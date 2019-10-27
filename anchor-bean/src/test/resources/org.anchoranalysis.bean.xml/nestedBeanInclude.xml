@@ -1,0 +1,5 @@
+<config>
+<bean config-class="org.anchoranalysis.bean.xml.mock.MockBeanNested" fieldSimpleNecessary="hello">
+	<fieldBeanNecessary config-class="org.anchoranalysis.bean.xml.mock.MockBeanSimple" filePath="simpleBean.xml" config-factory="include"/>
+</bean>
+</config>

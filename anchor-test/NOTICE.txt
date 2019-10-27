@@ -1,0 +1,18 @@
+This product depends on other libraries. Their attribution and/or original licenses are found in the notices/ sub-folder
+
+ ===================================================================================
+ ==  Notices and attributions required by libraries that the project depends on   ==
+ ===================================================================================
+
+Apache Commons IO
+Copyright 2002-2012 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+
+The JUnit depends on Java Hamcrest (http://hamcrest.org/JavaHamcrest/).
+
+
+
+

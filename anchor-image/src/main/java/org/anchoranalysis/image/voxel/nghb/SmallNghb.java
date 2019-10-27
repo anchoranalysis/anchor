@@ -1,0 +1,74 @@
+package org.anchoranalysis.image.voxel.nghb;
+
+/*
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+// 4 or 6 connectivity
+// Relies on IProcessRelPoint to do bound checking
+public class SmallNghb extends Nghb {
+
+	@Override
+	public void processAllPointsInNghb(boolean do3d, IProcessRelPoint testNghb) {
+		
+		int numDims = do3d ? 3 : 2;
+		
+		boolean b = testNghb.notifyChangeZ(0);
+		assert(b==true);
+		
+		for (int d=0; d<numDims; d++) {
+			for (int j=-1; j<=1; j+=2) {
+
+				// If it's the z dimension we notify change in the Z value
+				if (d==2) {
+					if (testNghb.notifyChangeZ(j)) {
+						processD( testNghb, j, d);
+					}
+				} else {
+					processD( testNghb, j, d);
+				}
+					
+			}
+		}
+	}
+	
+	private final void processD( IProcessRelPoint testNghb, int j, int d) {
+		switch(d) {
+			case 0:
+				testNghb.processPoint(j, 0);
+				break;
+			case 1:
+				testNghb.processPoint(0, j);
+				break;
+			case 2:
+				testNghb.processPoint(0, 0);
+				break;	
+			default:
+				assert false;
+		}
+	}
+
+}

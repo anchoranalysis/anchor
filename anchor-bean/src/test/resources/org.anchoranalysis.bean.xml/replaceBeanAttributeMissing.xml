@@ -1,0 +1,8 @@
+<config>
+<!-- We deliberately using a missing attribute to trigger an error -->
+<bean config-class="java.lang.Object" key="fieldMissing" replacement="helloChanged" config-factory="replaceProperty">
+	<item config-class="org.anchoranalysis.bean.xml.mock.MockBeanNested" fieldSimpleNecessary="hello">
+		<fieldBeanNecessary config-class="org.anchoranalysis.bean.xml.mock.MockBeanSimple" message="world"/>
+	</item>
+</bean>
+</config>

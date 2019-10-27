@@ -1,0 +1,606 @@
+package org.anchoranalysis.image.voxel.box;
+
+/*
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.interpolator.InterpolateUtilities;
+import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+
+public abstract class VoxelBox<BufferType extends Buffer> {
+
+	private IPixelsForPlane<BufferType> planeAccess;
+	private VoxelBoxFactoryTypeBound<BufferType> factory;
+	
+	public VoxelBox(IPixelsForPlane<BufferType> pixelsForPlane, VoxelBoxFactoryTypeBound<BufferType> factory) {
+		super();
+		this.planeAccess = pixelsForPlane;
+		this.factory = factory;
+	}
+
+	public IPixelsForPlane<BufferType> getPlaneAccess() {
+		return planeAccess;
+	}
+	
+	public VoxelDataType dataType() {
+		return factory.dataType();
+	}
+	
+	public VoxelBox<BufferType> createBufferAvoidNew(BoundingBox bbox ) {
+		
+		if (   bbox.equals(new BoundingBox(extnt()))
+			&& bbox.getCrnrMin().getX()==0
+			&& bbox.getCrnrMin().getY()==0
+			&& bbox.getCrnrMin().getZ()==0
+		) {
+			return this;
+		}
+		return createBufferAlwaysNew(bbox);
+	}
+	
+	public VoxelBox<BufferType> createBufferAlwaysNew(BoundingBox bbox) {
+		
+		// Otherwise we create a new buffer
+		VoxelBox<BufferType> vbOut = factory.create(bbox.extnt());
+		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extnt()));
+		return vbOut;
+	}
+	
+	
+	public void replaceBy(VoxelBox<BufferType> vb) throws IncorrectImageSizeException {
+		
+		if (!extnt().equals(vb.extnt())) {
+			throw new IncorrectImageSizeException("Sizes do not match");
+		}
+		
+		BoundingBox bbo = new BoundingBox(vb.extnt());
+		vb.copyPixelsTo(bbo, this, bbo);
+	}
+
+	/**
+	 * Copies pixels from this object to another object
+	 * 
+	 * @param sourceBox relative to the current object
+	 * @param destVoxelBox 
+	 * @param destBox relative to destVoxelBox
+	 */
+	public void copyPixelsTo(BoundingBox sourceBox, VoxelBox<BufferType> destVoxelBox,
+			BoundingBox destBox) {
+		
+		if (sourceBox.extnt().getVolume()!=destBox.extnt().getVolume()) {
+			throw new IllegalArgumentException("Volume mismatch");
+		}
+		
+		Point3i srcStart = sourceBox.getCrnrMin();
+		Point3i srcEnd = sourceBox.calcCrnrMax();
+		
+		Point3i relPos = destBox.relPosTo(sourceBox);
+		
+		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
+			
+			assert( z< extnt().getZ() );
+			
+			BufferType srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
+			BufferType destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
+			
+			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
+				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
+				
+					int srcIndex = getPlaneAccess().extnt().offset(x, y);
+					int destIndex = destVoxelBox.extnt().offset(x + relPos.getX(), y+relPos.getY());
+					
+					copyItem( srcArr, srcIndex, destArr, destIndex );
+					//destArr.put( destIndex, srcArr.get(srcIndex) );
+				}
+			}
+		}
+	}
+	
+	
+	// Only copies pixels if part of an ObjMask, otherwise we set a null pixel
+	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBox<BufferType> destVoxelBox,
+			BoundingBox destBox, VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV ) {
+		
+		if (sourceBox.extnt().getVolume()!=destBox.extnt().getVolume()) {
+			throw new IllegalArgumentException("Volume mismatch");
+		}
+		
+		if (!sourceBox.extnt().equals(objMaskBuffer.extnt())) {
+			throw new IllegalArgumentException("objMask extent does not match bbox size");
+		}
+		
+		Point3i srcStart = sourceBox.getCrnrMin();
+		Point3i srcEnd = sourceBox.calcCrnrMax();
+		
+		Point3i relPos = destBox.relPosTo(sourceBox);
+		
+		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
+			
+			BufferType srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
+			BufferType destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
+
+			ByteBuffer maskBuffer = objMaskBuffer.getPixelsForPlane(z-srcStart.getZ()).buffer();
+			
+			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
+				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
+				
+					int srcIndex = getPlaneAccess().extnt().offset(x, y);
+					int destIndex = destVoxelBox.extnt().offset(x + relPos.getX(), y+relPos.getY());
+					
+					if(maskBuffer.get()==maskBV.getOnByte()) {
+						copyItem( srcArr, srcIndex, destArr, destIndex );
+					}
+					//destArr.put( destIndex, srcArr.get(srcIndex) );
+				}
+			}
+		}
+	}
+	
+	public void setPixelsCheckMask( ObjMask om, int value ) {
+		assert( om!= null );
+		assert( om.getBoundingBox()!= null );
+		assert( om.getVoxelBox()!= null );
+		setPixelsCheckMask( om.getBoundingBox(), om.getVoxelBox(), new BoundingBox(om.getBoundingBox().extnt()), value, om.getBinaryValuesByte().getOnByte() );
+	}
+	
+	public void setPixelsCheckMask( ObjMask om, int value, byte maskMatchValue ) {
+		assert( om!= null );
+		assert( om.getBoundingBox()!= null );
+		assert( om.getVoxelBox()!= null );
+		setPixelsCheckMask( om.getBoundingBox(), om.getVoxelBox(), new BoundingBox(om.getBoundingBox().extnt()), value, maskMatchValue );
+	}
+	
+	
+	// Only copies pixels if part of an ObjMask, otherwise we set a null pixel
+	public void setPixelsCheckMask(	BoundingBox bboxToBeAssigned, VoxelBox<ByteBuffer> objMaskBuffer, BoundingBox bboxMask, int value, byte maskMatchValue ) {
+		
+		if (!bboxMask.extnt().equals(bboxToBeAssigned.extnt())) {
+			throw new IllegalArgumentException("Volume mismatch");
+		}
+		
+		Extent eIntersectingBox = bboxMask.extnt();
+		
+		Extent eAssignBuffer = this.extnt();
+		Extent eMaskBuffer = objMaskBuffer.extnt();
+		
+		for (int z=0; z<eIntersectingBox.getZ(); z++) {
+			
+			VoxelBuffer<?> pixels = getPlaneAccess().getPixelsForPlane(z + bboxToBeAssigned.getCrnrMin().getZ());
+			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z + bboxMask.getCrnrMin().getZ()).buffer();
+			
+			for (int y=0; y<eIntersectingBox.getY(); y++) {
+				for (int x=0; x<eIntersectingBox.getX(); x++) {
+
+					int indexMask = eMaskBuffer.offset(x + bboxMask.getCrnrMin().getX(), y + bboxMask.getCrnrMin().getY());
+					
+					if (pixelsMask.get(indexMask)==maskMatchValue) {
+						int indexAssgn = eAssignBuffer.offset(x +bboxToBeAssigned.getCrnrMin().getX(), y + bboxToBeAssigned.getCrnrMin().getY());
+						pixels.putInt(indexAssgn, value );
+					}
+				}
+			}
+			
+		}
+	}
+	
+	public abstract void addPixelsCheckMask( ObjMask mask, int value );
+	
+	public abstract void scalePixelsCheckMask( ObjMask mask, double value );
+	
+	public abstract void subtractFrom( int val );
+	
+	
+	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
+		
+		ObjMask om = new ObjMask( new BoundingBox(bbox) );
+		
+		Point3i pntMax = bbox.calcCrnrMax();
+		
+		byte maskOut = om.getBinaryValuesByte().getOnByte();
+		
+		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+			
+			BufferType pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
+			
+			int ind = 0;
+			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+					
+					int index = getPlaneAccess().extnt().offset(x, y);
+					
+					pixelIn.position(index);
+					
+					if (isEqualTo(pixelIn, equalVal)) {
+						pixelOut.put(ind, maskOut );
+					}
+					
+					ind++;
+				}
+			}
+		}
+		
+		return om;
+	}
+	
+	
+	public ObjMask greaterThanMask( BoundingBox bbox, int equalVal ) {
+		
+		ObjMask om = new ObjMask( new BoundingBox(bbox) );
+		
+		Point3i pntMax = bbox.calcCrnrMax();
+		
+		byte maskOut = om.getBinaryValuesByte().getOnByte();
+		
+		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+			
+			BufferType pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
+			
+			int ind = 0;
+			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+					
+					int index = getPlaneAccess().extnt().offset(x, y);
+					
+					pixelIn.position(index);
+					
+					if (isGreaterThan(pixelIn, equalVal)) {
+						pixelOut.put(ind, maskOut );
+					}
+					
+					ind++;
+				}
+			}
+		}
+		
+		return om;
+	}
+	
+	
+	public ObjMask greaterThanMask( ObjMask maskIn, int equalVal ) {
+		
+		ObjMask maskOut = new ObjMask(
+			new BoundingBox(
+				maskIn.getBoundingBox()
+			)
+		);
+		
+		BoundingBox bbox = maskIn.getBoundingBox();
+		Point3i pntMax = bbox.calcCrnrMax();
+		
+		byte maskInVal = maskIn.getBinaryValuesByte().getOnByte();
+		byte maskOutVal = maskOut.getBinaryValuesByte().getOnByte();
+		
+		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+			
+			BufferType pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelMaskIn = maskIn.getVoxelBox().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelOut = maskOut.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
+			
+			int ind = 0;
+			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+					
+					int index = getPlaneAccess().extnt().offset(x, y);
+					
+					pixelIn.position(index);
+					
+					byte maskVal = pixelMaskIn.get(ind);
+					
+					if (maskVal==maskInVal && isGreaterThan(pixelIn, equalVal)) {
+						pixelOut.put(ind, maskOutVal);
+					}
+										
+					ind++;
+				}
+			}
+		}
+		
+		return maskOut;
+	}
+	
+
+	public int countGreaterThan( int operand ) {
+		
+		int cnt = 0;
+		
+		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+			
+			BufferType buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			while( buffer.hasRemaining() ) {
+				
+				if ( isGreaterThan(buffer,operand) ) {
+					cnt++;
+				}
+			}
+			
+		}
+		return cnt;
+	}
+	
+	public boolean hasGreaterThan( int operand ) {
+		
+		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+			
+			BufferType buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			while( buffer.hasRemaining() ) {
+				
+				if ( isGreaterThan(buffer,operand) ) {
+					return true;
+				}
+			}
+			
+		}
+		return false;
+	}
+	
+	
+	public boolean hasEqualTo( int operand ) {
+		
+		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+			
+			BufferType buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			while( buffer.hasRemaining() ) {
+				
+				if ( isEqualTo(buffer,operand) ) {
+					return true;
+				}
+			}
+			
+		}
+		return false;
+	}
+	
+	
+	
+	public int countEqual( int equalVal ) {
+		
+		int count = 0;
+		
+		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+			BufferType pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
+			
+			while (pixels.hasRemaining()) {
+				if (isEqualTo(pixels, equalVal )) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+	
+	
+	public int countEqualMask( int equalVal, ObjMask om ) {
+		
+		Point3i srcStart = om.getBoundingBox().getCrnrMin();
+		Point3i srcEnd = om.getBoundingBox().calcCrnrMax();
+
+		int count = 0;
+		
+		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
+		
+		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
+			
+			BufferType srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer maskBuffer = om.getVoxelBox().getPixelsForPlane(z-srcStart.getZ()).buffer();
+			
+			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
+				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
+
+					int maskIndex = om.getVoxelBox().extnt().offset(x-srcStart.getX(), y-srcStart.getY());
+					
+					if (maskBuffer.get(maskIndex)==maskOnVal) {
+					
+						int srcIndex = getPlaneAccess().extnt().offset(x, y);
+						srcArr.position(srcIndex);
+						
+						if (isEqualTo(srcArr, equalVal )) {
+							count++;
+						}
+					}
+					//destArr.put( destIndex, srcArr.get(srcIndex) );
+				}
+			}
+		}
+		return count;
+	}
+	
+	public abstract int ceilOfMaxPixel();
+	
+	public abstract void copyItem( BufferType srcBuffer, int srcIndex, BufferType destBuffer, int destIndex );
+	
+	public abstract boolean isGreaterThan( BufferType buffer, int operand );
+	
+	public abstract boolean isEqualTo( BufferType buffer, int operand );
+	
+	public abstract boolean isEqualTo( BufferType buffer1, BufferType buffer2 );
+	
+	public abstract void setAllPixelsTo( int val );
+	
+	public abstract void setPixelsTo( BoundingBox bbox, int val );
+	
+	public abstract void multiplyBy( double val );
+
+	public abstract VoxelBox<BufferType> maxIntensityProj();
+	
+	public abstract VoxelBox<BufferType> meanIntensityProj();
+	
+	public void transferPixelsForPlane(int z, VoxelBox<BufferType> src, int zSrc, boolean duplicate ) {
+		if (duplicate) {
+			setPixelsForPlane(z, src.getPixelsForPlane(zSrc));
+		} else {
+			setPixelsForPlane(z, src.getPixelsForPlane(zSrc).duplicate() );
+		}
+	}
+	
+	public void setPixelsForPlane(int z, VoxelBuffer<BufferType> pixels) {
+		planeAccess.setPixelsForPlane(z, pixels);
+	}
+
+	public VoxelBuffer<BufferType> getPixelsForPlane(int z) {
+		return planeAccess.getPixelsForPlane(z);
+	}
+
+	public Extent extnt() {
+		return planeAccess.extnt();
+	}
+
+	public int minSliceNonZero() {
+		
+		for (int z=0; z<extnt().getZ(); z++) {
+			if(isSliceNonZero(z)) {
+				return z;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public boolean isSliceNonZero( int z ) {
+		BufferType pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
+		
+		while (pixels.hasRemaining()) {
+			if (!isEqualTo(pixels, 0 )) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public abstract void setVoxel(int x, int y, int z, int val);
+
+	// Very slow access, use sparingly.  Instead process slice by slice.
+	public abstract int getVoxel(int x, int y, int z);
+	
+	// Creates a new channel contain a duplication only of a particular slice
+	public VoxelBox<BufferType> extractSlice( int z ) {
+		
+		Extent e = new Extent( extnt());
+		e.setZ(1);
+		
+		VoxelBox<BufferType> bufferAccess = factory.create(e);
+		bufferAccess.getPlaneAccess().setPixelsForPlane(0, getPlaneAccess().getPixelsForPlane(z) );
+		return bufferAccess;
+	}
+	
+	/**
+	 * Resizes the current voxelbox.  
+	 * 
+	 * @param x
+	 * @param y
+	 * @param interpolator	If non-null, this is used to interpolate pixels as they are resized.
+	 * @param averageWhenDownsizing
+	 * @return
+	 */
+	public VoxelBox<BufferType> resizeXY( int x, int y, Interpolator interpolator ) {
+		
+		Extent e = new Extent( extnt());
+		e.setXY(x, y);
+		
+		VoxelBox<BufferType> bufferTarget = factory.create(e);
+		
+		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==e.getVolumeXY());
+		
+		VoxelBoxWrapper srcWrapped = new VoxelBoxWrapper( this );
+		VoxelBoxWrapper trgtWrapped = new VoxelBoxWrapper( bufferTarget);
+		
+		InterpolateUtilities.transferSlicesResizeXY( srcWrapped, trgtWrapped, interpolator );
+			
+		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==e.getVolumeXY());
+		return bufferTarget;
+	}
+	
+	public VoxelBox<BufferType> duplicate() {
+		
+		assert( getPlaneAccess().extnt().getZ() > 0 );
+		
+		VoxelBox<BufferType> bufferAccess = factory.create( getPlaneAccess().extnt() );
+		
+		for( int z=0; z<extnt().getZ(); z++ ) {
+			VoxelBuffer<BufferType> buffer = getPixelsForPlane(z);
+			bufferAccess.setPixelsForPlane( z, buffer.duplicate() );
+		}
+		
+		return bufferAccess;
+	}
+	
+	/**
+	 * Is the buffer identical to another beautiful (deep equals)
+	 * 
+	 * @param other
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean equalsDeep( VoxelBox<?> other) {
+		
+		if (!factory.dataType().equals(other.getFactory().dataType())) {
+			return false;
+		}
+		
+		if (!extnt().equals(other.extnt())) {
+			return false;
+		}
+		
+		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+			
+			VoxelBuffer<BufferType> buffer1 = getPlaneAccess().getPixelsForPlane(z);
+			VoxelBuffer<BufferType> buffer2 = (VoxelBuffer<BufferType>) other.getPlaneAccess().getPixelsForPlane(z);
+			
+			while( buffer1.buffer().hasRemaining() ) {
+				
+				if ( !isEqualTo(buffer1.buffer(), buffer2.buffer()) ) {
+					return false;
+				}
+			}
+			
+			assert( !buffer2.buffer().hasRemaining() );
+			
+		}
+		
+		return true;
+	}
+	
+	public abstract void max( VoxelBox<BufferType> other ) throws OperationFailedException;
+
+	public VoxelBoxFactoryTypeBound<BufferType> getFactory() {
+		return factory;
+	}
+}

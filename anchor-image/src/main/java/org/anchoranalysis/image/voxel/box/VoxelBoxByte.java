@@ -1,0 +1,363 @@
+package org.anchoranalysis.image.voxel.box;
+
+/*
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import java.nio.ByteBuffer;
+
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
+import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityByteBuffer;
+
+public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
+
+	public VoxelBoxByte(IPixelsForPlane<ByteBuffer> pixelsForPlane) {
+		super(
+			pixelsForPlane,
+			VoxelBoxFactory.getByte()
+		);
+	}
+	
+	
+	public static int ceilOfMaxPixel( IPixelsForPlane<?> planeAccess ) {
+		int max = 0;
+		boolean first = true;
+		
+		int sizeXY = planeAccess.extnt().getVolumeXY();
+		for (int z=0; z<planeAccess.extnt().getZ(); z++) {
+			
+			VoxelBuffer<?> pixels = planeAccess.getPixelsForPlane(z);
+			
+			for(int offset=0; offset<sizeXY; offset++) {
+				
+				int val = pixels.getInt(offset);
+				if (first || val > max) {
+					max = val;
+					first = false;
+				}
+			}
+			
+		}
+		return max;
+	}
+	
+	
+	@Override
+	public int ceilOfMaxPixel() {
+		return ceilOfMaxPixel(getPlaneAccess());
+	}
+
+	@Override
+	public void copyItem(ByteBuffer srcBuffer, int srcIndex,
+			ByteBuffer destBuffer, int destIndex) {
+		destBuffer.put( destIndex, srcBuffer.get(srcIndex) );
+	}
+
+	@Override
+	public boolean isGreaterThan(ByteBuffer buffer, int operand) {
+		return ByteConverter.unsignedByteToInt(buffer.get()) > operand;
+	}
+	
+	@Override
+	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
+		
+		ObjMask om = new ObjMask(bbox );
+		
+		Point3i pntMax = bbox.calcCrnrMax();
+		
+		byte equalValByte = (byte) equalVal;
+		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
+		
+		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+			
+			ByteBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
+			
+			int ind = 0;
+			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+					
+					int index = getPlaneAccess().extnt().offset(x, y);
+					byte chnlVal = pixelIn.get(index);
+					
+					if ( chnlVal==equalValByte ) {
+						pixelOut.put(ind, maskOnVal);
+					}
+					
+					ind++;
+				}
+			}
+		}
+		
+		return om;
+	}
+
+	@Override
+	public void setAllPixelsTo( int val ) {
+
+		byte valByte = (byte) val;
+		
+		for (int z=0; z<extnt().getZ(); z++) {
+			
+			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			
+			while( buffer.hasRemaining() ) {
+				buffer.put( valByte );
+			}
+		}
+	}
+	
+	@Override
+	public void setPixelsTo( BoundingBox bbox, int val ) {
+
+		byte valByte = (byte) val;
+		
+		Point3i crnrMin = bbox.getCrnrMin();
+		Point3i crnrMax = bbox.calcCrnrMax();
+		Extent e = extnt();
+		
+		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+			
+			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			
+			for (int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
+				for (int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+					int offset = e.offset(x, y);
+					buffer.put( offset, valByte );
+				}
+			}
+		}
+	}
+
+
+	@Override
+	public boolean isEqualTo(ByteBuffer buffer, int operand) {
+		return ByteConverter.unsignedByteToInt(buffer.get())==operand;
+	}
+
+
+	@Override
+	public VoxelBox<ByteBuffer> maxIntensityProj() {
+		
+		MaxIntensityBufferByte mi = new MaxIntensityBufferByte( extnt() ); 
+
+		for (int z=0; z<extnt().getZ(); z++) {
+			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
+		}
+	
+		return mi.getProjection();
+	}
+	
+	@Override
+	public VoxelBox<ByteBuffer> meanIntensityProj() {
+		MeanIntensityByteBuffer mi = new MeanIntensityByteBuffer( extnt() ); 
+
+		for (int z=0; z<extnt().getZ(); z++) {
+			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
+		}
+		
+		return mi.getFlatBuffer();
+
+	}
+
+
+	@Override
+	public void multiplyBy(double val) {
+		
+		if (val==1) {
+			return;
+		}
+		
+		for (int z=0; z<extnt().getZ(); z++) {
+			
+			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			
+			while( buffer.hasRemaining() ) {
+				int mult = (int) (ByteConverter.unsignedByteToInt( buffer.get() ) * val);
+				buffer.put( buffer.position()-1, (byte) mult );
+			}
+		}
+		
+	}
+	
+	@Override
+	public void setVoxel(int x, int y, int z, int val) {
+		ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+        buffer.put( getPlaneAccess().extnt().offset(x, y), (byte) val );
+	}
+
+	@Override
+	public int getVoxel(int x, int y, int z) {
+		ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+        return ByteConverter.unsignedByteToInt( buffer.get( getPlaneAccess().extnt().offset(x, y) ) );
+	}
+	
+
+	
+	
+
+
+	
+	@Override
+	public void scalePixelsCheckMask(ObjMask mask, double value) {
+		
+		BoundingBox bbox = mask.getBoundingBox();
+		VoxelBox<ByteBuffer> objMaskBuffer = mask.getVoxelBox();
+
+		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
+		
+		Point3i pntMax = bbox.calcCrnrMax();
+		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+			
+			ByteBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.getCrnrMin().getZ()).buffer();
+			
+			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+										
+					if (pixelsMask.get()==maskOnByte) {
+						int index = getPlaneAccess().extnt().offset(x, y);
+						
+						byte b = pixels.get(index);
+						
+						int intVal = (int) Math.round(value * ByteConverter.unsignedByteToInt(b));
+						if (intVal<0) {
+							intVal = 0;
+						}
+						if (intVal>255) {
+							intVal = 255;
+						}
+						
+						pixels.put(index, (byte) intVal );
+					}
+				}
+			}
+		}
+		
+	}
+	
+	@Override
+	public void addPixelsCheckMask(ObjMask mask, int value) {
+		
+		BoundingBox bbox = mask.getBoundingBox();
+		VoxelBox<ByteBuffer> objMaskBuffer = mask.getVoxelBox();
+
+		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
+		
+		Point3i pntMax = bbox.calcCrnrMax();
+		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+			
+			ByteBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.getCrnrMin().getZ()).buffer();
+			
+			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+										
+					if (pixelsMask.get()==maskOnByte) {
+						int index = getPlaneAccess().extnt().offset(x, y);
+						
+						byte b = pixels.get(index);
+						
+						int intVal = ByteConverter.unsignedByteToInt(b) + value;
+						
+						if (intVal<0) {
+							intVal = 0;
+						}
+						if (intVal>255) {
+							intVal = 255;
+						}
+
+						
+						pixels.put(index, (byte) intVal );
+					}
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public boolean isEqualTo(ByteBuffer buffer1, ByteBuffer buffer2) {
+		return buffer1.get()==buffer2.get();
+	}
+
+	@Override
+	public void subtractFrom(int val) {
+
+		for (int z=0; z<extnt().getZ(); z++) {
+			
+			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			
+			while( buffer.hasRemaining() ) {
+				int newVal = val - ByteConverter.unsignedByteToInt( buffer.get() );
+				buffer.put( buffer.position()-1, (byte) newVal );
+			}
+		}
+	}
+
+	@Override
+	public void max( VoxelBox<ByteBuffer> other ) throws OperationFailedException {
+		
+		if (!extnt().equals(other.extnt())) {
+			throw new OperationFailedException("other must have same extnt");
+		}
+		
+		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+			
+			ByteBuffer buffer1 = getPlaneAccess().getPixelsForPlane(z).buffer();
+			ByteBuffer buffer2 = other.getPlaneAccess().getPixelsForPlane(z).buffer();
+			
+			int indx = 0;
+			int vol = getPlaneAccess().extnt().getVolumeXY();
+			while( indx<vol ) {
+				
+				int elem1 = ByteConverter.unsignedByteToInt( buffer1.get(indx) );
+				int elem2 = ByteConverter.unsignedByteToInt( buffer2.get(indx) );
+				
+				if( elem2 > elem1) {
+					buffer1.put(indx, (byte) elem2);
+				}
+
+				indx++;
+			}
+		}
+	}
+		
+
+	
+	
+
+
+}

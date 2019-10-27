@@ -1,0 +1,12 @@
+This product depends on other libraries. Their attribution and/or original licenses are found in the notices/ sub-folder
+
+In HungarianAlgorithm.java, it also subsumes work by:
+Copyright (c) 2012 Kevin L. Stern
+
+with a license outlined in the file-header, and in licenses/hungarianAlgorithm.txt
+
+ ===================================================================================
+ ==  Notices and attributions required by libraries that the project depends on   ==
+ ===================================================================================
+
+The JUnit depends on Java Hamcrest (http://hamcrest.org/JavaHamcrest/).

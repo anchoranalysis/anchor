@@ -1,0 +1,7 @@
+This product depends on other libraries. Their attribution and/or original licenses are found in the notices/ sub-folder
+
+ ===================================================================================
+ ==  Notices and attributions required by libraries that the project depends on   ==
+ ===================================================================================
+
+The JUnit depends on Java Hamcrest (http://hamcrest.org/JavaHamcrest/).

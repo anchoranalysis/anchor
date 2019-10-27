@@ -1,0 +1,134 @@
+package org.anchoranalysis.bean.xml.factory;
+
+
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.xml.error.BeanMisconfiguredXmlException;
+import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.error.HelperFriendlyExceptions;
+
+/*
+ * #%L
+ * anchor-bean
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import org.apache.commons.configuration.ConfigurationRuntimeException;
+import org.apache.commons.configuration.beanutils.BeanDeclaration;
+import org.apache.commons.configuration.beanutils.BeanFactory;
+import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
+
+
+
+/**
+ * The default bean factory used for initializing AnchorBeans
+ * 
+ * i.e. the factory used when no config-factory attribute is set in the XML
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class AnchorDefaultBeanFactory implements BeanFactory {
+	
+	private BeanInstanceMap defaultInstances;
+
+	public AnchorDefaultBeanFactory(BeanInstanceMap defaultInstances) {
+		super();
+		this.defaultInstances = defaultInstances;
+	}
+
+	@Override
+    public Object createBean(Class<?> beanClass, BeanDeclaration data,
+            Object parameter) throws Exception
+    {
+    	try {
+	        Object result = createBeanInstance(beanClass, data);
+	        initBeanInstance(result, data, parameter);
+	        
+	        // We check initParams and localise if it's a bean
+	        if (result instanceof AnchorBean) {
+	        	AnchorBean<?> resultCast = (AnchorBean<?>) result;
+	        	resultCast.checkMisconfigured( defaultInstances );
+	        	
+	        	Path localPath = Paths.get( (String) parameter );
+	        	resultCast.localise( localPath );
+	        }
+	        
+	        return result;
+    	} catch ( ConfigurationRuntimeException e ) {
+    		// We suppress these exceptions as they are ugly to read, and instead
+    		//   focus on where in the XML file the error is occurring
+    		if (data instanceof XMLBeanDeclaration) {
+    			XMLBeanDeclaration dataCast = (XMLBeanDeclaration) data;
+    			
+    			String description = HelperDescribeXmlNode.describeXMLNode(dataCast.getNode());
+    			
+    			// We can read the ClassType from beanClass.getName() but we don't report this to
+    			//  the user, as we assume it is presented later as part of the trace of the XML
+    			//  element by DescribeXMLNodeUtilities.describeXMLNode
+    			
+    			String msg = String.format(
+    				"A misconfigured bean exists%n%s",
+    				description
+    			);
+    			
+    			throw new BeanMisconfiguredXmlException(
+    				msg,
+    				HelperFriendlyExceptions.maybeCreateUserFriendlyException( e ) 
+    			);
+    				
+    		}
+    		
+    		String msg = String.format("A misconfigured bean (%s) exists at unknown location", beanClass.getName() );
+    		throw new BeanXmlException( msg, e.getCause() );
+    	}
+    }
+	
+
+	@Override
+    public Class<?> getDefaultBeanClass()
+    {
+        return null;
+    }
+
+	protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data)
+            throws Exception
+    {
+        return beanClass.getConstructor().newInstance();
+    }
+
+    protected void initBeanInstance(Object bean, BeanDeclaration data, Object parameter)
+            throws Exception
+    {
+    	DefaultBeanFactoryHelperInit.initBean(bean, data, parameter);
+    }
+
+	public BeanInstanceMap getDefaultInstances() {
+		return defaultInstances;
+	}
+}

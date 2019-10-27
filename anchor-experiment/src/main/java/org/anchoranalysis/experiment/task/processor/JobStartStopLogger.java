@@ -1,0 +1,122 @@
+package org.anchoranalysis.experiment.task.processor;
+
+/*-
+ * #%L
+ * anchor-experiment
+ * %%
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+import org.anchoranalysis.core.log.LogReporter;
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * Logs when jobs start and stop
+ * 
+ * We keep it thread-safe as there might be multiple calls in parallel
+ * 
+ * @author FEEHANO
+ *
+ */
+public class JobStartStopLogger {
+	
+	// Assume terminal has at least 80 characters in width
+	private static String HASH_SEPERATOR = StringUtils.repeat('#', 80);
+	
+	private String jobDscrText;
+	private LogReporter logReporter;
+	private ConcurrentJobMonitor monitor;
+	private boolean showHashSeperators;
+	private boolean disableLogMessages = false;
+	
+	/**
+	 * 
+	 * @param jobDscrText A noun describing the job that appears in the log e.g. "Job"
+	 * @param logReporter if non-NULL, write messages to logger. If null, no messages are wrritten
+	 * @param showHashSeperators indicates if lines of hashes should be placed before and after each log message (adds emphasis)
+	 * @param monitor
+	 */
+	public JobStartStopLogger(String jobDscrText, LogReporter logReporter, ConcurrentJobMonitor monitor, boolean showHashSeperators) {
+		super();
+		this.jobDscrText = jobDscrText;
+		this.logReporter = logReporter;
+		this.monitor = monitor;
+		this.showHashSeperators = showHashSeperators;
+
+		if (monitor.getTotalNumTasks()<=1 || logReporter==null) {
+			this.disableLogMessages = true;
+			
+			// Disabled
+			//logReporter.logFormatted("Disabling start-stop log messages as there is only %d %s", monitor.getTotalNumTasks(), jobDscrText );
+		}
+	}
+
+	public synchronized void logStart(JobDescription job) {
+		
+		if (disableLogMessages) {
+			return;
+		}
+		
+		logWithDecoration( () ->
+			logReporter.logFormatted(
+				"%s %4d:\tSTART\t[%s]\t\t%s  %s",
+				jobDscrText,
+				job.getJobNumber(),
+				monitor.currentStateDescription(),
+				job.getJobShortName(),
+				monitor.ongoingTasksLessThan(10)
+			)
+		);
+	}
+	
+	public synchronized void logEnd(JobDescription job, JobState jobState, boolean success) {
+		
+		if (disableLogMessages) {
+			return;
+		}
+		
+		logWithDecoration( () -> {
+			String endWord = success ? "END" : "ERROR";
+			logReporter.logFormatted(
+				"%s %4d:\t%s  \t[%s]\t(%ds)\t%s  %s",
+				jobDscrText,
+				job.getJobNumber(),
+				endWord,
+				monitor.currentStateDescription(),
+				jobState.getTime()/1000,
+				job.getJobShortName(),
+				monitor.ongoingTasksLessThan(10)
+			);
+		});
+	}
+	
+
+	private void logWithDecoration( Runnable logFunc ) {
+		if (showHashSeperators) {
+			logReporter.log(HASH_SEPERATOR);
+		}
+		logFunc.run();
+		if (showHashSeperators) {
+			logReporter.log(HASH_SEPERATOR);
+		}
+	}
+}

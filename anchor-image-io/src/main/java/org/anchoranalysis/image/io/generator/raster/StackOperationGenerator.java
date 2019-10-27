@@ -1,0 +1,111 @@
+package org.anchoranalysis.image.io.generator.raster;
+
+/*
+ * #%L
+ * anchor-image-io
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.generator.IterableObjectGenerator;
+import org.anchoranalysis.io.generator.ObjectGenerator;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
+
+public class StackOperationGenerator extends RasterGenerator implements IterableObjectGenerator< Operation<Stack>, Stack> {
+
+	private Operation<Stack> stackIn;
+	private boolean padIfNec;
+	private String manifestFunction;
+	
+	public StackOperationGenerator(boolean padIfNec, String manifestFunction ) {
+		super();
+		this.padIfNec = padIfNec;
+		this.manifestFunction = manifestFunction;
+	}
+	
+	// Notes pads the passed channel, would be better if it makes a new stack first
+	public StackOperationGenerator(Operation<Stack> stack, boolean padIfNec, String manifestFunction) {
+		super();
+		this.stackIn = stack;
+		this.padIfNec = padIfNec;
+		this.manifestFunction = manifestFunction;
+	}
+
+	@Override
+	public Stack generate() throws OutputWriteFailedException {
+
+		assert( stackIn!=null);
+		try {
+			return StackGenerator.generateImgStack( stackIn.doOperation(), padIfNec );
+		} catch (ExecuteException e) {
+			throw new OutputWriteFailedException(e);
+		}
+	}
+
+	@Override
+	public ManifestDescription createManifestDescription() {
+		return new ManifestDescription("raster", manifestFunction);
+	}
+
+
+	@Override
+	public ObjectGenerator<Stack> getGenerator() {
+		return this;
+	}
+
+	@Override
+	public Operation<Stack> getIterableElement() {
+		return stackIn;
+	}
+
+	@Override
+	public void setIterableElement(Operation<Stack> element) {
+		this.stackIn = element;
+	}
+	
+	@Override
+	public void start() throws OutputWriteFailedException {
+	}
+
+
+	@Override
+	public void end() throws OutputWriteFailedException {
+		this.stackIn = null;
+	}
+
+
+	@Override
+	public boolean isRGB() {
+		try {
+			return stackIn.doOperation().getNumChnl()==3 || (stackIn.doOperation().getNumChnl()==2 && padIfNec);
+		} catch (ExecuteException e) {
+			assert false;
+			return false;
+		}
+	}
+
+}

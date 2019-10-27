@@ -1,0 +1,169 @@
+package org.anchoranalysis.image.voxel.nghb;
+
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+import java.util.List;
+
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
+import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph.IVertexToObjMask;
+
+/**
+ * Adds edges if objects neighbour each other
+ * 
+ * @author FEEHANO
+ *
+ * @param <V> vertice-type
+ */
+class EdgeAdder<V> {
+	
+	private List<V> verticesAsList;
+	private IVertexToObjMask<V> vertexToObjMask;
+	private ObjMaskCollectionRTree rTree;
+	private AddEdge<V> addEdge;
+	private boolean preventObjIntersection;
+	private boolean bigNghb;
+	private boolean testBothDirs;
+
+	// TODO replace with class which behaves differently
+	@FunctionalInterface
+	public static interface AddEdge<V> {
+		void addEdge( V src, V dest, int numBorderPixels );
+	}
+	
+	/**
+	 * Adds edges by checking if a Vertex intersects with another Vertex
+	 * 
+	 * This is done always by finding an ObjMask representation of each vertex
+	 * 
+	 * @param verticesAsList a list of vertices
+	 * @param vertexToObjMask how to convert a individual vertice to an object mask
+	 * @param rTree the rTree underpinning the vertices (or rather their derived object-masks)
+	 * @param graph
+	 * @param preventObjIntersection avoids any edge if any two objects have a common pixel
+	 * @param undirected iff FALSE edges are considered in both directions independently
+	 */
+	public EdgeAdder(
+		List<V> verticesAsList,
+		IVertexToObjMask<V> vertexToObjMask,
+		ObjMaskCollectionRTree rTree,
+		AddEdge<V> addEdge,
+		boolean preventObjIntersection,
+		boolean bigNghb,
+		boolean testBothDirs
+	) {
+		super();
+		this.preventObjIntersection = preventObjIntersection;
+		this.verticesAsList = verticesAsList;
+		this.vertexToObjMask = vertexToObjMask;
+		this.rTree = rTree;
+		this.addEdge = addEdge;
+		this.bigNghb = bigNghb;
+		this.testBothDirs = testBothDirs;
+	}
+	
+	public void addEdgesFor(
+		int ignoreIndex,
+		ObjMask om,
+		V vertexWith,
+		Extent sceneExtnt,
+		boolean do3D
+	) throws CreateException {
+		
+		ObjMask omDilated = MorphologicalDilation.createDilatedObjMask(
+			om,
+			sceneExtnt,
+			do3D && sceneExtnt.getZ()>1,
+			1,
+			bigNghb
+		);
+		
+		addWithDilatedMask( ignoreIndex, om, vertexWith, omDilated );
+	}
+	
+	private void addWithDilatedMask(
+		int ignoreIndex,
+		ObjMask om,
+		V vertexWith,
+		ObjMask omDilated
+	) {
+		
+		List<Integer> indicesIntersects = rTree.intersectsWithAsIndices( omDilated.getBoundingBox() );
+		
+		for( int j : indicesIntersects) {
+			
+			// We enforce an ordering, so as not to do the same pair twice (or the identity case)
+			if (testBothDirs) {
+				if (j==ignoreIndex) {
+					continue;
+				}
+			} else {
+				if (j>=ignoreIndex) {
+					continue;
+				}				
+			}
+			
+			V vertexOther = verticesAsList.get(j);
+			
+			maybeAddEdge(
+				om,
+				omDilated,
+				vertexToObjMask.objMaskFromVertex(vertexOther),
+				vertexWith,
+				verticesAsList.get(j)
+			);
+		}		
+	}
+	
+	private void maybeAddEdge(
+		ObjMask om,
+		ObjMask omDilated,
+		ObjMask omOther,
+		V vertexWith,
+		V vertexOther
+	) {
+		if (preventObjIntersection) {
+			// Check that they don't overlap
+			if (om.hasIntersectingPixels(omOther)) {
+				return;
+			}
+		}
+			
+		// How many border pixels shared between the two?
+		int numBorderPixels = numBorderPixels(omDilated, omOther); 
+		if( numBorderPixels>0 ) {
+			addEdge.addEdge(vertexWith,vertexOther, numBorderPixels);
+		}
+	}
+	
+	private static int numBorderPixels( ObjMask om1Dilated, ObjMask om2 ) {
+		return om1Dilated.countIntersectingPixels(om2);
+	}
+}

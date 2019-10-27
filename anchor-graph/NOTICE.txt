@@ -1,0 +1,19 @@
+This product depends on other libraries. Their licenses are found in the licenses/ subdirectory
+
+ ===================================================================================
+ ==  Notices and attributions required by libraries that the project depends on   ==
+ ===================================================================================
+
+
+***********************************
+*  JFREECHART: Version 1.2.0-ea1  *
+***********************************
+
+30 June 2009
+
+(C)opyright 2000-2009, by Object Refinery Limited and Contributors.
+
+
+
+
+The JUnit depends on Java Hamcrest (http://hamcrest.org/JavaHamcrest/).

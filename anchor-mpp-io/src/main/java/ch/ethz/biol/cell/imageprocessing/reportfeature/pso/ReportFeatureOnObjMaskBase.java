@@ -1,0 +1,124 @@
+package ch.ethz.biol.cell.imageprocessing.reportfeature.pso;
+
+/*-
+ * #%L
+ * anchor-mpp-io
+ * %%
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.objmask.ObjMaskCollection;
+
+import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
+
+public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedObjects {
+
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	// START BEAN PROPERTIES
+	@BeanField
+	private ObjMaskProvider objMaskProvider;
+	
+	@BeanField
+	private FeatureEvaluatorNrgStack featureEvaluator;
+	
+	@BeanField
+	private String title;
+	// END BEAN PROPERTIES
+	
+	@Override
+	public String genFeatureStrFor(MPPInitParams so, LogErrorReporter logger)
+			throws OperationFailedException {
+
+		try {
+			objMaskProvider.initRecursive( so.getImage(), logger );
+			featureEvaluator.initRecursive( so.getFeature(), logger );
+		} catch (InitException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		try {
+			ObjMaskCollection objs = objMaskProvider.create();
+						
+			FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession();
+			double val = calcFeatureOn( objs, session );
+			return Double.toString(val);
+			
+		} catch (FeatureCalcException | CreateException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	protected abstract double calcFeatureOn( ObjMaskCollection objs, FeatureSessionCreateParamsSingle session ) throws FeatureCalcException;
+	
+	@Override
+	public boolean isNumeric() {
+		return true;
+	}
+
+	@Override
+	public String genTitleStr() throws OperationFailedException {
+		return title;
+	}
+	
+	public ObjMaskProvider getObjMaskProvider() {
+		return objMaskProvider;
+	}
+
+
+	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
+		this.objMaskProvider = objMaskProvider;
+	}
+
+
+	public String getTitle() {
+		return title;
+	}
+
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
+	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+		return featureEvaluator;
+	}
+
+
+	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+		this.featureEvaluator = featureEvaluator;
+	}
+}

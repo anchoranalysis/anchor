@@ -1,0 +1,3 @@
+<config>
+<bean config-class="org.anchoranalysis.bean.xml.mock.MockBeanSimple" message="world"/>
+</config>

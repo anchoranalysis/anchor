@@ -1,0 +1,13 @@
+.metadata
+bin
+.recommenders
+.Rproj.user
+*.Rhistory
+fallback.log
+Thumbs.db
+.settings
+.classpath
+.project
+target
+/.idea
+*.iml

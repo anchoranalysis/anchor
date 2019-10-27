@@ -1,0 +1,7 @@
+<config>
+<bean config-class="java.lang.Object" key="fieldSimpleNecessary" replacement="helloChanged" config-factory="replaceProperty">
+	<item config-class="org.anchoranalysis.bean.xml.mock.MockBeanNested" fieldSimpleNecessary="hello">
+		<fieldBeanNecessary config-class="org.anchoranalysis.bean.xml.mock.MockBeanSimple" message="world"/>
+	</item>
+</bean>
+</config>

@@ -1,0 +1,8 @@
+<config>
+<bean config-class="java.lang.Object" key="fieldBeanNecessary" config-factory="replaceProperty">
+	<item config-class="org.anchoranalysis.bean.xml.mock.MockBeanNested" fieldSimpleNecessary="hello">
+		<fieldBeanNecessary config-class="org.anchoranalysis.bean.xml.mock.MockBeanSimple" filePath="simpleBean.xml" config-factory="include"/>
+	</item>
+	<replacement config-class="org.anchoranalysis.bean.xml.mock.MockBeanSimple" filePath="simpleBeanAlternative.xml" config-factory="include"/>
+</bean>
+</config>

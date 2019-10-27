@@ -1,0 +1,150 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+  <parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-pom</artifactId>
+		<version>0.0.16-SNAPSHOT</version>
+    </parent> 
+	
+    <artifactId>anchor-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.11-SNAPSHOT</version>
+    <name>anchor-parent</name>
+    <url>http://www.anchoranalysis.org/</url>
+    
+	<scm>
+		<connection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor.git</connection>
+		<developerConnection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor.git</developerConnection>
+		<url>https://git@bitbucket.org/anchorimageanalysis/anchor.git</url>
+	  <tag>HEAD</tag>
+  </scm>
+	
+    <modules>
+        <module>anchor-core</module>
+        <module>anchor-bean</module>
+        <module>anchor-beans-shared</module>
+        <module>anchor-annotation</module>
+        <module>anchor-image</module>
+        <module>anchor-math</module>
+        <module>anchor-overlay</module>
+        <module>anchor-io</module>
+	<module>anchor-io-manifest</module>
+	<module>anchor-io-output</module>
+	<module>anchor-io-generator</module>
+        <module>anchor-feature</module>
+		<module>anchor-feature-session</module>
+        <module>anchor-image-bean</module>
+        <module>anchor-image-feature</module>
+        <module>anchor-mpp</module>
+        <module>anchor-mpp-feature</module>
+        <module>anchor-experiment</module>
+        <module>anchor-feature-io</module>
+        <module>anchor-image-io</module>
+        <module>anchor-mpp-io</module>
+        <module>anchor-mpp-sgmn</module>
+        <module>anchor-image-experiment</module>
+        <module>anchor-mpp-graph</module>
+        <module>anchor-graph</module>
+	<module>anchor-annotation-io</module>
+		
+		<module>anchor-test</module>
+		<module>anchor-test-feature</module>
+    </modules>
+	
+	
+
+	<!-- Provides a means of reaching anchor-pom and ImageJ -->
+    <repositories>
+		<repository>
+		  <releases>
+			<enabled>true</enabled>
+			<updatePolicy>never</updatePolicy>
+			<checksumPolicy>warn</checksumPolicy>
+		  </releases>
+		  <snapshots>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+			<checksumPolicy>warn</checksumPolicy>
+		  </snapshots>
+		  <id>anchor</id>
+		   <name>anchor</name>
+		   <url>http://maven.anchoranalysis.org:8081/repository/anchor</url>
+		  <layout>default</layout>
+		</repository>
+		
+		<repository>
+			<id>imagej</id>
+			<name>ImageJ repository</name>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+		
+   	</repositories>
+	
+  <reporting>
+    <plugins>
+    
+     <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-project-info-reports-plugin</artifactId>
+      <version>2.8.1</version>
+      <configuration>
+      	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+      	<skip>true</skip>
+      </configuration>
+    </plugin>
+   </plugins>
+   </reporting>
+    
+    <build>
+		
+        <pluginManagement>
+            <plugins>
+              
+								
+            </plugins>
+        </pluginManagement>
+	
+				
+		<!-- Adds license information in each jar -->
+		 <resources>
+		  <resource>
+		    <directory>src/main/resources</directory>
+		  </resource>
+		  
+		  <resource>
+		    <filtering>false</filtering>
+		    <directory>notices</directory>
+		    
+		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <targetPath>META-INF/notices</targetPath>
+		    <includes>
+		       <include>*</include>
+		    </includes>
+		  </resource>
+			
+		  <resource>
+		    <filtering>false</filtering>
+		    <directory>${project.basedir}</directory>
+		    
+		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <targetPath>META-INF/</targetPath>
+		    <includes>
+		      <include>LICENSE.txt</include>
+		      <include>NOTICE.txt</include>
+		    </includes>
+		  </resource>
+		  
+		</resources>	
+    </build>
+    
+    <dependencies>
+        <dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.12</version>
+		  <scope>test</scope>
+	      <optional>true</optional>
+		</dependency>
+    </dependencies>
+	
+</project>
