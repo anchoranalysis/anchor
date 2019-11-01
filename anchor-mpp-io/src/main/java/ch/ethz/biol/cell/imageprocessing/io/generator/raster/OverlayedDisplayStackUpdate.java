@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -40,9 +43,6 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import ch.ethz.biol.cell.gui.image.provider.DisplayUpdate;
 import ch.ethz.biol.cell.gui.image.provider.BoundOverlayedDisplayStack;
 import ch.ethz.biol.cell.gui.overlay.BoundColoredOverlayCollection;
-import ch.ethz.biol.cell.gui.overlay.Overlay;
-import ch.ethz.biol.cell.gui.overlay.ColoredOverlayCollection;
-import ch.ethz.biol.cell.gui.overlay.OverlayCollection;
 
 /**
  * An update to an OverlayCollection/DisplayStack combination indicating a change to either or both

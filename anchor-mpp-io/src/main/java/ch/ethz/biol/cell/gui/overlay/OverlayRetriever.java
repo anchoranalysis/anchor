@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.gui.overlay;
 
+import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.geometry.Point3i;
 
 /*

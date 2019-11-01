@@ -28,6 +28,8 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 
 import java.io.Serializable;
+
+import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;

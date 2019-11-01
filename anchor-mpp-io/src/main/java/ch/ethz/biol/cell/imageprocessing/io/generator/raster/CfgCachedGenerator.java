@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.io.generator.raster;
 
 import java.nio.file.Path;
 
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.error.CreateException;
 
 /*
@@ -40,8 +41,6 @@ import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
 
 public class CfgCachedGenerator extends CacheableCfgToRGBGenerator {
 

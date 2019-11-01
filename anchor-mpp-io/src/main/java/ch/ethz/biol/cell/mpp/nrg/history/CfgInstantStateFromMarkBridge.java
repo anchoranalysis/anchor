@@ -30,12 +30,12 @@ package ch.ethz.biol.cell.mpp.nrg.history;
 import overlay.OverlayCollectionMarkFactory;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.OverlayedInstantState;
+import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
-import ch.ethz.biol.cell.gui.overlay.OverlayCollection;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.instantstate.OverlayedInstantState;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 

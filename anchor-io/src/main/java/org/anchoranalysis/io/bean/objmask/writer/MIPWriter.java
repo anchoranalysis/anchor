@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+
 /*
  * #%L
  * anchor-io
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 // Note doesn't cache the underlying maskWriter
 public class MIPWriter extends ObjMaskWriter {

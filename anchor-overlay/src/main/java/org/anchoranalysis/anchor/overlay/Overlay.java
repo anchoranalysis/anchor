@@ -1,4 +1,7 @@
-package ch.ethz.biol.cell.gui.overlay.scaledmask;
+package org.anchoranalysis.anchor.overlay;
+
+import org.anchoranalysis.anchor.overlay.id.Identifiable;
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 /*-
  * #%L
@@ -27,38 +30,55 @@ package ch.ethz.biol.cell.gui.overlay.scaledmask;
  */
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
-
-/**
- * Creates a scaled version of a mask from a mark/objMask that is not scaled
- * 
- * @author Owen Feehan
- *
- */
-public abstract class ScaledMaskCreator {
+// What can be projected on top of a raster through the GUI
+public abstract class Overlay implements Identifiable {
 	
 	/**
-	 * Creates a scaled-version of the mask
+	 * A bounding-box around the overlay
+	 * @param overlayWriter TODO
+	 * @param dim	The dimensions of the containing-scene
 	 * 
-	 * @param overlayWriter what writes an overlay onto a raster
-	 * @param omUnscaled unscaled object-mask
-	 * @param scaleFactor how much to scale by (e.g. 0.5 scales the X dimension to 50%)
-	 * @param originalObject the object from which omUnscaled was derived
-	 * @param sdScaled the scene-dimensions when scaled to match scaleFactor
-	 * @param bv binary-values for creating the mask
-	 * @return the scaled object-mask
-	 * @throws CreateException
+	 * @return the bounding-box
 	 */
+	public abstract BoundingBox bbox( OverlayWriter overlayWriter, ImageDim dim );
+	
 	public abstract ObjMaskWithProperties createScaledMask(
 		OverlayWriter overlayWriter,
-		ObjMaskWithProperties omUnscaled,
-		double scaleFactor,
-		Object originalObject,
+		double zoomFactorNew,
+		ObjMaskWithProperties om,
+		Overlay ol,
+		ImageDim sdUnscaled,
 		ImageDim sdScaled,
-		BinaryValuesByte bv
+		BinaryValuesByte bvOut
 	) throws CreateException;
+	
+	public abstract ObjMaskWithProperties createObjMask(
+		OverlayWriter overlayWriter,
+		ImageDim dimEntireImage,
+		BinaryValuesByte bvOut
+	) throws CreateException;
+	
+	/**
+	 * Is a point inside an overlay? (for a particular OverlayWriter).
+	 * 
+	 * @param overlayWriter
+	 * @param pnt
+	 * @return
+	 */
+	public abstract boolean isPointInside( OverlayWriter overlayWriter, Point3i pnt );
+
+	@Override
+	public abstract boolean equals(Object obj);
+
+	@Override
+	public abstract int hashCode();
+	
+	public abstract OverlayProperties generateProperties(ImageRes sr);
 }

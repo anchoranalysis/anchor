@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.objmask.rgb;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+
 /*-
  * #%L
  * anchor-image-io
@@ -30,8 +32,6 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 public abstract class RGBObjMaskGeneratorBaseWithBackground extends RGBObjMaskGeneratorBase {
 

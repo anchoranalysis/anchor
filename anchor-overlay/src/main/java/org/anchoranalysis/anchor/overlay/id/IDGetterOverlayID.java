@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.gui.overlay;
+package org.anchoranalysis.anchor.overlay.id;
+
+import org.anchoranalysis.anchor.overlay.Overlay;
 
 /*-
  * #%L

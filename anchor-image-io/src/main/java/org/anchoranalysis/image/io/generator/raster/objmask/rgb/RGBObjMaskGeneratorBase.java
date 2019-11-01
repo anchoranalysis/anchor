@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.objmask.rgb;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+
 /*-
  * #%L
  * anchor-image-io
@@ -39,8 +41,6 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements IterableObjectGenerator<ObjMaskWithPropertiesCollection,Stack> {
 

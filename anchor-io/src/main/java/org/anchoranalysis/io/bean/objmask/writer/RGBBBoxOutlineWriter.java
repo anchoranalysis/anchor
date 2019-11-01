@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+
 /*
  * #%L
  * anchor-io
@@ -39,8 +41,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 

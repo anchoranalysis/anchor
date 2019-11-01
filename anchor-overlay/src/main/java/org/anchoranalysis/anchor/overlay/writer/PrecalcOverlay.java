@@ -1,12 +1,8 @@
-package ch.ethz.biol.cell.gui.overlay.scaledmask;
-
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.overlay.objmask.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+package org.anchoranalysis.anchor.overlay.writer;
 
 /*-
  * #%L
- * anchor-mpp
+ * anchor-overlay
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -30,38 +26,31 @@ import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
+/**
+ * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class PrecalcOverlay {
 
-public class FromMark extends ScaledMaskCreator {
-
-	private RegionMembershipWithFlags regionMembership;
+	private ObjMaskWithProperties first;		// Result of the Mark->ObjMaskWithProperties 	
+	private Object second;				// Result of ObjMaskWithProperties>-Object
 	
-	public FromMark(RegionMembershipWithFlags regionMembership) {
+	public PrecalcOverlay(ObjMaskWithProperties first, Object second) {
 		super();
-		this.regionMembership = regionMembership;
+		this.first = first;
+		this.second = second;
 	}
 
-	@Override
-	public ObjMaskWithProperties createScaledMask(
-		OverlayWriter overlayWriter,
-		ObjMaskWithProperties omUnscaled,
-		double scaleFactor,
-		Object originalObject,
-		ImageDim sdScaled,
-		BinaryValuesByte bv )
-	throws CreateException {
-
-		Mark originalMark = (Mark) originalObject;
-		
-		ObjMaskWithProperties omScaled = originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor );
-		
-		// We keep the properties the same
-		return new ObjMaskWithProperties(omScaled.getMask(), omUnscaled.getProperties());
+	public ObjMaskWithProperties getFirst() {
+		return first;
 	}
 
+	public Object getSecond() {
+		return second;
+	}
+	
 }

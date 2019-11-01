@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.gui.overlay.scaledmask;
+package org.anchoranalysis.anchor.overlay.objmask.scaled;
+
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 /*-
  * #%L
@@ -34,8 +36,6 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
 
 public class FromMask extends ScaledMaskCreator {
 

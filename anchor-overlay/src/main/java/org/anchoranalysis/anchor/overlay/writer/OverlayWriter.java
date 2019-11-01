@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter;
+package org.anchoranalysis.anchor.overlay.writer;
 
 /*
  * #%L
@@ -30,6 +30,9 @@ package ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
@@ -41,10 +44,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.IDGetterObjMaskWithProperties;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-
-import ch.ethz.biol.cell.gui.overlay.Overlay;
-import ch.ethz.biol.cell.gui.overlay.ColoredOverlayCollection;
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 /**
  * Writes overlays onto a RGBStack. Also writes precalculated overlays.

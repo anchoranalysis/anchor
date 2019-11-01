@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.io.generator.raster;
 
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+
 /*-
  * #%L
  * anchor-mpp-io
@@ -32,7 +34,6 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.cfgtorgb.IRedrawable;
 
 public abstract class CacheableCfgToRGBGenerator extends ObjectGenerator<DisplayStack> implements IRedrawable, IterableObjectGenerator<OverlayedDisplayStackUpdate,DisplayStack> {

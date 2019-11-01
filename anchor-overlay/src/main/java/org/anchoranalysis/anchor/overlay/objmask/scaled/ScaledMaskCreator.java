@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter;
+package org.anchoranalysis.anchor.overlay.objmask.scaled;
+
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 /*-
  * #%L
@@ -26,31 +28,37 @@ package ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter;
  * #L%
  */
 
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
 /**
- * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
+ * Creates a scaled version of a mask from a mark/objMask that is not scaled
  * 
  * @author Owen Feehan
  *
  */
-public class PrecalcOverlay {
-
-	private ObjMaskWithProperties first;		// Result of the Mark->ObjMaskWithProperties 	
-	private Object second;				// Result of ObjMaskWithProperties>-Object
+public abstract class ScaledMaskCreator {
 	
-	public PrecalcOverlay(ObjMaskWithProperties first, Object second) {
-		super();
-		this.first = first;
-		this.second = second;
-	}
-
-	public ObjMaskWithProperties getFirst() {
-		return first;
-	}
-
-	public Object getSecond() {
-		return second;
-	}
-	
+	/**
+	 * Creates a scaled-version of the mask
+	 * 
+	 * @param overlayWriter what writes an overlay onto a raster
+	 * @param omUnscaled unscaled object-mask
+	 * @param scaleFactor how much to scale by (e.g. 0.5 scales the X dimension to 50%)
+	 * @param originalObject the object from which omUnscaled was derived
+	 * @param sdScaled the scene-dimensions when scaled to match scaleFactor
+	 * @param bv binary-values for creating the mask
+	 * @return the scaled object-mask
+	 * @throws CreateException
+	 */
+	public abstract ObjMaskWithProperties createScaledMask(
+		OverlayWriter overlayWriter,
+		ObjMaskWithProperties omUnscaled,
+		double scaleFactor,
+		Object originalObject,
+		ImageDim sdScaled,
+		BinaryValuesByte bv
+	) throws CreateException;
 }

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.io.objmask;
+package org.anchoranalysis.anchor.overlay.bean.objmask.writer;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -42,8 +42,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 
-	//private static Log log = LogFactory.getLog(ObjMaskWriter.class);
-	
 	/**
 	 * 
 	 */
@@ -69,8 +67,6 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 		ColorIndex colorIndex,
 		BoundingBox bboxContainer
 	) throws OperationFailedException {
-		
-		//System.out.printf("Writing a mask %s at\n", mask.getBoundingBox() );
 		
 		try {
 			Object precalculatedObj = precalculate( mask, stack.getDimensions() );

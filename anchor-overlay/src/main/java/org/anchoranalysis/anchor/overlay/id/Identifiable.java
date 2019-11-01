@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.core;
+package org.anchoranalysis.anchor.overlay.id;
 
 /*
  * #%L
@@ -28,6 +28,6 @@ package ch.ethz.biol.cell.core;
 
 
 @FunctionalInterface
-public interface IHasIdentifier {
+public interface Identifiable {
 	int getId();
 }

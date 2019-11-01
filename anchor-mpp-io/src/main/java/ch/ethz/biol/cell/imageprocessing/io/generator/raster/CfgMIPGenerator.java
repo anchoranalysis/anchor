@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.imageprocessing.io.generator.raster;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
+
 /*
  * #%L
  * anchor-mpp-io
@@ -41,9 +45,6 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 
 import overlay.OverlayCollectionMarkFactory;
-import ch.ethz.biol.cell.gui.overlay.Overlay;
-import ch.ethz.biol.cell.gui.overlay.ColoredOverlayCollection;
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.SimpleOverlayWriter;
 import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;

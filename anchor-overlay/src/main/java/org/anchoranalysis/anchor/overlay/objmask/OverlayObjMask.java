@@ -1,6 +1,10 @@
-package ch.ethz.biol.cell.gui.overlay;
+package org.anchoranalysis.anchor.overlay.objmask;
 
-import org.anchoranalysis.anchor.mpp.mark.OverlayProperties;
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.OverlayProperties;
+import org.anchoranalysis.anchor.overlay.objmask.scaled.FromMask;
+import org.anchoranalysis.anchor.overlay.objmask.scaled.ScaledMaskCreator;
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 /*-
  * #%L
@@ -37,11 +41,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-import ch.ethz.biol.cell.gui.overlay.Overlay;
-import ch.ethz.biol.cell.gui.overlay.scaledmask.FromMask;
-import ch.ethz.biol.cell.gui.overlay.scaledmask.ScaledMaskCreator;
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
-
 public class OverlayObjMask extends Overlay {
 
 	private static ScaledMaskCreator scaledMaskCreator = new FromMask();
@@ -58,7 +57,7 @@ public class OverlayObjMask extends Overlay {
 
 	// Assumes object mask is always inside the dim. TODO verify that is valid.
 	@Override
-	protected BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
+	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
 		assert( dim.contains( om.getBoundingBox()) );
 		return om.getBoundingBox();
 	}

@@ -29,17 +29,18 @@ package ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.anchor.overlay.id.IDGetterMaskFromOverlay;
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-
-import ch.ethz.biol.cell.gui.overlay.Overlay;
-import ch.ethz.biol.cell.gui.overlay.ColoredOverlayCollection;
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
-import ch.ethz.biol.cell.imageprocessing.objmask.IDGetterMaskFromOverlay;
 
 // Converts a configuration to a set of object masks, using a simple ObjMaskWriter for
 //   all objects

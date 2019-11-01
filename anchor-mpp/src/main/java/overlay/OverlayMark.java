@@ -1,7 +1,11 @@
 package overlay;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.OverlayProperties;
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.OverlayProperties;
+import org.anchoranalysis.anchor.overlay.objmask.scaled.FromMask;
+import org.anchoranalysis.anchor.overlay.objmask.scaled.ScaledMaskCreator;
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 /*-
  * #%L
@@ -39,12 +43,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-import ch.ethz.biol.cell.gui.overlay.Overlay;
 import ch.ethz.biol.cell.gui.overlay.scaledmask.FromMark;
-import ch.ethz.biol.cell.gui.overlay.scaledmask.FromMask;
-import ch.ethz.biol.cell.gui.overlay.scaledmask.ScaledMaskCreator;
 import ch.ethz.biol.cell.gui.overlay.scaledmask.VolumeThreshold;
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public class OverlayMark extends Overlay {
@@ -73,7 +73,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	protected BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
+	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
 		return mark.bbox(
 			dim,
 			regionMembership.getRegionID()

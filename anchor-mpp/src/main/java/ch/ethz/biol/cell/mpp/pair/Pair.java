@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.mpp.pair;
 
 import java.io.Serializable;
 
-import ch.ethz.biol.cell.core.IHasIdentifier;
+import org.anchoranalysis.anchor.overlay.id.Identifiable;
 
-public class Pair<ItemType extends IHasIdentifier> implements Serializable {
+public class Pair<ItemType extends Identifiable> implements Serializable {
 	
 	/**
 	 * 

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.gui.overlay;
+package org.anchoranalysis.anchor.overlay.collection;
 
 /*
  * #%L
@@ -31,13 +31,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
 
 public class ColoredOverlayCollection implements Iterable<Overlay> {
 
