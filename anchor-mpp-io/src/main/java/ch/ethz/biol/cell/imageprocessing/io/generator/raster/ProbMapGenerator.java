@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.io.generator.raster;
 
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+
 /*-
  * #%L
  * anchor-mpp-io
@@ -35,8 +37,6 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
 
 public class ProbMapGenerator extends RasterGenerator implements IterableGenerator<ProbMap> {
 

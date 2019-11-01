@@ -2,6 +2,8 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
+import org.anchoranalysis.anchor.mpp.points.PointClipper;
+
 /*-
  * #%L
  * anchor-mpp
@@ -34,7 +36,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 
 import cern.colt.matrix.DoubleMatrix1D;
-import ch.ethz.biol.cell.mpp.mark.points.PointClipper;
 
 /**
  * Functions to calculate a bounding-box for a point surrounded by some form of radii

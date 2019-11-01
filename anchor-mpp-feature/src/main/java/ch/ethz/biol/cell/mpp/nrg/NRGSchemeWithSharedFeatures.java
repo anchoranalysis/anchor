@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 
 /*
@@ -42,11 +45,8 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 import ch.ethz.biol.cell.mpp.nrg.nrgscheme.NRGScheme;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.AddCriteriaPair;
 
 public class NRGSchemeWithSharedFeatures {
 

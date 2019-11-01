@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
@@ -44,10 +45,9 @@ import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
 
-import static ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers.*;
-import static ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipUtilities.*;
+import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.*;
+import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.*;
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
 //

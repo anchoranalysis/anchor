@@ -31,7 +31,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -45,10 +50,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.nrg.IGetMemoForIndex;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.IAddCriteria;
 
 // PairType is how we store the pair information
 
@@ -80,7 +82,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private Class<?> pairTypeClass;
 	
 	@BeanField
-	private transient IAddCriteria<T> addCriteria;
+	private transient AddCriteria<T> addCriteria;
 	// END BEAN PROPERTIES
 	
 	private transient boolean hasInit = false;
@@ -116,7 +118,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( IGetMemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
 		assert( sharedFeatures!=null );
 		assert( logger!=null );
 		this.logger = logger;
@@ -168,7 +170,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void add( IGetMemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
 		assert hasInit;
 		try {
 			this.graph.addVertex( newMark.getMark() );
@@ -178,7 +180,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		}
 	}
 	
-	private void calcPairsForMark( IGetMemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
+	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
 		assert sharedFeatures!=null;
 		assert logger!=null;
 		FeatureSessionCreateParamsMPP session = new FeatureSessionCreateParamsMPP( addCriteria.orderedListOfFeatures(), nrgStack.getNrgStack(), nrgStack.getParams() );
@@ -209,7 +211,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void exchange( IGetMemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
 		
 		assert hasInit;
 		
@@ -226,7 +228,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void rmv( IGetMemoForIndex marksExisting, PxlMarkMemo mark ) {
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) {
 		
 		assert(hasInit);
 		
@@ -308,11 +310,11 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		throw new RuntimeException("Invalid index chosen for randomPair");
 	}
 	
-	public IAddCriteria<T> getAddCriteria() {
+	public AddCriteria<T> getAddCriteria() {
 		return addCriteria;
 	}
 
-	public void setAddCriteria(IAddCriteria<T> addCriteria) {
+	public void setAddCriteria(AddCriteria<T> addCriteria) {
 		this.addCriteria = addCriteria;
 	}
 

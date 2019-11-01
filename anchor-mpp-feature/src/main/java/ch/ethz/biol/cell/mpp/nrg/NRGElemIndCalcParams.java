@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*-
  * #%L
  * anchor-mpp-feature
@@ -29,8 +31,6 @@ package ch.ethz.biol.cell.mpp.nrg;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class NRGElemIndCalcParams extends FeatureCalcParamsNRGStack {
 

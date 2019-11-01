@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
+
 /*-
  * #%L
  * anchor-mpp
@@ -35,9 +38,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.beaninitparams.PointsInitParams;
 
 public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams> {
 

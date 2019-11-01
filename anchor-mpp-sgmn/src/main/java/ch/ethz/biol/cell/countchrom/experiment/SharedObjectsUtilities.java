@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -41,7 +43,6 @@ import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.mpp.proposer.CombineDiverseProvidersAsStacks;
 
 public class SharedObjectsUtilities {

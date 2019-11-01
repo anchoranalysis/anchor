@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -49,7 +50,6 @@ import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemAllCalcParams;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;

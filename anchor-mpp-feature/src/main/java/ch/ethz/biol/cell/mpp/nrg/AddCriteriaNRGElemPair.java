@@ -1,6 +1,11 @@
 package ch.ethz.biol.cell.mpp.nrg;
 
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pair.Pair;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*-
  * #%L
@@ -38,14 +43,9 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
-import ch.ethz.biol.cell.mpp.pair.Pair;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.IAddCriteria;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.AddCriteriaPair;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.IncludeMarksFailureException;
 
-public class AddCriteriaNRGElemPair implements IAddCriteria<NRGPair> {
+public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 
 	private FeatureList nrgElemPairList;
 	

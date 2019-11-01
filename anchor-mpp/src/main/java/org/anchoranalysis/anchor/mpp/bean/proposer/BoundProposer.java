@@ -1,5 +1,8 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
+import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
+import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -33,9 +36,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 
 import anchor.provider.bean.ProposerBean;
-import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
-import ch.ethz.biol.cell.imageprocessing.bound.RslvdBound;
-import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 public abstract class BoundProposer extends ProposerBean<BoundProposer> implements ICompatibleWith {
 	/**

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.reportfeature.pso;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*
  * #%L
  * anchor-mpp-io
@@ -34,7 +36,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPPSingle;

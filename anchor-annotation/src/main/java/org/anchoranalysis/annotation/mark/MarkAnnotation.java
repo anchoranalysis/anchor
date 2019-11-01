@@ -29,13 +29,13 @@ package org.anchoranalysis.annotation.mark;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.annotation.AnnotationWithCfg;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 
 /**
  * An annotation that consists of two sets of marks (accepted marks, and rejected marks)

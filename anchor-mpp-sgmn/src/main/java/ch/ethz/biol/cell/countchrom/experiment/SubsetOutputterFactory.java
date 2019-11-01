@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.countchrom.experiment;
 
 import java.util.function.Function;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.io.objs.ObjMaskCollectionWriter;
@@ -38,7 +39,6 @@ import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 

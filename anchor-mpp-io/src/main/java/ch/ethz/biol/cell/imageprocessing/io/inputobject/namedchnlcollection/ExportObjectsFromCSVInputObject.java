@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.imageprocessing.io.inputobject.namedchnlcollection;
 
 import java.nio.file.Path;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*
  * #%L
  * anchor-mpp-io
@@ -33,8 +35,6 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public class ExportObjectsFromCSVInputObject implements InputFromManager {
 

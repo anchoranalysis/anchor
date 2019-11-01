@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import anchor.provider.bean.ProposalAbnormalFailureException;
@@ -35,7 +36,6 @@ import anchor.provider.bean.ProposalAbnormalFailureException;
 import anchor.provider.bean.ProposerBean;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 // Proposes an entire configuration
 @GroupingRoot

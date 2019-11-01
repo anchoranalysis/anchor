@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.gui.overlay.scaledmask;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.objmask.scaled.ScaledMaskCreator;
 import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
@@ -34,8 +35,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public class FromMark extends ScaledMaskCreator {
 

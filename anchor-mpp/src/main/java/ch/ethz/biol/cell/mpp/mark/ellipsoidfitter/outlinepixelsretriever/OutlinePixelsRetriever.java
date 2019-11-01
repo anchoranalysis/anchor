@@ -29,10 +29,9 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.points.PointsBean;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-
-import ch.ethz.biol.cell.mpp.mark.points.PointsBean;
 
 public abstract class OutlinePixelsRetriever extends PointsBean<OutlinePixelsRetriever> {
 

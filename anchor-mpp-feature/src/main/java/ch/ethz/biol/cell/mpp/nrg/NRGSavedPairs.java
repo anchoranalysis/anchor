@@ -30,7 +30,12 @@ package ch.ethz.biol.cell.mpp.nrg;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteria;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -39,14 +44,10 @@ import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.pair.IUpdatableMarkSet;
 import ch.ethz.biol.cell.mpp.pair.PairCollectionAddCriteria;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.IAddCriteria;
 
 
-public class NRGSavedPairs implements Serializable, IUpdatableMarkSet {
+public class NRGSavedPairs implements Serializable, UpdatableMarkSet {
 
 	/**
 	 * 
@@ -59,7 +60,7 @@ public class NRGSavedPairs implements Serializable, IUpdatableMarkSet {
     private PairCollectionAddCriteria<NRGPair> pairCollection;
     
 	// START CONSTRUCTORS
-	public NRGSavedPairs( IAddCriteria<NRGPair> addCriteria ) {
+	public NRGSavedPairs( AddCriteria<NRGPair> addCriteria ) {
 		this.pairCollection = new PairCollectionAddCriteria<>(NRGPair.class);
 		this.pairCollection.setAddCriteria(addCriteria);
 	}
@@ -88,7 +89,7 @@ public class NRGSavedPairs implements Serializable, IUpdatableMarkSet {
 
 	
 	@Override
-	public void initUpdatableMarkSet( IGetMemoForIndex pxlMarkMemoList, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex pxlMarkMemoList, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
 		
 		this.pairCollection.initUpdatableMarkSet( pxlMarkMemoList, stack, logger, sharedFeatures );
 		calcTotalFresh();		
@@ -122,7 +123,7 @@ public class NRGSavedPairs implements Serializable, IUpdatableMarkSet {
 	}
 	
 	@Override
-	public void add( IGetMemoForIndex pxlMarkMemoList, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void add( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark ) throws UpdateMarkSetException {
 		
 		this.pairCollection.add(pxlMarkMemoList, newMark);
 		this.nrgTotal += totalNRGForMark( newMark.getMark() );
@@ -131,7 +132,7 @@ public class NRGSavedPairs implements Serializable, IUpdatableMarkSet {
 	
 	
 	@Override
-	public void rmv( IGetMemoForIndex marksExisting, PxlMarkMemo mark ) {
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) {
 		
 		// We calculate it's individual contribution
 		this.nrgTotal -= totalNRGForMark(mark.getMark());
@@ -141,7 +142,7 @@ public class NRGSavedPairs implements Serializable, IUpdatableMarkSet {
 	
 	// exchanges one mark with another
 	@Override
-	public void exchange( IGetMemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
 		
 		// We get a total for how the old mark interacts with the other marks
 		double oldPairTotal = totalNRGForMark(oldMark.getMark());

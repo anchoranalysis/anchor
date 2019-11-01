@@ -29,15 +29,14 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
+import org.anchoranalysis.anchor.mpp.bounds.Bound;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.imageprocessing.bound.Bound;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipUtilities;
 
 
 

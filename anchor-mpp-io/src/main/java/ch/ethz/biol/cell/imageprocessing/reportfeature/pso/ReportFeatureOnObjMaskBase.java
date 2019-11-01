@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.reportfeature.pso;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*-
  * #%L
  * anchor-mpp-io
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedObjects {
 

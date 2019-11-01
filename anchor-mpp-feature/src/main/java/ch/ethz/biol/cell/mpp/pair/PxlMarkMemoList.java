@@ -30,12 +30,11 @@ package ch.ethz.biol.cell.mpp.pair;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.nrg.IGetMemoForIndex;
-
-public class PxlMarkMemoList implements IGetMemoForIndex {
+public class PxlMarkMemoList implements MemoForIndex {
 
 	private List<PxlMarkMemo> delegate = new ArrayList<PxlMarkMemo>();
 	
@@ -87,7 +86,7 @@ public class PxlMarkMemoList implements IGetMemoForIndex {
 		return true;
 	}
 	
-	public void addAll( IGetMemoForIndex src ) {
+	public void addAll( MemoForIndex src ) {
 		
 		for (int i=0; i<src.size(); i++) {
 			add( src.getMemoForIndex(i) );

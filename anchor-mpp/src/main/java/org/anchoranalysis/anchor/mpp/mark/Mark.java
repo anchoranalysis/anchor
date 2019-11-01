@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.function.Function;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.anchor.overlay.id.Identifiable;
 import org.anchoranalysis.core.cache.IHasCacheableID;
@@ -44,8 +45,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
 

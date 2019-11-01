@@ -1,5 +1,8 @@
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
+import org.anchoranalysis.anchor.mpp.bounds.Bound;
+import org.anchoranalysis.anchor.mpp.bounds.BoundUnitless;
+
 /*
  * #%L
  * anchor-mpp
@@ -32,9 +35,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
-
-import ch.ethz.biol.cell.imageprocessing.bound.Bound;
-import ch.ethz.biol.cell.imageprocessing.bound.BoundUnitless;
 
 public class EllipseBounds extends EllipseBoundsWithoutRotation {
 

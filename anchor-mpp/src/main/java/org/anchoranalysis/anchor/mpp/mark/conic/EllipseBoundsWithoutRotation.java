@@ -1,6 +1,7 @@
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
-import org.anchoranalysis.anchor.mpp.mark.bounds.OrientableBounds;
+import org.anchoranalysis.anchor.mpp.bounds.Bound;
+import org.anchoranalysis.anchor.mpp.bounds.OrientableBounds;
 
 /*
  * #%L
@@ -31,8 +32,6 @@ import org.anchoranalysis.anchor.mpp.mark.bounds.OrientableBounds;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageRes;
-
-import ch.ethz.biol.cell.imageprocessing.bound.Bound;
 
 public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 

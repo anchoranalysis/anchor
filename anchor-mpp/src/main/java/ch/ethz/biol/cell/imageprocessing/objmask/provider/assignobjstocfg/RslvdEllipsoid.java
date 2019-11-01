@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 /*-
@@ -33,8 +34,6 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public class RslvdEllipsoid {
 	private MarkEllipsoid mark;

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.imageprocessing.seed.finder;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -53,8 +56,6 @@ import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 import ch.ethz.biol.cell.sgmn.cfg.CfgSgmn;
 import ch.ethz.biol.cell.sgmn.cfg.ExperimentState;
 

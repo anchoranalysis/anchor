@@ -29,10 +29,10 @@ package ch.ethz.biol.cell.mpp.nrg;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class CfgWithNrgTotal implements Serializable {
 

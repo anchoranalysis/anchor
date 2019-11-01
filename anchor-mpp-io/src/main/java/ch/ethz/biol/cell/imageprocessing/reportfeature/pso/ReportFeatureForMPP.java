@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.reportfeature.pso;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*-
  * #%L
  * anchor-mpp-io
@@ -37,7 +39,6 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorRes;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPPSingle;
 
 public abstract class ReportFeatureForMPP extends ReportFeatureForSharedObjects {

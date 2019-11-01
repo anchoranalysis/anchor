@@ -1,6 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
@@ -34,7 +35,6 @@ import anchor.provider.bean.ProposalAbnormalFailureException;
 
 import anchor.provider.bean.ProposerBean;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 public abstract class MarkFromCfgProposer extends ProposerBean<MarkFromCfgProposer> implements ICompatibleWith  {
 

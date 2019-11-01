@@ -33,42 +33,43 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.nrg.IGetMemoForIndex;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
-
 // The pxlMarkMemoList must always match the current state of the underlzing updatable items
-public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<IUpdatableMarkSet> {
+public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<UpdatableMarkSet> {
 	
-	private ArrayList<IUpdatableMarkSet> delegate = new ArrayList<>();
+	private ArrayList<UpdatableMarkSet> delegate = new ArrayList<>();
 
 	@Override
-	public boolean add(IUpdatableMarkSet e) {
+	public boolean add(UpdatableMarkSet e) {
 		return delegate.add(e);
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( IGetMemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
-		for (IUpdatableMarkSet item : delegate) {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
+		for (UpdatableMarkSet item : delegate) {
 			item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);
 		}
 	}
 	
 	@Override
-	public void add( IGetMemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
-		for (IUpdatableMarkSet item : delegate) {
+	public void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+		for (UpdatableMarkSet item : delegate) {
 			item.add(marksExisting, newMark);
 		}
 	}
 
 	
 	// Modifies marksExisting
-	private void add( PxlMarkMemoList marksExisting, IGetMemoForIndex listToAdd ) throws UpdateMarkSetException {
+	private void add( PxlMarkMemoList marksExisting, MemoForIndex listToAdd ) throws UpdateMarkSetException {
 		for (int i=0; i<listToAdd.size(); i++) {
 			PxlMarkMemo item = listToAdd.getMemoForIndex(i);
 			add( marksExisting, item );
@@ -77,7 +78,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 	
 	// Assumes no existing marks
-	public void add( IGetMemoForIndex listToAdd ) throws UpdateMarkSetException {
+	public void add( MemoForIndex listToAdd ) throws UpdateMarkSetException {
 		add( new PxlMarkMemoList(), listToAdd );
 	}
 	
@@ -85,7 +86,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 		
 		int cnt = 0;
 		
-		for (IUpdatableMarkSet item : delegate) {
+		for (UpdatableMarkSet item : delegate) {
 
 			if (item instanceof ProbMap) {
 				cnt++;
@@ -97,7 +98,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	public List<ProbMap> listProbMap() {
 		ArrayList<ProbMap> list = new ArrayList<>();
 		
-		for (IUpdatableMarkSet item : delegate) {
+		for (UpdatableMarkSet item : delegate) {
 
 			if (item instanceof ProbMap) {
 				list.add( (ProbMap) item );
@@ -113,32 +114,32 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}*/
 	
 	@Override
-	public void exchange( IGetMemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
-		for (IUpdatableMarkSet item : delegate) {
+	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+		for (UpdatableMarkSet item : delegate) {
 			item.exchange(pxlMarkMemoList, oldMark, indexOldMark, newMark);
 		}
 	}
 	
 	@Override
-	public void rmv( IGetMemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
-		for (IUpdatableMarkSet item : delegate) {
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
+		for (UpdatableMarkSet item : delegate) {
 			item.rmv(marksExisting, mark);
 		}
 	}
 	
 	@Override
-	public void add(int index, IUpdatableMarkSet element) {
+	public void add(int index, UpdatableMarkSet element) {
 		delegate.add(index, element);		
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends IUpdatableMarkSet> c) {
+	public boolean addAll(Collection<? extends UpdatableMarkSet> c) {
 		return delegate.addAll(c);
 	}
 
 	@Override
 	public boolean addAll(int index,
-			Collection<? extends IUpdatableMarkSet> c) {
+			Collection<? extends UpdatableMarkSet> c) {
 		return delegate.addAll(index, c);
 	}
 
@@ -158,7 +159,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 
 	@Override
-	public IUpdatableMarkSet get(int index) {
+	public UpdatableMarkSet get(int index) {
 		return delegate.get(index);
 	}
 
@@ -173,7 +174,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 
 	@Override
-	public Iterator<IUpdatableMarkSet> iterator() {
+	public Iterator<UpdatableMarkSet> iterator() {
 		return delegate.iterator();
 	}
 
@@ -183,12 +184,12 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 
 	@Override
-	public ListIterator<IUpdatableMarkSet> listIterator() {
+	public ListIterator<UpdatableMarkSet> listIterator() {
 		return delegate.listIterator();
 	}
 
 	@Override
-	public ListIterator<IUpdatableMarkSet> listIterator(int index) {
+	public ListIterator<UpdatableMarkSet> listIterator(int index) {
 		return delegate.listIterator(index);
 	}
 
@@ -198,7 +199,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 
 	@Override
-	public IUpdatableMarkSet remove(int index) {
+	public UpdatableMarkSet remove(int index) {
 		return delegate.remove(index);
 	}
 
@@ -213,8 +214,8 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 
 	@Override
-	public IUpdatableMarkSet set(int index,
-			IUpdatableMarkSet element) {
+	public UpdatableMarkSet set(int index,
+			UpdatableMarkSet element) {
 		return delegate.set(index, element);
 	}
 
@@ -224,7 +225,7 @@ public class ListUpdatableMarkSetCollection implements IUpdatableMarkSet, List<I
 	}
 
 	@Override
-	public List<IUpdatableMarkSet> subList(int fromIndex, int toIndex) {
+	public List<UpdatableMarkSet> subList(int fromIndex, int toIndex) {
 		return delegate.subList(fromIndex, toIndex);
 	}
 

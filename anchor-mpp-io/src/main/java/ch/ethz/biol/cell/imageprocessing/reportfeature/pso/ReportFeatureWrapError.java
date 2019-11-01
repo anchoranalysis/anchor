@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.reportfeature.pso;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*
  * #%L
  * anchor-mpp-io
@@ -31,8 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
 

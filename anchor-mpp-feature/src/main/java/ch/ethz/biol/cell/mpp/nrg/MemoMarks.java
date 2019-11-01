@@ -30,17 +30,18 @@ package ch.ethz.biol.cell.mpp.nrg;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemoFactory;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
-public class MemoMarks implements Serializable, IGetMemoForIndex {
+public class MemoMarks implements Serializable, MemoForIndex {
 
     /**
 	 * 

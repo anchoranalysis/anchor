@@ -1,6 +1,9 @@
 package ch.ethz.biol.cell.core;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.list.OrderedFeatureList;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -33,11 +36,8 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 import ch.ethz.biol.cell.mpp.MPPBean;
 import ch.ethz.biol.cell.mpp.mark.check.CheckException;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.IOrderedListOfFeatures;
-import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
-public abstract class CheckMark extends MPPBean<CheckMark> implements ICompatibleWith, IOrderedListOfFeatures {
+public abstract class CheckMark extends MPPBean<CheckMark> implements ICompatibleWith, OrderedFeatureList {
 
 	/**
 	 * 

@@ -31,6 +31,10 @@ import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.bean.bounds.BoundCalculator;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
+import org.anchoranalysis.anchor.mpp.bounds.Bound;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -38,11 +42,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-
-import ch.ethz.biol.cell.imageprocessing.bound.Bound;
-import ch.ethz.biol.cell.mpp.bound.BoundCalculator;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipUtilities;
 
 
 // A spherical mark

@@ -29,13 +29,11 @@ package org.anchoranalysis.anchor.mpp.mark;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipUtilities;
 
 public class MarkPointList extends MarkAbstractPointList {
 

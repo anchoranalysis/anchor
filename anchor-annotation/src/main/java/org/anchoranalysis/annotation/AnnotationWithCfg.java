@@ -1,5 +1,7 @@
 package org.anchoranalysis.annotation;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+
 /*-
  * #%L
  * anchor-annotation
@@ -31,7 +33,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
 public abstract class AnnotationWithCfg extends Annotation {
 	

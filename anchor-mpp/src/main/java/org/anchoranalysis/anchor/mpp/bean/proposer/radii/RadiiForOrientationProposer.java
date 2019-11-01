@@ -1,7 +1,9 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
+import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
+import org.anchoranalysis.anchor.mpp.bounds.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 /*-
@@ -38,9 +40,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix2DFromRadianCreator;
 import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
-
-import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
-import ch.ethz.biol.cell.imageprocessing.bound.RslvdBound;
 
 public class RadiiForOrientationProposer extends RadiiProposerWithBoundProposer {
 	

@@ -30,6 +30,8 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -39,8 +41,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 import ch.ethz.biol.cell.mpp.MPPBean;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
-import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 /**
  * Modifies an Object by applying a kernel

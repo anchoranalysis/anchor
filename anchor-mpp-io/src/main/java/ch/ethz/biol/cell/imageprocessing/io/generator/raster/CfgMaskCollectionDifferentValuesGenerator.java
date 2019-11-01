@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.io.generator.raster;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+
 /*
  * #%L
  * anchor-mpp-io
@@ -40,7 +42,6 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator implements IterableGenerator<Cfg> {
 

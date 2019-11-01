@@ -1,7 +1,9 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
@@ -34,8 +36,6 @@ import anchor.provider.bean.ProposalAbnormalFailureException;
 
 
 import anchor.provider.bean.ProposerBean;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 // Proposes a mark
 @GroupingRoot

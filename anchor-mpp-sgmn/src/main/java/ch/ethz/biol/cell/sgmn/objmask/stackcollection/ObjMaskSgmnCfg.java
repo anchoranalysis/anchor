@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.sgmn.objmask.stackcollection;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+
 /*
  * #%L
  * anchor-mpp-sgmn
@@ -45,8 +48,6 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 import ch.ethz.biol.cell.sgmn.cfg.CfgSgmn;
 
 public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {

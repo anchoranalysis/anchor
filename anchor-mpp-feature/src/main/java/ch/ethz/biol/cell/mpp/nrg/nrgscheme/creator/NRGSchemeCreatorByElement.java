@@ -30,6 +30,8 @@ package ch.ethz.biol.cell.mpp.nrg.nrgscheme.creator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
@@ -40,9 +42,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.operator.Sum;
 
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.nrg.nrgscheme.NRGScheme;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.AddCriteriaPair;
 
 public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 

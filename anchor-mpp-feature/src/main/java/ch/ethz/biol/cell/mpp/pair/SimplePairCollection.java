@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.pair;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pair.Pair;
 
 
 // A simple pair collection where the underlying PairType is a simple Pair
