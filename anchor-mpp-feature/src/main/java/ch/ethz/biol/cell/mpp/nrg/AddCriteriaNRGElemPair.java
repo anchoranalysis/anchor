@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp-feature
@@ -36,7 +38,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 import ch.ethz.biol.cell.mpp.pair.Pair;

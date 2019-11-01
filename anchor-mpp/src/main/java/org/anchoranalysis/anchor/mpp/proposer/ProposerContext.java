@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.proposer;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -32,7 +34,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemoFactory;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;

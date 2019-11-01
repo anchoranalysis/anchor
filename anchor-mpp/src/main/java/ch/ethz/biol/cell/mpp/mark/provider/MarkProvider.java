@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -29,7 +31,6 @@ package ch.ethz.biol.cell.mpp.mark.provider;
 import org.anchoranalysis.core.error.CreateException;
 
 import ch.ethz.biol.cell.mpp.MPPProvider;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public abstract class MarkProvider extends MPPProvider<MarkProvider,Mark>  {
 

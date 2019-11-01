@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.io.generator.raster;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -33,7 +35,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
 
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class ColoredCfgWithDisplayStack {
 

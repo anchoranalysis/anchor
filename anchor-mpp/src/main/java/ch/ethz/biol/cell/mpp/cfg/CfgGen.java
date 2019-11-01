@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.cfg;
 
 
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.NullParamsBean;
 
 /*
@@ -34,7 +35,6 @@ import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.factory.MarkFactory;
 
 public class CfgGen extends NullParamsBean<CfgGen> {

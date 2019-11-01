@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.mpp.nrg;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.pair.Pair;
 
 public class NRGPair implements Serializable {

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.factory;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+
 /*
  * #%L
  * anchor-mpp
@@ -28,9 +31,6 @@ package ch.ethz.biol.cell.mpp.mark.factory;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 
 public class MarkEllipseFactory extends MarkFactory {
 

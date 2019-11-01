@@ -33,6 +33,9 @@ import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 import ch.ethz.biol.cell.gui.overlay.OverlayCollection;
+import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 // Bridges CfgNRGInstantState to CfgInstantState
 public class CfgWithNrgTotalInstantStateBridge implements IObjectBridge<CfgWithNrgTotalInstantState, OverlayedInstantState> {
@@ -50,7 +53,11 @@ public class CfgWithNrgTotalInstantStateBridge implements IObjectBridge<CfgWithN
 			return new OverlayedInstantState(sourceObject.getIndex(), new OverlayCollection() );
 		}
 		
-		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor( sourceObject.getCfg().getCfg() );
+		RegionMembershipWithFlags regionMembership = RegionMapSingleton.instance().membershipWithFlagsForIndex( GlobalRegionIdentifiers.SUBMARK_INSIDE );
+		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor(
+			sourceObject.getCfg().getCfg(),
+			regionMembership
+		);
 			
 		return new OverlayedInstantState(sourceObject.getIndex(), oc );
 	}

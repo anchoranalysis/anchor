@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.factory;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*
  * #%L
  * anchor-mpp
@@ -27,8 +29,6 @@ package ch.ethz.biol.cell.mpp.mark.factory;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public abstract class MarkFactory extends AnchorBean<MarkFactory> {
 

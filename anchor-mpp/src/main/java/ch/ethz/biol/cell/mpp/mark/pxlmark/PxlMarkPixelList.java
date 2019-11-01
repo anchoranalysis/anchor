@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.pxlmark;
 
 import java.nio.ByteBuffer;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -44,7 +45,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromList;
 
 import ch.ethz.biol.cell.imageprocessing.pixellist.IndexByChnl;
 import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactoryPixelList;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembership;
 

@@ -30,6 +30,10 @@ package ch.ethz.biol.cell.mpp.gui.videostats.internalframe.evaluator;
 import java.awt.Color;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkPointList;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point2d;
@@ -40,11 +44,6 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
-import ch.ethz.biol.cell.mpp.mark.MarkPointList;
 
 public class EvaluatorUtilities {
 

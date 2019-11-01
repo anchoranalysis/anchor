@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
+import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
+
 /*-
  * #%L
  * anchor-mpp
@@ -33,7 +35,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
 import ch.ethz.biol.cell.mpp.MPPBean;
-import ch.ethz.biol.cell.mpp.mark.MarkBounds;
 import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 // This IParamsEquals interface is redundant, can be removed

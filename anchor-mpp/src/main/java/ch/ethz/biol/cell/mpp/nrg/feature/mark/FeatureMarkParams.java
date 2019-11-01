@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -29,8 +31,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParams;
 import org.anchoranalysis.image.extent.ImageRes;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class FeatureMarkParams extends FeatureCalcParamsWithImageParams {
 

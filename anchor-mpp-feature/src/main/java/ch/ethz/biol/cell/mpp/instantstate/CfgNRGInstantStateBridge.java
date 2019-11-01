@@ -34,12 +34,18 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 
 import ch.ethz.biol.cell.gui.overlay.OverlayCollection;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
-// Bridges CfgNRGInstantState to CfgInstantState
+// Bridges CfgNRGInstantState to OverlayedInstantState
 public class CfgNRGInstantStateBridge implements IObjectBridge<CfgNRGInstantState, OverlayedInstantState> {
 
-	
-	
+	private RegionMembershipWithFlags regionMembership;
+		
+	public CfgNRGInstantStateBridge(RegionMembershipWithFlags regionMembership) {
+		super();
+		this.regionMembership = regionMembership;
+	}
+
 	@Override
 	public OverlayedInstantState bridgeElement(CfgNRGInstantState sourceObject) throws GetOperationFailedException {
 		
@@ -57,7 +63,10 @@ public class CfgNRGInstantStateBridge implements IObjectBridge<CfgNRGInstantStat
 			cfg = new Cfg();
 		}
 		
-		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor(cfg);
+		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor(
+			cfg,
+			regionMembership
+		);
 		
 		return new OverlayedInstantState(sourceObject.getIndex(), oc);
 	}

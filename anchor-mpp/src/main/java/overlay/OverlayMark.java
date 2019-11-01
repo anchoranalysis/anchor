@@ -1,5 +1,8 @@
 package overlay;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.OverlayProperties;
+
 /*-
  * #%L
  * anchor-mpp
@@ -30,7 +33,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -43,26 +45,27 @@ import ch.ethz.biol.cell.gui.overlay.scaledmask.FromMask;
 import ch.ethz.biol.cell.gui.overlay.scaledmask.ScaledMaskCreator;
 import ch.ethz.biol.cell.gui.overlay.scaledmask.VolumeThreshold;
 import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
-import ch.ethz.biol.cell.mpp.mark.Mark;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public class OverlayMark extends Overlay {
 
-	/**
-	 *	How we create our scaled masks 
-	 */
-	private final static ScaledMaskCreator scaledMaskCreator = new VolumeThreshold(
-		new FromMask(),	// Above the threshold, we use the quick *rough* method for scaling up
-		new FromMark(),	// Below the threshold, we use the slower *fine* method for scaling up 
-		5000			// The threshold that decides which to use
-	);
-	
-	
-	
+	private ScaledMaskCreator scaledMaskCreator;
 	private Mark mark;
+	private RegionMembershipWithFlags regionMembership;
 	
-	public OverlayMark(Mark mark) {
+	public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
 		super();
 		this.mark = mark;
+		this.regionMembership = regionMembership;
+		
+		/**
+		 *	How we create our scaled masks 
+		 */
+		scaledMaskCreator = new VolumeThreshold(
+			new FromMask(),	// Above the threshold, we use the quick *rough* method for scaling up
+			new FromMark(regionMembership),	// Below the threshold, we use the slower *fine* method for scaling up 
+			5000			// The threshold that decides which to use
+		);
 	}
 
 	public Mark getMark() {
@@ -71,7 +74,10 @@ public class OverlayMark extends Overlay {
 
 	@Override
 	protected BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
-		return mark.bbox(dim,overlayWriter.getRegionMembership().getRegionID());
+		return mark.bbox(
+			dim,
+			regionMembership.getRegionID()
+		);
 	}
 
 	@Override
@@ -96,7 +102,11 @@ public class OverlayMark extends Overlay {
 	@Override
 	public ObjMaskWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
 			BinaryValuesByte bvOut) throws CreateException {
-		return mark.calcMask(dimEntireImage, overlayWriter.getRegionMembership(), bvOut );
+		return mark.calcMask(
+			dimEntireImage,
+			regionMembership,
+			bvOut
+		);
 	}
 
 	@Override
@@ -110,7 +120,7 @@ public class OverlayMark extends Overlay {
 		Point3d pntD = PointConverter.doubleFromInt(pnt);
 		
 		byte membership = mark.evalPntInside(pntD);
-		return (overlayWriter.getRegionMembership().isMemberFlag(membership));
+		return (regionMembership.isMemberFlag(membership));
 	}
 
 	// We delegate uniqueness-check to the mask
@@ -131,7 +141,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public NameValueSet<String> generateProperties(ImageRes sr) {
+	public OverlayProperties generateProperties(ImageRes sr) {
 		return mark.generateProperties(sr);
 	}
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.proposer.error;
 
 import java.io.Serializable;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 public abstract class ErrorNode implements Serializable {
 	/**

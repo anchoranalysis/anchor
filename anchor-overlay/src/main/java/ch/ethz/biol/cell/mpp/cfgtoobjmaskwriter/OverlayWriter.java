@@ -45,7 +45,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import ch.ethz.biol.cell.gui.overlay.Overlay;
 import ch.ethz.biol.cell.gui.overlay.ColoredOverlayCollection;
 import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 /**
  * Writes overlays onto a RGBStack. Also writes precalculated overlays.
@@ -56,9 +55,7 @@ import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 public abstract class OverlayWriter {
 	
 	public abstract ObjMaskWriter getObjMaskWriter();
-	
-	public abstract RegionMembershipWithFlags getRegionMembership();
-	
+		
 	/**
 	 * Writes a collection of colored-overlays to the background
 	 * 

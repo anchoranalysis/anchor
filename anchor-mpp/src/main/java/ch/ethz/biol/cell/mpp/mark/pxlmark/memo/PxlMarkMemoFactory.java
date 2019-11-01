@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pxlmark.memo;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -31,7 +33,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactory;
 import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactoryHistogram;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
 // We more explicitly manage the creation and deletiion of PxlMarkMemo as they can take up a large amount of memory

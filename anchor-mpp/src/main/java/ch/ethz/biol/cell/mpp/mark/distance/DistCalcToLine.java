@@ -31,7 +31,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 public class DistCalcToLine {
 	
 	private Point3d startPoint;
-	Point3d endPoint;
+	private Point3d endPoint;
 	private Point3d directionVector;
 	
 	public DistCalcToLine() {

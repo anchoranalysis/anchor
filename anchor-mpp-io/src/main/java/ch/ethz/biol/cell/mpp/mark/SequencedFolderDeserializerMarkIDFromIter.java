@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp-io

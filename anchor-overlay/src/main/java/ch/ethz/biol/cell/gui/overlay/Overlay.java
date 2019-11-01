@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.gui.overlay;
 
+import org.anchoranalysis.anchor.mpp.mark.OverlayProperties;
+
 /*-
  * #%L
  * anchor-overlay
@@ -28,7 +30,6 @@ package ch.ethz.biol.cell.gui.overlay;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -81,5 +82,5 @@ public abstract class Overlay implements IHasIdentifier {
 	@Override
 	public abstract int hashCode();
 	
-	public abstract NameValueSet<String> generateProperties(ImageRes sr);
+	public abstract OverlayProperties generateProperties(ImageRes sr);
 }

@@ -29,6 +29,7 @@ package overlay;
 
 import ch.ethz.biol.cell.gui.overlay.Overlay;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
 
@@ -36,7 +37,7 @@ import ch.ethz.biol.cell.gui.overlay.ColoredOverlayCollection;
 import ch.ethz.biol.cell.gui.overlay.OverlayCollection;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 /**
  * Two-way factory.
@@ -49,23 +50,27 @@ import ch.ethz.biol.cell.mpp.mark.Mark;
  */
 public class OverlayCollectionMarkFactory {
 	
-	public static OverlayCollection createWithoutColor( Cfg cfg ) {
+	public static OverlayCollection createWithoutColor( Cfg cfg, RegionMembershipWithFlags regionMembership ) {
 		OverlayCollection out = new OverlayCollection();
 		
 		for(int i=0; i<cfg.size(); i++) {
 			Mark m = cfg.get(i);
-			out.add( new OverlayMark(m) );
+			out.add( new OverlayMark(m, regionMembership) );
 		}
 		
 		return out;
 	}
 
-	public static ColoredOverlayCollection createColor( ColoredCfg cfg ) {
-		return createColor( cfg.getCfg(), cfg.getColorList() );
+	public static ColoredOverlayCollection createColor( ColoredCfg cfg, RegionMembershipWithFlags regionMembership ) {
+		return createColor( cfg.getCfg(), cfg.getColorList(), regionMembership );
 	}
 	
 	
-	private static ColoredOverlayCollection createColor( Cfg cfg, ColorIndex colorIndex ) {
+	private static ColoredOverlayCollection createColor(
+		Cfg cfg,
+		ColorIndex colorIndex,
+		RegionMembershipWithFlags regionMembership
+	) {
 		
 		ColoredOverlayCollection out = new ColoredOverlayCollection();
 		
@@ -74,7 +79,7 @@ public class OverlayCollectionMarkFactory {
 			RGBColor color = colorIndex.get(i);
 			
 			// TODO should we duplicate color?
-			out.add( new OverlayMark(m), color );
+			out.add( new OverlayMark(m, regionMembership), color );
 		}
 		
 		return out;

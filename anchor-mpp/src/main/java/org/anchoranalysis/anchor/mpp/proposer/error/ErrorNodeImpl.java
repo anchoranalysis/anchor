@@ -34,9 +34,8 @@ import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class ErrorNodeImpl extends ErrorNode implements TreeNode {
 

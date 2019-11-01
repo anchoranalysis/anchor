@@ -35,12 +35,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkSphere;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedsFactory;
 import org.junit.Test;
-
-import ch.ethz.biol.cell.mpp.mark.MarkSphere;
 
 
 public class SeedTest {

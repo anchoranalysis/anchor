@@ -57,6 +57,8 @@ public class CfgGenerator extends RasterGenerator implements IterableObjectGener
 	
 	private String manifestDescriptionFunction = "cfg";
 	
+	private RegionMembershipWithFlags regionMembership;
+	
 	public CfgGenerator(ObjMaskWriter maskWriter, IDGetter<Overlay> idGetter ) {
 		this(maskWriter, null, idGetter);
 	}
@@ -67,9 +69,10 @@ public class CfgGenerator extends RasterGenerator implements IterableObjectGener
 	
 	public CfgGenerator(ObjMaskWriter maskWriter, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership ) {
 		super();
-		this.maskWriter = new SimpleOverlayWriter(maskWriter, regionMembership );
+		this.maskWriter = new SimpleOverlayWriter(maskWriter);
 		this.cws = cws;
 		this.idGetter = idGetter;
+		this.regionMembership = regionMembership;
 	}
 
 	@Override
@@ -83,7 +86,8 @@ public class CfgGenerator extends RasterGenerator implements IterableObjectGener
 			RGBStack stack = ConvertDisplayStackToRGB.convert( cws.getStack() );
 			
 			ColoredOverlayCollection oc = OverlayCollectionMarkFactory.createColor(
-				cws.getCfg()
+				cws.getCfg(),
+				regionMembership
 			);
 			
 			maskWriter.writeOverlays( oc, stack, idGetter );

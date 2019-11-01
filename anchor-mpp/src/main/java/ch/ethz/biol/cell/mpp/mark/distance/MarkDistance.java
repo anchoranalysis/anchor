@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.distance;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
+
 /*
  * #%L
  * anchor-mpp
@@ -28,8 +31,6 @@ package ch.ethz.biol.cell.mpp.mark.distance;
 
 import org.anchoranalysis.bean.AnchorBean;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.UnsupportedMarkTypeException;
 import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 public abstract class MarkDistance extends AnchorBean<MarkDistance> implements ICompatibleWith {

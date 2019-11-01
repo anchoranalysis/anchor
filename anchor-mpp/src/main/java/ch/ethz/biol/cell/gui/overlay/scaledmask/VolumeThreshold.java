@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.gui.overlay.scaledmask;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -32,7 +34,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
 import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class VolumeThreshold extends ScaledMaskCreator {
 

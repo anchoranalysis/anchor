@@ -101,10 +101,13 @@ public class CfgMIPGenerator extends RasterGenerator implements IterableObjectGe
 		try {
 			RGBStack backgroundMIPRGB = ConvertDisplayStackToRGB.convert(cachedBackgroundMIP);
 			
-			ColoredOverlayCollection oc = OverlayCollectionMarkFactory.createColor( cws.getCfg() );
+			ColoredOverlayCollection oc = OverlayCollectionMarkFactory.createColor(
+				cws.getCfg(),
+				regionMembership
+			);
 			
 			// Convert our displaystack into a RGB stack
-			new SimpleOverlayWriter(maskWriter, regionMembership).writeOverlays(
+			new SimpleOverlayWriter(maskWriter).writeOverlays(
 				oc,
 				backgroundMIPRGB,
 				idGetter

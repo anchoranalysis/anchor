@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -38,7 +39,6 @@ import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.pair.IUpdatableMarkSet;
 import ch.ethz.biol.cell.mpp.pair.PairCollectionAddCriteria;

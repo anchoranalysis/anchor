@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.gui.overlay.scaledmask;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -32,9 +34,16 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
 import ch.ethz.biol.cell.mpp.cfgtoobjmaskwriter.OverlayWriter;
-import ch.ethz.biol.cell.mpp.mark.Mark;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 public class FromMark extends ScaledMaskCreator {
+
+	private RegionMembershipWithFlags regionMembership;
+	
+	public FromMark(RegionMembershipWithFlags regionMembership) {
+		super();
+		this.regionMembership = regionMembership;
+	}
 
 	@Override
 	public ObjMaskWithProperties createScaledMask(
@@ -48,9 +57,7 @@ public class FromMark extends ScaledMaskCreator {
 
 		Mark originalMark = (Mark) originalObject;
 		
-		ObjMaskWithProperties omScaled = originalMark.calcMaskScaledXY(sdScaled, overlayWriter.getRegionMembership(), bv, scaleFactor );
-		
-		//assert( omScaled.getMask().numPixels()>0 );
+		ObjMaskWithProperties omScaled = originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor );
 		
 		// We keep the properties the same
 		return new ObjMaskWithProperties(omScaled.getMask(), omUnscaled.getProperties());

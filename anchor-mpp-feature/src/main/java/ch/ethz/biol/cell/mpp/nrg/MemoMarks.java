@@ -30,12 +30,12 @@ package ch.ethz.biol.cell.mpp.nrg;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemoFactory;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;

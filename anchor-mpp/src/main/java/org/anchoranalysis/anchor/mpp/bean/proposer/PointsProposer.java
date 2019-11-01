@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.bean.NullParamsBean;
@@ -37,7 +38,6 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 public abstract class PointsProposer extends NullParamsBean<PointsProposer> implements ICompatibleWith {

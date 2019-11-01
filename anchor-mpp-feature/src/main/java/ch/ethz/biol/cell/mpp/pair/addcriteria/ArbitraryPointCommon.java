@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
+import org.anchoranalysis.anchor.mpp.mark.MarkPointList;
+
 /*
  * #%L
  * anchor-mpp
@@ -31,7 +33,6 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.mpp.mark.MarkPointList;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 

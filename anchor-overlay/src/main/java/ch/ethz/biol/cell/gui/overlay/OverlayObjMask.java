@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.gui.overlay;
 
+import org.anchoranalysis.anchor.mpp.mark.OverlayProperties;
+
 /*-
  * #%L
  * anchor-overlay
@@ -28,7 +30,6 @@ package ch.ethz.biol.cell.gui.overlay;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -113,10 +114,10 @@ public class OverlayObjMask extends Overlay {
 	}
 
 	@Override
-	public NameValueSet<String> generateProperties(ImageRes sr) {
+	public OverlayProperties generateProperties(ImageRes sr) {
 		// TODO take the properties from the object mask
-		NameValueSet<String> out = new NameValueSet<>();
-		out.add("id", String.valueOf(id));
+		OverlayProperties out = new OverlayProperties();
+		out.add("id", id);
 		return out;
 	}
 

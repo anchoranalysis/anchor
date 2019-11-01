@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.bound;
 
+import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
+
 /*-
  * #%L
  * anchor-mpp
@@ -27,8 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.bound;
  */
 
 import org.anchoranalysis.image.extent.ImageRes;
-
-import ch.ethz.biol.cell.mpp.mark.MarkBounds;
 
 
 //

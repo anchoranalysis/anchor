@@ -29,18 +29,26 @@ package ch.ethz.biol.cell.mpp.nrg.history;
 
 import overlay.OverlayCollectionMarkFactory;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 import ch.ethz.biol.cell.gui.overlay.OverlayCollection;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.instantstate.OverlayedInstantState;
-import ch.ethz.biol.cell.mpp.mark.Mark;
+import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 
 // Creates CfgInstantState from marks with an index
 public class CfgInstantStateFromMarkBridge implements IObjectBridgeIndex<Mark, OverlayedInstantState> {
 	
+	private RegionMembershipWithFlags regionMembership;
+		
+	public CfgInstantStateFromMarkBridge(RegionMembershipWithFlags regionMembership) {
+		super();
+		this.regionMembership = regionMembership;
+	}
+
 	@Override
 	public OverlayedInstantState bridgeElement(int index, Mark sourceObject)
 			throws GetOperationFailedException {
@@ -48,7 +56,10 @@ public class CfgInstantStateFromMarkBridge implements IObjectBridgeIndex<Mark, O
 		Cfg cfg = new Cfg();
 		cfg.add( sourceObject);
 		
-		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor(cfg);
+		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor(
+			cfg,
+			regionMembership
+		);
 		return new OverlayedInstantState(index, oc);
 	}
 }

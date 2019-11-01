@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pxlmark.memo;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*
  * #%L
  * anchor-mpp
@@ -34,7 +36,6 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.histogram.Histogram;
 
 import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactory;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMarkHistogram;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;

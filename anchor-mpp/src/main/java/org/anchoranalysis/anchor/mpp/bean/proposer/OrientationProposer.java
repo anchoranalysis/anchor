@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-mpp
@@ -32,7 +34,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
 import ch.ethz.biol.cell.mpp.MPPBean;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 public abstract class OrientationProposer extends MPPBean<OrientationProposer> implements ICompatibleWith {
