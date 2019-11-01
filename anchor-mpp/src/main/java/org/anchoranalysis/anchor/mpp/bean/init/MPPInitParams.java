@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.mpp.bean.init;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
@@ -57,7 +58,6 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.provider.ProviderBridge;
 
-import ch.ethz.biol.cell.mpp.MPPBean;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.proposer.CfgProposer;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;

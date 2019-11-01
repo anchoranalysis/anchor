@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp;
+package org.anchoranalysis.anchor.mpp.bean;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;

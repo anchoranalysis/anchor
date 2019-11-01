@@ -1,5 +1,6 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
+import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.bounds.MarkBounds;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 
@@ -34,8 +35,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
-
-import ch.ethz.biol.cell.mpp.MPPBean;
 
 // This IParamsEquals interface is redundant, can be removed
 public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements ICompatibleWith {

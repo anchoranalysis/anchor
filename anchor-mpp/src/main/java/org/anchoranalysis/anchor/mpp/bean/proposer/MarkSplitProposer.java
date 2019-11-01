@@ -31,13 +31,12 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
 
-import anchor.provider.bean.ProposalAbnormalFailureException;
-import anchor.provider.bean.ProposerBean;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
 
 @GroupingRoot

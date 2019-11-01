@@ -1,5 +1,6 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 
@@ -33,8 +34,6 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
-
-import ch.ethz.biol.cell.mpp.MPPBean;
 
 public abstract class OrientationProposer extends MPPBean<OrientationProposer> implements ICompatibleWith {
 

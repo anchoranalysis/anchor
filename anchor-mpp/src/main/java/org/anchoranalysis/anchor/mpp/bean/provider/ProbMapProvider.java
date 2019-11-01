@@ -31,8 +31,6 @@ import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 
-import ch.ethz.biol.cell.mpp.MPPProvider;
-
 @GroupingRoot
 public abstract class ProbMapProvider extends MPPProvider<ProbMapProvider,ProbMap> {
 

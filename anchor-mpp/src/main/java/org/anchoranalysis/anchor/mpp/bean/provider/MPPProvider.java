@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.mpp;
+package org.anchoranalysis.anchor.mpp.bean.provider;
+
+import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 
 /*-
  * #%L

@@ -1,5 +1,6 @@
 package org.anchoranalysis.anchor.mpp.bean.bounds;
 
+import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 
@@ -32,8 +33,6 @@ import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-
-import ch.ethz.biol.cell.mpp.MPPBean;
 
 public abstract class BoundCalculator extends MPPBean<BoundCalculator> implements IParamsEquals {
 

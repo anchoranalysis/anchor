@@ -1,10 +1,10 @@
-package anchor.provider.bean;
+package org.anchoranalysis.anchor.mpp.proposer;
 
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,35 @@ package anchor.provider.bean;
  * #L%
  */
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-import ch.ethz.biol.cell.mpp.MPPBean;
-
-public abstract class ProposerBean<BeanType> extends MPPBean<BeanType> {
+/**
+ * An exception when a proposal could not be made for an abnormal reason
+ * 
+ * This is different from the usual failure to make a proposal (return value of null), which happens frequently
+ *  as an ordinary part of proposal routines
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ProposalAbnormalFailureException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public ProposalAbnormalFailureException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ProposalAbnormalFailureException(String message) {
+		super(message);
+	}
+
+	public ProposalAbnormalFailureException(Throwable cause) {
+		super(cause);
+	}
+
+	
 }

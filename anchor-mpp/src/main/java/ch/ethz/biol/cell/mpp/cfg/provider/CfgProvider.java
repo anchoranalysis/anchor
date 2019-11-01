@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.provider.MPPProvider;
+
 /*-
  * #%L
  * anchor-mpp
@@ -29,7 +31,6 @@ package ch.ethz.biol.cell.mpp.cfg.provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 
-import ch.ethz.biol.cell.mpp.MPPProvider;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 @GroupingRoot

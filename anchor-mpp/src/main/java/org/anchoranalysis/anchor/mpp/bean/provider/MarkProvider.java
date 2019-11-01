@@ -30,8 +30,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 import org.anchoranalysis.core.error.CreateException;
 
-import ch.ethz.biol.cell.mpp.MPPProvider;
-
 public abstract class MarkProvider extends MPPProvider<MarkProvider,Mark>  {
 
 	/**

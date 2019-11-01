@@ -31,13 +31,11 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
-
-import anchor.provider.bean.ProposalAbnormalFailureException;
-import anchor.provider.bean.ProposerBean;
 
 @GroupingRoot
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer> implements ICompatibleWith {
