@@ -40,15 +40,11 @@ public class RasterIOException extends AnchorCheckedException {
 		super(string);
 	}
 
-	public RasterIOException( Throwable exc ) {
+	public RasterIOException(Throwable exc) {
 		super( exc );
 	}
 	
-	public RasterIOException( String string, Throwable exc ) {
+	public RasterIOException(String string, Throwable exc) {
 		super( string, exc );
 	}
-
-
-	
-	
 }
