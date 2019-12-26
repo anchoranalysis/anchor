@@ -49,7 +49,7 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private PropertyInitializer<P> propertyInitializer; 
+	private transient PropertyInitializer<P> propertyInitializer; 
 	
 	protected InitializableBean(PropertyInitializer<P> propertyInitializer) {
 		super();

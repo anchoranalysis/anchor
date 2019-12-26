@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class AssignmentObjMask extends Assignment {
+public class AssignmentObjMask implements Assignment {
 
 	private List<ObjMask> listUnassignedLeft = new ArrayList<>();
 	private List<ObjMask> listUnassignedRight = new ArrayList<>();

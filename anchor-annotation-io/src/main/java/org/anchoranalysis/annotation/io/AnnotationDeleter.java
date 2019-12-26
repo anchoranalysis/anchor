@@ -29,8 +29,8 @@ package org.anchoranalysis.annotation.io;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public abstract class AnnotationDeleter {
+public interface AnnotationDeleter {
 
 	/** Deletes all files at this path (or any other paths derived from this one */
-	public abstract void delete( Path path ) throws IOException;
+	void delete( Path path ) throws IOException;
 }

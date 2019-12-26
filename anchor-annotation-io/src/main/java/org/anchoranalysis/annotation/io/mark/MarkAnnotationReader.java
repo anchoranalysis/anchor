@@ -40,7 +40,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.io.CfgDeserializer;
 
-public class MarkAnnotationReader extends AnnotationReader<MarkAnnotation> {
+public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 
 	private boolean acceptUnfinished;
 	

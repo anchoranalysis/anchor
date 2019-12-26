@@ -32,6 +32,9 @@ import java.nio.file.Path;
 
 public class WriterUtilities {
 
+	private WriterUtilities() {
+	}
+	
 	public static void createNecessaryDirectories(Path annotationPath) throws IOException {
 		// Create whatever directories we need
 		Files.createDirectories( annotationPath.getParent() );

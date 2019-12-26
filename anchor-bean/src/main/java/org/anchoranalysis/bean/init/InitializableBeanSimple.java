@@ -50,7 +50,7 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 	
 	private boolean hasBeenInit = false;
 	private transient LogErrorReporter logger;
-	private PropertyDefiner<P> propertyDefiner;
+	private transient PropertyDefiner<P> propertyDefiner;
 	
 	protected InitializableBeanSimple(
 			PropertyInitializer<P> propertyInitializer,

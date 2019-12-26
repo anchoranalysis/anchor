@@ -78,24 +78,24 @@ class HelperDuplication {
  			 Collection<?> propertyValueCast = (Collection<?>) propertyValue;
  			 return duplicateCollection( propertyValueCast, propertyName, parentBean );        	 
          } else if (propertyValue instanceof String) {
-        	 return (String) propertyValue;	// String is immutable
+        	 return propertyValue;	// String is immutable
          } else if (propertyValue instanceof Integer) {
-        	 return (Integer) propertyValue;	// Primitive-types are immutable
+        	 return propertyValue;	// Primitive-types are immutable
          } else if (propertyValue instanceof Double) {
-        	 return (Double) propertyValue;		// Primitive-types are immutable
+        	 return propertyValue;		// Primitive-types are immutable
          } else if (propertyValue instanceof Float) {
-        	 return (Float) propertyValue;		// Primitive-types are immutable
+        	 return propertyValue;		// Primitive-types are immutable
          } else if (propertyValue instanceof Short) {
-        	 return (Short) propertyValue;		// Primitive-types are immutable
+        	 return propertyValue;		// Primitive-types are immutable
          } else if (propertyValue instanceof Long) {
-        	 return (Long) propertyValue;		// Primitive-types are immutable
+        	 return propertyValue;		// Primitive-types are immutable
          } else if (propertyValue instanceof Byte) {
-        	 return (Byte) propertyValue;		// Primitive-types are immutable
+        	 return propertyValue;		// Primitive-types are immutable
          } else if (propertyValue instanceof Boolean) {
-        	 return (Boolean) propertyValue;	// Primitive-types are immutable
+        	 return propertyValue;	// Primitive-types are immutable
          } else if (propertyValue instanceof Class) {
         	 // This is assumed to be immutable, so we don't bother changing it	// TODO eventually remove this
-        	 return (Class) propertyValue;
+        	 return propertyValue;
        	 
          } else {
         	 throw new BeanDuplicateException( String.format("Unsupported property type: %s", propertyValue.getClass().toString()) );
@@ -108,10 +108,11 @@ class HelperDuplication {
 
 	
 	
-	public static AnchorBean<?> duplicate( AnchorBean<?> bean ) {
+	@SuppressWarnings("unchecked")
+	public static <T> AnchorBean<T> duplicate( AnchorBean<T> bean ) {
 		
 		try {
-			AnchorBean<?> beanOut = bean.getClass().getConstructor().newInstance();
+			AnchorBean<T> beanOut = bean.getClass().getConstructor().newInstance();
 			
 			for(Field field  : bean.getOrCreateBeanFields()) {
 	

@@ -31,7 +31,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.Annotation;
 
-public abstract class AnnotationReader<T extends Annotation> {
+public interface AnnotationReader<T extends Annotation> {
 
 	// 
 	/**
@@ -40,5 +40,5 @@ public abstract class AnnotationReader<T extends Annotation> {
 	 * @return the annotation or NULL if it doesn't exist in a suitable state
 	 * @throws IOException if something unexpected goes wrong trying to read it
 	 */
-	public abstract T read( Path path ) throws IOException;
+	T read( Path path ) throws IOException;
 }

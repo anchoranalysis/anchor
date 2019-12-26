@@ -32,7 +32,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.AnnotationDeleter;
 
-public class MarkAnnotationDeleter extends AnnotationDeleter {
+public class MarkAnnotationDeleter implements AnnotationDeleter {
 
 	@Override
 	public void delete( Path annotationPath ) throws IOException {

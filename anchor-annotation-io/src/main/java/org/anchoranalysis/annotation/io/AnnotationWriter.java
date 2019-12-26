@@ -31,7 +31,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.Annotation;
 
-public abstract class AnnotationWriter<T extends Annotation> {
+public interface AnnotationWriter<T extends Annotation> {
 
 	/**
 	 * Saves the annotation to the file-system
@@ -40,5 +40,5 @@ public abstract class AnnotationWriter<T extends Annotation> {
 	 * @param path the path to write to (or a slightly-modified path is derived from this)
 	 * @throws IOException
 	 */
-	public abstract void write( T annotation, Path path ) throws IOException;
+	void write( T annotation, Path path ) throws IOException;
 }

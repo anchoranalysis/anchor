@@ -42,63 +42,99 @@ import org.apache.commons.configuration.beanutils.BeanHelper;
 // We change the behaviour of BeanHelper so that it will keep passing the current 'param' onto new beans which are created
 class DefaultBeanFactoryHelperInit {
 
+	/// Initializing a collection
+	private static class InitCollection {
+		
+		private Collection<Object> beanCollection;
+		private Class<?> defaultClass;
+				
+		public InitCollection(Collection<Object> beanCollection, String propName) {
+			super();
+			this.beanCollection = beanCollection;
+	        this.defaultClass = getDefaultClass(beanCollection, propName);
+		}
+
+		@SuppressWarnings("unchecked")
+		public void init( Object propVal, Object parameter ) {
+	        if (propVal instanceof List) {
+	            // This is safe, provided that the bean declaration is implemented
+	            // correctly.
+	            for (BeanDeclaration decl : (List<BeanDeclaration>) propVal) {
+					addWithParam( decl, parameter );
+	            }
+	            
+	        } else {
+	            addWithoutParam( (BeanDeclaration) propVal );
+	        }
+		}
+		
+		private void addWithoutParam( BeanDeclaration decl ) {
+			beanCollection.add(BeanHelper.createBean(decl, defaultClass));
+		}
+		
+		private void addWithParam( BeanDeclaration decl, Object parameter ) {
+			beanCollection.add(BeanHelper.createBean(decl, defaultClass, parameter));
+		}
+	}
+	
+	
+	private static class InitNested {
+		
+		private Map<String, Object> nestedBeans;
+		private Object parameter;
+				
+		public InitNested(Map<String, Object> nestedBeans, Object parameter) {
+			super();
+			this.nestedBeans = nestedBeans;
+			this.parameter = parameter;
+		}
+
+		@SuppressWarnings("unchecked")
+		public void initBean( Object bean ) {
+	        
+        	if (bean instanceof Collection) {
+            	initCollection( (Collection<Object>) bean );
+            } else {
+            	initNonCollection( bean );
+            }			
+		}
+		
+		private void initCollection( Collection<Object> beanCollection ) {
+			// This is safe because the collection stores the values of the
+	        // nested beans.
+	        if (nestedBeans.size() != 1) {
+	        	return;
+	        }
+	     
+	        // Extract propery key and value from the first item
+	        Map.Entry<String, Object> e = nestedBeans.entrySet().iterator().next();
+	        new InitCollection(beanCollection, e.getKey()).init(e.getValue(), parameter );
+		}
+			
+		private void initNonCollection( Object bean ) {
+			for (Map.Entry<String, Object> e : nestedBeans.entrySet()) {
+	            String propName = e.getKey();
+	            Class<?> defaultClass = getDefaultClass(bean, propName);
+	            initProperty(bean, propName, BeanHelper.createBean(
+	                (BeanDeclaration) e.getValue(), defaultClass, parameter));
+	        }
+		}
+	}
+
 	private DefaultBeanFactoryHelperInit() {
 		
 	}
 	
-	
-
 	public static void initBean(Object bean, BeanDeclaration data, Object parameter)
-            throws ConfigurationRuntimeException
-    {
+            throws ConfigurationRuntimeException {
         BeanHelper.initBeanProperties(bean, data);
 
         Map<String, Object> nestedBeans = data.getNestedBeanDeclarations();
-        if (nestedBeans != null)
-        {
-            if (bean instanceof Collection)
-            {
-                // This is safe because the collection stores the values of the
-                // nested beans.
-                @SuppressWarnings("unchecked")
-                Collection<Object> coll = (Collection<Object>) bean;
-                if (nestedBeans.size() == 1)
-                {
-                    Map.Entry<String, Object> e = nestedBeans.entrySet().iterator().next();
-                    String propName = e.getKey();
-                    Class<?> defaultClass = getDefaultClass(bean, propName);
-                    if (e.getValue() instanceof List)
-                    {
-                        // This is safe, provided that the bean declaration is implemented
-                        // correctly.
-                        @SuppressWarnings("unchecked")
-                        List<BeanDeclaration> decls = (List<BeanDeclaration>) e.getValue();
-                        for (BeanDeclaration decl : decls)
-                        {
-                            coll.add(BeanHelper.createBean(decl, defaultClass, parameter));
-                        }
-                    }
-                    else
-                    {
-                        BeanDeclaration decl = (BeanDeclaration) e.getValue();
-                        coll.add(BeanHelper.createBean(decl, defaultClass));
-                    }
-                }
-            }
-            else
-            {
-                for (Map.Entry<String, Object> e : nestedBeans.entrySet())
-                {
-                    String propName = e.getKey();
-                    Class<?> defaultClass = getDefaultClass(bean, propName);
-                    initProperty(bean, propName, BeanHelper.createBean(
-                        (BeanDeclaration) e.getValue(), defaultClass, parameter));
-                }
-            }
+        if (nestedBeans != null) {
+        	new InitNested(nestedBeans, parameter).initBean(bean);
         }
     }
-	
-	
+		
 	  /**
      * Sets a property on the given bean using Common Beanutils.
      *
@@ -109,23 +145,15 @@ class DefaultBeanFactoryHelperInit {
      * an error occurred
      */
     private static void initProperty(Object bean, String propName, Object value) {
-        if (!PropertyUtils.isWriteable(bean, propName))
-        {
+        if (!PropertyUtils.isWriteable(bean, propName)) {
             throw new ConfigurationRuntimeException("Property " + propName
                     + " cannot be set on " + bean.getClass().getName());
         }
 
-        try
-        {
+        try {
             BeanUtils.setProperty(bean, propName, value);
-        }
-        catch (IllegalAccessException iaex)
-        {
+        } catch (IllegalAccessException | InvocationTargetException iaex) {
             throw new ConfigurationRuntimeException(iaex);
-        }
-        catch (InvocationTargetException itex)
-        {
-            throw new ConfigurationRuntimeException(itex);
         }
     }
 	
@@ -135,19 +163,14 @@ class DefaultBeanFactoryHelperInit {
      * @param propName The name of the property.
      * @return The class associated with the property or null.
      */
-    private static Class<?> getDefaultClass(Object bean, String propName)
-    {
-        try
-        {
+    private static Class<?> getDefaultClass(Object bean, String propName) {
+        try {
             PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(bean, propName);
-            if (desc == null)
-            {
+            if (desc == null) {
                 return null;
             }
             return desc.getPropertyType();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return null;
         }
     }

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
 
-public class AssignmentMaskIntersection extends Assignment {
+public class AssignmentMaskIntersection implements Assignment {
 
 	private ObjMask omLeft;
 	private ObjMask omRight;

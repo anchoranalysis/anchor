@@ -34,7 +34,7 @@ import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.io.generator.text.WriteStringToFile;
 
-public class WholeImageLabelAnnotationWriter extends AnnotationWriter<WholeImageLabelAnnotation> {
+public class WholeImageLabelAnnotationWriter implements AnnotationWriter<WholeImageLabelAnnotation> {
 
 	@Override
 	public void write(WholeImageLabelAnnotation annotation, Path path) throws IOException {

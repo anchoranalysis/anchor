@@ -29,6 +29,7 @@ package org.anchoranalysis.annotation.io.assignment;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -96,7 +97,9 @@ public class AssignmentObjMaskFactory {
 		int[] assign = ha.execute();
 		
 		AssignmentObjMask ass = createAssignment(cost, assign, maxAcceptedCost);
-		assert(ass.rightSize()==rightObjs.size());
+		if (ass.rightSize()!=rightObjs.size()) {
+			throw new FeatureCalcException("assignment.rightSize() does not equal the number of the right objects. This should never happen!");
+		}
 		return ass;
 		
 	}
@@ -121,16 +124,20 @@ public class AssignmentObjMaskFactory {
 				
 				ObjMask objR = result.get(j);
 	
-				double cost = session.calc(objA, objR);
-				outArr[i][j] = cost;
+				double costObjs = session.calc(objA, objR);
+				outArr[i][j] = costObjs;
 				
-				if (Double.isNaN(cost)) {
+				if (Double.isNaN(costObjs)) {
 					throw new FeatureCalcException("Cost is NaN");
 				}
 			}
 		}
 		
-		return new ObjMaskCollectionDistanceMatrix( annotation, result, outArr );
+		try {
+			return new ObjMaskCollectionDistanceMatrix( annotation, result, outArr );
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
 

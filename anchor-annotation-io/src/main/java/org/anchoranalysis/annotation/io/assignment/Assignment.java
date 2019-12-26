@@ -34,17 +34,17 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 
 
-public abstract class Assignment {
+public interface Assignment {
 	
-	public abstract int numPaired();
+	int numPaired();
 	
-	public abstract int numUnassigned( boolean left );
+	int numUnassigned( boolean left );
 	
-	public abstract List<ObjMask> getListPaired( boolean left );
+	List<ObjMask> getListPaired( boolean left );
 	
-	public abstract List<ObjMask> getListUnassigned( boolean left );
+	List<ObjMask> getListUnassigned( boolean left );
 	
-	public abstract List<String> createStatisticsHeaderNames();
+	List<String> createStatisticsHeaderNames();
 	
-	public abstract List<TypedValue> createStatistics();
+	List<TypedValue> createStatistics();
 }

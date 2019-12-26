@@ -70,7 +70,7 @@ public abstract class AnchorBean<F> implements Serializable {
 	 * If non-null, a local path on the file-system associate with this bean (from serialization).
 	 * If null, no such local-path has been assigned.
 	 */
-	private Path localPath;
+	private transient Path localPath;
 
 	/**
 	 * A short-name identifying a bean (by default the name of the class associated with the bean)

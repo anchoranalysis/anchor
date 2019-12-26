@@ -34,7 +34,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 
-public class WholeImageLabelAnnotationReader extends AnnotationReader<WholeImageLabelAnnotation> {
+public class WholeImageLabelAnnotationReader implements AnnotationReader<WholeImageLabelAnnotation> {
 
 	@Override
 	public WholeImageLabelAnnotation read(Path path) throws IOException {

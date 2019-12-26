@@ -36,7 +36,7 @@ import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 
-public class MarkAnnotationWriter extends AnnotationWriter<MarkAnnotation> {
+public class MarkAnnotationWriter implements AnnotationWriter<MarkAnnotation> {
 
 	private boolean disablePathModification = false;
 
