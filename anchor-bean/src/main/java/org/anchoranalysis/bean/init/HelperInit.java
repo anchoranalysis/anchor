@@ -47,8 +47,7 @@ class HelperInit {
 	private HelperInit() {
 		
 	}
-	
-	
+		
 	/**
 	 *
 	 * Initializes the bean
@@ -74,60 +73,50 @@ class HelperInit {
 				continue;
 			}
 			
-			try {
-				AnchorBean<?> parentBean = removedObj.getParent()!=null ? removedObj.getParent().getBean() : null;
+			maybeInitChildren(removedObj, everything, bean.getBeanName(), pi, logger);
 			
-				boolean didInitChild = pi.execIfInheritsFrom(removedObj.getBean(), parentBean, logger); 
-				if (didInitChild) {
-					// Add children of the object, but only if PropertyInitializer initialize the object
-					addChildrenForInit(everything, removedObj);		
-				} else {
-					
-					if (removedObj.getBean() instanceof InitializableBean) {
-						InitializableBean<?,?> objCast = (InitializableBean<?,?>)  removedObj.getBean();
-						throw new InitException(
-							String.format("Could not find matching params to initialise %s (%s) (recursively following from %s). Requires %s. Provider is %s.",
-								objCast.getBeanName(),
-								objCast.getClass().getName(),
-								bean.getBeanName(),
-								objCast.getPropertyDefiner().describeAcceptedClasses(),
-								pi.getInitParamType()
-							)
-						);
-					}
-					
-				}
-				done.add(removedObj.getBean());
-				
-			} catch (InitException e) {
-				String msg = String.format(
-					"Cannot initialize a field '%s' when initializing '%s'",
-					removedObj.pathFromRootAsString(),
-					bean.getBeanName()
-				);
-				throw new InitException(msg,e);
-			}
+			done.add(removedObj.getBean() );
 		}
 
 	}
 	
-
-
-	
-	private static void addChildren( List<BeanAndParent> listInit, BeanAndParent parentBean, Object propertyValue, boolean optional ) throws InitException {
+	private static void maybeInitChildren( BeanAndParent beanAndParent, List<BeanAndParent> listInit, String beanNameFollowingFrom, PropertyInitializer<?> pi, LogErrorReporter logger ) throws InitException {
 		
-		// If it's an optional attribute we check that it's not null
-    	if (optional && propertyValue==null) {
-   			 return;
-    	}
-    	
-    	// We only add if its a bean itself
-    	if (propertyValue instanceof AnchorBean) {
-    		BeanAndParent beanAndParent = new BeanAndParent( (AnchorBean<?>) propertyValue, parentBean );
-    		listInit.add( beanAndParent );
-    	}
+		try {
+			boolean didInitChild = pi.execIfInheritsFrom(beanAndParent.getBean(), beanAndParent.parentBean(), logger); 
+			if (didInitChild) {
+				// Add children of the object, but only if PropertyInitializer initialize the object
+				addChildrenForInit(listInit, beanAndParent);		
+			} else {
+				throwExceptionIfInitializable( beanAndParent.getBean(), beanNameFollowingFrom, pi.getInitParamType().toString() );
+			}
+		
+		
+		} catch (InitException e) {
+			String msg = String.format(
+				"Cannot initialize a field '%s' when initializing '%s'",
+				beanAndParent.pathFromRootAsString(),
+				beanNameFollowingFrom
+			);
+			throw new InitException(msg,e);
+		}
 	}
+	
+	
+	private static void addChildrenForInit( List<BeanAndParent> listInit, BeanAndParent parentBean ) throws InitException {
 		
+		List<Field> beanFields = parentBean.getBean().getOrCreateBeanFields();
+		
+		for(Field field  : beanFields) {
+			
+			if (!field.isAnnotationPresent(SkipInit.class)) {
+			
+				// Create a FIFO queue of items to be initialised
+				addChildrenMany( listInit, parentBean, field, field.isAnnotationPresent(Optional.class) );
+			}
+		}
+	}
+	
 	private static void addChildrenMany( List<BeanAndParent> listInit, BeanAndParent parentBean, Field field, boolean optional ) throws InitException {
 	 
 		try {
@@ -151,17 +140,34 @@ class HelperInit {
 		}
 	}
 	
-	private static void addChildrenForInit( List<BeanAndParent> listInit, BeanAndParent parentBean ) throws InitException {
+	private static void addChildren( List<BeanAndParent> listInit, BeanAndParent parentBean, Object propertyValue, boolean optional ) throws InitException {
 		
-		List<Field> beanFields = parentBean.getBean().getOrCreateBeanFields();
+		// If it's an optional attribute we check that it's not null
+    	if (optional && propertyValue==null) {
+   			 return;
+    	}
+    	
+    	// We only add if its a bean itself
+    	if (propertyValue instanceof AnchorBean) {
+    		listInit.add(
+    			new BeanAndParent( (AnchorBean<?>) propertyValue, parentBean )
+    		);
+    	}
+	}
+	
+	private static void throwExceptionIfInitializable( AnchorBean<?> bean, String beanNameFollowingFrom, String provider ) throws InitException {
 		
-		for(Field field  : beanFields) {
-			
-			if (!field.isAnnotationPresent(SkipInit.class)) {
-			
-				// Create a FIFO queue of items to be initialised
-				addChildrenMany( listInit, parentBean, field, field.isAnnotationPresent(Optional.class) );
-			}
+		if (bean instanceof InitializableBean) {
+			InitializableBean<?,?> objCast = (InitializableBean<?,?>) bean;
+			throw new InitException(
+				String.format("Could not find matching params to initialise %s (%s) (recursively following from %s). Requires %s. Provider is %s.",
+					objCast.getBeanName(),
+					objCast.getClass().getName(),
+					beanNameFollowingFrom,
+					objCast.getPropertyDefiner().describeAcceptedClasses(),
+					provider
+				)
+			);
 		}
 	}
 

@@ -59,6 +59,10 @@ class BeanAndParent {
 		return parent;
 	}
 	
+	public AnchorBean<?> parentBean() {
+		return parent!=null ? parent.getBean() : null;
+	}
+	
 	/**
 	 * Path from the the root of the tree (null parent) to the current item
 	 * expressed as a string with ({@literal "->"} as a divider
