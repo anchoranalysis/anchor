@@ -68,30 +68,36 @@ class BeanAndParent {
 	 * @return a string showing the path with {@literal "->"} as a divider
 	 */
 	public String pathFromRootAsString() {
+		// Populate list from root to leaf with the beans along the path, and convert to string
+		return stringFromPath(
+			beansRootToLeaf()
+		);
+	}
+	
+	private List<AnchorBean<?>> beansRootToLeaf() {
+		
 		List<AnchorBean<?>> listObjects = new ArrayList<>();
 		
-		// Populate list from root to leaf with the beans along the path
-		{
-			BeanAndParent next = this;
+		BeanAndParent next = this;
+		listObjects.add(0,next.getBean());
+		while( (next=next.getParent())!=null ) {
 			listObjects.add(0,next.getBean());
-			while( (next=next.getParent())!=null ) {
-				listObjects.add(0,next.getBean());
-			}
 		}
 		
-		// Make a string of the path
-		{
-			StringBuilder sb = new StringBuilder();
-			for( int i=0; i<listObjects.size(); i++ ) {
-				
-				if (i!=0) {
-					sb.append("->");
-				}
-				
-				AnchorBean<?> beanIter = listObjects.get(i);
-				sb.append(beanIter.getBeanName());
+		return listObjects;
+	}
+	
+	private static String stringFromPath( List<AnchorBean<?>> listObjects ) {
+		StringBuilder sb = new StringBuilder();
+		for( int i=0; i<listObjects.size(); i++ ) {
+			
+			if (i!=0) {
+				sb.append("->");
 			}
-			return sb.toString();
+			
+			AnchorBean<?> beanIter = listObjects.get(i);
+			sb.append(beanIter.getBeanName());
 		}
+		return sb.toString();
 	}
 }
