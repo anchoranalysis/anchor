@@ -63,8 +63,6 @@ public class Files extends InputManager<FileInput> {
 	private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
 	// END BEAN PROPERTIES
 	
-	//private static Log log = LogFactory.getLog(FileInputManager.class);
-	
 	public List<FileInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException {
 		
 		List<FileInput> listOut = new ArrayList<>();
