@@ -36,8 +36,6 @@ import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public abstract class OpenedRaster implements AutoCloseable {
-
-	public abstract int getNumSeries();
 	
 	// Open when we don't have a specific-type
 	public abstract TimeSequence open( int seriesIndex, ProgressReporter progressReporter ) throws RasterIOException;
@@ -54,12 +52,16 @@ public abstract class OpenedRaster implements AutoCloseable {
 		return ts;
 	}
 	
+	public abstract int numSeries();
+	
 	// Can be null if no channel names exist
-	public abstract List<String> getChannelNames();
+	public abstract List<String> channelNames();
 	
-	public abstract int getNumChnl() throws RasterIOException;
+	public abstract int numChnl() throws RasterIOException;
 	
-	public abstract int getNumFrames() throws RasterIOException;
+	public abstract int numFrames() throws RasterIOException;
+	
+	public abstract int bitDepth() throws RasterIOException;
 	
 	public abstract void close() throws RasterIOException;
 	

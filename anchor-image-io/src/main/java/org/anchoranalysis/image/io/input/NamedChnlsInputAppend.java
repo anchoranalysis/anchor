@@ -143,6 +143,16 @@ public class NamedChnlsInputAppend<T extends Buffer> extends NamedChnlsInputBase
 	}
 
 	@Override
+	public int numChnl() throws RasterIOException {
+		return delegate.numChnl();
+	}
+
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return delegate.bitDepth();
+	}
+	
+	@Override
 	public void close(ErrorReporter errorReporter) {
 		if (openedRasterMemo!=null) {
 			try {

@@ -70,7 +70,7 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 		if (useLastSeriesIndexOnly) {
 			return 1;
 		} else {
-			return getOpenedRaster().getNumSeries();
+			return getOpenedRaster().numSeries();
 		}
 	}
 		
@@ -78,7 +78,7 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 	public int numFrames() throws OperationFailedException {
 		
 		try {
-			return getOpenedRaster().getNumFrames();
+			return getOpenedRaster().numFrames();
 		} catch (RasterIOException e) {
 			throw new OperationFailedException(e);
 		}
@@ -89,7 +89,7 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 		
 		// We always use the last one
 		if (useLastSeriesIndexOnly) {
-			seriesNum = getOpenedRaster().getNumSeries()-1;
+			seriesNum = getOpenedRaster().numSeries()-1;
 		}
 		return openRasterAsOperation( getOpenedRaster(), seriesNum);
 	}

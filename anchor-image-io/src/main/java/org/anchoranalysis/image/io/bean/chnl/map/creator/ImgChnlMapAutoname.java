@@ -61,10 +61,10 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 		ImgChnlMap map = new ImgChnlMap();
 		
 		// null indicates that there are no names
-		List<String> names = openedRaster.getChannelNames();
+		List<String> names = openedRaster.channelNames();
 		
 		try {
-			for( int c=0; c<openedRaster.getNumChnl(); c++) {
+			for( int c=0; c<openedRaster.numChnl(); c++) {
 				
 				String chnlName;
 				if (names!=null) {

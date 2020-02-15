@@ -41,7 +41,7 @@ public class RasterReaderUtilities {
 		OpenedRaster openedRaster = rasterReader.openFile(path);
 		
 		try {
-			if (openedRaster.getNumSeries()!=1) {
+			if (openedRaster.numSeries()!=1) {
 				throw new RasterIOException("there must be exactly one series");
 			}
 			

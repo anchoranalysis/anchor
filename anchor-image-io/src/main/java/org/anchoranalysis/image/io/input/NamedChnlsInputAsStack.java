@@ -49,6 +49,12 @@ public abstract class NamedChnlsInputAsStack extends StackInputBase {
 	/** Dimensions of a particular series */
 	public abstract ImageDim dim( int seriesIndex ) throws RasterIOException;
 	
+	/** Number of channels */
+	public abstract int numChnl() throws RasterIOException;
+	
+	/** Bit-depth of image */
+	public abstract int bitDepth() throws RasterIOException;
+	
 	// Where most of our time is being taken up when opening a raster
 	public abstract NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException;
 

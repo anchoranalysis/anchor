@@ -87,7 +87,7 @@ public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
 	
 	@Override
 	public ImageDim dim( int seriesIndex ) throws RasterIOException {
-		return getOpenedRaster().dim(seriesIndex);
+		return openedRaster().dim(seriesIndex);
 	}
 
 	@Override
@@ -95,13 +95,13 @@ public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
 		if (useLastSeriesIndexOnly) {
 			return 1;
 		} else {
-			return getOpenedRaster().getNumSeries();
+			return openedRaster().numSeries();
 		}
 	}
 	
 	@Override
 	public boolean hasChnl( String chnlName ) throws RasterIOException {
-		return getImgChnlMap().keySet().contains(chnlName);
+		return chnlMap().keySet().contains(chnlName);
 		//chnlMap.get(chnlName)!=-1;
 	}
 	
@@ -111,11 +111,11 @@ public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
 
 		// We always use the last one
 		if (useLastSeriesIndexOnly) {
-			seriesNum = getOpenedRaster().getNumSeries()-1;
+			seriesNum = openedRaster().numSeries()-1;
 		}
 		
 		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<>();
-		out.add( new NamedChnlCollectionForSeriesMap( getOpenedRaster(), getImgChnlMap(), seriesNum ) );
+		out.add( new NamedChnlCollectionForSeriesMap( openedRaster(), chnlMap(), seriesNum ) );
 		
 		return out;
 	}
@@ -142,7 +142,22 @@ public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
 		return delegate.getFile();
 	}
 
-	private OpenedRaster getOpenedRaster() throws RasterIOException {
+	@Override
+	public int numChnl() throws RasterIOException {
+		return openedRaster().numChnl();
+	}
+
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return openedRaster().bitDepth();
+	}
+	
+	private ImgChnlMap chnlMap() throws RasterIOException {
+		openedRaster();
+		return chnlMap;
+	}
+	
+	private OpenedRaster openedRaster() throws RasterIOException {
 		if (openedRasterMemo==null) {
 			openedRasterMemo = rasterReader.openFile( delegate.pathForBinding() );
 			try {
@@ -152,13 +167,6 @@ public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
 			}
 		}
 		return openedRasterMemo;
-	}
-	
-	private ImgChnlMap getImgChnlMap() throws RasterIOException {
-		if (chnlMap==null) {
-			getOpenedRaster();
-		}
-		return chnlMap;
 	}
 
 	@Override
@@ -173,5 +181,4 @@ public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
 		}
 		delegate.close(errorReporter);
 	}
-
 }

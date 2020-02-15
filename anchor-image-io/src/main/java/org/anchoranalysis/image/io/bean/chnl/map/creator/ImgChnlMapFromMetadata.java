@@ -44,7 +44,7 @@ public class ImgChnlMapFromMetadata extends ImgChnlMapCreator {
 	@Override
 	public ImgChnlMap createMap(OpenedRaster openedRaster) throws CreateException {
 
-		List<String> names = openedRaster.getChannelNames();
+		List<String> names = openedRaster.channelNames();
 		if (names==null) {
 			throw new CreateException("No channels names are associated with the openedRaster");
 		}
