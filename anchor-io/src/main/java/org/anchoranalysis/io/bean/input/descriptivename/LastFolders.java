@@ -61,7 +61,8 @@ public class LastFolders extends DescriptiveNameFromFile {
 		this.numFoldersInDescription = numFoldersInDescription;
 	}
 	
-	public String createDescriptiveName( File file, int index ) {
+	@Override
+	protected String createDescriptiveName( File file, int index ) {
 		
 		String nameOut = "";
 		if (!skipFileName) {

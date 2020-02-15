@@ -40,8 +40,8 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public abstract String createDescriptiveName( File file, int index ) throws CreateException;
+	
+	protected abstract String createDescriptiveName( File file, int index ) throws CreateException;
 	
 	private Logger log = Logger.getLogger(DescriptiveNameFromFile.class.getName());
 	

@@ -44,7 +44,7 @@ public class RegExMatcher extends DescriptiveNameFromFile {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String createDescriptiveName(File file, int index) {
+	protected String createDescriptiveName(File file, int index) {
 		
 		String filePath = file.getPath();
 		filePath = filePath.replace('\\', '/');

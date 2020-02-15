@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
@@ -72,19 +71,17 @@ public class Files extends InputManager<FileInput> {
 		int index = 0;
 		for( File f : files ) {
 			
-			FileInput input = createInput(f, index++);
+			String descriptiveName = descriptiveNameFromFile.createDescriptiveNameOrElse(
+				f,
+				index++,
+				"<unknown>"
+			);
+			
+			FileInput input = new FileInput(f, descriptiveName);
 			listOut.add( input );
 		}
 		
 		return listOut;
-	}
-	
-	private FileInput createInput( File f, int index ) throws IOException {
-		try {
-			return new FileInput(f,descriptiveNameFromFile,index);
-		} catch (CreateException e) {
-			throw new IOException(e);
-		}
 	}
 	
 	public FileProvider getFileProvider() {

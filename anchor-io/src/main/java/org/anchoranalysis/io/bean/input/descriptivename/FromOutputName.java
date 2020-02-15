@@ -45,7 +45,7 @@ public class FromOutputName extends DescriptiveNameFromFile {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String createDescriptiveName(File file, int index) {
+	protected String createDescriptiveName(File file, int index) {
 		return outputNameStyle.getPhysicalName(index);
 	}
 
