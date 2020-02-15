@@ -31,16 +31,17 @@ import java.io.File;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
 
 	private File file;
 	private String descriptiveName;
 	
-	public FileInput(File file, String descriptiveName ) {
+	public FileInput( DescriptiveFile file ) {
 		super();
-		this.file = file;
-		this.descriptiveName = descriptiveName;
+		this.file = file.getFile();
+		this.descriptiveName = file.getDescriptiveName();
 	}
 	
 	@Override

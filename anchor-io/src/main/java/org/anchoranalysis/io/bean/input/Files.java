@@ -29,9 +29,10 @@ package org.anchoranalysis.io.bean.input;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
@@ -64,24 +65,11 @@ public class Files extends InputManager<FileInput> {
 	
 	public List<FileInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException {
 		
-		List<FileInput> listOut = new ArrayList<>();
-		
 		Collection<File> files = getFileProvider().matchingFiles(progressReporter, inputContext );
-		
-		int index = 0;
-		for( File f : files ) {
 			
-			String descriptiveName = descriptiveNameFromFile.createDescriptiveNameOrElse(
-				f,
-				index++,
-				"<unknown>"
-			);
-			
-			FileInput input = new FileInput(f, descriptiveName);
-			listOut.add( input );
-		}
-		
-		return listOut;
+		return descriptiveNameFromFile.descriptiveNamesFor(files, "<unknown>").stream().map(
+			df -> new FileInput(df)
+		).collect( Collectors.toList() );
 	}
 	
 	public FileProvider getFileProvider() {

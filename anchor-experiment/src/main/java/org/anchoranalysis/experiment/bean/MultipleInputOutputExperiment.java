@@ -30,6 +30,7 @@ package org.anchoranalysis.experiment.bean;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
@@ -41,6 +42,7 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -85,21 +87,18 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 		}
 		
 		try {
-		
+			List<DescriptiveFile> list = descriptiveNameFromFile.descriptiveNamesFor(files, "Invalid Name");
+			
 			int i = 0;
-			for( File f : files ) {
-				String name = descriptiveNameFromFile.createDescriptiveNameOrElse(
-					f,
-					i++,
-					"Invalid Name"
-				);
-				System.out.printf("Starting\t%03d:\t%s\tat %s%n", i, name, f.getPath() );
+			for( DescriptiveFile df : list ) {
+
+				System.out.printf("Starting\t%03d:\t%s\tat %s%n", i, df.getDescriptiveName(), df.getPath() );
 				
-				InputManager<T> inputManager = BeanXmlLoader.loadBean(f.toPath(), "bean");
+				InputManager<T> inputManager = BeanXmlLoader.loadBean(df.getPath(), "bean");
 
 				experiment.setInput(inputManager);
-				experiment.setExperimentIdentifier( new ExperimentIdentifierSimple(name,version));
-				System.out.printf("Ending   \t%03d:\t%s\tat %s%n", i, name, f.getPath() );
+				experiment.setExperimentIdentifier( new ExperimentIdentifierSimple(df.getDescriptiveName(),version));
+				System.out.printf("Ending   \t%03d:\t%s\tat %s%n", i++, df.getDescriptiveName(), df.getPath() );
 
 				experiment.doExperiment(expArgs);
 			}

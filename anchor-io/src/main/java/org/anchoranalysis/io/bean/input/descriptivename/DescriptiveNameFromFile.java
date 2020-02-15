@@ -28,6 +28,10 @@ package org.anchoranalysis.io.bean.input.descriptivename;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,12 +44,29 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+		
+	private Logger log = Logger.getLogger(DescriptiveNameFromFile.class.getName());
+	
+	public DescriptiveFile descriptiveNameFor( File file, String elseName ) {
+		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
+	}
+	
+	public List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName ) {
+		
+		List<DescriptiveFile> out = new ArrayList<>();
+		
+		int i =0;
+		for (File f : files) {
+			String descriptiveName = createDescriptiveNameOrElse( f, i++, elseName);
+			out.add( new DescriptiveFile(f, descriptiveName) );
+		}
+		
+		return out;
+	}
 	
 	protected abstract String createDescriptiveName( File file, int index ) throws CreateException;
 	
-	private Logger log = Logger.getLogger(DescriptiveNameFromFile.class.getName());
-	
-	public String createDescriptiveNameOrElse( File file, int index, String elseName ) {
+	private String createDescriptiveNameOrElse( File file, int index, String elseName ) {
 		try {
 			return createDescriptiveName(file, index);
 		} catch (CreateException e) {
@@ -59,5 +80,6 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 			return elseName;
 		}
 	}
+
 	
 }
