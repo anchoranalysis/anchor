@@ -30,17 +30,32 @@ package org.anchoranalysis.core.text;
 public class LanguageUtilities {
 
 	/**
+	 * Returns something or somethings depending on the number
+	 * 
+	 * @param number the number n
+	 * @param word the something
+	 * @return the string as above
+	 */
+	public static String pluralizeMaybe( long number, String word ) {
+		if (number==1) {
+			return word;
+		} else {
+			return pluralize(word);
+		}
+	}
+	
+	/**
 	 * Returns 1 something or n somethings as is appropriate
 	 * 
 	 * @param number the number n
 	 * @param word the something
 	 * @return the string as above
 	 */
-	public static String maybePluralize( long number, String word ) {
+	public static String prefixPluralizeMaybe( long number, String word ) {
 		if (number==1) {
 			return "1 " + word;
 		} else {
-			return pluralize(number,word);
+			return prefixPluralize(number,word);
 		}
 	}
 	
@@ -51,8 +66,18 @@ public class LanguageUtilities {
 	 * @param word the something
 	 * @return the string as above
 	 */
-	public static String pluralize( long number, String word ) {
-		return String.format("%d %ss", number, word);
+	public static String prefixPluralize( long number, String word ) {
+		return String.format("%d %s", number, pluralize(word) );
+	}
+	
+	/**
+	 * Given something, returns somethings
+	 * 
+	 * @param word the something
+	 * @return the string as above
+	 */
+	public static String pluralize( String word ) {
+		return String.format("%ss", word);
 	}
 	
 }

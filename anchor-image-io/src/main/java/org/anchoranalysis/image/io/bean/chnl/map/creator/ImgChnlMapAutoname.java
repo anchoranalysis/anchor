@@ -35,6 +35,14 @@ import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
+
+/**
+ * Names of the channels from the metadata if it exists, otherwise names in pattern chnl-%d
+ * where %d is the index
+ *   
+ * @author owen
+ *
+ */
 public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 
 	/**

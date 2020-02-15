@@ -124,7 +124,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		if (detailedLogging) {
 			logReporter.logFormatted(
 				"Using %s from: %d",
-				LanguageUtilities.maybePluralize(nrOfProcessors, "processor"),
+				LanguageUtilities.prefixPluralizeMaybe(nrOfProcessors, "processor"),
 				availableProcessors
 			);
 		}

@@ -64,7 +64,7 @@ public class NamedChnls extends NamedChnlsBase {
 	private ImgChnlMapCreator imgChnlMapCreator;
 	
 	@BeanField
-	private boolean useLastSeriesIndexOnly;
+	private boolean useLastSeriesIndexOnly = false;
 	// END BEANS
 
 	@Override

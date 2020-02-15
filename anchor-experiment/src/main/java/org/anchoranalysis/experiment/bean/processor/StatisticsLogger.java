@@ -130,7 +130,7 @@ class StatisticsLogger {
 	 * @return the string as above
 	 */
 	private static String maybePluralizeJobs( long number ) {
-		return LanguageUtilities.maybePluralize(number, JOB_WORD);
+		return LanguageUtilities.prefixPluralizeMaybe(number, JOB_WORD);
 	}
 	
 	/**
@@ -140,6 +140,6 @@ class StatisticsLogger {
 	 * @return the string as above
 	 */
 	private static String alwaysPluralizeJobs( long number ) {
-		return LanguageUtilities.pluralize(number, JOB_WORD);
+		return LanguageUtilities.prefixPluralize(number, JOB_WORD);
 	}
 }
