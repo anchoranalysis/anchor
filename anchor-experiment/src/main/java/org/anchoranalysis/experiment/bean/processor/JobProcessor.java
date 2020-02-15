@@ -29,20 +29,36 @@ package org.anchoranalysis.experiment.bean.processor;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-public abstract class JobProcessor<T extends InputFromManager> extends AnchorBean<JobProcessor<T>> {
+
+/**
+ * Processes a job
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> input-object type
+ * @param <S> shared-state type
+ */
+public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorBean<JobProcessor<T,S>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	// START BEAN PROPERTIES
+	@BeanField
+	private Task<T,S> task;
+	// END BEAN PROPERTIES
+		
 	/**
 	 * Executes the tasks, gathers statistics, and logs them
 	 * 
@@ -65,7 +81,9 @@ public abstract class JobProcessor<T extends InputFromManager> extends AnchorBea
 	}
 	
 	/** Is the execution-time of the task per-input expected to be very quick to execute? */
-	public abstract boolean hasVeryQuickPerInputExecution();
+	public boolean hasVeryQuickPerInputExecution() {
+		return task.hasVeryQuickPerInputExecution();
+	}
 	
 	/**
 	 * The job processor is expected to remove items from the inputObjects List as they are consumed
@@ -97,5 +115,13 @@ public abstract class JobProcessor<T extends InputFromManager> extends AnchorBea
 			paramsExperiment.getLogReporterExperiment()
 		);
 		statisticsLogger.logTextualMessage(stats);		
+	}
+	
+	public Task<T,S> getTask() {
+		return task;
+	}
+
+	public void setTask(Task<T,S> task) {
+		this.task = task;
 	}
 }

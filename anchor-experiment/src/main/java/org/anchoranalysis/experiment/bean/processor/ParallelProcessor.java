@@ -36,7 +36,6 @@ import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.CallableJob;
 import org.anchoranalysis.experiment.task.processor.ConcurrentJobMonitor;
@@ -47,13 +46,14 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
+ * Executes jobs in parallel
  * 
  * @author Owen Feehan
  *
  * @param <T> input-object type
  * @param <S> shared-state type
  */
-public class ParallelProcessor<T extends InputFromManager,S> extends JobProcessor<T> {
+public class ParallelProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
 	/**
 	 * 
@@ -61,9 +61,6 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN
-	@BeanField
-	private Task<T,S> task;
-	
 	@BeanField
 	private boolean supressExceptions = true;
 	
@@ -78,7 +75,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		ParametersExperiment paramsExperiment
 	) throws ExperimentExecutionException {
 		
-		S sharedState = task.beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
+		S sharedState = getTask().beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
 			
 		int nrOfProcessors = selectNumProcessors(
 			paramsExperiment.getLogReporterExperiment(),
@@ -110,7 +107,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 
 	    }
 		
-		task.afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment() );
+		getTask().afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment() );
 		return monitor.createStatistics();
 	}
 	
@@ -149,7 +146,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		JobState taskState = new JobState();
 		eservice.submit(
 			new CallableJob<>(
-				task,
+				getTask(),
 				paramsUnbound,
 				taskState,
 				td,
@@ -160,15 +157,6 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		
 		SubmittedJob submittedTask = new SubmittedJob( td, taskState);
 		monitor.add( submittedTask );
-	}
-	
-
-	public Task<T,S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<T,S> task) {
-		this.task = task;
 	}
 
 	public boolean isSupressExceptions() {
@@ -186,11 +174,4 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	public void setMaxNumProcessors(int maxNumProcessors) {
 		this.maxNumProcessors = maxNumProcessors;
 	}
-
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return task.hasVeryQuickPerInputExecution();
-	}
-
-
 }

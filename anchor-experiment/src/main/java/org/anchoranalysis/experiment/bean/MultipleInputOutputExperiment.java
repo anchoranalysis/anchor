@@ -46,7 +46,7 @@ import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.input.InputFromManager;
 
 // Not finished
-public class MultipleInputOutputExperiment<T extends InputFromManager> extends Experiment {
+public class MultipleInputOutputExperiment<T extends InputFromManager, S> extends Experiment {
 
 	/**
 	 * 
@@ -61,7 +61,7 @@ public class MultipleInputOutputExperiment<T extends InputFromManager> extends E
 	private DescriptiveNameFromFile descriptiveNameFromFile;
 	
 	@BeanField
-	private InputOutputExperiment<T> experiment;
+	private InputOutputExperiment<T,S> experiment;
 	
 	@BeanField
 	private String version = "1.0";
@@ -130,11 +130,11 @@ public class MultipleInputOutputExperiment<T extends InputFromManager> extends E
 		this.descriptiveNameFromFile = descriptiveNameFromFile;
 	}
 
-	public InputOutputExperiment<T> getExperiment() {
+	public InputOutputExperiment<T,S> getExperiment() {
 		return experiment;
 	}
 
-	public void setExperiment(InputOutputExperiment<T> experiment) {
+	public void setExperiment(InputOutputExperiment<T,S> experiment) {
 		this.experiment = experiment;
 	}
 
