@@ -99,7 +99,7 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	}
 	
 	@Override
-	protected boolean useDetailedLogging() {
+	public boolean useDetailedLogging() {
 
 		// Disable detailed-logging if the task has a very quick execution (unless we are in 'force' mode)
 		if ( isForceDetailedLogging() ||  !taskProcessor.hasVeryQuickPerInputExecution()) {

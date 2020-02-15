@@ -84,23 +84,6 @@ public abstract class OutputExperiment extends Experiment {
 	@BeanField
 	private boolean forceDetailedLogging = false;
 	// END BEAN PROPERTIES
-
-
-	public boolean isForceDetailedLogging() {
-		return forceDetailedLogging;
-	}
-
-
-
-	// Runs the experiment on all files
-	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
-		
-		// Now let's delete existing files if we want
-		getOutput().deleteExstExpQuietly( getExperimentIdentifier().identifier(), debugMode );
-		UpdateLog4JOutputManager.updateLog4J(bom);
-	}
-	
-	
 	
 	// Runs the experiment on all files
 	public void doExperiment(ExperimentExecutionArguments expArgs) throws ExperimentExecutionException {
@@ -134,14 +117,6 @@ public abstract class OutputExperiment extends Experiment {
 				rootOutputManagerNoErrors,
 				errorReporter
 			);
-			
-			
-			
-			// why do we do this twice?
-			
-			// Now let's delete existing files if we want
-			//getOutput().deleteExstExpQuietly( getExperimentIdentifier() );
-			//OutputManager.updateLog4J(rootOutputManager);
 			
 			try {
 				
@@ -191,10 +166,6 @@ public abstract class OutputExperiment extends Experiment {
 				
 			} finally {
 				
-				// Let's add two blank lines to the log for readability (especially on console)
-				logReporter.log("");
-				logReporter.log("");
-				
 				// An experiment is considered always successful
 				logReporter.close(true);
 			}
@@ -206,9 +177,24 @@ public abstract class OutputExperiment extends Experiment {
 
 	protected abstract void execExperiment( BoundOutputManagerRouteErrors outputManager, ManifestRecorder experimentalManifest, ExperimentExecutionArguments expArgs, LogReporter logReporter ) throws ExperimentExecutionException;
 
-	protected boolean useDetailedLogging() {
+	@Override
+	public boolean useDetailedLogging() {
 		return forceDetailedLogging;
 	}
+
+	public boolean isForceDetailedLogging() {
+		return forceDetailedLogging;
+	}
+	
+	// Runs the experiment on all files
+	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
+		
+		// Now let's delete existing files if we want
+		getOutput().deleteExstExpQuietly( getExperimentIdentifier().identifier(), debugMode );
+		UpdateLog4JOutputManager.updateLog4J(bom);
+	}
+	
+	
 	
 	public String getOutputNameConfigCopy() {
 		return outputNameConfigCopy;

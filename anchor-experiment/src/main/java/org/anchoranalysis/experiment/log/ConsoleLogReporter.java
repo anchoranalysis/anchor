@@ -34,7 +34,7 @@ public class ConsoleLogReporter implements StatefulLogReporter {
 
 	@Override
 	public void start() {
-		// NOTHING TO INITIALIZE
+		// NOTHING TO DO
 	}
 
 	@Override
@@ -45,7 +45,6 @@ public class ConsoleLogReporter implements StatefulLogReporter {
 	@Override
 	public void logFormatted(String formatString, Object... args) {
 		log( String.format(formatString,args) );
-		
 	}
 
 	@Override

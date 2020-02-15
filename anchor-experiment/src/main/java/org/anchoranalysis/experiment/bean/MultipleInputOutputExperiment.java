@@ -109,8 +109,11 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 			throw new ExperimentExecutionException(e);
 		}
 	}
-	
-	
+
+	@Override
+	public boolean useDetailedLogging() {
+		return experiment.useDetailedLogging();
+	}
 
 	public FileProvider getInputManagerBeanPathProvider() {
 		return inputManagerBeanPathProvider;
@@ -153,5 +156,4 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 	public void setExperimentIdentifier(ExperimentIdentifier experimentIdentifier) {
 		this.experimentIdentifier = experimentIdentifier;
 	}
-
 }
