@@ -51,6 +51,10 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	@BeanField
 	private FilePathPrefixer filePathPrefixer = null;
 	
+	/**  
+	 * If true, if an existing output folder (at intended path) is deleted
+	 * If false, an error is thrown if the folder already exists
+	 */
 	@BeanField
 	private boolean delExistingFolder = true;
 	// END BEAN PROPERTIES
@@ -93,10 +97,20 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 
 	@Override
 	public void deleteExstExpQuietly( String expIdentifier, boolean debugMode ) throws IOException {
+
+		Path expPath = filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getFolderPath();
 		
-		if (delExistingFolder) {
-			Path expPath = filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getFolderPath();
-			FileUtils.deleteQuietly( expPath.toFile() );
+		if (expPath.toFile().exists()) {
+			if (delExistingFolder) {
+				FileUtils.deleteQuietly( expPath.toFile() );
+			} else {
+				String line1 = "Experiment output folder already exists.";
+				String line3 = "Consider enabling delExistingFolder=\"true\" in experiment.xml";
+				// Check if it exists already, and refuse to overwrite
+				throw new IOException(
+					String.format("%s%nBefore proceeding, please delete: %s%n%s", line1, expPath, line3)
+				);
+			}
 		}
 	}
 	
