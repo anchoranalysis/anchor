@@ -31,6 +31,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -57,6 +58,9 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	 */
 	@BeanField
 	private boolean delExistingFolder = true;
+
+	@BeanField
+	private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 	// END BEAN PROPERTIES
 		
 	// Binds the output to be connected to a particular file and experiment
@@ -133,5 +137,14 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	public void setDelExistingFolder(boolean delExistingFolder) {
 		this.delExistingFolder = delExistingFolder;
 	}
+	
+	
+	public OutputWriteSettings getOutputWriteSettings() {
+		return outputWriteSettings;
+	}
+
+	public void setOutputWriteSettings(OutputWriteSettings outputWriteSettings) {
+		this.outputWriteSettings = outputWriteSettings;
+	}	
 	// END BEAN getters and setters
 }
