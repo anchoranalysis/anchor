@@ -35,6 +35,8 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
+import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
 import org.anchoranalysis.experiment.io.IReplaceOutputManager;
@@ -68,6 +70,9 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	
 	@BeanField
 	private JobProcessor<T,S> taskProcessor;
+	
+	@BeanField
+	private LogReporterBean logReporterTask = new ConsoleLogReporterBean();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -85,6 +90,7 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 			params.setExperimentIdentifier(getExperimentIdentifier());
 			params.setExperimentArguments(expArgs);
 			params.setLogReporterExperiment(logReporter);
+			params.setLogReporterTaskCreator(logReporterTask);
 			params.setDetailedLogging( useDetailedLogging() );
 			
 			taskProcessor.executeLogStats(
@@ -141,5 +147,13 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	public void replaceTask(Task<T, S> task) throws OperationFailedException {
 		this.taskProcessor.setTask(task);
 		
+	}
+
+	public LogReporterBean getLogReporterTask() {
+		return logReporterTask;
+	}
+
+	public void setLogReporterTask(LogReporterBean logReporterTask) {
+		this.logReporterTask = logReporterTask;
 	}
 }

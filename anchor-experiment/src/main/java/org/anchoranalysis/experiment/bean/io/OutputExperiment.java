@@ -72,7 +72,7 @@ public abstract class OutputExperiment extends Experiment {
 	private String outputNameExecutionTime = "executionTime";
 	
 	@BeanField
-	private LogReporterBean logReporterBean = new ConsoleLogReporterBean();
+	private LogReporterBean logReporterExperiment = new ConsoleLogReporterBean();
 	
 	@BeanField
 	private ExperimentIdentifier experimentIdentifier = null;
@@ -106,7 +106,7 @@ public abstract class OutputExperiment extends Experiment {
 			// To reporter errors when trying to do logging
 			ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( new ConsoleLogReporter() );
 			
-			StatefulLogReporter logReporter = logReporterBean.create( rootOutputManagerNoErrors, errorReporterFallback, expArgs);
+			StatefulLogReporter logReporter = logReporterExperiment.create( rootOutputManagerNoErrors, errorReporterFallback, expArgs);
 			ErrorReporter errorReporter = new ErrorReporterIntoLog( logReporter );
 			
 			
@@ -215,13 +215,13 @@ public abstract class OutputExperiment extends Experiment {
 		this.output = output;
 	}
 	
-	public LogReporterBean getLogReporter() {
-		return logReporterBean;
+	public LogReporterBean getLogReporterExperiment() {
+		return logReporterExperiment;
 	}
 
 
-	public void setLogReporter(LogReporterBean logReporter) {
-		this.logReporterBean = logReporter;
+	public void setLogReporterExperiment(LogReporterBean logReporter) {
+		this.logReporterExperiment = logReporter;
 	}
 
 

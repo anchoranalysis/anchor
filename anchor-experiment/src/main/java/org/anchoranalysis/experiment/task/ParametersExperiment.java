@@ -29,6 +29,7 @@ package org.anchoranalysis.experiment.task;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
+import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
@@ -46,9 +47,15 @@ public class ParametersExperiment {
 	private ManifestRecorder experimentalManifest;
 	private OutputManager outputManager;
 	private ExperimentIdentifier experimentIdentifier;
-	private LogReporter logReporterExperiment;
-	private ExperimentExecutionArguments experimentArguments;
 	
+	// This is an actual log-reporter
+	private LogReporter logReporterExperiment;
+	
+	// This is a means to create new log-reporters for each task
+	private LogReporterBean logReporterTaskCreator;
+	
+	private ExperimentExecutionArguments experimentArguments;
+		
 	/**
 	 * Iff true, additional log messages are written to describe each job in terms of its unique name,
 	 *  output folder, average execution time etc.
@@ -92,5 +99,10 @@ public class ParametersExperiment {
 	public void setExperimentArguments(ExperimentExecutionArguments experimentArguments) {
 		this.experimentArguments = experimentArguments;
 	}
-
+	public LogReporterBean getLogReporterTaskCreator() {
+		return logReporterTaskCreator;
+	}
+	public void setLogReporterTaskCreator(LogReporterBean logReporterTaskCreator) {
+		this.logReporterTaskCreator = logReporterTaskCreator;
+	}
 }
