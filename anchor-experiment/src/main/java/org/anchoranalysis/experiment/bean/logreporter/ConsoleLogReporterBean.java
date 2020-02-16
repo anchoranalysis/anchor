@@ -40,7 +40,7 @@ public class ConsoleLogReporterBean extends LogReporterBean {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs ) {
+	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
 		return new ConsoleLogReporter();
 	}
 

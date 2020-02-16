@@ -43,7 +43,7 @@ public class TextFileLogReporterBean extends LogReporterBean {
 	}
 	
 	@Override
-	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs ) {
+	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
 		return new TextFileLogReporter( bom, errorReporter );
 	}
 

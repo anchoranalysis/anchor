@@ -106,7 +106,14 @@ public abstract class OutputExperiment extends Experiment {
 			// To reporter errors when trying to do logging
 			ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( new ConsoleLogReporter() );
 			
-			StatefulLogReporter logReporter = logReporterExperiment.create( rootOutputManagerNoErrors, errorReporterFallback, expArgs);
+			boolean detailedLogging = useDetailedLogging();
+			
+			StatefulLogReporter logReporter = logReporterExperiment.create(
+				rootOutputManagerNoErrors,
+				errorReporterFallback,
+				expArgs,
+				detailedLogging
+			);
 			ErrorReporter errorReporter = new ErrorReporterIntoLog( logReporter );
 			
 			
@@ -128,8 +135,6 @@ public abstract class OutputExperiment extends Experiment {
 					outputNameConfigCopy,
 					() -> new XMLConfigurationWrapperGenerator( getXMLConfiguration() )
 				);
-
-				boolean detailedLogging = useDetailedLogging();
 				
 				if (detailedLogging) {
 					logReporter.logFormatted(
