@@ -86,7 +86,7 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 			
 			ParametersExperiment params = new ParametersExperiment();
 			params.setExperimentalManifest(experimentalManifest);
-			params.setOutputManager(getOutput());
+			params.setOutputManager(outputManager);
 			params.setExperimentIdentifier(getExperimentIdentifier());
 			params.setExperimentArguments(expArgs);
 			params.setLogReporterExperiment(logReporter);

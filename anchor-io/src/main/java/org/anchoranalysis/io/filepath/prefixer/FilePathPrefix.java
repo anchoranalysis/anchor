@@ -63,12 +63,7 @@ public class FilePathPrefix implements FilePathCreator {
 
 		String combinedFilePath = filenamePrefix + filePathRelative;
 	
-		Path fullPath = folderPath.resolve(combinedFilePath);
-
-		// We create any subdirectories as needed
-		PathUtilities.createNecessaryDirs(fullPath);
-		
-		return fullPath;
+		return folderPath.resolve(combinedFilePath);
 	}
 		
 	@Override

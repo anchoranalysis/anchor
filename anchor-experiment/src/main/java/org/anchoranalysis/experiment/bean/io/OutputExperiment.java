@@ -191,9 +191,6 @@ public abstract class OutputExperiment extends Experiment {
 	
 	// Runs the experiment on all files
 	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
-		
-		// Now let's delete existing files if we want
-		getOutput().deleteExstExpQuietly( getExperimentIdentifier().identifier(), debugMode );
 		UpdateLog4JOutputManager.updateLog4J(bom);
 	}
 	

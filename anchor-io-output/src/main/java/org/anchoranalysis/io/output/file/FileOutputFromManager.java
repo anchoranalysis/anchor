@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.output.file;
 
+
+
 /*-
  * #%L
  * anchor-io-output
@@ -29,6 +31,7 @@ package org.anchoranalysis.io.output.file;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 public class FileOutputFromManager {
@@ -53,10 +56,8 @@ public class FileOutputFromManager {
 		ManifestDescription manifestDescription,
 		BoundOutputManager outputManager,
 		String outputName
-	) {
-		
-		
-		
+	) throws OutputWriteFailedException {
+
 		Path fileOutputPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
 			outputName,
 			extension,

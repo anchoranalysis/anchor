@@ -1,10 +1,10 @@
 package org.anchoranalysis.io.output;
 
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,24 @@ package org.anchoranalysis.io.output;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-public class OutputWriteFailedException extends AnchorCheckedException {
+/**
+ * When an OutputManager already exists. This is thrown as a RuntimeException to
+ * cause the application to immediately end.
+ * 
+ * @author owen
+ *
+ */
+public class OutputManagerAlreadyExists extends AnchorFriendlyRuntimeException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1036971819028250342L;
+	private static final long serialVersionUID = 1L;
 
-	public OutputWriteFailedException( String s ) {
-		super(s);
+	public OutputManagerAlreadyExists(String msg) {
+		super(msg);
 	}
-	
-	public OutputWriteFailedException( String s, Throwable e ) {
-		super(s,e);
-	}
-	
-	public OutputWriteFailedException( Throwable e ) {
-		super(e);
-	}
+
 }

@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.file.FileOutput;
 
@@ -57,17 +58,17 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	
 	@Override
 	public void start() {
-		
-		fileOutput = TextFileLogHelper.createOutput(bom);
-		
-		if (fileOutput==null) {
-			return;
-		}
 	
 		try {
+			fileOutput = TextFileLogHelper.createOutput(bom);
+			
+			if (fileOutput==null) {
+				return;
+			}
+			
 			fileOutput.start();
 			printWriter = fileOutput.getWriter();
-		} catch (IOException e) {
+		} catch (IOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}		
 	}

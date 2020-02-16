@@ -39,7 +39,6 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.apache.commons.io.FileUtils;
 
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
@@ -64,59 +63,39 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	// END BEAN PROPERTIES
 		
 	// Binds the output to be connected to a particular file and experiment
-	public BoundOutputManager bindFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
+	@Override
+	public FilePathPrefix prefixForFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
 		
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( infilePath, expIdentifier, debugMode );
-
+		
 		FilePathDifferenceFromFolderPath fpd = new FilePathDifferenceFromFolderPath();
 		fpd.init(
 			this.filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getCombinedPrefix(),
 			fpp.getCombinedPrefix()
 		);
 		
-		//fpr.setInPathPrefix( fpp.g)
-		
 		experimentalManifestRecorder.getRootFolder().writeFolder( fpd.getRemainderCombined(), new ManifestFolderDescription(), 
 				new ExperimentFileFolder() );
 		
 		manifestRecorder.init( fpp.getFolderPath() );
 		
-		return new BoundOutputManager( this, fpp, getOutputWriteSettings(), manifestRecorder.getRootFolder() );
+		return fpp;
 	}
 	
+	@Override
 	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, boolean debugMode ) throws IOException {
 
 		FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, debugMode );
 		
-		//System.out.printf("filePathPrefixer.getFolderPath()=%s\n", prefix.getFolderPath() );
-		
 		if (writeOperationRecorder!=null) {
 			writeOperationRecorder.init(prefix.getFolderPath());
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder() );
+			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), delExistingFolder, null );
 		} else {
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder() );
+			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), delExistingFolder, null );
 		}
 	}
 
-	@Override
-	public void deleteExstExpQuietly( String expIdentifier, boolean debugMode ) throws IOException {
-
-		Path expPath = filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getFolderPath();
-		
-		if (expPath.toFile().exists()) {
-			if (delExistingFolder) {
-				FileUtils.deleteQuietly( expPath.toFile() );
-			} else {
-				String line1 = "Experiment output folder already exists.";
-				String line3 = "Consider enabling delExistingFolder=\"true\" in experiment.xml";
-				// Check if it exists already, and refuse to overwrite
-				throw new IOException(
-					String.format("%s%nBefore proceeding, please delete: %s%n%s", line1, expPath, line3)
-				);
-			}
-		}
-	}
 	
 	// START BEAN getters and setters
 	public FilePathPrefixer getFilePathPrefixer() {

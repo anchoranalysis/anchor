@@ -31,7 +31,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. are still
@@ -45,7 +45,7 @@ public class ParametersExperiment {
 
 	// Parameters for all tasks in general (the experiment)
 	private ManifestRecorder experimentalManifest;
-	private OutputManager outputManager;
+	private BoundOutputManagerRouteErrors outputManager;
 	private ExperimentIdentifier experimentIdentifier;
 	
 	// This is an actual log-reporter
@@ -75,10 +75,10 @@ public class ParametersExperiment {
 	public void setExperimentalManifest(ManifestRecorder experimentalManifest) {
 		this.experimentalManifest = experimentalManifest;
 	}
-	public OutputManager getOutputManager() {
+	public BoundOutputManagerRouteErrors getOutputManager() {
 		return outputManager;
 	}
-	public void setOutputManager(OutputManager outputManager) {
+	public void setOutputManager(BoundOutputManagerRouteErrors outputManager) {
 		this.outputManager = outputManager;
 	}
 	public ExperimentIdentifier getExperimentIdentifier() {
