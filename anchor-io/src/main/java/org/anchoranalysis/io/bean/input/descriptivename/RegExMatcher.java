@@ -31,7 +31,7 @@ import java.io.File;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 
-public class RegExMatcher extends DescriptiveNameFromFile {
+public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 
 	/**
 	 * 

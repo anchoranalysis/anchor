@@ -32,7 +32,7 @@ import java.io.File;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.apache.commons.io.FilenameUtils;
 
-public class LastFolders extends DescriptiveNameFromFile {
+public class LastFolders extends DescriptiveNameFromFileIndependent {
 
 	/**
 	 * 

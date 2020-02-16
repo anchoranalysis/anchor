@@ -32,7 +32,7 @@ import java.io.File;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
-public class FromOutputName extends DescriptiveNameFromFile {
+public class FromOutputName extends DescriptiveNameFromFileIndependent {
 
 	/**
 	 * 
