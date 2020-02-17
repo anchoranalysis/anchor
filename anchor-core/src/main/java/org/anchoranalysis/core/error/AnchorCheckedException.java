@@ -44,8 +44,8 @@ public abstract class AnchorCheckedException extends Exception {
 		super();
 	}
 
-	public AnchorCheckedException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
+	public AnchorCheckedException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 	public AnchorCheckedException(String message) {
