@@ -50,7 +50,6 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 	private ParametersUnbound<T,S> paramsUnbound; 
 	private JobState jobState;
 	private JobDescription jobDescription;
-	
 	private JobStartStopLogger logger;
 	
 	/**
@@ -69,7 +68,8 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 		JobState taskState,
 		JobDescription taskDescription,
 		ConcurrentJobMonitor monitor,
-		LogReporter logReporterMonitor
+		LogReporter logReporterMonitor,
+		int showOngoingJobsLessThan
 	) {
 		super();
 		this.task = task;
@@ -80,7 +80,8 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 			"Job",
 			logReporterMonitor,
 			monitor,
-			false
+			false,
+			showOngoingJobsLessThan
 		);
 	}
 	

@@ -30,6 +30,8 @@ package org.anchoranalysis.experiment.task.processor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
@@ -82,37 +84,27 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 	}
 	
 	public synchronized long numberCompletedJobs() {
-		return list.stream().filter( s->s.getJobState().isCompleted()).count();
+		return numberJobs( j->j.isCompleted() );
 	}
 	
 	public synchronized long numberCompletedSuccessfullyJobs() {
-		return list.stream().filter( s->s.getJobState().isCompletedSucessfully()).count();
+		return numberJobs( j->j.isCompletedSuccessfully() );
 	}
 	
 	public synchronized long numberCompletedFailureJobs() {
-		return list.stream().filter( s->s.getJobState().isCompletedFailure()).count();
+		return numberJobs( j->j.isCompletedFailure() );
 	}
 	
 	public synchronized long numberExecutingJobs() {
-		return list.stream().filter( s->s.getJobState().isExecuting()).count();
+		return numberJobs( j->j.isExecuting() );
 	}
 	
 	public synchronized long sumCompletedSuccessfullyExectionTime() {
-		return list
-			.stream()
-			.filter( s->s.getJobState()
-			.isCompletedSucessfully())
-			.mapToLong( s->s.getJobState().getTime() )
-			.sum();
+		return sumExectionTime( j->j.isCompletedSuccessfully() );
 	}
 	
 	public synchronized long sumCompletedFailureExectionTime() {
-		return list
-			.stream()
-			.filter( s->s.getJobState()
-			.isCompletedFailure())
-			.mapToLong( s->s.getJobState().getTime() )
-			.sum();
+		return sumExectionTime( j->j.isCompletedFailure() );
 	}
 	
 	public synchronized TaskStatistics createStatistics() {
@@ -129,5 +121,19 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 	
 	public int getTotalNumTasks() {
 		return totalNumJobs;
+	}
+		
+	private long numberJobs( Predicate<JobState> pred ) {
+		return filteredJobs(pred).count();
+	}
+	
+	private long sumExectionTime( Predicate<JobState> pred ) {
+		return filteredJobs(pred)
+			.mapToLong( s->s.getJobState().getTime() )
+			.sum();
+	}
+	
+	private Stream<SubmittedJob> filteredJobs( Predicate<JobState> pred ) {
+		return list.stream().filter( s-> pred.test(s.getJobState()) );
 	}
 }

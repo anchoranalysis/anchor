@@ -85,7 +85,8 @@ public class MonitoredSequentialExecutor<T> {
 			logPrefix,
 			logReporter,
 			monitor,
-			showHashSeperators
+			showHashSeperators,
+			0
 		);
 		
 		List<InputAfterSubmission> submittedInputs = mapToSubmitted(inputs, monitor);

@@ -66,6 +66,10 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	
 	@BeanField
 	private int maxNumProcessors = 64;
+	
+	/** When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. */
+	@BeanField
+	private int showOngoingJobsLessThan = 0;
 	// END BEAN
 		
 	@Override
@@ -151,7 +155,8 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 				taskState,
 				td,
 				monitor,
-				logReporterForMonitor(paramsExperiment)
+				logReporterForMonitor(paramsExperiment),
+				showOngoingJobsLessThan
 			)
 		);
 		
@@ -173,5 +178,13 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 
 	public void setMaxNumProcessors(int maxNumProcessors) {
 		this.maxNumProcessors = maxNumProcessors;
+	}
+
+	public int getShowOngoingJobsLessThan() {
+		return showOngoingJobsLessThan;
+	}
+
+	public void setShowOngoingJobsLessThan(int showOngoingJobsLessThan) {
+		this.showOngoingJobsLessThan = showOngoingJobsLessThan;
 	}
 }
