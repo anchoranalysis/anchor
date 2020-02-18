@@ -33,7 +33,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 
 class AdditionalChnl {
 	private String chnlName;

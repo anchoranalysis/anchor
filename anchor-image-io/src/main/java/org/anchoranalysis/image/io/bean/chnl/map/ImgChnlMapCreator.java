@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.bean.chnl.map.creator;
+package org.anchoranalysis.image.io.bean.chnl.map;
 
 /*
  * #%L
@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.bean.chnl.map.creator;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 public abstract class ImgChnlMapCreator extends AnchorBean<ImgChnlMapCreator> {

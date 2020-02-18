@@ -1,4 +1,6 @@
-package org.anchoranalysis.image.io.bean.chnl.map.creator;
+package org.anchoranalysis.image.io.bean.chnl.map;
+
+import org.anchoranalysis.bean.AnchorBean;
 
 /*
  * #%L
@@ -27,58 +29,48 @@ package org.anchoranalysis.image.io.bean.chnl.map.creator;
  */
 
 
-import java.util.List;
+import org.anchoranalysis.bean.annotation.BeanField;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-
-
-/**
- * Names of the channels from the metadata if it exists, otherwise names in pattern chnl-%d
- * where %d is the index
- *   
- * @author owen
- *
- */
-public class ImgChnlMapAutoname extends ImgChnlMapCreator {
-
+public class ImgChnlMapEntry extends AnchorBean<ImgChnlMapEntry> {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	
-	public ImgChnlMapAutoname() {
+	// START BEAN PROPERTIES
+	@BeanField
+	private int index;
+	
+	@BeanField
+	private String name;
+	// END BEAN PROPERTIES
+	
+	public ImgChnlMapEntry() {
+		
+	}
+		
+	public ImgChnlMapEntry(String name, int index) {
 		super();
+		this.index = index;
+		this.name = name;
 	}
 
-	@Override
-	public ImgChnlMap createMap(OpenedRaster openedRaster) throws CreateException {
-		
-		ImgChnlMap map = new ImgChnlMap();
-		
-		// null indicates that there are no names
-		List<String> names = openedRaster.channelNames();
-		
-		try {
-			for( int c=0; c<openedRaster.numChnl(); c++) {
-				
-				String chnlName;
-				if (names!=null) {
-					chnlName = names.get(c);
-				} else {
-					chnlName = String.format("chnl-%d", c);
-				}
-				map.add( new ImgChnlMapEntry(chnlName, c) );	
-			}
-			
-		} catch (RasterIOException e) {
-			throw new CreateException(e);
-		}
-
-		return map;
+	public int getIndex() {
+		return index;
 	}
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+
+
 }

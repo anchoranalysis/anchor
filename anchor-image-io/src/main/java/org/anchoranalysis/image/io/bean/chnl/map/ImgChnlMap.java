@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 
 /**
