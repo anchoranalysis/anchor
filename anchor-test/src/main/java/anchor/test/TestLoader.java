@@ -91,13 +91,21 @@ public class TestLoader {
 	
 
 	/**
-	 * Creates a new test-data loader using the default system property
-	 *  (DEFAULT_PROPERTY_NAME_TEST_DATA_ROOT)
+	 * Creates a new test-data loader finding "src/test/resources" using the Maven working directory
 	 * 
 	 * @return a testLoader associated with the root found in the default system proeprty
 	 */
-	public static TestLoader createFromMavenWorkingDir() {
-		return new TestLoader("src/test/resources");
+	public static TestLoader createFromMavenWorkingDirTest() {
+		return mavenDirTestLoaderFor("test");
+	}
+	
+	/**
+	 * Creates a new test-data loader finding "src/main/resources" using the Maven working directory
+	 * 
+	 * @return a testLoader associated with the root found in the default system property
+	 */
+	public static TestLoader createFromMavenWorkingDirMain() {
+		return mavenDirTestLoaderFor("main");
 	}
 		
 	/**
@@ -293,5 +301,8 @@ public class TestLoader {
 		dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 		return dbf;
 	}
-	
+
+	private static TestLoader mavenDirTestLoaderFor( String dirInSrc ) {
+		return new TestLoader( String.format("src/%s/resources", dirInSrc ) );
+	}
 }

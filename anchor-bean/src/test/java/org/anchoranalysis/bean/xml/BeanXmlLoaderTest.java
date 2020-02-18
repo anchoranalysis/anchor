@@ -39,7 +39,7 @@ import anchor.test.TestLoader;
 
 public class BeanXmlLoaderTest {
 
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
 
 	@Test
 	public void testLoadBean() throws BeanXmlException {
