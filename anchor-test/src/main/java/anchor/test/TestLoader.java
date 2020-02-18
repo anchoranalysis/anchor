@@ -93,7 +93,7 @@ public class TestLoader {
 	/**
 	 * Creates a new test-data loader finding "src/test/resources" using the Maven working directory
 	 * 
-	 * @return a testLoader associated with the root found in the default system proeprty
+	 * @return a testLoader associated with the root found in the default system property
 	 */
 	public static TestLoader createFromMavenWorkingDirTest() {
 		return mavenDirTestLoaderFor("test");
