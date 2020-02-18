@@ -40,6 +40,14 @@ public class FilePathGeneratorConstant extends FilePathGenerator {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public FilePathGeneratorConstant() {
+		
+	}
+	
+	public FilePathGeneratorConstant( String value ) {
+		this.value = value;
+	}
+	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String value;

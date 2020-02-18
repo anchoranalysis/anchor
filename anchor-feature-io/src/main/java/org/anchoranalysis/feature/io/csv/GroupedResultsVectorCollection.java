@@ -49,6 +49,7 @@ import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCo
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 
@@ -268,14 +269,13 @@ public class GroupedResultsVectorCollection {
 			paramsOut.put(item.getName(), Double.toString(val));
 		}
 		
-		Path fileOutPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename("paramsGroupAgg", "xml", new ManifestDescription("paramsXML", "aggregateObjMask"), "", "", "");
-		if( fileOutPath!=null ) {
-			try {
+		try {
+			Path fileOutPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename("paramsGroupAgg", "xml", new ManifestDescription("paramsXML", "aggregateObjMask"), "", "", "");
+			if( fileOutPath!=null ) {
 				paramsOut.writeToFile(fileOutPath);
-			} catch (IOException e) {
-				logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e);
 			}
+		} catch (IOException | OutputWriteFailedException e) {
+			logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e);
 		}
-		
 	}	
 }

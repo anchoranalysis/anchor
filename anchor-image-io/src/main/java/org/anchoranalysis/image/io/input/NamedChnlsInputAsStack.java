@@ -30,6 +30,7 @@ package org.anchoranalysis.image.io.input;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -42,7 +43,17 @@ import org.anchoranalysis.image.stack.TimeSequence;
  */
 public abstract class NamedChnlsInputAsStack extends StackInputBase {
 
+	/** Number of series */
 	public abstract int numSeries() throws RasterIOException;
+	
+	/** Dimensions of a particular series */
+	public abstract ImageDim dim( int seriesIndex ) throws RasterIOException;
+	
+	/** Number of channels */
+	public abstract int numChnl() throws RasterIOException;
+	
+	/** Bit-depth of image */
+	public abstract int bitDepth() throws RasterIOException;
 	
 	// Where most of our time is being taken up when opening a raster
 	public abstract NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException;

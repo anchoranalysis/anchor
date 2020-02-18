@@ -31,7 +31,6 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -44,7 +43,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @param <T> input-object type
  * @param <S> shared-object state
  */
-public class DebugDependentProcessor<T extends InputFromManager,S> extends JobProcessor<T> {
+public class DebugDependentProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
 	/**
 	 * 
@@ -52,9 +51,6 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private Task<T,S> task;
-	
 	@BeanField
 	private int maxNumProcessors;
 	
@@ -68,37 +64,23 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 		
 		assert( rootOutputManager.getDelegate().getOutputWriteSettings().hasBeenInit());
 		
-		JobProcessor<T> processor = createProcessor( paramsExperiment.getExperimentArguments().isDebugEnabled() );
+		JobProcessor<T,S> processor = createProcessor( paramsExperiment.getExperimentArguments().isDebugEnabled() );
 		return processor.execute(rootOutputManager, inputObjects, paramsExperiment);
 	}
 	
-
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return task.hasVeryQuickPerInputExecution();
-	}
-	
-	private JobProcessor<T> createProcessor( boolean debugMode ) {
+	private JobProcessor<T,S> createProcessor( boolean debugMode ) {
 		if (debugMode) {
 			SequentialProcessor<T,S> sp = new SequentialProcessor<>();
-			sp.setTask(task);
+			sp.setTask(getTask());
 			sp.setSupressExceptions(supressExceptions);
 			return sp;
 		} else {
 			ParallelProcessor<T,S> pp = new ParallelProcessor<>();
 			pp.setMaxNumProcessors(maxNumProcessors);
-			pp.setTask(task);
+			pp.setTask(getTask());
 			pp.setSupressExceptions(supressExceptions);
 			return pp;
 		}
-	}
-
-	public Task<T,S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<T,S> task) {
-		this.task = task;
 	}
 
 	public int getMaxNumProcessors() {
@@ -116,5 +98,4 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 	public void setSupressExceptions(boolean supressExceptions) {
 		this.supressExceptions = supressExceptions;
 	}
-
 }

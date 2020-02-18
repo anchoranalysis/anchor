@@ -40,7 +40,6 @@ public class InputContextParams {
 	/** Iff non-NULL, a directory which can be used by beans to find input */
 	private Path inputDir = null;
 
-
 	/** Whether an experiment is executing in debug mode or not */
 	private boolean debugMode = false;
 	

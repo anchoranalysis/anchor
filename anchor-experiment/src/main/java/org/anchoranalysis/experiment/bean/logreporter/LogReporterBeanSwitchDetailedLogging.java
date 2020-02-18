@@ -1,10 +1,10 @@
 package org.anchoranalysis.experiment.bean.logreporter;
 
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +26,57 @@ package org.anchoranalysis.experiment.bean.logreporter;
  * #L%
  */
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
-import org.anchoranalysis.experiment.log.reporter.TextFileLogReporter;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-public class TextFileLogReporterBean extends LogReporterBean {
+/**
+ * Switches between two log-reporters depending on whether detailed logging is switched on or not
+ * 
+ * @author owen
+ *
+ */
+public class LogReporterBeanSwitchDetailedLogging extends LogReporterBean {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public TextFileLogReporterBean() {
-	}
+	// START BEAN PROPERTIES
+	@BeanField
+	private LogReporterBean detailed;
 	
+	@BeanField
+	private LogReporterBean notDetailed;
+	// END BEAN PROPERTIES
+
 	@Override
-	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
-		return new TextFileLogReporter( bom, errorReporter );
+	public StatefulLogReporter create(BoundOutputManager bom, ErrorReporter errorReporter,
+			ExperimentExecutionArguments expArgs, boolean detailedLogging) {
+		if (detailedLogging) {
+			return detailed.create(bom, errorReporter, expArgs, detailedLogging);
+		} else {
+			return notDetailed.create(bom, errorReporter, expArgs, detailedLogging);
+		}
+	}
+
+	public LogReporterBean getDetailed() {
+		return detailed;
+	}
+
+	public void setDetailed(LogReporterBean detailed) {
+		this.detailed = detailed;
+	}
+
+	public LogReporterBean getNotDetailed() {
+		return notDetailed;
+	}
+
+	public void setNotDetailed(LogReporterBean notDetailed) {
+		this.notDetailed = notDetailed;
 	}
 
 }

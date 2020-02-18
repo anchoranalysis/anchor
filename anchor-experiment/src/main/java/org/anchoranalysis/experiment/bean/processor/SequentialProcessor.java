@@ -36,20 +36,20 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
- *  
+ * Executes jobs sequentially
+ * 
  * @author Owen Feehan
  *
  * @param <T> input-object type
  * @param <S> shared-object type
  */
-public class SequentialProcessor<T extends InputFromManager,S> extends JobProcessor<T> {
+public class SequentialProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
 	/**
 	 * 
@@ -57,9 +57,6 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN
-	@BeanField
-	private Task<T,S> task;
-	
 	@BeanField
 	private boolean supressExceptions = true;
 	// END BEAN
@@ -71,7 +68,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		ParametersExperiment paramsExperiment
 	) throws ExperimentExecutionException {
 		
-		S sharedState = task.beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
+		S sharedState = getTask().beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
 		
 		int totalNumJobs = inputObjects.size();
 		
@@ -83,7 +80,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 			logReporterForMonitor(paramsExperiment)
 		);
 		
-		task.afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment());
+		getTask().afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment());
 		
 		return stats;
 	}
@@ -117,20 +114,12 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 			paramsUnbound.setSharedState(sharedState);
 			paramsUnbound.setSupressExceptions(supressExceptions);
 			
-			return task.executeJob( paramsUnbound );
+			return getTask().executeJob( paramsUnbound );
 						
 		} catch (JobExecutionException e) {
 			errorReporter.recordError(SequentialProcessor.class, e);
 			return false;
 		}
-	}
-
-	public Task<T,S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<T,S> task) {
-		this.task = task;
 	}
 
 	public boolean isSupressExceptions() {
@@ -140,9 +129,4 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 	public void setSupressExceptions(boolean supressExceptions) {
 		this.supressExceptions = supressExceptions;
 	}
-
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return task.hasVeryQuickPerInputExecution();
-	}	
 }

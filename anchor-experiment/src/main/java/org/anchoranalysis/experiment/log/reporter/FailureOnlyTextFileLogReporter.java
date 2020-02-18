@@ -29,6 +29,7 @@ package org.anchoranalysis.experiment.log.reporter;
 import java.io.IOException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.file.FileOutput;
 
@@ -76,19 +77,19 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	}
 	
 	private void writeStringToFile( String message ) {
-				
-		FileOutput fileOutput = TextFileLogHelper.createOutput(bom);
 		
-		if (fileOutput==null) {
-			return;
-		}
-	
 		try {
+			FileOutput fileOutput = TextFileLogHelper.createOutput(bom);
+			
+			if (fileOutput==null) {
+				return;
+			}
+			
 			fileOutput.start();
 			fileOutput.getWriter().append( message );
 			fileOutput.end();
 			
-		} catch (IOException e) {
+		} catch (IOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}
 	}

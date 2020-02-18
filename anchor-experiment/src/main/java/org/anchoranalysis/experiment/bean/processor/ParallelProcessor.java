@@ -36,7 +36,6 @@ import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.CallableJob;
 import org.anchoranalysis.experiment.task.processor.ConcurrentJobMonitor;
@@ -47,13 +46,14 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
+ * Executes jobs in parallel
  * 
  * @author Owen Feehan
  *
  * @param <T> input-object type
  * @param <S> shared-state type
  */
-public class ParallelProcessor<T extends InputFromManager,S> extends JobProcessor<T> {
+public class ParallelProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
 	/**
 	 * 
@@ -62,13 +62,14 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	
 	// START BEAN
 	@BeanField
-	private Task<T,S> task;
-	
-	@BeanField
 	private boolean supressExceptions = true;
 	
 	@BeanField
 	private int maxNumProcessors = 64;
+	
+	/** When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. */
+	@BeanField
+	private int showOngoingJobsLessThan = 0;
 	// END BEAN
 		
 	@Override
@@ -78,7 +79,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		ParametersExperiment paramsExperiment
 	) throws ExperimentExecutionException {
 		
-		S sharedState = task.beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
+		S sharedState = getTask().beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
 			
 		int nrOfProcessors = selectNumProcessors(
 			paramsExperiment.getLogReporterExperiment(),
@@ -110,7 +111,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 
 	    }
 		
-		task.afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment() );
+		getTask().afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment() );
 		return monitor.createStatistics();
 	}
 	
@@ -127,7 +128,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		if (detailedLogging) {
 			logReporter.logFormatted(
 				"Using %s from: %d",
-				LanguageUtilities.maybePluralize(nrOfProcessors, "processor"),
+				LanguageUtilities.prefixPluralizeMaybe(nrOfProcessors, "processor"),
 				availableProcessors
 			);
 		}
@@ -149,26 +150,18 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		JobState taskState = new JobState();
 		eservice.submit(
 			new CallableJob<>(
-				task,
+				getTask(),
 				paramsUnbound,
 				taskState,
 				td,
 				monitor,
-				logReporterForMonitor(paramsExperiment)
+				logReporterForMonitor(paramsExperiment),
+				showOngoingJobsLessThan
 			)
 		);
 		
 		SubmittedJob submittedTask = new SubmittedJob( td, taskState);
 		monitor.add( submittedTask );
-	}
-	
-
-	public Task<T,S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<T,S> task) {
-		this.task = task;
 	}
 
 	public boolean isSupressExceptions() {
@@ -187,10 +180,11 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		this.maxNumProcessors = maxNumProcessors;
 	}
 
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return task.hasVeryQuickPerInputExecution();
+	public int getShowOngoingJobsLessThan() {
+		return showOngoingJobsLessThan;
 	}
 
-
+	public void setShowOngoingJobsLessThan(int showOngoingJobsLessThan) {
+		this.showOngoingJobsLessThan = showOngoingJobsLessThan;
+	}
 }

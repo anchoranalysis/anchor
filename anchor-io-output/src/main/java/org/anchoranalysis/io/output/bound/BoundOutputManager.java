@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.output.bound;
 
+
+
 /*
  * #%L
  * anchor-io
@@ -28,18 +30,21 @@ package org.anchoranalysis.io.output.bound;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
+import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.writer.AlwaysAllowed;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
 import org.anchoranalysis.io.output.writer.Writer;
+import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 
 public class BoundOutputManager {
@@ -50,17 +55,43 @@ public class BoundOutputManager {
 	private OutputWriteSettings outputWriteSettings;
 	private IWriteOperationRecorder writeOperationRecorder;
 	
-	private Writer writerAlwaysAllowed = new AlwaysAllowed(this);
-	private Writer writerCheckIfAllowed = new CheckIfAllowed(this, writerAlwaysAllowed);
+	private Writer writerAlwaysAllowed;
+	private Writer writerCheckIfAllowed;
+	private boolean delExistingFolder = false;
 	
-	// Constructor
-	public BoundOutputManager( OutputManager outputManager, FilePathPrefix boundFilePathPrefix, OutputWriteSettings outputWriteSettings, IWriteOperationRecorder writeOperationRecorder ) throws IOException {
+	private WriterExecuteBeforeEveryOperation initIfNeeded;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param outputManager
+	 * @param boundFilePathPrefix
+	 * @param outputWriteSettings
+	 * @param writeOperationRecorder
+	 * @param delExistingFolder
+	 * @param parentInit if non-NULL, parent initializer to call, before our own initializer is called
+	 * @throws IOException
+	 */
+	public BoundOutputManager(
+		OutputManager outputManager,
+		FilePathPrefix boundFilePathPrefix,
+		OutputWriteSettings outputWriteSettings,
+		IWriteOperationRecorder writeOperationRecorder,
+		boolean delExistingFolder,
+		WriterExecuteBeforeEveryOperation parentInit
+	) throws IOException {
 		
 		this.boundFilePathPrefix = boundFilePathPrefix;
 		this.outputManager = outputManager;
 		this.outputWriteSettings = outputWriteSettings;
 		this.writeOperationRecorder = writeOperationRecorder;
+		this.delExistingFolder = delExistingFolder;
 		assert(writeOperationRecorder!=null);
+		
+		initIfNeeded = new LazyDirectoryInit(boundFilePathPrefix.getFolderPath(), delExistingFolder, parentInit);
+		writerAlwaysAllowed = new AlwaysAllowed(this, initIfNeeded);
+		writerCheckIfAllowed = new CheckIfAllowed(this, initIfNeeded, writerAlwaysAllowed);
+		
 		
 		// Make sure any supporting directories are present
 		// Removed on 21.03.2019 to prevent ghost directories
@@ -71,6 +102,38 @@ public class BoundOutputManager {
 		// If no problems are shown over time, then we can fully remove this comment
 		//
 		//Files.createDirectories(boundFilePathPrefix.getFolderPath());
+	}
+	
+	/** Adds an additional operation recorder alongside any existing recorders */
+	public void addOperationRecorder( IWriteOperationRecorder toAdd ) {
+		this.writeOperationRecorder = new DualWriterOperationRecorder( writeOperationRecorder, toAdd );
+	}
+
+	/** Creates a new outputManager by appending a relative folder-path to the current boundoutputmanager */
+	public BoundOutputManager resolveFolder( String folderPath, FolderWrite folderWrite ) throws OutputWriteFailedException {
+		
+		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(folderPath);
+		
+		try {
+			FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
+			fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
+			
+			return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, delExistingFolder, initIfNeeded);
+		} catch (IOException e) {
+			throw new OutputWriteFailedException(e);
+		}
+	}
+	
+	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
+	public BoundOutputManager bindFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
+		FilePathPrefix fpp = outputManager.prefixForFile(
+			infilePath,
+			expIdentifier,
+			manifestRecorder,
+			experimentalManifestRecorder,
+			debugMode
+		);
+		return new BoundOutputManager( outputManager, fpp, outputWriteSettings, manifestRecorder.getRootFolder(), false, initIfNeeded );
 	}
 
 	public boolean isOutputAllowed(String outputName) {
@@ -84,13 +147,10 @@ public class BoundOutputManager {
 	public OutputWriteSettings getOutputWriteSettings() {
 		return outputWriteSettings;
 	}
-
 	
 	public Path getOutputFolderPath() {
 		return boundFilePathPrefix.getFolderPath();
 	}
-
-
 
 	public Writer getWriterAlwaysAllowed() {
 		return writerAlwaysAllowed;
@@ -112,16 +172,7 @@ public class BoundOutputManager {
 		return boundFilePathPrefix;
 	}
 
-	// Creates a new outputManager by appending a relative folder-path to the current boundoutputmanager
-	public BoundOutputManager resolveFolder( String folderPath, FolderWrite folderWrite ) throws IOException {
-		
-		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(folderPath);
-		
-		Files.createDirectories(folderPathNew);
-		
-		FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
-		fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
-		
-		return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite);
+	public boolean isDelExistingFolder() {
+		return delExistingFolder;
 	}
 }

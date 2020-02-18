@@ -37,8 +37,6 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
-import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
@@ -72,13 +70,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	
 	@BeanField
 	private String outputNameExecutionTime = "executionTime";
-
-	/**
-	 * Log reporter created for each job
-	 */
-	// TODO rename to logReporterJob
-	@BeanField
-	private LogReporterBean logReporterBean = new ConsoleLogReporterBean();
 	// END BEAN
 	
 	/** Is the execution-time of the task per-input expected to be very quick to execute? */
@@ -133,7 +124,12 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		
 		// We create a new log reporter for this job only
 		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
-		StatefulLogReporter logReporterJob = logReporterBean.create( outputManagerTask, errorReporterFallback, paramsUnbound.getParametersExperiment().getExperimentArguments() );
+		StatefulLogReporter logReporterJob = paramsUnbound.getParametersExperiment().getLogReporterTaskCreator().create(
+			outputManagerTask,
+			errorReporterFallback,
+			paramsUnbound.getParametersExperiment().getExperimentArguments(),
+			paramsUnbound.getParametersExperiment().isDetailedLogging()
+		);
 		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(logReporterJob);
 		
 		// We initialise the output manager
@@ -256,14 +252,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
 	public void setOutputNameExecutionTime(String outputNameExecutionTime) {
 		this.outputNameExecutionTime = outputNameExecutionTime;
-	}
-
-	public LogReporterBean getLogReporter() {
-		return logReporterBean;
-	}
-
-	public void setLogReporter(LogReporterBean logReporter) {
-		this.logReporterBean = logReporter;
 	}
 	// END: public
 }

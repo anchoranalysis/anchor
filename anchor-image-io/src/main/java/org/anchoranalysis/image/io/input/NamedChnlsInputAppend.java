@@ -36,6 +36,7 @@ import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
@@ -70,6 +71,12 @@ public class NamedChnlsInputAppend<T extends Buffer> extends NamedChnlsInputBase
 	@Override
 	public int numSeries() throws RasterIOException {
 		return delegate.numSeries();
+	}
+	
+
+	@Override
+	public ImageDim dim(int seriesIndex) throws RasterIOException {
+		return delegate.dim(seriesIndex);
 	}
 
 	@Override
@@ -135,6 +142,16 @@ public class NamedChnlsInputAppend<T extends Buffer> extends NamedChnlsInputBase
 		return delegate.getFile();
 	}
 
+	@Override
+	public int numChnl() throws RasterIOException {
+		return delegate.numChnl();
+	}
+
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return delegate.bitDepth();
+	}
+	
 	@Override
 	public void close(ErrorReporter errorReporter) {
 		if (openedRasterMemo!=null) {

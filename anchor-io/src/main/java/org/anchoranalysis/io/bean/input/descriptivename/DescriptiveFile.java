@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.output;
+package org.anchoranalysis.io.bean.input.descriptivename;
 
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,35 @@ package org.anchoranalysis.io.output;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import java.io.File;
+import java.nio.file.Path;
 
-public class OutputWriteFailedException extends AnchorCheckedException {
+/**
+ * A file with an associated descriptive-name
+ * 
+ * @author owen
+ *
+ */
+public class DescriptiveFile {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1036971819028250342L;
+	private File file;
+	private String descriptiveName;
+	
+	public DescriptiveFile(File file, String descriptiveName) {
+		super();
+		this.file = file;
+		this.descriptiveName = descriptiveName;
+	}
 
-	public OutputWriteFailedException( String s ) {
-		super(s);
+	public File getFile() {
+		return file;
 	}
 	
-	public OutputWriteFailedException( String s, Throwable e ) {
-		super(s,e);
+	public Path getPath() {
+		return file.toPath();
 	}
-	
-	public OutputWriteFailedException( Throwable e ) {
-		super(e);
+
+	public String getDescriptiveName() {
+		return descriptiveName;
 	}
 }

@@ -72,7 +72,7 @@ public abstract class OutputExperiment extends Experiment {
 	private String outputNameExecutionTime = "executionTime";
 	
 	@BeanField
-	private LogReporterBean logReporterBean = new ConsoleLogReporterBean();
+	private LogReporterBean logReporterExperiment = new ConsoleLogReporterBean();
 	
 	@BeanField
 	private ExperimentIdentifier experimentIdentifier = null;
@@ -84,23 +84,6 @@ public abstract class OutputExperiment extends Experiment {
 	@BeanField
 	private boolean forceDetailedLogging = false;
 	// END BEAN PROPERTIES
-
-
-	public boolean isForceDetailedLogging() {
-		return forceDetailedLogging;
-	}
-
-
-
-	// Runs the experiment on all files
-	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
-		
-		// Now let's delete existing files if we want
-		getOutput().deleteExstExpQuietly( getExperimentIdentifier().identifier(), debugMode );
-		UpdateLog4JOutputManager.updateLog4J(bom);
-	}
-	
-	
 	
 	// Runs the experiment on all files
 	public void doExperiment(ExperimentExecutionArguments expArgs) throws ExperimentExecutionException {
@@ -113,8 +96,6 @@ public abstract class OutputExperiment extends Experiment {
 			
 			getExperimentIdentifier().init( expArgs.isGUIEnabled() );
 			
-			assert( getOutput().getOutputWriteSettings().hasBeenInit() );
-			
 			BoundOutputManager rootOutputManagerNoErrors = 
 				getOutput().bindRootFolder( this.getExperimentIdentifier().identifier(), experimentalManifest, expArgs.isDebugEnabled() );
 			
@@ -123,7 +104,14 @@ public abstract class OutputExperiment extends Experiment {
 			// To reporter errors when trying to do logging
 			ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( new ConsoleLogReporter() );
 			
-			StatefulLogReporter logReporter = logReporterBean.create( rootOutputManagerNoErrors, errorReporterFallback, expArgs);
+			boolean detailedLogging = useDetailedLogging();
+			
+			StatefulLogReporter logReporter = logReporterExperiment.create(
+				rootOutputManagerNoErrors,
+				errorReporterFallback,
+				expArgs,
+				detailedLogging
+			);
 			ErrorReporter errorReporter = new ErrorReporterIntoLog( logReporter );
 			
 			
@@ -135,14 +123,6 @@ public abstract class OutputExperiment extends Experiment {
 				errorReporter
 			);
 			
-			
-			
-			// why do we do this twice?
-			
-			// Now let's delete existing files if we want
-			//getOutput().deleteExstExpQuietly( getExperimentIdentifier() );
-			//OutputManager.updateLog4J(rootOutputManager);
-			
 			try {
 				
 				initBeforeDo( rootOutputManager, expArgs.isDebugEnabled() );
@@ -153,8 +133,6 @@ public abstract class OutputExperiment extends Experiment {
 					outputNameConfigCopy,
 					() -> new XMLConfigurationWrapperGenerator( getXMLConfiguration() )
 				);
-
-				boolean detailedLogging = useDetailedLogging();
 				
 				if (detailedLogging) {
 					logReporter.logFormatted(
@@ -191,10 +169,6 @@ public abstract class OutputExperiment extends Experiment {
 				
 			} finally {
 				
-				// Let's add two blank lines to the log for readability (especially on console)
-				logReporter.log("");
-				logReporter.log("");
-				
 				// An experiment is considered always successful
 				logReporter.close(true);
 			}
@@ -206,9 +180,21 @@ public abstract class OutputExperiment extends Experiment {
 
 	protected abstract void execExperiment( BoundOutputManagerRouteErrors outputManager, ManifestRecorder experimentalManifest, ExperimentExecutionArguments expArgs, LogReporter logReporter ) throws ExperimentExecutionException;
 
-	protected boolean useDetailedLogging() {
+	@Override
+	public boolean useDetailedLogging() {
 		return forceDetailedLogging;
 	}
+
+	public boolean isForceDetailedLogging() {
+		return forceDetailedLogging;
+	}
+	
+	// Runs the experiment on all files
+	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
+		UpdateLog4JOutputManager.updateLog4J(bom);
+	}
+	
+	
 	
 	public String getOutputNameConfigCopy() {
 		return outputNameConfigCopy;
@@ -229,13 +215,13 @@ public abstract class OutputExperiment extends Experiment {
 		this.output = output;
 	}
 	
-	public LogReporterBean getLogReporter() {
-		return logReporterBean;
+	public LogReporterBean getLogReporterExperiment() {
+		return logReporterExperiment;
 	}
 
 
-	public void setLogReporter(LogReporterBean logReporter) {
-		this.logReporterBean = logReporter;
+	public void setLogReporterExperiment(LogReporterBean logReporter) {
+		this.logReporterExperiment = logReporter;
 	}
 
 

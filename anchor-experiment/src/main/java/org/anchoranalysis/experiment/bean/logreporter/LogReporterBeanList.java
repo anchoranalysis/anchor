@@ -69,10 +69,10 @@ public class LogReporterBeanList extends LogReporterBean {
 	}
 
 	@Override
-	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs ) {
+	public StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
 		LogReporterList out = new LogReporterList();
 		for (LogReporterBean logReporter : list) {
-			out.add( logReporter.create( bom, errorReporter, expArgs ) );
+			out.add( logReporter.create( bom, errorReporter, expArgs, detailedLogging ) );
 		}
 		return out;
 	}

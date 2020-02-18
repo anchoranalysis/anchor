@@ -39,6 +39,8 @@ public class SimpleTextFileLogReporter implements StatefulLogReporter {
 	
 	private PrintWriter writer;
 	
+	private boolean first = false;
+	
 	public SimpleTextFileLogReporter(String filePath) {
 		this.filePath = filePath;
 	}
@@ -47,6 +49,7 @@ public class SimpleTextFileLogReporter implements StatefulLogReporter {
 	public void start() {
 		try {
 			writer = new PrintWriter(filePath);
+			first = true;
 		} catch (FileNotFoundException e) {
 			System.out.println(
 				String.format("Cannot create file %s for log", filePath)
@@ -57,8 +60,18 @@ public class SimpleTextFileLogReporter implements StatefulLogReporter {
 
 	@Override
 	public void log(String message) {
+				
+		// To avoid printing a newline at the end of the last-message
+		// This removes a needless newline on the console at the end of the application.
 		if (writer!=null) {
-			writer.println(message); // NOSONAR
+			
+			if (first) {
+				first = false;
+			} else {
+				writer.println();
+			}
+			
+			writer.print(message); // NOSONAR
 		}
 	}
 	

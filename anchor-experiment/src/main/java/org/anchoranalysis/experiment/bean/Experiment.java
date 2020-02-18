@@ -54,4 +54,7 @@ public abstract class Experiment extends AnchorBean<Experiment> implements IAsso
 	public void associateXml(XMLConfiguration xmlConfiguration) {
 		this.xmlConfiguration = xmlConfiguration;
 	}
+	
+	/** Whether to detail more (a lengthy experiment) or less (something quick and simple - suitable for console)? */
+	public abstract boolean useDetailedLogging();
 }

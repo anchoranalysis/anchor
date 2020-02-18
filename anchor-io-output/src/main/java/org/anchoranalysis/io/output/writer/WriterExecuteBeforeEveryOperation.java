@@ -1,10 +1,11 @@
-package org.anchoranalysis.io.filepath.prefixer;
+package org.anchoranalysis.io.output.writer;
+
 
 /*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +27,7 @@ package org.anchoranalysis.io.filepath.prefixer;
  * #L%
  */
 
-import java.io.File;
-import java.nio.file.Path;
+public interface WriterExecuteBeforeEveryOperation {
 
-class PathUtilities {
-
-	/** Creates any necessary sub-directories to allow a path to be written */
-	public static void createNecessaryDirs( Path pathToFile ) {
-		File parentDirectory = pathToFile.getParent().toFile();
-		parentDirectory.mkdirs();
-	}
+	public void exec();
 }

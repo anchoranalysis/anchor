@@ -27,10 +27,7 @@ package org.anchoranalysis.image.feature.bean.operator;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 
@@ -42,38 +39,8 @@ public class ConvertToPhysicalVolume extends FeatureConvertRes {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private Feature item;
-	
-	@BeanField
-	private String unitType;
-	// END BEAN PROPERTIES
-	
 	@Override
 	protected double convertToPhysical(double value, ImageRes res) throws FeatureCalcException {
 		return ImageUnitConverter.convertToPhysicalVolume(value, res);
-	}
-
-	public Feature getItem() {
-		return item;
-	}
-
-	public void setItem(Feature item) {
-		this.item = item;
-	}
-
-	@Override
-	public FeatureParamsDescriptor paramType()
-			throws FeatureCalcException {
-		return item.paramType();
-	}
-
-	public String getUnitType() {
-		return unitType;
-	}
-
-	public void setUnitType(String unitType) {
-		this.unitType = unitType;
 	}
 }

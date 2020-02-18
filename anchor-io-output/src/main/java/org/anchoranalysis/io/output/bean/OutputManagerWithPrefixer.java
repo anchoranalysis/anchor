@@ -31,6 +31,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -38,7 +39,6 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.apache.commons.io.FileUtils;
 
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
@@ -51,54 +51,51 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	@BeanField
 	private FilePathPrefixer filePathPrefixer = null;
 	
+	/**  
+	 * If true, if an existing output folder (at intended path) is deleted
+	 * If false, an error is thrown if the folder already exists
+	 */
 	@BeanField
 	private boolean delExistingFolder = true;
+
+	@BeanField
+	private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 	// END BEAN PROPERTIES
 		
 	// Binds the output to be connected to a particular file and experiment
-	public BoundOutputManager bindFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
+	@Override
+	public FilePathPrefix prefixForFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
 		
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( infilePath, expIdentifier, debugMode );
-
+		
 		FilePathDifferenceFromFolderPath fpd = new FilePathDifferenceFromFolderPath();
 		fpd.init(
 			this.filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getCombinedPrefix(),
 			fpp.getCombinedPrefix()
 		);
 		
-		//fpr.setInPathPrefix( fpp.g)
-		
 		experimentalManifestRecorder.getRootFolder().writeFolder( fpd.getRemainderCombined(), new ManifestFolderDescription(), 
 				new ExperimentFileFolder() );
 		
 		manifestRecorder.init( fpp.getFolderPath() );
 		
-		return new BoundOutputManager( this, fpp, getOutputWriteSettings(), manifestRecorder.getRootFolder() );
+		return fpp;
 	}
 	
+	@Override
 	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, boolean debugMode ) throws IOException {
 
 		FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, debugMode );
 		
-		//System.out.printf("filePathPrefixer.getFolderPath()=%s\n", prefix.getFolderPath() );
-		
 		if (writeOperationRecorder!=null) {
 			writeOperationRecorder.init(prefix.getFolderPath());
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder() );
+			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), delExistingFolder, null );
 		} else {
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder() );
+			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), delExistingFolder, null );
 		}
 	}
 
-	@Override
-	public void deleteExstExpQuietly( String expIdentifier, boolean debugMode ) throws IOException {
-		
-		if (delExistingFolder) {
-			Path expPath = filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getFolderPath();
-			FileUtils.deleteQuietly( expPath.toFile() );
-		}
-	}
 	
 	// START BEAN getters and setters
 	public FilePathPrefixer getFilePathPrefixer() {
@@ -119,5 +116,14 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	public void setDelExistingFolder(boolean delExistingFolder) {
 		this.delExistingFolder = delExistingFolder;
 	}
+	
+	
+	public OutputWriteSettings getOutputWriteSettings() {
+		return outputWriteSettings;
+	}
+
+	public void setOutputWriteSettings(OutputWriteSettings outputWriteSettings) {
+		this.outputWriteSettings = outputWriteSettings;
+	}	
 	// END BEAN getters and setters
 }

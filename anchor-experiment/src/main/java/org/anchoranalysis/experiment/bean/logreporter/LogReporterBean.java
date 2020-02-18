@@ -39,5 +39,5 @@ public abstract class LogReporterBean extends AnchorBean<LogReporterBean> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public abstract StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs );
+	public abstract StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging );
 }

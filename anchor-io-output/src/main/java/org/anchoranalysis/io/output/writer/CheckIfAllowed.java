@@ -40,20 +40,26 @@ import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 
 public class CheckIfAllowed extends Writer {
 
+	// Execute before every operation
+	private WriterExecuteBeforeEveryOperation preop;
+		
 	private BoundOutputManager bom;
 	private Writer writer;
 
-	public CheckIfAllowed(BoundOutputManager bom, Writer writer) {
+	public CheckIfAllowed(BoundOutputManager bom, WriterExecuteBeforeEveryOperation preop, Writer writer) {
 		this.bom = bom;
 		this.writer = writer;
+		this.preop = preop;
 	}
 
 	@Override
 	public BoundOutputManager bindAsSubFolder(String outputName,
 			ManifestFolderDescription manifestDescription,
 			FolderWriteWithPath folder) throws OutputWriteFailedException {
-
+		
 		if (!bom.isOutputAllowed(outputName)) return null;
+
+		preop.exec();
 		
 		return writer.bindAsSubFolder(outputName, manifestDescription, folder);
 	}
@@ -64,6 +70,8 @@ public class CheckIfAllowed extends Writer {
 			throws OutputWriteFailedException {
 		
 		if (!bom.isOutputAllowed(outputName)) return;
+
+		preop.exec();
 		
 		writer.writeSubfolder(outputName, collectionGenerator);
 	}
@@ -74,6 +82,8 @@ public class CheckIfAllowed extends Writer {
 			throws OutputWriteFailedException {
 		
 		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return -1;
+
+		preop.exec();
 		
 		return writer.write(outputNameStyle, generator, index);
 	}
@@ -84,6 +94,8 @@ public class CheckIfAllowed extends Writer {
 
 		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return;
 		
+		preop.exec();
+		
 		writer.write(outputNameStyle, generator);
 	}
 
@@ -93,6 +105,8 @@ public class CheckIfAllowed extends Writer {
 			String outputNameSuffix, String index) {
 		
 		if (!bom.isOutputAllowed(outputName)) return null;
+		
+		preop.exec();
 		
 		return writer.writeGenerateFilename(outputName, extension, manifestDescription, outputNamePrefix, outputNameSuffix, index);
 	}

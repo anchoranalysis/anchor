@@ -27,13 +27,14 @@ package org.anchoranalysis.experiment.log.reporter;
  */
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
 class TextFileLogHelper {
 
-	public static FileOutput createOutput( BoundOutputManager bom ) {
+	public static FileOutput createOutput( BoundOutputManager bom ) throws OutputWriteFailedException {
 		
 		return FileOutputFromManager.create(
 			"txt",

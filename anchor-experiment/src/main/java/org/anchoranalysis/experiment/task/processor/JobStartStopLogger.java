@@ -47,26 +47,26 @@ public class JobStartStopLogger {
 	private ConcurrentJobMonitor monitor;
 	private boolean showHashSeperators;
 	private boolean disableLogMessages = false;
+	private int showOngoingJobsLessThan;
 	
 	/**
 	 * 
 	 * @param jobDscrText A noun describing the job that appears in the log e.g. "Job"
-	 * @param logReporter if non-NULL, write messages to logger. If null, no messages are wrritten
+	 * @param logReporter if non-NULL, write messages to logger. If null, no messages are written
 	 * @param showHashSeperators indicates if lines of hashes should be placed before and after each log message (adds emphasis)
+	 * @param showOngoingJobsLess When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. 
 	 * @param monitor
 	 */
-	public JobStartStopLogger(String jobDscrText, LogReporter logReporter, ConcurrentJobMonitor monitor, boolean showHashSeperators) {
+	public JobStartStopLogger(String jobDscrText, LogReporter logReporter, ConcurrentJobMonitor monitor, boolean showHashSeperators, int showOngoingJobsLessThan ) {
 		super();
 		this.jobDscrText = jobDscrText;
 		this.logReporter = logReporter;
 		this.monitor = monitor;
 		this.showHashSeperators = showHashSeperators;
+		this.showOngoingJobsLessThan = showOngoingJobsLessThan;
 
 		if (monitor.getTotalNumTasks()<=1 || logReporter==null) {
 			this.disableLogMessages = true;
-			
-			// Disabled
-			//logReporter.logFormatted("Disabling start-stop log messages as there is only %d %s", monitor.getTotalNumTasks(), jobDscrText );
 		}
 	}
 
@@ -75,17 +75,7 @@ public class JobStartStopLogger {
 		if (disableLogMessages) {
 			return;
 		}
-		
-		logWithDecoration( () ->
-			logReporter.logFormatted(
-				"%s %4d:\tSTART\t[%s]\t\t%s  %s",
-				jobDscrText,
-				job.getJobNumber(),
-				monitor.currentStateDescription(),
-				job.getJobShortName(),
-				monitor.ongoingTasksLessThan(10)
-			)
-		);
+		logEvent("START", job, "");
 	}
 	
 	public synchronized void logEnd(JobDescription job, JobState jobState, boolean success) {
@@ -95,26 +85,44 @@ public class JobStartStopLogger {
 		}
 		
 		logWithDecoration( () -> {
-			String endWord = success ? "END" : "ERROR";
-			logReporter.logFormatted(
-				"%s %4d:\t%s  \t[%s]\t(%ds)\t%s  %s",
-				jobDscrText,
-				job.getJobNumber(),
-				endWord,
-				monitor.currentStateDescription(),
-				jobState.getTime()/1000,
-				job.getJobShortName(),
-				monitor.ongoingTasksLessThan(10)
+			logEvent(
+				success ? "END  " : "ERROR",
+				job,
+				timeStr(jobState)
 			);
 		});
 	}
 	
+	private void logEvent( String eventWord, JobDescription job, String timeStr ) {
+		logWithDecoration( () -> {
+			logReporter.logFormatted(
+				"%s %4d:\t%s\t[%s]\t%s\t%s  %s",
+				jobDscrText,
+				job.getJobNumber(),
+				eventWord,
+				monitor.currentStateDescription(),
+				timeStr,
+				job.getJobShortName(),
+				ongoingJobStr()
+			);
+		});
+	}
+	
+	private String timeStr( JobState jobState ) {
+		return String.format("(%ds)", jobState.getTime()/1000);
+	}
+	
+	private String ongoingJobStr() {
+		return showOngoingJobsLessThan > 0 ? monitor.ongoingTasksLessThan(showOngoingJobsLessThan) : "";
+	}
 
 	private void logWithDecoration( Runnable logFunc ) {
-		if (showHashSeperators) {
-			logReporter.log(HASH_SEPERATOR);
-		}
+		logMaybeHashSeperator();
 		logFunc.run();
+		logMaybeHashSeperator();
+	}
+	
+	private void logMaybeHashSeperator() {
 		if (showHashSeperators) {
 			logReporter.log(HASH_SEPERATOR);
 		}

@@ -30,45 +30,30 @@ package org.anchoranalysis.io.output.bean;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-/// Responsible for making decisions on where output goes and what form it takes
-///
-/// Is always associated with a particular infilePath through init()
-//    which may be changed as the program is executed
-//
+/*
+ *  Responsible for making decisions on where output goes and what form it takes
+ *  
+ *  Is always associated with a particular infilePath through init()
+ *   which may be changed as the program is executed.
+ */
 public abstract class OutputManager extends AnchorBean<OutputManager> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6960949966148383845L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
-	// END BEAN PROPERTIES
-	
-	public abstract void deleteExstExpQuietly( String expIdentifier, boolean debugMode ) throws IOException;
 	
 	public abstract boolean isOutputAllowed( String outputName );
 	
 	/** A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key */ 
 	public abstract OutputAllowed outputAllowedSecondLevel( String key );
 	
-	public abstract BoundOutputManager bindFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException;
-	
 	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, boolean debugMode ) throws IOException;
 	
-	public OutputWriteSettings getOutputWriteSettings() {
-		return outputWriteSettings;
-	}
-
-	public void setOutputWriteSettings(OutputWriteSettings outputWriteSettings) {
-		this.outputWriteSettings = outputWriteSettings;
-	}	
+	public abstract FilePathPrefix prefixForFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException;
 }

@@ -35,10 +35,14 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
+import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
 import org.anchoranalysis.experiment.io.IReplaceOutputManager;
+import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -51,8 +55,9 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @author Owen Feehan
  *
  * @param <T> input-object type
+ * @param <S> shared-state for job
  */
-public class InputOutputExperiment<T extends InputFromManager> extends OutputExperiment implements IReplaceInputManager, IReplaceOutputManager {
+public class InputOutputExperiment<T extends InputFromManager,S> extends OutputExperiment implements IReplaceInputManager, IReplaceOutputManager, IReplaceTask<T,S> {
 
 	/**
 	 * 
@@ -64,7 +69,10 @@ public class InputOutputExperiment<T extends InputFromManager> extends OutputExp
 	private InputManager<T> inputManager = null;
 	
 	@BeanField
-	private JobProcessor<T> taskProcessor;
+	private JobProcessor<T,S> taskProcessor;
+	
+	@BeanField
+	private LogReporterBean logReporterTask = new ConsoleLogReporterBean();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -78,10 +86,11 @@ public class InputOutputExperiment<T extends InputFromManager> extends OutputExp
 			
 			ParametersExperiment params = new ParametersExperiment();
 			params.setExperimentalManifest(experimentalManifest);
-			params.setOutputManager(getOutput());
+			params.setOutputManager(outputManager);
 			params.setExperimentIdentifier(getExperimentIdentifier());
 			params.setExperimentArguments(expArgs);
 			params.setLogReporterExperiment(logReporter);
+			params.setLogReporterTaskCreator(logReporterTask);
 			params.setDetailedLogging( useDetailedLogging() );
 			
 			taskProcessor.executeLogStats(
@@ -96,7 +105,7 @@ public class InputOutputExperiment<T extends InputFromManager> extends OutputExp
 	}
 	
 	@Override
-	protected boolean useDetailedLogging() {
+	public boolean useDetailedLogging() {
 
 		// Disable detailed-logging if the task has a very quick execution (unless we are in 'force' mode)
 		if ( isForceDetailedLogging() ||  !taskProcessor.hasVeryQuickPerInputExecution()) {
@@ -115,11 +124,11 @@ public class InputOutputExperiment<T extends InputFromManager> extends OutputExp
 		this.inputManager = input;
 	}
 	
-	public JobProcessor<T> getTaskProcessor() {
+	public JobProcessor<T,S> getTaskProcessor() {
 		return taskProcessor;
 	}
 
-	public void setTaskProcessor(JobProcessor<T> taskProcessor) {
+	public void setTaskProcessor(JobProcessor<T,S> taskProcessor) {
 		this.taskProcessor = taskProcessor;
 	}	
 	
@@ -132,5 +141,19 @@ public class InputOutputExperiment<T extends InputFromManager> extends OutputExp
 	@Override
 	public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
 		this.setOutput(outputManager);
+	}
+
+	@Override
+	public void replaceTask(Task<T, S> task) throws OperationFailedException {
+		this.taskProcessor.setTask(task);
+		
+	}
+
+	public LogReporterBean getLogReporterTask() {
+		return logReporterTask;
+	}
+
+	public void setLogReporterTask(LogReporterBean logReporterTask) {
+		this.logReporterTask = logReporterTask;
 	}
 }

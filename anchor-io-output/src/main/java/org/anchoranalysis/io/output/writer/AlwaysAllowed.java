@@ -47,13 +47,19 @@ import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 public class AlwaysAllowed extends Writer {
 
 	private BoundOutputManager bom;
+	
+	// Execute before every operation
+	private WriterExecuteBeforeEveryOperation preop;
 
-	public AlwaysAllowed(BoundOutputManager bom) {
+	public AlwaysAllowed(BoundOutputManager bom, WriterExecuteBeforeEveryOperation preop ) {
 		this.bom = bom;
+		this.preop = preop;
 	}
 	
 	@Override
 	public BoundOutputManager bindAsSubFolder( String outputName, ManifestFolderDescription manifestDescription, FolderWriteWithPath folder ) throws OutputWriteFailedException {
+		
+		preop.exec();
 		
 		assert bom.getWriteOperationRecorder()!=null;
 		
@@ -75,7 +81,14 @@ public class AlwaysAllowed extends Writer {
 		
 		FilePathPrefix fpp = new FilePathPrefix( folderOut );
 		try {
-			return new BoundOutputManager( bom.getOutputManager(), fpp, bom.getOutputWriteSettings(), recorderNew );
+			return new BoundOutputManager(
+				bom.getOutputManager(),
+				fpp,
+				bom.getOutputWriteSettings(),
+				recorderNew,
+				bom.isDelExistingFolder(),
+				preop
+			);
 		} catch (IOException e) {
 			throw new OutputWriteFailedException("Failed to create output-manager", e);
 		}
@@ -84,6 +97,9 @@ public class AlwaysAllowed extends Writer {
 	
 	@Override
 	public void writeSubfolder( String outputName, Operation<? extends WritableItem> collectionGenerator ) throws OutputWriteFailedException {
+		
+		preop.exec();
+		
 		try {
 			IndexableOutputNameStyle outputNameStyle = new IntegerSuffixOutputNameStyle(outputName, "_%03d");
 			collectionGenerator.doOperation().write(outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom );
@@ -94,6 +110,9 @@ public class AlwaysAllowed extends Writer {
 	
 	@Override
 	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator, String index ) throws OutputWriteFailedException {
+		
+		preop.exec();
+		
 		try {
 			return generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), index, bom);
 		} catch (ExecuteException e) {
@@ -104,6 +123,9 @@ public class AlwaysAllowed extends Writer {
 	// Write a file without checking if the outputName is allowed
 	@Override
 	public void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator ) throws OutputWriteFailedException {
+		
+		preop.exec();
+		
 		try {
 			generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom);
 		} catch (ExecuteException e) {
@@ -116,6 +138,8 @@ public class AlwaysAllowed extends Writer {
 	// Returns null if output is not allowed
 	@Override
 	public Path writeGenerateFilename( String outputName, String extension, ManifestDescription manifestDescription, String outputNamePrefix, String outputNameSuffix, String index ) {
+		
+		preop.exec();
 		
 		String fileMain = outputNamePrefix + outputName + outputNameSuffix + "." + extension;
 		

@@ -41,7 +41,7 @@ public class FailureOnlyTextFileLogReporterBean extends LogReporterBean {
 
 	@Override
 	public StatefulLogReporter create(BoundOutputManager bom, ErrorReporter errorReporter,
-			ExperimentExecutionArguments expArgs) {
+			ExperimentExecutionArguments expArgs, boolean detailedLogging) {
 		return new FailureOnlyTextFileLogReporter(bom, errorReporter);
 	}
 

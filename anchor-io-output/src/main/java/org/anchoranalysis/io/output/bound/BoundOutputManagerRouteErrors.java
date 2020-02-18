@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.output.bound;
 
+import java.io.IOException;
+
 /*
  * #%L
  * anchor-io
@@ -27,15 +29,17 @@ package org.anchoranalysis.io.output.bound;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
+import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 public class BoundOutputManagerRouteErrors {
@@ -98,7 +102,7 @@ public class BoundOutputManagerRouteErrors {
 	private BoundOutputManagerRouteErrors resolveFolder(String folderPath, FolderWrite folderWrite) {
 		try {
 			return new BoundOutputManagerRouteErrors( delegate.resolveFolder(folderPath, folderWrite), errorReporter );
-		} catch (IOException e) {
+		} catch (OutputWriteFailedException e) {
 			errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
 			return null;
 		}
@@ -110,5 +114,14 @@ public class BoundOutputManagerRouteErrors {
 
 	public ErrorReporter getErrorReporter() {
 		return errorReporter;
+	}
+
+	public void addOperationRecorder(IWriteOperationRecorder toAdd) {
+		delegate.addOperationRecorder(toAdd);
+	}
+
+	public BoundOutputManager bindFile(Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder,
+			ManifestRecorder experimentalManifestRecorder, boolean debugMode) throws IOException {
+		return delegate.bindFile(infilePath, expIdentifier, manifestRecorder, experimentalManifestRecorder, debugMode);
 	}
 }

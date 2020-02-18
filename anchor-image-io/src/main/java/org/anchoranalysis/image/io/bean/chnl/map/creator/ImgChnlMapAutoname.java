@@ -35,6 +35,14 @@ import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
+
+/**
+ * Names of the channels from the metadata if it exists, otherwise names in pattern chnl-%d
+ * where %d is the index
+ *   
+ * @author owen
+ *
+ */
 public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 
 	/**
@@ -53,10 +61,10 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 		ImgChnlMap map = new ImgChnlMap();
 		
 		// null indicates that there are no names
-		List<String> names = openedRaster.getChannelNames();
+		List<String> names = openedRaster.channelNames();
 		
 		try {
-			for( int c=0; c<openedRaster.getNumChnl(); c++) {
+			for( int c=0; c<openedRaster.numChnl(); c++) {
 				
 				String chnlName;
 				if (names!=null) {

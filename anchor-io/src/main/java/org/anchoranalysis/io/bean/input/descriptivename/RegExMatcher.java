@@ -31,7 +31,7 @@ import java.io.File;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 
-public class RegExMatcher extends DescriptiveNameFromFile {
+public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class RegExMatcher extends DescriptiveNameFromFile {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String createDescriptiveName(File file, int index) {
+	protected String createDescriptiveName(File file, int index) {
 		
 		String filePath = file.getPath();
 		filePath = filePath.replace('\\', '/');

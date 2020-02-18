@@ -30,26 +30,18 @@ package org.anchoranalysis.io.input;
 import java.io.File;
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
 
 	private File file;
 	private String descriptiveName;
 	
-	public FileInput(File file, DescriptiveNameFromFile descriptiveNameFromFile, int index ) throws CreateException {
+	public FileInput( DescriptiveFile file ) {
 		super();
-		this.file = file;
-		this.descriptiveName = descriptiveNameFromFile.createDescriptiveName(
-			file,
-			index
-		);
-		
-		if (this.descriptiveName.isEmpty()) {
-			this.descriptiveName = "<unnamed>";
-		}
+		this.file = file.getFile();
+		this.descriptiveName = file.getDescriptiveName();
 	}
 	
 	@Override

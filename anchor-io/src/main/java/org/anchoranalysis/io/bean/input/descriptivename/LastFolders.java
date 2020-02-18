@@ -32,7 +32,7 @@ import java.io.File;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.apache.commons.io.FilenameUtils;
 
-public class LastFolders extends DescriptiveNameFromFile {
+public class LastFolders extends DescriptiveNameFromFileIndependent {
 
 	/**
 	 * 
@@ -61,7 +61,8 @@ public class LastFolders extends DescriptiveNameFromFile {
 		this.numFoldersInDescription = numFoldersInDescription;
 	}
 	
-	public String createDescriptiveName( File file, int index ) {
+	@Override
+	protected String createDescriptiveName( File file, int index ) {
 		
 		String nameOut = "";
 		if (!skipFileName) {

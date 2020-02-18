@@ -1,8 +1,8 @@
-package org.anchoranalysis.io.output;
+package org.anchoranalysis.experiment.io;
 
 /*
  * #%L
- * anchor-io
+ * anchor-experiment
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,24 +26,21 @@ package org.anchoranalysis.io.output;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public class OutputWriteFailedException extends AnchorCheckedException {
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.experiment.task.Task;
+import org.anchoranalysis.io.input.InputFromManager;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1036971819028250342L;
+/**
+ * If an experiment implements this interface, the task of an
+ *   an experiment can be replaced by another
+ *
+ * @param <T> input-object type
+ * @param <S> shared-state for job
+ * @author Owen Feehan
+ *
+ */
+public interface IReplaceTask<T extends InputFromManager,S> {
 
-	public OutputWriteFailedException( String s ) {
-		super(s);
-	}
-	
-	public OutputWriteFailedException( String s, Throwable e ) {
-		super(s,e);
-	}
-	
-	public OutputWriteFailedException( Throwable e ) {
-		super(e);
-	}
+	public void replaceTask( Task<T,S> task ) throws OperationFailedException;
 }

@@ -40,9 +40,13 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 
-// THIS PROBABLY CAN'T BE DUPLICATED.... TODO let's get rid of it
-//
-// This is customly-defined, as it uses map-stuff
+/**
+ * A map of image channels to indices
+ * 
+ * This bean has a custom-factory
+ * @author owen
+ *
+ */
 public class ImgChnlMap extends AnchorBean<ImgChnlMap> {
 
 	/**

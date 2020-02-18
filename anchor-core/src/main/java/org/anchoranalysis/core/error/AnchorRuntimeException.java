@@ -27,7 +27,7 @@ package org.anchoranalysis.core.error;
  */
 
 /**
- * A base class for all unchecked exceptions used on the Anchor platform
+ * A base class for all unchecked (runtime) exceptions used on the Anchor platform
  * 
  * @author Owen Feehan
  *

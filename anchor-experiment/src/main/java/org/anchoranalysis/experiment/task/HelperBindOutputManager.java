@@ -33,14 +33,14 @@ import java.nio.file.Path;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 class HelperBindOutputManager {
 
 	// If pathForBinding is null, we bind to the root folder instead
 	public static BoundOutputManager createOutputManagerForTask(
-		OutputManager outputManager,
+		BoundOutputManagerRouteErrors outputManager,
 		Path pathForBinding,
 		String experimentIdentifier,
 		ManifestRecorder manifestTask,
@@ -49,12 +49,19 @@ class HelperBindOutputManager {
 	) throws JobExecutionException {
 		try {
 			if (pathForBinding!=null) {
-				BoundOutputManager boundOutput = outputManager.bindFile( pathForBinding, experimentIdentifier, manifestTask, manifestExperiment, debugMode );
+				BoundOutputManager boundOutput = outputManager.bindFile( 
+					pathForBinding,
+					experimentIdentifier,
+					manifestTask,
+					manifestExperiment,
+					debugMode
+				);
 				throwExceptionIfClashes( manifestExperiment, boundOutput, pathForBinding );
 				return boundOutput;
 			} else {
-				// If pathForBinding is null, we just use the root folder
-				return outputManager.bindRootFolder( experimentIdentifier, manifestTask, debugMode );
+				// If pathForBinding is null, we reuse the existing root output-manager (but adding a recorder for manifestTask)
+				outputManager.addOperationRecorder( manifestTask.getRootFolder() );
+				return outputManager.getDelegate();
 			}
 		} catch (IOException e) {
 			throw new JobExecutionException(
@@ -71,7 +78,7 @@ class HelperBindOutputManager {
 
 	private static void throwExceptionIfClashes( ManifestRecorder manifestExperiment, BoundOutputManager boundOutput, Path pathForBinding ) throws JobExecutionException {
 		// Now we do a check, to ensure that our experimentalManifest and manifest are going to write files
-		//  to the same folder (without at least having some kind of prefix, to prevent files overriwring each other)
+		//  to the same folder (without at least having some kind of prefix, to prevent files overwriting each other)
 		Path experimentalRoot = manifestExperiment.getRootFolder().getRelativePath();
 		if (wouldClashWithExperimentRoot(experimentalRoot,boundOutput.getBoundFilePathPrefix())) {
 			throw new JobExecutionException(
