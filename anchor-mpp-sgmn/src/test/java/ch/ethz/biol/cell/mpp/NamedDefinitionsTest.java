@@ -43,7 +43,7 @@ import anchor.test.TestLoader;
 
 public class NamedDefinitionsTest {
 
-	private TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
+	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
 	@Before
     public void setUp() {

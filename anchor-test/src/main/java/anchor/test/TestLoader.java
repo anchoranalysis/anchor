@@ -95,17 +95,8 @@ public class TestLoader {
 	 * 
 	 * @return a testLoader associated with the root found in the default system property
 	 */
-	public static TestLoader createFromMavenWorkingDirTest() {
-		return mavenDirTestLoaderFor("test");
-	}
-	
-	/**
-	 * Creates a new test-data loader finding "src/main/resources" using the Maven working directory
-	 * 
-	 * @return a testLoader associated with the root found in the default system property
-	 */
-	public static TestLoader createFromMavenWorkingDirMain() {
-		return mavenDirTestLoaderFor("main");
+	public static TestLoader createFromMavenWorkingDir() {
+		return new TestLoader("src/test/resources");
 	}
 		
 	/**
@@ -300,9 +291,5 @@ public class TestLoader {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 		return dbf;
-	}
-
-	private static TestLoader mavenDirTestLoaderFor( String dirInSrc ) {
-		return new TestLoader( String.format("src/%s/resources", dirInSrc ) );
 	}
 }

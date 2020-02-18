@@ -55,7 +55,7 @@ public class XmlOutputterTest {
 		String testPathIn = "simpleXML01.xml";
 		Path pathOut = folder.newFile("a file name with_spaces_and_underscores_.xml").toPath();
 		
-		TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
+		TestLoader loader = TestLoader.createFromMavenWorkingDir();
 		
 		Document docIn = loader.openXmlFromTestPath( testPathIn );
 		

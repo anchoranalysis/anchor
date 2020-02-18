@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session;
+package org.anchoranalysis.test.feature;
 
 /*-
  * #%L

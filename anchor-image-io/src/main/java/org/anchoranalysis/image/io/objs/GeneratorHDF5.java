@@ -47,7 +47,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  * @author FEEHANO
  *
  */
-class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjMaskCollection> {
+public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjMaskCollection> {
 
 	private ObjMaskCollection item;
 	private boolean compressed;
