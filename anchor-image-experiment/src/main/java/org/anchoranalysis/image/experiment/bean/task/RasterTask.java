@@ -33,7 +33,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @author Owen Feehan
  *
  */
-public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInputAsStack> {
+public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput> {
 
 	/**
 	 * 
@@ -56,10 +56,10 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInputA
 	}
 
 	@Override
-	public void doJobOnInputObject( ParametersBound<NamedChnlsInputAsStack,Object> params ) throws JobExecutionException {
+	public void doJobOnInputObject( ParametersBound<NamedChnlsInput,Object> params ) throws JobExecutionException {
 
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		NamedChnlsInputAsStack inputObject = params.getInputObject();
+		NamedChnlsInput inputObject = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
 		try
@@ -81,7 +81,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInputA
 	
 	public abstract void startSeries( BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter ) throws JobExecutionException;
 	
-	public abstract void doStack( NamedChnlsInputAsStack inputObject, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException;
+	public abstract void doStack( NamedChnlsInput inputObject, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException;
 	
 	public abstract void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException;
 	

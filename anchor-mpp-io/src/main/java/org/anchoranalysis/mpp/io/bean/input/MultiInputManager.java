@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.StackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -60,7 +60,7 @@ public class MultiInputManager extends MultiInputManagerBase {
 	private String inputName = "input_image";
 	
 	@BeanField
-	private InputManager<? extends StackInputBase> input;
+	private InputManager<? extends StackInput> input;
 	
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;	// For reading appended files
@@ -100,10 +100,10 @@ public class MultiInputManager extends MultiInputManagerBase {
 		
 		List<MultiInput> outList = new ArrayList<>();
 		
-		Iterator<? extends StackInputBase> itr = input.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<? extends StackInput> itr = input.inputObjects(inputContext, progressReporter).iterator();
 		
 		while (itr.hasNext()) {
-			StackInputBase mainStack = itr.next();
+			StackInput mainStack = itr.next();
 			
 			MultiInput inputObject = new MultiInput(inputName,mainStack);
 			appendFromLists(inputObject, inputContext.isDebugMode());
@@ -137,11 +137,11 @@ public class MultiInputManager extends MultiInputManagerBase {
 		appendCfgFromAnnotation( listAppendCfgFromAnnotationRejectedOnly, inputObject, false, true, doDebug );
 	}
 			
-	public InputManager<? extends StackInputBase> getInput() {
+	public InputManager<? extends StackInput> getInput() {
 		return input;
 	}
 
-	public void setInput(InputManager<? extends StackInputBase> input) {
+	public void setInput(InputManager<? extends StackInput> input) {
 		this.input = input;
 	}
 

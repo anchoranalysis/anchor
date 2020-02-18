@@ -27,29 +27,30 @@ package org.anchoranalysis.image.io.input;
  */
 
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.io.input.InputFromManager;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
+
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.image.io.RasterIOException;
+
 
 /**
- * Base class for inputs which somehow eventually send up providing stacks, with or without names
+ * One part of a NamedChnlsInput that can be combined with others
  * 
  * @author Owen Feehan
- *
- */
-public abstract class StackInputBase implements InputFromManager {
+  */
+public abstract class NamedChnlsInputPart extends NamedChnlsInput {
+	
+	public abstract boolean hasChnl( String chnlName ) throws RasterIOException;
+	
+	@Override
+	public abstract String descriptiveName();
 
-	// Adds the current object to a NamedItemStore of ImgStack
-	//
-	// stackCollection: destination to add to
-	// seriesNum: a seriesNum to add
-	// t: a timepoint to add
-	// progressReporter
-	public abstract void addToStore( NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter ) throws OperationFailedException;
+	@Override
+	public abstract Path pathForBinding();
 	
-	public abstract void addToStoreWithName( String name, NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter ) throws OperationFailedException;
+	public abstract List<Path> pathForBindingForAllChannels() throws GetOperationFailedException;
 	
-	public abstract int numFrames() throws OperationFailedException;
+	public abstract File getFile();
 }

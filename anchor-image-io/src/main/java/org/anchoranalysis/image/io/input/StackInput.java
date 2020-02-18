@@ -1,7 +1,5 @@
 package org.anchoranalysis.image.io.input;
 
-import java.nio.file.Path;
-
 /*
  * #%L
  * anchor-image-io
@@ -29,41 +27,29 @@ import java.nio.file.Path;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.cache.Operation;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.io.input.InputFromManager;
 
-class AdditionalChnl {
-	private String chnlName;
-	private int chnlIndex;
-	private Operation<Path> filePath;
+/**
+ * Base class for inputs which somehow eventually send up providing stacks, with or without names
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class StackInput implements InputFromManager {
+
+	// Adds the current object to a NamedItemStore of ImgStack
+	//
+	// stackCollection: destination to add to
+	// seriesNum: a seriesNum to add
+	// t: a timepoint to add
+	// progressReporter
+	public abstract void addToStore( NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter ) throws OperationFailedException;
 	
-	public AdditionalChnl(String chnlName, int chnlIndex, Operation<Path> filePath) {
-		super();
-		this.chnlName = chnlName;
-		this.chnlIndex = chnlIndex;
-		this.filePath = filePath;
-	}
-
-
-	public Path getFilePath() throws GetOperationFailedException {
-		try {
-			return filePath.doOperation();
-		} catch (ExecuteException e) {
-			throw new GetOperationFailedException(e);
-		}
-	}
+	public abstract void addToStoreWithName( String name, NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter ) throws OperationFailedException;
 	
-	public ImgChnlMap createChnlMap() {
-		ImgChnlMap map = new ImgChnlMap();
-		map.add( new ImgChnlMapEntry(chnlName, chnlIndex) );
-		return map;
-	}
-
-
-	public String getChnlName() {
-		return chnlName;
-	}
+	public abstract int numFrames() throws OperationFailedException;
 }

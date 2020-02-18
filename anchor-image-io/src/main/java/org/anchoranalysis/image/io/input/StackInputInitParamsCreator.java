@@ -26,18 +26,26 @@ package org.anchoranalysis.image.io.input;
  * #L%
  */
 
-import org.anchoranalysis.core.progress.OperationWithProgressReporter;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
+import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
-/**
- *  Provides a single stack (or a time series of such stacks) as an input
- *  
- *  @author Owen Feehan
- *
- */
-public abstract class StackSequenceInput extends StackInputBase {
-
-	// Creates a TimeSequence of ImgStack for a particular series number
-	public abstract OperationWithProgressReporter<TimeSequence> createStackSequenceForSeries( int seriesNum ) throws RasterIOException;
+public class StackInputInitParamsCreator {
+	
+	public static ImageInitParams createInitParams( StackInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneConstant() );
+		addInput(soImage, inputObject);
+		return soImage;
+	}
+		
+	private static void addInput( ImageInitParams soImage, StackInput inputObject ) throws OperationFailedException {
+		inputObject.addToStore(
+			new WrapStackAsTimeSequenceStore(soImage.getStackCollection()),
+			0,
+			ProgressReporterNull.get()
+		);
+	}
 }
