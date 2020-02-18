@@ -40,7 +40,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.anchoranalysis.core.file.PathUtilities;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -57,8 +56,6 @@ public class TestLoader {
 	 * Path to where the test-data is stored
 	 */
 	private Path pathTestDataRoot;
-	
-	private static final String DEFAULT_PROPERTY_NAME_TEST_DATA_ROOT = "test.data.root";
 	
 	/**
 	 * Makes a new test-data loader
