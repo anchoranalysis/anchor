@@ -36,7 +36,7 @@ import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.input.InputFromManager;
 
@@ -49,12 +49,12 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {
 	
-	private StackInput input;
+	private ProvidesStackInput input;
 	private T annotationStrategy;
 	private Path annotationPath;
 	
 	public AnnotationWithStrategy(
-		StackInput input,
+		ProvidesStackInput input,
 		T strategy
 	) throws IOException {
 		this.input = input;

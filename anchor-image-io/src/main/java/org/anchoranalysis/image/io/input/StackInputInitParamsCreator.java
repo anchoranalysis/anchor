@@ -35,13 +35,13 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
 public class StackInputInitParamsCreator {
 	
-	public static ImageInitParams createInitParams( StackInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
 		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneConstant() );
 		addInput(soImage, inputObject);
 		return soImage;
 	}
 		
-	private static void addInput( ImageInitParams soImage, StackInput inputObject ) throws OperationFailedException {
+	private static void addInput( ImageInitParams soImage, ProvidesStackInput inputObject ) throws OperationFailedException {
 		inputObject.addToStore(
 			new WrapStackAsTimeSequenceStore(soImage.getStackCollection()),
 			0,

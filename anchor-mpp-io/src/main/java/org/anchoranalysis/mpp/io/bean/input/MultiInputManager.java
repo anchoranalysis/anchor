@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -60,7 +60,7 @@ public class MultiInputManager extends MultiInputManagerBase {
 	private String inputName = "input_image";
 	
 	@BeanField
-	private InputManager<? extends StackInput> input;
+	private InputManager<? extends ProvidesStackInput> input;
 	
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;	// For reading appended files
@@ -100,10 +100,10 @@ public class MultiInputManager extends MultiInputManagerBase {
 		
 		List<MultiInput> outList = new ArrayList<>();
 		
-		Iterator<? extends StackInput> itr = input.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<? extends ProvidesStackInput> itr = input.inputObjects(inputContext, progressReporter).iterator();
 		
 		while (itr.hasNext()) {
-			StackInput mainStack = itr.next();
+			ProvidesStackInput mainStack = itr.next();
 			
 			MultiInput inputObject = new MultiInput(inputName,mainStack);
 			appendFromLists(inputObject, inputContext.isDebugMode());
@@ -137,11 +137,11 @@ public class MultiInputManager extends MultiInputManagerBase {
 		appendCfgFromAnnotation( listAppendCfgFromAnnotationRejectedOnly, inputObject, false, true, doDebug );
 	}
 			
-	public InputManager<? extends StackInput> getInput() {
+	public InputManager<? extends ProvidesStackInput> getInput() {
 		return input;
 	}
 
-	public void setInput(InputManager<? extends StackInput> input) {
+	public void setInput(InputManager<? extends ProvidesStackInput> input) {
 		this.input = input;
 	}
 

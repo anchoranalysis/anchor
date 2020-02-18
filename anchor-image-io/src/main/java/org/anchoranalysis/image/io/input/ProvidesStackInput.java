@@ -39,7 +39,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @author Owen Feehan
  *
  */
-public abstract class StackInput implements InputFromManager {
+public abstract class ProvidesStackInput implements InputFromManager {
 
 	// Adds the current object to a NamedItemStore of ImgStack
 	//

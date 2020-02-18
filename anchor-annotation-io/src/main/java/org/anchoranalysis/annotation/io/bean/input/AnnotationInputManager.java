@@ -38,13 +38,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 
-public class AnnotationInputManager<T extends StackInput, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
+public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
 
 	/**
 	 * 
@@ -110,7 +110,7 @@ public class AnnotationInputManager<T extends StackInput, S extends AnnotatorStr
 		return outList;
 	}
 	
-	public AnnotationWithStrategy<S> createInput( StackInput item ) throws IOException {
+	public AnnotationWithStrategy<S> createInput( ProvidesStackInput item ) throws IOException {
 		return new AnnotationWithStrategy<S>(item, annotatorStrategy);
 	}
 	
