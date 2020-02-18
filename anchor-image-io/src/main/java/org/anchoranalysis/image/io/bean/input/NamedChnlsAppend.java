@@ -49,8 +49,8 @@ import org.anchoranalysis.image.io.input.NamedChnlsInputAppend;
 import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.OperationOutFilePath;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.io.params.InputContextParams;
 
 

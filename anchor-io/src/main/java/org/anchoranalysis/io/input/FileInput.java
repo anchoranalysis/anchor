@@ -31,7 +31,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
 

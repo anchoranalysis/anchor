@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bean.input.descriptivename;
+package org.anchoranalysis.io.bean.descriptivename;
 
 /*
  * #%L
@@ -28,33 +28,22 @@ package org.anchoranalysis.io.bean.input.descriptivename;
 
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-
-public class FromOutputName extends DescriptiveNameFromFileIndependent {
+public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveNameFromFile> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private IndexableOutputNameStyle outputNameStyle;
-	// END BEAN PROPERTIES
+	public DescriptiveFile descriptiveNameFor( File file, String elseName ) {
+		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
+	}
 	
-	@Override
-	protected String createDescriptiveName(File file, int index) {
-		return outputNameStyle.getPhysicalName(index);
-	}
-
-	public IndexableOutputNameStyle getOutputNameStyle() {
-		return outputNameStyle;
-	}
-
-	public void setOutputNameStyle(IndexableOutputNameStyle outputNameStyle) {
-		this.outputNameStyle = outputNameStyle;
-	}
-
+	public abstract List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName );
 }

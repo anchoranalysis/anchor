@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bean.input.descriptivename;
+package org.anchoranalysis.io.bean.descriptivename;
 
 /*-
  * #%L
@@ -34,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 /**
  * Calculates the descriptive-name independently for each file

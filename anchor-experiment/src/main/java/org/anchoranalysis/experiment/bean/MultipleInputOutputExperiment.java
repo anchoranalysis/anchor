@@ -41,11 +41,11 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 // Not finished
 public class MultipleInputOutputExperiment<T extends InputFromManager, S> extends Experiment {
