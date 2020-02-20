@@ -46,11 +46,13 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	
 	private BoundOutputManager bom;
 	private ErrorReporter errorReporter;
+	private String outputName;
 	
-	public FailureOnlyTextFileLogReporter(BoundOutputManager bom, ErrorReporter errorReporter) {
+	public FailureOnlyTextFileLogReporter(BoundOutputManager bom, ErrorReporter errorReporter, String outputName) {
 		super();
 		this.bom = bom;
 		this.errorReporter = errorReporter;
+		this.outputName = outputName;
 	}	
 	
 	@Override
@@ -79,7 +81,7 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	private void writeStringToFile( String message ) {
 		
 		try {
-			FileOutput fileOutput = TextFileLogHelper.createOutput(bom);
+			FileOutput fileOutput = TextFileLogHelper.createOutput(bom, outputName);
 			
 			if (fileOutput==null) {
 				return;

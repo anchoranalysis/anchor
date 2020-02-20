@@ -125,10 +125,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		// We create a new log reporter for this job only
 		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
 		StatefulLogReporter logReporterJob = paramsUnbound.getParametersExperiment().getLogReporterTaskCreator().create(
+			"job_log",
 			outputManagerTask,
 			errorReporterFallback,
-			paramsUnbound.getParametersExperiment().getExperimentArguments(),
-			paramsUnbound.getParametersExperiment().isDetailedLogging()
+			paramsUnbound.getParametersExperiment().getExperimentArguments(), paramsUnbound.getParametersExperiment().isDetailedLogging()
 		);
 		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(logReporterJob);
 		

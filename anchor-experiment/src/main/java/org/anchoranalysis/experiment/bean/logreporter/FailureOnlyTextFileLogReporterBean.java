@@ -40,9 +40,9 @@ public class FailureOnlyTextFileLogReporterBean extends LogReporterBean {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public StatefulLogReporter create(BoundOutputManager bom, ErrorReporter errorReporter,
-			ExperimentExecutionArguments expArgs, boolean detailedLogging) {
-		return new FailureOnlyTextFileLogReporter(bom, errorReporter);
+	public StatefulLogReporter create(String outputName, BoundOutputManager bom,
+			ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
+		return new FailureOnlyTextFileLogReporter(bom, errorReporter, outputName);
 	}
 
 }

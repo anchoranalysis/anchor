@@ -107,10 +107,10 @@ public abstract class OutputExperiment extends Experiment {
 			boolean detailedLogging = useDetailedLogging();
 			
 			StatefulLogReporter logReporter = logReporterExperiment.create(
+				"experiment_log",
 				rootOutputManagerNoErrors,
 				errorReporterFallback,
-				expArgs,
-				detailedLogging
+				expArgs, detailedLogging
 			);
 			ErrorReporter errorReporter = new ErrorReporterIntoLog( logReporter );
 			

@@ -39,5 +39,16 @@ public abstract class LogReporterBean extends AnchorBean<LogReporterBean> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public abstract StatefulLogReporter create( BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging );
+	
+	/**
+	 * Creates a log-reporter
+	 * 
+	 * @param outputName what name to use iff the log is outputted to the file-system, otherwise ignroed
+	 * @param bom a bound output manager
+	 * @param errorReporter error-reporter
+	 * @param expArgs experiment-arguments
+	 * @param detailedLogging whether detailed logging should occur in this reporter, or a less detailed version
+	 * @return
+	 */
+	public abstract StatefulLogReporter create( String outputName, BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging );
 }

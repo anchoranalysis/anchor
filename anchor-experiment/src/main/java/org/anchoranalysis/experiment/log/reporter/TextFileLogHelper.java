@@ -34,13 +34,13 @@ import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
 class TextFileLogHelper {
 
-	public static FileOutput createOutput( BoundOutputManager bom ) throws OutputWriteFailedException {
+	public static FileOutput createOutput( BoundOutputManager bom, String outputName ) throws OutputWriteFailedException {
 		
 		return FileOutputFromManager.create(
 			"txt",
 			new ManifestDescription("textlog","messageLog"),
 			bom,
-			"messagelog"
+			outputName
 		);
 	}
 }

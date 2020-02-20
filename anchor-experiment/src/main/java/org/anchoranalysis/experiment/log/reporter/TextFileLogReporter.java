@@ -38,15 +38,17 @@ import org.anchoranalysis.io.output.file.FileOutput;
 
 public class TextFileLogReporter implements StatefulLogReporter {
 
+	private String outputName;
 	private BoundOutputManager bom;
 	private ErrorReporter errorReporter;
 	
 	private FileOutput fileOutput;
 	private PrintWriter printWriter;
 	
-	public TextFileLogReporter(BoundOutputManager bom,
+	public TextFileLogReporter(String outputName, BoundOutputManager bom,
 			ErrorReporter errorReporter) {
 		super();
+		this.outputName = outputName;
 		this.bom = bom;
 		this.errorReporter = errorReporter;
 	}
@@ -60,7 +62,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	public void start() {
 	
 		try {
-			fileOutput = TextFileLogHelper.createOutput(bom);
+			fileOutput = TextFileLogHelper.createOutput(bom, outputName);
 			
 			if (fileOutput==null) {
 				return;
