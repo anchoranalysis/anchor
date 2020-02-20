@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.bean.provider.file.FileSet;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
@@ -48,21 +49,6 @@ public class SerializedObjectSetFolderSource extends SequencedFolder {
 
 	private HashMap<String,FileWrite> mapFileWrite = new HashMap<>();
 	private IncrementalSequenceType incrSequenceType;
-	
-
-	// AcceptFilter can be null in which case, it is ignored
-	private FileSet createFileSet( Path folderPath, String acceptFilter ) {
-		
-		// We use fileSets so as to be expansible with the future
-		FileSet fileSet = new FileSet();
-		fileSet.setDirectory( folderPath );
-		
-		if (acceptFilter!=null) {
-			fileSet.setFileFilter(acceptFilter);
-		}
-		
-		return fileSet;
-	}
 	
 	// Constructor	
 	public SerializedObjectSetFolderSource( Path folderPath ) throws SequenceTypeException {
@@ -125,5 +111,18 @@ public class SerializedObjectSetFolderSource extends SequencedFolder {
 			foundList.add( fw );
 		}
 	}
-
+	
+	// AcceptFilter can be null in which case, it is ignored
+	private FileSet createFileSet( Path folderPath, String acceptFilter ) {
+		
+		// We use fileSets so as to be expansible with the future
+		FileSet fileSet = new FileSet();
+		fileSet.setDirectory( folderPath );
+		
+		if (acceptFilter!=null) {
+			fileSet.setMatcher( new MatchGlob(acceptFilter) );
+		}
+		
+		return fileSet;
+	}
 }

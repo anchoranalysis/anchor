@@ -47,7 +47,7 @@ public class NamedDefinitionsTest {
 	
 	@Before
     public void setUp() {
-		RegisterBeanFactories.registerAllPackageBeanFactories(false);
+		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
 	private void checkNamedDefinitions( Define namedDefinitions ) {

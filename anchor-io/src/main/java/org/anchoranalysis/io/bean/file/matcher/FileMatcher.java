@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.file;
+package org.anchoranalysis.io.bean.file.matcher;
 
 /*
  * #%L
@@ -32,11 +32,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.util.Collection;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.file.findmatching.FindMatchingFiles;
 import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithProgressReporter;
 import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithoutProgressReporter;
@@ -49,25 +47,27 @@ import org.anchoranalysis.core.progress.ProgressReporter;
  * @author Owen
  *
  */
-public class FileMatcher {
+public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 
-	private boolean applyFilterToPath = false;
-	private int maxDirDepth = Integer.MAX_VALUE;	// maxDepth of directories searches
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private HiddenPathChecker hiddenPathChecker;
 	
 	public FileMatcher() {
-		this(false,true);
+		this(true);
 	}
 	
-	public FileMatcher(boolean applyFilterToPath, boolean ignoreHidden) {
+	public FileMatcher(boolean ignoreHidden) {
 		super();
-		this.applyFilterToPath = applyFilterToPath;
 		this.hiddenPathChecker = new HiddenPathChecker(ignoreHidden);
 	}
 
 
 	// Matching files
-	public Collection<File> matchingFiles(Path dir, boolean regEx, String fileFilter, boolean recursive, ProgressReporter progressReporter) throws IOException {
+	public Collection<File> matchingFiles(Path dir, boolean recursive, int maxDirDepth, ProgressReporter progressReporter) throws IOException {
 		
 		if (!Files.exists(dir) || !Files.isDirectory(dir)) {
 			throw new FileNotFoundException( String.format("Directory '%s' does not exist", dir) );
@@ -76,12 +76,14 @@ public class FileMatcher {
 		return createMatchingFiles(progressReporter, recursive).apply(
 			dir,
 			new PathMatchConstraints(
-				createMatcherFile(regEx, dir, fileFilter),
+				hiddenPathChecker.addHiddenCheck( createMatcherFile(dir) ),
 				createMatcherDir(),
 				maxDirDepth
 			)
 		);
 	}
+	
+	protected abstract Predicate<Path> createMatcherFile( Path dir );
 	
 	private FindMatchingFiles createMatchingFiles( ProgressReporter progressReporter, boolean recursive ) {
 		if (progressReporter==null) {
@@ -94,44 +96,5 @@ public class FileMatcher {
 	private Predicate<Path> createMatcherDir() {
 		return path -> hiddenPathChecker.includePath(path);
 	}
-	
-	private Predicate<Path> createMatcherFile( boolean regEx, Path dir, String fileFilter ) {
-		
-		if (applyFilterToPath) {
-			Pattern pattern = Pattern.compile(fileFilter);
-			return hiddenPathChecker.addHiddenCheck(
-				p -> acceptPathViaRegEx(p, pattern)
-			);
-		} else {
-			String filterType = regEx ? "regex" : "glob";
-			PathMatcher matcher = dir.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);	
-			return hiddenPathChecker.addHiddenCheck(
-				p->acceptPathViaMatcher(p, matcher)
-			);
-		}
-	}
-		
-	private static boolean acceptPathViaRegEx(Path path, Pattern pattern) {
-		return pattern.matcher(
-			pathAsString(path)
-		).matches();
-	}
-	
-	private static boolean acceptPathViaMatcher(Path path, PathMatcher matcher) {
-		return matcher.matches( path.getFileName() );
-	}
-	
-	private static String pathAsString(Path p) {
-		return PathUtilities.toStringUnixStyle(
-			p.toFile().toString()
-		);
-	}
 
-	public int getMaxDirDepth() {
-		return maxDirDepth;
-	}
-
-	public void setMaxDirDepth(int maxDirDepth) {
-		this.maxDirDepth = maxDirDepth;
-	}
 }

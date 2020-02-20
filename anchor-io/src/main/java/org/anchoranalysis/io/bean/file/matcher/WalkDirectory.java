@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.file;
+package org.anchoranalysis.io.bean.file.matcher;
 
 /*-
  * #%L

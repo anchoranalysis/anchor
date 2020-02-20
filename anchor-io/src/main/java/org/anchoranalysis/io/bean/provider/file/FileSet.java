@@ -38,8 +38,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.error.BeanCombinableException;
-import org.anchoranalysis.core.file.FileMatcher;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
+import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.params.InputContextParams;
 
 @SuppressWarnings("unused")
@@ -52,13 +53,10 @@ public class FileSet extends FileProviderWithDirectory {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private String fileFilter="*";
+	private FileMatcher matcher;
 	
 	@BeanField
 	private boolean recursive = false;
-	
-	@BeanField
-	private boolean regEx = false;
 	
 	/** A directory in which to look for files.
 	 * 
@@ -67,18 +65,12 @@ public class FileSet extends FileProviderWithDirectory {
 	@BeanField @AllowEmpty
 	private String directory = "";
 	
-	/** If true, the filter is applied to the path as a whole, not just the filename, and it is always considered a Regular-Expression
-	 *    using UNIX directory separators
-	 */
-	@BeanField
-	private boolean applyFilterToPath = false;
-	
 	/** If non-negative the max depth of directories */
 	@BeanField 
 	private int maxDirectoryDepth = 0;
 	
 	/** if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used
-	 *  i.e. Windows ingores case, Linux doesn't
+	 *  i.e. Windows ignores case, Linux doesn't
 	 */
 	@BeanField
 	private boolean ignoreHidden = true;
@@ -87,34 +79,15 @@ public class FileSet extends FileProviderWithDirectory {
 	public FileSet() {
 	}
 	
-	/**
-	 * If path is absolute, it's returned as-is
-	 * If path is relative, and the 'makeAbsolute' option is activated, it's added to the localizedPath 
-	 * 
-	 * @param path
-	 * @return
-	 */
-	private Path makeAbsolutePathIfNecessary( Path path ) {
-		if (path.isAbsolute()) {
-			return path;
-		} else {
-			Path parent = getLocalPath().getParent();
-			return parent.resolve(path);
-		}
-	}
-	
 	// Matching files
 	@Override
 	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
 		
 		// If we don't have an absolute Directory(), we combine it with the localizedPath
 		Path dir = makeAbsolutePathIfNecessary( getDirectoryAsPath(inputContext) );
-		
-		FileMatcher matcher = new FileMatcher( applyFilterToPath, ignoreHidden );
-		if (maxDirectoryDepth>0) {
-			matcher.setMaxDirDepth(maxDirectoryDepth);
-		}
-		return matcher.matchingFiles(dir, regEx, fileFilter, recursive, progressReporter);
+
+		int maxDirDepth = maxDirectoryDepth>0 ? Integer.MAX_VALUE : maxDirectoryDepth;	// maxDepth of directories searches
+		return matcher.matchingFiles(dir, recursive, maxDirDepth, progressReporter);
 	}
 	
 	public Path getDirectoryMaybeAbsolute( InputContextParams inputContext ) {
@@ -134,13 +107,15 @@ public class FileSet extends FileProviderWithDirectory {
 		String pathStr = SingleFile.replaceBackslashes(combinedFileFilter.toString() );
 		int finalSlash = pathStr.lastIndexOf("/");
 		
+		MatchGlob matcherGlob = new MatchGlob();
 		if (finalSlash==-1) {
 			setDirectory("");
-			setFileFilter(pathStr);
+			matcherGlob.setGlob(pathStr);
 		} else {
 			setDirectory( pathStr.substring(0, finalSlash+1 ));
-			setFileFilter( pathStr.substring(finalSlash+1));
+			matcherGlob.setGlob( pathStr.substring(finalSlash+1));
 		}
+		this.matcher = matcherGlob;
 	}
 	
 	public boolean isRecursive() {
@@ -149,14 +124,6 @@ public class FileSet extends FileProviderWithDirectory {
 
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
-	}
-
-	public String getFileFilter() {
-		return fileFilter;
-	}
-
-	public void setFileFilter(String fileFilter) {
-		this.fileFilter = fileFilter;
 	}
 	
 	public String getDirectory() {
@@ -185,25 +152,6 @@ public class FileSet extends FileProviderWithDirectory {
 	public void setDirectory(Path path) {
 		this.directory = path.toString();
 	}
-	
-	public boolean isApplyFilterToPath() {
-		return applyFilterToPath;
-	}
-
-
-	public void setApplyFilterToPath(boolean applyFilterToPath) {
-		this.applyFilterToPath = applyFilterToPath;
-	}
-
-
-	public boolean isRegEx() {
-		return regEx;
-	}
-
-
-	public void setRegEx(boolean regEx) {
-		this.regEx = regEx;
-	}
 
 	public int getMaxDirectoryDepth() {
 		return maxDirectoryDepth;
@@ -219,5 +167,29 @@ public class FileSet extends FileProviderWithDirectory {
 
 	public void setIgnoreHidden(boolean ignoreHidden) {
 		this.ignoreHidden = ignoreHidden;
+	}
+	
+	/**
+	 * If path is absolute, it's returned as-is
+	 * If path is relative, and the 'makeAbsolute' option is activated, it's added to the localizedPath 
+	 * 
+	 * @param path
+	 * @return
+	 */
+	private Path makeAbsolutePathIfNecessary( Path path ) {
+		if (path.isAbsolute()) {
+			return path;
+		} else {
+			Path parent = getLocalPath().getParent();
+			return parent.resolve(path);
+		}
+	}
+
+	public FileMatcher getMatcher() {
+		return matcher;
+	}
+
+	public void setMatcher(FileMatcher matcher) {
+		this.matcher = matcher;
 	}
 }

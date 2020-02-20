@@ -39,6 +39,9 @@ public class InputContextParams {
 
 	/** Iff non-NULL, a directory which can be used by beans to find input */
 	private Path inputDir = null;
+	
+	/** Iff non-NULL, a file-filter which is applied on top of the the input-directory */
+	private String inputFileFilter = null;
 
 	/** Whether an experiment is executing in debug mode or not */
 	private boolean debugMode = false;
@@ -86,5 +89,13 @@ public class InputContextParams {
 				String.format("An non-absolute path was passed to setInputDir() of %s", inputDir)
 			);
 		}
+	}
+
+	public String getInputFileFilter() {
+		return inputFileFilter;
+	}
+
+	public void setInputFileFilter(String inputFileFilter) {
+		this.inputFileFilter = inputFileFilter;
 	}
 }
