@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.generator.raster;
 
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 public class RasterWriterUtilities {
 

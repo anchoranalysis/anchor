@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.output.namestyle;
+package org.anchoranalysis.io.namestyle;
 
 /*
  * #%L
@@ -27,28 +27,25 @@ package org.anchoranalysis.io.output.namestyle;
  */
 
 
-import java.io.Serializable;
-
-public abstract class OutputNameStyle implements Serializable {
+public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7757474603700575166L;
-	
+	private static final long serialVersionUID = -2393013576294162543L;
+
 	// Only for deserialization
-	public OutputNameStyle() {
-		
+	public IndexableOutputNameStyle() {
+		super();
+	}
+
+	public String getPhysicalName( int index ){
+		return getPhysicalName(Integer.toString(index) );
 	}
 	
-	public abstract String getPhysicalName();
+	// The full physical name written to the file, including prefix, suffix, index etc.
+	public abstract String getPhysicalName( String index );
 
-	// The output name which refers to a particular category of output
-	public abstract String getOutputName();
-
-	public abstract void setOutputName(String outputName);
-
-	public abstract OutputNameStyle duplicate(); 
-	
-	public abstract IndexableOutputNameStyle deriveIndexableStyle( int numDigits );
+	@Override
+	public abstract IndexableOutputNameStyle duplicate();
 }

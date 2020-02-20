@@ -1,6 +1,4 @@
-package org.anchoranalysis.io.bean.output.allowed;
-
-import org.anchoranalysis.bean.StringSet;
+package org.anchoranalysis.io.output.bean.allowed;
 
 /*
  * #%L
@@ -28,32 +26,14 @@ import org.anchoranalysis.bean.StringSet;
  * #L%
  */
 
+import org.anchoranalysis.bean.AnchorBean;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-
-public class SpecificOutputAllowed extends OutputAllowed {
+public abstract class OutputAllowed extends AnchorBean<OutputAllowed> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7783226379991535090L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private StringSet outputsAllowed;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return outputsAllowed.contains(outputName);
-	}
+	private static final long serialVersionUID = 52347011093112941L;
 
-	public StringSet getOutputsAllowed() {
-		return outputsAllowed;
-	}
-
-	public void setOutputsAllowed(StringSet outputsAllowed) {
-		this.outputsAllowed = outputsAllowed;
-	}
-
+	public abstract boolean isOutputAllowed( String outputName );
 }

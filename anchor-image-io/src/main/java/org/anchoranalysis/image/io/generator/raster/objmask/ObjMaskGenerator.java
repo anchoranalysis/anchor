@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class ObjMaskGenerator extends RasterGenerator implements IterableGenerator<ObjMask> {
 	

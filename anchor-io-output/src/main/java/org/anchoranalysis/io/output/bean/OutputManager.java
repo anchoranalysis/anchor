@@ -30,9 +30,9 @@ package org.anchoranalysis.io.output.bean;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 /*

@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class SequenceWriter {
 

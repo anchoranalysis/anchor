@@ -34,8 +34,8 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 /**

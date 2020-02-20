@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.output.namestyle;
+package org.anchoranalysis.io.namestyle;
 
 /*
  * #%L

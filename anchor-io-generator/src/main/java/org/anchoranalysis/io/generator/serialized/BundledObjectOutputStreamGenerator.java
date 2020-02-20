@@ -29,7 +29,6 @@ package org.anchoranalysis.io.generator.serialized;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -39,10 +38,11 @@ import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class BundledObjectOutputStreamGenerator<T extends Serializable> extends Generator implements IterableGenerator<T> {
 

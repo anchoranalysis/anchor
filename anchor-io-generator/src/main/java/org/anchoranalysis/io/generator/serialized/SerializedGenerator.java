@@ -28,9 +28,9 @@ package org.anchoranalysis.io.generator.serialized;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class SerializedGenerator extends SingleFileTypeGenerator {
 

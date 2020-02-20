@@ -31,8 +31,8 @@ package org.anchoranalysis.io.output.file;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class FileOutputFromManager {
 	

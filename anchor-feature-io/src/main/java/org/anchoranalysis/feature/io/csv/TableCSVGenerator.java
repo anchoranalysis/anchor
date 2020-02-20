@@ -31,12 +31,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 /**

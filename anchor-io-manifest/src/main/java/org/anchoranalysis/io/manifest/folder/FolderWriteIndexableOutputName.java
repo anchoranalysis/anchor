@@ -37,7 +37,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.Match;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 
 public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
 

@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bean.output;
+package org.anchoranalysis.io.output.bean;
 
 import java.util.List;
 

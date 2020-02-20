@@ -28,7 +28,7 @@ package org.anchoranalysis.io.generator.sequence;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 public class GeneratorSequenceNonIncrementalRerouterErrors<T> {

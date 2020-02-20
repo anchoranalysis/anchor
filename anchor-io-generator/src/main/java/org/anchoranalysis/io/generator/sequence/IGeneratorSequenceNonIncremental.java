@@ -27,7 +27,7 @@ package org.anchoranalysis.io.generator.sequence;
  */
 
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public interface IGeneratorSequenceNonIncremental<T> {
 

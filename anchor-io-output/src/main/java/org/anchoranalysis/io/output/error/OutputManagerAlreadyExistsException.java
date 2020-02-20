@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.output.namestyle;
+package org.anchoranalysis.io.output.error;
 
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,42 +26,24 @@ package org.anchoranalysis.io.output.namestyle;
  * #L%
  */
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-public class SimpleOutputNameStyle extends OutputNameStyle {
+/**
+ * When an OutputManager already exists. This is thrown as a RuntimeException to
+ * cause the application to immediately end.
+ * 
+ * @author owen
+ *
+ */
+public class OutputManagerAlreadyExistsException extends AnchorFriendlyRuntimeException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7800246042849181557L;
+	private static final long serialVersionUID = 1L;
 
-	private String outputName;
-	
-	public SimpleOutputNameStyle(String outputName) {
-		this.outputName = outputName;
-	}
-	
-	@Override
-	public String getPhysicalName() {
-		return getOutputName();
+	public OutputManagerAlreadyExistsException(String msg) {
+		super(msg);
 	}
 
-	@Override
-	public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
-		return new IntegerSuffixOutputNameStyle(getOutputName(), numDigits);
-	}
-
-	@Override
-	public String getOutputName() {
-		return outputName;
-	}
-
-	@Override
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
-
-	@Override
-	public OutputNameStyle duplicate() {
-		return new SimpleOutputNameStyle(outputName);
-	}
 }

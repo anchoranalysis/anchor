@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.output.bean;
+package org.anchoranalysis.io.output.error;
 
-/*-
+/*
  * #%L
- * anchor-io-output
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,24 @@ package org.anchoranalysis.io.output.bean;
  * #L%
  */
 
-import org.anchoranalysis.io.bean.output.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
+import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public class OutputManagerPermissive extends OutputManagerWithPrefixer {
+public class OutputWriteFailedException extends AnchorCheckedException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1036971819028250342L;
+
+	public OutputWriteFailedException( String s ) {
+		super(s);
+	}
 	
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return true;
+	public OutputWriteFailedException( String s, Throwable e ) {
+		super(s,e);
 	}
-
-	@Override
-	public OutputAllowed outputAllowedSecondLevel(String key) {
-		return new AllOutputAllowed();
+	
+	public OutputWriteFailedException( Throwable e ) {
+		super(e);
 	}
-
 }

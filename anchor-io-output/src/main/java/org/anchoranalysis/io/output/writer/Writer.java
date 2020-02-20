@@ -29,15 +29,15 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.cache.Operation;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // 
 

@@ -29,8 +29,8 @@ package org.anchoranalysis.experiment.log.reporter;
 import java.io.IOException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 
 /** Writes text to a file, but only if close is called with a successful=true

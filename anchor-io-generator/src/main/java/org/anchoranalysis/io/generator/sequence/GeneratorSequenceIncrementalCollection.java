@@ -31,7 +31,7 @@ import java.util.Collection;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GeneratorSequenceIncrementalCollection<T,C> implements IGeneratorSequenceIncremental<T> {
 	

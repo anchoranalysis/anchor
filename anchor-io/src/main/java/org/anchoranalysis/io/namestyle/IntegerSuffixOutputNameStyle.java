@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.output.namestyle;
+package org.anchoranalysis.io.namestyle;
 
 /*
  * #%L
@@ -27,7 +27,7 @@ package org.anchoranalysis.io.output.namestyle;
  */
 
 
-public class IntegerPrefixOutputNameStyle extends IndexableOutputNameStyle {
+public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
 	/**
 	 * 
@@ -42,19 +42,19 @@ public class IntegerPrefixOutputNameStyle extends IndexableOutputNameStyle {
 	private String integerFormatString;
 	
 	// Only for deserialization
-	public IntegerPrefixOutputNameStyle() {
+	public IntegerSuffixOutputNameStyle() {
 		super();
 	}
 	
-	public IntegerPrefixOutputNameStyle(String outputName, int numDigitsInteger ) {
-		this(outputName, "",  "%0" + Integer.toString(numDigitsInteger) + "d_");
+	public IntegerSuffixOutputNameStyle(String outputName, int numDigitsInteger ) {
+		this(outputName, "",  "_%0" + Integer.toString(numDigitsInteger) + "d");
 	}
 	
-	public IntegerPrefixOutputNameStyle(String outputName, String integerFormatString) {
+	public IntegerSuffixOutputNameStyle(String outputName, String integerFormatString) {
 		this(outputName, "", integerFormatString);
 	}
 	
-	public IntegerPrefixOutputNameStyle(String outputName, String prefix, String integerFormatString) {
+	public IntegerSuffixOutputNameStyle(String outputName, String prefix, String integerFormatString) {
 		this.outputName = outputName;
 		this.prefix = prefix;
 		this.integerFormatString = integerFormatString;
@@ -62,7 +62,7 @@ public class IntegerPrefixOutputNameStyle extends IndexableOutputNameStyle {
 	}
 	
 	private void updateFormatString() {
-		this.outputFormatString = integerFormatString + prefix + outputName;
+		this.outputFormatString = outputName + prefix + integerFormatString;
 	}
 	
 
@@ -88,7 +88,7 @@ public class IntegerPrefixOutputNameStyle extends IndexableOutputNameStyle {
 
 	@Override
 	public IndexableOutputNameStyle deriveIndexableStyle( int numDigits ) {
-		return new IntegerPrefixOutputNameStyle( this.getOutputName(), numDigits );
+		return new IntegerSuffixOutputNameStyle( this.getOutputName(), numDigits );
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class IntegerPrefixOutputNameStyle extends IndexableOutputNameStyle {
 
 	@Override
 	public IndexableOutputNameStyle duplicate() {
-		return new IntegerPrefixOutputNameStyle(outputName, integerFormatString);
+		return new IntegerSuffixOutputNameStyle(outputName, integerFormatString);
 	}
 
 }

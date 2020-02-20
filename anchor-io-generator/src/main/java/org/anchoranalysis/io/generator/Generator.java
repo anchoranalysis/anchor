@@ -1,7 +1,5 @@
 package org.anchoranalysis.io.generator;
 
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
-
 /*
  * #%L
  * anchor-io
@@ -31,6 +29,7 @@ import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 
 
 import org.anchoranalysis.io.manifest.file.FileType;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
 public abstract class Generator implements WritableItem {

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements IterableObjectGenerator<ObjMaskWithPropertiesCollection,Stack> {
 

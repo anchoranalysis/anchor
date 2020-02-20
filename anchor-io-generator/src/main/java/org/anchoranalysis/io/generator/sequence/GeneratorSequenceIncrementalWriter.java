@@ -29,9 +29,9 @@ package org.anchoranalysis.io.generator.sequence;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GeneratorSequenceIncrementalWriter<T> implements IGeneratorSequenceIncremental<T> {
 

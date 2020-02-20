@@ -40,8 +40,8 @@ import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 import ch.ethz.biol.cell.mpp.proposer.CombineDiverseProvidersAsStacks;
 

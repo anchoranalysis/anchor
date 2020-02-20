@@ -52,7 +52,7 @@ import org.anchoranalysis.io.bean.objmask.writer.IfElseWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class AssignmentGenerator extends RasterGenerator {
 	

@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.output;
+package org.anchoranalysis.io.namestyle;
 
 /*
  * #%L
@@ -26,24 +26,29 @@ package org.anchoranalysis.io.output;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public class OutputWriteFailedException extends AnchorCheckedException {
+import java.io.Serializable;
+
+public abstract class OutputNameStyle implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1036971819028250342L;
+	private static final long serialVersionUID = 7757474603700575166L;
+	
+	// Only for deserialization
+	public OutputNameStyle() {
+		
+	}
+	
+	public abstract String getPhysicalName();
 
-	public OutputWriteFailedException( String s ) {
-		super(s);
-	}
+	// The output name which refers to a particular category of output
+	public abstract String getOutputName();
+
+	public abstract void setOutputName(String outputName);
+
+	public abstract OutputNameStyle duplicate(); 
 	
-	public OutputWriteFailedException( String s, Throwable e ) {
-		super(s,e);
-	}
-	
-	public OutputWriteFailedException( Throwable e ) {
-		super(e);
-	}
+	public abstract IndexableOutputNameStyle deriveIndexableStyle( int numDigits );
 }

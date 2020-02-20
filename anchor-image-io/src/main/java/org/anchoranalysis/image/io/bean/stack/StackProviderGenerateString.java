@@ -45,7 +45,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackProviderGenerateString extends StackProvider {
 

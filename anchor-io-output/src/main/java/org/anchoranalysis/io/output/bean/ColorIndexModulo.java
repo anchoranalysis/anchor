@@ -1,4 +1,7 @@
-package org.anchoranalysis.io.bean.output.allowed;
+package org.anchoranalysis.io.output.bean;
+
+import org.anchoranalysis.core.color.ColorIndex;
+import org.anchoranalysis.core.color.RGBColor;
 
 /*
  * #%L
@@ -27,16 +30,29 @@ package org.anchoranalysis.io.bean.output.allowed;
  */
 
 
-public class NoOutputAllowed extends OutputAllowed {
+class ColorIndexModulo implements ColorIndex {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6189493796393374208L;
+	private ColorIndex delegate;
 
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return false;
+	public ColorIndexModulo(ColorIndex delegate) {
+		super();
+		this.delegate = delegate;
 	}
 
+	@Override
+	public RGBColor get(int i) {
+		return delegate.get( i % numUniqueColors() );
+	}
+
+	@Override
+	public int numUniqueColors() {
+		return delegate.numUniqueColors();
+	}
+
+	@Override
+	public boolean has(int i) {
+		return delegate.has(i % numUniqueColors() );
+	}
+	
+	
 }
