@@ -42,6 +42,8 @@ import org.anchoranalysis.bean.xml.error.BeanCombinableException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.glob.GlobExtractor;
+import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 import org.anchoranalysis.io.params.InputContextParams;
 
 @SuppressWarnings("unused")
@@ -105,17 +107,18 @@ public class FileSet extends FileProviderWithDirectory {
 	 */
 	public void setFileFilterAndDirectory( Path combinedFileFilter ) {
 		
-		String pathStr = SingleFile.replaceBackslashes(combinedFileFilter.toString() );
-		int finalSlash = pathStr.lastIndexOf("/");
+		GlobWithDirectory gwd = GlobExtractor.extract(combinedFileFilter.toString());
+		
 		
 		MatchGlob matcherGlob = new MatchGlob();
-		if (finalSlash==-1) {
-			setDirectory("");
-			matcherGlob.setGlob(pathStr);
+		matcherGlob.setGlob( gwd.getGlob() );
+		
+		if (gwd.getDirectory()!=null) {
+			setDirectory( gwd.getDirectory() );
 		} else {
-			setDirectory( pathStr.substring(0, finalSlash+1 ));
-			matcherGlob.setGlob( pathStr.substring(finalSlash+1));
+			setDirectory("");	
 		}
+		
 		this.matcher = matcherGlob;
 	}
 	

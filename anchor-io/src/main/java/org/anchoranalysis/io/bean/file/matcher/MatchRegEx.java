@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.params.InputContextParams;
 
 
 /**
@@ -62,7 +63,7 @@ public class MatchRegEx extends FileMatcher {
 	}
 
 	@Override
-	protected Predicate<Path> createMatcherFile(Path dir) {
+	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
 		if (applyToPath) {
 			Pattern pattern = Pattern.compile(expression);
 			return p -> acceptPathViaRegEx(p, pattern);

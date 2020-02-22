@@ -28,6 +28,9 @@ package org.anchoranalysis.io.params;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Additional paramaters that provide context for many beans that provide input-functions
@@ -40,22 +43,17 @@ public class InputContextParams {
 	/** Iff non-NULL, a directory which can be used by beans to find input */
 	private Path inputDir = null;
 	
-	/** Iff non-NULL, a file-filter which is applied on top of the the input-directory */
-	private String inputFileFilter = null;
-
+	/** A glob that can be used by beans to filter input */
+	private String inputFilterGlob = "*.*";
+	
+	/** A list of extensions that can be used filter inputs */
+	private Set<String> inputFilterExtensions = defaultFilterExtensions();
+	
 	/** Whether an experiment is executing in debug mode or not */
 	private boolean debugMode = false;
 	
 	/** Whether an experiment is executing in GUI mode or not */
 	private boolean guiMode = false;
-	
-	public boolean isGuiMode() {
-		return guiMode;
-	}
-
-	public void setGuiMode(boolean guiMode) {
-		this.guiMode = guiMode;
-	}
 	
 	public boolean hasInputDir() {
 		return inputDir!=null;
@@ -75,14 +73,10 @@ public class InputContextParams {
 		this.inputDir = inputDir;
 	}
 
-	public boolean isDebugMode() {
-		return debugMode;
+	public void setInputFilterGlob(String inputFilterGlob) {
+		this.inputFilterGlob = inputFilterGlob;
 	}
-
-	public void setDebugMode(boolean debugMode) {
-		this.debugMode = debugMode;
-	}
-		
+	
 	private static void checkAbsolutePath(Path inputDir) throws IOException {
 		if (!inputDir.isAbsolute()) {
 			throw new IOException(
@@ -90,12 +84,38 @@ public class InputContextParams {
 			);
 		}
 	}
-
-	public String getInputFileFilter() {
-		return inputFileFilter;
+	
+	private Set<String> defaultFilterExtensions() {
+		return new HashSet<>(Arrays.asList("jpg", "png", "tif", "tiff"));
 	}
 
-	public void setInputFileFilter(String inputFileFilter) {
-		this.inputFileFilter = inputFileFilter;
+	public Set<String> getInputFilterExtensions() {
+		return inputFilterExtensions;
+	}
+
+	public void setInputFilterExtensions(Set<String> inputFilterExtensions) {
+		this.inputFilterExtensions = inputFilterExtensions;
+	}
+	
+	
+	public boolean isGuiMode() {
+		return guiMode;
+	}
+
+	public void setGuiMode(boolean guiMode) {
+		this.guiMode = guiMode;
+	}
+	
+
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
+	}
+
+	public String getInputFilterGlob() {
+		return inputFilterGlob;
 	}
 }

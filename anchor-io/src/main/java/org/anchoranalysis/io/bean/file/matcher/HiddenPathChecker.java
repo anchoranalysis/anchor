@@ -31,30 +31,16 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.DosFileAttributes;
-import java.util.function.Predicate;
 
 import org.apache.commons.lang.SystemUtils;
 
 class HiddenPathChecker {
 	
-	private boolean ignoreHidden;
-	HiddenPathChecker( boolean ignoreHidden ) {
-		this.ignoreHidden = ignoreHidden;
-	}
-	
-	public Predicate<Path> addHiddenCheck( Predicate<Path> func ) {
-		return p -> func.test(p) && includePath(p);
-	}
-	
-	public boolean includePath( Path path ) {
-		
-		if (!ignoreHidden) {
-			return true;
-		}
+	public static boolean includePath( Path path ) {
 		
 		try {
-			// There is a big in Java (apparently fixed in version 13) where Files.isHidden
-			//  does not recognise directories as hidden. Ther
+			// There is a bug in Java (apparently fixed in version 13) where Files.isHidden
+			//  does not recognize directories as hidden.
 			return !Files.exists(path) || !isHidden(path);
 		} catch (IOException e) {
 			// If we can't perform these operations, we consider the file not to be hidden
@@ -66,7 +52,7 @@ class HiddenPathChecker {
 	// A workaround for a bug in Java (apparently fixed in version 13) where Files.isHidden
 	//  does not recognise directories as being hidden.
 	// https://stackoverflow.com/questions/53791740/why-does-files-ishiddenpath-return-false-for-directories-on-windows
-	private boolean isHidden(Path path) throws IOException {
+	private static boolean isHidden(Path path) throws IOException {
 		
 		try {
 			if (SystemUtils.IS_OS_WINDOWS) {

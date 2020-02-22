@@ -40,6 +40,7 @@ import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithProgressRe
 import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithoutProgressReporter;
 import org.anchoranalysis.core.file.findmatching.PathMatchConstraints;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Matches filepaths against patterns
@@ -54,36 +55,49 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private HiddenPathChecker hiddenPathChecker;
-	
-	public FileMatcher() {
-		this(true);
-	}
-	
-	public FileMatcher(boolean ignoreHidden) {
-		super();
-		this.hiddenPathChecker = new HiddenPathChecker(ignoreHidden);
-	}
-
-
-	// Matching files
-	public Collection<File> matchingFiles(Path dir, boolean recursive, int maxDirDepth, ProgressReporter progressReporter) throws IOException {
+	/**
+	 * Finds a collection of files that match particular conditions
+	 * 
+	 * @param dir root directory to search
+	 * @param recursive whether to recursively search
+	 * @param ignoreHidden whether to ignore hidden files/directories or not 
+	 * @param maxDirDepth a maximum depth in directories to search
+	 * @param inputContext parameters providing input-context
+	 * @param progressReporter progress-reporter
+	 * @return a collection of files matching the conditions
+	 * @throws IOException if an error occurrs reading/writing or interacting with the filesystem
+	 */
+	public Collection<File> matchingFiles(Path dir, boolean recursive, boolean ignoreHidden, int maxDirDepth, InputContextParams inputContext, ProgressReporter progressReporter) throws IOException {
 		
 		if (!Files.exists(dir) || !Files.isDirectory(dir)) {
 			throw new FileNotFoundException( String.format("Directory '%s' does not exist", dir) );
 		}
 		
+		// Many checks are possible on a file, including whether it is hidden or not
+		Predicate<Path> filePred = maybeAddIgnoreHidden( ignoreHidden, createMatcherFile(dir, inputContext) );
+		
+		// The only check on a directory is (maybe) whether it is hidden or not
+		Predicate<Path> dirPred = maybeAddIgnoreHidden( ignoreHidden, p->true ); 
+		
 		return createMatchingFiles(progressReporter, recursive).apply(
 			dir,
 			new PathMatchConstraints(
-				hiddenPathChecker.addHiddenCheck( createMatcherFile(dir) ),
-				createMatcherDir(),
+				filePred,
+				dirPred,
 				maxDirDepth
 			)
 		);
 	}
 	
-	protected abstract Predicate<Path> createMatcherFile( Path dir );
+	private Predicate<Path> maybeAddIgnoreHidden( boolean ignoreHidden, Predicate<Path> pred ) {
+		if (ignoreHidden) {
+			return p -> pred.test(p) && HiddenPathChecker.includePath(p);
+		} else {
+			return pred;
+		}
+	}
+	
+	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext );
 	
 	private FindMatchingFiles createMatchingFiles( ProgressReporter progressReporter, boolean recursive ) {
 		if (progressReporter==null) {
@@ -92,9 +106,4 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 			return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
 		}
 	}
-	
-	private Predicate<Path> createMatcherDir() {
-		return path -> hiddenPathChecker.includePath(path);
-	}
-
 }

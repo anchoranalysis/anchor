@@ -49,6 +49,7 @@ public class PathMatchConstraints {
 		this.matcherFile = matcherFile;
 		this.matcherDir = matcherDir;
 		this.maxDirDepth = maxDirDepth;
+		assert( maxDirDepth>= 0 );
 	}
 	
 	public PathMatchConstraints replaceMaxDirDepth( int replacementMaxDirDepth ) {
