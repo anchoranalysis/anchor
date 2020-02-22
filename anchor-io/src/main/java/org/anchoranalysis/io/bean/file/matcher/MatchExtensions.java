@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.io.params.InputContextParams;
-import org.apache.commons.io.IOCase;
+import org.apache.commons.io.FilenameUtils;
 
 
 /**
@@ -85,16 +85,10 @@ public class MatchExtensions extends FileMatcher {
 			return true;
 		}
 		
-		for( String ext : fileExtensions ) {
-			if (caseInsensitiveEndsWith(path, "." + ext )) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static boolean caseInsensitiveEndsWith( Path path, String extension ) {
-		return IOCase.INSENSITIVE.checkEndsWith( path.toString(), extension );
+		// Extract extension from path
+		String ext = FilenameUtils.getExtension( path.toString() ).toLowerCase();
+		
+		return fileExtensions.contains(ext);
 	}
 	
 	private Set<String> fileExtensions(InputContextParams inputContext) {

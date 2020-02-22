@@ -44,10 +44,10 @@ public class InputContextParams {
 	private Path inputDir = null;
 	
 	/** A glob that can be used by beans to filter input */
-	private String inputFilterGlob = "*.*";
+	private String inputFilterGlob = "*";
 	
 	/** A list of extensions that can be used filter inputs */
-	private Set<String> inputFilterExtensions = defaultFilterExtensions();
+	private Set<String> inputFilterExtensions = fallBackFilterExtensions();
 	
 	/** Whether an experiment is executing in debug mode or not */
 	private boolean debugMode = false;
@@ -85,8 +85,9 @@ public class InputContextParams {
 		}
 	}
 	
-	private Set<String> defaultFilterExtensions() {
-		return new HashSet<>(Arrays.asList("jpg", "png", "tif", "tiff"));
+	// If no filter extensions are provided from anywhere else, this is a convenient set of defaults
+	private Set<String> fallBackFilterExtensions() {
+		return new HashSet<>(Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp"));
 	}
 
 	public Set<String> getInputFilterExtensions() {
