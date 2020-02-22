@@ -35,6 +35,7 @@ import java.util.Collection;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.error.BeanCombinableException;
@@ -65,9 +66,9 @@ public class FileSet extends FileProviderWithDirectory {
 	@BeanField @AllowEmpty
 	private String directory = "";
 	
-	/** If non-negative the max depth of directories */
-	@BeanField 
-	private int maxDirectoryDepth = 0;
+	/** If non-negative the max depth of directories. If -1, then there is no maximum depth. */
+	@BeanField
+	private int maxDirectoryDepth = -1;
 	
 	/** if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used
 	 *  i.e. Windows ignores case, Linux doesn't
@@ -86,8 +87,8 @@ public class FileSet extends FileProviderWithDirectory {
 		// If we don't have an absolute Directory(), we combine it with the localizedPath
 		Path dir = makeAbsolutePathIfNecessary( getDirectoryAsPath(inputContext) );
 
-		int maxDirDepth = maxDirectoryDepth>0 ? Integer.MAX_VALUE : maxDirectoryDepth;	// maxDepth of directories searches
-		return matcher.matchingFiles(dir, recursive, maxDirDepth, progressReporter);
+		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
+		return matcher.matchingFiles(dir, recursive, ignoreHidden, maxDirDepth, inputContext, progressReporter);
 	}
 	
 	public Path getDirectoryMaybeAbsolute( InputContextParams inputContext ) {
