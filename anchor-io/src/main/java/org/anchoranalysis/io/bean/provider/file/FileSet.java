@@ -87,14 +87,10 @@ public class FileSet extends FileProviderWithDirectory {
 	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
 		
 		// If we don't have an absolute Directory(), we combine it with the localizedPath
-		Path dir = makeAbsolutePathIfNecessary( getDirectoryAsPath(inputContext) );
+		Path dir = getDirectoryAsPath( inputContext );
 
 		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
 		return matcher.matchingFiles(dir, recursive, ignoreHidden, maxDirDepth, inputContext, progressReporter);
-	}
-	
-	public Path getDirectoryMaybeAbsolute( InputContextParams inputContext ) {
-		return makeAbsolutePathIfNecessary( getDirectoryAsPath(inputContext) );
 	}
 	
 	

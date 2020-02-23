@@ -28,9 +28,11 @@ package org.anchoranalysis.io.output.bean;
 
 
 import java.io.IOException;
-import java.nio.file.Path;
+
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -53,7 +55,7 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
 	/** A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key */ 
 	public abstract OutputAllowed outputAllowedSecondLevel( String key );
 	
-	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, boolean debugMode ) throws IOException;
+	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws IOException;
 	
-	public abstract FilePathPrefix prefixForFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException;
+	public abstract FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws IOException;
 }

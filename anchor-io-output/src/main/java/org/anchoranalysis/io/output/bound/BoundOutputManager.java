@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
@@ -91,17 +93,6 @@ public class BoundOutputManager {
 		initIfNeeded = new LazyDirectoryInit(boundFilePathPrefix.getFolderPath(), delExistingFolder, parentInit);
 		writerAlwaysAllowed = new AlwaysAllowed(this, initIfNeeded);
 		writerCheckIfAllowed = new CheckIfAllowed(this, initIfNeeded, writerAlwaysAllowed);
-		
-		
-		// Make sure any supporting directories are present
-		// Removed on 21.03.2019 to prevent ghost directories
-		//
-		// The Assumption is that FilePathPrefix.outFilePath will always be called, before
-		//   any new file is created. It in turn calls PathUtilities.createNecessaryDirs()
-		//
-		// If no problems are shown over time, then we can fully remove this comment
-		//
-		//Files.createDirectories(boundFilePathPrefix.getFolderPath());
 	}
 	
 	/** Adds an additional operation recorder alongside any existing recorders */
@@ -125,13 +116,13 @@ public class BoundOutputManager {
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
-	public BoundOutputManager bindFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
+	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws IOException {
 		FilePathPrefix fpp = outputManager.prefixForFile(
-			infilePath,
+			input,
 			expIdentifier,
 			manifestRecorder,
 			experimentalManifestRecorder,
-			debugMode
+			context
 		);
 		return new BoundOutputManager( outputManager, fpp, outputWriteSettings, manifestRecorder.getRootFolder(), false, initIfNeeded );
 	}

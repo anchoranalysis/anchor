@@ -1,12 +1,10 @@
 package org.anchoranalysis.io.filepath.prefixer;
 
-
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,46 +26,38 @@ package org.anchoranalysis.io.filepath.prefixer;
  * #L%
  */
 
-
+import java.io.IOException;
 import java.nio.file.Path;
 
-public class FilePathPrefix implements FilePathCreator {
-	
-	private Path folderPath;
-	private String filenamePrefix = "";
-	
-	public FilePathPrefix(Path folderPath) {
-		super();
-		setFolderPath(folderPath.normalize());
-	}
-	
-	public Path getFolderPath() {
-		return folderPath;
-	}
-	public void setFolderPath(Path folderPath) {
-		this.folderPath = folderPath.normalize();
-	}
-	public String getFilenamePrefix() {
-		return filenamePrefix;
-	}
-	public void setFilenamePrefix(String filenamePrefix) {
-		this.filenamePrefix = filenamePrefix;
-	}
-	
-	public Path getCombinedPrefix() {
-		return getFolderPath().resolve( getFilenamePrefix() );
-	}
-	
-	@Override
-	public Path outFilePath( String filePathRelative ) {
+public class FilePathPrefixerParams {
 
-		String combinedFilePath = filenamePrefix + filePathRelative;
+	private boolean debugMode;
 	
-		return folderPath.resolve(combinedFilePath);
+	/**
+	 * A directory indicating where inputs can be located
+	 */
+	private Path outputDirectory;
+
+	public FilePathPrefixerParams(boolean debugMode, Path outputDirectory) throws IOException {
+		super();
+		this.debugMode = debugMode;
+		this.outputDirectory = outputDirectory;
+		checkAbsolutePath(outputDirectory);
+	}
+
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+	public Path getOutputDirectory() {
+		return outputDirectory;
 	}
 		
-	@Override
-	public Path relativePath( Path fullPath ) {
-		return folderPath.relativize( fullPath );
+	private static void checkAbsolutePath(Path outputDirectory) throws IOException {
+		if (outputDirectory!=null && !outputDirectory.isAbsolute()) {
+			throw new IOException(
+				String.format("An non-absolute path was passed to FilePathPrefixerParams of %s", outputDirectory)
+			);
+		}
 	}
 }

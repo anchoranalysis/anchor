@@ -97,7 +97,7 @@ public abstract class OutputExperiment extends Experiment {
 			getExperimentIdentifier().init( expArgs.isGUIEnabled() );
 			
 			BoundOutputManager rootOutputManagerNoErrors = 
-				getOutput().bindRootFolder( this.getExperimentIdentifier().identifier(), experimentalManifest, expArgs.isDebugEnabled() );
+				getOutput().bindRootFolder( this.getExperimentIdentifier().identifier(), experimentalManifest, expArgs.createParamsContext() );
 			
 			assert( rootOutputManagerNoErrors.getOutputWriteSettings().hasBeenInit() );
 			

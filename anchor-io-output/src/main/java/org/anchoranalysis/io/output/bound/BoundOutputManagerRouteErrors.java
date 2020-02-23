@@ -33,6 +33,8 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
@@ -120,8 +122,8 @@ public class BoundOutputManagerRouteErrors {
 		delegate.addOperationRecorder(toAdd);
 	}
 
-	public BoundOutputManager bindFile(Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder,
-			ManifestRecorder experimentalManifestRecorder, boolean debugMode) throws IOException {
-		return delegate.bindFile(infilePath, expIdentifier, manifestRecorder, experimentalManifestRecorder, debugMode);
+	public BoundOutputManager bindFile(InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder,
+			ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context) throws IOException {
+		return delegate.bindFile(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
 	}
 }

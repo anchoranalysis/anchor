@@ -27,12 +27,13 @@ package org.anchoranalysis.io.output.bean;
  */
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
@@ -63,14 +64,14 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		
 	// Binds the output to be connected to a particular file and experiment
 	@Override
-	public FilePathPrefix prefixForFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException {
+	public FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws IOException {
 		
 		// Calculate a prefix from the incoming file, and create a file path generator
-		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( infilePath, expIdentifier, debugMode );
+		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( input, expIdentifier, context );
 		
 		FilePathDifferenceFromFolderPath fpd = new FilePathDifferenceFromFolderPath();
 		fpd.init(
-			this.filePathPrefixer.rootFolderPrefix(expIdentifier, debugMode).getCombinedPrefix(),
+			this.filePathPrefixer.rootFolderPrefix(expIdentifier, context).getCombinedPrefix(),
 			fpp.getCombinedPrefix()
 		);
 		
@@ -83,9 +84,9 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	}
 	
 	@Override
-	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, boolean debugMode ) throws IOException {
+	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws IOException {
 
-		FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, debugMode );
+		FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
 		
 		if (writeOperationRecorder!=null) {
 			writeOperationRecorder.init(prefix.getFolderPath());

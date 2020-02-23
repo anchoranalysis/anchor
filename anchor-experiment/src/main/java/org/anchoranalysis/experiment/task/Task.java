@@ -94,12 +94,9 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		
 		// Bind an outputManager for the task
 		BoundOutputManager outputManagerTask = HelperBindOutputManager.createOutputManagerForTask(
-			paramsUnbound.getParametersExperiment().getOutputManager(),
-			paramsUnbound.getInputObject().pathForBinding(),
-			paramsUnbound.getParametersExperiment().getExperimentIdentifier().identifier(),
+			paramsUnbound.getInputObject(),
 			manifestTask,
-			paramsUnbound.getParametersExperiment().getExperimentalManifest(),
-			paramsUnbound.getParametersExperiment().getExperimentArguments().isDebugEnabled()
+			paramsUnbound.getParametersExperiment()
 		);
 		
 		assert(outputManagerTask.getOutputWriteSettings().hasBeenInit());	
