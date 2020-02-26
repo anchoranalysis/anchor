@@ -82,9 +82,11 @@ public class TextFileLogReporter implements StatefulLogReporter {
 		}
 		
 		if (printWriter!=null) {
-			printWriter.print(message);
-			printWriter.println();
-			printWriter.flush();
+			synchronized(printWriter) {
+				printWriter.print(message);
+				printWriter.println();
+				printWriter.flush();
+			}
 		}
 	}
 	
