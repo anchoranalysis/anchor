@@ -88,7 +88,7 @@ public abstract class Feature extends FeatureBase implements
 	public final String getBeanDscr() {
 		String paramDscr = getParamDscr();
 
-		if (paramDscr != "") {
+		if (!paramDscr.isEmpty()) {
 			return String.format("%s(%s)", getBeanName(), getParamDscr());
 		} else {
 			return getBeanName();
