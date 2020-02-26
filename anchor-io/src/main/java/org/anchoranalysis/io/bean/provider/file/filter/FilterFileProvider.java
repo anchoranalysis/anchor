@@ -33,11 +33,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 public abstract class FilterFileProvider extends FileProvider {
 
@@ -52,16 +50,16 @@ public abstract class FilterFileProvider extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+	public Collection<File> matchingFiles(InputManagerParams params)
 			throws AnchorIOException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext, logger);
+		Collection<File> filesIn = fileProvider.matchingFiles(params);
 		
 		List<File> filesOut = new ArrayList<>();
 		
 		for( File f : filesIn ) {
 			
-			if (isFileAccepted(f, inputContext.isDebugMode())) {
+			if (isFileAccepted(f, params.isDebugMode())) {
 				filesOut.add(f);
 			}
 		}

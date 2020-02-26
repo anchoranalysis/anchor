@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileSet;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.file.FileWrite;
@@ -71,9 +72,11 @@ public class SerializedObjectSetFolderSource extends SequencedFolder {
 		
 		try {
 			Collection<File> files = fileSet.matchingFiles(
-				ProgressReporterNull.get(),
-				new InputContextParams(),
-				null		// Can be safely set to null as fileSet.setIgnoreHidden(false);
+				new InputManagerParams(
+					new InputContextParams(),
+					ProgressReporterNull.get(),
+					null		// HACK: Can be safely set to null as fileSet.setIgnoreHidden(false);						
+				)
 			);
 			
 			for ( File file : files ) {

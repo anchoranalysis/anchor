@@ -45,6 +45,7 @@ import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -81,9 +82,11 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 		
 		try {	
 			List<T> inputObjects = getInput().inputObjects(
-				expArgs.createInputContext(),
-				ProgressReporterNull.get(),
-				new LogErrorReporter(logReporter)
+				new InputManagerParams(
+					expArgs.createInputContext(),
+					ProgressReporterNull.get(),
+					new LogErrorReporter(logReporter)
+				)
 			);
 			
 			ParametersExperiment params = createParams(

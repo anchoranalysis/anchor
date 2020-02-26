@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.bean.input;
+package org.anchoranalysis.io.error;
 
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,28 +26,20 @@ package org.anchoranalysis.io.bean.input;
  * #L%
  */
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-import java.util.List;
-
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.InputFromManager;
-
-/**
- * Base class for describing the input to an experiment (i.e. which files etc. form the source of the
- *   experimenent)
- * 
- * @author Owen Feehan
- *
- * @param <T> input-type
- */
-public abstract class InputManager<T extends InputFromManager> extends AnchorBean<InputManager<T>> {
+public class AnchorIOException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8305744272662659794L;
+	private static final long serialVersionUID = 1L;
 
-	public abstract List<T> inputObjects(InputManagerParams params) throws AnchorIOException;
+	public AnchorIOException(String message) {
+		super(message);
+	}
 
+	public AnchorIOException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

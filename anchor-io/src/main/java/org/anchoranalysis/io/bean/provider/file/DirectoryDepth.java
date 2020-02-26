@@ -35,9 +35,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.apache.commons.io.DirectoryWalker;
@@ -61,21 +60,23 @@ public class DirectoryDepth extends FileProviderWithDirectory {
 
 
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 		
-		String[] filesDir = getDirectoryAsPath(inputContext).toFile().list();
+		Path dirAsPath = getDirectoryAsPath(params.getInputContext());
+		
+		String[] filesDir = dirAsPath.toFile().list();
 		
 		if (filesDir==null) {
 			throw new AnchorIOException(
-				String.format("Path %s is not valid. Cannot enumerate directory.", getDirectoryAsPath(inputContext))
+				String.format("Path %s is not valid. Cannot enumerate directory.", dirAsPath)
 			);
 		}
 		
 		int numFiles = filesDir.length;
 		
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, numFiles) ) {
+		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), numFiles) ) {
 			WalkToDepth walkTo = new WalkToDepth(exactDepth, prm);
-			return walkTo.findDirs( getDirectoryAsPath(inputContext).toFile());
+			return walkTo.findDirs( dirAsPath.toFile() );
 		} catch (IOException e) {
 			throw new AnchorIOException("A failure occurred searching for directories", e);
 		}

@@ -33,10 +33,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 public class FileList extends FileProvider {
 
@@ -48,10 +46,10 @@ public class FileList extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 
-		progressReporter.setMin(0);
-		progressReporter.setMax( listPaths.size() );
+		params.getProgressReporter().setMin(0);
+		params.getProgressReporter().setMax( listPaths.size() );
 		
 		List<File> listOut = new ArrayList<>();
 		
@@ -61,7 +59,7 @@ public class FileList extends FileProvider {
 			File f = new File(s);
 			listOut.add(f);
 			
-			progressReporter.update(i+1);
+			params.getProgressReporter().update(i+1);
 		}
 		
 		return listOut;

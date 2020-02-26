@@ -39,10 +39,9 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.error.BeanCombinableException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.glob.GlobExtractor;
 import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
@@ -92,13 +91,13 @@ public class FileSet extends FileProviderWithDirectory {
 	
 	// Matching files
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 		
 		// If we don't have an absolute Directory(), we combine it with the localizedPath
-		Path dir = getDirectoryAsPath( inputContext );
+		Path dir = getDirectoryAsPath( params.getInputContext() );
 
 		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
-		return matcher.matchingFiles(dir, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, inputContext, progressReporter, logger);
+		return matcher.matchingFiles(dir, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
 	}
 	
 	
