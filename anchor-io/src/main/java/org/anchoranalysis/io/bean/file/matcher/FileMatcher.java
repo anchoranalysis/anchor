@@ -28,7 +28,6 @@ package org.anchoranalysis.io.bean.file.matcher;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,10 +35,13 @@ import java.util.Collection;
 import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.file.findmatching.FindMatchingFiles;
+import org.anchoranalysis.core.file.findmatching.FindFilesException;
 import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithProgressReporter;
 import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithoutProgressReporter;
 import org.anchoranalysis.core.file.findmatching.PathMatchConstraints;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**
@@ -61,16 +63,18 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 	 * @param dir root directory to search
 	 * @param recursive whether to recursively search
 	 * @param ignoreHidden whether to ignore hidden files/directories or not 
+	 * @param boolean acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging it), otherwise throws an exception
 	 * @param maxDirDepth a maximum depth in directories to search
 	 * @param inputContext parameters providing input-context
 	 * @param progressReporter progress-reporter
+	 * @param logger logger
 	 * @return a collection of files matching the conditions
 	 * @throws IOException if an error occurrs reading/writing or interacting with the filesystem
 	 */
-	public Collection<File> matchingFiles(Path dir, boolean recursive, boolean ignoreHidden, int maxDirDepth, InputContextParams inputContext, ProgressReporter progressReporter) throws IOException {
+	public Collection<File> matchingFiles(Path dir, boolean recursive, boolean ignoreHidden, boolean acceptDirectoryErrors, int maxDirDepth, InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
 		
 		if (!Files.exists(dir) || !Files.isDirectory(dir)) {
-			throw new FileNotFoundException( String.format("Directory '%s' does not exist", dir) );
+			throw new AnchorIOException( String.format("Directory '%s' does not exist", dir) );
 		}
 		
 		// Many checks are possible on a file, including whether it is hidden or not
@@ -79,14 +83,20 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 		// The only check on a directory is (maybe) whether it is hidden or not
 		Predicate<Path> dirPred = maybeAddIgnoreHidden( ignoreHidden, p->true ); 
 		
-		return createMatchingFiles(progressReporter, recursive).apply(
-			dir,
-			new PathMatchConstraints(
-				filePred,
-				dirPred,
-				maxDirDepth
-			)
-		);
+		try {
+			return createMatchingFiles(progressReporter, recursive).apply(
+				dir,
+				new PathMatchConstraints(
+					filePred,
+					dirPred,
+					maxDirDepth
+				),
+				acceptDirectoryErrors,
+				logger
+			);
+		} catch (FindFilesException e) {
+			throw new AnchorIOException("Cannot find matching files", e);
+		}
 	}
 	
 	private Predicate<Path> maybeAddIgnoreHidden( boolean ignoreHidden, Predicate<Path> pred ) {

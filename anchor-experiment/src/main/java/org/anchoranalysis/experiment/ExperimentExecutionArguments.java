@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -86,7 +87,7 @@ public class ExperimentExecutionArguments {
 		return out;
 	}
 	
-	public FilePathPrefixerParams createParamsContext() throws IOException {
+	public FilePathPrefixerParams createParamsContext() throws AnchorIOException {
 		return new FilePathPrefixerParams(debugEnabled, outputDirectory);
 	}
 	

@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.error.BeanStrangeException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -51,9 +52,9 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
 	 * @param experimentIdentifier an identifier for the experiment
 	 * @param outputContext TODO
 	 * @return a prefixer
-	 * @throws IOException if something goes wrong
+	 * @throws AnchorIOException TODO
 	 */
-	public abstract FilePathPrefix outFilePrefix( InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context ) throws IOException;
+	public abstract FilePathPrefix outFilePrefix( InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context ) throws AnchorIOException;
 	
 	/**
 	 * Provides a prefix that becomes the root-folder. The prefix should be an absolute path.
@@ -61,9 +62,9 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
 	 * @param experimentIdentifier an identifier for the experiment
 	 * @param outputContext TODO
 	 * @return a prefixer
-	 * @throws IOException
+	 * @throws AnchorIOException TODO
 	 */
-	public abstract FilePathPrefix rootFolderPrefix( String experimentIdentifier, FilePathPrefixerParams context ) throws IOException;
+	public abstract FilePathPrefix rootFolderPrefix( String experimentIdentifier, FilePathPrefixerParams context ) throws AnchorIOException;
 	
 	/**
 	 * Converts a relative-path to an absolute-path (relative to the file-path associated with this current bean)

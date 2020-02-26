@@ -27,10 +27,10 @@ package org.anchoranalysis.feature.io.csv;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
@@ -86,7 +86,7 @@ public abstract class TableCSVGenerator<T> extends CSVGenerator implements Itera
 		
 		try (CSVWriter writer = CSVWriter.create(filePath)) {
 			writeRowsAndColumns( writer, element, headerNames );
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new OutputWriteFailedException(e);
 		}
 	}

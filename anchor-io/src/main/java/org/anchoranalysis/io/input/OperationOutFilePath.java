@@ -27,7 +27,6 @@ package org.anchoranalysis.io.input;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
@@ -35,6 +34,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class OperationOutFilePath extends CachedOperation<Path> {
 
@@ -54,7 +54,7 @@ public class OperationOutFilePath extends CachedOperation<Path> {
 	protected Path execute() throws ExecuteException {
 		try {
 			return ni.getValue().outFilePath( path.get(), debugMode );
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExecuteException(e);
 		}
 	}

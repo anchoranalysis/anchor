@@ -39,9 +39,11 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.error.BeanCombinableException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.glob.GlobExtractor;
 import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -77,6 +79,12 @@ public class FileSet extends FileProviderWithDirectory {
 	 */
 	@BeanField
 	private boolean ignoreHidden = true;
+	
+	/**
+	 * if TRUE, continues when a directory-access-error occurs (logging it), otherwise throws an exception
+	 */
+	@BeanField
+	private boolean acceptDirectoryErrors = false;
 	// END BEAN PROPERTIES
 	
 	public FileSet() {
@@ -84,13 +92,13 @@ public class FileSet extends FileProviderWithDirectory {
 	
 	// Matching files
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
 		
 		// If we don't have an absolute Directory(), we combine it with the localizedPath
 		Path dir = getDirectoryAsPath( inputContext );
 
 		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
-		return matcher.matchingFiles(dir, recursive, ignoreHidden, maxDirDepth, inputContext, progressReporter);
+		return matcher.matchingFiles(dir, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, inputContext, progressReporter, logger);
 	}
 	
 	
@@ -191,5 +199,13 @@ public class FileSet extends FileProviderWithDirectory {
 
 	public void setMatcher(FileMatcher matcher) {
 		this.matcher = matcher;
+	}
+
+	public boolean isAcceptDirectoryErrors() {
+		return acceptDirectoryErrors;
+	}
+
+	public void setAcceptDirectoryErrors(boolean acceptDirectoryErrors) {
+		this.acceptDirectoryErrors = acceptDirectoryErrors;
 	}
 }

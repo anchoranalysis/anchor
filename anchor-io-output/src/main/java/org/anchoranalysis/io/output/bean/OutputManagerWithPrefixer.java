@@ -4,7 +4,7 @@ package org.anchoranalysis.io.output.bean;
  * #%L
  * anchor-io-output
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,9 @@ package org.anchoranalysis.io.output.bean;
  * #L%
  */
 
-import java.io.IOException;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
@@ -64,7 +63,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		
 	// Binds the output to be connected to a particular file and experiment
 	@Override
-	public FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws IOException {
+	public FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
 		
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( input, expIdentifier, context );
@@ -84,7 +83,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	}
 	
 	@Override
-	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws IOException {
+	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
 
 		FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
 		

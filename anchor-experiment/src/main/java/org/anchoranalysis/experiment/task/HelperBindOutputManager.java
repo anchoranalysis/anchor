@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -60,7 +61,7 @@ class HelperBindOutputManager {
 				params.getOutputManager().addOperationRecorder( manifestTask.getRootFolder() );
 				return params.getOutputManager().getDelegate();
 			}
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new JobExecutionException(
 				String.format(
 					"Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'%n%s",

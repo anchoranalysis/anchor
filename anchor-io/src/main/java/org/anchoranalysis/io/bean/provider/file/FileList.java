@@ -28,13 +28,14 @@ package org.anchoranalysis.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class FileList extends FileProvider {
@@ -47,7 +48,7 @@ public class FileList extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws FileNotFoundException {
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
 
 		progressReporter.setMin(0);
 		progressReporter.setMax( listPaths.size() );

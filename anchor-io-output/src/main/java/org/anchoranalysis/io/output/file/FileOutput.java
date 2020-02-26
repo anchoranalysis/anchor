@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
 public class FileOutput extends AnchorBean<FileOutput> {
@@ -76,11 +77,15 @@ public class FileOutput extends AnchorBean<FileOutput> {
 	}
 	
 	
-	public void start() throws IOException {
+	public void start() throws AnchorIOException {
 		
-		FileWriter fileWriter = new FileWriter( filePath );
-		
-		this.out = new PrintWriter(fileWriter);
+		try {
+			FileWriter fileWriter = new FileWriter( filePath );
+			
+			this.out = new PrintWriter(fileWriter);
+		} catch (IOException e) {
+			throw new AnchorIOException("Cannot create file-writer", e);
+		}
 	}
 	
 	public boolean isEnabled() {

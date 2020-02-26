@@ -27,11 +27,12 @@ package org.anchoranalysis.core.file.findmatching;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
+
 public abstract class FindMatchingFiles {
 
-	public abstract Collection<File> apply( Path dir, PathMatchConstraints constraints ) throws IOException;
+	public abstract Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException;
 }

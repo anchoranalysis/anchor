@@ -33,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	// START NORMAL-BEHAVIOUR
 	
 	@Test
-	public void testFolderAbsoluteWindowsFolder() throws IOException {
+	public void testFolderAbsoluteWindowsFolder() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -59,7 +60,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void testFolderAbsoluteWindowsNonFolderBase() throws IOException {
+	public void testFolderAbsoluteWindowsNonFolderBase() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -69,7 +70,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 	
 	@Test
-	public void testFolderAbsoluteUnixFolder() throws IOException {
+	public void testFolderAbsoluteUnixFolder() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -82,7 +83,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void testFolderAbsoluteUnixNonFolderBase() throws IOException {
+	public void testFolderAbsoluteUnixNonFolderBase() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -93,7 +94,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 
 	@Test
-	public void testFolderRelativeWindowsFolder() throws IOException {
+	public void testFolderRelativeWindowsFolder() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -106,7 +107,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void testFolderRelativeWindowsNonFolderBase() throws IOException {
+	public void testFolderRelativeWindowsNonFolderBase() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -116,7 +117,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 	
 	@Test
-	public void testFolderRelativeUnixFolder() throws IOException {
+	public void testFolderRelativeUnixFolder() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(
@@ -129,7 +130,7 @@ public class FilePathDifferenceFromFolderPathTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void testFolderRelativeUnixNonFolderBase() throws IOException {
+	public void testFolderRelativeUnixNonFolderBase() throws AnchorIOException {
 		
 		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
 		fdd.init(

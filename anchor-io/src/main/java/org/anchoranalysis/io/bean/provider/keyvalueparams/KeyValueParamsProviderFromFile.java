@@ -38,6 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
@@ -57,7 +58,8 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 		try {
 			Collection<File> files = fileProvider.matchingFiles(
 				ProgressReporterNull.get(),
-				new InputContextParams()
+				new InputContextParams(),
+				getLogger()
 			);
 			
 			if (files.size()==0) {
@@ -73,6 +75,8 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 				
 		} catch (IOException e) {
 			throw new CreateException(e);
+		} catch (AnchorIOException e) {
+			throw new CreateException("Cannot find files", e);
 		}
 	}
 

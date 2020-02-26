@@ -1,6 +1,6 @@
 package org.anchoranalysis.annotation.io.mark;
 
-import java.io.IOException;
+
 
 /*
  * #%L
@@ -36,6 +36,7 @@ import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.io.CfgDeserializer;
@@ -54,7 +55,7 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 	}
 	
 	@Override
-	public MarkAnnotation read( Path path ) throws IOException {
+	public MarkAnnotation read( Path path ) throws AnchorIOException {
 		
 		Path pathMaybeChanged = fileNameToRead(path);
 		
@@ -65,7 +66,7 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 		try {
 			return readAnnotationFromPath(pathMaybeChanged);
 		} catch (DeserializationFailedException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("Cannot deserialize annotation", e);
 		}
 	}
 		

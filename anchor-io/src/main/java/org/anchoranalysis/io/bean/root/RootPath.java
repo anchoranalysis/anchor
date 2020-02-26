@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -76,7 +77,7 @@ public class RootPath extends AnchorBean<RootPath> {
 	 * @return the split-path
 	 * @throws IOException if the path cannot be matched against the root
 	 */
-	public SplitPath split( Path path ) throws IOException {
+	public SplitPath split( Path path ) throws AnchorIOException {
 		
 		SplitPath out = new SplitPath();
 		

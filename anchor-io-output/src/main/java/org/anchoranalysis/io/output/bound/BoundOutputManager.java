@@ -32,6 +32,7 @@ package org.anchoranalysis.io.output.bound;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -81,7 +82,7 @@ public class BoundOutputManager {
 		IWriteOperationRecorder writeOperationRecorder,
 		boolean delExistingFolder,
 		WriterExecuteBeforeEveryOperation parentInit
-	) throws IOException {
+	) throws AnchorIOException {
 		
 		this.boundFilePathPrefix = boundFilePathPrefix;
 		this.outputManager = outputManager;
@@ -110,13 +111,13 @@ public class BoundOutputManager {
 			fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
 			
 			return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, delExistingFolder, initIfNeeded);
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new OutputWriteFailedException(e);
 		}
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
-	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws IOException {
+	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
 		FilePathPrefix fpp = outputManager.prefixForFile(
 			input,
 			expIdentifier,

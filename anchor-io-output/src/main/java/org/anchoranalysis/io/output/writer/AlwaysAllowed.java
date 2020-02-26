@@ -27,11 +27,11 @@ package org.anchoranalysis.io.output.writer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -89,7 +89,7 @@ public class AlwaysAllowed extends Writer {
 				bom.isDelExistingFolder(),
 				preop
 			);
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new OutputWriteFailedException("Failed to create output-manager", e);
 		}
 	}

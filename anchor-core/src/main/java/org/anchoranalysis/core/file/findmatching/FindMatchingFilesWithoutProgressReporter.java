@@ -27,19 +27,29 @@ package org.anchoranalysis.core.file.findmatching;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
+
 public class FindMatchingFilesWithoutProgressReporter extends FindMatchingFiles {
 	
 	@Override
-	public Collection<File> apply( Path dir, PathMatchConstraints constraints ) throws IOException {
+	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
 		
 		List<File> listOut = new ArrayList<>();
-		WalkSingleDir.apply( dir, constraints, listOut );
+		try {
+			WalkSingleDir.apply( dir, constraints, listOut );
+		} catch (FindFilesException e) {
+			if (acceptDirectoryErrors) {
+				logger.getErrorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
+			} else {
+				// Rethrow the exception
+				throw e;
+			}
+		}
 		return listOut;
 	}
 }

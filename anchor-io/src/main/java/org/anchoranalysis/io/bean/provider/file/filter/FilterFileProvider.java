@@ -28,15 +28,15 @@ package org.anchoranalysis.io.bean.provider.file.filter;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public abstract class FilterFileProvider extends FileProvider {
@@ -52,28 +52,24 @@ public abstract class FilterFileProvider extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext)
-			throws IOException {
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+			throws AnchorIOException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext);
+		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext, logger);
 		
 		List<File> filesOut = new ArrayList<>();
 		
 		for( File f : filesIn ) {
 			
-			try {
-				if (isFileAccepted(f, inputContext.isDebugMode())) {
-					filesOut.add(f);
-				}
-			} catch (DeserializationFailedException e) {
-				throw new IOException(e);
+			if (isFileAccepted(f, inputContext.isDebugMode())) {
+				filesOut.add(f);
 			}
 		}
 		
 		return filesOut;
 	}
 	
-	protected abstract boolean isFileAccepted( File file, boolean debugMode ) throws IOException, DeserializationFailedException;
+	protected abstract boolean isFileAccepted( File file, boolean debugMode ) throws AnchorIOException;
 	
 
 	public FileProvider getFileProvider() {

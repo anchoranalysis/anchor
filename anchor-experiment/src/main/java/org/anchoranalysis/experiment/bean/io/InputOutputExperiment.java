@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
@@ -44,7 +45,7 @@ import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -78,20 +79,19 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	@Override
 	protected void execExperiment( BoundOutputManagerRouteErrors outputManager, ManifestRecorder experimentalManifest, ExperimentExecutionArguments expArgs, LogReporter logReporter ) throws ExperimentExecutionException {
 		
-		try {
+		try {	
 			List<T> inputObjects = getInput().inputObjects(
 				expArgs.createInputContext(),
-				ProgressReporterNull.get()
+				ProgressReporterNull.get(),
+				new LogErrorReporter(logReporter)
 			);
 			
-			ParametersExperiment params = new ParametersExperiment();
-			params.setExperimentalManifest(experimentalManifest);
-			params.setOutputManager(outputManager);
-			params.setExperimentIdentifier(getExperimentIdentifier());
-			params.setExperimentArguments(expArgs);
-			params.setLogReporterExperiment(logReporter);
-			params.setLogReporterTaskCreator(logReporterTask);
-			params.setDetailedLogging( useDetailedLogging() );
+			ParametersExperiment params = createParams(
+				experimentalManifest,
+				outputManager,
+				expArgs,
+				logReporter
+			);
 			
 			taskProcessor.executeLogStats(
 				outputManager,
@@ -99,9 +99,21 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 				params
 			);
 			
-		} catch (IOException | DeserializationFailedException e) {
-			throw new ExperimentExecutionException(e);
-		}
+		} catch (AnchorIOException | IOException e) {
+			throw new ExperimentExecutionException("An error occured while searching for inputs", e);
+		}			
+	}
+	
+	private ParametersExperiment createParams(ManifestRecorder experimentalManifest, BoundOutputManagerRouteErrors outputManager, ExperimentExecutionArguments expArgs, LogReporter logReporter) {
+		ParametersExperiment params = new ParametersExperiment();
+		params.setExperimentalManifest(experimentalManifest);
+		params.setOutputManager(outputManager);
+		params.setExperimentIdentifier(getExperimentIdentifier());
+		params.setExperimentArguments(expArgs);
+		params.setLogReporterExperiment(logReporter);
+		params.setLogReporterTaskCreator(logReporterTask);
+		params.setDetailedLogging( useDetailedLogging() );
+		return params;
 	}
 	
 	@Override

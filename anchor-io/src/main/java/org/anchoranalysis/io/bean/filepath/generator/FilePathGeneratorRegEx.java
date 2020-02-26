@@ -27,7 +27,6 @@ package org.anchoranalysis.io.bean.filepath.generator;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Matcher;
@@ -35,6 +34,7 @@ import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 // Generates an out string where $digit$ is replaced with the #digit group from a regex
 public class FilePathGeneratorRegEx extends FilePathGenerator {
@@ -67,13 +67,13 @@ public class FilePathGeneratorRegEx extends FilePathGenerator {
 	}
 	
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		
 		Matcher m;
 		try {
 			m = match(pathIn, regEx);
 		} catch (OperationFailedException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("Cannot match against the regular expression", e);
 		}
 		
 		String outStr = new String(outPath);

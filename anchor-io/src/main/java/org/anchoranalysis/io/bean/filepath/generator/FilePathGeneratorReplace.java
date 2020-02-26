@@ -4,7 +4,7 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Generates a file-path by replacing all occurrences of a string-pattern with another
@@ -56,7 +56,7 @@ public class FilePathGeneratorReplace extends FilePathGenerator {
 	// END BEAN FIELDS
 	
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 	
 		String outStr = Utilities.convertBackslashes(pathIn);
 		

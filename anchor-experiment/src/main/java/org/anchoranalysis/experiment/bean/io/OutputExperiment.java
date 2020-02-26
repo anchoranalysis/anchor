@@ -27,8 +27,6 @@ package org.anchoranalysis.experiment.bean.io;
  */
 
 
-import java.io.IOException;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
@@ -41,6 +39,7 @@ import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
@@ -173,7 +172,7 @@ public abstract class OutputExperiment extends Experiment {
 				logReporter.close(true);
 			}
 			
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
@@ -190,7 +189,7 @@ public abstract class OutputExperiment extends Experiment {
 	}
 	
 	// Runs the experiment on all files
-	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
+	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) {
 		UpdateLog4JOutputManager.updateLog4J(bom);
 	}
 	

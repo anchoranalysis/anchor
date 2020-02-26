@@ -28,11 +28,12 @@ package org.anchoranalysis.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public abstract class FileProvider extends AnchorBean<FileProvider> {
@@ -42,5 +43,5 @@ public abstract class FileProvider extends AnchorBean<FileProvider> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public abstract Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException;
+	public abstract Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException;
 }

@@ -28,7 +28,6 @@ package org.anchoranalysis.io.bean.provider.file.filter;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FilterForExistingFiles extends FilterFileProvider {
 
@@ -51,7 +50,7 @@ public class FilterForExistingFiles extends FilterFileProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected boolean isFileAccepted( File file, boolean debugMode ) throws IOException, DeserializationFailedException {
+	protected boolean isFileAccepted( File file, boolean debugMode ) throws AnchorIOException {
 		
 		for( FilePathGenerator fpg : listFilePathGenerator ) {
 			Path annotationPath = fpg.outFilePath( file.toPath(), debugMode );

@@ -35,15 +35,18 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
+import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
@@ -80,10 +83,13 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 		try {
 			files = inputManagerBeanPathProvider.matchingFiles(
 				ProgressReporterNull.get(),
-				expArgs.createInputContext()
+				expArgs.createInputContext(),
+				new LogErrorReporter( new ConsoleLogReporter() )
 			);
-		} catch (IOException e1) {
-			throw new ExperimentExecutionException(e1);
+		} catch (AnchorIOException e) {
+			throw new ExperimentExecutionException("Cannot find input manager files", e);
+		} catch (IOException e) {
+			throw new ExperimentExecutionException("Cannot create input context", e);
 		}
 		
 		try {
