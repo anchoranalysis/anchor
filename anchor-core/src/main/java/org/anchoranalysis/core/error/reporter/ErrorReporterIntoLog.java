@@ -44,6 +44,9 @@ public class ErrorReporterIntoLog implements ErrorReporter {
 	
 	private LogReporter logReporter;
 
+	private final static String START_BANNER = "------------ BEGIN ERROR ------------" + System.lineSeparator();
+	private final static String END_BANNER =  System.lineSeparator() + "------------ END ERROR ------------";
+	
 	public ErrorReporterIntoLog(LogReporter logReporter) {
 		super();
 		assert logReporter!=null;
@@ -55,45 +58,36 @@ public class ErrorReporterIntoLog implements ErrorReporter {
 		
 		// Special behaviour if it's a friendly exception
 		if (exc instanceof IFriendlyException) {
-			startErrorBanner();
 			IFriendlyException eCast = (IFriendlyException) exc;
-			logReporter.log( eCast.friendlyMessageHierarchy() );
-			endErrorBanner();
+			logWithBanner( eCast.friendlyMessageHierarchy() );
 		} else {
-			startErrorBanner();
 			try {
-				logReporter.log( exc.toString() );
-				logReporter.log("");	// newline
-				logReporter.log( ExceptionUtils.getFullStackTrace(exc) );
+				logWithBanner( exc.toString() + System.lineSeparator() +  ExceptionUtils.getFullStackTrace(exc), classOriginating );
 			} catch (Exception e) {
 				logReporter.log("An error occurred while writing an error: " + e.toString());
-			} finally {
-				endErrorBanner(classOriginating);
 			}
 		}
 	}
 
 	@Override
 	public void recordError(Class<?> classOriginating, String errorMsg) {
-		startErrorBanner();
+		
 		try {
-			logReporter.log( errorMsg );
+			logWithBanner( errorMsg, classOriginating );
 		} catch (Exception e) {
-			logReporter.log("An error occurred while writing an error: " + e.toString());
-		} finally {
-			endErrorBanner(classOriginating);
+			logReporter.log("An error occurred while writing an error: " + e.toString() );
 		}
 	}
 	
-	private void startErrorBanner() {
-		logReporter.log( "------------ BEGIN ERROR ------------" );
+	private void logWithBanner( String logMessage ) {
+		logReporter.log( START_BANNER + logMessage + END_BANNER );
 	}
 	
-	private void endErrorBanner() {
-		logReporter.log("------------ END ERROR ------------");
+	private void logWithBanner( String logMessage, Class<?> classOriginating ) {
+		logReporter.log( START_BANNER + logMessage + classMessage(classOriginating) + END_BANNER );
 	}
 	
-	private void endErrorBanner( Class<?> c ) {
-		logReporter.logFormatted( "%nThe error occurred when executing a method in class %s%n------------ END ERROR ------------", c.getName() );
+	private static String classMessage( Class<?> c ) {
+		return String.format( "%nThe error occurred when executing a method in class %s", c.getName() );
 	}
 }
