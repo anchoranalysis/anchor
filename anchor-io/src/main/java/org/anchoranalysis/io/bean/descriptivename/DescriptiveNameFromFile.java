@@ -31,7 +31,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveNameFromFile> {
@@ -41,9 +45,40 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public DescriptiveFile descriptiveNameFor( File file, String elseName ) {
+	public DescriptiveFile descriptiveNameFor( File file, String elseName ) throws AnchorIOException {
 		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
 	}
 	
+	/** Like descriptiveNames for but checks that the final list of descriptive-files all have unique descriptive-names */
+	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files, String elseName ) throws AnchorIOException {
+		List<DescriptiveFile> list = descriptiveNamesFor(files, elseName);
+		checkUniqueness(list);
+		return list;
+	}
+	
+	/**
+	 * Extracts a list of descriptive-names (with associated) file for some files
+	 * 
+	 * @param files the files
+	 * @param elseName a string to use if an error occurs extracting the descriptive-name (used as a prefix with an index)
+	 * @return a list of identical size and order to files, corresponding to the extracted names
+	 */
 	public abstract List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName );
+	
+	private static void checkUniqueness( List<DescriptiveFile> list ) throws AnchorIOException {
+		Map<String,Long> countDescriptiveNames = list.stream().collect(
+			Collectors.groupingBy(
+				d -> d.getDescriptiveName(),
+				Collectors.counting()
+			)
+		);
+		
+		for (Map.Entry<String, Long> entry : countDescriptiveNames.entrySet()) {
+			if(entry.getValue()>1) {
+				throw new AnchorIOException(
+					String.format("The extracted descriptive-names are not unique for %s", entry.getKey())
+				);
+			}
+		}
+	}
 }

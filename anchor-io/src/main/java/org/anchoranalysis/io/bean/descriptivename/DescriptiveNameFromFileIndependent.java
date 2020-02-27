@@ -71,14 +71,17 @@ public abstract class DescriptiveNameFromFileIndependent extends DescriptiveName
 		try {
 			return createDescriptiveName(file, index);
 		} catch (CreateException e) {
+			
+			String elseNameWithIndex = String.format("%s04%d", elseName, index);
+			
 			String msg = String.format(
 				"Cannot create a descriptive-name for file %s and index %d. Using '%s' instead.",
 				file.getPath(),
 				index,
-				elseName
+				elseNameWithIndex
 			);
 			log.log( Level.WARNING, msg, e );
-			return elseName;
+			return elseNameWithIndex;
 		}
 	}
 }

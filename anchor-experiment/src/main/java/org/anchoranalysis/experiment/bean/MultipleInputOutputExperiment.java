@@ -95,9 +95,9 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 			throw new ExperimentExecutionException("Cannot create input context", e);
 		}
 		
+		List<DescriptiveFile> list = descriptiveNames(files);
+		
 		try {
-			List<DescriptiveFile> list = descriptiveNameFromFile.descriptiveNamesFor(files, "Invalid Name");
-			
 			int i = 0;
 			for( DescriptiveFile df : list ) {
 
@@ -113,9 +113,16 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 			}
 		
 		} catch (BeanXmlException e ) {
-			System.out.printf("Ending early due to exception" );
-			throw new ExperimentExecutionException(e);
+			throw new ExperimentExecutionException("Ending early due to error in BeanXML", e);
 		}
+	}
+	
+	private List<DescriptiveFile> descriptiveNames( Collection<File> files ) throws ExperimentExecutionException {
+		try {
+			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "Invalid Name");
+		} catch (AnchorIOException e ) {
+			throw new ExperimentExecutionException("An error occurred getting descriptive-names for the files", e);
+		}			
 	}
 
 	@Override
