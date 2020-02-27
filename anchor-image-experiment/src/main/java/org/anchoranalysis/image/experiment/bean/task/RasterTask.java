@@ -69,7 +69,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 			startSeries( outputManager, logErrorReporter.getErrorReporter() );
 			
 			for (int s=0; s<numSeries; s++) {
-				doStack( inputObject, s, outputManager, logErrorReporter, inputObject.descriptiveName(), params.getExperimentArguments() );
+				doStack( inputObject, s, numSeries, outputManager, logErrorReporter, params.getExperimentArguments() );
 			}
 			
 			endSeries( outputManager );
@@ -81,7 +81,18 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 	
 	public abstract void startSeries( BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter ) throws JobExecutionException;
 	
-	public abstract void doStack( NamedChnlsInput inputObject, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException;
+	/**
+	 * Processes one stack from a series
+	 * 
+	 * @param inputObject the input-object corresponding to this stack (a set of named-channels)
+	 * @param seriesIndex the index that is being currently processed from the series
+	 * @param numSeries the total number of images in the series (constant for a given task)
+	 * @param outputManager output-manager
+	 * @param logErrorReporter log-error reporter
+	 * @param expArgs experiment-arguments
+	 * @throws JobExecutionException
+	 */
+	public abstract void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException;
 	
 	public abstract void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException;
 	
