@@ -36,7 +36,7 @@ import java.util.List;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileSet;
+import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
@@ -60,7 +60,7 @@ public class SerializedObjectSetFolderSource extends SequencedFolder {
 	public SerializedObjectSetFolderSource( Path folderPath, String acceptFilter ) throws SequenceTypeException {
 		super();
 
-		FileSet fileSet = createFileSet(folderPath, acceptFilter);
+		SearchDirectory fileSet = createFileSet(folderPath, acceptFilter);
 		
 		incrSequenceType = new IncrementalSequenceType();
 		int i = 0;
@@ -117,10 +117,10 @@ public class SerializedObjectSetFolderSource extends SequencedFolder {
 	}
 	
 	// AcceptFilter can be null in which case, it is ignored
-	private FileSet createFileSet( Path folderPath, String acceptFilter ) {
+	private SearchDirectory createFileSet( Path folderPath, String acceptFilter ) {
 		
 		// We use fileSets so as to be expansible with the future
-		FileSet fileSet = new FileSet();
+		SearchDirectory fileSet = new SearchDirectory();
 		fileSet.setDirectory( folderPath );
 		fileSet.setIgnoreHidden(false);
 		

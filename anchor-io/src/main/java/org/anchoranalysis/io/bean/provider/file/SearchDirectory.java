@@ -48,7 +48,7 @@ import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 import org.anchoranalysis.io.params.InputContextParams;
 
 @SuppressWarnings("unused")
-public class FileSet extends FileProviderWithDirectory {
+public class SearchDirectory extends FileProviderWithDirectory {
 
 	/**
 	 * 
@@ -86,7 +86,7 @@ public class FileSet extends FileProviderWithDirectory {
 	private boolean acceptDirectoryErrors = false;
 	// END BEAN PROPERTIES
 	
-	public FileSet() {
+	public SearchDirectory() {
 	}
 	
 	// Matching files

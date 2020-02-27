@@ -49,7 +49,7 @@ import org.anchoranalysis.io.params.InputContextParams;
  * @author owen
  *
  */
-public class FileList extends FileProvider {
+public class SpecificPathList extends FileProvider {
 
 	private static final long serialVersionUID = 1L;
 	
