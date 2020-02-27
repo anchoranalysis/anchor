@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.AnchorBean;
@@ -53,6 +54,7 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files, String elseName ) throws AnchorIOException {
 		List<DescriptiveFile> list = descriptiveNamesFor(files, elseName);
 		checkUniqueness(list);
+		checkNoBackslashes(list);
 		return list;
 	}
 	
@@ -76,9 +78,51 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 		for (Map.Entry<String, Long> entry : countDescriptiveNames.entrySet()) {
 			if(entry.getValue()>1) {
 				throw new AnchorIOException(
-					String.format("The extracted descriptive-names are not unique for %s", entry.getKey())
+					String.format(
+						"The extracted descriptive-names are not unique for %s.%nThe following have the same descriptive-name:%n%s",
+						entry.getKey(),
+						keysWithDescriptiveName(entry.getKey(), list)
+					)
 				);
 			}
 		}
 	}
+	
+	private static void checkNoBackslashes( List<DescriptiveFile> list ) throws AnchorIOException {
+		long numWithBackslashes = list.stream()
+				.filter( df-> containsBackslash(df.getDescriptiveName()) )
+				.count();
+		
+		if(numWithBackslashes>0) {
+			throw new AnchorIOException(
+				String.format(
+					"The following descriptive-names contain backslashes:%n%s",
+					keysContainsBackslash(list)
+				)
+			);
+		}
+	}
+
+	// For debugging if there is a non-uniqueness clash between two DescriptiveFiles
+	private static String keysWithDescriptiveName( String descriptiveName, List<DescriptiveFile> list ) {
+		return keysWithDescriptiveNamePredicate( dn->dn.equals(descriptiveName), list );
+	}
+	
+	private static String keysContainsBackslash( List<DescriptiveFile> list ) {
+		return keysWithDescriptiveNamePredicate( dn-> containsBackslash(dn), list );
+	}
+	
+	private static String keysWithDescriptiveNamePredicate( Predicate<String> pred, List<DescriptiveFile> list ) {
+		List<String> matches = list.stream()
+			.filter( df -> pred.test(df.getDescriptiveName()) )
+			.map( df-> df.getPath().toString() )
+			.collect( Collectors.toList() );
+		
+		return String.join(System.lineSeparator(), matches);
+	}
+	
+	private static boolean containsBackslash( String str ) {
+		return str.contains("\\");
+	}
+	
 }

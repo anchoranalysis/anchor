@@ -2,6 +2,7 @@ package org.anchoranalysis.experiment;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
 
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -47,6 +48,11 @@ public class ExperimentExecutionArguments {
 	private boolean debugEnabled = false;
 	
 	/**
+	 * A list of paths referring to specific inputs;
+	 */
+	private List<Path> inputPaths;
+	
+	/**
 	 * A directory indicating where inputs can be located
 	 */
 	private Path inputDirectory;
@@ -84,6 +90,7 @@ public class ExperimentExecutionArguments {
 		if (inputFilterExtensions!=null) {
 			out.setInputFilterExtensions(inputFilterExtensions);
 		}
+		out.setInputPaths(inputPaths);
 		return out;
 	}
 	
@@ -137,6 +144,10 @@ public class ExperimentExecutionArguments {
 	public boolean hasOutputDirectory() {
 		return outputDirectory!=null;
 	}
+	
+	public boolean hasInputFilterExtensions() {
+		return inputFilterExtensions!=null;
+	}
 
 	public void setOutputDirectory(Path outputDirectory) {
 		this.outputDirectory = outputDirectory;
@@ -156,5 +167,13 @@ public class ExperimentExecutionArguments {
 
 	public void setInputFilterExtensions(Set<String> inputFilterExtensions) {
 		this.inputFilterExtensions = inputFilterExtensions;
+	}
+
+	public List<Path> getInputPaths() {
+		return inputPaths;
+	}
+
+	public void setInputPaths(List<Path> inputPaths) {
+		this.inputPaths = inputPaths;
 	}
 }

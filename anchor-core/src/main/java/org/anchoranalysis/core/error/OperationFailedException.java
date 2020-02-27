@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.error;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+
 /*
  * #%L
  * anchor-core
@@ -27,7 +29,7 @@ package org.anchoranalysis.core.error;
  */
 
 
-public class OperationFailedException extends AnchorCheckedException {
+public class OperationFailedException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,6 +41,11 @@ import java.util.Set;
  */
 public class InputContextParams {
 
+	/**
+	 * A list of paths referring to specific inputs;
+	 */
+	private List<Path> inputPaths;
+	
 	/** Iff non-NULL, a directory which can be used by beans to find input */
 	private Path inputDir = null;
 	
@@ -107,7 +113,10 @@ public class InputContextParams {
 		this.guiMode = guiMode;
 	}
 	
-
+	public boolean hasInputPaths() {
+		return inputPaths!=null;
+	}
+	
 	public boolean isDebugMode() {
 		return debugMode;
 	}
@@ -118,5 +127,13 @@ public class InputContextParams {
 
 	public String getInputFilterGlob() {
 		return inputFilterGlob;
+	}
+
+	public List<Path> getInputPaths() {
+		return inputPaths;
+	}
+
+	public void setInputPaths(List<Path> inputPaths) {
+		this.inputPaths = inputPaths;
 	}
 }
