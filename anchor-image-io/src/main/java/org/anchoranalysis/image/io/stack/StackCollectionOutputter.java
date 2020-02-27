@@ -30,12 +30,12 @@ package org.anchoranalysis.image.io.stack;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.OperationFromNamedProvider;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -110,7 +110,7 @@ public class StackCollectionOutputter {
 		return out;
 	}
 	
-	public static void copyFrom( NamedChnlCollectionForSeries src, NamedImgStackCollection target, ProgressReporter progressReporter ) throws RasterIOException {
+	public static void copyFrom( NamedChnlCollectionForSeries src, NamedImgStackCollection target, ProgressReporter progressReporter ) throws GetOperationFailedException {
 		
 		Set<String> keys = src.chnlNames();
 		

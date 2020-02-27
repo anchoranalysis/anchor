@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
@@ -54,7 +55,7 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 	
 	@Override
-	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException {
+	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 		
 		for( NamedChnlCollectionForSeries item : list ) {
 			
@@ -64,11 +65,12 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 			}
 		}
 
-		throw new RasterIOException( String.format("chnlName '%s' is not found", chnlName) );
+		throw new GetOperationFailedException( String.format("chnlName '%s' is not found", chnlName) );
 	}
 
+	@Override
 	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
-			throws RasterIOException {
+			throws GetOperationFailedException {
 
 		for( NamedChnlCollectionForSeries item : list ) {
 			
@@ -83,7 +85,7 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	
 
 	public void addToStackCollection(NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter )
-			throws RasterIOException {
+			throws OperationFailedException {
 		
 		try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, list.size())) {
 			

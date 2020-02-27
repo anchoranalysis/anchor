@@ -63,6 +63,8 @@ public abstract class OpenedRaster implements AutoCloseable {
 	
 	public abstract int bitDepth() throws RasterIOException;
 	
+	public abstract boolean isRGB() throws RasterIOException;
+	
 	public abstract void close() throws RasterIOException;
 	
 	public abstract ImageDim dim( int seriesIndex ) throws RasterIOException;
