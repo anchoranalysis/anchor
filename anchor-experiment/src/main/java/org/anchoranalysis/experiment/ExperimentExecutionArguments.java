@@ -38,11 +38,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class ExperimentExecutionArguments {
 	
 	/**
-	 * Is the GUI enabled
-	 */
-	private boolean guiEnabled = false;
-	
-	/**
 	 * Is debug-mode enabled
 	 */
 	private boolean debugEnabled = false;
@@ -89,7 +84,6 @@ public class ExperimentExecutionArguments {
 		InputContextParams out = new InputContextParams();
 		out.setDebugMode(debugEnabled);
 		out.setInputDir(inputDirectory);
-		out.setGuiMode(guiEnabled);
 		if (inputFilterGlob!=null) {
 			out.setInputFilterGlob(inputFilterGlob);
 		}
@@ -126,17 +120,9 @@ public class ExperimentExecutionArguments {
 	public boolean hasInputDirectory() {
 		return inputDirectory!=null;
 	}
-
-	public void setGUIEnabled( boolean value) {
-		guiEnabled = value;
-	}
 	
 	public void setDebugEnabled( boolean value ) {
 		debugEnabled = value;
-	}
-	
-	public boolean isGUIEnabled() {
-		return guiEnabled;
 	}
 	
 	public boolean isDebugEnabled() {

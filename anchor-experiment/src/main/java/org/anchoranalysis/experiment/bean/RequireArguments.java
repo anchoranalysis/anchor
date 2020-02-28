@@ -41,27 +41,10 @@ public class RequireArguments extends AnchorBean<RequireArguments> {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean requiresGUI = false;
-	
-	@BeanField
 	private boolean requiresDebug = false;
 	// END BEAN PROPERTIES
-	
-	public boolean isRequiresGUI() {
-		return requiresGUI;
-	}
-
-	public void setRequiresGUI(boolean requiresGUI) {
-		this.requiresGUI = requiresGUI;
-	}
 
 	public boolean hasAllRequiredArguments( ExperimentExecutionArguments ea ) {
-		
-		if (requiresGUI) {
-			if (!ea.isGUIEnabled()) {
-				return false;
-			}
-		}
 		
 		if (requiresDebug) {
 			if (!ea.isDebugEnabled()) {

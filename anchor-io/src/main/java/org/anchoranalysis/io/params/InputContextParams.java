@@ -58,9 +58,6 @@ public class InputContextParams {
 	/** Whether an experiment is executing in debug mode or not */
 	private boolean debugMode = false;
 	
-	/** Whether an experiment is executing in GUI mode or not */
-	private boolean guiMode = false;
-	
 	public boolean hasInputDir() {
 		return inputDir!=null;
 	}
@@ -104,15 +101,7 @@ public class InputContextParams {
 		this.inputFilterExtensions = inputFilterExtensions;
 	}
 	
-	
-	public boolean isGuiMode() {
-		return guiMode;
-	}
 
-	public void setGuiMode(boolean guiMode) {
-		this.guiMode = guiMode;
-	}
-	
 	public boolean hasInputPaths() {
 		return inputPaths!=null;
 	}
