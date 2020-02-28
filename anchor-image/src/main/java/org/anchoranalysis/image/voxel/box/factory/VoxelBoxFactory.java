@@ -37,10 +37,10 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class VoxelBoxFactory {
 
@@ -83,11 +83,11 @@ public class VoxelBoxFactory {
 	
 	private static VoxelBoxFactoryTypeBound<?> multiplex( VoxelDataType dataType ) {
 		
-		if (dataType.equals(VoxelDataTypeByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			return factoryByte;
-		} else if (dataType.equals(VoxelDataTypeShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			return factoryShort;
-		} else if (dataType.equals(VoxelDataTypeInt.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedInt.instance)) {
 			return factoryInt;
 		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
 			return factoryFloat;

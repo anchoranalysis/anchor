@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.datatype;
 public abstract class VoxelDataTypeUnsigned extends VoxelDataType {
 		
 	protected VoxelDataTypeUnsigned(int numBits, String typeIdentifier, long maxValue) {
-		super(numBits, typeIdentifier, maxValue);
+		super(numBits, typeIdentifier, maxValue, 0);
 	}
 
 	@Override

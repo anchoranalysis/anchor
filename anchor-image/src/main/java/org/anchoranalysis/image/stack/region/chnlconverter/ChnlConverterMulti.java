@@ -28,10 +28,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class ChnlConverterMulti {
 
@@ -45,13 +45,13 @@ public class ChnlConverterMulti {
 		
 		if (chnlIn.getVoxelDataType().equals(outputType)) {
 			return chnlIn;
-		} else if (outputType.equals(VoxelDataTypeByte.instance)) {
-			return new ChnlConverterToByte().convert(chnlIn, conversionPolicy);
-		} else if (outputType.equals(VoxelDataTypeShort.instance)) {
-			return new ChnlConverterToShort().convert(chnlIn, conversionPolicy);
+		} else if (outputType.equals(VoxelDataTypeUnsignedByte.instance)) {
+			return new ChnlConverterToUnsignedByte().convert(chnlIn, conversionPolicy);
+		} else if (outputType.equals(VoxelDataTypeUnsignedShort.instance)) {
+			return new ChnlConverterToUnsignedShort().convert(chnlIn, conversionPolicy);
 		} else if (outputType.equals(VoxelDataTypeFloat.instance)) {
 			return new ChnlConverterToFloat().convert(chnlIn, conversionPolicy);
-		} else if (outputType.equals(VoxelDataTypeInt.instance)) {
+		} else if (outputType.equals(VoxelDataTypeUnsignedInt.instance)) {
 			assert false;
 			return null;
 		} else { 

@@ -27,14 +27,14 @@ package org.anchoranalysis.image.voxel.datatype;
  */
 
 
-public class VoxelDataTypeByte extends VoxelDataTypeUnsigned {
+public class VoxelDataTypeSignedShort extends VoxelDataTypeSigned {
 
-	public static final long MAX_VALUE = 255;
-	public static final int MAX_VALUE_INT = 255;
+	public static final long MIN_VALUE = -32768;
+	public static final long MAX_VALUE = 32767;
 	
-	public static final VoxelDataTypeByte instance = new VoxelDataTypeByte();
+	public static final VoxelDataTypeSignedShort instance = new VoxelDataTypeSignedShort();
 	
-	private VoxelDataTypeByte() {
-		super(8, "unsigned8", MAX_VALUE);
+	private VoxelDataTypeSignedShort() {
+		super(16, "signed16", MAX_VALUE, MIN_VALUE);
 	}
 }

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.box.factory;
+package org.anchoranalysis.image.stack.region.chnlconverter;
 
 /*
  * #%L
@@ -29,36 +29,24 @@ package org.anchoranalysis.image.voxel.box.factory;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxByte;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromByteBufferArr;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteNoScaling;
+import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-class VoxelBoxFactoryByte extends VoxelBoxFactoryTypeBound<ByteBuffer> {
+// Converts from other data types to Byte (unsigned 8-bit) without scaling any other data types
+public class ChnlConverterToUnsignedByte extends ChnlConverter<ByteBuffer> {
 
-	private static VoxelDataType dataType = VoxelDataTypeUnsignedByte.instance;
-	
-	public VoxelBoxFactoryByte() {
-		// Prevent creation outside this package
+	public ChnlConverterToUnsignedByte() {
+		this( new VoxelBoxConverterToByteNoScaling() );
 	}
 	
-	@Override
-	public VoxelBox<ByteBuffer> create(
-			IPixelsForPlane<ByteBuffer> pixelsForPlane) {
-		return new VoxelBoxByte(pixelsForPlane);
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> create(Extent e) {
-		return new VoxelBoxByte( PixelsFromByteBufferArr.createInitialised(e) );
-	}
-
-	@Override
-	public VoxelDataType dataType() {
-		return dataType;
+	public ChnlConverterToUnsignedByte( VoxelBoxConverter<ByteBuffer> voxelBoxConverter ) {
+		super(
+			VoxelDataTypeUnsignedByte.instance,
+			voxelBoxConverter,
+			VoxelBoxFactory.getByte()
+		);
 	}
 
 }

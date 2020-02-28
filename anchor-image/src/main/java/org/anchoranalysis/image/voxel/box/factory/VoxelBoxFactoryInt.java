@@ -35,11 +35,11 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxInt;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromIntBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
 class VoxelBoxFactoryInt extends VoxelBoxFactoryTypeBound<IntBuffer> {
 
-	private static VoxelDataType dataType = VoxelDataTypeInt.instance;
+	private static VoxelDataType dataType = VoxelDataTypeUnsignedInt.instance;
 	
 	public VoxelBoxFactoryInt() {
 		// Prevent creation outside this package

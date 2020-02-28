@@ -36,14 +36,14 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromByteBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class ChnlFactoryByte extends ChnlFactorySingleType {
 
 	private static Log log = LogFactory.getLog(ChnlFactoryByte.class);
-	private static VoxelDataTypeByte dataType = VoxelDataTypeByte.instance;
+	private static VoxelDataTypeUnsignedByte dataType = VoxelDataTypeUnsignedByte.instance;
 	
 	private static VoxelBoxFactoryTypeBound<ByteBuffer> factoryVoxelBox = VoxelBoxFactory.getByte();
 	

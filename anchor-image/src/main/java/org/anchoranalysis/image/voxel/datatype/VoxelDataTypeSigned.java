@@ -1,10 +1,10 @@
 package org.anchoranalysis.image.voxel.datatype;
 
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,20 @@ package org.anchoranalysis.image.voxel.datatype;
  * #L%
  */
 
-
-public class VoxelDataTypeInt extends VoxelDataTypeUnsigned {
-
-	public static final long MAX_VALUE = 4294967295L;
-	
-	public static final VoxelDataTypeInt instance = new VoxelDataTypeInt();
-	
-	private VoxelDataTypeInt() {
-		super(32, "unsigned32", MAX_VALUE);
+public abstract class VoxelDataTypeSigned extends VoxelDataType {
+		
+	protected VoxelDataTypeSigned(int numBits, String typeIdentifier, long maxValue, long minValue) {
+		super(numBits, typeIdentifier, maxValue, minValue);
 	}
+
+	@Override
+	public final boolean isInteger() {
+		return true;
+	}
+
+	@Override
+	public final boolean isUnsigned() {
+		return false;
+	}
+	
 }

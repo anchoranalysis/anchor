@@ -35,10 +35,10 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 /**
  * Creates a channel for one of several data-types
@@ -69,11 +69,11 @@ public class ChnlFactory {
 	/** Get a single-type factory */
 	public ChnlFactorySingleType get( VoxelDataType dataType ) {
 		
-		if (dataType.equals(VoxelDataTypeByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			return factoryByte;
-		} else if (dataType.equals(VoxelDataTypeShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			return factoryShort;
-		} else if (dataType.equals(VoxelDataTypeInt.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedInt.instance)) {
 			return factoryInt;
 		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
 			return factoryFloat;

@@ -45,6 +45,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -216,15 +217,16 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			params.getInputObject().close( params.getLogErrorReporter().getErrorReporter() );
 		}
 		
-		params.getOutputManager().getWriterCheckIfAllowed().write(
+		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 
+		writeIfAllowed.write(
 			outputNameManifest,
 			() -> new XStreamGenerator<Object>( params.getManifest(), "ManifestRecorder")
 		);
-		params.getOutputManager().getWriterCheckIfAllowed().write(
+		writeIfAllowed.write(
 			outputNameManifest,
 			() -> new ObjectOutputStreamGenerator<>( params.getManifest(), "ManifestRecorder" )
 		);
-		params.getOutputManager().getWriterCheckIfAllowed().write(
+		writeIfAllowed.write(
 			outputNameExecutionTime,
 			() -> new StringGenerator( Long.toString(stopWatchFile.getTime()) )
 		);

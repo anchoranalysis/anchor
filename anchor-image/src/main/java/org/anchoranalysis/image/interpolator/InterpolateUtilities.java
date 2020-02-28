@@ -34,8 +34,8 @@ import org.anchoranalysis.image.interpolator.transfer.TransferViaByte;
 import org.anchoranalysis.image.interpolator.transfer.TransferViaShort;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class InterpolateUtilities {
 	
@@ -47,9 +47,9 @@ public class InterpolateUtilities {
 			throw new IncorrectVoxelDataTypeException("Data types don't match between src and dest");
 		}
 		
-		if (src.getVoxelDataType().equals( VoxelDataTypeByte.instance )) {
+		if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			return new TransferViaByte(src, dest);
-		} else if (src.getVoxelDataType().equals( VoxelDataTypeShort.instance )) {
+		} else if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance )) {
 			return new TransferViaShort(src, dest);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");

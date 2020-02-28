@@ -44,8 +44,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class HistogramFactoryUtilities {
 
@@ -146,9 +146,9 @@ public class HistogramFactoryUtilities {
 	}
 	
 	public static Histogram create( VoxelBoxWrapper inputBuffer ) {
-		if (inputBuffer.getVoxelDataType().equals( VoxelDataTypeByte.instance )) {
+		if (inputBuffer.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			return create( inputBuffer.any() );
-		} else if (inputBuffer.getVoxelDataType().equals( VoxelDataTypeShort.instance )) {
+		} else if (inputBuffer.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance )) {
 			return create( inputBuffer.any() );
 		} else {
 			throw new IncorrectVoxelDataTypeException( String.format("Data type %s is not supported", inputBuffer.getVoxelDataType()) );

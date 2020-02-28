@@ -41,8 +41,8 @@ import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class CachedRGB {
 
@@ -159,8 +159,8 @@ public class CachedRGB {
 
 	// Allows us to change just the background
 	private void setBackground( DisplayStack background ) {
-		assert(background.dataTypeBeforeConversion().equals(VoxelDataTypeByte.instance)
-			|| (background.dataTypeBeforeConversion().equals(VoxelDataTypeShort.instance)&&background.numNonNullConverters()>0) );
+		assert(background.dataTypeBeforeConversion().equals(VoxelDataTypeUnsignedByte.instance)
+			|| (background.dataTypeBeforeConversion().equals(VoxelDataTypeUnsignedShort.instance)&&background.numNonNullConverters()>0) );
 		if (background!=this.backgroundOrig) {
 			this.backgroundOrig = background;
 			needsBackgroundRefresh = true;

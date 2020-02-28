@@ -47,7 +47,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // An image that supporting certain binary operations
 public class BinaryChnl {
@@ -60,7 +60,7 @@ public class BinaryChnl {
 		super();
 		this.chnl = chnl;
 		
-		if (!chnl.getVoxelDataType().equals(VoxelDataTypeByte.instance)) {
+		if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			throw new IncorrectVoxelDataTypeException("Only unsigned 8-bit data type is supported for BinaryChnl");
 		}
 		

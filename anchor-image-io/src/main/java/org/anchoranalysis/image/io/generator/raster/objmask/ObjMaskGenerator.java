@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -121,7 +121,7 @@ public class ObjMaskGenerator extends RasterGenerator implements IterableGenerat
 		newSd.setZ( bbox.extnt().getZ() );
 		
 				
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeByte.instance );
+		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.instance );
 		
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		

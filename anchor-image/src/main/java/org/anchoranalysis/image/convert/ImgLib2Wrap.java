@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import net.imglib2.img.NativeImg;
 import net.imglib2.img.array.ArrayImg;
@@ -63,9 +63,9 @@ public class ImgLib2Wrap {
 		
 		VoxelDataType dataType = box.getVoxelDataType();
 		
-		if (dataType.equals(VoxelDataTypeByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			return wrapByte(box.asByte(), do3D);
-		} else if (dataType.equals(VoxelDataTypeShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			return wrapShort(box.asShort(), do3D);
 		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
 				return wrapFloat(box.asFloat(), do3D);			
@@ -80,9 +80,9 @@ public class ImgLib2Wrap {
 		
 		VoxelDataType dataType = vb.dataType();
 		
-		if (dataType.equals(VoxelDataTypeByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			return wrapByte( (VoxelBuffer<ByteBuffer>) vb, e);
-		} else if (dataType.equals(VoxelDataTypeShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			return wrapShort( (VoxelBuffer<ShortBuffer>) vb, e);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");

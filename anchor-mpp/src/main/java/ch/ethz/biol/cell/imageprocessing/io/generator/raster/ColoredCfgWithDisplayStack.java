@@ -31,8 +31,8 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
 
@@ -69,7 +69,7 @@ public class ColoredCfgWithDisplayStack {
 	public void setStack(DisplayStack stack) {
 		this.stack = stack;
 		
-		assert(stack==null || stack.dataTypeBeforeConversion().equals(VoxelDataTypeByte.instance)
-				|| (stack.dataTypeBeforeConversion().equals(VoxelDataTypeShort.instance)&&stack.numNonNullConverters()>0) );		
+		assert(stack==null || stack.dataTypeBeforeConversion().equals(VoxelDataTypeUnsignedByte.instance)
+				|| (stack.dataTypeBeforeConversion().equals(VoxelDataTypeUnsignedShort.instance)&&stack.numNonNullConverters()>0) );		
 	}
 }

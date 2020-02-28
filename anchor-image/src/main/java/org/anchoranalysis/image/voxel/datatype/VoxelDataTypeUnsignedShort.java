@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.stack.region.chnlconverter;
+package org.anchoranalysis.image.voxel.datatype;
 
 /*
  * #%L
@@ -27,26 +27,14 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
  */
 
 
-import java.nio.ByteBuffer;
+public class VoxelDataTypeUnsignedShort extends VoxelDataTypeUnsigned {
 
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteNoScaling;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-
-// Converts from other data types to Byte (unsigned 8-bit) without scaling any other data types
-public class ChnlConverterToByte extends ChnlConverter<ByteBuffer> {
-
-	public ChnlConverterToByte() {
-		this( new VoxelBoxConverterToByteNoScaling() );
-	}
+	public static final long MAX_VALUE = 65535;
+	public static final int MAX_VALUE_INT = 65535;
 	
-	public ChnlConverterToByte( VoxelBoxConverter<ByteBuffer> voxelBoxConverter ) {
-		super(
-			VoxelDataTypeByte.instance,
-			voxelBoxConverter,
-			VoxelBoxFactory.getByte()
-		);
+	public static final VoxelDataTypeUnsignedShort instance = new VoxelDataTypeUnsignedShort();
+	
+	private VoxelDataTypeUnsignedShort() {
+		super(16, "unsigned16", MAX_VALUE);
 	}
-
 }

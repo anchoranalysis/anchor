@@ -46,8 +46,8 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	
@@ -108,7 +108,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 
 		MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 		
-		if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeByte.instance )) {
+		if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			VoxelBox<ByteBuffer> vb = extractedSlice.getVoxelBox().asByte(); 
 			interpolateRegionFromByte( vb,bufferSc,extractedSlice.getDimensions().getExtnt(),extntTrgt,BoundingBox,zoomFactor,interpolator );
 			
@@ -116,7 +116,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 				chnlConverter.getVoxelBoxConverter().convertFromByte(bufferSc, bufferSc);
 			}
 			
-		} else if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeShort.instance ) && chnlConverter!=null) {
+		} else if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance ) && chnlConverter!=null) {
 			
 			VoxelBox<ShortBuffer> vb = extractedSlice.getVoxelBox().asShort();
 			
@@ -132,7 +132,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		
 		return ChnlFactory
 				.instance()
-				.get(VoxelDataTypeByte.instance)
+				.get(VoxelDataTypeUnsignedByte.instance)
 				.create(bufferSc, sd.getRes());
 		
 	}

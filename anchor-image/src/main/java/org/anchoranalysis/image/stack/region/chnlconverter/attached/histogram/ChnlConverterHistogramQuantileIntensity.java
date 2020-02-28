@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
@@ -42,14 +42,14 @@ public class ChnlConverterHistogramQuantileIntensity extends ChnlConverterAttach
 
 	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
 	private double quantile = 1.0;
-	private ChnlConverterToByte delegate;
+	private ChnlConverterToUnsignedByte delegate;
 	
 	public ChnlConverterHistogramQuantileIntensity( double quantile ) {
 		// Initialise with a dummy value;
 		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMaxValue(1);
 		this.quantile = quantile;
 		
-		delegate = new ChnlConverterToByte(voxelBoxConverter);
+		delegate = new ChnlConverterToUnsignedByte(voxelBoxConverter);
 	}
 	
 	@Override
