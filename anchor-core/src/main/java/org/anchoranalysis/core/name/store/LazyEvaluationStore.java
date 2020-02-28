@@ -31,15 +31,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.memory.MemoryUtilities;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.StopWatch;
+import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
+import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 
 /**
  * Items are evaluated only when they are first needed. The value is thereafter stored.
@@ -102,86 +100,6 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 		map.put(name, new ProfiledCachedGetter<>(getter,name,storeDisplayName,logErrorReporter) );
 		
 	}
-
-	private static class CachedGetter<T> extends CachedOperation<T> {
-
-		private Operation<T> getter;
-		
-		public CachedGetter(Operation<T> getter) {
-			super();
-			this.getter = getter;
-		}
-
-		@Override
-		protected T execute() throws ExecuteException {
-			return getter.doOperation(); 
-		}
-
-	}
-	
-	
-	//
-	//  WE HACK USING STATIC VARIABLES TO MONITOR CALLS TO PROFILE CACHED GETTER FROM DIFFERENT STORES
-	//
-	// As it is recurisvely called during the evaluation process, we subtract
-	//   the time spent in other 'execute' methods from the main one
-	private static class ProfiledCachedGetter<T> extends CachedGetter<T> {
-
-		private String name;
-		private String storeDisplayName;
-		private LogErrorReporter logErrorReporter;
-
-		private static int cnt = 0;
-		private static long subExecTime = 0; 
-		private static long subMem = 0;
-		
-		private static final int STORE_DISPLAY_NAME_LENGTH = 30;
-		private static final int NAME_LENGTH = 30;
-		
-		public ProfiledCachedGetter(Operation<T> getter, String name, String storeDisplayName, LogErrorReporter logErrorReporter) {
-			super(getter);
-			this.logErrorReporter = logErrorReporter;
-			
-			// We pad the display name to a fixed with
-			this.name = StringUtils.rightPad( name, NAME_LENGTH );
-			this.storeDisplayName = StringUtils.rightPad( storeDisplayName, STORE_DISPLAY_NAME_LENGTH );
-		}
-		
-		@Override
-		protected T execute() throws ExecuteException {
-			cnt++;
-
-			StopWatch sw = new StopWatch();
-			sw.start();
-			
-			long memoryBefore = MemoryUtilities.calcMemoryUsage();
-		
-			T obj = super.execute();
-			long timeTaken = Math.max( sw.getTime() - subExecTime, 0 );
-
-			long memoryAfter = MemoryUtilities.calcMemoryUsage();
-			long memoryAdded = memoryAfter - memoryBefore;
-			
-			
-			long memoryUsed = Math.max( memoryAdded - subMem, 0);
-			
-			logErrorReporter.getLogReporter().log( String.format("Execution Time \t(%6dms, %7dkb)\t%s\t%s", timeTaken, memoryUsed/1000, name, storeDisplayName ) );
-			cnt--;
-			
-			if (cnt==0) {
-				subExecTime=0;
-				subMem = 0;
-			} else {
-				subExecTime = timeTaken;
-				subMem = memoryAdded;
-			}
-			
-			
-			
-			return obj;
-		}
-	}
-
 
 	@Override
 	public T getNull(String key) throws GetOperationFailedException {
