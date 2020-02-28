@@ -38,17 +38,7 @@ public class SimpleManifestDeserializer extends ManifestDeserializer {
 	@Override
 	public ManifestRecorder deserializeManifest( File file ) throws DeserializationFailedException {
 		
-		//XStream xstream = new XStream();
-		
-		//XStream xstream = new XStream( new DomDriver() );
-		
-		
-		//String xml = readFileAsString( file.getPath() );
-		
-		//ManifestRecorder manifest = (ManifestRecorder) xstream.fromXML(xml);
-		
 		ManifestRecorder manifest = new ObjectInputStreamDeserializer<ManifestRecorder>().deserialize(file.toPath());
-		
 		manifest.init( file.toPath().getParent() );
 		//ManifestRecorder manifest = new XStreamDeserializer().deserialize(file);
 		return manifest;

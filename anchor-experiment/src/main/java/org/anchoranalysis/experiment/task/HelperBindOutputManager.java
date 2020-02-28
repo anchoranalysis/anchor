@@ -58,6 +58,7 @@ class HelperBindOutputManager {
 				return boundOutput;
 			} else {
 				// If pathForBinding is null, we reuse the existing root output-manager (but adding a recorder for manifestTask)
+				manifestTask.init( params.getOutputManager().getOutputFolderPath() );
 				params.getOutputManager().addOperationRecorder( manifestTask.getRootFolder() );
 				return params.getOutputManager().getDelegate();
 			}
