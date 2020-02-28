@@ -75,6 +75,12 @@ public class ExperimentExecutionArguments {
 	 * <p>An empty set implies, no check is applied</p>
 	 */
 	private Set<String> inputFilterExtensions;
+	
+	
+	/**
+	 * If non-null, a name to describe the ongoing task
+	 */
+	private String taskName;
 
 
 	/** Creates an input-context, reusing parameters from the experiment-execution 
@@ -175,5 +181,13 @@ public class ExperimentExecutionArguments {
 
 	public void setInputPaths(List<Path> inputPaths) {
 		this.inputPaths = inputPaths;
+	}
+	
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 }

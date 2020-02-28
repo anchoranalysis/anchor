@@ -49,7 +49,7 @@ class HelperBindOutputManager {
 			if (input.pathForBinding()!=null) {
 				BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
 					input,
-					params.getExperimentIdentifier().identifier(),
+					params.getExperimentIdentifier(),
 					manifestTask,
 					params.getExperimentalManifest(),
 					params.getExperimentArguments().createParamsContext()
@@ -66,7 +66,7 @@ class HelperBindOutputManager {
 				String.format(
 					"Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'%n%s",
 					input.pathForBinding()!=null ? quoteString(input.pathForBinding().toString()) : "null",
-					params.getExperimentIdentifier().identifier(),
+					params.getExperimentIdentifier(),
 					e.toString()
 				),
 				e

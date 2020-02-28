@@ -1,10 +1,10 @@
 package org.anchoranalysis.experiment.bean.identifier;
 
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,22 +26,48 @@ package org.anchoranalysis.experiment.bean.identifier;
  * #L%
  */
 
-import org.anchoranalysis.bean.AnchorBean;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+import org.anchoranalysis.bean.annotation.BeanField;
 
-public abstract class ExperimentIdentifier extends AnchorBean<ExperimentIdentifier> {
-	
+/**
+ * Automatically populates a experiment-name and version number
+ * @author owen
+ *
+ */
+public class ExperimentIdentifierAuto extends ExperimentIdentifier {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7846340573699806634L;
-	
-	/**
-	 * Creates an identifier for the experiment
-	 * 
-	 * @param taskName if non-null, a name describing the current task.
-	 * @return a string to identify the current experiment
-	 */
-	public abstract String identifier(String taskName);
+	private static final long serialVersionUID = 1L;
 
+	// START BEAN FIELDS
+	/** If there's no task-name, then this constant is used as a fallback name */
+	@BeanField
+	private String fallbackName = "experiment";
+	// END BEAN FIELDS
+	
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.ss");
+	
+	@Override
+	public String identifier(String taskName) {
+		return IdentifierUtilities.identifierFromNameVersion(
+			determineExperimentName(taskName),
+			determineVersion()
+		);
+	}
+
+	private String determineExperimentName(String taskName) {
+		if (taskName!=null) {
+			return taskName;
+		} else {
+			return fallbackName;
+		}
+	}
+	
+	private String determineVersion() {
+		return dtf.format( LocalDateTime.now() );
+	}
 }

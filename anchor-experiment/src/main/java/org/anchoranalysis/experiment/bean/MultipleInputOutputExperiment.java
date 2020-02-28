@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
+import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
@@ -106,7 +106,7 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 				InputManager<T> inputManager = BeanXmlLoader.loadBean(df.getPath(), "bean");
 
 				experiment.setInput(inputManager);
-				experiment.setExperimentIdentifier( new ExperimentIdentifierSimple(df.getDescriptiveName(),version));
+				experiment.setExperimentIdentifier( new ExperimentIdentifierConstant(df.getDescriptiveName(),version));
 				System.out.printf("Ending   \t%03d:\t%s\tat %s%n", i++, df.getDescriptiveName(), df.getPath() );
 
 				experiment.doExperiment(expArgs);

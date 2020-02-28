@@ -27,53 +27,52 @@ package org.anchoranalysis.experiment.bean.identifier;
  */
 
 
-import javax.swing.JOptionPane;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 
-public class ExperimentIdentifierPrompt extends ExperimentIdentifier {
 
+/**
+ * Defines constants for name and version of an experiment
+ * 
+ * @author owen
+ *
+ */
+public class ExperimentIdentifierConstant extends ExperimentIdentifier {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7846340573699806634L;
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ExperimentIdentifier experimentIdentifier;
+	private String name;
+	
+	@BeanField
+	private String version;
 	// END BEAN PROPERTIES
-
-	private String identifier;
+	
+	public ExperimentIdentifierConstant() {
+		super();
+	}
+	
+	public ExperimentIdentifierConstant(String name, String version) {
+		super();
+		this.name = name;
+		this.version = version;
+	}
 	
 	@Override
-	public void init(boolean gui) {
-		experimentIdentifier.init(gui);
-
-		identifier = experimentIdentifier.identifier();
-		
-		if (!gui) {
-			return;
-		}
-		
-		String s = (String) JOptionPane.showInputDialog(null, "Select an experiment identifier", "Experiment Identifier", JOptionPane.PLAIN_MESSAGE, null, null, identifier );
-		if (s==null) {
-			// We quit if we have no eidentifier
-			System.exit(0);
-		}
-		identifier = s;
-		
+	public String identifier(String taskName) {
+		return IdentifierUtilities.identifierFromNameVersion(name, version);
 	}
-
-	@Override
-	public String identifier() {
-		return identifier;
+	
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public ExperimentIdentifier getExperimentIdentifier() {
-		return experimentIdentifier;
+	public String getVersion() {
+		return version;
 	}
-
-	public void setExperimentIdentifier(ExperimentIdentifier experimentIdentifier) {
-		this.experimentIdentifier = experimentIdentifier;
+	public void setVersion(String version) {
+		this.version = version;
 	}
 }

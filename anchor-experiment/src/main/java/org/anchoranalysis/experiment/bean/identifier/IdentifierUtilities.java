@@ -1,10 +1,10 @@
 package org.anchoranalysis.experiment.bean.identifier;
 
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,47 +26,9 @@ package org.anchoranalysis.experiment.bean.identifier;
  * #L%
  */
 
+class IdentifierUtilities {
 
-import org.anchoranalysis.bean.annotation.BeanField;
-
-
-public class ExperimentIdentifierSimple extends ExperimentIdentifier {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7846340573699806634L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private String name;
-	
-	@BeanField
-	private String version;
-	// END BEAN PROPERTIES
-	
-	public ExperimentIdentifierSimple() {
-		super();
-	}
-	
-	public ExperimentIdentifierSimple(String name, String version) {
-		super();
-		this.name = name;
-		this.version = version;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
-	}
-	
-	@Override
-	public String identifier() {
+	public static String identifierFromNameVersion( String name, String version ) {
 		StringBuilder sb = new StringBuilder(name);
 		if (version!=null) {
 			sb.append("_");
@@ -74,8 +36,4 @@ public class ExperimentIdentifierSimple extends ExperimentIdentifier {
 		}
 		return sb.toString();
 	}
-
-	@Override
-	public void init(boolean gui) {
-	}	
 }
