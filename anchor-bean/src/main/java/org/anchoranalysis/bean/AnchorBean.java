@@ -137,10 +137,9 @@ public abstract class AnchorBean<F> implements Serializable {
 	 * Any state that is not a @BeanField is ignored.
 	 * 
 	 * @return the newly created bean
-	 * @throws BeanDuplicateException if duplication fails
 	 */
 	@SuppressWarnings("unchecked")
-	public F duplicateBean() throws BeanDuplicateException {
+	public F duplicateBean() {
 		try {
 			return (F) HelperDuplication.duplicate(this);
 		} catch (BeanDuplicateException e) {

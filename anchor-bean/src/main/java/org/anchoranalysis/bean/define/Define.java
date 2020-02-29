@@ -38,7 +38,6 @@ import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
@@ -113,7 +112,7 @@ public class Define extends AnchorBean<Define> implements Serializable {
 	}
 
 	@Override
-	public Define duplicateBean() throws BeanDuplicateException {
+	public Define duplicateBean() {
 		
 		// We must also copy the map, and duplicate its contents, as otherwise a new empty
 		Define out = new Define();
