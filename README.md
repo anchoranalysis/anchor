@@ -12,5 +12,12 @@ Anchor is a platform for image analysis, developed by Owen Feehan at:
 * ongoing as a open-source personal/community project
 
 Please consider:
+
 * the [user guide](https://www.anchoranalysis.org/user_guide.html)
 * the [developer guide](https://www.anchoranalysis.org/developer_guide.html)
+
+Before reading the source code, please:
+
+* Understand Maven and [multi-module projects](https://www.anchoranalysis.org/developer_guide_building_anchor.html).
+* Consider Anchor's [architecture](https://www.anchoranalysis.org/developer_guide_architecture_overview.html).
+* Consider the role of each of Anchor's [modules](https://www.anchoranalysis.org/developer_guide_architecture_modules.html).
