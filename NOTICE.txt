@@ -2,4 +2,4 @@
  ==  Notices and attributions required by libraries that the project depends on   ==
  ===================================================================================
 
-Please see the notices/ directory in each of the modules.
+Please see the NOTICES.txt or notices/ sub-directory in each of the modules.
