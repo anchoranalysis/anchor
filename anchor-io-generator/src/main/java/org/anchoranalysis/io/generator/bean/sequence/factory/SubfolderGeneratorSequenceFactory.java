@@ -30,8 +30,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
 
 public class SubfolderGeneratorSequenceFactory extends GeneratorSequenceFactory {
 

@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlFromObjs {
 
@@ -77,7 +77,7 @@ public class BinaryChnlFromObjs {
 		
 		ImageDim newSd = new ImageDim( sd );
 		
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, VoxelDataTypeByte.instance);
+		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		
 		if (outVal.getOnInt()!=0) {

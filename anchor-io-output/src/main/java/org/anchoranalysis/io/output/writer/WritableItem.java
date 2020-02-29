@@ -28,10 +28,10 @@ package org.anchoranalysis.io.output.writer;
 
 import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 /**

@@ -30,23 +30,26 @@ package org.anchoranalysis.image.io.stack;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.OperationFromNamedProvider;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackCollectionOutputter {
+	
+	private static final String OUTPUT_NAME = "stackCollection";
+	private static final String PREFIX = "";
 	
 	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
 	 * @throws OutputWriteFailedException */
@@ -61,8 +64,8 @@ public class StackCollectionOutputter {
 		StackCollectionOutputter.output(
 			stackSubset(stacks, secondLevelOutputKey, outputManager ),
 			outputManager.getDelegate(),
-			"stackCollection",
-			"stack_",
+			OUTPUT_NAME,
+			PREFIX,
 			errorReporter,
 			suppressSubfolders
 		);
@@ -80,15 +83,15 @@ public class StackCollectionOutputter {
 		StackCollectionOutputter.outputWithException(
 			stackSubset(stacks, secondLevelOutputKey, outputManager ),
 			outputManager.getDelegate(),
-			"stackCollection",
-			"stack_",
+			OUTPUT_NAME,
+			PREFIX,
 			suppressSubfolders
 		);
 	}
 	
-	public static void output( NamedImgStackCollection namedCollection, BoundOutputManager outputManager, String outputName, String suffix, ErrorReporter errorReporter, boolean suppressSubfoldersIn) {
+	public static void output( NamedImgStackCollection namedCollection, BoundOutputManager outputManager, String outputName, String prefix, ErrorReporter errorReporter, boolean suppressSubfoldersIn) {
 		StackGenerator generator = createStackGenerator();
-		IterableGeneratorOutputHelper.output( namedCollection, generator, outputManager, outputName, suffix, errorReporter, suppressSubfoldersIn);
+		IterableGeneratorOutputHelper.output( namedCollection, generator, outputManager, outputName, prefix, errorReporter, suppressSubfoldersIn);
 	}
 	
 	private static void outputWithException(NamedImgStackCollection namedCollection, BoundOutputManager outputManager, String outputName, String suffix, boolean suppressSubfoldersIn ) throws OutputWriteFailedException {
@@ -110,7 +113,7 @@ public class StackCollectionOutputter {
 		return out;
 	}
 	
-	public static void copyFrom( NamedChnlCollectionForSeries src, NamedImgStackCollection target, ProgressReporter progressReporter ) throws RasterIOException {
+	public static void copyFrom( NamedChnlCollectionForSeries src, NamedImgStackCollection target, ProgressReporter progressReporter ) throws GetOperationFailedException {
 		
 		Set<String> keys = src.chnlNames();
 		

@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter;
@@ -44,36 +45,47 @@ public class FindMatchingFilesWithProgressReporter extends FindMatchingFiles {
 	
 	private boolean recursive;
 	private ProgressReporter progressReporter;
-
+	
+	/**
+	 * Constructor
+	 *  
+	 * @param recursive whether to recursively iterate through directories
+	 * @param acceptDirectoryErrors if true, directory access errors are logged and iteration continues. if false, an error is thrown and the experiment ends.
+	 * @param progressReporter the progress reporter
+	 * @param logger the logger
+	 */
 	public FindMatchingFilesWithProgressReporter(boolean recursive, ProgressReporter progressReporter ) {
 		super();
 		this.recursive = recursive;
 		this.progressReporter = progressReporter;
 	}
-
 	
 	@Override
-	public Collection<File> apply( Path dir, PathMatchConstraints constraints ) throws IOException {
+	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
 		
-		TraversalResult traversal;
-		if (recursive) {
-			traversal = TraverseDirectoryForProgressReporter.traverseRecursive(
-				dir,
-				20,
-				constraints.getMatcherDir(),
-				constraints.getMaxDirDepth()
-			);
-		} else {
-			traversal = TraverseDirectoryForProgressReporter.traverseNotRecursive(
-				dir,
-				constraints.getMatcherDir()
-			);
+		try {
+			TraversalResult traversal;
+			if (recursive) {
+				traversal = TraverseDirectoryForProgressReporter.traverseRecursive(
+					dir,
+					20,
+					constraints.getMatcherDir(),
+					constraints.getMaxDirDepth()
+				);
+			} else {
+				traversal = TraverseDirectoryForProgressReporter.traverseNotRecursive(
+					dir,
+					constraints.getMatcherDir()
+				);
+			}
+			return convertToList(traversal, constraints, acceptDirectoryErrors, logger);
+			
+		} catch (IOException e) {
+			throw new FindFilesException("A failure occurred searching a directory for files");
 		}
-		
-		return convertToList(traversal, constraints);
 	}
 	
-	private List<File> convertToList( TraversalResult traversal, PathMatchConstraints constraints ) throws IOException {
+	private List<File> convertToList( TraversalResult traversal, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
 
 		List<File> listOut = new ArrayList<>();
 		
@@ -98,7 +110,9 @@ public class FindMatchingFilesWithProgressReporter extends FindMatchingFiles {
 			pri,
 			leafDirectories,
 			constraints.replaceMaxDirDepth(remainingDirDepth),
-			listOut
+			listOut,
+			acceptDirectoryErrors,
+			logger
 		);
 		
 		pri.close();
@@ -119,20 +133,33 @@ public class FindMatchingFilesWithProgressReporter extends FindMatchingFiles {
 		}
 	}
 	
-	private static void otherFiles(
+	private void otherFiles(
 		ProgressReporterIncrement pri,
 		List<Path> progressFolders,
 		PathMatchConstraints pathMatchConstraints,
-		List<File> listOut
-	) throws IOException {
+		List<File> listOut,
+		boolean acceptDirectoryErrors,
+		LogErrorReporter logger
+	) throws FindFilesException {
 		// Then every other folder is treated as a bucket
 		for( Path dirProgress : progressFolders) {
-			WalkSingleDir.apply(
-				dirProgress,
-				pathMatchConstraints,
-				listOut
-			);
-			pri.update();
+			
+			try {
+				WalkSingleDir.apply(
+					dirProgress,
+					pathMatchConstraints,
+					listOut
+				);
+			} catch (FindFilesException e) {
+				if (acceptDirectoryErrors) {
+					logger.getErrorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
+				} else {
+					// Rethrow the exception
+					throw e;
+				}
+			} finally {
+				pri.update();
+			}
 		}
 	}
 }

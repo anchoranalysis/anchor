@@ -27,12 +27,12 @@ package org.anchoranalysis.io.bean.filepath.generator;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.StringJoiner;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathNormalizer;
 
 // Generates an out string where $digit$ is replaced with the #digit group from a regex
@@ -62,14 +62,14 @@ public class FilePathGeneratorRegExBean extends FilePathGenerator {
 
 	
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		
 		String pathInStr = FilePathNormalizer.normalizeFilePath(pathIn.toString());
 		
 		String[] components = regEx.matchStr(pathInStr);
 		
 		if (components==null) {
-			throw new IOException( String.format("RegEx string '%s' does not match '%s'", regEx, pathInStr ));
+			throw new AnchorIOException( String.format("RegEx string '%s' does not match '%s'", regEx, pathInStr ));
 		}
 		
 		return Paths.get( createOutString(components) );

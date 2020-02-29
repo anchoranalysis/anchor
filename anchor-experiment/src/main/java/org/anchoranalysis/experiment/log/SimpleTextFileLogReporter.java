@@ -40,7 +40,7 @@ public class SimpleTextFileLogReporter implements StatefulLogReporter {
 	private PrintWriter writer;
 	
 	private boolean first = false;
-	
+
 	public SimpleTextFileLogReporter(String filePath) {
 		this.filePath = filePath;
 	}

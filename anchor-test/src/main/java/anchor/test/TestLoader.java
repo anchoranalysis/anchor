@@ -40,7 +40,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.anchoranalysis.core.file.PathUtilities;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -57,8 +56,6 @@ public class TestLoader {
 	 * Path to where the test-data is stored
 	 */
 	private Path pathTestDataRoot;
-	
-	private static final String DEFAULT_PROPERTY_NAME_TEST_DATA_ROOT = "test.data.root";
 	
 	/**
 	 * Makes a new test-data loader
@@ -94,44 +91,14 @@ public class TestLoader {
 	
 
 	/**
-	 * Creates a new test-data loader using the default system property
-	 *  (DEFAULT_PROPERTY_NAME_TEST_DATA_ROOT)
+	 * Creates a new test-data loader finding "src/test/resources" using the Maven working directory
 	 * 
-	 * @return a testLoader associated with the root found in the default system proeprty
+	 * @return a testLoader associated with the root found in the default system property
 	 */
 	public static TestLoader createFromMavenWorkingDir() {
 		return new TestLoader("src/test/resources");
 	}
-	
-	
-	/**
-	 * Creates a new test-data loader using the default system property
-	 *  (DEFAULT_PROPERTY_NAME_TEST_DATA_ROOT)
-	 * 
-	 * @return a testLoader associated with the root found in the default system proeprty
-	 */
-	public static TestLoader createFromDefaultSystemProperty() {
-		return createFromSystemProperty(DEFAULT_PROPERTY_NAME_TEST_DATA_ROOT);
-	}
-	
-	/**
-	 * Creates a new test-data loader using a system property for the root
-	 * 
-	 * @param propertyNameTestDataRoot path to where the test-data is stored
-	 * @return a testLoader associated with the root found in the system proeprty
-	 */
-	public static TestLoader createFromSystemProperty( String propertyNameTestDataRoot ) {
-		String root = System.getProperty(propertyNameTestDataRoot);
 		
-		if (root==null || root.isEmpty()) {
-			throw new TestDataInitException(
-			  String.format("Property '%s' must be set, specifying the location of the test-data", propertyNameTestDataRoot)
-			);
-		}
-		return new TestLoader(root);
-	}
-	
-	
 	/**
 	 * Creates a new test-data loader using an explicit File path as root
 	 * 
@@ -142,19 +109,6 @@ public class TestLoader {
 		return new TestLoader( rootDirectory );
 	}
 	
-	
-	/**
-	 * Creates a new test-data loader using an explicit File path as root
-	 * 
-	 * @param launchClass the class the application was launched from
-	 * @return a testLoader associated with the explicit root
-	 */
-	public static TestLoader createFromExecutingJARDirectory( Class<?> launchClass ) {
-		Path launchDir = PathUtilities.pathCurrentJAR( launchClass );
-		return createFromExplicitDirectory( launchDir );
-	}
-	
-
 	/**
 	 * Creates a new test-loader for a subdirectory of the current test
 	 * @param subdirectory the subdirectory to use (relative path to the current root)
@@ -338,5 +292,4 @@ public class TestLoader {
 		dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 		return dbf;
 	}
-	
 }

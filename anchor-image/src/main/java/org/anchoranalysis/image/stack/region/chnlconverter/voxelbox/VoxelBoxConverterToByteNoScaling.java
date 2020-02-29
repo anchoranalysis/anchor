@@ -35,7 +35,7 @@ import java.nio.ShortBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
 // So values larger than 255 are clipped
@@ -48,8 +48,8 @@ public class VoxelBoxConverterToByteNoScaling extends VoxelBoxConverter<ByteBuff
 		
 		while( bufferIn.buffer().hasRemaining() ) {
 			float f = bufferIn.buffer().get();
-			if (f>VoxelDataTypeByte.MAX_VALUE_INT) {
-				f= VoxelDataTypeByte.MAX_VALUE_INT;
+			if (f>VoxelDataTypeUnsignedByte.MAX_VALUE_INT) {
+				f= VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
 			}
 			if (f<0) {
 				f = 0;

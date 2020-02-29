@@ -36,8 +36,9 @@ import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /** 
@@ -49,14 +50,14 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {
 	
-	private StackInputBase input;
+	private ProvidesStackInput input;
 	private T annotationStrategy;
 	private Path annotationPath;
 	
 	public AnnotationWithStrategy(
-		StackInputBase input,
+		ProvidesStackInput input,
 		T strategy
-	) throws IOException {
+	) throws AnchorIOException {
 		this.input = input;
 		this.annotationStrategy = strategy;
 		this.annotationPath = annotationStrategy.annotationPathFor(input);
@@ -76,7 +77,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 	
 	/** A label to be used when aggregrating this annotation with others, or NULL if this makes no sense 
 	 * @throws IOException */
-	public String labelForAggregation() throws IOException {
+	public String labelForAggregation() throws AnchorIOException {
 		return annotationStrategy.annotationLabelFor(input);
 	}
 	

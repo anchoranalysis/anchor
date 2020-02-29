@@ -31,7 +31,7 @@ import java.nio.ShortBuffer;
 
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
@@ -66,7 +66,7 @@ public class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 	
 	@Override
 	public VoxelDataType dataType() {
-		return VoxelDataTypeShort.instance;
+		return VoxelDataTypeUnsignedShort.instance;
 	}
 	
 	@Override

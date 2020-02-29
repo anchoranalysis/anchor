@@ -26,10 +26,10 @@ package org.anchoranalysis.image.io;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
  
-public class RasterIOException extends AnchorCheckedException {
+public class RasterIOException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 

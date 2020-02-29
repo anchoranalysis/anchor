@@ -85,6 +85,27 @@ public class Stack implements Iterable<Chnl> {
 		delegate = new StackNotUniformSized();
 	}
 
+	/** Produces a new stack with a particular operation applied to each channel.
+	 * 
+	 *  <p>The function applied to the channel should ensure it produces uniform sizes</p>
+	 * 
+	 * @param mapFunc performs an operation on a channel and produces a modified channel (or a different one entirely)
+	 * @return a new stack containing mapFunc(chnl) preserving the channel order
+	 * @throws IncorrectImageSizeException if the channels produced have non-uniform sizes
+	 * */ 
+	public Stack mapChnl( ChnlMapOperation mapFunc ) throws OperationFailedException {
+		Stack out = new Stack();
+		for( Chnl c : this ) {
+			try {
+				out.addChnl(
+					mapFunc.apply(c)
+				);
+			} catch (IncorrectImageSizeException e) {
+				throw new OperationFailedException(e);
+			}
+		}
+		return out;
+	}
 	
 	public Stack extractSlice(int z) {
 		// We know the sizes will be correct

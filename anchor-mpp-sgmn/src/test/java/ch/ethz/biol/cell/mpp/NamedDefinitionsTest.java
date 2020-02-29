@@ -43,11 +43,11 @@ import anchor.test.TestLoader;
 
 public class NamedDefinitionsTest {
 
-	private TestLoader loader = TestLoader.createFromExecutingJARDirectory(NamedDefinitionsTest.class);
+	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
 	@Before
     public void setUp() {
-		RegisterBeanFactories.registerAllPackageBeanFactories(false);
+		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
 	private void checkNamedDefinitions( Define namedDefinitions ) {

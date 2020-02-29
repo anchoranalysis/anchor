@@ -29,14 +29,14 @@ package org.anchoranalysis.io.generator;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // Allows us to call an IterableGenerator<Cfg> as if it was an IterableGenerator<CfgNRG> 
 public class IterableGeneratorBridge<SourceType,DestinationType> extends Generator implements IterableGenerator<SourceType> {

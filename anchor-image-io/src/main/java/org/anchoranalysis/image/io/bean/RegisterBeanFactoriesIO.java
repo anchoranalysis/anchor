@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.factory.IndirectlyFromListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterCell;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 
 // An externally loadable component of the system
 public final class RegisterBeanFactoriesIO {

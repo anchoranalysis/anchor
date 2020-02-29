@@ -39,8 +39,8 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class CfgCachedGenerator extends CacheableCfgToRGBGenerator {
 

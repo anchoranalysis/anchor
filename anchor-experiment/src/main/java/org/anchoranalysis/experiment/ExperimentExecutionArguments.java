@@ -2,7 +2,11 @@ package org.anchoranalysis.experiment;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
 
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /*
@@ -34,14 +38,14 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class ExperimentExecutionArguments {
 	
 	/**
-	 * Is the GUI enabled
-	 */
-	private boolean guiEnabled = false;
-	
-	/**
 	 * Is debug-mode enabled
 	 */
 	private boolean debugEnabled = false;
+	
+	/**
+	 * A list of paths referring to specific inputs;
+	 */
+	private List<Path> inputPaths;
 	
 	/**
 	 * A directory indicating where inputs can be located
@@ -52,6 +56,26 @@ public class ExperimentExecutionArguments {
 	 * A directory indicating where inputs can be located
 	 */
 	private Path outputDirectory;
+	
+	
+	/**
+	 * If non-null, a glob that is applied on inputDirectory
+	 */
+	private String inputFilterGlob;
+		
+	
+	/**
+	 * If non-null, a set of extension filters that can be applied on inputDirectory 
+	 * 
+	 * <p>An empty set implies, no check is applied</p>
+	 */
+	private Set<String> inputFilterExtensions;
+	
+	
+	/**
+	 * If non-null, a name to describe the ongoing task
+	 */
+	private String taskName;
 
 
 	/** Creates an input-context, reusing parameters from the experiment-execution 
@@ -60,8 +84,18 @@ public class ExperimentExecutionArguments {
 		InputContextParams out = new InputContextParams();
 		out.setDebugMode(debugEnabled);
 		out.setInputDir(inputDirectory);
-		out.setGuiMode(guiEnabled);
+		if (inputFilterGlob!=null) {
+			out.setInputFilterGlob(inputFilterGlob);
+		}
+		if (inputFilterExtensions!=null) {
+			out.setInputFilterExtensions(inputFilterExtensions);
+		}
+		out.setInputPaths(inputPaths);
 		return out;
+	}
+	
+	public FilePathPrefixerParams createParamsContext() throws AnchorIOException {
+		return new FilePathPrefixerParams(debugEnabled, outputDirectory);
 	}
 	
 	public Path getInputDirectory() {
@@ -86,17 +120,9 @@ public class ExperimentExecutionArguments {
 	public boolean hasInputDirectory() {
 		return inputDirectory!=null;
 	}
-
-	public void setGUIEnabled( boolean value) {
-		guiEnabled = value;
-	}
 	
 	public void setDebugEnabled( boolean value ) {
 		debugEnabled = value;
-	}
-	
-	public boolean isGUIEnabled() {
-		return guiEnabled;
 	}
 	
 	public boolean isDebugEnabled() {
@@ -110,8 +136,44 @@ public class ExperimentExecutionArguments {
 	public boolean hasOutputDirectory() {
 		return outputDirectory!=null;
 	}
+	
+	public boolean hasInputFilterExtensions() {
+		return inputFilterExtensions!=null;
+	}
 
 	public void setOutputDirectory(Path outputDirectory) {
 		this.outputDirectory = outputDirectory;
+	}
+
+	public String getInputFilterGlob() {
+		return inputFilterGlob;
+	}
+
+	public void setInputFilterGlob(String inputFilterGlob) {
+		this.inputFilterGlob = inputFilterGlob;
+	}
+
+	public Set<String> getInputFilterExtensions() {
+		return inputFilterExtensions;
+	}
+
+	public void setInputFilterExtensions(Set<String> inputFilterExtensions) {
+		this.inputFilterExtensions = inputFilterExtensions;
+	}
+
+	public List<Path> getInputPaths() {
+		return inputPaths;
+	}
+
+	public void setInputPaths(List<Path> inputPaths) {
+		this.inputPaths = inputPaths;
+	}
+	
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 }

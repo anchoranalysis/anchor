@@ -27,7 +27,6 @@ package org.anchoranalysis.feature.io.csv;
  */
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
@@ -49,7 +49,7 @@ public class FeatureCSVWriter {
 	}
 	
 	// Can return null
-	public static FeatureCSVWriter create( String outputName, BoundOutputManagerRouteErrors outputManager, String[] firstHeaderNames, FeatureNameList featureNames ) throws IOException {
+	public static FeatureCSVWriter create( String outputName, BoundOutputManagerRouteErrors outputManager, String[] firstHeaderNames, FeatureNameList featureNames ) throws AnchorIOException {
 		
 		List<String> allHeaders = new ArrayList<String>( Arrays.asList(firstHeaderNames) );
 		allHeaders.addAll( featureNames.asList() );

@@ -52,7 +52,7 @@ import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.objmask.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -98,7 +98,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 	
 	
 	@Override
-	public void doStack( NamedChnlsInputAsStack inputObject, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
 		
 		try {
 			SgmnObjMaskCollection sgmnDup = sgmn.duplicateBean();

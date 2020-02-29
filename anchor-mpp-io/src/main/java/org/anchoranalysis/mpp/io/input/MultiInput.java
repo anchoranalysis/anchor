@@ -37,15 +37,17 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
-public class MultiInput extends StackInputBase {
-
+public class MultiInput extends ProvidesStackInput {
+	
+	public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
+	
 	private StackWithMap stackWithMap;
 	
 	private OperationMap<Cfg> mapCfg = new OperationMap<>();
@@ -54,7 +56,11 @@ public class MultiInput extends StackInputBase {
 	private OperationMap<Histogram> mapHistogram = new OperationMap<>();
 	private OperationMap<Path> mapFilePath = new OperationMap<>();
 	
-	public MultiInput( String mainObjectName, StackInputBase mainInputObject ) {
+	public MultiInput( ProvidesStackInput mainInputObject ) {
+		this( DEFAULT_IMAGE_INPUT_NAME, mainInputObject );
+	}
+	
+	public MultiInput( String mainObjectName, ProvidesStackInput mainInputObject ) {
 		super();
 		assert(mainInputObject!=null);
 		this.stackWithMap = new StackWithMap(mainObjectName, mainInputObject);

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class ExtractedBBoxGenerator extends RasterGenerator implements IterableObjectGenerator<BoundingBox,Stack> {
 

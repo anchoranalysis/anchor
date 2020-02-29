@@ -31,9 +31,8 @@ import java.io.IOException;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
@@ -44,11 +43,10 @@ import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
  * 
@@ -76,31 +74,38 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected void execExperiment( BoundOutputManagerRouteErrors outputManager, ManifestRecorder experimentalManifest, ExperimentExecutionArguments expArgs, LogReporter logReporter ) throws ExperimentExecutionException {
+	protected void execExperiment( ParametersExperiment params ) throws ExperimentExecutionException {
 		
-		try {
+		try {	
 			List<T> inputObjects = getInput().inputObjects(
-				expArgs.createInputContext(),
-				ProgressReporterNull.get()
+				new InputManagerParams(
+					params.getExperimentArguments().createInputContext(),
+					ProgressReporterNull.get(),
+					new LogErrorReporter(params.getLogReporterExperiment())
+				)
 			);
+			checkCompabilityInputObjects(inputObjects);
 			
-			ParametersExperiment params = new ParametersExperiment();
-			params.setExperimentalManifest(experimentalManifest);
-			params.setOutputManager(outputManager);
-			params.setExperimentIdentifier(getExperimentIdentifier());
-			params.setExperimentArguments(expArgs);
-			params.setLogReporterExperiment(logReporter);
 			params.setLogReporterTaskCreator(logReporterTask);
-			params.setDetailedLogging( useDetailedLogging() );
-			
+						
 			taskProcessor.executeLogStats(
-				outputManager,
+				params.getOutputManager(),
 				inputObjects,
 				params
 			);
 			
-		} catch (IOException | DeserializationFailedException e) {
-			throw new ExperimentExecutionException(e);
+		} catch (AnchorIOException | IOException e) {
+			throw new ExperimentExecutionException("An error occured while searching for inputs", e);
+		}			
+	}
+	
+	private void checkCompabilityInputObjects(List<T> inputObjects) throws ExperimentExecutionException {
+		for( T input : inputObjects ) {
+			if (!taskProcessor.isInputObjectCompatibleWith(input.getClass())) {
+				throw new ExperimentExecutionException(
+					String.format("Input has an incompatible class for the associated task: %s", input.getClass().toString() )
+				);
+			}
 		}
 	}
 	
@@ -144,8 +149,8 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	}
 
 	@Override
-	public void replaceTask(Task<T, S> task) throws OperationFailedException {
-		this.taskProcessor.setTask(task);
+	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
+		this.taskProcessor.replaceTask(taskToReplace);
 		
 	}
 

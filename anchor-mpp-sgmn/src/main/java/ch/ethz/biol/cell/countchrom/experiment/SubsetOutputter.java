@@ -28,11 +28,11 @@ package ch.ethz.biol.cell.countchrom.experiment;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class SubsetOutputter<T> {
 	private INamedProvider<T> providers;

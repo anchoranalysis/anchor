@@ -28,7 +28,7 @@ package org.anchoranalysis.io.output.bound;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.io.output.OutputManagerAlreadyExists;
+import org.anchoranalysis.io.output.error.OutputManagerAlreadyExistsException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.apache.commons.io.FileUtils;
 
@@ -81,7 +81,7 @@ public class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
 					String line1 = "Output directory already exists.";
 					String line3 = "Consider enabling delExistingFolder=\"true\" in experiment.xml";
 					// Check if it exists already, and refuse to overwrite
-					throw new OutputManagerAlreadyExists(
+					throw new OutputManagerAlreadyExistsException(
 						String.format("%s%nBefore proceeding, please delete: %s%n%s", line1, outputDirectory, line3)
 					);
 				}

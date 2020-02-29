@@ -34,9 +34,9 @@ import java.nio.file.Path;
 
 import javax.xml.transform.TransformerException;
 
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.xml.XmlOutputter;
 import org.apache.commons.configuration.XMLConfiguration;
 

@@ -31,8 +31,7 @@
 	  		<artifactId>anchor-io</artifactId>
 	  		<version>0.0.8-SNAPSHOT</version>
 	  	</dependency>
-	  	
-		
+
 	</dependencies>		
 
 </project>

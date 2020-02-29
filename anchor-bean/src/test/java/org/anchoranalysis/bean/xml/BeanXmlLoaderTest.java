@@ -95,7 +95,7 @@ public class BeanXmlLoaderTest {
 	}
 	
 	private <T> T registerLoad( String fileId ) throws BeanXmlException {
-		RegisterBeanFactories.registerAllPackageBeanFactories(false);
+		RegisterBeanFactories.registerAllPackageBeanFactories();
 		
 		Path path = loader.resolveTestPath(
 			String.format("org.anchoranalysis.bean.xml/%s.xml", fileId)

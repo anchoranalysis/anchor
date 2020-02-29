@@ -1,5 +1,8 @@
 package org.anchoranalysis.image.io.input;
 
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.Operation;
+
 /*
  * #%L
  * anchor-image-io
@@ -27,158 +30,81 @@ package org.anchoranalysis.image.io.input;
  */
 
 
-import java.io.File;
-import java.nio.Buffer;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.bean.chnl.map.creator.ImgChnlMapCreator;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesConcatenate;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
- * Provides a set of channels as an input, each of which has a name. The standard implementation
- *   of {@link NamedChnlsInputBase}.
- *   
- * It can be used together with {@link NamedChnlsInputAppend} where are additional channels are added.
+ * Provides a set of channels as an input, each of which has a name. Only a single time-point is possible
  * 
  * @author Owen Feehan
  *
- * @param <T> voxel data-type buffer
  */
-public class NamedChnlsInput<T extends Buffer> extends NamedChnlsInputBase {
+public abstract class NamedChnlsInput extends ProvidesStackInput {
 
-	private FileInput delegate;
-	private RasterReader rasterReader;
-	private ImgChnlMapCreator chnlMapCreator;
+	/** Number of series */
+	public abstract int numSeries() throws RasterIOException;
 	
-	private ImgChnlMap chnlMap;
+	/** Dimensions of a particular series */
+	public abstract ImageDim dim( int seriesIndex ) throws RasterIOException;
 	
-	// We cache a certain amount of stacks read for particular series
-	private OpenedRaster openedRasterMemo = null;
+	/** Number of channels */
+	public abstract int numChnl() throws RasterIOException;
 	
-	// This is to correct for a problem with formats such as czi where the seriesIndex doesn't indicate
-	//   the total number of series but rather is incremented with each acquisition, so for our purposes
-	//   we treat it as if its 0
-	private boolean useLastSeriesIndexOnly = false;
-
-	// The root object that is used to provide the descriptiveName and pathForBinding
-	//
-	public NamedChnlsInput(FileInput delegate, RasterReader rasterReader,
-			ImgChnlMapCreator chnlMapCreator, boolean useLastSeriesIndexOnly ) {
-		super();
-		assert( rasterReader != null );
-		this.delegate = delegate;
-		this.rasterReader = rasterReader;
-		this.chnlMapCreator = chnlMapCreator;
-		this.useLastSeriesIndexOnly = useLastSeriesIndexOnly;
-	}
-	
-	@Override
-	public ImageDim dim( int seriesIndex ) throws RasterIOException {
-		return openedRaster().dim(seriesIndex);
-	}
-
-	@Override
-	public int numSeries() throws RasterIOException {
-		if (useLastSeriesIndexOnly) {
-			return 1;
-		} else {
-			return openedRaster().numSeries();
-		}
-	}
-	
-	@Override
-	public boolean hasChnl( String chnlName ) throws RasterIOException {
-		return chnlMap().keySet().contains(chnlName);
-		//chnlMap.get(chnlName)!=-1;
-	}
+	/** Bit-depth of image */
+	public abstract int bitDepth() throws RasterIOException;
 	
 	// Where most of our time is being taken up when opening a raster
-	@Override
-	public NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException {
+	public abstract NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException;
 
-		// We always use the last one
-		if (useLastSeriesIndexOnly) {
-			seriesNum = openedRaster().numSeries()-1;
+	@Override
+	public void addToStore(NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter)
+			throws OperationFailedException {
+		// Adds each channel as a separate stack
+		try {
+			NamedChnlCollectionForSeries ncc = createChnlCollectionForSeries(seriesNum, progressReporter);
+			// Apply it only to first time-series frame
+			ncc.addAsSeparateChnls(stackCollection, 0);
+			
+		} catch (RasterIOException e) {
+			throw new OperationFailedException(e);
 		}
 		
-		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<>();
-		out.add( new NamedChnlCollectionForSeriesMap( openedRaster(), chnlMap(), seriesNum ) );
-		
-		return out;
 	}
 	
 	@Override
-	public String descriptiveName() {
-		return delegate.descriptiveName();
-	}
-	
-	@Override
-	public List<Path> pathForBindingForAllChannels() {
-		ArrayList<Path> out = new ArrayList<>();
-		out.add(pathForBinding());
-		return out;
-	}
-
-	@Override
-	public Path pathForBinding() {
-		return delegate.pathForBinding();
-	}
-
-	@Override
-	public File getFile() {
-		return delegate.getFile();
-	}
-
-	@Override
-	public int numChnl() throws RasterIOException {
-		return openedRaster().numChnl();
-	}
-
-	@Override
-	public int bitDepth() throws RasterIOException {
-		return openedRaster().bitDepth();
-	}
-	
-	private ImgChnlMap chnlMap() throws RasterIOException {
-		openedRaster();
-		return chnlMap;
-	}
-	
-	private OpenedRaster openedRaster() throws RasterIOException {
-		if (openedRasterMemo==null) {
-			openedRasterMemo = rasterReader.openFile( delegate.pathForBinding() );
+	public void addToStoreWithName(String name,
+			NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
+		// Adds the channels as a stack under the given name
+				
+			
+		// Creates a stack that combines all the channels
+		Operation<TimeSequence> op = () -> {
+			
+			// Apply it only to first time-series frame
 			try {
-				chnlMap = chnlMapCreator.createMap( openedRasterMemo );
-			} catch (CreateException e) {
-				throw new RasterIOException(e);
+				NamedChnlCollectionForSeries ncc = createChnlCollectionForSeries(seriesNum, progressReporter);
+				return new TimeSequence( ncc.allChnlsAsStack(0).doOperation() );
+				
+			} catch (OperationFailedException | RasterIOException e) {
+				throw new ExecuteException(e);
 			}
-		}
-		return openedRasterMemo;
+			
+			
+		};
+		
+		// Adds this stack (cached) under the given name
+		stackCollection.add(name, new CachedGetter<>(op) );
 	}
 
 	@Override
-	public void close(ErrorReporter errorReporter) {
-		
-		if (openedRasterMemo!=null) {
-			try {
-				openedRasterMemo.close();
-			} catch (RasterIOException e) {
-				errorReporter.recordError(NamedChnlsInput.class, e);
-			}
-		}
-		delegate.close(errorReporter);
+	public int numFrames() {
+		return 1;
 	}
+
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.io.generator;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // Allows us to call an IterableGenerator<ExternalType> as if it was an IterableGenerator<InternalType>
 //   using an interface function to connect the two

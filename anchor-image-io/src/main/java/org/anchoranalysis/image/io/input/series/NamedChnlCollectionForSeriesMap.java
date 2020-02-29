@@ -33,6 +33,7 @@ import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
@@ -40,8 +41,10 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -64,31 +67,24 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 		this.openedRaster = openedRaster;
 	}
 	
-	private TimeSequence createTs( ProgressReporter progressReporter ) throws RasterIOException {
-		if( ts==null) {
-			// TODO create another way of inserting scaling information from the getChnlMap()
-			ts = openedRaster.open(seriesNum, progressReporter );
-		}
-		return ts;
-	}
-	
 	@Override
 	public ImageDim dimensions() throws RasterIOException {
 		return openedRaster.dim(seriesNum);
 	}
 			
 	// The outputManager is in case we want to do any debugging
-	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException {
+	@Override
+	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 
 		int index = chnlMap.get(chnlName);
 		if (index==-1) {
-			throw new RasterIOException( String.format("'%s' cannot be found", chnlName) );
+			throw new GetOperationFailedException( String.format("'%s' cannot be found", chnlName) );
 		}
 		
 		Stack stack = createTs( progressReporter ).get(t); 
 
 		if (index>=stack.getNumChnl()) {
-			throw new RasterIOException( String.format("Stack does not have a channel corresponding to '%s'",chnlName) );
+			throw new GetOperationFailedException( String.format("Stack does not have a channel corresponding to '%s'",chnlName) );
 		}
 		
 		return stack.getChnl( chnlMap.getException(chnlName) );
@@ -96,7 +92,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	
 	// The outputManager is in case we want to do any debugging
 	@Override
-	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException {
+	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 
 		int index = chnlMap.get(chnlName);
 		if (index==-1) {
@@ -114,7 +110,11 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	
 	@Override
 	public int sizeT( ProgressReporter progressReporter ) throws RasterIOException {
-		return createTs( progressReporter ).size();
+		try {
+			return createTs( progressReporter ).size();
+		} catch (GetOperationFailedException e) {
+			throw new RasterIOException(e);
+		}
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	}
 	
 	@Override
-	public void addToStackCollection( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws RasterIOException {
+	public void addAsSeparateChnls( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws OperationFailedException {
 		
 		try {
 			try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, chnlMap.keySet().size() )) {
@@ -140,6 +140,8 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 					stackCollection.addImageStack( chnlName, new Stack(image) );
 					prm.incrWorker();
 				}
+			} catch (GetOperationFailedException e) {
+				throw new OperationFailedException(e);
 			}
 			
 		} finally {
@@ -148,7 +150,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	}
 
 	@Override
-	public void addToStackCollection( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException  {
+	public void addAsSeparateChnls( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException  {
 		// Populate our stack from all the channels
 		for (final String chnlName : chnlMap.keySet() ) {
 			
@@ -159,7 +161,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 					Chnl image;
 					try {
 						image = getChnl(chnlName,  t, ProgressReporterNull.get());
-					} catch (RasterIOException e) {
+					} catch (GetOperationFailedException e) {
 						throw new ExecuteException(e);
 					}
 					return new TimeSequence( new Stack(image) );
@@ -170,8 +172,38 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 			stackCollection.add( chnlName, op );
 		}
 	}
+	
+	@Override
+	public Operation<Stack> allChnlsAsStack(int t) throws OperationFailedException {
+		return new CachedOperation<Stack>() {
 
-	protected ImgChnlMap getChnlMap() {
-		return chnlMap;
+			@Override
+			protected Stack execute() throws ExecuteException {
+				
+				Stack out = new Stack();
+				
+				for( ImgChnlMapEntry entry : chnlMap.entryCollection() ) {
+					try {
+						out.addChnl( getChnl(entry.getName(), t, ProgressReporterNull.get()) );
+					} catch (IncorrectImageSizeException | GetOperationFailedException e) {
+						throw new ExecuteException(e);
+					}
+				}
+				
+				return out;
+			}
+		};
+	}
+	
+	private TimeSequence createTs( ProgressReporter progressReporter ) throws GetOperationFailedException {
+		if( ts==null) {
+			// TODO create another way of inserting scaling information from the getChnlMap()
+			try {
+				ts = openedRaster.open(seriesNum, progressReporter );
+			} catch (RasterIOException e) {
+				throw new GetOperationFailedException(e);
+			}
+		}
+		return ts;
 	}
 }

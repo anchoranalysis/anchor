@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 /** Combines a Stack with a map of other stacks */
@@ -42,12 +42,12 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
 
 	// Needed for getting main-stack
 	private String mainObjectName;
-	private StackInputBase mainInputObject;
+	private ProvidesStackInput mainInputObject;
 	
 	// Where the other stacks are stored
 	private OperationMap<TimeSequence> map = new OperationMap<>();
 	
-	public StackWithMap( String mainObjectName,	StackInputBase mainInputObject ) {
+	public StackWithMap( String mainObjectName,	ProvidesStackInput mainInputObject ) {
 		super();
 		this.mainObjectName = mainObjectName;
 		this.mainInputObject = mainInputObject;

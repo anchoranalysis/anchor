@@ -43,7 +43,7 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
  * @author FEEHANO
  *
  */
-class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjMaskCollection,List<ObjMask>> {
+public class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjMaskCollection,List<ObjMask>> {
 
 	public GeneratorTIFFDirectory() {
 		super(

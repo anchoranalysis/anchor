@@ -1,10 +1,10 @@
 package org.anchoranalysis.io.output.bean;
 
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,13 @@ package org.anchoranalysis.io.output.bean;
  * #L%
  */
 
-
-import java.io.IOException;
-import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 /*
@@ -53,7 +53,7 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
 	/** A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key */ 
 	public abstract OutputAllowed outputAllowedSecondLevel( String key );
 	
-	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, boolean debugMode ) throws IOException;
+	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws AnchorIOException;
 	
-	public abstract FilePathPrefix prefixForFile( Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, boolean debugMode ) throws IOException;
+	public abstract FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException;
 }

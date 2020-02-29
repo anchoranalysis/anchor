@@ -27,26 +27,28 @@ package org.anchoranalysis.experiment.log.reporter;
  */
 
 
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 
 public class TextFileLogReporter implements StatefulLogReporter {
 
+	private String outputName;
 	private BoundOutputManager bom;
 	private ErrorReporter errorReporter;
 	
 	private FileOutput fileOutput;
 	private PrintWriter printWriter;
 	
-	public TextFileLogReporter(BoundOutputManager bom,
+	public TextFileLogReporter(String outputName, BoundOutputManager bom,
 			ErrorReporter errorReporter) {
 		super();
+		this.outputName = outputName;
 		this.bom = bom;
 		this.errorReporter = errorReporter;
 	}
@@ -60,7 +62,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	public void start() {
 	
 		try {
-			fileOutput = TextFileLogHelper.createOutput(bom);
+			fileOutput = TextFileLogHelper.createOutput(bom, outputName);
 			
 			if (fileOutput==null) {
 				return;
@@ -68,7 +70,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 			
 			fileOutput.start();
 			printWriter = fileOutput.getWriter();
-		} catch (IOException | OutputWriteFailedException e) {
+		} catch (AnchorIOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}		
 	}
@@ -80,9 +82,11 @@ public class TextFileLogReporter implements StatefulLogReporter {
 		}
 		
 		if (printWriter!=null) {
-			printWriter.print(message);
-			printWriter.println();
-			printWriter.flush();
+			synchronized(printWriter) {
+				printWriter.print(message);
+				printWriter.println();
+				printWriter.flush();
+			}
 		}
 	}
 	

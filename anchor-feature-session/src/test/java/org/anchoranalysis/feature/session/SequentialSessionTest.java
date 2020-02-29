@@ -34,6 +34,7 @@ import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.NullParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
 import org.junit.Test;
 
 public class SequentialSessionTest {

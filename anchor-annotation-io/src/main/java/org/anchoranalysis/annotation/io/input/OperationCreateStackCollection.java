@@ -32,22 +32,22 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
 class OperationCreateStackCollection extends CachedOperationWithProgressReporter<INamedProvider<Stack>> {
 
-	private StackInputBase inputObject;
+	private ProvidesStackInput inputObject;
 	private int seriesNum;
 	private int t;
 	
-	public OperationCreateStackCollection( StackInputBase inputObject ) {
+	public OperationCreateStackCollection( ProvidesStackInput inputObject ) {
 		this(inputObject,0,0);
 	}
 	
-	public OperationCreateStackCollection( StackInputBase inputObject, int seriesNum, int t ) {
+	public OperationCreateStackCollection( ProvidesStackInput inputObject, int seriesNum, int t ) {
 		super();
 		this.inputObject = inputObject;
 		this.seriesNum = seriesNum;

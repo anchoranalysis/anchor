@@ -33,10 +33,10 @@ import java.nio.file.Path;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
 

@@ -54,12 +54,12 @@ public class LogReporterBeanSwitchDetailedLogging extends LogReporterBean {
 	// END BEAN PROPERTIES
 
 	@Override
-	public StatefulLogReporter create(BoundOutputManager bom, ErrorReporter errorReporter,
-			ExperimentExecutionArguments expArgs, boolean detailedLogging) {
+	public StatefulLogReporter create(String outputName, BoundOutputManager bom,
+			ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
 		if (detailedLogging) {
-			return detailed.create(bom, errorReporter, expArgs, detailedLogging);
+			return detailed.create(outputName, bom, errorReporter, expArgs, detailedLogging);
 		} else {
-			return notDetailed.create(bom, errorReporter, expArgs, detailedLogging);
+			return notDetailed.create(outputName, bom, errorReporter, expArgs, detailedLogging);
 		}
 	}
 

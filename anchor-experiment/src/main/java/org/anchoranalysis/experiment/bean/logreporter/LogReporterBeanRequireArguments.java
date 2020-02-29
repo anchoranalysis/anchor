@@ -66,10 +66,10 @@ public class LogReporterBeanRequireArguments extends LogReporterBean {
 	}
 
 	@Override
-	public StatefulLogReporter create(BoundOutputManager bom,
-			ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
+	public StatefulLogReporter create(String outputName,
+			BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
 		if (requireArguments.hasAllRequiredArguments(expArgs)) {
-			return logReporter.create(bom, errorReporter, expArgs, detailedLogging);
+			return logReporter.create(outputName, bom, errorReporter, expArgs, detailedLogging);
 		} else {
 			return new StatefulNullLogReporter();
 		}

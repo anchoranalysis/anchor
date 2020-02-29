@@ -37,10 +37,10 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 
@@ -52,13 +52,13 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 	
 	public void convertFrom( VoxelBoxWrapper vbIn, VoxelBox<DestinationType> vbOut ) {
 		// Otherwise, depending on the input type we spawn in different directions
-		if (vbIn.getVoxelDataType().equals( VoxelDataTypeByte.instance )) {
+		if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			convertFromByte(vbIn.asByte(), vbOut);
 		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeFloat.instance )) {
 			convertFromFloat(vbIn.asFloat(), vbOut);
-		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeShort.instance )) {
+		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance )) {
 			convertFromShort(vbIn.asShort(), vbOut);
-		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeInt.instance )) {
+		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedInt.instance )) {
 			convertFromInt(vbIn.asInt(), vbOut);
 		}
 	}

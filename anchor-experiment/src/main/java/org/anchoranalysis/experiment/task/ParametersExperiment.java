@@ -1,5 +1,8 @@
 package org.anchoranalysis.experiment.task;
 
+import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
+import org.anchoranalysis.core.log.LogReporter;
+
 /*-
  * #%L
  * anchor-experiment
@@ -26,11 +29,11 @@ package org.anchoranalysis.experiment.task;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
+import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
@@ -46,10 +49,10 @@ public class ParametersExperiment {
 	// Parameters for all tasks in general (the experiment)
 	private ManifestRecorder experimentalManifest;
 	private BoundOutputManagerRouteErrors outputManager;
-	private ExperimentIdentifier experimentIdentifier;
+	private String experimentIdentifier;
 	
 	// This is an actual log-reporter
-	private LogReporter logReporterExperiment;
+	private StatefulLogReporter logReporterExperiment;
 	
 	// This is a means to create new log-reporters for each task
 	private LogReporterBean logReporterTaskCreator;
@@ -62,47 +65,60 @@ public class ParametersExperiment {
 	 */
 	private boolean detailedLogging;
 	
+	public ParametersExperiment(
+		ExperimentExecutionArguments experimentArguments,
+		String experimentIdentifier,
+		ManifestRecorder experimentalManifest,
+		BoundOutputManager outputManager,
+		StatefulLogReporter logReporterExperiment,
+		boolean detailedLogging
+	) {
+		this.experimentArguments = experimentArguments;
+		this.experimentIdentifier = experimentIdentifier;
+		this.experimentalManifest = experimentalManifest;
+		this.detailedLogging = detailedLogging;
+		this.outputManager = wrapErrors(outputManager, logReporterExperiment);
+		this.logReporterExperiment = logReporterExperiment;
+	}
+	
+	public void setLogReporterTaskCreator(LogReporterBean logReporterTaskCreator) {
+		this.logReporterTaskCreator = logReporterTaskCreator;
+	}
+	
+	
 	public boolean isDetailedLogging() {
 		return detailedLogging;
-	}
-	public void setDetailedLogging(boolean detailedLogging) {
-		this.detailedLogging = detailedLogging;
 	}
 	
 	public ManifestRecorder getExperimentalManifest() {
 		return experimentalManifest;
 	}
-	public void setExperimentalManifest(ManifestRecorder experimentalManifest) {
-		this.experimentalManifest = experimentalManifest;
-	}
+
 	public BoundOutputManagerRouteErrors getOutputManager() {
 		return outputManager;
 	}
-	public void setOutputManager(BoundOutputManagerRouteErrors outputManager) {
-		this.outputManager = outputManager;
-	}
-	public ExperimentIdentifier getExperimentIdentifier() {
-		return experimentIdentifier;
-	}
-	public void setExperimentIdentifier(ExperimentIdentifier experimentIdentifier) {
-		this.experimentIdentifier = experimentIdentifier;
-	}
-	public LogReporter getLogReporterExperiment() {
+	
+	public StatefulLogReporter getLogReporterExperiment() {
 		return logReporterExperiment;
 	}
-	public void setLogReporterExperiment(LogReporter logReporterExperiment) {
-		this.logReporterExperiment = logReporterExperiment;
-	}
+	
 	public ExperimentExecutionArguments getExperimentArguments() {
 		return experimentArguments;
 	}
-	public void setExperimentArguments(ExperimentExecutionArguments experimentArguments) {
-		this.experimentArguments = experimentArguments;
-	}
+
 	public LogReporterBean getLogReporterTaskCreator() {
 		return logReporterTaskCreator;
 	}
-	public void setLogReporterTaskCreator(LogReporterBean logReporterTaskCreator) {
-		this.logReporterTaskCreator = logReporterTaskCreator;
+
+	public String getExperimentIdentifier() {
+		return experimentIdentifier;
+	}
+	
+	/** Redirects any output-errors into the log */
+	private static BoundOutputManagerRouteErrors wrapErrors( BoundOutputManager rootOutputManagerNoErrors, LogReporter logReporter ) {
+		return new BoundOutputManagerRouteErrors(
+			rootOutputManagerNoErrors,
+			new ErrorReporterIntoLog( logReporter )
+		);
 	}
 }

@@ -29,7 +29,9 @@ package org.anchoranalysis.image.io.input.series;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -37,13 +39,14 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
 	
-	public abstract Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException;
+	public abstract Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
-	public abstract Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException;
+	public abstract Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
 	public abstract Set<String> chnlNames();
 	
@@ -51,6 +54,8 @@ public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
 	
 	public abstract ImageDim dimensions() throws RasterIOException;
 
-	public abstract void addToStackCollection( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws RasterIOException;
-	public abstract void addToStackCollection( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException;
+	public abstract void addAsSeparateChnls( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws OperationFailedException;
+	public abstract void addAsSeparateChnls( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException;
+	
+	public abstract Operation<Stack> allChnlsAsStack( final int t ) throws OperationFailedException;
 }

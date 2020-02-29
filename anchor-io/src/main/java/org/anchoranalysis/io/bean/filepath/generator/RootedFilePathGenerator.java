@@ -1,10 +1,10 @@
 package org.anchoranalysis.io.bean.filepath.generator;
 
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,6 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * #L%
  */
 
-
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -35,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.bean.root.SplitPath;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class RootedFilePathGenerator extends FilePathGenerator {
 
@@ -71,7 +70,7 @@ public class RootedFilePathGenerator extends FilePathGenerator {
 	}
 
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		
 		SplitPath pathInWithoutRoot = RootPathMap.instance().split(pathIn, rootName, debugMode);		
 		

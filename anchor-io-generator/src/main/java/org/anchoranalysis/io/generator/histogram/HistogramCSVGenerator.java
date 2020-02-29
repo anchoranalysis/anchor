@@ -27,16 +27,16 @@ package org.anchoranalysis.io.generator.histogram;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class HistogramCSVGenerator extends CSVGenerator implements IterableGenerator<Histogram> {
 
@@ -76,7 +76,7 @@ public class HistogramCSVGenerator extends CSVGenerator implements IterableGener
 			Path filePath) throws OutputWriteFailedException {
 		try {
 			HistogramCSVWriter.writeHistogramToFile( histogram, filePath, ignoreZeros );
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new OutputWriteFailedException(e);
 		}
 	}

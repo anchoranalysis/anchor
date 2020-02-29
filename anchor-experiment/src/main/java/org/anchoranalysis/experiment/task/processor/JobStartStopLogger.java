@@ -75,7 +75,7 @@ public class JobStartStopLogger {
 		if (disableLogMessages) {
 			return;
 		}
-		logEvent("START", job, "");
+		logEvent("start", job, "");
 	}
 	
 	public synchronized void logEnd(JobDescription job, JobState jobState, boolean success) {
@@ -86,7 +86,7 @@ public class JobStartStopLogger {
 		
 		logWithDecoration( () -> {
 			logEvent(
-				success ? "END  " : "ERROR",
+				success ? "end  " : "ERROR",
 				job,
 				timeStr(jobState)
 			);

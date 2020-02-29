@@ -35,9 +35,13 @@ public abstract class ExperimentIdentifier extends AnchorBean<ExperimentIdentifi
 	 * 
 	 */
 	private static final long serialVersionUID = -7846340573699806634L;
-
-	public abstract void init( boolean gui );
 	
-	public abstract String identifier();
+	/**
+	 * Creates an identifier for the experiment
+	 * 
+	 * @param taskName if non-null, a name describing the current task.
+	 * @return a string to identify the current experiment
+	 */
+	public abstract String identifier(String taskName);
 
 }

@@ -27,14 +27,11 @@ package org.anchoranalysis.io.bean.input;
  */
 
 
-import java.io.IOException;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Base class for describing the input to an experiment (i.e. which files etc. form the source of the
@@ -51,6 +48,6 @@ public abstract class InputManager<T extends InputFromManager> extends AnchorBea
 	 */
 	private static final long serialVersionUID = -8305744272662659794L;
 
-	public abstract List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException, DeserializationFailedException;
+	public abstract List<T> inputObjects(InputManagerParams params) throws AnchorIOException;
 
 }

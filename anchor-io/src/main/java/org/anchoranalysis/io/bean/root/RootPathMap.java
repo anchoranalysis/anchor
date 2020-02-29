@@ -35,6 +35,7 @@ import java.util.List;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -68,7 +69,7 @@ public class RootPathMap {
 	 * @return the split-path
 	 * @throws IOException if the path cannot be matched against the root
 	 */
-	public SplitPath split( Path pathIn, String rootName, boolean debugMode ) throws IOException {
+	public SplitPath split( Path pathIn, String rootName, boolean debugMode ) throws AnchorIOException {
 		
 		SplitPath out = new SplitPath();
 		
@@ -141,13 +142,13 @@ public class RootPathMap {
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
-	public RootPath findRoot( String name, boolean debug ) throws IOException {
+	public RootPath findRoot( String name, boolean debug ) throws AnchorIOException {
 		
 		Collection<RootPath> exst = (Collection<RootPath>) map.get(name);
 		
 		// We check both, as the behaviour is implementation-dependent in the multimap
 		if (exst==null || exst.isEmpty()) {
-			throw new IOException(
+			throw new AnchorIOException(
 				String.format("Cannot find a root-path for '%s'", name)
 			);
 		}

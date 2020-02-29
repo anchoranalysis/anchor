@@ -70,6 +70,16 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	/** When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. */
 	@BeanField
 	private int showOngoingJobsLessThan = 0;
+	
+	/** 
+	 *  How many processors to avoid using for the tasks.
+	 *  
+	 *  <p>When using the maximum available number of processors, a certain amount are deliberately not used, to save them
+	 *  for other tasks on the operating system. This is particularly valuable on a desktop PC where other tasks (e.g web
+	 *  browsing) may be ongoing during processing.</p>
+	 */
+	@BeanField
+	private int keepProcessorsFree = 1;
 	// END BEAN
 		
 	@Override
@@ -119,7 +129,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		
 		int availableProcessors = Runtime.getRuntime().availableProcessors();
 		
-		int nrOfProcessors = availableProcessors - 1;
+		int nrOfProcessors = availableProcessors - keepProcessorsFree;
 		
 		if (maxNumProcessors>0) {
 			nrOfProcessors = Math.min(nrOfProcessors, maxNumProcessors);
@@ -186,5 +196,13 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 
 	public void setShowOngoingJobsLessThan(int showOngoingJobsLessThan) {
 		this.showOngoingJobsLessThan = showOngoingJobsLessThan;
+	}
+
+	public int getKeepProcessorsFree() {
+		return keepProcessorsFree;
+	}
+
+	public void setKeepProcessorsFree(int keepProcessorsFree) {
+		this.keepProcessorsFree = keepProcessorsFree;
 	}
 }

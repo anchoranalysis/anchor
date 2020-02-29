@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -69,7 +69,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
 		BoundingBox bbox = bboxDeserializer.deserialize(filePath);
 		
 		try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
-			Stack stack = or.openCheckType(0, ProgressReporterNull.get(), VoxelDataTypeByte.instance ).get(0);
+			Stack stack = or.openCheckType(0, ProgressReporterNull.get(), VoxelDataTypeUnsignedByte.instance ).get(0);
 			
 			if (stack.getNumChnl()!=1) {
 				throw new DeserializationFailedException("Raster file must have 1 channel exactly");

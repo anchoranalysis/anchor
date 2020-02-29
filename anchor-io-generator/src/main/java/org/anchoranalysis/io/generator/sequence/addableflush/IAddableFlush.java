@@ -4,7 +4,7 @@ package org.anchoranalysis.io.generator.sequence.addableflush;
  * #%L
  * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package org.anchoranalysis.io.generator.sequence.addableflush;
  * #L%
  */
 
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // A time series of RGB images requiring a color index that is constant across frames
 public interface IAddableFlush<T> {

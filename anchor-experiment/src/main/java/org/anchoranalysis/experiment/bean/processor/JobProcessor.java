@@ -30,8 +30,10 @@ import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.TaskStatistics;
@@ -47,7 +49,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @param <T> input-object type
  * @param <S> shared-state type
  */
-public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorBean<JobProcessor<T,S>> {
+public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorBean<JobProcessor<T,S>> implements IReplaceTask<T, S> {
 
 	/**
 	 * 
@@ -58,7 +60,7 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 	@BeanField
 	private Task<T,S> task;
 	// END BEAN PROPERTIES
-		
+	
 	/**
 	 * Executes the tasks, gathers statistics, and logs them
 	 * 
@@ -78,6 +80,11 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 		if (paramsExperiment.isDetailedLogging()) {
 			logStats(stats, paramsExperiment);
 		}
+	}
+	
+	/** Is an input-object compatible with this particular task? */
+	public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
+		return task.isInputObjectCompatibleWith(inputObjectClass);
 	}
 	
 	/** Is the execution-time of the task per-input expected to be very quick to execute? */
@@ -124,4 +131,19 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 	public void setTask(Task<T,S> task) {
 		this.task = task;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
+
+		// This is a bit hacky. If the underlying task inherit from IReplaceTask then, rather than directly
+		//  replacing the task, we call this method. In effect, this allows skipping of the task that is replaced.
+		if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
+			((IReplaceTask<T,S>) this.task).replaceTask(taskToReplace);
+		} else {
+			// If not, then we replace the task directly
+			this.task = taskToReplace;
+		}
+	}
 }
+

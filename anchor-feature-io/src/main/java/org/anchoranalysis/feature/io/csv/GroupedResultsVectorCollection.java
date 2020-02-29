@@ -48,9 +48,10 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 public class GroupedResultsVectorCollection {
@@ -143,7 +144,7 @@ public class GroupedResultsVectorCollection {
 		NamedFeatureStore featuresAggregate,
 		BoundOutputManagerRouteErrors outputManager,
 		LogErrorReporter logErrorReporter
-	) throws IOException {
+	) throws AnchorIOException {
 		
 		FeatureCSVWriter csvWriterAll = FeatureCSVWriter.create("csvAll", outputManager, groupHeaderNames, featureNamesNonAggregate );
 		FeatureCSVWriter csvWriterAggregate = featuresAggregate!=null ? FeatureCSVWriter.create("csvAgg", outputManager, groupHeaderNamesAggregate, featuresAggregate.createFeatureNames() ) : null;
@@ -188,7 +189,7 @@ public class GroupedResultsVectorCollection {
 		FeatureCSVWriter csvWriterAggregate,	// If null, disabled
 		BoundOutputManagerRouteErrors outputManager,
 		LogErrorReporter logErrorReporter
-	) throws IOException {
+	) throws AnchorIOException {
 		
 		BoundOutputManagerRouteErrors outputManagerGroup = outputManager.resolveFolder(
 			group.getUniqueName()
@@ -230,7 +231,7 @@ public class GroupedResultsVectorCollection {
 		FeatureNameList featureNamesSource,
 		ResultsVectorCollection featuresCollection,
 		LogErrorReporter logErrorReporter
-	) throws IOException {
+	) throws AnchorIOException {
 		
 		SequentialSession session = new SequentialSession( featuresAggregate.listFeatures() );
 		
@@ -238,7 +239,7 @@ public class GroupedResultsVectorCollection {
 			session.start( new FeatureInitParams(null), new SharedFeatureSet(), logErrorReporter );
 		} catch (InitException e1) {
 			logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e1);
-			throw new IOException(e1);
+			throw new AnchorIOException("Cannot start feature-session", e1);
 		}
 		
 		FeatureResultsVectorCollectionParams params = new FeatureResultsVectorCollectionParams(

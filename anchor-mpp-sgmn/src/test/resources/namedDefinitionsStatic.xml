@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <config>
-<bean config-class="org.anchoranalysis.bean.define.Define" config-factory="namedDefinitions">
+<bean config-class="org.anchoranalysis.bean.define.Define" config-factory="define">
 
 	<namedChnlProviderList config-class="java.util.List" config-factory="include" filePath="chnlProviderList.xml"/>
 

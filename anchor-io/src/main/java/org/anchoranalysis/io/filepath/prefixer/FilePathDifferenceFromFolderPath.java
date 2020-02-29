@@ -33,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -64,13 +65,17 @@ public class FilePathDifferenceFromFolderPath {
 	 * @param filePath the path to resolve
 	 * @throws IOException if the canonical file cannot be found
 	 */
-	public void init( Path baseFolderPath, Path filePath ) throws IOException {
+	public void init( Path baseFolderPath, Path filePath ) throws AnchorIOException {
 		
-		String base = baseFolderPath.toFile().getCanonicalFile().toURI().getPath();
-	    String all = filePath.toFile().getCanonicalFile().toURI().getPath();
-	    
-	    // As we've converted to URIs the seperator is always a forward slash
-	    calcDiff(base, all);			
+		try {
+			String base = baseFolderPath.toFile().getCanonicalFile().toURI().getPath();
+		    String all = filePath.toFile().getCanonicalFile().toURI().getPath();
+		    
+		    // As we've converted to URIs the seperator is always a forward slash
+		    calcDiff(base, all);
+		} catch (IOException e) {
+			throw new AnchorIOException("Cannot fully resolve paths");
+		}
 	}
 	
 	/**

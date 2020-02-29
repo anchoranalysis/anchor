@@ -35,11 +35,13 @@ public abstract class VoxelDataType {
 	private int numBits;
 	private String typeIdentifier;
 	private long maxValue;
+	private long minValue;
 	
-	protected VoxelDataType(int numBits, String typeIdentifier, long maxValue) {
+	protected VoxelDataType(int numBits, String typeIdentifier, long maxValue, long minValue) {
 		this.numBits = numBits;
 		this.typeIdentifier = typeIdentifier;
 		this.maxValue = maxValue;
+		this.minValue = minValue;
 	}
 
 	@Override
@@ -90,5 +92,9 @@ public abstract class VoxelDataType {
 
 	public final long maxValue() {
 		return maxValue;
+	}
+	
+	public final long minValue() {
+		return minValue;
 	}
 }

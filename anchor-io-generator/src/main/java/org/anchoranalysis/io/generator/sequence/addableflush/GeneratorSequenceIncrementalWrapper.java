@@ -27,7 +27,7 @@ package org.anchoranalysis.io.generator.sequence.addableflush;
  */
 
 import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceIncremental;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // Wraps a GeneratorSequenceWriter to the implement the IAddableFlush interface
 public class GeneratorSequenceIncrementalWrapper<T> implements IAddableFlush<T> {

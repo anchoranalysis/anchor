@@ -26,11 +26,11 @@ package org.anchoranalysis.experiment.log.reporter;
  * #L%
  */
 
-import java.io.IOException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 
 /** Writes text to a file, but only if close is called with a successful=true
@@ -46,11 +46,13 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	
 	private BoundOutputManager bom;
 	private ErrorReporter errorReporter;
+	private String outputName;
 	
-	public FailureOnlyTextFileLogReporter(BoundOutputManager bom, ErrorReporter errorReporter) {
+	public FailureOnlyTextFileLogReporter(BoundOutputManager bom, ErrorReporter errorReporter, String outputName) {
 		super();
 		this.bom = bom;
 		this.errorReporter = errorReporter;
+		this.outputName = outputName;
 	}	
 	
 	@Override
@@ -79,7 +81,7 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	private void writeStringToFile( String message ) {
 		
 		try {
-			FileOutput fileOutput = TextFileLogHelper.createOutput(bom);
+			FileOutput fileOutput = TextFileLogHelper.createOutput(bom, outputName);
 			
 			if (fileOutput==null) {
 				return;
@@ -89,7 +91,7 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 			fileOutput.getWriter().append( message );
 			fileOutput.end();
 			
-		} catch (IOException | OutputWriteFailedException e) {
+		} catch (AnchorIOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}
 	}

@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.anchoranalysis.bean.gui.ShowDialogFiles;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
@@ -39,10 +38,7 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 public class IncludeBeanFactory extends AnchorBeanFactory {
 	
-	private boolean choice = false;
-	
-	public IncludeBeanFactory( boolean choice ) {
-		this.choice = choice;
+	public IncludeBeanFactory() {
 	}
 	
 	
@@ -59,19 +55,7 @@ public class IncludeBeanFactory extends AnchorBeanFactory {
     	
     	Path exstPath = Paths.get( (String) param );
     	
-    	Path totalPath;
-    	if (choice) {
-    		// We present a dialog asking the user to choose from a list of files
-    		// We use the directory of filePath as the area to choose from
-    		// We default to the current selection
-    		Path parentDir = filePath.getParent();
-    		String defaultChoice = filePath.getFileName().toString();
-    		
-    		parentDir = BeanPathUtilities.combine(exstPath, parentDir);
-    		totalPath = ShowDialogFiles.showDialogFilesSelectOne( parentDir, "*.xml", defaultChoice);
-    	} else {
-    		totalPath = BeanPathUtilities.combine(exstPath, filePath);	
-    	}
+    	Path totalPath = BeanPathUtilities.combine(exstPath, filePath);	
     	
     	String xmlPath = (String) declXML.getBeanProperties().get("xpath");
     	

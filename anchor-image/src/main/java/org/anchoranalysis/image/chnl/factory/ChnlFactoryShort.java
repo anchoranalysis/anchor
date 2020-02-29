@@ -31,11 +31,11 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBoxShort;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromShortBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class ChnlFactoryShort extends ChnlFactorySingleType {
 
-	private static VoxelDataType dataType = VoxelDataTypeShort.instance;
+	private static VoxelDataType dataType = VoxelDataTypeUnsignedShort.instance;
 	
 	@Override
 	public Chnl createEmptyInitialised(ImageDim dim) {

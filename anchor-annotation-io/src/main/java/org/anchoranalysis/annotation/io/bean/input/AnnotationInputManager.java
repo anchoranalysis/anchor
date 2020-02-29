@@ -27,8 +27,6 @@ package org.anchoranalysis.annotation.io.bean.input;
  */
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +36,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 
-public class AnnotationInputManager<T extends StackInputBase, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
+public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
 
 	/**
 	 * 
@@ -62,15 +60,13 @@ public class AnnotationInputManager<T extends StackInputBase, S extends Annotato
 
 	
 	@Override
-	public List<AnnotationWithStrategy<S>> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException,
-			DeserializationFailedException {
+	public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
+			throws AnchorIOException {
 
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
+		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 			
 			List<T> inputs = input.inputObjects(
-				inputContext,
-				new ProgressReporterOneOfMany(prm)
+				params
 			);
 		
 			prm.incrWorker();
@@ -86,7 +82,7 @@ public class AnnotationInputManager<T extends StackInputBase, S extends Annotato
 	}
 	
 	
-	private List<AnnotationWithStrategy<S>> createListInput( List<T> listInputObjects, ProgressReporter progressReporter ) throws IOException {
+	private List<AnnotationWithStrategy<S>> createListInput( List<T> listInputObjects, ProgressReporter progressReporter ) throws AnchorIOException {
 		List<AnnotationWithStrategy<S>> outList = new ArrayList<>();
 
 		progressReporter.setMin( 0 );
@@ -110,7 +106,7 @@ public class AnnotationInputManager<T extends StackInputBase, S extends Annotato
 		return outList;
 	}
 	
-	public AnnotationWithStrategy<S> createInput( StackInputBase item ) throws IOException {
+	public AnnotationWithStrategy<S> createInput( ProvidesStackInput item ) throws AnchorIOException {
 		return new AnnotationWithStrategy<S>(item, annotatorStrategy);
 	}
 	

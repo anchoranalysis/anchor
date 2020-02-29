@@ -43,4 +43,8 @@ public class DeserializationFailedException extends AnchorCheckedException {
 		super( exc );
 	}
 
+	public DeserializationFailedException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }

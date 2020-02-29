@@ -40,12 +40,12 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToShort;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToShortScaleByType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackProviderGenerateString extends StackProvider {
 
@@ -84,14 +84,14 @@ public class StackProviderGenerateString extends StackProvider {
 			Stack stack = stringRasterGenerator.generateStack();
 			
 			if (createShort) {
-				ChnlConverter<ShortBuffer> cc = new ChnlConverterToShort( new VoxelBoxConverterToShortScaleByType() );
+				ChnlConverter<ShortBuffer> cc = new ChnlConverterToUnsignedShort( new VoxelBoxConverterToShortScaleByType() );
 					
 				stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL );
 			}
 			
 			
 			if (intensityProvider!=null) {
-				int maxTypeValue = createShort ? VoxelDataTypeShort.MAX_VALUE_INT : VoxelDataTypeByte.MAX_VALUE_INT;
+				int maxTypeValue = createShort ? VoxelDataTypeUnsignedShort.MAX_VALUE_INT : VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
 				
 				Stack stackIntensity = intensityProvider.create();
 				double maxValue = maxValueFromStack(stackIntensity);

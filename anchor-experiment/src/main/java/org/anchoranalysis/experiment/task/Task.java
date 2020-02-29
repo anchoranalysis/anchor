@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task;
 
+
+
 /*
  * #%L
  * anchor-experiment
@@ -45,7 +47,9 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
+
 
 /**
  * A task which performs some kind of processing on a specific input-object
@@ -94,12 +98,9 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		
 		// Bind an outputManager for the task
 		BoundOutputManager outputManagerTask = HelperBindOutputManager.createOutputManagerForTask(
-			paramsUnbound.getParametersExperiment().getOutputManager(),
-			paramsUnbound.getInputObject().pathForBinding(),
-			paramsUnbound.getParametersExperiment().getExperimentIdentifier().identifier(),
+			paramsUnbound.getInputObject(),
 			manifestTask,
-			paramsUnbound.getParametersExperiment().getExperimentalManifest(),
-			paramsUnbound.getParametersExperiment().getExperimentArguments().isDebugEnabled()
+			paramsUnbound.getParametersExperiment()
 		);
 		
 		assert(outputManagerTask.getOutputWriteSettings().hasBeenInit());	
@@ -110,6 +111,19 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		return executeJobLogExceptions( paramsBound, paramsUnbound.isSupressExceptions() );
 		
 	}
+	
+	/** Is an input-object compatible with this particular task? */
+	public boolean isInputObjectCompatibleWith( Class<? extends InputFromManager> inputObjectClass ) {
+		return inputTypesExpected().doesClassInheritFromAny(inputObjectClass);
+	}
+	
+	/** Highest class(es) that will function as a valid input.
+	 * 
+	 * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager)</p>
+	 **/
+	public abstract InputTypesExpected inputTypesExpected();
+		
+	public abstract void doJobOnInputObject( ParametersBound<T,S> params ) throws JobExecutionException;
 	
 	
 	/**
@@ -125,10 +139,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		// We create a new log reporter for this job only
 		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
 		StatefulLogReporter logReporterJob = paramsUnbound.getParametersExperiment().getLogReporterTaskCreator().create(
+			"job_log",
 			outputManagerTask,
 			errorReporterFallback,
-			paramsUnbound.getParametersExperiment().getExperimentArguments(),
-			paramsUnbound.getParametersExperiment().isDetailedLogging()
+			paramsUnbound.getParametersExperiment().getExperimentArguments(), paramsUnbound.getParametersExperiment().isDetailedLogging()
 		);
 		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(logReporterJob);
 		
@@ -219,22 +233,20 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			params.getInputObject().close( params.getLogErrorReporter().getErrorReporter() );
 		}
 		
-		params.getOutputManager().getWriterCheckIfAllowed().write(
+		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 
+		writeIfAllowed.write(
 			outputNameManifest,
 			() -> new XStreamGenerator<Object>( params.getManifest(), "ManifestRecorder")
 		);
-		params.getOutputManager().getWriterCheckIfAllowed().write(
+		writeIfAllowed.write(
 			outputNameManifest,
 			() -> new ObjectOutputStreamGenerator<>( params.getManifest(), "ManifestRecorder" )
 		);
-		params.getOutputManager().getWriterCheckIfAllowed().write(
+		writeIfAllowed.write(
 			outputNameExecutionTime,
 			() -> new StringGenerator( Long.toString(stopWatchFile.getTime()) )
 		);
 	}
-		
-	protected abstract void doJobOnInputObject( ParametersBound<T,S> params ) throws JobExecutionException;
-	
 	
 	// START: public
 	

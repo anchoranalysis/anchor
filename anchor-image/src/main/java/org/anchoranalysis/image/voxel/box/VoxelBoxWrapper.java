@@ -38,10 +38,10 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 // Wraps a VoxelBox associated with an ImgChnl so it can be casted to
 //  an appropriate data type
@@ -77,7 +77,7 @@ public class VoxelBoxWrapper {
 	@SuppressWarnings("unchecked")
 	public VoxelBox<ByteBuffer> asByte() throws IncorrectVoxelDataTypeException {
 		
-		if (!voxelDataType.equals( VoxelDataTypeByte.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeUnsignedByte.instance )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain unsigned 8-bit data (byte)");
 		}
 		
@@ -97,7 +97,7 @@ public class VoxelBoxWrapper {
 	@SuppressWarnings("unchecked")
 	public VoxelBox<ShortBuffer> asShort() throws IncorrectVoxelDataTypeException {
 		
-		if (!voxelDataType.equals( VoxelDataTypeShort.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeUnsignedShort.instance )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain unsigned 16-bit data (int)");
 		}
 		
@@ -107,7 +107,7 @@ public class VoxelBoxWrapper {
 	@SuppressWarnings("unchecked")
 	public VoxelBox<IntBuffer> asInt() throws IncorrectVoxelDataTypeException {
 		
-		if (!voxelDataType.equals( VoxelDataTypeInt.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeUnsignedInt.instance )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain unsigned 32-bit data (int)");
 		}
 		
@@ -127,7 +127,7 @@ public class VoxelBoxWrapper {
 		
 		// If the input-channel is Byte then we do it in-place
 		// Otherwise we create a new voxelbox
-		if(!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeByte.instance)) {
+		if(!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			boxOut = asByte();
 		} else {
 			boxOut = VoxelBoxFactory.getByte().create( any().extnt() );

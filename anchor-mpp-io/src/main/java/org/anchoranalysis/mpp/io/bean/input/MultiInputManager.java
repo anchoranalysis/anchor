@@ -27,8 +27,6 @@ package org.anchoranalysis.mpp.io.bean.input;
  */
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,13 +34,12 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
 import static org.anchoranalysis.mpp.io.bean.input.AppendHelper.*;
@@ -57,10 +54,10 @@ public class MultiInputManager extends MultiInputManagerBase {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private String inputName = "input_image";
+	private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
 	
 	@BeanField
-	private InputManager<? extends StackInputBase> input;
+	private InputManager<? extends ProvidesStackInput> input;
 	
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;	// For reading appended files
@@ -94,19 +91,18 @@ public class MultiInputManager extends MultiInputManagerBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public List<MultiInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException,
-			DeserializationFailedException {
+	public List<MultiInput> inputObjects(InputManagerParams params)
+			throws AnchorIOException {
 		
 		List<MultiInput> outList = new ArrayList<>();
 		
-		Iterator<? extends StackInputBase> itr = input.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<? extends ProvidesStackInput> itr = input.inputObjects(params).iterator();
 		
 		while (itr.hasNext()) {
-			StackInputBase mainStack = itr.next();
+			ProvidesStackInput mainStack = itr.next();
 			
 			MultiInput inputObject = new MultiInput(inputName,mainStack);
-			appendFromLists(inputObject, inputContext.isDebugMode());
+			appendFromLists(inputObject, params.isDebugMode());
 			
 			outList.add( inputObject );
 		}
@@ -137,11 +133,11 @@ public class MultiInputManager extends MultiInputManagerBase {
 		appendCfgFromAnnotation( listAppendCfgFromAnnotationRejectedOnly, inputObject, false, true, doDebug );
 	}
 			
-	public InputManager<? extends StackInputBase> getInput() {
+	public InputManager<? extends ProvidesStackInput> getInput() {
 		return input;
 	}
 
-	public void setInput(InputManager<? extends StackInputBase> input) {
+	public void setInput(InputManager<? extends ProvidesStackInput> input) {
 		this.input = input;
 	}
 

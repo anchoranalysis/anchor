@@ -35,10 +35,10 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class WriterRouterErrors {
 

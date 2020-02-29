@@ -42,5 +42,5 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public interface IReplaceTask<T extends InputFromManager,S> {
 
-	public void replaceTask( Task<T,S> task ) throws OperationFailedException;
+	public void replaceTask( Task<T,S> taskToReplace ) throws OperationFailedException;
 }

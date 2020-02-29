@@ -2,7 +2,6 @@ package org.anchoranalysis.annotation.io.bean.strategy;
 
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.background.AnnotationBackgroundDefinition;
@@ -38,7 +37,8 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
@@ -55,10 +55,11 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 	private RasterReader rasterReader;
 	// END BEAN PROPERTIES
 	
-	public abstract Path annotationPathFor( StackInputBase item ) throws IOException;
+	public abstract Path annotationPathFor( ProvidesStackInput item ) throws AnchorIOException;
 	
-	/** Returns a label describing the annotation, or NULL if this makes no sense */
-	public abstract String annotationLabelFor( StackInputBase item ) throws IOException;
+	/** Returns a label describing the annotation, or NULL if this makes no sense 
+	 * @throws AnchorIOException TODO*/
+	public abstract String annotationLabelFor( ProvidesStackInput item ) throws AnchorIOException;
 	
 	public abstract int weightWidthDescription();
 	

@@ -32,9 +32,9 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class OperationGenerator<GeneratedType,IterationType> extends ObjectGenerator<GeneratedType> implements IterableObjectGenerator<Operation<IterationType>, GeneratedType> {
 

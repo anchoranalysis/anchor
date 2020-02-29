@@ -35,17 +35,21 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
+import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
+import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 // Not finished
 public class MultipleInputOutputExperiment<T extends InputFromManager, S> extends Experiment {
@@ -79,16 +83,21 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 		Collection<File> files;
 		try {
 			files = inputManagerBeanPathProvider.matchingFiles(
-				ProgressReporterNull.get(),
-				expArgs.createInputContext()
+				new InputManagerParams(
+					expArgs.createInputContext(),
+					ProgressReporterNull.get(),
+					new LogErrorReporter( new ConsoleLogReporter() )
+				)
 			);
-		} catch (IOException e1) {
-			throw new ExperimentExecutionException(e1);
+		} catch (AnchorIOException e) {
+			throw new ExperimentExecutionException("Cannot find input manager files", e);
+		} catch (IOException e) {
+			throw new ExperimentExecutionException("Cannot create input context", e);
 		}
 		
+		List<DescriptiveFile> list = descriptiveNames(files);
+		
 		try {
-			List<DescriptiveFile> list = descriptiveNameFromFile.descriptiveNamesFor(files, "Invalid Name");
-			
 			int i = 0;
 			for( DescriptiveFile df : list ) {
 
@@ -97,16 +106,23 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 				InputManager<T> inputManager = BeanXmlLoader.loadBean(df.getPath(), "bean");
 
 				experiment.setInput(inputManager);
-				experiment.setExperimentIdentifier( new ExperimentIdentifierSimple(df.getDescriptiveName(),version));
+				experiment.setExperimentIdentifier( new ExperimentIdentifierConstant(df.getDescriptiveName(),version));
 				System.out.printf("Ending   \t%03d:\t%s\tat %s%n", i++, df.getDescriptiveName(), df.getPath() );
 
 				experiment.doExperiment(expArgs);
 			}
 		
 		} catch (BeanXmlException e ) {
-			System.out.printf("Ending early due to exception" );
-			throw new ExperimentExecutionException(e);
+			throw new ExperimentExecutionException("Ending early due to error in BeanXML", e);
 		}
+	}
+	
+	private List<DescriptiveFile> descriptiveNames( Collection<File> files ) throws ExperimentExecutionException {
+		try {
+			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "Invalid Name");
+		} catch (AnchorIOException e ) {
+			throw new ExperimentExecutionException("An error occurred getting descriptive-names for the files", e);
+		}			
 	}
 
 	@Override

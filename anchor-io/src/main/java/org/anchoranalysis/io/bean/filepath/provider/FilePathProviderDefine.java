@@ -28,14 +28,15 @@ package org.anchoranalysis.io.bean.filepath.provider;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class FilePathProviderDefine extends FilePathProvider {
@@ -56,11 +57,14 @@ public class FilePathProviderDefine extends FilePathProvider {
 		Collection<File> files;
 		try {
 			files = fileProvider.matchingFiles(
-				ProgressReporterNull.get(),
-				new InputContextParams()
+				new InputManagerParams(
+					new InputContextParams(),						
+					ProgressReporterNull.get(),
+					getLogger()
+				)
 			);
-		} catch (IOException e) {
-			throw new CreateException(e);
+		} catch (AnchorIOException e) {
+			throw new CreateException("Cannot find files", e);
 		}
 		
 		if (files.size()!=1) {

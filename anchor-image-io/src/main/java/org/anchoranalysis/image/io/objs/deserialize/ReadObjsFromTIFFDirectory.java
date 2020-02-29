@@ -50,7 +50,7 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjMaskCollection> {
 		return readWithRaster(folderPath, rasterReader);
 	}
 	
-	private static ObjMaskCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
+	private ObjMaskCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
 		
 		try {
 			SerializedObjectSetFolderSource folderSource = new SerializedObjectSetFolderSource(folderPath,"*.ser");

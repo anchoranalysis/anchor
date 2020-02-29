@@ -33,10 +33,10 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.io.objs.ObjMaskCollectionWriter;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;

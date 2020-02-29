@@ -27,7 +27,7 @@ package org.anchoranalysis.io.generator;
  */
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public interface IterableGenerator<T> {
 

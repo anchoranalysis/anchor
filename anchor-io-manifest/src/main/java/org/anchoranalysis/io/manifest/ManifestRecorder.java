@@ -57,21 +57,6 @@ public class ManifestRecorder implements Serializable {
 		log.debug( String.format("init %s", rootFolderPath) ); 
 
 		rootFolder.initRootPath( rootFolderPath );
-		
-		
-		/*if (rootFolder!=null && rootFolder instanceof FolderWritePhysical) {
-		
-			for (FileWrite f : rootFolder.fileList()) {
-				folder.add(f);
-			}
-			
-			for (FolderWrite f : rootFolder.getFolderList()) {
-				folder.add(f);
-			}
-		}*/
-		
-		//this.rootFolder = folder;
-	
 	}
 
 	public FolderWrite getRootFolder() {

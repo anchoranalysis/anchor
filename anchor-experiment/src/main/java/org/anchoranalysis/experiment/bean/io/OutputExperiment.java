@@ -27,12 +27,9 @@ package org.anchoranalysis.experiment.bean.io;
  */
 
 
-import java.io.IOException;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -41,6 +38,8 @@ import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
@@ -89,97 +88,136 @@ public abstract class OutputExperiment extends Experiment {
 	public void doExperiment(ExperimentExecutionArguments expArgs) throws ExperimentExecutionException {
 
 		try {
-			StopWatch stopWatchExperiment = new StopWatch();
-			stopWatchExperiment.start();
-			
-			ManifestRecorder experimentalManifest = new ManifestRecorder();
-			
-			getExperimentIdentifier().init( expArgs.isGUIEnabled() );
-			
-			BoundOutputManager rootOutputManagerNoErrors = 
-				getOutput().bindRootFolder( this.getExperimentIdentifier().identifier(), experimentalManifest, expArgs.isDebugEnabled() );
-			
-			assert( rootOutputManagerNoErrors.getOutputWriteSettings().hasBeenInit() );
-			
-			// To reporter errors when trying to do logging
-			ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( new ConsoleLogReporter() );
-			
-			boolean detailedLogging = useDetailedLogging();
-			
-			StatefulLogReporter logReporter = logReporterExperiment.create(
-				rootOutputManagerNoErrors,
-				errorReporterFallback,
-				expArgs,
-				detailedLogging
-			);
-			ErrorReporter errorReporter = new ErrorReporterIntoLog( logReporter );
-			
-			
-			// Important we bind to a root folder before any log messages go out, as certain log
-			//  appenders require the OutputManager to be set before outputting to the correct location
-			//  and this only occurs after the call to bindRootFolder()
-			BoundOutputManagerRouteErrors rootOutputManager = new BoundOutputManagerRouteErrors(
-				rootOutputManagerNoErrors,
-				errorReporter
+			doExperimentWithParams(
+				createParams(expArgs)
 			);
 			
-			try {
-				
-				initBeforeDo( rootOutputManager, expArgs.isDebugEnabled() );
-				
-				logReporter.start( );
-			
-				rootOutputManager.getWriterCheckIfAllowed().write(
-					outputNameConfigCopy,
-					() -> new XMLConfigurationWrapperGenerator( getXMLConfiguration() )
-				);
-				
-				if (detailedLogging) {
-					logReporter.logFormatted(
-						"Experiment %s started writing to %s",
-						getExperimentIdentifier().identifier(),
-						rootOutputManager.getOutputFolderPath()
-					);
-				}
-	
-				assert( rootOutputManager.getDelegate().getOutputWriteSettings().hasBeenInit());
-				execExperiment( rootOutputManager, experimentalManifest, expArgs, logReporter );
-				
-				rootOutputManager.getWriterCheckIfAllowed().write(
-					outputNameManifestExperiment,
-					() -> new XStreamGenerator<Object>( experimentalManifest, "ManifestRecorder"  )
-				);
-				rootOutputManager.getWriterCheckIfAllowed().write(
-					outputNameManifestExperiment,
-					() -> new ObjectOutputStreamGenerator<>( experimentalManifest, "ManifestRecorder" )
-				);
-				rootOutputManager.getWriterCheckIfAllowed().write(
-					outputNameExecutionTime,
-					() -> new StringGenerator( Long.toString(stopWatchExperiment.getTime()) )
-				);
-				
-				// Outputs after processing
-				stopWatchExperiment.stop();
-				
-				if (detailedLogging) {
-					logReporter.logFormatted( "Experiment %s completed (%ds)", getExperimentIdentifier().identifier(), stopWatchExperiment.getTime() / 1000);
-				}
-
-				// Report here on how many successful tasks ocurred
-				
-			} finally {
-				
-				// An experiment is considered always successful
-				logReporter.close(true);
-			}
-			
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
+	
+	private void doExperimentWithParams( ParametersExperiment params ) throws ExperimentExecutionException {
+		try {
+			StopWatch stopWatchExperiment = new StopWatch();
+			stopWatchExperiment.start();
+			
+			
+			initBeforeDo( params.getOutputManager(), params.getExperimentArguments().isDebugEnabled() );
+			
+			params.getLogReporterExperiment().start( );
+					
+			if (params.isDetailedLogging()) {
+				params.getLogReporterExperiment().logFormatted(
+					"Experiment %s started writing to %s",
+					params.getExperimentIdentifier(),
+					params.getOutputManager().getOutputFolderPath()
+				);
+			}
+			
+			writeConfigCopy(params.getOutputManager());
 
-	protected abstract void execExperiment( BoundOutputManagerRouteErrors outputManager, ManifestRecorder experimentalManifest, ExperimentExecutionArguments expArgs, LogReporter logReporter ) throws ExperimentExecutionException;
+			assert( params.getOutputManager().getDelegate().getOutputWriteSettings().hasBeenInit());
+			
+			execExperiment( params );
+			
+			writeManifests(params.getOutputManager(), params.getExperimentalManifest());
+			writeExecutionTime(params.getOutputManager(), stopWatchExperiment);
+			
+			// Outputs after processing
+			stopWatchExperiment.stop();
+			
+			if (params.isDetailedLogging()) {
+				params.getLogReporterExperiment().logFormatted( "Experiment %s completed (%ds) writing to %s",
+					params.getExperimentIdentifier(),
+					stopWatchExperiment.getTime() / 1000,
+					params.getOutputManager().getOutputFolderPath()
+				);
+			}
+			
+		} finally {
+			
+			// An experiment is considered always successful
+			params.getLogReporterExperiment().close(true);
+		}
+	}
 
+	protected abstract void execExperiment( ParametersExperiment params ) throws ExperimentExecutionException;
+	
+	private ParametersExperiment createParams(ExperimentExecutionArguments expArgs) throws AnchorIOException {
+		
+		ManifestRecorder experimentalManifest = new ManifestRecorder();
+		
+		String experimentId = experimentIdentifier.identifier( expArgs.getTaskName() );
+		
+		BoundOutputManager rootOutputManager = 
+			getOutput().bindRootFolder( experimentId, experimentalManifest, expArgs.createParamsContext() );
+		
+		assert( rootOutputManager.getOutputWriteSettings().hasBeenInit() );
+		
+		StatefulLogReporter logReporter = createExperimentLog(rootOutputManager, expArgs, useDetailedLogging());
+
+		// Important we bind to a root folder before any log messages go out, as certain log
+		//  appenders require the OutputManager to be set before outputting to the correct location
+		//  and this only occurs after the call to bindRootFolder()
+		return new ParametersExperiment(
+			expArgs,
+			experimentId,
+			experimentalManifest,
+			rootOutputManager,
+			logReporter,
+			useDetailedLogging()
+		);
+	}
+	
+	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) {
+		UpdateLog4JOutputManager.updateLog4J(bom);
+	}
+	
+	private StatefulLogReporter createExperimentLog(
+		BoundOutputManager rootOutputManagerNoErrors,
+		ExperimentExecutionArguments expArgs,
+		boolean detailedLogging
+	) {
+		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( new ConsoleLogReporter() );
+		
+		return logReporterExperiment.create(
+			"experiment_log",
+			rootOutputManagerNoErrors,
+			errorReporterFallback,
+			expArgs,
+			detailedLogging
+		);
+	}
+	
+	/** Maybe writes a copy of a configuration */
+	private void writeConfigCopy(BoundOutputManagerRouteErrors rootOutputManager) {
+		rootOutputManager.getWriterCheckIfAllowed().write(
+			outputNameConfigCopy,
+			() -> new XMLConfigurationWrapperGenerator( getXMLConfiguration() )
+		);
+	}
+	
+	/** Maybe writes the experimental-manifest to the file-system in two different formats */
+	private void writeManifests(BoundOutputManagerRouteErrors rootOutputManager, ManifestRecorder experimentalManifest) {
+		rootOutputManager.getWriterCheckIfAllowed().write(
+			outputNameManifestExperiment,
+			() -> new XStreamGenerator<Object>( experimentalManifest, "ManifestRecorder")
+		);
+		rootOutputManager.getWriterCheckIfAllowed().write(
+			outputNameManifestExperiment,
+			() -> new ObjectOutputStreamGenerator<>( experimentalManifest, "ManifestRecorder")
+		);
+	}
+	
+	/** Maybe writes the execution time to the file-system */
+	private void writeExecutionTime(BoundOutputManagerRouteErrors rootOutputManager, StopWatch stopWatchExperiment) {
+		rootOutputManager.getWriterCheckIfAllowed().write(
+			outputNameExecutionTime,
+			() -> new StringGenerator( Long.toString(stopWatchExperiment.getTime()) )
+		);
+	}
+		
 	@Override
 	public boolean useDetailedLogging() {
 		return forceDetailedLogging;
@@ -188,13 +226,6 @@ public abstract class OutputExperiment extends Experiment {
 	public boolean isForceDetailedLogging() {
 		return forceDetailedLogging;
 	}
-	
-	// Runs the experiment on all files
-	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) throws IOException {
-		UpdateLog4JOutputManager.updateLog4J(bom);
-	}
-	
-	
 	
 	public String getOutputNameConfigCopy() {
 		return outputNameConfigCopy;

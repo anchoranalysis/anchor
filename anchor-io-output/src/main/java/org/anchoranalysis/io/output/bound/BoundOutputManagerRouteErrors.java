@@ -1,6 +1,6 @@
 package org.anchoranalysis.io.output.bound;
 
-import java.io.IOException;
+
 
 /*
  * #%L
@@ -32,14 +32,17 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 public class BoundOutputManagerRouteErrors {
@@ -120,8 +123,8 @@ public class BoundOutputManagerRouteErrors {
 		delegate.addOperationRecorder(toAdd);
 	}
 
-	public BoundOutputManager bindFile(Path infilePath, String expIdentifier, ManifestRecorder manifestRecorder,
-			ManifestRecorder experimentalManifestRecorder, boolean debugMode) throws IOException {
-		return delegate.bindFile(infilePath, expIdentifier, manifestRecorder, experimentalManifestRecorder, debugMode);
+	public BoundOutputManager bindFile(InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder,
+			ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context) throws AnchorIOException {
+		return delegate.bindFile(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
 	}
 }

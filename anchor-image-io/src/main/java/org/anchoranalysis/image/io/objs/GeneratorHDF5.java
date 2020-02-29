@@ -31,12 +31,12 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
@@ -47,7 +47,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  * @author FEEHANO
  *
  */
-class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjMaskCollection> {
+public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjMaskCollection> {
 
 	private ObjMaskCollection item;
 	private boolean compressed;

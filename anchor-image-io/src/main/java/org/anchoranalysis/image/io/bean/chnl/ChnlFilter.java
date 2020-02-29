@@ -41,7 +41,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -92,7 +91,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 			
 			return chnlProviderDup.create();
 			
-		} catch (InitException | OperationFailedException | RasterIOException | CreateException | BeanDuplicateException e) {
+		} catch (InitException | OperationFailedException | CreateException | BeanDuplicateException e) {
 			throw new GetOperationFailedException(e);
 		}
 	}

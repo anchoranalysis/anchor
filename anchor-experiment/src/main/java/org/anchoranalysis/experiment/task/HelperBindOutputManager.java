@@ -31,44 +31,43 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 class HelperBindOutputManager {
 
 	// If pathForBinding is null, we bind to the root folder instead
 	public static BoundOutputManager createOutputManagerForTask(
-		BoundOutputManagerRouteErrors outputManager,
-		Path pathForBinding,
-		String experimentIdentifier,
+		InputFromManager input,
 		ManifestRecorder manifestTask,
-		ManifestRecorder manifestExperiment,
-		boolean debugMode
+		ParametersExperiment params
 	) throws JobExecutionException {
 		try {
-			if (pathForBinding!=null) {
-				BoundOutputManager boundOutput = outputManager.bindFile( 
-					pathForBinding,
-					experimentIdentifier,
+			if (input.pathForBinding()!=null) {
+				BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
+					input,
+					params.getExperimentIdentifier(),
 					manifestTask,
-					manifestExperiment,
-					debugMode
+					params.getExperimentalManifest(),
+					params.getExperimentArguments().createParamsContext()
 				);
-				throwExceptionIfClashes( manifestExperiment, boundOutput, pathForBinding );
+				throwExceptionIfClashes( params.getExperimentalManifest(), boundOutput, input.pathForBinding() );
 				return boundOutput;
 			} else {
 				// If pathForBinding is null, we reuse the existing root output-manager (but adding a recorder for manifestTask)
-				outputManager.addOperationRecorder( manifestTask.getRootFolder() );
-				return outputManager.getDelegate();
+				manifestTask.init( params.getOutputManager().getOutputFolderPath() );
+				params.getOutputManager().addOperationRecorder( manifestTask.getRootFolder() );
+				return params.getOutputManager().getDelegate();
 			}
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new JobExecutionException(
 				String.format(
 					"Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'%n%s",
-					pathForBinding!=null ? quoteString(pathForBinding.toString()) : "null",
-					experimentIdentifier,
+					input.pathForBinding()!=null ? quoteString(input.pathForBinding().toString()) : "null",
+					params.getExperimentIdentifier(),
 					e.toString()
 				),
 				e
