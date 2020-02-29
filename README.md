@@ -1,4 +1,4 @@
-This is the primary source-distribution for the Anchor project.
+This is part of the source-distribution for the [Anchor Image Analysis](http://www.anchoranalysis.org) software.
 
 It contains the Anchor core libraries and several key plugins.
 
@@ -9,8 +9,8 @@ Anchor is a platform for image analysis, developed by Owen Feehan at:
 * Hoffmann la Roche
 
 Please consider:
-
-* the [developer documentation](https://bitbucket.org/anchorimageanalysis/anchor/wiki/Home)
+* the [user guide](https://www.anchoranalysis.org/user_guide.html)
+* the [developer guide](https://www.anchoranalysis.org/developer_guide.html)
 
 
 ## Note
