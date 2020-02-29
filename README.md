@@ -9,7 +9,7 @@ Anchor is a platform for image analysis, developed by Owen Feehan at:
 * ETH Zurich
 * University of Zurich
 * Hoffmann la Roche
-* ongoing as a personal open-source project
+* ongoing as a open-source personal/community project
 
 Please consider:
 * the [user guide](https://www.anchoranalysis.org/user_guide.html)
