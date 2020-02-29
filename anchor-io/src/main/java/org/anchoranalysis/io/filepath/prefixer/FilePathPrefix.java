@@ -41,6 +41,11 @@ public class FilePathPrefix implements FilePathCreator {
 		setFolderPath(folderPath.normalize());
 	}
 	
+	public FilePathPrefix(Path folderPath, String filenamePrefix) {
+		this.folderPath = folderPath;
+		this.filenamePrefix = filenamePrefix;
+	}
+	
 	public Path getFolderPath() {
 		return folderPath;
 	}
