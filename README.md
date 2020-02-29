@@ -2,7 +2,7 @@
 
 This is part of the source-distribution for the [Anchor Image Analysis](http://www.anchoranalysis.org) software.
 
-It contains the **Core libraries for Anchor** (excluding plugins and graphical extensions and projects).
+It contains the **core libraries for Anchor** (excluding plugins and graphical extensions and projects).
 
 ## What is Anchor?
 
