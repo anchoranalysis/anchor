@@ -84,9 +84,10 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 					new LogErrorReporter(params.getLogReporterExperiment())
 				)
 			);
+			checkCompabilityInputObjects(inputObjects);
 			
 			params.setLogReporterTaskCreator(logReporterTask);
-			
+						
 			taskProcessor.executeLogStats(
 				params.getOutputManager(),
 				inputObjects,
@@ -96,6 +97,16 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 		} catch (AnchorIOException | IOException e) {
 			throw new ExperimentExecutionException("An error occured while searching for inputs", e);
 		}			
+	}
+	
+	private void checkCompabilityInputObjects(List<T> inputObjects) throws ExperimentExecutionException {
+		for( T input : inputObjects ) {
+			if (!taskProcessor.isInputObjectCompatibleWith(input.getClass())) {
+				throw new ExperimentExecutionException(
+					String.format("Input has an incompatible class for the associated task: %s", input.getClass().toString() )
+				);
+			}
+		}
 	}
 	
 	@Override
@@ -138,8 +149,8 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	}
 
 	@Override
-	public void replaceTask(Task<T, S> task) throws OperationFailedException {
-		this.taskProcessor.setTask(task);
+	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
+		this.taskProcessor.replaceTask(taskToReplace);
 		
 	}
 

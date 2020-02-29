@@ -34,6 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -42,8 +45,10 @@ import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> extends NamedChnlCollectionForSeries {
@@ -84,22 +89,22 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 	
 
-	public void addToStackCollection(NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter )
+	public void addAsSeparateChnls(NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter )
 			throws OperationFailedException {
 		
 		try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, list.size())) {
 			
 			for( NamedChnlCollectionForSeries item : list ) {
-				item.addToStackCollection(stackCollection, t, new ProgressReporterOneOfMany(prm) );
+				item.addAsSeparateChnls(stackCollection, t, new ProgressReporterOneOfMany(prm) );
 				prm.incrWorker();
 			}
 		}
 	}
 	
-	public void addToStackCollection(NamedProviderStore<TimeSequence> stackCollection, int t)
+	public void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, int t)
 			throws OperationFailedException {
 		for( NamedChnlCollectionForSeries item : list ) {
-			item.addToStackCollection(stackCollection, t);
+			item.addAsSeparateChnls(stackCollection, t);
 		}
 	}
 
@@ -149,5 +154,34 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 
 	public Iterator<NamedChnlCollectionForSeries> iteratorFromRaster() {
 		return list.iterator();
+	}
+
+	@Override
+	public Operation<Stack> allChnlsAsStack(int t) throws OperationFailedException {
+		return new CachedOperation<Stack>() {
+
+			@Override
+			protected Stack execute() throws ExecuteException {
+				
+				Stack out = new Stack();
+				for( NamedChnlCollectionForSeries ncc : list ) {
+					try {
+						addAllChnlsFrom(
+							ncc.allChnlsAsStack(t).doOperation(),
+							out
+						);
+					} catch (OperationFailedException | IncorrectImageSizeException e) {
+						throw new ExecuteException(e);
+					}
+				}
+				return out;
+			}
+		};
+	}
+	
+	private static void addAllChnlsFrom( Stack src, Stack dest ) throws IncorrectImageSizeException {
+		for( Chnl c : src ) {
+			dest.addChnl(c);;
+		}
 	}
 }

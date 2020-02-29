@@ -1,4 +1,6 @@
-package org.anchoranalysis.image.io.bean.chnl.map;
+package org.anchoranalysis.image.io.chnl.map;
+
+import java.util.Collection;
 
 /*
  * #%L
@@ -27,46 +29,27 @@ package org.anchoranalysis.image.io.bean.chnl.map;
  */
 
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 
 /**
- * A map of image channels to indices
+ * A map of image channels to indices. 
+ * 
+ * <p>It is vital that the insertion order is preserved, so a LinkedHashMap or similar should be used</p>
  * 
  * This bean has a custom-factory
  * @author owen
  *
  */
-public class ImgChnlMap extends AnchorBean<ImgChnlMap> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1213727015932422224L;
+public class ImgChnlMap {
 	
-	// START BEAN PROPERTIES
-	private Map<String,ImgChnlMapEntry> map = new HashMap<>();
-	// END BEAN PROPERTIES
+	private LinkedHashMap<String,ImgChnlMapEntry> map = new LinkedHashMap<>();
 
-	@Override
-	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
-		super.checkMisconfigured( defaultInstances );
-		for( ImgChnlMapEntry entry : map.values() ) {
-			if (entry!=null) {
-				entry.checkMisconfigured( defaultInstances );
-			}
-		}
-	}
-	
 	public void add( ImgChnlMapEntry entry ) {
 		map.put( entry.getName(), entry );
 	}
@@ -82,6 +65,10 @@ public class ImgChnlMap extends AnchorBean<ImgChnlMap> {
 	
 	public Set<String> keySet() {
 		return map.keySet();
+	}
+	
+	public Collection<ImgChnlMapEntry> entryCollection() {
+		return map.values();
 	}
 	
 	public int getException( String name ) {
@@ -109,15 +96,4 @@ public class ImgChnlMap extends AnchorBean<ImgChnlMap> {
     	    return beanOut;		
 		}
 	}
-
-	// We replace the default behaviour
-	@Override
-	public ImgChnlMap duplicateBean() throws BeanDuplicateException {
-		ImgChnlMap out = new ImgChnlMap();
-		for( ImgChnlMapEntry entry : map.values() ) {
-			out.add(entry.duplicateBean());
-		}
-		return out;
-	}
-
 }

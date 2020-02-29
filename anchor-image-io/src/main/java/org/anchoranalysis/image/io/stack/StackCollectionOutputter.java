@@ -48,6 +48,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackCollectionOutputter {
 	
+	private static final String OUTPUT_NAME = "stackCollection";
+	private static final String PREFIX = "";
+	
 	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
 	 * @throws OutputWriteFailedException */
 	public static void outputSubset(
@@ -61,8 +64,8 @@ public class StackCollectionOutputter {
 		StackCollectionOutputter.output(
 			stackSubset(stacks, secondLevelOutputKey, outputManager ),
 			outputManager.getDelegate(),
-			"stackCollection",
-			"stack_",
+			OUTPUT_NAME,
+			PREFIX,
 			errorReporter,
 			suppressSubfolders
 		);
@@ -80,15 +83,15 @@ public class StackCollectionOutputter {
 		StackCollectionOutputter.outputWithException(
 			stackSubset(stacks, secondLevelOutputKey, outputManager ),
 			outputManager.getDelegate(),
-			"stackCollection",
-			"stack_",
+			OUTPUT_NAME,
+			PREFIX,
 			suppressSubfolders
 		);
 	}
 	
-	public static void output( NamedImgStackCollection namedCollection, BoundOutputManager outputManager, String outputName, String suffix, ErrorReporter errorReporter, boolean suppressSubfoldersIn) {
+	public static void output( NamedImgStackCollection namedCollection, BoundOutputManager outputManager, String outputName, String prefix, ErrorReporter errorReporter, boolean suppressSubfoldersIn) {
 		StackGenerator generator = createStackGenerator();
-		IterableGeneratorOutputHelper.output( namedCollection, generator, outputManager, outputName, suffix, errorReporter, suppressSubfoldersIn);
+		IterableGeneratorOutputHelper.output( namedCollection, generator, outputManager, outputName, prefix, errorReporter, suppressSubfoldersIn);
 	}
 	
 	private static void outputWithException(NamedImgStackCollection namedCollection, BoundOutputManager outputManager, String outputName, String suffix, boolean suppressSubfoldersIn ) throws OutputWriteFailedException {

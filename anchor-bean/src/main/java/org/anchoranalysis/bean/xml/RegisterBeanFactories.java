@@ -60,7 +60,7 @@ public final class RegisterBeanFactories {
 	private static final String FACTORY_INCLUDE = "include";
 	private static final String FACTORY_OBJECT_LIST_INCLUDE = "listInclude";
 	private static final String FACTORY_OBJECT_LIST = "list";
-	private static final String FACTORY_NAMED_DEFINITIONS = "namedDefinitions";
+	private static final String FACTORY_DEFINE = "define";
 	private static final String FACTORY_REPLACE_PROPERTY = "replaceProperty";
 	// END keys for factories
 	
@@ -86,7 +86,7 @@ public final class RegisterBeanFactories {
 		register(FACTORY_STRING_LIST, new StringListFactory() );
 		register(FACTORY_INCLUDE, new IncludeBeanFactory() );
 		register(FACTORY_OBJECT_LIST_INCLUDE, new IncludeListFactory<>() );
-		register(FACTORY_NAMED_DEFINITIONS, new DefineFactory() );
+		register(FACTORY_DEFINE, new DefineFactory() );
 	
 		register(FACTORY_OBJECT_LIST, list -> list );
 

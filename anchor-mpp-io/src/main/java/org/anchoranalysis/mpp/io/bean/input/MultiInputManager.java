@@ -54,7 +54,7 @@ public class MultiInputManager extends MultiInputManagerBase {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private String inputName = "input_image";
+	private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
 	
 	@BeanField
 	private InputManager<? extends ProvidesStackInput> input;

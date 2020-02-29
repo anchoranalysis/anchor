@@ -52,6 +52,22 @@ public class ParametersBound<T,S> {
 	private StatefulLogReporter logReporterJob;
 	private boolean detailedLogging;
 
+	/** Immutably changes the input-object */
+	public <U> ParametersBound<U,S> changeInputObject( U inputObjectNew ) {
+		ParametersBound<U,S> out = new ParametersBound<U,S>();
+		out.setManifest(manifest);
+		out.setOutputManager(outputManager);
+		out.setLogErrorReporter(logErrorReporter);
+		out.setExperimentArguments(experimentArguments);
+		out.setSharedState(sharedState);
+		out.setLogReporterJob(logReporterJob);
+		out.setDetailedLogging(detailedLogging);
+		
+		// The new input-object
+		out.setInputObject(inputObjectNew);
+		return out;
+	}
+	
 	public boolean isDetailedLogging() {
 		return detailedLogging;
 	}

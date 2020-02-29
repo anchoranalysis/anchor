@@ -45,7 +45,9 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public class MultiInput extends ProvidesStackInput {
-
+	
+	public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
+	
 	private StackWithMap stackWithMap;
 	
 	private OperationMap<Cfg> mapCfg = new OperationMap<>();
@@ -53,6 +55,10 @@ public class MultiInput extends ProvidesStackInput {
 	private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
 	private OperationMap<Histogram> mapHistogram = new OperationMap<>();
 	private OperationMap<Path> mapFilePath = new OperationMap<>();
+	
+	public MultiInput( ProvidesStackInput mainInputObject ) {
+		this( DEFAULT_IMAGE_INPUT_NAME, mainInputObject );
+	}
 	
 	public MultiInput( String mainObjectName, ProvidesStackInput mainInputObject ) {
 		super();

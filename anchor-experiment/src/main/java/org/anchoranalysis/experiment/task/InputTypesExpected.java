@@ -1,10 +1,10 @@
-package org.anchoranalysis.experiment.io;
+package org.anchoranalysis.experiment.task;
 
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +26,49 @@ package org.anchoranalysis.experiment.io;
  * #L%
  */
 
+import java.util.ArrayList;
+import java.util.List;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 
+
 /**
- * If an experiment implements this interface, the task of an
- *   an experiment can be replaced by another
- *
- * @param <T> input-object type
- * @param <S> shared-state for job
- * @author Owen Feehan
+ * A list of base (parent) classes for input-types that a task expects
+ * 
+ * @author owen
  *
  */
-public interface IReplaceTask<T extends InputFromManager,S> {
+public class InputTypesExpected {
 
-	public void replaceTask( Task<T,S> taskToReplace ) throws OperationFailedException;
+	private List<Class<? extends InputFromManager>> list = new ArrayList<>();
+	
+	public InputTypesExpected( Class<? extends InputFromManager> cls ) {
+		list.add(cls);
+	}
+	
+	/**
+	 * Does the childclass inherit from any one of expected input-types
+	 * 
+	 * @param childClass the class to test if it inherits
+	 * @return true if inherits from at least one input-type, false otherwise
+	 */
+	public boolean doesClassInheritFromAny( Class<? extends InputFromManager> childClass ) {
+		for (Class<? extends InputFromManager> possibleInputTypeClass : list) {
+			if (possibleInputTypeClass.isAssignableFrom(childClass)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean add(Class<? extends InputFromManager> e) {
+		return list.add(e);
+	}
+
+	@Override
+	public String toString() {
+		// Describe the classes in the list
+		return list.toString();
+	}
+
 }

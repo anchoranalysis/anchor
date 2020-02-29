@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task;
 
+
+
 /*
  * #%L
  * anchor-experiment
@@ -47,6 +49,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
+
 
 /**
  * A task which performs some kind of processing on a specific input-object
@@ -108,6 +111,19 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		return executeJobLogExceptions( paramsBound, paramsUnbound.isSupressExceptions() );
 		
 	}
+	
+	/** Is an input-object compatible with this particular task? */
+	public boolean isInputObjectCompatibleWith( Class<? extends InputFromManager> inputObjectClass ) {
+		return inputTypesExpected().doesClassInheritFromAny(inputObjectClass);
+	}
+	
+	/** Highest class(es) that will function as a valid input.
+	 * 
+	 * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager)</p>
+	 **/
+	public abstract InputTypesExpected inputTypesExpected();
+		
+	public abstract void doJobOnInputObject( ParametersBound<T,S> params ) throws JobExecutionException;
 	
 	
 	/**
@@ -231,9 +247,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			() -> new StringGenerator( Long.toString(stopWatchFile.getTime()) )
 		);
 	}
-		
-	protected abstract void doJobOnInputObject( ParametersBound<T,S> params ) throws JobExecutionException;
-	
 	
 	// START: public
 	

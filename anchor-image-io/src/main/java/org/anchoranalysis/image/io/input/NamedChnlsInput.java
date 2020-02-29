@@ -1,5 +1,8 @@
 package org.anchoranalysis.image.io.input;
 
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.Operation;
+
 /*
  * #%L
  * anchor-image-io
@@ -29,6 +32,7 @@ package org.anchoranalysis.image.io.input;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -61,11 +65,11 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
 	@Override
 	public void addToStore(NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter)
 			throws OperationFailedException {
-
+		// Adds each channel as a separate stack
 		try {
 			NamedChnlCollectionForSeries ncc = createChnlCollectionForSeries(seriesNum, progressReporter);
 			// Apply it only to first time-series frame
-			ncc.addToStackCollection(stackCollection, 0);
+			ncc.addAsSeparateChnls(stackCollection, 0);
 			
 		} catch (RasterIOException e) {
 			throw new OperationFailedException(e);
@@ -76,8 +80,26 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
 	@Override
 	public void addToStoreWithName(String name,
 			NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
-		// We ignore the name
-		addToStore(stackCollection, seriesNum, progressReporter);
+		// Adds the channels as a stack under the given name
+				
+			
+		// Creates a stack that combines all the channels
+		Operation<TimeSequence> op = () -> {
+			
+			// Apply it only to first time-series frame
+			try {
+				NamedChnlCollectionForSeries ncc = createChnlCollectionForSeries(seriesNum, progressReporter);
+				return new TimeSequence( ncc.allChnlsAsStack(0).doOperation() );
+				
+			} catch (OperationFailedException | RasterIOException e) {
+				throw new ExecuteException(e);
+			}
+			
+			
+		};
+		
+		// Adds this stack (cached) under the given name
+		stackCollection.add(name, new CachedGetter<>(op) );
 	}
 
 	@Override

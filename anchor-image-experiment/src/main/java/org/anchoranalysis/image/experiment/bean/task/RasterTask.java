@@ -31,6 +31,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -53,6 +54,11 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 	
 	// Raster experiment
 	public RasterTask() {
+	}
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(NamedChnlsInput.class);
 	}
 
 	@Override
