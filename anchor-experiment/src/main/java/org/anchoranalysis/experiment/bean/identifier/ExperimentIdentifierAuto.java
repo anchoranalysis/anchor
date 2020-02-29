@@ -49,7 +49,7 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	private String fallbackName = "experiment";
 	// END BEAN FIELDS
 	
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.ss");
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
 	
 	@Override
 	public String identifier(String taskName) {
