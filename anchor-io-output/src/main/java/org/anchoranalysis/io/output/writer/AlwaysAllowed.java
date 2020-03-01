@@ -86,7 +86,7 @@ public class AlwaysAllowed extends Writer {
 				fpp,
 				bom.getOutputWriteSettings(),
 				recorderNew,
-				bom.isDelExistingFolder(),
+				bom.getLazyDirectoryFactory(),
 				preop
 			);
 		} catch (AnchorIOException e) {

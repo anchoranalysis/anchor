@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
@@ -102,7 +101,7 @@ public class NamedFeatureStore implements Iterable<NamedBean<Feature>> {
 	
 
 	
-	public NamedFeatureStore deepCopy() throws BeanDuplicateException {
+	public NamedFeatureStore deepCopy() {
 		NamedFeatureStore out = new NamedFeatureStore();
 		for( NamedBean<Feature> ni : list ) {
 			NamedBean<Feature> niDup = ni.duplicateBean();

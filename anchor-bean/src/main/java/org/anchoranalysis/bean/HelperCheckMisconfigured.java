@@ -126,49 +126,34 @@ class HelperCheckMisconfigured {
 		if (fieldValue instanceof AnchorBean) {
 			AnchorBean<?> valueCast = (AnchorBean<?>) fieldValue;
 			valueCast.checkMisconfigured( defaultInstances );
-		}
-		
-		// If it's a list, we assume it's a list of IBeans
-		if (fieldValue instanceof Collection) {
+		} else if (fieldValue instanceof Collection) {
+			// If it's a list, we assume it's a list of IBeans
 			Collection<AnchorBean<?>> valueCast = (Collection<AnchorBean<?>>) fieldValue;
 			checkCollection( valueCast, field, beanName );
-			return;
-		}
-		
-		if (fieldValue instanceof String) {
+		} else if (fieldValue instanceof String) {
 			String valueCast = (String) fieldValue;
 			checkString( valueCast, field, beanName );
-			return;
+		} else {
+			checkPropertyPrimitiveTypes(field, fieldValue, beanName);
 		}
-		
+	}
+	
+	private void checkPropertyPrimitiveTypes( Field field, Object fieldValue, String beanName ) throws BeanMisconfiguredException {
 		if (fieldValue instanceof Integer) {
 			Integer valueCast = (Integer) fieldValue;
 			checkInteger( valueCast, field, beanName );
-			return;
-		}
-		
-		if (fieldValue instanceof Double) {
+		} else if (fieldValue instanceof Double) {
 			Double valueCast = (Double) fieldValue;
 			checkDouble( valueCast, field, beanName );
-			return;
-		}
-		
-		if (fieldValue instanceof Float) {
+		} else if (fieldValue instanceof Float) {
 			Float valueCast = (Float) fieldValue;
 			checkFloat( valueCast, field, beanName );
-			return;
-		}
-		
-		if (fieldValue instanceof Short) {
+		} else if (fieldValue instanceof Short) {
 			Short valueCast = (Short) fieldValue;
 			checkShort( valueCast, field, beanName );
-			return;
-		}
-		
-		if (fieldValue instanceof Long) {
+		} else if (fieldValue instanceof Long) {
 			Long valueCast = (Long) fieldValue;
 			checkLong( valueCast, field, beanName );
-			return;
 		}
 	}
 	

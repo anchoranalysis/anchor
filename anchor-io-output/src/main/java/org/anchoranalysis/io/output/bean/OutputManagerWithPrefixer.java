@@ -38,6 +38,7 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
 
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
@@ -89,10 +90,14 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		
 		if (writeOperationRecorder!=null) {
 			writeOperationRecorder.init(prefix.getFolderPath());
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), delExistingFolder, null );
+			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), lazyDirectoryFactory(), null );
 		} else {
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), delExistingFolder, null );
+			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), lazyDirectoryFactory(), null );
 		}
+	}
+	
+	private LazyDirectoryFactory lazyDirectoryFactory() {
+		return new LazyDirectoryFactory(delExistingFolder);
 	}
 
 	

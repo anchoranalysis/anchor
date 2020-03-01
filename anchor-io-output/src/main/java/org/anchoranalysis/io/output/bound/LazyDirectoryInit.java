@@ -44,7 +44,7 @@ import org.apache.commons.io.FileUtils;
  * </ul>
  * 
  **/
-public class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
+class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
 
 	private boolean needsInit = true;
 	
@@ -59,7 +59,7 @@ public class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
 	 * @param delExistingFolder
 	 * @param if non-NULL a parent whose exec() is called before our exec() is called. if NULL, ignored.
 	 */
-	public LazyDirectoryInit(Path outputDirectory, boolean delExistingFolder, WriterExecuteBeforeEveryOperation parent) {
+	LazyDirectoryInit(Path outputDirectory, boolean delExistingFolder, WriterExecuteBeforeEveryOperation parent) {
 		super();
 		this.outputDirectory = outputDirectory;
 		this.delExistingFolder = delExistingFolder;

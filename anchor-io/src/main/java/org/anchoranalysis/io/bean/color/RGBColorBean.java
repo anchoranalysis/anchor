@@ -30,7 +30,6 @@ package org.anchoranalysis.io.bean.color;
 import java.awt.Color;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.color.RGBColor;
 
 public class RGBColorBean extends AnchorBean<RGBColorBean> {
@@ -99,7 +98,7 @@ public class RGBColorBean extends AnchorBean<RGBColorBean> {
 	}
 
 	@Override
-	public RGBColorBean duplicateBean() throws BeanDuplicateException {
+	public RGBColorBean duplicateBean() {
 		RGBColorBean bean = super.duplicateBean();
 		bean.delegate = delegate.duplicate();
 		return bean;

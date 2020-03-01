@@ -57,10 +57,10 @@ public class BoundOutputManager {
 	private FilePathPrefix boundFilePathPrefix = null;
 	private OutputWriteSettings outputWriteSettings;
 	private IWriteOperationRecorder writeOperationRecorder;
+	private LazyDirectoryFactory lazyDirectoryFactory;
 	
 	private Writer writerAlwaysAllowed;
 	private Writer writerCheckIfAllowed;
-	private boolean delExistingFolder = false;
 	
 	private WriterExecuteBeforeEveryOperation initIfNeeded;
 	
@@ -80,7 +80,7 @@ public class BoundOutputManager {
 		FilePathPrefix boundFilePathPrefix,
 		OutputWriteSettings outputWriteSettings,
 		IWriteOperationRecorder writeOperationRecorder,
-		boolean delExistingFolder,
+		LazyDirectoryFactory lazyDirectoryFactory,
 		WriterExecuteBeforeEveryOperation parentInit
 	) throws AnchorIOException {
 		
@@ -88,10 +88,10 @@ public class BoundOutputManager {
 		this.outputManager = outputManager;
 		this.outputWriteSettings = outputWriteSettings;
 		this.writeOperationRecorder = writeOperationRecorder;
-		this.delExistingFolder = delExistingFolder;
+		this.lazyDirectoryFactory = lazyDirectoryFactory;
 		assert(writeOperationRecorder!=null);
 		
-		initIfNeeded = new LazyDirectoryInit(boundFilePathPrefix.getFolderPath(), delExistingFolder, parentInit);
+		initIfNeeded = lazyDirectoryFactory.createOrReuse(boundFilePathPrefix.getFolderPath(), parentInit);
 		writerAlwaysAllowed = new AlwaysAllowed(this, initIfNeeded);
 		writerCheckIfAllowed = new CheckIfAllowed(this, initIfNeeded, writerAlwaysAllowed);
 	}
@@ -110,7 +110,7 @@ public class BoundOutputManager {
 			FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
 			fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
 			
-			return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, delExistingFolder, initIfNeeded);
+			return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, lazyDirectoryFactory, initIfNeeded);
 		} catch (AnchorIOException e) {
 			throw new OutputWriteFailedException(e);
 		}
@@ -125,7 +125,7 @@ public class BoundOutputManager {
 			experimentalManifestRecorder,
 			context
 		);
-		return new BoundOutputManager( outputManager, fpp, outputWriteSettings, manifestRecorder.getRootFolder(), false, initIfNeeded );
+		return new BoundOutputManager( outputManager, fpp, outputWriteSettings, manifestRecorder.getRootFolder(), lazyDirectoryFactory, initIfNeeded );
 	}
 
 	public boolean isOutputAllowed(String outputName) {
@@ -164,7 +164,7 @@ public class BoundOutputManager {
 		return boundFilePathPrefix;
 	}
 
-	public boolean isDelExistingFolder() {
-		return delExistingFolder;
+	public LazyDirectoryFactory getLazyDirectoryFactory() {
+		return lazyDirectoryFactory;
 	}
 }
