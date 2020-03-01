@@ -1,5 +1,8 @@
 package org.anchoranalysis.experiment.bean.identifier;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /*-
  * #%L
  * anchor-experiment
@@ -61,7 +64,9 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 
 	private String determineExperimentName(String taskName) {
 		if (taskName!=null) {
-			return taskName;
+			return removeSpecialChars(
+				finalPartOfTaskName(taskName)
+			);
 		} else {
 			return fallbackName;
 		}
@@ -69,5 +74,14 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	
 	private String determineVersion() {
 		return dtf.format( LocalDateTime.now() );
+	}
+	
+	private static String finalPartOfTaskName( String taskName ) {
+		Path path = Paths.get(taskName);
+		return path.getName( path.getNameCount() - 1 ).toString();
+	}
+	
+	private static String removeSpecialChars(String str) {
+		return str.replaceAll("[^a-zA-Z]+","");
 	}
 }
