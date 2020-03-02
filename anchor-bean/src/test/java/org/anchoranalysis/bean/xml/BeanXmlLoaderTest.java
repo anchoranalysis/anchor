@@ -33,9 +33,8 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.bean.xml.mock.MockBeanNested;
+import org.anchoranalysis.test.TestLoader;
 import org.junit.Test;
-
-import anchor.test.TestLoader;
 
 public class BeanXmlLoaderTest {
 

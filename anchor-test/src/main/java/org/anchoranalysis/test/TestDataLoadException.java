@@ -1,4 +1,4 @@
-package anchor.test;
+package org.anchoranalysis.test;
 
 /*
  * #%L
@@ -33,18 +33,18 @@ package anchor.test;
  * @author Owen Feehan
  *
  */
-public class TestDataInitException extends RuntimeException {
+public class TestDataLoadException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public TestDataInitException( String msg ) {
-		super( msg );
+	public TestDataLoadException( String s ) {
+		super(s);
 	}
 	
-	public TestDataInitException( Throwable e ) {
+	public TestDataLoadException( Throwable e ) {
 		super(e);
 	}
 }

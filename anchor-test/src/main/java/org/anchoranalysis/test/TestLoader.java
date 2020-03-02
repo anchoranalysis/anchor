@@ -1,4 +1,4 @@
-package anchor.test;
+package org.anchoranalysis.test;
 
 import static org.junit.Assert.assertTrue;
 

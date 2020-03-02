@@ -36,10 +36,9 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.test.TestLoader;
 import org.junit.Before;
 import org.junit.Test;
-
-import anchor.test.TestLoader;
 
 public class NamedDefinitionsTest {
 
