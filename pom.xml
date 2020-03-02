@@ -46,9 +46,15 @@
         <module>anchor-mpp-graph</module>
         <module>anchor-graph</module>
 	<module>anchor-annotation-io</module>
-		
+
+	   <!-- IO modules that the test routines dependent on -->
+	   <module>anchor-io-bioformats</module>
+	   <module>anchor-io-ij</module>
+	   
+	   <!-- Test modules -->
 		<module>anchor-test</module>
 		<module>anchor-test-feature</module>
+		<module>anchor-test-image</module>
     </modules>
 	
 	
