@@ -57,6 +57,8 @@ public class TestLoaderImageIO {
 	}
 	
 	public Stack openStackFromTestPath( String testPath ) throws TestDataLoadException {
+		ConfigureBioformatsLogging.instance().makeSureConfigured();
+		
 		Path filePath = delegate.resolveTestPath( testPath);
 		return openStackFromFilePath(filePath);
 	}
