@@ -35,7 +35,7 @@ import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.bean.root.SplitPath;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class RootedFilePathGenerator extends FilePathGenerator {
+public class Rooted extends FilePathGenerator {
 
 	/**
 	 * 
@@ -63,7 +63,7 @@ public class RootedFilePathGenerator extends FilePathGenerator {
 	private boolean logPath = false;
 	// END BEAN PROPERTIES
 
-	private Logger logger = Logger.getLogger(RootedFilePathGenerator.class.getName());
+	private Logger logger = Logger.getLogger(Rooted.class.getName());
 	
 	public void setSuppressRootOut(boolean suppressRootOut) {
 		this.suppressRootOut = suppressRootOut;

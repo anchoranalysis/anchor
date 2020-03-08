@@ -121,7 +121,7 @@ public class SerializedObjectSetFolderSource extends SequencedFolder {
 		
 		// We use fileSets so as to be expansible with the future
 		SearchDirectory fileSet = new SearchDirectory();
-		fileSet.setDirectory( folderPath );
+		fileSet.setDirectory( folderPath.toString() );
 		fileSet.setIgnoreHidden(false);
 		
 		if (acceptFilter!=null) {

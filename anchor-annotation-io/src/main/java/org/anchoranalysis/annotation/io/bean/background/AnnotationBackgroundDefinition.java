@@ -49,7 +49,7 @@ public class AnnotationBackgroundDefinition extends AnchorBean<AnnotationBackgro
 	
 	/** If non-empty any stackNames (after map) containing a certain string will be ignored */
 	@BeanField @AllowEmpty
-	private String ignoreContains;
+	private String ignoreContains = "";
 	// END BEAN PROPERTIES
 
 	public StringMap getBackgroundStackMap() {

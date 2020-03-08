@@ -1,10 +1,10 @@
 package org.anchoranalysis.io.bean.provider.file;
 
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,80 +26,54 @@ package org.anchoranalysis.io.bean.provider.file;
  * #L%
  */
 
-
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
 
+import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
-public class SingleFile extends FileProviderWithDirectory {
+/**
+ * A FileProviderWithDirectory where the directory is specified a String BeanField
+ * @author owen
+ *
+ */
+public abstract class FileProviderWithDirectoryString extends FileProviderWithDirectory {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private String path;
-	// END BEAN PROPERTIES
 	
-	// Optionally changes the directory of the path
-	private Path directory;
-
-	public SingleFile() {
-		
-	}
-	
-	public SingleFile( String path ) {
-		this.path = path;
-	}
-	
-	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
-		
-		File file = new File(path);
-		
-		if (hasDirectory()) {
-			file = directory.resolve( file.getName() ).toFile();
-		}
-
-		return Collections.singletonList(file);
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-
-	public static String replaceBackslashes( String str ) {
-		return str.replace('\\', '/');
-	}
-	
-	public void setPath(String path) {
-		// Make everything a forward slash
-		this.path = replaceBackslashes(path);
-	}
-	
-	private boolean hasDirectory() {
-		return directory!=null;
-	}
-
+	// START BEAN FIELDS
+	/** A directory in which to look for files.
+	 * 
+	 *  If empty, first the bean will try to use any input-dir set in the input context if it exists, or otherwise use the current working-directory
+	 * */
+	@BeanField @AllowEmpty
+	private String directory = "";
+	// END BEAN FIELDS
 
 	@Override
 	public Path getDirectoryAsPath(InputContextParams inputContext) {
-
-		if (hasDirectory()) {
-			return directory;
-		} else {
-			// We infer the directory if it isn't set
-			return Paths.get(path).getParent();
+		
+		// If no directory is explicitly specified, and the input-context provides an input-directory
+		//  then we use this
+		//
+		// This is a convenient way for the ExperimentLauncher to parameterize the input-directory
+		if (directory.isEmpty() && inputContext.hasInputDir()) {
+			return inputContext.getInputDir();
 		}
+		
+		return Paths.get(directory);
 	}
+	
+	public String getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(String directory) {
+		this.directory = directory;
+	}
+
 }

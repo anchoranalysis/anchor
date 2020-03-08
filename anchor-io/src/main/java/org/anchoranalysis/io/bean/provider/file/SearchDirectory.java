@@ -48,7 +48,7 @@ import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 import org.anchoranalysis.io.params.InputContextParams;
 
 @SuppressWarnings("unused")
-public class SearchDirectory extends FileProviderWithDirectory {
+public class SearchDirectory extends FileProviderWithDirectoryString {
 
 	/**
 	 * 
@@ -61,13 +61,6 @@ public class SearchDirectory extends FileProviderWithDirectory {
 	
 	@BeanField
 	private boolean recursive = false;
-	
-	/** A directory in which to look for files.
-	 * 
-	 *  If empty, first the bean will try to use any input-dir set in the input context if it exists, or otherwise use the current working-directory
-	 * */
-	@BeanField @AllowEmpty
-	private String directory = "";
 	
 	/** If non-negative the max depth of directories. If -1, then there is no maximum depth. */
 	@BeanField
@@ -91,13 +84,10 @@ public class SearchDirectory extends FileProviderWithDirectory {
 	
 	// Matching files
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
-		
-		// If we don't have an absolute Directory(), we combine it with the localizedPath
-		Path dir = getDirectoryAsPath( params.getInputContext() );
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
 
 		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
-		return matcher.matchingFiles(dir, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
+		return matcher.matchingFiles(directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
 	}
 	
 	
@@ -132,33 +122,6 @@ public class SearchDirectory extends FileProviderWithDirectory {
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
 	}
-	
-	public String getDirectory() {
-		return directory;
-	}
-
-	@Override
-	public Path getDirectoryAsPath(InputContextParams inputContext) {
-		
-		// If no directory is explicitly specified, and the input-context provides an input-directory
-		//  then we use this
-		//
-		// This is a convenient way for the ExperimentLauncher to parameterize the input-directory
-		if (directory.isEmpty() && inputContext.hasInputDir()) {
-			return makeAbsolutePathIfNecessary( inputContext.getInputDir() );
-		}
-		
-		return Paths.get(directory).toAbsolutePath();
-	}
-			
-	public void setDirectory(String directory) {
-		this.directory = SingleFile.replaceBackslashes(directory);
-	}
-	
-	@Override
-	public void setDirectory(Path path) {
-		this.directory = path.toString();
-	}
 
 	public int getMaxDirectoryDepth() {
 		return maxDirectoryDepth;
@@ -174,22 +137,6 @@ public class SearchDirectory extends FileProviderWithDirectory {
 
 	public void setIgnoreHidden(boolean ignoreHidden) {
 		this.ignoreHidden = ignoreHidden;
-	}
-	
-	/**
-	 * If path is absolute, it's returned as-is
-	 * If path is relative, and the 'makeAbsolute' option is activated, it's added to the localizedPath 
-	 * 
-	 * @param path
-	 * @return
-	 */
-	private Path makeAbsolutePathIfNecessary( Path path ) {
-		if (path.isAbsolute()) {
-			return path;
-		} else {
-			Path parent = getLocalPath().getParent();
-			return parent.resolve(path);
-		}
 	}
 
 	public FileMatcher getMatcher() {

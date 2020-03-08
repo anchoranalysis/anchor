@@ -1,7 +1,11 @@
 package org.anchoranalysis.io.bean.provider.file;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.util.Collection;
 
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /*
@@ -38,8 +42,40 @@ public abstract class FileProviderWithDirectory extends FileProvider {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/** Like getDirectory as Path but converts any relative path to absolute one */
+	public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {
+		Path path = getDirectoryAsPath(inputContext);
+		return makeAbsolutePathIfNecessary(path);
+	}
+	
 	public abstract Path getDirectoryAsPath(InputContextParams inputContext);
 	
-	public abstract void setDirectory( Path directory );
+	@Override
+	public final Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+		return matchingFilesForDirectory(
+			getDirectoryAsPath(params.getInputContext()),
+			params
+		);
+	}
 	
+	public abstract Collection<File> matchingFilesForDirectory(
+		Path directory,
+		InputManagerParams params
+	) throws AnchorIOException;
+		
+	/**
+	 * If path is absolute, it's returned as-is
+	 * If path is relative, and the 'makeAbsolute' option is activated, it's added to the localizedPath 
+	 * 
+	 * @param path
+	 * @return
+	 */
+	private Path makeAbsolutePathIfNecessary( Path path ) {
+		if (path.isAbsolute()) {
+			return path;
+		} else {
+			Path parent = getLocalPath().getParent();
+			return parent.resolve(path);
+		}
+	}
 }
