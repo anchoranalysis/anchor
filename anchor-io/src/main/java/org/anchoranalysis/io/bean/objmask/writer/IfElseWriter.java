@@ -28,9 +28,6 @@ package org.anchoranalysis.io.bean.objmask.writer;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -97,34 +94,22 @@ public class IfElseWriter extends ObjMaskWriter {
 			ImageDim dim) throws CreateException {
 		
 		// We calculate both the TRUE and FALSE precalculations
-		List<PrecalcOverlay> listOut = new ArrayList<>();
-		listOut.add( trueWriter.precalculate(mask, dim) );
-		listOut.add( falseWriter.precalculate(mask, dim) );
-		return new PrecalcOverlay(mask, listOut);
-	}
+		PrecalcOverlay precalcTrue = trueWriter.precalculate(mask, dim);
+		PrecalcOverlay precalcFalse = falseWriter.precalculate(mask, dim);
+				
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			PrecalcOverlay precalculatedObj,
-			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex,
-			BoundingBox bboxContainer)
-			throws OperationFailedException {
-		
-		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
-		
-		@SuppressWarnings("unchecked")
-		List<PrecalcOverlay> preList = (List<PrecalcOverlay>) precalculatedObj.getSecond();
-		assert( preList.size()==2 );
-		PrecalcOverlay precalcTrue = preList.get(0);
-		PrecalcOverlay precalcFalse = preList.get(1);
-		
-		if ( condition.isTrue(maskOrig, stack, idGetter.getID(maskOrig, iter))) {
-			trueWriter.writePrecalculatedMask(precalcTrue, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
-		} else {
-			falseWriter.writePrecalculatedMask(precalcFalse, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
-		}
-		
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				if ( condition.isTrue(mask, stack, idGetter.getID(mask, iter))) {
+					precalcTrue.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+				} else {
+					precalcFalse.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+				}
+			}
+			
+		};
 	}
 }

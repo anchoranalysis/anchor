@@ -50,16 +50,15 @@ public class NullWriter extends ObjMaskWriter {
 	@Override
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
-		return new PrecalcOverlay(mask,mask);
-	}
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			PrecalcOverlay precalculatedObj,
-			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex,
-			BoundingBox bboxContainer)
-			throws OperationFailedException {
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				// Nothing to DO
+			}
+			
+		};
 	}
 }

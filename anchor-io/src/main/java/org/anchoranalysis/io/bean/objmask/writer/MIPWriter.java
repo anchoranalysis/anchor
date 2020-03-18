@@ -62,30 +62,23 @@ public class MIPWriter extends ObjMaskWriter {
 		super();
 		this.maskWriter = maskWriter;
 	}
-
-	private ObjMaskWithProperties createMIPMask( ObjMaskWithProperties mask ) {
-
-		// Now we manipulate the mask
-		ObjMaskWithProperties copyMask = mask.duplicate();
-		copyMask.convertToMaxIntensityProjection();
-		return copyMask;
-	}
 	
 	@Override
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
 			throws CreateException {
-		return new PrecalcOverlay(mask, createMIPMask(mask));
-	}
+		
+		ObjMaskWithProperties maskMIP = createMIPMask(mask);
+		
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			PrecalcOverlay precalculatedObj,
-			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter,
-			ColorIndex colorIndex, BoundingBox bboxContainer)
-			throws OperationFailedException {
-		maskWriter.writeSingle( (ObjMaskWithProperties) precalculatedObj.getSecond(), stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				maskWriter.writeSingle( (ObjMaskWithProperties) maskMIP, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+			}
+			
+		};
 	}
 	
 	public ObjMaskWriter getMaskWriter() {
@@ -95,4 +88,12 @@ public class MIPWriter extends ObjMaskWriter {
 	public void setMaskWriter(ObjMaskWriter maskWriter) {
 		this.maskWriter = maskWriter;
 	}
+
+	private ObjMaskWithProperties createMIPMask( ObjMaskWithProperties mask ) {
+
+		// Now we manipulate the mask
+		ObjMaskWithProperties copyMask = mask.duplicate();
+		copyMask.convertToMaxIntensityProjection();
+		return copyMask;
+	}	
 }

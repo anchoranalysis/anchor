@@ -84,46 +84,38 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 			true,
 			(dim.getZ() > 1) && !force2D
 		);
-		return new PrecalcOverlay(
-			mask,
-			new ObjMaskWithProperties(om, mask.getProperties())
-		);
-	}
+		
+		ObjMaskWithProperties omMask = new ObjMaskWithProperties(om, mask.getProperties());
+		
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(PrecalcOverlay precalculatedObj,
-		RGBStack stack,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter,
-		int iter,
-		ColorIndex colorIndex,
-		BoundingBox bboxContainer
-	)
-	throws OperationFailedException {
-		
-		ObjMaskWithProperties preCast = (ObjMaskWithProperties) precalculatedObj.getSecond();
-		
-		ObjMask om = preCast.getMask();
-		
-		assert( preCast.getVoxelBox().extnt().getZ() > 0 );
-		assert( colorIDGetter!=null );
-		assert( colorIndex!=null );
-		
-		// TODO this can get broken! Fix!
-		assert( om.getBoundingBox().getCrnrMin().getZ()>=0 );
-		
-		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
-		int colorID = colorIDGetter.getID(maskOrig, iter);
-		assert( colorIndex.has(colorID) );
-		
-		RGBColor color = colorIndex.get( colorID );
-		
-		IntersectionWriter.writeRGBMaskIntersection(
-			om,
-			color,
-			stack,
-			bboxContainer
-		);
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				
+				assert( om.getVoxelBox().extnt().getZ() > 0 );
+				assert( colorIDGetter!=null );
+				assert( colorIndex!=null );
+				
+				// TODO this can get broken! Fix!
+				assert( om.getBoundingBox().getCrnrMin().getZ()>=0 );
+				
+				int colorID = colorIDGetter.getID(omMask, iter);
+				assert( colorIndex.has(colorID) );
+				
+				RGBColor color = colorIndex.get( colorID );
+				
+				IntersectionWriter.writeRGBMaskIntersection(
+					om,
+					color,
+					stack,
+					bboxContainer
+				);
+			}
+			
+		};
+			
 	}
 	
 	public boolean isForce2D() {

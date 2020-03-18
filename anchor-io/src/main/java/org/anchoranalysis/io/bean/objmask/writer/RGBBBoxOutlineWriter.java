@@ -81,27 +81,23 @@ public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 			true,
 			dim.getZ() > 1
 		);
-		return new PrecalcOverlay(
-			mask,
-			new ObjMaskWithProperties(outline, mask.getProperties())
-		);
-	}
+		
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			PrecalcOverlay precalculatedObj,
-			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
-			ColorIndex colorIndex, BoundingBox bboxContainer) throws OperationFailedException {
-
-		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
-		IntersectionWriter.writeRGBMaskIntersection(
-			((ObjMaskWithProperties) precalculatedObj.getSecond()).getMask(),
-			colorIndex.get( colorIDGetter.getID(maskOrig, iter) ),
-			stack,
-			bboxContainer
-		);
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				
+				IntersectionWriter.writeRGBMaskIntersection(
+						outline,
+						colorIndex.get( colorIDGetter.getID(mask, iter) ),
+						stack,
+						bboxContainer
+					);
+			}
+			
+		};
 	}
 	
 	public int getOutlineWidth() {

@@ -84,45 +84,43 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	@Override
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
-		return new PrecalcOverlay(mask,mask);
-	}
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(PrecalcOverlay precalculatedObj,
-			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex,
-			BoundingBox bboxContainer)
-			throws OperationFailedException {
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
 
-		ObjMaskWithProperties mask = (ObjMaskWithProperties) precalculatedObj.getSecond();
-		
-		Point3i midpoint = RGBMidpointWriter.calcMidpoint( mask );
-		if (midpoint==null) {
-			return;
-		}
-		
-		Double orientationRadians = calcOrientation( mask );
-		if (orientationRadians==null) {
-			return;
-		}
-		
-		Point3d xAxisMin = calcPoint(mask, "xAxisMin");
-		if (xAxisMin==null) {
-			return;
-		}
-		
-		Point3d xAxisMax = calcPoint(mask, "xAxisMax");
-		if (xAxisMax==null) {
-			return;
-		}
-		
-		writeOrientationLine(  midpoint, orientationRadians, colorIndex.get( colorIDGetter.getID(mask, iter) ), stack, bboxContainer, xAxisMin, xAxisMax );
-		
-		// Reverse
-		if (drawReverseLine) {
-			writeOrientationLine( midpoint, orientationRadians, colorIndex.get( colorIDGetter.getID(mask, iter) ), stack, bboxContainer, xAxisMin, xAxisMax );
-		}
+				Point3i midpoint = RGBMidpointWriter.calcMidpoint( mask, false );
+				if (midpoint==null) {
+					return;
+				}
+				
+				Double orientationRadians = calcOrientation( mask );
+				if (orientationRadians==null) {
+					return;
+				}
+				
+				Point3d xAxisMin = calcPoint(mask, "xAxisMin");
+				if (xAxisMin==null) {
+					return;
+				}
+				
+				Point3d xAxisMax = calcPoint(mask, "xAxisMax");
+				if (xAxisMax==null) {
+					return;
+				}
+				
+				writeOrientationLine(  midpoint, orientationRadians, colorIndex.get( colorIDGetter.getID(mask, iter) ), stack, bboxContainer, xAxisMin, xAxisMax );
+				
+				// Reverse
+				if (drawReverseLine) {
+					writeOrientationLine( midpoint, orientationRadians, colorIndex.get( colorIDGetter.getID(mask, iter) ), stack, bboxContainer, xAxisMin, xAxisMax );
+				}
+				
+			}
+			
+		};
 	}
 	
 	private void writeOrientationLine( Point3i midpoint, double orientationRadians, RGBColor color, RGBStack stack, BoundingBox bbox, Point3d min, Point3d max ) {

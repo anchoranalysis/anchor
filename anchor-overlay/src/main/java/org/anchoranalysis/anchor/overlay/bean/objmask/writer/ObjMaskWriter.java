@@ -78,8 +78,7 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 		
 		try {
 			PrecalcOverlay precalculatedObj = precalculate( mask, stack.getDimensions() );
-			writePrecalculatedMask(
-				precalculatedObj,
+			precalculatedObj.writePrecalculatedMask(
 				stack,
 				idGetter,
 				colorIDGetter,
@@ -95,17 +94,6 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	
 	// Does computational preprocessing (so it can be cached). Outputs a collection of ObjMasks that are later re used
 	public abstract PrecalcOverlay precalculate( ObjMaskWithProperties mask, ImageDim dim ) throws CreateException;
-	
-	// Writes the pre-processed mask
-	public abstract void writePrecalculatedMask(
-		PrecalcOverlay precalculatedObj,
-		RGBStack stack,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter,
-		int iter,
-		ColorIndex colorIndex,
-		BoundingBox bboxContainer
-	) throws OperationFailedException;
 		
 	public void write(
 		ObjMaskWithPropertiesCollection masks,

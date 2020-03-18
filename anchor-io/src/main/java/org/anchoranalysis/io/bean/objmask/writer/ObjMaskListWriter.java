@@ -69,36 +69,26 @@ public class ObjMaskListWriter extends ObjMaskWriter {
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
 
-		List<Object> listOut = new ArrayList<>();
+		List<PrecalcOverlay> listPrecalc = new ArrayList<>();
 		
 		for( ObjMaskWriter writer : list) {
-			listOut.add( writer.precalculate(mask, dim) );
+			listPrecalc.add( writer.precalculate(mask, dim) );
 		}
 		
-		return new PrecalcOverlay(mask, listOut);
-	}
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			PrecalcOverlay precalculatedObj,
-			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
-			ColorIndex colorIndex, BoundingBox bboxContainer)
-			throws OperationFailedException {
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+
+				for(PrecalcOverlay preCalc : listPrecalc) {
+					preCalc.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+				}
 				
-		@SuppressWarnings("unchecked")
-		List<PrecalcOverlay> precalcList = (List<PrecalcOverlay>) precalculatedObj.getSecond();
-		
-		assert(precalcList.size()==list.size());
-		
-		for(int i=0; i<list.size(); i++ ) {
-			ObjMaskWriter writer = (ObjMaskWriter) list.get(i);
-			PrecalcOverlay preCalc = precalcList.get(i);
+			}
 			
-			writer.writePrecalculatedMask(preCalc, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
-		}
-		
+		};
 	}
 
 	public List<ObjMaskWriter> getList() {
