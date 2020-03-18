@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
 /*
  * #%L
@@ -81,20 +82,20 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	
 	
 	@Override
-	public ObjMaskWithProperties precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
-		return mask;
+		return new PrecalcOverlay(mask,mask);
 	}
 
 	@Override
-	public void writePrecalculatedMask(ObjMaskWithProperties maskOrig,
-			Object precalculatedObj, RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
-			ColorIndex colorIndex, BoundingBox bboxContainer)
+	public void writePrecalculatedMask(PrecalcOverlay precalculatedObj,
+			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+			IDGetter<ObjMaskWithProperties> colorIDGetter,
+			int iter, ColorIndex colorIndex,
+			BoundingBox bboxContainer)
 			throws OperationFailedException {
 
-		ObjMaskWithProperties mask = (ObjMaskWithProperties) precalculatedObj;
+		ObjMaskWithProperties mask = (ObjMaskWithProperties) precalculatedObj.getSecond();
 		
 		Point3i midpoint = RGBMidpointWriter.calcMidpoint( mask );
 		if (midpoint==null) {

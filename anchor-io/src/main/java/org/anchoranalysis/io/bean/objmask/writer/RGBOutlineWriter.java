@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
 /*
  * #%L
@@ -74,7 +75,7 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 
 	
 	@Override
-	public ObjMaskWithProperties precalculate(ObjMaskWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
 			throws CreateException {
 		
 		ObjMask om = FindOutline.outline(
@@ -83,12 +84,14 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 			true,
 			(dim.getZ() > 1) && !force2D
 		);
-		return new ObjMaskWithProperties(om, mask.getProperties());
+		return new PrecalcOverlay(
+			mask,
+			new ObjMaskWithProperties(om, mask.getProperties())
+		);
 	}
 
 	@Override
-	public void writePrecalculatedMask(ObjMaskWithProperties maskOrig,
-		Object precalculatedObj,
+	public void writePrecalculatedMask(PrecalcOverlay precalculatedObj,
 		RGBStack stack,
 		IDGetter<ObjMaskWithProperties> idGetter,
 		IDGetter<ObjMaskWithProperties> colorIDGetter,
@@ -98,7 +101,7 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 	)
 	throws OperationFailedException {
 		
-		ObjMaskWithProperties preCast = (ObjMaskWithProperties) precalculatedObj;
+		ObjMaskWithProperties preCast = (ObjMaskWithProperties) precalculatedObj.getSecond();
 		
 		ObjMask om = preCast.getMask();
 		
@@ -109,6 +112,7 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 		// TODO this can get broken! Fix!
 		assert( om.getBoundingBox().getCrnrMin().getZ()>=0 );
 		
+		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
 		int colorID = colorIDGetter.getID(maskOrig, iter);
 		assert( colorIndex.has(colorID) );
 		

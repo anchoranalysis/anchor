@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
 /*
  * #%L
@@ -75,26 +76,33 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public Point3i precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
-		return calcMidpoint( mask );
+		return new PrecalcOverlay(mask, calcMidpoint( mask ));
 	}
 
 	@Override
 	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig, Object precalculatedObj,
-			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex, BoundingBox bboxContainer)
+			PrecalcOverlay precalculatedObj, RGBStack stack,
+			IDGetter<ObjMaskWithProperties> idGetter,
+			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
+			ColorIndex colorIndex, BoundingBox bboxContainer)
 			throws OperationFailedException {
 
-		Point3i midpoint = (Point3i) precalculatedObj;
+		Point3i precalcPoint = (Point3i) precalculatedObj.getSecond();
 		
-		if (midpoint==null) {
+		if (precalcPoint==null) {
 			return;
 		}
 		
-		writeCross(  midpoint, colorIndex.get( colorIDGetter.getID(maskOrig, iter) ), stack, extraLength, bboxContainer );
+		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
+		writeCross(
+			precalcPoint,
+			colorIndex.get( colorIDGetter.getID(maskOrig, iter) ),
+			stack,
+			extraLength,
+			bboxContainer
+		);
 		
 	}
 	

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
@@ -65,7 +66,7 @@ public class ObjMaskListWriter extends ObjMaskWriter {
 	}
 
 	@Override
-	public List<Object> precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
 
 		List<Object> listOut = new ArrayList<>();
@@ -74,27 +75,28 @@ public class ObjMaskListWriter extends ObjMaskWriter {
 			listOut.add( writer.precalculate(mask, dim) );
 		}
 		
-		return listOut;
+		return new PrecalcOverlay(mask, listOut);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig,
-			Object precalculatedObj,
+			PrecalcOverlay precalculatedObj,
 			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex, BoundingBox bboxContainer)
+			IDGetter<ObjMaskWithProperties> idGetter,
+			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
+			ColorIndex colorIndex, BoundingBox bboxContainer)
 			throws OperationFailedException {
 				
-		List<Object> preCast = (List<Object>) precalculatedObj;
-		assert(preCast.size()==list.size());
+		@SuppressWarnings("unchecked")
+		List<PrecalcOverlay> precalcList = (List<PrecalcOverlay>) precalculatedObj.getSecond();
+		
+		assert(precalcList.size()==list.size());
 		
 		for(int i=0; i<list.size(); i++ ) {
-			ObjMaskWriter writer = list.get(i);
-			Object preCalc = preCast.get(i);
+			ObjMaskWriter writer = (ObjMaskWriter) list.get(i);
+			PrecalcOverlay preCalc = precalcList.get(i);
 			
-			writer.writePrecalculatedMask(maskOrig, preCalc, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+			writer.writePrecalculatedMask(preCalc, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
 		}
 		
 	}

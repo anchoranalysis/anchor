@@ -63,6 +63,21 @@ public class SpecificPathList extends FileProvider {
 	private FileProvider fallback;
 	// END BEAN PROPERTIES
 	
+	public SpecificPathList() {
+		
+	}
+	
+	public SpecificPathList( List<String> listPaths ) {
+		this.listPaths = listPaths;
+	}
+	
+	/** Factory method for creating the class with an empty list of paths */
+	public static SpecificPathList createWithEmptyList() {
+		SpecificPathList out = new SpecificPathList();
+		out.listPaths = new ArrayList<>();
+		return out;
+	}
+	
 	@Override
 	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 

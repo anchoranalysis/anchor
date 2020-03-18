@@ -161,15 +161,20 @@ public class AssignmentGenerator extends RasterGenerator {
 	
 	private RGBObjMaskGenerator createGenerator( List<ObjMask> otherObjs, ColorList cols, ObjMaskCollection omc ) {
 		
-		ObjMaskWriter objMaskWriter = createOutlineWriter();
+		ObjMaskWriter outlineWriter = createOutlineWriter();
 		
 		if (colorPool.isDifferentColorsForMatches()) {
-			objMaskWriter = createConditionalWriter(
+			ObjMaskWriter objMaskWriter = createConditionalWriter(
 				otherObjs,
-				objMaskWriter
+				outlineWriter
 			);
+			return createGenerator( objMaskWriter, cols, omc );
+		} else {
+			return createGenerator( outlineWriter, cols, omc );
 		}
-		
+	}
+	
+	private RGBObjMaskGenerator createGenerator( ObjMaskWriter objMaskWriter, ColorList cols, ObjMaskCollection omc ) {
 		return new RGBObjMaskGenerator(
 			objMaskWriter,
 			new ObjMaskWithPropertiesCollection(omc),

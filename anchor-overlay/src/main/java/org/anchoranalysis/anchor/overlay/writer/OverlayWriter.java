@@ -110,7 +110,7 @@ public abstract class OverlayWriter {
 	//  per Mark in the cfg, in the same order as the Cfg is inputted
 	public static List<PrecalcOverlay> precalculate(ColoredOverlayCollection coc, OverlayWriter maskWriter, ImageDim dim, BinaryValuesByte bvOut) throws CreateException {
 		
-		List<PrecalcOverlay> listOut = new ArrayList<PrecalcOverlay>();
+		List<PrecalcOverlay> listOut = new ArrayList<>();
 		
 		IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<Overlay>();
 		
@@ -130,7 +130,6 @@ public abstract class OverlayWriter {
 	
 	
 	public static PrecalcOverlay createPrecalc( OverlayWriter maskWriter, ObjMaskWithProperties om, ImageDim dim ) throws CreateException {
-		Object writerPrecalc = maskWriter.getObjMaskWriter().precalculate(om, dim);
-		return new PrecalcOverlay(om,writerPrecalc);
+		return maskWriter.getObjMaskWriter().precalculate(om, dim);
 	}
 }

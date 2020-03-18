@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
 /*
  * #%L
@@ -72,7 +73,7 @@ public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public ObjMaskWithProperties precalculate(ObjMaskWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
 			throws CreateException {
 		ObjMask outline = FindOutline.outline(
 			createBBoxMask(mask.getMask()),
@@ -80,21 +81,23 @@ public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 			true,
 			dim.getZ() > 1
 		);
-		return new ObjMaskWithProperties(outline, mask.getProperties());
+		return new PrecalcOverlay(
+			mask,
+			new ObjMaskWithProperties(outline, mask.getProperties())
+		);
 	}
 
 	@Override
 	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig,
-			Object precalculatedObj,
+			PrecalcOverlay precalculatedObj,
 			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex, BoundingBox bboxContainer) throws OperationFailedException {
-		
-		ObjMaskWithProperties preCast = (ObjMaskWithProperties) precalculatedObj;
+			IDGetter<ObjMaskWithProperties> idGetter,
+			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
+			ColorIndex colorIndex, BoundingBox bboxContainer) throws OperationFailedException {
 
+		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
 		IntersectionWriter.writeRGBMaskIntersection(
-			preCast.getMask(),
+			((ObjMaskWithProperties) precalculatedObj.getSecond()).getMask(),
 			colorIndex.get( colorIDGetter.getID(maskOrig, iter) ),
 			stack,
 			bboxContainer

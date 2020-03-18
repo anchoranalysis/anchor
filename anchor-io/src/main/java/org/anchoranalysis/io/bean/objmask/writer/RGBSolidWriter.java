@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
@@ -49,21 +50,22 @@ public class RGBSolidWriter extends ObjMaskWriter {
 	private static final long serialVersionUID = -5929656081616731935L;
 
 	@Override
-	public ObjMaskWithProperties precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
-		return mask;
+		return new PrecalcOverlay(mask,mask);
 	}
 
 	@Override
-	public void writePrecalculatedMask(ObjMaskWithProperties maskOrig,
-			Object precalculatedObj, RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
-			ColorIndex colorIndex, BoundingBox bboxContainer)
+	public void writePrecalculatedMask(PrecalcOverlay precalculatedObj,
+			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+			IDGetter<ObjMaskWithProperties> colorIDGetter,
+			int iter, ColorIndex colorIndex,
+			BoundingBox bboxContainer)
 			throws OperationFailedException {
 		
-		ObjMaskWithProperties preCast = (ObjMaskWithProperties) precalculatedObj;
+		ObjMaskWithProperties preCast = (ObjMaskWithProperties) precalculatedObj.getSecond();
 		
+		ObjMaskWithProperties maskOrig = precalculatedObj.getFirst();
 		RGBColor c = colorIndex.get( colorIDGetter.getID(maskOrig, iter) );
 		assert( c!= null );
 		

@@ -175,7 +175,7 @@ public class OverlayPrecalculatedCache implements OverlayRetriever {
 	
 	
 	private static List<PrecalcOverlay> createCollectionWithNulls( int size ) {
-		List<PrecalcOverlay> out = new ArrayList<PrecalcOverlay>();
+		List<PrecalcOverlay> out = new ArrayList<>();
 		for( int i=0; i<size; i++ ) {
 			out.add(null);
 		}
@@ -279,9 +279,9 @@ public class OverlayPrecalculatedCache implements OverlayRetriever {
 		
 		// The lists for the subset we are creating
 		ColoredOverlayCollection overlaysOut = new ColoredOverlayCollection();
-		List<PrecalcOverlay> generatedObjectsOut = new ArrayList<PrecalcOverlay>();
+		List<PrecalcOverlay> generatedObjectsOut = new ArrayList<>();
 		List<BoundingBox> listBoundingBoxOut = new ArrayList<BoundingBox>();
-		List<PrecalcOverlay> generatedObjectsZoomOut = new ArrayList<PrecalcOverlay>();
+		List<PrecalcOverlay> generatedObjectsZoomOut = new ArrayList<>();
 		
 
 		// Create appropriate objects related to the zoom (if it's not 1)

@@ -73,8 +73,7 @@ public class SimpleOverlayWriter extends OverlayWriter {
 			PrecalcOverlay pre = precalculatedMasks.get(i);
 			
 			objMaskWriter.writePrecalculatedMask(
-				pre.getFirst(),
-				pre.getSecond(),
+				pre,
 				background,
 				createMaskIDGetter(overlays, idGetter),
 				idGetterColor,

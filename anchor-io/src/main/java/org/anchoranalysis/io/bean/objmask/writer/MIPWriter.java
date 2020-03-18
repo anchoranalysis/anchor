@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
 /*
  * #%L
@@ -71,21 +72,20 @@ public class MIPWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public ObjMaskWithProperties precalculate(ObjMaskWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
 			throws CreateException {
-		return createMIPMask(mask);
+		return new PrecalcOverlay(mask, createMIPMask(mask));
 	}
 
 	@Override
 	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig,
-			Object precalculatedObj,
-			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex,
-			BoundingBox bboxContainer)
+			PrecalcOverlay precalculatedObj,
+			RGBStack stack,
+			IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter,
+			int iter,
+			ColorIndex colorIndex, BoundingBox bboxContainer)
 			throws OperationFailedException {
-		maskWriter.writeSingle( (ObjMaskWithProperties) precalculatedObj, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+		maskWriter.writeSingle( (ObjMaskWithProperties) precalculatedObj.getSecond(), stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
 	}
 	
 	public ObjMaskWriter getMaskWriter() {

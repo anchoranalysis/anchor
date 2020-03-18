@@ -42,6 +42,8 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  * Generates RGBStacks with an ObjMaskWriter applied for a collection of Objects (e.g. an outline)
  * imposed on a background
  * 
+ * @param T pre-calculation type for ObjMaskWriter
+ * 
  * @author Owen Feehan
  *
  */
