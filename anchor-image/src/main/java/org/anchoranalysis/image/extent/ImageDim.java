@@ -44,16 +44,25 @@ public class ImageDim implements Serializable {
 	private ImageRes res;
 	private Extent extent;
 	
+	/** Construct with default extent (0 for each dimension) and resolution (1.0 for each dimension) */
 	public ImageDim() {
 		this.extent = new Extent();
 		this.res = new ImageRes();
 	}
-	
+
+	/** Construct with an explicit extent and resolution */
 	public ImageDim( Extent extent, ImageRes res ) {
 		this.extent = new Extent(extent);
 		this.res = new ImageRes( res );
 	}
 	
+	/** Calculates image-dimensions for x,y,z using default resolution (1.0 for each dimension) */
+	public ImageDim( int x, int y, int z ) {
+		this.extent = new Extent(x, y, z);
+		this.res = new ImageRes();
+	}
+	
+	/** Copy constructor */
 	public ImageDim( ImageDim dim ) {
 		this.extent = new Extent( dim.extent );
 		this.res = new ImageRes( dim.res );

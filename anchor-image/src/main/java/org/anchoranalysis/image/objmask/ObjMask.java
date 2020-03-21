@@ -69,9 +69,9 @@ public class ObjMask {
 	private BinaryValuesByte bvb = new BinaryValuesByte( (byte) 0, (byte) -1 );
 	
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
-	public ObjMask(BoundingBox BoundingBox) {
+	public ObjMask(BoundingBox bbox) {
 		super();
-		delegate = new BoundedVoxelBox<>(BoundingBox, VoxelBoxFactory.getByte() );
+		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.getByte() );
 	}
 	
 	public ObjMask(BoundedVoxelBox<ByteBuffer> voxelBox) {

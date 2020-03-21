@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.init;
 
+import java.nio.file.Path;
+
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.params.IdentityBridgeInit;
@@ -79,11 +81,12 @@ public class ImageInitParams extends BeanInitParams {
 		
 	// START: Single Items
 	private RandomNumberGenerator re = new RandomNumberGeneratorMersenneTime();
+	private Path modelDir;
 	// END: Single Items
 	
 	private ProviderBridge<StackProvider,Stack,ImageInitParams> stackProviderBridge;
 
-	private ImageInitParams(SharedObjects so, RandomNumberGenerator re) {
+	private ImageInitParams(SharedObjects so, RandomNumberGenerator re, Path modelDir) {
 		super();
 		this.re = re;
 		this.soParams = KeyValueParamsInitParams.create(so);
@@ -95,19 +98,20 @@ public class ImageInitParams extends BeanInitParams {
 		storeChnl = so.getOrCreate(Chnl.class);
 		storeBinaryChnl = so.getOrCreate(BinaryChnl.class);
 		storeBinarySgmn = so.getOrCreate(BinarySgmn.class);
+		this.modelDir = modelDir;
 	}
 	
-	public static ImageInitParams create( SharedObjects so ) {
-		return create(so, new RandomNumberGeneratorMersenneTime() );
+	public static ImageInitParams create( SharedObjects so, Path modelDir ) {
+		return create(so, new RandomNumberGeneratorMersenneTime(), modelDir );
 	}
 	
-	public static ImageInitParams create( SharedObjects so, RandomNumberGenerator re ) {
-		return new ImageInitParams(so, re);
+	public static ImageInitParams create( SharedObjects so, RandomNumberGenerator re, Path modelDir ) {
+		return new ImageInitParams(so, re, modelDir);
 	}
 	
-	public static ImageInitParams create( LogErrorReporter logErrorReporter, RandomNumberGenerator re ) {
+	public static ImageInitParams create( LogErrorReporter logErrorReporter, RandomNumberGenerator re, Path modelDir ) {
 		SharedObjects so = new SharedObjects(logErrorReporter);
-		return ImageInitParams.create(so,re);
+		return ImageInitParams.create(so,re, modelDir);
 	}
 	
 	public NamedProviderStore<Stack> getStackCollection() {
@@ -205,5 +209,9 @@ public class ImageInitParams extends BeanInitParams {
 
 	public RandomNumberGenerator getRandomNumberGenerator() {
 		return re;
+	}
+
+	public Path getModelDir() {
+		return modelDir;
 	}
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.init;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-mpp
@@ -53,7 +55,6 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.provider.ProviderBridge;
@@ -100,23 +101,22 @@ public class MPPInitParams extends BeanInitParams {
 		return new MPPInitParams( soImage, so);
 	}
 	
-	public static MPPInitParams create( SharedObjects so ) {
-		return create( ImageInitParams.create(so), so );
+	public static MPPInitParams create( SharedObjects so, Path modelDir ) {
+		return create( ImageInitParams.create(so, modelDir), so );
 	}
 	
 	public static MPPInitParams create(
 			SharedObjects so,
 			Define namedDefinitions,
-			LogErrorReporter logErrorReporter,
-			RandomNumberGenerator re
+			GeneralInitParams paramsGeneral
 	) throws CreateException {
-		ImageInitParams soImage = ImageInitParams.create( so, re );
+		ImageInitParams soImage = ImageInitParams.create( so, paramsGeneral.getRe(), paramsGeneral.getModelDir() );
 		MPPInitParams soMPP = create( soImage, so);
 		if (namedDefinitions!=null) {
 			try {
 				PropertyInitializer<MPPInitParams> pi = new MPPBean.Initializer();
 				pi.setParam(soMPP);
-				soMPP.populate( pi, namedDefinitions, logErrorReporter);
+				soMPP.populate( pi, namedDefinitions, paramsGeneral.getLogErrorReporter() );
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
 			}

@@ -61,10 +61,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
-	public BoundedVoxelBox(BoundingBox BoundingBox, VoxelBoxFactoryTypeBound<T> factory) {
+	public BoundedVoxelBox(BoundingBox bbox, VoxelBoxFactoryTypeBound<T> factory) {
 		super();
-		this.BoundingBox = BoundingBox;
-		this.voxelBox = factory.create( BoundingBox.extnt() );
+		this.BoundingBox = bbox;
+		this.voxelBox = factory.create( bbox.extnt() );
 		assert(this.voxelBox.extnt().getZ() >0);
 		assert(sizesMatch());
 	}

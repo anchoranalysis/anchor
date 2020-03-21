@@ -110,7 +110,12 @@ public class ObjMaskSgmnTask extends RasterTask {
 			NamedChnlCollectionForSeries ncc = inputObject.createChnlCollectionForSeries(0, progressReporter );
 
 			NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-			StackCollectionOutputter.copyFrom(ncc, stackCollection, progressReporter);
+			StackCollectionOutputter.copyFrom(
+				ncc,
+				stackCollection,
+				expArgs.getModelDirectory(),
+				progressReporter
+			);
 		
 			sgmnDup.initRecursive(logErrorReporter);
 			

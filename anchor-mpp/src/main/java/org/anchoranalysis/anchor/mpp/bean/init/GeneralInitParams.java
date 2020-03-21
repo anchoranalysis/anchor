@@ -1,12 +1,10 @@
-package org.anchoranalysis.image.io.input;
-
-import java.nio.file.Path;
+package org.anchoranalysis.anchor.mpp.bean.init;
 
 /*-
  * #%L
- * anchor-image-io
+ * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,26 +26,52 @@ import java.nio.file.Path;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import java.nio.file.Path;
 
-public class StackInputInitParamsCreator {
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.random.RandomNumberGenerator;
+import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
+
+public class GeneralInitParams {
+
+	private RandomNumberGenerator re;
+	private Path modelDir;
+	private LogErrorReporter logErrorReporter;
 	
-	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneConstant(), modelDir );
-		addInput(soImage, inputObject);
-		return soImage;
-	}
-		
-	private static void addInput( ImageInitParams soImage, ProvidesStackInput inputObject ) throws OperationFailedException {
-		inputObject.addToStore(
-			new WrapStackAsTimeSequenceStore(soImage.getStackCollection()),
-			0,
-			ProgressReporterNull.get()
+	public GeneralInitParams(Path modelDir, LogErrorReporter logErrorReporter) {
+		this(
+			new RandomNumberGeneratorMersenneConstant(),
+			modelDir,
+			logErrorReporter
 		);
+	}
+	
+	public GeneralInitParams(RandomNumberGenerator re, Path modelDir, LogErrorReporter logErrorReporter) {
+		super();
+		this.re = re;
+		this.modelDir = modelDir;
+		this.logErrorReporter = logErrorReporter;
+	}
+
+	public RandomNumberGenerator getRe() {
+		return re;
+	}
+
+	public Path getModelDir() {
+		return modelDir;
+	}
+
+	public LogErrorReporter getLogErrorReporter() {
+		return logErrorReporter;
+	}
+
+	public ErrorReporter getErrorReporter() {
+		return logErrorReporter.getErrorReporter();
+	}
+
+	public LogReporter getLogReporter() {
+		return logErrorReporter.getLogReporter();
 	}
 }

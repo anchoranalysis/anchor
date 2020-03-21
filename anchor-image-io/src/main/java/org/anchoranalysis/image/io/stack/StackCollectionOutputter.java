@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.stack;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-image-io
@@ -113,14 +115,24 @@ public class StackCollectionOutputter {
 		return out;
 	}
 	
-	public static void copyFrom( NamedChnlCollectionForSeries src, NamedImgStackCollection target, ProgressReporter progressReporter ) throws GetOperationFailedException {
+	public static void copyFrom(
+		NamedChnlCollectionForSeries src,
+		NamedImgStackCollection target,
+		Path modelDir,
+		ProgressReporter progressReporter
+	) throws GetOperationFailedException {
 		
 		Set<String> keys = src.chnlNames();
 		
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, keys.size()) ) {
 			for (String id : keys) {
 				if (target.getImageNoException(id)==null) {
-					target.addImageStack(id, new Stack( src.getChnl(id, 0, new ProgressReporterOneOfMany(prm)) ) );
+					target.addImageStack(
+						id,
+						new Stack(
+							src.getChnl(id, 0, new ProgressReporterOneOfMany(prm))
+						)
+					);
 					prm.incrWorker();
 				}
 			}

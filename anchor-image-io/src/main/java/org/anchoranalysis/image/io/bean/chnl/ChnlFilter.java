@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.bean.chnl;
 
+import java.nio.file.Path;
+
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -65,15 +67,21 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 
 	private LogErrorReporter logErrorReporter;
 	private RandomNumberGenerator re;
+	private Path modelDir;
 	
-	public void init( ChnlGetter chnlCollection, LogErrorReporter logErrorReporter, RandomNumberGenerator re ) {
+	public void init( ChnlGetter chnlCollection, Path modelDir, LogErrorReporter logErrorReporter, RandomNumberGenerator re ) {
 		this.chnlCollection = chnlCollection;
+		this.modelDir = modelDir;
 		this.logErrorReporter = logErrorReporter;
 		this.re = re;
 	}
 	
 	@Override
-	public Chnl getChnl( String name, int t, ProgressReporter progressReporter ) throws GetOperationFailedException {
+	public Chnl getChnl(
+		String name,
+		int t,
+		ProgressReporter progressReporter
+	) throws GetOperationFailedException {
 		
 		try {
 			if( !name.equals(chnlName) ) {
@@ -84,7 +92,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 			
 			Chnl chnlIn = chnlCollection.getChnl(name, t, progressReporter);
 			
-			ImageInitParams soImage = ImageInitParams.create(logErrorReporter, re);
+			ImageInitParams soImage = ImageInitParams.create(logErrorReporter, re, modelDir);
 			soImage.addToStackCollection("input_chnl", new Stack(chnlIn) );
 			
 			chnlProviderDup.initRecursive(soImage, logErrorReporter);
