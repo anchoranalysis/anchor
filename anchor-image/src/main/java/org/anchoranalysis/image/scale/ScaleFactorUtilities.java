@@ -55,7 +55,7 @@ public class ScaleFactorUtilities {
 	 * @return the multiple floored to an integer
 	 */
 	public static int multiplyAsInt( double first, int second ) {
-		return (int) first * second; 
+		return (int) (first * second); 
 	}
 	
 	
