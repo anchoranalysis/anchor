@@ -40,6 +40,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
@@ -97,12 +98,14 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// TODO put in some form of interpolation when zoomFactor<1
 	private Chnl extractRegionFrom( Chnl extractedSlice, BoundingBox BoundingBox, double zoomFactor, ChnlConverterAttached<Chnl,ByteBuffer> chnlConverter ) throws OperationFailedException {
 		
+		ScaleFactor sf = new ScaleFactor(zoomFactor);
+		
 		// We calculate how big our outgoing voxelbox wil be 
 		ImageDim sd = new ImageDim( extractedSlice.getDimensions() );
-		sd.scaleXYBy(zoomFactor, zoomFactor);
+		sd.scaleXYBy(sf);
 		
 		Extent extntTrgt = new Extent( BoundingBox.extnt() );
-		extntTrgt.scaleXYBy(zoomFactor, zoomFactor);
+		extntTrgt.scaleXYBy(sf);
 
 		VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.getByte().create(extntTrgt);
 

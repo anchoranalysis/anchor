@@ -36,6 +36,7 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class FromMask extends ScaledMaskCreator {
 
@@ -51,7 +52,10 @@ public class FromMask extends ScaledMaskCreator {
 		try {
 			// Then we have to create the scaled-object fresh
 			// We store it for next-time
-			ObjMask omScaled = omUnscaled.getMask().scaleNew(scaleFactor, scaleFactor, interpolator );
+			ObjMask omScaled = omUnscaled.getMask().scaleNew(
+				new ScaleFactor(scaleFactor),
+				interpolator
+			);
 			
 			//System.out.printf("create Scaling from %s to %s for zoom=%f\n", omUnscaled.toString(), omScaled.toString(), scaleFactor );
 			

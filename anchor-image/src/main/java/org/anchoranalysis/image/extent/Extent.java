@@ -34,6 +34,8 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
+import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
  * Width, height etc. of image in 2 or 3 dimensions  
@@ -320,8 +322,11 @@ public final class Extent implements Serializable {
 		return contains( bbox.getCrnrMin() ) && contains( bbox.calcCrnrMax() );
 	}
 	
-	public void scaleXYBy( double xFactor, double yFactor ) {
-		setXY( (int) (xFactor * getX()), (int) (yFactor * getY()) );
+	public void scaleXYBy( ScaleFactor sf ) {
+		setXY(
+			ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX()),
+			ScaleFactorUtilities.multiplyAsInt(sf.getY(), getY())
+		);
 	}
 	
 	public void subtract( Extent e ) {

@@ -45,6 +45,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
 
@@ -228,7 +229,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	public ObjMaskWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
 			
 		BoundingBox bbox = this.bbox( bndScene, rm.getRegionID() );
-		bbox.scaleXYPosAndExtnt(scaleFactor, scaleFactor);
+		bbox.scaleXYPosAndExtnt( new ScaleFactor(scaleFactor) );
 		
 		// We make a new mask and populate it from out iterator
 		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.scale;
 
+import org.anchoranalysis.image.extent.Extent;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -26,7 +28,6 @@ package org.anchoranalysis.image.scale;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
 
 public class ScaleFactorUtilities {
 	
@@ -35,14 +36,36 @@ public class ScaleFactorUtilities {
 	 * 
 	 * <p>i.e. the scale-factor is target/source for each XY dimension</p>
 	 * 
-	 * @param source source dimension
-	 * @param target target dimension
+	 * @param source source extent
+	 * @param target target extent
 	 * @return the scaling-factor to scale the source to be the same size as the target
 	 */
-	public static ScaleFactor calcRelativeScale( ImageDim source, ImageDim target ) {
+	public static ScaleFactor calcRelativeScale( Extent source, Extent target ) {
 		return new ScaleFactor(
-			((double) target.getX()) / source.getX(),
-			((double) target.getY()) / source.getY()
+			divideAsDouble( target.getX(), source.getX() ),
+			divideAsDouble( target.getY(), source.getY() )
 		);
+	}
+		
+	/**
+	 * Multiplies a double by an integer, returning it as an integer
+	 * 
+	 * @param first the double
+	 * @param second the int
+	 * @return the multiple floored to an integer
+	 */
+	public static int multiplyAsInt( double first, int second ) {
+		return (int) first * second; 
+	}
+	
+	
+	/**
+	 * Divides two integers as a double
+	 * @param numerator to divide by
+	 * @param denominator  divider
+	 * @return floating-point result of division
+	 */
+	private static double divideAsDouble( int numerator, int denominator ) {
+		return ((double) numerator) / denominator;
 	}
 }

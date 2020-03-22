@@ -31,6 +31,10 @@ public class ScaleFactor {
 	private double x;
 	private double y;
 	
+	public ScaleFactor(double factor) {
+		this(factor, factor);
+	}
+	
 	public ScaleFactor(double x, double y) {
 		super();
 		this.x = x;

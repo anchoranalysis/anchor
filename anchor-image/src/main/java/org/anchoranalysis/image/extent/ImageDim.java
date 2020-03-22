@@ -30,6 +30,8 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
  * The dimensions of an image (in voxels), together with the image resolution
@@ -105,19 +107,21 @@ public class ImageDim implements Serializable {
 	
 	public void scaleXYTo( int x, int y ) {
 		
-		double xChange = ((double) extent.getX() ) / x; 
-		double yChange = ((double) extent.getY() ) / y;
+		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(
+			extent,
+			new Extent(x,y,0)
+		);
 				
 		extent.setXY(x,y);
 		
-		res.scaleXY(xChange, yChange);
+		res.scaleXY(sf);
 	}
 	
-	public void scaleXYBy( double xFactor, double yFactor ) {
+	public void scaleXYBy( ScaleFactor sf ) {
 				
-		extent.scaleXYBy(xFactor, yFactor);
+		extent.scaleXYBy(sf);
 		
-		res.scaleXY(xFactor, yFactor);
+		res.scaleXY(sf);
 	}
 	
 	public int getVolume() {

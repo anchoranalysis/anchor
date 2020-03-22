@@ -33,6 +33,8 @@ import java.util.List;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
@@ -523,15 +525,13 @@ public class BoundingBox implements Serializable {
 		return crnrMin.toString() + "+" + extnt.toString() + "=" + calcCrnrMax().toString();
 	}
 	
-	public void scaleXYPos( double ratioX, double ratioY ) {
-		crnrMin.setX( (int) Math.floor( ratioX * crnrMin.getX() ) );
-		crnrMin.setY( (int) Math.floor( ratioY * crnrMin.getY() ) );
+	public void scaleXYPos( ScaleFactor sf ) {
+		crnrMin.setX( ScaleFactorUtilities.multiplyAsInt(sf.getX(), crnrMin.getX()) );
+		crnrMin.setY( ScaleFactorUtilities.multiplyAsInt(sf.getY(), crnrMin.getY()) );
 	}
 	
-	public void scaleXYPosAndExtnt( double ratioX, double ratioY ) {
-		scaleXYPos(ratioX, ratioY);
-		extnt.scaleXYBy(ratioX, ratioY);
+	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
+		scaleXYPos(sf);
+		extnt.scaleXYBy(sf);
 	}
-	
-	
 }

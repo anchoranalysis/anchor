@@ -46,6 +46,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.index.rtree.BBoxRTree;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * Caches several operations associated with an OverlayCollection, and allows the creation of subsets.
@@ -373,7 +374,9 @@ public class OverlayPrecalculatedCache implements OverlayRetriever {
 	private ImageDim createDimensionsScaled( double zoomFactorNew ) {
 		// We create a scaled version of our dimensions
 		ImageDim dimScaled = new ImageDim(dimEntireImage);
-		dimScaled.scaleXYBy(zoomFactorNew, zoomFactorNew);
+		dimScaled.scaleXYBy(
+			new ScaleFactor(zoomFactorNew)
+		);
 		return dimScaled;
 	}
 }
