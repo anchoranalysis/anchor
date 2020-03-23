@@ -49,7 +49,7 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private FeatureEvaluatorNrgStack featureEvaluator;
@@ -63,17 +63,17 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 			throws OperationFailedException {
 
 		try {
-			objMaskProvider.initRecursive( so.getImage(), logger );
+			objs.initRecursive( so.getImage(), logger );
 			featureEvaluator.initRecursive( so.getFeature(), logger );
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
 		
 		try {
-			ObjMaskCollection objs = objMaskProvider.create();
+			ObjMaskCollection objsCollection = objs.create();
 						
 			FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession();
-			double val = calcFeatureOn( objs, session );
+			double val = calcFeatureOn( objsCollection, session );
 			return Double.toString(val);
 			
 		} catch (FeatureCalcException | CreateException e) {
@@ -93,13 +93,13 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 		return title;
 	}
 	
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 
