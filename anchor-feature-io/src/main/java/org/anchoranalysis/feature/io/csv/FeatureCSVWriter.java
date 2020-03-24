@@ -99,6 +99,8 @@ public class FeatureCSVWriter {
 		}
 		
 		for( ResultsVector rv : resultsCollectionFromFeatures ) {
+			assert(group!=null);
+			assert(rv!=null);
 			addResultsVectorWithGroup(group, rv, includeID);
 		}
 	}
@@ -115,11 +117,15 @@ public class FeatureCSVWriter {
 	// group is ignored if null
 	private static List<TypedValue> buildCsvRow( MultiName group, ResultsVector resultsFromFeatures, boolean includeID ) {
 		
+		assert( resultsFromFeatures!=null );
+		
 		List<TypedValue> csvRow = new ArrayList<>();
 		
 		if (includeID) {
 			assert(resultsFromFeatures.getIdentifier()!=null);
-			csvRow.add( new TypedValue(resultsFromFeatures.getIdentifier(), false) );
+			csvRow.add(
+				new TypedValue(resultsFromFeatures.getIdentifier(), false)
+			);
 		}
 		
 		if (group!=null) {

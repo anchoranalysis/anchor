@@ -28,7 +28,6 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
@@ -67,7 +66,7 @@ public class SharedObjectsUtilities {
 					logErrorReporter
 				);
 			}
-		} catch (GetOperationFailedException | CreateException e) {
+		} catch (GetOperationFailedException e) {
 			logErrorReporter.getErrorReporter().recordError(SharedObjectsUtilities.class, e);
 		}
 	}

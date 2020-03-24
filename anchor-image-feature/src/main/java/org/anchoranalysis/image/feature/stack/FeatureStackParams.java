@@ -26,13 +26,14 @@ package org.anchoranalysis.image.feature.stack;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public class FeatureStackParams extends FeatureCalcParamsWithRes {
+public class FeatureStackParams extends FeatureNRGStackParams {
 
 	private NRGStack nrgStack;
 	private ImageInitParams so;
@@ -54,12 +55,8 @@ public class FeatureStackParams extends FeatureCalcParamsWithRes {
 	 */
 	public FeatureStackParams(NRGStack nrgStack, ImageInitParams so) {
 		super();
-		this.nrgStack = nrgStack;
 		this.so = so;
-	}
-
-	public NRGStack getNrgStack() {
-		return nrgStack;
+		this.setNrgStack( new NRGStackWithParams(nrgStack) );
 	}
 
 	@Override
