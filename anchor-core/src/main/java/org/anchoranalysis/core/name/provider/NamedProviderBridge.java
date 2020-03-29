@@ -29,6 +29,7 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
@@ -57,7 +58,11 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 
 	@Override
 	public DestType getException(String key) throws GetOperationFailedException {
-		return bridge.bridgeElement( srcProvider.getNull(key) );
+		try {
+			return bridge.bridgeElement( srcProvider.getNull(key) );
+		} catch (BridgeElementException e) {
+			throw new GetOperationFailedException(e);
+		}
 	}
 
 	@Override
@@ -74,8 +79,10 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 			return null;
 		}
 		
-		return bridge.bridgeElement( srcVal );
+		try {
+			return bridge.bridgeElement( srcVal );
+		} catch (BridgeElementException e) {
+			throw new GetOperationFailedException(e);
+		}
 	}
-
-
 }

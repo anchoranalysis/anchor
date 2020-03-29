@@ -32,18 +32,18 @@ import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.OverlayedInstantState;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 
 public class CfgWithNrgTotalInstantStateBridge implements IObjectBridge<CfgWithNrgTotalInstantState, OverlayedInstantState> {
 
 	
 	
 	@Override
-	public OverlayedInstantState bridgeElement(CfgWithNrgTotalInstantState sourceObject) throws GetOperationFailedException {
+	public OverlayedInstantState bridgeElement(CfgWithNrgTotalInstantState sourceObject) throws BridgeElementException {
 		
 		if (sourceObject==null) {
-			throw new GetOperationFailedException("invalid index");
+			throw new BridgeElementException("The sourceObject is null. Invalid index");
 		}
 		
 		if (sourceObject.getCfg()==null) {

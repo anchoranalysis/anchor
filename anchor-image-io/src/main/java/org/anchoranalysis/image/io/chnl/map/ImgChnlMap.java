@@ -33,8 +33,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 
 /**
@@ -85,7 +85,7 @@ public class ImgChnlMap {
 
 		@Override
 		public ImgChnlMap bridgeElement(List<ImgChnlMapEntry> list)
-				throws GetOperationFailedException {
+				throws BridgeElementException {
 			
 			ImgChnlMap beanOut = new ImgChnlMap();
 	    	

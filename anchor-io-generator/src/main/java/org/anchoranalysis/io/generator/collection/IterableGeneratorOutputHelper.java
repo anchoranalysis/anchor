@@ -29,6 +29,7 @@ package org.anchoranalysis.io.generator.collection;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.error.friendly.IFriendlyException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
@@ -108,13 +109,26 @@ public class IterableGeneratorOutputHelper {
 				T item = providers.getException(name);
 				writer.add( item, name );
 			} catch (Exception e) {
-				throw new OutputWriteFailedException( String.format("An error occurred outputting '%s'",name), e);
+				throwExceptionInWriter(e, name);
 			}
 		}
 		
 		writer.end();
 	}
 	
+	private static void throwExceptionInWriter(Exception e, String name) throws OutputWriteFailedException {
+		
+		String errorMsg = String.format("An error occurred outputting '%s'",name); 
+		
+		if (e instanceof IFriendlyException) {
+			IFriendlyException eCast = (IFriendlyException) e;
+			throw new OutputWriteFailedException(
+				errorMsg + ": " + eCast.friendlyMessageHierarchy()
+			);
+		} 
+		
+		throw new OutputWriteFailedException(errorMsg, e);		
+	}
 	
 	public static <T> INamedProvider<T> subset( INamedProvider<T> providers, OutputAllowed oa, ErrorReporter errorReporter ) {
 		

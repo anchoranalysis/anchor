@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -27,7 +29,6 @@ package org.anchoranalysis.io.generator;
  */
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -63,7 +64,7 @@ public class IterableGeneratorBridge<SourceType,DestinationType> extends Generat
 		this.element = element;
 		try {
 			delegate.setIterableElement( bridge.bridgeElement(element) );
-		} catch (GetOperationFailedException e) {
+		} catch (BridgeElementException e) {
 			throw new SetOperationFailedException(e);
 		}
 	}

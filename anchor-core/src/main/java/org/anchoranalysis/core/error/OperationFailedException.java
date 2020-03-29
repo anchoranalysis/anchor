@@ -40,7 +40,7 @@ public class OperationFailedException extends AnchorFriendlyCheckedException {
 		super(message);
 	}
 
-	public OperationFailedException( Exception exc ) {
+	public OperationFailedException( Throwable exc ) {
 		super( exc );
 	}
 	

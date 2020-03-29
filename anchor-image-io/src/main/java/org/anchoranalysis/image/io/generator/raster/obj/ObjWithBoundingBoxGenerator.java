@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.obj;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-image-io
@@ -27,7 +29,6 @@ package org.anchoranalysis.image.io.generator.raster.obj;
  */
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -68,7 +69,7 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 
 					@Override
 					public BoundingBox bridgeElement(ObjMask sourceObject)
-							throws GetOperationFailedException {
+							throws BridgeElementException {
 						return sourceObject.getBoundingBox();
 					}
 				}				

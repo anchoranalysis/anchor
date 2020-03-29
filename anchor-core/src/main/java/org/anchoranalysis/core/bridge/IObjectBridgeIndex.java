@@ -26,8 +26,6 @@ package org.anchoranalysis.core.bridge;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
-
 /**
  * 
  * @author Owen Feehan
@@ -38,5 +36,5 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 @FunctionalInterface
 public interface IObjectBridgeIndex<S,D> {
 
-	D bridgeElement( int index, S sourceObject ) throws GetOperationFailedException;
+	D bridgeElement( int index, S sourceObject ) throws BridgeElementException;
 }

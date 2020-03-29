@@ -26,13 +26,10 @@ package org.anchoranalysis.core.bridge;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
-
 public class IdentityBridge<T> implements IObjectBridge<T,T> {
 
 	@Override
-	public T bridgeElement(T sourceObject)
-			throws GetOperationFailedException {
+	public T bridgeElement(T sourceObject) throws BridgeElementException {
 		return sourceObject;
 	}
 

@@ -30,6 +30,7 @@ package org.anchoranalysis.image.init;
 import java.nio.ByteBuffer;
 import java.util.Set;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -116,9 +117,7 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 	private static class ChnlToStackBridge implements IObjectBridge<Chnl,Stack> {
 		
 		@Override
-		public Stack bridgeElement(
-				Chnl sourceObject)
-				throws GetOperationFailedException {
+		public Stack bridgeElement(Chnl sourceObject) throws BridgeElementException {
 			return new Stack( sourceObject ); 
 		}
 	}
@@ -128,9 +127,7 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 		private ChnlFactorySingleType factory = new ChnlFactoryByte();
 		
 		@Override
-		public Stack bridgeElement(
-				BinaryChnl sourceObject)
-				throws GetOperationFailedException {
+		public Stack bridgeElement(	BinaryChnl sourceObject ) throws BridgeElementException {
 			
 			Chnl chnlNew = factory.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
 	
@@ -139,7 +136,7 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 			try {
 				bvb = sourceObject.binaryVoxelBox();
 			} catch (CreateException e1) {
-				throw new GetOperationFailedException(e1);
+				throw new BridgeElementException(e1);
 			}
 			
 			// For each region we get a mask for what equals the binary mask

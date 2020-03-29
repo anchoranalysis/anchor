@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -27,7 +29,6 @@ package org.anchoranalysis.io.generator;
  */
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -60,7 +61,7 @@ public class IterableObjectGeneratorBridge<GeneratorType,ExposedIteratorType,Hid
 		try {
 			HiddenIteratorType bridgedElement = elementBridge.bridgeElement(element); 
 			internalGenerator.setIterableElement( bridgedElement );
-		} catch (GetOperationFailedException e) {
+		} catch (BridgeElementException e) {
 			throw new SetOperationFailedException(e);
 		}
 	}

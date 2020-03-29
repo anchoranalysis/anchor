@@ -27,10 +27,10 @@ package org.anchoranalysis.feature.shared;
  */
 
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -56,12 +56,12 @@ class FeatureBridge implements IObjectBridge<NamedBean<FeatureListProvider>, Fea
 
 	@Override
 	public FeatureList bridgeElement(NamedBean<FeatureListProvider> sourceObject)
-			throws GetOperationFailedException {
+			throws BridgeElementException {
 
 		try {
 			sourceObject.getValue().initRecursive(so,logger);
 		} catch (InitException e1) {
-			throw new GetOperationFailedException(e1);
+			throw new BridgeElementException(e1);
 		}
 		
 		try {
@@ -71,8 +71,7 @@ class FeatureBridge implements IObjectBridge<NamedBean<FeatureListProvider>, Fea
 				
 			return fl;
 		} catch (CreateException e) {
-			String desc = String.format("Cannot create feature-list: '%s'", sourceObject.getName() );
-			throw new GetOperationFailedException(desc,e);
+			throw new BridgeElementException(e);
 		}
 	}
 
