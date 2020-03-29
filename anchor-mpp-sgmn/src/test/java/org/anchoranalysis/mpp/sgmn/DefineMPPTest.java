@@ -29,7 +29,10 @@ package org.anchoranalysis.mpp.sgmn;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
+import java.util.List;
 
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -49,32 +52,42 @@ public class DefineMPPTest {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
-	private void checkNamedDefinitions( Define namedDefinitions ) {
-		// We assume an order of chnl1 before chnl2
-		assertTrue( namedDefinitions.getList(ChnlProvider.class).size()==2 );
-		assertTrue( namedDefinitions.getList(ChnlProvider.class).get(0).getName().equals("chnl1") );
-		assertTrue( namedDefinitions.getList(ChnlProvider.class).get(1).getName().equals("chnl2") );
-		
-		// We assume an order of stack1 before stack2
-		assertTrue( namedDefinitions.getList(StackProvider.class).size()==2 );
-		assertTrue( namedDefinitions.getList(StackProvider.class).get(0).getName().equals("stack1") );
-		assertTrue( namedDefinitions.getList(StackProvider.class).get(1).getName().equals("stack2") );
-	}
-	
 	@Test
 	public void testStatic() throws BeanXmlException {
-		Path pathStatic = loader.resolveTestPath("namedDefinitionsStatic.xml");
-		
-		Define namedDefinitions = BeanXmlLoader.loadBean( pathStatic );
-		checkNamedDefinitions(namedDefinitions);
+		checkPath("namedDefinitionsStatic.xml");
 	}
-	
 	
 	@Test
 	public void testDynamic() throws BeanXmlException {
-		Path pathDynamic = loader.resolveTestPath("namedDefinitionsDynamic.xml");
-		Define namedDefinitions = BeanXmlLoader.loadBean( pathDynamic );
-		checkNamedDefinitions(namedDefinitions);
+		checkPath("namedDefinitionsDynamic.xml");
 	}
-
+	
+	private void checkPath( String fileName ) throws BeanXmlException {
+		Path path = loader.resolveTestPath( fileName );
+		Define define = BeanXmlLoader.loadBean( path );
+		checkDefine(define);
+	}
+		
+	private void checkDefine( Define define ) {
+		// We assume an order of chnl1 before chnl2
+		assertTwoElements( define, ChnlProvider.class, "chnl" );
+		
+		// We assume an order of stack1 before stack2
+		assertTwoElements( define, StackProvider.class, "stack" );
+	}
+	
+	private void assertTwoElements( Define define, Class<?> provider, String prefix ) {
+		List<NamedBean<AnchorBean<?>>> list = define.getList(provider); 
+		assertTrue( list.size()==2 );
+		assertElement( list, 0, prefix + "1" );
+		assertElement( list, 1, prefix + "2" );
+	}
+	
+	private void assertElement( List<NamedBean<AnchorBean<?>>> list, int index, String expectedName ) {
+		assertTrue(
+			list.get(index)
+				.getName()
+				.equals(expectedName)
+		);
+	}
 }
