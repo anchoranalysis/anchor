@@ -28,12 +28,11 @@ package org.anchoranalysis.mpp.io.bean.input;
 
 import java.nio.file.Path;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 class DeserializerHelper {
 

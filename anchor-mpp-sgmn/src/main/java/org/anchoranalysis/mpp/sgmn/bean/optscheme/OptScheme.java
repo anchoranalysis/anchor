@@ -2,6 +2,8 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme;
 
 
 
+import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
+
 /*
  * #%L
  * anchor-mpp-sgmn
@@ -30,10 +32,9 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
-
-import ch.ethz.biol.cell.mpp.feedback.FeedbackReceiver;
-import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
 
 /**

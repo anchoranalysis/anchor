@@ -44,9 +44,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-import ch.ethz.biol.cell.gui.overlay.scaledmask.FromMark;
-import ch.ethz.biol.cell.gui.overlay.scaledmask.VolumeThreshold;
-
 public class OverlayMark extends Overlay {
 
 	private ScaledMaskCreator scaledMaskCreator;

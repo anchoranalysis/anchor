@@ -32,8 +32,8 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualState;
-import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.statereporter.StateReporter;
-import org.anchoranalysis.plugin.mpp.sgmn.optscheme.TransformationContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
+import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
 
 /**

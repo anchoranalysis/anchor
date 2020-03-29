@@ -1,5 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.list.OrderedFeatureList;
 import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -32,8 +33,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 
 /**
  * Add Criteria

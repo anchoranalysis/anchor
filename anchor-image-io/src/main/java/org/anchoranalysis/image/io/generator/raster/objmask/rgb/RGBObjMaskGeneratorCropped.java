@@ -55,8 +55,8 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  */
 public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackground {
 	
-	private int marginXY = 0;
-	private int marginZ = 0;
+	private int paddingXY = 0;
+	private int paddingZ = 0;
 	
 	private BoundingBox bbox;
 
@@ -66,22 +66,6 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 
 	private RGBObjMaskGeneratorCropped(ObjMaskWriter objMaskWriter, DisplayStack background, ColorIndex colorIndex, IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter) {
 		super(objMaskWriter, colorIndex, idGetter, colorIDGetter, background);
-	}
-	
-	public int getMarginXY() {
-		return marginXY;
-	}
-
-	public void setMarginXY(int marginXY) {
-		this.marginXY = marginXY;
-	}
-
-	public int getMarginZ() {
-		return marginZ;
-	}
-
-	public void setMarginZ(int marginZ) {
-		this.marginZ = marginZ;
 	}
 
 	@Override
@@ -115,22 +99,22 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 	}
 
 	private void growBBBox(BoundingBox bbox, Extent containingScene ) {
-		assert(marginXY>=0);
-		assert(marginZ>=0);
+		assert(paddingXY>=0);
+		assert(paddingZ>=0);
 		
-		if (marginXY==0 && marginZ==0) {
+		if (paddingXY==0 && paddingZ==0) {
 			return;
 		}
 		
-		bbox.getCrnrMin().setX( bbox.getCrnrMin().getX() - marginXY );
-		bbox.getCrnrMin().setY( bbox.getCrnrMin().getY() - marginXY );
-		bbox.getCrnrMin().setZ( bbox.getCrnrMin().getZ() - marginZ );
+		bbox.getCrnrMin().setX( bbox.getCrnrMin().getX() - paddingXY );
+		bbox.getCrnrMin().setY( bbox.getCrnrMin().getY() - paddingXY );
+		bbox.getCrnrMin().setZ( bbox.getCrnrMin().getZ() - paddingZ );
 		
 		bbox.clipTo(containingScene);
 		
-		bbox.extnt().setX( bbox.extnt().getX() + (2*marginXY) );
-		bbox.extnt().setY( bbox.extnt().getY() + (2*marginXY) );
-		bbox.extnt().setZ( bbox.extnt().getZ() + (2*marginZ) );
+		bbox.extnt().setX( bbox.extnt().getX() + (2*paddingXY) );
+		bbox.extnt().setY( bbox.extnt().getY() + (2*paddingXY) );
+		bbox.extnt().setZ( bbox.extnt().getZ() + (2*paddingZ) );
 		
 		bbox.clipTo(containingScene);
 	}
@@ -146,6 +130,22 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		}
 		
 		return out;
+	}
+
+	public int getPaddingXY() {
+		return paddingXY;
+	}
+
+	public void setPaddingXY(int paddingXY) {
+		this.paddingXY = paddingXY;
+	}
+
+	public int getPaddingZ() {
+		return paddingZ;
+	}
+
+	public void setPaddingZ(int paddingZ) {
+		this.paddingZ = paddingZ;
 	}
 
 }

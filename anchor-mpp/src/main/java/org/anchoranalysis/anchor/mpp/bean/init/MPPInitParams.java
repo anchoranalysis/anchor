@@ -32,11 +32,14 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
+import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.bean.provider.ProbMapProvider;
-import org.anchoranalysis.anchor.mpp.bounds.MarkBounds;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
@@ -58,10 +61,6 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.provider.ProviderBridge;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.cfg.proposer.CfgProposer;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
 
 // A wrapper around SharedObjects which types certain MPP entities
 public class MPPInitParams extends BeanInitParams {

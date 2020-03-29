@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.kernel;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -30,8 +32,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGSchemeWithSharedFeatures;
 
 public class KernelCalcContext {
 

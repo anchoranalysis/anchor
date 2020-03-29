@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
-import org.anchoranalysis.anchor.mpp.bounds.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 
 /*-

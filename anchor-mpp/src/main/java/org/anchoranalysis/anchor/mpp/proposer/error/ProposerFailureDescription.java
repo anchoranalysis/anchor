@@ -36,16 +36,12 @@ public class ProposerFailureDescription implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 4418671354471633349L;
-
-	//private StringBuilder sb = new StringBuilder();
-	
-	//private static String newLine = System.getProperty("line.separator");
 	
 	private DefaultTreeModel errorTree;
 	private ErrorNode root = null;
 	
 	public ProposerFailureDescription() {
-		root = new ErrorNodeNull();
+		root = ErrorNodeNull.instance();
 		errorTree = null;
 	}
 	

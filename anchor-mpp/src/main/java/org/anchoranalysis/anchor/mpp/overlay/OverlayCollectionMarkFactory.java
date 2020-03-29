@@ -27,15 +27,14 @@ package org.anchoranalysis.anchor.mpp.overlay;
  */
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
 
 /**
  * Two-way factory.

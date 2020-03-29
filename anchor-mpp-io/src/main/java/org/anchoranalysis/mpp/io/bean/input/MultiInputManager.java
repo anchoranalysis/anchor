@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.io.bean.input;
 
+import static org.anchoranalysis.mpp.io.bean.input.AppendHelper.*;
+
 /*
  * #%L
  * anchor-mpp-io
@@ -30,6 +32,7 @@ package org.anchoranalysis.mpp.io.bean.input;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
@@ -41,8 +44,6 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-
-import static org.anchoranalysis.mpp.io.bean.input.AppendHelper.*;
 
 // An input stack
 public class MultiInputManager extends MultiInputManagerBase {

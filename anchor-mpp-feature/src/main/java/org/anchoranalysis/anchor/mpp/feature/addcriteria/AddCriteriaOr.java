@@ -30,14 +30,13 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.list.OrderedListUtilities;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 
 public class AddCriteriaOr extends AddCriteriaPair {
 
