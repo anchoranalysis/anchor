@@ -44,10 +44,19 @@ public class XStreamDeserializer<T> extends Deserializer<T> {
 			throw new DeserializationFailedException( String.format("File '%s' does not exist", filePath ) );
 		}
 		
-		XStream xstream = new XStream( new Xpp3Driver() );
+		XStream xstream = setupXStream();
 				
 		Object o = xstream.fromXML( filePath.toFile() );
 		
 		return (T) o;
+	}
+	
+	private XStream setupXStream() {
+		XStream xstream = new XStream( new Xpp3Driver() );
+		XStream.setupDefaultSecurity(xstream); // to be removed after 1.5
+		xstream.allowTypesByWildcard(new String[] {
+		    "org.anchoranalysis.**"
+		});
+		return xstream;
 	}
 }
