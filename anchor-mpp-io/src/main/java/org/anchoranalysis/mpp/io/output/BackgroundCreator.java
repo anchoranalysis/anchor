@@ -27,7 +27,7 @@ package org.anchoranalysis.mpp.io.output;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -42,10 +42,8 @@ public class BackgroundCreator {
 			return DisplayStack.create(
 				stackCollection.getException( backgroundStackName )
 			);
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException("Cannot create background display-stack", e);
-		} catch (CreateException e) {
-			throw new CreateException("Cannot create DisplayStack", e);
 		}
 	}
 }

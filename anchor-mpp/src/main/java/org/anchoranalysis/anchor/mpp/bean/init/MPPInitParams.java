@@ -56,6 +56,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -181,7 +182,7 @@ public class MPPInitParams extends BeanInitParams {
 	 * @return
 	 * @throws GetOperationFailedException
 	 */
-	public MarkBounds getMarkBounds() throws GetOperationFailedException {
+	public MarkBounds getMarkBounds() throws NamedProviderGetException {
 		return getMarkBoundsSet().getException("primary");
 	}
 

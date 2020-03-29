@@ -26,9 +26,9 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-public class ReporterException extends AnchorCheckedException {
+public class ReporterException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 
@@ -39,7 +39,7 @@ public class ReporterException extends AnchorCheckedException {
 		super(string);
 	}
 
-	public ReporterException( Exception exc ) {
+	public ReporterException(Throwable exc) {
 		super( exc );
 	}
 }

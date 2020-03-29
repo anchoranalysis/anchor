@@ -28,8 +28,8 @@ package org.anchoranalysis.feature.session.cache;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
@@ -80,8 +80,8 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	public double calcFeatureByID(String id, FeatureCalcParams params) throws FeatureCalcException {
 		try {
 			return calc( sharedFeatures.getException(id), params );
-		} catch (GetOperationFailedException e) {
-			throw new FeatureCalcException(e);
+		} catch (NamedProviderGetException e) {
+			throw new FeatureCalcException(e.summarize());
 		}
 	}
 

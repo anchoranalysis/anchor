@@ -44,7 +44,7 @@ public class InitException extends AnchorCheckedException {
 		super(string);
 	}
 
-	public InitException( Exception exc ) {
+	public InitException(Throwable exc ) {
 		super( exc );
 	}
 	
@@ -52,7 +52,7 @@ public class InitException extends AnchorCheckedException {
 		super(message, cause);
 	}
 
-	public static InitException createOrReuse( Exception exc ) {
+	public static InitException createOrReuse( Throwable exc ) {
 		// If it's an initialization error, we don't create a new one but re-throw
 		//  as frequently initialization errors will pass through a recursive train
 		if (exc.getCause() instanceof InitException) {

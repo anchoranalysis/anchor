@@ -32,8 +32,8 @@ import java.util.Set;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.NameValue;
 
 /**
@@ -48,10 +48,10 @@ public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 	private NameValueSet<T> delegate = new NameValueSet<>();
 	
 	@Override
-	public T getException(String key) throws GetOperationFailedException {
+	public T getException(String key) throws NamedProviderGetException {
 		T obj = delegate.getException(key);
 		if (obj==null) {
-			throw new GetOperationFailedException( String.format("Object '%s' does not exist in store ",key) );
+			throw NamedProviderGetException.nonExistingItem(key);
 		}
 		return obj;
 	}
@@ -78,7 +78,7 @@ public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 	}
 
 	@Override
-	public T getNull(String key) throws GetOperationFailedException {
+	public T getNull(String key) throws NamedProviderGetException {
 		return delegate.getException(key);
 	}
 

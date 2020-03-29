@@ -33,10 +33,10 @@ import java.util.Set;
 import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -97,13 +97,13 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 	
 	@Override
 	public Stack getException(String key)
-			throws GetOperationFailedException {
+			throws NamedProviderGetException {
 		return combinedStackProvider.getNull(key);
 	}
 
 	@Override
 	public Stack getNull(String key)
-			throws GetOperationFailedException {
+			throws NamedProviderGetException {
 		return combinedStackProvider.getException(key);
 	}
 

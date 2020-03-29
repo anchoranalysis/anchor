@@ -40,7 +40,7 @@ public class GetOperationFailedException extends AnchorFriendlyCheckedException 
 		super(string);
 	}
 
-	public GetOperationFailedException( Throwable exc ) {
-		super( exc );
+	public GetOperationFailedException(Throwable exc) {
+		super(exc);
 	}
 }

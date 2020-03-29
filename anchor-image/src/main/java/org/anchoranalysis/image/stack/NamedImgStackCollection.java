@@ -36,8 +36,8 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.IdentityOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
@@ -58,7 +58,7 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 		return map.get(identifier);
 	}
 	
-	public Stack getException( String identifier ) throws GetOperationFailedException {
+	public Stack getException( String identifier ) throws NamedProviderGetException {
 		try {
 			OperationWithProgressReporter<Stack> ret = getAsOperation(identifier);
 
@@ -68,12 +68,12 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 			return ret.doOperation( ProgressReporterNull.get() );
 		
 		} catch (ExecuteException e) {
-			throw new GetOperationFailedException( e.getCause() );
+			throw new NamedProviderGetException( identifier, e.getCause() );
 		}
 	}
 	
 	@Override
-	public Stack getNull(String identifier)	throws GetOperationFailedException {
+	public Stack getNull(String identifier)	throws NamedProviderGetException {
 		try {
 			OperationWithProgressReporter<Stack> ret = getAsOperation(identifier);
 
@@ -82,7 +82,7 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 			}
 			return ret.doOperation( ProgressReporterNull.get() );
 		} catch (ExecuteException e) {
-			throw new GetOperationFailedException(e);
+			throw new NamedProviderGetException(identifier, e);
 		}
 	}
 	
@@ -182,8 +182,8 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 			}
 			return out;
 			
-		} catch (GetOperationFailedException e) {
-			throw new OperationFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
 		}
 		
 	}
@@ -220,8 +220,8 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 				throws ExecuteException {
 			try {
 				return src.getException(name);
-			} catch (GetOperationFailedException e) {
-				throw new ExecuteException(e);
+			} catch (NamedProviderGetException e) {
+				throw new ExecuteException(e.summarize());
 			}
 		}
 		

@@ -32,7 +32,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class FilePathProviderReference extends FilePathProvider {
 
@@ -54,8 +54,8 @@ public class FilePathProviderReference extends FilePathProvider {
 		super.onInit(so);
 		try {
 			filePath = so.getNamedFilePathCollection().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 

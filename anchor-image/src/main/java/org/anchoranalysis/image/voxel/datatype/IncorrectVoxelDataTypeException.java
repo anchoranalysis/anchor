@@ -26,25 +26,21 @@ package org.anchoranalysis.image.voxel.datatype;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-public class IncorrectVoxelDataTypeException extends AnchorRuntimeException {
+public class IncorrectVoxelDataTypeException extends AnchorFriendlyRuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public IncorrectVoxelDataTypeException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
+	public IncorrectVoxelDataTypeException(String msg) {
+		super(msg);
 	}
 
-	public IncorrectVoxelDataTypeException(String arg0) {
-		super(arg0);
-	}
-
-	public IncorrectVoxelDataTypeException(Throwable arg0) {
-		super(arg0);
+	public IncorrectVoxelDataTypeException(Throwable exc) {
+		super(exc);
 	}
 	
 	

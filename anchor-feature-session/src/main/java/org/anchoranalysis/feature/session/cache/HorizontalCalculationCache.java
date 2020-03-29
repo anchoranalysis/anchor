@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.InitException;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
@@ -119,10 +119,10 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 			try {
 				Feature feature = sharedFeatures.getException(id);
 				return calc( feature, params );
-			} catch (GetOperationFailedException e) {
+			} catch (NamedProviderGetException e) {
 				throw new FeatureCalcException(
 					String.format("Cannot locate feature with resolved-ID: %s", id ),
-					e
+					e.summarize()
 				);
 			}
 		}

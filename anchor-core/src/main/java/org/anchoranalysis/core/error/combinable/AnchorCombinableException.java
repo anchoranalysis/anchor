@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.xml.error;
+package org.anchoranalysis.core.error.combinable;
 
 /*
  * #%L
@@ -32,27 +32,30 @@ import java.util.StringJoiner;
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 /**
- *  A special type of exception where lots of nested exceptions of the same type
- *  can be combined together to  create a new exception summarising them all together
+ *  An exception that can be combined with similar exceptions and summarized.
+ *  
+ *  <p>A special type of exception where lots of nested exceptions of the same type
+ *  can be combined together to create a new exception summarising them all together.</p>
  *   
- *  This is useful for nested-exceptions which could be better expressed
- *     as a path e.g. /cause3/cause2/cause1/exception 
+ *  <p>This is useful for nested-exceptions which could be better expressed
+ *     as a path e.g. /cause3/cause2/cause1/exception</p>
  *
- *  It is also supported to skip certain exception types when traversing through
- *  the hierarchy of nested exceptions (i.e. getCause().getCause().getCause().
+ *  <p>It is also supported to skip certain exception types when traversing through
+ *  the hierarchy of nested exceptions (i.e. getCause().getCause().getCause().</p>
  *  
- *  When skipped, the exception is ignored, and its getCause() is then processed.
+ *  <p>When skipped, the exception is ignored, and its getCause() is then processed.</p>
  *  
- *  Otherwise, if a getCause() is encountered that can be neither combined, nor
- *  skipped, the process ends.
+ *  <p>Otherwise, if a getCause() is encountered that can be neither combined, nor
+ *  skipped, the process ends.</p>
  *  
- *  Finally, a BeanSummaryException is created representing the combined beans.
- *  Its getCause() is set as the getCause() of the last bean to be combined.
+ *  <p>Finally, a {@link org.anchoranalysis.core.error.combinable.SummaryException} is created
+ *  representing the combined beans. Its getCause() is set as the getCause() of the last bean
+ *  to be combined.</p>
  * 
  * @author Owen Feehan
  *
  */
-public abstract class BeanCombinableException extends AnchorCheckedException {
+public abstract class AnchorCombinableException extends AnchorCheckedException {
 
 
 	/**
@@ -62,7 +65,7 @@ public abstract class BeanCombinableException extends AnchorCheckedException {
 	
 	private final String dscr;
 
-	protected BeanCombinableException(String dscr, Throwable cause) {
+	protected AnchorCombinableException(String dscr, Throwable cause) {
 		super(dscr,cause);	// This message should never be seen, as we should always call the summarize functionality
 		this.dscr = dscr;
 	}
@@ -74,7 +77,7 @@ public abstract class BeanCombinableException extends AnchorCheckedException {
 	public abstract Throwable summarize();
 	
 	protected Throwable createCombinedException(String combinedNames, Throwable finalClause) {
-		return new BeanSummaryException(createMessageForDscr(combinedNames), finalClause );
+		return new SummaryException(createMessageForDscr(combinedNames), finalClause );
 	}
 	
 	/**
@@ -87,7 +90,7 @@ public abstract class BeanCombinableException extends AnchorCheckedException {
 	
 	
 	private void joinException( Throwable exc, StringJoiner sj ) {
-		BeanCombinableException excCast = (BeanCombinableException) exc;
+		AnchorCombinableException excCast = (AnchorCombinableException) exc;
 		sj.add(excCast.getDscr());
 	}
 	

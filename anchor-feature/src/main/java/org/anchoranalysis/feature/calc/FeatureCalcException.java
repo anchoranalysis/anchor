@@ -43,7 +43,7 @@ public class FeatureCalcException extends AnchorCheckedException {
 		super( exc );
 	}
 	
-	public FeatureCalcException( String string, Exception exc ) {
+	public FeatureCalcException( String string, Throwable exc ) {
 		super( string, exc );
 	}
 }

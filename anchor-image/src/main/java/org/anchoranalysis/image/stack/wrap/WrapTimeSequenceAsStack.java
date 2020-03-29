@@ -28,8 +28,8 @@ package org.anchoranalysis.image.stack.wrap;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -45,12 +45,12 @@ public class WrapTimeSequenceAsStack implements INamedProvider<Stack> {
 	}
 
 	@Override
-	public Stack getException(String key) throws GetOperationFailedException {
+	public Stack getException(String key) throws NamedProviderGetException {
 		return namedProvider.getException(key).get(TIME_INDEX);
 	}
 
 	@Override
-	public Stack getNull(String key) throws GetOperationFailedException {
+	public Stack getNull(String key) throws NamedProviderGetException {
 		return namedProvider.getNull(key).get(TIME_INDEX);
 	}
 

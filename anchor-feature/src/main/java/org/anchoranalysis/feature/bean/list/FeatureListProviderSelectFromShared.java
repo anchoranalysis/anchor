@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 /**
  * Selects a number of features of shared-features matching against a regular-expression
@@ -60,7 +60,7 @@ public class FeatureListProviderSelectFromShared extends FeatureListProviderRefe
 			if( match==null || match.matchStr(key)!=null ) {
 				try {
 					out.add( getSharedObjects().getSharedFeatureSet().getException(key) );
-				} catch (GetOperationFailedException e) {
+				} catch (NamedProviderGetException e) {
 					throw new CreateException(e);
 				}
 			}

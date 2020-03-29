@@ -135,6 +135,7 @@ class HelperFriendlyFormatting {
 		String prefixCurrent = "";
 		
 		Throwable e = excDescribe;
+		boolean firstLine = true;
 		while( e!=null ) {
 
 			// Skip any exception with any empty message
@@ -144,7 +145,9 @@ class HelperFriendlyFormatting {
 			}
 			
 			// Unless it's the very first line of the exception, we add a newline
-			if( e!=excDescribe)	{ // Test for being the first line
+			if( firstLine)	{ // Test for being the first line
+				firstLine = false;
+			} else {
 				writer.append( System.lineSeparator() );
 			}
 			

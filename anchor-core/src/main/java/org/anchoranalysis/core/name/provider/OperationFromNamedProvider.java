@@ -28,7 +28,6 @@ package org.anchoranalysis.core.name.provider;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 
@@ -49,7 +48,7 @@ public class OperationFromNamedProvider<ProviderType> extends CachedOperationWit
 	protected ProviderType execute( ProgressReporter progressReporter ) throws ExecuteException {
 		try {
 			return provider.getException(name);
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new ExecuteException(e);
 		}
 	}

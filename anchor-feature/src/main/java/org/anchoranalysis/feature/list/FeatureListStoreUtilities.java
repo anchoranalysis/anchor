@@ -26,8 +26,8 @@ package org.anchoranalysis.feature.list;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -41,7 +41,7 @@ public class FeatureListStoreUtilities {
 				FeatureList fl = featureListProvider.getException(key);
 				out.addNoDuplicate(fl);
 				
-			} catch (GetOperationFailedException e) {
+			} catch (NamedProviderGetException e) {
 				assert false;
 			}
 		}

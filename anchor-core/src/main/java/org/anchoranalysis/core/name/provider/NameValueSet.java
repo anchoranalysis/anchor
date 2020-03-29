@@ -32,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
 
@@ -58,10 +57,10 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 	}
 	
 	@Override
-	public T getException( String name ) throws GetOperationFailedException {
+	public T getException( String name ) throws NamedProviderGetException {
 		INameValue<T> item= map.get(name);
 		if (item==null) {
-			throw new GetOperationFailedException( String.format("Item '%s' does not exist", name));
+			throw NamedProviderGetException.nonExistingItem(name);
 		}
 		return item.getValue();
 	}
@@ -91,7 +90,7 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 		for ( String key : set.keys() ) {
 			try {
 				add( key, set.getException(key) );
-			} catch (GetOperationFailedException e) {
+			} catch (NamedProviderGetException e) {
 				// This should never occur as we always use known key-values
 				assert false;
 			}

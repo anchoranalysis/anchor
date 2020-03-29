@@ -27,6 +27,8 @@ package org.anchoranalysis.io.output.error;
  */
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
+import org.anchoranalysis.core.error.friendly.IFriendlyException;
 
 public class OutputWriteFailedException extends AnchorCheckedException {
 
@@ -39,11 +41,15 @@ public class OutputWriteFailedException extends AnchorCheckedException {
 		super(s);
 	}
 	
-	public OutputWriteFailedException( String s, Throwable e ) {
-		super(s,e);
+	public OutputWriteFailedException( String s, IFriendlyException e ) {
+		super(s + ": " + e.friendlyMessageHierarchy(), null);
+	}
+	
+	public OutputWriteFailedException( String s, AnchorCombinableException e ) {
+		super(s, e.summarize());
 	}
 	
 	public OutputWriteFailedException( Throwable e ) {
-		super(e);
+		super("", e);
 	}
 }

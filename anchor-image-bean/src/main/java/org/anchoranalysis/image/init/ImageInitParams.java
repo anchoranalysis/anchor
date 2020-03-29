@@ -39,9 +39,9 @@ import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -180,8 +180,8 @@ public class ImageInitParams extends BeanInitParams {
 					addToStackCollection(id,stack);
 				}
 			}
-		} catch (GetOperationFailedException e) {
-			throw new OperationFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
 		}
 	}
 	
@@ -194,8 +194,8 @@ public class ImageInitParams extends BeanInitParams {
 					addToObjMaskCollection(id, new IdentityOperation<ObjMaskCollection>(objs) );
 				}
 			}
-		} catch (GetOperationFailedException e) {
-			throw new OperationFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
 		}
 	}
 	

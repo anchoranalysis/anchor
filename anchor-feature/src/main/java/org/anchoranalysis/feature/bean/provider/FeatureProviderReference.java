@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
@@ -63,15 +63,15 @@ public class FeatureProviderReference extends FeatureProvider {
 			// We request this to make sure it's evaluated and added to the pso.getSharedFeatureSet()
 			try {
 				getSharedObjects().getFeatureListSet().getException(featureListRef);
-			} catch (GetOperationFailedException e) {
-				throw new InitException(e);
+			} catch (NamedProviderGetException e) {
+				throw new InitException(e.summarize());
 			}
 		}
 		
 		try {
 			this.feature = getSharedObjects().getSharedFeatureSet().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}		
 	}
 

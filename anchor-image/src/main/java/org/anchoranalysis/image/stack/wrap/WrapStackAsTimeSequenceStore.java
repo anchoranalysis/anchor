@@ -30,7 +30,7 @@ import java.util.Set;
 
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -50,12 +50,12 @@ public class WrapStackAsTimeSequenceStore extends NamedProviderStore<TimeSequenc
 	}
 
 	@Override
-	public TimeSequence getException(String key) throws GetOperationFailedException {
+	public TimeSequence getException(String key) throws NamedProviderGetException {
 		return new TimeSequence( namedProvider.getException(key) );
 	}
 
 	@Override
-	public TimeSequence getNull(String key) throws GetOperationFailedException {
+	public TimeSequence getNull(String key) throws NamedProviderGetException {
 		return new TimeSequence( namedProvider.getException(key) );
 	}
 

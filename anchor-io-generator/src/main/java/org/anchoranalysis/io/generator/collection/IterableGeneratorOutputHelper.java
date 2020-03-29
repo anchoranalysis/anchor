@@ -29,11 +29,12 @@ package org.anchoranalysis.io.generator.collection;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.IFriendlyException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NameValueSet;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
@@ -73,8 +74,8 @@ public class IterableGeneratorOutputHelper {
 			try {
 				T item = providers.getNull(name);
 				writer.add( item, name );
-			} catch (GetOperationFailedException e) {
-				errorReporter.recordError(IterableGeneratorOutputHelper.class, e);
+			} catch (NamedProviderGetException e) {
+				errorReporter.recordError(IterableGeneratorOutputHelper.class, e.summarize());
 			}
 		}
 		
@@ -122,12 +123,15 @@ public class IterableGeneratorOutputHelper {
 		
 		if (e instanceof IFriendlyException) {
 			IFriendlyException eCast = (IFriendlyException) e;
-			throw new OutputWriteFailedException(
-				errorMsg + ": " + eCast.friendlyMessageHierarchy()
-			);
-		} 
+			throw new OutputWriteFailedException(errorMsg, eCast);
+		}
 		
-		throw new OutputWriteFailedException(errorMsg, e);		
+		if (e instanceof AnchorCombinableException) {
+			AnchorCombinableException eCast = (AnchorCombinableException) e;
+			throw new OutputWriteFailedException( errorMsg, eCast );	
+		}
+		
+		throw new OutputWriteFailedException(errorMsg + ":" + e);		
 	}
 	
 	public static <T> INamedProvider<T> subset( INamedProvider<T> providers, OutputAllowed oa, ErrorReporter errorReporter ) {
@@ -139,8 +143,8 @@ public class IterableGeneratorOutputHelper {
 			if (oa.isOutputAllowed(name)) {
 				try {
 					out.add( new NameValue<>(name,providers.getException(name)) );
-				} catch (GetOperationFailedException e) {
-					errorReporter.recordError(IterableGeneratorOutputHelper.class, e);
+				} catch (NamedProviderGetException e) {
+					errorReporter.recordError(IterableGeneratorOutputHelper.class, e.summarize());
 				}
 			}
 		}
@@ -158,8 +162,8 @@ public class IterableGeneratorOutputHelper {
 			if (oa.isOutputAllowed(name)) {
 				try {
 					out.add( new NameValue<>(name,providers.getException(name)) );
-				} catch (GetOperationFailedException e) {
-					throw new OutputWriteFailedException(e);
+				} catch (NamedProviderGetException e) {
+					throw new OutputWriteFailedException(e.summarize());
 				}
 			}
 		}

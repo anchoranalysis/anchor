@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.xml.error;
+package org.anchoranalysis.core.error.combinable;
 
 /*
  * #%L
@@ -35,14 +35,14 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
  * @author Owen Feehan
  *
  */
-public class BeanSummaryException extends AnchorFriendlyCheckedException {
+public class SummaryException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public BeanSummaryException(String message, Throwable cause) {
+	public SummaryException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

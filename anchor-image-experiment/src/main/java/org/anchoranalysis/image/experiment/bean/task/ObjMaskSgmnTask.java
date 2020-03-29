@@ -38,6 +38,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.LazyEvaluationStore;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -169,6 +170,8 @@ public class ObjMaskSgmnTask extends RasterTask {
 			
 		} catch (SgmnFailedException | RasterIOException | InitException | GetOperationFailedException | BeanDuplicateException e) {
 			throw new JobExecutionException(e);
+		} catch (NamedProviderGetException e) {
+			throw new JobExecutionException(e.summarize());
 		}
 	}
 
