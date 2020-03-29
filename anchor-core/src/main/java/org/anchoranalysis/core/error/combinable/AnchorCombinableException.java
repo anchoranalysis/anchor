@@ -75,6 +75,10 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
 	protected abstract boolean canExceptionBeSkipped( Throwable exc );
 	
 	public abstract Throwable summarize();
+
+	public String getDscr() {
+		return dscr;
+	}
 	
 	protected Throwable createCombinedException(String combinedNames, Throwable finalClause) {
 		return new SummaryException(createMessageForDscr(combinedNames), finalClause );
@@ -87,13 +91,6 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
 	 * @return a message describing an error, incorporating description
 	 */
 	protected abstract String createMessageForDscr( String dscr );
-	
-	
-	private void joinException( Throwable exc, StringJoiner sj ) {
-		AnchorCombinableException excCast = (AnchorCombinableException) exc;
-		sj.add(excCast.getDscr());
-	}
-	
 	
 	/**
 	 * Traverses through a set of nested-exceptions creating a description for
@@ -170,8 +167,9 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
 		return findMostDeepCombinableException()==this;
 	}
 	
-
-	public String getDscr() {
-		return dscr;
+	private void joinException( Throwable exc, StringJoiner sj ) {
+		AnchorCombinableException excCast = (AnchorCombinableException) exc;
+		sj.add(excCast.getDscr());
 	}
+	
 }
