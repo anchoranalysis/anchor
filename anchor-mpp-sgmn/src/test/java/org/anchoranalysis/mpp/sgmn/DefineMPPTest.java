@@ -54,18 +54,20 @@ public class DefineMPPTest {
 	
 	@Test
 	public void testStatic() throws BeanXmlException {
-		Path pathStatic = loader.resolveTestPath("namedDefinitionsStatic.xml");
-		
-		Define define = BeanXmlLoader.loadBean( pathStatic );
-		checkDefine(define);
+		checkPath("namedDefinitionsStatic.xml");
 	}
 	
 	@Test
 	public void testDynamic() throws BeanXmlException {
-		Path pathDynamic = loader.resolveTestPath("namedDefinitionsDynamic.xml");
-		Define define = BeanXmlLoader.loadBean( pathDynamic );
+		checkPath("namedDefinitionsDynamic.xml");
+	}
+	
+	private void checkPath( String fileName ) throws BeanXmlException {
+		Path path = loader.resolveTestPath( fileName );
+		Define define = BeanXmlLoader.loadBean( path );
 		checkDefine(define);
 	}
+	
 	
 	private void checkDefine( Define define ) {
 		// We assume an order of chnl1 before chnl2
