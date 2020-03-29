@@ -67,8 +67,7 @@ public class DefineMPPTest {
 		Define define = BeanXmlLoader.loadBean( path );
 		checkDefine(define);
 	}
-	
-	
+		
 	private void checkDefine( Define define ) {
 		// We assume an order of chnl1 before chnl2
 		assertTwoElements( define, ChnlProvider.class, "chnl" );
