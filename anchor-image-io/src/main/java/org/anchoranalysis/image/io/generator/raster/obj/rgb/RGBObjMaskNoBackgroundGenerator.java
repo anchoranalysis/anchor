@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.generator.raster.objmask.rgb;
+package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.core.color.ColorIndex;

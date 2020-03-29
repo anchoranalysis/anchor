@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderTileWithLabel
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;

@@ -3,7 +3,7 @@ package org.anchoranalysis.image.io.generator.raster.seed;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskCollectionGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.collection.ObjsMergedAsBinaryChnlGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -57,7 +57,7 @@ public class SeedsAsCenterPointsGenerator extends RasterGenerator {
 			seeds.createMasks(),
 			BinaryValuesByte.getDefault()
 		);
-		return new ObjMaskCollectionGenerator(masks, dim).generate();
+		return new ObjsMergedAsBinaryChnlGenerator(masks, dim).generate();
 	}
 
 	@Override

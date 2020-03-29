@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.generator.raster.objmask;
+package org.anchoranalysis.image.io.generator.raster.obj.collection;
 
 /*-
  * #%L
@@ -27,41 +27,41 @@ package org.anchoranalysis.image.io.generator.raster.objmask;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjMaskCollectionGenerator extends RasterGenerator implements IterableGenerator<ObjMaskCollection> {
 
-	private ObjMaskCollection masks;
-	private ImageDim dim;
+/**
+ * Writes objects a binary-mask (with all objects merged together for the mask)
+ * 
+ * @author owen
+ *
+ */
+public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
 	
-	// Constructor
-	public ObjMaskCollectionGenerator(ImageDim dim) {
-		this.dim = dim;
+	public ObjsMergedAsBinaryChnlGenerator(ImageDim dim) {
+		super(dim);
 	}
-	
-	// Constructor
-	public ObjMaskCollectionGenerator(ObjMaskCollection masks, ImageDim dim) {
-		this(dim);
-		this.masks = masks;
+
+	public ObjsMergedAsBinaryChnlGenerator(ObjMaskCollection masks, ImageDim dim) {
+		super(masks, dim);
 	}
-	
+
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
 		
 		try {
-			BinaryChnl chnl = BinaryChnlFromObjs.createFromObjs(masks, dim, BinaryValues.getDefault() );
+			BinaryChnl chnl = BinaryChnlFromObjs.createFromObjs(
+				getObjs(),
+				getDimensions(),
+				BinaryValues.getDefault()
+			);
 			return new ChnlGenerator(chnl.getChnl(), "maskCollection").generate();
 		} catch (CreateException e) {
 			throw new OutputWriteFailedException(e);
@@ -70,43 +70,4 @@ public class ObjMaskCollectionGenerator extends RasterGenerator implements Itera
 		
 	}
 
-	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "maskCollection");
-	}
-
-	@Override
-	public boolean isRGB() {
-		return false;
-	}
-
-	@Override
-	public ObjMaskCollection getIterableElement() {
-		return masks;
-	}
-
-	@Override
-	public void setIterableElement(ObjMaskCollection element)
-			throws SetOperationFailedException {
-		this.masks = element;
-	}
-
-	@Override
-	public void start() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
-
-	public ImageDim getDimensions() {
-		return dim;
-	}
 }

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.generator.raster.objmask;
+package org.anchoranalysis.image.io.generator.raster.obj;
 
 /*-
  * #%L
@@ -28,23 +28,38 @@ package org.anchoranalysis.image.io.generator.raster.objmask;
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 // Outputs a mask and a serialized Bounding Box for each ObjMask
-public class ObjMaskWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjMask> {
+
+/**
+ * 
+ * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator} but also outputs a serialized bounding box.
+ * 
+ * @author owen
+ *
+ */
+public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjMask> {
 	
-	public ObjMaskWithBoundingBoxGenerator( ImageRes res ) {
+	public ObjWithBoundingBoxGenerator( ImageRes res ) {
+		this(
+			new ObjAsBinaryChnlGenerator(
+				BinaryValuesByte.getDefault().getOnByte(),
+				res
+			)
+		);
+	}
+	
+	private ObjWithBoundingBoxGenerator( IterableGenerator<ObjMask> generator) {
 		
-		byte valOut = BinaryValuesByte.getDefault().getOnByte();
-		
-		add( null, new ObjMaskGenerator(valOut, res) );
+		add( null, generator );
 		
 		// We create an iterable bridge from ObjMask to BoundingBox
 		IterableGeneratorBridge<ObjMask, BoundingBox> generatorBBox = new IterableGeneratorBridge<>(
@@ -60,11 +75,6 @@ public class ObjMaskWithBoundingBoxGenerator extends IterableCombinedListGenerat
 		);
 		
 		add( null, generatorBBox );
-	}
-	
-	public ObjMaskWithBoundingBoxGenerator( ImageRes res, ObjMask om ) throws SetOperationFailedException {
-		this(res);
-		setIterableElement(om);
 	}
 	
 

@@ -49,9 +49,9 @@ import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskChnlGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ChnlMaskedWithObjGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
@@ -135,7 +135,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 				outputManager,
 				"maskChnl",
 				"maskChnl",
-				() -> new ObjMaskChnlGenerator(chnlIn),
+				() -> new ChnlMaskedWithObjGenerator(chnlIn),
 				objs.asList(),
 				true
 			);
@@ -146,7 +146,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 				outputManager,
 				"mask",
 				"mask",
-				() -> new ObjMaskGenerator(255, chnlIn.getDimensions().getRes() ),
+				() -> new ObjAsBinaryChnlGenerator(255, chnlIn.getDimensions().getRes() ),
 				objs.asList(),
 				true
 			);			

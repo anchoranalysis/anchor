@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.generator.raster.objmask;
+package org.anchoranalysis.image.io.generator.raster.obj;
 
 /*-
  * #%L
@@ -33,28 +33,37 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjMaskChnlGenerator extends RasterGenerator implements IterableGenerator<ObjMask> {
-
-	private Chnl srcChnl;
-	private ObjMask mask = null;
+/**
+ * Writes an object-mask as a channel
+ * @author owen
+ *
+ */
+public class ObjAsBinaryChnlGenerator extends RasterGenerator implements IterableGenerator<ObjMask> {
 	
-	public ObjMaskChnlGenerator(Chnl srcChnl ) {
-		super();
-		this.srcChnl = srcChnl;
+	private int maskVal;
+	private ImageRes res;
+	private ObjMask mask;
+	
+	public ObjAsBinaryChnlGenerator(int maskVal, ImageRes res) {
+		this.maskVal = maskVal;
+		this.res = res;
 	}
-	
-	public ObjMaskChnlGenerator(ObjMask mask, Chnl srcChnl) {
+
+	public ObjAsBinaryChnlGenerator(ObjMask mask, int maskVal, ImageRes dim) {
 		this.mask = mask;
-		this.srcChnl = srcChnl;
+		this.maskVal = maskVal;
+		this.res = dim;
 	}
 
 	@Override
@@ -64,32 +73,32 @@ public class ObjMaskChnlGenerator extends RasterGenerator implements IterableGen
 			throw new OutputWriteFailedException("no mutable element set");
 		}
 		
-		if (!(srcChnl instanceof Chnl)) {
-			throw new OutputWriteFailedException("srcChnl must be of type ImgChnlSingleRegion");
-		}
+		Chnl outChnl = createChnlFromMask( getIterableElement(), this.res, maskVal);
 		
-		Chnl outChnl = createMaskedChnl( getIterableElement(), (Chnl) srcChnl);
 		return new Stack( outChnl );
 	}
 
+
 	@Override
 	public ObjMask getIterableElement() {
-		return mask;
+		return this.mask;
 	}
+
 
 	@Override
 	public void setIterableElement(ObjMask element) {
-		mask = element;
+		this.mask = element;
 	}
 
+
 	@Override
-	public RasterGenerator getGenerator() {
+	public Generator getGenerator() {
 		return this;
 	}
 
 	@Override
 	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "maskChnl");
+		return new ManifestDescription("raster", "mask");
 	}
 	
 	@Override
@@ -105,58 +114,43 @@ public class ObjMaskChnlGenerator extends RasterGenerator implements IterableGen
 	public boolean isRGB() {
 		return false;
 	}
-	
-	/**
-	 * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the mask to 0
-	 * 
-	 * i.e. the new channel is a masked version of srcChnl
-	 * 
-	 * @param mask mask
-	 * @param srcChnl the channel to copy
-	 * @return the masked channel
-	 */
-	private static Chnl createMaskedChnl( ObjMask mask, Chnl srcChnl) {
+
+	private static Chnl createChnlFromMask( ObjMask mask, ImageRes res, int chnlOutVal ) {
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		ImageDim newSd = new ImageDim( srcChnl.getDimensions() );
+		ImageDim newSd = new ImageDim();
+		newSd.setRes( res );
 		newSd.setX( bbox.extnt().getX() );
 		newSd.setY( bbox.extnt().getY() );
 		newSd.setZ( bbox.extnt().getZ() );
 		
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
+				
+		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.instance );
 		
-		byte maskOn = mask.getBinaryValuesByte().getOnByte();
+		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		
-		Point3i maxGlobal = bbox.calcCrnrMax();
-		Point3i pntGlobal = new Point3i();
+		byte maskVal = mask.getBinaryValuesByte().getOnByte();
+		byte chnlOutValByte = (byte) chnlOutVal;
+		
 		Point3i pntLocal = new Point3i();
 		
-		VoxelBox<?> vbSrc = srcChnl.getVoxelBox().any(); 
-		VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
-		
-		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrZ(), pntLocal.incrZ()) {
+		for (pntLocal.setZ(0); pntLocal.getZ() < newSd.getZ(); pntLocal.incrZ()) {
 			
-			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
-			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pntGlobal.getZ());
-			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pntLocal.getZ());
+			ByteBuffer pixelsIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
+			ByteBuffer pixelsOut = vbNew.getPlaneAccess().getPixelsForPlane(pntLocal.getZ()).buffer();
 			
-			for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
-			
-				for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrX() ) {	
-
-					if (maskIn.get()!=maskOn) {
-						continue;
-					}
-					
-					int indexGlobal = srcChnl.getDimensions().offset(pntGlobal.getX(), pntGlobal.getY());
-					pixelsOut.putInt(maskIn.position()-1, pixelsIn.getInt(indexGlobal) );
+			while (pixelsIn.hasRemaining()) {
+				
+				if (pixelsIn.get()!=maskVal) {
+					continue;
 				}
+					
+				pixelsOut.put(pixelsIn.position()-1,chnlOutValByte);
 			}
 		}
+
 		
 		return chnlNew;
 	}
-
 }

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.generator.raster.objmask;
+package org.anchoranalysis.image.io.generator.raster.obj.collection;
 
 /*-
  * #%L
@@ -26,95 +26,54 @@ package org.anchoranalysis.image.io.generator.raster.objmask;
  * #L%
  */
 
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjMaskCollectionDifferentValuesGenerator extends RasterGenerator implements IterableGenerator<ObjMaskCollection> {
 
-	private ObjMaskCollection masks;
-	private ImageDim dim;
+/**
+ * Writes objects as a Raster with unique id values for each object.
+ * 
+ * <p>Note that a maximum of 254 objects are allowed to be written on a channel in this way (for a 8-bit image)</p>
+ * @author owen
+ *
+ */
+public class ObjsAsUniqueValueGenerator extends ObjsGenerator {
 	
 	private static ChnlFactoryByte factory = new ChnlFactoryByte();
 	
-	// Constructor
-	public ObjMaskCollectionDifferentValuesGenerator(ImageDim dim) {
-		this.dim = dim;
+	public ObjsAsUniqueValueGenerator(ImageDim dim) {
+		super(dim);
 	}
-	
-	// Constructor
-	public ObjMaskCollectionDifferentValuesGenerator(ObjMaskCollection masks, ImageDim dim) {
-		this(dim);
-		this.masks = masks;
+
+	public ObjsAsUniqueValueGenerator(ObjMaskCollection masks, ImageDim dim) {
+		super(masks, dim);
 	}
 	
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
 		
-		Chnl outChnl = factory.createEmptyInitialised(dim);
+		Chnl outChnl = factory.createEmptyInitialised(
+			getDimensions()
+		);
 
 		VoxelBox<?> vbOutput = outChnl.getVoxelBox().any();
 		
-		if (masks.size()>254) {
-			throw new OutputWriteFailedException( String.format("Collection has %d objs. A max of 254 is allowed", masks.size()));
+		if (getObjs().size()>254) {
+			throw new OutputWriteFailedException( String.format("Collection has %d objs. A max of 254 is allowed", getObjs().size()));
 		}
 		
 		int val = 1;
-		for( ObjMask om : masks ) {
+		for( ObjMask om : getObjs() ) {
 			vbOutput.setPixelsCheckMask(om, val++);
 		}
 		
 		return new ChnlGenerator(outChnl, "maskCollection").generate();
-	}
-
-	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "maskCollection");
-	}
-
-	@Override
-	public boolean isRGB() {
-		return false;
-	}
-
-	@Override
-	public ObjMaskCollection getIterableElement() {
-		return masks;
-	}
-
-	@Override
-	public void setIterableElement(ObjMaskCollection element)
-			throws SetOperationFailedException {
-		this.masks = element;
-	}
-
-	@Override
-	public void start() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
-
-	public ImageDim getDimensions() {
-		return dim;
 	}
 }
