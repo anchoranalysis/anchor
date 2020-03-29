@@ -27,9 +27,9 @@ package org.anchoranalysis.core.index;
  */
 
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-public class GetOperationFailedException extends AnchorCheckedException {
+public class GetOperationFailedException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 
@@ -38,10 +38,6 @@ public class GetOperationFailedException extends AnchorCheckedException {
 
 	public GetOperationFailedException(String string) {
 		super(string);
-	}
-	
-	public GetOperationFailedException(String string, Throwable exc ) {
-		super(string, exc);
 	}
 
 	public GetOperationFailedException( Throwable exc ) {

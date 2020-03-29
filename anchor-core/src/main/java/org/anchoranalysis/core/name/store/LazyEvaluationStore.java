@@ -34,6 +34,7 @@ import java.util.Set;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.IFriendlyException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
@@ -71,9 +72,25 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 			
 			return cachedGetter.doOperation();
 		} catch (ExecuteException e) {
-			throw new GetOperationFailedException( String.format("An error occurred getting '%s'",key), e.getCause());
+			return throwException(key, e.getCause());
 		} catch (Exception e) {
-			throw new GetOperationFailedException( String.format("An error occurred getting '%s'",key), e);
+			return throwException(key, e);
+		}
+	}
+	
+	private static <T> T throwException( String key, Throwable cause ) throws GetOperationFailedException {
+		
+		String msg = String.format("An error occurred getting '%s'", key); 
+		
+		if (cause instanceof IFriendlyException) {
+			IFriendlyException causeCast = (IFriendlyException) cause;
+			throw new GetOperationFailedException(
+				msg + ": " + causeCast.friendlyMessageHierarchy()
+			);
+		} else {
+			throw new GetOperationFailedException(
+				new OperationFailedException( msg, cause )
+			);
 		}
 	}
 
