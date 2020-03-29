@@ -31,6 +31,7 @@ import java.nio.file.Path;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
@@ -120,7 +121,7 @@ public class StackCollectionOutputter {
 		NamedImgStackCollection target,
 		Path modelDir,
 		ProgressReporter progressReporter
-	) throws GetOperationFailedException {
+	) throws OperationFailedException {
 		
 		Set<String> keys = src.chnlNames();
 		
@@ -136,6 +137,8 @@ public class StackCollectionOutputter {
 					prm.incrWorker();
 				}
 			}
+		} catch (GetOperationFailedException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 		

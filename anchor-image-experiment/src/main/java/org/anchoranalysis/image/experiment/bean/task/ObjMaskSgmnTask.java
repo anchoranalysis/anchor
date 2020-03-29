@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.experiment.bean.task;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-image-experiment
@@ -102,79 +104,84 @@ public class ObjMaskSgmnTask extends RasterTask {
 	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
 		
 		try {
-			SgmnObjMaskCollection sgmnDup = sgmn.duplicateBean();
-			
-			assert( sgmnDup != null );
-			
-			ProgressReporter progressReporter = ProgressReporterNull.get();
-			
-			NamedChnlCollectionForSeries ncc = inputObject.createChnlCollectionForSeries(0, progressReporter );
-
-			NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-			StackCollectionOutputter.copyFrom(
-				ncc,
-				stackCollection,
-				expArgs.getModelDirectory(),
-				progressReporter
-			);
-		
-			sgmnDup.initRecursive(logErrorReporter);
-			
-			// Test that values have opened correctly
-			Chnl chnlIn = stackCollection.getException(ImgStackIdentifiers.INPUT_IMAGE).getChnl(0);
-			outputManager.getWriterCheckIfAllowed().write(
-				outputNameOriginal,
-				() -> new ChnlGenerator(chnlIn,"original")
+			NamedImgStackCollection stackCollection = stacksForInput(
+				inputObject,
+				expArgs.getModelDirectory()
 			);
 			
-			NamedProviderStore<ObjMaskCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection");
+			Chnl chnl = backgroundFromStacks(stackCollection);
 			
-			ObjMaskCollection objs = sgmnDup.sgmn(stackCollection, objMaskCollectionStore, null, randomNumberGenerator.create(), expArgs, logErrorReporter, outputManager );
-
-			// Write out the results as a subfolder
-			IterableGeneratorWriter.writeSubfolder(
-				outputManager,
-				"maskChnl",
-				"maskChnl",
-				() -> new ChnlMaskedWithObjGenerator(chnlIn),
-				objs.asList(),
-				true
-			);
+			Outputter.writeOriginal(outputManager, chnl, outputNameOriginal);
 			
-
-			// Write out the results as a subfolder
-			IterableGeneratorWriter.writeSubfolder(
-				outputManager,
-				"mask",
-				"mask",
-				() -> new ObjAsBinaryChnlGenerator(255, chnlIn.getDimensions().getRes() ),
-				objs.asList(),
-				true
-			);			
-
-			outputManager.getWriterCheckIfAllowed().write(
-				"outline",
-				() -> {
-					try {
-						return new RGBObjMaskGenerator(
-							new RGBOutlineWriter(),
-							new ObjMaskWithPropertiesCollection(objs),
-							DisplayStack.create(chnlIn),
-							outputManager.getOutputWriteSettings().genDefaultColorIndex(objs.size())
-						);
-					} catch (CreateException | OperationFailedException e) {
-						throw new ExecuteException(e);
-					}
-				}
-			);
+			ObjMaskCollection objs = sgmnFromStacks(stackCollection, outputManager, logErrorReporter, expArgs);
 			
-		} catch (SgmnFailedException | RasterIOException | InitException | GetOperationFailedException | BeanDuplicateException e) {
+			// Write different visualizations of the result
+			Outputter.writeMaskOutputs(objs, chnl, outputManager);
+			
+		} catch (BeanDuplicateException | OperationFailedException e) {
 			throw new JobExecutionException(e);
 		} catch (NamedProviderGetException e) {
 			throw new JobExecutionException(e.summarize());
 		}
 	}
+	
+	private ObjMaskCollection sgmnFromStacks(
+		NamedImgStackCollection stackCollection,
+		BoundOutputManagerRouteErrors outputManager,
+		LogErrorReporter logErrorReporter,
+		ExperimentExecutionArguments expArgs
+	) throws OperationFailedException {
+		
+		SgmnObjMaskCollection sgmnDup = sgmn.duplicateBean();
+		assert( sgmnDup != null );
+		try {
+			sgmnDup.initRecursive(logErrorReporter);
+		} catch (InitException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		try {
+			return sgmnDup.sgmn(
+				stackCollection,
+				new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection"),
+				null,
+				randomNumberGenerator.create(),
+				expArgs,
+				logErrorReporter,
+				outputManager
+			);
+		} catch (SgmnFailedException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	private static NamedImgStackCollection stacksForInput( NamedChnlsInput inputObject, Path modelDir ) throws OperationFailedException {
+		
+		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+		
+		ProgressReporter progressReporter = ProgressReporterNull.get();
+		
+		NamedChnlCollectionForSeries ncc;
+		try {
+			ncc = inputObject.createChnlCollectionForSeries(0, progressReporter );
+		} catch (RasterIOException e) {
+			throw new OperationFailedException(e);
+		}
 
+		StackCollectionOutputter.copyFrom(
+			ncc,
+			stackCollection,
+			modelDir,
+			progressReporter
+		);
+		
+		return stackCollection;
+	}
+	
+	private static Chnl backgroundFromStacks( NamedImgStackCollection stackCollection ) throws NamedProviderGetException {
+		return stackCollection.getException(ImgStackIdentifiers.INPUT_IMAGE).getChnl(0);
+	}
+	
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
 		
