@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
 /*
  * #%L
@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 
-// converts a feature to a physical distance in a XY place that is isometric
+/** converts a feature to a physical distance in a XY place that is isometric */
 public class ConvertToPhysicalVolume extends FeatureConvertRes {
 
 	/**

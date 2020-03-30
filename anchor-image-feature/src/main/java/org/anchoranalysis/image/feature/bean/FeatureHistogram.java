@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.stack.nrg;
+package org.anchoranalysis.image.feature.bean;
 
 /*-
  * #%L
@@ -30,33 +30,33 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParamsDescriptor;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParamsDescriptor;
 
-public abstract class FeatureNRGStack extends Feature {
-
+public abstract class FeatureHistogram extends Feature {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
 		
-		if (params instanceof FeatureNRGStackParams) {
-			return calcCast( (FeatureNRGStackParams) params );
+		if (params instanceof FeatureHistogramParams) {
+			return calcCast( (FeatureHistogramParams) params );
 		} else {
-			throw new FeatureCalcException("Requires " + FeatureNRGStackParams.class.getSimpleName() );
+			throw new FeatureCalcException("Requires " + FeatureHistogramParams.class.getSimpleName() );
 		}
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureNRGStackParams params ) throws FeatureCalcException;
+	public abstract double calcCast( FeatureHistogramParams params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureNRGStackParamsDescriptor.instance;
+		return FeatureObjMaskPairParamsDescriptor.instance;
 	}
+
 }

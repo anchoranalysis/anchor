@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
 /*
  * #%L
@@ -32,7 +32,7 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 
 // converts a feature to a physical distance in a XY place that is isometric
-public class ConvertFromPhysicalVolume extends FeatureConvertRes {
+public class ConvertToPhysicalAreaXY extends FeatureConvertRes {
 
 	/**
 	 * 
@@ -41,6 +41,7 @@ public class ConvertFromPhysicalVolume extends FeatureConvertRes {
 
 	@Override
 	protected double convertToPhysical(double value, ImageRes res) throws FeatureCalcException {
-		return ImageUnitConverter.convertFromPhysicalVolume(value, res);
+		// We use arbitrary direction as everything should be the same in a isometric XY plane
+		return ImageUnitConverter.convertToPhysicalArea(value, res);
 	}
 }

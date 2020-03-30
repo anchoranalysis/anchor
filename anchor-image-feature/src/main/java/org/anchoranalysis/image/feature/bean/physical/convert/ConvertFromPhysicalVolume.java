@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
 /*
  * #%L
@@ -27,58 +27,20 @@ package org.anchoranalysis.image.feature.bean.operator;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.unitvalue.area.UnitValueArea;
-import org.anchoranalysis.image.bean.unitvalue.area.UnitValueAreaPixels;
+import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-public class AreaMinMax extends FeatureNRGRange {
+/** converts a feature to a physical distance in a XY place that is isometric */
+public class ConvertFromPhysicalVolume extends FeatureConvertRes {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private UnitValueArea min = new UnitValueAreaPixels( 0 );
-	
-	@BeanField
-	private UnitValueArea max = new UnitValueAreaPixels( Double.MAX_VALUE );
-	// END BEAN PROPERTIES
 
 	@Override
-	protected double calcWithRes(double value, ImageRes res) throws FeatureCalcException {
-		try {
-			double minVoxels = min.rslv(res);
-			double maxVoxels = max.rslv(res);
-			
-			return multiplexNRG(value >= minVoxels && value <= maxVoxels);
-		} catch (UnitValueException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("min=%s max=%s", min.toString(), max.toString(), paramDscrNRG());
-	}
-
-	public UnitValueArea getMin() {
-		return min;
-	}
-
-	public void setMin(UnitValueArea min) {
-		this.min = min;
-	}
-
-	public UnitValueArea getMax() {
-		return max;
-	}
-
-	public void setMax(UnitValueArea max) {
-		this.max = max;
+	protected double convertToPhysical(double value, ImageRes res) throws FeatureCalcException {
+		return ImageUnitConverter.convertFromPhysicalVolume(value, res);
 	}
 }

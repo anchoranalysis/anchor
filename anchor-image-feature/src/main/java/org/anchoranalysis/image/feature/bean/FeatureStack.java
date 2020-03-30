@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.stack;
+package org.anchoranalysis.image.feature.bean;
 
 /*-
  * #%L

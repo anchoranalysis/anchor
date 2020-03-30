@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical;
 
 /*-
  * #%L
@@ -26,48 +26,45 @@ package org.anchoranalysis.image.feature.bean.operator;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
+import org.anchoranalysis.image.extent.ImageRes;
 
-public abstract class FeatureNRGRange extends FeatureSingleElemWithRes {
+public abstract class FeatureSingleElemWithRes extends FeatureSingleElem {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public FeatureSingleElemWithRes() {
+		
+	}
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private double acceptNRG = 0;
+	public FeatureSingleElemWithRes( Feature feature  ) {
+		super(feature);
+	}
 	
-	@BeanField
-	private double rejectNRG = -10;
-	// END BEAN PROPERTIES
-	
-	protected double multiplexNRG( boolean accept ) {
-		if (accept) {
-			return acceptNRG;
-		} else {
-			return rejectNRG;
+	@Override
+	public final double calc(FeatureCalcParams params) throws FeatureCalcException {
+		
+		if (!(params instanceof FeatureCalcParamsWithRes)) {
+			throw new FeatureCalcException("Requires " + FeatureCalcParamsWithRes.class.getSimpleName() );
 		}
+		
+		FeatureCalcParamsWithRes paramsCast = (FeatureCalcParamsWithRes) params;
+		
+		if (paramsCast.getRes()==null) {
+			throw new FeatureCalcException("A resolution is required for this feature");
+		}
+		
+		double value = getCacheSession().calc( getItem(), params);
+		
+		return calcWithRes(value, paramsCast.getRes() );
 	}
 	
-	protected String paramDscrNRG() {
-		return String.format("acceptNRG=%8.3f rejectNRG=%8.3f", acceptNRG, rejectNRG);
-	}
-	
-	public double getAcceptNRG() {
-		return acceptNRG;
-	}
-
-	public void setAcceptNRG(double acceptNRG) {
-		this.acceptNRG = acceptNRG;
-	}
-
-	public double getRejectNRG() {
-		return rejectNRG;
-	}
-
-	public void setRejectNRG(double rejectNRG) {
-		this.rejectNRG = rejectNRG;
-	}
+	protected abstract double calcWithRes( double value, ImageRes res ) throws FeatureCalcException;
 }

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
 /*-
  * #%L
@@ -26,45 +26,55 @@ package org.anchoranalysis.image.feature.bean.operator;
  * #L%
  */
 
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.unit.SpatialConversionUtilities;
+import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
-public abstract class FeatureSingleElemWithRes extends FeatureSingleElem {
+public abstract class FeatureConvertRes extends FeatureSingleElemWithRes {
 
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	// START BEAN PROPERTIES
+	@BeanField
+	private String unitType;
+	// END BEAN PROPERTIES
 	
-	public FeatureSingleElemWithRes() {
+	public FeatureConvertRes() {
 		
+	}
+	
+	public FeatureConvertRes( Feature feature, UnitSuffix unitType ) {
+		super(feature);
+		this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
 	}
 
-	public FeatureSingleElemWithRes( Feature feature  ) {
-		super(feature);
-	}
-	
 	@Override
-	public final double calc(FeatureCalcParams params) throws FeatureCalcException {
-		
-		if (!(params instanceof FeatureCalcParamsWithRes)) {
-			throw new FeatureCalcException("Requires " + FeatureCalcParamsWithRes.class.getSimpleName() );
-		}
-		
-		FeatureCalcParamsWithRes paramsCast = (FeatureCalcParamsWithRes) params;
-		
-		if (paramsCast.getRes()==null) {
-			throw new FeatureCalcException("A resolution is required for this feature");
-		}
-		
-		double value = getCacheSession().calc( getItem(), params);
-		
-		return calcWithRes(value, paramsCast.getRes() );
+	protected double calcWithRes(double value, ImageRes res) throws FeatureCalcException {
+		double valuePhysical = convertToPhysical( value, res );
+		return convertToUnits(valuePhysical);
 	}
 	
-	protected abstract double calcWithRes( double value, ImageRes res ) throws FeatureCalcException;
+	protected abstract double convertToPhysical( double value, ImageRes res ) throws FeatureCalcException;
+
+	public String getUnitType() {
+		return unitType;
+	}
+
+	public void setUnitType(String unitType) {
+		this.unitType = unitType;
+	}
+		
+	private double convertToUnits( double valuePhysical ) {
+		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
+		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
+	}
+
 }

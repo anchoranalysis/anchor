@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical;
 
-/*-
+/*
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,54 +26,59 @@ package org.anchoranalysis.image.feature.bean.operator;
  * #L%
  */
 
+
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.bean.unitvalue.area.UnitValueArea;
+import org.anchoranalysis.image.bean.unitvalue.area.UnitValueAreaPixels;
 import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-public abstract class FeatureConvertRes extends FeatureSingleElemWithRes {
+public class AreaMinMax extends FeatureNRGRange {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	// START BEAN PROPERTIES
 	@BeanField
-	private String unitType;
+	private UnitValueArea min = new UnitValueAreaPixels( 0 );
+	
+	@BeanField
+	private UnitValueArea max = new UnitValueAreaPixels( Double.MAX_VALUE );
 	// END BEAN PROPERTIES
-	
-	public FeatureConvertRes() {
-		
-	}
-	
-	public FeatureConvertRes( Feature feature, UnitSuffix unitType ) {
-		super(feature);
-		this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
-	}
 
 	@Override
 	protected double calcWithRes(double value, ImageRes res) throws FeatureCalcException {
-		double valuePhysical = convertToPhysical( value, res );
-		return convertToUnits(valuePhysical);
+		try {
+			double minVoxels = min.rslv(res);
+			double maxVoxels = max.rslv(res);
+			
+			return multiplexNRG(value >= minVoxels && value <= maxVoxels);
+		} catch (UnitValueException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
-	protected abstract double convertToPhysical( double value, ImageRes res ) throws FeatureCalcException;
-
-	public String getUnitType() {
-		return unitType;
+	@Override
+	public String getParamDscr() {
+		return String.format("min=%s max=%s", min.toString(), max.toString(), paramDscrNRG());
 	}
 
-	public void setUnitType(String unitType) {
-		this.unitType = unitType;
-	}
-		
-	private double convertToUnits( double valuePhysical ) {
-		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
-		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
+	public UnitValueArea getMin() {
+		return min;
 	}
 
+	public void setMin(UnitValueArea min) {
+		this.min = min;
+	}
+
+	public UnitValueArea getMax() {
+		return max;
+	}
+
+	public void setMax(UnitValueArea max) {
+		this.max = max;
+	}
 }

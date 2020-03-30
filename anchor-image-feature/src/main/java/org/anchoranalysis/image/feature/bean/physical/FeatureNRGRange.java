@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.feature.bean.operator;
+package org.anchoranalysis.image.feature.bean.physical;
 
-/*
+/*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,22 +26,48 @@ package org.anchoranalysis.image.feature.bean.operator;
  * #L%
  */
 
+import org.anchoranalysis.bean.annotation.BeanField;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageRes;
-
-// converts a feature to a physical distance in a XY place that is isometric
-public class ConvertToPhysicalAreaXY extends FeatureConvertRes {
+public abstract class FeatureNRGRange extends FeatureSingleElemWithRes {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected double convertToPhysical(double value, ImageRes res) throws FeatureCalcException {
-		// We use arbitrary direction as everything should be the same in a isometric XY plane
-		return ImageUnitConverter.convertToPhysicalArea(value, res);
+	// START BEAN PROPERTIES
+	@BeanField
+	private double acceptNRG = 0;
+	
+	@BeanField
+	private double rejectNRG = -10;
+	// END BEAN PROPERTIES
+	
+	protected double multiplexNRG( boolean accept ) {
+		if (accept) {
+			return acceptNRG;
+		} else {
+			return rejectNRG;
+		}
+	}
+	
+	protected String paramDscrNRG() {
+		return String.format("acceptNRG=%8.3f rejectNRG=%8.3f", acceptNRG, rejectNRG);
+	}
+	
+	public double getAcceptNRG() {
+		return acceptNRG;
+	}
+
+	public void setAcceptNRG(double acceptNRG) {
+		this.acceptNRG = acceptNRG;
+	}
+
+	public double getRejectNRG() {
+		return rejectNRG;
+	}
+
+	public void setRejectNRG(double rejectNRG) {
+		this.rejectNRG = rejectNRG;
 	}
 }
