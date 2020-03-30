@@ -92,53 +92,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	public Generator getGenerator() {
 		return this;
 	}
-
-	private void addFeature( Feature feature, String prefix, FeatureList featureList ) throws InitException {
-		try {
-			featureList.addWithCustomName( feature.duplicateBean(), prefix + feature.getFriendlyName() );
-			
-			if (includeDependencies) {
-				FeatureList childFeatures = feature.createListChildFeatures(false);
-				for( Feature dependentFeature : childFeatures ) {
-					addFeature( dependentFeature, prefix + "..", featureList );
-				}
-			}
-		} catch (BeanMisconfiguredException e) {
-			throw new InitException(e);
-		}
-	}
-	
-	// Puts in some extra descriptive features at the start
-	private FeatureList createFullFeatureList( FeatureList features ) throws CreateException {
-		
-		try {
-			FeatureList featuresAll = new FeatureList();
-			
-			Feature cogX = new CenterOfGravity("x");
-			Feature cogY = new CenterOfGravity("y");
-			Feature cogZ = new CenterOfGravity("z");
-			
-			featuresAll.addWithCustomName( cogX, "x" );
-			featuresAll.addWithCustomName( cogY, "y" );
-			featuresAll.addWithCustomName( cogZ, "z" );
-			
-	
-			featuresAll.addWithCustomName( convert(cogX, new DirectionVector(1, 0, 0)), "x_p" );
-			featuresAll.addWithCustomName( convert(cogY, new DirectionVector(0, 1, 0)), "y_p" );
-			featuresAll.addWithCustomName( convert(cogZ, new DirectionVector(0, 0, 1)), "z_p" );
-	
-			featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
-			
-			for (Feature f : features) {
-				addFeature(f, "", featuresAll);
-			}
-			
-			return featuresAll;
-			
-		} catch (InitException e) {
-			throw new CreateException(e);
-		}
-	}
 	
 	@Override
 	public void writeToFile(OutputWriteSettings outputWriteSettings,
@@ -174,7 +127,57 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	public void setIterableElement(ObjMaskCollection element) {
 		this.objs = element;
 	}
+
+	private void addFeature( Feature feature, String prefix, FeatureList featureList ) throws InitException {
+		try {
+			featureList.addWithCustomName( feature.duplicateBean(), prefix + feature.getFriendlyName() );
+			
+			if (includeDependencies) {
+				FeatureList childFeatures = feature.createListChildFeatures(false);
+				for( Feature dependentFeature : childFeatures ) {
+					addFeature( dependentFeature, prefix + "..", featureList );
+				}
+			}
+		} catch (BeanMisconfiguredException e) {
+			throw new InitException(e);
+		}
+	}
+	
+	// Puts in some extra descriptive features at the start
+	private FeatureList createFullFeatureList( FeatureList features ) throws CreateException {
 		
+		try {
+			FeatureList featuresAll = new FeatureList();
+			
+			Feature cogX = new CenterOfGravity("x");
+			Feature cogY = new CenterOfGravity("y");
+			Feature cogZ = new CenterOfGravity("z");
+			
+			featuresAll.addWithCustomName( cogX, "x" );
+			featuresAll.addWithCustomName( cogY, "y" );
+			featuresAll.addWithCustomName( cogZ, "z" );
+			
+			addConvertedFeature( featuresAll, cogX, new DirectionVector(1, 0, 0), "x_p" );
+			addConvertedFeature( featuresAll, cogY, new DirectionVector(0, 1, 0), "y_p" );
+			addConvertedFeature( featuresAll, cogZ, new DirectionVector(0, 0, 1), "z_p" );
+	
+			featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
+			
+			for (Feature f : features) {
+				addFeature(f, "", featuresAll);
+			}
+			
+			return featuresAll;
+			
+		} catch (InitException e) {
+			throw new CreateException(e);
+		}
+	}
+	
+	private static void addConvertedFeature( FeatureList featuresAll, Feature feature, DirectionVector dir, String name ) {
+		featuresAll.addWithCustomName( convert(feature, dir), name );
+	}
+	
 	private static Feature convert( Feature feature, DirectionVector dir ) {
 		return new ConvertToPhysicalDistance(feature, UnitSuffix.MICRO, dir);
 	}
