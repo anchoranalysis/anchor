@@ -54,6 +54,11 @@ public class Point2f implements Serializable {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public void scale( double factor ) {
+		this.x *= factor;
+		this.y *= factor;
+	}
 
 	public float getX() {
 		return x;

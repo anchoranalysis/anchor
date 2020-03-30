@@ -61,6 +61,11 @@ public class Point2d implements Serializable {
 		this.x = this.x + pnt.getX();
 		this.y = this.y + pnt.getY();
 	}
+	
+	public void scale( double factor ) {
+		this.x *= factor;
+		this.y *= factor;
+	}
 
 	public double getX() {
 		return x;

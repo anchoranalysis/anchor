@@ -31,6 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
 public class MarkLineSegment extends Mark {
 
@@ -79,9 +80,7 @@ public class MarkLineSegment extends Mark {
 	
 	@Override
 	public BoundingBox bbox(ImageDim bndScene, int regionID) {
-		Point3d min = calcMin();
-		Point3d max = calcMax();
-		return new BoundingBox(min,max);
+		return BoundingBoxFromPoints.forTwoPoints( distCalcToLine.getStartPoint(), distCalcToLine.getEndPoint() );
 	}
 
 	@Override
@@ -106,25 +105,6 @@ public class MarkLineSegment extends Mark {
 	public int numDims() {
 		return 3;
 	}
-
-	
-	private Point3d calcMin() {
-		Point3d pnt = new Point3d();
-		pnt.setX( Math.min( distCalcToLine.getStartPoint().getX(), distCalcToLine.getEndPoint().getX() ));
-		pnt.setY( Math.min( distCalcToLine.getStartPoint().getY(), distCalcToLine.getEndPoint().getY() ));
-		pnt.setZ( Math.min( distCalcToLine.getStartPoint().getZ(), distCalcToLine.getEndPoint().getZ() ));
-		return pnt;
-	}
-	
-	private Point3d calcMax() {
-		Point3d pnt = new Point3d();
-		pnt.setX( Math.max( distCalcToLine.getStartPoint().getX(), distCalcToLine.getEndPoint().getX() ));
-		pnt.setY( Math.max( distCalcToLine.getStartPoint().getY(), distCalcToLine.getEndPoint().getY() ));
-		pnt.setZ( Math.max( distCalcToLine.getStartPoint().getZ(), distCalcToLine.getEndPoint().getZ() ));
-		return pnt;
-	}
-	
-
 
 	@Override
 	public String getName() {

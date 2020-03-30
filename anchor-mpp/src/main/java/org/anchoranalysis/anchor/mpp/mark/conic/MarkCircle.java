@@ -89,7 +89,7 @@ public class MarkCircle extends MarkAbstractPosition implements Serializable {
     
 	@Override
 	public String getName() {
-		return new String("circle");
+		return "circle";
 	}
 
     public boolean randomizeMarks( RandomNumberGenerator re, ImageRes sr, BoundCalculator boundGenerator ) {

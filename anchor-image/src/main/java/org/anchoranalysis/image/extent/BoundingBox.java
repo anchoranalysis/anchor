@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -78,6 +79,8 @@ public class BoundingBox implements Serializable {
 	
 	public BoundingBox( Point3i min, Point3i max ) {
 		this.crnrMin = new Point3i(min);
+		
+		checkMaxMoreThanMin(min, max);
 		
 		this.extnt = new Extent();
 		this.extnt.setX( max.getX() - min.getX() + 1 );
@@ -533,5 +536,13 @@ public class BoundingBox implements Serializable {
 	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
 		scaleXYPos(sf);
 		extnt.scaleXYBy(sf);
+	}
+	
+	private void checkMaxMoreThanMin( Point3i min, Point3i max ) {
+		if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {
+			throw new AnchorFriendlyRuntimeException(
+				String.format("To create a bounding-box, the max-point %s must always be >= the min-point %s in all dimensions.", max, min)
+			);
+		}
 	}
 }
