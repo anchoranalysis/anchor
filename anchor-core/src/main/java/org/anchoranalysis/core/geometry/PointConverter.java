@@ -43,6 +43,10 @@ public class PointConverter {
 		return new Point3i(p);
 	}
 	
+	public static Point2d doubleFromFloat(Point2f p) {
+		return new Point2d( p.getX(), p.getY() );
+	}
+	
 	public static Point3d doubleFromFloat(Point3f p) {
 		return new Point3d( p.getX(), p.getY(),	p.getZ() );
 	}
