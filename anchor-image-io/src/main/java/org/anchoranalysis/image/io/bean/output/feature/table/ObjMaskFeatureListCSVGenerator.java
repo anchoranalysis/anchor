@@ -117,17 +117,15 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			Feature cogX = new CenterOfGravity("x");
 			Feature cogY = new CenterOfGravity("y");
 			Feature cogZ = new CenterOfGravity("z");
+			
 			featuresAll.addWithCustomName( cogX, "x" );
 			featuresAll.addWithCustomName( cogY, "y" );
 			featuresAll.addWithCustomName( cogZ, "z" );
 			
 	
-			Feature cogX_phys = new ConvertToPhysicalDistance(cogX, UnitSuffix.MICRO, new DirectionVector(1, 0, 0)) ;
-			Feature cogY_phys = new ConvertToPhysicalDistance(cogY, UnitSuffix.MICRO, new DirectionVector(0, 1, 0)) ;
-			Feature cogZ_phys = new ConvertToPhysicalDistance(cogZ, UnitSuffix.MICRO, new DirectionVector(0, 0, 1)) ;
-			featuresAll.addWithCustomName( cogX_phys, "x_p" );
-			featuresAll.addWithCustomName( cogY_phys, "y_p" );
-			featuresAll.addWithCustomName( cogZ_phys, "z_p" );
+			featuresAll.addWithCustomName( convert(cogX, new DirectionVector(1, 0, 0)), "x_p" );
+			featuresAll.addWithCustomName( convert(cogY, new DirectionVector(0, 1, 0)), "y_p" );
+			featuresAll.addWithCustomName( convert(cogZ, new DirectionVector(0, 0, 1)), "z_p" );
 	
 			featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
 			
@@ -175,6 +173,10 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	@Override
 	public void setIterableElement(ObjMaskCollection element) {
 		this.objs = element;
+	}
+		
+	private static Feature convert( Feature feature, DirectionVector dir ) {
+		return new ConvertToPhysicalDistance(feature, UnitSuffix.MICRO, dir);
 	}
 
 	public FeatureInitParams getParamsInit() {
