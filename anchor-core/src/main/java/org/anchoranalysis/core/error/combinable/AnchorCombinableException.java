@@ -115,7 +115,6 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
 				e = e.getCause();
 				
 			} else if (canExceptionBeSkipped(e)) { 		
-				// We skip certain types of exceptions (basically ignore them, and move to the next cause)
 				e = e.getCause();
 				continue;
 			} else {
