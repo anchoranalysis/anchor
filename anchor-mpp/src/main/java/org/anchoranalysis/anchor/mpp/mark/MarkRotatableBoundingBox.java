@@ -25,7 +25,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	
 	// START mark state
 
-	// Note that internally three-dimensional points are used instad of two-dimensional as it
+	// Note that internally three-dimensional points are used instead of two-dimensional as it
 	//  fits more nicely with the rotation matrices (at the cost of some extra computation).
 	
 	/** Add to orientation to get the left-point and bottom-point (without rotation) */ 
