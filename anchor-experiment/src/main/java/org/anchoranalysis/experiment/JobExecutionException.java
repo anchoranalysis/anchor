@@ -50,7 +50,7 @@ public class JobExecutionException extends AnchorFriendlyCheckedException {
 	}
 
 	public JobExecutionException( Throwable exc ) {
-		super( exc );
+		super("The job's execution failed.", exc);
 	}
 
 	/**
