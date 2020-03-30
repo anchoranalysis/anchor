@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.bean.output.feature.table;
+package org.anchoranalysis.image.io.bean.feature;
 
 import java.nio.file.Path;
 

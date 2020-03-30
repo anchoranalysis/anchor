@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.image.feature.bean.objmask.cachedcalculation.CalculateNumVoxels;
+import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
 public class NumVoxels extends FeatureObjMask {
