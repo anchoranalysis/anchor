@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.file.findmatching;
+package org.anchoranalysis.io.file.findmatching;
 
 /*-
  * #%L
@@ -27,45 +27,29 @@ package org.anchoranalysis.core.file.findmatching;
  */
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
 
-class AddFilesToList extends SimpleFileVisitor<Path> {
+import org.anchoranalysis.core.log.LogErrorReporter;
 
-	private List<File> list;
-	private Predicate<Path> matcherFile;
-	private Predicate<Path> matcherDir;
+public class FindMatchingFilesWithoutProgressReporter extends FindMatchingFiles {
 	
-	public AddFilesToList(List<File> list, Predicate<Path> matcherFile, Predicate<Path> matcherDir) {
-		super();
-		this.list = list;
-		this.matcherFile = matcherFile;
-		this.matcherDir = matcherDir;
-	}
-
 	@Override
-	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
 		
-		if (attrs.isRegularFile() && !attrs.isDirectory() && matcherFile.test(file) ) {
-			list.add( file.normalize().toFile() );
+		List<File> listOut = new ArrayList<>();
+		try {
+			WalkSingleDir.apply( dir, constraints, listOut );
+		} catch (FindFilesException e) {
+			if (acceptDirectoryErrors) {
+				logger.getErrorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
+			} else {
+				// Rethrow the exception
+				throw e;
+			}
 		}
-		return FileVisitResult.CONTINUE;
+		return listOut;
 	}
-
-	@Override
-	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-
-		if (!matcherDir.test(dir)) {
-			return FileVisitResult.SKIP_SUBTREE;
-		}
-		
-		return super.preVisitDirectory(dir, attrs);
-	}
-	
-	
 }

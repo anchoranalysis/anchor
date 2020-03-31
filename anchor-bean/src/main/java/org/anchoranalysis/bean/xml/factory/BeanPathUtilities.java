@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.file.PathUtilities;
 
 public class BeanPathUtilities {
 
@@ -55,20 +54,24 @@ public class BeanPathUtilities {
 			exstPath = exstPath.toAbsolutePath();
 		}
     	
-    	String exstPathReplaced = PathUtilities.toStringUnixStyle(exstPath);
-    	assert exstPathReplaced != null;
-    	
     	// Otherwise it's a relative path and we combine it
-    	Path totalPath = getPathWithoutFileName(exstPathReplaced).resolve(filePath);
+    	Path totalPath = getPathWithoutFileName(exstPath.toString()).resolve(filePath);
     	assert totalPath!=null;
     	return totalPath.normalize();
 	}
 	
 	private static Path getPathWithoutFileName( String in ) {
-		int index = in.lastIndexOf('/');
+		int index = lastIndexOfEither(in, '/','\\');
 		if (index==-1) {
 			throw new IllegalArgumentException("There is no path without the filename");
 		}
 		return Paths.get( in.substring(0,index) );
+	}
+	
+	private static int lastIndexOfEither( String str, char c1, char c2 ) {
+		return Math.max(
+			str.lastIndexOf(c1),
+			str.lastIndexOf(c2)
+		);
 	}
 }

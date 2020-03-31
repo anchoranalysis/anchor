@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.file.findmatching;
+package org.anchoranalysis.io.file;
 
 /*-
  * #%L
@@ -26,35 +26,33 @@ package org.anchoranalysis.core.file.findmatching;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystemException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumSet;
-import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 
-class WalkSingleDir {
+/**
+ * Conversion to Unix-style separators
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class PathUtilities {
+
+	/**
+	 * Converts a path to a string using Unix-style separators (forward-slashes)
+	 * @param path with either Windows-style (blackslashes) or Unix-style separators (forward slashes)
+	 * @return identical path but with Unix-style separators
+	 */
+	public static String toStringUnixStyle( Path path ) {
+		return toStringUnixStyle( path.toString() );
+	}
 	
-	private WalkSingleDir() {}
-	
-	public static void apply( Path dir, PathMatchConstraints constraints, List<File> listOut ) throws FindFilesException {
-		
-		try {
-			Files.walkFileTree(
-					dir,
-				EnumSet.of(FileVisitOption.FOLLOW_LINKS),
-				constraints.getMaxDirDepth(),
-				new AddFilesToList(listOut, constraints.getMatcherFile(), constraints.getMatcherDir())
-			);
-		} catch (AccessDeniedException e) {
-			throw new FindFilesException( String.format("Cannot access directory: %s",e.getFile().toString()) );
-		} catch (FileSystemException e) {
-			throw new FindFilesException( String.format("An file-system error occurring accessing directory: %s", e.getFile().toString()) );
-		} catch (IOException e) {
-			throw new FindFilesException( String.format("An IO error occurring accessing directory: %s", e.toString()) );
-		}
+	/**
+	 * Converts a path to a string using Unix-style separators (forward-slashes)
+	 * 
+	 * @param path with either Windows-style (blackslashes) or Unix-style separators (forward slashes)
+	 * @return identical path but with Unix-style separators
+	 */
+	public static String toStringUnixStyle( String path ) {
+		return FilenameUtils.separatorsToUnix(path);
 	}
 }

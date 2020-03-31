@@ -32,8 +32,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.file.PathUtilities;
 import org.apache.commons.io.FilenameUtils;
 
 /**

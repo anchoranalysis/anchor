@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.file.PathUtilities;
 import org.anchoranalysis.io.params.InputContextParams;
 
 
