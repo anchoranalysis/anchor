@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.file.findmatching;
+package org.anchoranalysis.io.filepath.findmatching;
 
 /*-
  * #%L
@@ -26,46 +26,45 @@ package org.anchoranalysis.io.file.findmatching;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
 import java.util.function.Predicate;
 
-class AddFilesToList extends SimpleFileVisitor<Path> {
+/**
+ * Some constraints on which paths to match
+ *
+ */
+public class PathMatchConstraints {
 
-	private List<File> list;
+	/** Only accepts files where the predicate returns TRUE */
 	private Predicate<Path> matcherFile;
+	
+	/** Only accepts any containing directories where the predicate returns TRUE */
 	private Predicate<Path> matcherDir;
 	
-	public AddFilesToList(List<File> list, Predicate<Path> matcherFile, Predicate<Path> matcherDir) {
+	/** Limits on the depth of how many sub-directories are recursed */
+	private int maxDirDepth;
+	
+	public PathMatchConstraints(Predicate<Path> matcherFile, Predicate<Path> matcherDir, int maxDirDepth) {
 		super();
-		this.list = list;
 		this.matcherFile = matcherFile;
 		this.matcherDir = matcherDir;
-	}
-
-	@Override
-	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-		
-		if (attrs.isRegularFile() && !attrs.isDirectory() && matcherFile.test(file) ) {
-			list.add( file.normalize().toFile() );
-		}
-		return FileVisitResult.CONTINUE;
-	}
-
-	@Override
-	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-
-		if (!matcherDir.test(dir)) {
-			return FileVisitResult.SKIP_SUBTREE;
-		}
-		
-		return super.preVisitDirectory(dir, attrs);
+		this.maxDirDepth = maxDirDepth;
+		assert( maxDirDepth>= 0 );
 	}
 	
-	
+	public PathMatchConstraints replaceMaxDirDepth( int replacementMaxDirDepth ) {
+		return new PathMatchConstraints(matcherFile, matcherDir, replacementMaxDirDepth);
+	}
+
+	public Predicate<Path> getMatcherFile() {
+		return matcherFile;
+	}
+
+	public Predicate<Path> getMatcherDir() {
+		return matcherDir;
+	}
+
+	public int getMaxDirDepth() {
+		return maxDirDepth;
+	}
 }

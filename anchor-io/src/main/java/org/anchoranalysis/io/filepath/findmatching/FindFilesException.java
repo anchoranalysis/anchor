@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.file.findmatching;
+package org.anchoranalysis.io.filepath.findmatching;
 
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,30 +26,20 @@ package org.anchoranalysis.io.file.findmatching;
  * #L%
  */
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+public class FindFilesException extends AnchorFriendlyCheckedException {
 
-public class FindMatchingFilesWithoutProgressReporter extends FindMatchingFiles {
-	
-	@Override
-	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
-		
-		List<File> listOut = new ArrayList<>();
-		try {
-			WalkSingleDir.apply( dir, constraints, listOut );
-		} catch (FindFilesException e) {
-			if (acceptDirectoryErrors) {
-				logger.getErrorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
-			} else {
-				// Rethrow the exception
-				throw e;
-			}
-		}
-		return listOut;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public FindFilesException(String message) {
+		super(message);
+	}
+
+	public FindFilesException(String message, Throwable cause) {
+		super(message, cause);
 	}
 }

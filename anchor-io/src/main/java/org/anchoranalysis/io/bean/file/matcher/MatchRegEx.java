@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.file.PathUtilities;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.params.InputContextParams;
 
 
@@ -79,7 +79,7 @@ public class MatchRegEx extends FileMatcher {
 	}
 	
 	private static String pathAsString(Path p) {
-		return PathUtilities.toStringUnixStyle(
+		return FilePathToUnixStyleConverter.toStringUnixStyle(
 			p.toFile().toString()
 		);
 	}

@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.file.findmatching;
+package org.anchoranalysis.io.filepath.findmatching;
 
 /*-
  * #%L
@@ -26,45 +26,35 @@ package org.anchoranalysis.io.file.findmatching;
  * #L%
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystemException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.Predicate;
+import java.util.EnumSet;
+import java.util.List;
 
-/**
- * Some constraints on which paths to match
- *
- */
-public class PathMatchConstraints {
-
-	/** Only accepts files where the predicate returns TRUE */
-	private Predicate<Path> matcherFile;
+class WalkSingleDir {
 	
-	/** Only accepts any containing directories where the predicate returns TRUE */
-	private Predicate<Path> matcherDir;
+	private WalkSingleDir() {}
 	
-	/** Limits on the depth of how many sub-directories are recursed */
-	private int maxDirDepth;
-	
-	public PathMatchConstraints(Predicate<Path> matcherFile, Predicate<Path> matcherDir, int maxDirDepth) {
-		super();
-		this.matcherFile = matcherFile;
-		this.matcherDir = matcherDir;
-		this.maxDirDepth = maxDirDepth;
-		assert( maxDirDepth>= 0 );
-	}
-	
-	public PathMatchConstraints replaceMaxDirDepth( int replacementMaxDirDepth ) {
-		return new PathMatchConstraints(matcherFile, matcherDir, replacementMaxDirDepth);
-	}
-
-	public Predicate<Path> getMatcherFile() {
-		return matcherFile;
-	}
-
-	public Predicate<Path> getMatcherDir() {
-		return matcherDir;
-	}
-
-	public int getMaxDirDepth() {
-		return maxDirDepth;
+	public static void apply( Path dir, PathMatchConstraints constraints, List<File> listOut ) throws FindFilesException {
+		
+		try {
+			Files.walkFileTree(
+					dir,
+				EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+				constraints.getMaxDirDepth(),
+				new AddFilesToList(listOut, constraints.getMatcherFile(), constraints.getMatcherDir())
+			);
+		} catch (AccessDeniedException e) {
+			throw new FindFilesException( String.format("Cannot access directory: %s",e.getFile().toString()) );
+		} catch (FileSystemException e) {
+			throw new FindFilesException( String.format("An file-system error occurring accessing directory: %s", e.getFile().toString()) );
+		} catch (IOException e) {
+			throw new FindFilesException( String.format("An IO error occurring accessing directory: %s", e.toString()) );
+		}
 	}
 }

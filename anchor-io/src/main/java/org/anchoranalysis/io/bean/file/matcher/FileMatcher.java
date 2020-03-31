@@ -37,11 +37,11 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.file.findmatching.FindFilesException;
-import org.anchoranalysis.io.file.findmatching.FindMatchingFiles;
-import org.anchoranalysis.io.file.findmatching.FindMatchingFilesWithProgressReporter;
-import org.anchoranalysis.io.file.findmatching.FindMatchingFilesWithoutProgressReporter;
-import org.anchoranalysis.io.file.findmatching.PathMatchConstraints;
+import org.anchoranalysis.io.filepath.findmatching.FindFilesException;
+import org.anchoranalysis.io.filepath.findmatching.FindMatchingFiles;
+import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithProgressReporter;
+import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithoutProgressReporter;
+import org.anchoranalysis.io.filepath.findmatching.PathMatchConstraints;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**

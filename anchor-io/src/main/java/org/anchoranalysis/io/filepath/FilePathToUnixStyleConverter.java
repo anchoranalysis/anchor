@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.file;
+package org.anchoranalysis.io.filepath;
 
 /*-
  * #%L
@@ -35,7 +35,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author Owen Feehan
  *
  */
-public class PathUtilities {
+public class FilePathToUnixStyleConverter {
 
 	/**
 	 * Converts a path to a string using Unix-style separators (forward-slashes)

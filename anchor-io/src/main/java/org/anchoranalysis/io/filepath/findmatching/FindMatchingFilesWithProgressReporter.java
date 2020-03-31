@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.file.findmatching;
+package org.anchoranalysis.io.filepath.findmatching;
 
 /*-
  * #%L

@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.file.findmatching;
+package org.anchoranalysis.io.filepath.findmatching;
 
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,20 +26,14 @@ package org.anchoranalysis.io.file.findmatching;
  * #L%
  */
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Collection;
 
-public class FindFilesException extends AnchorFriendlyCheckedException {
+import org.anchoranalysis.core.log.LogErrorReporter;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+// TODO move to anchor-io?
+public abstract class FindMatchingFiles {
 
-	public FindFilesException(String message) {
-		super(message);
-	}
-
-	public FindFilesException(String message, Throwable cause) {
-		super(message, cause);
-	}
+	public abstract Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException;
 }
