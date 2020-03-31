@@ -8,6 +8,10 @@ package org.anchoranalysis.image.objmask;
  */
 public class ObjMaskOverlap {
 	
+	private ObjMaskOverlap() {
+		
+	}
+	
 	public static double calcOverlapRatio( ObjMask objA, ObjMask objB, ObjMask objMerged ) {
 		
 		int intersectingPixels = objA.countIntersectingPixels(objB);

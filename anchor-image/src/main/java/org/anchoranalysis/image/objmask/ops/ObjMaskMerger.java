@@ -40,7 +40,13 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 
+/** 
+ * Merges one or more ObjMasks into a single mask
+ **/
 public class ObjMaskMerger {
+	
+	private ObjMaskMerger() {
+	}
 	
 	public static ObjMask merge( ObjMask om1, ObjMask om2 ) {
 
