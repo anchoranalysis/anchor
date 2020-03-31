@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.threshold.calculatelevel;
+package org.anchoranalysis.image.bean.threshold;
 
 import org.anchoranalysis.bean.NullParamsBean;
 
