@@ -36,6 +36,7 @@ import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
 import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 
@@ -60,20 +61,22 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 	}
 
 	@Override
-	public T getException(String key) throws GetOperationFailedException {
+	public T getException(String key) throws NamedProviderGetException {
 		
 		try {
 			CachedGetter<T> cachedGetter = map.get(key);
 			
 			if (cachedGetter==null) {
-				throw new GetOperationFailedException( String.format("NamedItem '%s' does not exist in %s",key, storeDisplayName) );
+				throw new GetOperationFailedException(
+					String.format("NamedItem '%s' does not exist in %s", key, storeDisplayName)
+				);
 			}
 			
 			return cachedGetter.doOperation();
 		} catch (ExecuteException e) {
-			throw new GetOperationFailedException( String.format("An error occurred getting '%s'",key), e.getCause());
+			throw createExceptionForKey(key, e.getCause());
 		} catch (Exception e) {
-			throw new GetOperationFailedException( String.format("An error occurred getting '%s'",key), e);
+			throw createExceptionForKey(key, e);
 		}
 	}
 
@@ -102,7 +105,7 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 	}
 
 	@Override
-	public T getNull(String key) throws GetOperationFailedException {
+	public T getNull(String key) throws NamedProviderGetException {
 		
 		
 		try {
@@ -114,10 +117,18 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 			
 			return cachedGetter.doOperation();
 		} catch (ExecuteException e) {
-			throw new GetOperationFailedException(e.getCause());
+			throw createExceptionForKey(key, e.getCause());
 		}
 	}
-
-
-
+	
+	private NamedProviderGetException createExceptionForKey( String key, Throwable cause ) {
+		return new NamedProviderGetException(
+			decorateKey(key),
+			cause
+		);
+	}
+	
+	private String decorateKey( String key ) {
+		return String.format("%s: %s", storeDisplayName, key);
+	}
 }

@@ -1,5 +1,10 @@
 package org.anchoranalysis.anchor.overlay.writer;
 
+import org.anchoranalysis.core.color.ColorIndex;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.image.extent.BoundingBox;
+
 /*-
  * #%L
  * anchor-overlay
@@ -27,6 +32,7 @@ package org.anchoranalysis.anchor.overlay.writer;
  */
 
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
  * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
@@ -34,23 +40,26 @@ import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
  * @author Owen Feehan
  *
  */
-public class PrecalcOverlay {
+public abstract class PrecalcOverlay {
 
 	private ObjMaskWithProperties first;		// Result of the Mark->ObjMaskWithProperties 	
-	private Object second;				// Result of ObjMaskWithProperties>-Object
 	
-	public PrecalcOverlay(ObjMaskWithProperties first, Object second) {
+	public PrecalcOverlay(ObjMaskWithProperties first) {
 		super();
 		this.first = first;
-		this.second = second;
 	}
 
 	public ObjMaskWithProperties getFirst() {
 		return first;
 	}
 
-	public Object getSecond() {
-		return second;
-	}
+	public abstract void writePrecalculatedMask(
+		RGBStack stack,
+		IDGetter<ObjMaskWithProperties> idGetter,
+		IDGetter<ObjMaskWithProperties> colorIDGetter,
+		int iter,
+		ColorIndex colorIndex,
+		BoundingBox bboxContainer
+	) throws OperationFailedException;
 	
 }

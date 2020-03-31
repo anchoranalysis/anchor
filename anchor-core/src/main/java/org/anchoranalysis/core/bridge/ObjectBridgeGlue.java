@@ -26,9 +26,9 @@ package org.anchoranalysis.core.bridge;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
-
-// Glues two object bridges together so that a bridge A->B and a bridge B->C becomes bridge A->C
+/**
+ * Glues two object bridges together so that a bridge A->B and a bridge B->C becomes bridge A->C
+ */
 public class ObjectBridgeGlue<A,B,C> implements IObjectBridge<A, C> {
 
 	private IObjectBridge<A,B> bridge1;
@@ -41,7 +41,7 @@ public class ObjectBridgeGlue<A,B,C> implements IObjectBridge<A, C> {
 	}
 
 	@Override
-	public C bridgeElement(A sourceObject) throws GetOperationFailedException {
+	public C bridgeElement(A sourceObject) throws BridgeElementException {
 		B objTemp = bridge1.bridgeElement(sourceObject);
 		return bridge2.bridgeElement(objTemp);
 	}

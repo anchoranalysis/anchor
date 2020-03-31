@@ -104,7 +104,7 @@ public class AlwaysAllowed extends Writer {
 			IndexableOutputNameStyle outputNameStyle = new IntegerSuffixOutputNameStyle(outputName, "_%03d");
 			collectionGenerator.doOperation().write(outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom );
 		} catch (ExecuteException e) {
-			throw new OutputWriteFailedException("Cannot create generator", e.getCause());
+			throw new OutputWriteFailedException(e.getCause());
 		}	
 	}
 	
@@ -116,7 +116,7 @@ public class AlwaysAllowed extends Writer {
 		try {
 			return generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), index, bom);
 		} catch (ExecuteException e) {
-			throw new OutputWriteFailedException("Cannot create generator", e.getCause());
+			throw new OutputWriteFailedException(e.getCause());
 		}			
 	}
 	
@@ -129,7 +129,7 @@ public class AlwaysAllowed extends Writer {
 		try {
 			generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom);
 		} catch (ExecuteException e) {
-			throw new OutputWriteFailedException("Cannot create generator", e.getCause());
+			throw new OutputWriteFailedException(e.getCause());
 		}
 	}
 		

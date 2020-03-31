@@ -33,8 +33,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.mpp.mark.distance.DistCalcToLine;
-
 public class MarkPolygonCurve extends MarkAbstractPointList {
 
 	/**

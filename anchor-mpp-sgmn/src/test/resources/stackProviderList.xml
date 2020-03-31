@@ -3,12 +3,12 @@
 <bean config-class="java.util.List" config-factory="list">
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="stack1">
-  		<item config-class="ch.ethz.biol.cell.mpp.dummyProvider.DummyStackProvider"/>
+  		<item config-class="org.anchoranalysis.mpp.sgmn.dummyProvider.DummyStackProvider"/>
 	</item>
 	
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="stack2">
-		<item config-class="ch.ethz.biol.cell.mpp.dummyProvider.DummyStackProvider"/>
+		<item config-class="org.anchoranalysis.mpp.sgmn.dummyProvider.DummyStackProvider"/>
 	</item>
 	
 </bean>

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.input;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-image-io
@@ -35,8 +37,8 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
 public class StackInputInitParamsCreator {
 	
-	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneConstant() );
+	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneConstant(), modelDir );
 		addInput(soImage, inputObject);
 		return soImage;
 	}

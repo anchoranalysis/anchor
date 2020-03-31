@@ -31,6 +31,7 @@ import java.io.Serializable;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.scale.ScaleFactor;
 
 
 /**
@@ -113,9 +114,9 @@ public class ImageRes implements Serializable {
 		res.setY( res.getY() * ratio );
 	}
 	
-	public void scaleXY( double ratioX, double ratioY ) {
-		scaleX( ratioX );
-		scaleY( ratioY );
+	public void scaleXY( ScaleFactor sf ) {
+		scaleX( sf.getX() );
+		scaleY( sf.getY() );
 	}
 	
 	private double max2D() {

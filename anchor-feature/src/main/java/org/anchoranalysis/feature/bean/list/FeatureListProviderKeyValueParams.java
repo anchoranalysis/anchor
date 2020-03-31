@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.operator.Constant;
 
@@ -73,7 +73,7 @@ public class FeatureListProviderKeyValueParams extends FeatureListProvider {
 				out.add(featureNew);
 			}
 			
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 		

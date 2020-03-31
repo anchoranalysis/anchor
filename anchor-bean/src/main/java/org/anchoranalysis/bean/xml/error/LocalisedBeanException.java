@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.error.BeanStrangeException;
+import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 
 /*
  * #%L
@@ -51,7 +52,7 @@ import org.anchoranalysis.bean.error.BeanStrangeException;
  * 
  * @author Owen Feehan
  */
-public class LocalisedBeanException extends BeanCombinableException {
+public class LocalisedBeanException extends AnchorCombinableException {
 
 	/**
 	 * 

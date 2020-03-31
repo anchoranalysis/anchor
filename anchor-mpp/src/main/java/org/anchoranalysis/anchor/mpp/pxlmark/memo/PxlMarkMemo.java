@@ -2,6 +2,7 @@ package org.anchoranalysis.anchor.mpp.pxlmark.memo;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMarkHistogram;
 
@@ -37,8 +38,6 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.histogram.Histogram;
-
-import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactory;
 
 // Memoization of retrieving a PxlMark from a mark
 // So we only ever need to do this calculation once for a given instantiation

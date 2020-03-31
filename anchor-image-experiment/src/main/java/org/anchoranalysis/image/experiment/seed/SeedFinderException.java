@@ -39,7 +39,7 @@ public class SeedFinderException extends AnchorCheckedException {
 		super(string);
 	}
 
-	public SeedFinderException( Exception exc ) {
+	public SeedFinderException(Throwable exc ) {
 		super( exc );
 	}
 }

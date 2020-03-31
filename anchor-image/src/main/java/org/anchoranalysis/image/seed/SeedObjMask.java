@@ -30,6 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class SeedObjMask extends Seed {
 
@@ -48,7 +49,10 @@ public class SeedObjMask extends Seed {
 	@Override
 	public void scaleXY(double scale) throws OptionalOperationUnsupportedException {
 		try {
-			om.scale(scale, scale, InterpolatorFactory.getInstance().noInterpolation() );
+			om.scale(
+				new ScaleFactor(scale),
+				InterpolatorFactory.getInstance().noInterpolation()
+			);
 		} catch (OperationFailedException e) {
 			throw new OptionalOperationUnsupportedException();
 		}

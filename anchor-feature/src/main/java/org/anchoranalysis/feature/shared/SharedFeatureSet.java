@@ -31,10 +31,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NameValueSet;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
@@ -80,8 +80,8 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 			try {
 				Feature feat = delegate.getException(name);
 				feat.initRecursive( featureInitParams, logger);
-			} catch (GetOperationFailedException e) {
-				throw new InitException(e);
+			} catch (NamedProviderGetException e) {
+				throw new InitException(e.summarize());
 			}
 			
 		}
@@ -125,7 +125,7 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 		for ( String key : src.keys() ) {
 			try {
 				target.add( key, src.getException(key).duplicateBean() );
-			} catch (GetOperationFailedException e) {
+			} catch (NamedProviderGetException e) {
 				assert false;
 			}
 		}
@@ -145,7 +145,7 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 	}
 
 	@Override
-	public Feature getException(String key) throws GetOperationFailedException {
+	public Feature getException(String key) throws NamedProviderGetException {
 		return delegate.getException(key);
 	}
 

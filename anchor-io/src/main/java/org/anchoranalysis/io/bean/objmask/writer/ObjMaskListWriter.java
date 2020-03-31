@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
@@ -65,38 +66,29 @@ public class ObjMaskListWriter extends ObjMaskWriter {
 	}
 
 	@Override
-	public List<Object> precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
 
-		List<Object> listOut = new ArrayList<>();
+		List<PrecalcOverlay> listPrecalc = new ArrayList<>();
 		
 		for( ObjMaskWriter writer : list) {
-			listOut.add( writer.precalculate(mask, dim) );
+			listPrecalc.add( writer.precalculate(mask, dim) );
 		}
 		
-		return listOut;
-	}
+		return new PrecalcOverlay(mask) {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig,
-			Object precalculatedObj,
-			RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex, BoundingBox bboxContainer)
-			throws OperationFailedException {
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+
+				for(PrecalcOverlay preCalc : listPrecalc) {
+					preCalc.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+				}
 				
-		List<Object> preCast = (List<Object>) precalculatedObj;
-		assert(preCast.size()==list.size());
-		
-		for(int i=0; i<list.size(); i++ ) {
-			ObjMaskWriter writer = list.get(i);
-			Object preCalc = preCast.get(i);
+			}
 			
-			writer.writePrecalculatedMask(maskOrig, preCalc, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
-		}
-		
+		};
 	}
 
 	public List<ObjMaskWriter> getList() {

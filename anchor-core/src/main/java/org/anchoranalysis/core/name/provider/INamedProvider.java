@@ -29,16 +29,22 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
-
 public interface INamedProvider<T> {
 
-	T getException(String key) throws GetOperationFailedException;
+	/**
+	 * Retrieves the item if it exists, or throws an exception if it doesn't exist.
+	 */
+	T getException(String key) throws NamedProviderGetException;
 	
-	// Returns null if the item doesn't exist.  Note that a 'key' might still return something valid
-	//   even if it's not contained in keys()
-	T getNull( String key ) throws GetOperationFailedException;
+	/** 
+	 * Retrieves the item if it exists, or returns null if it doesn't exist.
+	 *  <p>Note that a 'key' might still throw an exception for another reason</p>
+	 */
+	T getNull( String key ) throws NamedProviderGetException;
 	
-	// Returns a set of keys associated with the provider. No guarantee that it refers to all valid keys.
+	/** 
+	 * Returns a set of keys associated with the provider.
+	 * 
+	 * <p>There's no guarantee that it refers to all valid keys.</p> */
 	Set<String> keys();
 }

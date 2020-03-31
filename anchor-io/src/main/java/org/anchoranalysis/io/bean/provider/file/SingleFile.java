@@ -62,10 +62,7 @@ public class SingleFile extends FileProviderWithDirectory {
 	}
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params)
-			throws AnchorIOException {
-
-
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
 		
 		File file = new File(path);
 		
@@ -105,12 +102,4 @@ public class SingleFile extends FileProviderWithDirectory {
 			return Paths.get(path).getParent();
 		}
 	}
-
-
-	@Override
-	public void setDirectory(Path directory) {
-		this.directory = directory;
-	}
-
-	
 }

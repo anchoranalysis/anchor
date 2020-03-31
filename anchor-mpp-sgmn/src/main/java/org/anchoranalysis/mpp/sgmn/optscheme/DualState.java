@@ -1,8 +1,8 @@
 package org.anchoranalysis.mpp.sgmn.optscheme;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.mpp.sgmn.cfgnrg.transformer.StateTransformer;
-import org.anchoranalysis.plugin.mpp.sgmn.optscheme.TransformationContext;
+import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
+import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
 /*
  * #%L

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.stack;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-image-io
@@ -29,6 +31,7 @@ package org.anchoranalysis.image.io.stack;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
@@ -113,17 +116,29 @@ public class StackCollectionOutputter {
 		return out;
 	}
 	
-	public static void copyFrom( NamedChnlCollectionForSeries src, NamedImgStackCollection target, ProgressReporter progressReporter ) throws GetOperationFailedException {
+	public static void copyFrom(
+		NamedChnlCollectionForSeries src,
+		NamedImgStackCollection target,
+		Path modelDir,
+		ProgressReporter progressReporter
+	) throws OperationFailedException {
 		
 		Set<String> keys = src.chnlNames();
 		
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, keys.size()) ) {
 			for (String id : keys) {
 				if (target.getImageNoException(id)==null) {
-					target.addImageStack(id, new Stack( src.getChnl(id, 0, new ProgressReporterOneOfMany(prm)) ) );
+					target.addImageStack(
+						id,
+						new Stack(
+							src.getChnl(id, 0, new ProgressReporterOneOfMany(prm))
+						)
+					);
 					prm.incrWorker();
 				}
 			}
+		} catch (GetOperationFailedException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 		

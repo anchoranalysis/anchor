@@ -28,6 +28,12 @@ package org.anchoranalysis.anchor.mpp.proposer.error;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
+/**
+ * Singleton that does nothing with errors
+ * 
+ * @author owen
+ *
+ */
 public class ErrorNodeNull extends ErrorNode {
 
 	/**
@@ -35,6 +41,16 @@ public class ErrorNodeNull extends ErrorNode {
 	 */
 	private static final long serialVersionUID = 5512508477564211253L;
 
+	private static ErrorNodeNull instance = new ErrorNodeNull();
+	
+	private ErrorNodeNull() {
+		
+	}
+	
+	public static ErrorNodeNull instance() {
+		return instance;
+	}
+	
 	@Override
 	public ErrorNode add(String errorMessage) {
 		// do nothing

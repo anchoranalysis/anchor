@@ -29,7 +29,6 @@ package org.anchoranalysis.io.bean.provider.file;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,12 +37,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
 /** Lists all directories to a certain depth */
-public class DirectoryDepth extends FileProviderWithDirectory {
+public class DirectoryDepth extends FileProviderWithDirectoryString {
 
 	/**
 	 * 
@@ -52,23 +50,18 @@ public class DirectoryDepth extends FileProviderWithDirectory {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private String directory = "";
-	
-	@BeanField
 	private int exactDepth = 0;
 	// END BEAN PROPERTIES
 
-
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+			throws AnchorIOException {
 		
-		Path dirAsPath = getDirectoryAsPath(params.getInputContext());
-		
-		String[] filesDir = dirAsPath.toFile().list();
+		String[] filesDir = directory.toFile().list();
 		
 		if (filesDir==null) {
 			throw new AnchorIOException(
-				String.format("Path %s is not valid. Cannot enumerate directory.", dirAsPath)
+				String.format("Path %s is not valid. Cannot enumerate directory.", directory)
 			);
 		}
 		
@@ -76,32 +69,10 @@ public class DirectoryDepth extends FileProviderWithDirectory {
 		
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), numFiles) ) {
 			WalkToDepth walkTo = new WalkToDepth(exactDepth, prm);
-			return walkTo.findDirs( dirAsPath.toFile() );
+			return walkTo.findDirs( directory.toFile() );
 		} catch (IOException e) {
 			throw new AnchorIOException("A failure occurred searching for directories", e);
 		}
-	}
-
-
-	public String getDirectory() {
-		return directory;
-	}
-
-
-	public void setDirectory(String directory) {
-		this.directory = directory;
-	}
-
-
-	@Override
-	public Path getDirectoryAsPath(InputContextParams inputContext) {
-		return Paths.get(directory);
-	}
-
-
-	@Override
-	public void setDirectory(Path directory) {
-		this.directory = directory.toString();
 	}
 
 	private static class RejectAllFiles implements IOFileFilter {

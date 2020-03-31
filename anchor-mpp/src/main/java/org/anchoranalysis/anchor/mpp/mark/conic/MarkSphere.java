@@ -29,8 +29,8 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-import org.anchoranalysis.anchor.mpp.bounds.Bound;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;

@@ -165,11 +165,11 @@ public class FindOutline {
 
 	private static boolean isTooSmall( Extent e, boolean do3D ) {
 		if (e.getX()<3 || e.getY()<3) {
-			return false;
+			return true;
 		}
 		if (do3D && e.getZ() < 3) {
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 }

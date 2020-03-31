@@ -67,7 +67,14 @@ public class Point2i implements Serializable {
 		this.y = y;
 	}
 	
-
+	public void incrX() {
+		this.x++;
+	}
+	
+	public void incrY() {
+		this.y++;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("[%d,%d]",x,y);

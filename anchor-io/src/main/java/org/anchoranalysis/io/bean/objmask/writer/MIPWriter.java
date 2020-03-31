@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
 /*
  * #%L
@@ -61,31 +62,23 @@ public class MIPWriter extends ObjMaskWriter {
 		super();
 		this.maskWriter = maskWriter;
 	}
-
-	private ObjMaskWithProperties createMIPMask( ObjMaskWithProperties mask ) {
-
-		// Now we manipulate the mask
-		ObjMaskWithProperties copyMask = mask.duplicate();
-		copyMask.convertToMaxIntensityProjection();
-		return copyMask;
-	}
 	
 	@Override
-	public ObjMaskWithProperties precalculate(ObjMaskWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
 			throws CreateException {
-		return createMIPMask(mask);
-	}
+		
+		ObjMaskWithProperties maskMIP = createMIPMask(mask);
+		
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig,
-			Object precalculatedObj,
-			RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter,
-			int iter, ColorIndex colorIndex,
-			BoundingBox bboxContainer)
-			throws OperationFailedException {
-		maskWriter.writeSingle( (ObjMaskWithProperties) precalculatedObj, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				maskWriter.writeSingle( (ObjMaskWithProperties) maskMIP, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+			}
+			
+		};
 	}
 	
 	public ObjMaskWriter getMaskWriter() {
@@ -95,4 +88,12 @@ public class MIPWriter extends ObjMaskWriter {
 	public void setMaskWriter(ObjMaskWriter maskWriter) {
 		this.maskWriter = maskWriter;
 	}
+
+	private ObjMaskWithProperties createMIPMask( ObjMaskWithProperties mask ) {
+
+		// Now we manipulate the mask
+		ObjMaskWithProperties copyMask = mask.duplicate();
+		copyMask.convertToMaxIntensityProjection();
+		return copyMask;
+	}	
 }

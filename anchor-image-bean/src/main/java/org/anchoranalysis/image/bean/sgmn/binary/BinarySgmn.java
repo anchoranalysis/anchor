@@ -49,10 +49,6 @@ public abstract class BinarySgmn extends SgmnBean<BinarySgmn> {
 	// Returns a BinaryVoxelBox associated with the input buffer or null if nothing has changed
 	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re ) throws SgmnFailedException;
 	
-//	public BinaryVoxelBox<ByteBuffer> sgmn( VoxelBox<ByteBuffer> voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re ) throws SgmnFailedException {
-//		return sgmn( new VoxelBoxWrapper(voxelBox), params, objMask, re );
-//	}
-	
 	// Segments only the object found within the ObjMask, if it returns NULL then no change has occurred (for sure)
 	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re ) throws SgmnFailedException;
 	

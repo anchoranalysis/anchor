@@ -1,10 +1,10 @@
 package org.anchoranalysis.anchor.mpp.proposer.visualization;
 
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,7 @@ package org.anchoranalysis.anchor.mpp.proposer.visualization;
  * #L%
  */
 
-
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 
 public interface ICreateProposalVisualization {
 

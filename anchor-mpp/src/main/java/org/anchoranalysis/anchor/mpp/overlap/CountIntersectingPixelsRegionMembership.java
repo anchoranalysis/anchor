@@ -38,7 +38,7 @@ import org.anchoranalysis.image.objmask.intersecting.IntersectionBBox;
  * @author FEEHANO
  *
  */
-public class CountIntersectingPixelsRegionMembership extends CountIntersectingPixels {
+class CountIntersectingPixelsRegionMembership extends CountIntersectingPixels {
 
 	private byte regionMembershipFlag;
 	

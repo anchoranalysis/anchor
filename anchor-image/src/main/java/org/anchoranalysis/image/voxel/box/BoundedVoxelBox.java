@@ -37,6 +37,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -54,35 +56,35 @@ public class BoundedVoxelBox<T extends Buffer> {
 	private static final Point3i allOnes2D = new Point3i(1,1,0);
 	private static final Point3i allOnes3D = new Point3i(1,1,1);
 	
-	private BoundingBox BoundingBox;
+	private BoundingBox boundingBox;
 	private VoxelBox<T> voxelBox;
 	
 	public BoundedVoxelBox() {
 	}
 	
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
-	public BoundedVoxelBox(BoundingBox BoundingBox, VoxelBoxFactoryTypeBound<T> factory) {
+	public BoundedVoxelBox(BoundingBox bbox, VoxelBoxFactoryTypeBound<T> factory) {
 		super();
-		this.BoundingBox = BoundingBox;
-		this.voxelBox = factory.create( BoundingBox.extnt() );
+		this.boundingBox = bbox;
+		this.voxelBox = factory.create( bbox.extnt() );
 		assert(this.voxelBox.extnt().getZ() >0);
 		assert(sizesMatch());
 	}
 	
 	public BoundedVoxelBox(VoxelBox<T> voxelBox ) {
-		this.BoundingBox = new BoundingBox( voxelBox.extnt() );
+		this.boundingBox = new BoundingBox( voxelBox.extnt() );
 		this.voxelBox = voxelBox;
 	}
 	
 	public BoundedVoxelBox(BoundingBox BoundingBox, VoxelBox<T> voxelBox ) {
-		this.BoundingBox = BoundingBox;
+		this.boundingBox = BoundingBox;
 		this.voxelBox = voxelBox;
 	}
 	
 	// Copy constructor
 	public BoundedVoxelBox(BoundedVoxelBox<T> src) {
 		super();
-		this.BoundingBox = new BoundingBox(src.getBoundingBox());
+		this.boundingBox = new BoundingBox(src.getBoundingBox());
 		assert( src.voxelBox.extnt().getZ() > 0 );
 		this.voxelBox = src.voxelBox.duplicate();
 		assert( this.voxelBox.extnt().equals( src.voxelBox.extnt() ));
@@ -90,7 +92,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	public boolean equalsDeep( BoundedVoxelBox<?> other) {
 		
-		if(!BoundingBox.equals(other.BoundingBox)) {
+		if(!boundingBox.equals(other.boundingBox)) {
 			return false;
 		}
 		if(!voxelBox.equalsDeep(other.voxelBox)) {
@@ -110,21 +112,21 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox<T> flattenZ() {
-		BoundingBox bboxNew = new BoundingBox(this.BoundingBox);
+		BoundingBox bboxNew = new BoundingBox(this.boundingBox);
 		bboxNew.flattenZ();
 		return new BoundedVoxelBox<>( bboxNew, voxelBox.maxIntensityProj() );
 	}
 	
 	public BoundedVoxelBox<T> growToZ( int sz, VoxelBoxFactoryTypeBound<T> factory ) {
-		assert(this.BoundingBox.extnt().getZ()==1);
+		assert(this.boundingBox.extnt().getZ()==1);
 		assert(this.voxelBox.extnt().getZ()==1);
 		
-		BoundingBox bboxNew = new BoundingBox(this.BoundingBox);
+		BoundingBox bboxNew = new BoundingBox(this.boundingBox);
 		bboxNew.extnt().setZ(sz);
 		
 		VoxelBox<T> buffer = factory.create(bboxNew.extnt());
 		
-		Extent e = this.BoundingBox.extnt();
+		Extent e = this.boundingBox.extnt();
 		BoundingBox bboxSrc = new BoundingBox(e);
 		
 		// we copy in one by one
@@ -184,7 +186,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Extent clipRegion ) {
 		BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
 		relBox.getCrnrMin().scale(-1);
-		relBox.getCrnrMin().add( BoundingBox.getCrnrMin() );
+		relBox.getCrnrMin().add( boundingBox.getCrnrMin() );
 		return relBox;
 	}
 
@@ -201,11 +203,11 @@ public class BoundedVoxelBox<T extends Buffer> {
 	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Extent clipRegion ) {
 		
 		Point3i negClip = new Point3i(neg);
-		negClip.setX( clipNeg(BoundingBox.getCrnrMin().getX(), neg.getX()));
-		negClip.setY( clipNeg(BoundingBox.getCrnrMin().getY(), neg.getY()));
-		negClip.setZ( clipNeg(BoundingBox.getCrnrMin().getZ(), neg.getZ()));
+		negClip.setX( clipNeg(boundingBox.getCrnrMin().getX(), neg.getX()));
+		negClip.setY( clipNeg(boundingBox.getCrnrMin().getY(), neg.getY()));
+		negClip.setZ( clipNeg(boundingBox.getCrnrMin().getZ(), neg.getZ()));
 		
-		Point3i bboxMax = BoundingBox.calcCrnrMax();
+		Point3i bboxMax = boundingBox.calcCrnrMax();
 		
 		int maxPossibleX;
 		int maxPossibleY;
@@ -258,7 +260,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		this.voxelBox.copyPixelsTo(new BoundingBox(e), bufferNew, new BoundingBox(grownBox.getCrnrMin(),e)  );
 		
 		// We create a new bounding box
-		Point3i crnrMinNew = new Point3i( this.BoundingBox.getCrnrMin() );
+		Point3i crnrMinNew = new Point3i( this.boundingBox.getCrnrMin() );
 		crnrMinNew.sub( grownBox.getCrnrMin() );
 		
 		BoundingBox bbo = new BoundingBox(crnrMinNew, grownBox.extnt());
@@ -273,12 +275,12 @@ public class BoundedVoxelBox<T extends Buffer> {
 		BoundingBox bboxIntersect = omCompare1.getBoundingBox().intersectCreateNew( omCompare2.getBoundingBox(), dim.getExtnt() );
 
 		// We calculate a bounding box, which we write into in the omDest
-		Point3i pntIntersectRelToSrc = bboxIntersect.relPosTo(BoundingBox);
+		Point3i pntIntersectRelToSrc = bboxIntersect.relPosTo(boundingBox);
 		BoundingBox bboxAssgn = new BoundingBox(pntIntersectRelToSrc,bboxIntersect.extnt());
 		
 		// We clip this bounding box against the scene, as it can contain negative co-ordinates
 		//  clipped stores the shift that occurs
-		Point3i clipped = bboxAssgn.clipTo(BoundingBox.extnt());
+		Point3i clipped = bboxAssgn.clipTo(boundingBox.extnt());
 		
 		// The corner we start from
 		Point3i maskRelCrnr = bboxIntersect.relPosTo(omCompare2.getBoundingBox());
@@ -306,10 +308,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	
-	public BoundedVoxelBox<T> scaleNew( double ratioX, double ratioY, Interpolator interpolator ) {
+	public BoundedVoxelBox<T> scaleNew( ScaleFactor sf, Interpolator interpolator ) {
 		
-		int resizedX = (int) (ratioX * BoundingBox.extnt().getX());
-		int resizedY = (int) (ratioY * BoundingBox.extnt().getY());
+		int resizedX = ScaleFactorUtilities.multiplyAsInt(sf.getX(), boundingBox.extnt().getX());
+		int resizedY = ScaleFactorUtilities.multiplyAsInt(sf.getY(), boundingBox.extnt().getY());
 
 		resizedX = Math.max(resizedX, 1);
 		resizedY = Math.max(resizedY, 1);
@@ -317,9 +319,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 		// Assumes that the extent associated with the BoundingBox is the same as the extent associated with the voxelBox..... is this always true?
 		VoxelBox<T> voxelBoxOut = voxelBox.resizeXY( resizedX, resizedY, interpolator );
 		
-		BoundingBox bboxNew = new BoundingBox(BoundingBox);
+		BoundingBox bboxNew = new BoundingBox(boundingBox);
 		
-		bboxNew.scaleXYPos(ratioX, ratioY);
+		bboxNew.scaleXYPos(sf);
 		
 		bboxNew.setExtnt( new Extent(voxelBoxOut.extnt()) );
 		
@@ -327,12 +329,16 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 
-	public void scale( double ratioX, double ratioY, Interpolator interpolator ) {
-		BoundingBox.scaleXYPos(ratioX, ratioY);
+	public void scale( ScaleFactor sf, Interpolator interpolator ) {
+		boundingBox.scaleXYPos(sf);
 		// Assumes that the extent associated with the BoundingBox is the same as the extent associated with the voxelBox..... is this always true?
-		VoxelBox<T> voxelBoxOut = voxelBox.resizeXY( (int) (BoundingBox.extnt().getX() * ratioX), (int) (BoundingBox.extnt().getY()*ratioY), interpolator );
+		VoxelBox<T> voxelBoxOut = voxelBox.resizeXY(
+			ScaleFactorUtilities.multiplyAsInt(sf.getX(), boundingBox.extnt().getX()),
+			ScaleFactorUtilities.multiplyAsInt(sf.getY(), boundingBox.extnt().getY()),
+			interpolator
+		);
 		
-		BoundingBox.setExtnt( new Extent(voxelBoxOut.extnt()) );
+		boundingBox.setExtnt( new Extent(voxelBoxOut.extnt()) );
 		voxelBox = voxelBoxOut;
 	}
 	
@@ -345,14 +351,14 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox<T> createMaxIntensityProjection() {
-		BoundingBox bboxNew = new BoundingBox(BoundingBox);
+		BoundingBox bboxNew = new BoundingBox(boundingBox);
 		bboxNew.convertToMaxIntensityProj();
 		return new BoundedVoxelBox<>(bboxNew,voxelBox.maxIntensityProj());
 	}
 	
 	
 	public void convertToMaxIntensityProjection() {
-		BoundingBox.convertToMaxIntensityProj();
+		boundingBox.convertToMaxIntensityProj();
 		voxelBox = voxelBox.maxIntensityProj();
 	}
 	
@@ -363,11 +369,11 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundingBox getBoundingBox() {
-		return BoundingBox;
+		return boundingBox;
 	}
 
 	public void setBoundingBox(BoundingBox BoundingBox) {
-		this.BoundingBox = BoundingBox;
+		this.boundingBox = BoundingBox;
 	}
 
 	public VoxelBox<T> getVoxelBox() {
@@ -416,7 +422,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	// Creates an ObjMask with a subrange of the slices. zMin inclusive, zMax inclusive
 	// Note, no new voxels are created
 	public BoundedVoxelBox<T> createVirtualSubrange(int zMin, int zMax, VoxelBoxFactoryTypeBound<T> factory) throws CreateException {
-		BoundingBox target = new BoundingBox(BoundingBox);
+		BoundingBox target = new BoundingBox(boundingBox);
 		
 		if( !target.containsZ(zMin)) {
 			throw new CreateException("zMin outside range");
@@ -425,7 +431,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			throw new CreateException("zMax outside range");
 		}
 		
-		int relZ = zMin - BoundingBox.getCrnrMin().getZ();
+		int relZ = zMin - boundingBox.getCrnrMin().getZ();
 		target.getCrnrMin().setZ(zMin);
 		target.extnt().setZ(zMax-zMin+1);
 		
@@ -436,12 +442,12 @@ public class BoundedVoxelBox<T extends Buffer> {
 
 	public BoundedVoxelBox<T> createBufferAvoidNew(BoundingBox bbox) throws CreateException {
 		
-		if (!BoundingBox.contains(bbox)) {
+		if (!boundingBox.contains(bbox)) {
 			throw new CreateException("Source box does not contain target box");
 		}
 		
 		BoundingBox target = new BoundingBox(bbox);
-		target.setCrnrMin( target.relPosTo( BoundingBox) );
+		target.setCrnrMin( target.relPosTo( boundingBox) );
 		return new BoundedVoxelBox<>(
 			bbox,
 			voxelBox.createBufferAvoidNew(target)
@@ -458,12 +464,12 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 */
 	public BoundedVoxelBox<T> createBufferAlwaysNew(BoundingBox bbox) throws CreateException {
 
-		if (!BoundingBox.contains(bbox)) {
+		if (!boundingBox.contains(bbox)) {
 			throw new CreateException("Source box does not contain target box");
 		}
 		
 		BoundingBox target = new BoundingBox(bbox);
-		target.setCrnrMin( target.relPosTo( BoundingBox) );
+		target.setCrnrMin( target.relPosTo( boundingBox) );
 		return new BoundedVoxelBox<>(
 			bbox,
 			voxelBox.createBufferAlwaysNew(target)
@@ -483,13 +489,13 @@ public class BoundedVoxelBox<T extends Buffer> {
 	public BoundedVoxelBox<T> createIntersectingBufferAlwaysNew(BoundingBox bbox)
 			throws CreateException {
 		
-		BoundingBox bboxIntersect = new BoundingBox(BoundingBox);
+		BoundingBox bboxIntersect = new BoundingBox(boundingBox);
 		if (!bboxIntersect.intersect(bbox,true)) {
 			throw new CreateException("Source box does not intersect with target box");
 		}
 		
 		// Find the difference between the current bounding box and our new one
-		Point3i relPosToSrc = bboxIntersect.relPosTo( this.BoundingBox );
+		Point3i relPosToSrc = bboxIntersect.relPosTo( this.boundingBox );
 		Point3i relPosToDest = bboxIntersect.relPosTo( bbox );
 		
 		BoundingBox bboxRelSrc = new BoundingBox( relPosToSrc, bboxIntersect.extnt() );
@@ -507,7 +513,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	// If keepZ is true the slice keeps its z coordinate, otherwise its set to 0
 	public BoundedVoxelBox<T> extractSlice(int z, boolean keepZ) {
 		
-		BoundingBox bboNew = new BoundingBox(BoundingBox);
+		BoundingBox bboNew = new BoundingBox(boundingBox);
 		bboNew.flattenZ();
 		
 		if (keepZ) {

@@ -26,7 +26,6 @@ package org.anchoranalysis.feature.nrg;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -39,13 +38,13 @@ public class NRGStackWithParams {
 	private NRGStack nrgStack;
 	private KeyValueParams params;
 
-	public NRGStackWithParams( Chnl chnl ) throws CreateException {
+	public NRGStackWithParams( Chnl chnl ) {
 		super();
 		this.nrgStack = new NRGStack(chnl);
 		this.params = new KeyValueParams();
 	}
 	
-	public NRGStackWithParams( NRGStack nrgStack ) throws CreateException {
+	public NRGStackWithParams( NRGStack nrgStack ) {
 		super();
 		this.nrgStack = nrgStack;
 		this.params = new KeyValueParams();
@@ -57,12 +56,12 @@ public class NRGStackWithParams {
 		this.params = params;
 	}
 	
-	public NRGStackWithParams( Stack stackIn, KeyValueParams params ) throws CreateException {
+	public NRGStackWithParams( Stack stackIn, KeyValueParams params ) {
 		this.nrgStack = new NRGStack( stackIn );
 		this.params = params;
 	}
 	
-	public NRGStackWithParams( Stack stackIn ) throws CreateException {
+	public NRGStackWithParams( Stack stackIn ) {
 		this.nrgStack = new NRGStack( stackIn );
 		this.params = new KeyValueParams();
 	}
@@ -99,6 +98,8 @@ public class NRGStackWithParams {
 	public NRGStackWithParams copyChangeParams( KeyValueParams paramsToAssign ) {
 		return new NRGStackWithParams(nrgStack, paramsToAssign );
 	}
-	
-	
+
+	public Chnl getChnl(int index) {
+		return nrgStack.getChnl(index);
+	}
 }

@@ -92,10 +92,8 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
 	
 	@Override
 	public void friendlyMessageHierarchy( Writer writer, int wordWrapLimit, boolean showExceptionNames ) throws IOException {
-		HelperFriendlyFormatting.friendlyMessageHierarchical(this,writer, wordWrapLimit, showExceptionNames );
+		HelperFriendlyFormatting.friendlyMessageHierarchical(this, writer, wordWrapLimit, showExceptionNames );
 	}
-	
-	
 	
 	/**
 	 * Prints a stack trace of the current exception to a string

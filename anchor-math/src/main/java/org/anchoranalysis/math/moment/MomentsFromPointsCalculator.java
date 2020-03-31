@@ -1,5 +1,7 @@
 package org.anchoranalysis.math.moment;
 
+import java.util.ArrayList;
+
 /*
  * #%L
  * anchor-math
@@ -105,6 +107,7 @@ public class MomentsFromPointsCalculator {
 	
 	public MomentsFromPointsCalculator duplicate() {
 		MomentsFromPointsCalculator out = new MomentsFromPointsCalculator();
+		out.list = new ArrayList<>();
 		for( int i=0; i<3; i++ ) {
 			out.list.add( list.get(i).duplicate() );
 		}

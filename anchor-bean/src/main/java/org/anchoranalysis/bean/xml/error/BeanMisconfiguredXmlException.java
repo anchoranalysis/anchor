@@ -1,5 +1,7 @@
 package org.anchoranalysis.bean.xml.error;
 
+import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
+
 /*
  * #%L
  * anchor-bean
@@ -39,7 +41,7 @@ import org.apache.commons.configuration.ConfigurationRuntimeException;
  * @author Owen Feehan
  *
  */
-public class BeanMisconfiguredXmlException extends BeanCombinableException {
+public class BeanMisconfiguredXmlException extends AnchorCombinableException {
 
 	/**
 	 * 

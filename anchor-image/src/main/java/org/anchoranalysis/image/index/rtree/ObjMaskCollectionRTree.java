@@ -45,6 +45,10 @@ public class ObjMaskCollectionRTree {
 	private BBoxRTree delegate;
 	private ObjMaskCollection objs;
 	
+	public ObjMaskCollectionRTree( List<ObjMask> list ) {
+		this( new ObjMaskCollection(list) );
+	}
+	
 	public ObjMaskCollectionRTree( ObjMaskCollection objs ) {
 		this.objs = objs;
 		delegate = new BBoxRTree( objs.size() );

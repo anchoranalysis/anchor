@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.index.container.bridge;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-core
@@ -53,10 +55,14 @@ public abstract class BoundedIndexContainerBridge <H,E> implements IBoundedIndex
 	public E get(int index) throws GetOperationFailedException {
 		
 		H internalState = delegate.get(index);
-		return bridge(index, internalState);
+		try {
+			return bridge(index, internalState);
+		} catch (BridgeElementException e) {
+			throw new GetOperationFailedException(e);
+		}
 	}
 	
-	protected abstract E bridge(int index, H internalState) throws GetOperationFailedException;
+	protected abstract E bridge(int index, H internalState) throws BridgeElementException;
 	
 	@Override
 	public void addBoundChangeListener(BoundChangeListener cl) {

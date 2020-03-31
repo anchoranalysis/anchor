@@ -154,7 +154,7 @@ public class GroupedResultsVectorCollection {
 				
 				ResultsVectorCollection resultsVectorCollection = groupMap.get(group);
 				
-				if( resultsVectorCollection.size()==0 ) {
+				if( resultsVectorCollection.size()==0) {
 					continue;
 				}
 				
@@ -191,6 +191,8 @@ public class GroupedResultsVectorCollection {
 		LogErrorReporter logErrorReporter
 	) throws AnchorIOException {
 		
+		assert(group!=null);
+		
 		BoundOutputManagerRouteErrors outputManagerGroup = outputManager.resolveFolder(
 			group.getUniqueName()
 		);
@@ -220,6 +222,8 @@ public class GroupedResultsVectorCollection {
 			writeKeyValueParams( featuresAggregate, rv, outputManagerGroup, logErrorReporter );
 
 			if (csvWriterAggregate!=null) {
+				assert(rv!=null);
+				
 				// If we write aggregate-feature-results to a single CSV file
 				csvWriterAggregate.addResultsVectorWithGroup(group, rv, false);
 			}

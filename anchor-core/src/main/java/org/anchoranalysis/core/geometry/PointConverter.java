@@ -35,8 +35,16 @@ public class PointConverter {
 
 	// START singular points
 	
+	public static Point2i intFromDouble(Point2d p) {
+		return new Point2i( (int) p.getX(), (int) p.getY() );
+	}
+	
 	public static Point3i intFromDouble(Point3d p) {
 		return new Point3i(p);
+	}
+	
+	public static Point2d doubleFromFloat(Point2f p) {
+		return new Point2d( p.getX(), p.getY() );
 	}
 	
 	public static Point3d doubleFromFloat(Point3f p) {

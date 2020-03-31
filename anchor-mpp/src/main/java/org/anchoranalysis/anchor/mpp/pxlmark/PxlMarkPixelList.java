@@ -32,6 +32,8 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
+import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryPixelList;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -44,9 +46,6 @@ import org.anchoranalysis.image.voxel.VoxelIntensityList;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromList;
-
-import ch.ethz.biol.cell.imageprocessing.pixellist.IndexByChnl;
-import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactoryPixelList;
 
 public class PxlMarkPixelList extends PxlMark {
 

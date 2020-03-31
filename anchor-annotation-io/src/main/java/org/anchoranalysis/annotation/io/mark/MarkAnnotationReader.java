@@ -32,14 +32,13 @@ package org.anchoranalysis.annotation.io.mark;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.io.CfgDeserializer;
+import org.anchoranalysis.mpp.io.cfg.CfgDeserializer;
 
 public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 

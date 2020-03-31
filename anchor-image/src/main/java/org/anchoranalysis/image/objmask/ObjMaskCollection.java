@@ -44,6 +44,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -249,9 +250,9 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		}
 	}
 	
-	public void scale( double ratioX, double ratioY, Interpolator interpolator ) throws OperationFailedException {
+	public void scale( ScaleFactor sf, Interpolator interpolator ) throws OperationFailedException {
 		for (ObjMask mask : this) {
-			mask.scale(ratioX, ratioY, interpolator);
+			mask.scale(sf, interpolator);
 		}
 	}
 	

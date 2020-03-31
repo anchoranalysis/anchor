@@ -102,15 +102,12 @@ public abstract class OverlayWriter {
 	public abstract void writePrecalculatedOverlays( List<PrecalcOverlay> precalculatedMasks, ColoredOverlayCollection overlays, ImageDim dim, RGBStack background, IDGetter<Overlay> idGetter, IDGetter<ObjMaskWithProperties> idGetterColor, BoundingBox bboxContainer ) throws OperationFailedException;
 	
 	public abstract void writeOverlaysIfIntersects( ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter, List<BoundingBox> intersectList ) throws OperationFailedException;
-	
-
-	
-	
+		
 	// Does computationally-intensive preprocessing (so it can be cached). Any object can be used, but there should be exactly one object
 	//  per Mark in the cfg, in the same order as the Cfg is inputted
 	public static List<PrecalcOverlay> precalculate(ColoredOverlayCollection coc, OverlayWriter maskWriter, ImageDim dim, BinaryValuesByte bvOut) throws CreateException {
 		
-		List<PrecalcOverlay> listOut = new ArrayList<PrecalcOverlay>();
+		List<PrecalcOverlay> listOut = new ArrayList<>();
 		
 		IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<Overlay>();
 		
@@ -120,9 +117,10 @@ public abstract class OverlayWriter {
 			ObjMaskWithProperties om = ol.createObjMask(maskWriter, dim, bvOut);
 			
 			om.setProperty("colorID", colorIDGetter.getID(ol, i));
-			
-			PrecalcOverlay cfgPrecalc = createPrecalc( maskWriter, om, dim );
-			listOut.add( cfgPrecalc );
+ 
+			listOut.add(
+				createPrecalc( maskWriter, om, dim )
+			);
 		}
 
 		return listOut;
@@ -130,7 +128,6 @@ public abstract class OverlayWriter {
 	
 	
 	public static PrecalcOverlay createPrecalc( OverlayWriter maskWriter, ObjMaskWithProperties om, ImageDim dim ) throws CreateException {
-		Object writerPrecalc = maskWriter.getObjMaskWriter().precalculate(om, dim);
-		return new PrecalcOverlay(om,writerPrecalc);
+		return maskWriter.getObjMaskWriter().precalculate(om, dim);
 	}
 }

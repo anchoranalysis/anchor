@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  * @author FEEHANO
  *
  */
-public class CountIntersectingPixelsRegionMembershipMask {
+class CountIntersectingPixelsRegionMembershipMask {
 	
 	private byte regionMembershipFlag;
 	

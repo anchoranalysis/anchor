@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
-import org.anchoranalysis.anchor.mpp.bounds.Bound;
-import org.anchoranalysis.anchor.mpp.bounds.BoundUnitless;
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
+import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
 
 /*
  * #%L

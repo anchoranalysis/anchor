@@ -29,9 +29,9 @@ package org.anchoranalysis.image.experiment.bean.seed;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -76,8 +76,10 @@ public class SeedFinderMIP<S> extends SeedFinder<S> {
 			SeedCollection seeds = seedFinder.findSeeds(stackCollectionMIP, objMaskProvider, expArgs, keyValueParams, logger, outputManager, sharedState);
 			seeds.growToZ( sd.getZ() );
 			return seeds;
-		} catch (OptionalOperationUnsupportedException | GetOperationFailedException e) {
+		} catch (OptionalOperationUnsupportedException e) {
 			throw new SeedFinderException(e);
+		} catch (NamedProviderGetException e) {
+			throw new SeedFinderException(e.summarize());
 		}
 	}
 

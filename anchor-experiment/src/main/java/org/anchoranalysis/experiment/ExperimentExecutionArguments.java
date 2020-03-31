@@ -59,6 +59,12 @@ public class ExperimentExecutionArguments {
 	
 	
 	/**
+	 * A directory indicating where models can be located
+	 */
+	private Path modelDirectory;
+	
+	
+	/**
 	 * If non-null, a glob that is applied on inputDirectory
 	 */
 	private String inputFilterGlob;
@@ -175,5 +181,13 @@ public class ExperimentExecutionArguments {
 
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
+	}
+
+	public Path getModelDirectory() {
+		return modelDirectory;
+	}
+
+	public void setModelDirectory(Path modelDirectory) {
+		this.modelDirectory = modelDirectory;
 	}
 }

@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 
@@ -47,18 +48,17 @@ public class NullWriter extends ObjMaskWriter {
 	private static final long serialVersionUID = -3514576997387450973L;
 
 	@Override
-	public Object precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {
-		return mask;
-	}
+		return new PrecalcOverlay(mask) {
 
-	@Override
-	public void writePrecalculatedMask(
-			ObjMaskWithProperties maskOrig,
-			Object precalculatedObj, RGBStack stack,
-			IDGetter<ObjMaskWithProperties> idGetter,
-			IDGetter<ObjMaskWithProperties> colorIDGetter, int iter,
-			ColorIndex colorIndex, BoundingBox bboxContainer)
-			throws OperationFailedException {
+			@Override
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
+					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+					BoundingBox bboxContainer) throws OperationFailedException {
+				// Nothing to DO
+			}
+			
+		};
 	}
 }

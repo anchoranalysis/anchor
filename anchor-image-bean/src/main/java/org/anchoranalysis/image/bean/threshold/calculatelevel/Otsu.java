@@ -30,25 +30,25 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+
+/**
+ * Performs Otsu auto-thresholding
+ * 
+ * <p>This performs binary thresholding into foreground and background.</p>
+ * 
+ * <p>This minimizes intra-class intensity variance, or equivalently, maximizes inter-class variance.</p>
+ * 
+ * <@see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method>Otsu's method on wikipedia</a>.</p>
+ * 
+ * @author owen
+ *
+ */
 public class Otsu extends CalculateLevel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	public static double betweenClassVariance( long runningSum, long runningCount, long totalSum, long totalCount ) {
-
-		double denom = ((double) runningCount) * (totalCount - runningCount);
-
-		if (denom==0){
-			return Double.NaN;
-		}
-		
-		double num = ((double)runningCount / totalCount ) * totalSum - runningSum;
-		return (num * num) / denom;
-	}
 
 	@Override
 	public int calculateLevel( Histogram hist ) {
@@ -94,5 +94,17 @@ public class Otsu extends CalculateLevel {
 	public int hashCode() {
 		return new HashCodeBuilder()
 			.toHashCode();
+	}
+	
+	private static double betweenClassVariance( long runningSum, long runningCount, long totalSum, long totalCount ) {
+
+		double denom = ((double) runningCount) * (totalCount - runningCount);
+
+		if (denom==0){
+			return Double.NaN;
+		}
+		
+		double num = ((double)runningCount / totalCount ) * totalSum - runningSum;
+		return (num * num) / denom;
 	}
 }

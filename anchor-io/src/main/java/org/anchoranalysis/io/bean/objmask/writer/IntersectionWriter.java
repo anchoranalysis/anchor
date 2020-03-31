@@ -27,6 +27,7 @@ package org.anchoranalysis.io.bean.objmask.writer;
  */
 
 import org.anchoranalysis.core.color.RGBColor;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -35,9 +36,17 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 class IntersectionWriter {
 
 	// Writes only to the intersection of mask and stack (positioned at stackBBox)
-	public static void writeRGBMaskIntersection( ObjMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox ) {
+	public static void writeRGBMaskIntersection( ObjMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox ) throws OperationFailedException {
 
-		assert( stackBBox.hasIntersection( mask.getBoundingBox() ));
+		if( !stackBBox.hasIntersection( mask.getBoundingBox() )) {
+			throw new OperationFailedException(
+				String.format(
+					"The bounding-box of the mask (%s) does not intersect with the stack (%s)",
+					mask.getBoundingBox().toString(),
+					stackBBox.toString()
+				)
+			);
+		}
 		// Intersection of the mask and stackBBox
 		BoundingBox intersection = mask.getBoundingBox().intersectCreateNewNoClip(stackBBox);
 		

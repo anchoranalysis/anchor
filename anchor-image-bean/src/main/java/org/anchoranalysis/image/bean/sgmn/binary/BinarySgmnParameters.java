@@ -31,7 +31,7 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-// Paramters that are optionally associated with BinarySgmn
+/** Parameters that are optionally associated with BinarySgmn */
 public class BinarySgmnParameters {
 
 	private VoxelBox<?> voxelBoxGradient;

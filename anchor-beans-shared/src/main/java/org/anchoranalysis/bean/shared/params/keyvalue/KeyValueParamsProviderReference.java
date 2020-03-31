@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 
 public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
@@ -52,8 +52,8 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 		super.onInit(so);
 		try {
 			params = so.getNamedKeyValueParamsCollection().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 

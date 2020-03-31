@@ -37,17 +37,9 @@ public abstract class FeatureNRGStackParams extends FeatureCalcParamsWithImagePa
 
 	private NRGStackWithParams nrgStack;
 	
-	public NRGStackWithParams getNrgStack() {
-		return nrgStack;
-	}
-	
 	/** Converts to featureStackParams */
 	public FeatureStackParams featureStackParams() {
 		return new FeatureStackParams(nrgStack.getNrgStack());
-	}
-
-	public void setNrgStack(NRGStackWithParams nrgStack) {
-		this.nrgStack = nrgStack;
 	}
 
 	@Override
@@ -94,4 +86,11 @@ public abstract class FeatureNRGStackParams extends FeatureCalcParamsWithImagePa
 		return nrgStack.getParams();
 	}
 
+	public void setNrgStack(NRGStackWithParams nrgStack) {
+		this.nrgStack = nrgStack;
+	}
+		
+	public NRGStackWithParams getNrgStack() {
+		return nrgStack;
+	}
 }

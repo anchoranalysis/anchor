@@ -31,9 +31,9 @@ import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.anchor.mpp.bean.bounds.BoundCalculator;
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
+import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-import org.anchoranalysis.anchor.mpp.bounds.Bound;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
@@ -89,7 +89,7 @@ public class MarkCircle extends MarkAbstractPosition implements Serializable {
     
 	@Override
 	public String getName() {
-		return new String("circle");
+		return "circle";
 	}
 
     public boolean randomizeMarks( RandomNumberGenerator re, ImageRes sr, BoundCalculator boundGenerator ) {

@@ -1,6 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
-import org.anchoranalysis.anchor.mpp.mark.MarkPointList;
+import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -33,8 +34,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 
 /** If one arbitrarily point overlaps between two MarkPointList then TRUE, otherwise FALSE
  * 

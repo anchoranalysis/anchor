@@ -1,6 +1,7 @@
 package org.anchoranalysis.annotation;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 /*-
  * #%L
@@ -31,8 +32,6 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public abstract class AnnotationWithCfg extends Annotation {
 	

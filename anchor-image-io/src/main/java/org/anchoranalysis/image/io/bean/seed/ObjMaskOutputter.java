@@ -27,7 +27,7 @@ package org.anchoranalysis.image.io.bean.seed;
  */
 
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskWithBoundingBoxGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -50,7 +50,7 @@ public class ObjMaskOutputter extends SeedCollectionOutputter {
 			outputManager,
 			"seeds",
 			"seeds",
-			() -> new ObjMaskWithBoundingBoxGenerator( res ),
+			() -> new ObjWithBoundingBoxGenerator( res ),
 			seeds.createMasks().asList(),
 			true
 		);

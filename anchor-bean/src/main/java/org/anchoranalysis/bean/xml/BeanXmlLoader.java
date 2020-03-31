@@ -33,10 +33,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.anchoranalysis.bean.error.BeanStrangeException;
-import org.anchoranalysis.bean.xml.error.BeanCombinableException;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.bean.xml.error.HelperFriendlyExceptions;
 import org.anchoranalysis.bean.xml.error.LocalisedBeanException;
+import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -232,8 +232,8 @@ public class BeanXmlLoader {
     		Throwable cause = HelperFriendlyExceptions.maybeCreateUserFriendlyException(e.getCause());
     		
     		// If we can summarise the bean, then we do
-    		if( cause instanceof BeanCombinableException ) {
-    			BeanCombinableException causeCast = (BeanCombinableException) cause;
+    		if( cause instanceof AnchorCombinableException ) {
+    			AnchorCombinableException causeCast = (AnchorCombinableException) cause;
     			cause = causeCast.summarize();
     		}
 			

@@ -1,5 +1,6 @@
 package org.anchoranalysis.anchor.overlay.bean.objmask.writer;
 
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
@@ -40,6 +41,13 @@ import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
+/**
+ * Writes an object-mask to the file-system
+ * 
+ * @author owen
+ *
+ * @param <T> pre-calculate object type
+ */
 public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 
 	/**
@@ -69,15 +77,14 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	) throws OperationFailedException {
 		
 		try {
-			Object precalculatedObj = precalculate( mask, stack.getDimensions() );
-			writePrecalculatedMask(
-				mask,
-				precalculatedObj,
+			PrecalcOverlay precalculatedObj = precalculate( mask, stack.getDimensions() );
+			precalculatedObj.writePrecalculatedMask(
 				stack,
 				idGetter,
 				colorIDGetter,
 				iter,
-				colorIndex, bboxContainer
+				colorIndex,
+				bboxContainer
 			);
 			
 		} catch (CreateException e) {
@@ -86,18 +93,7 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	}
 	
 	// Does computational preprocessing (so it can be cached). Outputs a collection of ObjMasks that are later re used
-	public abstract Object precalculate( ObjMaskWithProperties mask, ImageDim dim ) throws CreateException;
-	
-	// Writes the pre-processed mask
-	public abstract void writePrecalculatedMask(
-		ObjMaskWithProperties maskOrig,
-		Object precalculatedObj,
-		RGBStack stack,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter,
-		int iter,
-		ColorIndex colorIndex, BoundingBox bboxContainer
-	) throws OperationFailedException;
+	public abstract PrecalcOverlay precalculate( ObjMaskWithProperties mask, ImageDim dim ) throws CreateException;
 		
 	public void write(
 		ObjMaskWithPropertiesCollection masks,

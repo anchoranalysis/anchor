@@ -29,8 +29,8 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 
 public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<DestType> {
 
@@ -56,8 +56,12 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 	}
 
 	@Override
-	public DestType getException(String key) throws GetOperationFailedException {
-		return bridge.bridgeElement( srcProvider.getNull(key) );
+	public DestType getException(String key) throws NamedProviderGetException {
+		try {
+			return bridge.bridgeElement( srcProvider.getNull(key) );
+		} catch (BridgeElementException e) {
+			throw new NamedProviderGetException(key, e);
+		}
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 	}
 
 	@Override
-	public DestType getNull(String key) throws GetOperationFailedException {
+	public DestType getNull(String key) throws NamedProviderGetException {
 		SrcType srcVal = srcProvider.getNull(key);
 		
 		if (!bridgeNulls && srcVal==null) {
@@ -74,8 +78,10 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 			return null;
 		}
 		
-		return bridge.bridgeElement( srcVal );
+		try {
+			return bridge.bridgeElement( srcVal );
+		} catch (BridgeElementException e) {
+			throw new NamedProviderGetException(key, e);
+		}
 	}
-
-
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.index;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-core
@@ -50,6 +52,10 @@ public class ITypedGetFromIndexBridge<E,H> implements ITypedGetFromIndex<E> {
 
 	@Override
 	public E get(int index) throws GetOperationFailedException {
-		return bridge.bridgeElement( index, delegate.get(index) );
+		try {
+			return bridge.bridgeElement( index, delegate.get(index) );
+		} catch (BridgeElementException e) {
+			throw new GetOperationFailedException(e);
+		}
 	}
 }

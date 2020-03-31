@@ -4,7 +4,7 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Point3d;

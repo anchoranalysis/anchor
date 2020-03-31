@@ -95,9 +95,6 @@ public class OutlineTraverser {
 		}
 	
 		processQueue( queue, visitedPixels );
-		
-		// To check that the points are all connected
-		//assert( PointsListNghbUtilities.areAllPointsInBigNghb(listOutRel) );
 				
 		return visitedPixels.combineToOnePath( omOutline.getBoundingBox().extnt() );
 	

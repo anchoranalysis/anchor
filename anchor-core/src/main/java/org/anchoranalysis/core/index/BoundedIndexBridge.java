@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.index;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-core
@@ -39,12 +41,16 @@ public class BoundedIndexBridge<T> implements IObjectBridge<Integer, T> {
 	}
 
 	@Override
-	public T bridgeElement(Integer sourceObject) throws GetOperationFailedException {
+	public T bridgeElement(Integer sourceObject) throws BridgeElementException {
 		int index = cntr.previousEqualIndex(sourceObject);
 		if (index==-1) {
-			throw new GetOperationFailedException("Cannot find a previousEqualIndex in the cntr");
+			throw new BridgeElementException("Cannot find a previousEqualIndex in the cntr");
 		}
-		return cntr.get( index );
+		try {
+			return cntr.get( index );
+		} catch (GetOperationFailedException e) {
+			throw new BridgeElementException(e);
+		}
 	}
 
 	// Updates the cntr associated with the bridge

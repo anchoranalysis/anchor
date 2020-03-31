@@ -53,7 +53,7 @@ class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
 		//assert(cache!=null);
 		FeatureInitParams paramsCast = (FeatureInitParams) params;
 		if (propertyValue instanceof Feature) {
-			if (paramsCast.getCache().getCache()!=null) {
+			if (paramsCast.getCache()!=null && paramsCast.getCache().getCache()!=null) {
 				paramsCast.getCache().getCache().initFeature( (Feature) propertyValue, (FeatureBase) parent, paramsCast, logger );
 			}
 		}

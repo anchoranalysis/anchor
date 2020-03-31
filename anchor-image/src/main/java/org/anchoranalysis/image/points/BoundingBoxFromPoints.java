@@ -29,16 +29,46 @@ package org.anchoranalysis.image.points;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 
+/**
+ * Creates a bounding-box from one or more points
+ * 
+ * @author owen
+ *
+ */
 public class BoundingBoxFromPoints {
 
-	public static BoundingBox create( List<Point3i> pnts ) throws OperationFailedException {
+	/**
+	 * Create from a list of points
+	 * 
+	 * @param pnts the list
+	 * @return a bounding-box minimally spanning all points
+	 * @throws OperationFailedException if there are zero points
+	 */
+	public static BoundingBox forList( List<Point3i> pnts ) throws OperationFailedException {
 		
 		if (pnts.size()==0) {
 			throw new OperationFailedException("There are 0 points. At least one is required");
+		}
+		
+		return forListWithoutException(pnts);
+	}
+	
+	
+	/**
+	 * Creates for a list of points, but doesn't throw any exception if there are no points.
+	 * 
+	 * @param pnts the list of points
+	 * @return a bounding-box minimally spanning all points or NULL if there are zero points
+	 */
+	public static BoundingBox forListWithoutException( List<Point3i> pnts ) {
+	
+		if (pnts.size()==0) {
+			return null;
 		}
 		
 		// We create a bounding box for these points
@@ -46,6 +76,39 @@ public class BoundingBoxFromPoints {
 		for( int i=1; i<pnts.size(); i++ ) {
 			bbox.add( pnts.get(i) );
 		}
-		return bbox;
+		return bbox;		
+	}
+	
+	
+	/**
+	 * Creates a bounding-box for two unordered points.
+	 * 
+	 * <p>By unordered, it means that no one point must have a value higher than another</p>
+	 * 
+	 * @param pnt1 first-point (arbitrary order)
+	 * @param pnt2 second-point (arbitrary order)
+	 * @return a bounding-box minally spanning the two points
+	 */
+	public static BoundingBox forTwoPoints( Point3d pnt1, Point3d pnt2) {
+		Point3d min = calcMin( pnt1, pnt2 );
+		Point3d max = calcMax( pnt1, pnt2 );
+		return new BoundingBox(min,max);
+	}
+	
+	
+	private static Point3d calcMin( Point3d pnt1, Point3d pnt2 ) {
+		Point3d pnt = new Point3d();
+		pnt.setX( Math.min( pnt1.getX(), pnt2.getX() ));
+		pnt.setY( Math.min( pnt1.getY(), pnt2.getY() ));
+		pnt.setZ( Math.min( pnt1.getZ(), pnt2.getZ() ));
+		return pnt;
+	}
+	
+	private static Point3d calcMax( Point3d pnt1, Point3d pnt2 ) {
+		Point3d pnt = new Point3d();
+		pnt.setX( Math.max( pnt1.getX(), pnt2.getX() ));
+		pnt.setY( Math.max( pnt1.getY(), pnt2.getY() ));
+		pnt.setZ( Math.max( pnt1.getZ(), pnt2.getZ() ));
+		return pnt;
 	}
 }

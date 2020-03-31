@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
 public class ProviderBridge<SrcType extends InitializableBean<?,InitParamType> & Provider<DestType>, DestType, InitParamType extends BeanInitParams> implements IObjectBridge<SrcType, DestType> {
@@ -49,15 +49,12 @@ public class ProviderBridge<SrcType extends InitializableBean<?,InitParamType> &
 	}
 
 	@Override
-	public DestType bridgeElement(SrcType sourceObject)
-			throws GetOperationFailedException {
+	public DestType bridgeElement(SrcType sourceObject) throws BridgeElementException {
 		try {
 			sourceObject.initRecursiveWithInitializer(pi, logger);
 			return sourceObject.create();
-		} catch (CreateException e) {
-			throw new GetOperationFailedException(e);
-		} catch (InitException e) {
-			throw new GetOperationFailedException(e);
+		} catch (CreateException | InitException e) {
+			throw new BridgeElementException(e);
 		}
 	}
 	

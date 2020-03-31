@@ -32,23 +32,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
-
 public class NamedProviderCombine<T> implements INamedProvider<T> {
 
 	private List<INamedProvider<T>> list = new ArrayList<>();
 
 	@Override
-	public T getException(String key) throws GetOperationFailedException {
+	public T getException(String key) throws NamedProviderGetException {
 		T item = getNull(key);
 		if (item==null) {
-			throw new GetOperationFailedException( String.format("Item '%s' cannot be found",key) );
+			throw NamedProviderGetException.nonExistingItem(key);
 		}
 		return item;
 	}
 	
 	@Override
-	public T getNull(String key) throws GetOperationFailedException {
+	public T getNull(String key) throws NamedProviderGetException {
 		
 		for (INamedProvider<T> item : list) {
 			

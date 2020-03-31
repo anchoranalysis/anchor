@@ -37,13 +37,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.anchoranalysis.io.xml.XmlOutputter;
+import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
-import anchor.test.TestLoader;
 
 public class XmlOutputterTest {
 	

@@ -54,7 +54,7 @@ import cern.jet.math.Functions;
 
 import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.*;
 import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.*;
-import static org.anchoranalysis.anchor.mpp.mark.PropertyUtilities.*;
+import static org.anchoranalysis.anchor.mpp.mark.conic.PropertyUtilities.*;
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
 public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISetMarksExplicit  {

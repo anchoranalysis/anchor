@@ -30,7 +30,7 @@ package org.anchoranalysis.anchor.mpp.proposer.visualization;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 
 public class CreateProposeVisualizationList implements ICreateProposalVisualization {
 

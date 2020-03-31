@@ -46,6 +46,7 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.objmask.intersecting.CountIntersectingPixelsBinary;
 import org.anchoranalysis.image.objmask.intersecting.DetermineWhetherIntersectingPixelsBinary;
+import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -69,9 +70,9 @@ public class ObjMask {
 	private BinaryValuesByte bvb = new BinaryValuesByte( (byte) 0, (byte) -1 );
 	
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
-	public ObjMask(BoundingBox BoundingBox) {
+	public ObjMask(BoundingBox bbox) {
 		super();
-		delegate = new BoundedVoxelBox<>(BoundingBox, VoxelBoxFactory.getByte() );
+		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.getByte() );
 	}
 	
 	public ObjMask(BoundedVoxelBox<ByteBuffer> voxelBox) {
@@ -197,11 +198,11 @@ public class ObjMask {
 	}
 
 	// Scales an objMask making sure to create a duplicate first
-	public ObjMask scaleNew(double ratioX, double ratioY, Interpolator interpolator) throws OperationFailedException {
+	public ObjMask scaleNew(ScaleFactor sf, Interpolator interpolator) throws OperationFailedException {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
 			
-			BoundedVoxelBox<ByteBuffer> boxNew = delegate.scaleNew(ratioX, ratioY, interpolator);
+			BoundedVoxelBox<ByteBuffer> boxNew = delegate.scaleNew(sf, interpolator);
 			
 			// We should do a thresholding afterwards to make sure our values correspond to the two binary values
 			if (interpolator!=null && interpolator.isNewValuesPossible()) {
@@ -224,11 +225,11 @@ public class ObjMask {
 	}
 	
 	// Scales an objMask replacing the existing mask
-	public void scale(double ratioX, double ratioY, Interpolator interpolator ) throws OperationFailedException {
+	public void scale(ScaleFactor sf, Interpolator interpolator ) throws OperationFailedException {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
 			
-			delegate.scale(ratioX, ratioY, interpolator );
+			delegate.scale(sf, interpolator );
 			
 			// We should do a thresholding afterwards to make sure our values correspond to the two binry values
 			if (interpolator.isNewValuesPossible()) {

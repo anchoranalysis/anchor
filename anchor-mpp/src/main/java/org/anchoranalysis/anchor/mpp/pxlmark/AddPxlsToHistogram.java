@@ -30,10 +30,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
-
-import ch.ethz.biol.cell.imageprocessing.pixellist.IndexByChnl;
 
 class AddPxlsToHistogram {
 

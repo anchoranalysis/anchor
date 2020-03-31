@@ -1,5 +1,6 @@
 package org.anchoranalysis.bean.store;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 
 /*
@@ -31,7 +32,6 @@ import org.anchoranalysis.core.bridge.IObjectBridge;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
  * 
@@ -55,7 +55,7 @@ class CurriedObjectBridge<S,D> implements Operation<D> {
 	public D doOperation() throws ExecuteException {
 		try {
 			return bridge.bridgeElement(sourceObject);
-		} catch (GetOperationFailedException e) {
+		} catch (BridgeElementException e) {
 			throw new ExecuteException(e);
 		}
 	}

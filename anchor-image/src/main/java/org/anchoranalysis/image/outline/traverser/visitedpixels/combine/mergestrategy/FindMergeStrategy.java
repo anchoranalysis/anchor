@@ -62,7 +62,7 @@ class FindMergeStrategy {
 		int cost = dists[minIndex];
 		
 		// Catch unacceptably high costs early
-		assert( cost <= 10 );
+		//assert( cost <= 10 );
 		
 		return createStrategy(minIndex, cost );
 	}

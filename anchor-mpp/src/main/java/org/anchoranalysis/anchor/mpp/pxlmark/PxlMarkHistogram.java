@@ -33,6 +33,8 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
+import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -45,9 +47,6 @@ import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
-
-import ch.ethz.biol.cell.imageprocessing.pixellist.IndexByChnl;
-import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactory;
 
 public class PxlMarkHistogram extends PxlMark {
 

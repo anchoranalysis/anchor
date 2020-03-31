@@ -3,11 +3,11 @@
 <bean config-class="java.util.List" config-factory="list">
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="chnl1">
-		<item config-class="ch.ethz.biol.cell.mpp.dummyProvider.DummyChnlProvider"/>
+		<item config-class="org.anchoranalysis.mpp.sgmn.dummyProvider.DummyChnlProvider"/>
 	</item>
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="chnl2">
-		<item config-class="ch.ethz.biol.cell.mpp.dummyProvider.DummyChnlProvider"/>
+		<item config-class="org.anchoranalysis.mpp.sgmn.dummyProvider.DummyChnlProvider"/>
 	</item>
 
 </bean>

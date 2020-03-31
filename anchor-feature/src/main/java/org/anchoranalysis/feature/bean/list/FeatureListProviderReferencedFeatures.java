@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 public abstract class FeatureListProviderReferencedFeatures extends FeatureListProvider {
@@ -64,8 +64,8 @@ public abstract class FeatureListProviderReferencedFeatures extends FeatureListP
 //					for( Feature f : item ) {
 //						f.init(featureInitParams);
 //					}
-				} catch (GetOperationFailedException e) {
-					throw new InitException(e);
+				} catch (NamedProviderGetException e) {
+					throw new InitException(e.summarize());
 				}
 			}
 		}	

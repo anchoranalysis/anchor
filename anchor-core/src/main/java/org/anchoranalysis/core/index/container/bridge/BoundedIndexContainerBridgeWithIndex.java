@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.index.container.bridge;
 
+import org.anchoranalysis.core.bridge.BridgeElementException;
+
 /*-
  * #%L
  * anchor-core
@@ -27,7 +29,6 @@ package org.anchoranalysis.core.index.container.bridge;
  */
 
 import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
 
 /**
@@ -50,7 +51,7 @@ public class BoundedIndexContainerBridgeWithIndex<H,E> extends BoundedIndexConta
 	}
 
 	@Override
-	protected E bridge(int index, H internalState) throws GetOperationFailedException {
+	protected E bridge(int index, H internalState) throws BridgeElementException {
 		return bridge.bridgeElement(index, internalState);
 	}
 }

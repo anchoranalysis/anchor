@@ -80,7 +80,7 @@ public class BinaryChnl {
 		try {
 			return chnl.getVoxelBox().asByte();
 		} catch (IncorrectVoxelDataTypeException e) {
-			throw new IncorrectVoxelDataTypeException("Associated imgChnl does not have unsigned 8-bit data (byte)", e);
+			throw new IncorrectVoxelDataTypeException("Associated imgChnl does contain have unsigned 8-bit data (byte)");
 		}
 	}
 	

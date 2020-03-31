@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderTileWithLabel
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
@@ -161,15 +161,20 @@ public class AssignmentGenerator extends RasterGenerator {
 	
 	private RGBObjMaskGenerator createGenerator( List<ObjMask> otherObjs, ColorList cols, ObjMaskCollection omc ) {
 		
-		ObjMaskWriter objMaskWriter = createOutlineWriter();
+		ObjMaskWriter outlineWriter = createOutlineWriter();
 		
 		if (colorPool.isDifferentColorsForMatches()) {
-			objMaskWriter = createConditionalWriter(
+			ObjMaskWriter objMaskWriter = createConditionalWriter(
 				otherObjs,
-				objMaskWriter
+				outlineWriter
 			);
+			return createGenerator( objMaskWriter, cols, omc );
+		} else {
+			return createGenerator( outlineWriter, cols, omc );
 		}
-		
+	}
+	
+	private RGBObjMaskGenerator createGenerator( ObjMaskWriter objMaskWriter, ColorList cols, ObjMaskCollection omc ) {
 		return new RGBObjMaskGenerator(
 			objMaskWriter,
 			new ObjMaskWithPropertiesCollection(omc),

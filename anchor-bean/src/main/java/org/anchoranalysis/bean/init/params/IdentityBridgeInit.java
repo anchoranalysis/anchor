@@ -29,9 +29,9 @@ package org.anchoranalysis.bean.init.params;
 
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IdentityBridge;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
 /**
@@ -53,14 +53,13 @@ public class IdentityBridgeInit<B extends InitializableBean<?,P>,P extends BeanI
 	}
 
 	@Override
-	public B bridgeElement( B sourceObject )
-			throws GetOperationFailedException {
+	public B bridgeElement( B sourceObject ) throws BridgeElementException {
 		
 		try {
 			assert logger!=null;
 			sourceObject.initRecursiveWithInitializer(pi, logger);
 		} catch (InitException e) {
-			throw new GetOperationFailedException(e);
+			throw new BridgeElementException(e);
 		}
 		
 		return super.bridgeElement(sourceObject);
