@@ -1,8 +1,12 @@
 # anchor-bean
 
-A library for defining and loading/writing Anchor-Beans. These beans are the core object-model of many parts of the platform.
+Dependency injection framework and object-model.
+
+Anchor beans are the core object-model of many parts of the platform.
 
 ## Code Structure
+
+TODO rather put package descriptions in package-info.java and use Javadoc
 
 | Package Name | Description |
 |--------------|-------------|
@@ -20,6 +24,7 @@ A library for defining and loading/writing Anchor-Beans. These beans are the cor
 | org.anchoranalysis.bean.xml.error | exceptions that can be thrown doing the above (and internally due to parsing errors)
 | org.anchoranalysis.bean.xml.factory | additional bean factories |
 
-## Wiki
+## Documentation
 
-See the [wiki page](https://bitbucket.org/anchorimageanalysis/anchor/wiki/Anchor%20Beans) for an introduction to Anchor Beans.
+- [User Guide - BeanXML](https://www.anchoranalysis.org/user_guide_bean_xml.html) for an introduction to BeanXML.
+- [Developer Guide - Anchor beans](https://www.anchoranalysis.org/developer_guide_anchor_beans.html) for more details on AnchorBeans.
