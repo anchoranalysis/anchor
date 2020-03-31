@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 
+// TODO move to anchor-io?
 public abstract class FindMatchingFiles {
 
 	public abstract Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException;
