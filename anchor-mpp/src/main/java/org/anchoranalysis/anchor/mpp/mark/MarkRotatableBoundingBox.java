@@ -1,7 +1,17 @@
 package org.anchoranalysis.anchor.mpp.mark;
 
+import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.flagForNoRegion;
+import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.flagForRegion;
+import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation2D;
@@ -23,6 +33,9 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private static byte FLAG_SUBMARK_NONE = flagForNoRegion();
+	private static byte FLAG_SUBMARK_REGION0 = flagForRegion( SUBMARK_INSIDE );
+	
 	// START mark state
 
 	// Note that internally three-dimensional points are used instead of two-dimensional as it
@@ -39,6 +52,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	
 	// START internal objects
 	private RotationMatrix rotMatrix;
+	private RotationMatrix rotMatrixInv;	// Inversion of rotMatrix
 	// END internal objects
 	
 	public MarkRotatableBoundingBox() {
@@ -47,14 +61,26 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	
 	@Override
 	public byte evalPntInside(Point3d pt) {
-		// TODO populate with logic to find points inside
-		assert(false);
-		return 0;
+
+		// See if after rotating a point back, it lies with on our box
+		Point3d pnt = new Point3d(pt);
+		pnt.sub( getPos() );
+		
+		Point3d pntRot = rotMatrixInv.calcRotatedPoint(pnt);
+		
+		if (pntRot.getX() < distToLeftBottom.getX() || pntRot.getX() >= distToRightTop.getX()) {
+			return FLAG_SUBMARK_NONE;
+		}
+		
+		if (pntRot.getY() < distToLeftBottom.getY() || pntRot.getY() >= distToRightTop.getY()) {
+			return FLAG_SUBMARK_NONE;
+		}
+
+		return FLAG_SUBMARK_REGION0;
 	}
 	
 	public void update( Point2d distToLeftBottom, Point2d distToRightTop, Orientation2D orientation ) {
-		
-		this.rotMatrix = orientation.createRotationMatrix();
+
 		update(
 			convert3d(distToLeftBottom),
 			convert3d(distToRightTop),
@@ -69,18 +95,26 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 		this.orientation = orientation;
 		
 		this.rotMatrix = orientation.createRotationMatrix();
+		this.rotMatrixInv = rotMatrix.transpose();
 	}
 
 	@Override
 	public BoundingBox bboxAllRegions(ImageDim bndScene) {
 		
-		Point3d leftBottomRot = rotateAddPos(distToLeftBottom);
-		Point3d rightTopRot = rotateAddPos(distToRightTop);
+		Point3d[] points = new Point3d[] {
+			cornerPoint(false, false),
+			cornerPoint(true, false),
+			cornerPoint(false, true),
+			cornerPoint(true, true)
+		};
 		
-		return BoundingBoxFromPoints.forTwoPoints(
-			leftBottomRot,				
-			rightTopRot
+		BoundingBox box = BoundingBoxFromPoints.forListWithoutException(
+			rotateAddPos(points)
 		);
+		
+		box.clipTo(bndScene.getExtnt());
+		assert(box.extnt().getZ()>0);
+		return box;
 	}
 	
 	@Override
@@ -131,6 +165,20 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 		return new Point3d(pnt.getX(), pnt.getY(), 0);
 	}
 
+	private Point3d cornerPoint( boolean x, boolean y ) {
+		return new Point3d(
+			x ? distToLeftBottom.getX() : distToRightTop.getX(),
+			y ? distToLeftBottom.getY() : distToRightTop.getY(),
+			0
+		);
+	}
+	
+	private List<Point3i> rotateAddPos( Point3d[] points ) {
+		return Arrays.stream(points).map(
+			pnt -> PointConverter.intFromDouble( rotateAddPos(pnt) )	
+		).collect( Collectors.toList() );
+	}
+		
 	/** Rotates a position and adds the current position afterwards */
 	private Point3d rotateAddPos( Point3d pnt ) {
 		Point3d out = rotMatrix.calcRotatedPoint(pnt);
