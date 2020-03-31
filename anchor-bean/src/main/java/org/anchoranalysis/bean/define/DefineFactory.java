@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.xml.factory.define;
+package org.anchoranalysis.bean.define;
 
 /*-
  * #%L
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdder;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;

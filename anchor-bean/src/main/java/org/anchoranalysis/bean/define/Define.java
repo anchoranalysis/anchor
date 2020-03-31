@@ -41,8 +41,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
- * A bean where the definitions of many different NamedBean can be specified, and are indexed
- *  by a collection of keys.
+ * A bean where the definitions of many different NamedBeans can be specified and are indexed by a collection of keys.
  *  
  * @author Owen Feehan
  *

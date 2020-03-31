@@ -30,13 +30,13 @@ package org.anchoranalysis.bean.error;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 /**
- * Thrown if a Bean is misconfigured
+ * If a Bean is misconfigured
  * 
- * e.g. missing a value that is required
- *   or with a value that violates the constraints of the bean-field
+ * <p>e.g. missing a value that is required
+ *   or with a value that violates the constraints of the bean-field</p>
  * 
- * There should always be a sensible message, even if we nest another
- * exception.
+ * <p>There should always be a sensible message, even if we nest another
+ * exception.</p>
  * 
  * @author Owen Feehan
  *

@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.xml.factory.define;
+package org.anchoranalysis.bean.define;
 
 /*-
  * #%L

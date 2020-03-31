@@ -1,6 +1,7 @@
 package org.anchoranalysis.bean.xml;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.define.DefineFactory;
 
 /*
  * #%L
@@ -38,7 +39,6 @@ import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ReplacePropertyBeanFactory;
 import org.anchoranalysis.bean.xml.factory.StringListFactory;
 import org.anchoranalysis.bean.xml.factory.StringSetFactory;
-import org.anchoranalysis.bean.xml.factory.define.DefineFactory;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
 

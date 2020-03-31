@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.xml.factory.define;
+package org.anchoranalysis.bean.define;
 
 /*-
  * #%L
@@ -29,7 +29,6 @@ package org.anchoranalysis.bean.xml.factory.define;
 import java.util.List;
 
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdder;
 import org.anchoranalysis.bean.define.adder.DefineAdderUtilities;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
