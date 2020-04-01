@@ -1,3 +1,3 @@
 # anchor-annotation
 
-Annotating images with human-provided shapes / labels.
+Annotating images with (usually human-provided) shapes / labels.
