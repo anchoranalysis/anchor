@@ -59,7 +59,7 @@ public abstract class FilterFileProvider extends FileProvider {
 		
 		for( File f : filesIn ) {
 			
-			if (isFileAccepted(f, params.isDebugMode())) {
+			if (isFileAccepted(f, params.isDebugModeActivated())) {
 				filesOut.add(f);
 			}
 		}

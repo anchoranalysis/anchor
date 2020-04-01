@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /*
@@ -38,9 +39,9 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class ExperimentExecutionArguments {
 	
 	/**
-	 * Is debug-mode enabled
+	 * If non-NULL then debug-mode is enabled
 	 */
-	private boolean debugEnabled = false;
+	private DebugModeParams debugModeParams;
 	
 	/**
 	 * A list of paths referring to specific inputs;
@@ -88,7 +89,7 @@ public class ExperimentExecutionArguments {
 	 * @throws IOException */
 	public InputContextParams createInputContext() throws IOException {
 		InputContextParams out = new InputContextParams();
-		out.setDebugMode(debugEnabled);
+		out.setDebugModeParams(debugModeParams);
 		out.setInputDir(inputDirectory);
 		if (inputFilterGlob!=null) {
 			out.setInputFilterGlob(inputFilterGlob);
@@ -101,7 +102,10 @@ public class ExperimentExecutionArguments {
 	}
 	
 	public FilePathPrefixerParams createParamsContext() throws AnchorIOException {
-		return new FilePathPrefixerParams(debugEnabled, outputDirectory);
+		return new FilePathPrefixerParams(
+			isDebugModeActivated(),
+			outputDirectory
+		);
 	}
 	
 	public Path getInputDirectory() {
@@ -123,16 +127,25 @@ public class ExperimentExecutionArguments {
 		}
 	}
 	
+	private boolean isDebugModeActivated() {
+		return debugModeParams!=null;
+	}
+	
 	public boolean hasInputDirectory() {
 		return inputDirectory!=null;
 	}
 	
-	public void setDebugEnabled( boolean value ) {
-		debugEnabled = value;
+	/** 
+	 * Activates debug-mode
+	 * 
+	 * @param debugContains either NULL (no debugContains specified) or a string used for filtering items during debug
+	 */
+	public void activateDebugMode( String debugContains ) {
+		debugModeParams = new DebugModeParams(debugContains);
 	}
 	
 	public boolean isDebugEnabled() {
-		return debugEnabled;
+		return debugModeParams!=null;
 	}
 		
 	public Path getOutputDirectory() {
