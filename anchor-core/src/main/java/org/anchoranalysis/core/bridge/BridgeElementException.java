@@ -42,7 +42,7 @@ public class BridgeElementException extends AnchorFriendlyCheckedException {
 	private static final long serialVersionUID = 1L;
 
 	public BridgeElementException(Throwable exc) {
-		super(exc);
+		super("", exc);
 	}
 
 	public BridgeElementException(String message) {
