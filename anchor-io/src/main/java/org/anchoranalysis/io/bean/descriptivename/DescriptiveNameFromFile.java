@@ -54,7 +54,8 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files, String elseName ) throws AnchorIOException {
 		List<DescriptiveFile> list = descriptiveNamesFor(files, elseName);
 		checkUniqueness(list);
-		checkNoBackslashes(list);
+		checkNoPredicate(list, DescriptiveNameFromFile::containsBackslash, "contain backslashes");
+		checkNoPredicate(list, DescriptiveNameFromFile::emptyString, "contain an empty string");
 		return list;
 	}
 	
@@ -88,16 +89,17 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 		}
 	}
 	
-	private static void checkNoBackslashes( List<DescriptiveFile> list ) throws AnchorIOException {
+	private static void checkNoPredicate( List<DescriptiveFile> list, Predicate<String> predFunc, String dscr ) throws AnchorIOException {
 		long numWithBackslashes = list.stream()
-				.filter( df-> containsBackslash(df.getDescriptiveName()) )
+				.filter( df-> predFunc.test(df.getDescriptiveName()) )
 				.count();
 		
 		if(numWithBackslashes>0) {
 			throw new AnchorIOException(
 				String.format(
-					"The following descriptive-names contain backslashes:%n%s",
-					keysContainsBackslash(list)
+					"The following descriptive-names may not %s:%n%s",
+					dscr,
+					keysWithDescriptiveNamePredicate(predFunc, list)
 				)
 			);
 		}
@@ -106,10 +108,6 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	// For debugging if there is a non-uniqueness clash between two DescriptiveFiles
 	private static String keysWithDescriptiveName( String descriptiveName, List<DescriptiveFile> list ) {
 		return keysWithDescriptiveNamePredicate( dn->dn.equals(descriptiveName), list );
-	}
-	
-	private static String keysContainsBackslash( List<DescriptiveFile> list ) {
-		return keysWithDescriptiveNamePredicate( dn-> containsBackslash(dn), list );
 	}
 	
 	private static String keysWithDescriptiveNamePredicate( Predicate<String> pred, List<DescriptiveFile> list ) {
@@ -123,6 +121,10 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	
 	private static boolean containsBackslash( String str ) {
 		return str.contains("\\");
+	}
+	
+	private static boolean emptyString( String str ) {
+		return str==null || str.isEmpty();
 	}
 	
 }
