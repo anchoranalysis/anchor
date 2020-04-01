@@ -48,11 +48,7 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	
 	private final static String DEFAULT_ELSE_NAME = "unknownName";
 	
-	public DescriptiveFile descriptiveNameFor( File file, String elseName ) throws AnchorIOException {
-		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
-	}
-	
-	/** Like descriptiveNamesForCheckUniqueness but with a default for elseName */
+	/** Like descriptiveNamesForCheckUniqueness but with a default for emptyName */
 	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files ) throws AnchorIOException {
 		return descriptiveNamesForCheckUniqueness(files, DEFAULT_ELSE_NAME);
 	}
@@ -64,6 +60,18 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 		checkNoPredicate(list, DescriptiveNameFromFile::containsBackslash, "contain backslashes");
 		checkNoPredicate(list, DescriptiveNameFromFile::emptyString, "contain an empty string");
 		return list;
+	}
+	
+	/**
+	 * A descriptive-name for a file
+	 * 
+	 * @param file the file to extract a descriptive-name for
+	 * @param elseName a fallback name to use if something goes wrong
+	 * @return
+	 * @throws AnchorIOException
+	 */
+	public DescriptiveFile descriptiveNameFor( File file, String elseName ) throws AnchorIOException {
+		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
 	}
 	
 	/**
