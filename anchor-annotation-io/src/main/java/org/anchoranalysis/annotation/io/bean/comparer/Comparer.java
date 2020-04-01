@@ -2,6 +2,8 @@ package org.anchoranalysis.annotation.io.bean.comparer;
 
 import java.nio.file.Path;
 
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
+
 /*
  * #%L
  * anchor-annotation
@@ -41,5 +43,5 @@ public abstract class Comparer extends AnchorBean<Comparer> {
 	private static final long serialVersionUID = 1L;
 	
 	// A null value means that there are no objects to compare (e.g. they have been skipped)
-	public abstract ObjMaskCollection createObjs( Path filePathSource, ImageDim dim, boolean debugMode ) throws CreateException;
+	public abstract Findable<ObjMaskCollection> createObjs( Path filePathSource, ImageDim dim, boolean debugMode ) throws CreateException;
 }

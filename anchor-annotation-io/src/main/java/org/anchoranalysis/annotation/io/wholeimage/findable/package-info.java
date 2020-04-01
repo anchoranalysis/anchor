@@ -1,0 +1,1 @@
+package org.anchoranalysis.annotation.io.wholeimage.findable;
