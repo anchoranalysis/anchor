@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.file.findmatching;
+package org.anchoranalysis.io.filepath.findmatching;
 
 /*-
  * #%L
@@ -26,30 +26,45 @@ package org.anchoranalysis.core.file.findmatching;
  * #L%
  */
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.function.Predicate;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+/**
+ * Some constraints on which paths to match
+ *
+ */
+public class PathMatchConstraints {
 
-public class FindMatchingFilesWithoutProgressReporter extends FindMatchingFiles {
+	/** Only accepts files where the predicate returns TRUE */
+	private Predicate<Path> matcherFile;
 	
-	@Override
-	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
-		
-		List<File> listOut = new ArrayList<>();
-		try {
-			WalkSingleDir.apply( dir, constraints, listOut );
-		} catch (FindFilesException e) {
-			if (acceptDirectoryErrors) {
-				logger.getErrorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
-			} else {
-				// Rethrow the exception
-				throw e;
-			}
-		}
-		return listOut;
+	/** Only accepts any containing directories where the predicate returns TRUE */
+	private Predicate<Path> matcherDir;
+	
+	/** Limits on the depth of how many sub-directories are recursed */
+	private int maxDirDepth;
+	
+	public PathMatchConstraints(Predicate<Path> matcherFile, Predicate<Path> matcherDir, int maxDirDepth) {
+		super();
+		this.matcherFile = matcherFile;
+		this.matcherDir = matcherDir;
+		this.maxDirDepth = maxDirDepth;
+		assert( maxDirDepth>= 0 );
+	}
+	
+	public PathMatchConstraints replaceMaxDirDepth( int replacementMaxDirDepth ) {
+		return new PathMatchConstraints(matcherFile, matcherDir, replacementMaxDirDepth);
+	}
+
+	public Predicate<Path> getMatcherFile() {
+		return matcherFile;
+	}
+
+	public Predicate<Path> getMatcherDir() {
+		return matcherDir;
+	}
+
+	public int getMaxDirDepth() {
+		return maxDirDepth;
 	}
 }

@@ -30,9 +30,10 @@ package org.anchoranalysis.bean.error;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /**
- * When something quite strange happens, that we don't usually want to catch
- *   and we aren't going to invest much effort in handling, unless
- *   it starts becoming thrown regularly.
+ * When something quite strange happens that we don't usually want to catch.
+ *  
+ * <p>This type of "black swan" exception is for errors where we aren't going to invest much effort in handling,
+ *  unless it starts becoming thrown regularly.</p>
  * 
  * @author Owen Feehan
  *

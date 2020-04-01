@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 /**
- * Generates a CSV file from a table
+ * Generates a CSV file like a table
  * 
  * @author FEEHANO
  *

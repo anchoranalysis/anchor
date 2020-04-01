@@ -51,32 +51,51 @@ public class FeatureListCSVGeneratorVertical extends TableCSVGenerator<ResultsVe
 		super(manifestFunction, featureNames.asList() );
 	}
 
+	@Override
 	protected void writeRowsAndColumns( CSVWriter writer, ResultsVectorCollection featureValues, List<String> headerNames ) throws OutputWriteFailedException {
 		
-		for( int featureIndex=0; featureIndex<headerNames.size(); featureIndex++ ) {
+		int size = headerNames.size();
+		
+		for( int featureIndex=0; featureIndex<size; featureIndex++ ) {
 			String featureName = headerNames.get(featureIndex);
 			
-			List<TypedValue> csvRow = new ArrayList<>();
-			csvRow.add( new TypedValue( featureName ) );
+			writer.writeRow(
+				generateRow(featureName, featureValues, featureIndex, size)
+			);
+		}
+	}
+	
+	private static List<TypedValue> generateRow( String featureName, ResultsVectorCollection featureValues, int featureIndex, int size ) throws OutputWriteFailedException {
+
+		List<TypedValue> csvRow = new ArrayList<>();
+		
+		// The Name
+		csvRow.add(
+			new TypedValue( featureName )
+		);
+		
+		for( ResultsVector rv : featureValues ) {
 			
-			for( ResultsVector rv : featureValues ) {
-				
-				if (rv.length()!=headerNames.size()) {
-					throw new OutputWriteFailedException(
-						String.format("ResultsVector has size (%d) != featureNames vector (%d)", rv.length(), headerNames.size())
-					);
-				}
-				
-				double val = rv.get(featureIndex);
-					
-				if (Double.isNaN(val)) {
-					csvRow.add( new TypedValue("Error") );
-				} else {
-					csvRow.add( new TypedValue(val, 10) );
-				}					
+			if (rv.length()!=size) {
+				throw new OutputWriteFailedException(
+					String.format("ResultsVector has size (%d) != featureNames vector (%d)", rv.length(), size)
+				);
 			}
-			
-			writer.writeRow(csvRow);
+
+			csvRow.add(
+				replaceNaN( rv.get(featureIndex) )
+			);
+		}
+
+		return csvRow;
+	}
+	
+	/** Replaces NaN with error */
+	private static TypedValue replaceNaN( double val ) {
+		if (Double.isNaN(val)) {
+			return new TypedValue("Error");
+		} else {
+			return new TypedValue(val, 10);
 		}
 	}
 }

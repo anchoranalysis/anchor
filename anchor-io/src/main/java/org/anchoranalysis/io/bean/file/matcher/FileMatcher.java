@@ -34,14 +34,14 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.file.findmatching.FindMatchingFiles;
-import org.anchoranalysis.core.file.findmatching.FindFilesException;
-import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithProgressReporter;
-import org.anchoranalysis.core.file.findmatching.FindMatchingFilesWithoutProgressReporter;
-import org.anchoranalysis.core.file.findmatching.PathMatchConstraints;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.findmatching.FindFilesException;
+import org.anchoranalysis.io.filepath.findmatching.FindMatchingFiles;
+import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithProgressReporter;
+import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithoutProgressReporter;
+import org.anchoranalysis.io.filepath.findmatching.PathMatchConstraints;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**

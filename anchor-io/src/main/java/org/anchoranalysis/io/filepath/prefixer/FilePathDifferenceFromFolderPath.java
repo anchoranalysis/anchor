@@ -32,8 +32,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -99,8 +99,8 @@ public class FilePathDifferenceFromFolderPath {
 	private void calcDiff( String baseFolderPath, String entirePath ) {
 		
 		// Convert the base, and all to forward slashes only
-		String base = PathUtilities.toStringUnixStyle(baseFolderPath);
-		String all = PathUtilities.toStringUnixStyle(entirePath);
+		String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseFolderPath);
+		String all = FilePathToUnixStyleConverter.toStringUnixStyle(entirePath);
 		
 		// if base is non-empty, but doesn't end in a directory seperator we add one
 		//  (we use a forward slash due to the previous step converting it into a URL style)

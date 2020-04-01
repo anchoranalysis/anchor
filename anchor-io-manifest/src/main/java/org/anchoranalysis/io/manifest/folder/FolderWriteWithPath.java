@@ -30,7 +30,7 @@ package org.anchoranalysis.io.manifest.folder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 
 public abstract class FolderWriteWithPath extends FolderWrite {
 
@@ -51,6 +51,6 @@ public abstract class FolderWriteWithPath extends FolderWrite {
 	}
 
 	public void setPath(Path path) {
-		this.path = PathUtilities.toStringUnixStyle( path );
+		this.path = FilePathToUnixStyleConverter.toStringUnixStyle( path );
 	}
 }

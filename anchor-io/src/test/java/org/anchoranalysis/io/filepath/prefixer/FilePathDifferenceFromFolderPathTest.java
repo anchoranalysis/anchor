@@ -32,8 +32,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class FilePathDifferenceFromFolderPathTest {
 
 	private Path resolve( String path ) {
 		// We treat it as a UNIX path so the tests will work on all platforms
-		return Paths.get( PathUtilities.toStringUnixStyle(path) );
+		return Paths.get( FilePathToUnixStyleConverter.toStringUnixStyle(path) );
 	}
 	
 	// START NORMAL-BEHAVIOUR
