@@ -55,7 +55,8 @@ public class XStreamDeserializer<T> extends Deserializer<T> {
 		XStream xstream = new XStream( new Xpp3Driver() );
 		XStream.setupDefaultSecurity(xstream); // to be removed after 1.5
 		xstream.allowTypesByWildcard(new String[] {
-		    "org.anchoranalysis.**"
+		    "org.anchoranalysis.**",
+		    "cern.colt.matrix.**"
 		});
 		return xstream;
 	}
