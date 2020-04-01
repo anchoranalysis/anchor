@@ -119,7 +119,7 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 	
 	private List<DescriptiveFile> descriptiveNames( Collection<File> files ) throws ExperimentExecutionException {
 		try {
-			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "unknownName");
+			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files);
 		} catch (AnchorIOException e ) {
 			throw new ExperimentExecutionException("An error occurred getting descriptive-names for the files", e);
 		}			

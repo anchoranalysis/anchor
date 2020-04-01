@@ -46,8 +46,15 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private final static String DEFAULT_ELSE_NAME = "unknownName";
+	
 	public DescriptiveFile descriptiveNameFor( File file, String elseName ) throws AnchorIOException {
 		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
+	}
+	
+	/** Like descriptiveNamesForCheckUniqueness but with a default for elseName */
+	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files ) throws AnchorIOException {
+		return descriptiveNamesForCheckUniqueness(files, DEFAULT_ELSE_NAME);
 	}
 	
 	/** Like descriptiveNames for but checks that the final list of descriptive-files all have unique descriptive-names */
