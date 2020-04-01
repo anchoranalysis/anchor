@@ -119,7 +119,7 @@ public class IterableGeneratorOutputHelper {
 	
 	private static void throwExceptionInWriter(Exception e, String name) throws OutputWriteFailedException {
 		
-		String errorMsg = String.format("An error occurred outputting '%s'",name); 
+		String errorMsg = String.format("An error occurred outputting '%s'.",name); 
 		
 		if (e instanceof IFriendlyException) {
 			IFriendlyException eCast = (IFriendlyException) e;
