@@ -4,6 +4,8 @@ Fundamental core library objects.
 
 This is one of the highest-level packages in Anchor's dependency tree i.e. a lot of other packages depend on it.
 
+## What belongs?
+
 Its functionality contains:
 - Error handling
 - Colors

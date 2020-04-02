@@ -42,6 +42,7 @@ public class FileInput implements InputFromManager {
 		super();
 		this.file = file.getFile();
 		this.descriptiveName = file.getDescriptiveName();
+		assert(!descriptiveName.isEmpty());
 	}
 	
 	@Override

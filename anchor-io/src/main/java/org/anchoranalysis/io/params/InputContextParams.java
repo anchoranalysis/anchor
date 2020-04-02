@@ -55,8 +55,8 @@ public class InputContextParams {
 	/** A list of extensions that can be used filter inputs */
 	private Set<String> inputFilterExtensions = fallBackFilterExtensions();
 	
-	/** Whether an experiment is executing in debug mode or not */
-	private boolean debugMode = false;
+	/** If non-null, then debug-mode is activated */
+	private DebugModeParams debugModeParams;
 	
 	public boolean hasInputDir() {
 		return inputDir!=null;
@@ -106,14 +106,18 @@ public class InputContextParams {
 		return inputPaths!=null;
 	}
 	
-	public boolean isDebugMode() {
-		return debugMode;
+	public boolean isDebugModeActivated() {
+		return debugModeParams!=null;
 	}
 
-	public void setDebugMode(boolean debugMode) {
-		this.debugMode = debugMode;
+	public void setDebugModeParams(DebugModeParams debugModeParams) {
+		this.debugModeParams = debugModeParams;
 	}
-
+	
+	public DebugModeParams getDebugModeParams() {
+		return debugModeParams;
+	}
+	
 	public String getInputFilterGlob() {
 		return inputFilterGlob;
 	}
@@ -125,4 +129,6 @@ public class InputContextParams {
 	public void setInputPaths(List<Path> inputPaths) {
 		this.inputPaths = inputPaths;
 	}
+
+
 }

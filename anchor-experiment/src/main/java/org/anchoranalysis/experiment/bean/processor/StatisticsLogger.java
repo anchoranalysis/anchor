@@ -56,8 +56,7 @@ class StatisticsLogger {
 				"All ",
 				stats.numCompletedSuccess(),
 				" completed successfully.",
-				() -> stats.meanExecutionTimeSuccess(),
-				true
+				() -> stats.meanExecutionTimeSuccess()
 			);
 		} else {
 			
@@ -65,16 +64,14 @@ class StatisticsLogger {
 				"",
 				stats.numCompletedSuccess(),
 				String.format(" out of %d completed successfully.", stats.numTotalScheduledJobs()),
-				() -> stats.meanExecutionTimeSuccess(),
-				false
+				() -> stats.meanExecutionTimeSuccess()
 			);
 			
 			logMessageAboutTasks(
 				"",
 				stats.numCompletedFailed(),
 				" failed.",
-				() -> stats.meanExecutionTimeFailed(),
-				false
+				() -> stats.meanExecutionTimeFailed()
 			);
 			
 			long numNotCompleted = stats.numNotCompleted();
@@ -95,13 +92,13 @@ class StatisticsLogger {
 	 * @param numTasks number of tasks
 	 * @param suffix suffix
 	 * @param executionTimeMs a function for calculating the mean-execution time
-	 * @param alwaysPluralize always pluralize tasks
 	 */
-	private void logMessageAboutTasks( String prefix, long numTasks, String suffix, DoubleSupplier executionTimeMs, boolean alwaysPluralize ) {
-		String tasksDscr = alwaysPluralize ? alwaysPluralizeJobs(numTasks) : maybePluralizeJobs(numTasks); 
+	private void logMessageAboutTasks( String prefix, long numTasks, String suffix, DoubleSupplier executionTimeMs) {
+
 		logMessageWithExecutionTime(
-			prefix + tasksDscr + suffix,
+			prefix + maybePluralizeJobs(numTasks) + suffix,
 			numTasks > 0,
+			numTasks > 1,
 			executionTimeMs
 		);
 		
@@ -113,14 +110,23 @@ class StatisticsLogger {
 	 *  
 	 * @param msg the message to always log
 	 * @param showExecutionTime indicates whether to include the optional additional message or not
+	 * @param moreThanOneJob indicates that there was more than one job i.e. num_jobs >=2
 	 * @param executionTimeMs function for calculating the average-execution time in millisecond
 	 */
-	private void logMessageWithExecutionTime( String msg, boolean showExecutionTime, DoubleSupplier executionTimeMs ) {
+	private void logMessageWithExecutionTime( String msg, boolean showExecutionTime, boolean moreThanOneJob, DoubleSupplier executionTimeMs ) {
 		if (showExecutionTime) {
 			double execTimeSeconds = executionTimeMs.getAsDouble() / 1000;
-			msg = msg + String.format(" The average execution time was %.3f ms.", execTimeSeconds );
+			msg = msg + String.format(
+				" The %sexecution time was %.3f ms.",
+				maybeIncludeAverage(moreThanOneJob),
+				execTimeSeconds
+			);
 		}
 		logReporter.log(msg);
+	}
+	
+	private String maybeIncludeAverage( boolean moreThanOneJob ) {
+		return moreThanOneJob ? "average " : "";
 	}
 	
 	/**
@@ -131,15 +137,5 @@ class StatisticsLogger {
 	 */
 	private static String maybePluralizeJobs( long number ) {
 		return LanguageUtilities.prefixPluralizeMaybe(number, JOB_WORD);
-	}
-	
-	/**
-	 * Returns 1 task or n tasks as is appropriate
-	 * 
-	 * @param number the number n
-	 * @return the string as above
-	 */
-	private static String alwaysPluralizeJobs( long number ) {
-		return LanguageUtilities.prefixPluralize(number, JOB_WORD);
 	}
 }

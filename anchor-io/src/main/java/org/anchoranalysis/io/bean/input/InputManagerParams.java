@@ -28,6 +28,7 @@ package org.anchoranalysis.io.bean.input;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**
@@ -68,7 +69,11 @@ public class InputManagerParams {
 		return logger;
 	}
 
-	public boolean isDebugMode() {
-		return inputContext.isDebugMode();
+	public boolean isDebugModeActivated() {
+		return inputContext.isDebugModeActivated();
+	}
+
+	public DebugModeParams getDebugModeParams() {
+		return inputContext.getDebugModeParams();
 	}
 }

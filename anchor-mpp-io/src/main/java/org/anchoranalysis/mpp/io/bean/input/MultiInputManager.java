@@ -103,7 +103,7 @@ public class MultiInputManager extends MultiInputManagerBase {
 			ProvidesStackInput mainStack = itr.next();
 			
 			MultiInput inputObject = new MultiInput(inputName,mainStack);
-			appendFromLists(inputObject, params.isDebugMode());
+			appendFromLists(inputObject, params.isDebugModeActivated());
 			
 			outList.add( inputObject );
 		}

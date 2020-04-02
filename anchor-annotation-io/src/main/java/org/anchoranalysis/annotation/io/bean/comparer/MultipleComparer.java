@@ -38,6 +38,7 @@ import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -104,51 +105,66 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 				background.getDimensions()
 			);
 			
-			ObjMaskCollection compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
+			Findable<ObjMaskCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
 			
-			// Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow happening, so we prevent it from interfereing
-			//  with the rest of the analysis as a workaround
-			removeObjsWithNoPixels( annotationObjs );
-			removeObjsWithNoPixels( compareObjs );
-					
-			
-			AssignmentObjMask assignment;
-			try {
-				assignment = new AssignmentObjMaskFactory(featureEvaluator,useMIP).createAssignment(
-					annotationObjs,
-					compareObjs,
-					maxCost,
-					background.getDimensions()
-				);
-				
-				ColorPool colorPool = new ColorPool(
-					assignment.numPaired(),
-					colorSetGenerator,
-					new VeryBrightColorSetGenerator(),
-					true
-				);
-				
-				AssignmentGenerator generator = AssignmentGeneratorFactory.createAssignmentGenerator(
-					background,
-					assignment,
-					colorPool,
-					useMIP,
-					"annotator",
-					ni.getName(),
-					3,
-					true
-				);
-				
-				out.add( new NameValue<>( ni.getName(), generator.generate() ) );
-				
-			} catch (FeatureCalcException | OutputWriteFailedException e1) {
-				throw new CreateException(e1);
+			if (!compareObjs.logIfFailure(ni.getName(), logErrorReporter)) {
+				continue;
 			}
+			
+			out.add(
+				compare(annotationObjs, compareObjs.getOrNull(), background, ni.getName(), colorSetGenerator)
+			);
 		}
 		
 		return out;
 	}
 	
+	private NameValue<Stack> compare(
+		ObjMaskCollection annotationObjs,
+		ObjMaskCollection compareObjs,
+		DisplayStack background,
+		String rightName,
+		ColorSetGenerator colorSetGenerator
+	) throws CreateException {
+		// Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow happening, so we prevent it from interfereing
+		//  with the rest of the analysis as a workaround
+		removeObjsWithNoPixels( annotationObjs );
+		removeObjsWithNoPixels( compareObjs );
+				
+		
+		AssignmentObjMask assignment;
+		try {
+			assignment = new AssignmentObjMaskFactory(featureEvaluator,useMIP).createAssignment(
+				annotationObjs,
+				compareObjs,
+				maxCost,
+				background.getDimensions()
+			);
+			
+			ColorPool colorPool = new ColorPool(
+				assignment.numPaired(),
+				colorSetGenerator,
+				new VeryBrightColorSetGenerator(),
+				true
+			);
+			
+			AssignmentGenerator generator = AssignmentGeneratorFactory.createAssignmentGenerator(
+				background,
+				assignment,
+				colorPool,
+				useMIP,
+				"annotator",
+				rightName,
+				3,
+				true
+			);
+			
+			return new NameValue<>( rightName, generator.generate() );
+			
+		} catch (FeatureCalcException | OutputWriteFailedException e1) {
+			throw new CreateException(e1);
+		}		
+	}
 	
 	private static void removeObjsWithNoPixels( ObjMaskCollection objs ) {
 		

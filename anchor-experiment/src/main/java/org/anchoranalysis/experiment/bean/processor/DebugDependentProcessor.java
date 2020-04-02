@@ -56,6 +56,16 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 	
 	@BeanField
 	private boolean supressExceptions = false;
+	
+	/** 
+	 *  How many processors to avoid using for the tasks.
+	 *  
+	 *  <p>When using the maximum available number of processors, a certain amount are deliberately not used, to save them
+	 *  for other tasks on the operating system. This is particularly valuable on a desktop PC where other tasks (e.g web
+	 *  browsing) may be ongoing during processing.</p>
+	 */
+	@BeanField
+	private int keepProcessorsFree = 1;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -79,6 +89,7 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 			pp.setMaxNumProcessors(maxNumProcessors);
 			pp.setTask(getTask());
 			pp.setSupressExceptions(supressExceptions);
+			pp.setKeepProcessorsFree(keepProcessorsFree);
 			return pp;
 		}
 	}
@@ -97,5 +108,13 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 
 	public void setSupressExceptions(boolean supressExceptions) {
 		this.supressExceptions = supressExceptions;
+	}
+
+	public int getKeepProcessorsFree() {
+		return keepProcessorsFree;
+	}
+
+	public void setKeepProcessorsFree(int keepProcessorsFree) {
+		this.keepProcessorsFree = keepProcessorsFree;
 	}
 }

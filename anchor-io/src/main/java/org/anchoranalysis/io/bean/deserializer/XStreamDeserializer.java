@@ -36,6 +36,11 @@ import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 
 public class XStreamDeserializer<T> extends Deserializer<T> {
 
+	private final static String[] ALLOWED_NAMESPACES = new String[] {
+		"org.anchoranalysis.**",
+		"cern.colt.matrix.**"	
+	};
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public T deserialize(Path filePath) throws DeserializationFailedException {
@@ -54,9 +59,7 @@ public class XStreamDeserializer<T> extends Deserializer<T> {
 	private XStream setupXStream() {
 		XStream xstream = new XStream( new Xpp3Driver() );
 		XStream.setupDefaultSecurity(xstream); // to be removed after 1.5
-		xstream.allowTypesByWildcard(new String[] {
-		    "org.anchoranalysis.**"
-		});
+		xstream.allowTypesByWildcard(ALLOWED_NAMESPACES);
 		return xstream;
 	}
 }
