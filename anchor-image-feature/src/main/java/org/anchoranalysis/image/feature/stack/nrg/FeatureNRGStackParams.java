@@ -64,8 +64,14 @@ public abstract class FeatureNRGStackParams extends FeatureCalcParamsWithImagePa
 		
 		FeatureNRGStackParams objCast = (FeatureNRGStackParams) obj;
 
-		if (!nrgStack.equals(objCast.nrgStack)) {
-			return false;
+		if (nrgStack!=null) {
+			if (!nrgStack.equals(objCast.nrgStack)) {
+				return false;
+			}	
+		} else {
+			if (objCast.nrgStack!=null) {
+				return false;
+			}
 		}
 		
 		return true;

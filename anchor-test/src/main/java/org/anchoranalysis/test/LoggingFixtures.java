@@ -1,8 +1,8 @@
-package org.anchoranalysis.annotation.io.wholeimage.findable;
+package org.anchoranalysis.test;
 
 /*-
  * #%L
- * anchor-annotation-io
+ * anchor-test
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -26,40 +26,19 @@ package org.anchoranalysis.annotation.io.wholeimage.findable;
  * #L%
  */
 
+import static org.mockito.Mockito.mock;
+
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
 
 /**
- * A positive-result when an object is found
- * 
+ * Fixtures
  * @author owen
  *
- * @param <T>
  */
-public class Found<T> extends Findable<T> {
+public class LoggingFixtures {
 
-	private T obj;
-
-	/**
-	 * The found object.
-	 * 
-	 * @param obj
-	 */
-	public Found(T obj) {
-		super();
-		this.obj = obj;
-	}
-
-	public T getObj() {
-		return obj;
-	}
-
-	@Override
-	public boolean logIfFailure(String name, LogErrorReporter logErrorReporter) {
-		return true;
-	}
-
-	@Override
-	public T getOrNull() {
-		return obj;
+	public static LogErrorReporter simpleLogErrorReporter() {
+		return new LogErrorReporter( mock(LogReporter.class) );
 	}
 }

@@ -13,20 +13,19 @@
 		  <artifactId>anchor-feature</artifactId>
 		  <version>0.0.8-SNAPSHOT</version>
 		</dependency>
-
-	   <dependency>
-		  <groupId>${project.groupId}</groupId>
-		  <artifactId>anchor-test-feature</artifactId>
-		  <version>0.0.4-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>
 		
 		<dependency>
-		  <groupId>${project.groupId}</groupId>
-		  <artifactId>anchor-experiment</artifactId>
-		  <version>0.0.8-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>
+		   <groupId>${project.groupId}</groupId>
+		   <artifactId>anchor-test</artifactId>
+           <version>0.0.8-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+           <groupId>${project.groupId}</groupId>
+           <artifactId>anchor-test-feature</artifactId>
+           <version>0.0.4-SNAPSHOT</version>
+        </dependency>
+        
 				
 	</dependencies>
 </project>
