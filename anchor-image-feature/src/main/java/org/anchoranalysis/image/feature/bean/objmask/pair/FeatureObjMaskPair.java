@@ -29,8 +29,6 @@ package org.anchoranalysis.image.feature.bean.objmask.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -79,10 +77,5 @@ public abstract class FeatureObjMaskPair extends Feature {
 	public FeatureParamsDescriptor paramType()
 			throws FeatureCalcException {
 		return FeatureObjMaskPairParamsDescriptor.instance;
-	}
-
-	@Override
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new ComplexCacheDefinition(this, new String[] {"first","second"});
 	}
 }

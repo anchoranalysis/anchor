@@ -73,7 +73,7 @@ public class Reference extends Feature {
 	
 	@Override
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
-		return getCacheSession().calcFeatureByID(rslvdID, params);
+		return params.getCacheSession().calcFeatureByID(rslvdID, params);
 	}
 
 	public String getId() {

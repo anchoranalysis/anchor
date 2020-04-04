@@ -37,10 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
-import org.anchoranalysis.feature.cache.SimpleCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -60,29 +57,16 @@ public abstract class Feature extends FeatureBase implements
 	private String customName = "";
 	// END BEAN PROPERTIES
 
-	// Saved for debugging reasons ONLY
-	// private FeatureInitParams paramsInit;
-
 	private transient LogErrorReporter logger;
 
 	private boolean hasBeenInit = false;
-	
-	private FeatureCacheDefinition cacheDefinition;
-	
-	private CacheSession cache;
 
 	protected Feature() {
 		super();
-		setupCacheDefinition();
 	}
 	
 	protected Feature( PropertyInitializer<FeatureInitParams> propertyInitializer ) {
 		super( propertyInitializer );
-		setupCacheDefinition();
-	}
-	
-	private void setupCacheDefinition() {
-		this.cacheDefinition = createCacheDefinition();
 	}
 	
 	@Override
@@ -164,8 +148,6 @@ public abstract class Feature extends FeatureBase implements
 	 * @param params parameters used for initialisation that are simply passed to beforeCalc()
 	 * @param logger logger
 	 * 
-	 * When a feature requires particular additional-caches, these are extracted from allAdditionalCaches to create an ordered array
-	 *   in the same order as returned by needsAdditionalCaches()
 	 * @param logger the logger, saved and made available to the feature
 	 */
 	@Override
@@ -177,14 +159,7 @@ public abstract class Feature extends FeatureBase implements
 				
 		hasBeenInit = true;
 		this.logger = logger;
-
-		cache = this.cacheDefinition.rslv(parentFeature, params.getParams().getCache() );
-		params.setCacheSession(cache);
 		beforeCalc(	params );
-	}
-	
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new SimpleCacheDefinition(this);
 	}
 	
 
@@ -244,14 +219,5 @@ public abstract class Feature extends FeatureBase implements
 	@Override
 	public String toString() {
 		return getFriendlyName();
-	}
-
-	@Override
-	public FeatureCacheDefinition cacheDefinition() {
-		return cacheDefinition;
-	}
-
-	protected CacheSession getCacheSession() {
-		return cache;
 	}
 }

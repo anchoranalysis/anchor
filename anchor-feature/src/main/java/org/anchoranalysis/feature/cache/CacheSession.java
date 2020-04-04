@@ -71,11 +71,6 @@ public class CacheSession implements ICachedCalculationSearch {
 		return main.initThroughSubcacheSession(subCacheName, params, item, logger);
 	}
 
-	public void initThroughSubcache(FeatureSessionCacheRetriever subCache, FeatureInitParams params, Feature item,
-			LogErrorReporter logger) throws InitException {
-		main.initThroughSubcache(subCache, params, item, logger);
-	}
-
 	public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		return main.calc(feature, params);
 	}

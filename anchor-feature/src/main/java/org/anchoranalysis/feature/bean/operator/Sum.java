@@ -51,7 +51,7 @@ public class Sum extends FeatureListElem {
 		double result = 0;
 		
 		for (Feature elem : getList()) {
-			double resultInd = getCacheSession().calc( elem, params );
+			double resultInd = params.calc( elem );
 			
 			if (ignoreNaN && Double.isNaN(resultInd)) {
 				continue;

@@ -62,7 +62,7 @@ public abstract class FeatureSingleElemWithRes extends FeatureSingleElem {
 			throw new FeatureCalcException("A resolution is required for this feature");
 		}
 		
-		double value = getCacheSession().calc( getItem(), params);
+		double value = params.calc( getItem() );
 		
 		return calcWithRes(value, paramsCast.getRes() );
 	}

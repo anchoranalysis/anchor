@@ -26,57 +26,36 @@ package org.anchoranalysis.feature.session;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.value.INameValue;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.AllAdditionalCaches;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
+// TODO BROKEN, most likely to be removed
 class CacheUtilities {
 
 	public static AllAdditionalCaches createNecessaryAdditionalCaches( FeatureSessionCacheFactory factory, FeatureList namedFeatures, SharedFeatureSet sharedFeatures ) throws CreateException {
 		
 		AllAdditionalCaches cacheAdditional = new AllAdditionalCaches();
 		
-		try {
+		//try {
 			// Let's get a list of all the additional-features we need
-			List<String> additionalCachesNeededList = namesOfAllAdditionalCaches( namedFeatures, sharedFeatures );
+			//List<String> additionalCachesNeededList = namesOfAllAdditionalCaches( namedFeatures, sharedFeatures );
 			
 			// Make it a set
-			Set<String> additionalCachesNeeded = additionalCachesNeededList.stream().collect( Collectors.toSet() );
+			//Set<String> additionalCachesNeeded = additionalCachesNeededList.stream().collect( Collectors.toSet() );
 			
 			// For each name, we create a cache
-			for( String key : additionalCachesNeeded) {
-				FeatureSessionCache cacheNew = factory.create(namedFeatures, sharedFeatures.duplicate() );
-				cacheAdditional.put(key, cacheNew);
-			}
+			//for( String key : additionalCachesNeeded) {
+			//	FeatureSessionCache cacheNew = factory.create(namedFeatures, sharedFeatures.duplicate() );
+			//	cacheAdditional.put(key, cacheNew);
+			//}
 			
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+		//} catch (OperationFailedException e) {
+//			throw new CreateException(e);
+	//	}
 		
 		return cacheAdditional;
-	}
-
-	
-	private static List<String> namesOfAllAdditionalCaches( FeatureList features, SharedFeatureSet sharedFeatures ) throws OperationFailedException {
-		
-		List<String> set = new ArrayList<>();
-		for( Feature f : features ) {
-			f.cacheDefinition().additionalCachesIncludingChildren(set);
-		}
-		for( INameValue<Feature> f : sharedFeatures ) {
-			f.getValue().cacheDefinition().additionalCachesIncludingChildren(set);
-		}
-		return set;
 	}
 }

@@ -31,9 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -66,11 +64,11 @@ public class VectorFromFeature extends FeatureBase {
 		super();
 	}
 	
-	public Vector3d calc( CacheSession session, CacheableParams<? extends FeatureCalcParams> params  ) throws FeatureCalcException {
+	public Vector3d calc( CacheableParams<? extends FeatureCalcParams> params  ) throws FeatureCalcException {
 		
-		double valX = session.calc(x, params);
-		double valY = session.calc(y, params);
-		double valZ = session.calc(z, params);
+		double valX = params.calc(x);
+		double valY = params.calc(y);
+		double valZ = params.calc(z);
 		
 		return new Vector3d(valX,valY,valZ);
 	}
@@ -102,10 +100,5 @@ public class VectorFromFeature extends FeatureBase {
 	@Override
 	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForThree(x,y,z);
-	}
-
-	@Override
-	public FeatureCacheDefinition cacheDefinition() {
-		return null;
 	}
 }

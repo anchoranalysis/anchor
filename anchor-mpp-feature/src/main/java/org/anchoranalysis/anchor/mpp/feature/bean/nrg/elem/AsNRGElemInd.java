@@ -57,20 +57,25 @@ public class AsNRGElemInd extends FeatureSingleElem {
 		if (params.getParams() instanceof NRGElemPairCalcParams) {
 		
 			NRGElemPairCalcParams paramsCast = (NRGElemPairCalcParams) params.getParams(); 
-			
-			NRGElemIndCalcParams paramsNew = new NRGElemIndCalcParams(
-				first ? paramsCast.getObj1() : paramsCast.getObj2(),
-				paramsCast.getNrgStack()
-			);
-			
-			return getCacheSession().calc(
-				getItem(),
-				params.changeParams(paramsNew)
-			);
+			return calcCast( params.changeParams(paramsCast) );
 			
 		} else {
 			throw new FeatureCalcException("Not supported for this type of params");
 		}
+	}
+	
+	private double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+
+		NRGElemIndCalcParams paramsNew = new NRGElemIndCalcParams(
+				first ? params.getParams().getObj1() : params.getParams().getObj2(),
+				params.getParams().getNrgStack()
+			);
+			
+		return params.calcChangeParams(
+			getItem(),
+			paramsNew,
+			"ind"
+		);		
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

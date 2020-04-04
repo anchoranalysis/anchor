@@ -30,11 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 
 public abstract class FeatureCacheDefinition {
 	
@@ -55,62 +53,6 @@ public abstract class FeatureCacheDefinition {
 		super();
 		this.feature = feature;
 	}
-
-	public CacheSession rslv( FeatureBase parentFeature, CacheRetrieverPlusAll cache ) throws InitException {
-		
-		this.parentFeature = parentFeature;
-		
-		// We record the cache for later
-		FeatureSessionCacheRetriever retriever = cache.getCache();
-		
-		// We setup the additional caches, and record them for later
-		List<String> listAdditionalCachesNeeded = additionalCachesIncludingParentPrefixes();
-		
-		FeatureSessionCacheRetriever[] additionalCaches = createAdditionalRetrievers(
-			cache.getAllAdditionalCaches(),
-			listAdditionalCachesNeeded
-		);	
-		
-		return new CacheSession( retriever, additionalCaches );
-	}
-	
-	private static FeatureSessionCacheRetriever[] createAdditionalRetrievers( AllAdditionalCaches allAdditionalCaches, List<String> listAdditionalCachesNeeded ) throws InitException {
-		// catch the null case
-		if (allAdditionalCaches==null) {
-			if (listAdditionalCachesNeeded.size()>0) {
-				throw new InitException("At least one additional-cache is specified, but allCaches is null");
-			} else {
-				return new FeatureSessionCacheRetriever[]{};
-			}
-		}
-		
-		return allAdditionalCaches.createRetrievers( listAdditionalCachesNeeded );
-	}
-	
-	
-	/**
-	 * Finds the additional caches this feature needs, prefixing as needed with the parent-prefixes
-	 * 
-	 * @param out
-	 */
-	public List<String> additionalCachesIncludingParentPrefixes() {
-		List<String> out = new ArrayList<>();
-		additionalCaches(out);
-		
-		// Wet prefix
-		String prefix = allPrefixesFromParents();
-		if (prefix.isEmpty()) {
-			return out;
-		}
-		
-		List<String> outPrepend = new ArrayList<>();
-			
-		for( String s : out ) {
-			outPrepend.add( prefix + s );
-		}
-		return outPrepend;
-	}
-	
 	
 	// 
 	/**
@@ -163,27 +105,6 @@ public abstract class FeatureCacheDefinition {
 			throw new OperationFailedException(e);
 		}
 	}
-	
-	/** Builds a unique string of prefixes until parent */
-	private final String allPrefixesFromParents() {
-		StringBuilder sb = new StringBuilder();
-		FeatureCacheDefinition fb = this;
-		while( (fb = parentCacheDefinition(fb) )!=null ) {
-			String prefix = fb.prefixForAdditionalCachesForChildren();
-			if (prefix!=null) {
-				sb.append(prefix);
-			}
-		}
-		return sb.toString();
-	}
-	
-	private FeatureCacheDefinition parentCacheDefinition( FeatureCacheDefinition fb ) {
-		if (fb.getParentFeature()==null) {
-			return null;
-		}
-		return fb.getParentFeature().cacheDefinition();
-	}
-	
 	
 	private static void addToListWithPrefix( List<String> in, String prefix, List<String> out ) {
 		for( String s : in) {

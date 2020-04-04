@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -56,12 +55,6 @@ public abstract class FeatureBase extends InitializableBean<Feature,FeatureInitP
 	public PropertyDefiner<FeatureInitParams> getPropertyDefiner() {
 		return featureDefiner;
 	}
-	
-	/**
-	 * Cache definition
-	 * @return
-	 */
-	public abstract FeatureCacheDefinition cacheDefinition();
 		
 	public abstract FeatureParamsDescriptor paramType()
 			throws FeatureCalcException;

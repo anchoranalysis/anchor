@@ -64,7 +64,7 @@ public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureIn
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
 			CastInitParamsType paramsCast = (CastInitParamsType) params.getParams();
 			super.init(params, parentFeature, logger);
-			beforeCalcCast( paramsCast, params.getCacheSession().main() );
+			beforeCalcCast( paramsCast, params.getCacheSession() );
 		} else {
 			throw new InitException(
 				String.format("Requires %s", castInitParamsType.getName())
