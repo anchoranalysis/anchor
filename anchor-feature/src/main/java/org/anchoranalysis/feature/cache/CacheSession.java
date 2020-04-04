@@ -76,15 +76,15 @@ public class CacheSession implements ICachedCalculationSearch {
 		main.initThroughSubcache(subCache, params, item, logger);
 	}
 
-	public double calc(Feature feature, FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		return main.calc(feature, params);
 	}
 
-	public ResultsVector calc(List<Feature> features, FeatureCalcParams params) throws FeatureCalcException {
+	public ResultsVector calc(List<Feature> features,  CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		return main.calc(features, params);
 	}
 
-	public double calcFeatureByID(String resolvedID, FeatureCalcParams params) throws FeatureCalcException {
+	public double calcFeatureByID(String resolvedID, CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		return main.calcFeatureByID(resolvedID, params);
 	}
 

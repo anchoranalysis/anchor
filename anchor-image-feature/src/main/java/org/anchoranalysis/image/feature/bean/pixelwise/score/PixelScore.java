@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.bean.pixelwise.score;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -43,16 +45,20 @@ public abstract class PixelScore extends PixelwiseFeature {
 	
 	// Delegates to cast-specific params
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof PixelScoreFeatureCalcParams) {
-			return calcCast( (PixelScoreFeatureCalcParams) params );
+		if (params.getParams() instanceof PixelScoreFeatureCalcParams) {
+			return calcCast(
+				params.changeParams(
+					(PixelScoreFeatureCalcParams) params.getParams()
+				)
+			);
 		} else {
 			throw new FeatureCalcException("Requires PixelScoreFeatureCalcParams");
 		}
 	}
 
-	protected abstract double calcCast( PixelScoreFeatureCalcParams params ) throws FeatureCalcException;
+	protected abstract double calcCast( CacheableParams<PixelScoreFeatureCalcParams> params ) throws FeatureCalcException;
 	
 	@Override
 	public FeatureParamsDescriptor paramType()

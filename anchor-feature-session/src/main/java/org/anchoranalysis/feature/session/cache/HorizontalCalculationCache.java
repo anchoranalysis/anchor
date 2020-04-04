@@ -35,12 +35,14 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.ResettableSet;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.session.SessionUtilities;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -73,7 +75,7 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	private class Retriever extends FeatureSessionCacheRetriever {
 		
 		@Override
-		public void initFeature(Feature feature,
+		public CacheableParams<FeatureInitParams> initFeature(Feature feature,
 				FeatureBase parentFeature,
 				FeatureInitParams initParams, LogErrorReporter logger)
 				throws InitException {
@@ -82,11 +84,17 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 				logger.getLogReporter().logFormatted("Cache-init: %s", feature.getFriendlyName() );
 			}
 			
-			feature.init(initParams, parentFeature, logger);
+			CacheableParams<FeatureInitParams> paramsWithCache = SessionUtilities.createCacheableInit(initParams);
+			feature.init(
+				paramsWithCache,
+				parentFeature,
+				logger
+			);
+			return paramsWithCache;
 		}
 		
 		@Override
-		public double calc(Feature feature, FeatureCalcParams params )
+		public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params )
 				throws FeatureCalcException {
 			//System.out.printf("Calculating feature: %s\n", feature.getFriendlyName());
 	
@@ -114,7 +122,7 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 		}
 
 		@Override
-		public double calcFeatureByID(String id, FeatureCalcParams params)
+		public double calcFeatureByID(String id, CacheableParams<? extends FeatureCalcParams> params)
 				throws FeatureCalcException {
 			try {
 				Feature feature = sharedFeatures.getException(id);

@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 
@@ -58,12 +59,12 @@ public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureIn
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(FeatureInitParams params, FeatureBase parentFeature, LogErrorReporter logger) throws InitException {
+	public void init(CacheableParams<FeatureInitParams> params, FeatureBase parentFeature, LogErrorReporter logger) throws InitException {
 		assert( logger!=null );
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
-			CastInitParamsType paramsCast = (CastInitParamsType) params;
-			super.init(paramsCast, parentFeature, logger);
-			beforeCalcCast( paramsCast, params.getCache().getCache() );
+			CastInitParamsType paramsCast = (CastInitParamsType) params.getParams();
+			super.init(params, parentFeature, logger);
+			beforeCalcCast( paramsCast, params.getCacheSession().main() );
 		} else {
 			throw new InitException(
 				String.format("Requires %s", castInitParamsType.getName())

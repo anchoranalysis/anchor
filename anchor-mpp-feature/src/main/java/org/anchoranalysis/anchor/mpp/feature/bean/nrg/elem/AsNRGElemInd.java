@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParamsDescr
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -51,18 +52,21 @@ public class AsNRGElemInd extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemPairCalcParams) {
+		if (params.getParams() instanceof NRGElemPairCalcParams) {
 		
-			NRGElemPairCalcParams paramsCast = (NRGElemPairCalcParams) params; 
+			NRGElemPairCalcParams paramsCast = (NRGElemPairCalcParams) params.getParams(); 
 			
 			NRGElemIndCalcParams paramsNew = new NRGElemIndCalcParams(
 				first ? paramsCast.getObj1() : paramsCast.getObj2(),
 				paramsCast.getNrgStack()
 			);
 			
-			return getCacheSession().calc(getItem(), paramsNew);
+			return getCacheSession().calc(
+				getItem(),
+				params.changeParams(paramsNew)
+			);
 			
 		} else {
 			throw new FeatureCalcException("Not supported for this type of params");

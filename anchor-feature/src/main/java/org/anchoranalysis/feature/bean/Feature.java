@@ -38,6 +38,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.cache.SimpleCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -123,7 +124,7 @@ public abstract class Feature extends FeatureBase implements
 				: getBeanDscr();
 	}
 
-	public double calcCheckInit(FeatureCalcParams params) throws FeatureCalcException {
+	public double calcCheckInit(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		if (!hasBeenInit) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
@@ -137,7 +138,7 @@ public abstract class Feature extends FeatureBase implements
 	}
 	
 	// Calculates a value for some parameters
-	protected abstract double calc(FeatureCalcParams params) throws FeatureCalcException;
+	protected abstract double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException;
 
 	/**
 	 * Optionally transforms the parameters passed into this feature, before
@@ -169,7 +170,7 @@ public abstract class Feature extends FeatureBase implements
 	 */
 	@Override
 	public void init(
-		FeatureInitParams params,
+		CacheableParams<FeatureInitParams> params,
 		FeatureBase parentFeature,
 		LogErrorReporter logger
 	) throws InitException {
@@ -177,9 +178,9 @@ public abstract class Feature extends FeatureBase implements
 		hasBeenInit = true;
 		this.logger = logger;
 
-		cache = this.cacheDefinition.rslv(parentFeature, params.getCache() );
-		
-		beforeCalc(	params,	cache );
+		cache = this.cacheDefinition.rslv(parentFeature, params.getParams().getCache() );
+		params.setCacheSession(cache);
+		beforeCalc(	params );
 	}
 	
 	protected FeatureCacheDefinition createCacheDefinition() {
@@ -231,7 +232,7 @@ public abstract class Feature extends FeatureBase implements
 	}
 
 	// Dummy method, that children can optionally override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache) throws InitException {
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
 
 	}
 

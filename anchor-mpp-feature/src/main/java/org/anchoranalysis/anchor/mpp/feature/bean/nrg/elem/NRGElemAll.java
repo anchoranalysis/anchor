@@ -30,6 +30,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParamsDescri
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -42,17 +43,21 @@ public abstract class NRGElemAll extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemAllCalcParams) {
-			return calcCast( (NRGElemAllCalcParams) params );
+		if (params.getParams() instanceof NRGElemAllCalcParams) {
+			return calcCast(
+				params.changeParams(
+					(NRGElemAllCalcParams) params.getParams()
+				)
+			);
 		} else {
 			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
 		}
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( NRGElemAllCalcParams params ) throws FeatureCalcException;
+	public abstract double calcCast( CacheableParams<NRGElemAllCalcParams> params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()

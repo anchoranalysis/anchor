@@ -38,6 +38,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -149,7 +150,10 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 				
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature f = listFeatures.get(i);
-			double val = cache.retriever().calc(f, params);
+			double val = cache.retriever().calc(
+				f,
+				SessionUtilities.createCacheable(params)
+			);
 			res.set(i,val);
 		}
 		return res;
@@ -240,7 +244,12 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 			Feature f = listFeatures.get(i);
 			
 			try {
-				calcThroughCache( f, res, i, params );
+				calcThroughCache(
+					f,
+					res,
+					i,
+					SessionUtilities.createCacheable(params)
+				);
 				
 			} catch (FeatureCalcException e) {
 				if (reportErrors) {
@@ -260,7 +269,12 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 				Feature f = listFeatures.get(i);
 				FeatureCalcParams params = listCreateParams.get(i).createForFeature(f);
 				
-				calcThroughCache( f, res, i, params );
+				calcThroughCache(
+					f,
+					res,
+					i,
+					SessionUtilities.createCacheable(params)
+				);
 			}
 			return res;
 			
@@ -269,7 +283,12 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 		}		
 	}
 	
-	private void calcThroughCache( Feature f, ResultsVector res, int i, FeatureCalcParams params ) throws FeatureCalcException {
+	private void calcThroughCache(
+		Feature f,
+		ResultsVector res,
+		int i,
+		CacheableParams<FeatureCalcParams> params
+	) throws FeatureCalcException {
 		double val = cache.retriever().calc(f, params);
 		res.set(i,val);
 	}

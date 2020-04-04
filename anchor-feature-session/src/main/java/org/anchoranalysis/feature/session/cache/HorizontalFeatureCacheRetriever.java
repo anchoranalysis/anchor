@@ -33,6 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -62,7 +63,10 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 		this.cacheProducer = cacheProducer;
 	}
 
-	private Double calcAndAdd( Feature feature, FeatureCalcParams params ) throws FeatureCalcException {
+	private Double calcAndAdd(
+		Feature feature,
+		CacheableParams<? extends FeatureCalcParams> params
+	) throws FeatureCalcException {
 		Double result = delegate.calc(feature, params);
 		map.add(feature, resolveNameFeature(feature), result);
 		return result;
@@ -78,7 +82,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 	
 	@Override
-	public double calc(Feature feature, FeatureCalcParams params)
+	public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params)
 			throws FeatureCalcException {
 		
 		// if there's no custom name, then we don't consider caching
@@ -95,11 +99,11 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public void initFeature(Feature feature,
+	public CacheableParams<FeatureInitParams> initFeature(Feature feature,
 			FeatureBase parentFeature,
 			FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
 		assert( hasBeenInit() );
-		delegate.initFeature(feature, parentFeature, initParams, logger);
+		return delegate.initFeature(feature, parentFeature, initParams, logger);
 	}
 
 	@Override
@@ -132,7 +136,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 			
 	@Override
-	public double calcFeatureByID(String id, FeatureCalcParams params)
+	public double calcFeatureByID(String id, CacheableParams<? extends FeatureCalcParams> params)
 			throws FeatureCalcException {
 		
 		// Let's first check if it's in our cache

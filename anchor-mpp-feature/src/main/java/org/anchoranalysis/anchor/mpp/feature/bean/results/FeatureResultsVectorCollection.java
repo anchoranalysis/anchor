@@ -27,6 +27,7 @@ package org.anchoranalysis.anchor.mpp.feature.bean.results;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -41,10 +42,10 @@ public abstract class FeatureResultsVectorCollection extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof FeatureResultsVectorCollectionParams) {
-			return calc( (FeatureResultsVectorCollectionParams) params );
+		if (params.getParams() instanceof FeatureResultsVectorCollectionParams) {
+			return calc( (FeatureResultsVectorCollectionParams) params.getParams() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureResultsVectorCollectionParams.class.getSimpleName() );
 		}

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.feature.bean.objmask.pair;
 
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -44,10 +45,14 @@ public abstract class FeatureObjMaskPair extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof FeatureObjMaskPairParams) {
-			return calcCast( (FeatureObjMaskPairParams) params );
+		if (params.getParams() instanceof FeatureObjMaskPairParams) {
+			return calcCast(
+				params.changeParams(
+					(FeatureObjMaskPairParams) params.getParams()
+				)
+			);
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureObjMaskPairParams.class.getSimpleName() );
 		}
@@ -68,7 +73,7 @@ public abstract class FeatureObjMaskPair extends Feature {
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureObjMaskPairParams params ) throws FeatureCalcException;
+	public abstract double calcCast( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()

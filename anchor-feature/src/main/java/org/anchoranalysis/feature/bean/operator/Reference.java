@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
@@ -62,18 +62,17 @@ public class Reference extends Feature {
 	}
 
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		
 		// We resolve the ID before its passed to calcFeatureByID
-		this.rslvdID = cache.resolveFeatureID(id);
+		this.rslvdID = params.getCacheSession().resolveFeatureID(id);
 	}
 	
 	
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		return getCacheSession().calcFeatureByID(rslvdID, params);
 	}
 

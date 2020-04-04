@@ -27,6 +27,7 @@ package org.anchoranalysis.image.feature.bean;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -42,10 +43,10 @@ public abstract class FeatureNRGStack extends Feature {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof FeatureNRGStackParams) {
-			return calcCast( (FeatureNRGStackParams) params );
+		if (params.getParams() instanceof FeatureNRGStackParams) {
+			return calcCast( (FeatureNRGStackParams) params.getParams() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureNRGStackParams.class.getSimpleName() );
 		}

@@ -27,6 +27,7 @@ package org.anchoranalysis.feature.bean.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
@@ -45,7 +46,7 @@ public class Sum extends FeatureListElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
 		double result = 0;
 		

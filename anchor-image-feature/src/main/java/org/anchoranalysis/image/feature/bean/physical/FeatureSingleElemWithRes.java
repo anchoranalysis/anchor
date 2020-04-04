@@ -28,6 +28,7 @@ package org.anchoranalysis.image.feature.bean.physical;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
@@ -49,13 +50,13 @@ public abstract class FeatureSingleElemWithRes extends FeatureSingleElem {
 	}
 	
 	@Override
-	public final double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public final double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
-		if (!(params instanceof FeatureCalcParamsWithRes)) {
+		if (!(params.getParams() instanceof FeatureCalcParamsWithRes)) {
 			throw new FeatureCalcException("Requires " + FeatureCalcParamsWithRes.class.getSimpleName() );
 		}
 		
-		FeatureCalcParamsWithRes paramsCast = (FeatureCalcParamsWithRes) params;
+		FeatureCalcParamsWithRes paramsCast = (FeatureCalcParamsWithRes) params.getParams();
 		
 		if (paramsCast.getRes()==null) {
 			throw new FeatureCalcException("A resolution is required for this feature");

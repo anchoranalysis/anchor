@@ -32,6 +32,7 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -65,7 +66,7 @@ public class VectorFromFeature extends FeatureBase {
 		super();
 	}
 	
-	public Vector3d calc( CacheSession session, FeatureCalcParams params  ) throws FeatureCalcException {
+	public Vector3d calc( CacheSession session, CacheableParams<? extends FeatureCalcParams> params  ) throws FeatureCalcException {
 		
 		double valX = session.calc(x, params);
 		double valY = session.calc(y, params);

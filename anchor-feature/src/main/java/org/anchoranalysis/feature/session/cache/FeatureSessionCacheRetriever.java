@@ -36,6 +36,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
@@ -67,9 +68,9 @@ public abstract class FeatureSessionCacheRetriever implements ICachedCalculation
 	 * @return the feature-value
 	 * @throws FeatureCalcException
 	 */
-	public abstract double calc( Feature feature, FeatureCalcParams params ) throws FeatureCalcException;
+	public abstract double calc( Feature feature, CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException;
 
-	public abstract void initFeature( Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger ) throws InitException;
+	public abstract CacheableParams<FeatureInitParams> initFeature( Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger ) throws InitException;
 	
 	/**
 	 * Calculates a feature-list throwing an exception if there is an error
@@ -79,7 +80,7 @@ public abstract class FeatureSessionCacheRetriever implements ICachedCalculation
 	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
 	 * @throws FeatureCalcException 
 	 */
-	public ResultsVector calc( List<Feature> features, FeatureCalcParams params ) throws FeatureCalcException {
+	public ResultsVector calc( List<Feature> features, CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		ResultsVector out = new ResultsVector(features.size());
 		for( int i=0; i<features.size(); i++ ) {
 			
@@ -107,7 +108,7 @@ public abstract class FeatureSessionCacheRetriever implements ICachedCalculation
 	 * @param params params
 	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
 	 */
-	public ResultsVector calcSuppressErrors( List<Feature> features, FeatureCalcParams params ) {
+	public ResultsVector calcSuppressErrors( List<Feature> features, CacheableParams<FeatureCalcParams> params ) {
 		ResultsVector out = new ResultsVector(features.size());
 		for( int i=0; i<features.size(); i++ ) {
 			
@@ -149,7 +150,7 @@ public abstract class FeatureSessionCacheRetriever implements ICachedCalculation
 	 * @param params TODO
 	 * @throws GetOperationFailedException 
 	 */
-	public abstract double calcFeatureByID( String resolvedID, FeatureCalcParams params ) throws FeatureCalcException;
+	public abstract double calcFeatureByID( String resolvedID, CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException;
 	
 	/**
 	 * Debug method that describes the current caches

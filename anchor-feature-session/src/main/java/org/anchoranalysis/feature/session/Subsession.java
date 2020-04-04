@@ -32,6 +32,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -69,7 +70,10 @@ public class Subsession {
 
 		for( int i=0; i<features.size(); i++) {
 			Feature f = features.get(i);
-			double val = cache.retriever().calc(f,params);
+			double val = cache.retriever().calc(
+				f,
+				SessionUtilities.createCacheable(params)
+			);
 			res.set(i,val);
 		}
 		return res;
@@ -87,7 +91,10 @@ public class Subsession {
 			try {
 				FeatureCalcParams params = listParams.get(i);
 				
-				val = cache.retriever().calc(f,params);
+				val = cache.retriever().calc(
+					f,
+					SessionUtilities.createCacheable(params)
+				);
 				res.set(i,val);
 			} catch (Exception e) {
 				res.setError(i,e);
@@ -100,7 +107,10 @@ public class Subsession {
 	}
 	
 	public double calc( Feature feature, FeatureCalcParams params ) throws FeatureCalcException {
-		return cache.retriever().calc(feature,params);
+		return cache.retriever().calc(
+			feature,
+			SessionUtilities.createCacheable(params)
+		);
 	}
 
 }

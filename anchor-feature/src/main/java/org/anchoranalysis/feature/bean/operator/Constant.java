@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
@@ -54,7 +55,7 @@ public class Constant extends Feature {
 	}
 	
 	@Override
-	public double calc( FeatureCalcParams params ) {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) {
 		return value;
 	}
 

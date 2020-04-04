@@ -46,7 +46,13 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class SimpleSession extends FeatureSession {
 
-	public double calc(Feature feature, FeatureInitParams paramsInit, SharedFeatureSet sharedFeatures, FeatureCalcParams params, LogErrorReporter logger ) throws FeatureCalcException, InitException {
+	public double calc(
+		Feature feature,
+		FeatureInitParams paramsInit,
+		SharedFeatureSet sharedFeatures,
+		FeatureCalcParams params,
+		LogErrorReporter logger
+	) throws FeatureCalcException, InitException {
 		
 		NullCache cache = new NullCache(sharedFeatures);
 		
@@ -54,7 +60,10 @@ public class SimpleSession extends FeatureSession {
 		feature.initRecursive(paramsInit, logger);
 		
 		//System.out.printf("Calculating feature %s\n", feature.getCustomNameOrDscr() );
-		double val = retriever.calc(feature,params);
+		double val = retriever.calc(
+			feature,
+			SessionUtilities.createCacheable(params)
+		);
 		
 //		if (Double.isNaN(val)) {
 //			throw new FeatureCalcException( String.format("Warning: Feature %s returned NaN", feature.getCustomNameOrDscr() ) );
