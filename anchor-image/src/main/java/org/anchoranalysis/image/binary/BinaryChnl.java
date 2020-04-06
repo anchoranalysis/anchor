@@ -84,7 +84,7 @@ public class BinaryChnl {
 		}
 	}
 	
-	public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() throws CreateException {
+	public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
 		return new BinaryVoxelBoxByte( getVoxelBox(), new BinaryValues(binaryValues) );
 	}
 

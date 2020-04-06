@@ -3,6 +3,7 @@ package org.anchoranalysis.feature.cache;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.anchoranalysis.core.cache.ExecuteException;
@@ -43,10 +44,6 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		this.factory = factory;
 	}
 	
-	public FeatureSessionCacheRetriever getCacheSession() {
-		return cache;
-	}
-	
 	public FeatureSessionCacheRetriever cacheFor(String childName) {
 		return children.computeIfAbsent(childName, s -> factory.get() );
 	}
@@ -82,28 +79,49 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return cacheFor(childName).search(cc).getOrCalculate(params);
 	}
 
-	public <S extends FeatureCalcParams> CacheableParams<S> changeParams( S paramsNew ) {
-		return new CacheableParams<S>(
-			paramsNew,
-			cache,
-			factory
-		);
+	/** 
+	 * Downcasts the type of the parameters in the cache, while continuing to use the same cache
+	 * 
+	 *  @param classToDowncastTo the class to downcast to
+	 *  @return a new CacheableParams with identical but down-casted params, and using the same cache/factory as currently. 
+	 * */
+	@SuppressWarnings("unchecked")
+	public <S extends FeatureCalcParams> CacheableParams<S> downcastParams( Class<S> classToDowncastTo ) throws FeatureCalcException {
+		if (params.getClass().isAssignableFrom(classToDowncastTo)) {
+			
+			return new CacheableParams<S>(
+				(S) params,
+				cache,
+				factory
+			);
+
+		} else {
+			throw new FeatureCalcException( "Requires " + classToDowncastTo.getSimpleName() );
+		}
 	}
 	
-	public <S extends FeatureCalcParams> CacheableParams<S> changeParams( S paramsNew, String childName ) {
+	/**
+	 * Maps the parameters to a new type, which also leads to being assigned a new child-cache.
+	 *  
+	 * @param <S> the type of the new parameters
+	 * @param deriveParamsFunc derives new parameters from existing
+	 * @param childName unique name to use in the cache (other features can also reference the same childName)
+	 * @return a new CacheableParams with derived-parameters and a cache that is a child of the existing cache
+	 */
+	public <S extends FeatureCalcParams> CacheableParams<S> mapParams( Function<T,S> deriveParamsFunc, String childName ) {
 		return new CacheableParams<S>(
-			paramsNew,
+			deriveParamsFunc.apply(params),
 			cacheFor(childName),
 			factory
 		);
 	}
 	
-	public <S extends FeatureCalcParams> double calcChangeParams(Feature feature, S params, String childName) throws FeatureCalcException {
+	public <S extends FeatureCalcParams> double calcChangeParams(Feature feature, Function<T,S> deriveParamsFunc, String childName) throws FeatureCalcException {
 		FeatureSessionCacheRetriever child = cacheFor(childName); 
 		return child.calc(
 			feature,
 			new CacheableParams<S>(
-				params,
+				deriveParamsFunc.apply(params),
 				child,
 				factory
 			)

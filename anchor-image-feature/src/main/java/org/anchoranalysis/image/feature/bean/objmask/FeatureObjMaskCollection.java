@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask.collection;
+package org.anchoranalysis.image.feature.bean.objmask;
 
 /*-
  * #%L

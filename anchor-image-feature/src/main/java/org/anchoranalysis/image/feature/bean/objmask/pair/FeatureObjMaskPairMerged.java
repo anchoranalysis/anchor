@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask.pair.merged;
+package org.anchoranalysis.image.feature.bean.objmask.pair;
 
 /*-
  * #%L
@@ -43,16 +43,9 @@ public abstract class FeatureObjMaskPairMerged extends Feature {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureObjMaskPairMergedParams) {
-			return calcCast(
-				params.changeParams(
-					(FeatureObjMaskPairMergedParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskPairMergedParams.class.getSimpleName() );
-		}
+		return calcCast(
+			params.downcastParams(FeatureObjMaskPairMergedParams.class)
+		);
 	}
 	
 	// Calculates an NRG element for a set of pixels

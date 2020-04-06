@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask.sharedobjects;
+package org.anchoranalysis.image.feature.bean.objmask;
 
 /*
  * #%L
@@ -84,16 +84,9 @@ public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureObjMaskParams) {
-			return calcCast(
-				params.changeParams(
-					(FeatureObjMaskParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskParams.class.getSimpleName() );
-		}
+		return calcCast(
+			params.downcastParams(FeatureObjMaskParams.class)
+		);
 	}
 	
 	// Calculates an NRG element for a set of pixels

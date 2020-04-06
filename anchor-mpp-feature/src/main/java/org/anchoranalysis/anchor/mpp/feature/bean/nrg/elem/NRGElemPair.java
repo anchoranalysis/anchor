@@ -46,16 +46,9 @@ public abstract class NRGElemPair extends Feature {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemPairCalcParams) {
-			return calcCast(
-				params.changeParams(
-					(NRGElemPairCalcParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires NRGElemPairCalcParams");
-		}
+		return calcCast(
+			params.downcastParams(NRGElemPairCalcParams.class)
+		);
 	}
 	
 	public abstract double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException;

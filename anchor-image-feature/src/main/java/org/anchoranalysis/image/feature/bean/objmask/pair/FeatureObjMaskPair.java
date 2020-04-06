@@ -44,29 +44,17 @@ public abstract class FeatureObjMaskPair extends Feature {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureObjMaskPairParams) {
-			return calcCast(
-				params.changeParams(
-					(FeatureObjMaskPairParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskPairParams.class.getSimpleName() );
-		}
+		return calcCast(
+			params.downcastParams(FeatureObjMaskPairParams.class)
+		);
 	}
 	
 	@Override
 	public CacheableParams<FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params, Feature dependentFeature) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureObjMaskPairParams) {
-			return transformParams(
-				params.changeParams( (FeatureObjMaskPairParams) params.getParams() ),
-				dependentFeature
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskPairParams.class.getSimpleName() );
-		}
+		return transformParams(
+			params.downcastParams(FeatureObjMaskPairParams.class),
+			dependentFeature
+		);
 	}
 	
 	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskPairParams> params, Feature dependentFeature) throws FeatureCalcException {

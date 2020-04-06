@@ -43,16 +43,9 @@ public abstract class FeatureStack extends Feature {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureStackParams) {
-			return calcCast(
-				params.changeParams(
-					(FeatureStackParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureStackParams.class.getSimpleName() );
-		}
+		return calcCast(
+			params.downcastParams(FeatureStackParams.class)
+		);
 	}
 	
 	// Calculates an NRG element for a set of pixels

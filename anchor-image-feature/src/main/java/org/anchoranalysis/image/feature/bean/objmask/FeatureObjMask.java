@@ -43,14 +43,9 @@ public abstract class FeatureObjMask extends Feature {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureObjMaskParams) {
-			
-			FeatureObjMaskParams paramsCast = (FeatureObjMaskParams) params.getParams();
-			return calcCast( params.changeParams(paramsCast) );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskParams.class.getSimpleName() );
-		}
+		return calcCast(
+			params.downcastParams(FeatureObjMaskParams.class)
+		);
 	}
 	
 	// Calculates an NRG element for a set of pixels
@@ -58,15 +53,10 @@ public abstract class FeatureObjMask extends Feature {
 
 	@Override
 	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params, Feature dependentFeature) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureObjMaskParams) {
-			return transformParamsCast(
-				params.changeParams( (FeatureObjMaskParams) params.getParams() ),
-				dependentFeature
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskParams.class.getSimpleName() );
-		}
+		return transformParamsCast(
+			params.downcastParams(FeatureObjMaskParams.class),
+			dependentFeature
+		);
 	}
 	
 	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskParams> params, Feature dependentFeature) throws FeatureCalcException {

@@ -46,16 +46,9 @@ public abstract class PixelScore extends PixelwiseFeature {
 	// Delegates to cast-specific params
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof PixelScoreFeatureCalcParams) {
-			return calcCast(
-				params.changeParams(
-					(PixelScoreFeatureCalcParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires PixelScoreFeatureCalcParams");
-		}
+		return calcCast(
+			params.downcastParams(PixelScoreFeatureCalcParams.class)
+		);
 	}
 
 	protected abstract double calcCast( CacheableParams<PixelScoreFeatureCalcParams> params ) throws FeatureCalcException;

@@ -3,6 +3,7 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParamsDescriptor;
 
+
 /*-
  * #%L
  * anchor-mpp-feature
@@ -44,16 +45,9 @@ public abstract class NRGElemAll extends Feature {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemAllCalcParams) {
-			return calcCast(
-				params.changeParams(
-					(NRGElemAllCalcParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
-		}
+		return calcCast(
+			params.downcastParams(NRGElemAllCalcParams.class)
+		);
 	}
 	
 	// Calculates an NRG element for a set of pixels

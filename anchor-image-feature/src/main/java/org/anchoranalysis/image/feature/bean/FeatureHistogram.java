@@ -43,16 +43,9 @@ public abstract class FeatureHistogram extends Feature {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof FeatureHistogramParams) {
-			return calcCast(
-				params.changeParams(
-					(FeatureHistogramParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureHistogramParams.class.getSimpleName() );
-		}
+		return calcCast(
+			params.downcastParams(FeatureHistogramParams.class)
+		);
 	}
 	
 	// Calculates an NRG element for a set of pixels
