@@ -49,13 +49,14 @@ class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
 				throw new InitException("A feature may only have another FeatureBase as a bean-parent");
 			}
 		}
-		
-		//assert(cache!=null);
-		FeatureInitParams paramsCast = (FeatureInitParams) params;
+
 		if (propertyValue instanceof Feature) {
-			if (paramsCast.getCache()!=null && paramsCast.getCache().getCache()!=null) {
-				paramsCast.getCache().getCache().initFeature( (Feature) propertyValue, (FeatureBase) parent, paramsCast, logger );
-			}
+			Feature propertyValueCast = (Feature) propertyValue;
+			propertyValueCast.init(
+				(FeatureInitParams) params,
+				(FeatureBase) parent,
+				logger
+			);
 		}
 	}
 

@@ -26,7 +26,6 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -38,7 +37,6 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SessionUtilities;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -53,12 +51,9 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public CacheableParams<FeatureInitParams> initFeature(Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
+	public void initFeature(Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
 		sharedFeatures.initRecursive(initParams, logger);
-		
-		CacheableParams<FeatureInitParams> paramsWithCache = SessionUtilities.createCacheableInit(initParams);
-		feature.init(paramsWithCache, parentFeature, logger);
-		return paramsWithCache;
+		feature.init(initParams, parentFeature, logger);
 	}
 	
 	@Override
@@ -107,8 +102,8 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	
 	
 	@Override
-	public FeatureSessionCache createNewCache() throws CreateException {
-		throw new CreateException("Operation is not supported");
+	public FeatureSessionCache createNewCache() {
+		return null;	// TODO fix
 	}
 
 	@Override

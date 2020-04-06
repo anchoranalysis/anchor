@@ -28,14 +28,12 @@ package org.anchoranalysis.feature.bean.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
 public class Reference extends Feature {
@@ -50,8 +48,6 @@ public class Reference extends Feature {
 	private String id;
 	// END BEAN
 	
-	private String rslvdID;
-	
 	public Reference() {
 		super();
 	}
@@ -60,20 +56,12 @@ public class Reference extends Feature {
 		super();
 		this.id = id;
 	}
-
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		
-		// We resolve the ID before its passed to calcFeatureByID
-		this.rslvdID = params.getCacheSession().resolveFeatureID(id);
-	}
-	
 	
 	@Override
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
-		return params.getCacheSession().calcFeatureByID(rslvdID, params);
+		// We resolve the ID before its passed to calcFeatureByID
+		String rslvdID = params.resolveFeatureID(id);
+		return params.calcFeatureByID(rslvdID, params);
 	}
 
 	public String getId() {

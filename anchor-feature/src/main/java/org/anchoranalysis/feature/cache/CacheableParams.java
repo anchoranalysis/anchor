@@ -1,17 +1,19 @@
 package org.anchoranalysis.feature.cache;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
 /**
  * Wraps a params with a structure for adding cachable objects
@@ -21,29 +23,32 @@ import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
  * @author owen
  *
  */
-public class CacheableParams<T> {
+public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalculationSearch {
 
-	private CacheSession cacheSession;
+	private FeatureSessionCacheRetriever cache;
+	private Map<String, FeatureSessionCacheRetriever> children = new HashMap<>();
+	
 	private T params;
-	private FeatureSessionCacheFactory factory;
-
-	public CacheableParams(T params, FeatureSessionCacheFactory factory) {
+	private Supplier<FeatureSessionCacheRetriever> factory;
+	
+	public CacheableParams(T params, Supplier<FeatureSessionCacheRetriever> factory) {
 		this.params = params;
 		this.factory = factory;
-		//this.cacheSession = factory.create(namedFeatures, sharedFeatures);
+		this.cache = factory.get();
 	}
 	
-	private CacheableParams(T params, CacheSession cacheSession) {
+	private CacheableParams(T params, FeatureSessionCacheRetriever cache, Supplier<FeatureSessionCacheRetriever> factory) {
 		this.params = params;
-		this.cacheSession = cacheSession;
+		this.cache = cache;
+		this.factory = factory;
 	}
 	
 	public FeatureSessionCacheRetriever getCacheSession() {
-		return cacheSession.main();
+		return cache;
 	}
 	
-	public FeatureSessionCacheRetriever cacheFor(String sessionName) {
-		return cacheSession.additional(0);
+	public FeatureSessionCacheRetriever cacheFor(String childName) {
+		return children.computeIfAbsent(childName, s -> factory.get() );
 	}
 
 	public T getParams() {
@@ -51,34 +56,66 @@ public class CacheableParams<T> {
 	}
 
 	public <S> CachedCalculation<S> search(CachedCalculation<S> cc) {
-		return cacheSession.search(cc);
-	}
-
-	public CachedCalculation<FeatureSessionCacheRetriever> initThroughSubcacheSession(String subCacheName,
-			FeatureInitParams params, Feature item, LogErrorReporter logger) throws InitException {
-		return cacheSession.initThroughSubcacheSession(subCacheName, params, item, logger);
+		return cache.search(cc);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
+	public <S, U> CachedCalculationMap<S, U> search(CachedCalculationMap<S, U> cc) {
+		return cache.search(cc);
+	}
+	
 	public double calc(Feature feature)
 			throws FeatureCalcException {
-		return cacheSession.calc(feature, (CacheableParams<? extends FeatureCalcParams>) this);
+		return cache.calc(feature, (CacheableParams<? extends FeatureCalcParams>) this);
 	}
 
-	@SuppressWarnings("unchecked")
 	public ResultsVector calc(List<Feature> features)
 			throws FeatureCalcException {
-		return cacheSession.calc(features, (CacheableParams<? extends FeatureCalcParams>) this );
-	}
-
-	public <S> CacheableParams<S> changeParams( S paramsNew ) {
-		return new CacheableParams<S>(paramsNew, cacheSession);
+		return cache.calc(features, (CacheableParams<? extends FeatureCalcParams>) this );
 	}
 	
-	public <S extends FeatureCalcParams> double calcChangeParams(Feature feature, S params, String sessionName) throws FeatureCalcException {
-		return cacheSession.calc(
-			feature,
-			changeParams(params)
+	public <S> S calc(CachedCalculation<S> cc) throws ExecuteException {
+		return search(cc).getOrCalculate(params);
+	}
+	
+	public <S> S calc(CachedCalculation<S> cc, String childName) throws ExecuteException {
+		return cacheFor(childName).search(cc).getOrCalculate(params);
+	}
+
+	public <S extends FeatureCalcParams> CacheableParams<S> changeParams( S paramsNew ) {
+		return new CacheableParams<S>(
+			paramsNew,
+			cache,
+			factory
 		);
+	}
+	
+	public <S extends FeatureCalcParams> CacheableParams<S> changeParams( S paramsNew, String childName ) {
+		return new CacheableParams<S>(
+			paramsNew,
+			cacheFor(childName),
+			factory
+		);
+	}
+	
+	public <S extends FeatureCalcParams> double calcChangeParams(Feature feature, S params, String childName) throws FeatureCalcException {
+		FeatureSessionCacheRetriever child = cacheFor(childName); 
+		return child.calc(
+			feature,
+			new CacheableParams<S>(
+				params,
+				child,
+				factory
+			)
+		);
+	}
+
+	public String resolveFeatureID(String id) {
+		return cache.resolveFeatureID(id);
+	}
+
+	public double calcFeatureByID(String resolvedID, CacheableParams<? extends FeatureCalcParams> params)
+			throws FeatureCalcException {
+		return cache.calcFeatureByID(resolvedID, params);
 	}
 }

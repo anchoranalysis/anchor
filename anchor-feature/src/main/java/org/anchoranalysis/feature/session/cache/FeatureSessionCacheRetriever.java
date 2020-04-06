@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -37,7 +36,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -70,7 +68,7 @@ public abstract class FeatureSessionCacheRetriever implements ICachedCalculation
 	 */
 	public abstract double calc( Feature feature, CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException;
 
-	public abstract CacheableParams<FeatureInitParams> initFeature( Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger ) throws InitException;
+	public abstract void initFeature( Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger ) throws InitException;
 	
 	/**
 	 * Calculates a feature-list throwing an exception if there is an error
@@ -165,47 +163,7 @@ public abstract class FeatureSessionCacheRetriever implements ICachedCalculation
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureSessionCache createNewCache() throws CreateException;
+	public abstract FeatureSessionCache createNewCache();
 	
-	public CachedCalculation<FeatureSessionCacheRetriever> initThroughSubcacheSession(
-		String subCacheName,
-		FeatureInitParams params,
-		Feature item,
-		LogErrorReporter logger
-	) throws InitException {
-		CachedCalculation<FeatureSessionCacheRetriever> ccSubsession = search(
-			new CalculateExtraCache(subCacheName, this )
-		);
-		
-		try {
-			FeatureSessionCacheRetriever subCache = ccSubsession.getOrCalculate(null);
-			assert subCache.hasBeenInit();
-			
-			initThroughSubcache(
-				subCache,
-				params,
-				item,
-				logger
-			);
-			
-			return ccSubsession;
-			
-		} catch (ExecuteException e) {
-			throw new InitException(e);
-		}
-	}
-	
-	public void initThroughSubcache(
-		FeatureSessionCacheRetriever subCache,
-		FeatureInitParams params,
-		Feature item,
-		LogErrorReporter logger	
-	) throws InitException {
-		// Initialise sub-feature
-		FeatureInitParams paramsSub = params.duplicateChangeCache(subCache);
-		
-		// We pick the third, as the first and second are 0 and 1
-		item.initRecursive(paramsSub, logger );
-	}
 	
 }

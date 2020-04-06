@@ -1,6 +1,5 @@
 package org.anchoranalysis.feature.session;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 
 /*
@@ -33,8 +32,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.AllAdditionalCaches;
-import org.anchoranalysis.feature.cache.CacheRetrieverPlusAll;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
@@ -43,9 +40,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 
 /**
- * A cache for features with multiple components
- * 	- cacheMain (the cache used mostly for calculating features)
- *  - cacheAdditional (other caches that the feature can use if they don't want to clash with cacheMain)
+ * Creates caches as needed, remembering them all, so they can be invalidated as needed.
  *  
  * The features are each queried for the names of any additional-caches needed, so a superset
  *  of all necessary features exists.
@@ -55,108 +50,68 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class CachePlus extends FeatureSessionCache {
 
-	private FeatureSessionCache cacheMain;
-	private AllAdditionalCaches cacheAdditional;
+	private FeatureSessionCacheFactory factory;
+	private FeatureList namedFeatures;
+	private SharedFeatureSet sharedFeatures;
+	
+	private FeatureInitParams featureInitParams;
+	private LogErrorReporter logger;
 		
-	public CachePlus(FeatureSessionCacheFactory factory, FeatureList namedFeatures, SharedFeatureSet sharedFeatures) throws CreateException {
-		this(
-			factory.create(namedFeatures, sharedFeatures.duplicate() ),
-			CacheUtilities.createNecessaryAdditionalCaches( factory, namedFeatures, sharedFeatures )
-		);
-		
+	public CachePlus(FeatureSessionCacheFactory factory, FeatureList namedFeatures, SharedFeatureSet sharedFeatures) {
+		this.namedFeatures = namedFeatures;
+		this.sharedFeatures = sharedFeatures;
+		this.factory = factory;
 	}
 	
-	private CachePlus( FeatureSessionCache cacheMain, AllAdditionalCaches cacheAdditionalIn ) throws CreateException {
-		// Deep copy the main cache
-		this.cacheMain = cacheMain;
-		
-		// deep copy the additional caches
-		this.cacheAdditional = cacheAdditionalIn;
-	}
-	
-	public CacheRetrieverPlusAll retrieverPlus() {
-		return new CacheRetrieverPlusAll(
-			retriever(),
-			getCacheAdditional()
+	public FeatureSessionCache createCache() {
+				
+		FeatureSessionCache cache = factory.create(
+			namedFeatures,
+			sharedFeatures.duplicate()
 		);
+		try {
+			cache.init(featureInitParams, logger, false);
+		} catch (InitException e) {
+			assert(false);
+		}
+		return cache;
 	}
 	
 	@Override
 	public void init(FeatureInitParams featureInitParams,
 			LogErrorReporter logger, boolean logCacheInit) throws InitException {
 		
-		// Init caches
-		cacheMain.init(featureInitParams, logger, logCacheInit);
-		
-		featureInitParams.setCache( new CacheRetrieverPlusAll(
-			retriever(),
-			cacheAdditional
-		));
-		
-		for( FeatureSessionCache add : cacheAdditional.values()) {
-			add.init(featureInitParams, logger, logCacheInit);
-			
-		}
-		
 		// Init shared-features
 		initSharedFeatures( featureInitParams, logger );
-	}
-	
-	private void initSharedFeatures( FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException {
-		cacheMain.retriever().getSharedFeatureList().initRecursive( featureInitParams, logger );
-		for( FeatureSessionCache add : cacheAdditional.values()) {
-			add.retriever().getSharedFeatureList().initRecursive( featureInitParams, logger );
-		}
 	}
 
 	@Override
 	public void invalidate() {
 		// DEBUG
-		cacheMain.invalidate();
-		cacheAdditional.invalidate();
-	}
-	
-	public void replaceAdditionalCache(String key, FeatureSessionCache cache)
-			throws OperationFailedException {
-		cacheAdditional.put(key, cache);
-	}
-
-	public FeatureSessionCache getAdditionalCache(String key) {
-		return cacheAdditional.get(key);
+		//cacheMain.invalidate();
 	}
 	
 
 	@Override
 	public FeatureSessionCacheRetriever retriever() {
-		return cacheMain.retriever();
+		assert(false);
+		return null;
 	}
 
 	@Override
 	public void assignResult(FeatureSessionCache other) throws OperationFailedException {
-		CachePlus otherCast = (CachePlus) other;
-		cacheMain.assignResult( otherCast.cacheMain );
-		cacheAdditional.assignResult( otherCast.cacheAdditional );
+		//CachePlus otherCast = (CachePlus) other;
+		//cacheMain.assignResult( otherCast.cacheMain );
 	}
 
 	@Override
-	public FeatureSessionCache duplicate() throws CreateException {
-		return new CachePlus( cacheMain.duplicate(), cacheAdditional.duplicate() );
+	public FeatureSessionCache duplicate() {
+		return new CachePlus( factory, namedFeatures, sharedFeatures );
 	}
-
-	public AllAdditionalCaches getCacheAdditional() {
-		return cacheAdditional;
+		
+	private void initSharedFeatures( FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException {
+		sharedFeatures.initRecursive( featureInitParams, logger );
+		this.featureInitParams = featureInitParams;
+		this.logger = logger;
 	}
-
-	public int numItemsAdditional() {
-		return cacheAdditional.size();
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append( String.format("main=%d\n", System.identityHashCode(cacheMain)) );
-		sb.append( cacheAdditional.toString() );
-		return sb.toString();
-	}
-
 }

@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.session.cache;
 
+import java.util.ArrayList;
+
+
 /*
  * #%L
  * anchor-feature
@@ -29,7 +32,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -38,7 +40,14 @@ public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory
 
 	private FeatureSessionCacheFactory delegate;
 	private Collection<String> ignorePrefixes;
-		
+	
+	public HorizontalFeatureCacheFactory(FeatureSessionCacheFactory delegate) {
+		this(
+			delegate,
+			new ArrayList<>()
+		);
+	}
+	
 	public HorizontalFeatureCacheFactory(FeatureSessionCacheFactory delegate, Collection<String> ignorePrefixes ) {
 		super();
 		this.delegate = delegate;
@@ -46,8 +55,7 @@ public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory
 	}
 
 	@Override
-	public FeatureSessionCache create(FeatureList namedFeatures,
-			SharedFeatureSet sharedFeatures) throws CreateException {
+	public FeatureSessionCache create(FeatureList namedFeatures, SharedFeatureSet sharedFeatures) {
 
 		FeatureSessionCache cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
 		

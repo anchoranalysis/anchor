@@ -1,6 +1,5 @@
 package org.anchoranalysis.feature.session.cache;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 
 /*
@@ -42,7 +41,6 @@ import org.anchoranalysis.feature.cachedcalculation.ResettableSet;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SessionUtilities;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -75,7 +73,7 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	private class Retriever extends FeatureSessionCacheRetriever {
 		
 		@Override
-		public CacheableParams<FeatureInitParams> initFeature(Feature feature,
+		public void initFeature(Feature feature,
 				FeatureBase parentFeature,
 				FeatureInitParams initParams, LogErrorReporter logger)
 				throws InitException {
@@ -84,13 +82,11 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 				logger.getLogReporter().logFormatted("Cache-init: %s", feature.getFriendlyName() );
 			}
 			
-			CacheableParams<FeatureInitParams> paramsWithCache = SessionUtilities.createCacheableInit(initParams);
 			feature.init(
-				paramsWithCache,
+				initParams,
 				parentFeature,
 				logger
 			);
-			return paramsWithCache;
 		}
 		
 		@Override
@@ -161,7 +157,7 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 		}
 
 		@Override
-		public FeatureSessionCache createNewCache() throws CreateException {
+		public FeatureSessionCache createNewCache() {
 			return HorizontalCalculationCache.this.duplicate();
 		}
 

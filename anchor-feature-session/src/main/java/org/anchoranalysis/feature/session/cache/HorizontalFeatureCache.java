@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -68,7 +67,7 @@ public class HorizontalFeatureCache extends FeatureSessionCache {
 	 */
 	private Collection<String> ignorePrefixes;
 	
-	HorizontalFeatureCache(FeatureSessionCache delegate, FeatureList namedFeatures, SharedFeatureSet sharedFeatures, Collection<String> ignorePrefixes ) throws CreateException {
+	HorizontalFeatureCache(FeatureSessionCache delegate, FeatureList namedFeatures, SharedFeatureSet sharedFeatures, Collection<String> ignorePrefixes ) {
 		super();
 		this.delegate = delegate;
 		this.namedFeatures = namedFeatures;
@@ -92,7 +91,8 @@ public class HorizontalFeatureCache extends FeatureSessionCache {
 			);
 			
 		} catch (OperationFailedException e) {
-			throw new CreateException(e);
+			// TODO
+			assert(false);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class HorizontalFeatureCache extends FeatureSessionCache {
 	}
 
 	@Override
-	public FeatureSessionCache duplicate() throws CreateException {
+	public FeatureSessionCache duplicate() {
 		return new HorizontalFeatureCache( delegate.duplicate(), this.namedFeatures, this.sharedFeatures, this.ignorePrefixes );
 	}
 

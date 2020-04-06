@@ -32,11 +32,10 @@ import java.util.List;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 
 /**
  * A sub-session is spawned from another session
@@ -53,9 +52,9 @@ import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
  */
 public class Subsession {
 	
-	private FeatureSessionCache cache;
+	private CachePlus cache;
 
-	public Subsession(FeatureSessionCache cache) {
+	public Subsession(CachePlus cache) {
 		super();
 		this.cache = cache;
 	}
@@ -72,14 +71,18 @@ public class Subsession {
 			Feature f = features.get(i);
 			double val = cache.retriever().calc(
 				f,
-				SessionUtilities.createCacheable(params)
+				createCacheable(params)
 			);
 			res.set(i,val);
 		}
 		return res;
 	}
 	
-	public ResultsVector calcSubsetSuppressErrors( FeatureList features, List<FeatureCalcParams> listParams, ErrorReporter errorReporter ) {
+	public ResultsVector calcSubsetSuppressErrors(
+		FeatureList features,
+		List<CacheableParams<? extends FeatureCalcParams>> listParams,
+		ErrorReporter errorReporter
+	) {
 		assert(features.size()==listParams.size());
 		
 		ResultsVector res = new ResultsVector( features.size() );
@@ -89,12 +92,9 @@ public class Subsession {
 			
 			double val;
 			try {
-				FeatureCalcParams params = listParams.get(i);
+				CacheableParams<? extends FeatureCalcParams> params = listParams.get(i);
 				
-				val = cache.retriever().calc(
-					f,
-					SessionUtilities.createCacheable(params)
-				);
+				val = cache.retriever().calc( f, params	);
 				res.set(i,val);
 			} catch (Exception e) {
 				res.setError(i,e);
@@ -109,7 +109,14 @@ public class Subsession {
 	public double calc( Feature feature, FeatureCalcParams params ) throws FeatureCalcException {
 		return cache.retriever().calc(
 			feature,
-			SessionUtilities.createCacheable(params)
+			createCacheable(params)
+		);
+	}
+	
+	private CacheableParams<FeatureCalcParams> createCacheable(FeatureCalcParams params) {
+		return SessionUtilities.createCacheable(
+			params,
+			() -> cache.createCache().retriever()
 		);
 	}
 

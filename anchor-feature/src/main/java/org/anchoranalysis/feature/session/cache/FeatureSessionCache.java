@@ -1,6 +1,5 @@
 package org.anchoranalysis.feature.session.cache;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 
 /*
@@ -73,5 +72,5 @@ public abstract class FeatureSessionCache {
 	 * 
 	 * @return
 	 */
-	public abstract FeatureSessionCache duplicate() throws CreateException;
+	public abstract FeatureSessionCache duplicate();
 }

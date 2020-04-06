@@ -28,15 +28,12 @@ package org.anchoranalysis.feature.cache;
 
 import java.util.List;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
@@ -64,11 +61,6 @@ public class CacheSession implements ICachedCalculationSearch {
 
 	public FeatureSessionCacheRetriever additional(int index) {
 		return additionalCaches[index];
-	}
-
-	public CachedCalculation<FeatureSessionCacheRetriever> initThroughSubcacheSession(String subCacheName,
-			FeatureInitParams params, Feature item, LogErrorReporter logger) throws InitException {
-		return main.initThroughSubcacheSession(subCacheName, params, item, logger);
 	}
 
 	public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {

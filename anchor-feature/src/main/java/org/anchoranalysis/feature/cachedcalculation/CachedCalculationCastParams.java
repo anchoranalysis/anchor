@@ -45,11 +45,6 @@ public abstract class CachedCalculationCastParams<ResultType,ParamsType extends 
 		}
 	};
 	
-	@SuppressWarnings("unchecked")
-	private synchronized void init(FeatureCalcParams params) {
-		this.params = (ParamsType) params;
-	}
-	
 	@Override
 	public synchronized ResultType getOrCalculate( FeatureCalcParams params ) throws ExecuteException {
 		
@@ -63,7 +58,7 @@ public abstract class CachedCalculationCastParams<ResultType,ParamsType extends 
 			}
 		}
 		
-		init(params);
+		initParams(params);
 		return delegate.doOperation();
 	}
 
@@ -86,6 +81,9 @@ public abstract class CachedCalculationCastParams<ResultType,ParamsType extends 
 		CachedCalculationCastParams<ResultType,ParamsType> savedResultCached = (CachedCalculationCastParams<ResultType,ParamsType>) savedResult;
 		delegate.assignFrom( savedResultCached.delegate );
 	}
-
 	
+	@SuppressWarnings("unchecked")
+	private synchronized void initParams(FeatureCalcParams params) {
+		this.params = (ParamsType) params;
+	}	
 }

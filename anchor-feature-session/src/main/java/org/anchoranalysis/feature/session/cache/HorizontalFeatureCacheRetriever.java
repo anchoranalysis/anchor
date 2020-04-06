@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
@@ -99,11 +98,11 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public CacheableParams<FeatureInitParams> initFeature(Feature feature,
+	public void initFeature(Feature feature,
 			FeatureBase parentFeature,
 			FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
 		assert( hasBeenInit() );
-		return delegate.initFeature(feature, parentFeature, initParams, logger);
+		delegate.initFeature(feature, parentFeature, initParams, logger);
 	}
 
 	@Override
@@ -164,7 +163,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public FeatureSessionCache createNewCache() throws CreateException {
+	public FeatureSessionCache createNewCache() {
 		return cacheProducer.create();
 	}
 

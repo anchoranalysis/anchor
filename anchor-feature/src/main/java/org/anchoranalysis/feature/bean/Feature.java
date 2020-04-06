@@ -133,7 +133,7 @@ public abstract class Feature extends FeatureBase implements
 	 * @param dependentFeature
 	 *            a dependent-feature
 	 */
-	public FeatureCalcParams transformParams(FeatureCalcParams params,
+	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params,
 			Feature dependentFeature) throws FeatureCalcException {
 		return params;
 	}
@@ -152,7 +152,7 @@ public abstract class Feature extends FeatureBase implements
 	 */
 	@Override
 	public void init(
-		CacheableParams<FeatureInitParams> params,
+		FeatureInitParams params,
 		FeatureBase parentFeature,
 		LogErrorReporter logger
 	) throws InitException {
@@ -207,7 +207,7 @@ public abstract class Feature extends FeatureBase implements
 	}
 
 	// Dummy method, that children can optionally override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+	public void beforeCalc(FeatureInitParams params) throws InitException {
 
 	}
 

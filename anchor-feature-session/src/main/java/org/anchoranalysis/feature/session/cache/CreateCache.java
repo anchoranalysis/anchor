@@ -26,8 +26,8 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
+
 
 @FunctionalInterface interface CreateCache<T> {
-	public T create() throws CreateException; 
+	public T create(); 
 }

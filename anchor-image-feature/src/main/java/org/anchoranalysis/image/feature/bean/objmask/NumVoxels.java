@@ -29,11 +29,8 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
@@ -49,21 +46,12 @@ public class NumVoxels extends FeatureObjMask {
 	private boolean mip=false;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<Double> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		cc = params.search( new CalculateNumVoxels(mip) );
-		System.out.printf("INIT Hashcode for cc = %d%n", cc.hashCode());
-	}
-	
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		try {
-			System.out.printf("CALC Hashcode for cc = %d%n", cc.hashCode());
-			return cc.getOrCalculate(params.getParams());
+			return params.calc(
+				new CalculateNumVoxels(mip)
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
 		}

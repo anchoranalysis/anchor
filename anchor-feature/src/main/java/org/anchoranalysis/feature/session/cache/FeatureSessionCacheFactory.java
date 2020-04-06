@@ -26,11 +26,10 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public interface FeatureSessionCacheFactory {
-	FeatureSessionCache create(FeatureList namedFeatures, SharedFeatureSet sharedFeatures) throws CreateException;
+	FeatureSessionCache create(FeatureList namedFeatures, SharedFeatureSet sharedFeatures);
 }

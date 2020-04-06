@@ -29,9 +29,7 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 
 public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureInitParams> extends Feature {
 
@@ -53,18 +51,18 @@ public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureIn
 	}
 	
 	// DUMMY METHOD that can be overrridden
-	public void beforeCalcCast( CastInitParamsType params, FeatureSessionCacheRetriever session ) throws InitException {
+	public void beforeCalcCast( CastInitParamsType params ) throws InitException {
 		
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(CacheableParams<FeatureInitParams> params, FeatureBase parentFeature, LogErrorReporter logger) throws InitException {
+	public void init(FeatureInitParams params, FeatureBase parentFeature, LogErrorReporter logger) throws InitException {
 		assert( logger!=null );
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
-			CastInitParamsType paramsCast = (CastInitParamsType) params.getParams();
+			CastInitParamsType paramsCast = (CastInitParamsType) params;
 			super.init(params, parentFeature, logger);
-			beforeCalcCast( paramsCast, params.getCacheSession() );
+			beforeCalcCast( paramsCast );
 		} else {
 			throw new InitException(
 				String.format("Requires %s", castInitParamsType.getName())

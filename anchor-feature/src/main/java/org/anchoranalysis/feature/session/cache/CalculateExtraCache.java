@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session.cache;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -94,12 +93,8 @@ public class CalculateExtraCache extends CachedCalculation<FeatureSessionCacheRe
 	public FeatureSessionCacheRetriever getOrCalculate(FeatureCalcParams params)
 			throws ExecuteException {
 		if (subSession==null) {
-			try {
-				assert(parentSession.hasBeenInit());
-				subSession = parentSession.createNewCache();
-			} catch (CreateException e) {
-				throw new ExecuteException(e);
-			}
+			assert(parentSession.hasBeenInit());
+			subSession = parentSession.createNewCache();
 		}
 		FeatureSessionCacheRetriever retriever = subSession.retriever();
 		assert( retriever.hasBeenInit() );

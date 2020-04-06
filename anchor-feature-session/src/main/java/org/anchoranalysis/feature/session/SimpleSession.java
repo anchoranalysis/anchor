@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session;
 
+
+
 /*-
  * #%L
  * anchor-feature-session
@@ -29,11 +31,11 @@ package org.anchoranalysis.feature.session;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
-import org.anchoranalysis.feature.session.cache.NullCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -54,16 +56,19 @@ public class SimpleSession extends FeatureSession {
 		LogErrorReporter logger
 	) throws FeatureCalcException, InitException {
 		
-		NullCache cache = new NullCache(sharedFeatures);
+		//NullCache cache = new NullCache(sharedFeatures);
 		
-		FeatureSessionCacheRetriever retriever = cache.retriever();
+		//FeatureSessionCacheRetriever retriever = cache.retriever();
 		feature.initRecursive(paramsInit, logger);
 		
-		//System.out.printf("Calculating feature %s\n", feature.getCustomNameOrDscr() );
-		double val = retriever.calc(
-			feature,
-			SessionUtilities.createCacheable(params)
+		
+		CacheableParams<FeatureCalcParams> paramsCacheable = SessionUtilities.createCacheable(
+			params,
+			new FeatureList(feature),
+			sharedFeatures			
 		);
+		
+		double val = paramsCacheable.calc(feature);
 		
 //		if (Double.isNaN(val)) {
 //			throw new FeatureCalcException( String.format("Warning: Feature %s returned NaN", feature.getCustomNameOrDscr() ) );
