@@ -28,16 +28,12 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -95,14 +91,6 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 			result = calcAndAdd( feature, params );
 		}
 		return result;
-	}
-
-	@Override
-	public void initFeature(Feature feature,
-			FeatureBase parentFeature,
-			FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
-		assert( hasBeenInit() );
-		delegate.initFeature(feature, parentFeature, initParams, logger);
 	}
 
 	@Override

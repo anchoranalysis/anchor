@@ -26,17 +26,13 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -48,12 +44,6 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	public NullCacheRetriever(SharedFeatureSet sharedFeatures) {
 		super();
 		this.sharedFeatures = sharedFeatures;
-	}
-
-	@Override
-	public void initFeature(Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
-		sharedFeatures.initRecursive(initParams, logger);
-		feature.init(initParams, parentFeature, logger);
 	}
 	
 	@Override

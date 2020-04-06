@@ -33,7 +33,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
@@ -62,7 +61,6 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	
 	private LogErrorReporter logger;
 	private boolean logCacheInit;
-	private FeatureInitParams featureInitParams;
 	private SharedFeatureSet sharedFeatures;
 	
 	HorizontalCalculationCache( SharedFeatureSet sharedFeatures ) {
@@ -71,23 +69,6 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	}
 	
 	private class Retriever extends FeatureSessionCacheRetriever {
-		
-		@Override
-		public void initFeature(Feature feature,
-				FeatureBase parentFeature,
-				FeatureInitParams initParams, LogErrorReporter logger)
-				throws InitException {
-			assert( hasBeenInit==true );
-			if (logCacheInit && logger!=null) {
-				logger.getLogReporter().logFormatted("Cache-init: %s", feature.getFriendlyName() );
-			}
-			
-			feature.init(
-				initParams,
-				parentFeature,
-				logger
-			);
-		}
 		
 		@Override
 		public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params )
@@ -174,7 +155,6 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger, boolean logCacheInit) throws InitException {
 		this.logger = logger;
 		this.logCacheInit = logCacheInit;
-		this.featureInitParams = featureInitParams;
 		this.hasBeenInit = true;
 		assert(logger!=null);
 
@@ -211,7 +191,6 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 		
 		out.logger = logger;
 		out.logCacheInit = logCacheInit;
-		out.featureInitParams = featureInitParams;
 		out.listCC = listCC.duplicate();
 		out.listCCMap = listCCMap.duplicate();
 		out.hasBeenInit = hasBeenInit;
