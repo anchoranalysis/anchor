@@ -50,11 +50,11 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class SequentialSessionVerticallyCached extends FeatureSession implements ISequentialSessionSingleParams {
+public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> extends FeatureSession implements ISequentialSessionSingleParams<T> {
 
-	private SequentialSession delegate;
+	private SequentialSession<T> delegate;
 	
-	private LRUHashMapCache<ResultsVector,FeatureCalcParams> hashCache;
+	private LRUHashMapCache<ResultsVector,T> hashCache;
 	private CacheMonitor cacheMonitor = new CacheMonitor();
 
 	private static int CACHE_SIZE = 1000;
@@ -64,25 +64,25 @@ public class SequentialSessionVerticallyCached extends FeatureSession implements
 	// We update this every time so it matches whatever is passed to calcSuppressErrors
 	private ErrorReporter errorReporter = null;
 	
-	public SequentialSessionVerticallyCached(FeatureList listFeatures, boolean suppressErrors, Collection<String> ignoreFeaturePrefixes ) {
+	public SequentialSessionVerticallyCached(FeatureList<T> listFeatures, boolean suppressErrors, Collection<String> ignoreFeaturePrefixes ) {
 		super();
-		this.delegate = new SequentialSession(listFeatures, ignoreFeaturePrefixes);
+		this.delegate = new SequentialSession<>(listFeatures, ignoreFeaturePrefixes);
 		this.suppressErrors = suppressErrors;
 		
 	}
 	
 	@Override
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger) throws InitException {
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger) throws InitException {
 		delegate.start(featureInitParams, sharedFeatureList, logger);
 		
 		this.hashCache = LRUHashMapCache.createAndMonitor(CACHE_SIZE, new GetterImpl(), cacheMonitor, "SequentialSessionVerticallyCached");
 	}
 	
 	
-	private class GetterImpl implements LRUHashMapCache.Getter<ResultsVector,FeatureCalcParams> {
+	private class GetterImpl implements LRUHashMapCache.Getter<ResultsVector,T> {
 
 		@Override
-		public ResultsVector get(FeatureCalcParams index)
+		public ResultsVector get(T index)
 				throws GetOperationFailedException {
 			try {
 				if (suppressErrors) {
@@ -98,7 +98,7 @@ public class SequentialSessionVerticallyCached extends FeatureSession implements
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(FeatureCalcParams params,
+	public ResultsVector calcSuppressErrors(T params,
 			ErrorReporter errorReporter) {
 		this.errorReporter = errorReporter;
 		try {
@@ -113,12 +113,12 @@ public class SequentialSessionVerticallyCached extends FeatureSession implements
 		}
 	}
 
-	public FeatureSessionCache getCache() {
+	public FeatureSessionCache<T> getCache() {
 		return delegate.getCache();
 	}
 
 	@Override
-	public ResultsVector calc(FeatureCalcParams params)
+	public ResultsVector calc(T params)
 			throws FeatureCalcException {
 		return delegate.calc(params);
 	}

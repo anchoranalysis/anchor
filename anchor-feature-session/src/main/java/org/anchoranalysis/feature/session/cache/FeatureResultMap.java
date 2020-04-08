@@ -31,19 +31,20 @@ import java.util.Map;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-class FeatureResultMap {
+class FeatureResultMap<T extends FeatureCalcParams> {
 
-	private Map<Feature,Double> mapFeature = new HashMap<>();
+	private Map<Feature<T>,Double> mapFeature = new HashMap<>();
 	private Map<String,Double> mapID = new HashMap<>();
-	private Map<String,Feature> mapFeatureName = new HashMap<>();
+	private Map<String,Feature<T>> mapFeatureName = new HashMap<>();
 	
-	public void add( Feature feature, String featureName, Double result ) {
+	public void add( Feature<T> feature, String featureName, Double result ) {
 		mapFeature.put(feature, result);
 		mapID.put( featureName, result);
 	}
 	
-	public void add( Feature f ) throws OperationFailedException {
+	public void add( Feature<T> f ) throws OperationFailedException {
 		String customName = f.getCustomName();
 		if (customName!=null && !customName.isEmpty()) {
 			
@@ -64,11 +65,11 @@ class FeatureResultMap {
 		mapID.clear();
 	}
 
-	public Feature getFeatureFor(String name) {
+	public Feature<T> getFeatureFor(String name) {
 		return mapFeatureName.get(name);
 	}
 	
-	public Double getResultFor(Feature feature) {
+	public Double getResultFor(Feature<T> feature) {
 		return mapFeature.get(feature);
 	}
 	

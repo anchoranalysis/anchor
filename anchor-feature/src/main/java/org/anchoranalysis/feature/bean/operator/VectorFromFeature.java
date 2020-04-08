@@ -51,20 +51,20 @@ public class VectorFromFeature extends FeatureBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature x;
+	private Feature<FeatureCalcParams> x;
 	
 	@BeanField
-	private Feature y;
+	private Feature<FeatureCalcParams> y;
 	
 	@BeanField
-	private Feature z;
+	private Feature<FeatureCalcParams> z;
 	// END BEAN PROPERTIES
 	
 	public VectorFromFeature() {
 		super();
 	}
 	
-	public Vector3d calc( CacheableParams<? extends FeatureCalcParams> params  ) throws FeatureCalcException {
+	public Vector3d calc( CacheableParams<FeatureCalcParams> params  ) throws FeatureCalcException {
 		
 		double valX = params.calc(x);
 		double valY = params.calc(y);
@@ -73,27 +73,27 @@ public class VectorFromFeature extends FeatureBase {
 		return new Vector3d(valX,valY,valZ);
 	}
 
-	public Feature getX() {
+	public Feature<FeatureCalcParams> getX() {
 		return x;
 	}
 
-	public void setX(Feature x) {
+	public void setX(Feature<FeatureCalcParams> x) {
 		this.x = x;
 	}
 
-	public Feature getY() {
+	public Feature<FeatureCalcParams> getY() {
 		return y;
 	}
 
-	public void setY(Feature y) {
+	public void setY(Feature<FeatureCalcParams> y) {
 		this.y = y;
 	}
 
-	public Feature getZ() {
+	public Feature<FeatureCalcParams> getZ() {
 		return z;
 	}
 
-	public void setZ(Feature z) {
+	public void setZ(Feature<FeatureCalcParams> z) {
 		this.z = z;
 	}
 

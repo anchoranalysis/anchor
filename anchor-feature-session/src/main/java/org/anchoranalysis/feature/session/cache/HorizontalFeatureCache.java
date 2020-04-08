@@ -35,6 +35,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
@@ -50,16 +51,16 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class HorizontalFeatureCache extends FeatureSessionCache {
+public class HorizontalFeatureCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
 
-	private FeatureSessionCache delegate;
+	private FeatureSessionCache<T> delegate;
 	
-	private HorizontalFeatureCacheRetriever retriever;
+	private HorizontalFeatureCacheRetriever<T> retriever;
 	
-	private FeatureResultMap map = new FeatureResultMap();
+	private FeatureResultMap<T> map = new FeatureResultMap<>();
 	
-	private FeatureList namedFeatures;
-	private SharedFeatureSet sharedFeatures;
+	private FeatureList<T> namedFeatures;
+	private SharedFeatureSet<T> sharedFeatures;
 	
 	/**
 	 * When referencing features-ID, all the prefixes in the list are removed, if they exist
@@ -67,7 +68,7 @@ public class HorizontalFeatureCache extends FeatureSessionCache {
 	 */
 	private Collection<String> ignorePrefixes;
 	
-	HorizontalFeatureCache(FeatureSessionCache delegate, FeatureList namedFeatures, SharedFeatureSet sharedFeatures, Collection<String> ignorePrefixes ) {
+	HorizontalFeatureCache(FeatureSessionCache<T> delegate, FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures, Collection<String> ignorePrefixes ) {
 		super();
 		this.delegate = delegate;
 		this.namedFeatures = namedFeatures;
@@ -75,15 +76,15 @@ public class HorizontalFeatureCache extends FeatureSessionCache {
 		this.ignorePrefixes = ignorePrefixes;
 		
 		try {
-			for( Feature f : namedFeatures ) {
+			for( Feature<T> f : namedFeatures ) {
 				map.add(f);
 			}
 			
-			for( INameValue<Feature> f : sharedFeatures ) {
+			for( INameValue<Feature<T>> f : sharedFeatures ) {
 				map.add(f.getValue());
 			}
 			
-			retriever = new HorizontalFeatureCacheRetriever(
+			retriever = new HorizontalFeatureCacheRetriever<>(
 				delegate.retriever(),
 				map,
 				ignorePrefixes,
@@ -110,19 +111,24 @@ public class HorizontalFeatureCache extends FeatureSessionCache {
 	}
 
 	@Override
-	public FeatureSessionCacheRetriever retriever() {
+	public FeatureSessionCacheRetriever<T> retriever() {
 		return retriever;
 	}
 
 	@Override
-	public void assignResult(FeatureSessionCache other) throws OperationFailedException {
-		HorizontalFeatureCache otherCast = (HorizontalFeatureCache) other;
+	public void assignResult(FeatureSessionCache<T> other) throws OperationFailedException {
+		HorizontalFeatureCache<T> otherCast = (HorizontalFeatureCache<T>) other;
 		delegate.assignResult(otherCast.delegate);
 	}
 
 	@Override
-	public FeatureSessionCache duplicate() {
-		return new HorizontalFeatureCache( delegate.duplicate(), this.namedFeatures, this.sharedFeatures, this.ignorePrefixes );
+	public FeatureSessionCache<T> duplicate() {
+		return new HorizontalFeatureCache<>(
+			delegate.duplicate(),
+			this.namedFeatures,
+			this.sharedFeatures,
+			this.ignorePrefixes
+		);
 	}
 
 

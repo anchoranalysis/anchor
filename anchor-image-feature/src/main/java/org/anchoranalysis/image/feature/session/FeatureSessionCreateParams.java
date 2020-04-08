@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.session;
 
+import java.util.Iterator;
+
 /*
  * #%L
  * anchor-image-feature
@@ -58,7 +60,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class FeatureSessionCreateParams extends FeatureSession {
 
-	private SequentialSession session;
+	private SequentialSession<FeatureCalcParams> session;
 	private ImageRes res;
 	private NRGStackWithParams nrgStack=null;
 	private ParamsFactory factory = new ParamsFactory();
@@ -69,43 +71,43 @@ public class FeatureSessionCreateParams extends FeatureSession {
 			return null;
 		}
 		
-		public FeatureCalcParams createParams( ObjMask om ) {
+		public FeatureObjMaskParams createParams( ObjMask om ) {
 			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
 			params.setNrgStack(nrgStack);
 			return params;
 		}
 			
-		public FeatureCalcParams createParams( ObjMask objMask1, ObjMask objMask2 ) {
+		public FeatureObjMaskPairParams createParams( ObjMask objMask1, ObjMask objMask2 ) {
 			FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(objMask1, objMask2);
 			params.setNrgStack(nrgStack);
 			return params;
 		}
 		
-		public FeatureCalcParams createParams( ObjMaskCollection omc ) {
+		public FeatureObjMaskCollectionParams createParams( ObjMaskCollection omc ) {
 			FeatureObjMaskCollectionParams params = new FeatureObjMaskCollectionParams(omc);
 			params.setNrgStack(nrgStack);
 			return params;
 		}
 		
-		public FeatureCalcParams createParams( ObjMask obj1, ObjMask obj2, ObjMask omMerged ) {
+		public FeatureObjMaskPairMergedParams createParams( ObjMask obj1, ObjMask obj2, ObjMask omMerged ) {
 			FeatureObjMaskPairMergedParams params = new FeatureObjMaskPairMergedParams(obj1, obj2,omMerged);
 			params.setNrgStack(nrgStack);
 			return params;
 		}
 		
-		public FeatureCalcParams createParams( Histogram hist ) {
+		public FeatureHistogramParams createParams( Histogram hist ) {
 			return new FeatureHistogramParams(hist, determineRes() );
 		}
 		
-		public FeatureCalcParams createParams( NRGStack nrgStack ) {
+		public FeatureStackParams createParams( NRGStack nrgStack ) {
 			return new FeatureStackParams(nrgStack);
 		}
 	}
 
 
-	public FeatureSessionCreateParams(FeatureList listFeatures) {
+	public FeatureSessionCreateParams(Iterable<Feature<FeatureCalcParams>> iterFeatures) {
 		super();
-		this.session = new SequentialSession(listFeatures);
+		this.session = new SequentialSession<FeatureCalcParams>(iterFeatures);
 	}
 	
 	public ParamsFactory getParamsFactory() {
@@ -113,10 +115,10 @@ public class FeatureSessionCreateParams extends FeatureSession {
 	}
 	
 	public void start( LogErrorReporter logger ) throws InitException {
-		session.start( new FeatureInitParams(), new SharedFeatureSet(), logger );
+		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), logger );
 	}
 	
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger ) throws InitException {
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<FeatureCalcParams> sharedFeatureList, LogErrorReporter logger ) throws InitException {
 		session.start(featureInitParams, sharedFeatureList, logger);
 	}
 
@@ -200,7 +202,7 @@ public class FeatureSessionCreateParams extends FeatureSession {
 		this.nrgStack = nrgStack;
 	}
 
-	public List<Feature> getFeatureList() {
+	public List<Feature<FeatureCalcParams>> getFeatureList() {
 		return session.getFeatureList();
 	}
 

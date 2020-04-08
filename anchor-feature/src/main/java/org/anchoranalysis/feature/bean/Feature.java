@@ -43,8 +43,19 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.init.IInitFeatures;
 
-public abstract class Feature extends FeatureBase implements
-		Serializable, IInitFeatures {
+
+/**
+ * Feature that calculates a result (double) for some parameters
+ * 
+ * <p>It should be initialized before any other methods are called.</p>
+ * <p>
+ * 
+ * @author owen
+ *
+ * @param <T> type of parameters used during calculation 
+ */
+public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T> implements
+		Serializable, IInitFeatures<T> {
 
 	/**
 	 * 
@@ -108,7 +119,7 @@ public abstract class Feature extends FeatureBase implements
 				: getBeanDscr();
 	}
 
-	public double calcCheckInit(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calcCheckInit(CacheableParams<T> params) throws FeatureCalcException {
 		if (!hasBeenInit) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
@@ -122,7 +133,7 @@ public abstract class Feature extends FeatureBase implements
 	}
 	
 	// Calculates a value for some parameters
-	protected abstract double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException;
+	protected abstract double calc(CacheableParams<T> params) throws FeatureCalcException;
 
 	/**
 	 * Optionally transforms the parameters passed into this feature, before
@@ -133,12 +144,13 @@ public abstract class Feature extends FeatureBase implements
 	 * @param dependentFeature
 	 *            a dependent-feature
 	 */
-	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params,
-			Feature dependentFeature) throws FeatureCalcException {
-		return params;
+	@SuppressWarnings("unchecked")
+	public CacheableParams<FeatureCalcParams> transformParams(CacheableParams<T> params,
+			Feature<FeatureCalcParams> dependentFeature) throws FeatureCalcException {
+		return (CacheableParams<FeatureCalcParams>) params;
 	}
 
-	protected void duplicateHelper(Feature out) {
+	protected void duplicateHelper(Feature<FeatureCalcParams> out) {
 		out.customName = new String(customName);
 	}
 	
@@ -153,7 +165,7 @@ public abstract class Feature extends FeatureBase implements
 	@Override
 	public void init(
 		FeatureInitParams params,
-		FeatureBase parentFeature,
+		FeatureBase<T> parentFeature,
 		LogErrorReporter logger
 	) throws InitException {
 				
@@ -175,12 +187,12 @@ public abstract class Feature extends FeatureBase implements
 	 * @throws CreateException
 	 * @throws BeanMisconfiguredException
 	 */
-	public final FeatureList createListChildFeatures(boolean includeAdditionallyUsed)
+	public final FeatureList<FeatureCalcParams> createListChildFeatures(boolean includeAdditionallyUsed)
 			throws BeanMisconfiguredException {
 		
-		List<Feature> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
+		List<Feature<FeatureCalcParams>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
 
-		FeatureList out = new FeatureList(outUpcast);
+		FeatureList<FeatureCalcParams> out = new FeatureList<>(outUpcast);
 
 		if (includeAdditionallyUsed) {
 			addAdditionallyUsedFeatures(out);
@@ -203,7 +215,7 @@ public abstract class Feature extends FeatureBase implements
 	 * @param out a list to add these features to
 	 *            
 	 */
-	public void addAdditionallyUsedFeatures(FeatureList out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
 	}
 
 	// Dummy method, that children can optionally override
@@ -219,5 +231,17 @@ public abstract class Feature extends FeatureBase implements
 	@Override
 	public String toString() {
 		return getFriendlyName();
+	}
+	
+	/** Upcasts the feature to FeatureCalcParams */
+	@SuppressWarnings("unchecked")
+	public Feature<FeatureCalcParams> upcast() {
+		return (Feature<FeatureCalcParams>) this;
+	}
+	
+	/** Downcasts the feature  */
+	@SuppressWarnings("unchecked")
+	public <S extends T> Feature<S> downcast() {
+		return (Feature<S>) this;
 	}
 }

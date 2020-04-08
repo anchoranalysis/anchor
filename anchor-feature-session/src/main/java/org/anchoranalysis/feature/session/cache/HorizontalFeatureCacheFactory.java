@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -55,11 +56,11 @@ public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory
 	}
 
 	@Override
-	public FeatureSessionCache create(FeatureList namedFeatures, SharedFeatureSet sharedFeatures) {
+	public <T extends FeatureCalcParams> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
 
-		FeatureSessionCache cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
+		FeatureSessionCache<T> cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
 		
-		return new HorizontalFeatureCache(cacheCalculation, namedFeatures, sharedFeatures, ignorePrefixes);
+		return new HorizontalFeatureCache<>(cacheCalculation, namedFeatures, sharedFeatures, ignorePrefixes);
 	}
 	
 }

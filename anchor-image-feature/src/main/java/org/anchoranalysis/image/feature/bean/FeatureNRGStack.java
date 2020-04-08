@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParamsDescriptor;
 
-public abstract class FeatureNRGStack extends Feature {
+public abstract class FeatureNRGStack extends Feature<FeatureNRGStackParams> {
 
 
 	/**
@@ -43,7 +43,7 @@ public abstract class FeatureNRGStack extends Feature {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureNRGStackParams> params ) throws FeatureCalcException {
 		
 		if (params.getParams() instanceof FeatureNRGStackParams) {
 			return calcCast( (FeatureNRGStackParams) params.getParams() );

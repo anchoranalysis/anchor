@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParamsDescriptor;
 
-public abstract class FeatureStack extends Feature {
+public abstract class FeatureStack extends Feature<FeatureStackParams> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public abstract class FeatureStack extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureStackParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(FeatureStackParams.class)
 		);

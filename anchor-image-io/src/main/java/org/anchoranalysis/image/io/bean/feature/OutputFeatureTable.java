@@ -40,11 +40,13 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -71,17 +73,14 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	
 	@BeanField
 	private String outputName = "objsFeatureList";
-	
-	@BeanField
-	private boolean includeDependencies = false;
 	// END BEAN PROPERTIES
 
 	public void output(
 		BoundOutputManagerRouteErrors outputManager,
-		final LogErrorReporter logErrorReporter
+		LogErrorReporter logErrorReporter
 	) throws IOException {
 		
-		// Early exit if we're not allowed output anytrhing anyway
+		// Early exit if we're not allowed output anything anyway
 		if (!outputManager.isOutputAllowed(getOutputName())) {
 			return;
 		}
@@ -89,7 +88,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 			
-			FeatureList features = createFeatureList();
+			FeatureList<FeatureObjMaskParams> features = createFeatureList().downcast();
 			
 			if (features.size()==0) {
 				throw new IOException("No features are set");
@@ -104,27 +103,34 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 				
 			outputManager.getWriterCheckIfAllowed().write(
 				outputName,
-				() -> {
-					try {
-						ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator( features, nrgStack, logErrorReporter );
-						generator.setParamsInit(paramsInit);
-						generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet());
-						generator.setIterableElement(objsCollection);
-						generator.setIncludeDependencies(includeDependencies);
-						return generator;
-					} catch (CreateException e) {
-						throw new ExecuteException(e);
-					}
-				}
+				() -> createGenerator(paramsInit, nrgStack, objsCollection, features, logErrorReporter)
 			);
 			
 		} catch (CreateException e) {
 			throw new IOException(e);
 		}
 	}
+	
+	private ObjMaskFeatureListCSVGenerator createGenerator(
+		FeatureInitParamsImageInit paramsInit,
+		NRGStackWithParams nrgStack,
+		ObjMaskCollection objsCollection,
+		FeatureList<FeatureObjMaskParams> features,
+		LogErrorReporter logErrorReporter
+	) {
+		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
+			features,
+			nrgStack,
+			logErrorReporter
+		);
+		generator.setParamsInit(paramsInit);
+		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet().downcast() );
+		generator.setIterableElement(objsCollection);
+		return generator;
+	}
 
-	private FeatureList createFeatureList() throws CreateException {
-		FeatureList out = new FeatureList();
+	private FeatureList<FeatureCalcParams> createFeatureList() throws CreateException {
+		FeatureList<FeatureCalcParams> out = new FeatureList<>();
 		for( FeatureProvider fp : listFeatureProvider) {
 			out.add( fp.create() );
 		}
@@ -189,16 +195,4 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		this.outputName = outputName;
 	}
 
-
-	public boolean isIncludeDependencies() {
-		return includeDependencies;
-	}
-
-
-	public void setIncludeDependencies(boolean includeDependencies) {
-		this.includeDependencies = includeDependencies;
-	}
-	
-	
-	
 }

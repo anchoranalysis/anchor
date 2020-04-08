@@ -32,6 +32,9 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
@@ -41,6 +44,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.operator.Sum;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 
 public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 
@@ -51,16 +55,16 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider elemIndCreator;
+	private FeatureListProvider<NRGElemIndCalcParams> elemIndCreator;
 	
 	@BeanField
-	private FeatureListProvider elemPairCreator;
+	private FeatureListProvider<NRGElemPairCalcParams> elemPairCreator;
 	
 	@BeanField @Optional
-	private FeatureListProvider elemAllCreator;
+	private FeatureListProvider<NRGElemAllCalcParams> elemAllCreator;
 	
 	@BeanField
-	private List<NamedBean<FeatureListProvider>> listImageFeatures = new ArrayList<NamedBean<FeatureListProvider>>();
+	private List<NamedBean<FeatureListProvider<FeatureStackParams>>> listImageFeatures = new ArrayList<>();
 	
 	@BeanField
 	private AddCriteriaPair pairAddCriteria;
@@ -101,26 +105,26 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 		return out;
 	}
 	
-	private void addImageFeatures( List<NamedBean<Feature>> imageFeatures ) throws CreateException {
-		for( NamedBean<FeatureListProvider> ni : listImageFeatures) {
-			FeatureList fl = ni.getValue().create();
+	private void addImageFeatures( List<NamedBean<Feature<FeatureStackParams>>> imageFeatures ) throws CreateException {
+		for( NamedBean<FeatureListProvider<FeatureStackParams>> ni : listImageFeatures) {
+			FeatureList<FeatureStackParams> fl = ni.getValue().create();
 			addImageFeature( fl, ni.getName(), imageFeatures );
 		}
 	}
 	
-	private void addImageFeature( FeatureList fl, String name, List<NamedBean<Feature>> imageFeatures ) {
-		Sum feature = new Sum();
+	private void addImageFeature( FeatureList<FeatureStackParams> fl, String name, List<NamedBean<Feature<FeatureStackParams>>> imageFeatures ) {
+		Sum<FeatureStackParams> feature = new Sum<>();
 		feature.setList( fl );
 		
 		imageFeatures.add(
-			new NamedBean<Feature>(
+			new NamedBean<Feature<FeatureStackParams>>(
 				nameForFeature( feature, name ),
 				feature
 			)
 		);
 	}
 	
-	private String nameForFeature( Feature feature, String name ) {
+	private String nameForFeature( Feature<?> feature, String name ) {
 				
 		if (includeFeatureNames) {
 			return String.format("%s.%s", name, feature.getFriendlyName()  );
@@ -137,36 +141,36 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 		this.pairAddCriteria = pairAddCriteria;
 	}
 
-	public FeatureListProvider getElemIndCreator() {
+	public FeatureListProvider<NRGElemIndCalcParams> getElemIndCreator() {
 		return elemIndCreator;
 	}
 
-	public void setElemIndCreator(FeatureListProvider elemIndCreator) {
+	public void setElemIndCreator(FeatureListProvider<NRGElemIndCalcParams> elemIndCreator) {
 		this.elemIndCreator = elemIndCreator;
 	}
 
-	public FeatureListProvider getElemPairCreator() {
+	public FeatureListProvider<NRGElemPairCalcParams> getElemPairCreator() {
 		return elemPairCreator;
 	}
 
-	public void setElemPairCreator(FeatureListProvider elemPairCreator) {
+	public void setElemPairCreator(FeatureListProvider<NRGElemPairCalcParams> elemPairCreator) {
 		this.elemPairCreator = elemPairCreator;
 	}
 
-	public FeatureListProvider getElemAllCreator() {
+	public FeatureListProvider<NRGElemAllCalcParams> getElemAllCreator() {
 		return elemAllCreator;
 	}
 
-	public void setElemAllCreator(FeatureListProvider elemAllCreator) {
+	public void setElemAllCreator(FeatureListProvider<NRGElemAllCalcParams> elemAllCreator) {
 		this.elemAllCreator = elemAllCreator;
 	}
 
-	public List<NamedBean<FeatureListProvider>> getListImageFeatures() {
+	public List<NamedBean<FeatureListProvider<FeatureStackParams>>> getListImageFeatures() {
 		return listImageFeatures;
 	}
 
 	public void setListImageFeatures(
-			List<NamedBean<FeatureListProvider>> listImageFeatures) {
+			List<NamedBean<FeatureListProvider<FeatureStackParams>>> listImageFeatures) {
 		this.listImageFeatures = listImageFeatures;
 	}
 

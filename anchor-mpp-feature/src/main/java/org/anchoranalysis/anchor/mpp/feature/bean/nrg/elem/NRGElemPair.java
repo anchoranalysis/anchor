@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public abstract class NRGElemPair extends Feature {
+public abstract class NRGElemPair extends Feature<NRGElemPairCalcParams> {
 
 	/**
 	 * 
@@ -45,7 +45,7 @@ public abstract class NRGElemPair extends Feature {
 	
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(NRGElemPairCalcParams.class)
 		);

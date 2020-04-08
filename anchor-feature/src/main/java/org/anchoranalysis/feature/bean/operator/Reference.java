@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class Reference extends Feature {
+public class Reference extends Feature<FeatureCalcParams> {
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public class Reference extends Feature {
 	}
 	
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureCalcParams> params) throws FeatureCalcException {
 		// We resolve the ID before its passed to calcFeatureByID
 		String rslvdID = params.resolveFeatureID(id);
 		return params.calcFeatureByID(rslvdID, params);

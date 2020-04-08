@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParamsDescriptor;
 
-public abstract class FeatureObjMaskPairMerged extends Feature {
+public abstract class FeatureObjMaskPairMerged extends Feature<FeatureObjMaskPairMergedParams> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public abstract class FeatureObjMaskPairMerged extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureObjMaskPairMergedParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(FeatureObjMaskPairMergedParams.class)
 		);

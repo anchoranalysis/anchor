@@ -146,7 +146,7 @@ public class FeatureSessionCreateParamsMPP {
 		return delegate.calc();
 	}
 
-	public List<Feature> getFeatureList() {
+	public List<Feature<FeatureCalcParams>> getFeatureList() {
 		return delegate.getFeatureList();
 	}
 

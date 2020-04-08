@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParamsDescriptor;
 
-public abstract class FeatureObjMask extends Feature {
+public abstract class FeatureObjMask extends Feature<FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public abstract class FeatureObjMask extends Feature {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(FeatureObjMaskParams.class)
 		);
@@ -50,18 +50,6 @@ public abstract class FeatureObjMask extends Feature {
 	
 	// Calculates an NRG element for a set of pixels
 	public abstract double calcCast( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException;
-
-	@Override
-	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params, Feature dependentFeature) throws FeatureCalcException {
-		return transformParamsCast(
-			params.downcastParams(FeatureObjMaskParams.class),
-			dependentFeature
-		);
-	}
-	
-	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskParams> params, Feature dependentFeature) throws FeatureCalcException {
-		return params;
-	}
 	
 	@Override
 	public FeatureParamsDescriptor paramType()

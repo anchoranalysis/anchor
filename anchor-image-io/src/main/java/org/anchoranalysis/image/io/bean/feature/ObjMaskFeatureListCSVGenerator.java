@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.io.bean.feature;
 
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 /*
  * #%L
@@ -37,6 +38,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.TableCSVGenerator;
@@ -45,6 +47,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -55,25 +58,31 @@ import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * 
+ * @author owen
+ *
+ * @param <T> feature calculation params
+ */
 class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjMaskCollection> {
 
 	private TableCSVGenerator<ResultsVectorCollection> delegate;
 	
 	private ObjMaskCollection objs;
 	
-	private FeatureList features;
+	private FeatureList<FeatureObjMaskParams> features;
 	private boolean includeDependencies = false;
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
-	private SharedFeatureSet sharedFeatures = new SharedFeatureSet();
+	private SharedFeatureSet<FeatureObjMaskParams> sharedFeatures = new SharedFeatureSet<>();
 	
 	private NRGStackWithParams nrgStack;
 	private LogErrorReporter logErrorReporter;
 	
-	public ObjMaskFeatureListCSVGenerator( FeatureList features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws CreateException {
+	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureObjMaskParams> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
 		this.logErrorReporter = logErrorReporter;
-		this.features = createFullFeatureList( features );
+		this.features = createFullFeatureList( features, logErrorReporter );
 		
 		delegate = new FeatureListCSVGeneratorVertical( "objMaskFeatures", features.createNames() );
 	}
@@ -99,8 +108,8 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 
 		ResultsVectorCollection rvc;
 		try {
-			FeatureSessionCreateParams session = new FeatureSessionCreateParams(features);
-			session.start(paramsInit, sharedFeatures, logErrorReporter);
+			FeatureSessionCreateParams session = new FeatureSessionCreateParams( upcastFeatures() );
+			session.start(paramsInit, sharedFeatures.upcast(), logErrorReporter);
 			session.setNrgStack(nrgStack);
 		
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
@@ -115,7 +124,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		
 		delegate.setIterableElement(rvc);
 		delegate.writeToFile(outputWriteSettings, filePath);
-				
 	}
 
 	@Override
@@ -128,60 +136,57 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.objs = element;
 	}
 
-	private void addFeature( Feature feature, String prefix, FeatureList featureList ) throws InitException {
-		try {
-			featureList.addWithCustomName( feature.duplicateBean(), prefix + feature.getFriendlyName() );
-			
-			if (includeDependencies) {
-				FeatureList childFeatures = feature.createListChildFeatures(false);
-				for( Feature dependentFeature : childFeatures ) {
-					addFeature( dependentFeature, prefix + "..", featureList );
-				}
-			}
-		} catch (BeanMisconfiguredException e) {
-			throw new InitException(e);
-		}
+	private void addFeature( Feature<FeatureObjMaskParams> feature, String prefix, FeatureList<FeatureObjMaskParams> featureList ) throws BeanMisconfiguredException {
+		featureList.addWithCustomName( feature.duplicateBean(), prefix + feature.getFriendlyName() );
 	}
 	
 	// Puts in some extra descriptive features at the start
-	private FeatureList createFullFeatureList( FeatureList features ) throws CreateException {
+	private FeatureList<FeatureObjMaskParams> createFullFeatureList( FeatureList<FeatureObjMaskParams> features, LogErrorReporter logger ) {
 		
-		try {
-			FeatureList featuresAll = new FeatureList();
-			
-			Feature cogX = new CenterOfGravity("x");
-			Feature cogY = new CenterOfGravity("y");
-			Feature cogZ = new CenterOfGravity("z");
-			
-			featuresAll.addWithCustomName( cogX, "x" );
-			featuresAll.addWithCustomName( cogY, "y" );
-			featuresAll.addWithCustomName( cogZ, "z" );
-			
-			addConvertedFeature( featuresAll, cogX, new DirectionVector(1, 0, 0), "x_p" );
-			addConvertedFeature( featuresAll, cogY, new DirectionVector(0, 1, 0), "y_p" );
-			addConvertedFeature( featuresAll, cogZ, new DirectionVector(0, 0, 1), "z_p" );
-	
-			featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
-			
-			for (Feature f : features) {
+		
+		FeatureList<FeatureObjMaskParams> featuresAll = new FeatureList<>();
+		
+		Feature<FeatureObjMaskParams> cogX = new CenterOfGravity("x");
+		Feature<FeatureObjMaskParams> cogY = new CenterOfGravity("y");
+		Feature<FeatureObjMaskParams> cogZ = new CenterOfGravity("z");
+		
+		featuresAll.addWithCustomName( cogX, "x" );
+		featuresAll.addWithCustomName( cogY, "y" );
+		featuresAll.addWithCustomName( cogZ, "z" );
+		
+		addConvertedFeature( featuresAll, cogX, new DirectionVector(1, 0, 0), "x_p" );
+		addConvertedFeature( featuresAll, cogY, new DirectionVector(0, 1, 0), "y_p" );
+		addConvertedFeature( featuresAll, cogZ, new DirectionVector(0, 0, 1), "z_p" );
+
+		featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
+		
+		for (Feature<FeatureObjMaskParams> f : features) {
+			try {
 				addFeature(f, "", featuresAll);
+			} catch (BeanMisconfiguredException e) {
+				logger.getErrorReporter().recordError(this.getClass(), e);
 			}
-			
-			return featuresAll;
-			
-		} catch (InitException e) {
-			throw new CreateException(e);
 		}
+		
+		return featuresAll;
+
 	}
 	
-	private static void addConvertedFeature( FeatureList featuresAll, Feature feature, DirectionVector dir, String name ) {
+	private static void addConvertedFeature( FeatureList<FeatureObjMaskParams> featuresAll, Feature<FeatureObjMaskParams> feature, DirectionVector dir, String name ) {
 		featuresAll.addWithCustomName( convert(feature, dir), name );
 	}
 	
-	private static Feature convert( Feature feature, DirectionVector dir ) {
-		return new ConvertToPhysicalDistance(feature, UnitSuffix.MICRO, dir);
+	private static Feature<FeatureObjMaskParams> convert( Feature<FeatureObjMaskParams> feature, DirectionVector dir ) {
+		return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
 	}
-
+	
+	private Iterable<Feature<FeatureCalcParams>> upcastFeatures() {
+		return features.getList()
+				.stream()
+				.map( p -> p.upcast() )
+				.collect( Collectors.toList() );
+	}
+	
 	public FeatureInitParams getParamsInit() {
 		return paramsInit;
 	}
@@ -190,19 +195,11 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.paramsInit = paramsInit;
 	}
 
-	public boolean isIncludeDependencies() {
-		return includeDependencies;
-	}
-
-	public void setIncludeDependencies(boolean includeDependencies) {
-		this.includeDependencies = includeDependencies;
-	}
-
-	public SharedFeatureSet getSharedFeatures() {
+	public SharedFeatureSet<FeatureObjMaskParams> getSharedFeatures() {
 		return sharedFeatures;
 	}
 
-	public void setSharedFeatures(SharedFeatureSet sharedFeatures) {
+	public void setSharedFeatures(SharedFeatureSet<FeatureObjMaskParams> sharedFeatures) {
 		this.sharedFeatures = sharedFeatures;
 	}
 }

@@ -43,7 +43,7 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 		super();
 	}
 	
-	public NameValueSet(List<? extends INameValue<T>> list) {
+	public NameValueSet(Iterable<? extends INameValue<T>> list) {
 		super();
 		
 		for (INameValue<T> nmp : list) {

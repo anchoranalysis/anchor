@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionDescriptor;
 import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
 
-public abstract class FeatureObjMaskCollection extends Feature {
+public abstract class FeatureObjMaskCollection extends Feature<FeatureObjMaskCollectionParams> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public abstract class FeatureObjMaskCollection extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureObjMaskCollectionParams> params ) throws FeatureCalcException {
 		
 		if (params.getParams() instanceof FeatureObjMaskCollectionParams) {
 			return calc( (FeatureObjMaskCollectionParams) params.getParams() );

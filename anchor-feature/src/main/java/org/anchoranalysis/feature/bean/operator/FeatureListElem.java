@@ -33,10 +33,11 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
-public abstract class FeatureListElem extends Feature {
+public abstract class FeatureListElem<T extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -45,14 +46,14 @@ public abstract class FeatureListElem extends Feature {
 	
 	// START BEAN PARAMETERS
 	@BeanField
-	private List<Feature> list = new ArrayList<>();
+	private List<Feature<T>> list = new ArrayList<>();
 	// END BEAN PARAMETERS
 		
-	public List<Feature> getList() {
+	public List<Feature<T>> getList() {
 		return list;
 	}
 
-	public void setList(List<Feature> list) {
+	public void setList(List<Feature<T>> list) {
 		this.list = list;
 	}
 

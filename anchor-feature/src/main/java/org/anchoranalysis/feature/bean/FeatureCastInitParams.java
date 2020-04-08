@@ -29,9 +29,18 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
-public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureInitParams> extends Feature {
+/**
+ * A feature that must be initialized with params first before being valid
+ * 
+ * @author owen
+ *
+ * @param <S> init-params params type
+ * @param <T> calc-params type
+ */
+public abstract class FeatureCastInitParams<S extends FeatureInitParams, T extends FeatureCalcParams> extends Feature<T> {
 
 
 	/**
@@ -50,8 +59,8 @@ public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureIn
 		this.castInitParamsType = castInitParamsType;
 	}
 	
-	// DUMMY METHOD that can be overrridden
-	public void beforeCalcCast( CastInitParamsType params ) throws InitException {
+	// DUMMY METHOD that can be overridden
+	public void beforeCalcCast( S params ) throws InitException {
 		
 	}
 	
@@ -60,7 +69,7 @@ public abstract class FeatureCastInitParams<CastInitParamsType extends FeatureIn
 	public void init(FeatureInitParams params, FeatureBase parentFeature, LogErrorReporter logger) throws InitException {
 		assert( logger!=null );
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
-			CastInitParamsType paramsCast = (CastInitParamsType) params;
+			S paramsCast = (S) params;
 			super.init(params, parentFeature, logger);
 			beforeCalcCast( paramsCast );
 		} else {

@@ -50,9 +50,9 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * The caches are reset, every time reset() is called
  * 
  * @author Owen Feehan
- *
+ * @param parameter-type
  */
-public class HorizontalCalculationCache extends FeatureSessionCache {
+public class HorizontalCalculationCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
 	
 	private ResettableSet<CachedCalculation<?>> listCC = new ResettableSet<>(false);
 	private ResettableSet<CachedCalculationMap<?,?>> listCCMap = new ResettableSet<>(false);
@@ -61,17 +61,17 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	
 	private LogErrorReporter logger;
 	private boolean logCacheInit;
-	private SharedFeatureSet sharedFeatures;
+	private SharedFeatureSet<T> sharedFeatures;
 	
-	HorizontalCalculationCache( SharedFeatureSet sharedFeatures ) {
+	HorizontalCalculationCache( SharedFeatureSet<T> sharedFeatures ) {
 		super();
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	private class Retriever extends FeatureSessionCacheRetriever {
+	private class Retriever extends FeatureSessionCacheRetriever<T> {
 		
 		@Override
-		public double calc(Feature feature, CacheableParams<? extends FeatureCalcParams> params )
+		public double calc(Feature<T> feature, CacheableParams<T> params )
 				throws FeatureCalcException {
 			//System.out.printf("Calculating feature: %s\n", feature.getFriendlyName());
 	
@@ -84,25 +84,24 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public <T> CachedCalculation<T> search(CachedCalculation<T> cc) {
+		public <U> CachedCalculation<U> search(CachedCalculation<U> cc) {
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return (CachedCalculation<T>) listCC.findOrAdd(cc,loggerToPass);
+			return (CachedCalculation<U>) listCC.findOrAdd(cc,loggerToPass);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <S, T> CachedCalculationMap<S, T> search(
-				CachedCalculationMap<S, T> cc) {
+		public <S, U> CachedCalculationMap<S, U> search(CachedCalculationMap<S, U> cc) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return (CachedCalculationMap<S,T>) listCCMap.findOrAdd(cc,loggerToPass);
+			return (CachedCalculationMap<S,U>) listCCMap.findOrAdd(cc,loggerToPass);
 		}
 
 		@Override
-		public double calcFeatureByID(String id, CacheableParams<? extends FeatureCalcParams> params)
+		public double calcFeatureByID(String id, CacheableParams<T> params)
 				throws FeatureCalcException {
 			try {
-				Feature feature = sharedFeatures.getException(id);
+				Feature<T> feature = sharedFeatures.getException(id);
 				return calc( feature, params );
 			} catch (NamedProviderGetException e) {
 				throw new FeatureCalcException(
@@ -113,7 +112,7 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 		}
 
 		@Override
-		public SharedFeatureSet getSharedFeatureList() {
+		public SharedFeatureSet<T> getSharedFeatureList() {
 			return sharedFeatures;
 		}
 
@@ -138,7 +137,7 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 		}
 
 		@Override
-		public FeatureSessionCache createNewCache() {
+		public FeatureSessionCache<T> createNewCache() {
 			return HorizontalCalculationCache.this.duplicate();
 		}
 
@@ -169,14 +168,14 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 	}
 
 	@Override
-	public FeatureSessionCacheRetriever retriever() {
+	public FeatureSessionCacheRetriever<T> retriever() {
 		return retriever;
 	}
 
 	@Override
-	public void assignResult(FeatureSessionCache other) throws OperationFailedException {
-		
-		HorizontalCalculationCache otherCast = (HorizontalCalculationCache) other;
+	public void assignResult(FeatureSessionCache<T> other) throws OperationFailedException {
+
+		HorizontalCalculationCache<T> otherCast = (HorizontalCalculationCache<T>) other;
 		listCC.assignResult( otherCast.listCC );
 		listCCMap.assignResult( otherCast.listCCMap );
 	}
@@ -184,8 +183,8 @@ public class HorizontalCalculationCache extends FeatureSessionCache {
 
 
 	@Override
-	public FeatureSessionCache duplicate() {
-		HorizontalCalculationCache out = new HorizontalCalculationCache( sharedFeatures.duplicate() );
+	public FeatureSessionCache<T> duplicate() {
+		HorizontalCalculationCache<T> out = new HorizontalCalculationCache<>( sharedFeatures.duplicate() );
 		assert(hasBeenInit==true);
 		assert(logger!=null);
 		

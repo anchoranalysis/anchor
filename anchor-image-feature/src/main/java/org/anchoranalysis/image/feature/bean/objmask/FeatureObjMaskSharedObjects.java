@@ -41,7 +41,13 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.shared.FeatureObjMaskSharedObjectsParamsDescriptor;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<FeatureInitParamsImageInit> {
+/**
+ * A feature that requires shared-objects during intialization
+ * 
+ * @author owen
+ *
+ */
+public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<FeatureInitParamsImageInit, FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -83,7 +89,7 @@ public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<
 	}
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(FeatureObjMaskParams.class)
 		);

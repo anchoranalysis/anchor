@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class AsNRGElemInd extends FeatureSingleElem {
+public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGElemIndCalcParams> {
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public class AsNRGElemInd extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemPairCalcParams> params) throws FeatureCalcException {
 		return params
 			.downcastParams(NRGElemPairCalcParams.class)
 			.calcChangeParams(

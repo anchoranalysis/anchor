@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class Constant extends Feature {
+public class Constant<T extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -55,7 +55,7 @@ public class Constant extends Feature {
 	}
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) {
+	public double calc( CacheableParams<T> params ) {
 		return value;
 	}
 

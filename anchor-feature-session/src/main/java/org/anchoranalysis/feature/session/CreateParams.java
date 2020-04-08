@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public abstract class CreateParams {
+public abstract class CreateParams <T extends FeatureCalcParams> {
 	
-	public abstract FeatureCalcParams createForFeature( Feature feature ) throws CreateException;
+	public abstract T createForFeature( Feature<?> feature ) throws CreateException;
 }

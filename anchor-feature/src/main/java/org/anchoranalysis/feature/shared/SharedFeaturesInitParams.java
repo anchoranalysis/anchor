@@ -39,6 +39,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.list.FeatureListStoreUtilities;
 
 public class SharedFeaturesInitParams extends BeanInitParams {
@@ -48,11 +49,11 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	// END: InitParams
 	
 	// START: Stores
-	private NamedProviderStore<FeatureList> storeFeatureList;
+	private NamedProviderStore<FeatureList<FeatureCalcParams>> storeFeatureList;
 	// END: Stores
 	
 	// START: Single Items
-	private SharedFeatureSet sharedFeatureSet;
+	private SharedFeatureSet<FeatureCalcParams> sharedFeatureSet;
 	// END: Single Items
 
 	private SharedFeaturesInitParams(SharedObjects so) {
@@ -62,7 +63,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		storeFeatureList = so.getOrCreate(FeatureList.class);
 		
 		// We populate our shared features from our storeFeatureList
-		sharedFeatureSet = new SharedFeatureSet();
+		sharedFeatureSet = new SharedFeatureSet<>();
 		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(storeFeatureList, sharedFeatureSet);
 	}
 	
@@ -73,6 +74,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	
 	/**
 	 * Creates empty params
+	 * 
 	 * @param logErrorReporter
 	 * @return
 	 */
@@ -81,17 +83,20 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		return create(so);
 	}
 	
-	public NamedProviderStore<FeatureList> getFeatureListSet() {
+	public NamedProviderStore<FeatureList<FeatureCalcParams>> getFeatureListSet() {
 		return storeFeatureList;
 	}
 	
-	public void addAll( List<NamedBean<FeatureListProvider>> namedFeatureListCreator, LogErrorReporter logger ) throws OperationFailedException {
+	public void addAll(
+		List<NamedBean<FeatureListProvider<FeatureCalcParams>>> namedFeatureListCreator,
+		LogErrorReporter logger
+	) throws OperationFailedException {
 		
 		assert( getFeatureListSet()!=null );
 		BeanStoreAdder.addPreserveNameEmbedded(
 			namedFeatureListCreator,
 			getFeatureListSet(),
-			new FeatureBridge(getSharedFeatureSet(), this, logger )
+			new FeatureBridge<>(getSharedFeatureSet(), this, logger )
 		);
 	}
 
@@ -99,7 +104,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		return soParams;
 	}
 	
-	public SharedFeatureSet getSharedFeatureSet() {
+	public SharedFeatureSet<FeatureCalcParams> getSharedFeatureSet() {
 		return sharedFeatureSet;
 	}
 }

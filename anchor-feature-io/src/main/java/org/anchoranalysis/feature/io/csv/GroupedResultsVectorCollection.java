@@ -42,6 +42,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
@@ -141,7 +142,7 @@ public class GroupedResultsVectorCollection {
 	 */
 	public void writeResultsForAllGroups(
 		FeatureNameList featureNamesNonAggregate,			
-		NamedFeatureStore featuresAggregate,
+		NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate,
 		BoundOutputManagerRouteErrors outputManager,
 		LogErrorReporter logErrorReporter
 	) throws AnchorIOException {
@@ -180,11 +181,11 @@ public class GroupedResultsVectorCollection {
 	}
 	
 	
-	private void writeResultsForSingleGroup(
+	private <T extends FeatureCalcParams> void writeResultsForSingleGroup(
 		MultiName group,
 		ResultsVectorCollection resultsVectorCollection,
 		FeatureNameList featureNames,
-		NamedFeatureStore featuresAggregate,	// If null, we don't do any feature aggregation
+		NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate,	// If null, we don't do any feature aggregation
 		FeatureCSVWriter csvWriterAll,			// If null, disabled
 		FeatureCSVWriter csvWriterAggregate,	// If null, disabled
 		BoundOutputManagerRouteErrors outputManager,
@@ -216,7 +217,12 @@ public class GroupedResultsVectorCollection {
 		}
 
 		if (featuresAggregate!=null) {
-			ResultsVector rv = createAggregateResultsVector( featuresAggregate, featureNames, resultsVectorCollection, logErrorReporter );
+			ResultsVector rv = createAggregateResultsVector(
+				featuresAggregate,
+				featureNames,
+				resultsVectorCollection,
+				logErrorReporter
+			);
 			
 			// Write aggregate-feature-results to a KeyValueparams file
 			writeKeyValueParams( featuresAggregate, rv, outputManagerGroup, logErrorReporter );
@@ -231,16 +237,16 @@ public class GroupedResultsVectorCollection {
 	}
 		
 	private static ResultsVector createAggregateResultsVector(
-		NamedFeatureStore featuresAggregate,
+		NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate,
 		FeatureNameList featureNamesSource,
 		ResultsVectorCollection featuresCollection,
 		LogErrorReporter logErrorReporter
 	) throws AnchorIOException {
 		
-		SequentialSession session = new SequentialSession( featuresAggregate.listFeatures() );
+		SequentialSession<FeatureResultsVectorCollectionParams> session = new SequentialSession<>( featuresAggregate.listFeatures() );
 		
 		try {
-			session.start( new FeatureInitParams(null), new SharedFeatureSet(), logErrorReporter );
+			session.start( new FeatureInitParams(null), new SharedFeatureSet<>(), logErrorReporter );
 		} catch (InitException e1) {
 			logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e1);
 			throw new AnchorIOException("Cannot start feature-session", e1);
@@ -254,11 +260,8 @@ public class GroupedResultsVectorCollection {
 		return session.calcSuppressErrors(params, logErrorReporter.getErrorReporter() );
 	}
 	
-	
-
-	
-	private static void writeKeyValueParams(
-			NamedFeatureStore featuresAggregate,
+	private static <T extends FeatureCalcParams> void writeKeyValueParams(
+			NamedFeatureStore<T> featuresAggregate,
 			ResultsVector rv,
 			BoundOutputManagerRouteErrors outputManager,
 			LogErrorReporter logErrorReporter
@@ -268,7 +271,7 @@ public class GroupedResultsVectorCollection {
 		
 		for( int i=0; i<featuresAggregate.size(); i++ ) {
 			
-			NamedBean<Feature> item = featuresAggregate.get(i);
+			NamedBean<Feature<T>> item = featuresAggregate.get(i);
 			
 			double val = rv.get(i);
 			paramsOut.put(item.getName(), Double.toString(val));

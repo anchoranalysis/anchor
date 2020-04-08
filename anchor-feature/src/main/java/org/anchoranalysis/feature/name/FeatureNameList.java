@@ -134,8 +134,8 @@ public class FeatureNameList implements Iterable<String> {
 	 *  
 	 * @param list
 	 */
-	public void addCustomNames( FeatureList list ) {
-		for( Feature f : list ) {
+	public void addCustomNames( FeatureList<?> list ) {
+		for( Feature<?> f : list ) {
 			delegate.add( f.getCustomName() );
 		}
 	}
@@ -146,8 +146,8 @@ public class FeatureNameList implements Iterable<String> {
 	 *  
 	 * @param list
 	 */
-	public void addCustomNamesWithPrefix( String prefix, FeatureList list ) {
-		for( Feature f : list ) {
+	public void addCustomNamesWithPrefix( String prefix, FeatureList<?> list ) {
+		for( Feature<?> f : list ) {
 			delegate.add( prefix + f.getCustomName() );
 		}
 	}

@@ -37,13 +37,13 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public interface ISequentialSessionSingleParams {
+public interface ISequentialSessionSingleParams<T extends FeatureCalcParams> {
 	
-	void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger ) throws InitException;
+	void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger ) throws InitException;
 
-	ResultsVector calcSuppressErrors(FeatureCalcParams params, ErrorReporter errorReporter );
+	ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	ResultsVector calc( FeatureCalcParams params ) throws FeatureCalcException;
+	ResultsVector calc( T params ) throws FeatureCalcException;
 	
-	FeatureSessionCache getCache();
+	FeatureSessionCache<T> getCache();
 }

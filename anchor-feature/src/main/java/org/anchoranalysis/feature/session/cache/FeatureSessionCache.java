@@ -31,6 +31,7 @@ import org.anchoranalysis.core.error.InitException;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
 
@@ -45,9 +46,10 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
  *
  * 
  * @author Owen Feehan
+ * @param T feature-calc-params
  *
  */
-public abstract class FeatureSessionCache {
+public abstract class FeatureSessionCache<T extends FeatureCalcParams> {
 
 	
 	/**
@@ -63,14 +65,14 @@ public abstract class FeatureSessionCache {
 	 */
 	public abstract void invalidate();
 	
-	public abstract FeatureSessionCacheRetriever retriever();
+	public abstract FeatureSessionCacheRetriever<T> retriever();
 	
-	public abstract void assignResult( FeatureSessionCache other ) throws OperationFailedException;
+	public abstract void assignResult( FeatureSessionCache<T> other ) throws OperationFailedException;
 	
 	/**
 	 * A deep copy of the current state of the cache
 	 * 
 	 * @return
 	 */
-	public abstract FeatureSessionCache duplicate();
+	public abstract FeatureSessionCache<T> duplicate();
 }

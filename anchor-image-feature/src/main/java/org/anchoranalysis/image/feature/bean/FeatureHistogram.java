@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParamsDescriptor;
 
-public abstract class FeatureHistogram extends Feature {
+public abstract class FeatureHistogram extends Feature<FeatureHistogramParams> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public abstract class FeatureHistogram extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureHistogramParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(FeatureHistogramParams.class)
 		);

@@ -30,10 +30,11 @@ import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public abstract class FeatureBase extends InitializableBean<Feature,FeatureInitParams> {
+public abstract class FeatureBase<T extends FeatureCalcParams> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
 	/**
 	 * 

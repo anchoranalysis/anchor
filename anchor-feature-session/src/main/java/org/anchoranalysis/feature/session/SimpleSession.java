@@ -46,13 +46,13 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class SimpleSession extends FeatureSession {
+public class SimpleSession<T extends FeatureCalcParams> extends FeatureSession {
 
 	public double calc(
-		Feature feature,
+		Feature<T> feature,
 		FeatureInitParams paramsInit,
-		SharedFeatureSet sharedFeatures,
-		FeatureCalcParams params,
+		SharedFeatureSet<T> sharedFeatures,
+		T params,
 		LogErrorReporter logger
 	) throws FeatureCalcException, InitException {
 		
@@ -62,10 +62,12 @@ public class SimpleSession extends FeatureSession {
 		feature.initRecursive(paramsInit, logger);
 		
 		
-		CacheableParams<FeatureCalcParams> paramsCacheable = SessionUtilities.createCacheable(
+		CacheableParams<T> paramsCacheable = SessionUtilities.createCacheable(
 			params,
-			new FeatureList(feature),
-			sharedFeatures			
+			new FeatureList<T>(feature),
+			sharedFeatures,
+			paramsInit,
+			logger
 		);
 		
 		double val = paramsCacheable.calc(feature);

@@ -33,6 +33,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -50,37 +51,36 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class Subsession {
+public class Subsession<T extends FeatureCalcParams> {
 	
-	private CachePlus cache;
+	private CacheCreator cacheCreator;
 
-	public Subsession(CachePlus cache) {
+	public Subsession(CacheCreator cacheCreator) {
 		super();
-		this.cache = cache;
+		this.cacheCreator = cacheCreator;
 	}
 
 	public void beforeNewCalc() {
-		cache.invalidate();
+		//cache.invalidate();
 	}
 
-	public ResultsVector calcSubset( FeatureList features, FeatureCalcParams params ) throws FeatureCalcException {
+	public ResultsVector calcSubset( FeatureList<T> features, T params ) throws FeatureCalcException {
 		
 		ResultsVector res = new ResultsVector( features.size() );
 
 		for( int i=0; i<features.size(); i++) {
-			Feature f = features.get(i);
-			double val = cache.retriever().calc(
-				f,
-				createCacheable(params)
+			Feature<T> f = features.get(i);
+			res.set(
+				i,
+				calc(f, params)
 			);
-			res.set(i,val);
 		}
 		return res;
 	}
 	
 	public ResultsVector calcSubsetSuppressErrors(
-		FeatureList features,
-		List<CacheableParams<? extends FeatureCalcParams>> listParams,
+		FeatureList<T> features,
+		List<CacheableParams<T>> listParams,
 		ErrorReporter errorReporter
 	) {
 		assert(features.size()==listParams.size());
@@ -88,14 +88,13 @@ public class Subsession {
 		ResultsVector res = new ResultsVector( features.size() );
 
 		for( int i=0; i<features.size(); i++) {
-			Feature f = features.get(i);
+			Feature<T> f = features.get(i);
 			
-			double val;
 			try {
-				CacheableParams<? extends FeatureCalcParams> params = listParams.get(i);
-				
-				val = cache.retriever().calc( f, params	);
-				res.set(i,val);
+				res.set(
+					i,
+					listParams.get(i).calc(f)
+				);
 			} catch (Exception e) {
 				res.setError(i,e);
 				errorReporter.recordError(Subsession.class, e);
@@ -103,21 +102,10 @@ public class Subsession {
 			
 		}
 		return res;
-
 	}
 	
-	public double calc( Feature feature, FeatureCalcParams params ) throws FeatureCalcException {
-		return cache.retriever().calc(
-			feature,
-			createCacheable(params)
-		);
-	}
-	
-	private CacheableParams<FeatureCalcParams> createCacheable(FeatureCalcParams params) {
-		return SessionUtilities.createCacheable(
-			params,
-			() -> cache.createCache().retriever()
-		);
+	public double calc( Feature<T> feature, T params ) throws FeatureCalcException {
+		return SessionUtilities.createCacheable(params, cacheCreator).calc(feature);
 	}
 
 }

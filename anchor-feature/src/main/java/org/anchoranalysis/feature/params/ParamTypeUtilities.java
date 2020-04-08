@@ -32,11 +32,12 @@ import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
 
 public class ParamTypeUtilities {
 
-	public static FeatureParamsDescriptor paramTypeForTwo( Feature item1, Feature item2 ) throws FeatureCalcException {
+	public static FeatureParamsDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) throws FeatureCalcException {
 		return paramTypeForTwo( item1.paramType(), item2.paramType() );
 	}
 	
@@ -63,9 +64,9 @@ public class ParamTypeUtilities {
 	}
 	
 	
-	public static FeatureParamsDescriptor paramTypeForThree( Feature item1, Feature item2, Feature item3 ) throws FeatureCalcException {
+	public static <T extends FeatureCalcParams> FeatureParamsDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) throws FeatureCalcException {
 		
-		List<Feature> list = new ArrayList<>();
+		List<Feature<T>> list = new ArrayList<>();
 		list.add( item1 );
 		list.add( item2 );
 		list.add( item3 );
@@ -73,7 +74,7 @@ public class ParamTypeUtilities {
 	}
 	
 	
-	public static FeatureParamsDescriptor paramTypeForList( List<Feature> list ) throws FeatureCalcException {
+	public static <T extends FeatureCalcParams> FeatureParamsDescriptor paramTypeForList( List<Feature<T>> list ) throws FeatureCalcException {
 		
 		if (list.size()==0) {
 			return FeatureCalcParamsDescriptor.instance;
@@ -89,9 +90,9 @@ public class ParamTypeUtilities {
 		
 	}
 	
-	private static FeatureParamsDescriptor chooseParamType( List<Feature> list ) throws FeatureCalcException {
+	private static <T extends FeatureCalcParams> FeatureParamsDescriptor chooseParamType( List<Feature<T>> list ) throws FeatureCalcException {
 		FeatureParamsDescriptor chosenParamType = null;
-		for (Feature f : list) {
+		for (Feature<?> f : list) {
 			
 			FeatureParamsDescriptor paramType = f.paramType();
 			

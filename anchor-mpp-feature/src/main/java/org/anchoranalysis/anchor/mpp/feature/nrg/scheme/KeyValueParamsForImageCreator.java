@@ -84,7 +84,7 @@ public class KeyValueParamsForImageCreator {
 		FeatureInitParams paramsInit = new FeatureInitParams(kvp);
 		paramsInit.setNrgStack(nrgStack);
 				
-		for( NamedBean<Feature> ni : nrgScheme.getListImageFeatures() ) {
+		for( NamedBean<Feature<FeatureStackParams>> ni : nrgScheme.getListImageFeatures() ) {
 			
 			kvp.putIfEmpty(
 				ni.getName(),

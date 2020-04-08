@@ -34,18 +34,19 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 public class NamedFeatureStoreFactory {
 
-	public static NamedFeatureStore createNamedFeatureList( List<NamedBean<FeatureListProvider>> listFeatureListProvider ) throws CreateException {
+	public static <T extends FeatureCalcParams> NamedFeatureStore<T> createNamedFeatureList( List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider ) throws CreateException {
 		
 		try {
-			NamedFeatureStore out = new NamedFeatureStore();
-			for( NamedBean<FeatureListProvider> ni : listFeatureListProvider ) {
+			NamedFeatureStore<T> out = new NamedFeatureStore<>();
+			for( NamedBean<FeatureListProvider<T>> ni : listFeatureListProvider ) {
 								
 				// NOTE: Naming convention
 				//  When a featureList contains a single item, we use the name of the featureList, rather than the feature 
-				FeatureList featureList = ni.getValue().create();
+				FeatureList<T> featureList = ni.getValue().create();
 				
 				if (featureList.size()==0) {
 					continue;
