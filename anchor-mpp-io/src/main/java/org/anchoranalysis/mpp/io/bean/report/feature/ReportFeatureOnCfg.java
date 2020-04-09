@@ -3,7 +3,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPPSingle;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
 
 /*
  * #%L
@@ -38,8 +38,12 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.extent.ImageDim;
 
-public class ReportFeatureOnCfg extends ReportFeatureForMPP {
+public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureCfgParams> {
 
 	/**
 	 * 
@@ -68,25 +72,22 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP {
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		Cfg cfg;
+							
 		try {
-			cfg = cfgProvider.create();
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-					
-		try {
-			FeatureSessionCreateParamsMPPSingle session = createSession();
+			Cfg cfg = cfgProvider.create();
 			
-			double val = session.calc(cfg);
+			ImageDim dim = createImageDim();
+			
+			FeatureCalculatorVector<FeatureCfgParams> session = createAndStartSession();
+			
+			double val = session.calc(
+				new FeatureCfgParams(cfg, dim)
+			).get(0);
 			return Double.toString(val);
 			
 		} catch (FeatureCalcException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		
 	}
 
 	public CfgProvider getCfgProvider() {
@@ -97,4 +98,5 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP {
 	public void setCfgProvider(CfgProvider cfgProvider) {
 		this.cfgProvider = cfgProvider;
 	}
+
 }

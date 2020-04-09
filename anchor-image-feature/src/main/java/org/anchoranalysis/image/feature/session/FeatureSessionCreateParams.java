@@ -58,9 +58,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class FeatureSessionCreateParams extends FeatureSession {
+public class FeatureSessionCreateParams<T extends FeatureCalcParams> extends FeatureSession {
 
-	private SequentialSession<FeatureCalcParams> session;
+	private SequentialSession<T> session;
 	private ImageRes res;
 	private NRGStackWithParams nrgStack=null;
 	private ParamsFactory factory = new ParamsFactory();
@@ -71,7 +71,7 @@ public class FeatureSessionCreateParams extends FeatureSession {
 			return null;
 		}
 		
-		public FeatureObjMaskParams createParams( ObjMask om ) {
+		/*public FeatureObjMaskParams createParams( ObjMask om ) {
 			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
 			params.setNrgStack(nrgStack);
 			return params;
@@ -101,13 +101,13 @@ public class FeatureSessionCreateParams extends FeatureSession {
 		
 		public FeatureStackParams createParams( NRGStack nrgStack ) {
 			return new FeatureStackParams(nrgStack);
-		}
+		}*/
 	}
 
 
-	public FeatureSessionCreateParams(Iterable<Feature<FeatureCalcParams>> iterFeatures) {
+	public FeatureSessionCreateParams(Iterable<Feature<T>> iterFeatures) {
 		super();
-		this.session = new SequentialSession<FeatureCalcParams>(iterFeatures);
+		this.session = new SequentialSession<T>(iterFeatures);
 	}
 	
 	public ParamsFactory getParamsFactory() {
@@ -118,7 +118,7 @@ public class FeatureSessionCreateParams extends FeatureSession {
 		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), logger );
 	}
 	
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<FeatureCalcParams> sharedFeatureList, LogErrorReporter logger ) throws InitException {
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger ) throws InitException {
 		session.start(featureInitParams, sharedFeatureList, logger);
 	}
 
@@ -146,7 +146,7 @@ public class FeatureSessionCreateParams extends FeatureSession {
 		}
 	}
 
-	public ResultsVector calc() throws FeatureCalcException {
+	/*public ResultsVector calc() throws FeatureCalcException {
 		return session.calc( factory.createParams() );
 	}
 	
@@ -174,17 +174,10 @@ public class FeatureSessionCreateParams extends FeatureSession {
 	
 	public ResultsVector calc( NRGStack nrgStack ) throws FeatureCalcException {
 		return session.calc( factory.createParams(nrgStack) );
-	}
+	}*/
 	
 	public String featureNameForIndex( int index ) {
 		return session.getFeatureList().get(index).getFriendlyName();
-	}
-	
-	/*
-	 * Creates a sub-session that refers to a single feature within the session
-	 */
-	public FeatureSessionCreateParamsSingle createSingle( int index ) {
-		return new FeatureSessionCreateParamsSingle(this, index);
 	}
 	
 	public KeyValueParams getKeyValueParams() {
@@ -202,7 +195,7 @@ public class FeatureSessionCreateParams extends FeatureSession {
 		this.nrgStack = nrgStack;
 	}
 
-	public List<Feature<FeatureCalcParams>> getFeatureList() {
+	public List<Feature<T>> getFeatureList() {
 		return session.getFeatureList();
 	}
 
@@ -218,18 +211,18 @@ public class FeatureSessionCreateParams extends FeatureSession {
 		return session.numFeatures();
 	}
 
-	public ResultsVector calcSuppressErrors(FeatureCalcParams params,
+	public ResultsVector calcSuppressErrors(T params,
 			ErrorReporter errorReporter) throws FeatureCalcException {
 		return session.calcSuppressErrors(params, errorReporter);
 	}
 
-	public ResultsVector calc(FeatureCalcParams params)
+	public ResultsVector calc(T params)
 			throws FeatureCalcException {
 		return session.calc(params);
 	}
 
-	public FeatureSessionCreateParamsSubsession createSubsession( FeatureCalcParams params ) throws CreateException {
-		return new FeatureSessionCreateParamsSubsession(
+	public FeatureSessionCreateParamsSubsession<T> createSubsession( T params ) throws CreateException {
+		return new FeatureSessionCreateParamsSubsession<>(
 			session.createSubsession(),
 			getParamsFactory(),
 			params

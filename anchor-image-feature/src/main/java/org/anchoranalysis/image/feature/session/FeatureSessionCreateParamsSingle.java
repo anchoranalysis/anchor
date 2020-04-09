@@ -42,6 +42,7 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -64,7 +65,7 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	/**
 	 * From where the single feature is calculated
 	 */
-	private FeatureSessionCreateParams delegate;
+	private FeatureSessionCreateParams<FeatureObjMaskParams> delegate;
 	
 	/**
 	 * The index that is referred to in the delegate FeatureSessionCreateParams (0 if there's only one item)
@@ -76,7 +77,7 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	/**
 	 * Features shared in the session
 	 */
-	private SharedFeatureSet sharedFeatures;
+	private SharedFeatureSet<FeatureObjMaskParams> sharedFeatures;
 	
 	/**
 	 * We set up a parent, that contains a single Feature. This is self-contained case.
@@ -84,8 +85,8 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	 * @param feature
 	 */
 	public FeatureSessionCreateParamsSingle(
-		Feature feature,
-		SharedFeatureSet sharedFeatures
+		Feature<FeatureObjMaskParams> feature,
+		SharedFeatureSet<FeatureObjMaskParams> sharedFeatures
 	) {
 		this(feature,sharedFeatures,null);
 	}
@@ -96,8 +97,8 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	 * @param listKeyValueParams can be NULL
 	 */
 	public FeatureSessionCreateParamsSingle(
-		Feature feature,
-		SharedFeatureSet sharedFeatures,
+		Feature<FeatureObjMaskParams> feature,
+		SharedFeatureSet<FeatureObjMaskParams> sharedFeatures,
 		KeyValueParams keyValueParams
 	) {
 		this(feature, new FeatureInitParams(keyValueParams) );
@@ -106,12 +107,14 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	
 	
 	public FeatureSessionCreateParamsSingle(
-		Feature feature,
+		Feature<FeatureObjMaskParams> feature,
 		FeatureInitParams paramsInit
 	) {
 		this.paramsInit = paramsInit;
 		this.index = 0;
-		delegate = new FeatureSessionCreateParams( new FeatureList(feature) );
+		delegate = new FeatureSessionCreateParams<>(
+			new FeatureList<FeatureObjMaskParams>(feature)
+		);
 	}
 	
 	/**
@@ -120,7 +123,7 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	 * @param parent
 	 * @param index
 	 */
-	public FeatureSessionCreateParamsSingle( FeatureSessionCreateParams parent, int index ) {
+	public FeatureSessionCreateParamsSingle( FeatureSessionCreateParams<FeatureObjMaskParams> parent, int index ) {
 		this.index = index;
 		this.delegate = parent;
 	}
@@ -145,18 +148,20 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 		}
 	}
 	
-	public double calc() throws FeatureCalcException {
+	/*public double calc() throws FeatureCalcException {
 		checkSingleFeature();
 		return delegate.calc().get(index);
-	}
+	}*/
 	
 	@Override
-	public double calc( ObjMask om) throws FeatureCalcException {
+	public double calc( ObjMask om ) throws FeatureCalcException {
 		checkSingleFeature();
-		return delegate.calc(om).get(index);
+		return delegate.calc(
+			new FeatureObjMaskParams(om)
+		).get(index);
 	}
 	
-	public double calc( ObjMask objMask1, ObjMask objMask2 ) throws FeatureCalcException {
+	/*public double calc( ObjMask objMask1, ObjMask objMask2 ) throws FeatureCalcException {
 		checkSingleFeature();
 		return delegate.calc(objMask1,objMask2).get(index);
 	}
@@ -182,7 +187,7 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 	public double calc(FeatureCalcParams params)
 			throws FeatureCalcException {
 		return delegate.calc(params).get(index);
-	}
+	}*/
 	
 	public void setNrgStack(NRGStackWithParams nrgStack) {
 		delegate.setNrgStack(nrgStack);
@@ -196,7 +201,7 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 		delegate.setRes(res);
 	}
 
-	public Feature getFeature() {
+	public Feature<FeatureObjMaskParams> getFeature() {
 		return delegate.getFeatureList().get(index);
 	}
 
@@ -204,11 +209,11 @@ public class FeatureSessionCreateParamsSingle extends FeatureSession implements 
 		return paramsInit;
 	}
 
-	public SharedFeatureSet getSharedFeatures() {
+	public SharedFeatureSet<FeatureObjMaskParams> getSharedFeatures() {
 		return sharedFeatures;
 	}
 
-	public FeatureSessionCreateParams getDelegate() {
+	public FeatureSessionCreateParams<FeatureObjMaskParams> getDelegate() {
 		return delegate;
 	}
 

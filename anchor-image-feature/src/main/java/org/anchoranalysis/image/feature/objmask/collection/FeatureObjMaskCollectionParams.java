@@ -29,9 +29,10 @@ package org.anchoranalysis.image.feature.objmask.collection;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class FeatureObjMaskCollectionParams extends FeatureCalcParamsWithRes {
+public class FeatureObjMaskCollectionParams extends FeatureNRGStackParams {
 
 	private ObjMaskCollection objMaskCollection;
 	private NRGStackWithParams nrgStack;
@@ -54,10 +55,12 @@ public class FeatureObjMaskCollectionParams extends FeatureCalcParamsWithRes {
 		this.objMaskCollection = objMaskCollection;
 	}
 
+	@Override
 	public NRGStackWithParams getNrgStack() {
 		return nrgStack;
 	}
 
+	@Override
 	public void setNrgStack(NRGStackWithParams nrgStack) {
 		this.nrgStack = nrgStack;
 	}

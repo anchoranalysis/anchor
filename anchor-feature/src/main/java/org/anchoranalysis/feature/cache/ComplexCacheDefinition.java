@@ -28,13 +28,14 @@ package org.anchoranalysis.feature.cache;
 
 import java.util.List;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 public class ComplexCacheDefinition extends FeatureCacheDefinition {
 
 	private String[] neededAdditionalCaches;
 	
 	public ComplexCacheDefinition(
-		Feature feature,
+		Feature<FeatureCalcParams> feature,
 		String[] neededAdditionalCaches
 	) {
 		super(feature);

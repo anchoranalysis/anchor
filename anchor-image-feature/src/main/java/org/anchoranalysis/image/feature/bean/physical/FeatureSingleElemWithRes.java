@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.image.extent.ImageRes;
 
-public abstract class FeatureSingleElemWithRes<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
+public abstract class FeatureSingleElemWithRes<T extends FeatureCalcParamsWithRes> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -53,19 +53,9 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureCalcParams> exte
 	@Override
 	public final double calc(CacheableParams<T> params) throws FeatureCalcException {
 		
-		if (!(params.getParams() instanceof FeatureCalcParamsWithRes)) {
-			throw new FeatureCalcException("Requires " + FeatureCalcParamsWithRes.class.getSimpleName() );
-		}
-		
-		FeatureCalcParamsWithRes paramsCast = (FeatureCalcParamsWithRes) params.getParams();
-		
-		if (paramsCast.getRes()==null) {
-			throw new FeatureCalcException("A resolution is required for this feature");
-		}
-		
 		double value = params.calc( getItem() );
 		
-		return calcWithRes(value, paramsCast.getRes() );
+		return calcWithRes(value, params.getParams().getRes() );
 	}
 	
 	protected abstract double calcWithRes( double value, ImageRes res ) throws FeatureCalcException;

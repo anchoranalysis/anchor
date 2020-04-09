@@ -94,6 +94,12 @@ public class FeatureList<T extends FeatureCalcParams> extends AnchorBean<Feature
 	}
 	
 	@SuppressWarnings("unchecked")
+	public FeatureList<FeatureCalcParams> upcast() {
+		return (FeatureList<FeatureCalcParams>) this;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
 	public <S extends FeatureCalcParams> FeatureList<S> downcast() {
 		return (FeatureList<S>) this;
 	}

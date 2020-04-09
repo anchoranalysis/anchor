@@ -30,12 +30,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public abstract class FeatureProvider extends FeatureProviderBean<FeatureProvider,Feature<FeatureCalcParams>>  {
+public abstract class FeatureProvider<T extends FeatureCalcParams> extends FeatureProviderBean<FeatureProvider<T>,Feature<T>>  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3791187543366929792L;
 
-	public abstract Feature<FeatureCalcParams> create() throws CreateException;
+	public abstract Feature<T> create() throws CreateException;
 }

@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
-public class FeatureProviderReference extends FeatureProvider {
+public class FeatureProviderReference extends FeatureProvider<FeatureCalcParams> {
 
 	/**
 	 * 

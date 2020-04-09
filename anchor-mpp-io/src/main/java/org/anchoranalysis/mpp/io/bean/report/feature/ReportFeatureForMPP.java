@@ -1,7 +1,6 @@
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPPSingle;
 
 /*-
  * #%L
@@ -35,12 +34,16 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorRes;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
-public abstract class ReportFeatureForMPP extends ReportFeatureForSharedObjects {
+public abstract class ReportFeatureForMPP<T extends FeatureCalcParams> extends ReportFeatureForSharedObjects {
 
 	/**
 	 * 
@@ -49,11 +52,11 @@ public abstract class ReportFeatureForMPP extends ReportFeatureForSharedObjects 
 
 	// START BEAN PROPERTIES	
 	@BeanField
-	private FeatureEvaluatorRes featureEvaluator;
+	private FeatureEvaluator<T> featureEvaluator;
 	
 	@BeanField
 	private String title;
-	
+		
 	@BeanField
 	private ImageDimProvider dimProvider;
 	// END BEAN PROPERTIES
@@ -63,21 +66,18 @@ public abstract class ReportFeatureForMPP extends ReportFeatureForSharedObjects 
 		featureEvaluator.initRecursive( so.getFeature(), logger );
 	}
 	
-	protected FeatureSessionCreateParamsMPPSingle createSession() throws CreateException {
-		ImageDim sd = dimProvider.create();
-
-		try {
-			return new FeatureSessionCreateParamsMPPSingle(featureEvaluator.createAndStartSession(), new NRGStack(sd), new KeyValueParams() );
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+	protected FeatureCalculatorVector<T> createAndStartSession() throws OperationFailedException {
+		return featureEvaluator.createAndStartSession();
+	}
+	
+	protected ImageDim createImageDim() throws CreateException {
+		return dimProvider.create();
 	}
 
 	@Override
 	public String genTitleStr() throws OperationFailedException {
 		return title;
 	}
-
 	
 	public String getTitle() {
 		return title;
@@ -87,14 +87,14 @@ public abstract class ReportFeatureForMPP extends ReportFeatureForSharedObjects 
 		this.title = title;
 	}
 
-	public FeatureEvaluatorRes getFeatureEvaluator() {
+	public FeatureEvaluator<T> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorRes featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
-
+	
 	public ImageDimProvider getDimProvider() {
 		return dimProvider;
 	}
@@ -102,5 +102,4 @@ public abstract class ReportFeatureForMPP extends ReportFeatureForSharedObjects 
 	public void setDimProvider(ImageDimProvider dimProvider) {
 		this.dimProvider = dimProvider;
 	}
-
 }

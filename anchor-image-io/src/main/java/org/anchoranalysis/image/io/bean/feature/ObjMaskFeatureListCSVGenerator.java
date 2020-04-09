@@ -42,7 +42,9 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.TableCSVGenerator;
+import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
@@ -71,7 +73,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	private ObjMaskCollection objs;
 	
 	private FeatureList<FeatureObjMaskParams> features;
-	private boolean includeDependencies = false;
+	
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
 	private SharedFeatureSet<FeatureObjMaskParams> sharedFeatures = new SharedFeatureSet<>();
 	
@@ -105,20 +107,24 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	@Override
 	public void writeToFile(OutputWriteSettings outputWriteSettings,
 			Path filePath) throws OutputWriteFailedException {
-
+				
 		ResultsVectorCollection rvc;
 		try {
-			FeatureSessionCreateParams session = new FeatureSessionCreateParams( upcastFeatures() );
-			session.start(paramsInit, sharedFeatures.upcast(), logErrorReporter);
-			session.setNrgStack(nrgStack);
+			SequentialSession<FeatureObjMaskParams> session = new SequentialSession<>( features.getList() );
+			session.start(paramsInit, sharedFeatures, logErrorReporter);
 		
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			
 			rvc = new ResultsVectorCollection();
 			for( ObjMask om : objs ) {
-				rvc.add( session.calcSuppressErrors( session.getParamsFactory().createParams(om),logErrorReporter.getErrorReporter()) );
+				rvc.add( 
+					session.calcSuppressErrors(
+						createParams(om, nrgStack),
+						logErrorReporter.getErrorReporter()
+					)
+				);
 			}
-		} catch (InitException | FeatureCalcException e) {
+		} catch (InitException e) {
 			throw new OutputWriteFailedException(e);
 		}
 		
@@ -142,7 +148,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	
 	// Puts in some extra descriptive features at the start
 	private FeatureList<FeatureObjMaskParams> createFullFeatureList( FeatureList<FeatureObjMaskParams> features, LogErrorReporter logger ) {
-		
 		
 		FeatureList<FeatureObjMaskParams> featuresAll = new FeatureList<>();
 		
@@ -169,7 +174,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		}
 		
 		return featuresAll;
-
 	}
 	
 	private static void addConvertedFeature( FeatureList<FeatureObjMaskParams> featuresAll, Feature<FeatureObjMaskParams> feature, DirectionVector dir, String name ) {
@@ -178,13 +182,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	
 	private static Feature<FeatureObjMaskParams> convert( Feature<FeatureObjMaskParams> feature, DirectionVector dir ) {
 		return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
-	}
-	
-	private Iterable<Feature<FeatureCalcParams>> upcastFeatures() {
-		return features.getList()
-				.stream()
-				.map( p -> p.upcast() )
-				.collect( Collectors.toList() );
 	}
 	
 	public FeatureInitParams getParamsInit() {
@@ -201,5 +198,12 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 
 	public void setSharedFeatures(SharedFeatureSet<FeatureObjMaskParams> sharedFeatures) {
 		this.sharedFeatures = sharedFeatures;
+	}
+	
+	private static FeatureObjMaskParams createParams(ObjMask om, NRGStackWithParams nrgStack) {
+		FeatureObjMaskParams params = new FeatureObjMaskParams();
+		params.setObjMask(om);
+		params.setNrgStack(nrgStack);
+		return params;
 	}
 }

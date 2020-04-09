@@ -33,6 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.operator.Constant;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
  * Loads a set of KeyValueParams as features
@@ -40,7 +41,7 @@ import org.anchoranalysis.feature.bean.operator.Constant;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderKeyValueParams extends FeatureListProvider {
+public class FeatureListProviderKeyValueParams<T extends FeatureCalcParams> extends FeatureListProvider<T> {
 
 	/**
 	 * 
@@ -53,9 +54,9 @@ public class FeatureListProviderKeyValueParams extends FeatureListProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 		
 		KeyValueParamsInitParams soParams = getSharedObjects().getParams();
 		
@@ -66,7 +67,7 @@ public class FeatureListProviderKeyValueParams extends FeatureListProvider {
 				
 				double val = kpv.getPropertyAsDouble(key);
 				
-				Constant featureNew = new Constant();
+				Constant<T> featureNew = new Constant<>();
 				featureNew.setCustomName( key );
 				featureNew.setValue( val );
 				

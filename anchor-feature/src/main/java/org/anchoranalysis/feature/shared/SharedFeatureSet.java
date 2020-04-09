@@ -63,6 +63,7 @@ public class SharedFeatureSet<T extends FeatureCalcParams> implements INamedProv
 		return (SharedFeatureSet<FeatureCalcParams>) this;
 	}
 	
+	// TODO go through all uses of downcast, and replace with something valid
 	@SuppressWarnings("unchecked")
 	public <S extends T> SharedFeatureSet<S> downcast() {
 		return (SharedFeatureSet<S>) this;

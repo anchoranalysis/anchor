@@ -37,6 +37,14 @@ public abstract class FeatureNRGStackParams extends FeatureCalcParamsWithImagePa
 
 	private NRGStackWithParams nrgStack;
 	
+	public FeatureNRGStackParams() {
+		
+	}
+	
+	public FeatureNRGStackParams(NRGStackWithParams nrgStack) {
+		this.nrgStack = nrgStack;
+	}
+	
 	/** Converts to featureStackParams */
 	public FeatureStackParams featureStackParams() {
 		return new FeatureStackParams(nrgStack.getNrgStack());

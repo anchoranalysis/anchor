@@ -1,6 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
@@ -112,8 +113,8 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	
 		if (calc) {
 			try {
-				FeatureCalcParams params = session.getParamsFactory().createParams(mark1,mark2, nrgStack.getNrgStack() );
-				FeatureSessionCreateParamsSubsession subsession = session.createSubsession( params );
+				NRGElemPairCalcParams params = session.getParamsFactory().createParams(mark1,mark2, nrgStack.getNrgStack() );
+				FeatureSessionCreateParamsSubsession<NRGElemPairCalcParams> subsession = session.createSubsession( params );
 				subsession.beforeNewCalc();
 				ResultsVector rv = subsession.calcSubset( nrgElemPairList );
 

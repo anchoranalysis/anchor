@@ -62,7 +62,7 @@ import org.apache.commons.collections.CollectionUtils;
  * @param T calc-params for feature
  *
  */
-public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements ISequentialSessionSingleParams<T> {
+public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements FeatureCalculatorVector<T>, ISequentialSessionSingleParams<T> {
 
 	private FeatureList<T> listFeatures;
 
@@ -114,6 +114,9 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	}
 	
 	
+	public void start( LogErrorReporter logger ) throws InitException {
+		start( new FeatureInitParams(), new SharedFeatureSet<T>(), logger);
+	}
 	
 	/**
 	 * Starts the session

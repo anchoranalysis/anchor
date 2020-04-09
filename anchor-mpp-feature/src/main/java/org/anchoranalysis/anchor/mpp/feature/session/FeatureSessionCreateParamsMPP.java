@@ -56,16 +56,16 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
-public class FeatureSessionCreateParamsMPP {
+public class FeatureSessionCreateParamsMPP<T extends FeatureCalcParams> {
 
-	private FeatureSessionCreateParams delegate;
-	private ParamsFactory factory;
+	private FeatureSessionCreateParams<T> delegate;
+	private ParamsFactory<T> factory;
 	
-	public static class ParamsFactory {
+	public static class ParamsFactory<T extends FeatureCalcParams> {
 			
-		private FeatureSessionCreateParams delegate;
+		private FeatureSessionCreateParams<T> delegate;
 				
-		public ParamsFactory(FeatureSessionCreateParams delegate, NRGStack nrgStack, KeyValueParams keyValueParams ) {
+		public ParamsFactory(FeatureSessionCreateParams<T> delegate, NRGStack nrgStack, KeyValueParams keyValueParams ) {
 			super();
 			this.delegate = delegate;
 			delegate.setNrgStack(
@@ -86,7 +86,7 @@ public class FeatureSessionCreateParamsMPP {
 			return params;
 		}
 				
-		public FeatureCalcParams createParams( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStack nrgStack ) throws CreateException {
+		public NRGElemPairCalcParams createParams( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStack nrgStack ) throws CreateException {
 			return new NRGElemPairCalcParams(
 				mark1,
 				mark2,
@@ -116,13 +116,13 @@ public class FeatureSessionCreateParamsMPP {
 		}
 	}
 
-	public FeatureSessionCreateParamsMPP( FeatureList listFeatures, NRGStack nrgStack, KeyValueParams keyValueParams ) {
-		assert(listFeatures!=null);
-		delegate = new FeatureSessionCreateParams( listFeatures );
-		factory = new ParamsFactory(delegate, nrgStack, keyValueParams);
+	public FeatureSessionCreateParamsMPP( Iterable<Feature<T>> iterFeatures, NRGStack nrgStack, KeyValueParams keyValueParams ) {
+		assert(iterFeatures!=null);
+		delegate = new FeatureSessionCreateParams<>( iterFeatures );
+		factory = new ParamsFactory<>(delegate, nrgStack, keyValueParams);
 	}
 	
-	public ResultsVector calc( Cfg cfg ) throws FeatureCalcException {
+	/*public ResultsVector calc( Cfg cfg ) throws FeatureCalcException {
 		return delegate.calc( factory.createParams(cfg) );
 	}
 	
@@ -144,9 +144,9 @@ public class FeatureSessionCreateParamsMPP {
 
 	public ResultsVector calc() throws FeatureCalcException {
 		return delegate.calc();
-	}
+	}*/
 
-	public List<Feature<FeatureCalcParams>> getFeatureList() {
+	public List<Feature<T>> getFeatureList() {
 		return delegate.getFeatureList();
 	}
 
@@ -158,15 +158,15 @@ public class FeatureSessionCreateParamsMPP {
 		delegate.setRes(res);
 	}
 
-	public ResultsVector calc(FeatureCalcParams params) throws FeatureCalcException {
+	public ResultsVector calc(T params) throws FeatureCalcException {
 		return delegate.calc(params);
 	}
 
-	public ParamsFactory getParamsFactory() {
+	public ParamsFactory<T> getParamsFactory() {
 		return factory;
 	}
 	
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger)
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger)
 			throws InitException {
 		delegate.start(featureInitParams, sharedFeatureList, logger);
 	}
@@ -183,7 +183,7 @@ public class FeatureSessionCreateParamsMPP {
 		delegate.start(logger);
 	}
 
-	public FeatureSessionCreateParamsSubsession createSubsession(FeatureCalcParams params) throws CreateException {
+	public FeatureSessionCreateParamsSubsession<T> createSubsession(T params) throws CreateException {
 		return delegate.createSubsession(params);
 	}
 	

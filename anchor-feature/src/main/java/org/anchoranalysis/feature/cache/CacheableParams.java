@@ -84,6 +84,11 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return cacheFor(childName, params.getClass()).search(cc).getOrCalculate(params);
 	}
 
+	@SuppressWarnings("unchecked")
+	public <S extends FeatureCalcParams> CacheableParams<FeatureCalcParams> upcastParams() throws FeatureCalcException {
+		return (CacheableParams<FeatureCalcParams>)(this);
+	}
+	
 	/** 
 	 * Downcasts the type of the parameters in the cache, while continuing to use the same cache
 	 * 

@@ -2,7 +2,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPPSingle;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*
@@ -38,8 +38,10 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.image.extent.ImageDim;
 
-public class ReportFeatureOnMark extends ReportFeatureForMPP {
+public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureMarkParams> {
 
 	/**
 	 * 
@@ -78,15 +80,17 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP {
 		
 					
 		try {
-			FeatureSessionCreateParamsMPPSingle session = createSession();
+			FeatureCalculatorVector<FeatureMarkParams> session = createAndStartSession();
 			
-			double val = session.calc(mark);
+			ImageDim dims = createImageDim();
+			
+			double val = session.calc(
+				new FeatureMarkParams(mark, dims.getRes())
+			).get(0);
 			return Double.toString(val);
 		} catch (FeatureCalcException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		
 	}
 
 	public MarkProvider getMarkProvider() {
