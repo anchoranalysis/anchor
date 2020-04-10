@@ -40,7 +40,6 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.creator.CacheCreator;
-import org.anchoranalysis.feature.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -48,6 +47,8 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -62,7 +63,7 @@ import org.apache.commons.collections.CollectionUtils;
  * @param T calc-params for feature
  *
  */
-public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements FeatureCalculatorVector<T>, ISequentialSessionSingleParams<T> {
+public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements FeatureCalculatorMulti<T>, ISequentialSessionSingleParams<T> {
 
 	private FeatureList<T> listFeatures;
 
@@ -240,6 +241,11 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	public CachePlus<T> getCache() {
 		return cache;
 	}
+
+	@Override
+	public int sizeFeatures() {
+		return listFeatures.size();
+	}
 	
 	private void calcSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
 		for( int i=0; i<listFeatures.size(); i++) {
@@ -362,5 +368,6 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			) );
 		}
 	}
+
 	
 }

@@ -40,9 +40,11 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -84,13 +86,13 @@ public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends Featu
 //	}
 	
 	@Override
-	public FeatureCalculatorVector<T> createAndStartSession() throws OperationFailedException {
+	public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
 		
-		FeatureCalculatorVector<T> session = super.createAndStartSession();
+		FeatureCalculatorSingle<T> session = super.createAndStartSession();
 		
 		final NRGStackWithParams nrgStack = nrgStackOrNull();
 		
-		return new FeatureCalculatorVectorChangeParams<>(
+		return new FeatureCalculatorSingleChangeParams<>(
 			session,
 			params -> {
 				// Use reflection, to only set the nrgStack on params that supports them

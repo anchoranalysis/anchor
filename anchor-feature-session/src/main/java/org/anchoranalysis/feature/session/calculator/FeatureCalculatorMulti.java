@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.feature.bean.evaluator;
+package org.anchoranalysis.feature.session.calculator;
 
-/*
+/*-
  * #%L
- * anchor-image-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,26 +26,26 @@ package org.anchoranalysis.image.feature.bean.evaluator;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 
-public class FeatureEvaluatorSimple<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
+/**
+ * Calculates one or more features for given params
+ * 
+ * @author owen
+ *
+ * @param <T>
+ */
+public interface FeatureCalculatorMulti<T extends FeatureCalcParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
+	/* Does one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
+	ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter );
+	
+	/* Does one calculation throwing an exception if something goes wrong */
+	ResultsVector calc( T params ) throws FeatureCalcException;
+	
+	/** The number of features that is calculated on each call to calc(), and therefore the size of the ResultsVector returned */
+	int sizeFeatures();
 }

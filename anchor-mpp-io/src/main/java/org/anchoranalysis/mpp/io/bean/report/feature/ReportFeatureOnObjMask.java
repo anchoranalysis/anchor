@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -41,13 +41,13 @@ public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureOb
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected double calcFeatureOn(ObjMaskCollection objs, FeatureCalculatorVector<FeatureObjMaskParams> session)
+	protected double calcFeatureOn(ObjMaskCollection objs, FeatureCalculatorSingle<FeatureObjMaskParams> session)
 			throws FeatureCalcException {
 		return session.calc(
 			new FeatureObjMaskParams(
 				extractObjFromCollection(objs)
 			)
-		).get(0);
+		);
 	}
 	
 	private ObjMask extractObjFromCollection( ObjMaskCollection objs ) throws FeatureCalcException {

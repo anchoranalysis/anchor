@@ -1,8 +1,8 @@
-package org.anchoranalysis.feature.bean.operator;
+package org.anchoranalysis.feature.session.calculator;
 
 /*-
  * #%L
- * anchor-feature
+ * anchor-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -26,27 +26,45 @@ package org.anchoranalysis.feature.bean.operator;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
+import java.util.function.Consumer;
+
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
- * A single-element feature that accepts the most generic of parameters {#link {@link FeatureCalcParams}}
- * 
+ * Likes a SequentialSession but automatically changes parameters before calculation
+ *
  * @author owen
- * @params feature-calc-params
+ *
+ * @param <T> feature-calc-params
  */
-public abstract class FeatureGenericSingleElem<T extends FeatureCalcParams> extends FeatureSingleElem<T, T> {
+public class FeatureCalculatorMultiChangeParams<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public FeatureGenericSingleElem() {
-		super();
+	private FeatureCalculatorMulti<T> calculator;
+	private Consumer<T> changeParams;
+	
+	public FeatureCalculatorMultiChangeParams(FeatureCalculatorMulti<T> calculator, Consumer<T> changeParams) {
+		this.calculator = calculator;
+		this.changeParams = changeParams;
 	}
 
-	public FeatureGenericSingleElem(Feature<T> feature) {
-		super(feature);
+	public ResultsVector calc(T params) throws FeatureCalcException {
+		changeParams.accept(params);
+		return calculator.calc(params);
+	}
+
+	public ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter) {
+		changeParams.accept(params);
+		return calculator.calcSuppressErrors(
+			params,
+			errorReporter
+		);
+	}
+
+	@Override
+	public int sizeFeatures() {
+		return calculator.sizeFeatures();
 	}
 }

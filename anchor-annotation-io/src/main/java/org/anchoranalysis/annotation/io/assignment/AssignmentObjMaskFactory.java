@@ -33,8 +33,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -110,7 +111,7 @@ public class AssignmentObjMaskFactory {
 		
 	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjMaskCollection annotation, ObjMaskCollection result, ImageDim dim) throws FeatureCalcException {
 
-		FeatureCalculatorVector<FeatureObjMaskPairParams> session;
+		FeatureCalculatorSingle<FeatureObjMaskPairParams> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -129,7 +130,7 @@ public class AssignmentObjMaskFactory {
 	
 				double costObjs = session.calc(
 					paramsFor(objA, objR, nrgStack)
-				).get(0);
+				);
 				outArr[i][j] = costObjs;
 				
 				if (Double.isNaN(costObjs)) {

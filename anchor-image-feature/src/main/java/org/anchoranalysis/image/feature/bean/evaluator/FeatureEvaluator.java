@@ -36,8 +36,10 @@ import org.anchoranalysis.feature.bean.FeatureBean;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends FeatureBean<FeatureEvaluator<T>> {
@@ -52,7 +54,7 @@ public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends Feat
 	private FeatureProvider<T> featureProvider;
 	// END BEAN PROPERTIES
 	
-	public FeatureCalculatorVector<T> createAndStartSession() throws OperationFailedException {
+	public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
 		
 		try {
 			Feature<T> feature = featureProvider.create();
@@ -69,7 +71,7 @@ public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends Feat
 				throw new OperationFailedException(e);
 			}
 						
-			return session;
+			return new FeatureCalculatorSingleFromMulti<>(session);
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

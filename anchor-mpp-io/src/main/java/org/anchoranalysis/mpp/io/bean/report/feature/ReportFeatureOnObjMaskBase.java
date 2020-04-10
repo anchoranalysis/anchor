@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -55,7 +55,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureCalcParams> ex
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack<T> featureEvaluator;
+	private FeatureEvaluator<T> featureEvaluator;
 	
 	@BeanField
 	private String title;
@@ -75,7 +75,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureCalcParams> ex
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 						
-			FeatureCalculatorVector<T> session = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<T> session = featureEvaluator.createAndStartSession();
 			double val = calcFeatureOn( objsCollection, session );
 			return Double.toString(val);
 			
@@ -84,7 +84,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureCalcParams> ex
 		}
 	}
 	
-	protected abstract double calcFeatureOn( ObjMaskCollection objs, FeatureCalculatorVector<T> session ) throws FeatureCalcException;
+	protected abstract double calcFeatureOn( ObjMaskCollection objs, FeatureCalculatorSingle<T> session ) throws FeatureCalcException;
 	
 	@Override
 	public boolean isNumeric() {
@@ -112,12 +112,12 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureCalcParams> ex
 		this.title = title;
 	}
 
-	public FeatureEvaluatorNrgStack<T> getFeatureEvaluator() {
+	public FeatureEvaluator<T> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack<T> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }
