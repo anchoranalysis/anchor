@@ -1,16 +1,10 @@
-package org.anchoranalysis.anchor.mpp.feature.addcriteria;
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
-import org.anchoranalysis.anchor.mpp.list.OrderedFeatureList;
-import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+package org.anchoranalysis.feature.session.calculator;
 
 /*-
  * #%L
- * anchor-mpp-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,17 +26,21 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
- * Add Criteria
+ * Calculates the result of a feature for particular params
+ * 
+ * @author owen
  *
- * @param <T> add-criteria
+ * @param <T> params-type
  */
-public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<NRGElemPairCalcParams> {
+public interface FeatureCalculatorSingle<T extends FeatureCalcParams> {
 
-	// Returns NULL to reject an edge
-	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, SequentialSession<NRGElemPairCalcParams> session, boolean use3D ) throws CreateException;
+	double calcSuppressErrors(T params, ErrorReporter errorReporter );
+	
+	double calc( T params ) throws FeatureCalcException;
 }

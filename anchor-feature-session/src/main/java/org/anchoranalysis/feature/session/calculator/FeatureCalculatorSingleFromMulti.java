@@ -1,16 +1,10 @@
-package org.anchoranalysis.anchor.mpp.feature.addcriteria;
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
-import org.anchoranalysis.anchor.mpp.list.OrderedFeatureList;
-import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+package org.anchoranalysis.feature.session.calculator;
 
 /*-
  * #%L
- * anchor-mpp-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,16 +27,38 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
- * Add Criteria
+ * Exposes a FeatureCalculatorMulti as a FeatureCalculatorSingle
+ * @author owen
  *
- * @param <T> add-criteria
+ * @param <T> feature-params type
  */
-public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<NRGElemPairCalcParams> {
+public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> implements FeatureCalculatorSingle<T> {
 
-	// Returns NULL to reject an edge
-	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, SequentialSession<NRGElemPairCalcParams> session, boolean use3D ) throws CreateException;
+	private FeatureCalculatorMulti<T> delegate;
+		
+	public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi) throws CreateException {
+		super();
+		this.delegate = multi;
+		if (delegate.sizeFeatures()!=1) {
+			throw new CreateException(
+				String.format("When creating a %s, the multi must have exactly one feature")
+			);
+		}
+	}
+
+	@Override
+	public double calcSuppressErrors(T params, ErrorReporter errorReporter) {
+		return delegate.calcSuppressErrors(params, errorReporter).get(0);
+	}
+
+	@Override
+	public double calc(T params) throws FeatureCalcException {
+		return delegate.calc(params).get(0);
+	}
+
 }

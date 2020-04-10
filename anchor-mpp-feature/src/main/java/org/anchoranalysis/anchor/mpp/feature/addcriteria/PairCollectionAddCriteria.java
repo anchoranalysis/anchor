@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
@@ -47,8 +48,10 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 // PairType is how we store the pair information
@@ -87,7 +90,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private transient boolean hasInit = false;
 	private transient NRGStackWithParams nrgStack;
 	private transient LogErrorReporter logger;
-	private transient SharedFeatureSet sharedFeatures;
+	private transient SharedFeatureSet<FeatureCalcParams> sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
 		this.pairTypeClass = pairTypeClass;
@@ -117,7 +120,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws InitException {
 		assert( sharedFeatures!=null );
 		assert( logger!=null );
 		this.logger = logger;
@@ -131,14 +134,16 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				graph.addVertex( marks.getMemoForIndex(i).getMark() );
 			}
 			
-			FeatureList features = addCriteria.orderedListOfFeatures();
+			FeatureList<NRGElemPairCalcParams> features = addCriteria.orderedListOfFeatures();
 			if (features==null) {
-				features = new FeatureList();
+				features = new FeatureList<>();
 			}
 			
-			FeatureSessionCreateParamsMPP session = new FeatureSessionCreateParamsMPP( features, stack.getNrgStack(), stack.getParams() );
+			SequentialSession<NRGElemPairCalcParams> session = new SequentialSession<>(	features );
 			try {
-				session.start( new FeatureInitParams(stack.getParams()), sharedFeatures, logger );
+				//stack.getNrgStack(),
+				//stack.getParams()
+				session.start( new FeatureInitParams(stack.getParams()), sharedFeatures.downcast(), logger );
 			} catch (InitException e) {
 				throw new CreateException(e);
 			}
@@ -182,12 +187,19 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
 		assert sharedFeatures!=null;
 		assert logger!=null;
-		FeatureSessionCreateParamsMPP session = new FeatureSessionCreateParamsMPP( addCriteria.orderedListOfFeatures(), nrgStack.getNrgStack(), nrgStack.getParams() );
+		SequentialSession<NRGElemPairCalcParams> session = new SequentialSession<NRGElemPairCalcParams>(
+			addCriteria.orderedListOfFeatures()	
+		);
 		try {
-			session.start( new FeatureInitParams(nrgStack.getParams()), sharedFeatures, logger );
+			session.start(
+				new FeatureInitParams(nrgStack.getParams()),
+				sharedFeatures.downcast(),
+				logger
+			);
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}
+		
 		
 		// We calculate how the new mark interacts with all the other marks
 		for( int i=0; i<pxlMarkMemoList.size(); i++) {

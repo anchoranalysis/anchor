@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * 
  * It is used to calculate feature-values for a subset of associated features (rather than them all, as with the direct calc() methods)
  * 
- * Unlike the other calc methods, no cache reset occurs, when they are called. There params are fixed.
+ * Unlike the other calc methods, no cache reset occurs, when they are called.
  * 
  * Only features that have been initialised should be calculated. Initialization should be triggered through calling a start() or similar method
  *   on a FeatureSession. This means only features associated with a session (or their recursive dependencies) should be calculated.
@@ -54,17 +54,19 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 public class Subsession<T extends FeatureCalcParams> {
 	
 	private CacheCreator cacheCreator;
+	private CacheableParams<T> params;
 
-	public Subsession(CacheCreator cacheCreator) {
+	public Subsession(CacheCreator cacheCreator, T params) throws FeatureCalcException {
 		super();
 		this.cacheCreator = cacheCreator;
+		this.params = SessionUtilities.createCacheable(params, cacheCreator);
 	}
 
 	public void beforeNewCalc() {
 		//cache.invalidate();
 	}
 
-	public ResultsVector calcSubset( FeatureList<T> features, T params ) throws FeatureCalcException {
+	public ResultsVector calcSubset( FeatureList<T> features ) throws FeatureCalcException {
 		
 		ResultsVector res = new ResultsVector( features.size() );
 
@@ -72,40 +74,14 @@ public class Subsession<T extends FeatureCalcParams> {
 			Feature<T> f = features.get(i);
 			res.set(
 				i,
-				calc(f, params)
+				calc(f)
 			);
 		}
 		return res;
 	}
 	
-	public ResultsVector calcSubsetSuppressErrors(
-		FeatureList<T> features,
-		List<CacheableParams<T>> listParams,
-		ErrorReporter errorReporter
-	) {
-		assert(features.size()==listParams.size());
-		
-		ResultsVector res = new ResultsVector( features.size() );
-
-		for( int i=0; i<features.size(); i++) {
-			Feature<T> f = features.get(i);
-			
-			try {
-				res.set(
-					i,
-					listParams.get(i).calc(f)
-				);
-			} catch (Exception e) {
-				res.setError(i,e);
-				errorReporter.recordError(Subsession.class, e);
-			}
-			
-		}
-		return res;
-	}
-	
-	public double calc( Feature<T> feature, T params ) throws FeatureCalcException {
-		return SessionUtilities.createCacheable(params, cacheCreator).calc(feature);
+	public double calc( Feature<T> feature ) throws FeatureCalcException {
+		return params.calc(feature);
 	}
 
 }

@@ -223,9 +223,7 @@ public class FeatureSessionCreateParams<T extends FeatureCalcParams> extends Fea
 
 	public FeatureSessionCreateParamsSubsession<T> createSubsession( T params ) throws CreateException {
 		return new FeatureSessionCreateParamsSubsession<>(
-			session.createSubsession(),
-			getParamsFactory(),
-			params
+			session.createSubsession(params)
 		);
 	}
 }

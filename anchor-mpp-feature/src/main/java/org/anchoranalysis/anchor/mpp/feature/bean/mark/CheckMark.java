@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public abstract class CheckMark extends MPPBean<CheckMark> implements ICompatibleWith, OrderedFeatureList {
+public abstract class CheckMark extends MPPBean<CheckMark> implements ICompatibleWith {
 
 	/**
 	 * 

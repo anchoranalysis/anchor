@@ -1,5 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -32,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 
@@ -51,7 +53,7 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureSessionCreateParamsMPP session, boolean use3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, SequentialSession<NRGElemPairCalcParams> session, boolean use3D) throws IncludeMarksFailureException {
 			
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
 		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);

@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.list;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+
 /*-
  * #%L
  * anchor-mpp
@@ -28,8 +30,9 @@ package org.anchoranalysis.anchor.mpp.list;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public interface OrderedFeatureList {
+public interface OrderedFeatureList<T extends FeatureCalcParams> {
 
 	/**
 	 * A list of features used to determine the add-criteria, or NULL if irrelevant. The order features appear in this list, will be used
@@ -37,5 +40,5 @@ public interface OrderedFeatureList {
 	 * 
 	 * @return
 	 */
-	FeatureList orderedListOfFeatures() throws CreateException;
+	FeatureList<T> orderedListOfFeatures() throws CreateException;
 }

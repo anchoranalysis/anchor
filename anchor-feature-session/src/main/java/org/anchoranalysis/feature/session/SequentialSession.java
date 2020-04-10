@@ -213,7 +213,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	 * @return
 	 * @throws FeatureCalcException 
 	 */
-	public Subsession<T> createSubsession() throws CreateException {
+	public Subsession<T> createSubsession( T params ) throws CreateException {
 		
 		if (!isStarted) {
 			throw new CreateException("Session has not been started yet. Call start().");
@@ -221,7 +221,11 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		
 		cache.invalidate();
 		
-		return new Subsession<>(simpleCacheCreator);
+		try {
+			return new Subsession<>(simpleCacheCreator, params);
+		} catch (FeatureCalcException e) {
+			throw new CreateException(e);
+		}
 	}
 	
 	
@@ -247,6 +251,16 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		return listFeatures.size();
 	}
 	
+	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
+		// TODO Invalidate cache
+		return SessionUtilities.createCacheable(params, simpleCacheCreator);
+	}
+	
+	public List<CacheableParams<T>> createCacheable(List<T> params) throws FeatureCalcException {
+		// TODO Invalidate cache
+		return SessionUtilities.createCacheable(params, simpleCacheCreator);
+	}
+	
 	private void calcSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);
@@ -256,7 +270,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 					f,
 					res,
 					i,
-					SessionUtilities.createCacheable(params, simpleCacheCreator)
+					createCacheable(params)
 				);
 				
 			} catch (FeatureCalcException e) {
@@ -281,7 +295,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 					f,
 					res,
 					i,
-					SessionUtilities.createCacheable(params, simpleCacheCreator)
+					createCacheable(params)
 				);
 			}
 			return res;
@@ -305,7 +319,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);
-			double val = SessionUtilities.createCacheable(params, simpleCacheCreator).calc(f);
+			double val = createCacheable(params).calc(f);
 			res.set(i,val);
 		}
 	}

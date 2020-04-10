@@ -46,6 +46,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -114,9 +115,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		//  a bit of overhead
     	return new Point3d(pnt);
     }
-	
+
 	@Override
-	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureSet sharedFeatures) throws InitException {
+	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureSet<FeatureCalcParams> sharedFeatures) throws InitException {
 		
 		
 

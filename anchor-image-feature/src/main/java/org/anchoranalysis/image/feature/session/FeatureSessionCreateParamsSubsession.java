@@ -36,31 +36,23 @@ import org.anchoranalysis.feature.session.Subsession;
 public class FeatureSessionCreateParamsSubsession<T extends FeatureCalcParams> {
 
 	private Subsession<T> subsession;
-	private FeatureSessionCreateParams.ParamsFactory paramsFactory;
-	private T params;
 	
-	public FeatureSessionCreateParamsSubsession(Subsession<T> subsession, FeatureSessionCreateParams.ParamsFactory paramsFactory, T params) {
+	public FeatureSessionCreateParamsSubsession(Subsession<T> subsession) {
 		super();
 		this.subsession = subsession;
-		this.paramsFactory = paramsFactory;
-		this.params = params;
 	}
 
 	public Subsession<T> getSubsession() {
 		return subsession;
 	}
 
-	public FeatureSessionCreateParams.ParamsFactory getParamsFactory() {
-		return paramsFactory;
-	}
-
 	public ResultsVector calcSubset( FeatureList<T> features ) throws FeatureCalcException {
-		return subsession.calcSubset(features, params);
+		return subsession.calcSubset(features);
 	}
 
 	public double calc( Feature<T> feature )
 			throws FeatureCalcException {
-		return subsession.calc(feature, params);
+		return subsession.calc(feature);
 	}
 
 	public void beforeNewCalc() {

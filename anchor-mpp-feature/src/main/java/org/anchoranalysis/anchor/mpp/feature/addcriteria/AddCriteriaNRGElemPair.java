@@ -41,18 +41,19 @@ import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
 public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 
-	private FeatureList nrgElemPairList;
+	private FeatureList<NRGElemPairCalcParams> nrgElemPairList;
 	
 	// List of criteria for adding pairs
 	private AddCriteriaPair pairAddCriteria;
 
-	private FeatureList featuresAddCriteria;
+	private FeatureList<NRGElemPairCalcParams> featuresAddCriteria;
 	
-	public AddCriteriaNRGElemPair( FeatureList nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
+	public AddCriteriaNRGElemPair( FeatureList<NRGElemPairCalcParams> nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
 		super();
 		
 		this.nrgElemPairList = nrgElemPairList;
@@ -71,9 +72,9 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	 * 
 	 */
 	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
+	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() throws CreateException {
 
-		FeatureList out = new FeatureList();
+		FeatureList<NRGElemPairCalcParams> out = new FeatureList<>();
 		
 		// Now we add all the features we need from the nrgElemPairList
 		out.addAll( nrgElemPairList );
@@ -90,7 +91,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
-		FeatureSessionCreateParamsMPP session,
+		SequentialSession<NRGElemPairCalcParams> session,
 		boolean use3D
 	) throws CreateException {
 		
@@ -113,10 +114,12 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	
 		if (calc) {
 			try {
-				NRGElemPairCalcParams params = session.getParamsFactory().createParams(mark1,mark2, nrgStack.getNrgStack() );
-				FeatureSessionCreateParamsSubsession<NRGElemPairCalcParams> subsession = session.createSubsession( params );
-				subsession.beforeNewCalc();
-				ResultsVector rv = subsession.calcSubset( nrgElemPairList );
+				NRGElemPairCalcParams params = new NRGElemPairCalcParams(
+					mark1,
+					mark2,
+					nrgStack
+				);
+				ResultsVector rv = session.createCacheable(params).calc(nrgElemPairList);
 
 				Pair<Mark> pair = new Pair<>( mark1.getMark(), mark2.getMark() );
 				return new NRGPair(pair, new NRGTotal(rv.total()) );
