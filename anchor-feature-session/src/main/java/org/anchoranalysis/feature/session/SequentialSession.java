@@ -47,6 +47,7 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreatorRemember;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -66,9 +67,6 @@ import org.apache.commons.collections.CollectionUtils;
 public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements FeatureCalculatorMulti<T>, ISequentialSessionSingleParams<T> {
 
 	private FeatureList<T> listFeatures;
-
-	// Our main cache which does our processing (and contains potentially additional caches)
-	private CachePlus<T> cache;
 	
 	private boolean isStarted = false;
 	
@@ -77,7 +75,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	
 	private FeatureSessionCacheFactory cacheFactory;
 	
-	private CacheCreator simpleCacheCreator;
+	private CacheCreatorRemember cacheCreator;
 	
 	/**
 	 * Constructor of a session
@@ -138,7 +136,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		
 		assert( logger!=null );
 		
-		this.cache = setupCacheAndInit( featureInitParams, sharedFeatures, logger );
+		setupCacheAndInit( featureInitParams, sharedFeatures, logger );
 		
 		isStarted = true;
 	}
@@ -157,7 +155,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			throw new FeatureCalcException("Session has not been started yet. Call start().");
 		}
 		
-		cache.invalidate();
+		invalidate();
 		
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 		calcException(params, res);
@@ -177,7 +175,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			throw new FeatureCalcException("Session has not been started yet. Call start().");
 		}
 		
-		cache.invalidate();
+		invalidate();
 		
 		checkSizesMatch( listCreateParams, listFeatures );
 		return calcException( listCreateParams );
@@ -200,34 +198,13 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			res.setErrorAll( new OperationFailedException(errorMsg) );
 		}
 		
-		cache.invalidate();
+		invalidate();
 		
 		calcSuppressErrors(res, params, errorReporter);
 		
 		return res;
 	}
-	
-	/**
-	 * Resets cache, and creates a new sub-session (for calculating particular sub-features)
-	 * 
-	 * @return
-	 * @throws FeatureCalcException 
-	 */
-	public Subsession<T> createSubsession( T params ) throws CreateException {
-		
-		if (!isStarted) {
-			throw new CreateException("Session has not been started yet. Call start().");
-		}
-		
-		cache.invalidate();
-		
-		try {
-			return new Subsession<>(simpleCacheCreator, params);
-		} catch (FeatureCalcException e) {
-			throw new CreateException(e);
-		}
-	}
-	
+
 	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
@@ -240,25 +217,20 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	public List<Feature<T>> getFeatureList() {
 		return listFeatures.getList();
 	}
-
-	@Override
-	public CachePlus<T> getCache() {
-		return cache;
-	}
-
+	
 	@Override
 	public int sizeFeatures() {
 		return listFeatures.size();
 	}
 	
 	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
-		// TODO Invalidate cache
-		return SessionUtilities.createCacheable(params, simpleCacheCreator);
+		invalidate();
+		return SessionUtilities.createCacheable(params, cacheCreator);
 	}
 	
 	public List<CacheableParams<T>> createCacheable(List<T> params) throws FeatureCalcException {
-		// TODO Invalidate cache
-		return SessionUtilities.createCacheable(params, simpleCacheCreator);
+		invalidate();
+		return SessionUtilities.createCacheable(params, cacheCreator);
 	}
 	
 	private void calcSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
@@ -266,11 +238,9 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			Feature<T> f = listFeatures.get(i);
 			
 			try {
-				calcThroughCache(
-					f,
-					res,
+				res.set(
 					i,
-					createCacheable(params)
+					createCacheable(params).calc(f)
 				);
 				
 			} catch (FeatureCalcException e) {
@@ -290,12 +260,10 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 				
 				Feature<T> f = listFeatures.get(i);
 				T params = listCreateParams.get(i).createForFeature(f);
-								
-				calcThroughCache(
-					f,
-					res,
+
+				res.set(
 					i,
-					createCacheable(params)
+					createCacheable(params).calc(f)
 				);
 			}
 			return res;
@@ -304,17 +272,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			throw new FeatureCalcException(e);
 		}		
 	}
-
-	private void calcThroughCache(
-			Feature<T> f,
-			ResultsVector res,
-			int i,
-			CacheableParams<T> params
-		) throws FeatureCalcException {
-			double val = cache.retriever().calc(f, params);
-			res.set(i,val);
-		}
-
+	
 	private void calcException( T params, ResultsVector res ) throws FeatureCalcException {
 		
 		for( int i=0; i<listFeatures.size(); i++) {
@@ -355,7 +313,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	}
 	
 	
-	private CachePlus<T> setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
+	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
 
 		CachePlus<T> out = new CachePlus<>(
 			cacheFactory,
@@ -364,13 +322,17 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		);
 	
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
-		simpleCacheCreator = new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger);
+		cacheCreator = new CacheCreatorRemember(
+			new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger)
+		);
 						
 		out.init(featureInitParamsDup, logger, false);
 		
 		listFeatures.initRecursive(featureInitParamsDup, logger);
-		
-		return out;
+	}
+	
+	private void invalidate() {
+		cacheCreator.invalidateAll();
 	}
 		
 	private static void checkSizesMatch( List<?> listCreateParams, FeatureList<?> listFeatures ) throws FeatureCalcException {

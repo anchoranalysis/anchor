@@ -1,7 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.list.OrderedFeatureList;
 import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;

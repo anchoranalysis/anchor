@@ -220,10 +220,4 @@ public class FeatureSessionCreateParams<T extends FeatureCalcParams> extends Fea
 			throws FeatureCalcException {
 		return session.calc(params);
 	}
-
-	public FeatureSessionCreateParamsSubsession<T> createSubsession( T params ) throws CreateException {
-		return new FeatureSessionCreateParamsSubsession<>(
-			session.createSubsession(params)
-		);
-	}
 }

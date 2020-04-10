@@ -113,10 +113,6 @@ public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> exte
 		}
 	}
 
-	public FeatureSessionCache<T> getCache() {
-		return delegate.getCache();
-	}
-
 	@Override
 	public ResultsVector calc(T params)
 			throws FeatureCalcException {

@@ -38,6 +38,7 @@ import org.anchoranalysis.feature.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.CachePlus;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
@@ -60,7 +61,7 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	@Override
-	public <T extends FeatureCalcParams> FeatureSessionCacheRetriever<T> create( Class<?> paramsType ) {
+	public <T extends FeatureCalcParams> FeatureSessionCache<T> create( Class<?> paramsType ) {
 		
 		FeatureList<T> featureList = filterFeatureList(paramsType);
 		SharedFeatureSet<T> sharedFeaturesCast = maybeCastSharedFeatures(paramsType); 
@@ -75,7 +76,7 @@ public class CacheCreatorSimple implements CacheCreator {
 		} catch (InitException e) {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
 		}
-		return cache.createCache().retriever();
+		return cache.createCache();
 	}
 
 	private <T extends FeatureCalcParams> FeatureList<T> filterFeatureList(Class<?> paramsType) {

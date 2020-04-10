@@ -78,11 +78,6 @@ public class SequentialSessionRepeatFirst<T extends FeatureCalcParams> extends F
 	}
 
 	@Override
-	public FeatureSessionCache<T> getCache() {
-		return delegate.getCache();
-	}
-
-	@Override
 	public ResultsVector calc(T params)
 			throws FeatureCalcException {
 		return delegate.calc(params);

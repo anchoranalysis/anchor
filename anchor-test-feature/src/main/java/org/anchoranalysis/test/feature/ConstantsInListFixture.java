@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class SimpleFeatureListFixture {
+public class ConstantsInListFixture {
 
 	private static double f1Value = 1.0;
 	private static double f2Value = 2.0;

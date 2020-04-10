@@ -2,7 +2,6 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -42,7 +41,6 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
 public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 

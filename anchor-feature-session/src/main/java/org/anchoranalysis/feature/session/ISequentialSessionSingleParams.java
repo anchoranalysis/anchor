@@ -44,6 +44,4 @@ public interface ISequentialSessionSingleParams<T extends FeatureCalcParams> {
 	ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter );
 	
 	ResultsVector calc( T params ) throws FeatureCalcException;
-	
-	FeatureSessionCache<T> getCache();
 }
