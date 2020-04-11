@@ -157,7 +157,7 @@ public abstract class FeatureSessionCacheRetriever<T extends FeatureCalcParams> 
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureSessionCache createNewCache();
+	public abstract FeatureSessionCache<T> createNewCache();
 	
 	
 }

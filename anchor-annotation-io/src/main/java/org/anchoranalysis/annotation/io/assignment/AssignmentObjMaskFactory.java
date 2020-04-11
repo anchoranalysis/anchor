@@ -33,12 +33,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -46,13 +43,13 @@ import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
 public class AssignmentObjMaskFactory {
 	
-	private FeatureEvaluatorSimple<FeatureObjMaskPairParams> featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator;
 	private boolean useMIP;
 	
 	// Remember the cost matrix, in case we need it later
 	private ObjMaskCollectionDistanceMatrix cost;
 	
-	public AssignmentObjMaskFactory(FeatureEvaluatorSimple<FeatureObjMaskPairParams> featureEvaluator, boolean useMIP ) {
+	public AssignmentObjMaskFactory(FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator, boolean useMIP ) {
 		super();
 		this.featureEvaluator = featureEvaluator;
 		this.useMIP = useMIP;

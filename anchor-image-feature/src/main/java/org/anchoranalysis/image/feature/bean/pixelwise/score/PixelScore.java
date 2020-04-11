@@ -29,7 +29,6 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelwiseFeature;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;

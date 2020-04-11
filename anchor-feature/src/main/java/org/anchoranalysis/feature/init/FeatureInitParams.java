@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.init;
 
 
 import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 

@@ -31,8 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class FeatureListProviderDefineSingle extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderDefineSingle<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -44,21 +45,21 @@ public class FeatureListProviderDefineSingle extends FeatureListProviderReferenc
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private Feature item;
+	private Feature<T> item;
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList create() throws CreateException {
-		FeatureList fl = new FeatureList();
+	public FeatureList<T> create() throws CreateException {
+		FeatureList<T> fl = new FeatureList<>();
 		fl.add(item);
 		return fl;
 	}
 
-	public Feature getItem() {
+	public Feature<T> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<T> item) {
 		this.item = item;
 	}
 }

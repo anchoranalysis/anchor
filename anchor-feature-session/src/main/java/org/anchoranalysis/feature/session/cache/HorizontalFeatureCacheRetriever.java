@@ -49,13 +49,13 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	private FeatureSessionCacheRetriever<T> delegate;
 	private FeatureResultMap<T> map;
 	private Collection<String> ignorePrefixes;
-	private CreateCache<FeatureSessionCache> cacheProducer;
+	private CreateCache<FeatureSessionCache<T>> cacheProducer;
 			
 	public HorizontalFeatureCacheRetriever(
 		FeatureSessionCacheRetriever<T> delegate,
 		FeatureResultMap<T> map,
 		Collection<String> ignorePrefixes,
-		CreateCache<FeatureSessionCache> cacheProducer
+		CreateCache<FeatureSessionCache<T>> cacheProducer
 	) {
 		super();
 		this.delegate = delegate;
@@ -155,7 +155,7 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	}
 
 	@Override
-	public FeatureSessionCache createNewCache() {
+	public FeatureSessionCache<T> createNewCache() {
 		return cacheProducer.create();
 	}
 

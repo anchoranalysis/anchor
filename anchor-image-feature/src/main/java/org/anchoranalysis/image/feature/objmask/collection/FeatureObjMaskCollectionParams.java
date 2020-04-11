@@ -26,7 +26,6 @@ package org.anchoranalysis.image.feature.objmask.collection;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;

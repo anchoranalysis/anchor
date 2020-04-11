@@ -29,9 +29,10 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
-class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
+class FeatureDefiner<T extends FeatureCalcParams> extends PropertyDefiner<FeatureInitParams> {
 
 	public FeatureDefiner() {
 	}
@@ -41,6 +42,7 @@ class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
 		return FeatureInitParams.class.isAssignableFrom(paramType);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void doInitFor(Object propertyValue, Object params, Object parent, LogErrorReporter logger) throws InitException {
 		
@@ -51,10 +53,10 @@ class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
 		}
 
 		if (propertyValue instanceof Feature) {
-			Feature propertyValueCast = (Feature) propertyValue;
+			Feature<T> propertyValueCast = (Feature<T>) propertyValue;
 			propertyValueCast.init(
 				(FeatureInitParams) params,
-				(FeatureBase) parent,
+				(FeatureBase<T>) parent,
 				logger
 			);
 		}

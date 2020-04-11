@@ -92,7 +92,7 @@ public class NullCacheRetriever<T extends FeatureCalcParams> extends FeatureSess
 	
 	
 	@Override
-	public FeatureSessionCache createNewCache() {
+	public FeatureSessionCache<T> createNewCache() {
 		return null;	// TODO fix
 	}
 

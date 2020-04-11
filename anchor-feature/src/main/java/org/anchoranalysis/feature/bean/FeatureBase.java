@@ -41,7 +41,7 @@ public abstract class FeatureBase<T extends FeatureCalcParams> extends Initializ
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private FeatureDefiner featureDefiner = new FeatureDefiner();
+	private FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
 	protected FeatureBase() {
 		super( new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class) );

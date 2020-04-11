@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.params.ParamTypeUtilities;
  * 
  * @author Owen Feehan
  */
-public class VectorFromFeature extends FeatureBase {
+public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<T> {
 
 	/**
 	 * 
@@ -51,20 +51,20 @@ public class VectorFromFeature extends FeatureBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureCalcParams> x;
+	private Feature<T> x;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> y;
+	private Feature<T> y;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> z;
+	private Feature<T> z;
 	// END BEAN PROPERTIES
 	
 	public VectorFromFeature() {
 		super();
 	}
 	
-	public Vector3d calc( CacheableParams<FeatureCalcParams> params  ) throws FeatureCalcException {
+	public Vector3d calc( CacheableParams<T> params  ) throws FeatureCalcException {
 		
 		double valX = params.calc(x);
 		double valY = params.calc(y);
@@ -73,27 +73,27 @@ public class VectorFromFeature extends FeatureBase {
 		return new Vector3d(valX,valY,valZ);
 	}
 
-	public Feature<FeatureCalcParams> getX() {
+	public Feature<T> getX() {
 		return x;
 	}
 
-	public void setX(Feature<FeatureCalcParams> x) {
+	public void setX(Feature<T> x) {
 		this.x = x;
 	}
 
-	public Feature<FeatureCalcParams> getY() {
+	public Feature<T> getY() {
 		return y;
 	}
 
-	public void setY(Feature<FeatureCalcParams> y) {
+	public void setY(Feature<T> y) {
 		this.y = y;
 	}
 
-	public Feature<FeatureCalcParams> getZ() {
+	public Feature<T> getZ() {
 		return z;
 	}
 
-	public void setZ(Feature<FeatureCalcParams> z) {
+	public void setZ(Feature<T> z) {
 		this.z = z;
 	}
 

@@ -30,7 +30,6 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDim;
 
 public class NRGElemAllCalcParams extends FeatureCalcParamsNRGStack {
 

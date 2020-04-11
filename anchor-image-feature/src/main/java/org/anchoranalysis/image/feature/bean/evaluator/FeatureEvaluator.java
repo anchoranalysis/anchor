@@ -2,7 +2,6 @@ package org.anchoranalysis.image.feature.bean.evaluator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 
@@ -36,13 +35,8 @@ import org.anchoranalysis.feature.bean.FeatureBean;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.session.SessionFactory;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends FeatureBean<FeatureEvaluator<T>> {
 

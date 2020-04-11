@@ -29,7 +29,6 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
 public abstract class FeatureMark extends Feature<FeatureMarkParams> {

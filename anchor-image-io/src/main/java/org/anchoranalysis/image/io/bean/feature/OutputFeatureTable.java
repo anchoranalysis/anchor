@@ -34,13 +34,11 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -63,7 +61,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private List<FeatureProvider> listFeatureProvider = new ArrayList<>();
+	private List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider = new ArrayList<>();
 	
 	@BeanField @Optional
 	private StackProvider stackProviderNRG;
@@ -88,7 +86,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 			
-			FeatureList<FeatureObjMaskParams> features = createFeatureList().downcast();
+			FeatureList<FeatureObjMaskParams> features = createFeatureList();
 			
 			if (features.size()==0) {
 				throw new IOException("No features are set");
@@ -129,9 +127,9 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		return generator;
 	}
 
-	private FeatureList<FeatureCalcParams> createFeatureList() throws CreateException {
-		FeatureList<FeatureCalcParams> out = new FeatureList<>();
-		for( FeatureProvider fp : listFeatureProvider) {
+	private FeatureList<FeatureObjMaskParams> createFeatureList() throws CreateException {
+		FeatureList<FeatureObjMaskParams> out = new FeatureList<>();
+		for( FeatureProvider<FeatureObjMaskParams> fp : listFeatureProvider) {
 			out.add( fp.create() );
 		}
 		return out;
@@ -155,12 +153,12 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	}
 
 
-	public List<FeatureProvider> getListFeatureProvider() {
+	public List<FeatureProvider<FeatureObjMaskParams>> getListFeatureProvider() {
 		return listFeatureProvider;
 	}
 
 
-	public void setListFeatureProvider(List<FeatureProvider> listFeatureProvider) {
+	public void setListFeatureProvider(List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider) {
 		this.listFeatureProvider = listFeatureProvider;
 	}
 

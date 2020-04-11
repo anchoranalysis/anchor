@@ -6,7 +6,6 @@ import java.util.List;
 import org.anchoranalysis.feature.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 
 /**
  * Rememembers all caches created by a delegate CacheCreator and provides a means to invalidate them all

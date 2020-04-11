@@ -131,7 +131,7 @@ public class NamedFeatureStore<T extends FeatureCalcParams> implements Iterable<
 	}
 	
 
-	public void copyTo( NameValueSet<Feature> out ) {
+	public void copyTo( NameValueSet<Feature<T>> out ) {
 		for( NamedBean<Feature<T>> ni : list ) {
 			out.add( ni.getName(), ni.getValue() );
 		}

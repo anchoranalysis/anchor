@@ -149,9 +149,6 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 		}
 	}
 
-	public FeatureList<NRGElemPairCalcParams> getElemPairAsFeatureList() {
-		return elemPair;
-	}
 	
 	public List<Feature<NRGElemPairCalcParams>> getElemPair() {
 		return elemPair;
@@ -183,13 +180,23 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 		}
 	}
 	
+	public FeatureList<NRGElemIndCalcParams> getElemIndAsFeatureList() {
+		return elemInd;
+	}
+	
+	public FeatureList<NRGElemPairCalcParams> getElemPairAsFeatureList() {
+		return elemPair;
+	}
+	
+	public FeatureList<NRGElemAllCalcParams> getElemAllAsFeatureList() {
+		return elemAll;
+	}	
+	
 	public List<Feature<NRGElemIndCalcParams>> getElemInd() {
 		return elemInd;
 	}
 	
-	public FeatureList<NRGElemIndCalcParams> getElemIndAsFeatureList() {
-		return elemInd;
-	}
+
 
 	public List<Feature<NRGElemAllCalcParams>> getElemAll() {
 		return elemAll;
@@ -199,9 +206,7 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 		this.elemAll = new FeatureList<>(elemAll);
 	}
 	
-	public FeatureList<NRGElemAllCalcParams> getElemAllAsFeatureList() {
-		return elemAll;
-	}	
+
 
 	// We put our normal setters and getters as List<Feature> so that the bean xml can use the normal factories for Lists
 	public void setElemInd(List<Feature<NRGElemIndCalcParams>> elemInd) {

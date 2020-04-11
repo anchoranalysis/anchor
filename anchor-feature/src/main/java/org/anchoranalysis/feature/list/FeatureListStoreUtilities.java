@@ -63,7 +63,7 @@ public class FeatureListStoreUtilities {
 	}
 	
 	
-	public static <T extends FeatureCalcParams> void addFeatureListToStore( FeatureList<T> featureList, String name, NamedFeatureStore out ) {
+	public static <T extends FeatureCalcParams> void addFeatureListToStore( FeatureList<T> featureList, String name, NamedFeatureStore<T> out ) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
 		for( Feature<T> f : featureList) {
