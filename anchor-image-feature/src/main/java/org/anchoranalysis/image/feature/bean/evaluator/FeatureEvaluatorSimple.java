@@ -38,7 +38,6 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 
 public class FeatureEvaluatorSimple<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
 

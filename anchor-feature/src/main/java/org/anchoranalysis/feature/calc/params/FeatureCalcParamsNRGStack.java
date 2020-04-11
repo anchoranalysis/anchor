@@ -28,19 +28,37 @@ package org.anchoranalysis.feature.calc.params;
 
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 
 public abstract class FeatureCalcParamsNRGStack extends FeatureCalcParamsWithImageParams {
 
+	private NRGStackWithParams nrgStack;
+	
+	public FeatureCalcParamsNRGStack(NRGStackWithParams nrgStack) {
+		super();
+		this.nrgStack = nrgStack;
+	}
+
 	@Override
 	public ImageRes getRes() {
-		return getNrgStack().getDimensions().getRes();
+		return nrgStack.getDimensions().getRes();
 	}
-	
-	public abstract NRGStackWithParams getNrgStack();
 
 	@Override
 	public KeyValueParams getKeyValueParams() {
-		return getNrgStack().getParams();
+		return nrgStack.getParams();
+	}
+
+	public ImageDim getDimensions() {
+		return nrgStack.getDimensions();
+	}
+	
+	public NRGStackWithParams getNrgStack() {
+		return nrgStack;
+	}
+
+	public void setNrgStack(NRGStackWithParams nrgStack) {
+		this.nrgStack = nrgStack;
 	}
 }

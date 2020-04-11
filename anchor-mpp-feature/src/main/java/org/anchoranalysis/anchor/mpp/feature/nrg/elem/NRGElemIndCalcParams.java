@@ -35,14 +35,13 @@ import org.anchoranalysis.image.extent.ImageDim;
 public class NRGElemIndCalcParams extends FeatureCalcParamsNRGStack {
 
 	private PxlMarkMemo pxlPartMemo;
-	private NRGStackWithParams raster;
 	
 	public NRGElemIndCalcParams(
 		PxlMarkMemo pxlPartMemo,
 		NRGStackWithParams raster
 	) {
+		super(raster);
 		this.pxlPartMemo = pxlPartMemo;
-		this.raster = raster;
 	}
 
 	public PxlMarkMemo getPxlPartMemo() {
@@ -53,12 +52,4 @@ public class NRGElemIndCalcParams extends FeatureCalcParamsNRGStack {
 		this.pxlPartMemo = pxlPartMemo;
 	}
 
-	public ImageDim getDimensions() {
-		return raster.getDimensions();
-	}
-
-	@Override
-	public NRGStackWithParams getNrgStack() {
-		return raster;
-	}
 }

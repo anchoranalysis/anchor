@@ -45,11 +45,11 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> imple
 
 	private FeatureCalculatorMulti<T> delegate;
 		
-	public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi) throws CreateException {
+	public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi) throws FeatureCalcException {
 		super();
 		this.delegate = multi;
 		if (delegate.sizeFeatures()!=1) {
-			throw new CreateException(
+			throw new FeatureCalcException(
 				String.format("When creating a %s, the multi must have exactly one feature")
 			);
 		}

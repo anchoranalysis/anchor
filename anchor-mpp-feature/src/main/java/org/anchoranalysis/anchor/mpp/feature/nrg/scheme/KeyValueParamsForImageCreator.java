@@ -38,7 +38,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.session.SequentialSessionSingleFeature;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 
@@ -52,10 +54,10 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 public class KeyValueParamsForImageCreator {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureSet sharedFeatures;
+	private SharedFeatureSet<FeatureStackParams> sharedFeatures;
 	private LogErrorReporter logger;
 	
-	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureSet sharedFeatures,
+	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureSet<FeatureStackParams> sharedFeatures,
 			LogErrorReporter logger) {
 		super();
 		this.nrgScheme = nrgScheme;
@@ -93,17 +95,17 @@ public class KeyValueParamsForImageCreator {
 		}
 	}
 	
-	private double calcImageFeature( Feature feature, FeatureInitParams paramsInit, FeatureStackParams params) throws OperationFailedException {
+	private double calcImageFeature( Feature<FeatureStackParams> feature, FeatureInitParams paramsInit, FeatureStackParams params) throws OperationFailedException {
 
-		SequentialSessionSingleFeature session = new SequentialSessionSingleFeature( feature );
 		try {
-			session.start(paramsInit, sharedFeatures, logger );
-		} catch (InitException e) {
-			throw new OperationFailedException(e);
-		}
-	
-		try {
-			return session.calc( params );
+			FeatureCalculatorSingle<FeatureStackParams> session = SessionFactory.createAndStart(
+				feature,
+				paramsInit,
+				sharedFeatures,
+				logger
+			);			
+			
+			return session.calcOne( params );
 					
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);

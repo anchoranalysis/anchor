@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 /**
  * Add Criteria
@@ -42,5 +42,5 @@ import org.anchoranalysis.feature.session.SequentialSession;
 public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<NRGElemPairCalcParams> {
 
 	// Returns NULL to reject an edge
-	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, SequentialSession<NRGElemPairCalcParams> session, boolean use3D ) throws CreateException;
+	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3D ) throws CreateException;
 }

@@ -40,6 +40,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -48,6 +49,8 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -243,11 +246,17 @@ public class GroupedResultsVectorCollection {
 		LogErrorReporter logErrorReporter
 	) throws AnchorIOException {
 		
-		SequentialSession<FeatureResultsVectorCollectionParams> session = new SequentialSession<>( featuresAggregate.listFeatures() );
+		FeatureCalculatorMulti<FeatureResultsVectorCollectionParams> session;
 		
 		try {
-			session.start( new FeatureInitParams(null), new SharedFeatureSet<>(), logErrorReporter );
-		} catch (InitException e1) {
+			session = SessionFactory.createAndStart(
+				featuresAggregate.listFeatures(),
+				new FeatureInitParams(null),
+				new SharedFeatureSet<>(),
+				logErrorReporter
+			);
+			
+		} catch (FeatureCalcException e1) {
 			logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e1);
 			throw new AnchorIOException("Cannot start feature-session", e1);
 		}

@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -67,9 +68,7 @@ public class FeatureCalculatorMultiChangeParams<T extends FeatureCalcParams> imp
 
 	@Override
 	public List<ResultsVector> calcMany(List<T> listParams) throws FeatureCalcException {
-		listParams.forEach(
-			params -> changeParams.accept(params) 
-		);
+		changeList(listParams);
 		return calculator.calcMany(listParams);
 	}
 	
@@ -78,5 +77,21 @@ public class FeatureCalculatorMultiChangeParams<T extends FeatureCalcParams> imp
 		return calculator.sizeFeatures();
 	}
 
+	@Override
+	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
+		changeParams.accept(params);
+		return calculator.createCacheable(params);
+	}
 
+	@Override
+	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
+		changeList(listParams);
+		return calculator.createCacheable(listParams);
+	}
+	
+	private void changeList( List<T> listParams ) {
+		listParams.forEach(
+			params -> changeParams.accept(params) 
+		);
+	}
 }

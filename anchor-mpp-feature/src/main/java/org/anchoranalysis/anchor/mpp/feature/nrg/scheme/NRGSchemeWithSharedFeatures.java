@@ -46,11 +46,14 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParamsNRGStack;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class NRGSchemeWithSharedFeatures {
@@ -81,7 +84,11 @@ public class NRGSchemeWithSharedFeatures {
 			this.raster = raster;
 			
 			
-			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator( nrgScheme, sharedFeatures, logger );
+			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator(
+				nrgScheme,
+				sharedFeatures.downcast(),
+				logger
+			);
 			this.kvp = creator.createParamsForImage( raster );
 		}
 		
@@ -97,17 +104,17 @@ public class NRGSchemeWithSharedFeatures {
 		
 		public NRGTotal calc() throws FeatureCalcException {
 			
-			SequentialSession<NRGElemIndCalcParams> session = new SequentialSession<>(
-				nrgScheme.getElemIndAsFeatureList()
-			);
+			FeatureCalculatorMulti<NRGElemIndCalcParams> session;
 			
 			try {
-				session.start(
+				session = SessionFactory.createAndStart(
+					nrgScheme.getElemIndAsFeatureList(),
 					createInitParams(kvp),
 					sharedFeatures.downcast(),
 					logger
 				);
-			} catch (InitException | CreateException e) {
+
+			} catch (CreateException e) {
 				throw new FeatureCalcException(e);
 			}
 			
@@ -121,6 +128,8 @@ public class NRGSchemeWithSharedFeatures {
 		}
 		
 	}
+	
+
 	
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
 			SharedFeatureSet<FeatureCalcParams> sharedFeatures, int nrgSchemeIndCacheSize, CacheMonitor cacheMonitor, LogErrorReporter logger ) {
@@ -137,34 +146,27 @@ public class NRGSchemeWithSharedFeatures {
 	
 	public NRGTotal calcElemAllTotal( MemoMarks pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
 		
-		KeyValueParams kvp;
+		NRGStackWithParams nrgStack = createNRGStack(raster);
+	
 		try {
-			kvp = nrgScheme.createKeyValueParams();
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-		
-		SequentialSession<NRGElemAllCalcParams> session = new SequentialSession<>(
-			nrgScheme.getElemAllAsFeatureList()
-		);
-		
-		try {
-			session.start(
-				createInitParams(kvp),
+			FeatureCalculatorMulti<NRGElemAllCalcParams> session = SessionFactory.createAndStart(
+				nrgScheme.getElemAllAsFeatureList(),
+				createInitParams(nrgStack.getParams()),
 				sharedFeatures.downcast(),
 				logger
 			);
-		} catch (InitException | CreateException e) {
+			
+			NRGElemAllCalcParams params = new NRGElemAllCalcParams(
+				pxlMarkMemoList,
+				nrgStack
+			);
+			
+			assert pxlMarkMemoList!=null;
+			return new NRGTotal( session.calcOne(params).total() );
+
+		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-		
-		NRGElemAllCalcParams params = new NRGElemAllCalcParams(
-			pxlMarkMemoList,
-			new NRGStackWithParams(raster,kvp)
-		);
-		
-		assert pxlMarkMemoList!=null;
-		return new NRGTotal( session.calcOne(params).total() );
 	}
 	
 	public NRGTotal calcElemIndTotal( PxlMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
@@ -182,7 +184,19 @@ public class NRGSchemeWithSharedFeatures {
 		
 		return operationIndCalc.calc();
 	}
+
 	
+	private NRGStackWithParams createNRGStack( NRGStack raster ) throws FeatureCalcException {
+		
+		KeyValueParams kvp;
+		try {
+			kvp = nrgScheme.createKeyValueParams();
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
+		}
+		
+		return new NRGStackWithParams(raster,kvp);
+	}
 
 	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
 		return new FeatureInitParams( kvp );

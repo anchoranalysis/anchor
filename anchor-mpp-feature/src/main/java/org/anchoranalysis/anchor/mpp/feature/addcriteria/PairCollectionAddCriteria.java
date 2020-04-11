@@ -47,10 +47,13 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 // PairType is how we store the pair information
@@ -138,36 +141,19 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				features = new FeatureList<>();
 			}
 			
-			SequentialSession<NRGElemPairCalcParams> session = new SequentialSession<>(	features );
-			try {
-				//stack.getNrgStack(),
-				//stack.getParams()
-				session.start( new FeatureInitParams(stack.getParams()), sharedFeatures.downcast(), logger );
-			} catch (InitException e) {
-				throw new CreateException(e);
-			}
-
+			FeatureCalculatorMulti<NRGElemPairCalcParams> session = SessionFactory.createAndStart(
+				features,
+				new FeatureInitParams(stack.getParams()),
+				sharedFeatures.downcast(),
+				logger
+			);
 			
-			// Some nrg components need to be calculated individually
-			for( int i=0; i< marks.size(); i++ ) {
-				
-				PxlMarkMemo srcMark = marks.getMemoForIndex(i); 
-					
-				for( int j=0; j<i; j++ ) {
-					
-					PxlMarkMemo destMark = marks.getMemoForIndex(j);
-					
-					T pair = addCriteria.generateEdge(srcMark, destMark, stack, session, stack.getDimensions().getZ()>1 );
-					if( pair != null ) {
-						graph.addEdge( srcMark.getMark(), destMark.getMark(), pair );
-					}
-				}
-			}
+			initGraph( marks, stack, session );
 			
 			this.hasInit = true;
 			this.nrgStack = stack;
 			
-		} catch (CreateException e) {
+		} catch (CreateException | FeatureCalcException e) {
 			throw new InitException(e);
 		}
 	}
@@ -180,43 +166,6 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 			calcPairsForMark( marksExisting, newMark, nrgStack );
 		} catch (CreateException e) {
 			throw new UpdateMarkSetException(e);
-		}
-	}
-	
-	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
-		assert sharedFeatures!=null;
-		assert logger!=null;
-		SequentialSession<NRGElemPairCalcParams> session = new SequentialSession<NRGElemPairCalcParams>(
-			addCriteria.orderedListOfFeatures()	
-		);
-		try {
-			session.start(
-				new FeatureInitParams(nrgStack.getParams()),
-				sharedFeatures.downcast(),
-				logger
-			);
-		} catch (InitException e) {
-			throw new CreateException(e);
-		}
-		
-		
-		// We calculate how the new mark interacts with all the other marks
-		for( int i=0; i<pxlMarkMemoList.size(); i++) {
-
-			PxlMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
-			if (!otherMark.getMark().equals( newMark.getMark() )) {
-			
-				T pair = addCriteria.generateEdge(otherMark,newMark, nrgStack, session, nrgStack.getDimensions().getZ()>1 );
-				if (pair!=null) {
-					assert containsMark( otherMark.getMark());
-					assert containsMark( newMark.getMark());
-					
-					assert graph.getEdge(otherMark.getMark(), newMark.getMark())==null; 
-					assert graph.getEdge(newMark.getMark(), otherMark.getMark())==null;
-
-					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair );
-				}
-			} 
 		}
 	}
 	
@@ -334,5 +283,59 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 
 	public void setPairTypeClass(Class<?> pairTypeClass) {
 		this.pairTypeClass = pairTypeClass;
+	}
+	
+	private void initGraph( MemoForIndex marks, NRGStackWithParams stack, FeatureCalculatorMulti<NRGElemPairCalcParams> session ) throws CreateException {
+		// Some nrg components need to be calculated individually
+		for( int i=0; i< marks.size(); i++ ) {
+			
+			PxlMarkMemo srcMark = marks.getMemoForIndex(i); 
+				
+			for( int j=0; j<i; j++ ) {
+				
+				PxlMarkMemo destMark = marks.getMemoForIndex(j);
+				
+				T pair = addCriteria.generateEdge(srcMark, destMark, stack, session, stack.getDimensions().getZ()>1 );
+				if( pair != null ) {
+					graph.addEdge( srcMark.getMark(), destMark.getMark(), pair );
+				}
+			}
+		}
+	}
+	
+	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
+		assert sharedFeatures!=null;
+		assert logger!=null;
+		
+		FeatureCalculatorMulti<NRGElemPairCalcParams> session;
+		try {
+			session = SessionFactory.createAndStart(
+				addCriteria.orderedListOfFeatures(),
+				new FeatureInitParams(nrgStack.getParams()),
+				sharedFeatures.downcast(),
+				logger
+			);
+		} catch (FeatureCalcException e) {
+			throw new CreateException(e);
+		}
+				
+		// We calculate how the new mark interacts with all the other marks
+		for( int i=0; i<pxlMarkMemoList.size(); i++) {
+
+			PxlMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
+			if (!otherMark.getMark().equals( newMark.getMark() )) {
+			
+				T pair = addCriteria.generateEdge(otherMark,newMark, nrgStack, session, nrgStack.getDimensions().getZ()>1 );
+				if (pair!=null) {
+					assert containsMark( otherMark.getMark() );
+					assert containsMark( newMark.getMark() );
+					
+					assert graph.getEdge(otherMark.getMark(), newMark.getMark())==null; 
+					assert graph.getEdge(newMark.getMark(), otherMark.getMark())==null;
+
+					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair );
+				}
+			} 
+		}
 	}
 }

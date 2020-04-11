@@ -29,6 +29,7 @@ import java.util.List;
  */
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -42,10 +43,10 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  */
 public interface FeatureCalculatorMulti<T extends FeatureCalcParams> {
 
-	/* Does one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
+	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
 	ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	/* Does one calculation throwing an exception if something goes wrong */
+	/** Performs one calculation throwing an exception if something goes wrong */
 	ResultsVector calcOne( T params ) throws FeatureCalcException;
 	
 	/**
@@ -56,6 +57,12 @@ public interface FeatureCalculatorMulti<T extends FeatureCalcParams> {
 	 * @throws FeatureCalcException
 	 */
 	List<ResultsVector> calcMany( List<T> listParams ) throws FeatureCalcException;
+
+	/** Creates a cacheable-parameters to be later used for calculating one or more features */
+	CacheableParams<T> createCacheable(T params) throws FeatureCalcException;
+	
+	/** Creates many cacheable-parameters to be later used for calculating one or more features */
+	List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException;
 	
 	/** The number of features that is calculated on each call to calc(), and therefore the size of the ResultsVector returned */
 	int sizeFeatures();

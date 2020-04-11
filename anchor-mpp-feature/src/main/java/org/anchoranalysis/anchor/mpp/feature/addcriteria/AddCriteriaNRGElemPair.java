@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 
@@ -88,7 +88,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
-		SequentialSession<NRGElemPairCalcParams> session,
+		FeatureCalculatorMulti<NRGElemPairCalcParams> session,
 		boolean use3D
 	) throws CreateException {
 		

@@ -45,12 +45,13 @@ import org.anchoranalysis.feature.io.csv.TableCSVGenerator;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.orientation.DirectionVector;
@@ -110,11 +111,14 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 				
 		ResultsVectorCollection rvc;
 		try {
-			SequentialSession<FeatureObjMaskParams> session = new SequentialSession<>( features.getList() );
-			session.start(paramsInit, sharedFeatures, logErrorReporter);
-		
-			// We calculate a results vector for each object, across all features in memory. This is more efficient
+			 FeatureCalculatorMulti<FeatureObjMaskParams> session = SessionFactory.createAndStart(
+				features,
+				paramsInit,
+				sharedFeatures,
+				logErrorReporter
+			);
 			
+			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			rvc = new ResultsVectorCollection();
 			for( ObjMask om : objs ) {
 				rvc.add( 
@@ -124,7 +128,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 					)
 				);
 			}
-		} catch (InitException e) {
+		} catch (FeatureCalcException e) {
 			throw new OutputWriteFailedException(e);
 		}
 		

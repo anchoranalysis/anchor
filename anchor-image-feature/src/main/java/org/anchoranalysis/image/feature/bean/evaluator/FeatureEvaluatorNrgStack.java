@@ -48,7 +48,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChan
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 /**

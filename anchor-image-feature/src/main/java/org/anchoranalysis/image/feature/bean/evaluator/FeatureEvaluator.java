@@ -34,9 +34,11 @@ import org.anchoranalysis.feature.bean.Feature;
 
 import org.anchoranalysis.feature.bean.FeatureBean;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
@@ -63,17 +65,9 @@ public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends Feat
 				throw new OperationFailedException("FeatureProvider returns null. A feature is required.");
 			}
 			
-			SequentialSession<T> session = new SequentialSession<>(feature); 
+			return SessionFactory.createAndStart(feature, getLogger());
 			
-			try {
-				session.start( new FeatureInitParams(), getSharedObjects().getSharedFeatureSet().downcast(), getLogger() );
-			} catch (InitException e) {
-				throw new OperationFailedException(e);
-			}
-						
-			return new FeatureCalculatorSingleFromMulti<>(session);
-			
-		} catch (CreateException e) {
+		} catch (CreateException | FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
 	}

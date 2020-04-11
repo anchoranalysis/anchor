@@ -52,6 +52,7 @@ import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorRemember;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -78,7 +79,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	private FeatureSessionCacheFactory cacheFactory;
 	
 	private CacheCreatorRemember cacheCreator;
-	
+		
 	/**
 	 * Constructor of a session
 	 * 
@@ -225,7 +226,17 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		return calcUniqueException( listParams );
 	}
 	
+	@Override
+	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
+		invalidate();
+		return SessionUtilities.createCacheable(params, cacheCreator);
+	}
 	
+	@Override
+	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
+		invalidate();
+		return SessionUtilities.createCacheable(listParams, cacheCreator);
+	}
 	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
@@ -243,17 +254,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	public int sizeFeatures() {
 		return listFeatures.size();
 	}
-	
-	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
-		invalidate();
-		return SessionUtilities.createCacheable(params, cacheCreator);
-	}
-	
-	public List<CacheableParams<T>> createCacheable(List<T> params) throws FeatureCalcException {
-		invalidate();
-		return SessionUtilities.createCacheable(params, cacheCreator);
-	}
-	
+		
 	private void calcCommonSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
 		
 		// Create cacheable params, and record any errors for all features
@@ -289,7 +290,6 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			}
 		}	
 	}
-
 	
 	private ResultsVector calcCommonExceptionAsVector( T params ) throws FeatureCalcException {
 		ResultsVector res = new ResultsVector( listFeatures.size() );
@@ -340,9 +340,6 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		}
 		return res;
 	}
-	
-	
-
 
 	/**
 	 * Checks that there's no common features in the featureList and the shared-features as this can create
@@ -372,8 +369,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 			throw new InitException(e);
 		}
 	}
-	
-	
+		
 	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
 
 		CachePlus<T> out = new CachePlus<>(

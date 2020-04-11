@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDim;
 
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implements AddCriteria<Pair<Mark>> {
@@ -46,7 +46,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implem
 	private static final long serialVersionUID = -4297170419831364319L;
 	
 	@Override
-	public Pair<Mark> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, SequentialSession<NRGElemPairCalcParams> session, boolean use3D) throws CreateException {
+	public Pair<Mark> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3D) throws CreateException {
 
 		try {
 			if ( includeMarks(mark1, mark2, nrgStack.getDimensions(), session, use3D) ) {
@@ -59,7 +59,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implem
 		return null;
 	}
 
-	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, SequentialSession<NRGElemPairCalcParams> session, boolean use3D ) throws IncludeMarksFailureException;
+	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3D ) throws IncludeMarksFailureException;
 	
 	@Override
 	public String getBeanDscr() {
