@@ -54,7 +54,7 @@ public class SequentialSessionSingleFeature extends FeatureSession {
 	 * @throws FeatureCalcException
 	 */
 	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		return delegate.calc(params).get(0); 
+		return delegate.calcOne(params).get(0); 
 	}
 	
 	public boolean hasSingleFeature() {

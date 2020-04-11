@@ -71,8 +71,16 @@ public class Point2i implements Serializable {
 		this.x++;
 	}
 	
+	public void incrX(int val) {
+		this.x += val;
+	}
+	
 	public void incrY() {
 		this.y++;
+	}
+	
+	public void incrY(int val) {
+		this.y += val;
 	}
 	
 	@Override

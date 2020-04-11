@@ -41,7 +41,7 @@ public interface ISequentialSessionSingleParams<T extends FeatureCalcParams> {
 	
 	void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger ) throws InitException;
 
-	ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter );
+	ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	ResultsVector calc( T params ) throws FeatureCalcException;
+	ResultsVector calcOne( T params ) throws FeatureCalcException;
 }

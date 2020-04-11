@@ -86,9 +86,9 @@ public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> exte
 				throws GetOperationFailedException {
 			try {
 				if (suppressErrors) {
-					return delegate.calcSuppressErrors(index,errorReporter);
+					return delegate.calcOneSuppressErrors(index,errorReporter);
 				} else {
-					return delegate.calc(index);
+					return delegate.calcOne(index);
 				}
 			} catch (FeatureCalcException e) {
 				throw new GetOperationFailedException(e);
@@ -98,7 +98,7 @@ public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> exte
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(T params,
+	public ResultsVector calcOneSuppressErrors(T params,
 			ErrorReporter errorReporter) {
 		this.errorReporter = errorReporter;
 		try {
@@ -114,9 +114,9 @@ public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> exte
 	}
 
 	@Override
-	public ResultsVector calc(T params)
+	public ResultsVector calcOne(T params)
 			throws FeatureCalcException {
-		return delegate.calc(params);
+		return delegate.calcOne(params);
 	}
 
 

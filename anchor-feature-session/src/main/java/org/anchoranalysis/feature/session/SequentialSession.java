@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session;
 
+import java.util.ArrayList;
+
 /*
  * #%L
  * anchor-feature
@@ -142,44 +144,24 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	}
 	
 	/**
-	 * Calculates the next-object in our sequential series
+	 * Calculates one params for each feature.
 	 * 
 	 * @param params
 	 * @return
 	 * @throws FeatureCalcException
 	 */
 	@Override
-	public ResultsVector calc( T params ) throws FeatureCalcException {
+	public ResultsVector calcOne( T params ) throws FeatureCalcException {
 		
 		if (!isStarted) {
 			throw new FeatureCalcException("Session has not been started yet. Call start().");
 		}
 		
 		invalidate();
-		
-		ResultsVector res = new ResultsVector( listFeatures.size() );
-		calcException(params, res);
-		return res;
+
+		return calcCommonExceptionAsVector(params);
 	}
-	
-	/**
-	 * Calculates the next-object in our sequential series
-	 * 
-	 * @param params
-	 * @return
-	 * @throws FeatureCalcException
-	 */
-	public ResultsVector calc( List<CreateParams<T>> listCreateParams ) throws FeatureCalcException {
-		
-		if (!isStarted) {
-			throw new FeatureCalcException("Session has not been started yet. Call start().");
-		}
-		
-		invalidate();
-		
-		checkSizesMatch( listCreateParams, listFeatures );
-		return calcException( listCreateParams );
-	}
+
 	
 	/**
 	 * Calculates the next-object in our sequential series, reporting any exceptions into a reporter log
@@ -188,7 +170,7 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	 * @return
 	 * @throws FeatureCalcException
 	 */
-	public ResultsVector calcSuppressErrors( T params, ErrorReporter errorReporter ) {
+	public ResultsVector calcOneSuppressErrors( T params, ErrorReporter errorReporter ) {
 		
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 		
@@ -200,11 +182,50 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		
 		invalidate();
 		
-		calcSuppressErrors(res, params, errorReporter);
+		calcCommonSuppressErrors(res, params, errorReporter);
 		
 		return res;
 	}
-
+	
+	@Override
+	public List<ResultsVector> calcMany( List<T> listParams ) throws FeatureCalcException {
+		
+		if (!isStarted) {
+			throw new FeatureCalcException("Session has not been started yet. Call start().");
+		}
+		
+		List<ResultsVector> listOut = new ArrayList<>();
+		
+		for( T params : listParams ) {
+			invalidate();
+			listOut.add(
+				calcCommonExceptionAsVector( params )
+			);
+		}
+				
+		return listOut;
+	}
+	
+	/**
+	 * Calculates one (different) parameter for each features.
+	 * 
+	 * @param listParams a list of parameters the same size as the features
+	 * @return a results vector, one result for each feature
+	 * @throws FeatureCalcException
+	 */
+	public ResultsVector calcDifferent( List<T> listParams ) throws FeatureCalcException {
+		
+		if (!isStarted) {
+			throw new FeatureCalcException("Session has not been started yet. Call start().");
+		}
+		
+		invalidate();
+		
+		checkSizesMatch( listParams, listFeatures );
+		return calcUniqueException( listParams );
+	}
+	
+	
 	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
@@ -233,14 +254,31 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		return SessionUtilities.createCacheable(params, cacheCreator);
 	}
 	
-	private void calcSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
+	private void calcCommonSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
+		
+		// Create cacheable params, and record any errors for all features
+		CacheableParams<T> cacheableParams;
+		try {
+			cacheableParams = createCacheable(params);
+		} catch (FeatureCalcException e) {
+			// Return all features as errored
+			if (reportErrors) {
+				errorReporter.recordError(SequentialSession.class, e);
+			}
+			for( int i=0; i<listFeatures.size(); i++) {
+				res.setError(i, e);
+			}
+			return;
+		} 
+		
+		// Perform individual calculations on each feature
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);
 			
 			try {
 				res.set(
 					i,
-					createCacheable(params).calc(f)
+					cacheableParams.calc(f)
 				);
 				
 			} catch (FeatureCalcException e) {
@@ -252,36 +290,59 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		}	
 	}
 
-	private ResultsVector calcException( List<CreateParams<T>> listCreateParams ) throws FeatureCalcException {
-		ResultsVector res = new ResultsVector( listFeatures.size() );
-		
-		try {
-			for( int i=0; i<listFeatures.size(); i++) {
-				
-				Feature<T> f = listFeatures.get(i);
-				T params = listCreateParams.get(i).createForFeature(f);
-
-				res.set(
-					i,
-					createCacheable(params).calc(f)
-				);
-			}
-			return res;
-			
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}		
-	}
 	
-	private void calcException( T params, ResultsVector res ) throws FeatureCalcException {
+	private ResultsVector calcCommonExceptionAsVector( T params ) throws FeatureCalcException {
+		ResultsVector res = new ResultsVector( listFeatures.size() );
+
+		CacheableParams<T> cacheableParams = createCacheable(params); 
 		
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);
-			double val = createCacheable(params).calc(f);
+			double val = cacheableParams.calc(f);
 			res.set(i,val);
 		}
+		
+		return res;
 	}
 	
+	
+	/** Calculate each feature  with unique parameters.
+	 * 
+	 * <p>TODO exploit situation if the same parameter is repeated, so that they are cached together.</p>
+	 *   
+	 * @param listParams a list of parameters to be calculated, one for each feature
+	 * @return a vector of calculation results
+	 * @throws FeatureCalcException if something goes wrong during calculation, or the list sizes don't match
+	 */
+	private ResultsVector calcUniqueException( List<T> listParams ) throws FeatureCalcException {
+		
+		if (listParams.size()!=listFeatures.size()) {
+			throw new FeatureCalcException(
+				String.format(
+					"The number of features (%d) must be equal to the number of params (%d)",
+					listFeatures.size(),
+					listParams.size()
+				)	
+			);
+		}
+		
+		ResultsVector res = new ResultsVector( listFeatures.size() );
+		
+		for( int i=0; i<listFeatures.size(); i++) {
+			
+			Feature<T> f = listFeatures.get(i);
+			T params = listParams.get(i);
+
+			res.set(
+				i,
+				createCacheable(params).calc(f)
+			);
+		}
+		return res;
+	}
+	
+	
+
 
 	/**
 	 * Checks that there's no common features in the featureList and the shared-features as this can create

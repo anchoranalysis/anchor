@@ -69,18 +69,18 @@ public class SequentialSessionRepeatFirst<T extends FeatureCalcParams> extends F
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(T params,
+	public ResultsVector calcOneSuppressErrors(T params,
 			ErrorReporter errorReporter) {
 		if (rv==null) {
-			rv = delegate.calcSuppressErrors(params, errorReporter);
+			rv = delegate.calcOneSuppressErrors(params, errorReporter);
 		}
 		return rv;
 	}
 
 	@Override
-	public ResultsVector calc(T params)
+	public ResultsVector calcOne(T params)
 			throws FeatureCalcException {
-		return delegate.calc(params);
+		return delegate.calcOne(params);
 	}
 
 }

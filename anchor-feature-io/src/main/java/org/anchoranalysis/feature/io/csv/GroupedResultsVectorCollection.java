@@ -257,7 +257,7 @@ public class GroupedResultsVectorCollection {
 			featureNamesSource.createMapToIndex()
 		);
 		
-		return session.calcSuppressErrors(params, logErrorReporter.getErrorReporter() );
+		return session.calcOneSuppressErrors(params, logErrorReporter.getErrorReporter() );
 	}
 	
 	private static <T extends FeatureCalcParams> void writeKeyValueParams(

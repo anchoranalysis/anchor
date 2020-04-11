@@ -81,7 +81,7 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureCfgParams> {
 			
 			FeatureCalculatorSingle<FeatureCfgParams> session = createAndStartSession();
 			
-			double val = session.calc(
+			double val = session.calcOne(
 				new FeatureCfgParams(cfg, dim)
 			);
 			return Double.toString(val);

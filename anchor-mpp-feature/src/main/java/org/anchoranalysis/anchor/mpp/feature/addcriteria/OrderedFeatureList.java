@@ -1,6 +1,5 @@
-package org.anchoranalysis.anchor.mpp.list;
+package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 
 /*-
  * #%L

@@ -85,7 +85,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureMarkParams> 
 			
 			ImageDim dims = createImageDim();
 			
-			double val = session.calc(
+			double val = session.calcOne(
 				new FeatureMarkParams(mark, dims.getRes())
 			);
 			return Double.toString(val);

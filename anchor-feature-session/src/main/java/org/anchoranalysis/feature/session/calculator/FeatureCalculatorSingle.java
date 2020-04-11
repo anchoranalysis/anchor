@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
+import java.util.List;
+
 /*-
  * #%L
  * anchor-feature-session
@@ -40,7 +42,9 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  */
 public interface FeatureCalculatorSingle<T extends FeatureCalcParams> {
 
-	double calcSuppressErrors(T params, ErrorReporter errorReporter );
+	double calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	double calc( T params ) throws FeatureCalcException;
+	double calcOne( T params ) throws FeatureCalcException;
+	
+	List<Double> calcMany(List<T> listParams) throws FeatureCalcException;
 }

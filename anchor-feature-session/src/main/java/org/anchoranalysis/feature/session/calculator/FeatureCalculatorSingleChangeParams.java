@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
+import java.util.List;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -50,16 +52,24 @@ public class FeatureCalculatorSingleChangeParams<T extends FeatureCalcParams> im
 		this.changeParams = changeParams;
 	}
 
-	public double calc(T params) throws FeatureCalcException {
+	public double calcOne(T params) throws FeatureCalcException {
 		changeParams.accept(params);
-		return calculator.calc(params);
+		return calculator.calcOne(params);
 	}
 
-	public double calcSuppressErrors(T params, ErrorReporter errorReporter) {
+	public double calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
 		changeParams.accept(params);
-		return calculator.calcSuppressErrors(
+		return calculator.calcOneSuppressErrors(
 			params,
 			errorReporter
 		);
+	}
+
+	@Override
+	public List<Double> calcMany(List<T> listParams) throws FeatureCalcException {
+		listParams.forEach(
+			params -> changeParams.accept(params)
+		);
+		return calculator.calcMany(listParams);
 	}
 }

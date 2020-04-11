@@ -1,4 +1,4 @@
-package org.anchoranalysis.anchor.mpp.list;
+package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 /*
  * #%L
@@ -31,17 +31,18 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class OrderedListUtilities {
+class OrderedFeatureListCombine {
 	
-	public static FeatureList combine( List<? extends OrderedFeatureList> list ) throws CreateException {
+	public static <T extends FeatureCalcParams> FeatureList<T> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
 		
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 		
-		for( OrderedFeatureList item : list) {
-			FeatureList features = item.orderedListOfFeatures();
+		for( OrderedFeatureList<T> item : list) {
+			FeatureList<T> features = item.orderedListOfFeatures();
 			if (features==null) {
-				features = new FeatureList();
+				features = new FeatureList<>();
 			}
 			
 			out.addAll(features);

@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
+import java.util.List;
+
 /*-
  * #%L
  * anchor-feature-session
@@ -41,10 +43,19 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 public interface FeatureCalculatorMulti<T extends FeatureCalcParams> {
 
 	/* Does one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
-	ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter );
+	ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
 	/* Does one calculation throwing an exception if something goes wrong */
-	ResultsVector calc( T params ) throws FeatureCalcException;
+	ResultsVector calcOne( T params ) throws FeatureCalcException;
+	
+	/**
+	 * Calculates many parameters on each feature.
+	 * 
+	 * @param listParams a list of parameters the same size as the features
+	 * @return a results vector, one result for each feature
+	 * @throws FeatureCalcException
+	 */
+	List<ResultsVector> calcMany( List<T> listParams ) throws FeatureCalcException;
 	
 	/** The number of features that is calculated on each call to calc(), and therefore the size of the ResultsVector returned */
 	int sizeFeatures();

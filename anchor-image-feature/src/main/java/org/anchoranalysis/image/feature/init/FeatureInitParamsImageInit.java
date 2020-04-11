@@ -29,6 +29,12 @@ package org.anchoranalysis.image.feature.init;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
+/**
+ * Extension of typical feature initialization, that also sets shared objects
+ * 
+ * @author owen
+ *
+ */
 public class FeatureInitParamsImageInit extends FeatureInitParams {
 
 	private ImageInitParams sharedObjects;

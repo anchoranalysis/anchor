@@ -85,7 +85,7 @@ public class BBoxIntersection extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList orderedListOfFeatures() {
+	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
 		// No features involved
 		return null;
 	}

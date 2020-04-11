@@ -213,11 +213,11 @@ public class FeatureSessionCreateParams<T extends FeatureCalcParams> extends Fea
 
 	public ResultsVector calcSuppressErrors(T params,
 			ErrorReporter errorReporter) throws FeatureCalcException {
-		return session.calcSuppressErrors(params, errorReporter);
+		return session.calcOneSuppressErrors(params, errorReporter);
 	}
 
 	public ResultsVector calc(T params)
 			throws FeatureCalcException {
-		return session.calc(params);
+		return session.calcOne(params);
 	}
 }

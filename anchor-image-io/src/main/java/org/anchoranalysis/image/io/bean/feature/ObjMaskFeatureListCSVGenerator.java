@@ -118,7 +118,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			rvc = new ResultsVectorCollection();
 			for( ObjMask om : objs ) {
 				rvc.add( 
-					session.calcSuppressErrors(
+					session.calcOneSuppressErrors(
 						createParams(om, nrgStack),
 						logErrorReporter.getErrorReporter()
 					)
