@@ -30,7 +30,6 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParamsDescr
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
@@ -40,17 +39,6 @@ public abstract class NRGElemPair extends Feature<NRGElemPairCalcParams> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	
-	
-	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
-		return calcCast(
-			params.downcastParams(NRGElemPairCalcParams.class)
-		);
-	}
-	
-	public abstract double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException;
 	
 	@Override
 	public FeatureParamsDescriptor paramType()

@@ -31,7 +31,6 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.FeatureCastInitParams;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -82,20 +81,9 @@ public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<
 		}
 	}
 	
-	
 	protected FeatureObjMaskSharedObjects() {
 		super(FeatureInitParamsImageInit.class, new Initializer() );
 	}
-	
-	@Override
-	public double calc( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException {
-		return calcCast(
-			params.downcastParams(FeatureObjMaskParams.class)
-		);
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()

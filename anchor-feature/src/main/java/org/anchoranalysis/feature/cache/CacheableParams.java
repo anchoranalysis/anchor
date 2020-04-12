@@ -117,27 +117,6 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return (CacheableParams<FeatureCalcParams>)(this);
 	}
 	
-	/** 
-	 * Downcasts the type of the parameters in the cache, while continuing to use the same cache
-	 * 
-	 *  @param classToDowncastTo the class to downcast to
-	 *  @return a new CacheableParams with identical but down-casted params, and using the same cache/factory as currently. 
-	 * */
-	@SuppressWarnings("unchecked")
-	public <S extends FeatureCalcParams> CacheableParams<S> downcastParams( Class<S> classToDowncastTo ) throws FeatureCalcException {
-		if (params.getClass().isAssignableFrom(classToDowncastTo)) {
-			
-			return new CacheableParams<S>(
-				(S) params,
-				(FeatureSessionCacheRetriever<S>) cacheRetriever,
-				factory
-			);
-
-		} else {
-			throw new FeatureCalcException( "Requires " + classToDowncastTo.getSimpleName() );
-		}
-	}
-	
 	/**
 	 * Maps the parameters to a new type, which also leads to being assigned a new child-cache.
 	 *  

@@ -56,7 +56,7 @@ public class CenterOfGravity extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) {
 		
 		FeatureObjMaskParams params = paramsCacheable.getParams();
 		

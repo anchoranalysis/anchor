@@ -27,7 +27,6 @@ package org.anchoranalysis.image.feature.bean;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
@@ -39,16 +38,6 @@ public abstract class FeatureHistogram extends Feature<FeatureHistogramParams> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	public double calc( CacheableParams<FeatureHistogramParams> params ) throws FeatureCalcException {
-		return calcCast(
-			params.downcastParams(FeatureHistogramParams.class)
-		);
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( CacheableParams<FeatureHistogramParams> params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()

@@ -53,7 +53,6 @@ public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGEle
 	@Override
 	public double calc(CacheableParams<NRGElemPairCalcParams> params) throws FeatureCalcException {
 		return params
-			.downcastParams(NRGElemPairCalcParams.class)
 			.calcChangeParams(
 				getItem(),
 				p -> extractParams(p),
