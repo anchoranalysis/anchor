@@ -29,14 +29,21 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.provider.FeatureProviderBean;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
+/**
+ * 
+ * @author owen
+ *
+ * @param <T> calc-params type for feature list
+ */
 @GroupingRoot
-public abstract class FeatureListProvider extends FeatureProviderBean<FeatureListProvider,FeatureList> {
+public abstract class FeatureListProvider<T extends FeatureCalcParams> extends FeatureProviderBean<FeatureListProvider<T>,FeatureList<T>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6274456303368095887L;
 
-	public abstract FeatureList create() throws CreateException;
+	public abstract FeatureList<T> create() throws CreateException;
 }

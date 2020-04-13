@@ -27,60 +27,14 @@ package org.anchoranalysis.image.feature.bean.evaluator;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class FeatureEvaluatorSimple extends FeatureEvaluator {
+public class FeatureEvaluatorSimple<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FeatureProvider featureProvider;
-	// END BEAN PROPERTIES
 
-	// Must always be executed first
-	public FeatureSessionCreateParamsSingle createAndStartSession() throws OperationFailedException {
-		
-		try {
-			Feature feature = featureProvider.create();
-			
-			if (feature==null) {
-				throw new OperationFailedException("FeatureProvider returns null. A feature is required.");
-			}
-		
-			//SharedFeatureSet sharedFeatures = getSharedObjects().getSharedFeatureSet();
-			SharedFeatureSet sharedFeatures = new SharedFeatureSet();
-			FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(feature,sharedFeatures);
-			
-			try {
-				session.start( getLogger() );
-			} catch (InitException e) {
-				throw new OperationFailedException(e);
-			}
-			
-			
-			return session;
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	public FeatureProvider getFeatureProvider() {
-		return featureProvider;
-	}
-
-	public void setFeatureProvider(FeatureProvider featureProvider) {
-		this.featureProvider = featureProvider;
-	}
 }

@@ -39,11 +39,12 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
-public class NamedFeatureStore implements Iterable<NamedBean<Feature>> {
+public class NamedFeatureStore<T extends FeatureCalcParams> implements Iterable<NamedBean<Feature<T>>> {
 	
-	private List<NamedBean<Feature>> list = new ArrayList<>();
+	private List<NamedBean<Feature<T>>> list = new ArrayList<>();
 	private Map<String,Integer> mapIndex = new HashMap<String,Integer>();
 	
 	public NamedFeatureStore() {
@@ -58,10 +59,10 @@ public class NamedFeatureStore implements Iterable<NamedBean<Feature>> {
 	 * @param name name of the feature
 	 * @param feature the feature to add (whose customName will be overridden with the name)
 	 */
-	public void add( String name, Feature feature ) {
+	public void add( String name, Feature<T> feature ) {
 		mapIndex.put( name, list.size() );
 		feature.setCustomName(name);
-		list.add( new NamedBean<Feature>(name,feature) );
+		list.add( new NamedBean<Feature<T>>(name,feature) );
 	}
 	
 	public int getIndex( String name ) throws GetOperationFailedException {
@@ -72,7 +73,7 @@ public class NamedFeatureStore implements Iterable<NamedBean<Feature>> {
 		return index;
 	}
 	
-	public NamedBean<Feature> get( int index ) {
+	public NamedBean<Feature<T>> get( int index ) {
 		return list.get(index);
 	}
 	
@@ -84,60 +85,60 @@ public class NamedFeatureStore implements Iterable<NamedBean<Feature>> {
 	
 	public void addFeatureNamesToCollection( Collection<String> listOut ) {
 		
-		for( NamedBean<Feature> item : list ) {
+		for( NamedBean<Feature<T>> item : list ) {
 			listOut.add( item.getName() );
 		}
 	}
 	
-	public NamedBean<Feature> get( String name ) {
+	public NamedBean<Feature<T>> get( String name ) {
 		int index = mapIndex.get(name);
 		return list.get(index);
 	}
 	
 	@Override
-	public Iterator<NamedBean<Feature>> iterator() {
+	public Iterator<NamedBean<Feature<T>>> iterator() {
 		return list.iterator();
 	}
 	
 
 	
-	public NamedFeatureStore deepCopy() {
-		NamedFeatureStore out = new NamedFeatureStore();
-		for( NamedBean<Feature> ni : list ) {
-			NamedBean<Feature> niDup = ni.duplicateBean();
+	public NamedFeatureStore<T> deepCopy() {
+		NamedFeatureStore<T> out = new NamedFeatureStore<>();
+		for( NamedBean<Feature<T>> ni : list ) {
+			NamedBean<Feature<T>> niDup = ni.duplicateBean();
 			out.add( niDup.getName(), niDup.getValue() );
 		}
 		return out;
 	}
 	
-	public FeatureList listFeatures() {
-		FeatureList out = new FeatureList();
-		for( NamedBean<Feature> ni : list ) {
+	public FeatureList<T> listFeatures() {
+		FeatureList<T> out = new FeatureList<>();
+		for( NamedBean<Feature<T>> ni : list ) {
 			out.add( ni.getValue() );
 		}
 		return out;
 	}
 
 	
-	public FeatureList listFeaturesSubset(int start, int size) {
-		FeatureList out = new FeatureList();
+	public FeatureList<T> listFeaturesSubset(int start, int size) {
+		FeatureList<T> out = new FeatureList<>();
 		int end = start + size;
 		for( int i=start; i<end; i++ ) {
-			NamedBean<Feature> ni = list.get(i);
+			NamedBean<Feature<T>> ni = list.get(i);
 			out.add( ni.getValue() );
 		}
 		return out;
 	}
 	
 
-	public void copyTo( NameValueSet<Feature> out ) {
-		for( NamedBean<Feature> ni : list ) {
+	public void copyTo( NameValueSet<Feature<T>> out ) {
+		for( NamedBean<Feature<T>> ni : list ) {
 			out.add( ni.getName(), ni.getValue() );
 		}
 	}
 	
-	public void copyToDuplicate( NameValueSet<Feature> out ) {
-		for( NamedBean<Feature> ni : list ) {
+	public void copyToDuplicate( NameValueSet<Feature<T>> out ) {
+		for( NamedBean<Feature<T>> ni : list ) {
 			out.add( ni.getName(), ni.getValue().duplicateBean() );
 		}
 	}

@@ -31,8 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -43,7 +42,7 @@ import org.anchoranalysis.feature.params.ParamTypeUtilities;
  * 
  * @author Owen Feehan
  */
-public class VectorFromFeature extends FeatureBase {
+public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<T> {
 
 	/**
 	 * 
@@ -52,59 +51,54 @@ public class VectorFromFeature extends FeatureBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature x;
+	private Feature<T> x;
 	
 	@BeanField
-	private Feature y;
+	private Feature<T> y;
 	
 	@BeanField
-	private Feature z;
+	private Feature<T> z;
 	// END BEAN PROPERTIES
 	
 	public VectorFromFeature() {
 		super();
 	}
 	
-	public Vector3d calc( CacheSession session, FeatureCalcParams params  ) throws FeatureCalcException {
+	public Vector3d calc( CacheableParams<T> params  ) throws FeatureCalcException {
 		
-		double valX = session.calc(x, params);
-		double valY = session.calc(y, params);
-		double valZ = session.calc(z, params);
+		double valX = params.calc(x);
+		double valY = params.calc(y);
+		double valZ = params.calc(z);
 		
 		return new Vector3d(valX,valY,valZ);
 	}
 
-	public Feature getX() {
+	public Feature<T> getX() {
 		return x;
 	}
 
-	public void setX(Feature x) {
+	public void setX(Feature<T> x) {
 		this.x = x;
 	}
 
-	public Feature getY() {
+	public Feature<T> getY() {
 		return y;
 	}
 
-	public void setY(Feature y) {
+	public void setY(Feature<T> y) {
 		this.y = y;
 	}
 
-	public Feature getZ() {
+	public Feature<T> getZ() {
 		return z;
 	}
 
-	public void setZ(Feature z) {
+	public void setZ(Feature<T> z) {
 		this.z = z;
 	}
 
 	@Override
 	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForThree(x,y,z);
-	}
-
-	@Override
-	public FeatureCacheDefinition cacheDefinition() {
-		return null;
 	}
 }

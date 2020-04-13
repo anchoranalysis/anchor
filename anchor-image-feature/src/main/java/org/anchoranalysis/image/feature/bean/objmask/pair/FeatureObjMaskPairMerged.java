@@ -1,8 +1,8 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.image.feature.bean.objmask.pair;
 
 /*-
  * #%L
- * anchor-feature-session
+ * anchor-image-feature
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,11 +26,22 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParamsDescriptor;
 
-public interface FeatureSessionCacheFactory {
-	FeatureSessionCache create(FeatureList namedFeatures, SharedFeatureSet sharedFeatures) throws CreateException;
+public abstract class FeatureObjMaskPairMerged extends Feature<FeatureObjMaskPairMergedParams> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public FeatureParamsDescriptor paramType()
+			throws FeatureCalcException {
+		return FeatureObjMaskPairMergedParamsDescriptor.instance;
+	}
 }

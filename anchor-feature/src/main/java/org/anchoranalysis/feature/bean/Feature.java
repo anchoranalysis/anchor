@@ -37,16 +37,25 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
-import org.anchoranalysis.feature.cache.SimpleCacheDefinition;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.init.IInitFeatures;
 
-public abstract class Feature extends FeatureBase implements
-		Serializable, IInitFeatures {
+
+/**
+ * Feature that calculates a result (double) for some parameters
+ * 
+ * <p>It should be initialized before any other methods are called.</p>
+ * <p>
+ * 
+ * @author owen
+ *
+ * @param <T> type of parameters used during calculation 
+ */
+public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T> implements
+		Serializable, IInitFeatures<T> {
 
 	/**
 	 * 
@@ -59,29 +68,16 @@ public abstract class Feature extends FeatureBase implements
 	private String customName = "";
 	// END BEAN PROPERTIES
 
-	// Saved for debugging reasons ONLY
-	// private FeatureInitParams paramsInit;
-
 	private transient LogErrorReporter logger;
 
 	private boolean hasBeenInit = false;
-	
-	private FeatureCacheDefinition cacheDefinition;
-	
-	private CacheSession cache;
 
 	protected Feature() {
 		super();
-		setupCacheDefinition();
 	}
 	
 	protected Feature( PropertyInitializer<FeatureInitParams> propertyInitializer ) {
 		super( propertyInitializer );
-		setupCacheDefinition();
-	}
-	
-	private void setupCacheDefinition() {
-		this.cacheDefinition = createCacheDefinition();
 	}
 	
 	@Override
@@ -123,7 +119,7 @@ public abstract class Feature extends FeatureBase implements
 				: getBeanDscr();
 	}
 
-	public double calcCheckInit(FeatureCalcParams params) throws FeatureCalcException {
+	public double calcCheckInit(CacheableParams<T> params) throws FeatureCalcException {
 		if (!hasBeenInit) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
@@ -137,7 +133,7 @@ public abstract class Feature extends FeatureBase implements
 	}
 	
 	// Calculates a value for some parameters
-	protected abstract double calc(FeatureCalcParams params) throws FeatureCalcException;
+	protected abstract double calc(CacheableParams<T> params) throws FeatureCalcException;
 
 	/**
 	 * Optionally transforms the parameters passed into this feature, before
@@ -148,12 +144,13 @@ public abstract class Feature extends FeatureBase implements
 	 * @param dependentFeature
 	 *            a dependent-feature
 	 */
-	public FeatureCalcParams transformParams(FeatureCalcParams params,
-			Feature dependentFeature) throws FeatureCalcException {
-		return params;
+	@SuppressWarnings("unchecked")
+	public CacheableParams<FeatureCalcParams> transformParams(CacheableParams<T> params,
+			Feature<FeatureCalcParams> dependentFeature) throws FeatureCalcException {
+		return (CacheableParams<FeatureCalcParams>) params;
 	}
 
-	protected void duplicateHelper(Feature out) {
+	protected void duplicateHelper(Feature<FeatureCalcParams> out) {
 		out.customName = new String(customName);
 	}
 	
@@ -163,27 +160,18 @@ public abstract class Feature extends FeatureBase implements
 	 * @param params parameters used for initialisation that are simply passed to beforeCalc()
 	 * @param logger logger
 	 * 
-	 * When a feature requires particular additional-caches, these are extracted from allAdditionalCaches to create an ordered array
-	 *   in the same order as returned by needsAdditionalCaches()
 	 * @param logger the logger, saved and made available to the feature
 	 */
 	@Override
 	public void init(
 		FeatureInitParams params,
-		FeatureBase parentFeature,
+		FeatureBase<T> parentFeature,
 		LogErrorReporter logger
 	) throws InitException {
 				
 		hasBeenInit = true;
 		this.logger = logger;
-
-		cache = this.cacheDefinition.rslv(parentFeature, params.getCache() );
-		
-		beforeCalc(	params,	cache );
-	}
-	
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new SimpleCacheDefinition(this);
+		beforeCalc(	params );
 	}
 	
 
@@ -199,12 +187,12 @@ public abstract class Feature extends FeatureBase implements
 	 * @throws CreateException
 	 * @throws BeanMisconfiguredException
 	 */
-	public final FeatureList createListChildFeatures(boolean includeAdditionallyUsed)
+	public final FeatureList<FeatureCalcParams> createListChildFeatures(boolean includeAdditionallyUsed)
 			throws BeanMisconfiguredException {
 		
-		List<Feature> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
+		List<Feature<FeatureCalcParams>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
 
-		FeatureList out = new FeatureList(outUpcast);
+		FeatureList<FeatureCalcParams> out = new FeatureList<>(outUpcast);
 
 		if (includeAdditionallyUsed) {
 			addAdditionallyUsedFeatures(out);
@@ -227,11 +215,11 @@ public abstract class Feature extends FeatureBase implements
 	 * @param out a list to add these features to
 	 *            
 	 */
-	public void addAdditionallyUsedFeatures(FeatureList out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
 	}
 
 	// Dummy method, that children can optionally override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache) throws InitException {
+	public void beforeCalc(FeatureInitParams params) throws InitException {
 
 	}
 
@@ -244,13 +232,16 @@ public abstract class Feature extends FeatureBase implements
 	public String toString() {
 		return getFriendlyName();
 	}
-
-	@Override
-	public FeatureCacheDefinition cacheDefinition() {
-		return cacheDefinition;
+	
+	/** Upcasts the feature to FeatureCalcParams */
+	@SuppressWarnings("unchecked")
+	public Feature<FeatureCalcParams> upcast() {
+		return (Feature<FeatureCalcParams>) this;
 	}
-
-	protected CacheSession getCacheSession() {
-		return cache;
+	
+	/** Downcasts the feature  */
+	@SuppressWarnings("unchecked")
+	public <S extends T> Feature<S> downcast() {
+		return (Feature<S>) this;
 	}
 }

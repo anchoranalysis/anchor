@@ -34,16 +34,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public interface ISequentialSessionSingleParams {
+public interface ISequentialSessionSingleParams<T extends FeatureCalcParams> {
 	
-	void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger ) throws InitException;
+	void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger ) throws InitException;
 
-	ResultsVector calcSuppressErrors(FeatureCalcParams params, ErrorReporter errorReporter );
+	ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	ResultsVector calc( FeatureCalcParams params ) throws FeatureCalcException;
-	
-	FeatureSessionCache getCache();
+	ResultsVector calcOne( T params ) throws FeatureCalcException;
 }

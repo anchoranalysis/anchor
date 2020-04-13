@@ -28,13 +28,13 @@ package org.anchoranalysis.image.feature.bean.pixelwise;
 
 import org.anchoranalysis.feature.bean.FeatureCastInitParams;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
+import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 
 // A feature designed to work, not with Marks, but with individual pixels
-public abstract class PixelwiseFeature extends FeatureCastInitParams<PixelwiseFeatureInitParams> {
+public abstract class PixelwiseFeature extends FeatureCastInitParams<PixelwiseFeatureInitParams,PixelScoreFeatureCalcParams> {
 
 	protected PixelwiseFeature() {
 		super(PixelwiseFeatureInitParams.class);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

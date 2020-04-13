@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.cache;
+package org.anchoranalysis.feature.bean.operator;
 
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,33 +26,27 @@ package org.anchoranalysis.feature.cache;
  * #L%
  */
 
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class CacheRetrieverPlusAll {
+/**
+ * A single-element feature that accepts the most generic of parameters {#link {@link FeatureCalcParams}}
+ * 
+ * @author owen
+ * @params feature-calc-params
+ */
+public abstract class FeatureGenericSingleElem<T extends FeatureCalcParams> extends FeatureSingleElem<T, T> {
 
-	private FeatureSessionCacheRetriever cache;
-	private AllAdditionalCaches allAdditionalCaches;
-	
-	public CacheRetrieverPlusAll(FeatureSessionCacheRetriever cache) {
-		this.cache = cache;
-	}
-	
-	public CacheRetrieverPlusAll(FeatureSessionCacheRetriever cache, AllAdditionalCaches allAdditionalCaches) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public FeatureGenericSingleElem() {
 		super();
-		this.cache = cache;
-		this.allAdditionalCaches = allAdditionalCaches;
 	}
 
-	// Shallow-copy
-	public CacheRetrieverPlusAll duplicate() {
-		return new CacheRetrieverPlusAll(cache, allAdditionalCaches);
-	}
-
-	public FeatureSessionCacheRetriever getCache() {
-		return cache;
-	}
-
-	public AllAdditionalCaches getAllAdditionalCaches() {
-		return allAdditionalCaches;
+	public FeatureGenericSingleElem(Feature<T> feature) {
+		super(feature);
 	}
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.bean.pixelwise.score;
 
+
+
 /*-
  * #%L
  * anchor-image-feature
@@ -27,10 +29,8 @@ package org.anchoranalysis.image.feature.bean.pixelwise.score;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelwiseFeature;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParamsDescriptor;
 
 // Calculates a score that a pixel belongs to a pa
@@ -40,19 +40,6 @@ public abstract class PixelScore extends PixelwiseFeature {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// Delegates to cast-specific params
-	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		
-		if (params instanceof PixelScoreFeatureCalcParams) {
-			return calcCast( (PixelScoreFeatureCalcParams) params );
-		} else {
-			throw new FeatureCalcException("Requires PixelScoreFeatureCalcParams");
-		}
-	}
-
-	protected abstract double calcCast( PixelScoreFeatureCalcParams params ) throws FeatureCalcException;
 	
 	@Override
 	public FeatureParamsDescriptor paramType()

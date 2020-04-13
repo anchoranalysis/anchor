@@ -30,9 +30,18 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public abstract class FeatureSingleElem extends Feature {
+/**
+ * A feature that contains another feature as a property (the single element)
+ * 
+ * @author owen
+ *
+ * @param <T> calc-params used for calculating feature
+ * @param <S> calc-params used for the "item" that is the single element
+ */
+public abstract class FeatureSingleElem<T extends FeatureCalcParams, S extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -41,22 +50,22 @@ public abstract class FeatureSingleElem extends Feature {
 	
 	// START BEAN PARAMETERS
 	@BeanField
-	private Feature item = null;
+	private Feature<S> item = null;
 	// END BEAN PARAMETERS
 	
 	public FeatureSingleElem() {
 		
 	}
 
-	public FeatureSingleElem( Feature feature  ) {
+	public FeatureSingleElem( Feature<S> feature  ) {
 		this.item = feature;
 	}
 	
-	public Feature getItem() {
+	public Feature<S> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<S> item) {
 		this.item = item;
 	}
 	

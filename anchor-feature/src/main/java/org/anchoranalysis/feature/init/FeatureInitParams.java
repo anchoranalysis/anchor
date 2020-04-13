@@ -29,9 +29,7 @@ package org.anchoranalysis.feature.init;
 
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.cache.CacheRetrieverPlusAll;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 
 /**
  * Parameters used to initialise a feature
@@ -43,8 +41,6 @@ public class FeatureInitParams extends BeanInitParams {
 
 	private KeyValueParams keyValueParams;
 	private NRGStack nrgStack;
-	
-	private CacheRetrieverPlusAll cache;
 	
 	public FeatureInitParams() {
 		super();
@@ -58,7 +54,6 @@ public class FeatureInitParams extends BeanInitParams {
 	protected FeatureInitParams( FeatureInitParams src ) {
 		this.keyValueParams = src.keyValueParams;
 		this.nrgStack = src.nrgStack;
-		this.cache = src.cache;
 	}
 	
 	
@@ -67,24 +62,9 @@ public class FeatureInitParams extends BeanInitParams {
 		FeatureInitParams out = new FeatureInitParams();
 		out.nrgStack = nrgStack;
 		out.keyValueParams = keyValueParams;
-		out.cache = cache!=null ? cache.duplicate() : null;
 		return out;
 	}
 	
-	public FeatureInitParams duplicateChangeCache( FeatureSessionCacheRetriever retriever ) {
-		FeatureInitParams out = duplicate();
-		out.setCache(
-			new CacheRetrieverPlusAll(retriever)
-		);
-		return out;
-	}
-	
-	public FeatureInitParams duplicateChangeCachePlus( CacheRetrieverPlusAll retriever ) {
-		FeatureInitParams out = duplicate();
-		out.setCache(retriever);
-		return out;
-	}
-
 	public KeyValueParams getKeyValueParams() {
 		return keyValueParams;
 	}
@@ -99,13 +79,5 @@ public class FeatureInitParams extends BeanInitParams {
 
 	public void setNrgStack(NRGStack nrgStack) {
 		this.nrgStack = nrgStack;
-	}
-
-	public CacheRetrieverPlusAll getCache() {
-		return cache;
-	}
-
-	public void setCache(CacheRetrieverPlusAll cache) {
-		this.cache = cache;
 	}
 }

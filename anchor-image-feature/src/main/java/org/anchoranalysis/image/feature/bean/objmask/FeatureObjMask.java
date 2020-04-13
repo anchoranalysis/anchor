@@ -28,46 +28,16 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParamsDescriptor;
 
-public abstract class FeatureObjMask extends Feature {
+public abstract class FeatureObjMask extends Feature<FeatureObjMaskParams> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		
-		if (params instanceof FeatureObjMaskParams) {
-			
-			FeatureObjMaskParams paramsCast = (FeatureObjMaskParams) params;
-			return calcCast( paramsCast );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskParams.class.getSimpleName() );
-		}
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureObjMaskParams params ) throws FeatureCalcException;
-
-	@Override
-	public FeatureCalcParams transformParams(FeatureCalcParams params, Feature dependentFeature) throws FeatureCalcException {
-		
-		if (params instanceof FeatureObjMaskParams) {
-			return transformParams( (FeatureObjMaskParams) params, dependentFeature );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskParams.class.getSimpleName() );
-		}
-	}
-	
-	public FeatureCalcParams transformParams(FeatureObjMaskParams params, Feature dependentFeature) throws FeatureCalcException {
-		return params;
-	}
 	
 	@Override
 	public FeatureParamsDescriptor paramType()

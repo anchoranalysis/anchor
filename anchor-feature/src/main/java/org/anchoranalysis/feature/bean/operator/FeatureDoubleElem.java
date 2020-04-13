@@ -30,10 +30,11 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
-public abstract class FeatureDoubleElem extends Feature {
+public abstract class FeatureDoubleElem<T extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -42,30 +43,30 @@ public abstract class FeatureDoubleElem extends Feature {
 	
 	// START BEAN PARAMETERS
 	@BeanField
-	private Feature item1 = null;
+	private Feature<T> item1 = null;
 	
 	@BeanField
-	private Feature item2 = null;
+	private Feature<T> item2 = null;
 	// END BEAN PARAMETERS
-
-	public Feature getItem1() {
-		return item1;
-	}
-
-	public void setItem1(Feature item1) {
-		this.item1 = item1;
-	}
-
-	public Feature getItem2() {
-		return item2;
-	}
-
-	public void setItem2(Feature item2) {
-		this.item2 = item2;
-	}
 
 	@Override
 	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForTwo(item1, item2);
+	}
+	
+	public Feature<T> getItem1() {
+		return item1;
+	}
+
+	public void setItem1(Feature<T> item1) {
+		this.item1 = item1;
+	}
+
+	public Feature<T> getItem2() {
+		return item2;
+	}
+
+	public void setItem2(Feature<T> item2) {
+		this.item2 = item2;
 	}
 }

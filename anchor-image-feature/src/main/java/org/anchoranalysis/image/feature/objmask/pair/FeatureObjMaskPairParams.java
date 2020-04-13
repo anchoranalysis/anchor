@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.objmask.pair;
 
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -50,12 +52,18 @@ public class FeatureObjMaskPairParams extends FeatureNRGStackParams {
 	public FeatureObjMaskPairParams() {
 	}
 	
-	public FeatureObjMaskPairParams(ObjMask objMask1,ObjMask objMask2) {
+	public FeatureObjMaskPairParams(ObjMask objMask1, ObjMask objMask2) {
 		super();
 		this.objMask1 = objMask1;
 		this.objMask2 = objMask2;
 	}
 	
+	public FeatureObjMaskPairParams(ObjMask objMask1, ObjMask objMask2, NRGStackWithParams nrgStack) {
+		super(nrgStack);
+		this.objMask1 = objMask1;
+		this.objMask2 = objMask2;
+	}
+		
 	protected FeatureObjMaskPairParams( FeatureObjMaskPairParams src ) {
 		super();
 		this.objMask1 = src.getObjMask1();

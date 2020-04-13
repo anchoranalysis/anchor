@@ -37,7 +37,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -47,45 +46,40 @@ import org.apache.commons.collections.CollectionUtils;
  * @author Owen Feehan
  *
  */
-public class SequentialSessionRepeatFirst extends FeatureSession implements ISequentialSessionSingleParams {
+public class SequentialSessionRepeatFirst<T extends FeatureCalcParams> extends FeatureSession implements ISequentialSessionSingleParams<T> {
 
-	private SequentialSession delegate;
+	private SequentialSession<T> delegate;
 	
 	private ResultsVector rv = null;
 	
 	@SuppressWarnings("unchecked")
-	public SequentialSessionRepeatFirst(FeatureList listFeatures) {
+	public SequentialSessionRepeatFirst(FeatureList<T> listFeatures) {
 		this( listFeatures, (Collection<String>) CollectionUtils.EMPTY_COLLECTION );
 	}
 	
-	public SequentialSessionRepeatFirst(FeatureList listFeatures, Collection<String> ignoreFeaturePrefixes ) {
+	public SequentialSessionRepeatFirst(FeatureList<T> listFeatures, Collection<String> ignoreFeaturePrefixes ) {
 		super();
-		this.delegate = new SequentialSession(listFeatures, ignoreFeaturePrefixes);
+		this.delegate = new SequentialSession<>(listFeatures, ignoreFeaturePrefixes);
 	}
 
 	@Override
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger) throws InitException {
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger) throws InitException {
 		delegate.start(featureInitParams, sharedFeatureList, logger);
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(FeatureCalcParams params,
+	public ResultsVector calcOneSuppressErrors(T params,
 			ErrorReporter errorReporter) {
 		if (rv==null) {
-			rv = delegate.calcSuppressErrors(params, errorReporter);
+			rv = delegate.calcOneSuppressErrors(params, errorReporter);
 		}
 		return rv;
 	}
 
 	@Override
-	public FeatureSessionCache getCache() {
-		return delegate.getCache();
-	}
-
-	@Override
-	public ResultsVector calc(FeatureCalcParams params)
+	public ResultsVector calcOne(T params)
 			throws FeatureCalcException {
-		return delegate.calc(params);
+		return delegate.calcOne(params);
 	}
 
 }

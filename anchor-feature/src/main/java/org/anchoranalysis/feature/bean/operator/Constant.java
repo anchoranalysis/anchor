@@ -29,12 +29,13 @@ package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class Constant extends Feature {
+public class Constant<T extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -54,7 +55,7 @@ public class Constant extends Feature {
 	}
 	
 	@Override
-	public double calc( FeatureCalcParams params ) {
+	public double calc( CacheableParams<T> params ) {
 		return value;
 	}
 

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask.pair.merged;
+package org.anchoranalysis.image.feature.bean.objmask;
 
 /*-
  * #%L
@@ -27,13 +27,13 @@ package org.anchoranalysis.image.feature.bean.objmask.pair.merged;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParamsDescriptor;
+import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionDescriptor;
+import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
 
-public abstract class FeatureObjMaskPairMerged extends Feature {
+public abstract class FeatureObjMaskCollection extends Feature<FeatureObjMaskCollectionParams> {
 
 	/**
 	 * 
@@ -41,21 +41,22 @@ public abstract class FeatureObjMaskPairMerged extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureObjMaskCollectionParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof FeatureObjMaskPairMergedParams) {
-			return calcCast( (FeatureObjMaskPairMergedParams) params );
+		if (params.getParams() instanceof FeatureObjMaskCollectionParams) {
+			return calc( (FeatureObjMaskCollectionParams) params.getParams() );
 		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskPairMergedParams.class.getSimpleName() );
+			throw new FeatureCalcException("Requires " + FeatureObjMaskCollectionParams.class.getSimpleName() );
 		}
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureObjMaskPairMergedParams params ) throws FeatureCalcException;
+	public abstract double calc( FeatureObjMaskCollectionParams params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureObjMaskPairMergedParamsDescriptor.instance;
+		return FeatureObjMaskCollectionDescriptor.instance;
 	}
+	
 }

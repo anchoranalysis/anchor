@@ -34,10 +34,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 
-public class FeatureListProviderDefineNamedItemList extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderDefineNamedItemList<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -46,44 +47,40 @@ public class FeatureListProviderDefineNamedItemList extends FeatureListProviderR
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private List<NamedBean<FeatureListProvider>> list;
-
+	private List<NamedBean<FeatureListProvider<T>>> list;
 	// END BEAN PROPERTIES
 	
-	private static Feature renameFeature( String name, Feature feature ) {
-		feature.setCustomName(name);
-		return feature;
-	}
-	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 		
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 
-		NamedFeatureStore featuresRenamed = NamedFeatureStoreFactory.createNamedFeatureList(list);
+		NamedFeatureStore<T> featuresRenamed = NamedFeatureStoreFactory.createNamedFeatureList(list);
 		
 		if (featuresRenamed.size()==0) {
-			return new FeatureList();
+			return new FeatureList<T>();
 		}
 		
 		// It ignores the names on the feature-provider
-		for( NamedBean<Feature> ni : featuresRenamed ) {
+		for( NamedBean<Feature<T>> ni : featuresRenamed ) {
 			
-			Feature wrapped = renameFeature( ni.getName(), ni.getValue() );
+			Feature<T> wrapped = renameFeature( ni.getName(), ni.getValue() );
 			out.add( wrapped );
 		}
 		
 		return out;
 	}
 
-	public List<NamedBean<FeatureListProvider>> getList() {
+	public List<NamedBean<FeatureListProvider<T>>> getList() {
 		return list;
 	}
 
-	public void setList(List<NamedBean<FeatureListProvider>> list) {
+	public void setList(List<NamedBean<FeatureListProvider<T>>> list) {
 		this.list = list;
 	}
 
-
-
+	private static <T extends FeatureCalcParams> Feature<T> renameFeature( String name, Feature<T> feature ) {
+		feature.setCustomName(name);
+		return feature;
+	}
 }

@@ -34,12 +34,13 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedObjects {
+public abstract class ReportFeatureOnObjMaskBase<T extends FeatureCalcParams> extends ReportFeatureForSharedObjects {
 
 	
 	/**
@@ -52,7 +53,7 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<T> featureEvaluator;
 	
 	@BeanField
 	private String title;
@@ -72,7 +73,7 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 						
-			FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<T> session = featureEvaluator.createAndStartSession();
 			double val = calcFeatureOn( objsCollection, session );
 			return Double.toString(val);
 			
@@ -81,7 +82,7 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 		}
 	}
 	
-	protected abstract double calcFeatureOn( ObjMaskCollection objs, FeatureSessionCreateParamsSingle session ) throws FeatureCalcException;
+	protected abstract double calcFeatureOn( ObjMaskCollection objs, FeatureCalculatorSingle<T> session ) throws FeatureCalcException;
 	
 	@Override
 	public boolean isNumeric() {
@@ -97,28 +98,24 @@ public abstract class ReportFeatureOnObjMaskBase extends ReportFeatureForSharedO
 		return objs;
 	}
 
-
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
 	}
-
 
 	public String getTitle() {
 		return title;
 	}
 
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<T> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

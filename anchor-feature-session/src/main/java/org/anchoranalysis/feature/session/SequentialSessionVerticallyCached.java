@@ -40,7 +40,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -50,11 +49,11 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class SequentialSessionVerticallyCached extends FeatureSession implements ISequentialSessionSingleParams {
+public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> extends FeatureSession implements ISequentialSessionSingleParams<T> {
 
-	private SequentialSession delegate;
+	private SequentialSession<T> delegate;
 	
-	private LRUHashMapCache<ResultsVector,FeatureCalcParams> hashCache;
+	private LRUHashMapCache<ResultsVector,T> hashCache;
 	private CacheMonitor cacheMonitor = new CacheMonitor();
 
 	private static int CACHE_SIZE = 1000;
@@ -64,31 +63,31 @@ public class SequentialSessionVerticallyCached extends FeatureSession implements
 	// We update this every time so it matches whatever is passed to calcSuppressErrors
 	private ErrorReporter errorReporter = null;
 	
-	public SequentialSessionVerticallyCached(FeatureList listFeatures, boolean suppressErrors, Collection<String> ignoreFeaturePrefixes ) {
+	public SequentialSessionVerticallyCached(FeatureList<T> listFeatures, boolean suppressErrors, Collection<String> ignoreFeaturePrefixes ) {
 		super();
-		this.delegate = new SequentialSession(listFeatures, ignoreFeaturePrefixes);
+		this.delegate = new SequentialSession<>(listFeatures, ignoreFeaturePrefixes);
 		this.suppressErrors = suppressErrors;
 		
 	}
 	
 	@Override
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatureList, LogErrorReporter logger) throws InitException {
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger) throws InitException {
 		delegate.start(featureInitParams, sharedFeatureList, logger);
 		
 		this.hashCache = LRUHashMapCache.createAndMonitor(CACHE_SIZE, new GetterImpl(), cacheMonitor, "SequentialSessionVerticallyCached");
 	}
 	
 	
-	private class GetterImpl implements LRUHashMapCache.Getter<ResultsVector,FeatureCalcParams> {
+	private class GetterImpl implements LRUHashMapCache.Getter<ResultsVector,T> {
 
 		@Override
-		public ResultsVector get(FeatureCalcParams index)
+		public ResultsVector get(T index)
 				throws GetOperationFailedException {
 			try {
 				if (suppressErrors) {
-					return delegate.calcSuppressErrors(index,errorReporter);
+					return delegate.calcOneSuppressErrors(index,errorReporter);
 				} else {
-					return delegate.calc(index);
+					return delegate.calcOne(index);
 				}
 			} catch (FeatureCalcException e) {
 				throw new GetOperationFailedException(e);
@@ -98,7 +97,7 @@ public class SequentialSessionVerticallyCached extends FeatureSession implements
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(FeatureCalcParams params,
+	public ResultsVector calcOneSuppressErrors(T params,
 			ErrorReporter errorReporter) {
 		this.errorReporter = errorReporter;
 		try {
@@ -113,14 +112,10 @@ public class SequentialSessionVerticallyCached extends FeatureSession implements
 		}
 	}
 
-	public FeatureSessionCache getCache() {
-		return delegate.getCache();
-	}
-
 	@Override
-	public ResultsVector calc(FeatureCalcParams params)
+	public ResultsVector calcOne(T params)
 			throws FeatureCalcException {
-		return delegate.calc(params);
+		return delegate.calcOne(params);
 	}
 
 

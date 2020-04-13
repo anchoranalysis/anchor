@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
  * Selects a number of features of shared-features matching against a regular-expression
@@ -39,7 +40,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderSelectFromShared extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderSelectFromShared<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -52,14 +53,16 @@ public class FeatureListProviderSelectFromShared extends FeatureListProviderRefe
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 		
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 		
 		for( String key : getSharedObjects().getFeatureListSet().keys() ) {
 			if( match==null || match.matchStr(key)!=null ) {
 				try {
-					out.add( getSharedObjects().getSharedFeatureSet().getException(key) );
+					out.add(
+						getSharedObjects().getSharedFeatureSet().getException(key).downcast()
+					);
 				} catch (NamedProviderGetException e) {
 					throw new CreateException(e);
 				}

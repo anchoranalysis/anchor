@@ -28,15 +28,12 @@ package org.anchoranalysis.image.feature.bean.objmask.pair;
 
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParamsDescriptor;
 
-public abstract class FeatureObjMaskPair extends Feature {
+public abstract class FeatureObjMaskPair extends Feature<FeatureObjMaskPairParams> {
 
 	/**
 	 * 
@@ -44,40 +41,8 @@ public abstract class FeatureObjMaskPair extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		
-		if (params instanceof FeatureObjMaskPairParams) {
-			return calcCast( (FeatureObjMaskPairParams) params );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskPairParams.class.getSimpleName() );
-		}
-	}
-	
-	@Override
-	public FeatureCalcParams transformParams(FeatureCalcParams params, Feature dependentFeature) throws FeatureCalcException {
-		
-		if (params instanceof FeatureObjMaskPairParams) {
-			return transformParams( (FeatureObjMaskPairParams) params, dependentFeature );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskPairParams.class.getSimpleName() );
-		}
-	}
-	
-	public FeatureCalcParams transformParams(FeatureObjMaskPairParams params, Feature dependentFeature) throws FeatureCalcException {
-		return params;
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureObjMaskPairParams params ) throws FeatureCalcException;
-
-	@Override
 	public FeatureParamsDescriptor paramType()
 			throws FeatureCalcException {
 		return FeatureObjMaskPairParamsDescriptor.instance;
-	}
-
-	@Override
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new ComplexCacheDefinition(this, new String[] {"first","second"});
 	}
 }

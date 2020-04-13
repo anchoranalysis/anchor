@@ -31,10 +31,11 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
-public abstract class FeatureConvertRes extends FeatureSingleElemWithRes {
+public abstract class FeatureConvertRes<T extends FeatureCalcParamsWithRes> extends FeatureSingleElemWithRes<T> {
 
 	
 	/**
@@ -51,7 +52,7 @@ public abstract class FeatureConvertRes extends FeatureSingleElemWithRes {
 		
 	}
 	
-	public FeatureConvertRes( Feature feature, UnitSuffix unitType ) {
+	public FeatureConvertRes( Feature<T> feature, UnitSuffix unitType ) {
 		super(feature);
 		this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
 	}

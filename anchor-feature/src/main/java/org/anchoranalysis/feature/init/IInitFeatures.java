@@ -29,10 +29,11 @@ package org.anchoranalysis.feature.init;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public interface IInitFeatures {
+public interface IInitFeatures<T extends FeatureCalcParams> {
 
-	void init( FeatureInitParams params, FeatureBase parentFeature, LogErrorReporter logger) throws InitException;
+	void init( FeatureInitParams params, FeatureBase<T> parentFeature, LogErrorReporter logger) throws InitException;
 	
 	/**
 	 * A friendly name that can be displayed to user describing the Feature. Should always prioritise the CustomName

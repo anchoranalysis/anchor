@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session;
 
+import java.util.ArrayList;
+
 /*
  * #%L
  * anchor-feature
@@ -31,13 +33,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -45,6 +47,9 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
 import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreatorRemember;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -56,14 +61,12 @@ import org.apache.commons.collections.CollectionUtils;
  * Object calculations occur sequentially thereafter.
  * 
  * @author Owen Feehan
+ * @param T calc-params for feature
  *
  */
-public class SequentialSession extends FeatureSession implements ISequentialSessionSingleParams {
+public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements FeatureCalculatorMulti<T>, ISequentialSessionSingleParams<T> {
 
-	private FeatureList listFeatures;
-
-	// Our main cache which does our processing (and contains potentially additional caches)
-	private CachePlus cache;
+	private FeatureList<T> listFeatures;
 	
 	private boolean isStarted = false;
 	
@@ -72,13 +75,15 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 	
 	private FeatureSessionCacheFactory cacheFactory;
 	
+	private CacheCreatorRemember cacheCreator;
+		
 	/**
 	 * Constructor of a session
 	 * 
 	 * @param feature the feature that will be calculated in the session
 	 */
-	public SequentialSession(Feature feature) {
-		this( new FeatureList(feature) );
+	public SequentialSession(Feature<T> feature) {
+		this( new FeatureList<>(feature) );
 	}
 	
 	/**
@@ -87,8 +92,8 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 	 * @param listFeatures the features that will be calculated in this session
 	 */
 	@SuppressWarnings("unchecked")
-	public SequentialSession(FeatureList listFeatures) {
-		this( listFeatures, (Collection<String>) CollectionUtils.EMPTY_COLLECTION );
+	public SequentialSession(Iterable<Feature<T>> iterFeatures) {
+		this( iterFeatures, (Collection<String>) CollectionUtils.EMPTY_COLLECTION );
 	}
 	
 	/**
@@ -98,13 +103,19 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 	 * @param prependFeatureName a string that can be prepended to feature-ID references e.g. when looking for  featureX,  concat(prependFeatureName,featureX)
 	 *         is also considered. This helps with scoping.
 	 */
-	public SequentialSession(FeatureList listFeatures, Collection<String> ignorePrefixes) {
+	public SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes) {
+		this.listFeatures = new FeatureList<>(iterFeatures);
 		assert(listFeatures!=null);
-		this.listFeatures = listFeatures;
-		this.cacheFactory = new HorizontalFeatureCacheFactory( new HorizontalCalculationCacheFactory(), ignorePrefixes );
+		this.cacheFactory = new HorizontalFeatureCacheFactory(
+			new HorizontalCalculationCacheFactory(),
+			ignorePrefixes
+		);
 	}
 	
 	
+	public void start( LogErrorReporter logger ) throws InitException {
+		start( new FeatureInitParams(), new SharedFeatureSet<T>(), logger);
+	}
 	
 	/**
 	 * Starts the session
@@ -115,7 +126,7 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 	 * @throws InitException
 	 */
 	@Override
-	public void start( FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatures, LogErrorReporter logger ) throws InitException{
+	public void start( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException{
 		
 		if (isStarted) {
 			throw new InitException("Session has already been started.");
@@ -125,56 +136,30 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 		
 		assert( logger!=null );
 		
-		this.cache = setupCacheAndInit( featureInitParams, sharedFeatures, logger );
+		setupCacheAndInit( featureInitParams, sharedFeatures, logger );
 		
 		isStarted = true;
 	}
 	
 	/**
-	 * Calculates the next-object in our sequential series
+	 * Calculates one params for each feature.
 	 * 
 	 * @param params
 	 * @return
 	 * @throws FeatureCalcException
 	 */
-	public ResultsVector calc( FeatureCalcParams params ) throws FeatureCalcException {
+	@Override
+	public ResultsVector calcOne( T params ) throws FeatureCalcException {
 		
 		if (!isStarted) {
 			throw new FeatureCalcException("Session has not been started yet. Call start().");
 		}
 		
-		cache.invalidate();
-		
-		ResultsVector res = new ResultsVector( listFeatures.size() );
-				
-		for( int i=0; i<listFeatures.size(); i++) {
-			Feature f = listFeatures.get(i);
-			double val = cache.retriever().calc(f, params);
-			res.set(i,val);
-		}
-		return res;
+		invalidate();
+
+		return calcCommonExceptionAsVector(params);
 	}
-	
-	
-	
-	/**
-	 * Calculates the next-object in our sequential series
-	 * 
-	 * @param params
-	 * @return
-	 * @throws FeatureCalcException
-	 */
-	public ResultsVector calc( List<CreateParams> listCreateParams ) throws FeatureCalcException {
-		
-		if (!isStarted) {
-			throw new FeatureCalcException("Session has not been started yet. Call start().");
-		}
-		
-		cache.invalidate();
-		
-		checkSizesMatch( listCreateParams, listFeatures );
-		return calcException( listCreateParams );
-	}
+
 	
 	/**
 	 * Calculates the next-object in our sequential series, reporting any exceptions into a reporter log
@@ -183,7 +168,7 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 	 * @return
 	 * @throws FeatureCalcException
 	 */
-	public ResultsVector calcSuppressErrors( FeatureCalcParams params, ErrorReporter errorReporter ) {
+	public ResultsVector calcOneSuppressErrors( T params, ErrorReporter errorReporter ) {
 		
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 		
@@ -193,30 +178,62 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 			res.setErrorAll( new OperationFailedException(errorMsg) );
 		}
 		
-		cache.invalidate();
+		invalidate();
 		
-		calcSuppressErrors(res, params, errorReporter);
+		calcCommonSuppressErrors(res, params, errorReporter);
 		
 		return res;
 	}
 	
-	/**
-	 * Resets cache, and creates a new sub-session (for calculating particular sub-features)
-	 * 
-	 * @return
-	 * @throws FeatureCalcException 
-	 */
-	public Subsession createSubsession() throws CreateException {
+	@Override
+	public List<ResultsVector> calcMany( List<T> listParams ) throws FeatureCalcException {
 		
 		if (!isStarted) {
-			throw new CreateException("Session has not been started yet. Call start().");
+			throw new FeatureCalcException("Session has not been started yet. Call start().");
 		}
 		
-		cache.invalidate();
+		List<ResultsVector> listOut = new ArrayList<>();
 		
-		return new Subsession(cache);
+		for( T params : listParams ) {
+			invalidate();
+			listOut.add(
+				calcCommonExceptionAsVector( params )
+			);
+		}
+				
+		return listOut;
 	}
 	
+	/**
+	 * Calculates one (different) parameter for each features.
+	 * 
+	 * @param listParams a list of parameters the same size as the features
+	 * @return a results vector, one result for each feature
+	 * @throws FeatureCalcException
+	 */
+	public ResultsVector calcDifferent( List<T> listParams ) throws FeatureCalcException {
+		
+		if (!isStarted) {
+			throw new FeatureCalcException("Session has not been started yet. Call start().");
+		}
+		
+		invalidate();
+		
+		checkSizesMatch( listParams, listFeatures );
+		return calcUniqueException( listParams );
+	}
+	
+	@Override
+	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
+		invalidate();
+		return SessionUtilities.createCacheable(params, cacheCreator);
+	}
+	
+	@Override
+	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
+		invalidate();
+		return SessionUtilities.createCacheable(listParams, cacheCreator);
+	}
 	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
@@ -226,21 +243,41 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 		return listFeatures.size();
 	}
 
-	public List<Feature> getFeatureList() {
+	public List<Feature<T>> getFeatureList() {
 		return listFeatures.getList();
 	}
-
-	@Override
-	public CachePlus getCache() {
-		return cache;
-	}
 	
-	private void calcSuppressErrors( ResultsVector res, FeatureCalcParams params, ErrorReporter errorReporter ) {
+	@Override
+	public int sizeFeatures() {
+		return listFeatures.size();
+	}
+		
+	private void calcCommonSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
+		
+		// Create cacheable params, and record any errors for all features
+		CacheableParams<T> cacheableParams;
+		try {
+			cacheableParams = createCacheable(params);
+		} catch (FeatureCalcException e) {
+			// Return all features as errored
+			if (reportErrors) {
+				errorReporter.recordError(SequentialSession.class, e);
+			}
+			for( int i=0; i<listFeatures.size(); i++) {
+				res.setError(i, e);
+			}
+			return;
+		} 
+		
+		// Perform individual calculations on each feature
 		for( int i=0; i<listFeatures.size(); i++) {
-			Feature f = listFeatures.get(i);
+			Feature<T> f = listFeatures.get(i);
 			
 			try {
-				calcThroughCache( f, res, i, params );
+				res.set(
+					i,
+					cacheableParams.calc(f)
+				);
 				
 			} catch (FeatureCalcException e) {
 				if (reportErrors) {
@@ -250,32 +287,56 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 			}
 		}	
 	}
+	
+	private ResultsVector calcCommonExceptionAsVector( T params ) throws FeatureCalcException {
+		ResultsVector res = new ResultsVector( listFeatures.size() );
 
-	private ResultsVector calcException( List<CreateParams> listCreateParams ) throws FeatureCalcException {
+		CacheableParams<T> cacheableParams = createCacheable(params); 
+		
+		for( int i=0; i<listFeatures.size(); i++) {
+			Feature<T> f = listFeatures.get(i);
+			double val = cacheableParams.calc(f);
+			res.set(i,val);
+		}
+		
+		return res;
+	}
+	
+	
+	/** Calculate each feature  with unique parameters.
+	 * 
+	 * <p>TODO exploit situation if the same parameter is repeated, so that they are cached together.</p>
+	 *   
+	 * @param listParams a list of parameters to be calculated, one for each feature
+	 * @return a vector of calculation results
+	 * @throws FeatureCalcException if something goes wrong during calculation, or the list sizes don't match
+	 */
+	private ResultsVector calcUniqueException( List<T> listParams ) throws FeatureCalcException {
+		
+		if (listParams.size()!=listFeatures.size()) {
+			throw new FeatureCalcException(
+				String.format(
+					"The number of features (%d) must be equal to the number of params (%d)",
+					listFeatures.size(),
+					listParams.size()
+				)	
+			);
+		}
+		
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 		
-		try {
-			for( int i=0; i<listFeatures.size(); i++) {
-				
-				Feature f = listFeatures.get(i);
-				FeatureCalcParams params = listCreateParams.get(i).createForFeature(f);
-				
-				calcThroughCache( f, res, i, params );
-			}
-			return res;
+		for( int i=0; i<listFeatures.size(); i++) {
 			
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}		
+			Feature<T> f = listFeatures.get(i);
+			T params = listParams.get(i);
+
+			res.set(
+				i,
+				createCacheable(params).calc(f)
+			);
+		}
+		return res;
 	}
-	
-	private void calcThroughCache( Feature f, ResultsVector res, int i, FeatureCalcParams params ) throws FeatureCalcException {
-		double val = cache.retriever().calc(f, params);
-		res.set(i,val);
-	}
-	
-	
-	
 
 	/**
 	 * Checks that there's no common features in the featureList and the shared-features as this can create
@@ -284,14 +345,14 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 	 * @param sharedFeatures
 	 * @throws InitException
 	 */
-	private void checkNoIntersectionWithSharedFeatures( SharedFeatureSet sharedFeatures ) throws InitException {
+	private void checkNoIntersectionWithSharedFeatures( SharedFeatureSet<T> sharedFeatures ) throws InitException {
 		assert(listFeatures!=null);
 		try {
-			for( Feature f : listFeatures ) {
+			for( Feature<T> f : listFeatures ) {
 				
-				FeatureList allDependents = f.createListChildFeatures(false);
+				FeatureList<FeatureCalcParams> allDependents = f.createListChildFeatures(false);
 				
-				for( Feature dep : allDependents ) {
+				for( Feature<FeatureCalcParams> dep : allDependents ) {
 				
 					if (sharedFeatures.contains(dep)) {
 						throw new InitException(
@@ -305,28 +366,30 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 			throw new InitException(e);
 		}
 	}
-	
-	
-	private CachePlus setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatures, LogErrorReporter logger ) throws InitException {
-		try {
-			CachePlus out = new CachePlus(cacheFactory,listFeatures,sharedFeatures);
 		
-			FeatureInitParams featureInitParamsDup = featureInitParams.duplicateChangeCachePlus(
-				out.retrieverPlus()
-			);
+	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
 
-			out.init(featureInitParamsDup, logger, false);
-			
-			listFeatures.initRecursive(featureInitParamsDup, logger);
-			
-			return out;
-			
-		} catch (CreateException e) {
-			throw new InitException(e);
-		}		
+		CachePlus<T> out = new CachePlus<>(
+			cacheFactory,
+			listFeatures,
+			sharedFeatures
+		);
+	
+		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
+		cacheCreator = new CacheCreatorRemember(
+			new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger)
+		);
+						
+		out.init(featureInitParamsDup, logger, false);
+		
+		listFeatures.initRecursive(featureInitParamsDup, logger);
+	}
+	
+	private void invalidate() {
+		cacheCreator.invalidateAll();
 	}
 		
-	private static void checkSizesMatch( List<?> listCreateParams, FeatureList listFeatures ) throws FeatureCalcException {
+	private static void checkSizesMatch( List<?> listCreateParams, FeatureList<?> listFeatures ) throws FeatureCalcException {
 		if( listCreateParams.size()!=listFeatures.size() ) {
 			throw new FeatureCalcException( String.format(
 				"The number of params (%d) should match the number of features (%d)",
@@ -335,5 +398,6 @@ public class SequentialSession extends FeatureSession implements ISequentialSess
 			) );
 		}
 	}
+
 	
 }

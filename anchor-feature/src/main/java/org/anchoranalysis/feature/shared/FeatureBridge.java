@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
  * Creates a FeatureList from a FeatureListProvider
@@ -41,13 +42,13 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
  * @author Owen
  *
  */
-class FeatureBridge implements IObjectBridge<NamedBean<FeatureListProvider>, FeatureList> {
+class FeatureBridge<T extends FeatureCalcParams> implements IObjectBridge<NamedBean<FeatureListProvider<T>>, FeatureList<T>> {
 
-	private SharedFeatureSet sharedFeatureSet;
+	private SharedFeatureSet<T> sharedFeatureSet;
 	private SharedFeaturesInitParams so;
 	private LogErrorReporter logger;
 	
-	public FeatureBridge(SharedFeatureSet sharedFeatureSet, SharedFeaturesInitParams so, LogErrorReporter logger ) {
+	public FeatureBridge(SharedFeatureSet<T> sharedFeatureSet, SharedFeaturesInitParams so, LogErrorReporter logger ) {
 		super();
 		this.sharedFeatureSet = sharedFeatureSet;
 		this.so = so;
@@ -55,7 +56,7 @@ class FeatureBridge implements IObjectBridge<NamedBean<FeatureListProvider>, Fea
 	}
 
 	@Override
-	public FeatureList bridgeElement(NamedBean<FeatureListProvider> sourceObject)
+	public FeatureList<T> bridgeElement(NamedBean<FeatureListProvider<T>> sourceObject)
 			throws BridgeElementException {
 
 		try {
@@ -65,7 +66,7 @@ class FeatureBridge implements IObjectBridge<NamedBean<FeatureListProvider>, Fea
 		}
 		
 		try {
-			FeatureList fl = sourceObject.getValue().create();
+			FeatureList<T> fl = sourceObject.getValue().create();
 			
 			sharedFeatureSet.addNoDuplicate(fl);
 				

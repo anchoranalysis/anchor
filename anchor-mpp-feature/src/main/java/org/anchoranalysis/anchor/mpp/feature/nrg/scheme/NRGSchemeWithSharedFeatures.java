@@ -5,7 +5,8 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaNRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 
@@ -44,15 +45,19 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class NRGSchemeWithSharedFeatures {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureSet sharedFeatures;
+	private SharedFeatureSet<FeatureCalcParams> sharedFeatures;
 	
 	private LRUHashMapCache<NRGTotal, Integer> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
@@ -66,7 +71,7 @@ public class NRGSchemeWithSharedFeatures {
 
 		private PxlMarkMemo pmm;
 		private NRGStack raster;
-		private KeyValueParams kpv;
+		private KeyValueParams kvp;
 		
 		public CalcElemIndTotalOperation() {
 			super();
@@ -77,8 +82,12 @@ public class NRGSchemeWithSharedFeatures {
 			this.raster = raster;
 			
 			
-			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator( nrgScheme, sharedFeatures, logger );
-			this.kpv = creator.createParamsForImage( raster );
+			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator(
+				nrgScheme,
+				sharedFeatures.downcast(),
+				logger
+			);
+			this.kvp = creator.createParamsForImage( raster );
 		}
 		
 		@Override
@@ -93,29 +102,35 @@ public class NRGSchemeWithSharedFeatures {
 		
 		public NRGTotal calc() throws FeatureCalcException {
 			
-			FeatureSessionCreateParamsMPP session = new FeatureSessionCreateParamsMPP(
-				nrgScheme.getElemIndAsFeatureList(),
-				raster,
-				kpv
-			);
+			FeatureCalculatorMulti<NRGElemIndCalcParams> session;
 			
 			try {
-				session.start(
-					createInitParams(kpv),
-					sharedFeatures,
+				session = SessionFactory.createAndStart(
+					nrgScheme.getElemIndAsFeatureList(),
+					createInitParams(kvp),
+					sharedFeatures.downcast(),
 					logger
 				);
-			} catch (InitException | CreateException e) {
+
+			} catch (CreateException e) {
 				throw new FeatureCalcException(e);
 			}
 			
-			return new NRGTotal( session.calc(pmm).total() );
+			
+			NRGElemIndCalcParams params = new NRGElemIndCalcParams(
+				pmm,
+				new NRGStackWithParams(raster,kvp)
+			);
+			
+			return new NRGTotal( session.calcOne(params).total() );
 		}
 		
 	}
 	
+
+	
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureSet sharedFeatures, int nrgSchemeIndCacheSize, CacheMonitor cacheMonitor, LogErrorReporter logger ) {
+			SharedFeatureSet<FeatureCalcParams> sharedFeatures, int nrgSchemeIndCacheSize, CacheMonitor cacheMonitor, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
@@ -127,31 +142,29 @@ public class NRGSchemeWithSharedFeatures {
 		indCache = LRUHashMapCache.createAndMonitor(nrgSchemeIndCacheSize, operationIndCalc, cacheMonitor, "NRGSchemeWithSharedFeatures"); 
 	}
 	
-	
-	
 	public NRGTotal calcElemAllTotal( MemoMarks pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
 		
-		KeyValueParams kvp;
+		NRGStackWithParams nrgStack = createNRGStack(raster);
+	
 		try {
-			kvp = nrgScheme.createKeyValueParams();
+			FeatureCalculatorMulti<NRGElemAllCalcParams> session = SessionFactory.createAndStart(
+				nrgScheme.getElemAllAsFeatureList(),
+				createInitParams(nrgStack.getParams()),
+				sharedFeatures.downcast(),
+				logger
+			);
+			
+			NRGElemAllCalcParams params = new NRGElemAllCalcParams(
+				pxlMarkMemoList,
+				nrgStack
+			);
+			
+			assert pxlMarkMemoList!=null;
+			return new NRGTotal( session.calcOne(params).total() );
+
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-		
-		FeatureSessionCreateParamsMPP session = new FeatureSessionCreateParamsMPP(
-			nrgScheme.getElemAllAsFeatureList(),
-			raster,
-			kvp
-		);
-		
-		try {
-			session.start(createInitParams(kvp), sharedFeatures, logger);
-		} catch (InitException | CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-		
-		assert pxlMarkMemoList!=null;
-		return new NRGTotal( session.calc(pxlMarkMemoList).total() );
 	}
 	
 	public NRGTotal calcElemIndTotal( PxlMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
@@ -169,7 +182,19 @@ public class NRGSchemeWithSharedFeatures {
 		
 		return operationIndCalc.calc();
 	}
+
 	
+	private NRGStackWithParams createNRGStack( NRGStack raster ) throws FeatureCalcException {
+		
+		KeyValueParams kvp;
+		try {
+			kvp = nrgScheme.createKeyValueParams();
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
+		}
+		
+		return new NRGStackWithParams(raster,kvp);
+	}
 
 	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
 		return new FeatureInitParams( kvp );
@@ -198,7 +223,7 @@ public class NRGSchemeWithSharedFeatures {
 		}
 	}
 
-	public SharedFeatureSet getSharedFeatures() {
+	public SharedFeatureSet<FeatureCalcParams> getSharedFeatures() {
 		return sharedFeatures;
 	}
 

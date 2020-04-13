@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 // 
-public class ConvertToPhysicalDistance extends FeatureConvertRes {
+public class ConvertToPhysicalDistance<T extends FeatureCalcParamsWithRes> extends FeatureConvertRes<T> {
 
 	/**
 	 * 
@@ -60,14 +60,14 @@ public class ConvertToPhysicalDistance extends FeatureConvertRes {
 		
 	}
 	
-	public ConvertToPhysicalDistance( Feature feature, UnitSuffix unitType, DirectionVector directionVector ) {
+	public ConvertToPhysicalDistance( Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector ) {
 		super(feature, unitType);
 		this.directionVector = new DirectionVectorBean(directionVector);
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
+	public void beforeCalc(FeatureInitParams params) throws InitException {
+		super.beforeCalc(params);
 		dv = directionVector.createVector();
 	}
 	

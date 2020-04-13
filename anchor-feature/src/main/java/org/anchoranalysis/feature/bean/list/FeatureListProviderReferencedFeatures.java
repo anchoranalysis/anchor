@@ -33,9 +33,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
-public abstract class FeatureListProviderReferencedFeatures extends FeatureListProvider {
+public abstract class FeatureListProviderReferencedFeatures<T extends FeatureCalcParams> extends FeatureListProvider<T> {
 
 	/**
 	 * 
@@ -47,7 +48,7 @@ public abstract class FeatureListProviderReferencedFeatures extends FeatureListP
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	// END BEAN PROPERITES
 	
-	private static void ensureReferencedFeaturesCalled( StringSet referencesFeatureListCreator, SharedFeaturesInitParams so ) throws InitException {
+	private void ensureReferencedFeaturesCalled( StringSet referencesFeatureListCreator, SharedFeaturesInitParams so ) throws InitException {
 		if (referencesFeatureListCreator!=null && so!=null) {
 			for( String s : referencesFeatureListCreator.set() ) {
 				
@@ -71,13 +72,6 @@ public abstract class FeatureListProviderReferencedFeatures extends FeatureListP
 		}	
 	}
 	
-	@Override
-	public void onInit(SharedFeaturesInitParams so)
-			throws InitException {
-		super.onInit(so);
-		ensureReferencedFeaturesCalled( referencesFeatureListCreator, so );
-	}
-	
 	public StringSet getReferencesFeatureListCreator() {
 		return referencesFeatureListCreator;
 	}
@@ -85,5 +79,13 @@ public abstract class FeatureListProviderReferencedFeatures extends FeatureListP
 	public void setReferencesFeatureListCreator(
 			StringSet referencesFeatureListCreator) {
 		this.referencesFeatureListCreator = referencesFeatureListCreator;
+	}
+
+
+
+	@Override
+	public void onInit(SharedFeaturesInitParams soFeature) throws InitException {
+		super.onInit(soFeature);
+		ensureReferencedFeaturesCalled( referencesFeatureListCreator, soFeature );
 	}
 }

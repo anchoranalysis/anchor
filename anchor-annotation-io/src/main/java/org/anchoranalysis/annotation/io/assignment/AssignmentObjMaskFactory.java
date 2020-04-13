@@ -33,22 +33,23 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
 public class AssignmentObjMaskFactory {
 	
-	private FeatureEvaluatorSimple featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator;
 	private boolean useMIP;
 	
 	// Remember the cost matrix, in case we need it later
 	private ObjMaskCollectionDistanceMatrix cost;
 	
-	public AssignmentObjMaskFactory(FeatureEvaluatorSimple featureEvaluator, boolean useMIP ) {
+	public AssignmentObjMaskFactory(FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator, boolean useMIP ) {
 		super();
 		this.featureEvaluator = featureEvaluator;
 		this.useMIP = useMIP;
@@ -106,7 +107,7 @@ public class AssignmentObjMaskFactory {
 		
 	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjMaskCollection annotation, ObjMaskCollection result, ImageDim dim) throws FeatureCalcException {
 
-		FeatureSessionCreateParamsSingle session;
+		FeatureCalculatorSingle<FeatureObjMaskPairParams> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -114,7 +115,6 @@ public class AssignmentObjMaskFactory {
 		}
 		
 		NRGStackWithParams nrgStack = new NRGStackWithParams(dim);
-		session.setNrgStack(nrgStack);
 		
 		double[][] outArr = new double[annotation.size()][result.size()];
 		
@@ -124,7 +124,9 @@ public class AssignmentObjMaskFactory {
 				
 				ObjMask objR = result.get(j);
 	
-				double costObjs = session.calc(objA, objR);
+				double costObjs = session.calcOne(
+					paramsFor(objA, objR, nrgStack)
+				);
 				outArr[i][j] = costObjs;
 				
 				if (Double.isNaN(costObjs)) {
@@ -140,7 +142,12 @@ public class AssignmentObjMaskFactory {
 		}
 	}
 	
-
+	private static FeatureObjMaskPairParams paramsFor( ObjMask objMask1, ObjMask objMask2, NRGStackWithParams nrgStack) {
+		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(objMask1, objMask2);
+		params.setNrgStack(nrgStack);
+		return params;
+	}
+	
 	private static AssignmentObjMask createAssignment( ObjMaskCollectionDistanceMatrix costMatrix, int[] assign, double maxAcceptedCost) {
 		
 		AssignmentObjMask assignment = new AssignmentObjMask();

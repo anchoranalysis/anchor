@@ -33,6 +33,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,10 +42,17 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
-public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Feature>, Collection<Feature>, List<Feature>, Serializable {
+/**
+ * 
+ * @author owen
+ *
+ * @param <T> calc-params type of features contained in the list
+ */
+public class FeatureList<T extends FeatureCalcParams> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>>, Serializable {
 	
 	/**
 	 * 
@@ -52,7 +61,7 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 	
 	// START BEAN PARAMETERS
 	@BeanField
-	private List<Feature> list;
+	private List<Feature<T>> list;
 	// END BEAN PARAMETERS
 	
 	public FeatureList() {
@@ -61,43 +70,60 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 	}
 	
 	// We wrap an existing list
-	public FeatureList( List<Feature> list ) {
+	public FeatureList( List<Feature<T>> list ) {
 		this.list = list;
+	}
+	
+	public FeatureList( Iterable<Feature<T>> iterFeatures ) {
+		this.list = StreamSupport
+				.stream(iterFeatures.spliterator(), false)
+				.collect(Collectors.toList());
 	}
 
 	
-	public FeatureList( Feature f ) {
+	public FeatureList( Feature<T> f ) {
 		this();
 		assert(f!=null);
 		this.list.add(f);
 	}
 	
 	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logErrorReporter ) throws InitException {
-		for( Feature f : list) {
+		for( Feature<T> f : list) {
 			f.initRecursive(featureInitParams, logErrorReporter);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public FeatureList<FeatureCalcParams> upcast() {
+		return (FeatureList<FeatureCalcParams>) this;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public <S extends FeatureCalcParams> FeatureList<S> downcast() {
+		return (FeatureList<S>) this;
+	}
+	
 	public FeatureNameList createNames() {
 		FeatureNameList out = new FeatureNameList();
-		for( Feature f : list ) {
+		for( Feature<T> f : list ) {
 			out.add( f.getFriendlyName() );
 		}
 		return out;
 	}
 	
 	// Copies all features using their CustomName to a set
-	public void copyToCustomName( NameValueSet<Feature> set, boolean duplicate ) {
-		for( Feature f : list ) {
+	public void copyToCustomName( NameValueSet<Feature<T>> set, boolean duplicate ) {
+		for( Feature<T> f : list ) {
 			
-			Feature fToAdd = duplicate ? f.duplicateBean() : f;
+			Feature<T> fToAdd = duplicate ? f.duplicateBean() : f;
 			assert(fToAdd!=null);
 			set.add( f.getCustomName(), fToAdd );
 		}
 	}
 	
-	public Feature find( String customName ) {
-		for( Feature f : list ) {
+	public Feature<T> find( String customName ) {
+		for( Feature<T> f : list ) {
 			if (f.getCustomName().equals(customName)) {
 				return f;
 			}
@@ -107,7 +133,7 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 	
 	public int findIndex( String customName ) {
 		for( int i=0; i<list.size(); i++ ) {
-			Feature f = list.get(i);
+			Feature<T> f = list.get(i);
 			if (f.getCustomName().equals(customName)) {
 				return i;
 			}
@@ -118,18 +144,18 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 	// Delegate Methods
 	
 	@Override
-	public boolean add(Feature f) {
+	public boolean add(Feature<T> f) {
 		assert(f!=null);
 		return list.add(f);
 	}
 	
-	public void addWithCustomName( Feature f, String customName ) {
+	public void addWithCustomName( Feature<T> f, String customName ) {
 		f.setCustomName( customName );
 		add(f);
 	}
 
 	@Override
-	public Feature get(int index) {
+	public Feature<T> get(int index) {
 		return list.get(index);
 	}
 
@@ -139,7 +165,7 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 	}
 
 	@Override
-	public Iterator<Feature> iterator() {
+	public Iterator<Feature<T>> iterator() {
 		return list.iterator();
 	}
 
@@ -149,26 +175,26 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 	}
 
 	@Override
-	public ListIterator<Feature> listIterator() {
+	public ListIterator<Feature<T>> listIterator() {
 		return list.listIterator();
 	}
 
 
 	@Override
-	public void add(int arg0, Feature f) {
+	public void add(int arg0, Feature<T> f) {
 		assert(f!=null);
 		list.add(arg0, f);
 	}
 
 
 	@Override
-	public boolean addAll(Collection<? extends Feature> arg0) {
+	public boolean addAll(Collection<? extends Feature<T>> arg0) {
 		return list.addAll(arg0);
 	}
 
 
 	@Override
-	public boolean addAll(int arg0, Collection<? extends Feature> arg1) {
+	public boolean addAll(int arg0, Collection<? extends Feature<T>> arg1) {
 		return list.addAll(arg0, arg1);
 	}
 
@@ -215,13 +241,13 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 
 
 	@Override
-	public ListIterator<Feature> listIterator(int arg0) {
+	public ListIterator<Feature<T>> listIterator(int arg0) {
 		return list.listIterator(arg0);
 	}
 
 
 	@Override
-	public Feature remove(int arg0) {
+	public Feature<T> remove(int arg0) {
 		return list.remove(arg0);
 	}
 
@@ -245,13 +271,13 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 
 
 	@Override
-	public Feature set(int arg0, Feature arg1) {
+	public Feature<T> set(int arg0, Feature<T> arg1) {
 		return list.set(arg0, arg1);
 	}
 
 
 	@Override
-	public List<Feature> subList(int arg0, int arg1) {
+	public List<Feature<T>> subList(int arg0, int arg1) {
 		return list.subList(arg0, arg1);
 	}
 
@@ -263,15 +289,15 @@ public class FeatureList extends AnchorBean<FeatureList> implements Iterable<Fea
 
 
 	@Override
-	public <T> T[] toArray(T[] arg0) {
+	public <U> U[] toArray(U[] arg0) {
 		return list.toArray(arg0);
 	}
 
-	public List<Feature> getList() {
+	public List<Feature<T>> getList() {
 		return list;
 	}
 
-	public void setList(List<Feature> list) {
+	public void setList(List<Feature<T>> list) {
 		this.list = list;
 	}
 

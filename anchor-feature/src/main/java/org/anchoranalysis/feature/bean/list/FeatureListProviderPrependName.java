@@ -30,6 +30,7 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
  * Prepends a string to each feature in the list
@@ -37,7 +38,7 @@ import org.anchoranalysis.feature.bean.Feature;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderPrependName extends FeatureListProvider {
+public class FeatureListProviderPrependName extends FeatureListProvider<FeatureCalcParams> {
 
 	/**
 	 * 
@@ -46,23 +47,23 @@ public class FeatureListProviderPrependName extends FeatureListProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider item;
+	private FeatureListProvider<FeatureCalcParams> item;
 	
 	@BeanField
 	private String prependString;
 	// END BEAN PROPERTIES
 
-	public static void setNewNameOnFeature( Feature f, String existingName, String prependString ) {
+	public static void setNewNameOnFeature( Feature<? extends FeatureCalcParams> f, String existingName, String prependString ) {
 		String nameNew = String.format("%s%s", prependString, existingName);
 		f.setCustomName(nameNew);
 	}
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<FeatureCalcParams> create() throws CreateException {
 
-		FeatureList features = item.create();
+		FeatureList<FeatureCalcParams> features = item.create();
 		
-		for( Feature f : features ) {
+		for( Feature<FeatureCalcParams> f : features ) {
 			String existingName = f.getFriendlyName();
 			setNewNameOnFeature( f, existingName, prependString );
 			
@@ -79,11 +80,11 @@ public class FeatureListProviderPrependName extends FeatureListProvider {
 		this.prependString = prependString;
 	}
 
-	public FeatureListProvider getItem() {
+	public FeatureListProvider<FeatureCalcParams> getItem() {
 		return item;
 	}
 
-	public void setItem(FeatureListProvider item) {
+	public void setItem(FeatureListProvider<FeatureCalcParams> item) {
 		this.item = item;
 	}
 }

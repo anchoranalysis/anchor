@@ -34,7 +34,6 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -45,6 +44,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -61,7 +61,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private List<FeatureProvider> listFeatureProvider = new ArrayList<>();
+	private List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider = new ArrayList<>();
 	
 	@BeanField @Optional
 	private StackProvider stackProviderNRG;
@@ -71,17 +71,14 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	
 	@BeanField
 	private String outputName = "objsFeatureList";
-	
-	@BeanField
-	private boolean includeDependencies = false;
 	// END BEAN PROPERTIES
 
 	public void output(
 		BoundOutputManagerRouteErrors outputManager,
-		final LogErrorReporter logErrorReporter
+		LogErrorReporter logErrorReporter
 	) throws IOException {
 		
-		// Early exit if we're not allowed output anytrhing anyway
+		// Early exit if we're not allowed output anything anyway
 		if (!outputManager.isOutputAllowed(getOutputName())) {
 			return;
 		}
@@ -89,7 +86,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 			
-			FeatureList features = createFeatureList();
+			FeatureList<FeatureObjMaskParams> features = createFeatureList();
 			
 			if (features.size()==0) {
 				throw new IOException("No features are set");
@@ -104,28 +101,35 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 				
 			outputManager.getWriterCheckIfAllowed().write(
 				outputName,
-				() -> {
-					try {
-						ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator( features, nrgStack, logErrorReporter );
-						generator.setParamsInit(paramsInit);
-						generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet());
-						generator.setIterableElement(objsCollection);
-						generator.setIncludeDependencies(includeDependencies);
-						return generator;
-					} catch (CreateException e) {
-						throw new ExecuteException(e);
-					}
-				}
+				() -> createGenerator(paramsInit, nrgStack, objsCollection, features, logErrorReporter)
 			);
 			
 		} catch (CreateException e) {
 			throw new IOException(e);
 		}
 	}
+	
+	private ObjMaskFeatureListCSVGenerator createGenerator(
+		FeatureInitParamsImageInit paramsInit,
+		NRGStackWithParams nrgStack,
+		ObjMaskCollection objsCollection,
+		FeatureList<FeatureObjMaskParams> features,
+		LogErrorReporter logErrorReporter
+	) {
+		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
+			features,
+			nrgStack,
+			logErrorReporter
+		);
+		generator.setParamsInit(paramsInit);
+		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet().downcast() );
+		generator.setIterableElement(objsCollection);
+		return generator;
+	}
 
-	private FeatureList createFeatureList() throws CreateException {
-		FeatureList out = new FeatureList();
-		for( FeatureProvider fp : listFeatureProvider) {
+	private FeatureList<FeatureObjMaskParams> createFeatureList() throws CreateException {
+		FeatureList<FeatureObjMaskParams> out = new FeatureList<>();
+		for( FeatureProvider<FeatureObjMaskParams> fp : listFeatureProvider) {
 			out.add( fp.create() );
 		}
 		return out;
@@ -149,12 +153,12 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	}
 
 
-	public List<FeatureProvider> getListFeatureProvider() {
+	public List<FeatureProvider<FeatureObjMaskParams>> getListFeatureProvider() {
 		return listFeatureProvider;
 	}
 
 
-	public void setListFeatureProvider(List<FeatureProvider> listFeatureProvider) {
+	public void setListFeatureProvider(List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider) {
 		this.listFeatureProvider = listFeatureProvider;
 	}
 
@@ -189,16 +193,4 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		this.outputName = outputName;
 	}
 
-
-	public boolean isIncludeDependencies() {
-		return includeDependencies;
-	}
-
-
-	public void setIncludeDependencies(boolean includeDependencies) {
-		this.includeDependencies = includeDependencies;
-	}
-	
-	
-	
 }

@@ -31,17 +31,22 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
-public class FeatureEvaluatorNrgStack extends FeatureEvaluator {
+/**
+ * TODO make more generic than FeatureObjMaskParams
+ * @author owen
+ *
+ * @param <T> feature-calculation parameters
+ */
+public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
 
 	/**
 	 * 
@@ -49,101 +54,72 @@ public class FeatureEvaluatorNrgStack extends FeatureEvaluator {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private FeatureProvider featureProvider;
-	
 	@BeanField @Optional
 	private StackProvider stackProviderNRG;
 	
 	@BeanField @Optional
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
-
-	private Feature feature;
-	private NRGStackWithParams nrgStack;
 		
-	public FeatureSessionCreateParamsSingle createAndStartSession() throws OperationFailedException {
-		return createAndStartSession(false);
+	
+//	// Init our shared features
+//	for( String key : sharedFeatureList.keys() ) {
+//		Feature f;
+//		try {
+//			f = sharedFeatureList.getNull(key);
+//			assert(f!=null);
+//			f.init(paramsInit);
+//		} catch (GetOperationFailedException | InitException e) {
+//			throw new OperationFailedException(e);
+//		}
+//	}
+	
+	@Override
+	public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
+		
+		FeatureCalculatorSingle<T> session = super.createAndStartSession();
+		
+		final NRGStackWithParams nrgStack = nrgStackOrNull();
+		
+		return new FeatureCalculatorSingleChangeParams<>(
+			session,
+			params -> {
+				// Use reflection, to only set the nrgStack on params that supports them
+				if (params instanceof FeatureNRGStackParams) {
+					((FeatureNRGStackParams) params).setNrgStack( nrgStack );
+				}
+			}
+		);
 	}
 	
-	// Must always be executed first
-	public FeatureSessionCreateParamsSingle createAndStartSession( boolean recordTimes ) throws OperationFailedException {
-	
+	private NRGStackWithParams nrgStackOrNull() throws OperationFailedException {
 		try {
-			feature = featureProvider.create();
+			if (stackProviderNRG!=null) {
+				
+				NRGStackWithParams nrgStack = new NRGStackWithParams( stackProviderNRG.create() );
+				nrgStack.setParams(
+					createKeyValueParams()
+				);
+				return nrgStack;
+			} else {
+				return null;
+			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		if (feature==null) {
-			throw new OperationFailedException("FeatureProvider returns null. A feature is required.");
-		}
-		
-//		// Init our shared features
-//		for( String key : sharedFeatureList.keys() ) {
-//			Feature f;
-//			try {
-//				f = sharedFeatureList.getNull(key);
-//				assert(f!=null);
-//				f.init(paramsInit);
-//			} catch (GetOperationFailedException | InitException e) {
-//				throw new OperationFailedException(e);
-//			}
-//		}
-
-		KeyValueParams kpv;
+	}
+	
+	private KeyValueParams createKeyValueParams() throws OperationFailedException {
 		if (keyValueParamsProvider!=null) {
 			try {
-				kpv = keyValueParamsProvider.create();
+				return keyValueParamsProvider.create();
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);
 			}
 		} else {
-			kpv = new KeyValueParams();
+			return new KeyValueParams();
 		}
-		
-
-		try {
-			nrgStack = null;
-			
-			if (stackProviderNRG!=null) {
-				
-				nrgStack = new NRGStackWithParams( stackProviderNRG.create() );
-				nrgStack.setParams(kpv);
-			}
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-
-		
-		SharedFeatureSet sharedFeatures = getSharedObjects().getSharedFeatureSet();
-		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
-		
-		FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(
-			feature,
-			sharedFeatures,
-			kpv
-		);
-		session.setNrgStack(nrgStack);
-		try {
-			session.start( getLogger() );
-		} catch (InitException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		
-		return session;
 	}
-	
-	public FeatureProvider getFeatureProvider() {
-		return featureProvider;
-	}
-
-	public void setFeatureProvider(FeatureProvider featureProvider) {
-		this.featureProvider = featureProvider;
-	}
-
-
 
 	public StackProvider getStackProviderNRG() {
 		return stackProviderNRG;

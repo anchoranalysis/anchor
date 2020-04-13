@@ -1,10 +1,12 @@
-package org.anchoranalysis.feature.session;
+package org.anchoranalysis.feature.session.calculator;
+
+import java.util.List;
 
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,38 +28,22 @@ package org.anchoranalysis.feature.session;
  * #L%
  */
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public class SequentialSessionSingleFeature extends FeatureSession {
+/**
+ * Calculates the result of a feature for particular params
+ * 
+ * @author owen
+ *
+ * @param <T> params-type
+ */
+public interface FeatureCalculatorSingle<T extends FeatureCalcParams> {
 
-	private SequentialSession delegate;
-
-	public SequentialSessionSingleFeature( Feature feature ) {
-		delegate = new SequentialSession(feature );
-	}
-
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatures, LogErrorReporter logErrorReporter ) throws InitException {
-		delegate.start(featureInitParams, sharedFeatures, logErrorReporter);
-	}
+	double calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	/**
-	 * Calculates the next-object in our sequential series
-	 * 
-	 * @param params
-	 * @return
-	 * @throws FeatureCalcException
-	 */
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		return delegate.calc(params).get(0); 
-	}
+	double calcOne( T params ) throws FeatureCalcException;
 	
-	public boolean hasSingleFeature() {
-		return delegate.hasSingleFeature();
-	}
+	List<Double> calcMany(List<T> listParams) throws FeatureCalcException;
 }

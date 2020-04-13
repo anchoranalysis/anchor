@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.feature.bean.objmask.collection;
+package org.anchoranalysis.feature.session.cache;
 
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-feature-session
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,37 +26,11 @@ package org.anchoranalysis.image.feature.bean.objmask.collection;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionDescriptor;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public abstract class FeatureObjMaskCollection extends Feature {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		
-		if (params instanceof FeatureObjMaskCollectionParams) {
-			return calc( (FeatureObjMaskCollectionParams) params );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskCollectionParams.class.getSimpleName() );
-		}
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureObjMaskCollectionParams params ) throws FeatureCalcException;
-
-	@Override
-	public FeatureParamsDescriptor paramType()
-			throws FeatureCalcException {
-		return FeatureObjMaskCollectionDescriptor.instance;
-	}
-	
+public interface FeatureSessionCacheFactory {
+	<T extends FeatureCalcParams> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures);
 }

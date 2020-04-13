@@ -28,17 +28,15 @@ package org.anchoranalysis.feature.bean.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class Reference extends Feature {
+public class Reference<T extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -50,8 +48,6 @@ public class Reference extends Feature {
 	private String id;
 	// END BEAN
 	
-	private String rslvdID;
-	
 	public Reference() {
 		super();
 	}
@@ -60,21 +56,12 @@ public class Reference extends Feature {
 		super();
 		this.id = id;
 	}
-
+	
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		
+	public double calc(CacheableParams<T> params) throws FeatureCalcException {
 		// We resolve the ID before its passed to calcFeatureByID
-		this.rslvdID = cache.resolveFeatureID(id);
-	}
-	
-	
-	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
-		return getCacheSession().calcFeatureByID(rslvdID, params);
+		String rslvdID = params.resolveFeatureID(id);
+		return params.calcFeatureByID(rslvdID, params);
 	}
 
 	public String getId() {
@@ -86,7 +73,7 @@ public class Reference extends Feature {
 	}
 	
 	@Override
-	public void addAdditionallyUsedFeatures(FeatureList out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
 		super.addAdditionallyUsedFeatures(out);
 //		if (feature!=null) {
 //			out.add( feature );

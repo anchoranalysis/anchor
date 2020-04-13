@@ -26,38 +26,28 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public class NullCacheRetriever extends FeatureSessionCacheRetriever {
+public class NullCacheRetriever<T extends FeatureCalcParams> extends FeatureSessionCacheRetriever<T> {
 
-	private SharedFeatureSet sharedFeatures;
+	private SharedFeatureSet<T> sharedFeatures;
 
-	public NullCacheRetriever(SharedFeatureSet sharedFeatures) {
+	public NullCacheRetriever(SharedFeatureSet<T> sharedFeatures) {
 		super();
 		this.sharedFeatures = sharedFeatures;
 	}
-
-	@Override
-	public void initFeature(Feature feature, FeatureBase parentFeature, FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
-		sharedFeatures.initRecursive(initParams, logger);
-		feature.init(initParams, parentFeature, logger);
-	}
 	
 	@Override
-	public double calc(Feature feature, FeatureCalcParams params )
+	public double calc(Feature<T> feature, CacheableParams<T> params )
 			throws FeatureCalcException {
 		return feature.calcCheckInit(params);
 	}
@@ -66,18 +56,18 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	 * Always returns the cachedCalculation passed to the function
 	 */
 	@Override
-	public <T> CachedCalculation<T> search(CachedCalculation<T> cc) {
+	public <U> CachedCalculation<U> search(CachedCalculation<U> cc) {
 		return cc;
 	}
 	
 	@Override
-	public <S, T> CachedCalculationMap<S, T> search(
-			CachedCalculationMap<S, T> cc) {
+	public <S, U> CachedCalculationMap<S, U> search(
+			CachedCalculationMap<S, U> cc) {
 		return cc;
 	}
 
 	@Override
-	public double calcFeatureByID(String id, FeatureCalcParams params) throws FeatureCalcException {
+	public double calcFeatureByID(String id, CacheableParams<T> params) throws FeatureCalcException {
 		try {
 			return calc( sharedFeatures.getException(id), params );
 		} catch (NamedProviderGetException e) {
@@ -86,7 +76,7 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public SharedFeatureSet getSharedFeatureList() {
+	public SharedFeatureSet<T> getSharedFeatureList() {
 		return sharedFeatures.duplicate();
 	}
 
@@ -102,8 +92,8 @@ public class NullCacheRetriever extends FeatureSessionCacheRetriever {
 	
 	
 	@Override
-	public FeatureSessionCache createNewCache() throws CreateException {
-		throw new CreateException("Operation is not supported");
+	public FeatureSessionCache<T> createNewCache() {
+		return null;	// TODO fix
 	}
 
 	@Override

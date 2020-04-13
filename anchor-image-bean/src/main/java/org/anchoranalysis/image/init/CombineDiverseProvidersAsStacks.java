@@ -32,7 +32,6 @@ import java.util.Set;
 
 import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
@@ -130,14 +129,8 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 		public Stack bridgeElement(	BinaryChnl sourceObject ) throws BridgeElementException {
 			
 			Chnl chnlNew = factory.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
-	
 				
-			BinaryVoxelBox<ByteBuffer> bvb;
-			try {
-				bvb = sourceObject.binaryVoxelBox();
-			} catch (CreateException e1) {
-				throw new BridgeElementException(e1);
-			}
+			BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxelBox();
 			
 			// For each region we get a mask for what equals the binary mask
 			ObjMask om = bvb.getVoxelBox().equalMask(

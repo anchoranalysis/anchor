@@ -33,11 +33,11 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParamsDescr
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class AsNRGElemInd extends FeatureSingleElem {
+public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGElemIndCalcParams> {
 
 	/**
 	 * 
@@ -51,22 +51,20 @@ public class AsNRGElemInd extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
-		
-		if (params instanceof NRGElemPairCalcParams) {
-		
-			NRGElemPairCalcParams paramsCast = (NRGElemPairCalcParams) params; 
-			
-			NRGElemIndCalcParams paramsNew = new NRGElemIndCalcParams(
-				first ? paramsCast.getObj1() : paramsCast.getObj2(),
-				paramsCast.getNrgStack()
-			);
-			
-			return getCacheSession().calc(getItem(), paramsNew);
-			
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
+	public double calc(CacheableParams<NRGElemPairCalcParams> params) throws FeatureCalcException {
+		return params
+			.calcChangeParams(
+				getItem(),
+				p -> extractParams(p),
+				"ind"
+			);		
+	}
+	
+	private NRGElemIndCalcParams extractParams( NRGElemPairCalcParams params ) {
+		return new NRGElemIndCalcParams(
+			first ? params.getObj1() : params.getObj2(),
+			params.getNrgStack()
+		);
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

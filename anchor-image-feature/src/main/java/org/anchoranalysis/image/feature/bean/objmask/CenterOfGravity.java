@@ -29,6 +29,7 @@ package org.anchoranalysis.image.feature.bean.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeUtilities;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
 public class CenterOfGravity extends FeatureObjMask {
@@ -55,7 +56,9 @@ public class CenterOfGravity extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		double val = params.getObjMask().centerOfGravity(
 			axisType()

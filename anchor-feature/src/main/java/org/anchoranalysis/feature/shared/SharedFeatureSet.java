@@ -39,15 +39,34 @@ import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
-public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<INameValue<Feature>> {
+/**
+ * A group of features made available for references to other features
+ * 
+ * @author owen
+ *
+ * @param <T> feature-calc params type
+ */
+public class SharedFeatureSet<T extends FeatureCalcParams> implements INamedProvider<Feature<T>>, Iterable<INameValue<Feature<T>>> {
 
-	private NameValueSet<Feature> delegate;
+	private NameValueSet<Feature<T>> delegate;
 
 	// Create an empty set
 	public SharedFeatureSet() {
 		delegate = new NameValueSet<>();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public SharedFeatureSet<FeatureCalcParams> upcast() {
+		return (SharedFeatureSet<FeatureCalcParams>) this;
+	}
+	
+	// TODO go through all uses of downcast, and replace with something valid
+	@SuppressWarnings("unchecked")
+	public <S extends T> SharedFeatureSet<S> downcast() {
+		return (SharedFeatureSet<S>) this;
 	}
 	
 	@Override
@@ -56,9 +75,9 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 	}
 	
 	// TODO inefficient, let's move towards a map
-	public boolean contains( Feature feature ) {
-		for( INameValue<Feature> nv : this) {
-			Feature f = nv.getValue();
+	public boolean contains( Feature<FeatureCalcParams> feature ) {
+		for( INameValue<Feature<T>> nv : this) {
+			Feature<T> f = nv.getValue();
 			if (feature.equals(f)) {
 				return true;
 			}
@@ -66,10 +85,10 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 		return false;
 	}
 		
-	public SharedFeatureSet duplicate() {
-		SharedFeatureSet out = new SharedFeatureSet();
+	public SharedFeatureSet<T> duplicate() {
+		SharedFeatureSet<T> out = new SharedFeatureSet<>();
 		for( String key : delegate.keys() ) {
-			Feature item = delegate.getNull(key);
+			Feature<T> item = delegate.getNull(key);
 			out.delegate.add( new String(key), item.duplicateBean());
 		}
 		return out;
@@ -78,7 +97,7 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logger ) throws InitException {
 		for( String name : delegate.keys() ) {
 			try {
-				Feature feat = delegate.getException(name);
+				Feature<T> feat = delegate.getException(name);
 				feat.initRecursive( featureInitParams, logger);
 			} catch (NamedProviderGetException e) {
 				throw new InitException(e.summarize());
@@ -87,41 +106,53 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 		}
 	}
 	
-	public void add( SharedFeatureSet other ) {
+	public void add( SharedFeatureSet<T> other ) {
 		delegate.add( other.delegate );
 	}
 	
 	// Uses names of features
-	public void addDuplicate( FeatureList features ) {
-		for( Feature f : features ) {
+	public void addDuplicate( FeatureList<T> features ) {
+		for( Feature<T> f : features ) {
 			delegate.add( f.getFriendlyName(), f.duplicateBean() );
 		}
 	}
 	
-	public void addNoDuplicate( FeatureList features) {
+	public void addNoDuplicate( FeatureList<T> features) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
-		for( Feature f : features) {
+		for( Feature<T> f : features) {
 			add( new NameValue<>(f.getFriendlyName(), f) );
 		}
 	}
 	
-	public void addDuplicate( NameValueSet<Feature> src ) {
+	public void addDuplicate( NameValueSet<Feature<T>> src ) {
 		addDuplicate( src, delegate );
 	}
 	
-	public void addDuplicate( SharedFeatureSet other ) {
+	public void addDuplicate( SharedFeatureSet<T> other ) {
 		addDuplicate( other.delegate, delegate );
 	}
 	
-	public void removeIfExists( FeatureList features) {
+	public void removeIfExists( FeatureList<T> features) {
 		// We loop over all features in the ni, and call them all the same thing with a number
-		for( Feature f : features) {
+		for( Feature<T> f : features) {
 			delegate.removeIfExists(f);
 		}
 	}
 	
-	private static void addDuplicate( NameValueSet<Feature> src, NameValueSet<Feature> target ) {
+	/** Returns an arbitrary-item from the set, or null if the set is empty */
+	public Feature<T> arbitraryItem() {
+		
+		if (keys().isEmpty()) {
+			return null;
+		}
+		
+		return getNull(
+			keys().iterator().next()
+		);
+	}
+	
+	private void addDuplicate( NameValueSet<Feature<T>> src, NameValueSet<Feature<T>> target ) {
 		for ( String key : src.keys() ) {
 			try {
 				target.add( key, src.getException(key).duplicateBean() );
@@ -131,26 +162,26 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 		}
 	}
 
-	public void add(INameValue<Feature> ni) {
+	public void add(INameValue<Feature<T>> ni) {
 		delegate.add(ni);
 	}
 
-	public NameValueSet<Feature> getSet() {
+	public NameValueSet<Feature<T>> getSet() {
 		return delegate;
 	}
 
 	@Override
-	public Iterator<INameValue<Feature>> iterator() {
+	public Iterator<INameValue<Feature<T>>> iterator() {
 		return delegate.iterator();
 	}
 
 	@Override
-	public Feature getException(String key) throws NamedProviderGetException {
+	public Feature<T> getException(String key) throws NamedProviderGetException {
 		return delegate.getException(key);
 	}
 
 	@Override
-	public Feature getNull(String key) {
+	public Feature<T> getNull(String key) {
 		return delegate.getNull(key);
 	}
 
@@ -159,7 +190,7 @@ public class SharedFeatureSet implements INamedProvider<Feature>, Iterable<IName
 		return delegate.keys();
 	}
 
-	public void add(String name, Feature item) {
+	public void add(String name, Feature<T> item) {
 		delegate.add(name, item);
 	}
 }

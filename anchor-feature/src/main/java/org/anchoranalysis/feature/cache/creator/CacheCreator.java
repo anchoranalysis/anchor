@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.cache;
+package org.anchoranalysis.feature.cache.creator;
 
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,31 +26,10 @@ package org.anchoranalysis.feature.cache;
  * #L%
  */
 
-import java.util.List;
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 
-public class ComplexCacheDefinition extends FeatureCacheDefinition {
+public interface CacheCreator {
 
-	private String[] neededAdditionalCaches;
-	
-	public ComplexCacheDefinition(
-		Feature feature,
-		String[] neededAdditionalCaches
-	) {
-		super(feature);
-		this.neededAdditionalCaches = neededAdditionalCaches;
-	}
-
-	@Override
-	public void additionalCaches(List<String> out) {
-
-		for( String s : neededAdditionalCaches ) {
-			out.add(s);
-		}
-	}
-
-	@Override
-	public String prefixForAdditionalCachesForChildren() {
-		return "";
-	}
+	<T extends FeatureCalcParams> FeatureSessionCache<T> create( Class<?> paramsType );
 }

@@ -26,17 +26,17 @@ package org.anchoranalysis.feature.session.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class NullCacheFactory implements FeatureSessionCacheFactory {
 
 	@Override
-	public FeatureSessionCache create(FeatureList namedFeatures,
-			SharedFeatureSet sharedFeatures) throws CreateException {
-		return new NullCache(sharedFeatures);
+	public <T extends FeatureCalcParams> FeatureSessionCache<T> create(FeatureList<T> namedFeatures,
+			SharedFeatureSet<T> sharedFeatures) {
+		return new NullCache<>(sharedFeatures);
 	}
 
 }

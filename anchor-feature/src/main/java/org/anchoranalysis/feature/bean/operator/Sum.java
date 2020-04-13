@@ -27,10 +27,11 @@ package org.anchoranalysis.feature.bean.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class Sum extends FeatureListElem {
+public class Sum<T extends FeatureCalcParams> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -39,18 +40,18 @@ public class Sum extends FeatureListElem {
 
 	// START BEAN PROPERTIES
 	/**
-	 * If TRUE, we ignore any NaN values. Otherwise the sum becoems NaN
+	 * If TRUE, we ignore any NaN values. Otherwise the sum becomes NaN
 	 */
 	private boolean ignoreNaN;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double result = 0;
 		
-		for (Feature elem : getList()) {
-			double resultInd = getCacheSession().calc( elem, params );
+		for (Feature<T> elem : getList()) {
+			double resultInd = params.calc( elem );
 			
 			if (ignoreNaN && Double.isNaN(resultInd)) {
 				continue;
@@ -68,7 +69,7 @@ public class Sum extends FeatureListElem {
 		StringBuilder sb = new StringBuilder();
 		
 		boolean first = true;
-		for (Feature elem : getList()) {
+		for (Feature<T> elem : getList()) {
 			
 			if (first==true) {
 				first = false;

@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Reference;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
  * Populates a FeatureListElem with references to other features formed by one
@@ -49,7 +50,7 @@ import org.anchoranalysis.feature.bean.operator.Reference;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderListSequence extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderListSequence<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -61,7 +62,7 @@ public class FeatureListProviderListSequence extends FeatureListProviderReferenc
 	 * The list feature that is duplicated, and populated.
 	 */
 	@BeanField @SkipInit
-	private FeatureListElem feature;
+	private FeatureListElem<T> feature;
 	
 	@BeanField
 	private String prependString;
@@ -90,17 +91,17 @@ public class FeatureListProviderListSequence extends FeatureListProviderReferenc
 		return sb.toString();
 	}
 	
-	private Feature createReferenceFeature( String prepend, String append ) {
+	private Feature<T> createReferenceFeature( String prepend, String append ) {
 		String featureName = determineFeatureName(prepend, append);
 		
-		Reference out = new Reference();
+		Reference<T> out = new Reference<>();
 		out.setId(featureName);
 		return out;
 	}
 	
-	private Feature createSingleSequence() {
+	private Feature<T> createSingleSequence() {
 		
-		FeatureListElem out = (FeatureListElem) feature;
+		FeatureListElem<T> out = (FeatureListElem<T>) feature;
 		
 		for( int i=sequence.getStart(); i<=sequence.getEnd(); i+= sequence.getIncrement()) {
 			out.getList().add( createReferenceFeature(prependString, Integer.toString(i)) );
@@ -109,9 +110,9 @@ public class FeatureListProviderListSequence extends FeatureListProviderReferenc
 		return out;
 	}
 	
-	private Feature createDoubleSequence() {
+	private Feature<T> createDoubleSequence() {
 		
-		FeatureListElem out = (FeatureListElem) feature;
+		FeatureListElem<T> out = (FeatureListElem<T>) feature;
 		
 		for( int i=sequence.getStart(); i<=sequence.getEnd(); i+= sequence.getIncrement()) {
 			for( int j=sequenceAdditional.getStart(); j<=sequenceAdditional.getEnd(); j+= sequenceAdditional.getIncrement()) {
@@ -126,9 +127,9 @@ public class FeatureListProviderListSequence extends FeatureListProviderReferenc
 	
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 		
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 		
 		if (sequenceAdditional!=null) {
 			out.add(createDoubleSequence());
@@ -171,11 +172,11 @@ public class FeatureListProviderListSequence extends FeatureListProviderReferenc
 		this.seperator = seperator;
 	}
 
-	public FeatureListElem getFeature() {
+	public FeatureListElem<T> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(FeatureListElem feature) {
+	public void setFeature(FeatureListElem<T> feature) {
 		this.feature = feature;
 	}
 

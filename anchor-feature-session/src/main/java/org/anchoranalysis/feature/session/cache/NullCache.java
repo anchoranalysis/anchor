@@ -29,17 +29,18 @@ package org.anchoranalysis.feature.session.cache;
 
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public class NullCache extends FeatureSessionCache {
+public class NullCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
 
-	private NullCacheRetriever retriever;
+	private NullCacheRetriever<T> retriever;
 	
-	public NullCache( SharedFeatureSet sharedFeatures ) {
-		retriever = new NullCacheRetriever( sharedFeatures );
+	public NullCache( SharedFeatureSet<T> sharedFeatures ) {
+		retriever = new NullCacheRetriever<>( sharedFeatures );
 	}
 	
 	@Override
@@ -52,17 +53,17 @@ public class NullCache extends FeatureSessionCache {
 	}
 
 	@Override
-	public FeatureSessionCacheRetriever retriever() {
+	public FeatureSessionCacheRetriever<T> retriever() {
 		return retriever;
 	}
 
 	@Override
-	public void assignResult(FeatureSessionCache other) {
+	public void assignResult(FeatureSessionCache<T> other) {
 		throw new OperationFailedRuntimeException("Operation not supported for this type of cache");
 	}
 
 	@Override
-	public FeatureSessionCache duplicate() {
-		return new NullCache( retriever.getSharedFeatureList() );
+	public FeatureSessionCache<T> duplicate() {
+		return new NullCache<>( retriever.getSharedFeatureList() );
 	}
 }

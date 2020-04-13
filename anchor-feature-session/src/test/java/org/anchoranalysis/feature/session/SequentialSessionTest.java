@@ -27,14 +27,14 @@ package org.anchoranalysis.feature.session;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.NullParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
+import org.anchoranalysis.test.LoggingFixtures;
+import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.junit.Test;
 
 public class SequentialSessionTest {
@@ -42,13 +42,13 @@ public class SequentialSessionTest {
 	@Test
 	public void testCalculateSimpleListOfFeatures() throws InitException, FeatureCalcException {
 		
-		SequentialSession session = new SequentialSession(SimpleFeatureListFixture.create());
-		session.start( new FeatureInitParams(), new SharedFeatureSet(), new LogErrorReporter( new ConsoleLogReporter() ) );
+		SequentialSession<FeatureCalcParams> session = new SequentialSession<>(ConstantsInListFixture.create());
+		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
 		
-		ResultsVector rv1 = session.calc( NullParams.instance() );
-		SimpleFeatureListFixture.checkResultVector(rv1);
+		ResultsVector rv1 = session.calcOne( NullParams.instance() );
+		ConstantsInListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calc( NullParams.instance() );
-		SimpleFeatureListFixture.checkResultVector(rv2);
+		ResultsVector rv2 = session.calcOne( NullParams.instance() );
+		ConstantsInListFixture.checkResultVector(rv2);
 	}
 }

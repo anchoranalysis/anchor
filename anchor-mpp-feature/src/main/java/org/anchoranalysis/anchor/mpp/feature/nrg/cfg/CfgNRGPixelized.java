@@ -38,6 +38,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -95,7 +96,7 @@ public final class CfgNRGPixelized {
 		cfgNrg.assertValid();
 	}
 	
-	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureSet sharedFeatures ) throws FeatureCalcException, InitException {
+	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws FeatureCalcException, InitException {
 
 		double old = cfgNrg.getNrgTotal();
 		this.init( nrgStack, sharedFeatures );
@@ -103,7 +104,7 @@ public final class CfgNRGPixelized {
 	}
 	
 	// The initial calculation of the NRG, thereafter it can be updated
-	public void init( NRGStackWithParams nrgStack, SharedFeatureSet sharedFeatures ) throws InitException, FeatureCalcException {
+	public void init( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws InitException, FeatureCalcException {
 
 		cfgNrg.init();
 		

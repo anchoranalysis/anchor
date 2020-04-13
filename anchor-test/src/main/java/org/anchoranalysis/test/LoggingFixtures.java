@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.session;
+package org.anchoranalysis.test;
 
-/*
+/*-
  * #%L
- * anchor-feature
+ * anchor-test
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,4 +26,19 @@ package org.anchoranalysis.feature.session;
  * #L%
  */
 
+import static org.mockito.Mockito.mock;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
+
+/**
+ * Fixtures
+ * @author owen
+ *
+ */
+public class LoggingFixtures {
+
+	public static LogErrorReporter simpleLogErrorReporter() {
+		return new LogErrorReporter( mock(LogReporter.class) );
+	}
+}

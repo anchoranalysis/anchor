@@ -29,9 +29,10 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
-class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
+class FeatureDefiner<T extends FeatureCalcParams> extends PropertyDefiner<FeatureInitParams> {
 
 	public FeatureDefiner() {
 	}
@@ -41,6 +42,7 @@ class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
 		return FeatureInitParams.class.isAssignableFrom(paramType);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void doInitFor(Object propertyValue, Object params, Object parent, LogErrorReporter logger) throws InitException {
 		
@@ -49,13 +51,14 @@ class FeatureDefiner extends PropertyDefiner<FeatureInitParams> {
 				throw new InitException("A feature may only have another FeatureBase as a bean-parent");
 			}
 		}
-		
-		//assert(cache!=null);
-		FeatureInitParams paramsCast = (FeatureInitParams) params;
+
 		if (propertyValue instanceof Feature) {
-			if (paramsCast.getCache()!=null && paramsCast.getCache().getCache()!=null) {
-				paramsCast.getCache().getCache().initFeature( (Feature) propertyValue, (FeatureBase) parent, paramsCast, logger );
-			}
+			Feature<T> propertyValueCast = (Feature<T>) propertyValue;
+			propertyValueCast.init(
+				(FeatureInitParams) params,
+				(FeatureBase<T>) parent,
+				logger
+			);
 		}
 	}
 

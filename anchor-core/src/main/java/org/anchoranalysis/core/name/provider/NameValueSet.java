@@ -29,7 +29,6 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.anchoranalysis.core.name.value.INameValue;
@@ -43,7 +42,7 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 		super();
 	}
 	
-	public NameValueSet(List<? extends INameValue<T>> list) {
+	public NameValueSet(Iterable<? extends INameValue<T>> list) {
 		super();
 		
 		for (INameValue<T> nmp : list) {

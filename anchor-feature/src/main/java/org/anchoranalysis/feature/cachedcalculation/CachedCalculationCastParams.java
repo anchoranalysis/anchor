@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.cachedcalculation;
 
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 public abstract class CachedCalculationCastParams<ResultType,ParamsType extends FeatureCalcParams> extends CachedCalculation<ResultType> {
@@ -44,23 +45,20 @@ public abstract class CachedCalculationCastParams<ResultType,ParamsType extends 
 		}
 	};
 	
-	@SuppressWarnings("unchecked")
-	private synchronized void init(FeatureCalcParams params) {
-		this.params = (ParamsType) params;
-	}
-	
 	@Override
 	public synchronized ResultType getOrCalculate( FeatureCalcParams params ) throws ExecuteException {
 		
 		// DEBUG
 		// Checks we have the same params, if we call the cached calculation a second-time. This maybe catches errors.
 		if (hasCachedCalculation()) {
-			if (params!=null) {
-				assert(params.equals(this.params));
+			if (params!=null && !params.equals(this.params)) {
+				throw new ExecuteException(
+					new FeatureCalcException("This feature already has been used, its cache set is already set to different params")
+				);
 			}
 		}
 		
-		init(params);
+		initParams(params);
 		return delegate.doOperation();
 	}
 
@@ -83,6 +81,9 @@ public abstract class CachedCalculationCastParams<ResultType,ParamsType extends 
 		CachedCalculationCastParams<ResultType,ParamsType> savedResultCached = (CachedCalculationCastParams<ResultType,ParamsType>) savedResult;
 		delegate.assignFrom( savedResultCached.delegate );
 	}
-
 	
+	@SuppressWarnings("unchecked")
+	private synchronized void initParams(FeatureCalcParams params) {
+		this.params = (ParamsType) params;
+	}	
 }

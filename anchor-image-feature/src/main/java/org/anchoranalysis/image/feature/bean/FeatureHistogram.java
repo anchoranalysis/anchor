@@ -28,30 +28,16 @@ package org.anchoranalysis.image.feature.bean;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParamsDescriptor;
 
-public abstract class FeatureHistogram extends Feature {
+public abstract class FeatureHistogram extends Feature<FeatureHistogramParams> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		
-		if (params instanceof FeatureHistogramParams) {
-			return calcCast( (FeatureHistogramParams) params );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureHistogramParams.class.getSimpleName() );
-		}
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureHistogramParams params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureParamsDescriptor paramType()

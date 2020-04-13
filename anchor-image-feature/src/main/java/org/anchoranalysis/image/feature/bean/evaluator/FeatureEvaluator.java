@@ -1,5 +1,10 @@
 package org.anchoranalysis.image.feature.bean.evaluator;
 
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.bean.Feature;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -27,11 +32,45 @@ package org.anchoranalysis.image.feature.bean.evaluator;
  */
 
 import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
-public abstract class FeatureEvaluator extends FeatureBean<FeatureEvaluator> {
+public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends FeatureBean<FeatureEvaluator<T>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private FeatureProvider<T> featureProvider;
+	// END BEAN PROPERTIES
+	
+	public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
+		
+		try {
+			Feature<T> feature = featureProvider.create();
+			
+			if (feature==null) {
+				throw new OperationFailedException("FeatureProvider returns null. A feature is required.");
+			}
+			
+			return SessionFactory.createAndStart(feature, getLogger());
+			
+		} catch (CreateException | FeatureCalcException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	public FeatureProvider<T> getFeatureProvider() {
+		return featureProvider;
+	}
+
+	public void setFeatureProvider(FeatureProvider<T> featureProvider) {
+		this.featureProvider = featureProvider;
+	}
 }

@@ -1,6 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*-
@@ -32,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 public class AddCriteriaNever<EdgeType> implements AddCriteria<EdgeType> {
 
@@ -46,12 +47,12 @@ public class AddCriteriaNever<EdgeType> implements AddCriteria<EdgeType> {
 
 	@Override
 	public EdgeType generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2,
-			NRGStackWithParams nrgStack, FeatureSessionCreateParamsMPP session, boolean use3d) throws CreateException {
+			NRGStackWithParams nrgStack, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3d) throws CreateException {
 		return null;
 	}
 
 	@Override
-	public FeatureList orderedListOfFeatures() {
+	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
 		// No features involved
 		return null;
 	}

@@ -32,8 +32,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class SimpleFeatureListFixture {
+public class ConstantsInListFixture {
 
 	private static double f1Value = 1.0;
 	private static double f2Value = 2.0;
@@ -42,12 +43,12 @@ public class SimpleFeatureListFixture {
 	private static double eps = 1e-16;
 	
 	/** creates a feature-list associated with the fixture */
-	public static FeatureList create() {
-		Feature f1 = new Constant(f1Value);
-		Feature f2 = new Constant(f2Value);
-		Feature f3 = new Constant(f3Value);
+	public static <T extends FeatureCalcParams> FeatureList<T> create() {
+		Feature<T> f1 = new Constant<>(f1Value);
+		Feature<T> f2 = new Constant<>(f2Value);
+		Feature<T> f3 = new Constant<>(f3Value);
 		
-		FeatureList list = new FeatureList();
+		FeatureList<T> list = new FeatureList<>();
 		list.add(f1);
 		list.add(f2);
 		list.add(f3);

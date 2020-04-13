@@ -28,32 +28,34 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
+/**
+ * 
+ * @author owen
+ *
+ * @param <T> feature-calc-params
+ */
+class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends FeatureSessionCacheRetriever<T> {
 
-	private FeatureSessionCacheRetriever delegate;
-	private FeatureResultMap map;
+	private FeatureSessionCacheRetriever<T> delegate;
+	private FeatureResultMap<T> map;
 	private Collection<String> ignorePrefixes;
-	private CreateCache<FeatureSessionCache> cacheProducer;
+	private CreateCache<FeatureSessionCache<T>> cacheProducer;
 			
 	public HorizontalFeatureCacheRetriever(
-		FeatureSessionCacheRetriever delegate,
-		FeatureResultMap map,
+		FeatureSessionCacheRetriever<T> delegate,
+		FeatureResultMap<T> map,
 		Collection<String> ignorePrefixes,
-		CreateCache<FeatureSessionCache> cacheProducer
+		CreateCache<FeatureSessionCache<T>> cacheProducer
 	) {
 		super();
 		this.delegate = delegate;
@@ -62,13 +64,16 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 		this.cacheProducer = cacheProducer;
 	}
 
-	private Double calcAndAdd( Feature feature, FeatureCalcParams params ) throws FeatureCalcException {
+	private Double calcAndAdd(
+		Feature<T> feature,
+		CacheableParams<T> params
+	) throws FeatureCalcException {
 		Double result = delegate.calc(feature, params);
 		map.add(feature, resolveNameFeature(feature), result);
 		return result;
 	}
 	
-	private String resolveNameFeature( Feature feature ) {
+	private String resolveNameFeature( Feature<T> feature ) {
 		String id = feature.getCustomName();
 		if (id!=null && !id.isEmpty()) {
 			return resolveFeatureID(id);
@@ -78,8 +83,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 	
 	@Override
-	public double calc(Feature feature, FeatureCalcParams params)
-			throws FeatureCalcException {
+	public double calc(Feature<T> feature, CacheableParams<T> params) throws FeatureCalcException {
 		
 		// if there's no custom name, then we don't consider caching
 		if (feature.getCustomName()==null || feature.getCustomName().isEmpty()) {
@@ -95,26 +99,18 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public void initFeature(Feature feature,
-			FeatureBase parentFeature,
-			FeatureInitParams initParams, LogErrorReporter logger) throws InitException {
-		assert( hasBeenInit() );
-		delegate.initFeature(feature, parentFeature, initParams, logger);
-	}
-
-	@Override
-	public <T> CachedCalculation<T> search(CachedCalculation<T> cc) {
+	public <U> CachedCalculation<U> search(CachedCalculation<U> cc) {
 		return delegate.search(cc);
 	}
 
 	@Override
-	public <S, T> CachedCalculationMap<S, T> search(
-			CachedCalculationMap<S, T> cc) {
+	public <S, U> CachedCalculationMap<S, U> search(
+			CachedCalculationMap<S, U> cc) {
 		return delegate.search(cc);
 	}
 
 	@Override
-	public SharedFeatureSet getSharedFeatureList() {
+	public SharedFeatureSet<T> getSharedFeatureList() {
 		return delegate.getSharedFeatureList();
 	}
 	
@@ -132,8 +128,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 			
 	@Override
-	public double calcFeatureByID(String id, FeatureCalcParams params)
-			throws FeatureCalcException {
+	public double calcFeatureByID(String id, CacheableParams<T> params)	throws FeatureCalcException {
 		
 		// Let's first check if it's in our cache
 		Double res = map.getResultFor(id);
@@ -143,7 +138,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 		}
 		
 		// If it's not there, then let's find the feature we need to calculate from our list
-		Feature feat = map.getFeatureFor(id);
+		Feature<T> feat = map.getFeatureFor(id);
 		
 		if(feat!=null) {
 			return calcAndAdd(feat, params);
@@ -160,7 +155,7 @@ class HorizontalFeatureCacheRetriever extends FeatureSessionCacheRetriever {
 	}
 
 	@Override
-	public FeatureSessionCache createNewCache() throws CreateException {
+	public FeatureSessionCache<T> createNewCache() {
 		return cacheProducer.create();
 	}
 
