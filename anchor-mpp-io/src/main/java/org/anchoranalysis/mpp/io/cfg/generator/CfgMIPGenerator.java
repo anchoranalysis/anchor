@@ -2,11 +2,10 @@ package org.anchoranalysis.mpp.io.cfg.generator;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
-import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
+import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 /*
  * #%L
@@ -37,24 +36,11 @@ import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.bean.objmask.writer.MIPWriter;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 
-public class CfgMIPGenerator extends RasterGenerator implements IterableObjectGenerator<ColoredCfgWithDisplayStack,Stack> {
-
-	private ObjMaskWriter maskWriter;
-	private ColoredCfgWithDisplayStack cws;
-	private IDGetter<Overlay> idGetter;
-	private RegionMembershipWithFlags regionMembership;
+public class CfgMIPGenerator extends CfgGeneratorBase {
 
 	
 	// We cache the last background, and background MIP
@@ -71,81 +57,28 @@ public class CfgMIPGenerator extends RasterGenerator implements IterableObjectGe
 		IDGetter<Overlay> idGetter,
 		RegionMembershipWithFlags regionMembership
 	) {
-		super();
-		this.maskWriter = new MIPWriter(maskWriter);
-		this.idGetter = idGetter;
-		this.setIterableElement(cws);
-		this.regionMembership = regionMembership;
+		super(
+			createWriter(maskWriter),
+			cws,
+			idGetter,
+			regionMembership
+		);
 	}
-	
+
 	@Override
-	public boolean isRGB() {
-		return true;
-	}
-	
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		
-		// TODO we should be able to speed this up, by not repeatedly doing MIPs on the same background image, but using
-		//  a cache, which save the previous calculation.
-		
-		if (cws.getStack()!=cachedBackground) {
-			cachedBackground = cws.getStack();
-			try {
-				cachedBackgroundMIP = cws.getStack().maxIntensityProj();
-			} catch (OperationFailedException e) {
-				throw new OutputWriteFailedException(e);
-			}
+	protected DisplayStack background(DisplayStack stack) throws OperationFailedException {
+		// We avoid repeating the same calculation using a cache
+		if (stack!=cachedBackground) {
+			cachedBackground = stack;
+			cachedBackgroundMIP = stack.maxIntensityProj();
 		}
 		
-		try {
-			RGBStack backgroundMIPRGB = ConvertDisplayStackToRGB.convert(cachedBackgroundMIP);
-			
-			ColoredOverlayCollection oc = OverlayCollectionMarkFactory.createColor(
-				cws.getCfg(),
-				regionMembership
-			);
-			
-			// Convert our displaystack into a RGB stack
-			new SimpleOverlayWriter(maskWriter).writeOverlays(
-				oc,
-				backgroundMIPRGB,
-				idGetter
-			);
-			return backgroundMIPRGB.asStack();
-		} catch (OperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		}
+		return cachedBackgroundMIP;
 	}
-
-	@Override
-	public ColoredCfgWithDisplayStack getIterableElement() {
-		return this.cws;
+	
+	private static OverlayWriter createWriter(ObjMaskWriter maskWriter) {
+		return new SimpleOverlayWriter(
+			new MIPWriter(maskWriter)
+		);
 	}
-
-	@Override
-	public void setIterableElement(ColoredCfgWithDisplayStack element) {
-		this.cws = element;
-	}
-
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
-
-	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "cfg");
-	}
-
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
-
 }
