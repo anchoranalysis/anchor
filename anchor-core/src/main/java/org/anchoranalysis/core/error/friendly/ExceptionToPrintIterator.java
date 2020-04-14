@@ -27,6 +27,7 @@ package org.anchoranalysis.core.error.friendly;
  */
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Iterates over an exception and all it's causes skipping friendly-exceptions with empty messages 
@@ -51,6 +52,11 @@ class ExceptionToPrintIterator implements Iterator<Throwable> {
 
 	@Override
 	public Throwable next() {
+		
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		
 		current = skipIfNotAcceptable( current.getCause() );
 		return current;
 	}

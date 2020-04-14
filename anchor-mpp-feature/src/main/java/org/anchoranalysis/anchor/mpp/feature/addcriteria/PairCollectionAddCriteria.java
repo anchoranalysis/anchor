@@ -42,8 +42,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -259,7 +259,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		int index = (int) (re.nextDouble() * count);
 		
 		int i =0;
-		for( GraphWithEdgeTypes.EdgeTypeWithVertices<Mark,T> di : getPairsWithPossibleDuplicates()) {
+		for( EdgeTypeWithVertices<Mark,T> di : getPairsWithPossibleDuplicates()) {
 			if (i++==index) {
 				return di.getEdge();
 			}

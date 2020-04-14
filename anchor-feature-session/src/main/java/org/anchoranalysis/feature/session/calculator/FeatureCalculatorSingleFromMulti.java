@@ -49,7 +49,10 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> imple
 		this.delegate = multi;
 		if (delegate.sizeFeatures()!=1) {
 			throw new FeatureCalcException(
-				String.format("When creating a %s, the multi must have exactly one feature")
+				String.format(
+					"When creating a %s, the multi must have exactly one feature",
+					FeatureCalculatorSingle.class.getSimpleName()
+				)
 			);
 		}
 	}
