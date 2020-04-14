@@ -262,7 +262,12 @@ public class BeanXmlLoader {
 	 */
 	private static void checkBeansRegistered() {
 		if (!RegisterBeanFactories.isCalledRegisterAllPackage()) {
-			throw new BeanStrangeException("Please call BeanXmlRegisterUtilities.registerAllPackageBeanFactories() before loading any beans");
+			throw new BeanStrangeException(
+				String.format(
+					"Please call %s.registerAllPackageBeanFactories() before loading any beans",
+					RegisterBeanFactories.class.getSimpleName()
+				)
+			);
 		}
 	}
 }

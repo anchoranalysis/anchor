@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.bean.provider.stack;
+package org.anchoranalysis.test;
 
-/*
+/*-
  * #%L
- * anchor-image-bean
+ * anchor-test
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,37 +26,25 @@ package org.anchoranalysis.image.bean.provider.stack;
  * #L%
  */
 
+import static org.mockito.Mockito.mock;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
 
-// We don't really use this as a bean, convenient way of inserting stack into providers in bean
-// parameters
-// This is hack. When inserted into the usual framework, lots of standard bean behaviour wont work.
-public class StackProviderHolder extends StackProvider {
+/**
+ * Fixtures
+ * @author owen
+ *
+ */
+public class LoggingFixture {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private Stack stack;
-	// END BEAN PROPERTIES
-
-	public StackProviderHolder() {
-		// Needed to allow duplication in bean framework
+	public static LogReporter simpleLogReporter() {
+		return mock(LogReporter.class);
 	}
 	
-	public StackProviderHolder(Stack stack) {
-		super();
-		this.stack = stack;
-	}
-
-	@Override
-	public Stack create() throws CreateException {
-		return stack;
+	public static LogErrorReporter simpleLogErrorReporter() {
+		return new LogErrorReporter(
+			simpleLogReporter()
+		);
 	}
 }

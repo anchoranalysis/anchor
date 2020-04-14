@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.bean.provider.stack;
+package org.anchoranalysis.io.output.bean.allowed;
 
 /*
  * #%L
- * anchor-image-bean
+ * anchor-io
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,36 +27,16 @@ package org.anchoranalysis.image.bean.provider.stack;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.stack.Stack;
-
-// We don't really use this as a bean, convenient way of inserting stack into providers in bean
-// parameters
-// This is hack. When inserted into the usual framework, lots of standard bean behaviour wont work.
-public class StackProviderHolder extends StackProvider {
+public class NoOutputAllowed extends OutputAllowed {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private Stack stack;
-	// END BEAN PROPERTIES
-
-	public StackProviderHolder() {
-		// Needed to allow duplication in bean framework
-	}
-	
-	public StackProviderHolder(Stack stack) {
-		super();
-		this.stack = stack;
-	}
+	private static final long serialVersionUID = -6189493796393374208L;
 
 	@Override
-	public Stack create() throws CreateException {
-		return stack;
+	public boolean isOutputAllowed(String outputName) {
+		return false;
 	}
+
 }

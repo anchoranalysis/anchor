@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.LogReporter;
 
@@ -47,7 +49,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class ParametersExperiment {
 
 	// Parameters for all tasks in general (the experiment)
-	private ManifestRecorder experimentalManifest;
+	private Optional<ManifestRecorder> experimentalManifest;
 	private BoundOutputManagerRouteErrors outputManager;
 	private String experimentIdentifier;
 	
@@ -68,7 +70,7 @@ public class ParametersExperiment {
 	public ParametersExperiment(
 		ExperimentExecutionArguments experimentArguments,
 		String experimentIdentifier,
-		ManifestRecorder experimentalManifest,
+		Optional<ManifestRecorder> experimentalManifest,
 		BoundOutputManager outputManager,
 		StatefulLogReporter logReporterExperiment,
 		boolean detailedLogging
@@ -90,7 +92,7 @@ public class ParametersExperiment {
 		return detailedLogging;
 	}
 	
-	public ManifestRecorder getExperimentalManifest() {
+	public Optional<ManifestRecorder> getExperimentalManifest() {
 		return experimentalManifest;
 	}
 

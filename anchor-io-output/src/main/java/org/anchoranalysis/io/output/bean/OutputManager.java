@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.output.bean;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-output
@@ -55,5 +57,11 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
 	
 	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws AnchorIOException;
 	
-	public abstract FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException;
+	public abstract FilePathPrefix prefixForFile(
+		InputFromManager input,
+		String expIdentifier,
+		Optional<ManifestRecorder> manifestRecorder,
+		Optional<ManifestRecorder> experimentalManifestRecorder,
+		FilePathPrefixerParams context
+	) throws AnchorIOException;
 }

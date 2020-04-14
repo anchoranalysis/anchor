@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.NullParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.test.LoggingFixtures;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class SequentialSessionTest {
 	public void testCalculateSimpleListOfFeatures() throws InitException, FeatureCalcException {
 		
 		SequentialSession<FeatureCalcParams> session = new SequentialSession<>(ConstantsInListFixture.create());
-		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
+		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixture.simpleLogErrorReporter() );
 		
 		ResultsVector rv1 = session.calcOne( NullParams.instance() );
 		ConstantsInListFixture.checkResultVector(rv1);

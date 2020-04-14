@@ -30,6 +30,7 @@ package org.anchoranalysis.io.output.bound;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -123,8 +124,13 @@ public class BoundOutputManagerRouteErrors {
 		delegate.addOperationRecorder(toAdd);
 	}
 
-	public BoundOutputManager bindFile(InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder,
-			ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context) throws AnchorIOException {
+	public BoundOutputManager bindFile(
+		InputFromManager input,
+		String expIdentifier,
+		Optional<ManifestRecorder> manifestRecorder,
+		Optional<ManifestRecorder> experimentalManifestRecorder,
+		FilePathPrefixerParams context
+	) throws AnchorIOException {
 		return delegate.bindFile(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
 	}
 }
