@@ -69,7 +69,7 @@ public class ObjMaskCollectionReader {
 	public static ObjMaskCollection createFromPath( Path path ) throws DeserializationFailedException {
 
 		// 1. First check if has a file extension HDF5
-		if (hasHdf5Extension(path) && Files.exists(path) ) {
+		if (hasHdf5Extension(path)) {
 			return hdf5.deserialize(path);
 		}
 		
