@@ -28,29 +28,31 @@ package org.anchoranalysis.feature.session.cache;
 
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
-public class NullCachedCalculationSearch implements ICachedCalculationSearch {
+public class NullCachedCalculationSearch<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
 
-	private static NullCachedCalculationSearch instance = new NullCachedCalculationSearch();
+	private static NullCachedCalculationSearch<?> instance = new NullCachedCalculationSearch<>();
 	
 	private NullCachedCalculationSearch() {
 		
 	}
 	
 	@Override
-	public <T> CachedCalculation<T> search(CachedCalculation<T> cc) {
+	public <S> CachedCalculation<S,T> search(CachedCalculation<S,T> cc) {
 		return cc;
 	}
 
 	@Override
-	public <S, T> CachedCalculationMap<S, T> search(
-			CachedCalculationMap<S, T> cc) {
+	public <S,U> CachedCalculationMap<S,T,U> search(
+			CachedCalculationMap<S,T,U> cc) {
 		return cc;
 	}
 
-	public static NullCachedCalculationSearch getInstance() {
-		return instance;
+	@SuppressWarnings("unchecked")
+	public static <U extends FeatureCalcParams> NullCachedCalculationSearch<U> getInstance() {
+		return (NullCachedCalculationSearch<U>) instance;
 	}
 
 }

@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
  * @author owen
  *
  */
-public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalculationSearch {
+public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
 
 	private FeatureSessionCacheRetriever<T> cacheRetriever;
 	private Map<String, FeatureSessionCacheRetriever<FeatureCalcParams>> children = new HashMap<>();
@@ -74,8 +74,18 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <S extends FeatureCalcParams> FeatureSessionCacheRetriever<S> cacheFor(String childName, Class<?> paramsType) {
-		return (FeatureSessionCacheRetriever<S>) children.computeIfAbsent(
+	/**
+	 * Gets/creates a child-cache for a given name
+	 * 
+	 * <p>This function trusts the caller to use the correct type for the child-cache.</p>
+	 * 
+	 * @param <V> params-type of the child cache to found
+	 * @param childName name of the child-cache
+	 * @param paramsType the type of V
+	 * @return the existing or new child cache of the given name
+	 */
+	public <V extends FeatureCalcParams> FeatureSessionCacheRetriever<V> cacheFor(String childName, Class<?> paramsType) {
+		return (FeatureSessionCacheRetriever<V>) children.computeIfAbsent(
 			childName,
 			s -> factory.create(paramsType).retriever()
 		);
@@ -85,12 +95,12 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return params;
 	}
 
-	public <S> CachedCalculation<S> search(CachedCalculation<S> cc) {
+	public <S> CachedCalculation<S, T> search(CachedCalculation<S, T> cc) {
 		return cacheRetriever.search(cc);
 	}
 	
 	@Override
-	public <S, U> CachedCalculationMap<S, U> search(CachedCalculationMap<S, U> cc) {
+	public <S, U> CachedCalculationMap<S, T, U> search(CachedCalculationMap<S, T, U> cc) {
 		return cacheRetriever.search(cc);
 	}
 	
@@ -104,14 +114,10 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return cacheRetriever.calc(features, this );
 	}
 	
-	public <S> S calc(CachedCalculation<S> cc) throws ExecuteException {
+	public <S> S calc(CachedCalculation<S,T> cc) throws ExecuteException {
 		return search(cc).getOrCalculate(params);
 	}
 	
-	public <S> S calc(CachedCalculation<S> cc, String childName) throws ExecuteException {
-		return cacheFor(childName, params.getClass()).search(cc).getOrCalculate(params);
-	}
-
 	@SuppressWarnings("unchecked")
 	public <S extends FeatureCalcParams> CacheableParams<FeatureCalcParams> upcastParams() throws FeatureCalcException {
 		return (CacheableParams<FeatureCalcParams>)(this);

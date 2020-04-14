@@ -56,13 +56,12 @@ public class NullCacheRetriever<T extends FeatureCalcParams> extends FeatureSess
 	 * Always returns the cachedCalculation passed to the function
 	 */
 	@Override
-	public <U> CachedCalculation<U> search(CachedCalculation<U> cc) {
+	public <U> CachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
 		return cc;
 	}
 	
 	@Override
-	public <S, U> CachedCalculationMap<S, U> search(
-			CachedCalculationMap<S, U> cc) {
+	public <S,U> CachedCalculationMap<S,T,U> search( CachedCalculationMap<S,T,U> cc) {
 		return cc;
 	}
 

@@ -41,12 +41,12 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public abstract class CachedCalculationMapHash<ResultType,KeyType,ParamsType> extends CachedCalculationMap<ResultType,KeyType> {
+public abstract class CachedCalculationMapHash<S,T extends FeatureCalcParams,U> extends CachedCalculationMap<S,T,U> {
 
 	/**
 	 * Caches our results for different Keys
 	 */
-	private transient Map<KeyType,ResultType> cache;
+	private transient Map<U,S> cache;
 	
 	
 	/**
@@ -54,7 +54,7 @@ public abstract class CachedCalculationMapHash<ResultType,KeyType,ParamsType> ex
 	 * @param cacheSize cache-size to use for the keys
 	 */
 	public CachedCalculationMapHash( int cacheSize ) {
-		cache = new HashMap<KeyType,ResultType>();
+		cache = new HashMap<U,S>();
 	}
 	
 	/**
@@ -65,19 +65,18 @@ public abstract class CachedCalculationMapHash<ResultType,KeyType,ParamsType> ex
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public ResultType getOrCalculate( FeatureCalcParams params, KeyType key ) throws FeatureCalcException {
+	public S getOrCalculate( T params, U key ) throws FeatureCalcException {
 		
-		ResultType obj = cache.get(key);
+		S obj = cache.get(key);
 		if (obj==null) {
-			obj = execute( (ParamsType) params, key );
+			obj = execute( params, key );
 			put( key, obj );
 		}
 		return obj;
 	}
 	
-	protected abstract ResultType execute( ParamsType params, KeyType key ) throws FeatureCalcException;
+	protected abstract S execute( T params, U key ) throws FeatureCalcException;
 
 	/**
 	 *  Gets an existing result for the current params from the cache.
@@ -86,15 +85,15 @@ public abstract class CachedCalculationMapHash<ResultType,KeyType,ParamsType> ex
 	 * @throws FeatureCalcException 
 	 * @throws GetOperationFailedException 
 	 */
-	protected ResultType getOrNull( KeyType key ) throws FeatureCalcException {
+	protected S getOrNull( U key ) throws FeatureCalcException {
 		return cache.get(key);
 	}
 	
-	protected boolean hasKey( KeyType key ) {
+	protected boolean hasKey( U key ) {
 		return cache.get(key)!=null;
 	}
 	
-	protected void put(KeyType index, ResultType item) {
+	protected void put(U index, S item) {
 		cache.put(index, item);
 	}
 
@@ -114,9 +113,9 @@ public abstract class CachedCalculationMapHash<ResultType,KeyType,ParamsType> ex
 		
 		cache.clear();
 		
-		CachedCalculationMapHash<ResultType,KeyType,ParamsType> savedResultCached = (CachedCalculationMapHash<ResultType,KeyType,ParamsType>) savedResult;
-		for( KeyType key : savedResultCached.cache.keySet() ) {
-			ResultType val = savedResultCached.cache.get(key);
+		CachedCalculationMapHash<S,T,U> savedResultCached = (CachedCalculationMapHash<S,T,U>) savedResult;
+		for( U key : savedResultCached.cache.keySet() ) {
+			S val = savedResultCached.cache.get(key);
 			cache.put( key, val );
 		}
 	}

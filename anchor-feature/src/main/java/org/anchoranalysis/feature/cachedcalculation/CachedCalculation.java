@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.cachedcalculation;
 
+import org.anchoranalysis.core.cache.CachedOperation;
+
 /*
  * #%L
  * anchor-feature
@@ -28,7 +30,7 @@ package org.anchoranalysis.feature.cachedcalculation;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 // Memoized calculation
@@ -51,9 +53,21 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * 
  * @author Owen Feehan
  *
- * @param <ResultType> result-type of the calculation
+ * @param <S> result-type of the calculation
+ * @param <T> params-type
  */
-public abstract class CachedCalculation<ResultType> implements IResettableCachedCalculation {
+public abstract class CachedCalculation<S, T extends FeatureCalcParams> implements IResettableCachedCalculation {
+	
+	private transient T params;
+	
+	// We delegate the actualy execution of the cache
+	private transient CachedOperation<S> delegate = new CachedOperation<S>() {
+
+		@Override
+		protected S execute() throws ExecuteException {
+			return CachedCalculation.this.execute( params );
+		}
+	};
 	
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
@@ -63,7 +77,21 @@ public abstract class CachedCalculation<ResultType> implements IResettableCached
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public abstract ResultType getOrCalculate( FeatureCalcParams params ) throws ExecuteException;
+	public synchronized S getOrCalculate( T params ) throws ExecuteException {
+		
+		// DEBUG
+		// Checks we have the same params, if we call the cached calculation a second-time. This maybe catches errors.
+		if (hasCachedCalculation()) {
+			if (params!=null && !params.equals(this.params)) {
+				throw new ExecuteException(
+					new FeatureCalcException("This feature already has been used, its cache set is already set to different params")
+				);
+			}
+		}
+		
+		initParams(params);
+		return delegate.doOperation();
+	}
 	
 	@Override
 	public abstract boolean equals(Object other);
@@ -72,10 +100,28 @@ public abstract class CachedCalculation<ResultType> implements IResettableCached
 	public abstract int hashCode();	
 	
 	@Override
-	public abstract CachedCalculation<ResultType> duplicate();
+	public abstract CachedCalculation<S, T> duplicate();
 	
+	public void assignResult( Object savedResult) {
+		@SuppressWarnings("unchecked")
+		CachedCalculation<S,T> savedResultCached = (CachedCalculation<S,T>) savedResult;
+		delegate.assignFrom( savedResultCached.delegate );
+	}
+	
+	public boolean hasCachedCalculation() {
+		return delegate.isDone();
+	}
+
 	@Override
-	public abstract void assignResult( Object src ) throws OperationFailedException;
+	public synchronized void reset() {
+		delegate.reset();
+		this.params = null;	// Just to be clean, release memory, before the next getOrCalculate
+	}
+		
+	protected abstract S execute( T params ) throws ExecuteException;
 	
-	public abstract boolean hasCachedCalculation();
+	@SuppressWarnings("unchecked")
+	private synchronized void initParams(FeatureCalcParams params) {
+		this.params = (T) params;
+	}	
 }

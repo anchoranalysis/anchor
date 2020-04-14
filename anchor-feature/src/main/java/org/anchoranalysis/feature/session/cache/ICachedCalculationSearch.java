@@ -28,8 +28,9 @@ package org.anchoranalysis.feature.session.cache;
 
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public interface ICachedCalculationSearch {
+public interface ICachedCalculationSearch<T extends FeatureCalcParams> {
 
 	/**
 	 * 
@@ -39,7 +40,7 @@ public interface ICachedCalculationSearch {
 	 * @param cc the cached-calculation to find an equivalent for
 	 * @return
 	 */
-	<T> CachedCalculation<T> search( CachedCalculation<T> cc );
+	<S> CachedCalculation<S,T> search( CachedCalculation<S,T> cc );
 
 	
 	/**
@@ -50,5 +51,5 @@ public interface ICachedCalculationSearch {
 	 * @param cc the cached-calculation map to find an equivalent for
 	 * @return
 	 */
-	<S,T> CachedCalculationMap<S,T> search( CachedCalculationMap<S,T> cc );
+	<S,U> CachedCalculationMap<S,T,U> search( CachedCalculationMap<S,T,U> cc );
 }

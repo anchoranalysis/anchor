@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  * @params feature calc-params that the cache supports
  */
-public abstract class FeatureSessionCacheRetriever<T extends FeatureCalcParams> implements ICachedCalculationSearch {
+public abstract class FeatureSessionCacheRetriever<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
 	
 	/**
 	 * Has the cache been inited()

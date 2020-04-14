@@ -38,24 +38,22 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * 
  * @author Owen Feehan
  *
- * @param <T>
+ * @param <S> result-type
+ * @param <T> params-type
  */
-public class CachedCalculationOperation<T> implements Operation<T> {
+public class CachedCalculationOperation<S, T extends FeatureCalcParams> implements Operation<S> {
 
-	private CachedCalculation<T> cachedCalculation;
-	private FeatureCalcParams params;
+	private CachedCalculation<S,T> cachedCalculation;
+	private T params;
 		
-	public CachedCalculationOperation(CachedCalculation<T> cachedCalculation,
-			FeatureCalcParams params) {
+	public CachedCalculationOperation(CachedCalculation<S,T> cachedCalculation,	T params) {
 		super();
 		this.cachedCalculation = cachedCalculation;
 		this.params = params;
 	}
 	
 	@Override
-	public T doOperation() throws ExecuteException {
+	public S doOperation() throws ExecuteException {
 		return cachedCalculation.getOrCalculate(params);
 	}
-	
-	
 }

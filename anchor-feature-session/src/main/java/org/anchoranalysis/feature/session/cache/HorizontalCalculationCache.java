@@ -54,8 +54,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class HorizontalCalculationCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
 	
-	private ResettableSet<CachedCalculation<?>> listCC = new ResettableSet<>(false);
-	private ResettableSet<CachedCalculationMap<?,?>> listCCMap = new ResettableSet<>(false);
+	private ResettableSet<CachedCalculation<?,T>> listCC = new ResettableSet<>(false);
+	private ResettableSet<CachedCalculationMap<?,T,?>> listCCMap = new ResettableSet<>(false);
 	
 	private Retriever retriever = new Retriever();
 	
@@ -84,17 +84,17 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public <U> CachedCalculation<U> search(CachedCalculation<U> cc) {
+		public <U> CachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return (CachedCalculation<U>) listCC.findOrAdd(cc,loggerToPass);
+			return (CachedCalculation<U,T>) listCC.findOrAdd(cc,loggerToPass);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <S, U> CachedCalculationMap<S, U> search(CachedCalculationMap<S, U> cc) {
+		public <S, U> CachedCalculationMap<S,T,U> search(CachedCalculationMap<S,T,U> cc) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return (CachedCalculationMap<S,U>) listCCMap.findOrAdd(cc,loggerToPass);
+			return (CachedCalculationMap<S,T,U>) listCCMap.findOrAdd(cc,loggerToPass);
 		}
 
 		@Override

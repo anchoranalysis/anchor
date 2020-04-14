@@ -36,9 +36,11 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  *   by a key
  * 
  * @author Owen Feehan
- *
+ * @param S result-type
+ * @param T params-type
+ * @param U key-type
  */
-public abstract class CachedCalculationMap<ResultType,KeyType> implements IResettableCachedCalculation {
+public abstract class CachedCalculationMap<S,T extends FeatureCalcParams,U> implements IResettableCachedCalculation {
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.
@@ -47,10 +49,10 @@ public abstract class CachedCalculationMap<ResultType,KeyType> implements IReset
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public abstract ResultType getOrCalculate( FeatureCalcParams params, KeyType key ) throws FeatureCalcException;
+	public abstract S getOrCalculate( T params, U key ) throws FeatureCalcException;
 	
 	@Override
-	public abstract CachedCalculationMap<ResultType,KeyType> duplicate();
+	public abstract CachedCalculationMap<S,T,U> duplicate();
 
 	@Override
 	public abstract boolean equals(Object other);

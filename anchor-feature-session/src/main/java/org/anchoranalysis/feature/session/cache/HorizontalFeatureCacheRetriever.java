@@ -99,13 +99,13 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	}
 
 	@Override
-	public <U> CachedCalculation<U> search(CachedCalculation<U> cc) {
+	public <U> CachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
 		return delegate.search(cc);
 	}
 
 	@Override
-	public <S, U> CachedCalculationMap<S, U> search(
-			CachedCalculationMap<S, U> cc) {
+	public <S, U> CachedCalculationMap<S,T,U> search(
+			CachedCalculationMap<S,T,U> cc) {
 		return delegate.search(cc);
 	}
 
