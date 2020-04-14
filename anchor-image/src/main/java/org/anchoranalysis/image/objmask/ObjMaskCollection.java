@@ -404,7 +404,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		}
 	}
 	
-	public ObjMaskCollection growBuffer( Point3i neg, Point3i pos, Extent clipRegion ) {
+	public ObjMaskCollection growBuffer( Point3i neg, Point3i pos, Extent clipRegion ) throws OperationFailedException {
 		ObjMaskCollection omc = new ObjMaskCollection();
 		for (ObjMask om : this) {
 			omc.add( om.growBuffer(neg, pos, clipRegion) );

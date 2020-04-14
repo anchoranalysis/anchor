@@ -31,6 +31,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -249,7 +250,11 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @param factory
 	 * @return
 	 */
-	public BoundedVoxelBox<T> growBuffer( Point3i neg, Point3i pos, Extent clipRegion, VoxelBoxFactoryTypeBound<T> factory ) {
+	public BoundedVoxelBox<T> growBuffer( Point3i neg, Point3i pos, Extent clipRegion, VoxelBoxFactoryTypeBound<T> factory ) throws OperationFailedException {
+		
+		if(!clipRegion.contains(this.boundingBox) ) {
+			throw new OperationFailedException("Cannot grow the bounding-box of the object-mask, as it is already outside the clipping region.");
+		}
 		
 		Extent e = this.voxelBox.extnt();
 				

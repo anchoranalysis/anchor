@@ -33,8 +33,6 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-// Memoized calculation
-
 /**
  * Caches the result of a calculation, until reset() is called
  * 

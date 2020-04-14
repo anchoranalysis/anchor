@@ -86,6 +86,13 @@ public final class Extent implements Serializable {
 		updateSxy();
 	}
 	
+	/** Collapses the Z dimension i.e. immutably returns a new extent with the same X- and Y- size but Z-size of 1 */
+	public Extent flatten() {
+		return new Extent(
+			new Point3i(len.getX(), len.getY(), 1)
+		);
+	}
+	
 	private void updateSxy() {
 		this.sxy = len.getX() * len.getY();
 	}
