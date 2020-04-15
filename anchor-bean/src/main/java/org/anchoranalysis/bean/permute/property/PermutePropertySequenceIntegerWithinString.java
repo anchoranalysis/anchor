@@ -37,33 +37,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
  * @author Owen Feehan
  *
  */
-public class PermutePropertySequenceIntegerWithinString extends PermutePropertyWithPath<String> {
+public class PermutePropertySequenceIntegerWithinString extends PermutePropertySequence<String> {
 
-	// START BEAN PROPERTIES
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Where the sequence starts
-	 */
-	@BeanField
-	private int start = 0;
-	
-	/**
-	 * How much to increment by
-	 */
-	@BeanField
-	private int increment = 1;
-	
-	/**
-	 * The final value. Equal to this value is included. Anything higher is not allowed. 
-	 */
-	@BeanField
-	private int end = 1;
-	
+	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty
 	private String prefix = "";
 	
@@ -73,8 +54,7 @@ public class PermutePropertySequenceIntegerWithinString extends PermutePropertyW
 
 	@Override
 	public Iterator<String> propertyValues() {
-		Iterator<Integer> range = new IntegerRange(start, end, increment);
-		return new IteratorIntegerWithPrefixSuffix(range, prefix, suffix);
+		return new IteratorIntegerWithPrefixSuffix(range(), prefix, suffix);
 	}
 	
 	public String getPrefix() {
@@ -91,30 +71,6 @@ public class PermutePropertySequenceIntegerWithinString extends PermutePropertyW
 
 	public void setSuffix(String suffix) {
 		this.suffix = suffix;
-	}
-
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getIncrement() {
-		return increment;
-	}
-
-	public void setIncrement(int increment) {
-		this.increment = increment;
-	}
-
-	public int getEnd() {
-		return end;
-	}
-
-	public void setEnd(int end) {
-		this.end = end;
 	}
 
 	@Override

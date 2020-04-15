@@ -39,33 +39,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
  * @param T permutation type
  *
  */
-public class PermutePropertySequenceInteger extends PermutePropertyWithPath<Integer> {
-
-	// START BEAN PROPERTIES
+public class PermutePropertySequenceInteger extends PermutePropertySequence<Integer> {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Where the sequence starts
-	 */
-	@BeanField
-	private int start = 0;
-	
-	/**
-	 * How much to increment by
-	 */
-	@BeanField
-	private int increment = 1;
-
-	/**
-	 * The final value. Equal to this value is included. Anything higher is not allowed. 
-	 */
-	@BeanField
-	private int end = 1;
-	// END BEAN PROPERTIES
 
 	@Override
 	public Iterator<Integer> propertyValues() {
@@ -73,37 +52,12 @@ public class PermutePropertySequenceInteger extends PermutePropertyWithPath<Inte
 	}
 	
 	public Iterator<Integer> propertyValuesDefinitelyInteger() {
-		return new IntegerRange(start,end,increment);
+		return range();
 	}
-		
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getIncrement() {
-		return increment;
-	}
-
-	public void setIncrement(int increment) {
-		this.increment = increment;
-	}
-
-	public int getEnd() {
-		return end;
-	}
-
-	public void setEnd(int end) {
-		this.end = end;
-	}
-
 	
 	@Override
 	public String nameForPropValue(Integer value) {
-		int numDigitsEnd = Integer.toString(end).length();
+		int numDigitsEnd = Integer.toString(getEnd()).length();
 		if (numDigitsEnd==1) {
 			return value.toString();
 		} else {
