@@ -29,7 +29,6 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
@@ -59,9 +58,7 @@ public abstract class PointsBean<FamilyType> extends InitializableBeanSimple<Fam
 				return succ;
 			}
 			
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, ImageInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getImage(), parent, logger );
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, ImageInitParams.class, getParam().getImage())) {
 				return true;
 			}
 			

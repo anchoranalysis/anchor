@@ -30,7 +30,6 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
@@ -75,27 +74,19 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 				return succ;
 			}
 			
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, PointsInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getPoints(), parent, logger );
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, PointsInitParams.class, getParam().getPoints())) {
+				return true;
+			}
+
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, SharedFeaturesInitParams.class, getParam().getFeature())) {
 				return true;
 			}
 			
-			pd = findPropertyThatDefines( propertyValue, SharedFeaturesInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getFeature(), parent, logger );
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, KeyValueParamsInitParams.class, getParam().getParams())) {
 				return true;
 			}
-			
-			pd = findPropertyThatDefines( propertyValue, KeyValueParamsInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getParams(), parent, logger );
-				return true;
-			}
-			
-			pd = findPropertyThatDefines( propertyValue, ImageInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getImage(), parent, logger );
+
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, ImageInitParams.class, getParam().getImage())) {
 				return true;
 			}
 			

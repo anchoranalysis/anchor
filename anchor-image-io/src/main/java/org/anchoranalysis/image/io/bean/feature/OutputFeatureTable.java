@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -93,7 +93,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			}
 			
 			// Init
-			FeatureInitParamsImageInit paramsInit = new FeatureInitParamsImageInit( getSharedObjects() );
+			FeatureInitParamsSharedObjs paramsInit = new FeatureInitParamsSharedObjs( getSharedObjects() );
 			paramsInit.setKeyValueParams( createKeyValueParams() );
 			
 			// Create NRG stack
@@ -110,7 +110,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	}
 	
 	private ObjMaskFeatureListCSVGenerator createGenerator(
-		FeatureInitParamsImageInit paramsInit,
+		FeatureInitParamsSharedObjs paramsInit,
 		NRGStackWithParams nrgStack,
 		ObjMaskCollection objsCollection,
 		FeatureList<FeatureObjMaskParams> features,

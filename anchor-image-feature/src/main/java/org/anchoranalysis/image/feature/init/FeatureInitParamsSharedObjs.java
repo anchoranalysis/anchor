@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.shared;
+package org.anchoranalysis.image.feature.init;
 
 /*-
  * #%L
@@ -26,19 +26,37 @@ package org.anchoranalysis.image.feature.objmask.shared;
  * #L%
  */
 
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.image.init.ImageInitParams;
 
-public class FeatureObjMaskSharedObjectsParamsDescriptor extends FeatureParamsDescriptor {
+/**
+ * Extension of typical feature initialization, that also sets shared objects
+ * 
+ * @author owen
+ *
+ */
+public class FeatureInitParamsSharedObjs extends FeatureInitParams {
 
-	public static final FeatureObjMaskSharedObjectsParamsDescriptor instance = new FeatureObjMaskSharedObjectsParamsDescriptor();
+	private ImageInitParams sharedObjects;
 	
-	private FeatureObjMaskSharedObjectsParamsDescriptor() {
-		
+	public FeatureInitParamsSharedObjs( ImageInitParams so ) {
+		super();
+		this.sharedObjects = so;
 	}
 	
+	private FeatureInitParamsSharedObjs( FeatureInitParams parent, ImageInitParams so ) {
+		super(parent);
+		this.sharedObjects = so;
+	}
+
+	public ImageInitParams getSharedObjects() {
+		return sharedObjects;
+	}
+
 	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
+	public FeatureInitParams duplicate() {
+		return new FeatureInitParamsSharedObjs(super.duplicate(), sharedObjects);
 	}
-
+	
+	
 }

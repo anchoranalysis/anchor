@@ -27,13 +27,11 @@ package org.anchoranalysis.feature.bean;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.NullParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 public abstract class FeatureBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
@@ -72,15 +70,7 @@ public abstract class FeatureBean<T> extends InitializableBeanSimple<T,SharedFea
 				return succ;
 			}
 			
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, KeyValueParamsInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getParams(), parent, logger );
-				return true;
-			}
-			
-			pd = findPropertyThatDefines( propertyValue, NullParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, NullParams.instance(), parent, logger );
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, KeyValueParamsInitParams.class, getParam().getParams())) {
 				return true;
 			}
 			

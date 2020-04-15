@@ -39,7 +39,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
  */
 public class PropertyInitializer<P> {
 	
-	private P so;
+	private P param;
 	private Class<?> initParamType;
 	
 	public PropertyInitializer( Class<?> initParamType ) {
@@ -47,31 +47,21 @@ public class PropertyInitializer<P> {
 		this.initParamType = initParamType;
 	}
 	
-	public void setParam(P so) {
-		this.so = so;
-	}
-
-	protected P getParam() {
-		return so;
+	public void setParam(P param) {
+		this.param = param;
 	}
 	
 	public boolean execIfInheritsFrom( Object propertyValue, Object parent, LogErrorReporter logger ) throws InitException {
 		
-		if (so!=null) {
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, so.getClass() );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam(), parent, logger );
+		if (param!=null) {
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), getParam())) {
 				return true;
 			}
 		}
 
 		// We can always initialize anything that doesn't take parameters (i.e. takes NullInitParams)
-		{
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, NullInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, NullInitParams.instance(), parent, logger );
-				return true;
-			}
+		if (initMatchingPropertiesWith(propertyValue, parent, logger, NullInitParams.class, NullInitParams.instance())) {
+			return true;
 		}
 		
 		return false;
@@ -100,4 +90,22 @@ public class PropertyInitializer<P> {
 		return initParamType;
 	}
 
+	protected P getParam() {
+		return param;
+	}
+	
+	protected boolean initMatchingPropertiesWith(
+		Object propertyValue,
+		Object parent,
+		LogErrorReporter logger,
+		Class<?> propertyClassToMatch,
+		Object paramToInitWith
+	) throws InitException {
+		PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
+		if (pd!=null) {
+			pd.doInitFor( propertyValue, paramToInitWith, parent, logger );
+			return true;
+		}
+		return false;
+	}
 }

@@ -27,7 +27,6 @@ package org.anchoranalysis.image.bean;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
@@ -71,16 +70,12 @@ public abstract class ImageBean<T> extends InitializableBeanSimple<T,ImageInitPa
 			if (succ) {
 				return succ;
 			}
-						
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, SharedFeaturesInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getFeature(), parent, logger );
+			
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, SharedFeaturesInitParams.class, getParam().getFeature())) {
 				return true;
 			}
 			
-			pd = findPropertyThatDefines( propertyValue, KeyValueParamsInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getParams(), parent, logger );
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, KeyValueParamsInitParams.class, getParam().getParams())) {
 				return true;
 			}
 			
