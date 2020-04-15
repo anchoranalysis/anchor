@@ -86,16 +86,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 
 	@Override
-	public void start() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
 	public Generator getGenerator() {
 		return this;
 	}

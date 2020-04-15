@@ -35,9 +35,13 @@ public interface IterableGenerator<T> {
 
 	void setIterableElement(T element) throws SetOperationFailedException;
 	
-	void start() throws OutputWriteFailedException;
+	default void start() throws OutputWriteFailedException {
+		// NOTHING TO DO
+	}
 
-	void end() throws OutputWriteFailedException;
+	default void end() throws OutputWriteFailedException {
+		// NOTHING TO DO
+	}
 	
 	Generator getGenerator();
 

@@ -100,14 +100,4 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
 	public ManifestDescription createManifestDescription() {
 		return new ManifestDescription("serialized", objectType);
 	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
 }

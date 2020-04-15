@@ -29,8 +29,6 @@ package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-
 /**
  * An arithmetic sequence of doubles, obtained by dividing an integer sequence by a divider
  * 

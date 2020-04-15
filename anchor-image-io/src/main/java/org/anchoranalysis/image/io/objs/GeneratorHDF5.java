@@ -58,15 +58,6 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	}
 
 	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
 	public Generator getGenerator() {
 		return this;
 	}

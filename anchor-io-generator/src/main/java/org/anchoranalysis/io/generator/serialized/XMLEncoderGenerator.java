@@ -93,14 +93,4 @@ public class XMLEncoderGenerator<T extends Serializable> extends SerializedGener
 	public ManifestDescription createManifestDescription() {
 		return new ManifestDescription("serialized", "xmlEncoder");
 	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
 }
