@@ -64,7 +64,7 @@ import org.apache.commons.collections.CollectionUtils;
  * @param T calc-params for feature
  *
  */
-public class SequentialSession<T extends FeatureCalcParams> extends FeatureSession implements FeatureCalculatorMulti<T>, ISequentialSessionSingleParams<T> {
+public class SequentialSession<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
 
 	private FeatureList<T> listFeatures;
 	
@@ -112,11 +112,6 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 		);
 	}
 	
-	
-	public void start( LogErrorReporter logger ) throws InitException {
-		start( new FeatureInitParams(), new SharedFeatureSet<T>(), logger);
-	}
-	
 	/**
 	 * Starts the session
 	 * 
@@ -125,7 +120,6 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	 * @param sharedFeatures		A list of features that are shared between the features we are calculating (and thus also init-ed)
 	 * @throws InitException
 	 */
-	@Override
 	public void start( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException{
 		
 		if (isStarted) {
@@ -237,10 +231,6 @@ public class SequentialSession<T extends FeatureCalcParams> extends FeatureSessi
 	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
-	}
-	
-	public int numFeatures() {
-		return listFeatures.size();
 	}
 
 	public List<Feature<T>> getFeatureList() {

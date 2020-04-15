@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session;
+package org.anchoranalysis.feature.session.calculator;
 
 /*
  * #%L
@@ -27,20 +27,16 @@ package org.anchoranalysis.feature.session;
  */
 
 
-import java.util.Collection;
+import java.util.List;
 
 import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.cache.LRUHashMapCache;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
  * A SequentialSession but we cache the ResultsVectors in case an identical FeatureCalcParams
@@ -49,12 +45,11 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> extends FeatureSession implements ISequentialSessionSingleParams<T> {
+public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
 
-	private SequentialSession<T> delegate;
+	private FeatureCalculatorMulti<T> delegate;
 	
-	private LRUHashMapCache<ResultsVector,T> hashCache;
-	private CacheMonitor cacheMonitor = new CacheMonitor();
+	private LRUHashMapCache<ResultsVector,T> cacheResults;
 
 	private static int CACHE_SIZE = 1000;
 	
@@ -63,20 +58,64 @@ public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> exte
 	// We update this every time so it matches whatever is passed to calcSuppressErrors
 	private ErrorReporter errorReporter = null;
 	
-	public SequentialSessionVerticallyCached(FeatureList<T> listFeatures, boolean suppressErrors, Collection<String> ignoreFeaturePrefixes ) {
+	public FeatureCalculatorCachedResults(FeatureCalculatorMulti<T> delegate, boolean suppressErrors) {
 		super();
-		this.delegate = new SequentialSession<>(listFeatures, ignoreFeaturePrefixes);
+		this.delegate = delegate;
 		this.suppressErrors = suppressErrors;
 		
-	}
-	
-	@Override
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger) throws InitException {
-		delegate.start(featureInitParams, sharedFeatureList, logger);
+		this.cacheResults = LRUHashMapCache.createAndMonitor(
+			CACHE_SIZE,
+			new GetterImpl(),
+			new CacheMonitor(),
+			"SequentialSessionVerticallyCached"
+		);
 		
-		this.hashCache = LRUHashMapCache.createAndMonitor(CACHE_SIZE, new GetterImpl(), cacheMonitor, "SequentialSessionVerticallyCached");
 	}
-	
+
+	@Override
+	public ResultsVector calcOneSuppressErrors(T params,
+			ErrorReporter errorReporter) {
+		this.errorReporter = errorReporter;
+		try {
+			return cacheResults.get(params);
+		} catch (GetOperationFailedException e) {
+			errorReporter.recordError(FeatureCalculatorCachedResults.class, e.getCause());
+			return createNaNVector(e);
+		}
+	}
+
+	@Override
+	public ResultsVector calcOne(T params)
+			throws FeatureCalcException {
+		try {
+			return cacheResults.get(params);
+		} catch (GetOperationFailedException e) {
+			throw new FeatureCalcException(e.getCause());
+		}
+	}
+
+	@Override
+	public List<ResultsVector> calcMany(List<T> listParams) throws FeatureCalcException {
+		// TODO how should we cache?
+		throw new FeatureCalcException("This operation is not supported");
+	}
+
+	@Override
+	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
+		// TODO how should we cache?
+		throw new FeatureCalcException("This operation is not supported");
+	}
+
+	@Override
+	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
+		// TODO how should we cache?
+		throw new FeatureCalcException("This operation is not supported");
+	}
+
+	@Override
+	public int sizeFeatures() {
+		return delegate.sizeFeatures();
+	}
 	
 	private class GetterImpl implements LRUHashMapCache.Getter<ResultsVector,T> {
 
@@ -95,28 +134,11 @@ public class SequentialSessionVerticallyCached<T extends FeatureCalcParams> exte
 		}
 		
 	}
-
-	@Override
-	public ResultsVector calcOneSuppressErrors(T params,
-			ErrorReporter errorReporter) {
-		this.errorReporter = errorReporter;
-		try {
-			return hashCache.get(params);
-		} catch (GetOperationFailedException e) {
-			errorReporter.recordError(SequentialSessionVerticallyCached.class, e.getCause());
-			
-			// Return a vector with all NaNs
-			ResultsVector rv = new ResultsVector( delegate.numFeatures() );
-			rv.setErrorAll(e);
-			return rv;
-		}
+	
+	/** Return a vector with all NaNs */
+	private ResultsVector createNaNVector(GetOperationFailedException e) {
+		ResultsVector rv = new ResultsVector( delegate.sizeFeatures() );
+		rv.setErrorAll(e);
+		return rv;
 	}
-
-	@Override
-	public ResultsVector calcOne(T params)
-			throws FeatureCalcException {
-		return delegate.calcOne(params);
-	}
-
-
 }

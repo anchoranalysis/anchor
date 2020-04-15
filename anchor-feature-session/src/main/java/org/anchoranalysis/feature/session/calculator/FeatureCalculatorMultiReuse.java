@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session;
+package org.anchoranalysis.feature.session.calculator;
 
 /*
  * #%L
@@ -27,18 +27,13 @@ package org.anchoranalysis.feature.session;
  */
 
 
-import java.util.Collection;
+import java.util.List;
 
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Remembers the first-calculation and always returns this value for all subsequent calculations
@@ -46,30 +41,20 @@ import org.apache.commons.collections.CollectionUtils;
  * @author Owen Feehan
  *
  */
-public class SequentialSessionRepeatFirst<T extends FeatureCalcParams> extends FeatureSession implements ISequentialSessionSingleParams<T> {
+public class FeatureCalculatorMultiReuse<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
 
-	private SequentialSession<T> delegate;
+	private FeatureCalculatorMulti<T> delegate;
 	
 	private ResultsVector rv = null;
+	private List<ResultsVector> rvList = null;
 	
-	@SuppressWarnings("unchecked")
-	public SequentialSessionRepeatFirst(FeatureList<T> listFeatures) {
-		this( listFeatures, (Collection<String>) CollectionUtils.EMPTY_COLLECTION );
-	}
-	
-	public SequentialSessionRepeatFirst(FeatureList<T> listFeatures, Collection<String> ignoreFeaturePrefixes ) {
+	public FeatureCalculatorMultiReuse(FeatureCalculatorMulti<T> delegate) {
 		super();
-		this.delegate = new SequentialSession<>(listFeatures, ignoreFeaturePrefixes);
+		this.delegate = delegate;
 	}
 
 	@Override
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatureList, LogErrorReporter logger) throws InitException {
-		delegate.start(featureInitParams, sharedFeatureList, logger);
-	}
-
-	@Override
-	public ResultsVector calcOneSuppressErrors(T params,
-			ErrorReporter errorReporter) {
+	public ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
 		if (rv==null) {
 			rv = delegate.calcOneSuppressErrors(params, errorReporter);
 		}
@@ -77,9 +62,34 @@ public class SequentialSessionRepeatFirst<T extends FeatureCalcParams> extends F
 	}
 
 	@Override
-	public ResultsVector calcOne(T params)
-			throws FeatureCalcException {
-		return delegate.calcOne(params);
+	public ResultsVector calcOne(T params) throws FeatureCalcException {
+		if (rv==null) {
+			rv = delegate.calcOne(params);
+		}
+		return rv;
+	}
+
+	@Override
+	public List<ResultsVector> calcMany(List<T> listParams) throws FeatureCalcException {
+		if (rvList==null) {
+			rvList = delegate.calcMany(listParams);; 
+		}
+		return rvList;
+	}
+
+	@Override
+	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
+		throw new FeatureCalcException("This operation is not supported");
+	}
+
+	@Override
+	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
+		throw new FeatureCalcException("This operation is not supported");
+	}
+
+	@Override
+	public int sizeFeatures() {
+		return delegate.sizeFeatures();
 	}
 
 }

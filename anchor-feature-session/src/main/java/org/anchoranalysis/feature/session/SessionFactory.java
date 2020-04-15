@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.session;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /*-
  * #%L
  * anchor-feature-session
@@ -75,14 +78,23 @@ public class SessionFactory {
 		return new FeatureCalculatorSingleFromMulti<>(session);
 	}
 	
-	
 	public static <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart(
 		FeatureList<T> features,
 		FeatureInitParams initParams,
 		SharedFeatureSet<T> sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
-		SequentialSession<T> session = new SequentialSession<>(features); 
+		return createAndStart(features, initParams, sharedFeatures, logger, new ArrayList<>() );
+	}
+	
+	public static <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart(
+		FeatureList<T> features,
+		FeatureInitParams initParams,
+		SharedFeatureSet<T> sharedFeatures,
+		LogErrorReporter logger,
+		Collection<String> ignoreFeaturePrefixes
+	) throws FeatureCalcException {
+		SequentialSession<T> session = new SequentialSession<>(features, ignoreFeaturePrefixes); 
 		startSession(session, initParams, sharedFeatures, logger);
 		return session;
 	}
