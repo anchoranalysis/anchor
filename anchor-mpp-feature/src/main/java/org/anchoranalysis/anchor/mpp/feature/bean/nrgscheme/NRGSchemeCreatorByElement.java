@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -60,7 +60,7 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	@BeanField
 	private FeatureListProvider<NRGElemPairCalcParams> elemPairCreator;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeatureListProvider<NRGElemAllCalcParams> elemAllCreator;
 	
 	@BeanField
@@ -72,7 +72,7 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	@BeanField
 	private RegionMap regionMap;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
 	/**

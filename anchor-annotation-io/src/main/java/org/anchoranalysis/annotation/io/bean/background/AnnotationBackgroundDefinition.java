@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.bean.background;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.StringMap;
 
 public class AnnotationBackgroundDefinition extends AnchorBean<AnnotationBackgroundDefinition> {
@@ -44,7 +44,7 @@ public class AnnotationBackgroundDefinition extends AnchorBean<AnnotationBackgro
 	private String stackNameVisualOriginal;
 	
 	/** If non-null, maps underlying stack-name to a background */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StringMap backgroundStackMap;
 	
 	/** If non-empty any stackNames (after map) containing a certain string will be ignored */

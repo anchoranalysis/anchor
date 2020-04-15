@@ -171,7 +171,7 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 				
 		hasBeenInit = true;
 		this.logger = logger;
-		beforeCalc(	params );
+		beforeCalc( );
 	}
 	
 
@@ -219,7 +219,7 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	}
 
 	// Dummy method, that children can optionally override
-	public void beforeCalc(FeatureInitParams params) throws InitException {
+	public void beforeCalc() throws InitException {
 
 	}
 

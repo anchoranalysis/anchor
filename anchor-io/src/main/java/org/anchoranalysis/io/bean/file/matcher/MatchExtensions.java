@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.apache.commons.io.FilenameUtils;
 
@@ -52,7 +52,7 @@ public class MatchExtensions extends FileMatcher {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FileMatcher matcher;
 	
 	/** 
@@ -60,7 +60,7 @@ public class MatchExtensions extends FileMatcher {
 	 * <p>If an empty set is passed then, no check occurs, and no extension is checked</p> 
 	 * <p>If null, then a default set is populated from the inputContext</p>
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private Set<String> extensions;
 	// END BEAN PROPERTIES
 

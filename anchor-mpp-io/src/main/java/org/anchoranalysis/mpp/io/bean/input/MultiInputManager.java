@@ -36,7 +36,7 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -63,31 +63,31 @@ public class MultiInputManager extends MultiInputManagerBase {
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;	// For reading appended files
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendStack = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendCfg = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotation = new ArrayList<>();		// Uses both accepted and rejected
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationAcceptedOnly = new ArrayList<>();		// Uses both accepted only
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationRejectedOnly = new ArrayList<>();		// Uses both accepted rejectedonly
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendObjMaskCollection = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendKeyValueParams = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendHistogram = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppendFilePath = new ArrayList<>();
 	// END BEAN PROPERTIES
 

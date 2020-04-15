@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.feature.pixelwise;
+package org.anchoranalysis.bean.annotation;
 
 /*
  * #%L
- * anchor-image-feature
+ * anchor-bean
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,45 +27,11 @@ package org.anchoranalysis.image.feature.pixelwise;
  */
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.image.histogram.Histogram;
-
-public class PixelwiseFeatureInitParams extends FeatureInitParams {
-
-	private List<Histogram> listHist = new ArrayList<>();
-	private RandomNumberGenerator re;
+// Indicates that a field of a class should be included in a equals() check
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OptionalBean {
 	
-	public PixelwiseFeatureInitParams( RandomNumberGenerator re ) {
-		super();
-		this.re = re;
-	}
-	
-	protected PixelwiseFeatureInitParams( FeatureInitParams src ) {
-		super(src);
-	}
-	
-	@Override
-	public FeatureInitParams duplicate() {
-		PixelwiseFeatureInitParams out = new PixelwiseFeatureInitParams( super.duplicate() );
-		out.listHist = listHist;
-		out.re = re;
-		return out;
-	}
-
-	public Histogram getHist( int index ) {
-		return listHist.get(index);
-	}
-
-	public RandomNumberGenerator getRandomNumberGenerator() {
-		return re;
-	}
-
-	public void addListHist( Histogram hist ) {
-		listHist.add( hist );
-	}
-
 }

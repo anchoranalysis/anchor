@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.stack;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -36,15 +38,25 @@ import org.anchoranalysis.image.init.ImageInitParams;
 public class FeatureStackParams extends FeatureNRGStackParams {
 
 	private NRGStack nrgStack;
-	private ImageInitParams so;
+	
+	private Optional<ImageInitParams> so;
 
+	
+	/**
+	 * Should only be used if it's guaranteed the NRG stack will be added later, as this this required.
+	 */
+	public FeatureStackParams() {
+		this(null);
+	}
+	
 	/**
 	 * Params without any ImageInitParams
 	 * 
 	 * @param nrgStack
 	 */
 	public FeatureStackParams(NRGStack nrgStack) {
-		this(nrgStack, null);
+		this.so = Optional.empty();
+		this.setNrgStack( new NRGStackWithParams(nrgStack) );
 	}
 
 	/**
@@ -55,7 +67,7 @@ public class FeatureStackParams extends FeatureNRGStackParams {
 	 */
 	public FeatureStackParams(NRGStack nrgStack, ImageInitParams so) {
 		super();
-		this.so = so;
+		this.so = Optional.of(so);
 		this.setNrgStack( new NRGStackWithParams(nrgStack) );
 	}
 
@@ -69,7 +81,7 @@ public class FeatureStackParams extends FeatureNRGStackParams {
 		}
 	}
 
-	public ImageInitParams getSharedObjs() {
+	public Optional<ImageInitParams> getSharedObjs() {
 		return so;
 	}
 }

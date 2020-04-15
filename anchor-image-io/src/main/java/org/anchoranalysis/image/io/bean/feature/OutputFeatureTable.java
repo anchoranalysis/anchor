@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -63,10 +63,10 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	@BeanField
 	private List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StackProvider stackProviderNRG;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
 	@BeanField

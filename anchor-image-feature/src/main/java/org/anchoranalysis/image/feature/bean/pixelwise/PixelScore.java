@@ -1,4 +1,13 @@
-package org.anchoranalysis.image.feature.pixelwise.score;
+package org.anchoranalysis.image.feature.bean.pixelwise;
+
+
+
+import java.util.List;
+import java.util.Optional;
+
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.params.KeyValueParams;
 
 /*-
  * #%L
@@ -26,20 +35,29 @@ package org.anchoranalysis.image.feature.pixelwise.score;
  * #L%
  */
 
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class PixelScoreFeatureCalcParamsDescriptor extends FeatureParamsDescriptor {
-
-	public static final PixelScoreFeatureCalcParamsDescriptor instance = new PixelScoreFeatureCalcParamsDescriptor();
+/** Calculates a per-pixel score */
+public abstract class PixelScore extends AnchorBean<PixelScore> {
 	
-	private PixelScoreFeatureCalcParamsDescriptor() {
-		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Initializes the pixels-score.
+	 * 
+	 * <p>Must be called before calc()</p>
+	 * 
+	 * @param histograms one or more histograms associated with this calculation
+	 * @param keyValueParams optional key-value params associated with this calculation
+	 * @throws InitException if anything goes wrong
+	 */
+	public void init( List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
+		// TO be overridden if needed
 	}
 	
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
-	}
-
-
+	public abstract double calc(int[] pixelVals) throws FeatureCalcException;
 }

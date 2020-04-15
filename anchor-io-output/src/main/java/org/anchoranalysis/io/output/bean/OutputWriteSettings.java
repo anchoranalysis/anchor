@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.NamedBean;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -67,7 +67,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 	/**
 	 * Specifies a writer bean instance for a particular type of writer (identified by the writer bean class)
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<?>> writers;
 	// END BEAN PROPERTIES
 	

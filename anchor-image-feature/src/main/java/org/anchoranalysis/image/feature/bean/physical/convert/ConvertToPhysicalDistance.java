@@ -33,7 +33,6 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -66,8 +65,8 @@ public class ConvertToPhysicalDistance<T extends FeatureCalcParamsWithRes> exten
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params) throws InitException {
-		super.beforeCalc(params);
+	public void beforeCalc() throws InitException {
+		super.beforeCalc();
 		dv = directionVector.createVector();
 	}
 	

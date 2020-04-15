@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
@@ -68,13 +68,13 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 	private static final long serialVersionUID = -3182282741823034283L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeatureList<NRGElemPairCalcParams> elemPair = null;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeatureList<NRGElemIndCalcParams> elemInd = null;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeatureList<NRGElemAllCalcParams> elemAll = null;
 	
 	@BeanField
@@ -87,7 +87,7 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 	@BeanField
 	private AddCriteriaPair pairAddCriteria = null;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
 	

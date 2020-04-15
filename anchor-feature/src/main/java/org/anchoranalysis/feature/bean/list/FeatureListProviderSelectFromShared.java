@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -48,7 +48,7 @@ public class FeatureListProviderSelectFromShared<T extends FeatureCalcParams> ex
 	private static final long serialVersionUID = -3698511957662882985L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private RegEx match = null;
 	// END BEAN PROPERTIES
 	

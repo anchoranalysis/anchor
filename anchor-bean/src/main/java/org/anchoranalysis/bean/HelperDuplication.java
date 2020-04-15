@@ -32,7 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 
@@ -117,7 +117,7 @@ class HelperDuplication {
 			for(Field field  : bean.getOrCreateBeanFields()) {
 	
 		    	Object propertyOld = field.get(bean);
-		    	Object propertyNew = duplicatePropertyValue(propertyOld,field.getName(),field.isAnnotationPresent(Optional.class), beanOut );
+		    	Object propertyNew = duplicatePropertyValue(propertyOld,field.getName(),field.isAnnotationPresent(OptionalBean.class), beanOut );
 		    	
 		    	field.set(beanOut, propertyNew);
 			}

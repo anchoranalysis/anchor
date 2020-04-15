@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.shared.SequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
@@ -76,7 +76,7 @@ public class FeatureListProviderListSequence<T extends FeatureCalcParams> extend
 	/**
 	 * Another number range that is appended
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private SequenceInteger sequenceAdditional;
 	
 	@BeanField
