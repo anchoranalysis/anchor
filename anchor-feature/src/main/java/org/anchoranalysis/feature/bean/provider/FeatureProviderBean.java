@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.bean.provider;
  */
 
 import org.anchoranalysis.bean.Provider;
-import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 
 /**
@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.bean.FeatureBean;
  * @param <B> bean-type
  * @param <P> provider-type
  */
-public abstract class FeatureProviderBean<B,P> extends FeatureBean<B> implements Provider<P> {
+public abstract class FeatureProviderBean<B,P> extends FeatureRelatedBean<B> implements Provider<P> {
 
 	/**
 	 * 

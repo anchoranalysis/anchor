@@ -1,5 +1,8 @@
 package org.anchoranalysis.image.bean;
 
+import java.util.Arrays;
+import java.util.List;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -27,12 +30,11 @@ package org.anchoranalysis.image.bean;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public abstract class ImageBean<T> extends InitializableBeanSimple<T,ImageInitParams> {
@@ -46,7 +48,10 @@ public abstract class ImageBean<T> extends InitializableBeanSimple<T,ImageInitPa
 	private transient ImageInitParams so;
 	
 	protected ImageBean() {
-		super( new Initializer(), new SimplePropertyDefiner<ImageInitParams>(ImageInitParams.class) );
+		super(
+			new PropertyInitializer<>( ImageInitParams.class, paramExtracters() ),
+			new SimplePropertyDefiner<ImageInitParams>(ImageInitParams.class)
+		);
 	}
 	
 	@Override
@@ -55,35 +60,20 @@ public abstract class ImageBean<T> extends InitializableBeanSimple<T,ImageInitPa
 		this.so = so;
 	}
 
-	private static class Initializer extends PropertyInitializer<ImageInitParams> {
-
-		public Initializer() {
-			super( ImageInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, SharedFeaturesInitParams.class, getParam().getFeature())) {
-				return true;
-			}
-			
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, KeyValueParamsInitParams.class, getParam().getParams())) {
-				return true;
-			}
-			
-			return false;
-		}
-	}
-
 	public ImageInitParams getSharedObjects() {
 		return so;
+	}
+	
+	private static List<ExtractFromParam<ImageInitParams,?>> paramExtracters() {
+		return Arrays.asList(
+			new ExtractFromParam<>(
+				KeyValueParamsInitParams.class,
+				ImageInitParams::getFeature
+			),				
+			new ExtractFromParam<>(
+				KeyValueParamsInitParams.class,
+				ImageInitParams::getParams
+			)
+		);
 	}
 }

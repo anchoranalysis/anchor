@@ -106,15 +106,16 @@ public class MPPInitParams extends BeanInitParams {
 	}
 	
 	public static MPPInitParams create(
-			SharedObjects so,
-			Define namedDefinitions,
-			GeneralInitParams paramsGeneral
+		SharedObjects so,
+		Define namedDefinitions,
+		GeneralInitParams paramsGeneral
 	) throws CreateException {
 		ImageInitParams soImage = ImageInitParams.create( so, paramsGeneral.getRe(), paramsGeneral.getModelDir() );
 		MPPInitParams soMPP = create( soImage, so);
 		if (namedDefinitions!=null) {
 			try {
-				PropertyInitializer<MPPInitParams> pi = new MPPBean.Initializer();
+				// Tries to initialize any properties (of type MPPInitParams) found in the NamedDefinitions
+				PropertyInitializer<MPPInitParams> pi = MPPBean.getInitializer();
 				pi.setParam(soMPP);
 				soMPP.populate( pi, namedDefinitions, paramsGeneral.getLogErrorReporter() );
 			} catch (OperationFailedException e) {

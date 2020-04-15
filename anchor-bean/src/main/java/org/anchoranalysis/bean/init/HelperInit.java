@@ -80,7 +80,7 @@ class HelperInit {
 	private static void maybeInitChildren( BeanAndParent bean, List<BeanAndParent> listInit, String beanNameFollowingFrom, PropertyInitializer<?> pi, LogErrorReporter logger ) throws InitException {
 		
 		try {
-			boolean didInitChild = pi.execIfInheritsFrom(bean.getBean(), bean.parentBean(), logger); 
+			boolean didInitChild = pi.applyInitializationIfPossibleTo(bean.getBean(), bean.parentBean(), logger); 
 			if (didInitChild) {
 				// Add children of the object, but only if PropertyInitializer initializes the object
 				FindChildrenForInit.addChildrenFromBean(bean, listInit);		

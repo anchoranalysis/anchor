@@ -1,5 +1,8 @@
 package org.anchoranalysis.anchor.mpp.bean;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
 
@@ -30,11 +33,11 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
@@ -48,8 +51,16 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 	
 	private transient MPPInitParams soMPP;
 	
+	private static PropertyInitializer<MPPInitParams> initializer = new PropertyInitializer<>(
+		MPPInitParams.class,
+		paramExtracters()
+	); 
+	
 	protected MPPBean() {
-		super( new Initializer(), new SimplePropertyDefiner<MPPInitParams>(MPPInitParams.class) );
+		super(
+			initializer,
+			new SimplePropertyDefiner<>(MPPInitParams.class)
+		);
 	}
 	
 	@Override
@@ -58,43 +69,32 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 		this.soMPP = soMPP;
 	}
 
-	public static class Initializer extends PropertyInitializer<MPPInitParams> {
-
-		public Initializer() {
-			super( MPPInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, PointsInitParams.class, getParam().getPoints())) {
-				return true;
-			}
-
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, SharedFeaturesInitParams.class, getParam().getFeature())) {
-				return true;
-			}
-			
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, KeyValueParamsInitParams.class, getParam().getParams())) {
-				return true;
-			}
-
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, ImageInitParams.class, getParam().getImage())) {
-				return true;
-			}
-			
-			return false;
-		}
-	}
+	public static PropertyInitializer<MPPInitParams> getInitializer() {
+		return initializer;
+	}	
 
 	public MPPInitParams getSharedObjects() {
 		return soMPP;
+	}
+	
+	private static List<ExtractFromParam<MPPInitParams,?>> paramExtracters() {
+		return Arrays.asList(
+			new ExtractFromParam<>(
+				PointsInitParams.class,
+				MPPInitParams::getPoints
+			),
+			new ExtractFromParam<>(
+				SharedFeaturesInitParams.class,
+				MPPInitParams::getFeature
+			),
+			new ExtractFromParam<>(
+				KeyValueParamsInitParams.class,
+				MPPInitParams::getParams
+			),
+			new ExtractFromParam<>(
+				ImageInitParams.class,
+				MPPInitParams::getImage
+			)			
+		);
 	}
 }

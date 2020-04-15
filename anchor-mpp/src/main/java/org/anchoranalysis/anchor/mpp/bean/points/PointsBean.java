@@ -1,5 +1,8 @@
 package org.anchoranalysis.anchor.mpp.bean.points;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
 
 /*
@@ -29,46 +32,30 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public abstract class PointsBean<FamilyType> extends InitializableBeanSimple<FamilyType,PointsInitParams> {
+/**
+ * 
+ * @author owen
+ *
+ * @param <T> bean-type
+ */
+public abstract class PointsBean<T> extends InitializableBeanSimple<T,PointsInitParams> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private static class Initializer extends PropertyInitializer<PointsInitParams> {
-
-		public Initializer() {
-			super( PointsInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, ImageInitParams.class, getParam().getImage())) {
-				return true;
-			}
-			
-			return false;
-		}
-	}
-	
 	
 	protected PointsBean() {
-		super( new Initializer(), new SimplePropertyDefiner<PointsInitParams>(PointsInitParams.class) );
+		super(
+			new PropertyInitializer<>(PointsInitParams.class, paramExtracters()),
+			new SimplePropertyDefiner<PointsInitParams>(PointsInitParams.class)
+		);
 	}
 	
 	private PointsInitParams so;
@@ -81,5 +68,14 @@ public abstract class PointsBean<FamilyType> extends InitializableBeanSimple<Fam
 	
 	protected PointsInitParams getSharedObjects() {
 		return so;
+	}
+	
+	private static List<ExtractFromParam<PointsInitParams,?>> paramExtracters() {
+		return Arrays.asList(
+			new ExtractFromParam<>(
+				ImageInitParams.class,
+				PointsInitParams::getImage
+			)				
+		);
 	}
 }

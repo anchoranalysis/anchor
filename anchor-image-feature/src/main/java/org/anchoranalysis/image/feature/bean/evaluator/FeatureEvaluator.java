@@ -31,14 +31,14 @@ import org.anchoranalysis.feature.bean.Feature;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
-public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends FeatureBean<FeatureEvaluator<T>> {
+public abstract class FeatureEvaluator<T extends FeatureCalcParams> extends FeatureRelatedBean<FeatureEvaluator<T>> {
 
 	/**
 	 * 

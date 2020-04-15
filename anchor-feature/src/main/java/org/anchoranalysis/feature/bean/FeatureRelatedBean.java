@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.bean;
 
+import java.util.Arrays;
+import java.util.List;
+
 /*-
  * #%L
  * anchor-feature
@@ -27,14 +30,21 @@ package org.anchoranalysis.feature.bean;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
-public abstract class FeatureBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
+/**
+ * Beans-related to features that require initialization with {@link SharedFeaturesInitParams}
+ * 
+ * @author owen
+ *
+ * @param <T> bean-type
+ */
+public abstract class FeatureRelatedBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
 
 	/**
 	 * 
@@ -44,8 +54,11 @@ public abstract class FeatureBean<T> extends InitializableBeanSimple<T,SharedFea
 	
 	private transient SharedFeaturesInitParams soFeature;
 	
-	protected FeatureBean() {
-		super( new Initializer(), new SimplePropertyDefiner<SharedFeaturesInitParams>(SharedFeaturesInitParams.class) );
+	protected FeatureRelatedBean() {
+		super(
+			new PropertyInitializer<>( SharedFeaturesInitParams.class, paramExtracters() ),
+			new SimplePropertyDefiner<SharedFeaturesInitParams>(SharedFeaturesInitParams.class)
+		);
 	}
 	
 	@Override
@@ -54,31 +67,16 @@ public abstract class FeatureBean<T> extends InitializableBeanSimple<T,SharedFea
 		this.soFeature = soFeature;
 	}
 
-	private static class Initializer extends PropertyInitializer<SharedFeaturesInitParams> {
-
-		public Initializer() {
-			super( SharedFeaturesInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, KeyValueParamsInitParams.class, getParam().getParams())) {
-				return true;
-			}
-			
-			return false;
-		}
-	}
-
 	public SharedFeaturesInitParams getSharedObjects() {
 		return soFeature;
+	}
+	
+	private static List<ExtractFromParam<SharedFeaturesInitParams,?>> paramExtracters() {
+		return Arrays.asList(
+			new ExtractFromParam<>(
+				KeyValueParamsInitParams.class,
+				SharedFeaturesInitParams::getParams
+			)
+		);
 	}
 }

@@ -1,5 +1,8 @@
 package org.anchoranalysis.bean.init.property;
 
+import java.util.Arrays;
+import java.util.List;
+
 /*-
  * #%L
  * anchor-bean
@@ -32,6 +35,15 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
 /**
+ * Tries to initialize a bean's property with particular (or derived) parameters
+ * 
+ * <div>
+ * Specifically, two types of properties will be initialized:
+ * <ul>
+ * <li>Properties that have identical property-type to P (the current parameters)</li>
+ * <li>Properties with another property-type that can be extracted from P (the current parameters)</li>
+ * </ul>
+ * </div>
  * 
  * @author Owen Feehan
  *
@@ -42,33 +54,143 @@ public class PropertyInitializer<P> {
 	private P param;
 	private Class<?> initParamType;
 	
+	// Initially only NullParamsInit are extracted (as they can be applied irrespective of current parameters)
+	// Depending on the constructor, more extracters may be added to this list
+	private List<ExtractFromParam<P,?>> listExtractFromParams = Arrays.asList(
+		nullExtracter()	
+	);
+	
+	/**
+	 * Simpler case where only the current-parameters can be initialized, but for no further property-types.
+	 * 
+	 * @param initParamType type of parameters to be propagated
+	 */
 	public PropertyInitializer( Class<?> initParamType ) {
 		super();
 		this.initParamType = initParamType;
 	}
+
+	/**
+	 * More complex-case where both current-parameters and other extracted property-types can be initialized.
+	 * 
+	 * @param initParamType type of parameters to be propagated
+	 * @param listExtractFromParams extracters to used for other property-types that can be derived from current property-type
+	 */
+	public PropertyInitializer( Class<?> initParamType, List<ExtractFromParam<P,?>> listExtractFromParams ) {
+		super();
+		this.initParamType = initParamType;
+		
+		// Add any additional extracters
+		listExtractFromParams.addAll(listExtractFromParams);
+	}
 	
+	/** Sets the current parameters used for propagation */
 	public void setParam(P param) {
 		this.param = param;
 	}
 	
-	public boolean execIfInheritsFrom( Object propertyValue, Object parent, LogErrorReporter logger ) throws InitException {
+	
+	/**
+	 * Applies the initialization to a property using the current or extracted params if possible.
+	 * 
+	 * <p>It is essential that {@link #setParam(Object)} is called before this method</p>
+	 * 
+	 * @param propertyValue bean-property to be initialized (as a root)
+	 * @param parent the parent bean in which this property resides
+	 * @param logger logger for any errrors
+	 * @return true if some kind of initialization occurred with this property, false otherwise
+	 * @throws InitException
+	 */
+	public boolean applyInitializationIfPossibleTo( Object propertyValue, Object parent, LogErrorReporter logger ) throws InitException {
 		
-		if (param!=null) {
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), getParam())) {
-				return true;
-			}
+		assert(param!=null);
+		
+		// Properties with identical property-type to the current parameters
+		if (initIdenticalParamTypes(propertyValue, parent, logger)) {
+			return true;
 		}
 
-		// We can always initialize anything that doesn't take parameters (i.e. takes NullInitParams)
-		if (initMatchingPropertiesWith(propertyValue, parent, logger, NullInitParams.class, NullInitParams.instance())) {
+		// Properties with other property-types (whose parameters can be extracted from the current parameters)
+		if (initExtractedParams(propertyValue, parent, logger)) {
 			return true;
 		}
 		
 		return false;
 		
 	}
+
+	public Class<?> getInitParamType() {
+		return initParamType;
+	}
 	
-	protected PropertyDefiner<?> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
+	
+	/**
+	 * Initializes properties that have an identical property-type as currently
+	 * 
+	 * <p>This has the effect of recursively propagating the the initialization</p>
+	 * 
+	 * @param propertyValue
+	 * @param parent
+	 * @param logger
+	 * @return
+	 * @throws InitException
+	 */
+	private boolean initIdenticalParamTypes(Object propertyValue, Object parent, LogErrorReporter logger) throws InitException {
+		if (param!=null) {
+			if (initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), param)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Initializes properties that don't have the same property type, but another property-type that can be extracted
+	 * 
+	 * <p>The {{@link #listExtractFromParams} defines what other property-types can be extracted and how to do it</p>
+	 * 
+	 * @param propertyValue
+	 * @param parent
+	 * @param logger
+	 * @return
+	 * @throws InitException
+	 */
+	private boolean initExtractedParams(Object propertyValue, Object parent, LogErrorReporter logger) throws InitException {
+		
+		for( ExtractFromParam<P,?> extract : listExtractFromParams) {
+			
+			// We can always initialize anything that doesn't take parameters (i.e. takes NullInitParams)
+			if (extract.acceptsAsSource(param.getClass()) && initMatchingPropertiesWith(
+				propertyValue,
+				parent,
+				logger,
+				extract.getClassOfTarget(),
+				extract.extract(param)
+			)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean initMatchingPropertiesWith(
+		Object propertyValue,
+		Object parent,
+		LogErrorReporter logger,
+		Class<?> propertyClassToMatch,
+		Object paramToInitWith
+	) throws InitException {
+		PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
+		if (pd!=null) {
+			pd.doInitFor( propertyValue, paramToInitWith, parent, logger );
+			return true;
+		}
+		return false;
+	}
+
+	private PropertyDefiner<?> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
 		
 		if (propertyValue instanceof InitializableBean ) {
 			
@@ -85,27 +207,12 @@ public class PropertyInitializer<P> {
 			return null;
 		}
 	}
-
-	public Class<?> getInitParamType() {
-		return initParamType;
-	}
-
-	protected P getParam() {
-		return param;
-	}
 	
-	protected boolean initMatchingPropertiesWith(
-		Object propertyValue,
-		Object parent,
-		LogErrorReporter logger,
-		Class<?> propertyClassToMatch,
-		Object paramToInitWith
-	) throws InitException {
-		PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
-		if (pd!=null) {
-			pd.doInitFor( propertyValue, paramToInitWith, parent, logger );
-			return true;
-		}
-		return false;
+	/** A simple extractor used to apply {@link NullInitParams} to any property looking for this property-type */
+	private ExtractFromParam<P, NullInitParams> nullExtracter() {
+		return new ExtractFromParam<>(
+			param.getClass(),
+			params -> NullInitParams.instance()
+		);
 	}
 }

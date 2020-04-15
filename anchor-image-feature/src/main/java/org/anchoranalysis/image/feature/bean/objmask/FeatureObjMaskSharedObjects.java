@@ -1,5 +1,12 @@
 package org.anchoranalysis.image.feature.bean.objmask;
 
+
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.anchoranalysis.bean.init.property.ExtractFromParam;
+
 /*
  * #%L
  * anchor-image-feature
@@ -27,8 +34,6 @@ package org.anchoranalysis.image.feature.bean.objmask;
  */
 
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.FeatureCastInitParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -51,46 +56,11 @@ public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	private static class Initializer extends PropertyInitializer<FeatureInitParams> {
-
-		public Initializer() {
-			super( FeatureInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			if (getParam() instanceof FeatureInitParamsSharedObjs) {
-				if (initMatchingPropertiesWith(
-					propertyValue,
-					parent,
-					logger,
-					ImageInitParams.class,
-					extractImageInitParams()
-				)) {
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		private ImageInitParams extractImageInitParams() {
-			FeatureInitParamsSharedObjs paramCast = (FeatureInitParamsSharedObjs) getParam();
-			return paramCast.getSharedObjects();
-		}
-	}
-	
 	protected FeatureObjMaskSharedObjects() {
-		super(FeatureInitParamsSharedObjs.class, new Initializer() );
+		super(
+			FeatureInitParamsSharedObjs.class,
+			new PropertyInitializer<FeatureInitParams>(	FeatureInitParams.class, paramExtracters() )
+		);
 	}
 
 	@Override
@@ -98,6 +68,19 @@ public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<
 			throws FeatureCalcException {
 		return FeatureObjMaskParamsDescriptor.instance;
 	}
-
-
+	
+	private static List<ExtractFromParam<FeatureInitParams,?>> paramExtracters() {
+		return Arrays.asList(
+			new ExtractFromParam<>(
+				ImageInitParams.class,
+				FeatureObjMaskSharedObjects::extractImageInitParams,
+				FeatureInitParamsSharedObjs.class
+			)
+		);
+	}
+		
+	private static ImageInitParams extractImageInitParams(FeatureInitParams params) {
+		FeatureInitParamsSharedObjs paramCast = (FeatureInitParamsSharedObjs) params;
+		return paramCast.getSharedObjects();
+	}
 }

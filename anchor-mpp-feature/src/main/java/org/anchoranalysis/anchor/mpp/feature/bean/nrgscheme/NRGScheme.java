@@ -45,7 +45,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
@@ -60,7 +60,7 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
  * @author Owen Feehan
  *
  */
-public class NRGScheme extends FeatureBean<NRGScheme> {
+public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 
 	/**
 	 * 
