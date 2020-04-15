@@ -1,5 +1,6 @@
 package org.anchoranalysis.bean.init.property;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,9 +57,7 @@ public class PropertyInitializer<P> {
 	
 	// Initially only NullParamsInit are extracted (as they can be applied irrespective of current parameters)
 	// Depending on the constructor, more extracters may be added to this list
-	private List<ExtractFromParam<P,?>> listExtractFromParams = Arrays.asList(
-		nullExtracter()	
-	);
+	private List<ExtractFromParam<P,?>> extracters = listExtractersWithDefault();
 	
 	/**
 	 * Simpler case where only the current-parameters can be initialized, but for no further property-types.
@@ -74,14 +73,14 @@ public class PropertyInitializer<P> {
 	 * More complex-case where both current-parameters and other extracted property-types can be initialized.
 	 * 
 	 * @param initParamType type of parameters to be propagated
-	 * @param listExtractFromParams extracters to used for other property-types that can be derived from current property-type
+	 * @param extracters extracters to used for other property-types that can be derived from current property-type
 	 */
-	public PropertyInitializer( Class<?> initParamType, List<ExtractFromParam<P,?>> listExtractFromParams ) {
+	public PropertyInitializer( Class<?> initParamType, List<ExtractFromParam<P,?>> extractersToAdd ) {
 		super();
 		this.initParamType = initParamType;
 		
 		// Add any additional extracters
-		listExtractFromParams.addAll(listExtractFromParams);
+		this.extracters.addAll(extractersToAdd);
 	}
 	
 	/** Sets the current parameters used for propagation */
@@ -148,7 +147,7 @@ public class PropertyInitializer<P> {
 	/**
 	 * Initializes properties that don't have the same property type, but another property-type that can be extracted
 	 * 
-	 * <p>The {{@link #listExtractFromParams} defines what other property-types can be extracted and how to do it</p>
+	 * <p>The {{@link #extracters} defines what other property-types can be extracted and how to do it</p>
 	 * 
 	 * @param propertyValue
 	 * @param parent
@@ -158,7 +157,7 @@ public class PropertyInitializer<P> {
 	 */
 	private boolean initExtractedParams(Object propertyValue, Object parent, LogErrorReporter logger) throws InitException {
 		
-		for( ExtractFromParam<P,?> extract : listExtractFromParams) {
+		for( ExtractFromParam<P,?> extract : extracters) {
 			
 			// We can always initialize anything that doesn't take parameters (i.e. takes NullInitParams)
 			if (extract.acceptsAsSource(param.getClass()) && initMatchingPropertiesWith(
@@ -206,6 +205,12 @@ public class PropertyInitializer<P> {
 		} else {
 			return null;
 		}
+	}
+	
+	private List<ExtractFromParam<P,?>> listExtractersWithDefault() {
+		List<ExtractFromParam<P,?>> list = new ArrayList<>();
+		list.add( nullExtracter() );
+		return list;
 	}
 	
 	/** A simple extractor used to apply {@link NullInitParams} to any property looking for this property-type */
