@@ -211,7 +211,7 @@ public class PropertyInitializer<P> {
 	/** A simple extractor used to apply {@link NullInitParams} to any property looking for this property-type */
 	private ExtractFromParam<P, NullInitParams> nullExtracter() {
 		return new ExtractFromParam<>(
-			param.getClass(),
+			NullInitParams.class,
 			params -> NullInitParams.instance()
 		);
 	}
