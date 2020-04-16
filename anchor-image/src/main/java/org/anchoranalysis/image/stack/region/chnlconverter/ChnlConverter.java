@@ -39,16 +39,22 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-// Converts a channel from one type to another
-public abstract class ChnlConverter<DestinationType extends Buffer> {
+/**
+ * Converts a channel from one type to another
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> type to convert to (destination-type)
+ */
+public abstract class ChnlConverter<T extends Buffer> {
 
-	private VoxelBoxFactoryTypeBound<DestinationType> voxelBoxFactory;
+	private VoxelBoxFactoryTypeBound<T> voxelBoxFactory;
 	
 	private VoxelDataType dataTypeTarget;
-	private VoxelBoxConverter<DestinationType> voxelBoxConverter;
+	private VoxelBoxConverter<T> voxelBoxConverter;
 		
 	public ChnlConverter(VoxelDataType dataTypeTarget,
-			VoxelBoxConverter<DestinationType> voxelBoxConverter, VoxelBoxFactoryTypeBound<DestinationType> voxelBoxFactory) {
+			VoxelBoxConverter<T> voxelBoxConverter, VoxelBoxFactoryTypeBound<T> voxelBoxFactory) {
 		super();
 		this.dataTypeTarget = dataTypeTarget;
 		this.voxelBoxConverter = voxelBoxConverter;
@@ -80,7 +86,7 @@ public abstract class ChnlConverter<DestinationType extends Buffer> {
 		}
 		
 		Chnl chnlOut;
-		VoxelBox<DestinationType> voxelBoxOut;
+		VoxelBox<T> voxelBoxOut;
 		
 		if (changeExisting==ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
 			chnlOut = chnlIn;
@@ -88,7 +94,7 @@ public abstract class ChnlConverter<DestinationType extends Buffer> {
 			voxelBoxOut = voxelBoxFactory.create( chnlIn.getDimensions().getExtnt() );
 		} else {
 			chnlOut = ChnlFactory.instance().createEmptyUninitialised( chnlIn.getDimensions(), dataTypeTarget );
-			voxelBoxOut = (VoxelBox<DestinationType>) chnlOut.getVoxelBox().match(dataTypeTarget);
+			voxelBoxOut = (VoxelBox<T>) chnlOut.getVoxelBox().match(dataTypeTarget);
 		}
 		
 		voxelBoxConverter.convertFrom(chnlIn.getVoxelBox(), voxelBoxOut);
@@ -101,7 +107,7 @@ public abstract class ChnlConverter<DestinationType extends Buffer> {
 		return chnlOut;
 	}
 
-	public VoxelBoxConverter<DestinationType> getVoxelBoxConverter() {
+	public VoxelBoxConverter<T> getVoxelBoxConverter() {
 		return voxelBoxConverter;
 	}
 

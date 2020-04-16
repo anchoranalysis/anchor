@@ -72,7 +72,7 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
 		
 		// We just want to return the area under the objMask
-		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.getByte().create( objMask.getVoxelBox().extnt() );
+		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.instance().getByte().create( objMask.getVoxelBox().extnt() );
 		VoxelBoxWrapper maskDupWrap = new VoxelBoxWrapper(maskDup);
 		
 		voxelBox.copyPixelsToCheckMask(

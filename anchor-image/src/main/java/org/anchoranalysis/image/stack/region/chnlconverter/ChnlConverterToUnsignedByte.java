@@ -45,7 +45,7 @@ public class ChnlConverterToUnsignedByte extends ChnlConverter<ByteBuffer> {
 		super(
 			VoxelDataTypeUnsignedByte.instance,
 			voxelBoxConverter,
-			VoxelBoxFactory.getByte()
+			VoxelBoxFactory.instance().getByte()
 		);
 	}
 

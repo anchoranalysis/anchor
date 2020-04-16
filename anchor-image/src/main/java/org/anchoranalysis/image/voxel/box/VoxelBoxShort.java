@@ -47,7 +47,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	public VoxelBoxShort(IPixelsForPlane<ShortBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
-			VoxelBoxFactory.getShort()
+			VoxelBoxFactory.instance().getShort()
 		);
 	}
 	

@@ -72,7 +72,7 @@ public class ObjMask {
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
 	public ObjMask(BoundingBox bbox) {
 		super();
-		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.getByte() );
+		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.instance().getByte() );
 	}
 	
 	public ObjMask(BoundedVoxelBox<ByteBuffer> voxelBox) {
@@ -148,7 +148,7 @@ public class ObjMask {
 		return new ObjMask(
 			delegate.growToZ(
 				sz,
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			)
 		);
 	}
@@ -160,7 +160,7 @@ public class ObjMask {
 				neg,
 				pos,
 				clipRegion,
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			)
 		);
 	}
@@ -365,7 +365,7 @@ public class ObjMask {
 		
 		BinaryValues bvOut = BinaryValues.getDefault();
 		
-		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.getByte().create( bboxIntersect.extnt() );
+		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.instance().getByte().create( bboxIntersect.extnt() );
 		vbMaskOut.setAllPixelsTo( bvOut.getOnInt() );
 		
 		BoundingBox allOut = new BoundingBox( vbMaskOut.extnt() );
@@ -510,7 +510,7 @@ public class ObjMask {
 			delegate.createVirtualSubrange(
 				zMin,
 				zMax,
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			),
 			this.bv
 		);
@@ -595,7 +595,7 @@ public class ObjMask {
 			rel2,
 			dim,
 			setVal,
-			VoxelBoxFactory.getByte()
+			VoxelBoxFactory.instance().getByte()
 		);
 	}
 	

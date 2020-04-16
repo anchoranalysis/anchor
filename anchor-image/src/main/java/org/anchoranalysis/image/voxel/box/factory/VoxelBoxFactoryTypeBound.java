@@ -34,11 +34,18 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-public abstract class VoxelBoxFactoryTypeBound<BufferType extends Buffer> {
+/**
+ * A factory for creating VoxelBoxes with a particular buffer-type
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> buffer-type
+ */
+public abstract class VoxelBoxFactoryTypeBound<T extends Buffer> {
 	
-	public abstract VoxelBox<BufferType> create( IPixelsForPlane<BufferType> pixelsForPlane );
+	public abstract VoxelBox<T> create( IPixelsForPlane<T> pixelsForPlane );
 	
-	public abstract VoxelBox<BufferType> create( Extent e );
+	public abstract VoxelBox<T> create( Extent e );
 	
 	public abstract VoxelDataType dataType();
 }

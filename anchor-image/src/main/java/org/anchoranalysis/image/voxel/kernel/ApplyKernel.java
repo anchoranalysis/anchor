@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
  */
 public class ApplyKernel {
 
-	private static VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.getByte();
+	private static VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.instance().getByte();
 	
 	public static VoxelBox<ByteBuffer> apply( BinaryKernel kernel, VoxelBox<ByteBuffer> in ) {
 		return apply(kernel, in, BinaryValuesByte.getDefault());
