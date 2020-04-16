@@ -58,15 +58,9 @@ public class LRUHashMapCache<V,K> {
 		V get( K index ) throws GetOperationFailedException;
 	}
 	
-	private LRUHashMapCache( int cacheSize, Getter<V,K> getter ) {
+	public LRUHashMapCache( int cacheSize, Getter<V,K> getter ) {
 		this.cacheSize = cacheSize;
 		this.sourceGetter = getter;
-	}
-		
-	public static <V,K> LRUHashMapCache<V,K> createAndMonitor( int cacheSize, Getter<V,K> getter, CacheMonitor cacheMonitor, String cacheMonitorName ) {
-		LRUHashMapCache<V,K> ret = new LRUHashMapCache<>( cacheSize, getter );
-		cacheMonitor.add(cacheMonitorName, ret);
-		return ret;
 	}
 	
 	public synchronized void clear() {

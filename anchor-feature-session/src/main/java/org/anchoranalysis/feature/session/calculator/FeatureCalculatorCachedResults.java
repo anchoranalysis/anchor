@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session.calculator;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.cache.LRUHashMapCache;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -63,11 +62,9 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 		this.delegate = delegate;
 		this.suppressErrors = suppressErrors;
 		
-		this.cacheResults = LRUHashMapCache.createAndMonitor(
+		this.cacheResults = new LRUHashMapCache<>(
 			CACHE_SIZE,
-			new GetterImpl(),
-			new CacheMonitor(),
-			"SequentialSessionVerticallyCached"
+			new GetterImpl()
 		);
 		
 	}

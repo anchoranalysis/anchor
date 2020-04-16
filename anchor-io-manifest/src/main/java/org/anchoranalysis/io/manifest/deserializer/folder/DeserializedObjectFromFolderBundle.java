@@ -30,7 +30,6 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.cache.LRUHashMapCache;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
@@ -69,13 +68,13 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 	
 	}
 	
-	public DeserializedObjectFromFolderBundle(FolderWrite folderWrite, final BundleDeserializers<T> deserializers, int cacheSize, CacheMonitor cacheMonitor ) throws DeserializationFailedException {
+	public DeserializedObjectFromFolderBundle(FolderWrite folderWrite, final BundleDeserializers<T> deserializers, int cacheSize ) throws DeserializationFailedException {
 		super();
 		
 		final FolderWrite bundleFolder = folderWrite;
 		
 		// We create our cache
-		this.cache = LRUHashMapCache.createAndMonitor(
+		this.cache = new LRUHashMapCache<>(
 			cacheSize,
 			new LRUHashMapCache.Getter<HashMap<Integer,T>,Integer>() {
 				
@@ -91,9 +90,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 					}
 					return bundle.createHashMap();
 				}
-			},
-			cacheMonitor,
-			"DeserializedObjectFromFolderBundle"
+			}
 		);
 		
 		bundleParameters = BundleUtilities.generateBundleParameters( deserializers.getDeserializerBundleParameters(), folderWrite );

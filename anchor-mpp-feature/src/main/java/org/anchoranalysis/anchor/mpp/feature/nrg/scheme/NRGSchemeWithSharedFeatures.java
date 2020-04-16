@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
  */
 
 
-import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.cache.LRUHashMapCache;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -61,7 +60,6 @@ public class NRGSchemeWithSharedFeatures {
 	
 	private LRUHashMapCache<NRGTotal, Integer> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
-	private CacheMonitor cacheMonitor;
 	private LogErrorReporter logger;
 	
 	private int nrgSchemeIndCacheSize;
@@ -130,16 +128,15 @@ public class NRGSchemeWithSharedFeatures {
 
 	
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureSet<FeatureCalcParams> sharedFeatures, int nrgSchemeIndCacheSize, CacheMonitor cacheMonitor, LogErrorReporter logger ) {
+			SharedFeatureSet<FeatureCalcParams> sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
 		this.nrgSchemeIndCacheSize = nrgSchemeIndCacheSize;
-		this.cacheMonitor = cacheMonitor;
 		this.logger = logger;
 		
 		operationIndCalc = new CalcElemIndTotalOperation();
-		indCache = LRUHashMapCache.createAndMonitor(nrgSchemeIndCacheSize, operationIndCalc, cacheMonitor, "NRGSchemeWithSharedFeatures"); 
+		indCache = new LRUHashMapCache<>(nrgSchemeIndCacheSize, operationIndCalc); 
 	}
 	
 	public NRGTotal calcElemAllTotal( MemoMarks pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
@@ -202,7 +199,7 @@ public class NRGSchemeWithSharedFeatures {
 	
 	
 	public NRGSchemeWithSharedFeatures duplicateWithNewNRGScheme() {
-		return new NRGSchemeWithSharedFeatures(nrgScheme.duplicateKeepFeatures(), sharedFeatures, nrgSchemeIndCacheSize, cacheMonitor, logger );
+		return new NRGSchemeWithSharedFeatures(nrgScheme.duplicateKeepFeatures(), sharedFeatures, nrgSchemeIndCacheSize, logger );
 	}
 	
 	public NRGScheme getNrgScheme() {
