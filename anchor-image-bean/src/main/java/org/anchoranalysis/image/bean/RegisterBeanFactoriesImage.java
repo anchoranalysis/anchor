@@ -54,7 +54,7 @@ public class RegisterBeanFactoriesImage {
 		RegisterBeanFactories.register("objMaskFilterList", (List<ObjMaskFilter> list)->{
 			ObjMaskFilterList lstOut = new ObjMaskFilterList();
 	    	for( ObjMaskFilter fr : list) {
-	    		lstOut.add( fr );
+	    		lstOut.getList().add( fr );
 	    	}
     	    return lstOut;
 		});
