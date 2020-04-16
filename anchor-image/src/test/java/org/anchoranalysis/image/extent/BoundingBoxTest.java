@@ -30,8 +30,6 @@ package org.anchoranalysis.image.extent;
 import static org.junit.Assert.assertTrue;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.junit.Test;
 
 public class BoundingBoxTest {

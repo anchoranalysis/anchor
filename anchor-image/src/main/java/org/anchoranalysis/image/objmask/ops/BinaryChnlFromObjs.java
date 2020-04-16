@@ -35,6 +35,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -111,21 +112,36 @@ public class BinaryChnlFromObjs {
 		for (pntGlobal.setZ(bbox.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrZ(), pntLocal.incrZ()) {
 			
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
+			
 			ByteBuffer pixelsOut = voxelBoxOut.getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
+			writeToBufferMasked(maskIn, pixelsOut, voxelBoxOut.extnt(), bbox.getCrnrMin(), pntGlobal, maxGlobal, maskOn, outValByte);
+		}
+	}
+	
+	private static void writeToBufferMasked(
+		ByteBuffer maskIn,
+		ByteBuffer pixelsOut,
+		Extent extntOut,
+		Point3i crnrMin,
+		Point3i pntGlobal,
+		Point3i maxGlobal,
+		byte maskOn,
+		byte outValByte
+	) {
+		
+		for (pntGlobal.setY(crnrMin.getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
 			
-			for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
-			
-				for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrX() ) {	
+			for (pntGlobal.setX(crnrMin.getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrX() ) {	
 
-					if (maskIn.get()!=maskOn) {
-						continue;
-					}
-					
-					int indexGlobal = voxelBoxOut.extnt().offset(pntGlobal.getX(), pntGlobal.getY());
-					pixelsOut.put(indexGlobal,outValByte);
+				if (maskIn.get()!=maskOn) {
+					continue;
 				}
+				
+				int indexGlobal = extntOut.offset(pntGlobal.getX(), pntGlobal.getY());
+				pixelsOut.put(indexGlobal,outValByte);
 			}
 		}
+		
 	}
 	
 }

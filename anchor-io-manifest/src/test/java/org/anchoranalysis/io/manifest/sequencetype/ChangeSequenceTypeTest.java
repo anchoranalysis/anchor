@@ -29,8 +29,6 @@ package org.anchoranalysis.io.manifest.sequencetype;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.io.manifest.sequencetype.ChangeSequenceType;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.junit.Test;
 
 public class ChangeSequenceTypeTest {

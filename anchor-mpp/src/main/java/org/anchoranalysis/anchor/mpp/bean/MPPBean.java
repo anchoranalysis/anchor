@@ -51,14 +51,9 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 	
 	private transient MPPInitParams soMPP;
 	
-	private static PropertyInitializer<MPPInitParams> initializer = new PropertyInitializer<>(
-		MPPInitParams.class,
-		paramExtracters()
-	); 
-	
 	protected MPPBean() {
 		super(
-			initializer,
+			initializerForMPPBeans(),
 			new SimplePropertyDefiner<>(MPPInitParams.class)
 		);
 	}
@@ -69,8 +64,19 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 		this.soMPP = soMPP;
 	}
 
-	public static PropertyInitializer<MPPInitParams> getInitializer() {
-		return initializer;
+	/**
+	 * Creates a property-initializes for MPP-Beans
+	 * 
+	 * <p>Beware concuirrency. Initializers are stateful with the {#link {@link PropertyInitializer#setParam(Object)}
+	 * method so this should be created newly for each thread, rather reused statically</p>
+	 * 
+	 * @return
+	 */
+	public static PropertyInitializer<MPPInitParams> initializerForMPPBeans() {
+		return new PropertyInitializer<>(
+			MPPInitParams.class,
+			paramExtracters()
+		);
 	}	
 
 	public MPPInitParams getSharedObjects() {

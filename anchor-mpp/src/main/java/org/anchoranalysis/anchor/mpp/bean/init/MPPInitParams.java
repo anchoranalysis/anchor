@@ -115,9 +115,10 @@ public class MPPInitParams extends BeanInitParams {
 		if (namedDefinitions!=null) {
 			try {
 				// Tries to initialize any properties (of type MPPInitParams) found in the NamedDefinitions
-				PropertyInitializer<MPPInitParams> pi = MPPBean.getInitializer();
+				PropertyInitializer<MPPInitParams> pi = MPPBean.initializerForMPPBeans();
 				pi.setParam(soMPP);
 				soMPP.populate( pi, namedDefinitions, paramsGeneral.getLogErrorReporter() );
+
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
 			}

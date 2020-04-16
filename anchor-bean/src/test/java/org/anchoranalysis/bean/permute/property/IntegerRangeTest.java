@@ -29,7 +29,6 @@ package org.anchoranalysis.bean.permute.property;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.bean.permute.property.IntegerRange;
 import org.junit.Test;
 
 public class IntegerRangeTest {

@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkSphere;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.junit.Test;
 
