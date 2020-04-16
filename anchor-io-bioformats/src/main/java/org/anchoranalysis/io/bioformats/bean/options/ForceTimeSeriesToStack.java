@@ -26,24 +26,15 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * #L%
  */
 
-import java.util.List;
-
-import org.anchoranalysis.bean.annotation.BeanField;
-
 import loci.formats.IFormatReader;
 
 /** Treats a time-series as if it was a z-stack */
-public class ForceTimeSeriesToStack extends ReadOptions {
+public class ForceTimeSeriesToStack extends ReadOptionsDelegate {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ReadOptions options = new Default();
-	// END BEAN PROPERTIES
 
 	@Override
 	public int sizeT(IFormatReader reader) {
@@ -53,39 +44,11 @@ public class ForceTimeSeriesToStack extends ReadOptions {
 
 	@Override
 	public int sizeZ(IFormatReader reader) {
-		return reader.getSizeT() * options.sizeZ(reader);
-	}
-
-	@Override
-	public int sizeC(IFormatReader reader) {
-		return options.sizeC(reader);
-	}
-	
-	@Override
-	public int effectiveBitsPerPixel(IFormatReader reader) {
-		return options.effectiveBitsPerPixel(reader);
-	}
-
-	@Override
-	public int chnlsPerByteArray(IFormatReader reader) {
-		return options.chnlsPerByteArray(reader);
-	}
-	
-	@Override
-	public List<String> determineChannelNames(IFormatReader reader) {
-		return options.determineChannelNames(reader);
+		return reader.getSizeT() * delegate().sizeZ(reader);
 	}
 	
 	@Override
 	public boolean isRGB(IFormatReader reader) {
-		return options.isRGB(reader);
-	}
-	
-	public ReadOptions getOptions() {
-		return options;
-	}
-
-	public void setOptions(ReadOptions options) {
-		this.options = options;
+		return delegate().isRGB(reader);
 	}
 }
