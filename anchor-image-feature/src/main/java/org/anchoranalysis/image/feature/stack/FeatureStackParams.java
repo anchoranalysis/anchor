@@ -30,14 +30,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public class FeatureStackParams extends FeatureNRGStackParams {
-
-	private NRGStack nrgStack;
 	
 	private Optional<ImageInitParams> so;
 
@@ -69,16 +65,6 @@ public class FeatureStackParams extends FeatureNRGStackParams {
 		super();
 		this.so = Optional.of(so);
 		this.setNrgStack( new NRGStackWithParams(nrgStack) );
-	}
-
-	@Override
-	public ImageRes getRes() {
-		ImageDim sd = nrgStack.getDimensions();
-		if (sd!=null) {
-			return sd.getRes();
-		} else {
-			return null;
-		}
 	}
 
 	public Optional<ImageInitParams> getSharedObjs() {
