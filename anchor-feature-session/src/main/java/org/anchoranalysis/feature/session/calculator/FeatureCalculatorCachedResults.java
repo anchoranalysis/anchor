@@ -29,7 +29,9 @@ package org.anchoranalysis.feature.session.calculator;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.LRUHashMapCache;
+import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
+import org.anchoranalysis.core.cache.LRUCache.CalculateForCache;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.CacheableParams;
@@ -48,7 +50,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 
 	private FeatureCalculatorMulti<T> delegate;
 	
-	private LRUHashMapCache<ResultsVector,T> cacheResults;
+	private LRUCache<T,ResultsVector> cacheResults;
 
 	private static int CACHE_SIZE = 1000;
 	
@@ -62,7 +64,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 		this.delegate = delegate;
 		this.suppressErrors = suppressErrors;
 		
-		this.cacheResults = new LRUHashMapCache<>(
+		this.cacheResults = new LRUCache<T,ResultsVector>(
 			CACHE_SIZE,
 			new GetterImpl()
 		);
@@ -114,11 +116,10 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 		return delegate.sizeFeatures();
 	}
 	
-	private class GetterImpl implements LRUHashMapCache.Getter<ResultsVector,T> {
+	private class GetterImpl implements CalculateForCache<T,ResultsVector> {
 
 		@Override
-		public ResultsVector get(T index)
-				throws GetOperationFailedException {
+		public ResultsVector calculate(T index)	throws CacheRetrievalFailed {
 			try {
 				if (suppressErrors) {
 					return delegate.calcOneSuppressErrors(index,errorReporter);
@@ -126,7 +127,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 					return delegate.calcOne(index);
 				}
 			} catch (FeatureCalcException e) {
-				throw new GetOperationFailedException(e);
+				throw new CacheRetrievalFailed(e);
 			}
 		}
 		

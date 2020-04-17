@@ -9,6 +9,9 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
+import org.anchoranalysis.core.cache.LRUCache.CalculateForCache;
 
 /*
  * #%L
@@ -37,7 +40,6 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
  */
 
 
-import org.anchoranalysis.core.cache.LRUHashMapCache;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -58,14 +60,14 @@ public class NRGSchemeWithSharedFeatures {
 	private NRGScheme nrgScheme;
 	private SharedFeatureSet<FeatureCalcParams> sharedFeatures;
 	
-	private LRUHashMapCache<NRGTotal, Integer> indCache;
+	private LRUCache<Integer,NRGTotal> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
 	private LogErrorReporter logger;
 	
 	private int nrgSchemeIndCacheSize;
 	
 	// Caches NRG value by index
-	private class CalcElemIndTotalOperation implements LRUHashMapCache.Getter<NRGTotal, Integer> {
+	private class CalcElemIndTotalOperation implements CalculateForCache<Integer,NRGTotal> {
 
 		private PxlMarkMemo pmm;
 		private NRGStack raster;
@@ -89,12 +91,11 @@ public class NRGSchemeWithSharedFeatures {
 		}
 		
 		@Override
-		public NRGTotal get(Integer index)
-				throws GetOperationFailedException {
+		public NRGTotal calculate(Integer index) throws CacheRetrievalFailed {
 			try {
 				return calc();
 			} catch (FeatureCalcException e) {
-				throw new GetOperationFailedException(e);
+				throw new CacheRetrievalFailed(e);
 			}
 		}
 		
@@ -136,7 +137,7 @@ public class NRGSchemeWithSharedFeatures {
 		this.logger = logger;
 		
 		operationIndCalc = new CalcElemIndTotalOperation();
-		indCache = new LRUHashMapCache<>(nrgSchemeIndCacheSize, operationIndCalc); 
+		indCache = new LRUCache<>(nrgSchemeIndCacheSize, operationIndCalc); 
 	}
 	
 	public NRGTotal calcElemAllTotal( MemoMarks pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {

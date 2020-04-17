@@ -30,7 +30,8 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import org.anchoranalysis.core.cache.LRUHashMapCache;
+import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.core.index.container.IOrderProvider;
@@ -43,7 +44,7 @@ import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 public class DeserializedObjectFromFolderBundle<T extends Serializable> implements ITypedGetFromIndex<T> {
 
-	private LRUHashMapCache<HashMap<Integer,T>,Integer> cache;
+	private LRUCache<Integer,HashMap<Integer,T>> cache;
 	private BundleParameters bundleParameters;
 	private IOrderProvider orderProvider;
 	
@@ -74,21 +75,14 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 		final FolderWrite bundleFolder = folderWrite;
 		
 		// We create our cache
-		this.cache = new LRUHashMapCache<>(
+		this.cache = new LRUCache<>(
 			cacheSize,
-			new LRUHashMapCache.Getter<HashMap<Integer,T>,Integer>() {
-				
-				@Override
-				public HashMap<Integer, T> get(Integer index) throws GetOperationFailedException {
-					Bundle<T> bundle;
-					try {
-						bundle = BundleUtilities.generateBundle( deserializers.getDeserializerBundle(), bundleFolder, index);
-					} catch (IllegalArgumentException e) {
-						throw new GetOperationFailedException(e);
-					} catch (DeserializationFailedException e) {
-						throw new GetOperationFailedException(e);
-					}
+			index -> {
+				try {
+					Bundle<T> bundle = BundleUtilities.generateBundle( deserializers.getDeserializerBundle(), bundleFolder, index);
 					return bundle.createHashMap();
+				} catch (IllegalArgumentException | DeserializationFailedException e) {
+					throw new CacheRetrievalFailed(e);
 				}
 			}
 		);

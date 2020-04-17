@@ -27,8 +27,6 @@ package org.anchoranalysis.core.cache;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-
 /**
  * 
  * @author Owen Feehan
