@@ -33,7 +33,6 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -87,12 +86,6 @@ public class NullCacheRetriever<T extends FeatureCalcParams> extends FeatureSess
 	@Override
 	public String describeCaches() {
 		return new String();
-	}
-	
-	
-	@Override
-	public FeatureSessionCache<T> createNewCache() {
-		return null;	// TODO fix
 	}
 
 	@Override

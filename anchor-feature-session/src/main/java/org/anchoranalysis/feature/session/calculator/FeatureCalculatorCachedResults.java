@@ -27,14 +27,12 @@ package org.anchoranalysis.feature.session.calculator;
  */
 
 
-import java.util.List;
-
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
 import org.anchoranalysis.core.cache.LRUCache.CalculateForCache;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -72,7 +70,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 	}
 
 	@Override
-	public ResultsVector calcOneSuppressErrors(T params,
+	public ResultsVector calcSuppressErrors(T params,
 			ErrorReporter errorReporter) {
 		this.errorReporter = errorReporter;
 		try {
@@ -84,7 +82,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 	}
 
 	@Override
-	public ResultsVector calcOne(T params)
+	public ResultsVector calc(T params)
 			throws FeatureCalcException {
 		try {
 			return cacheResults.get(params);
@@ -92,24 +90,14 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 			throw new FeatureCalcException(e.getCause());
 		}
 	}
+	
 
 	@Override
-	public List<ResultsVector> calcMany(List<T> listParams) throws FeatureCalcException {
+	public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws FeatureCalcException {
 		// TODO how should we cache?
 		throw new FeatureCalcException("This operation is not supported");
 	}
 
-	@Override
-	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
-		// TODO how should we cache?
-		throw new FeatureCalcException("This operation is not supported");
-	}
-
-	@Override
-	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
-		// TODO how should we cache?
-		throw new FeatureCalcException("This operation is not supported");
-	}
 
 	@Override
 	public int sizeFeatures() {
@@ -122,9 +110,9 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 		public ResultsVector calculate(T index)	throws CacheRetrievalFailed {
 			try {
 				if (suppressErrors) {
-					return delegate.calcOneSuppressErrors(index,errorReporter);
+					return delegate.calcSuppressErrors(index,errorReporter);
 				} else {
-					return delegate.calcOne(index);
+					return delegate.calc(index);
 				}
 			} catch (FeatureCalcException e) {
 				throw new CacheRetrievalFailed(e);
@@ -139,4 +127,5 @@ public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> impleme
 		rv.setErrorAll(e);
 		return rv;
 	}
+
 }

@@ -121,7 +121,7 @@ public class NRGSchemeWithSharedFeatures {
 				new NRGStackWithParams(raster,kvp)
 			);
 			
-			return new NRGTotal( session.calcOne(params).total() );
+			return new NRGTotal( session.calc(params).total() );
 		}
 		
 	}
@@ -158,7 +158,7 @@ public class NRGSchemeWithSharedFeatures {
 			);
 			
 			assert pxlMarkMemoList!=null;
-			return new NRGTotal( session.calcOne(params).total() );
+			return new NRGTotal( session.calc(params).total() );
 
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);

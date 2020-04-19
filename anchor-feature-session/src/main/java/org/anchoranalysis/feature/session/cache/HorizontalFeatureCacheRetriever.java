@@ -34,7 +34,6 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -49,19 +48,16 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	private FeatureSessionCacheRetriever<T> delegate;
 	private FeatureResultMap<T> map;
 	private Collection<String> ignorePrefixes;
-	private CreateCache<FeatureSessionCache<T>> cacheProducer;
 			
 	public HorizontalFeatureCacheRetriever(
 		FeatureSessionCacheRetriever<T> delegate,
 		FeatureResultMap<T> map,
-		Collection<String> ignorePrefixes,
-		CreateCache<FeatureSessionCache<T>> cacheProducer
+		Collection<String> ignorePrefixes
 	) {
 		super();
 		this.delegate = delegate;
 		this.map = map;
 		this.ignorePrefixes = ignorePrefixes;
-		this.cacheProducer = cacheProducer;
 	}
 
 	private Double calcAndAdd(
@@ -152,11 +148,6 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	@Override
 	public String describeCaches() {
 		return delegate.describeCaches();
-	}
-
-	@Override
-	public FeatureSessionCache<T> createNewCache() {
-		return cacheProducer.create();
 	}
 
 

@@ -116,7 +116,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 					mark2,
 					nrgStack
 				);
-				ResultsVector rv = session.createCacheable(params).calc(nrgElemPairList);
+				ResultsVector rv = session.calc(params, nrgElemPairList);
 
 				Pair<Mark> pair = new Pair<>( mark1.getMark(), mark2.getMark() );
 				return new NRGPair(pair, new NRGTotal(rv.total()) );

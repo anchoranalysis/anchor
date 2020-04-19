@@ -1,7 +1,5 @@
 package org.anchoranalysis.feature.session.calculator;
 
-import java.util.List;
-
 /*-
  * #%L
  * anchor-image-feature
@@ -31,7 +29,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -53,45 +51,28 @@ public class FeatureCalculatorMultiChangeParams<T extends FeatureCalcParams> imp
 		this.changeParams = changeParams;
 	}
 
-	public ResultsVector calcOne(T params) throws FeatureCalcException {
+	public ResultsVector calc(T params) throws FeatureCalcException {
 		changeParams.accept(params);
-		return calculator.calcOne(params);
+		return calculator.calc(params);
+	}
+	
+
+	@Override
+	public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws FeatureCalcException {
+		changeParams.accept(params);
+		return calculator.calc(params, featuresSubset);
 	}
 
-	public ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
+	public ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter) {
 		changeParams.accept(params);
-		return calculator.calcOneSuppressErrors(
+		return calculator.calcSuppressErrors(
 			params,
 			errorReporter
 		);
-	}
-
-	@Override
-	public List<ResultsVector> calcMany(List<T> listParams) throws FeatureCalcException {
-		changeList(listParams);
-		return calculator.calcMany(listParams);
 	}
 	
 	@Override
 	public int sizeFeatures() {
 		return calculator.sizeFeatures();
-	}
-
-	@Override
-	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
-		changeParams.accept(params);
-		return calculator.createCacheable(params);
-	}
-
-	@Override
-	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
-		changeList(listParams);
-		return calculator.createCacheable(listParams);
-	}
-	
-	private void changeList( List<T> listParams ) {
-		listParams.forEach(
-			params -> changeParams.accept(params) 
-		);
 	}
 }

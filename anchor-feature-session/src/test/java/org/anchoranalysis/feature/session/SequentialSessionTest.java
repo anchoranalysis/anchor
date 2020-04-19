@@ -45,10 +45,10 @@ public class SequentialSessionTest {
 		SequentialSession<FeatureCalcParams> session = new SequentialSession<>(ConstantsInListFixture.create());
 		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixture.simpleLogErrorReporter() );
 		
-		ResultsVector rv1 = session.calcOne( NullParams.instance() );
+		ResultsVector rv1 = session.calc( NullParams.instance() );
 		ConstantsInListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calcOne( NullParams.instance() );
+		ResultsVector rv2 = session.calc( NullParams.instance() );
 		ConstantsInListFixture.checkResultVector(rv2);
 	}
 }

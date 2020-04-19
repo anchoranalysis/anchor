@@ -27,10 +27,8 @@ package org.anchoranalysis.feature.session.calculator;
  */
 
 
-import java.util.List;
-
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -46,7 +44,6 @@ public class FeatureCalculatorMultiReuse<T extends FeatureCalcParams> implements
 	private FeatureCalculatorMulti<T> delegate;
 	
 	private ResultsVector rv = null;
-	private List<ResultsVector> rvList = null;
 	
 	public FeatureCalculatorMultiReuse(FeatureCalculatorMulti<T> delegate) {
 		super();
@@ -54,36 +51,23 @@ public class FeatureCalculatorMultiReuse<T extends FeatureCalcParams> implements
 	}
 
 	@Override
-	public ResultsVector calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
+	public ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter) {
 		if (rv==null) {
-			rv = delegate.calcOneSuppressErrors(params, errorReporter);
+			rv = delegate.calcSuppressErrors(params, errorReporter);
 		}
 		return rv;
 	}
 
 	@Override
-	public ResultsVector calcOne(T params) throws FeatureCalcException {
+	public ResultsVector calc(T params) throws FeatureCalcException {
 		if (rv==null) {
-			rv = delegate.calcOne(params);
+			rv = delegate.calc(params);
 		}
 		return rv;
 	}
 
 	@Override
-	public List<ResultsVector> calcMany(List<T> listParams) throws FeatureCalcException {
-		if (rvList==null) {
-			rvList = delegate.calcMany(listParams);; 
-		}
-		return rvList;
-	}
-
-	@Override
-	public CacheableParams<T> createCacheable(T params) throws FeatureCalcException {
-		throw new FeatureCalcException("This operation is not supported");
-	}
-
-	@Override
-	public List<CacheableParams<T>> createCacheable(List<T> listParams) throws FeatureCalcException {
+	public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws FeatureCalcException {
 		throw new FeatureCalcException("This operation is not supported");
 	}
 
@@ -91,5 +75,6 @@ public class FeatureCalculatorMultiReuse<T extends FeatureCalcParams> implements
 	public int sizeFeatures() {
 		return delegate.sizeFeatures();
 	}
+
 
 }

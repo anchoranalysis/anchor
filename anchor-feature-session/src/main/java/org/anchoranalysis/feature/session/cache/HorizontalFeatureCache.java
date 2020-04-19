@@ -86,8 +86,7 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 			retriever = new HorizontalFeatureCacheRetriever<>(
 				delegate.retriever(),
 				map,
-				ignorePrefixes,
-				() -> duplicate()
+				ignorePrefixes
 			);
 			
 		} catch (OperationFailedException e) {

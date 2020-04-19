@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.List;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
@@ -149,15 +148,6 @@ public abstract class FeatureSessionCacheRetriever<T extends FeatureCalcParams> 
 	 * @return
 	 */
 	public abstract String describeCaches();
-	
-	
-	/**
-	 * Creates a new cache, that can be used to store items
-	 * 
-	 * @return
-	 * @throws CreateException
-	 */
-	public abstract FeatureSessionCache<T> createNewCache();
 	
 	
 }

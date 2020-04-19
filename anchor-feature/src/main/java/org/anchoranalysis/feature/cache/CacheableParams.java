@@ -73,6 +73,13 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		this.factory = factory;
 	}
 	
+	
+	/** Replaces existing params with new params */
+	public void replaceParams(T params) {
+		// TODO should we also invalidate the cache here? Currently we're assuming it's been invalidated elsewhere.
+		this.params = params;
+	}
+	
 	@SuppressWarnings("unchecked")
 	/**
 	 * Gets/creates a child-cache for a given name
@@ -133,9 +140,13 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 	 */
 	public <S extends FeatureCalcParams> CacheableParams<S> mapParams( Function<T,S> deriveParamsFunc, String childName ) {
 		S paramsDerived = deriveParamsFunc.apply(params);
+		return mapParamsSpecific(paramsDerived, childName);
+	}
+	
+	public <S extends FeatureCalcParams> CacheableParams<S> mapParamsSpecific( S paramsNew, String childName ) {
 		return new CacheableParams<S>(
-			paramsDerived,
-			cacheFor(childName, paramsDerived.getClass()),
+			paramsNew,
+			cacheFor(childName, paramsNew.getClass()),
 			factory
 		);
 	}

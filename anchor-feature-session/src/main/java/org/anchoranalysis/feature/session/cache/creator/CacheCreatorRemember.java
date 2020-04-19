@@ -60,6 +60,7 @@ public class CacheCreatorRemember implements CacheCreator {
 
 	/** Invalidates all the rememembered caches */
 	public void invalidateAll() {
+		System.out.printf("Invalidating all with %d objects%n", list.size());
 		list.stream().forEach(
 			item -> item.invalidate()
 		);

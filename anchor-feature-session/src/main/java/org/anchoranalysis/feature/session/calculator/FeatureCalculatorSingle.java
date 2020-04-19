@@ -1,6 +1,6 @@
 package org.anchoranalysis.feature.session.calculator;
 
-import java.util.List;
+
 
 /*-
  * #%L
@@ -44,6 +44,4 @@ public interface FeatureCalculatorSingle<T extends FeatureCalcParams> {
 	double calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
 	double calcOne( T params ) throws FeatureCalcException;
-	
-	List<Double> calcMany(List<T> listParams) throws FeatureCalcException;
 }

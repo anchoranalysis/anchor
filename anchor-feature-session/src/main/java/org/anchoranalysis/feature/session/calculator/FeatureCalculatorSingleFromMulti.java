@@ -1,7 +1,6 @@
 package org.anchoranalysis.feature.session.calculator;
 
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 /*-
  * #%L
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
@@ -59,20 +57,13 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> imple
 
 	@Override
 	public double calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
-		return delegate.calcOneSuppressErrors(params, errorReporter).get(0);
+		return delegate.calcSuppressErrors(params, errorReporter).get(0);
 	}
 
 	@Override
 	public double calcOne(T params) throws FeatureCalcException {
-		return delegate.calcOne(params).get(0);
+		return delegate.calc(params).get(0);
 	}
 
-	@Override
-	public List<Double> calcMany(List<T> listParams) throws FeatureCalcException {
-		List<ResultsVector> list = delegate.calcMany(listParams);
-		return list.stream().map(
-			rv -> rv.get(0)
-		).collect( Collectors.toList());
-	}
 
 }

@@ -135,12 +135,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 			
 			return sb.toString();
 		}
-
-		@Override
-		public FeatureSessionCache<T> createNewCache() {
-			return HorizontalCalculationCache.this.duplicate();
-		}
-
+		
 		@Override
 		public boolean hasBeenInit() {
 			return hasBeenInit;

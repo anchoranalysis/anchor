@@ -26,8 +26,6 @@ package org.anchoranalysis.feature.session;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.List;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheableParams;
@@ -51,36 +49,6 @@ class SessionUtilities {
 			params,
 			new CacheCreatorSimple(featureList, sharedFeatures, featureInitParams, logger)
 		);
-	}
-	
-	public static <T extends FeatureCalcParams> List<CacheableParams<T>> createCacheable(
-		List<T> listParams,
-		FeatureList<T> featureList,
-		SharedFeatureSet<T> sharedFeatures,
-		FeatureInitParams featureInitParams,
-		LogErrorReporter logger
-	) throws FeatureCalcException {
-		List<CacheableParams<T>> out = new ArrayList<>();
-
-		for(T params : listParams) {
-			out.add(
-				createCacheable(params, featureList, sharedFeatures, featureInitParams, logger)
-			);
-		}
-		
-		return out;
-	}
-	
-	public static <T extends FeatureCalcParams> List<CacheableParams<T>> createCacheable(List<T> listParams, CacheCreator cacheFactory ) throws FeatureCalcException {
-		List<CacheableParams<T>> out = new ArrayList<>();
-
-		for(T params : listParams) {
-			out.add(
-				createCacheable(params, cacheFactory)
-			);
-		}
-		
-		return out;
 	}
 	
 	public static <T extends FeatureCalcParams> CacheableParams<T> createCacheable(T params, CacheCreator cacheFactory ) throws FeatureCalcException {

@@ -173,23 +173,74 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		}
 	}
 	
-	public void setPixelsCheckMask( ObjMask om, int value ) {
+	
+	/**
+	 * Sets pixels in a box to a particular value if they match an Object-Mask
+	 * 
+	 * See {@ #setPixelsCheckMask(BoundingBox, VoxelBox, BoundingBox, int, byte) for details
+	 * 
+	 * @param om the object-mask to restrict which values in the buffer are written to
+	 * @param value value to be set in matched pixels
+	 * @return the number of pixels successfully "set"
+	 */
+	public int setPixelsCheckMask( ObjMask om, int value ) {
+		assert( om!= null );
+		assert( om.getBoundingBox()!=null );
+		assert( om.getVoxelBox()!=null );
+		return setPixelsCheckMask(
+			om.getBoundingBox(),
+			om.getVoxelBox(),
+			new BoundingBox(om.getBoundingBox().extnt()),
+			value,
+			om.getBinaryValuesByte().getOnByte()
+		);
+	}
+	
+	
+	/**
+	 * Sets pixels in a box to a particular value if they match an Object-Mask
+	 * 
+	 * See {@ #setPixelsCheckMask(BoundingBox, VoxelBox, BoundingBox, int, byte) for details
+	 * 
+	 * @param om the object-mask to restrict which values in the buffer are written to
+	 * @param value value to be set in matched pixels
+	 * @param maskMatchValue what's an "On" value for the mask to match against?
+	 * @return the number of pixels successfully "set"
+	 */
+	public int setPixelsCheckMask( ObjMask om, int value, byte maskMatchValue ) {
 		assert( om!= null );
 		assert( om.getBoundingBox()!= null );
 		assert( om.getVoxelBox()!= null );
-		setPixelsCheckMask( om.getBoundingBox(), om.getVoxelBox(), new BoundingBox(om.getBoundingBox().extnt()), value, om.getBinaryValuesByte().getOnByte() );
+		return setPixelsCheckMask(
+			om.getBoundingBox(),
+			om.getVoxelBox(),
+			new BoundingBox(om.getBoundingBox().extnt()),
+			value,
+			maskMatchValue
+		);
 	}
 	
-	public void setPixelsCheckMask( ObjMask om, int value, byte maskMatchValue ) {
-		assert( om!= null );
-		assert( om.getBoundingBox()!= null );
-		assert( om.getVoxelBox()!= null );
-		setPixelsCheckMask( om.getBoundingBox(), om.getVoxelBox(), new BoundingBox(om.getBoundingBox().extnt()), value, maskMatchValue );
-	}
 	
-	
-	// Only copies pixels if part of an ObjMask, otherwise we set a null pixel
-	public void setPixelsCheckMask(	BoundingBox bboxToBeAssigned, VoxelBox<ByteBuffer> objMaskBuffer, BoundingBox bboxMask, int value, byte maskMatchValue ) {
+	/**
+	 * Sets pixels in a box to a particular value if they match an Object-Mask... with more customization
+	 *
+	 * <p>Pixels are unchanged if they do not match the mask</p>
+	 * <p>Bounding boxes can be used to restrict regions in both the source and destination, but must be equal in volume.</p>
+	 * 
+	 * @param bboxToBeAssigned which part of the buffer to write to
+	 * @param objMaskBuffer the byte-buffer for the mask
+	 * @param bboxMask which part of the mask to consider as input
+	 * @param value value to be set in matched pixels
+	 * @param maskMatchValue what's an "On" value for the mask to match against?
+	 * @return the number of pixels successfully "set"
+	 */
+	public int setPixelsCheckMask(
+		BoundingBox bboxToBeAssigned,
+		VoxelBox<ByteBuffer> objMaskBuffer,
+		BoundingBox bboxMask,
+		int value,
+		byte maskMatchValue
+	) {
 		
 		if (!bboxMask.extnt().equals(bboxToBeAssigned.extnt())) {
 			throw new IllegalArgumentException("Volume mismatch");
@@ -199,6 +250,8 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		Extent eAssignBuffer = this.extnt();
 		Extent eMaskBuffer = objMaskBuffer.extnt();
+		
+		int cnt = 0;
 		
 		for (int z=0; z<eIntersectingBox.getZ(); z++) {
 			
@@ -211,13 +264,19 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 					int indexMask = eMaskBuffer.offset(x + bboxMask.getCrnrMin().getX(), y + bboxMask.getCrnrMin().getY());
 					
 					if (pixelsMask.get(indexMask)==maskMatchValue) {
-						int indexAssgn = eAssignBuffer.offset(x +bboxToBeAssigned.getCrnrMin().getX(), y + bboxToBeAssigned.getCrnrMin().getY());
+						int indexAssgn = eAssignBuffer.offset(
+							x + bboxToBeAssigned.getCrnrMin().getX(),
+							y + bboxToBeAssigned.getCrnrMin().getY()
+						);
 						pixels.putInt(indexAssgn, value );
+						cnt++;
 					}
 				}
 			}
 			
 		}
+		
+		return cnt;
 	}
 	
 	public abstract void addPixelsCheckMask( ObjMask mask, int value );

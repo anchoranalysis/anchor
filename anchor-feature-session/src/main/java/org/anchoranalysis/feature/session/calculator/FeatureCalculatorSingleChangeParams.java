@@ -1,6 +1,6 @@
 package org.anchoranalysis.feature.session.calculator;
 
-import java.util.List;
+
 
 /*-
  * #%L
@@ -62,13 +62,5 @@ public class FeatureCalculatorSingleChangeParams<T extends FeatureCalcParams> im
 			params,
 			errorReporter
 		);
-	}
-
-	@Override
-	public List<Double> calcMany(List<T> listParams) throws FeatureCalcException {
-		listParams.forEach(
-			params -> changeParams.accept(params)
-		);
-		return calculator.calcMany(listParams);
 	}
 }
