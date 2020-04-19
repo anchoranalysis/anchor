@@ -65,11 +65,4 @@ public abstract class FeatureSessionCache<T extends FeatureCalcParams> {
 	public abstract void invalidate();
 	
 	public abstract FeatureSessionCacheRetriever<T> retriever();
-	
-	/**
-	 * A deep copy of the current state of the cache
-	 * 
-	 * @return
-	 */
-	public abstract FeatureSessionCache<T> duplicate();
 }

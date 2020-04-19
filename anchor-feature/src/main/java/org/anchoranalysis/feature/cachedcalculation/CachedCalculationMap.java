@@ -50,9 +50,6 @@ public abstract class CachedCalculationMap<S,T extends FeatureCalcParams,U> impl
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
 	public abstract S getOrCalculate( T params, U key ) throws FeatureCalcException;
-	
-	@Override
-	public abstract CachedCalculationMap<S,T,U> duplicate();
 
 	@Override
 	public abstract boolean equals(Object other);

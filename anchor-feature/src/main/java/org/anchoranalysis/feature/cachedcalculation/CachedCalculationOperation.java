@@ -43,10 +43,10 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  */
 public class CachedCalculationOperation<S, T extends FeatureCalcParams> implements Operation<S> {
 
-	private CachedCalculation<S,T> cachedCalculation;
+	private RslvdCachedCalculation<S,T> cachedCalculation;
 	private T params;
 		
-	public CachedCalculationOperation(CachedCalculation<S,T> cachedCalculation,	T params) {
+	public CachedCalculationOperation(RslvdCachedCalculation<S,T> cachedCalculation,	T params) {
 		super();
 		this.cachedCalculation = cachedCalculation;
 		this.params = params;

@@ -52,5 +52,5 @@ public interface IResettableCachedCalculation {
 	 */
 	abstract void assignResult( Object savedResult ) throws OperationFailedException;
 	
-	IResettableCachedCalculation duplicate();
+	//IResettableCachedCalculation duplicate();
 }

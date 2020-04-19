@@ -55,11 +55,6 @@ public class CalculateNumVoxels extends CachedCalculation<Double,FeatureObjMaskP
 	protected Double execute(FeatureObjMaskParams params) throws ExecuteException {
 		return calc( params.getObjMask(), mip );
 	}
-
-	@Override
-	public CachedCalculation<Double,FeatureObjMaskParams> duplicate() {
-		return new CalculateNumVoxels(mip);
-	}
 	
 	@Override
 	public boolean equals(final Object obj){

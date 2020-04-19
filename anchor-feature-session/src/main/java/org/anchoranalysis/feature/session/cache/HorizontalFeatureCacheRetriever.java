@@ -32,6 +32,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
@@ -95,7 +96,7 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	}
 
 	@Override
-	public <U> CachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
+	public <U> RslvdCachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
 		return delegate.search(cc);
 	}
 

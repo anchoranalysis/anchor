@@ -75,7 +75,7 @@ public abstract class CachedCalculation<S, T extends FeatureCalcParams> implemen
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public synchronized S getOrCalculate( T params ) throws ExecuteException {
+	synchronized S getOrCalculate( T params ) throws ExecuteException {
 		
 		// DEBUG
 		// Checks we have the same params, if we call the cached calculation a second-time. This maybe catches errors.
@@ -97,8 +97,8 @@ public abstract class CachedCalculation<S, T extends FeatureCalcParams> implemen
 	@Override
 	public abstract int hashCode();	
 	
-	@Override
-	public abstract CachedCalculation<S, T> duplicate();
+	/*@Override
+	public abstract CachedCalculation<S, T> duplicate();*/
 	
 	public void assignResult( Object savedResult) {
 		@SuppressWarnings("unchecked")

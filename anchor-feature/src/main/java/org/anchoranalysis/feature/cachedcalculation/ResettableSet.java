@@ -114,7 +114,7 @@ public class ResettableSet<T extends IResettableCachedCalculation> {
 //		}
 	}
 	
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public ResettableSet<T> duplicate() {
 		ResettableSet<T> out = new ResettableSet<>(doLogging);
 		
@@ -125,7 +125,7 @@ public class ResettableSet<T extends IResettableCachedCalculation> {
 		}
 
 		return out;
-	}
+	}*/
 
 	public int size() {
 		return map.size();

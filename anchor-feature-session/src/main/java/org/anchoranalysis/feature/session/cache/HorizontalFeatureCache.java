@@ -58,21 +58,9 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 	
 	private FeatureResultMap<T> map = new FeatureResultMap<>();
 	
-	private FeatureList<T> namedFeatures;
-	private SharedFeatureSet<T> sharedFeatures;
-	
-	/**
-	 * When referencing features-ID, all the prefixes in the list are removed, if they exist
-	 *   from the feature-ID
-	 */
-	private Collection<String> ignorePrefixes;
-	
 	HorizontalFeatureCache(FeatureSessionCache<T> delegate, FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures, Collection<String> ignorePrefixes ) {
 		super();
 		this.delegate = delegate;
-		this.namedFeatures = namedFeatures;
-		this.sharedFeatures = sharedFeatures;
-		this.ignorePrefixes = ignorePrefixes;
 		
 		try {
 			for( Feature<T> f : namedFeatures ) {
@@ -112,16 +100,4 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 	public FeatureSessionCacheRetriever<T> retriever() {
 		return retriever;
 	}
-
-	@Override
-	public FeatureSessionCache<T> duplicate() {
-		return new HorizontalFeatureCache<>(
-			delegate.duplicate(),
-			this.namedFeatures,
-			this.sharedFeatures,
-			this.ignorePrefixes
-		);
-	}
-
-
 }

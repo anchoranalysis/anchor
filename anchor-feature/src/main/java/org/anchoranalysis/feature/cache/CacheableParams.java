@@ -35,6 +35,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -102,7 +103,7 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return params;
 	}
 
-	public <S> CachedCalculation<S, T> search(CachedCalculation<S, T> cc) {
+	public <S> RslvdCachedCalculation<S, T> search(CachedCalculation<S, T> cc) {
 		return cacheRetriever.search(cc);
 	}
 	
@@ -125,6 +126,11 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return search(cc).getOrCalculate(params);
 	}
 	
+	public <S> S calc(RslvdCachedCalculation<S,T> cc) throws ExecuteException {
+		// No need to search as it's already resolved
+		return cc.getOrCalculate(params);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <S extends FeatureCalcParams> CacheableParams<FeatureCalcParams> upcastParams() throws FeatureCalcException {
 		return (CacheableParams<FeatureCalcParams>)(this);
@@ -143,7 +149,7 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 		return mapParamsSpecific(paramsDerived, childName);
 	}
 	
-	public <S extends FeatureCalcParams> CacheableParams<S> mapParamsSpecific( S paramsNew, String childName ) {
+	private <S extends FeatureCalcParams> CacheableParams<S> mapParamsSpecific( S paramsNew, String childName ) {
 		return new CacheableParams<S>(
 			paramsNew,
 			cacheFor(childName, paramsNew.getClass()),

@@ -36,6 +36,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.ResettableSet;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -83,10 +84,12 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public <U> CachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
+		public <U> RslvdCachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return (CachedCalculation<U,T>) listCC.findOrAdd(cc,loggerToPass);
+			return new RslvdCachedCalculation<>(
+				(CachedCalculation<U,T>) listCC.findOrAdd(cc,loggerToPass)
+			);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -166,7 +169,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		return retriever;
 	}
 
-	@Override
+	/*@Override
 	public FeatureSessionCache<T> duplicate() {
 		HorizontalCalculationCache<T> out = new HorizontalCalculationCache<>( sharedFeatures.duplicate() );
 		assert(hasBeenInit==true);
@@ -179,5 +182,5 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		out.hasBeenInit = hasBeenInit;
 	
 		return out;
-	}
+	}*/
 }
