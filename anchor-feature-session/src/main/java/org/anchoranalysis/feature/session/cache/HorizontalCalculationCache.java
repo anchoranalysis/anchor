@@ -37,6 +37,7 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.ResettableSet;
 import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -94,9 +95,11 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <S, U> CachedCalculationMap<S,T,U> search(CachedCalculationMap<S,T,U> cc) {
+		public <S, U> RslvdCachedCalculationMap<S,T,U> search(CachedCalculationMap<S,T,U> cc) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return (CachedCalculationMap<S,T,U>) listCCMap.findOrAdd(cc,loggerToPass);
+			return new RslvdCachedCalculationMap<>( 
+				(CachedCalculationMap<S,T,U>) listCCMap.findOrAdd(cc,loggerToPass)
+			);
 		}
 
 		@Override

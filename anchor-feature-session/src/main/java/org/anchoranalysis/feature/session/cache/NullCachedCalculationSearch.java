@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.session.cache;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
@@ -46,9 +47,9 @@ public class NullCachedCalculationSearch<T extends FeatureCalcParams> implements
 	}
 
 	@Override
-	public <S,U> CachedCalculationMap<S,T,U> search(
+	public <S,U> RslvdCachedCalculationMap<S,T,U> search(
 			CachedCalculationMap<S,T,U> cc) {
-		return cc;
+		return new RslvdCachedCalculationMap<>(cc);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -36,6 +36,7 @@ import org.anchoranalysis.feature.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -108,7 +109,7 @@ public class CacheableParams<T extends FeatureCalcParams> implements ICachedCalc
 	}
 	
 	@Override
-	public <S, U> CachedCalculationMap<S, T, U> search(CachedCalculationMap<S, T, U> cc) {
+	public <S, U> RslvdCachedCalculationMap<S, T, U> search(CachedCalculationMap<S, T, U> cc) {
 		return cacheRetriever.search(cc);
 	}
 	

@@ -49,7 +49,7 @@ public abstract class CachedCalculationMap<S,T extends FeatureCalcParams,U> impl
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public abstract S getOrCalculate( T params, U key ) throws FeatureCalcException;
+	abstract S getOrCalculate( T params, U key ) throws FeatureCalcException;
 
 	@Override
 	public abstract boolean equals(Object other);
