@@ -38,8 +38,6 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.CachePlus;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
-import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class CacheCreatorSimple implements CacheCreator {
@@ -63,22 +61,26 @@ public class CacheCreatorSimple implements CacheCreator {
 		
 		FeatureList<T> featureList = filterFeatureList(paramsType);
 		SharedFeatureSet<T> sharedFeaturesCast = maybeCastSharedFeatures(paramsType); 
-		
-		CachePlus<T> cache = new CachePlus<>(
-			new HorizontalFeatureCacheFactory( new HorizontalCalculationCacheFactory() ),
-			featureList,
-			sharedFeaturesCast
-		);
+				
 		try {
-			cache.init(featureInitParams, logger, false);
+			CachePlus<T> cache = new CachePlus<>(
+				featureList,
+				sharedFeaturesCast,
+				featureInitParams,
+				logger
+			);
+			return cache.createCache();
 		} catch (InitException e) {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
+			assert(false);
+			return null;
 		}
-		return cache.createCache();
+
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T extends FeatureCalcParams> FeatureList<T> filterFeatureList(Class<?> paramsType) {
-		@SuppressWarnings("unchecked")
+		
 		List<Feature<T>> list = namedFeatures.getList().stream()
 			.filter( f -> paramsType.isAssignableFrom(f.getClass()) )
 			.map( f -> (Feature<T>) f )

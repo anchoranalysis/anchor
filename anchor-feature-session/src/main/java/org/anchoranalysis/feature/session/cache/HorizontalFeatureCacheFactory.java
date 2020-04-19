@@ -40,18 +40,11 @@ public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory
 
 	private FeatureSessionCacheFactory delegate;
 	private Collection<String> ignorePrefixes;
-	
-	public HorizontalFeatureCacheFactory(FeatureSessionCacheFactory delegate) {
-		this(
-			delegate,
-			new ArrayList<>()
-		);
-	}
-	
-	public HorizontalFeatureCacheFactory(FeatureSessionCacheFactory delegate, Collection<String> ignorePrefixes ) {
+		
+	public HorizontalFeatureCacheFactory() {
 		super();
-		this.delegate = delegate;
-		this.ignorePrefixes = ignorePrefixes;
+		this.delegate = new HorizontalCalculationCacheFactory();
+		this.ignorePrefixes = new ArrayList<>();
 	}
 
 	@Override

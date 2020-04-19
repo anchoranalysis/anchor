@@ -43,9 +43,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
-import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
-import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorRemember;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -71,8 +68,6 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	
 	// Should feature calculation errors be printed to the console?
 	private boolean reportErrors = false;
-	
-	private FeatureSessionCacheFactory cacheFactory;
 	
 	private CacheCreatorRemember cacheCreator;
 	
@@ -107,10 +102,6 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	public SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes) {
 		this.listFeatures = new FeatureList<>(iterFeatures);
 		assert(listFeatures!=null);
-		this.cacheFactory = new HorizontalFeatureCacheFactory(
-			new HorizontalCalculationCacheFactory(),
-			ignorePrefixes
-		);
 	}
 	
 	/**
@@ -294,18 +285,11 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 		
 	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
 
-		CachePlus<T> out = new CachePlus<>(
-			cacheFactory,
-			listFeatures,
-			sharedFeatures
-		);
-	
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		cacheCreator = new CacheCreatorRemember(
 			new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger)
 		);
-						
-		out.init(featureInitParamsDup, logger, false);
+		
 		
 		listFeatures.initRecursive(featureInitParamsDup, logger);
 	}

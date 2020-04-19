@@ -29,7 +29,6 @@ import org.anchoranalysis.core.error.InitException;
  */
 
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -166,16 +165,6 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 	public FeatureSessionCacheRetriever<T> retriever() {
 		return retriever;
 	}
-
-	@Override
-	public void assignResult(FeatureSessionCache<T> other) throws OperationFailedException {
-
-		HorizontalCalculationCache<T> otherCast = (HorizontalCalculationCache<T>) other;
-		listCC.assignResult( otherCast.listCC );
-		listCCMap.assignResult( otherCast.listCCMap );
-	}
-
-
 
 	@Override
 	public FeatureSessionCache<T> duplicate() {

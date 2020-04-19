@@ -114,12 +114,6 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 	}
 
 	@Override
-	public void assignResult(FeatureSessionCache<T> other) throws OperationFailedException {
-		HorizontalFeatureCache<T> otherCast = (HorizontalFeatureCache<T>) other;
-		delegate.assignResult(otherCast.delegate);
-	}
-
-	@Override
 	public FeatureSessionCache<T> duplicate() {
 		return new HorizontalFeatureCache<>(
 			delegate.duplicate(),

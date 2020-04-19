@@ -29,14 +29,13 @@ import org.anchoranalysis.core.error.InitException;
  */
 
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 
@@ -49,7 +48,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class CachePlus<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
+public class CachePlus<T extends FeatureCalcParams> {
 
 	private FeatureSessionCacheFactory factory;
 	private FeatureList<T> namedFeatures;
@@ -58,10 +57,18 @@ public class CachePlus<T extends FeatureCalcParams> extends FeatureSessionCache<
 	private FeatureInitParams featureInitParams;
 	private LogErrorReporter logger;
 		
-	public CachePlus(FeatureSessionCacheFactory factory, FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
+	public CachePlus(
+		FeatureList<T> namedFeatures,
+		SharedFeatureSet<T> sharedFeatures,
+		FeatureInitParams featureInitParams,
+		LogErrorReporter logger
+	) throws InitException {
 		this.namedFeatures = namedFeatures;
 		this.sharedFeatures = sharedFeatures;
-		this.factory = factory;
+		this.factory = new HorizontalFeatureCacheFactory();
+		this.logger = logger;
+		// Init shared-features
+		initSharedFeatures( featureInitParams, logger );
 	}
 	
 	public FeatureSessionCache<T> createCache() {
@@ -76,38 +83,6 @@ public class CachePlus<T extends FeatureCalcParams> extends FeatureSessionCache<
 			assert(false);
 		}
 		return cache;
-	}
-	
-	@Override
-	public void init(FeatureInitParams featureInitParams,
-			LogErrorReporter logger, boolean logCacheInit) throws InitException {
-		this.logger = logger;
-		// Init shared-features
-		initSharedFeatures( featureInitParams, logger );
-	}
-
-	@Override
-	public void invalidate() {
-		// DEBUG
-		//cacheMain.invalidate();
-	}
-	
-
-	@Override
-	public FeatureSessionCacheRetriever<T> retriever() {
-		assert(false);
-		return null;
-	}
-
-	@Override
-	public void assignResult(FeatureSessionCache<T> other) throws OperationFailedException {
-		//CachePlus otherCast = (CachePlus) other;
-		//cacheMain.assignResult( otherCast.cacheMain );
-	}
-
-	@Override
-	public FeatureSessionCache<T> duplicate() {
-		return new CachePlus<>( factory, namedFeatures, sharedFeatures );
 	}
 		
 	private void initSharedFeatures( FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException {
