@@ -1,14 +1,13 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDescriptor;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,63 +29,29 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public class AsNRGElemInd extends FeatureSingleElem<FeatureInputPairMemo,FeatureInputSingleMemo> {
+public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean first = true;		// If it's true, we take the first object.  Otherwise the second
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(CacheableParams<FeatureInputPairMemo> params) throws FeatureCalcException {
-		return params
-			.calcChangeParams(
-				getItem(),
-				p -> extractParams(p),
-				"ind"
-			);		
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
+		return calcCast(input.getParams());
 	}
 	
-	private FeatureInputSingleMemo extractParams( FeatureInputPairMemo params ) {
-		return new FeatureInputSingleMemo(
-			first ? params.getObj1() : params.getObj2(),
-			params.getNrgStack()
-		);
-	}
+	// Calculates an NRG element for a set of pixels
+	public abstract double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException;
 
-	// We change the default behaviour, as we don't want to give the same paramsFactory
-	//   as the item we pass to
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureInputPairMemoDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.instance;
 	}
-
-	@Override
-	public String getParamDscr() {
-		return getItem().getParamDscr();
-	}
-
-	public boolean isFirst() {
-		return first;
-	}
-
-	public void setFirst(boolean first) {
-		this.first = first;
-	}
-
-
 }

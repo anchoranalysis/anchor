@@ -2,12 +2,13 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
-/*-
+/*
  * #%L
- * anchor-mpp-feature
+ * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,20 +30,62 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDesc
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
+
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public abstract class NRGElemPair extends Feature<FeatureInputPairMemo> {
+/**
+ * Extracts one of the memos from the pair, and processes as a {@link FeatureSingleMemo}
+ * @author Owen Feehan
+ *
+ */
+public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInputSingleMemo> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	
+	// START BEAN PROPERTIES
+	/** Iff true, first object is used, otherwise the second */
+	@BeanField
+	private boolean first = true;
+	// END BEAN PROPERTIES
+	
+	@Override
+	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
+		return input
+			.calcChangeParamsDirect(
+				getItem(),
+				new CalculateSingleMemoFromPair(first),
+				"ind"
+			);		
+	}
+	
+	// We change the default behaviour, as we don't want to give the same paramsFactory
+	//   as the item we pass to
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
 		return FeatureInputPairMemoDescriptor.instance;
 	}
+
+	@Override
+	public String getParamDscr() {
+		return getItem().getParamDscr();
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
+	}
+
+
 }

@@ -52,7 +52,7 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  * @author Owen Feehan
  *
  * @param <S> result-type of the calculation
- * @param <T> params-type
+ * @param <T> input-type
  */
 public abstract class CachedCalculation<S, T extends FeatureInput> implements IResettableCachedCalculation {
 	

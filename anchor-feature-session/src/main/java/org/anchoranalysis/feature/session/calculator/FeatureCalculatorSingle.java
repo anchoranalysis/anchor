@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  * 
  * @author owen
  *
- * @param <T> params-type
+ * @param <T> feature input-type
  */
 public interface FeatureCalculatorSingle<T extends FeatureInput> {
 

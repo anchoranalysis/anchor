@@ -42,21 +42,21 @@ import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
 /**
- * Wraps a params with a structure for adding cachable objects
+ * A feature-input in the context of a particular session (important for caching).
  * 
- * @param T feature-input
+ * @param T underlying feature-input type
  * 
  * @author owen
  *
  */
-public class CacheableParams<T extends FeatureInput> implements ICachedCalculationSearch<T> {
+public class SessionInput<T extends FeatureInput> implements ICachedCalculationSearch<T> {
 
 	private FeatureSessionCache<T> cache;
 		
 	private T params;
 	private CacheCreator factory;
 	
-	public CacheableParams(T params, CacheCreator factory) {
+	public SessionInput(T params, CacheCreator factory) {
 		this.params = params;
 		this.factory = factory;
 		
@@ -64,7 +64,7 @@ public class CacheableParams<T extends FeatureInput> implements ICachedCalculati
 		this.cache = factory.create( params.getClass() ); 
 	}
 	
-	private CacheableParams(T params, FeatureSessionCache<T> cache, CacheCreator factory) {
+	private SessionInput(T params, FeatureSessionCache<T> cache, CacheCreator factory) {
 		this.params = params;
 		this.factory = factory;
 		this.cache = cache;
@@ -142,29 +142,8 @@ public class CacheableParams<T extends FeatureInput> implements ICachedCalculati
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <S extends FeatureInput> CacheableParams<FeatureInput> upcastParams() throws FeatureCalcException {
-		return (CacheableParams<FeatureInput>)(this);
-	}
-	
-	/**
-	 * Maps the parameters to a new type, which also leads to being assigned a new child-cache.
-	 *  
-	 * @param <S> the type of the new parameters
-	 * @param deriveParamsFunc derives new parameters from existing
-	 * @param childName unique name to use in the cache (other features can also reference the same childName)
-	 * @return a new CacheableParams with derived-parameters and a cache that is a child of the existing cache
-	 */
-	public <S extends FeatureInput> CacheableParams<S> mapParams( Function<T,S> deriveParamsFunc, String childName ) {
-		S paramsDerived = deriveParamsFunc.apply(params);
-		return mapParamsSpecific(paramsDerived, childName);
-	}
-	
-	private <S extends FeatureInput> CacheableParams<S> mapParamsSpecific( S paramsNew, String childName ) {
-		return new CacheableParams<S>(
-			paramsNew,
-			cacheForInternal(childName, paramsNew.getClass()),
-			factory
-		);
+	public <S extends FeatureInput> SessionInput<FeatureInput> upcastParams() throws FeatureCalcException {
+		return (SessionInput<FeatureInput>)(this);
 	}
 	
 	public <S extends FeatureInput> double calcChangeParams(Feature<S> feature, Function<T,S> deriveParamsFunc, String childName) throws FeatureCalcException {
@@ -185,7 +164,7 @@ public class CacheableParams<T extends FeatureInput> implements ICachedCalculati
 		FeatureSessionCache<S> child = cacheForInternal(childName, paramsDerived.getClass()); 
 		return child.calculator().calc(
 			feature,
-			new CacheableParams<S>(
+			new SessionInput<S>(
 				paramsDerived,
 				child,
 				factory
@@ -197,8 +176,8 @@ public class CacheableParams<T extends FeatureInput> implements ICachedCalculati
 		return cache.calculator().resolveFeatureID(id);
 	}
 
-	public double calcFeatureByID(String resolvedID, CacheableParams<T> params)
+	public double calcFeatureByID(String resolvedID, SessionInput<T> input)
 			throws FeatureCalcException {
-		return cache.calculator().calcFeatureByID(resolvedID, params);
+		return cache.calculator().calcFeatureByID(resolvedID, input);
 	}
 }

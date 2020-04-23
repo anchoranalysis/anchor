@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
@@ -57,28 +57,28 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 	 * Calculate a feature with particular values
 	 * 
 	 * @param feature feature
-	 * @param params params
+	 * @param input feature-input
 	 * @return the feature-value
 	 * @throws FeatureCalcException
 	 */
-	public abstract double calc( Feature<T> feature, CacheableParams<T> params ) throws FeatureCalcException;
+	public abstract double calc( Feature<T> feature, SessionInput<T> input ) throws FeatureCalcException;
 	
 	/**
 	 * Calculates a feature-list throwing an exception if there is an error
 	 * 
 	 * @param features list of features
-	 * @param params params
+	 * @param input params
 	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
 	 * @throws FeatureCalcException 
 	 */
-	public ResultsVector calc( List<Feature<T>> features, CacheableParams<T> params ) throws FeatureCalcException {
+	public ResultsVector calc( List<Feature<T>> features, SessionInput<T> input ) throws FeatureCalcException {
 		ResultsVector out = new ResultsVector(features.size());
 		for( int i=0; i<features.size(); i++ ) {
 			
 			Feature<T> f = features.get(i);
 			
 			try {
-				double val = calc( f, params );
+				double val = calc( f, input );
 				out.set(i, val);
 			} catch (FeatureCalcException e) {
 			
@@ -96,17 +96,17 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 	 * Calculates a feature-list suppressing errors
 	 * 
 	 * @param features list of features
-	 * @param params params
+	 * @param input params
 	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
 	 */
-	public ResultsVector calcSuppressErrors( List<Feature<T>> features, CacheableParams<T> params ) {
+	public ResultsVector calcSuppressErrors( List<Feature<T>> features, SessionInput<T> input ) {
 		ResultsVector out = new ResultsVector(features.size());
 		for( int i=0; i<features.size(); i++ ) {
 			
 			Feature<T> f = features.get(i);
 			
 			try {
-				double val = calc( f, params );
+				double val = calc( f, input );
 				out.set(i, val);
 			} catch (FeatureCalcException e) {
 				out.setError(i, e);
@@ -138,10 +138,10 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 	 * Searches for a feature that matches a particular ID
 	 * 
 	 * @param resolvedID
-	 * @param params TODO
+	 * @param input TODO
 	 * @throws GetOperationFailedException 
 	 */
-	public abstract double calcFeatureByID( String resolvedID, CacheableParams<T> params ) throws FeatureCalcException;
+	public abstract double calcFeatureByID( String resolvedID, SessionInput<T> input ) throws FeatureCalcException;
 	
 	/**
 	 * Debug method that describes the current caches

@@ -27,7 +27,7 @@ package org.anchoranalysis.image.feature.bean.objmask;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjsDescriptor;
@@ -41,10 +41,10 @@ public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputObjs> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputObjs> input ) throws FeatureCalcException {
 		
-		if (params.getParams() instanceof FeatureInputObjs) {
-			return calc( (FeatureInputObjs) params.getParams() );
+		if (input.getParams() instanceof FeatureInputObjs) {
+			return calc( (FeatureInputObjs) input.getParams() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureInputObjs.class.getSimpleName() );
 		}

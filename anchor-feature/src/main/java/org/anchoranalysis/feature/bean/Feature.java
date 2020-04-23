@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -119,35 +119,35 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 				: getBeanDscr();
 	}
 
-	public double calcCheckInit(CacheableParams<T> params) throws FeatureCalcException {
+	public double calcCheckInit(SessionInput<T> input) throws FeatureCalcException {
 		if (!hasBeenInit) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
 					this.toString()));
 		}
 	
-		double ret = calc( params );
+		double ret = calc( input );
 		
 		assert( !Double.isNaN(ret) );
 		return ret;
 	}
 	
 	// Calculates a value for some parameters
-	protected abstract double calc(CacheableParams<T> params) throws FeatureCalcException;
+	protected abstract double calc(SessionInput<T> input) throws FeatureCalcException;
 
 	/**
 	 * Optionally transforms the parameters passed into this feature, before
 	 * they are passed to a dependent feature
 	 * 
-	 * @param params
+	 * @param input
 	 *            params passed to this feature
 	 * @param dependentFeature
 	 *            a dependent-feature
 	 */
 	@SuppressWarnings("unchecked")
-	public CacheableParams<FeatureInput> transformParams(CacheableParams<T> params,
+	public SessionInput<FeatureInput> transformInput(SessionInput<T> input,
 			Feature<FeatureInput> dependentFeature) throws FeatureCalcException {
-		return (CacheableParams<FeatureInput>) params;
+		return (SessionInput<FeatureInput>) input;
 	}
 
 	protected void duplicateHelper(Feature<FeatureInput> out) {

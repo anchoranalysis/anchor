@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
@@ -55,7 +55,7 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 	}
 	
 	@Override
-	public double calc( CacheableParams<T> params ) {
+	public double calc( SessionInput<T> input ) {
 		return value;
 	}
 

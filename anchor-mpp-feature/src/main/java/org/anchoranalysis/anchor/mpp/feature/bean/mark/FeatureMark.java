@@ -27,7 +27,7 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
@@ -39,10 +39,10 @@ public abstract class FeatureMark extends Feature<FeatureInputMark> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputMark> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputMark> input ) throws FeatureCalcException {
 		
-		if (params.getParams() instanceof FeatureInputMark) {
-			return calc( (FeatureInputMark) params.getParams() );
+		if (input.getParams() instanceof FeatureInputMark) {
+			return calc( (FeatureInputMark) input.getParams() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureInputMark.class.getSimpleName() );
 		}

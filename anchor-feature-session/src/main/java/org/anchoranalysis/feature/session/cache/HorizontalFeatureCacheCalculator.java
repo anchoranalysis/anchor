@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
@@ -63,9 +63,9 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 
 	private Double calcAndAdd(
 		Feature<T> feature,
-		CacheableParams<T> params
+		SessionInput<T> input
 	) throws FeatureCalcException {
-		Double result = delegate.calc(feature, params);
+		Double result = delegate.calc(feature, input);
 		map.add(feature, resolveNameFeature(feature), result);
 		return result;
 	}
@@ -80,17 +80,17 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 	}
 	
 	@Override
-	public double calc(Feature<T> feature, CacheableParams<T> params) throws FeatureCalcException {
+	public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalcException {
 		
 		// if there's no custom name, then we don't consider caching
 		if (feature.getCustomName()==null || feature.getCustomName().isEmpty()) {
-			return delegate.calc(feature, params);
+			return delegate.calc(feature, input);
 		}
 		
 		// Otherwise we save the result, and cache it for next time
 		Double result = map.getResultFor(feature);
 		if (result==null) {
-			result = calcAndAdd( feature, params );
+			result = calcAndAdd( feature, input );
 		}
 		return result;
 	}
@@ -125,7 +125,7 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 	}
 			
 	@Override
-	public double calcFeatureByID(String id, CacheableParams<T> params)	throws FeatureCalcException {
+	public double calcFeatureByID(String id, SessionInput<T> input)	throws FeatureCalcException {
 		
 		// Let's first check if it's in our cache
 		Double res = map.getResultFor(id);
@@ -138,10 +138,10 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 		Feature<T> feat = map.getFeatureFor(id);
 		
 		if(feat!=null) {
-			return calcAndAdd(feat, params);
+			return calcAndAdd(feat, input);
 		} else {
 			// We cannot find our feature throw an error, try the delegate
-			return delegate.calcFeatureByID(id, params);
+			return delegate.calcFeatureByID(id, input);
 		}
 	}
 

@@ -27,7 +27,7 @@ package org.anchoranalysis.anchor.mpp.feature.bean.results;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
@@ -51,8 +51,8 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputResults> params ) throws FeatureCalcException {
-		return calc( params.getParams() );
+	public double calc( SessionInput<FeatureInputResults> input ) throws FeatureCalcException {
+		return calc( input.getParams() );
 	}
 	
 	// Calculates an NRG element for a set of pixels

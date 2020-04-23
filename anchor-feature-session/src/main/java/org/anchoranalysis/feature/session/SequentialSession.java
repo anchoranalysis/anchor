@@ -39,7 +39,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheCreator;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
@@ -73,7 +73,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	
 	private CacheCreator cacheCreator;
 	
-	private CacheableParams<T> cacheableParams = null;
+	private SessionInput<T> sessionInput = null;
 		
 	/**
 	 * Constructor of a session
@@ -180,15 +180,19 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		return res;
 	}
 	
-	private CacheableParams<T> createOrReuseCache(T params) throws FeatureCalcException {
+	private SessionInput<T> createOrReuseCache(T input) throws FeatureCalcException {
 		
-		if (cacheableParams==null) {
-			cacheableParams = new CacheableParams<T>(params, cacheCreator);
-		} else {
-			cacheableParams.replaceParams(params);
+		if (input==null) {
+			throw new FeatureCalcException("The input may not be null");
 		}
 		
-		return cacheableParams;
+		if (sessionInput==null) {
+			sessionInput = new SessionInput<T>(input, cacheCreator);
+		} else {
+			sessionInput.replaceParams(input);
+		}
+		
+		return sessionInput;
 	}
 	
 	public boolean hasSingleFeature() {
@@ -207,7 +211,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	private void calcCommonSuppressErrors( ResultsVector res, T params, ErrorReporter errorReporter ) {
 		
 		// Create cacheable params, and record any errors for all features
-		CacheableParams<T> cacheableParams;
+		SessionInput<T> cacheableParams;
 		try {
 			cacheableParams = createOrReuseCache(params);
 		} catch (FeatureCalcException e) {
@@ -243,7 +247,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	private ResultsVector calcCommonExceptionAsVector( T params ) throws FeatureCalcException {
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 
-		CacheableParams<T> cacheableParams = createOrReuseCache(params); 
+		SessionInput<T> cacheableParams = createOrReuseCache(params); 
 		
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);

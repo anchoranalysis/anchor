@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
@@ -58,10 +58,10 @@ public class Reference<T extends FeatureInput> extends Feature<T> {
 	}
 	
 	@Override
-	public double calc(CacheableParams<T> params) throws FeatureCalcException {
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		// We resolve the ID before its passed to calcFeatureByID
-		String rslvdID = params.resolveFeatureID(id);
-		return params.calcFeatureByID(rslvdID, params);
+		String rslvdID = input.resolveFeatureID(id);
+		return input.calcFeatureByID(rslvdID, input);
 	}
 
 	public String getId() {

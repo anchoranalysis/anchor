@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemoDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDescriptor;
 
 /*-
  * #%L
@@ -33,16 +33,16 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public abstract class NRGElemAll extends Feature<FeatureInputAllMemo> {
+public abstract class FeaturePairMemo extends Feature<FeatureInputPairMemo> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureInputAllMemoDescriptor.instance;
+		return FeatureInputPairMemoDescriptor.instance;
 	}
 }

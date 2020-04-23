@@ -36,7 +36,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheCreator;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResettableSet;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
@@ -78,9 +78,9 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	private class Calculator extends FeatureSessionCacheCalculator<T> {
 		
 		@Override
-		public double calc(Feature<T> feature, CacheableParams<T> params )
+		public double calc(Feature<T> feature, SessionInput<T> input )
 				throws FeatureCalcException {
-			double val = feature.calcCheckInit(params);
+			double val = feature.calcCheckInit(input);
 			if (Double.isNaN(val)) {
 				logger.getLogReporter().logFormatted("WARNING: NaN returned from feature %s", feature.getFriendlyName() );
 			}
@@ -107,11 +107,11 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 		}
 
 		@Override
-		public double calcFeatureByID(String id, CacheableParams<T> params)
+		public double calcFeatureByID(String id, SessionInput<T> input)
 				throws FeatureCalcException {
 			try {
 				Feature<T> feature = sharedFeatures.getException(id);
-				return calc( feature, params );
+				return calc( feature, input );
 			} catch (NamedProviderGetException e) {
 				throw new FeatureCalcException(
 					String.format("Cannot locate feature with resolved-ID: %s", id ),
