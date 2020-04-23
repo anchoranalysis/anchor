@@ -30,6 +30,8 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class RegionMembership extends AnchorBean<RegionMembership> {
 
@@ -201,4 +203,40 @@ public abstract class RegionMembership extends AnchorBean<RegionMembership> {
 	}
 
 	public abstract boolean isMemberFlag( byte membership, byte flag );
+	
+	// See {@link ch.ethz.biol.cell.mpp.nrg.feature.ind.AsObjMask} for an example of where equals is needed on this class
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		RegionMembership rhs = (RegionMembership) obj;
+		return new EqualsBuilder()
+             .appendSuper(super.equals(obj))
+             .append(bit0, rhs.bit0)
+             .append(bit1, rhs.bit1)
+             .append(bit2, rhs.bit2)
+             .append(bit3, rhs.bit3)
+             .append(bit4, rhs.bit4)
+             .append(bit5, rhs.bit5)
+             .append(bit6, rhs.bit6)
+             .append(bit7, rhs.bit7)
+             .isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.append(bit0)
+			.append(bit1)
+			.append(bit2)
+			.append(bit3)
+			.append(bit4)
+			.append(bit5)
+			.append(bit6)
+			.append(bit7)
+			.toHashCode();
+	}
 }

@@ -32,6 +32,8 @@ import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 // Maps integer IDs to sub-regions in the map
 public class RegionMap extends AnchorBean<RegionMap> {
@@ -86,4 +88,28 @@ public class RegionMap extends AnchorBean<RegionMap> {
 		
 		return listOut;
 	}
+
+	// See {@link ch.ethz.biol.cell.mpp.nrg.feature.ind.AsObjMask} for an example of where equals is needed on this class
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		RegionMap rhs = (RegionMap) obj;
+		return new EqualsBuilder()
+             .appendSuper(super.equals(obj))
+             .append(list, rhs.list)
+             .isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.append(list)
+			.toHashCode();
+	}
+	
+	
 }

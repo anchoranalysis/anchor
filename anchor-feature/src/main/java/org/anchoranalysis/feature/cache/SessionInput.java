@@ -27,7 +27,6 @@ package org.anchoranalysis.feature.cache;
  */
 
 import java.util.List;
-import java.util.function.Function;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
@@ -123,6 +122,7 @@ public class SessionInput<T extends FeatureInput> implements ICachedCalculationS
 		return cache.calculator().calc(features, this );
 	}
 	
+	
 	public <S> S calc(CachedCalculation<S,T> cc) throws FeatureCalcException {
 		try {
 			RslvdCachedCalculation<S,T> ccAfterSearch = search(cc); 
@@ -140,37 +140,52 @@ public class SessionInput<T extends FeatureInput> implements ICachedCalculationS
 			throw new FeatureCalcException(e.getCause());
 		}			
 	}
-	
-	@SuppressWarnings("unchecked")
-	public <S extends FeatureInput> SessionInput<FeatureInput> upcastParams() throws FeatureCalcException {
-		return (SessionInput<FeatureInput>)(this);
-	}
-	
-	public <S extends FeatureInput> double calcChangeParams(Feature<S> feature, Function<T,S> deriveParamsFunc, String childName) throws FeatureCalcException {
-		S paramsDerived = deriveParamsFunc.apply(params);
-		return calcChangeParamsDirect(feature, paramsDerived, childName);
-	}
 
-	public <S extends FeatureInput> double calcChangeParamsDirect(Feature<S> feature, CachedCalculation<S,T> cc, String childName) throws FeatureCalcException {
-		return calcChangeParamsDirect(
-			feature,
-			calc(cc),
-			childName
-		);
-	}
 	
-	public <S extends FeatureInput> double calcChangeParamsDirect(Feature<S> feature, S paramsDerived, String childName) throws FeatureCalcException {
+
+	
+	/**
+	 * Calculates a feature in a child-cache
+	 * 
+	 * @param <S> input-type for feature to calculate
+	 * @param feature feature to calculate with
+	 * @param input input for feature
+	 * @param childCacheName a unique-name for a child-cache to use for the feature-calculation
+	 * @return the result of the feature calculation
+	 * @throws FeatureCalcException
+	 */
+	public <S extends FeatureInput> double calcChild(Feature<S> feature, S input, String childCacheName) throws FeatureCalcException {
 		
-		FeatureSessionCache<S> child = cacheForInternal(childName, paramsDerived.getClass()); 
+		FeatureSessionCache<S> child = cacheForInternal(childCacheName, input.getClass()); 
 		return child.calculator().calc(
 			feature,
 			new SessionInput<S>(
-				paramsDerived,
+				input,
 				child,
 				factory
 			)
 		);
 	}
+	
+	
+	/**
+	 * Calculates a feature in a child-cache using a new input created from a {@link #CachedCalculation}
+	 * 
+	 * @param <S> input-type for feature to calculate
+	 * @param feature feature to calculate with
+	 * @param cc cached-calculation to generate input for the feature
+	 * @param childCacheName a unique-name for a child-cache to use for the feature-calculation
+	 * @return the result of the feature calculation
+	 * @throws FeatureCalcException
+	 */
+	public <S extends FeatureInput> double calcChild(Feature<S> feature, CachedCalculation<S,T> cc, String childCacheName) throws FeatureCalcException {
+		return calcChild(
+			feature,
+			calc(cc),
+			childCacheName
+		);
+	}
+
 	
 	public String resolveFeatureID(String id) {
 		return cache.calculator().resolveFeatureID(id);

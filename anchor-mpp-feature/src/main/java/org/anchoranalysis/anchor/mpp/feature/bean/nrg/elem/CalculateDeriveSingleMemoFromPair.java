@@ -7,7 +7,7 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateSingleMemoFromPair extends CachedCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
+public class CalculateDeriveSingleMemoFromPair extends CachedCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
 
 	private boolean first;
 	
@@ -16,7 +16,7 @@ public class CalculateSingleMemoFromPair extends CachedCalculation<FeatureInputS
 	 * 
 	 * @param first Iff true, first object is used, otherwise the second
 	 */
-	public CalculateSingleMemoFromPair(boolean first) {
+	public CalculateDeriveSingleMemoFromPair(boolean first) {
 		super();
 		this.first = first;
 	}
@@ -31,8 +31,8 @@ public class CalculateSingleMemoFromPair extends CachedCalculation<FeatureInputS
 
 	@Override
 	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateSingleMemoFromPair){
-			 final CalculateSingleMemoFromPair other = (CalculateSingleMemoFromPair) obj;
+		 if(obj instanceof CalculateDeriveSingleMemoFromPair){
+			 final CalculateDeriveSingleMemoFromPair other = (CalculateDeriveSingleMemoFromPair) obj;
 		        return new EqualsBuilder()
 		            .append(first, other.first)
 		            .isEquals();

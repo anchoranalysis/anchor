@@ -59,9 +59,9 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInpu
 	@Override
 	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input
-			.calcChangeParamsDirect(
+			.calcChild(
 				getItem(),
-				new CalculateSingleMemoFromPair(first),
+				new CalculateDeriveSingleMemoFromPair(first),
 				"ind"
 			);		
 	}
