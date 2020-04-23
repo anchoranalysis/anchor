@@ -31,7 +31,7 @@ import org.anchoranalysis.core.cache.CachedOperation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Caches the result of a calculation, until reset() is called
@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @param <S> result-type of the calculation
  * @param <T> params-type
  */
-public abstract class CachedCalculation<S, T extends FeatureCalcParams> implements IResettableCachedCalculation {
+public abstract class CachedCalculation<S, T extends FeatureInput> implements IResettableCachedCalculation {
 	
 	private transient T params;
 	
@@ -82,7 +82,7 @@ public abstract class CachedCalculation<S, T extends FeatureCalcParams> implemen
 		if (hasCachedCalculation()) {
 			if (params!=null && !params.equals(this.params)) {
 				throw new ExecuteException(
-					new FeatureCalcException("This feature already has been used, its cache set is already set to different params")
+					new FeatureCalcException("This feature already has been used, its cache is already set to different params")
 				);
 			}
 		}

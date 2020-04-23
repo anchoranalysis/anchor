@@ -26,10 +26,10 @@ package org.anchoranalysis.feature.cache;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 
 public interface CacheCreator {
 
-	<T extends FeatureCalcParams> FeatureSessionCache<T> create( Class<?> paramsType );
+	<T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType );
 }

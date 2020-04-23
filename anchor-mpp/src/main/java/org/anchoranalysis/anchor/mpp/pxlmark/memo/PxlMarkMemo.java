@@ -39,8 +39,11 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.histogram.Histogram;
 
-// Memoization of retrieving a PxlMark from a mark
-// So we only ever need to do this calculation once for a given instantiation
+/** 
+ * Memoization of retrieving a PxlMark from a mark
+ * 
+ * <p>This is avoid repeated expensive operations (rasterization of a mark).</p>
+ */
 public class PxlMarkMemo extends CachedOperation<PxlMark> {
 
 	// Parameters

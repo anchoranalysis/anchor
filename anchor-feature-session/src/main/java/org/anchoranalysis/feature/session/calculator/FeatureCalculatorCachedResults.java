@@ -35,16 +35,15 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
- * A SequentialSession but we cache the ResultsVectors in case an identical FeatureCalcParams
- *   is passed in the future
+ * A {@link #FeatureCalculatorMulti} but calculations are cached to avoid repetition if identical {@link FeatureInput} are passed.
  * 
  * @author Owen Feehan
  *
  */
-public class FeatureCalculatorCachedResults<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorCachedResults<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
 	private FeatureCalculatorMulti<T> delegate;
 	

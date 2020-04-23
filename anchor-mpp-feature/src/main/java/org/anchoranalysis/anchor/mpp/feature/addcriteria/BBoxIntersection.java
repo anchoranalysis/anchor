@@ -1,6 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -49,7 +49,7 @@ public class BBoxIntersection extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws IncludeMarksFailureException {
 	
 		
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
@@ -85,7 +85,7 @@ public class BBoxIntersection extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
+	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() {
 		// No features involved
 		return null;
 	}

@@ -1,7 +1,7 @@
 package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Like a {@link CachedCalculation} but has been resolved against a cache to ensure its unique (singular).
@@ -13,7 +13,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @param <S>
  * @param <T>
  */
-public class RslvdCachedCalculation<S, T extends FeatureCalcParams> {
+public class RslvdCachedCalculation<S, T extends FeatureInput> {
 
 	private CachedCalculation<S, T> cachedCalculation;
 

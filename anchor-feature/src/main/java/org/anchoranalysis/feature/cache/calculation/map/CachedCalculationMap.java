@@ -31,7 +31,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.IResettableCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Similar to a {@link CachedCalculation} but stores several evaluations parameterised
@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @param T params-type
  * @param U key-type
  */
-public abstract class CachedCalculationMap<S,T extends FeatureCalcParams,U> implements IResettableCachedCalculation {
+public abstract class CachedCalculationMap<S,T extends FeatureInput,U> implements IResettableCachedCalculation {
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.

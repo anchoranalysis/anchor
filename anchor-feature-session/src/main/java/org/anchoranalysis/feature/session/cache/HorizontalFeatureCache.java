@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheCreator;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class HorizontalFeatureCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
+public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessionCache<T> {
 
 	private FeatureSessionCache<T> delegate;
 	
@@ -101,7 +101,7 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 	}
 
 	@Override
-	public <V extends FeatureCalcParams> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType,
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType,
 			CacheCreator cacheCreator) {
 		return delegate.childCacheFor(childName, paramsType, cacheCreator);
 	}

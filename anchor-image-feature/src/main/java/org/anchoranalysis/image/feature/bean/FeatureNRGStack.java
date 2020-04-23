@@ -29,11 +29,11 @@ package org.anchoranalysis.image.feature.bean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureInputNRGStackDescriptor;
 
-public abstract class FeatureNRGStack extends Feature<FeatureNRGStackParams> {
+public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
 
 
 	/**
@@ -42,21 +42,21 @@ public abstract class FeatureNRGStack extends Feature<FeatureNRGStackParams> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc( CacheableParams<FeatureNRGStackParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputNRGStack> params ) throws FeatureCalcException {
 		
-		if (params.getParams() instanceof FeatureNRGStackParams) {
-			return calcCast( (FeatureNRGStackParams) params.getParams() );
+		if (params.getParams() instanceof FeatureInputNRGStack) {
+			return calcCast( (FeatureInputNRGStack) params.getParams() );
 		} else {
-			throw new FeatureCalcException("Requires " + FeatureNRGStackParams.class.getSimpleName() );
+			throw new FeatureCalcException("Requires " + FeatureInputNRGStack.class.getSimpleName() );
 		}
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureNRGStackParams params ) throws FeatureCalcException;
+	public abstract double calcCast( FeatureInputNRGStack params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureNRGStackParamsDescriptor.instance;
+		return FeatureInputNRGStackDescriptor.instance;
 	}
 }

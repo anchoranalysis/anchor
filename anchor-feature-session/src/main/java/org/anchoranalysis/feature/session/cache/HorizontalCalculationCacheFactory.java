@@ -27,13 +27,13 @@ package org.anchoranalysis.feature.session.cache;
  */
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class HorizontalCalculationCacheFactory implements FeatureSessionCacheFactory {
 
 	@Override
-	public <T extends FeatureCalcParams> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
+	public <T extends FeatureInput> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
 		return new HorizontalCalculationCache<>(sharedFeatures);
 	}
 	

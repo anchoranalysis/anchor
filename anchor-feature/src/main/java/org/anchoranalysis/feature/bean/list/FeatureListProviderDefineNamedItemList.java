@@ -34,11 +34,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 
-public class FeatureListProviderDefineNamedItemList<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderDefineNamedItemList<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -79,7 +79,7 @@ public class FeatureListProviderDefineNamedItemList<T extends FeatureCalcParams>
 		this.list = list;
 	}
 
-	private static <T extends FeatureCalcParams> Feature<T> renameFeature( String name, Feature<T> feature ) {
+	private static <T extends FeatureInput> Feature<T> renameFeature( String name, Feature<T> feature ) {
 		feature.setCustomName(name);
 		return feature;
 	}

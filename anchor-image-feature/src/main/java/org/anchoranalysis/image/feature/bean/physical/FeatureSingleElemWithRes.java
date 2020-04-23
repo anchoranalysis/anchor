@@ -30,10 +30,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
+import org.anchoranalysis.feature.calc.params.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageRes;
 
-public abstract class FeatureSingleElemWithRes<T extends FeatureCalcParamsWithRes> extends FeatureGenericSingleElem<T> {
+public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 

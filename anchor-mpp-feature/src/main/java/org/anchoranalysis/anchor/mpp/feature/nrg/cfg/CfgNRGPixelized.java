@@ -2,8 +2,8 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.cfg;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -54,7 +54,7 @@ public final class CfgNRGPixelized {
 	
 	// A cached version of the calculations for
 	//   each energy component in the associated NRGScheme
-    private MemoMarks memoMarks;
+    private MemoCollection memoMarks;
     
     private CfgNRG cfgNrg;
     
@@ -70,7 +70,7 @@ public final class CfgNRGPixelized {
     // Copy constructor - we do shallow copying of configuration
     public CfgNRGPixelized shallowCopy() {
     	CfgNRGPixelized newCfgNRG = new CfgNRGPixelized(cfgNrg.shallowCopy(), logger); 
-    	newCfgNRG.memoMarks = new MemoMarks( this.memoMarks );
+    	newCfgNRG.memoMarks = new MemoCollection( this.memoMarks );
     	return newCfgNRG;
     }
     
@@ -78,7 +78,7 @@ public final class CfgNRGPixelized {
     // Copy constructor - we do shallow copying of configuration
     public CfgNRGPixelized deepCopy() {
     	CfgNRGPixelized newCfgNRG = new CfgNRGPixelized(cfgNrg.deepCopy(), logger);
-    	newCfgNRG.memoMarks = new MemoMarks( this.memoMarks );
+    	newCfgNRG.memoMarks = new MemoCollection( this.memoMarks );
     	return newCfgNRG;
     }
 
@@ -96,7 +96,7 @@ public final class CfgNRGPixelized {
 		cfgNrg.assertValid();
 	}
 	
-	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws FeatureCalcException, InitException {
+	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureInput> sharedFeatures ) throws FeatureCalcException, InitException {
 
 		double old = cfgNrg.getNrgTotal();
 		this.init( nrgStack, sharedFeatures );
@@ -104,11 +104,11 @@ public final class CfgNRGPixelized {
 	}
 	
 	// The initial calculation of the NRG, thereafter it can be updated
-	public void init( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws InitException, FeatureCalcException {
+	public void init( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException, FeatureCalcException {
 
 		cfgNrg.init();
 		
-		this.memoMarks = new MemoMarks(
+		this.memoMarks = new MemoCollection(
 			cfgNrg.getCalcMarkInd(),
 			nrgStack.getNrgStack(),
 			cfgNrg.getCfg(),
@@ -205,8 +205,8 @@ public final class CfgNRGPixelized {
 	}
 	
 	
-	public PxlMarkMemoList createDuplicatePxlMarkMemoList() {
-		PxlMarkMemoList list = new PxlMarkMemoList();
+	public MemoList createDuplicatePxlMarkMemoList() {
+		MemoList list = new MemoList();
 		list.addAll(memoMarks);
 		return list;
 	}

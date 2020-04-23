@@ -33,13 +33,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 
-public abstract class ReportFeatureForMPP<T extends FeatureCalcParams> extends ReportFeatureForSharedObjects {
+public abstract class ReportFeatureForMPP<T extends FeatureInput> extends ReportFeatureForSharedObjects {
 
 	/**
 	 * 

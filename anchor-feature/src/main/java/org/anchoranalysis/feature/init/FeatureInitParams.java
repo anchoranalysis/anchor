@@ -32,7 +32,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 
 /**
- * Parameters used to initialise a feature
+ * Parameters used to initialise a feature before any calculaitons
  * 
  * @author Owen Feehan
  *

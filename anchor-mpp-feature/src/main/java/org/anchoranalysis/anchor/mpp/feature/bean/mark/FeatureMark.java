@@ -29,9 +29,9 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public abstract class FeatureMark extends Feature<FeatureMarkParams> {
+public abstract class FeatureMark extends Feature<FeatureInputMark> {
 
 	/**
 	 * 
@@ -39,22 +39,22 @@ public abstract class FeatureMark extends Feature<FeatureMarkParams> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureMarkParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputMark> params ) throws FeatureCalcException {
 		
-		if (params.getParams() instanceof FeatureMarkParams) {
-			return calc( (FeatureMarkParams) params.getParams() );
+		if (params.getParams() instanceof FeatureInputMark) {
+			return calc( (FeatureInputMark) params.getParams() );
 		} else {
-			throw new FeatureCalcException("Requires " + FeatureMarkParams.class.getSimpleName() );
+			throw new FeatureCalcException("Requires " + FeatureInputMark.class.getSimpleName() );
 		}
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureMarkParams params ) throws FeatureCalcException;
+	public abstract double calc( FeatureInputMark params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureMarkParamsDescriptor.instance;
+		return FeatureInputMarkDescriptor.instance;
 	}
 
 }

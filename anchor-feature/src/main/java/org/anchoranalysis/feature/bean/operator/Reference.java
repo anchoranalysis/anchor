@@ -32,11 +32,11 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public class Reference<T extends FeatureCalcParams> extends Feature<T> {
+public class Reference<T extends FeatureInput> extends Feature<T> {
 
 	/**
 	 * 
@@ -73,7 +73,7 @@ public class Reference<T extends FeatureCalcParams> extends Feature<T> {
 	}
 	
 	@Override
-	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 		super.addAdditionallyUsedFeatures(out);
 //		if (feature!=null) {
 //			out.add( feature );
@@ -86,10 +86,10 @@ public class Reference<T extends FeatureCalcParams> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
 
-		return FeatureCalcParamsDescriptor.instance;
+		return FeatureInputGenericDescriptor.instance;
 //		assert(sharedFeatures!=null);
 //		
 //		try {

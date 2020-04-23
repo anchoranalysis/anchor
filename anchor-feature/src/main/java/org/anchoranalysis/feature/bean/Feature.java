@@ -39,9 +39,9 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.init.IInitFeatures;
+import org.anchoranalysis.feature.init.InitializableFeature;
 
 
 /**
@@ -52,10 +52,10 @@ import org.anchoranalysis.feature.init.IInitFeatures;
  * 
  * @author owen
  *
- * @param <T> type of parameters used during calculation 
+ * @param <T> input-type 
  */
-public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T> implements
-		Serializable, IInitFeatures<T> {
+public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements
+		Serializable, InitializableFeature<T> {
 
 	/**
 	 * 
@@ -145,12 +145,12 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	 *            a dependent-feature
 	 */
 	@SuppressWarnings("unchecked")
-	public CacheableParams<FeatureCalcParams> transformParams(CacheableParams<T> params,
-			Feature<FeatureCalcParams> dependentFeature) throws FeatureCalcException {
-		return (CacheableParams<FeatureCalcParams>) params;
+	public CacheableParams<FeatureInput> transformParams(CacheableParams<T> params,
+			Feature<FeatureInput> dependentFeature) throws FeatureCalcException {
+		return (CacheableParams<FeatureInput>) params;
 	}
 
-	protected void duplicateHelper(Feature<FeatureCalcParams> out) {
+	protected void duplicateHelper(Feature<FeatureInput> out) {
 		out.customName = new String(customName);
 	}
 	
@@ -187,12 +187,12 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	 * @throws CreateException
 	 * @throws BeanMisconfiguredException
 	 */
-	public final FeatureList<FeatureCalcParams> createListChildFeatures(boolean includeAdditionallyUsed)
+	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)
 			throws BeanMisconfiguredException {
 		
-		List<Feature<FeatureCalcParams>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
+		List<Feature<FeatureInput>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
 
-		FeatureList<FeatureCalcParams> out = new FeatureList<>(outUpcast);
+		FeatureList<FeatureInput> out = new FeatureList<>(outUpcast);
 
 		if (includeAdditionallyUsed) {
 			addAdditionallyUsedFeatures(out);
@@ -215,7 +215,7 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	 * @param out a list to add these features to
 	 *            
 	 */
-	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 	}
 
 	// Dummy method, that children can optionally override
@@ -235,8 +235,8 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	
 	/** Upcasts the feature to FeatureCalcParams */
 	@SuppressWarnings("unchecked")
-	public Feature<FeatureCalcParams> upcast() {
-		return (Feature<FeatureCalcParams>) this;
+	public Feature<FeatureInput> upcast() {
+		return (Feature<FeatureInput>) this;
 	}
 	
 	/** Downcasts the feature  */

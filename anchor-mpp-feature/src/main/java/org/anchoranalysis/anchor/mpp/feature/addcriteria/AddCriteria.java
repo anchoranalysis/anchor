@@ -1,6 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -39,8 +39,8 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
  *
  * @param <T> add-criteria
  */
-public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<NRGElemPairCalcParams> {
+public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<FeatureInputPairMemo> {
 
 	// Returns NULL to reject an edge
-	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3D ) throws CreateException;
+	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D ) throws CreateException;
 }

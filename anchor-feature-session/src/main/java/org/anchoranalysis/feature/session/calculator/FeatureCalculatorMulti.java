@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Calculates one or more features for given params
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  *
  * @param <T>
  */
-public interface FeatureCalculatorMulti<T extends FeatureCalcParams> {
+public interface FeatureCalculatorMulti<T extends FeatureInput> {
 
 	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
 	ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter );

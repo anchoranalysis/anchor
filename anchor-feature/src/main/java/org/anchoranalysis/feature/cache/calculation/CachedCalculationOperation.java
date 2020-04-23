@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Binds params with a CachedCalculation and exposes it as the {@link org.anchoranalysis.core.cache.Operation} interface
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @param <S> result-type
  * @param <T> params-type
  */
-public class CachedCalculationOperation<S, T extends FeatureCalcParams> implements Operation<S> {
+public class CachedCalculationOperation<S, T extends FeatureInput> implements Operation<S> {
 
 	private RslvdCachedCalculation<S,T> cachedCalculation;
 	private T params;

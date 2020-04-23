@@ -4,9 +4,9 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public interface ICachedCalculationSearch<T extends FeatureCalcParams> {
+public interface ICachedCalculationSearch<T extends FeatureInput> {
 
 	/**
 	 * 

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class NumVoxels extends FeatureObjMask {
 
@@ -46,7 +46,7 @@ public class NumVoxels extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		return params.calc(
 			new CalculateNumVoxels(mip)
 		);

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateNumVoxels extends CachedCalculation<Double,FeatureObjMaskParams> {
+public class CalculateNumVoxels extends CachedCalculation<Double,FeatureInputSingleObj> {
 
 	private boolean mip=false;
 	
@@ -52,7 +52,7 @@ public class CalculateNumVoxels extends CachedCalculation<Double,FeatureObjMaskP
 	
 
 	@Override
-	protected Double execute(FeatureObjMaskParams params) throws ExecuteException {
+	protected Double execute(FeatureInputSingleObj params) throws ExecuteException {
 		return calc( params.getObjMask(), mip );
 	}
 	

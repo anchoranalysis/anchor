@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Exposes a FeatureCalculatorMulti as a FeatureCalculatorSingle
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  *
  * @param <T> feature-params type
  */
-public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> implements FeatureCalculatorSingle<T> {
+public class FeatureCalculatorSingleFromMulti<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
 	private FeatureCalculatorMulti<T> delegate;
 		

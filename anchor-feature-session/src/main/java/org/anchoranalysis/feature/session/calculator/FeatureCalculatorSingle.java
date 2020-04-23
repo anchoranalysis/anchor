@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Calculates the result of a feature for particular params
@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  *
  * @param <T> params-type
  */
-public interface FeatureCalculatorSingle<T extends FeatureCalcParams> {
+public interface FeatureCalculatorSingle<T extends FeatureInput> {
 
 	double calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	

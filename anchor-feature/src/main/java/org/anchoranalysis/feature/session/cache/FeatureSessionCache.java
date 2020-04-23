@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.InitException;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.cache.CacheCreator;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
 
@@ -49,10 +49,10 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
  * <p>A call to {{@link #invalidate()} removes any existing caching (also in the children) and guarantees the next calculation will be fresh</p>/
  *
  * @author Owen Feehan
- * @param T feature-calc-params
+ * @param T feature-input
  *
  */
-public abstract class FeatureSessionCache<T extends FeatureCalcParams> {
+public abstract class FeatureSessionCache<T extends FeatureInput> {
 
 	
 	/**
@@ -87,5 +87,5 @@ public abstract class FeatureSessionCache<T extends FeatureCalcParams> {
 	 * @param cacheCreator TODO
 	 * @return the existing or new child cache of the given name
 	 */
-	public abstract <V extends FeatureCalcParams> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator);
+	public abstract <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator);
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Remembers the first-calculation and always returns this value for all subsequent calculations
@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class FeatureCalculatorMultiReuse<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorMultiReuse<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
 	private FeatureCalculatorMulti<T> delegate;
 	

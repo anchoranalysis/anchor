@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -42,9 +42,9 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * 
  * @author owen
  *
- * @param <T> feature-calc-params
+ * @param <T> feature-input
  */
-class HorizontalFeatureCacheCalculator<T extends FeatureCalcParams> extends FeatureSessionCacheCalculator<T> {
+class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSessionCacheCalculator<T> {
 
 	private FeatureSessionCacheCalculator<T> delegate;
 	private FeatureResultMap<T> map;

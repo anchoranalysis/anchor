@@ -29,10 +29,10 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
-class FeatureDefiner<T extends FeatureCalcParams> extends PropertyDefiner<FeatureInitParams> {
+class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner<FeatureInitParams> {
 
 	public FeatureDefiner() {
 	}

@@ -33,8 +33,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
 /**
@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.params.ParamTypeUtilities;
  * 
  * @author Owen Feehan
  */
-public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<T> {
+public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 
 	/**
 	 * 
@@ -98,7 +98,7 @@ public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForThree(x,y,z);
 	}
 }

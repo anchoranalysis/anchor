@@ -27,9 +27,9 @@ package org.anchoranalysis.feature.session.cache;
  */
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public interface FeatureSessionCacheFactory {
-	<T extends FeatureCalcParams> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures);
+	<T extends FeatureInput> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures);
 }

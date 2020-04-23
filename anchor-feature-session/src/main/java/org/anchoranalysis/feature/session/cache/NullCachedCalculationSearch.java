@@ -4,10 +4,10 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
-public class NullCachedCalculationSearch<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
+public class NullCachedCalculationSearch<T extends FeatureInput> implements ICachedCalculationSearch<T> {
 
 	private static NullCachedCalculationSearch<?> instance = new NullCachedCalculationSearch<>();
 	
@@ -27,7 +27,7 @@ public class NullCachedCalculationSearch<T extends FeatureCalcParams> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <U extends FeatureCalcParams> NullCachedCalculationSearch<U> getInstance() {
+	public static <U extends FeatureInput> NullCachedCalculationSearch<U> getInstance() {
 		return (NullCachedCalculationSearch<U>) instance;
 	}
 

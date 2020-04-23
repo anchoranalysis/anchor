@@ -33,12 +33,12 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 /**
  * TODO make more generic than FeatureObjMaskParams
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
  *
  * @param <T> feature-calculation parameters
  */
-public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
+public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEvaluator<T> {
 
 	/**
 	 * 
@@ -85,8 +85,8 @@ public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends Featu
 			session,
 			params -> {
 				// Use reflection, to only set the nrgStack on params that supports them
-				if (params instanceof FeatureNRGStackParams) {
-					((FeatureNRGStackParams) params).setNrgStack( nrgStack );
+				if (params instanceof FeatureInputNRGStack) {
+					((FeatureInputNRGStack) params).setNrgStack( nrgStack );
 				}
 			}
 		);

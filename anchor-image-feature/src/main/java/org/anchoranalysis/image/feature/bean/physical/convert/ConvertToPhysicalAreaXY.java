@@ -28,12 +28,12 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
+import org.anchoranalysis.feature.calc.params.FeatureInputWithRes;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 
 // converts a feature to a physical distance in a XY place that is isometric
-public class ConvertToPhysicalAreaXY<T extends FeatureCalcParamsWithRes> extends FeatureConvertRes<T> {
+public class ConvertToPhysicalAreaXY<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
 
 	/**
 	 * 

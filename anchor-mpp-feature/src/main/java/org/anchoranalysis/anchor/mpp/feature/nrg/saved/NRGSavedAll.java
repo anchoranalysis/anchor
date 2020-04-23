@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.saved;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -47,7 +47,7 @@ public class NRGSavedAll implements Serializable {
 	public NRGSavedAll() {
 	}
 	
-	public void calc( MemoMarks pxlMarkMemoList, NRGSchemeWithSharedFeatures nrgScheme, NRGStack nrgRaster ) throws FeatureCalcException {
+	public void calc( MemoCollection pxlMarkMemoList, NRGSchemeWithSharedFeatures nrgScheme, NRGStack nrgRaster ) throws FeatureCalcException {
 		nrgTotal = nrgScheme.calcElemAllTotal( pxlMarkMemoList, nrgRaster ).getTotal();
 	}
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Creates a FeatureList from a FeatureListProvider
@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen
  *
  */
-class FeatureBridge<T extends FeatureCalcParams> implements IObjectBridge<NamedBean<FeatureListProvider<T>>, FeatureList<T>> {
+class FeatureBridge<T extends FeatureInput> implements IObjectBridge<NamedBean<FeatureListProvider<T>>, FeatureList<T>> {
 
 	private SharedFeatureSet<T> sharedFeatureSet;
 	private SharedFeaturesInitParams so;

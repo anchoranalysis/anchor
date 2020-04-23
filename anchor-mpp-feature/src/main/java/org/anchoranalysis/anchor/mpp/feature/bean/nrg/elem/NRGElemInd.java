@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 
 /*-
  * #%L
@@ -32,9 +32,9 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescri
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public abstract class NRGElemInd extends Feature<NRGElemIndCalcParams> {
+public abstract class NRGElemInd extends Feature<FeatureInputSingleMemo> {
 
 	/**
 	 * 
@@ -42,16 +42,16 @@ public abstract class NRGElemInd extends Feature<NRGElemIndCalcParams> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputSingleMemo> params ) throws FeatureCalcException {
 		return calcCast(params.getParams());
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException;
+	public abstract double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return NRGElemIndCalcParamsDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.instance;
 	}
 }

@@ -32,16 +32,16 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Likes a SequentialSession but automatically changes parameters before calculation
  *
  * @author owen
  *
- * @param <T> feature-calc-params
+ * @param <T> feature-input
  */
-public class FeatureCalculatorMultiChangeParams<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorMultiChangeParams<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
 	private FeatureCalculatorMulti<T> calculator;
 	private Consumer<T> changeParams;

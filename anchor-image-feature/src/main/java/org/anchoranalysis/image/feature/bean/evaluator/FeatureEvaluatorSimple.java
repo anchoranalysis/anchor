@@ -27,9 +27,9 @@ package org.anchoranalysis.image.feature.bean.evaluator;
  */
 
 
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class FeatureEvaluatorSimple<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
+public class FeatureEvaluatorSimple<T extends FeatureInput> extends FeatureEvaluator<T> {
 
 	/**
 	 * 

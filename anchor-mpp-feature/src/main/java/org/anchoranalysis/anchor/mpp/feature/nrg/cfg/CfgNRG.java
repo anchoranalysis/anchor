@@ -30,8 +30,8 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.cfg;
 import java.io.Serializable;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedAll;
 import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedInd;
 import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedPairs;
@@ -99,7 +99,7 @@ public class CfgNRG implements Serializable {
 		return delegate;
 	}
 	
-	public void updateTotal( MemoMarks pxlMarkMemoList, NRGStack stack ) throws FeatureCalcException {
+	public void updateTotal( MemoCollection pxlMarkMemoList, NRGStack stack ) throws FeatureCalcException {
 		
 		// We calculate an all value
 		this.calcMarkAll.calc( pxlMarkMemoList, delegate.getNrgScheme(), stack );
@@ -138,7 +138,7 @@ public class CfgNRG implements Serializable {
 	}
 
 	
-	public void add( MemoMarks wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack, LogErrorReporter logger ) throws FeatureCalcException {
+	public void add( MemoCollection wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack, LogErrorReporter logger ) throws FeatureCalcException {
 		
 		delegate.add(newPxlMarkMemo);
 		
@@ -155,7 +155,7 @@ public class CfgNRG implements Serializable {
 		updateTotal( wrapperInd, stack );
 	}
 		
-	public void rmv(  MemoMarks wrapperInd, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
+	public void rmv(  MemoCollection wrapperInd, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
 		
 		int index = wrapperInd.getIndexForMemo(memoRmv);
 		assert(index!=-1);
@@ -165,7 +165,7 @@ public class CfgNRG implements Serializable {
 	
 	
 
-	public void rmv( MemoMarks wrapperInd, int index, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
+	public void rmv( MemoCollection wrapperInd, int index, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
 		
 		getCalcMarkPair().rmv( wrapperInd, memoRmv );
 		wrapperInd.rmv( getCalcMarkInd(), index);
@@ -177,7 +177,7 @@ public class CfgNRG implements Serializable {
 	
 	
 	
-	public void rmvTwo( MemoMarks wrapperInd, int index1, int index2, NRGStack nrgStack ) throws FeatureCalcException {
+	public void rmvTwo( MemoCollection wrapperInd, int index1, int index2, NRGStack nrgStack ) throws FeatureCalcException {
 		
 		PxlMarkMemo memoRmv1 = wrapperInd.getMemoForIndex(index1);
 		PxlMarkMemo memoRmv2 = wrapperInd.getMemoForIndex(index2);
@@ -186,7 +186,7 @@ public class CfgNRG implements Serializable {
 				
 		Cfg newCfg = delegate.getCfg().shallowCopy();
 		
-		PxlMarkMemoList memoList = new PxlMarkMemoList(); 
+		MemoList memoList = new MemoList(); 
 		memoList.addAll( wrapperInd );
 		
 		getCalcMarkPair().rmv( memoList, memoRmv1 );
@@ -207,7 +207,7 @@ public class CfgNRG implements Serializable {
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
 	public void exchange(
-		MemoMarks wrapperInd,
+		MemoCollection wrapperInd,
 		int index,
 		PxlMarkMemo newMark,
 		NRGStackWithParams nrgStack

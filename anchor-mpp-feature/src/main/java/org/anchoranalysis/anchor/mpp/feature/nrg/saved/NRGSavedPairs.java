@@ -42,7 +42,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -90,7 +90,7 @@ public class NRGSavedPairs implements Serializable, UpdatableMarkSet {
 
 	
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex pxlMarkMemoList, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex pxlMarkMemoList, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException {
 		
 		this.pairCollection.initUpdatableMarkSet( pxlMarkMemoList, stack, logger, sharedFeatures );
 		calcTotalFresh();		

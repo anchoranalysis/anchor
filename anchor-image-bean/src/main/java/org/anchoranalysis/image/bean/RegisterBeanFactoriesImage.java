@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Registers beans that needs particular factories
@@ -45,8 +45,8 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 public class RegisterBeanFactoriesImage {
 	
 	public static void registerBeanFactories() {
-		RegisterBeanFactories.register("featureList", (List<Feature<FeatureCalcParams>> list)-> {
-			FeatureList<FeatureCalcParams> listOut = new FeatureList<>();
+		RegisterBeanFactories.register("featureList", (List<Feature<FeatureInput>> list)-> {
+			FeatureList<FeatureInput> listOut = new FeatureList<>();
 			listOut.addAll(list);
 			return listOut;
 		});

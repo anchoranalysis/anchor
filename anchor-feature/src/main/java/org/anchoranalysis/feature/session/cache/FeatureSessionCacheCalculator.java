@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 
@@ -42,9 +42,9 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * Calculates features in the context of a particular {#FeatureSessionCache}.
  * 
  * @author Owen Feehan
- * @params feature calc-params that the cache supports
+ * @param T feature-input type that the cache supports
  */
-public abstract class FeatureSessionCacheCalculator<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
+public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> implements ICachedCalculationSearch<T> {
 	
 	/**
 	 * Has the cache been inited()

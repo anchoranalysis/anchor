@@ -34,11 +34,11 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 public class NamedFeatureStoreFactory {
 
-	public static <T extends FeatureCalcParams> NamedFeatureStore<T> createNamedFeatureList( List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider ) throws CreateException {
+	public static <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList( List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider ) throws CreateException {
 		
 		try {
 			NamedFeatureStore<T> out = new NamedFeatureStore<>();

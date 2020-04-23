@@ -4,9 +4,9 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaNRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.cache.LRUCache;
@@ -46,19 +46,19 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class NRGSchemeWithSharedFeatures {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureSet<FeatureCalcParams> sharedFeatures;
+	private SharedFeatureSet<FeatureInput> sharedFeatures;
 	
 	private LRUCache<Integer,NRGTotal> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
@@ -101,10 +101,10 @@ public class NRGSchemeWithSharedFeatures {
 		
 		public NRGTotal calc() throws FeatureCalcException {
 			
-			FeatureCalculatorMulti<NRGElemIndCalcParams> session;
+			FeatureCalculatorMulti<FeatureInputSingleMemo> session;
 			
 			try {
-				session = SessionFactory.createAndStart(
+				session = FeatureSession.with(
 					nrgScheme.getElemIndAsFeatureList(),
 					createInitParams(kvp),
 					sharedFeatures.downcast(),
@@ -116,7 +116,7 @@ public class NRGSchemeWithSharedFeatures {
 			}
 			
 			
-			NRGElemIndCalcParams params = new NRGElemIndCalcParams(
+			FeatureInputSingleMemo params = new FeatureInputSingleMemo(
 				pmm,
 				new NRGStackWithParams(raster,kvp)
 			);
@@ -129,7 +129,7 @@ public class NRGSchemeWithSharedFeatures {
 
 	
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureSet<FeatureCalcParams> sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
+			SharedFeatureSet<FeatureInput> sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
@@ -140,19 +140,19 @@ public class NRGSchemeWithSharedFeatures {
 		indCache = new LRUCache<>(nrgSchemeIndCacheSize, operationIndCalc); 
 	}
 	
-	public NRGTotal calcElemAllTotal( MemoMarks pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
+	public NRGTotal calcElemAllTotal( MemoCollection pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
 		
 		NRGStackWithParams nrgStack = createNRGStack(raster);
 	
 		try {
-			FeatureCalculatorMulti<NRGElemAllCalcParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorMulti<FeatureInputAllMemo> session = FeatureSession.with(
 				nrgScheme.getElemAllAsFeatureList(),
 				createInitParams(nrgStack.getParams()),
 				sharedFeatures.downcast(),
 				logger
 			);
 			
-			NRGElemAllCalcParams params = new NRGElemAllCalcParams(
+			FeatureInputAllMemo params = new FeatureInputAllMemo(
 				pxlMarkMemoList,
 				nrgStack
 			);
@@ -221,7 +221,7 @@ public class NRGSchemeWithSharedFeatures {
 		}
 	}
 
-	public SharedFeatureSet<FeatureCalcParams> getSharedFeatures() {
+	public SharedFeatureSet<FeatureInput> getSharedFeatures() {
 		return sharedFeatures;
 	}
 

@@ -39,7 +39,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.list.FeatureListStoreUtilities;
 
 public class SharedFeaturesInitParams extends BeanInitParams {
@@ -49,11 +49,11 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	// END: InitParams
 	
 	// START: Stores
-	private NamedProviderStore<FeatureList<FeatureCalcParams>> storeFeatureList;
+	private NamedProviderStore<FeatureList<FeatureInput>> storeFeatureList;
 	// END: Stores
 	
 	// START: Single Items
-	private SharedFeatureSet<FeatureCalcParams> sharedFeatureSet;
+	private SharedFeatureSet<FeatureInput> sharedFeatureSet;
 	// END: Single Items
 
 	private SharedFeaturesInitParams(SharedObjects so) {
@@ -83,12 +83,12 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		return create(so);
 	}
 	
-	public NamedProviderStore<FeatureList<FeatureCalcParams>> getFeatureListSet() {
+	public NamedProviderStore<FeatureList<FeatureInput>> getFeatureListSet() {
 		return storeFeatureList;
 	}
 	
 	public void addAll(
-		List<NamedBean<FeatureListProvider<FeatureCalcParams>>> namedFeatureListCreator,
+		List<NamedBean<FeatureListProvider<FeatureInput>>> namedFeatureListCreator,
 		LogErrorReporter logger
 	) throws OperationFailedException {
 		
@@ -104,7 +104,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		return soParams;
 	}
 	
-	public SharedFeatureSet<FeatureCalcParams> getSharedFeatureSet() {
+	public SharedFeatureSet<FeatureInput> getSharedFeatureSet() {
 		return sharedFeatureSet;
 	}
 }

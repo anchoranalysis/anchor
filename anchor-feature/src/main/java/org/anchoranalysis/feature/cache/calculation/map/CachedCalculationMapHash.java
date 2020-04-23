@@ -33,7 +33,7 @@ import java.util.Map;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Implementation of a CachedCalculationMap using a Hash-Map
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public abstract class CachedCalculationMapHash<S,T extends FeatureCalcParams,U> extends CachedCalculationMap<S,T,U> {
+public abstract class CachedCalculationMapHash<S,T extends FeatureInput,U> extends CachedCalculationMap<S,T,U> {
 
 	/**
 	 * Caches our results for different Keys

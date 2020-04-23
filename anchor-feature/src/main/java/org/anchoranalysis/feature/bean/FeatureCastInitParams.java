@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
 /**
@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
  * 
  * @author owen
  *
- * @param <S> init-params params type
- * @param <T> calc-params type
+ * @param <S> feature initialization type (this feature should only be initialized with this type, or an exception will be thrown)
+ * @param <T> feature input-type
  */
-public abstract class FeatureCastInitParams<S extends FeatureInitParams, T extends FeatureCalcParams> extends Feature<T> {
+public abstract class FeatureCastInitParams<S extends FeatureInitParams, T extends FeatureInput> extends Feature<T> {
 
 
 	/**

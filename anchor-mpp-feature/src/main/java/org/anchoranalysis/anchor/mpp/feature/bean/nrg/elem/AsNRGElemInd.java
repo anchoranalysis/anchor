@@ -1,8 +1,8 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParamsDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
  * #%L
@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGElemIndCalcParams> {
+public class AsNRGElemInd extends FeatureSingleElem<FeatureInputPairMemo,FeatureInputSingleMemo> {
 
 	/**
 	 * 
@@ -51,7 +51,7 @@ public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGEle
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemPairCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputPairMemo> params) throws FeatureCalcException {
 		return params
 			.calcChangeParams(
 				getItem(),
@@ -60,8 +60,8 @@ public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGEle
 			);		
 	}
 	
-	private NRGElemIndCalcParams extractParams( NRGElemPairCalcParams params ) {
-		return new NRGElemIndCalcParams(
+	private FeatureInputSingleMemo extractParams( FeatureInputPairMemo params ) {
+		return new FeatureInputSingleMemo(
 			first ? params.getObj1() : params.getObj2(),
 			params.getNrgStack()
 		);
@@ -70,9 +70,9 @@ public class AsNRGElemInd extends FeatureSingleElem<NRGElemPairCalcParams,NRGEle
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return NRGElemPairCalcParamsDescriptor.instance;
+		return FeatureInputPairMemoDescriptor.instance;
 	}
 
 	@Override

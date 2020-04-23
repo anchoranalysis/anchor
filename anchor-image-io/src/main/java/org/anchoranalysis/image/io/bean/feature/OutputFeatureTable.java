@@ -44,7 +44,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -61,7 +61,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider = new ArrayList<>();
+	private List<FeatureProvider<FeatureInputSingleObj>> listFeatureProvider = new ArrayList<>();
 	
 	@BeanField @OptionalBean
 	private StackProvider stackProviderNRG;
@@ -86,7 +86,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 			
-			FeatureList<FeatureObjMaskParams> features = createFeatureList();
+			FeatureList<FeatureInputSingleObj> features = createFeatureList();
 			
 			if (features.size()==0) {
 				throw new IOException("No features are set");
@@ -113,7 +113,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		FeatureInitParamsSharedObjs paramsInit,
 		NRGStackWithParams nrgStack,
 		ObjMaskCollection objsCollection,
-		FeatureList<FeatureObjMaskParams> features,
+		FeatureList<FeatureInputSingleObj> features,
 		LogErrorReporter logErrorReporter
 	) {
 		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
@@ -127,9 +127,9 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		return generator;
 	}
 
-	private FeatureList<FeatureObjMaskParams> createFeatureList() throws CreateException {
-		FeatureList<FeatureObjMaskParams> out = new FeatureList<>();
-		for( FeatureProvider<FeatureObjMaskParams> fp : listFeatureProvider) {
+	private FeatureList<FeatureInputSingleObj> createFeatureList() throws CreateException {
+		FeatureList<FeatureInputSingleObj> out = new FeatureList<>();
+		for( FeatureProvider<FeatureInputSingleObj> fp : listFeatureProvider) {
 			out.add( fp.create() );
 		}
 		return out;
@@ -153,12 +153,12 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	}
 
 
-	public List<FeatureProvider<FeatureObjMaskParams>> getListFeatureProvider() {
+	public List<FeatureProvider<FeatureInputSingleObj>> getListFeatureProvider() {
 		return listFeatureProvider;
 	}
 
 
-	public void setListFeatureProvider(List<FeatureProvider<FeatureObjMaskParams>> listFeatureProvider) {
+	public void setListFeatureProvider(List<FeatureProvider<FeatureInputSingleObj>> listFeatureProvider) {
 		this.listFeatureProvider = listFeatureProvider;
 	}
 

@@ -28,11 +28,11 @@ package org.anchoranalysis.image.feature.bean;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 
-public abstract class FeatureStack extends Feature<FeatureStackParams> {
+public abstract class FeatureStack extends Feature<FeatureInputStack> {
 
 	/**
 	 * 
@@ -40,9 +40,9 @@ public abstract class FeatureStack extends Feature<FeatureStackParams> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureStackParamsDescriptor.instance;
+		return FeatureInputStackDescriptor.instance;
 	}
 
 }

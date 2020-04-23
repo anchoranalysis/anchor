@@ -3,7 +3,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
 
 /*
  * #%L
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 
-public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureCfgParams> {
+public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 
 	/**
 	 * 
@@ -76,10 +76,10 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureCfgParams> {
 			
 			ImageDim dim = createImageDim();
 			
-			FeatureCalculatorSingle<FeatureCfgParams> session = createAndStartSession();
+			FeatureCalculatorSingle<FeatureInputCfg> session = createAndStartSession();
 			
 			double val = session.calcOne(
-				new FeatureCfgParams(cfg, dim)
+				new FeatureInputCfg(cfg, dim)
 			);
 			return Double.toString(val);
 			

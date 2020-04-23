@@ -32,16 +32,16 @@ import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
 
 public class ParamTypeUtilities {
 
-	public static FeatureParamsDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) throws FeatureCalcException {
+	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) throws FeatureCalcException {
 		return paramTypeForTwo( item1.paramType(), item2.paramType() );
 	}
 	
-	public static FeatureParamsDescriptor paramTypeForTwo( FeatureParamsDescriptor c1, FeatureParamsDescriptor c2 ) throws FeatureCalcException {
+	public static FeatureInputDescriptor paramTypeForTwo( FeatureInputDescriptor c1, FeatureInputDescriptor c2 ) throws FeatureCalcException {
 		
 		if (c1.isCompatibleWithEverything()) {
 			return c2;
@@ -55,7 +55,7 @@ public class ParamTypeUtilities {
 			return c1;
 		}
 		
-		FeatureParamsDescriptor preferred = c1.preferToBidirectional(c2);
+		FeatureInputDescriptor preferred = c1.preferToBidirectional(c2);
 		if (preferred==null) {
 			throw new FeatureCalcException("item1 and item2 must accept the same paramType, or be compatible.");
 		}
@@ -64,7 +64,7 @@ public class ParamTypeUtilities {
 	}
 	
 	
-	public static <T extends FeatureCalcParams> FeatureParamsDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) throws FeatureCalcException {
+	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) throws FeatureCalcException {
 		
 		List<Feature<T>> list = new ArrayList<>();
 		list.add( item1 );
@@ -74,27 +74,27 @@ public class ParamTypeUtilities {
 	}
 	
 	
-	public static <T extends FeatureCalcParams> FeatureParamsDescriptor paramTypeForList( List<Feature<T>> list ) throws FeatureCalcException {
+	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForList( List<Feature<T>> list ) throws FeatureCalcException {
 		
 		if (list.size()==0) {
-			return FeatureCalcParamsDescriptor.instance;
+			return FeatureInputGenericDescriptor.instance;
 		}
 		
-		FeatureParamsDescriptor chosenParamType = chooseParamType(list); 
+		FeatureInputDescriptor chosenParamType = chooseParamType(list); 
 		
 		if (chosenParamType==null) {
-			return FeatureCalcParamsDescriptor.instance;
+			return FeatureInputGenericDescriptor.instance;
 		} else {
 			return chosenParamType;
 		}
 		
 	}
 	
-	private static <T extends FeatureCalcParams> FeatureParamsDescriptor chooseParamType( List<Feature<T>> list ) throws FeatureCalcException {
-		FeatureParamsDescriptor chosenParamType = null;
+	private static <T extends FeatureInput> FeatureInputDescriptor chooseParamType( List<Feature<T>> list ) throws FeatureCalcException {
+		FeatureInputDescriptor chosenParamType = null;
 		for (Feature<?> f : list) {
 			
-			FeatureParamsDescriptor paramType = f.paramType();
+			FeatureInputDescriptor paramType = f.paramType();
 			
 			if (paramType.isCompatibleWithEverything()) {
 				continue;
@@ -105,7 +105,7 @@ public class ParamTypeUtilities {
 			} else {
 				if (!chosenParamType.equals(paramType)) {
 					
-					FeatureParamsDescriptor preferred = paramType.preferToBidirectional(chosenParamType);
+					FeatureInputDescriptor preferred = paramType.preferToBidirectional(chosenParamType);
 					if (preferred==null) {
 						// We don't know which parameter to prefer
 						throw new FeatureCalcException("All features in the list must have the same paramType, or a simple type, or a preference between conflicting type");

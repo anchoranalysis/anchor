@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class FeatureListProviderDefine<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderDefine<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 

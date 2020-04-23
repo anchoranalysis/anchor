@@ -33,11 +33,11 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
-public abstract class FeatureListElem<T extends FeatureCalcParams> extends Feature<T> {
+public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T> {
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public abstract class FeatureListElem<T extends FeatureCalcParams> extends Featu
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForList(list);
 	}

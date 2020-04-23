@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Reference;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Populates a FeatureListElem with references to other features formed by one
@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderListSequence<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderListSequence<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 

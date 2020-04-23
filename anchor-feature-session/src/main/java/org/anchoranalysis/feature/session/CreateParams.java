@@ -28,9 +28,9 @@ package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public abstract class CreateParams <T extends FeatureCalcParams> {
+public abstract class CreateParams <T extends FeatureInput> {
 	
 	public abstract T createForFeature( Feature<?> feature ) throws CreateException;
 }

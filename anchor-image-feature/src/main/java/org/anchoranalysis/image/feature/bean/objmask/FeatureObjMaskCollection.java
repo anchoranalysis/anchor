@@ -29,11 +29,11 @@ package org.anchoranalysis.image.feature.bean.objmask;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionDescriptor;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjsDescriptor;
+import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjs;
 
-public abstract class FeatureObjMaskCollection extends Feature<FeatureObjMaskCollectionParams> {
+public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs> {
 
 	/**
 	 * 
@@ -41,22 +41,22 @@ public abstract class FeatureObjMaskCollection extends Feature<FeatureObjMaskCol
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureObjMaskCollectionParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputObjs> params ) throws FeatureCalcException {
 		
-		if (params.getParams() instanceof FeatureObjMaskCollectionParams) {
-			return calc( (FeatureObjMaskCollectionParams) params.getParams() );
+		if (params.getParams() instanceof FeatureInputObjs) {
+			return calc( (FeatureInputObjs) params.getParams() );
 		} else {
-			throw new FeatureCalcException("Requires " + FeatureObjMaskCollectionParams.class.getSimpleName() );
+			throw new FeatureCalcException("Requires " + FeatureInputObjs.class.getSimpleName() );
 		}
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureObjMaskCollectionParams params ) throws FeatureCalcException;
+	public abstract double calc( FeatureInputObjs params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureObjMaskCollectionDescriptor.instance;
+		return FeatureInputObjsDescriptor.instance;
 	}
 	
 }

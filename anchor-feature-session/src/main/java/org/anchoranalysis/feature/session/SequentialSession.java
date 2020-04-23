@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -50,17 +50,19 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
- * Applies the same Params to several features.
+ * Calculates features with successively different parameters, taking care of caching etc. appropriately.
  * 
- * All feature use the same InitParams;
+ * <p>All feature use the same InitParams, but successively different {#FeatureCalcParams} sequentially.</p>
  * 
- * Object calculations occur sequentially thereafter.
+ * <p>Caching is applied only within each call to {{@link #calc(FeatureInput)} but among successive calls</p>.
+ * 
+ * TODO after MergeSession is fixed, considering making all constructors package-private and renaming back to SequentialSession
  * 
  * @author Owen Feehan
- * @param T calc-params for feature
+ * @param T input-type for feature
  *
  */
-public class SequentialSession<T extends FeatureCalcParams> implements FeatureCalculatorMulti<T> {
+public class SequentialSession<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
 	private FeatureList<T> listFeatures;
 	
@@ -88,7 +90,7 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	 * @param listFeatures the features that will be calculated in this session
 	 */
 	@SuppressWarnings("unchecked")
-	public SequentialSession(Iterable<Feature<T>> iterFeatures) {
+	SequentialSession(Iterable<Feature<T>> iterFeatures) {
 		this( iterFeatures, (Collection<String>) CollectionUtils.EMPTY_COLLECTION );
 	}
 	
@@ -99,7 +101,7 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	 * @param prependFeatureName a string that can be prepended to feature-ID references e.g. when looking for  featureX,  concat(prependFeatureName,featureX)
 	 *         is also considered. This helps with scoping.
 	 */
-	public SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes) {
+	SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes) {
 		this.listFeatures = new FeatureList<>(iterFeatures);
 		assert(listFeatures!=null);
 	}
@@ -181,7 +183,7 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	private CacheableParams<T> createOrReuseCache(T params) throws FeatureCalcException {
 		
 		if (cacheableParams==null) {
-			cacheableParams = SessionUtilities.createCacheable(params, cacheCreator);
+			cacheableParams = new CacheableParams<T>(params, cacheCreator);
 		} else {
 			cacheableParams.replaceParams(params);
 		}
@@ -265,9 +267,9 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 		try {
 			for( Feature<T> f : listFeatures ) {
 				
-				FeatureList<FeatureCalcParams> allDependents = f.createListChildFeatures(false);
+				FeatureList<FeatureInput> allDependents = f.createListChildFeatures(false);
 				
-				for( Feature<FeatureCalcParams> dep : allDependents ) {
+				for( Feature<FeatureInput> dep : allDependents ) {
 				
 					if (sharedFeatures.contains(dep)) {
 						throw new InitException(

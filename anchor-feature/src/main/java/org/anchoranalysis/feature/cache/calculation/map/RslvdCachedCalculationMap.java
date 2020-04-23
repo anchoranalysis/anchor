@@ -1,9 +1,9 @@
 package org.anchoranalysis.feature.cache.calculation.map;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class RslvdCachedCalculationMap<S, T extends FeatureCalcParams,U> {
+public class RslvdCachedCalculationMap<S, T extends FeatureInput,U> {
 
 	private CachedCalculationMap<S,T,U> cachedCalculationMap;
 

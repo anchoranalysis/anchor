@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
@@ -57,7 +57,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  * @param parameter-type
  */
-public class HorizontalCalculationCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
+public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
 	
 	private ResettableSet<CachedCalculation<?,T>> setCC = new ResettableSet<>(false);
 	private ResettableSet<CachedCalculationMap<?,T,?>> setCCMap = new ResettableSet<>(false);
@@ -68,7 +68,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 	private boolean logCacheInit;
 	private SharedFeatureSet<T> sharedFeatures;
 		
-	private Map<String, FeatureSessionCache<FeatureCalcParams>> children = new HashMap<>();
+	private Map<String, FeatureSessionCache<FeatureInput>> children = new HashMap<>();
 	
 	HorizontalCalculationCache( SharedFeatureSet<T> sharedFeatures ) {
 		super();
@@ -171,7 +171,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		setCCMap.reset();
 
 		// Invalidate each of the child caches
-		for (FeatureSessionCache<FeatureCalcParams> childCache : children.values()) {
+		for (FeatureSessionCache<FeatureInput> childCache : children.values()) {
 			childCache.invalidate();
 		}
 	}
@@ -183,7 +183,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <V extends FeatureCalcParams> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator) {
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator) {
 		// Creates a new child-cache if it doesn't already exist for a particular name
 		return (FeatureSessionCache<V>) children.computeIfAbsent(
 			childName,

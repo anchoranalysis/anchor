@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -43,14 +43,14 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 
-	private FeatureList<NRGElemPairCalcParams> nrgElemPairList;
+	private FeatureList<FeatureInputPairMemo> nrgElemPairList;
 	
 	// List of criteria for adding pairs
 	private AddCriteriaPair pairAddCriteria;
 
-	private FeatureList<NRGElemPairCalcParams> featuresAddCriteria;
+	private FeatureList<FeatureInputPairMemo> featuresAddCriteria;
 	
-	public AddCriteriaNRGElemPair( FeatureList<NRGElemPairCalcParams> nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
+	public AddCriteriaNRGElemPair( FeatureList<FeatureInputPairMemo> nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
 		super();
 		
 		this.nrgElemPairList = nrgElemPairList;
@@ -69,9 +69,9 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	 * 
 	 */
 	@Override
-	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() throws CreateException {
+	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() throws CreateException {
 
-		FeatureList<NRGElemPairCalcParams> out = new FeatureList<>();
+		FeatureList<FeatureInputPairMemo> out = new FeatureList<>();
 		
 		// Now we add all the features we need from the nrgElemPairList
 		out.addAll( nrgElemPairList );
@@ -88,7 +88,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
-		FeatureCalculatorMulti<NRGElemPairCalcParams> session,
+		FeatureCalculatorMulti<FeatureInputPairMemo> session,
 		boolean use3D
 	) throws CreateException {
 		
@@ -111,7 +111,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	
 		if (calc) {
 			try {
-				NRGElemPairCalcParams params = new NRGElemPairCalcParams(
+				FeatureInputPairMemo params = new FeatureInputPairMemo(
 					mark1,
 					mark2,
 					nrgStack

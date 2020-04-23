@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 
 /**
@@ -52,10 +52,10 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 public class KeyValueParamsForImageCreator {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureSet<FeatureStackParams> sharedFeatures;
+	private SharedFeatureSet<FeatureInputStack> sharedFeatures;
 	private LogErrorReporter logger;
 	
-	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureSet<FeatureStackParams> sharedFeatures,
+	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureSet<FeatureInputStack> sharedFeatures,
 			LogErrorReporter logger) {
 		super();
 		this.nrgScheme = nrgScheme;
@@ -79,12 +79,12 @@ public class KeyValueParamsForImageCreator {
 			KeyValueParams kvp
 		) throws OperationFailedException {
 		
-		FeatureStackParams params = new FeatureStackParams(nrgStack);
+		FeatureInputStack params = new FeatureInputStack(nrgStack);
 		
 		FeatureInitParams paramsInit = new FeatureInitParams(kvp);
 		paramsInit.setNrgStack(nrgStack);
 				
-		for( NamedBean<Feature<FeatureStackParams>> ni : nrgScheme.getListImageFeatures() ) {
+		for( NamedBean<Feature<FeatureInputStack>> ni : nrgScheme.getListImageFeatures() ) {
 			
 			kvp.putIfEmpty(
 				ni.getName(),
@@ -93,10 +93,10 @@ public class KeyValueParamsForImageCreator {
 		}
 	}
 	
-	private double calcImageFeature( Feature<FeatureStackParams> feature, FeatureInitParams paramsInit, FeatureStackParams params) throws OperationFailedException {
+	private double calcImageFeature( Feature<FeatureInputStack> feature, FeatureInitParams paramsInit, FeatureInputStack params) throws OperationFailedException {
 
 		try {
-			FeatureCalculatorSingle<FeatureStackParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorSingle<FeatureInputStack> session = FeatureSession.with(
 				feature,
 				paramsInit,
 				sharedFeatures,

@@ -31,9 +31,9 @@ import java.util.Map;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-class FeatureResultMap<T extends FeatureCalcParams> {
+class FeatureResultMap<T extends FeatureInput> {
 
 	private Map<Feature<T>,Double> mapFeature = new HashMap<>();
 	private Map<String,Double> mapID = new HashMap<>();

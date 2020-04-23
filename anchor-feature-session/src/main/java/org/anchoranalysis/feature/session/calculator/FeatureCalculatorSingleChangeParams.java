@@ -32,16 +32,16 @@ import java.util.function.Consumer;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Likes a SequentialSession but automatically changes parameters before calculation
  *
  * @author owen
  *
- * @param <T> feature-calc-params
+ * @param <T> feature-input
  */
-public class FeatureCalculatorSingleChangeParams<T extends FeatureCalcParams> implements FeatureCalculatorSingle<T> {
+public class FeatureCalculatorSingleChangeParams<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
 	private FeatureCalculatorSingle<T> calculator;
 	private Consumer<T> changeParams;
