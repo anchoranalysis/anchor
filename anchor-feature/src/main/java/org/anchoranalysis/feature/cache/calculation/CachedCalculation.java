@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.cachedcalculation;
+package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.core.cache.CachedOperation;
 
@@ -70,8 +70,8 @@ public abstract class CachedCalculation<S, T extends FeatureCalcParams> implemen
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.
-	 * 
 	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
+	 * 
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
@@ -97,9 +97,6 @@ public abstract class CachedCalculation<S, T extends FeatureCalcParams> implemen
 	@Override
 	public abstract int hashCode();	
 	
-	/*@Override
-	public abstract CachedCalculation<S, T> duplicate();*/
-	
 	public void assignResult( Object savedResult) {
 		@SuppressWarnings("unchecked")
 		CachedCalculation<S,T> savedResultCached = (CachedCalculation<S,T>) savedResult;
@@ -118,8 +115,7 @@ public abstract class CachedCalculation<S, T extends FeatureCalcParams> implemen
 		
 	protected abstract S execute( T params ) throws ExecuteException;
 	
-	@SuppressWarnings("unchecked")
-	private synchronized void initParams(FeatureCalcParams params) {
-		this.params = (T) params;
+	private synchronized void initParams(T params) {
+		this.params = params;
 	}	
 }

@@ -38,13 +38,13 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.creator.CacheCreatorRemember;
-import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
+import org.anchoranalysis.feature.session.cache.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
@@ -69,7 +69,7 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	// Should feature calculation errors be printed to the console?
 	private boolean reportErrors = false;
 	
-	private CacheCreatorRemember cacheCreator;
+	private CacheCreator cacheCreator;
 	
 	private CacheableParams<T> cacheableParams = null;
 		
@@ -180,8 +180,6 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	
 	private CacheableParams<T> createOrReuseCache(T params) throws FeatureCalcException {
 		
-		invalidate();
-		
 		if (cacheableParams==null) {
 			cacheableParams = SessionUtilities.createCacheable(params, cacheCreator);
 		} else {
@@ -247,6 +245,7 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 		
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);
+			
 			double val = cacheableParams.calc(f);
 			res.set(i,val);
 		}
@@ -286,15 +285,7 @@ public class SequentialSession<T extends FeatureCalcParams> implements FeatureCa
 	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
 
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
-		cacheCreator = new CacheCreatorRemember(
-			new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger)
-		);
-		
-		
+		cacheCreator = new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger);
 		listFeatures.initRecursive(featureInitParamsDup, logger);
-	}
-	
-	private void invalidate() {
-		cacheCreator.invalidateAll();
 	}
 }

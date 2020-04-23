@@ -28,13 +28,13 @@ package org.anchoranalysis.feature.session.cache;
 
 
 import java.util.Collection;
-
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
@@ -54,11 +54,16 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 
 	private FeatureSessionCache<T> delegate;
 	
-	private HorizontalFeatureCacheRetriever<T> retriever;
+	private HorizontalFeatureCacheCalculator<T> retriever;
 	
 	private FeatureResultMap<T> map = new FeatureResultMap<>();
 	
-	HorizontalFeatureCache(FeatureSessionCache<T> delegate, FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures, Collection<String> ignorePrefixes ) {
+	HorizontalFeatureCache(
+		FeatureSessionCache<T> delegate,
+		FeatureList<T> namedFeatures,
+		SharedFeatureSet<T> sharedFeatures,
+		Collection<String> ignorePrefixes
+	) {
 		super();
 		this.delegate = delegate;
 		
@@ -71,8 +76,8 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 				map.add(f.getValue());
 			}
 			
-			retriever = new HorizontalFeatureCacheRetriever<>(
-				delegate.retriever(),
+			retriever = new HorizontalFeatureCacheCalculator<>(
+				delegate.calculator(),
 				map,
 				ignorePrefixes
 			);
@@ -91,13 +96,19 @@ public class HorizontalFeatureCache<T extends FeatureCalcParams> extends Feature
 
 	@Override
 	public void invalidate() {
-		
 		map.clear();
 		delegate.invalidate();
 	}
 
 	@Override
-	public FeatureSessionCacheRetriever<T> retriever() {
+	public <V extends FeatureCalcParams> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType,
+			CacheCreator cacheCreator) {
+		return delegate.childCacheFor(childName, paramsType, cacheCreator);
+	}
+	
+	@Override
+	public FeatureSessionCacheCalculator<T> calculator() {
 		return retriever;
 	}
+
 }

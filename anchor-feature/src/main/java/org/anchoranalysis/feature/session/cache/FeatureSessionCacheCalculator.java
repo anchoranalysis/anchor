@@ -39,12 +39,12 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 
 /**
- * Retrieves items from a FeatureSessionCache
+ * Calculates features in the context of a particular {#FeatureSessionCache}.
  * 
  * @author Owen Feehan
  * @params feature calc-params that the cache supports
  */
-public abstract class FeatureSessionCacheRetriever<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
+public abstract class FeatureSessionCacheCalculator<T extends FeatureCalcParams> implements ICachedCalculationSearch<T> {
 	
 	/**
 	 * Has the cache been inited()
@@ -148,6 +148,4 @@ public abstract class FeatureSessionCacheRetriever<T extends FeatureCalcParams> 
 	 * @return
 	 */
 	public abstract String describeCaches();
-	
-	
 }

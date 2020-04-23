@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.cachedcalculation;
+package org.anchoranalysis.feature.cache.calculation.map;
 
 /*
  * #%L
@@ -28,32 +28,35 @@ package org.anchoranalysis.feature.cachedcalculation;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.IResettableCachedCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
- * Binds params with a CachedCalculation and exposes it as the {@link org.anchoranalysis.core.cache.Operation} interface
- * 
- * (reverse-currying)
+ * Similar to a {@link CachedCalculation} but stores several evaluations parameterised
+ *   by a key
  * 
  * @author Owen Feehan
- *
- * @param <S> result-type
- * @param <T> params-type
+ * @param S result-type
+ * @param T params-type
+ * @param U key-type
  */
-public class CachedCalculationOperation<S, T extends FeatureCalcParams> implements Operation<S> {
+public abstract class CachedCalculationMap<S,T extends FeatureCalcParams,U> implements IResettableCachedCalculation {
+	/**
+	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
+	 *   a cached-result from previously.
+	 * 
+	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
+	 * @return the result of the calculation
+	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
+	 */
+	abstract S getOrCalculate( T params, U key ) throws FeatureCalcException;
 
-	private RslvdCachedCalculation<S,T> cachedCalculation;
-	private T params;
-		
-	public CachedCalculationOperation(RslvdCachedCalculation<S,T> cachedCalculation,	T params) {
-		super();
-		this.cachedCalculation = cachedCalculation;
-		this.params = params;
-	}
-	
 	@Override
-	public S doOperation() throws ExecuteException {
-		return cachedCalculation.getOrCalculate(params);
-	}
+	public abstract boolean equals(Object other);
+
+	@Override
+	public abstract int hashCode();
+	
 }

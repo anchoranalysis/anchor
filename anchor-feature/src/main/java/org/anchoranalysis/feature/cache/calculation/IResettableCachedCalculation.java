@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.cache.creator;
+package org.anchoranalysis.feature.cache.calculation;
 
-/*-
+/*
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,29 @@ package org.anchoranalysis.feature.cache.creator;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 
-public interface CacheCreator {
+import org.anchoranalysis.core.error.OperationFailedException;
 
-	<T extends FeatureCalcParams> FeatureSessionCache<T> create( Class<?> paramsType );
+/**
+ * All Resettable Cached-Calculations must have a hashCode and equals implementation that checks
+ *   that relevant parameters are equal.  They will be used in sets 
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface IResettableCachedCalculation {
+
+	/**
+	 * Resets the cached-calculation, so the next call to doOperationWithParams() is guaranteed to
+	 *  calculation the operation, and store the value in the cache.
+	 */
+	abstract void reset();
+	
+	/**
+	 * Sets the executed-result of the cached-calculation to be object 
+	 * 
+	 * @param o
+	 * @return
+	 */
+	abstract void assignResult( Object savedResult ) throws OperationFailedException;
 }

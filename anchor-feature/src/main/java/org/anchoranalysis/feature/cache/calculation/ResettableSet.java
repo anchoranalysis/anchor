@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.cachedcalculation;
+package org.anchoranalysis.feature.cache.calculation;
 
 /*
  * #%L
@@ -146,7 +146,4 @@ public class ResettableSet<T extends IResettableCachedCalculation> {
 	public String toString() {
 		return describe();
 	}
-	
-	
-	
 }

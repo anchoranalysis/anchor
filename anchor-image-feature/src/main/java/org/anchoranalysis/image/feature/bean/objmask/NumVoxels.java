@@ -28,7 +28,6 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
@@ -48,13 +47,9 @@ public class NumVoxels extends FeatureObjMask {
 	
 	@Override
 	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		try {
-			return params.calc(
-				new CalculateNumVoxels(mip)
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+		return params.calc(
+			new CalculateNumVoxels(mip)
+		);
 	}
 
 	public boolean isMip() {

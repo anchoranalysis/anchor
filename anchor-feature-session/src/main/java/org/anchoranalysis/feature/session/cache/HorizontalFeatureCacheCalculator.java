@@ -27,16 +27,15 @@ package org.anchoranalysis.feature.session.cache;
  */
 
 import java.util.Collection;
-
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -45,14 +44,14 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  *
  * @param <T> feature-calc-params
  */
-class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends FeatureSessionCacheRetriever<T> {
+class HorizontalFeatureCacheCalculator<T extends FeatureCalcParams> extends FeatureSessionCacheCalculator<T> {
 
-	private FeatureSessionCacheRetriever<T> delegate;
+	private FeatureSessionCacheCalculator<T> delegate;
 	private FeatureResultMap<T> map;
 	private Collection<String> ignorePrefixes;
 			
-	public HorizontalFeatureCacheRetriever(
-		FeatureSessionCacheRetriever<T> delegate,
+	public HorizontalFeatureCacheCalculator(
+		FeatureSessionCacheCalculator<T> delegate,
 		FeatureResultMap<T> map,
 		Collection<String> ignorePrefixes
 	) {
@@ -157,5 +156,5 @@ class HorizontalFeatureCacheRetriever<T extends FeatureCalcParams> extends Featu
 	public boolean hasBeenInit() {
 		return delegate.hasBeenInit();
 	}
-	
+
 }

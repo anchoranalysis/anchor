@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache.creator;
+package org.anchoranalysis.feature.session.cache;
 
 /*-
  * #%L
@@ -29,15 +29,14 @@ package org.anchoranalysis.feature.session.cache.creator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.creator.CacheCreator;
+import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.CachePlus;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class CacheCreatorSimple implements CacheCreator {
@@ -46,6 +45,8 @@ public class CacheCreatorSimple implements CacheCreator {
 	private SharedFeatureSet<? extends FeatureCalcParams> sharedFeatures;
 	private FeatureInitParams featureInitParams;
 	private LogErrorReporter logger;
+	
+	private static FeatureSessionCacheFactory factory = new HorizontalFeatureCacheFactory();
 	
 	public CacheCreatorSimple(FeatureList<? extends FeatureCalcParams> namedFeatures,
 			SharedFeatureSet<? extends  FeatureCalcParams> sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
@@ -63,14 +64,13 @@ public class CacheCreatorSimple implements CacheCreator {
 		SharedFeatureSet<T> sharedFeaturesCast = maybeCastSharedFeatures(paramsType); 
 				
 		try {
-			CachePlus<T> cache = new CachePlus<>(
+			return createCache(
 				featureList,
 				sharedFeaturesCast,
 				featureInitParams,
-				logger
+				logger	
 			);
-			return cache.createCache();
-		} catch (InitException e) {
+		} catch (CreateException e) {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
 			assert(false);
 			return null;
@@ -105,5 +105,31 @@ public class CacheCreatorSimple implements CacheCreator {
 		}
 		
 		return new SharedFeatureSet<T>();	
+	}
+	
+	private <T extends FeatureCalcParams> FeatureSessionCache<T> createCache(
+		FeatureList<T> namedFeatures,
+		SharedFeatureSet<T> sharedFeatures,
+		FeatureInitParams featureInitParams,
+		LogErrorReporter logger			
+	) throws CreateException {
+		
+		try {
+			sharedFeatures.initRecursive( featureInitParams, logger );
+		} catch (InitException e) {
+			throw new CreateException(e);
+		}
+		
+		assert(logger!=null);
+		FeatureSessionCache<T> cache = factory.create(
+			namedFeatures,
+			sharedFeatures.duplicate()
+		);
+		try {
+			cache.init(featureInitParams, logger, false);
+		} catch (InitException e) {
+			throw new CreateException(e);
+		}
+		return cache;
 	}
 }

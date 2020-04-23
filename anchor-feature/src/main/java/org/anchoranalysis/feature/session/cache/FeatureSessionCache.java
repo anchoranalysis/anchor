@@ -30,20 +30,24 @@ import org.anchoranalysis.core.error.InitException;
 
 
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
 
 /**
- * When a user calculates a feature, he/she typically calculates the one or more features on many different objects
+ * A context in which to calculate features while caching certain duplicated internal calculations among the features.
  * 
- * This creates possibilities for various different forms of caching of results, and different initialization
- *   strategies.
+ * <p>When a user calculates a a single feature, they often are calculating other features at the same time (on one or more objects). This creates
+ * possibilities for various different forms of caching of results, and different initialization strategies.</p>
  *   
- * The FeatureSession object represents one such bunch of calculations. Different implementations provide
- *   different strategies for caching.
- *
+ * <p>This class represents one such bunch of calculations. Different implementations provide different strategies.</p>
  * 
+ * <p>Each session-cache may contain "child" caches for particular string identifiers. This provides a hierarchy of caches and sub-caches as
+ *   many features change the underlying objects that are being calculated, and need separate space in the cache.</p>
+ *   
+ * <p>A call to {{@link #invalidate()} removes any existing caching (also in the children) and guarantees the next calculation will be fresh</p>/
+ *
  * @author Owen Feehan
  * @param T feature-calc-params
  *
@@ -64,5 +68,24 @@ public abstract class FeatureSessionCache<T extends FeatureCalcParams> {
 	 */
 	public abstract void invalidate();
 	
-	public abstract FeatureSessionCacheRetriever<T> retriever();
+	
+	/**
+	 * A means of calculating feature values using this cache.
+	 * 
+	 * @return
+	 */
+	public abstract FeatureSessionCacheCalculator<T> calculator();
+	
+	/**
+	 * Gets/creates a child-cache for a given name
+	 * 
+	 * <p>This function trusts the caller to use the correct type for the child-cache.</p>
+	 * 
+	 * @param <V> params-type of the child cache to found
+	 * @param childName name of the child-cache
+	 * @param paramsType the type of V
+	 * @param cacheCreator TODO
+	 * @return the existing or new child cache of the given name
+	 */
+	public abstract <V extends FeatureCalcParams> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator);
 }

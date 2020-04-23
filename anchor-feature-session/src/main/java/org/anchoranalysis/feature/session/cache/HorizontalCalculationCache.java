@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.session.cache;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.anchoranalysis.core.error.InitException;
 
 /*
@@ -32,17 +35,18 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
-import org.anchoranalysis.feature.cachedcalculation.ResettableSet;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResettableSet;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -55,27 +59,27 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class HorizontalCalculationCache<T extends FeatureCalcParams> extends FeatureSessionCache<T> {
 	
-	private ResettableSet<CachedCalculation<?,T>> listCC = new ResettableSet<>(false);
-	private ResettableSet<CachedCalculationMap<?,T,?>> listCCMap = new ResettableSet<>(false);
+	private ResettableSet<CachedCalculation<?,T>> setCC = new ResettableSet<>(false);
+	private ResettableSet<CachedCalculationMap<?,T,?>> setCCMap = new ResettableSet<>(false);
 	
-	private Retriever retriever = new Retriever();
+	private Calculator retriever = new Calculator();
 	
 	private LogErrorReporter logger;
 	private boolean logCacheInit;
 	private SharedFeatureSet<T> sharedFeatures;
+		
+	private Map<String, FeatureSessionCache<FeatureCalcParams>> children = new HashMap<>();
 	
 	HorizontalCalculationCache( SharedFeatureSet<T> sharedFeatures ) {
 		super();
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	private class Retriever extends FeatureSessionCacheRetriever<T> {
+	private class Calculator extends FeatureSessionCacheCalculator<T> {
 		
 		@Override
 		public double calc(Feature<T> feature, CacheableParams<T> params )
 				throws FeatureCalcException {
-			//System.out.printf("Calculating feature: %s\n", feature.getFriendlyName());
-	
 			double val = feature.calcCheckInit(params);
 			if (Double.isNaN(val)) {
 				logger.getLogReporter().logFormatted("WARNING: NaN returned from feature %s", feature.getFriendlyName() );
@@ -89,7 +93,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new RslvdCachedCalculation<>(
-				(CachedCalculation<U,T>) listCC.findOrAdd(cc,loggerToPass)
+				(CachedCalculation<U,T>) setCC.findOrAdd(cc,loggerToPass)
 			);
 		}
 
@@ -98,7 +102,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		public <S, U> RslvdCachedCalculationMap<S,T,U> search(CachedCalculationMap<S,T,U> cc) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new RslvdCachedCalculationMap<>( 
-				(CachedCalculationMap<S,T,U>) listCCMap.findOrAdd(cc,loggerToPass)
+				(CachedCalculationMap<S,T,U>) setCCMap.findOrAdd(cc,loggerToPass)
 			);
 		}
 
@@ -131,11 +135,11 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 			StringBuilder sb = new StringBuilder();
 			
 			sb.append("listCC:\n");
-			sb.append(listCC.describe());
+			sb.append(setCC.describe());
 			sb.append("\n");
 			
 			sb.append("listCCMap:\n");
-			sb.append(listCCMap.describe());
+			sb.append(setCCMap.describe());
 			sb.append("\n");
 			
 			return sb.toString();
@@ -145,6 +149,7 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 		public boolean hasBeenInit() {
 			return hasBeenInit;
 		}
+
 	}
 	
 	private boolean hasBeenInit = false;
@@ -159,31 +164,30 @@ public class HorizontalCalculationCache<T extends FeatureCalcParams> extends Fea
 
 	}
 	
-	
-
 	@Override
 	public void invalidate() {
-		listCC.reset();
-		listCCMap.reset();
+		
+		setCC.reset();
+		setCCMap.reset();
+
+		// Invalidate each of the child caches
+		for (FeatureSessionCache<FeatureCalcParams> childCache : children.values()) {
+			childCache.invalidate();
+		}
 	}
 
 	@Override
-	public FeatureSessionCacheRetriever<T> retriever() {
+	public FeatureSessionCacheCalculator<T> calculator() {
 		return retriever;
 	}
-
-	/*@Override
-	public FeatureSessionCache<T> duplicate() {
-		HorizontalCalculationCache<T> out = new HorizontalCalculationCache<>( sharedFeatures.duplicate() );
-		assert(hasBeenInit==true);
-		assert(logger!=null);
-		
-		out.logger = logger;
-		out.logCacheInit = logCacheInit;
-		out.listCC = listCC.duplicate();
-		out.listCCMap = listCCMap.duplicate();
-		out.hasBeenInit = hasBeenInit;
 	
-		return out;
-	}*/
+	@SuppressWarnings("unchecked")
+	@Override
+	public <V extends FeatureCalcParams> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator) {
+		// Creates a new child-cache if it doesn't already exist for a particular name
+		return (FeatureSessionCache<V>) children.computeIfAbsent(
+			childName,
+			s -> cacheCreator.create(paramsType)
+		);
+	}
 }

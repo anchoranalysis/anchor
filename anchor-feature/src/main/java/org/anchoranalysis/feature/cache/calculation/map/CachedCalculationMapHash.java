@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.cachedcalculation;
+package org.anchoranalysis.feature.cache.calculation.map;
 
 /*
  * #%L
@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
- * Implementation of a CachedCalculationMap using a LRUCache
+ * Implementation of a CachedCalculationMap using a Hash-Map
  * 
  * @author Owen Feehan
  *
