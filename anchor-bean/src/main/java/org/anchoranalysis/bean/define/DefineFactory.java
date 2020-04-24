@@ -53,9 +53,6 @@ public class DefineFactory extends AnchorBeanFactory {
 	
 	private static String ELEMENT_NAME_ADD = "add";
 	
-	public DefineFactory() {
-	}
-	
     // Creates the bean. Checks if already an instance exists.
 	@Override
 	@SuppressWarnings("rawtypes")

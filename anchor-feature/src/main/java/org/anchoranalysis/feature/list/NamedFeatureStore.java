@@ -47,10 +47,6 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
 	private List<NamedBean<Feature<T>>> list = new ArrayList<>();
 	private Map<String,Integer> mapIndex = new HashMap<String,Integer>();
 	
-	public NamedFeatureStore() {
-		
-	}
-	
 	// 
 	
 	/**

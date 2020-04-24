@@ -38,9 +38,6 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 public class IncludeBeanFactory extends AnchorBeanFactory {
 	
-	public IncludeBeanFactory() {
-	}
-	
 	
     // Creates the bean. Checks if already an instance exists.
 	@Override

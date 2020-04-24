@@ -30,7 +30,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
  */
 
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class FeatureInputSingleObj extends FeatureInputNRGStack {
 
