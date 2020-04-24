@@ -47,8 +47,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Feature that calculates a result (double) for some parameters
  * 
- * <p>It should be initialized before any other methods are called.</p>
- * <p>
+ * <p>It should always be called in a context of a session, which first initializes the feature before doing calculations.</p>
  * 
  * @author owen
  *
@@ -155,9 +154,9 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	}
 	
 	/**
-	 * Initialises the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
+	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
 	 * 
-	 * @param params parameters used for initialisation that are simply passed to beforeCalc()
+	 * @param params parameters used for initialization that are simply passed to beforeCalc()
 	 * @param logger logger
 	 * 
 	 * @param logger the logger, saved and made available to the feature
