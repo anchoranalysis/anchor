@@ -189,7 +189,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		if (sessionInput==null) {
 			sessionInput = new SessionInputSequential<T>(input, cacheCreator);
 		} else {
-			sessionInput.replaceParams(input);
+			sessionInput.replaceInput(input);
 		}
 		
 		return sessionInput;

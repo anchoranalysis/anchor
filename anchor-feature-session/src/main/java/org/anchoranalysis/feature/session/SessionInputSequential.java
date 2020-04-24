@@ -51,11 +51,11 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 		
 	/** 
-	 * Replaces existing params with new params
+	 * Replaces existing input with new input
 	 * 
 	 * @param params new parameters which will replace existing ones
 	 **/
-	public void replaceParams(T params) {
+	public void replaceInput(T params) {
 		cache.invalidate();
 		this.input = params;
 	}
