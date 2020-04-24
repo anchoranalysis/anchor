@@ -56,9 +56,7 @@ public class VoxelStatisticsFromHistogram extends VoxelStatistics {
 	@Override
 	public VoxelStatistics threshold(RelationToValue relationToThreshold,
 			double threshold) {
-		// NOT CURRENTLY SUPPORTED
-		assert false;
-		return null;
+		throw new UnsupportedOperationException("The threshold operation is not currently supported");
 	}
 
 	@Override
