@@ -43,8 +43,8 @@ public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs>
 	@Override
 	public double calc( SessionInput<FeatureInputObjs> input ) throws FeatureCalcException {
 		
-		if (input.getParams() instanceof FeatureInputObjs) {
-			return calc( (FeatureInputObjs) input.getParams() );
+		if (input.get() instanceof FeatureInputObjs) {
+			return calc( (FeatureInputObjs) input.get() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureInputObjs.class.getSimpleName() );
 		}

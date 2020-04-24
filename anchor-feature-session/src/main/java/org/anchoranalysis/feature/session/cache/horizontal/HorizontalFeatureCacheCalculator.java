@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 /*-
  * #%L
@@ -29,14 +29,13 @@ package org.anchoranalysis.feature.session.cache;
 import java.util.Collection;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
  * 
@@ -96,21 +95,16 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 	}
 
 	@Override
-	public <U> RslvdCachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
+	public <U> ResolvedCalculation<U,T> search(CacheableCalculation<U,T> cc) {
 		return delegate.search(cc);
 	}
 
 	@Override
-	public <S, U> RslvdCachedCalculationMap<S,T,U> search(
-			CachedCalculationMap<S,T,U> cc) {
+	public <S, U> ResolvedCalculationMap<S,T,U> search(
+			CacheableCalculationMap<S,T,U> cc) {
 		return delegate.search(cc);
 	}
 
-	@Override
-	public SharedFeatureSet<T> getSharedFeatureList() {
-		return delegate.getSharedFeatureList();
-	}
-	
 	@Override
 	public String resolveFeatureID(String id) {
 		
@@ -144,17 +138,4 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 			return delegate.calcFeatureByID(id, input);
 		}
 	}
-
-
-	@Override
-	public String describeCaches() {
-		return delegate.describeCaches();
-	}
-
-
-	@Override
-	public boolean hasBeenInit() {
-		return delegate.hasBeenInit();
-	}
-
 }

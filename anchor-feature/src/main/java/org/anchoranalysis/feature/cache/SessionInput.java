@@ -27,123 +27,46 @@ package org.anchoranalysis.feature.cache;
  */
 
 import java.util.List;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
 /**
- * A feature-input in the context of a particular session (important for caching).
+ * Encapsulates a feature-input in the context of a particular session.
  * 
  * @param T underlying feature-input type
  * 
  * @author owen
  *
  */
-public class SessionInput<T extends FeatureInput> implements ICachedCalculationSearch<T> {
-
-	private FeatureSessionCache<T> cache;
-		
-	private T params;
-	private CacheCreator factory;
+public interface SessionInput<T extends FeatureInput> {
 	
-	public SessionInput(T params, CacheCreator factory) {
-		this.params = params;
-		this.factory = factory;
-		
-		// Deliberately two lines, as it needs an explicitly declared type for the template type inference to work
-		this.cache = factory.create( params.getClass() ); 
-	}
+	/** Returns the underlying feature-input (independent of the session) */
+	T get();
 	
-	private SessionInput(T params, FeatureSessionCache<T> cache, CacheCreator factory) {
-		this.params = params;
-		this.factory = factory;
-		this.cache = cache;
-	}
-	
-	
-	/** 
-	 * Replaces existing params with new params
-	 * 
-	 * @param params new parameters which will replace existing ones
-	 **/
-	public void replaceParams(T params) {
-		cache.invalidate();
-		this.params = params;
-	}
 	
 	/**
-	 * Gets/creates a child-cache for a given name
+	 * Calculates the result of a feature using this input
 	 * 
-	 * <p>This function trusts the caller to use the correct type for the child-cache.</p>
-	 * 
-	 * @param <V> params-type of the child cache to found
-	 * @param childName name of the child-cache
-	 * @param paramsType the type of V
-	 * @return the existing or new child cache of the given name
+	 * @param feature the feature to calculate with
+	 * @return the result of the calculation
 	 */
-	public <V extends FeatureInput> FeatureSessionCacheCalculator<V> cacheFor(String childName, Class<?> paramsType) {
-		FeatureSessionCache<V> cache = cacheForInternal(childName, paramsType);
-		return cache.calculator();
-	}
-	
-	private <V extends FeatureInput> FeatureSessionCache<V> cacheForInternal(String childName, Class<?> paramsType) {
-		return cache.childCacheFor(childName, paramsType, factory);
-	}
-
-	public T getParams() {
-		return params;
-	}
-
-	public <S> RslvdCachedCalculation<S, T> search(CachedCalculation<S, T> cc) {
-		return cache.calculator().search(cc);
-	}
-	
-	@Override
-	public <S, U> RslvdCachedCalculationMap<S, T, U> search(CachedCalculationMap<S, T, U> cc) {
-		return cache.calculator().search(cc);
-	}
-	
-	public double calc(Feature<T> feature)
-			throws FeatureCalcException {
-		return cache.calculator().calc(feature, this);
-	}
-
-	public ResultsVector calc(List<Feature<T>> features)
-			throws FeatureCalcException {
-		return cache.calculator().calc(features, this );
-	}
+	double calc(Feature<T> feature) throws FeatureCalcException;
 	
 	
-	public <S> S calc(CachedCalculation<S,T> cc) throws FeatureCalcException {
-		try {
-			RslvdCachedCalculation<S,T> ccAfterSearch = search(cc); 
-			return ccAfterSearch.getOrCalculate(params);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
-	}
-	
-	public <S> S calc(RslvdCachedCalculation<S,T> cc) throws FeatureCalcException {
-		try {
-			// No need to search as it's already resolved
-			return cc.getOrCalculate(params);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}			
-	}
-
-	
-
-	
+	/**
+	 * Calculates the results of several features using this input
+	 * 
+	 * @param features features to calculate with
+	 * @return the results of each feature's calculation respectively
+	 * @throws FeatureCalcException
+	 */
+	ResultsVector calc(List<Feature<T>> features) throws FeatureCalcException;
+		
 	/**
 	 * Calculates a feature in a child-cache
 	 * 
@@ -154,18 +77,7 @@ public class SessionInput<T extends FeatureInput> implements ICachedCalculationS
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	public <S extends FeatureInput> double calcChild(Feature<S> feature, S input, String childCacheName) throws FeatureCalcException {
-		
-		FeatureSessionCache<S> child = cacheForInternal(childCacheName, input.getClass()); 
-		return child.calculator().calc(
-			feature,
-			new SessionInput<S>(
-				input,
-				child,
-				factory
-			)
-		);
-	}
+	<S extends FeatureInput> double calcChild(Feature<S> feature, S input, String childCacheName) throws FeatureCalcException;
 	
 	
 	/**
@@ -178,21 +90,53 @@ public class SessionInput<T extends FeatureInput> implements ICachedCalculationS
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	public <S extends FeatureInput> double calcChild(Feature<S> feature, CachedCalculation<S,T> cc, String childCacheName) throws FeatureCalcException {
-		return calcChild(
-			feature,
-			calc(cc),
-			childCacheName
-		);
-	}
-
+	<S extends FeatureInput> double calcChild(Feature<S> feature, CacheableCalculation<S,T> cc, String childCacheName) throws FeatureCalcException;
 	
-	public String resolveFeatureID(String id) {
-		return cache.calculator().resolveFeatureID(id);
-	}
-
-	public double calcFeatureByID(String resolvedID, SessionInput<T> input)
-			throws FeatureCalcException {
-		return cache.calculator().calcFeatureByID(resolvedID, input);
-	}
+	
+	/**
+	 * Calculates a Cacheable-Calculation after resolving it against the main cache
+	 * 
+	 * @param <S> return-type of the cacheable-calculation
+	 * @param cc the cacheable-calculation
+	 * @return the result of the calculation
+	 * @throws FeatureCalcException
+	 */
+	<S> S calc(CacheableCalculation<S,T> cc) throws FeatureCalcException;
+	
+	
+	/**
+	 * Calculates a resolved Cacheable-Calculation
+	 * @param <S> return-type of the cacheable-calculation
+	 * @param cc the cacheable-calculation
+	 * @return the result of the calculation
+	 * @throws FeatureCalcException
+	 */
+	<S> S calc(ResolvedCalculation<S,T> cc) throws FeatureCalcException;
+		
+	
+	/**
+	 * Returns a resolver for calculations
+	 * 
+	 * @return
+	 */
+	CalculationResolver<T> resolver();
+	
+	/**
+	 * A resolver associated with a particular child-cache
+	 * 
+	 * <p>This function trusts the caller to use the correct type associated with the child-cache.</p>
+	 * 
+	 * @param <V> params-type of the child cache to found
+	 * @param childCacheName name of the child-cache
+	 * @param paramsType the type of V
+	 * @return the existing or new child cache of the given name
+	 */
+	<V extends FeatureInput> CalculationResolver<V> resolverForChild(String childCacheName, Class<?> paramsType);
+	
+	
+	/**
+	 * Calculates a feature if only an symbol (ID/name) is known, which refers to another feature.
+	 * @return
+	 */
+	FeatureSymbolCalculator<T> bySymbol();
 }

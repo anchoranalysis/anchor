@@ -52,9 +52,9 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  * @author Owen Feehan
  *
  * @param <S> result-type of the calculation
- * @param <T> input-type
+ * @param <T> feature input-type
  */
-public abstract class CachedCalculation<S, T extends FeatureInput> implements IResettableCachedCalculation {
+public abstract class CacheableCalculation<S, T extends FeatureInput> implements ResettableCalculation {
 	
 	private transient T params;
 	
@@ -63,7 +63,7 @@ public abstract class CachedCalculation<S, T extends FeatureInput> implements IR
 
 		@Override
 		protected S execute() throws ExecuteException {
-			return CachedCalculation.this.execute( params );
+			return CacheableCalculation.this.execute( params );
 		}
 	};
 	
@@ -99,7 +99,7 @@ public abstract class CachedCalculation<S, T extends FeatureInput> implements IR
 	
 	public void assignResult( Object savedResult) {
 		@SuppressWarnings("unchecked")
-		CachedCalculation<S,T> savedResultCached = (CachedCalculation<S,T>) savedResult;
+		CacheableCalculation<S,T> savedResultCached = (CacheableCalculation<S,T>) savedResult;
 		delegate.assignFrom( savedResultCached.delegate );
 	}
 	
@@ -108,7 +108,7 @@ public abstract class CachedCalculation<S, T extends FeatureInput> implements IR
 	}
 
 	@Override
-	public synchronized void reset() {
+	public synchronized void invalidate() {
 		delegate.reset();
 		this.params = null;	// Just to be clean, release memory, before the next getOrCalculate
 	}

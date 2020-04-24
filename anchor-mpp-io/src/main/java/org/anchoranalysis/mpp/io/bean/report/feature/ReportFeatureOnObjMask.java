@@ -43,7 +43,7 @@ public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureIn
 	@Override
 	protected double calcFeatureOn(ObjMaskCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> session)
 			throws FeatureCalcException {
-		return session.calcOne(
+		return session.calc(
 			new FeatureInputSingleObj(
 				extractObjFromCollection(objs)
 			)

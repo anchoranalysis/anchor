@@ -40,8 +40,10 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  * @param <T> feature input-type
  */
 public interface FeatureCalculatorSingle<T extends FeatureInput> {
-
-	double calcOneSuppressErrors(T params, ErrorReporter errorReporter );
 	
-	double calcOne( T params ) throws FeatureCalcException;
+	/** Performs one calculation throwing an exception if something goes wrong */
+	double calc( T params ) throws FeatureCalcException;
+	
+	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
+	double calcSuppressErrors(T params, ErrorReporter errorReporter );
 }

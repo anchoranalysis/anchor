@@ -28,12 +28,12 @@ package org.anchoranalysis.image.feature.objmask;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateNumVoxels extends CachedCalculation<Double,FeatureInputSingleObj> {
+public class CalculateNumVoxels extends CacheableCalculation<Double,FeatureInputSingleObj> {
 
 	private boolean mip=false;
 	

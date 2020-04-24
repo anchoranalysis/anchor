@@ -103,7 +103,7 @@ public class KeyValueParamsForImageCreator {
 				logger
 			);			
 			
-			return session.calcOne( params );
+			return session.calc( params );
 					
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);

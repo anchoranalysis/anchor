@@ -29,13 +29,13 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.List;
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 
 /**
@@ -44,14 +44,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  * @param T feature-input type that the cache supports
  */
-public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> implements ICachedCalculationSearch<T> {
-	
-	/**
-	 * Has the cache been inited()
-	 * 
-	 * @return
-	 */
-	public abstract boolean hasBeenInit();
+public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> implements CalculationResolver<T>, FeatureSymbolCalculator<T> {
 	
 	/**
 	 * Calculate a feature with particular values
@@ -91,61 +84,4 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 		}
 		return out;
 	}
-	
-	/**
-	 * Calculates a feature-list suppressing errors
-	 * 
-	 * @param features list of features
-	 * @param input params
-	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
-	 */
-	public ResultsVector calcSuppressErrors( List<Feature<T>> features, SessionInput<T> input ) {
-		ResultsVector out = new ResultsVector(features.size());
-		for( int i=0; i<features.size(); i++ ) {
-			
-			Feature<T> f = features.get(i);
-			
-			try {
-				double val = calc( f, input );
-				out.set(i, val);
-			} catch (FeatureCalcException e) {
-				out.setError(i, e);
-			}
-			
-		}
-		return out;
-	}
-	
-
-
-	/**
-	 * Duplicates the SharedFeatureList associated with this retriever
-	 * @return
-	 */
-	public abstract SharedFeatureSet<T> getSharedFeatureList();
-	
-	
-	/**
-	 * Due to scoping (different prefixes that can exist), an ID needs to be resolved
-	 *  to a unique-string before it can be passed to calcFeatureByID
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public abstract String resolveFeatureID( String id );
-	
-	/**
-	 * Searches for a feature that matches a particular ID
-	 * 
-	 * @param resolvedID
-	 * @param input TODO
-	 * @throws GetOperationFailedException 
-	 */
-	public abstract double calcFeatureByID( String resolvedID, SessionInput<T> input ) throws FeatureCalcException;
-	
-	/**
-	 * Debug method that describes the current caches
-	 * @return
-	 */
-	public abstract String describeCaches();
 }

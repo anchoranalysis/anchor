@@ -41,8 +41,8 @@ public abstract class FeatureMark extends Feature<FeatureInputMark> {
 	@Override
 	public double calc( SessionInput<FeatureInputMark> input ) throws FeatureCalcException {
 		
-		if (input.getParams() instanceof FeatureInputMark) {
-			return calc( (FeatureInputMark) input.getParams() );
+		if (input.get() instanceof FeatureInputMark) {
+			return calc( (FeatureInputMark) input.get() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureInputMark.class.getSimpleName() );
 		}

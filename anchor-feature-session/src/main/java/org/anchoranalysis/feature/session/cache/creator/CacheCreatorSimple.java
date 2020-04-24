@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.feature.session.cache.creator;
 
 /*-
  * #%L
@@ -34,9 +34,11 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
+import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class CacheCreatorSimple implements CacheCreator {

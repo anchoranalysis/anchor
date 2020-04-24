@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.calculator;
-
-
+package org.anchoranalysis.feature.session.cache.creator;
 
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -28,39 +26,10 @@ package org.anchoranalysis.feature.session.calculator;
  * #L%
  */
 
-import java.util.function.Consumer;
-
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 
-/**
- * Likes a SequentialSession but automatically changes parameters before calculation
- *
- * @author owen
- *
- * @param <T> feature-input
- */
-public class FeatureCalculatorSingleChangeParams<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
+public interface CacheCreator {
 
-	private FeatureCalculatorSingle<T> calculator;
-	private Consumer<T> changeParams;
-	
-	public FeatureCalculatorSingleChangeParams(FeatureCalculatorSingle<T> calculator, Consumer<T> changeParams) {
-		this.calculator = calculator;
-		this.changeParams = changeParams;
-	}
-
-	public double calcOne(T params) throws FeatureCalcException {
-		changeParams.accept(params);
-		return calculator.calcOne(params);
-	}
-
-	public double calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
-		changeParams.accept(params);
-		return calculator.calcOneSuppressErrors(
-			params,
-			errorReporter
-		);
-	}
+	<T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType );
 }

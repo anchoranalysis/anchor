@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,18 +35,17 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResettableSet;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -59,8 +58,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
 	
-	private ResettableSet<CachedCalculation<?,T>> setCC = new ResettableSet<>(false);
-	private ResettableSet<CachedCalculationMap<?,T,?>> setCCMap = new ResettableSet<>(false);
+	private ResettableSet<CacheableCalculation<?,T>> setCC = new ResettableSet<>(false);
+	private ResettableSet<CacheableCalculationMap<?,T,?>> setCCMap = new ResettableSet<>(false);
 	
 	private Calculator retriever = new Calculator();
 	
@@ -89,20 +88,20 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public <U> RslvdCachedCalculation<U,T> search(CachedCalculation<U,T> cc) {
+		public <U> ResolvedCalculation<U,T> search(CacheableCalculation<U,T> cc) {
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return new RslvdCachedCalculation<>(
-				(CachedCalculation<U,T>) setCC.findOrAdd(cc,loggerToPass)
+			return new ResolvedCalculation<>(
+				(CacheableCalculation<U,T>) setCC.findOrAdd(cc,loggerToPass)
 			);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <S, U> RslvdCachedCalculationMap<S,T,U> search(CachedCalculationMap<S,T,U> cc) {
+		public <S, U> ResolvedCalculationMap<S,T,U> search(CacheableCalculationMap<S,T,U> cc) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return new RslvdCachedCalculationMap<>( 
-				(CachedCalculationMap<S,T,U>) setCCMap.findOrAdd(cc,loggerToPass)
+			return new ResolvedCalculationMap<>( 
+				(CacheableCalculationMap<S,T,U>) setCCMap.findOrAdd(cc,loggerToPass)
 			);
 		}
 
@@ -121,45 +120,16 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 		}
 
 		@Override
-		public SharedFeatureSet<T> getSharedFeatureList() {
-			return sharedFeatures;
-		}
-
-		@Override
 		public String resolveFeatureID(String id) {
 			return id;
 		}
-
-		@Override
-		public String describeCaches() {
-			StringBuilder sb = new StringBuilder();
-			
-			sb.append("listCC:\n");
-			sb.append(setCC.describe());
-			sb.append("\n");
-			
-			sb.append("listCCMap:\n");
-			sb.append(setCCMap.describe());
-			sb.append("\n");
-			
-			return sb.toString();
-		}
-		
-		@Override
-		public boolean hasBeenInit() {
-			return hasBeenInit;
-		}
-
 	}
-	
-	private boolean hasBeenInit = false;
 	
 	// Set up the cache
 	@Override
 	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger, boolean logCacheInit) throws InitException {
 		this.logger = logger;
 		this.logCacheInit = logCacheInit;
-		this.hasBeenInit = true;
 		assert(logger!=null);
 
 	}
@@ -167,8 +137,8 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	@Override
 	public void invalidate() {
 		
-		setCC.reset();
-		setCCMap.reset();
+		setCC.invalidate();
+		setCCMap.invalidate();
 
 		// Invalidate each of the child caches
 		for (FeatureSessionCache<FeatureInput> childCache : children.values()) {

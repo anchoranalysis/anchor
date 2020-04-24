@@ -30,9 +30,9 @@ import org.anchoranalysis.core.error.InitException;
 
 
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
 
 
 /**

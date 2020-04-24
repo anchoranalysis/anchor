@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 /*
  * #%L
@@ -34,10 +34,11 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**

@@ -4,22 +4,27 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
- * Like a {@link CachedCalculation} but has been resolved against a cache to ensure its unique (singular).
+ * Like a {@link CacheableCalculation} but has been resolved against a cache to ensure its unique (singular).
  * 
  * <p>This operation should always occur before a cached-calculation is used</p>
  * 
  * @author Owen Feehan
  *
- * @param <S>
- * @param <T>
+ * @param <S> result-type of the calculation
+ * @param <T> feature input-type
  */
-public class RslvdCachedCalculation<S, T extends FeatureInput> {
+public class ResolvedCalculation<S, T extends FeatureInput> {
 
-	private CachedCalculation<S, T> cachedCalculation;
+	private CacheableCalculation<S, T> calc;
 
-	public RslvdCachedCalculation(CachedCalculation<S, T> cachedCalculation) {
+	/**
+	 * Constructor
+	 * 
+	 * @param calc the cacheable-calculation that is now considered resolved
+	 */
+	public ResolvedCalculation(CacheableCalculation<S, T> calc) {
 		super();
-		this.cachedCalculation = cachedCalculation;
+		this.calc = calc;
 	}
 	
 	/**
@@ -31,17 +36,15 @@ public class RslvdCachedCalculation<S, T extends FeatureInput> {
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
 	public S getOrCalculate( T params) throws ExecuteException {
-		return cachedCalculation.getOrCalculate(params);
+		return calc.getOrCalculate(params);
 	}
 	
 	// We delegate to the CachedCalculation to check equality. Needed for the search.
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof RslvdCachedCalculation) {
-			return ((RslvdCachedCalculation<S, T>) obj).cachedCalculation.equals(
-				cachedCalculation
-			);
+		if (obj instanceof ResolvedCalculation) {
+			return ((ResolvedCalculation<S, T>) obj).calc.equals(calc);
 		} else {
 			return false;
 		}
@@ -50,6 +53,6 @@ public class RslvdCachedCalculation<S, T extends FeatureInput> {
 	// We delegate to the CachedCalculation to check hashCode. Needed for the search.
 	@Override
 	public int hashCode() {
-		return cachedCalculation.hashCode();
+		return calc.hashCode();
 	}
 }

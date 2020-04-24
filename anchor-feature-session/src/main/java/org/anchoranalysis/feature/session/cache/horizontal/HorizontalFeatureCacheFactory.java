@@ -1,4 +1,7 @@
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.session.cache.horizontal;
+
+import java.util.ArrayList;
+
 
 /*
  * #%L
@@ -27,33 +30,31 @@ package org.anchoranalysis.feature.cache.calculation;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.cache.Operation;
+import java.util.Collection;
+
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
+import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-/**
- * Binds params with a CachedCalculation and exposes it as the {@link org.anchoranalysis.core.cache.Operation} interface
- * 
- * (reverse-currying)
- * 
- * @author Owen Feehan
- *
- * @param <S> result-type
- * @param <T> params-type
- */
-public class CachedCalculationOperation<S, T extends FeatureInput> implements Operation<S> {
+public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory {
 
-	private RslvdCachedCalculation<S,T> cachedCalculation;
-	private T params;
+	private FeatureSessionCacheFactory delegate;
+	private Collection<String> ignorePrefixes;
 		
-	public CachedCalculationOperation(RslvdCachedCalculation<S,T> cachedCalculation, T params) {
+	public HorizontalFeatureCacheFactory() {
 		super();
-		this.cachedCalculation = cachedCalculation;
-		this.params = params;
+		this.delegate = new HorizontalCalculationCacheFactory();
+		this.ignorePrefixes = new ArrayList<>();
+	}
+
+	@Override
+	public <T extends FeatureInput> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
+
+		FeatureSessionCache<T> cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
+		
+		return new HorizontalFeatureCache<>(cacheCalculation, namedFeatures, sharedFeatures, ignorePrefixes);
 	}
 	
-	@Override
-	public S doOperation() throws ExecuteException {
-		return cachedCalculation.getOrCalculate(params);
-	}
 }

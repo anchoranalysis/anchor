@@ -52,7 +52,7 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
 
 	@Override
 	public double calc( SessionInput<FeatureInputResults> input ) throws FeatureCalcException {
-		return calc( input.getParams() );
+		return calc( input.get() );
 	}
 	
 	// Calculates an NRG element for a set of pixels

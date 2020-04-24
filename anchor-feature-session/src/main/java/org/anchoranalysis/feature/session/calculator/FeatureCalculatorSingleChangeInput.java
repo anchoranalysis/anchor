@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
+
+
 /*-
  * #%L
  * anchor-image-feature
@@ -29,9 +31,7 @@ package org.anchoranalysis.feature.session.calculator;
 import java.util.function.Consumer;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
@@ -41,38 +41,29 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  *
  * @param <T> feature-input
  */
-public class FeatureCalculatorMultiChangeParams<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorSingleChangeInput<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
-	private FeatureCalculatorMulti<T> calculator;
-	private Consumer<T> changeParams;
+	private FeatureCalculatorSingle<T> calculator;
+	private Consumer<T> funcToApplyChange;
 	
-	public FeatureCalculatorMultiChangeParams(FeatureCalculatorMulti<T> calculator, Consumer<T> changeParams) {
+	/**
+	 * Constructor
+	 * 
+	 * @param calculator delegate which is called after an input is changed
+	 * @param funcToApplyChange a function that is applied to change the input before being passed to the delegate
+	 */
+	public FeatureCalculatorSingleChangeInput(FeatureCalculatorSingle<T> calculator, Consumer<T> funcToApplyChange) {
 		this.calculator = calculator;
-		this.changeParams = changeParams;
+		this.funcToApplyChange = funcToApplyChange;
 	}
 
-	public ResultsVector calc(T params) throws FeatureCalcException {
-		changeParams.accept(params);
-		return calculator.calc(params);
-	}
-	
-
-	@Override
-	public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws FeatureCalcException {
-		changeParams.accept(params);
-		return calculator.calc(params, featuresSubset);
+	public double calc(T input) throws FeatureCalcException {
+		funcToApplyChange.accept(input);
+		return calculator.calc(input);
 	}
 
-	public ResultsVector calcSuppressErrors(T params, ErrorReporter errorReporter) {
-		changeParams.accept(params);
-		return calculator.calcSuppressErrors(
-			params,
-			errorReporter
-		);
-	}
-	
-	@Override
-	public int sizeFeatures() {
-		return calculator.sizeFeatures();
+	public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
+		funcToApplyChange.accept(input);
+		return calculator.calcSuppressErrors(input,	errorReporter);
 	}
 }

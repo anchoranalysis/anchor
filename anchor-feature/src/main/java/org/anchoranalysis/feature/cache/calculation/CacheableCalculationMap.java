@@ -1,7 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
-
-import java.util.ArrayList;
-
+package org.anchoranalysis.feature.cache.calculation;
 
 /*
  * #%L
@@ -30,29 +27,34 @@ import java.util.ArrayList;
  */
 
 
-import java.util.Collection;
-
-import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory {
-
-	private FeatureSessionCacheFactory delegate;
-	private Collection<String> ignorePrefixes;
-		
-	public HorizontalFeatureCacheFactory() {
-		super();
-		this.delegate = new HorizontalCalculationCacheFactory();
-		this.ignorePrefixes = new ArrayList<>();
-	}
+/**
+ * Similar to a {@link CacheableCalculation} but stores several evaluations parameterised
+ *   by a key
+ * 
+ * @author Owen Feehan
+ * @param S result-type
+ * @param T feature input-type
+ * @param U key-type
+ */
+public abstract class CacheableCalculationMap<S,T extends FeatureInput,U> implements ResettableCalculation {
+	/**
+	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
+	 *   a cached-result from previously.
+	 * 
+	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
+	 * @return the result of the calculation
+	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
+	 */
+	public abstract S getOrCalculate( T params, U key ) throws FeatureCalcException;
 
 	@Override
-	public <T extends FeatureInput> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
+	public abstract boolean equals(Object other);
 
-		FeatureSessionCache<T> cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
-		
-		return new HorizontalFeatureCache<>(cacheCalculation, namedFeatures, sharedFeatures, ignorePrefixes);
-	}
+	@Override
+	public abstract int hashCode();
 	
 }

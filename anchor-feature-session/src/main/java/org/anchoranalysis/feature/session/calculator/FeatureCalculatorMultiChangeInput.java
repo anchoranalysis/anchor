@@ -1,10 +1,8 @@
 package org.anchoranalysis.feature.session.calculator;
 
-
-
 /*-
  * #%L
- * anchor-feature-session
+ * anchor-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -28,6 +26,8 @@ package org.anchoranalysis.feature.session.calculator;
  * #L%
  */
 
+import java.util.function.Consumer;
+
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -35,24 +35,46 @@ import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
- * Calculates one or more features for given params
- * 
+ * Likes a SequentialSession but automatically changes parameters before calculation
+ *
  * @author owen
  *
- * @param <T> feature input-type
+ * @param <T> feature-input-type
  */
-public interface FeatureCalculatorMulti<T extends FeatureInput> {
+public class FeatureCalculatorMultiChangeInput<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
-	/** Performs one calculation throwing an exception if something goes wrong */
-	ResultsVector calc( T input ) throws FeatureCalcException;
-	
-	/** Performs one calculation on a sub-set of the feature list throwing an exception if something goes wrong */
-	ResultsVector calc( T input, FeatureList<T> featuresSubset ) throws FeatureCalcException;
+	private FeatureCalculatorMulti<T> calculator;
+	private Consumer<T> funcToApplyChange;
+		
+	/**
+	 * Constructor
+	 * 
+	 * @param calculator delegate which is called after an input is changed
+	 * @param funcToApplyChange a function that is applied to change the input before being passed to the delegate
+	 */
+	public FeatureCalculatorMultiChangeInput(FeatureCalculatorMulti<T> calculator, Consumer<T> funcToApplyChange) {
+		this.calculator = calculator;
+		this.funcToApplyChange = funcToApplyChange;
+	}
 
-	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
-	ResultsVector calcSuppressErrors(T input
-			, ErrorReporter errorReporter );
+	public ResultsVector calc(T input) throws FeatureCalcException {
+		funcToApplyChange.accept(input);
+		return calculator.calc(input);
+	}
 	
-	/** The number of features that is calculated on each call to calc(), and therefore the size of the ResultsVector returned */
-	int sizeFeatures();
+	@Override
+	public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws FeatureCalcException {
+		funcToApplyChange.accept(input);
+		return calculator.calc(input, featuresSubset);
+	}
+
+	public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
+		funcToApplyChange.accept(input);
+		return calculator.calcSuppressErrors(input,	errorReporter);
+	}
+	
+	@Override
+	public int sizeFeatures() {
+		return calculator.sizeFeatures();
+	}
 }

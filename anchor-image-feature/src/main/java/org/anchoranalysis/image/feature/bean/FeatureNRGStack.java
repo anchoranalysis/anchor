@@ -44,8 +44,8 @@ public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
 	@Override
 	public double calc( SessionInput<FeatureInputNRGStack> input ) throws FeatureCalcException {
 		
-		if (input.getParams() instanceof FeatureInputNRGStack) {
-			return calcCast( (FeatureInputNRGStack) input.getParams() );
+		if (input.get() instanceof FeatureInputNRGStack) {
+			return calcCast( (FeatureInputNRGStack) input.get() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureInputNRGStack.class.getSimpleName() );
 		}

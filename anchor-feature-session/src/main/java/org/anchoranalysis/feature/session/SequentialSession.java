@@ -38,13 +38,13 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheCreator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.CacheCreatorSimple;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
+import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
@@ -73,7 +73,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	
 	private CacheCreator cacheCreator;
 	
-	private SessionInput<T> sessionInput = null;
+	private SessionInputSequential<T> sessionInput = null;
 		
 	/**
 	 * Constructor of a session
@@ -187,7 +187,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}
 		
 		if (sessionInput==null) {
-			sessionInput = new SessionInput<T>(input, cacheCreator);
+			sessionInput = new SessionInputSequential<T>(input, cacheCreator);
 		} else {
 			sessionInput.replaceParams(input);
 		}

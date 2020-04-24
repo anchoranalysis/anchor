@@ -53,7 +53,7 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes> ex
 		
 		double value = input.calc( getItem() );
 		
-		return calcWithRes(value, input.getParams().getRes() );
+		return calcWithRes(value, input.get().getRes() );
 	}
 	
 	protected abstract double calcWithRes( double value, ImageRes res ) throws FeatureCalcException;

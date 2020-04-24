@@ -30,19 +30,21 @@ package org.anchoranalysis.feature.cache.calculation;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
- * All Resettable Cached-Calculations must have a hashCode and equals implementation that checks
- *   that relevant parameters are equal.  They will be used in sets 
+ * A calculation that be invalidated (resetted), removing any existing cached value.
+ * 
+ * <p>All resettable calculations must have a hashCode and equals implementation that checks
+ *   that relevant parameters are equal.  They will be used in sets</p> 
  * 
  * @author Owen Feehan
  *
  */
-public interface IResettableCachedCalculation {
+public interface ResettableCalculation {
 
 	/**
 	 * Resets the cached-calculation, so the next call to doOperationWithParams() is guaranteed to
 	 *  calculation the operation, and store the value in the cache.
 	 */
-	abstract void reset();
+	abstract void invalidate();
 	
 	/**
 	 * Sets the executed-result of the cached-calculation to be object 

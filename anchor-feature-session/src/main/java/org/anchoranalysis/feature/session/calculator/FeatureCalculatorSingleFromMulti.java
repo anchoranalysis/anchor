@@ -33,10 +33,11 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
- * Exposes a FeatureCalculatorMulti as a FeatureCalculatorSingle
+ * Exposes a {@link FeatureCalculatorMulti} as a {@link FeatureCalculatorSingle}
+ * 
  * @author owen
  *
- * @param <T> feature-params type
+ * @param <T> feature input-type
  */
 public class FeatureCalculatorSingleFromMulti<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
@@ -56,12 +57,12 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput> implements
 	}
 
 	@Override
-	public double calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
-		return delegate.calcSuppressErrors(params, errorReporter).get(0);
+	public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
+		return delegate.calcSuppressErrors(input, errorReporter).get(0);
 	}
 
 	@Override
-	public double calcOne(T params) throws FeatureCalcException {
+	public double calc(T params) throws FeatureCalcException {
 		return delegate.calc(params).get(0);
 	}
 

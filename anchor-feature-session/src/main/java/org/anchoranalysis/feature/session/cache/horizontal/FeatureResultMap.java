@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 /*-
  * #%L

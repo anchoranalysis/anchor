@@ -56,9 +56,9 @@ public class CenterOfGravity extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) {
+	public double calc(SessionInput<FeatureInputSingleObj> input) {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = input.get();
 		
 		double val = params.getObjMask().centerOfGravity(
 			axisType()

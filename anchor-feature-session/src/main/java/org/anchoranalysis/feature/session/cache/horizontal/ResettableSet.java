@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 /*
  * #%L
@@ -32,8 +32,9 @@ import java.util.Map;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.cache.calculation.ResettableCalculation;
 
-public class ResettableSet<T extends IResettableCachedCalculation> {
+class ResettableSet<T extends ResettableCalculation> {
 
 	/**
 	 * A map for finding identical objects
@@ -85,16 +86,13 @@ public class ResettableSet<T extends IResettableCachedCalculation> {
 		
 	}
 	
-	public void reset() {
+	public void invalidate() {
 		for (T cachedCalculation : map.values()) {
-			cachedCalculation.reset();
+			cachedCalculation.invalidate();
 		}
 	}
 	
 	public void assignResult( ResettableSet<T> list ) throws OperationFailedException {
-		
-		//System.out.printf("Assigning %d and %d\n", size(), list.size() );
-		//assert( delegate.size() == list.delegate.size() );
 		
 		for( T key : list.map.keySet() ) {
 			
@@ -102,31 +100,10 @@ public class ResettableSet<T extends IResettableCachedCalculation> {
 			T existing = map.get(key);
 			if (existing!=null) {
 				existing.assignResult(key);  // As the key is guaranteed to be the same as the ite
-			} else {
-				// We just ignore if it's not there already
-				//assert false;
-				//delegate.put(key, key);
 			}
 		}
-		
-//		for( int i=0; i<delegate.size(); i++ ) {
-//			delegate.get(i).assignResult( list.delegate.get(i) );
-//		}
 	}
 	
-/*	@SuppressWarnings("unchecked")
-	public ResettableSet<T> duplicate() {
-		ResettableSet<T> out = new ResettableSet<>(doLogging);
-		
-		for( T key : map.keySet() ) {
-			// As we know the keys are same
-			T item = (T) key.duplicate();
-			out.map.put(key, item);
-		}
-
-		return out;
-	}*/
-
 	public int size() {
 		return map.size();
 	}

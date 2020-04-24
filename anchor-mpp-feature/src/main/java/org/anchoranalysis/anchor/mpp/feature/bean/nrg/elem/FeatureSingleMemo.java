@@ -43,7 +43,7 @@ public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> 
 
 	@Override
 	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
-		return calcCast(input.getParams());
+		return calcCast(input.get());
 	}
 	
 	// Calculates an NRG element for a set of pixels

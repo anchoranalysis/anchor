@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 /**
@@ -81,7 +81,7 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 		
 		final NRGStackWithParams nrgStack = nrgStackOrNull();
 		
-		return new FeatureCalculatorSingleChangeParams<>(
+		return new FeatureCalculatorSingleChangeInput<>(
 			session,
 			params -> {
 				// Use reflection, to only set the nrgStack on params that supports them

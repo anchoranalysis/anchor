@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.cache;
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 /*-
  * #%L
@@ -28,6 +28,8 @@ package org.anchoranalysis.feature.session.cache;
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class HorizontalCalculationCacheFactory implements FeatureSessionCacheFactory {

@@ -124,7 +124,7 @@ public class AssignmentObjMaskFactory {
 				
 				ObjMask objR = result.get(j);
 	
-				double costObjs = session.calcOne(
+				double costObjs = session.calc(
 					paramsFor(objA, objR, nrgStack)
 				);
 				outArr[i][j] = costObjs;

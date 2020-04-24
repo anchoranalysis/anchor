@@ -1,13 +1,13 @@
 package org.anchoranalysis.feature.session.cache;
 
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
-public class NullCachedCalculationSearch<T extends FeatureInput> implements ICachedCalculationSearch<T> {
+public class NullCachedCalculationSearch<T extends FeatureInput> implements CalculationResolver<T> {
 
 	private static NullCachedCalculationSearch<?> instance = new NullCachedCalculationSearch<>();
 	
@@ -16,14 +16,14 @@ public class NullCachedCalculationSearch<T extends FeatureInput> implements ICac
 	}
 	
 	@Override
-	public <S> RslvdCachedCalculation<S,T> search(CachedCalculation<S,T> cc) {
-		return new RslvdCachedCalculation<>(cc);
+	public <S> ResolvedCalculation<S,T> search(CacheableCalculation<S,T> cc) {
+		return new ResolvedCalculation<>(cc);
 	}
 
 	@Override
-	public <S,U> RslvdCachedCalculationMap<S,T,U> search(
-			CachedCalculationMap<S,T,U> cc) {
-		return new RslvdCachedCalculationMap<>(cc);
+	public <S,U> ResolvedCalculationMap<S,T,U> search(
+			CacheableCalculationMap<S,T,U> cc) {
+		return new ResolvedCalculationMap<>(cc);
 	}
 
 	@SuppressWarnings("unchecked")

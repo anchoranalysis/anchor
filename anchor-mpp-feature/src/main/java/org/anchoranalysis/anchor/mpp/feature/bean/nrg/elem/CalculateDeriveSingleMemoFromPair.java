@@ -3,11 +3,11 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateDeriveSingleMemoFromPair extends CachedCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
+public class CalculateDeriveSingleMemoFromPair extends CacheableCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
 
 	private boolean first;
 	
