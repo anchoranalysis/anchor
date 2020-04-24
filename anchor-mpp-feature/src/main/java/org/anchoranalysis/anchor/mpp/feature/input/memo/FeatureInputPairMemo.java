@@ -27,7 +27,7 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
  */
 
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class FeatureInputPairMemo extends FeatureInputNRGStack {

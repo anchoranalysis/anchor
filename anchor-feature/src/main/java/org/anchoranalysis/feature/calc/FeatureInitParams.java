@@ -27,39 +27,57 @@ package org.anchoranalysis.feature.calc;
  */
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.anchoranalysis.bean.init.params.BeanInitParams;
+import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.nrg.NRGStack;
 
-public class ResultsVectorCollection implements Iterable<ResultsVector> {
+/**
+ * Parameters used to initialize a feature before any calculations
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class FeatureInitParams extends BeanInitParams {
+
+	private KeyValueParams keyValueParams;
+	private NRGStack nrgStack;
 	
-	private List<ResultsVector> list = new ArrayList<>();
-	
-	public ResultsVectorCollection() {
+	public FeatureInitParams() {
 		super();
 	}
 	
-	public ResultsVectorCollection( ResultsVector rv ) {
+	public FeatureInitParams(KeyValueParams keyValueParams) {
 		super();
-		list.add( rv );
-	}
-
-
-	public boolean add(ResultsVector e) {
-		return list.add(e);
-	}
-
-	public int size() {
-		return list.size();
-	}
-	
-	public ResultsVector get( int index ) {
-		return list.get(index);
-	}
-
-	@Override
-	public Iterator<ResultsVector> iterator() {
-		return list.iterator();
+		this.keyValueParams = keyValueParams;
 	}
 		
+	protected FeatureInitParams( FeatureInitParams src ) {
+		this.keyValueParams = src.keyValueParams;
+		this.nrgStack = src.nrgStack;
+	}
+	
+	
+	// Shallow-copy
+	public FeatureInitParams duplicate() {
+		FeatureInitParams out = new FeatureInitParams();
+		out.nrgStack = nrgStack;
+		out.keyValueParams = keyValueParams;
+		return out;
+	}
+	
+	public KeyValueParams getKeyValueParams() {
+		return keyValueParams;
+	}
+
+	public void setKeyValueParams(KeyValueParams keyValueParams) {
+		this.keyValueParams = keyValueParams;
+	}
+
+	public NRGStack getNrgStack() {
+		return nrgStack;
+	}
+
+	public void setNrgStack(NRGStack nrgStack) {
+		this.nrgStack = nrgStack;
+	}
 }

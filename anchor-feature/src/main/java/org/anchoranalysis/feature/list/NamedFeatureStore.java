@@ -39,7 +39,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 public class NamedFeatureStore<T extends FeatureInput> implements Iterable<NamedBean<Feature<T>>> {

@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.provider.FeatureProviderBean;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * 

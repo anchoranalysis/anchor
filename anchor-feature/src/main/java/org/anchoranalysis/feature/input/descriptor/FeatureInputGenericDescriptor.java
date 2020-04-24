@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.init;
+package org.anchoranalysis.feature.input.descriptor;
 
 /*
  * #%L
@@ -27,57 +27,22 @@ package org.anchoranalysis.feature.init;
  */
 
 
-import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.nrg.NRGStack;
-
 /**
- * Parameters used to initialise a feature before any calculaitons
+ * For features that are compatible with all types of inputs
  * 
  * @author Owen Feehan
  *
  */
-public class FeatureInitParams extends BeanInitParams {
+public class FeatureInputGenericDescriptor extends FeatureInputDescriptor {
 
-	private KeyValueParams keyValueParams;
-	private NRGStack nrgStack;
+	public final static FeatureInputGenericDescriptor instance = new FeatureInputGenericDescriptor();
 	
-	public FeatureInitParams() {
-		super();
-	}
-	
-	public FeatureInitParams(KeyValueParams keyValueParams) {
-		super();
-		this.keyValueParams = keyValueParams;
-	}
+	private FeatureInputGenericDescriptor() {
 		
-	protected FeatureInitParams( FeatureInitParams src ) {
-		this.keyValueParams = src.keyValueParams;
-		this.nrgStack = src.nrgStack;
 	}
 	
-	
-	// Shallow-copy
-	public FeatureInitParams duplicate() {
-		FeatureInitParams out = new FeatureInitParams();
-		out.nrgStack = nrgStack;
-		out.keyValueParams = keyValueParams;
-		return out;
-	}
-	
-	public KeyValueParams getKeyValueParams() {
-		return keyValueParams;
-	}
-
-	public void setKeyValueParams(KeyValueParams keyValueParams) {
-		this.keyValueParams = keyValueParams;
-	}
-
-	public NRGStack getNrgStack() {
-		return nrgStack;
-	}
-
-	public void setNrgStack(NRGStack nrgStack) {
-		this.nrgStack = nrgStack;
+	@Override
+	public boolean isCompatibleWithEverything() {
+		return true;
 	}
 }

@@ -2,7 +2,7 @@ package org.anchoranalysis.feature.cache;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Resolves and calculates a feature by a symbol (an ID/variable-name referring to another feature)

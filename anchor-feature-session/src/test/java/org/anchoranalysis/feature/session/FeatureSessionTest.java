@@ -28,10 +28,10 @@ package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.calc.params.FeatureInputNull;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputNull;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;

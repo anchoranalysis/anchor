@@ -31,7 +31,7 @@ import org.anchoranalysis.core.cache.CachedOperation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Caches the result of a calculation, until reset() is called

@@ -5,7 +5,7 @@ import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public class NullCachedCalculationSearch<T extends FeatureInput> implements CalculationResolver<T> {
 

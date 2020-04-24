@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.bean.objmask.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescriptor;
 

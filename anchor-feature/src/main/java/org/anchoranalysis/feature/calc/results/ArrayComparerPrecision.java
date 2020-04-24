@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.calc.results;
 
 /*-
  * #%L

@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 
 /**

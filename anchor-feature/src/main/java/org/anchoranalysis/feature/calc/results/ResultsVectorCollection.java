@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.calc.params;
+package org.anchoranalysis.feature.calc.results;
 
 /*
  * #%L
@@ -27,16 +27,39 @@ package org.anchoranalysis.feature.calc.params;
  */
 
 
-// When we don't care about parameters
-public class FeatureInputNull extends FeatureInput {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-	private static FeatureInputNull instance = new FeatureInputNull();
+public class ResultsVectorCollection implements Iterable<ResultsVector> {
 	
-	private FeatureInputNull() {
+	private List<ResultsVector> list = new ArrayList<>();
+	
+	public ResultsVectorCollection() {
+		super();
+	}
+	
+	public ResultsVectorCollection( ResultsVector rv ) {
+		super();
+		list.add( rv );
+	}
+
+
+	public boolean add(ResultsVector e) {
+		return list.add(e);
+	}
+
+	public int size() {
+		return list.size();
+	}
+	
+	public ResultsVector get( int index ) {
+		return list.get(index);
+	}
+
+	@Override
+	public Iterator<ResultsVector> iterator() {
+		return list.iterator();
+	}
 		
-	}
-	
-	public static FeatureInputNull instance() {
-		return instance;
-	}
 }

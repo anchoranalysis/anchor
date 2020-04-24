@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.input;
 
 /*-
  * #%L
@@ -26,31 +26,9 @@ package org.anchoranalysis.feature.calc;
  * #L%
  */
 
-class ArrayComparer {
-	
-	public boolean compareArrays( Object[] objs1, Object[] objs2 ) {
-		if (objs1==null) {
-			return (objs2.length==0);
-		}
-		
-		if (objs2==null) {
-			return (objs1.length==0);
-		}
-		
-		if (objs1.length!=objs2.length) {
-			return false;
-		}
-		
-		for( int i=0; i<objs1.length; i++) {
-			
-			if (!compareItem(objs1[i], objs2[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
+import org.anchoranalysis.image.extent.ImageRes;
 
-	protected boolean compareItem( Object obj1, Object obj2 ) {
-		return obj1.equals(obj2);
-	}
+public abstract class FeatureInputWithRes extends FeatureInput {
+
+	public abstract ImageRes getRes();
 }

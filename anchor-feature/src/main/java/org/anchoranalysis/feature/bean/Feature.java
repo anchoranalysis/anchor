@@ -39,9 +39,9 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.init.InitializableFeature;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.InitializableFeature;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 
 /**

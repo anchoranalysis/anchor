@@ -29,8 +29,8 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A feature that must be initialized with params first before being valid

@@ -47,7 +47,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**

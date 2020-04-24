@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Selects a number of features of shared-features matching against a regular-expression

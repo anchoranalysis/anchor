@@ -32,7 +32,7 @@ import java.util.Iterator;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**

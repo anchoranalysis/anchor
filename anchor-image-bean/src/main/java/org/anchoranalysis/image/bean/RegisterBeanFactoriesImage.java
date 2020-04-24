@@ -33,9 +33,9 @@ import java.util.List;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * Registers beans that needs particular factories

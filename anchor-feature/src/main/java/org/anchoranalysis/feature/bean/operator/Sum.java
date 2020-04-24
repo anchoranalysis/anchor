@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 

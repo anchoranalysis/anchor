@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;

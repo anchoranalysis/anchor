@@ -29,7 +29,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.params.FeatureInputParams;
+import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.image.extent.ImageRes;
 
 public class FeatureInputMark extends FeatureInputParams {

@@ -33,9 +33,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
 /**
  * Calculates a vector of results, based upon 3 features that define the x, y and z components of the vector
@@ -99,6 +99,6 @@ public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 
 	@Override
 	public FeatureInputDescriptor paramType() throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForThree(x,y,z);
+		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
 	}
 }

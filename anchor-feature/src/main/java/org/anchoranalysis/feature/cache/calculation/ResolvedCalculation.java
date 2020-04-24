@@ -1,7 +1,7 @@
 package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Like a {@link CacheableCalculation} but has been resolved against a cache to ensure its unique (singular).

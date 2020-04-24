@@ -33,9 +33,9 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
 public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T> {
 
@@ -60,6 +60,6 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForList(list);
+		return FeatureInputDescriptorUtilities.paramTypeForList(list);
 	}
 }

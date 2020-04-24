@@ -5,7 +5,7 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObjDescriptor;

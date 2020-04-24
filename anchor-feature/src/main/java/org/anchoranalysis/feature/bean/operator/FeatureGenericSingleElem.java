@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.bean.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A single-element feature that accepts the most generic of parameters {#link {@link FeatureInput}}

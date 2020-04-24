@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.bean.physical;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.bean.unitvalue.area.UnitValueArea;
 import org.anchoranalysis.image.bean.unitvalue.area.UnitValueAreaPixels;
 import org.anchoranalysis.image.extent.ImageRes;

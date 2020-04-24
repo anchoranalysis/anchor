@@ -1,6 +1,6 @@
 package org.anchoranalysis.feature.cache.calculation;
 
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 
 /**

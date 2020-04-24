@@ -30,8 +30,8 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 /**
  * A feature that contains another feature as a property (the single element)

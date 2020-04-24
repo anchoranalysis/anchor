@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.params;
+package org.anchoranalysis.feature.calc;
 
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,35 +26,27 @@ package org.anchoranalysis.feature.params;
  * #L%
  */
 
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-/** Defines the type of inputs the feature accepts */
-public abstract class FeatureInputDescriptor {
+/**
+ * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any calculations occur.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> input-type for feature
+ */
+public interface InitializableFeature<T extends FeatureInput> {
 
+	void init( FeatureInitParams params, FeatureBase<T> parentFeature, LogErrorReporter logger) throws InitException;
+	
 	/**
-	 * Are these parameters compatible with everything else?
-	 * 
+	 * A friendly name that can be displayed to user describing the Feature. Should always prioritise the CustomName
+	 *   if one is associated with the feature
+	 *   
 	 * @return
 	 */
-	public abstract boolean isCompatibleWithEverything();
-	
-	/**
-	 * Rules for preferring to keep one dscr over another.
-	 * 
-	 * @param dscr
-	 * @return the favoured descriptor of the two, or NULL if there is no favourite
-	 */
-	// TODO remove
-	public FeatureInputDescriptor preferTo( FeatureInputDescriptor dscr ) {
-		return null;
-	}
-	
-	// TODO remove
-	public FeatureInputDescriptor preferToBidirectional( FeatureInputDescriptor dscr ) {
-		// If the first try returns NULL, we try to get a preference in the other direction
-		FeatureInputDescriptor first = preferTo(dscr);
-		if(first!=null) {
-			return first;
-		}
-		return dscr.preferTo(this);
-	}
+	String getFriendlyName();
 }

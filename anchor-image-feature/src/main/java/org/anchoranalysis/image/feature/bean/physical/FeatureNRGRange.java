@@ -27,7 +27,7 @@ package org.anchoranalysis.image.feature.bean.physical;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.params.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithRes;
 
 public abstract class FeatureNRGRange<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
 

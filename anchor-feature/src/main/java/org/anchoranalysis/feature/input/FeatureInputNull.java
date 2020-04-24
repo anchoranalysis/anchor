@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.init;
+package org.anchoranalysis.feature.input;
 
-/*-
+/*
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,17 @@ package org.anchoranalysis.feature.init;
  * #L%
  */
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.FeatureBase;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-/**
- * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any calculations occur.
- * 
- * @author Owen Feehan
- *
- * @param <T> input-type for feature
- */
-public interface InitializableFeature<T extends FeatureInput> {
+// When we don't care about parameters
+public class FeatureInputNull extends FeatureInput {
 
-	void init( FeatureInitParams params, FeatureBase<T> parentFeature, LogErrorReporter logger) throws InitException;
+	private static FeatureInputNull instance = new FeatureInputNull();
 	
-	/**
-	 * A friendly name that can be displayed to user describing the Feature. Should always prioritise the CustomName
-	 *   if one is associated with the feature
-	 *   
-	 * @return
-	 */
-	String getFriendlyName();
+	private FeatureInputNull() {
+		
+	}
+	
+	public static FeatureInputNull instance() {
+		return instance;
+	}
 }

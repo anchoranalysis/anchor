@@ -39,8 +39,8 @@ import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A group of features made available for references to other features

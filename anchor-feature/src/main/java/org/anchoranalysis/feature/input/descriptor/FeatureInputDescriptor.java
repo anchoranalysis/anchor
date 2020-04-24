@@ -1,10 +1,10 @@
-package org.anchoranalysis.feature.calc.params;
+package org.anchoranalysis.feature.input.descriptor;
 
-/*-
+/*
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,35 @@ package org.anchoranalysis.feature.calc.params;
  * #L%
  */
 
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-/**
- * For features that are compatible with all inut-types...... so long as they have key-value-params.
- * @author Owen Feehan
- *
- */
-public class FeatureInputParamsDescriptor extends FeatureInputDescriptor {
+/** Defines the type of inputs the feature accepts */
+public abstract class FeatureInputDescriptor {
 
-	public static final FeatureInputParamsDescriptor instance = new FeatureInputParamsDescriptor();
+	/**
+	 * Are these parameters compatible with everything else?
+	 * 
+	 * @return
+	 */
+	public abstract boolean isCompatibleWithEverything();
 	
-	private FeatureInputParamsDescriptor() {
-		
+	/**
+	 * Rules for preferring to keep one dscr over another.
+	 * 
+	 * @param dscr
+	 * @return the favoured descriptor of the two, or NULL if there is no favourite
+	 */
+	// TODO remove
+	public FeatureInputDescriptor preferTo( FeatureInputDescriptor dscr ) {
+		return null;
 	}
 	
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
+	// TODO remove
+	public FeatureInputDescriptor preferToBidirectional( FeatureInputDescriptor dscr ) {
+		// If the first try returns NULL, we try to get a preference in the other direction
+		FeatureInputDescriptor first = preferTo(dscr);
+		if(first!=null) {
+			return first;
+		}
+		return dscr.preferTo(this);
 	}
-
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemoDescr
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureAllMemo extends Feature<FeatureInputAllMemo> {
 

@@ -29,8 +29,8 @@ package org.anchoranalysis.image.feature.bean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureInputNRGStackDescriptor;
 
 public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {

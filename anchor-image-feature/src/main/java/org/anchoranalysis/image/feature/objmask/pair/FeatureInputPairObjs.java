@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.feature.objmask.pair;
 
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 /*-

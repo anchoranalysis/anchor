@@ -6,8 +6,8 @@ import java.util.List;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.feature.bean.FeatureCastInitParams;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.init.ImageInitParams;
 

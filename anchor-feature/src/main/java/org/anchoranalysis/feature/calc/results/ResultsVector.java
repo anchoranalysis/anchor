@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.calc;
+package org.anchoranalysis.feature.calc.results;
 
 /*
  * #%L
@@ -30,6 +30,7 @@ package org.anchoranalysis.feature.calc;
 import java.util.Collection;
 
 import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**

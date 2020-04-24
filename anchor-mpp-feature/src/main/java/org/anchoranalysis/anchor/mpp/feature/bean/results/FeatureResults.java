@@ -29,8 +29,8 @@ package org.anchoranalysis.anchor.mpp.feature.bean.results;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResultsDescriptor;
 

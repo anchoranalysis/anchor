@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.params;
+package org.anchoranalysis.feature.input.descriptor;
 
 /*
  * #%L
@@ -32,10 +32,9 @@ import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public class ParamTypeUtilities {
+public class FeatureInputDescriptorUtilities {
 
 	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) throws FeatureCalcException {
 		return paramTypeForTwo( item1.paramType(), item2.paramType() );

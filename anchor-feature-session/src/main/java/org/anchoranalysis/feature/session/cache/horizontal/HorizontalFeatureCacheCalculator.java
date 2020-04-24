@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 
 /**

@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface OrderedFeatureList<T extends FeatureInput> {
 

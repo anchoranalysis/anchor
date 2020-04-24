@@ -1,12 +1,10 @@
-package org.anchoranalysis.feature.calc.params;
+package org.anchoranalysis.feature.calc.results;
 
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,23 +26,31 @@ import org.anchoranalysis.feature.params.FeatureInputDescriptor;
  * #L%
  */
 
-
-/**
- * For features that are compatible with all types of inputs
- * 
- * @author Owen Feehan
- *
- */
-public class FeatureInputGenericDescriptor extends FeatureInputDescriptor {
-
-	public final static FeatureInputGenericDescriptor instance = new FeatureInputGenericDescriptor();
+class ArrayComparer {
 	
-	private FeatureInputGenericDescriptor() {
+	public boolean compareArrays( Object[] objs1, Object[] objs2 ) {
+		if (objs1==null) {
+			return (objs2.length==0);
+		}
 		
-	}
-	
-	@Override
-	public boolean isCompatibleWithEverything() {
+		if (objs2==null) {
+			return (objs1.length==0);
+		}
+		
+		if (objs1.length!=objs2.length) {
+			return false;
+		}
+		
+		for( int i=0; i<objs1.length; i++) {
+			
+			if (!compareItem(objs1[i], objs2[i])) {
+				return false;
+			}
+		}
 		return true;
+	}
+
+	protected boolean compareItem( Object obj1, Object obj2 ) {
+		return obj1.equals(obj2);
 	}
 }

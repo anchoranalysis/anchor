@@ -2,7 +2,7 @@ package org.anchoranalysis.image.feature.stack;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 
 /*-
  * #%L

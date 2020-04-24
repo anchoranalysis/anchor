@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Similar to a {@link CacheableCalculation} but stores several evaluations parameterised

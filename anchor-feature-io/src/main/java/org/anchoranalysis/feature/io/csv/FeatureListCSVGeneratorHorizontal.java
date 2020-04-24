@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;

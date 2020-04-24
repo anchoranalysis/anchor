@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 class FeatureResultMap<T extends FeatureInput> {
 

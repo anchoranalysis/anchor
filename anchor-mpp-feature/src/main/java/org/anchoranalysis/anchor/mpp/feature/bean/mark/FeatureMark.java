@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureMark extends Feature<FeatureInputMark> {
 
