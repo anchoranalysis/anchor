@@ -59,29 +59,6 @@ public class FeatureInputSingleObj extends FeatureInputNRGStack {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (!super.equals(obj)) { return false; }
-		if ( this == obj ) { return true; }
-		if ( !(obj instanceof FeatureInputSingleObj) ) { return false; }
-		
-		FeatureInputSingleObj objCast = (FeatureInputSingleObj)obj;
-
-		if (!super.equals(objCast)) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.appendSuper( super.hashCode() )
-			.append(objMask)
-			.toHashCode();
-	}
-	
-	@Override
 	public String toString() {
 		return objMask.toString();
 	}
