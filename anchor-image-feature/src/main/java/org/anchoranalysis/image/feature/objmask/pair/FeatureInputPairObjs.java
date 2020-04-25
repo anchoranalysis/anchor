@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.objmask.pair;
 
+import java.util.Optional;
+
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -58,7 +60,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		this.objMask2 = objMask2;
 	}
 	
-	public FeatureInputPairObjs(ObjMask objMask1, ObjMask objMask2, NRGStackWithParams nrgStack) {
+	public FeatureInputPairObjs(ObjMask objMask1, ObjMask objMask2, Optional<NRGStackWithParams> nrgStack) {
 		super(nrgStack);
 		this.objMask1 = objMask1;
 		this.objMask2 = objMask2;
@@ -68,7 +70,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		super();
 		this.objMask1 = src.getObjMask1();
 		this.objMask2 = src.getObjMask2();
-		this.setNrgStack( src.getNrgStack() );
+		this.setNrgStack( src.getNrgStackOptional() );
 	}
 
 	public ObjMask getObjMask1() {
@@ -94,7 +96,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	public FeatureInputSingleObj params1() {
 		if (params1==null) {
 			params1 = new FeatureInputSingleObj(objMask1);
-			params1.setNrgStack( getNrgStack() );
+			params1.setNrgStack( getNrgStackOptional() );
 		}
 		return params1;
 	}
@@ -102,7 +104,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	public FeatureInputSingleObj params2() {
 		if (params2==null) {
 			params2 = new FeatureInputSingleObj(objMask2);
-			params2.setNrgStack( getNrgStack() );
+			params2.setNrgStack( getNrgStackOptional() );
 		}
 		return params2;
 	}
@@ -125,7 +127,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		out.setObjMask1(objMask2);
 		out.setObjMask2(objMask1);
 		out.setObjMaskMerged(getObjMaskMerged());
-		out.setNrgStack( getNrgStack() );
+		out.setNrgStack( getNrgStackOptional() );
 		return out;
 	}
 

@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -53,7 +55,6 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 	private CfgProvider cfgProvider;
 	// END BEAN PROPERTIES
 	
-
 	@Override
 	public boolean isNumeric() {
 		return true;
@@ -79,7 +80,10 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 			FeatureCalculatorSingle<FeatureInputCfg> session = createAndStartSession();
 			
 			double val = session.calc(
-				new FeatureInputCfg(cfg, dim)
+				new FeatureInputCfg(
+					cfg,
+					Optional.of(dim)
+				)
 			);
 			return Double.toString(val);
 			

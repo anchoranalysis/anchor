@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp-feature
@@ -40,7 +42,9 @@ public class FeatureInputPairMemo extends FeatureInputNRGStack {
 		PxlMarkMemo obj2,
 		NRGStackWithParams nrgStack
 	) {
-		super(nrgStack);
+		super(
+			Optional.of(nrgStack)
+		);
 		this.obj1 = obj1;
 		this.obj2 = obj2;
 		assert obj1!=null;

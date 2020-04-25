@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -8,17 +10,17 @@ import org.anchoranalysis.image.extent.ImageRes;
 public class FeatureInputCfg extends FeatureInputWithRes {
 
 	private Cfg cfg;
-	private ImageDim dim;
+	private Optional<ImageDim> dim;
 	
-	public FeatureInputCfg(Cfg cfg, ImageDim dim) {
+	public FeatureInputCfg(Cfg cfg, Optional<ImageDim> dim) {
 		super();
 		this.cfg = cfg;
 		this.dim = dim;
 	}
 
 	@Override
-	public ImageRes getRes() {
-		return dim.getRes();
+	public Optional<ImageRes> getResOptional() {
+		return dim.map( ImageDim::getRes );
 	}
 
 	public Cfg getCfg() {
@@ -29,7 +31,7 @@ public class FeatureInputCfg extends FeatureInputWithRes {
 		this.cfg = cfg;
 	}
 
-	public ImageDim getDimensions() {
+	public Optional<ImageDim> getDimensions() {
 		return dim;
 	}
 }

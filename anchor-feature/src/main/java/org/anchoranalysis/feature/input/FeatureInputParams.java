@@ -1,6 +1,9 @@
 package org.anchoranalysis.feature.input;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 /*
  * #%L
@@ -37,5 +40,11 @@ import org.anchoranalysis.core.params.KeyValueParams;
  */
 public abstract class FeatureInputParams extends FeatureInputWithRes {
 	
-	public abstract KeyValueParams getKeyValueParams();
+	public abstract Optional<KeyValueParams> getParamsOptional();
+	
+	public KeyValueParams getParamsRequired() throws FeatureCalcException {
+		return getParamsOptional().orElseThrow(
+			() -> new FeatureCalcException("Params are required for this input")	
+		);
+	}
 }

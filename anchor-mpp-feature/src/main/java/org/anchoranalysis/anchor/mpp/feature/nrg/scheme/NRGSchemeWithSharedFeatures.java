@@ -80,8 +80,7 @@ public class NRGSchemeWithSharedFeatures {
 		public void update( PxlMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
 			this.pmm = pmm;
 			this.raster = raster;
-			
-			
+						
 			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator(
 				nrgScheme,
 				sharedFeatures.downcast(),
@@ -114,8 +113,7 @@ public class NRGSchemeWithSharedFeatures {
 			} catch (CreateException e) {
 				throw new FeatureCalcException(e);
 			}
-			
-			
+						
 			FeatureInputSingleMemo params = new FeatureInputSingleMemo(
 				pmm,
 				new NRGStackWithParams(raster,kvp)

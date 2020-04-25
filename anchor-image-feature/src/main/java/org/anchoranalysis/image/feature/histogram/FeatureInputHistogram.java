@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.histogram;
 
+import java.util.Optional;
+
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -7,7 +9,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class FeatureInputHistogram extends FeatureInputWithRes {
 
 	private Histogram histogram;
-	private ImageRes res;
+	private Optional<ImageRes> res;
 
 	/**
 	 * Constructor
@@ -15,14 +17,14 @@ public class FeatureInputHistogram extends FeatureInputWithRes {
 	 * @param histogram
 	 * @param res can be NULL so features should expect it
 	 */
-	public FeatureInputHistogram(Histogram histogram, ImageRes res) {
+	public FeatureInputHistogram(Histogram histogram, Optional<ImageRes> res) {
 		super();
 		this.histogram = histogram;
 		this.res = res;
 	}
 
 	@Override
-	public ImageRes getRes() {
+	public Optional<ImageRes> getResOptional() {
 		return res;
 	}
 
@@ -35,6 +37,6 @@ public class FeatureInputHistogram extends FeatureInputWithRes {
 	}
 
 	public void setRes(ImageRes res) {
-		this.res = res;
+		this.res = Optional.of(res);
 	}
 }

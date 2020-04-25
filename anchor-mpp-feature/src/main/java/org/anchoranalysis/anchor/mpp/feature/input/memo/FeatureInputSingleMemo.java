@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -10,9 +12,19 @@ public class FeatureInputSingleMemo extends FeatureInputNRGStack {
 	
 	public FeatureInputSingleMemo(
 		PxlMarkMemo pxlPartMemo,
-		NRGStackWithParams raster
+		NRGStackWithParams nrgStack
 	) {
-		super(raster);
+		this(
+			pxlPartMemo,
+			Optional.of(nrgStack)
+		);
+	}
+	
+	public FeatureInputSingleMemo(
+		PxlMarkMemo pxlPartMemo,
+		Optional<NRGStackWithParams> nrgStack
+	) {
+		super(nrgStack);
 		this.pxlPartMemo = pxlPartMemo;
 	}
 
@@ -23,5 +35,4 @@ public class FeatureInputSingleMemo extends FeatureInputNRGStack {
 	public void setPxlPartMemo(PxlMarkMemo pxlPartMemo) {
 		this.pxlPartMemo = pxlPartMemo;
 	}
-
 }

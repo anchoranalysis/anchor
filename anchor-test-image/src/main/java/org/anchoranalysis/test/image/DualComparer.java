@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.w3c.dom.Document;
 
 /**

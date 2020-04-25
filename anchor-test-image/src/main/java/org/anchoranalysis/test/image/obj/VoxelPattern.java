@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.input;
-
-import java.util.Optional;
-
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+package org.anchoranalysis.test.image.obj;
 
 /*-
  * #%L
- * anchor-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -30,15 +26,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
-
-public abstract class FeatureInputWithRes extends FeatureInput {
-
-	public abstract Optional<ImageRes> getResOptional();
+public abstract class VoxelPattern {
 	
-	public ImageRes getResRequired() throws FeatureCalcException {
-		return getResOptional().orElseThrow(
-			() -> new FeatureCalcException("An image-resolution is required to be associated with the input for this feature")	
-		);
-	}
+	public abstract boolean isPixelOn( int x, int y, int z );
+	
 }

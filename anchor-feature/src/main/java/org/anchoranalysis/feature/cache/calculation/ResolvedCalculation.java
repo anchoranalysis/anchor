@@ -31,12 +31,12 @@ public class ResolvedCalculation<S, T extends FeatureInput> {
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.
 	 * 
-	 * @param params If there is no existing cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
+	 * @param input If there is no existing cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public S getOrCalculate( T params) throws ExecuteException {
-		return calc.getOrCalculate(params);
+	public S getOrCalculate( T input) throws ExecuteException {
+		return calc.getOrCalculate(input);
 	}
 	
 	// We delegate to the CachedCalculation to check equality. Needed for the search.

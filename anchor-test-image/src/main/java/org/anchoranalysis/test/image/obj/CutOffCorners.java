@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.input;
-
-import java.util.Optional;
-
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+package org.anchoranalysis.test.image.obj;
 
 /*-
  * #%L
- * anchor-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -30,15 +26,49 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.Extent;
 
-public abstract class FeatureInputWithRes extends FeatureInput {
-
-	public abstract Optional<ImageRes> getResOptional();
+/** The bounding box is filled apart from cuboids cut out of the corners */
+public class CutOffCorners extends VoxelPattern {
 	
-	public ImageRes getResRequired() throws FeatureCalcException {
-		return getResOptional().orElseThrow(
-			() -> new FeatureCalcException("An image-resolution is required to be associated with the input for this feature")	
+	private int edgeXY;
+	private int edgeZ;
+	
+	// The right-most pixels border, before we start chopping off the triangle
+	private Extent rightBorder;
+	
+	public CutOffCorners( int edgeXY, int edgeZ, Extent extnt ) {
+		this.edgeXY = edgeXY;
+		this.edgeZ = edgeZ;
+		
+		this.rightBorder = new Extent(
+			extnt.getX() - edgeXY - 1,
+			extnt.getY() - edgeXY - 1,
+			extnt.getZ() - edgeZ - 1
 		);
+	}
+
+	// Predicate on whether a pixel is included or not - triangle pattern at the edges
+	@Override
+	public boolean isPixelOn( int x, int y, int z ) {
+		if (x<edgeXY) {
+			return false;
+		}
+		if (x>rightBorder.getX()) {
+			return false;
+		}
+		if (y<edgeXY) {
+			return false;
+		}
+		if (y>rightBorder.getY()) {
+			return false;
+		}
+		if (z<edgeZ) {
+			return false;
+		}
+		if (z>rightBorder.getZ()) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -70,24 +70,24 @@ public abstract class CacheableCalculation<S, T extends FeatureInput> implements
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.
-	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
+	 * @param input If there is no cached-value, and the calculation occurs, this input is used. Otherwise ignored.
 	 * 
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	synchronized S getOrCalculate( T params ) throws ExecuteException {
+	synchronized S getOrCalculate( T input ) throws ExecuteException {
 		
 		// DEBUG
 		// Checks we have the same params, if we call the cached calculation a second-time. This maybe catches errors.
 		if (hasCachedCalculation()) {
-			if (params!=null && !params.equals(this.params)) {
+			if (input!=null && !input.equals(this.params)) {
 				throw new ExecuteException(
 					new FeatureCalcException("This feature already has been used, its cache is already set to different params")
 				);
 			}
 		}
 		
-		initParams(params);
+		initParams(input);
 		return delegate.doOperation();
 	}
 	
@@ -113,9 +113,9 @@ public abstract class CacheableCalculation<S, T extends FeatureInput> implements
 		this.params = null;	// Just to be clean, release memory, before the next getOrCalculate
 	}
 		
-	protected abstract S execute( T params ) throws ExecuteException;
+	protected abstract S execute( T input ) throws ExecuteException;
 	
-	private synchronized void initParams(T params) {
-		this.params = params;
+	private synchronized void initParams(T input) {
+		this.params = input;
 	}	
 }

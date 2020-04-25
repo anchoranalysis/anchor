@@ -190,9 +190,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 	
 	private static FeatureInputSingleObj createParams(ObjMask om, NRGStackWithParams nrgStack) {
-		FeatureInputSingleObj params = new FeatureInputSingleObj();
-		params.setObjMask(om);
-		params.setNrgStack(nrgStack);
-		return params;
+		return new FeatureInputSingleObj(om, nrgStack);
 	}
 }

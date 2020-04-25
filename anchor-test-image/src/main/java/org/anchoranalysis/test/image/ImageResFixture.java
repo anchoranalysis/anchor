@@ -2,7 +2,7 @@ package org.anchoranalysis.test.image;
 
 /*-
  * #%L
- * anchor-test-image
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,33 +26,17 @@ package org.anchoranalysis.test.image;
  * #L%
  */
 
-import java.io.IOException;
+import org.anchoranalysis.image.extent.ImageRes;
 
-import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
+public class ImageResFixture {
 
-public class TestCsvUtilities {
-
-	/**
-	 * Checks if a particular string can be found in any cell of a CSV file
-	 * 
-	 * @param file a csv-file to search through its cells
-	 * @param str string to search for in any of the cells in the CsvFile (it may also be a substring of the cell)
-	 * @return TRUE if at least one instance of str is found, FALSE otherwise
-	 * @throws IOException if something goes wrong reading the csv-file
-	 */
-	public static boolean doesCsvFileContainString( OpenedCSVFile file, String str ) throws IOException {
-		
-		String[] line;
-		while ( (line = file.readLine())!=null ) {
-			
-			for( int i=0; i<line.length; i++) {
-				
-				if( line[i].contains(str)) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
+	public static final ImageRes instance = create();
+	
+	private static ImageRes create() {
+		ImageRes sr = new ImageRes();
+		sr.setX(0.01);
+		sr.setY(0.01);
+		sr.setZ(0.025);
+		return sr;
 	}
 }

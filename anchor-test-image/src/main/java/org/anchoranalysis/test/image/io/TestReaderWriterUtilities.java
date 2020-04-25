@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.image;
+package org.anchoranalysis.test.image.io;
 
 /*-
  * #%L

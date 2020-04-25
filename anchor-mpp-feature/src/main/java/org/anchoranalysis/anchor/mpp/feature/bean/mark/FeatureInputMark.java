@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*-
@@ -35,14 +37,31 @@ import org.anchoranalysis.image.extent.ImageRes;
 public class FeatureInputMark extends FeatureInputParams {
 
 	private Mark mark;
-	private ImageRes res;
-	private KeyValueParams params;
+	private Optional<ImageRes> res;
+	private Optional<KeyValueParams> params;
 	
 	public FeatureInputMark(Mark mark, ImageRes res) {
-		this(mark,res,null);
+		this(
+			mark,
+			Optional.of(res)
+		);
+	}
+	
+	public FeatureInputMark(Mark mark, Optional<ImageRes> res) {
+		this.mark = mark;
+		this.res = res;
+		this.params = Optional.empty();
 	}
 	
 	public FeatureInputMark(Mark mark, ImageRes res, KeyValueParams params) {
+		this(
+			mark,
+			Optional.of(res),
+			Optional.of(params)
+		);
+	}
+	
+	public FeatureInputMark(Mark mark, Optional<ImageRes> res, Optional<KeyValueParams> params) {
 		super();
 		this.mark = mark;
 		this.res = res;
@@ -58,16 +77,16 @@ public class FeatureInputMark extends FeatureInputParams {
 	}
 
 	@Override
-	public ImageRes getRes() {
+	public Optional<ImageRes> getResOptional() {
 		return res;
 	}
 
-	public void setRes(ImageRes res) {
+	public void setRes(Optional<ImageRes> res) {
 		this.res = res;
 	}
 
 	@Override
-	public KeyValueParams getKeyValueParams() {
+	public Optional<KeyValueParams> getParamsOptional() {
 		return params;
 	}
 }

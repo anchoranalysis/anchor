@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.input;
-
-import java.util.Optional;
-
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+package org.anchoranalysis.test.image.io;
 
 /*-
  * #%L
- * anchor-feature
+ * anchor-test-image
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -30,15 +26,33 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import java.io.IOException;
 
-public abstract class FeatureInputWithRes extends FeatureInput {
+import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 
-	public abstract Optional<ImageRes> getResOptional();
-	
-	public ImageRes getResRequired() throws FeatureCalcException {
-		return getResOptional().orElseThrow(
-			() -> new FeatureCalcException("An image-resolution is required to be associated with the input for this feature")	
-		);
+public class TestCsvUtilities {
+
+	/**
+	 * Checks if a particular string can be found in any cell of a CSV file
+	 * 
+	 * @param file a csv-file to search through its cells
+	 * @param str string to search for in any of the cells in the CsvFile (it may also be a substring of the cell)
+	 * @return TRUE if at least one instance of str is found, FALSE otherwise
+	 * @throws IOException if something goes wrong reading the csv-file
+	 */
+	public static boolean doesCsvFileContainString( OpenedCSVFile file, String str ) throws IOException {
+		
+		String[] line;
+		while ( (line = file.readLine())!=null ) {
+			
+			for( int i=0; i<line.length; i++) {
+				
+				if( line[i].contains(str)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

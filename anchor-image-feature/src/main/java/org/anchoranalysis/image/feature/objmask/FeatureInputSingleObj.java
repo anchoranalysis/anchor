@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.objmask;
 
+import java.util.Optional;
+
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -45,6 +47,13 @@ public class FeatureInputSingleObj extends FeatureInputNRGStack {
 	}
 	
 	public FeatureInputSingleObj(ObjMask objMask, NRGStackWithParams nrgStack) {
+		this(
+			objMask,
+			Optional.of(nrgStack)
+		);
+	}
+	
+	public FeatureInputSingleObj(ObjMask objMask, Optional<NRGStackWithParams> nrgStack) {
 		super(nrgStack);
 		this.objMask = objMask;
 	}
