@@ -53,7 +53,7 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<S>, D> void add(
+	public static <S extends AnchorBean<?>, D> void add(
 		String name,
 		S item,
 		NamedProviderStore<D> cntr,
@@ -80,7 +80,7 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<S>, D> void addPreserveName(
+	public static <S extends AnchorBean<?>, D> void addPreserveName(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
 		IObjectBridge<S,D,OperationFailedException> bridge
@@ -108,7 +108,7 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<S>, D, E extends Throwable> void addPreserveNameEmbedded(
+	public static <S extends AnchorBean<?>, D, E extends Throwable> void addPreserveNameEmbedded(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
 		IObjectBridge<NamedBean<S>, D, OperationFailedException> bridge

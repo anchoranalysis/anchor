@@ -102,7 +102,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 	 * @return the provider-bridge created for the initialization
 	 * @throws OperationFailedException
 	 */
-	public <S extends InitializableBean<S,V> & Provider<T>,T> IObjectBridge<S,T,OperationFailedException> copyProvider(
+	public <S extends InitializableBean<?,V> & Provider<T>,T> IObjectBridge<S,T,OperationFailedException> copyProvider(
 		Class<?> defineClss,
 		NamedProviderStore<T> destination
 	) throws OperationFailedException {
