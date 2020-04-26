@@ -35,8 +35,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
 
 /**
- * 
- *  Calculates the first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of points
+ * Calculates the first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of points
  * 
  * @author Owen Feehan
  *
