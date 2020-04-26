@@ -1,6 +1,6 @@
 package org.anchoranalysis.io.generator;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -39,32 +39,41 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// Allows us to call an IterableGenerator<Cfg> as if it was an IterableGenerator<CfgNRG> 
-public class IterableGeneratorBridge<SourceType,DestinationType> extends Generator implements IterableGenerator<SourceType> {
+ 
 
-	private SourceType element;
+/**
+ * Allows us to call an IterableGenerator<S> as if it was an IterableGenerator<T>
+ 
+ * @author Owen Feehan
+ *
+ * @param <S> source-type
+ * @param <T> destination-type
+ */
+public class IterableGeneratorBridge<S,T> extends Generator implements IterableGenerator<S> {
+
+	private S element;
 	
-	private IterableGenerator<DestinationType> delegate;
+	private IterableGenerator<T> delegate;
 	
-	private IObjectBridge<SourceType, DestinationType> bridge;
+	private IObjectBridge<S,T,?> bridge;
 	
-	public IterableGeneratorBridge(IterableGenerator<DestinationType> delegate, IObjectBridge<SourceType, DestinationType> bridge) {
+	public IterableGeneratorBridge(IterableGenerator<T> delegate, IObjectBridge<S,T,?> bridge) {
 		super();
 		this.delegate = delegate;
 		this.bridge = bridge;
 	}
 
 	@Override
-	public SourceType getIterableElement() {
+	public S getIterableElement() {
 		return this.element;
 	}
 
 	@Override
-	public void setIterableElement(SourceType element) throws SetOperationFailedException {
+	public void setIterableElement(S element) throws SetOperationFailedException {
 		this.element = element;
 		try {
 			delegate.setIterableElement( bridge.bridgeElement(element) );
-		} catch (BridgeElementException e) {
+		} catch (Throwable e) {
 			throw new SetOperationFailedException(e);
 		}
 	}

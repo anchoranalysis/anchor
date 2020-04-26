@@ -29,8 +29,8 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.Collection;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -95,13 +95,12 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 	}
 
 	@Override
-	public <U> ResolvedCalculation<U,T> search(CacheableCalculation<U,T> cc) {
+	public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> cc) {
 		return delegate.search(cc);
 	}
 
 	@Override
-	public <S, U> ResolvedCalculationMap<S,T,U> search(
-			CacheableCalculationMap<S,T,U> cc) {
+	public <S, U> ResolvedCalculationMap<S,T,U> search(	CacheableCalculationMap<S,T,U,FeatureCalcException> cc) {
 		return delegate.search(cc);
 	}
 

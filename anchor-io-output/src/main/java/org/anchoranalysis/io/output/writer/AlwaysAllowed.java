@@ -29,7 +29,6 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
@@ -96,41 +95,27 @@ public class AlwaysAllowed extends Writer {
 	
 	
 	@Override
-	public void writeSubfolder( String outputName, Operation<? extends WritableItem> collectionGenerator ) throws OutputWriteFailedException {
+	public void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException {
 		
 		preop.exec();
 		
-		try {
-			IndexableOutputNameStyle outputNameStyle = new IntegerSuffixOutputNameStyle(outputName, "_%03d");
-			collectionGenerator.doOperation().write(outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom );
-		} catch (ExecuteException e) {
-			throw new OutputWriteFailedException(e.getCause());
-		}	
+		IndexableOutputNameStyle outputNameStyle = new IntegerSuffixOutputNameStyle(outputName, "_%03d");
+		collectionGenerator.doOperation().write(outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom );
 	}
 	
 	@Override
-	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator, String index ) throws OutputWriteFailedException {
+	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, String index ) throws OutputWriteFailedException {
 		
 		preop.exec();
-		
-		try {
-			return generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), index, bom);
-		} catch (ExecuteException e) {
-			throw new OutputWriteFailedException(e.getCause());
-		}			
+		return generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), index, bom);
 	}
 	
 	// Write a file without checking if the outputName is allowed
 	@Override
-	public void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator ) throws OutputWriteFailedException {
+	public void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException {
 		
 		preop.exec();
-		
-		try {
-			generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom);
-		} catch (ExecuteException e) {
-			throw new OutputWriteFailedException(e.getCause());
-		}
+		generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom);
 	}
 		
 	

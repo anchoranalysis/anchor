@@ -29,8 +29,7 @@ import org.anchoranalysis.core.cache.CachedOperation;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -53,16 +52,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <S> result-type of the calculation
  * @param <T> feature input-type
+ * @param <E> exception thrown if something goes wrong in the calculation
  */
-public abstract class CacheableCalculation<S, T extends FeatureInput> implements ResettableCalculation {
+public abstract class CacheableCalculation<S, T extends FeatureInput, E extends Throwable> implements ResettableCalculation {
 	
 	private transient T params;
 	
 	// We delegate the actualy execution of the cache
-	private transient CachedOperation<S> delegate = new CachedOperation<S>() {
+	private transient CachedOperation<S,E> delegate = new CachedOperation<S,E>() {
 
 		@Override
-		protected S execute() throws ExecuteException {
+		protected S execute() throws E {
 			return CacheableCalculation.this.execute( params );
 		}
 	};
@@ -75,17 +75,11 @@ public abstract class CacheableCalculation<S, T extends FeatureInput> implements
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	synchronized S getOrCalculate( T input ) throws ExecuteException {
+	synchronized S getOrCalculate( T input ) throws E {
 		
-		// DEBUG
 		// Checks we have the same params, if we call the cached calculation a second-time. This maybe catches errors.
-		if (hasCachedCalculation()) {
-			if (input!=null && !input.equals(this.params)) {
-				throw new ExecuteException(
-					new FeatureCalcException("This feature already has been used, its cache is already set to different params")
-				);
-			}
-		}
+		// We only do this when asserts are enabled, as its expensive.
+		assert( checkParamsMatchesInput(input) );
 		
 		initParams(input);
 		return delegate.doOperation();
@@ -97,12 +91,6 @@ public abstract class CacheableCalculation<S, T extends FeatureInput> implements
 	@Override
 	public abstract int hashCode();	
 	
-	public void assignResult( Object savedResult) {
-		@SuppressWarnings("unchecked")
-		CacheableCalculation<S,T> savedResultCached = (CacheableCalculation<S,T>) savedResult;
-		delegate.assignFrom( savedResultCached.delegate );
-	}
-	
 	public boolean hasCachedCalculation() {
 		return delegate.isDone();
 	}
@@ -112,10 +100,22 @@ public abstract class CacheableCalculation<S, T extends FeatureInput> implements
 		delegate.reset();
 		this.params = null;	// Just to be clean, release memory, before the next getOrCalculate
 	}
-		
-	protected abstract S execute( T input ) throws ExecuteException;
+	
+	/** This performs the actual calculation when needed. It should only be called once, until invalidate() is called. */
+	protected abstract S execute( T input ) throws E;
 	
 	private synchronized void initParams(T input) {
 		this.params = input;
-	}	
+	}
+	
+	/** A check that if params are already set, any new inputs must be identical */
+	private boolean checkParamsMatchesInput( T input ) {
+		if (hasCachedCalculation()) {
+			if (input!=null && !input.equals(this.params)) {
+				throw new AnchorFriendlyRuntimeException("This feature already has been used, its cache is already set to different params");
+			}
+		}
+		return true;
+	}
+
 }

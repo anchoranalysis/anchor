@@ -40,7 +40,7 @@ public abstract class SequenceWriter {
 	
 	public abstract boolean isOn();
 	
-	public abstract void write(Operation<Generator> generator, String index) throws OutputWriteFailedException;
+	public abstract void write(Operation<Generator,OutputWriteFailedException> generator, String index) throws OutputWriteFailedException;
 	
 	// It can return null if there is no associated output manager
 	public abstract BoundOutputManager getOutputManagerForFiles();

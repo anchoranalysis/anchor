@@ -1,6 +1,6 @@
 package org.anchoranalysis.core.index;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -31,7 +31,7 @@ import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
 
-public class BoundedIndexBridge<T> implements IObjectBridge<Integer, T> {
+public class BoundedIndexBridge<T> implements IObjectBridge<Integer, T, GetOperationFailedException> {
 	
 	private IBoundedIndexContainer<T> cntr;
 	
@@ -41,16 +41,12 @@ public class BoundedIndexBridge<T> implements IObjectBridge<Integer, T> {
 	}
 
 	@Override
-	public T bridgeElement(Integer sourceObject) throws BridgeElementException {
+	public T bridgeElement(Integer sourceObject) throws GetOperationFailedException {
 		int index = cntr.previousEqualIndex(sourceObject);
 		if (index==-1) {
-			throw new BridgeElementException("Cannot find a previousEqualIndex in the cntr");
+			throw new GetOperationFailedException("Cannot find a previousEqualIndex in the cntr");
 		}
-		try {
-			return cntr.get( index );
-		} catch (GetOperationFailedException e) {
-			throw new BridgeElementException(e);
-		}
+		return cntr.get( index );
 	}
 
 	// Updates the cntr associated with the bridge

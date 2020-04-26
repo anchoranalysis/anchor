@@ -27,10 +27,10 @@ package org.anchoranalysis.feature.shared;
  */
 
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen
  *
  */
-class FeatureBridge<T extends FeatureInput> implements IObjectBridge<NamedBean<FeatureListProvider<T>>, FeatureList<T>> {
+class FeatureBridge<T extends FeatureInput> implements IObjectBridge<NamedBean<FeatureListProvider<T>>, FeatureList<T>,OperationFailedException> {
 
 	private SharedFeatureSet<T> sharedFeatureSet;
 	private SharedFeaturesInitParams so;
@@ -56,13 +56,12 @@ class FeatureBridge<T extends FeatureInput> implements IObjectBridge<NamedBean<F
 	}
 
 	@Override
-	public FeatureList<T> bridgeElement(NamedBean<FeatureListProvider<T>> sourceObject)
-			throws BridgeElementException {
+	public FeatureList<T> bridgeElement(NamedBean<FeatureListProvider<T>> sourceObject)	throws OperationFailedException {
 
 		try {
 			sourceObject.getValue().initRecursive(so,logger);
 		} catch (InitException e1) {
-			throw new BridgeElementException(e1);
+			throw new OperationFailedException(e1);
 		}
 		
 		try {
@@ -72,7 +71,7 @@ class FeatureBridge<T extends FeatureInput> implements IObjectBridge<NamedBean<F
 				
 			return fl;
 		} catch (CreateException e) {
-			throw new BridgeElementException(e);
+			throw new OperationFailedException(e);
 		}
 	}
 

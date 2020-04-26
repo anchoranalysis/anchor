@@ -32,9 +32,10 @@ package org.anchoranalysis.core.cache;
  * @author Owen Feehan
  *
  * @param <R> result-type
+ * @param <E> exception that is thrown if something goes wrong
  */
 @FunctionalInterface
-public interface Operation<R> {
+public interface Operation<R,E extends Throwable> {
 
-	R doOperation() throws ExecuteException;
+	R doOperation() throws E;
 }

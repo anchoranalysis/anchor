@@ -32,18 +32,20 @@ import java.util.function.Supplier;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class OperationOutFilePath extends CachedOperation<Path> {
+public class OperationOutFilePath extends CachedOperation<Path,AnchorIOException> {
 
 	private NamedBean<FilePathGenerator> ni;
 	private Supplier<Path> path;
 	private boolean debugMode;
 			
-	public OperationOutFilePath(NamedBean<FilePathGenerator> ni,
-			Supplier<Path> path, boolean debugMode) {
+	public OperationOutFilePath(
+		NamedBean<FilePathGenerator> ni,
+		Supplier<Path> path,
+		boolean debugMode
+	) {
 		super();
 		this.ni = ni;
 		this.path = path;
@@ -51,12 +53,7 @@ public class OperationOutFilePath extends CachedOperation<Path> {
 	}
 
 	@Override
-	protected Path execute() throws ExecuteException {
-		try {
-			return ni.getValue().outFilePath( path.get(), debugMode );
-		} catch (AnchorIOException e) {
-			throw new ExecuteException(e);
-		}
+	protected Path execute() throws AnchorIOException {
+		return ni.getValue().outFilePath( path.get(), debugMode );
 	}
-	
 }

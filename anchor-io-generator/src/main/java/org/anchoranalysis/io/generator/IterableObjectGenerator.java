@@ -28,14 +28,21 @@ package org.anchoranalysis.io.generator;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 
-public interface IterableObjectGenerator<IterationType,GeneratedType> extends IterableGenerator<IterationType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> iteration-type
+ * @param <S> generated-type
+ */
+public interface IterableObjectGenerator<T,S> extends IterableGenerator<T> {
 
 	@Override
-	IterationType getIterableElement();
+	T getIterableElement();
 
 	@Override
-	void setIterableElement(IterationType element) throws SetOperationFailedException;
+	void setIterableElement(T element) throws SetOperationFailedException;
 	
 	@Override
-	ObjectGenerator<GeneratedType> getGenerator();
+	ObjectGenerator<S> getGenerator();
 }

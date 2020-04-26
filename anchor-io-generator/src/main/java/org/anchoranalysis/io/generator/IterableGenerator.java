@@ -29,6 +29,14 @@ package org.anchoranalysis.io.generator;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+
+/**
+ * A generator that can be iterated over by changing elements
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> iteration-type
+ */
 public interface IterableGenerator<T> {
 
 	T getIterableElement();

@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name.store.cachedgetter;
 
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
+
 /*-
  * #%L
  * anchor-core
@@ -26,7 +28,6 @@ package org.anchoranalysis.core.name.store.cachedgetter;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.apache.commons.lang.StringUtils;
@@ -41,19 +42,20 @@ import org.apache.commons.lang.StringUtils;
  * @author owen
  *
  * @param <T>
+ * @param <E> exception thrown by operation
  */
-public class ProfiledCachedGetter<T> extends CachedGetter<T> {
+public class ProfiledCachedGetter<T, E extends Throwable> extends WrapOperationAsCached<T,E> {
 
 	private String name;
 	private String storeDisplayName;
 	private LogErrorReporter logErrorReporter;
 	
-	private static MeasuringSemaphoreExecutor semaphore = new MeasuringSemaphoreExecutor();
+	private static MeasuringSemaphoreExecutor<Throwable> semaphore = new MeasuringSemaphoreExecutor<>();
 	
 	private static final int STORE_DISPLAY_NAME_LENGTH = 30;
 	private static final int NAME_LENGTH = 30;
 	
-	public ProfiledCachedGetter(Operation<T> getter, String name, String storeDisplayName, LogErrorReporter logErrorReporter) {
+	public ProfiledCachedGetter(Operation<T,E> getter, String name, String storeDisplayName, LogErrorReporter logErrorReporter) {
 		super(getter);
 		this.logErrorReporter = logErrorReporter;
 		
@@ -62,9 +64,12 @@ public class ProfiledCachedGetter<T> extends CachedGetter<T> {
 		this.storeDisplayName = StringUtils.rightPad( storeDisplayName, STORE_DISPLAY_NAME_LENGTH );
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	protected T execute() throws ExecuteException {
-		return semaphore.execute(
+	protected T execute() throws E {
+		// As a hack, we assume the exception type is always the same between calls to ProfiledCachedGetter
+		// This may not be valid in practice. TODO consider an alternative means to profile.
+		return ((MeasuringSemaphoreExecutor<E>) semaphore).execute(
 			() -> super.execute(),
 			name,
 			storeDisplayName,

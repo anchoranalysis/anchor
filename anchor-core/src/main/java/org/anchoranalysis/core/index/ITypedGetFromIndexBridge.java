@@ -1,6 +1,6 @@
 package org.anchoranalysis.core.index;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -34,27 +34,28 @@ import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
  * 
  * @author Owen Feehan
  *
- * @param <E> external-type
+ * @param <S> external-type
  * @param <H> hidden-type
+ * @param <E> exception thrown if soemthing goes wrong
  */
-public class ITypedGetFromIndexBridge<E,H> implements ITypedGetFromIndex<E> {
+public class ITypedGetFromIndexBridge<S,H> implements ITypedGetFromIndex<S> {
 
 	private ITypedGetFromIndex<H> delegate;
 
-	private IObjectBridgeIndex<H,E> bridge;
+	private IObjectBridgeIndex<H,S,? extends Throwable> bridge;
 	
 	public ITypedGetFromIndexBridge(ITypedGetFromIndex<H> delegate,
-			IObjectBridgeIndex<H,E> bridge) {
+			IObjectBridgeIndex<H,S,? extends Throwable> bridge) {
 		super();
 		this.delegate = delegate;
 		this.bridge = bridge;
 	}
 
 	@Override
-	public E get(int index) throws GetOperationFailedException {
+	public S get(int index) throws GetOperationFailedException {
 		try {
 			return bridge.bridgeElement( index, delegate.get(index) );
-		} catch (BridgeElementException e) {
+		} catch (Throwable e) {
 			throw new GetOperationFailedException(e);
 		}
 	}

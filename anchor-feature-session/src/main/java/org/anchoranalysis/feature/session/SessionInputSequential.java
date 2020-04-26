@@ -2,12 +2,11 @@ package org.anchoranalysis.feature.session;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -86,22 +85,13 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 	
 	@Override
-	public <S> S calc(CacheableCalculation<S,T> cc) throws FeatureCalcException {
-		try {
-			return resolver().search(cc).getOrCalculate(input);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+	public <S> S calc(FeatureCalculation<S,T> cc) throws FeatureCalcException {
+		return resolver().search(cc).getOrCalculate(input);
 	}
 	
 	@Override
 	public <S> S calc(ResolvedCalculation<S,T> cc) throws FeatureCalcException {
-		try {
-			// No need to search as it's already resolved
-			return cc.getOrCalculate(input);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}			
+		return cc.getOrCalculate(input);
 	}
 	
 	@Override
@@ -119,7 +109,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 		
 	@Override
-	public <S extends FeatureInput> double calcChild(Feature<S> feature, CacheableCalculation<S,T> cc, String childCacheName) throws FeatureCalcException {
+	public <S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> cc, String childCacheName) throws FeatureCalcException {
 		return calcChild(
 			feature,
 			calc(cc),

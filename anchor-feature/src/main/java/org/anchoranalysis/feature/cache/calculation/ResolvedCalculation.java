@@ -1,6 +1,6 @@
 package org.anchoranalysis.feature.cache.calculation;
 
-import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -12,17 +12,18 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <S> result-type of the calculation
  * @param <T> feature input-type
+ * @param <E> exception that is thrown if something goes wrong during calculation
  */
 public class ResolvedCalculation<S, T extends FeatureInput> {
 
-	private CacheableCalculation<S, T> calc;
+	private CacheableCalculation<S, T, FeatureCalcException> calc;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param calc the cacheable-calculation that is now considered resolved
 	 */
-	public ResolvedCalculation(CacheableCalculation<S, T> calc) {
+	public ResolvedCalculation(CacheableCalculation<S, T, FeatureCalcException> calc) {
 		super();
 		this.calc = calc;
 	}
@@ -35,7 +36,7 @@ public class ResolvedCalculation<S, T extends FeatureInput> {
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public S getOrCalculate( T input) throws ExecuteException {
+	public S getOrCalculate( T input) throws FeatureCalcException {
 		return calc.getOrCalculate(input);
 	}
 	

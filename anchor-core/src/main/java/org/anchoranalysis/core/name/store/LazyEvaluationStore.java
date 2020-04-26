@@ -31,13 +31,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
 import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 
 /**
@@ -45,11 +44,11 @@ import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
  * 
  * @author Owen Feehan
  *
- * @param <T> item-type in store
+ * @param <T> item-type in the store
  */
 public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 
-	private HashMap<String,CachedGetter<T>> map = new HashMap<>();
+	private HashMap<String,	WrapOperationAsCached<T,OperationFailedException>> map = new HashMap<>();
 	
 	private LogErrorReporter logErrorReporter;
 	private String storeDisplayName;
@@ -64,7 +63,7 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 	public T getException(String key) throws NamedProviderGetException {
 		
 		try {
-			CachedGetter<T> cachedGetter = map.get(key);
+			WrapOperationAsCached<T,OperationFailedException> cachedGetter = map.get(key);
 			
 			if (cachedGetter==null) {
 				throw new GetOperationFailedException(
@@ -73,9 +72,7 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 			}
 			
 			return cachedGetter.doOperation();
-		} catch (ExecuteException e) {
-			throw createExceptionForKey(key, e.getCause());
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw createExceptionForKey(key, e);
 		}
 	}
@@ -98,9 +95,11 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 	}
 	
 	@Override
-	public void add(String name, Operation<T> getter)
-			throws OperationFailedException {
-		map.put(name, new ProfiledCachedGetter<>(getter,name,storeDisplayName,logErrorReporter) );
+	public void add(String name, Operation<T,OperationFailedException> getter) throws OperationFailedException {
+		map.put(
+			name,
+			new ProfiledCachedGetter<>(getter,name,storeDisplayName,logErrorReporter)
+		);
 		
 	}
 
@@ -109,15 +108,15 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 		
 		
 		try {
-			CachedGetter<T> cachedGetter = map.get(key);
+			WrapOperationAsCached<T,OperationFailedException> cachedGetter = map.get(key);
 			
 			if (cachedGetter==null) {
 				return null;
 			}
 			
 			return cachedGetter.doOperation();
-		} catch (ExecuteException e) {
-			throw createExceptionForKey(key, e.getCause());
+		} catch (Throwable e) {
+			throw createExceptionForKey(key, e);
 		}
 	}
 	

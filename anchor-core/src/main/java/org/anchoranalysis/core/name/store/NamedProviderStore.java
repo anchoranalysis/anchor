@@ -42,5 +42,5 @@ import org.anchoranalysis.core.name.provider.INamedProvider;
  */
 public abstract class NamedProviderStore<T> implements INamedProvider<T> {
 
-	public abstract void add( String name, Operation<T> getter ) throws OperationFailedException;
+	public abstract void add( String name, Operation<T,OperationFailedException> getter ) throws OperationFailedException;
 }

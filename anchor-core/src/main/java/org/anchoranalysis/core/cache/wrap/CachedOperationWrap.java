@@ -27,19 +27,18 @@ package org.anchoranalysis.core.cache.wrap;
  */
 
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 
-public class CachedOperationWrap<R> extends CachedOperation<R> {
+public class CachedOperationWrap<R, E extends Throwable> extends CachedOperation<R,E> {
 
-	private WrapFunctional<R> delegate;
+	private WrapFunctional<R,E> delegate;
 	
-	public <S> CachedOperationWrap(WrapFunctional<R> delegate) {
+	public <S> CachedOperationWrap(WrapFunctional<R,E> delegate) {
 		super();
 		this.delegate = delegate;
 	}
 	
 	@Override
-	protected R execute() throws ExecuteException {
+	protected R execute() throws E {
 		return delegate.apply();
 	}
 

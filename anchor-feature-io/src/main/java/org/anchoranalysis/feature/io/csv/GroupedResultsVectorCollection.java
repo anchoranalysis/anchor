@@ -31,9 +31,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.collection.TreeMapCreate;
+import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
@@ -75,17 +74,9 @@ public class GroupedResultsVectorCollection {
 	/**
 	 * A map between the name of groups, to a collection of results for each-group
 	 */
-	private TreeMapCreate<MultiName,ResultsVectorCollection> groupMap = new TreeMapCreate<MultiName,ResultsVectorCollection>( new OperationCreateEmptyResults() );
-	
-	private static class OperationCreateEmptyResults implements Operation<ResultsVectorCollection> {
-
-		@Override
-		public ResultsVectorCollection doOperation() throws ExecuteException {
-			return new ResultsVectorCollection();
-		}
-		
-	}
-	
+	private TreeMapCreate<MultiName,ResultsVectorCollection,AnchorNeverOccursException> groupMap = new TreeMapCreate<>(
+		() -> new ResultsVectorCollection()
+	);
 	
 	/**
 	 * This constructor will include two group names in the outputting CSV file, but NO id column

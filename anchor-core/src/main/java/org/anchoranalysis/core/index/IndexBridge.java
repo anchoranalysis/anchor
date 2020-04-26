@@ -1,6 +1,6 @@
 package org.anchoranalysis.core.index;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -30,7 +30,7 @@ import org.anchoranalysis.core.bridge.BridgeElementException;
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
 
-public class IndexBridge<T> implements IObjectBridge<Integer, T> {
+public class IndexBridge<T> implements IObjectBridge<Integer,T,GetOperationFailedException> {
 	
 	private ITypedGetFromIndex<T> cntr;
 	
@@ -40,12 +40,8 @@ public class IndexBridge<T> implements IObjectBridge<Integer, T> {
 	}
 
 	@Override
-	public T bridgeElement(Integer sourceObject) throws BridgeElementException {
-		try {
-			return cntr.get( sourceObject);
-		} catch (GetOperationFailedException e) {
-			throw new BridgeElementException(e);
-		}
+	public T bridgeElement(Integer sourceObject) throws GetOperationFailedException {
+		return cntr.get( sourceObject);
 	}
 
 	// Updates the cntr associated with the bridge

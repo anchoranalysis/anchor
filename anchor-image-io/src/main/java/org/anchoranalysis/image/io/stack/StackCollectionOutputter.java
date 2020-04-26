@@ -31,11 +31,13 @@ import java.nio.file.Path;
 
 import java.util.Set;
 
+import org.anchoranalysis.core.cache.WrapOperationWithProgressReporterAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
-import org.anchoranalysis.core.name.provider.OperationFromNamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -109,13 +111,16 @@ public class StackCollectionOutputter {
 		for ( String name : stackCollection.keys() ) {
 			
 			if (oa.isOutputAllowed(name)) {
-				out.addImageStack(name, new OperationFromNamedProvider<Stack>(stackCollection, name) );
+				out.addImageStack(
+					name,
+					extractStackCached(stackCollection, name)
+				);
 			}
 		}
 		
 		return out;
 	}
-	
+		
 	public static void copyFrom(
 		NamedChnlCollectionForSeries src,
 		NamedImgStackCollection target,
@@ -141,7 +146,19 @@ public class StackCollectionOutputter {
 			throw new OperationFailedException(e);
 		}
 	}
-		
+
+	private static OperationWithProgressReporter<Stack,OperationFailedException> extractStackCached(INamedProvider<Stack> stackCollection, String name) {
+		return new WrapOperationWithProgressReporterAsCached<>(
+			() -> {
+				try {
+					return stackCollection.getException(name);
+				} catch (NamedProviderGetException e) {
+					throw new OperationFailedException(e);
+				}
+			} 
+		);
+	}
+	
 	private static StackGenerator createStackGenerator() {
 		String manifestFunction = "stackFromCollection";
 		return new StackGenerator(

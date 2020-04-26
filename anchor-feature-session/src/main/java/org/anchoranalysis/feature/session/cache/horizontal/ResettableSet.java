@@ -30,7 +30,6 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.cache.calculation.ResettableCalculation;
 
@@ -89,18 +88,6 @@ class ResettableSet<T extends ResettableCalculation> {
 	public void invalidate() {
 		for (T cachedCalculation : map.values()) {
 			cachedCalculation.invalidate();
-		}
-	}
-	
-	public void assignResult( ResettableSet<T> list ) throws OperationFailedException {
-		
-		for( T key : list.map.keySet() ) {
-			
-			// We find our existing key, and we transfer. If we don't have an existing key, we ignore
-			T existing = map.get(key);
-			if (existing!=null) {
-				existing.assignResult(key);  // As the key is guaranteed to be the same as the ite
-			}
 		}
 	}
 	

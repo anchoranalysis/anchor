@@ -40,7 +40,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -171,12 +170,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	@Override
 	public void add(MemoForIndex marksExisting, PxlMarkMemo newMark) throws UpdateMarkSetException {
-		
-		try {
-			rmvPntsInMark( newMark );
-		} catch (ExecuteException e) {
-			throw new UpdateMarkSetException(e);
-		}						
+		rmvPntsInMark( newMark );
 	}
 	
 	private void rmvPnt( Point3i crntExtntPnt,  Point3i crnrPnt ) {
@@ -190,7 +184,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	}
 	
 
-	public void rmvPntsInMark(PxlMarkMemo newMark) throws ExecuteException {
+	public void rmvPntsInMark(PxlMarkMemo newMark) {
 		
 		// We add any points in our new mark to the set
 		PxlMark pxlMark = newMark.doOperation();
@@ -224,18 +218,14 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	@Override
 	public void exchange(MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark,
-			int indexOldMark, PxlMarkMemo newMark) throws UpdateMarkSetException {
+			int indexOldMark, PxlMarkMemo newMark) {
 		
-		try {
-			addPntsInMark( pxlMarkMemoList, oldMark );
-			rmvPntsInMark( newMark );
-		} catch (ExecuteException e) {
-			throw new UpdateMarkSetException(e);
-		}
+		addPntsInMark( pxlMarkMemoList, oldMark );
+		rmvPntsInMark( newMark );
 	}
 	
 	
-	public void addPntsInMark(MemoForIndex marksExisting, PxlMarkMemo markToAdd) throws ExecuteException {
+	public void addPntsInMark(MemoForIndex marksExisting, PxlMarkMemo markToAdd) {
 		// We add any points in our new mark to the set, but only if there's not already a neighbour covering them
 		
 		// So our first step is to identify any overlapping marks
@@ -289,7 +279,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 
-	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) throws ExecuteException {
+	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) {
 		
 		ArrayList<PxlMarkMemo> list = new ArrayList<>();
 			
@@ -326,11 +316,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	@Override
 	public void rmv(MemoForIndex marksExisting, PxlMarkMemo mark) throws UpdateMarkSetException {
-		try {
-			addPntsInMark(marksExisting, mark);
-		} catch (ExecuteException e) {
-			throw new UpdateMarkSetException(e);
-		}						
+		addPntsInMark(marksExisting, mark);
 	}
 
 	@Override

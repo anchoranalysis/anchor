@@ -27,13 +27,12 @@ package org.anchoranalysis.image.feature.objmask;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateNumVoxels extends CacheableCalculation<Double,FeatureInputSingleObj> {
+public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSingleObj> {
 
 	private boolean mip=false;
 	
@@ -52,7 +51,7 @@ public class CalculateNumVoxels extends CacheableCalculation<Double,FeatureInput
 	
 
 	@Override
-	protected Double execute(FeatureInputSingleObj params) throws ExecuteException {
+	protected Double execute(FeatureInputSingleObj params) {
 		return calc( params.getObjMask(), mip );
 	}
 	

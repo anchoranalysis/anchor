@@ -27,7 +27,7 @@ package org.anchoranalysis.annotation.io.input;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
-class OperationCreateStackCollection extends CachedOperationWithProgressReporter<INamedProvider<Stack>> {
+class OperationCreateStackCollection extends CachedOperationWithProgressReporter<INamedProvider<Stack>,CreateException> {
 
 	private ProvidesStackInput inputObject;
 	private int seriesNum;
@@ -55,11 +55,11 @@ class OperationCreateStackCollection extends CachedOperationWithProgressReporter
 	}
 
 	@Override
-	protected NamedImgStackCollection execute( ProgressReporter progressReporter ) throws ExecuteException {
+	protected NamedImgStackCollection execute( ProgressReporter progressReporter ) throws CreateException {
 		try {
 			return doOperationWithException( progressReporter );
 		} catch (OperationFailedException e) {
-			throw new ExecuteException(e);
+			throw new CreateException(e);
 		}
 	}
 	

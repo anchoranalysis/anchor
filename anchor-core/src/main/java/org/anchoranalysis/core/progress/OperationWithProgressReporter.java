@@ -27,16 +27,17 @@ package org.anchoranalysis.core.progress;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
+
 
 /**
  * 
  * @author Owen Feehan
  *
  * @param <R> result-type
+ * @param <E> exception throw if operation fails
  */
 @FunctionalInterface
-public interface OperationWithProgressReporter<R> {
+public interface OperationWithProgressReporter<R, E extends Throwable> {
 
-	R doOperation( ProgressReporter progressReporter ) throws ExecuteException;
+	R doOperation( ProgressReporter progressReporter ) throws E;
 }

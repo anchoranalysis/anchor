@@ -29,7 +29,7 @@ package org.anchoranalysis.core.cache;
 
 
 
-public class IdentityOperation<T> implements Operation<T> {
+public class IdentityOperation<T,E extends Throwable> implements Operation<T,E> {
 
 	private T obj;
 			
@@ -39,7 +39,7 @@ public class IdentityOperation<T> implements Operation<T> {
 	}
 
 	@Override
-	public T doOperation() throws ExecuteException {
+	public T doOperation() throws E {
 		return obj;
 	}
 	

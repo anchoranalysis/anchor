@@ -37,7 +37,10 @@ public class BackgroundCreator {
 	private BackgroundCreator() {
 	}
 	
-	public static DisplayStack createBackground( NamedProviderStore<Stack> stackCollection, String backgroundStackName ) throws CreateException {
+	public static DisplayStack createBackground(
+		NamedProviderStore<Stack> stackCollection,
+		String backgroundStackName
+	) throws CreateException {
 		try {
 			return DisplayStack.create(
 				stackCollection.getException( backgroundStackName )

@@ -110,18 +110,6 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements IGeneratorSeque
 		} catch (SetOperationFailedException e) {
 			throw new OutputWriteFailedException(e);
 		}
-			
-		/*try {
-			
-			
-			//this.subFolderOutputManager.write( outputNameStyle, iterableGenerator.getGenerator(), iter++ );
-			//this.subFolderOutputManager.write( outputNameStyle, iterableGenerator.getGenerator(), index );
-			
-			
-			
-		} catch (IOException e) {
-			throw new GeneralException(e);
-		}*/
 	}
 
 	@Override

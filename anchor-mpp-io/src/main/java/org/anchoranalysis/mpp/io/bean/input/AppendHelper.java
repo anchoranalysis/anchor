@@ -33,8 +33,8 @@ import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.wrap.CachedOperationWrap;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -43,28 +43,38 @@ import org.anchoranalysis.image.io.objs.ObjMaskCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 import org.anchoranalysis.core.params.KeyValueParams;
 
 class AppendHelper {
-
+	
+	/** Reads an object from a path */
+	@FunctionalInterface
+	private interface ReadFromPath<T> {
+		T apply(Path in) throws Exception;
+	}
 	
 	// We assume all the input files are single channel images
 	public static void appendStack(
 		List<NamedBean<FilePathGenerator>> listAppendStack,
 		final MultiInput inputObject,
 		boolean debugMode,
-		RasterReader rasterReader
+		final RasterReader rasterReader
 	) {
-		
 		append(
 			inputObject,				
 			listAppendStack,
-			in -> in.stack(),
-			outPath -> openRaster(outPath, rasterReader),
+			MultiInput::stack,
+			outPath -> {
+				try {
+					return openRaster(outPath, rasterReader);
+				} catch (RasterIOException e) {
+					throw new OperationFailedException(e);
+				}
+			},
 			debugMode
 		);
 	}
@@ -78,14 +88,8 @@ class AppendHelper {
 		append(
 			inputObject,				
 			list,
-			in -> in.histogram(),
-			outPath -> {
-				try {
-					return HistogramCSVReader.readHistogramFromFile( outPath );
-				} catch (IOException e) {
-					throw new ExecuteException(e);
-				}
-			},
+			MultiInput::histogram,
+			outPath -> HistogramCSVReader.readHistogramFromFile( outPath ),
 			debugMode
 		);
 	}
@@ -100,7 +104,7 @@ class AppendHelper {
 		append(
 			inputObject,				
 			list,
-			in -> in.filePath(),
+			MultiInput::filePath,
 			outPath -> outPath,
 			debugMode
 		);
@@ -117,14 +121,8 @@ class AppendHelper {
 		append(
 			inputObject,				
 			list,
-			in -> in.keyValueParams(),
-			outPath -> {
-				try {
-					return KeyValueParams.readFromFile(outPath);
-				} catch (IOException e) {
-					throw new ExecuteException(e);
-				}
-			},
+			MultiInput::keyValueParams,
+			outPath -> KeyValueParams.readFromFile(outPath),
 			debugMode
 		);
 	}
@@ -138,7 +136,7 @@ class AppendHelper {
 		append(
 			inputObject,				
 			listAppendCfg,
-			in -> in.cfg(),
+			MultiInput::cfg,
 			outPath -> DeserializerHelper.deserializeCfg( outPath ),
 			debugMode
 		);
@@ -155,7 +153,7 @@ class AppendHelper {
 		append(
 			inputObject,				
 			listAppendCfgFromAnnotation,
-			in -> in.cfg(),
+			MultiInput::cfg,
 			outPath -> DeserializerHelper.deserializeCfgFromAnnotation(
 				outPath,
 				includeAccepted,
@@ -173,23 +171,11 @@ class AppendHelper {
 		append(
 			inputObject,
 			listAppendCfg,
-			in -> in.objs(),
-			outPath -> {
-				try {
-					return ObjMaskCollectionReader.createFromPath(outPath);
-				} catch (DeserializationFailedException e) {
-					throw new ExecuteException(e);
-				}
-			},
+			MultiInput::objs,
+			outPath -> ObjMaskCollectionReader.createFromPath(outPath),
 			debugMode
 		);
 	}
-	
-	@FunctionalInterface
-	private interface ConvertFromPath<T> {
-		T apply(Path in) throws ExecuteException;
-	}
-	
 
 	/**
 	 * Appends new items to a particular OperationMap associated with the MultiInput
@@ -198,7 +184,7 @@ class AppendHelper {
 	 * @param inputObject the input-object
 	 * @param list file-generations to read paths from 
 	 * @param extractMap extracts an OperationMap from inputObject
-	 * @param convertFunc converts from func(Path) to func(T)
+	 * @param reader converts from a path to the object of interest
 	 * @param debugMode
 	 * @throws IOException
 	 */
@@ -206,38 +192,48 @@ class AppendHelper {
 		MultiInput inputObject,			
 		List<NamedBean<FilePathGenerator>> list,
 		Function<MultiInput,MultiInputSubMap<T>> extractMap,
-		ConvertFromPath<T> convertFunc,
+		ReadFromPath<T> reader,
 		boolean debugMode
 	) {
 		
 		for( NamedBean<FilePathGenerator> ni : list) {
 			
-			// Delayed-calculation of the appending path as it can be a bit expensive when multiplied by so many items
-			CachedOperation<Path> outPath = new OperationOutFilePath(
-				ni,
-				()->inputObject.pathForBinding(),
-				debugMode
-			);
-			
 			MultiInputSubMap<T> map = extractMap.apply(inputObject);
 			
 			map.add(
 				ni.getName(),
-				new CachedOperationWrap<>(
-					() -> convertFunc.apply(outPath.doOperation())
+				new CachedOperationWrap<T,OperationFailedException>(
+					() -> readObjectForAppend(inputObject, reader, ni, debugMode)
 				)
 			);
 		}
 	}
 	
-	
-	private static TimeSequence openRaster( Path path, RasterReader rasterReader ) throws ExecuteException {
+	private static <T> T readObjectForAppend(
+		MultiInput inputObject,
+		ReadFromPath<T> reader,
+		NamedBean<FilePathGenerator> ni,
+		boolean debugMode
+	) throws OperationFailedException {
+		// Delayed-calculation of the appending path as it can be a bit expensive when multiplied by so many items
+		CachedOperation<Path, AnchorIOException> outPath = new OperationOutFilePath(
+			ni,
+			()->inputObject.pathForBinding(),
+			debugMode
+		);						
+		
 		try {
-			try (OpenedRaster or = rasterReader.openFile( path )) {
-				return or.open(0, ProgressReporterNull.get() );
-			}
-		} catch (RasterIOException e) {
-			throw new ExecuteException(e);
+			return reader.apply(
+				outPath.doOperation()
+			);
+		} catch (Exception e) {
+			throw new OperationFailedException(e);
+		}
+	}
+		
+	private static TimeSequence openRaster( Path path, RasterReader rasterReader ) throws RasterIOException {
+		try (OpenedRaster or = rasterReader.openFile( path )) {
+			return or.open(0, ProgressReporterNull.get() );
 		}
 	}
 }

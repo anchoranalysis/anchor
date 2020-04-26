@@ -78,8 +78,12 @@ public class MultiInput extends ProvidesStackInput {
 
 
 	@Override
-	public void addToStoreWithName(String name,
-			NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
+	public void addToStoreWithName(
+		String name,
+		NamedProviderStore<TimeSequence> stackCollection,
+		int seriesNum,
+		ProgressReporter progressReporter
+	) throws OperationFailedException {
 		throw new OperationFailedException("Not supported");
 	}
 	
@@ -87,7 +91,9 @@ public class MultiInput extends ProvidesStackInput {
 	public void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage ) throws OperationFailedException {
 		
 		cfg().addToStore( soMPP.getCfgCollection() );
-		stack().addToStore( new WrapStackAsTimeSequenceStore(soImage.getStackCollection()) );
+		stack().addToStore(
+			new WrapStackAsTimeSequenceStore(soImage.getStackCollection())
+		);
 		objs().addToStore( soImage.getObjMaskCollection() );
 		keyValueParams().addToStore( soImage.getParams().getNamedKeyValueParamsCollection() );
 		filePath().addToStore( soImage.getParams().getNamedFilePathCollection() );

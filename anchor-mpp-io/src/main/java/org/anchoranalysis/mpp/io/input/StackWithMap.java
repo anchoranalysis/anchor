@@ -71,7 +71,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
 	}
 	
 	@Override
-	public void add(String name, Operation<TimeSequence> op) {
+	public void add(String name, Operation<TimeSequence,OperationFailedException> op) {
 		map.add( name, op );
 	}
 	
@@ -97,7 +97,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
 	}
 
 	@Override
-	public Operation<TimeSequence> get(String name) throws OperationFailedException {
+	public Operation<TimeSequence,OperationFailedException> get(String name) throws OperationFailedException {
 		
 		if (name.equals(mainObjectName)) {
 			throw new OperationFailedException("Retrieving the main-object name is not allowed");
@@ -105,4 +105,5 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
 		
 		return map.get(name);
 	}
+
 }

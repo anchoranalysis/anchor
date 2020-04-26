@@ -66,7 +66,7 @@ public class CheckIfAllowed extends Writer {
 
 	@Override
 	public void writeSubfolder(String outputName,
-			Operation<? extends WritableItem> collectionGenerator)
+			Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator)
 			throws OutputWriteFailedException {
 		
 		if (!bom.isOutputAllowed(outputName)) return;
@@ -78,7 +78,7 @@ public class CheckIfAllowed extends Writer {
 
 	@Override
 	public int write(IndexableOutputNameStyle outputNameStyle,
-			Operation<? extends WritableItem> generator, String index)
+			Operation<? extends WritableItem,OutputWriteFailedException> generator, String index)
 			throws OutputWriteFailedException {
 		
 		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return -1;
@@ -89,7 +89,7 @@ public class CheckIfAllowed extends Writer {
 	}
 
 	@Override
-	public void write(OutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator)
+	public void write(OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator)
 			throws OutputWriteFailedException {
 
 		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return;
@@ -115,4 +115,6 @@ public class CheckIfAllowed extends Writer {
 	public OutputWriteSettings getOutputWriteSettings() {
 		return bom.getOutputWriteSettings();
 	}
+
+
 }

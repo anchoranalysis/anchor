@@ -28,20 +28,25 @@ package org.anchoranalysis.core.bridge;
 
 /**
  * Glues two object bridges together so that a bridge A->B and a bridge B->C becomes bridge A->C
+ * 
+ * @param <A> source-type
+ * @param <B> intermediate-type
+ * @param <C> destination-type
+ * @param <E> exception throw if something goes wrong
  */
-public class ObjectBridgeGlue<A,B,C> implements IObjectBridge<A, C> {
+public class ObjectBridgeGlue<A,B,C,E extends Throwable> implements IObjectBridge<A,C,E> {
 
-	private IObjectBridge<A,B> bridge1;
-	private IObjectBridge<B,C> bridge2;
+	private IObjectBridge<A,B,E> bridge1;
+	private IObjectBridge<B,C,E> bridge2;
 	
-	public ObjectBridgeGlue(IObjectBridge<A, B> bridge1, IObjectBridge<B, C> bridge2) {
+	public ObjectBridgeGlue(IObjectBridge<A,B,E> bridge1, IObjectBridge<B,C,E> bridge2) {
 		super();
 		this.bridge1 = bridge1;
 		this.bridge2 = bridge2;
 	}
 
 	@Override
-	public C bridgeElement(A sourceObject) throws BridgeElementException {
+	public C bridgeElement(A sourceObject) throws E {
 		B objTemp = bridge1.bridgeElement(sourceObject);
 		return bridge2.bridgeElement(objTemp);
 	}

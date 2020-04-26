@@ -31,11 +31,11 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.overlay.OverlayedInstantState;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
+import org.anchoranalysis.core.error.OperationFailedException;
 
 // Bridges CfgNRGInstantState to OverlayedInstantState
-public class CfgNRGInstantStateBridge implements IObjectBridge<CfgNRGInstantState, OverlayedInstantState> {
+public class CfgNRGInstantStateBridge implements IObjectBridge<CfgNRGInstantState, OverlayedInstantState, OperationFailedException> {
 
 	private RegionMembershipWithFlags regionMembership;
 		
@@ -45,10 +45,10 @@ public class CfgNRGInstantStateBridge implements IObjectBridge<CfgNRGInstantStat
 	}
 
 	@Override
-	public OverlayedInstantState bridgeElement(CfgNRGInstantState sourceObject) throws BridgeElementException {
+	public OverlayedInstantState bridgeElement(CfgNRGInstantState sourceObject) throws OperationFailedException {
 		
 		if (sourceObject==null) {
-			throw new BridgeElementException("The sourceObject is null. Invalid index");
+			throw new OperationFailedException("The sourceObject is null. Invalid index");
 		}
 		
 		if (sourceObject.getCfgNRG()==null) {

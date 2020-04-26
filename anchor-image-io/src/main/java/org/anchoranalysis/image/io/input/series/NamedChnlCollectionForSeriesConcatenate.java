@@ -34,9 +34,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -157,31 +156,30 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 
 	@Override
-	public Operation<Stack> allChnlsAsStack(int t) throws OperationFailedException {
-		return new CachedOperation<Stack>() {
-
-			@Override
-			protected Stack execute() throws ExecuteException {
-				
-				Stack out = new Stack();
-				for( NamedChnlCollectionForSeries ncc : list ) {
-					try {
-						addAllChnlsFrom(
-							ncc.allChnlsAsStack(t).doOperation(),
-							out
-						);
-					} catch (OperationFailedException | IncorrectImageSizeException e) {
-						throw new ExecuteException(e);
-					}
-				}
-				return out;
+	public Operation<Stack,OperationFailedException> allChnlsAsStack(int t) {
+		return new WrapOperationAsCached<>(
+			() -> stackAllChnls(t)	
+		);
+	}
+	
+	private Stack stackAllChnls(int t) throws OperationFailedException {
+		Stack out = new Stack();
+		for( NamedChnlCollectionForSeries ncc : list ) {
+			try {
+				addAllChnlsFrom(
+					ncc.allChnlsAsStack(t).doOperation(),
+					out
+				);
+			} catch (IncorrectImageSizeException e) {
+				throw new OperationFailedException(e);
 			}
-		};
+		}
+		return out;
 	}
 	
 	private static void addAllChnlsFrom( Stack src, Stack dest ) throws IncorrectImageSizeException {
 		for( Chnl c : src ) {
-			dest.addChnl(c);;
+			dest.addChnl(c);
 		}
 	}
 }

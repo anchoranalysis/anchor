@@ -32,12 +32,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
-public class ManifestRecorderFile extends CachedOperation<ManifestRecorder> {
+public class ManifestRecorderFile extends CachedOperation<ManifestRecorder,OperationFailedException> {
 
 	private File file;
 	private ManifestDeserializer manifestDeserializer;
@@ -51,7 +50,7 @@ public class ManifestRecorderFile extends CachedOperation<ManifestRecorder> {
 	}
 
 	@Override
-	protected ManifestRecorder execute() throws ExecuteException {
+	protected ManifestRecorder execute() throws OperationFailedException {
 
 		try {
 			//StopWatch sw = new StopWatch();
@@ -65,8 +64,8 @@ public class ManifestRecorderFile extends CachedOperation<ManifestRecorder> {
 			ManifestRecorder manifestRecorder = manifestDeserializer.deserializeManifest(file);
 			//log.info( String.format("File %s deserialization ended (%dms)", file.getPath(), ((int) (sw.getTime())) ) );
 			return manifestRecorder;
-		} catch (DeserializationFailedException | OperationFailedException e) {
-			throw new ExecuteException(e);
+		} catch (DeserializationFailedException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package org.anchoranalysis.feature.cache.calculation;
 
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 
@@ -22,7 +23,7 @@ public interface CalculationResolver<T extends FeatureInput> {
 	 * @param cc the cached-calculation to find an equivalent for
 	 * @return
 	 */
-	<S> ResolvedCalculation<S,T> search( CacheableCalculation<S,T> cc );
+	<S> ResolvedCalculation<S,T> search( FeatureCalculation<S,T> cc );
 
 	
 	/**
@@ -33,5 +34,5 @@ public interface CalculationResolver<T extends FeatureInput> {
 	 * @param cc the cached-calculation map to find an equivalent for
 	 * @return
 	 */
-	<S,U> ResolvedCalculationMap<S,T,U> search( CacheableCalculationMap<S,T,U> cc );
+	<S,U> ResolvedCalculationMap<S,T,U> search( CacheableCalculationMap<S,T,U,FeatureCalcException> cc );
 }

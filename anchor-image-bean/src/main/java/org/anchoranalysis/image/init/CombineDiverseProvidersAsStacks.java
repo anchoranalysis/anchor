@@ -30,8 +30,8 @@ package org.anchoranalysis.image.init;
 import java.nio.ByteBuffer;
 import java.util.Set;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
+import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
@@ -113,20 +113,20 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 
 	// Note we expect that sourceObject is never NULL
 	
-	private static class ChnlToStackBridge implements IObjectBridge<Chnl,Stack> {
+	private static class ChnlToStackBridge implements IObjectBridge<Chnl,Stack,AnchorNeverOccursException> {
 		
 		@Override
-		public Stack bridgeElement(Chnl sourceObject) throws BridgeElementException {
+		public Stack bridgeElement(Chnl sourceObject) {
 			return new Stack( sourceObject ); 
 		}
 	}
 	
-	private static class BinaryImgChnlToStackBridge implements IObjectBridge<BinaryChnl,Stack> {
+	private static class BinaryImgChnlToStackBridge implements IObjectBridge<BinaryChnl,Stack,AnchorNeverOccursException> {
 		
 		private ChnlFactorySingleType factory = new ChnlFactoryByte();
 		
 		@Override
-		public Stack bridgeElement(	BinaryChnl sourceObject ) throws BridgeElementException {
+		public Stack bridgeElement(	BinaryChnl sourceObject ) {
 			
 			Chnl chnlNew = factory.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
 				

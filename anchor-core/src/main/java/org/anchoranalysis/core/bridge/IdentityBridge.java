@@ -26,10 +26,10 @@ package org.anchoranalysis.core.bridge;
  * #L%
  */
 
-public class IdentityBridge<T> implements IObjectBridge<T,T> {
+public class IdentityBridge<T, E extends Throwable> implements IObjectBridge<T,T,E> {
 
 	@Override
-	public T bridgeElement(T sourceObject) throws BridgeElementException {
+	public T bridgeElement(T sourceObject) throws E {
 		return sourceObject;
 	}
 

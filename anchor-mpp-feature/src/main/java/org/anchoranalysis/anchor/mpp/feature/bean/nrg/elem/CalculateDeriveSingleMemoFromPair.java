@@ -2,12 +2,11 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateDeriveSingleMemoFromPair extends CacheableCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
+public class CalculateDeriveSingleMemoFromPair extends FeatureCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
 
 	private boolean first;
 	
@@ -22,7 +21,7 @@ public class CalculateDeriveSingleMemoFromPair extends CacheableCalculation<Feat
 	}
 	
 	@Override
-	protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) throws ExecuteException {
+	protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) {
 		return new FeatureInputSingleMemo(
 			first ? input.getObj1() : input.getObj2(),
 			input.getNrgStackOptional()

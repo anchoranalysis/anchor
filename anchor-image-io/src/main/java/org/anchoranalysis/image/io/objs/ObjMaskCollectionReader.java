@@ -32,9 +32,10 @@ import static org.anchoranalysis.image.io.objs.deserialize.ObjMaskCollectionDese
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
@@ -82,20 +83,21 @@ public class ObjMaskCollectionReader {
 		// 3. Treat as a folder of TIFFs
 		return tiffCorrectMissing.deserialize(path);
 	}
-
 	
-	public static Operation<ObjMaskCollection> createFromPathCached( Operation<Path> path ) {
-		return () -> {
-			try {
-				return createFromPath(
-					path.doOperation()
-				);
-			} catch (DeserializationFailedException e) {
-				throw new ExecuteException(e);
+	public static Operation<ObjMaskCollection,OperationFailedException> createFromPathCached( Operation<Path,OperationFailedException> path ) {
+		return new WrapOperationAsCached<>(
+			() -> {
+				try {
+					return createFromPath(
+						path.doOperation()
+					);
+				} catch (DeserializationFailedException e) {
+					throw new OperationFailedException(e);
+				}
 			}
-		};
+		);
 	}
-	
+
 	public static boolean hasHdf5Extension( Path path ) {
 		return path.toString().toLowerCase().endsWith(HDF5_EXTENSION);
 	}

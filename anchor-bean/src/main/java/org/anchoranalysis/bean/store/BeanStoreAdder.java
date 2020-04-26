@@ -31,7 +31,6 @@ import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -41,9 +40,7 @@ public class BeanStoreAdder {
 	private BeanStoreAdder() {
 		
 	}
-	
-
-	
+		
 	/**
 	 * Adds an item a container (using a bridge) and explicitly specifying
 	 *   a new name
@@ -56,13 +53,16 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<S>,D> void add(
+	public static <S extends AnchorBean<S>, D> void add(
 		String name,
 		S item,
 		NamedProviderStore<D> cntr,
-		IObjectBridge<S,D> bridge
+		IObjectBridge<S,D,OperationFailedException> bridge
 	) throws OperationFailedException {
-		cntr.add( name, new CurriedObjectBridge<>(bridge, item ) );
+		cntr.add(
+			name,
+			new CurriedObjectBridge<>(bridge, item )
+		);
 	}
 
 	
@@ -80,10 +80,10 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<S>,D> void addPreserveName(
+	public static <S extends AnchorBean<S>, D> void addPreserveName(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
-		IObjectBridge<S,D> bridge
+		IObjectBridge<S,D,OperationFailedException> bridge
 	) throws OperationFailedException {
 		
 		for ( NamedBean<S> ni : listItem) {
@@ -108,23 +108,15 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<S>,D> void addPreserveNameEmbedded(
+	public static <S extends AnchorBean<S>, D, E extends Throwable> void addPreserveNameEmbedded(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
-		IObjectBridge<NamedBean<S>,D> bridge
+		IObjectBridge<NamedBean<S>, D, OperationFailedException> bridge
 	) throws OperationFailedException {
 		
-		try {
-			for ( NamedBean<S> ni : listItem) {
-				NamedBean<S> niDup = ni.duplicateBean();
-				add(niDup.getName(), niDup, cntr, bridge);
-			}
-			
-		} catch (BeanDuplicateException e) {
-			throw new OperationFailedException(e);
+		for ( NamedBean<S> ni : listItem) {
+			NamedBean<S> niDup = ni.duplicateBean();
+			add(niDup.getName(), niDup, cntr, bridge);
 		}
 	}
-	
-	
-
 }

@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.cache.calculation;
  */
 
 
-import org.anchoranalysis.core.error.OperationFailedException;
+
 
 /**
  * A calculation that be invalidated (resetted), removing any existing cached value.
@@ -45,12 +45,4 @@ public interface ResettableCalculation {
 	 *  calculation the operation, and store the value in the cache.
 	 */
 	abstract void invalidate();
-	
-	/**
-	 * Sets the executed-result of the cached-calculation to be object 
-	 * 
-	 * @param o
-	 * @return
-	 */
-	abstract void assignResult( Object savedResult ) throws OperationFailedException;
 }

@@ -26,7 +26,6 @@ package org.anchoranalysis.core.name.store.cachedgetter;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
@@ -37,14 +36,14 @@ import org.apache.commons.lang.time.StopWatch;
  * Allows for multiple simultaneous calls to execute(), measuring the total time and memory from the first starts until the last completes.
  *  
  * @author owen
- *
+ * @param E exception throw if operation fails
  */
-class MeasuringSemaphoreExecutor {
+class MeasuringSemaphoreExecutor<E extends Throwable> {
 	private int cnt = 0;
 	private long subExecTime = 0; 
 	private long subMem = 0;
 	
-	public <T> T execute(Operation<T> exec, String name, String storeDisplayName, LogErrorReporter logErrorReporter) throws ExecuteException {
+	public <T> T execute(Operation<T,E> exec, String name, String storeDisplayName, LogErrorReporter logErrorReporter) throws E {
 		cnt++;
 
 		StopWatch sw = new StopWatch();

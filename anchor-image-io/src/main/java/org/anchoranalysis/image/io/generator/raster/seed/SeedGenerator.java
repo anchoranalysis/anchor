@@ -64,7 +64,7 @@ public class SeedGenerator extends RasterGenerator {
 	}
 	
 	@Override
-	public boolean isRGB() {
+	public boolean isRGB() throws OutputWriteFailedException {
 		return delegate.isRGB();
 	}
 	

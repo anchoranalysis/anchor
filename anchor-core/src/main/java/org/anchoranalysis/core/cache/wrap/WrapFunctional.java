@@ -26,11 +26,11 @@ package org.anchoranalysis.core.cache.wrap;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
+
 
 /** A functional to be wrapped */
 @FunctionalInterface
-public interface WrapFunctional<T> {
+public interface WrapFunctional<T, E extends Throwable> {
 
-	T apply() throws ExecuteException;
+	T apply() throws E;
 }

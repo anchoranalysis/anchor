@@ -1,7 +1,7 @@
 package org.anchoranalysis.image.io.input;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
+
 
 /*
  * #%L
@@ -32,7 +32,6 @@ import org.anchoranalysis.core.cache.Operation;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.cachedgetter.CachedGetter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -78,33 +77,35 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
 	}
 	
 	@Override
-	public void addToStoreWithName(String name,
-			NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
-		// Adds the channels as a stack under the given name
-				
-			
-		// Creates a stack that combines all the channels
-		Operation<TimeSequence> op = () -> {
-			
-			// Apply it only to first time-series frame
-			try {
-				NamedChnlCollectionForSeries ncc = createChnlCollectionForSeries(seriesNum, progressReporter);
-				return new TimeSequence( ncc.allChnlsAsStack(0).doOperation() );
-				
-			} catch (OperationFailedException | RasterIOException e) {
-				throw new ExecuteException(e);
-			}
-			
-			
-		};
+	public void addToStoreWithName(
+		String name,
+		NamedProviderStore<TimeSequence> stackCollection,
+		int seriesNum,
+		ProgressReporter progressReporter
+	) throws OperationFailedException {
 		
 		// Adds this stack (cached) under the given name
-		stackCollection.add(name, new CachedGetter<>(op) );
+		stackCollection.add(
+			name,
+			new WrapOperationAsCached<>(
+				() -> chnlCollectionAsTimeSequence(seriesNum, progressReporter)	
+			)
+		);
 	}
-
+	
 	@Override
 	public int numFrames() {
 		return 1;
 	}
-
+	
+	private TimeSequence chnlCollectionAsTimeSequence(int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
+		// Apply it only to first time-series frame
+		try {
+			NamedChnlCollectionForSeries ncc = createChnlCollectionForSeries(seriesNum, progressReporter);
+			return new TimeSequence( ncc.allChnlsAsStack(0).doOperation() );
+			
+		} catch (RasterIOException e) {
+			throw new OperationFailedException(e);
+		}
+	}
 }

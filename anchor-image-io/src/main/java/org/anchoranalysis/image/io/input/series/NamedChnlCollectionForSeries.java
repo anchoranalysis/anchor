@@ -57,5 +57,5 @@ public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
 	public abstract void addAsSeparateChnls( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws OperationFailedException;
 	public abstract void addAsSeparateChnls( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException;
 	
-	public abstract Operation<Stack> allChnlsAsStack( final int t ) throws OperationFailedException;
+	public abstract Operation<Stack,OperationFailedException> allChnlsAsStack( final int t );
 }

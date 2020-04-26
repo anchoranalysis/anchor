@@ -32,9 +32,10 @@ package org.anchoranalysis.core.bridge;
  *
  * @param <S> source-type
  * @param <D> destination-type
+ * @param <E> exception-type if bridging fails
  */
 @FunctionalInterface
-public interface IObjectBridge<S,D> {
+public interface IObjectBridge<S, D, E extends Throwable> {
 
-	D bridgeElement( S sourceObject ) throws BridgeElementException;
+	D bridgeElement( S sourceObject ) throws E;
 }

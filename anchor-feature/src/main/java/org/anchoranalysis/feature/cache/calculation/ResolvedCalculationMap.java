@@ -8,20 +8,20 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * 
  * @author Owen Feehan
  *
- * @param S result-type
- * @param T feature input-type
- * @param U key-type
+ * @param <S> result-type
+ * @param <T> feature input-type
+ * @param <U> key-type
  */
 public class ResolvedCalculationMap<S, T extends FeatureInput,U> {
 
-	private CacheableCalculationMap<S,T,U> map;
+	private CacheableCalculationMap<S,T,U,FeatureCalcException> map;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param map the cacheable-calculation map that is now considered resolved
 	 */
-	public ResolvedCalculationMap(CacheableCalculationMap<S, T, U> map) {
+	public ResolvedCalculationMap(CacheableCalculationMap<S,T,U,FeatureCalcException> map) {
 		super();
 		this.map = map;
 	}

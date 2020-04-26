@@ -28,8 +28,8 @@ package org.anchoranalysis.feature.cache;
 
 import java.util.List;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -90,7 +90,7 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	<S extends FeatureInput> double calcChild(Feature<S> feature, CacheableCalculation<S,T> cc, String childCacheName) throws FeatureCalcException;
+	<S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> cc, String childCacheName) throws FeatureCalcException;
 	
 	
 	/**
@@ -101,7 +101,7 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @return the result of the calculation
 	 * @throws FeatureCalcException
 	 */
-	<S> S calc(CacheableCalculation<S,T> cc) throws FeatureCalcException;
+	<S> S calc(FeatureCalculation<S,T> cc) throws FeatureCalcException;
 	
 	
 	/**

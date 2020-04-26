@@ -29,25 +29,31 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 
-public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<DestType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <S> src-type
+ * @param <T> destination-type
+ */
+public class NamedProviderBridge<S,T> implements INamedProvider<T> {
 
-	private INamedProvider<SrcType> srcProvider;
-	private IObjectBridge<SrcType,DestType> bridge;
+	private INamedProvider<S> srcProvider;
+	private IObjectBridge<S,T,? extends Exception> bridge;
 	private boolean bridgeNulls = true;
 	
-	public NamedProviderBridge(INamedProvider<SrcType> srcProvider,
-			IObjectBridge<SrcType, DestType> bridge) {
+	public NamedProviderBridge(INamedProvider<S> srcProvider,
+			IObjectBridge<S, T, ? extends Exception> bridge) {
 		super();
 		assert(srcProvider!=null);
 		this.srcProvider = srcProvider;
 		this.bridge = bridge;
 	}
 	
-	public NamedProviderBridge(INamedProvider<SrcType> srcProvider,
-			IObjectBridge<SrcType, DestType> bridge, boolean bridgeNulls ) {
+	public NamedProviderBridge(INamedProvider<S> srcProvider,
+			IObjectBridge<S, T, ? extends Exception> bridge, boolean bridgeNulls ) {
 		super();
 		assert(srcProvider!=null);
 		this.srcProvider = srcProvider;
@@ -56,10 +62,10 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 	}
 
 	@Override
-	public DestType getException(String key) throws NamedProviderGetException {
+	public T getException(String key) throws NamedProviderGetException {
 		try {
 			return bridge.bridgeElement( srcProvider.getNull(key) );
-		} catch (BridgeElementException e) {
+		} catch (Exception e) {
 			throw new NamedProviderGetException(key, e);
 		}
 	}
@@ -70,8 +76,8 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 	}
 
 	@Override
-	public DestType getNull(String key) throws NamedProviderGetException {
-		SrcType srcVal = srcProvider.getNull(key);
+	public T getNull(String key) throws NamedProviderGetException {
+		S srcVal = srcProvider.getNull(key);
 		
 		if (!bridgeNulls && srcVal==null) {
 			// Early exit if doNotBridgeNulls is witched on
@@ -80,7 +86,7 @@ public class NamedProviderBridge<SrcType,DestType> implements INamedProvider<Des
 		
 		try {
 			return bridge.bridgeElement( srcVal );
-		} catch (BridgeElementException e) {
+		} catch (Exception e) {
 			throw new NamedProviderGetException(key, e);
 		}
 	}

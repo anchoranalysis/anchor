@@ -27,8 +27,6 @@ package org.anchoranalysis.feature.cache.calculation;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -36,11 +34,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *   by a key
  * 
  * @author Owen Feehan
- * @param S result-type
- * @param T feature input-type
- * @param U key-type
+ * @param <S> result-type
+ * @param <T> feature input-type
+ * @param <U> key-type
+ * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class CacheableCalculationMap<S,T extends FeatureInput,U> implements ResettableCalculation {
+public abstract class CacheableCalculationMap<
+	S,
+	T extends FeatureInput,
+	U,
+	E extends Throwable
+> implements ResettableCalculation {
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.
@@ -49,7 +53,7 @@ public abstract class CacheableCalculationMap<S,T extends FeatureInput,U> implem
 	 * @return the result of the calculation
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
-	public abstract S getOrCalculate( T input, U key ) throws FeatureCalcException;
+	public abstract S getOrCalculate( T input, U key ) throws E;
 
 	@Override
 	public abstract boolean equals(Object other);

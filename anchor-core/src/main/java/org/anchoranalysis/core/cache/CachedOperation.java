@@ -32,8 +32,9 @@ package org.anchoranalysis.core.cache;
  * @author Owen Feehan
  *
  * @param <R> result-type
+ * @param <E> exception that is thrown if something goes wrong
  */
-public abstract class CachedOperation<R> implements Operation<R> {
+public abstract class CachedOperation<R,E extends Throwable> implements Operation<R,E> {
 
 	private R result = null;
 	private boolean done = false;
@@ -48,7 +49,7 @@ public abstract class CachedOperation<R> implements Operation<R> {
 	}
 	
 	@Override
-	public synchronized R doOperation() throws ExecuteException {
+	public synchronized R doOperation() throws E {
 		
 		if (!done) {
 			result = execute();
@@ -57,7 +58,7 @@ public abstract class CachedOperation<R> implements Operation<R> {
 		return result;
 	}
 	
-	public synchronized void assignFrom( CachedOperation<R> src ) {
+	public synchronized void assignFrom( CachedOperation<R,E> src ) {
 		this.result = src.result;
 		this.done = src.done;
 	}
@@ -71,17 +72,17 @@ public abstract class CachedOperation<R> implements Operation<R> {
 		return done;
 	}
 	
-	protected abstract R execute() throws ExecuteException;
+	protected abstract R execute() throws E;
 
 	protected R getResult() {
 		return result;
 	}
 
-	public static <T> CachedOperation<T> wrap( Operation<T> op ) {
-		return new CachedOperation<T>() {
+	public static <T,E extends Throwable> CachedOperation<T,E> wrap( Operation<T,E> op ) {
+		return new CachedOperation<T,E>() {
 
 			@Override
-			protected T execute() throws ExecuteException {
+			protected T execute() throws E {
 				return op.doOperation();
 			}
 		};

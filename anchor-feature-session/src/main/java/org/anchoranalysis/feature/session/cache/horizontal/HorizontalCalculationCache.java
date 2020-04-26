@@ -38,6 +38,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -58,8 +59,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
 	
-	private ResettableSet<CacheableCalculation<?,T>> setCC = new ResettableSet<>(false);
-	private ResettableSet<CacheableCalculationMap<?,T,?>> setCCMap = new ResettableSet<>(false);
+	private ResettableSet<FeatureCalculation<?,T>> setCC = new ResettableSet<>(false);
+	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCCMap = new ResettableSet<>(false);
 	
 	private Calculator retriever = new Calculator();
 	
@@ -88,20 +89,20 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public <U> ResolvedCalculation<U,T> search(CacheableCalculation<U,T> cc) {
+		public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> cc) {
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new ResolvedCalculation<>(
-				(CacheableCalculation<U,T>) setCC.findOrAdd(cc,loggerToPass)
+				(CacheableCalculation<U,T,FeatureCalcException>) setCC.findOrAdd(cc,loggerToPass)
 			);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <S, U> ResolvedCalculationMap<S,T,U> search(CacheableCalculationMap<S,T,U> cc) {
+		public <S, U> ResolvedCalculationMap<S,T,U> search(CacheableCalculationMap<S,T,U,FeatureCalcException> cc) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new ResolvedCalculationMap<>( 
-				(CacheableCalculationMap<S,T,U>) setCCMap.findOrAdd(cc,loggerToPass)
+				(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCCMap.findOrAdd(cc,loggerToPass)
 			);
 		}
 
