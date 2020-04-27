@@ -71,7 +71,7 @@ public class ChnlConverterHistogramUpperLowerQuantileIntensity extends ChnlConve
 		voxelBoxConverter.setMinMaxValues(minValue,maxValue);
 	}
 	
-	private int scaleQuantile( Histogram hist, double quantile, double scaleFactor) {
+	private int scaleQuantile( Histogram hist, double quantile, double scaleFactor) throws OperationFailedException {
 		return (int) Math.round(hist.quantile(quantile) * scaleFactor);
 	}
 

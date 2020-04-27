@@ -76,6 +76,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	
 	@Override
 	public double calc(Feature<T> feature) throws FeatureCalcException {
+		//System.out.printf("CALCulating feature=%s%n", feature.getDscrWithCustomName());
 		return cache.calculator().calc(feature, this);
 	}
 

@@ -60,6 +60,8 @@ public class MorphologicalDilation {
 	 */
 	public static ObjMask createDilatedObjMask( ObjMask om, Extent extnt, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
 		
+		System.out.printf("CALLING createDilatedObjMask for %s in %s with numPixels=%d%n", om.getBoundingBox().extnt(), extnt, om.numPixels());
+		
 		Point3i grow = do3D ? new Point3i(iterations,iterations,iterations) : new Point3i(iterations,iterations,0);
 		
 		try {

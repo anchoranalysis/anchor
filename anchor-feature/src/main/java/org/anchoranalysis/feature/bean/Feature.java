@@ -128,6 +128,8 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 		double ret = calc( input );
 		
 		assert( !Double.isNaN(ret) );
+		assert( Double.isFinite(ret) );
+		
 		return ret;
 	}
 	
