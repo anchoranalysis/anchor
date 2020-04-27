@@ -89,20 +89,23 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> cc) {
+		public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> calculation) {
+			assert(calculation!=null);
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new ResolvedCalculation<>(
-				(CacheableCalculation<U,T,FeatureCalcException>) setCC.findOrAdd(cc,loggerToPass)
+				(CacheableCalculation<U,T,FeatureCalcException>) setCC.findOrAdd(calculation,loggerToPass)
 			);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <S, U> ResolvedCalculationMap<S,T,U> search(CacheableCalculationMap<S,T,U,FeatureCalcException> cc) {
+		public <S, U> ResolvedCalculationMap<S,T,U> search(
+			CacheableCalculationMap<S,T,U,FeatureCalcException> calculation
+		) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new ResolvedCalculationMap<>( 
-				(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCCMap.findOrAdd(cc,loggerToPass)
+				(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCCMap.findOrAdd(calculation,loggerToPass)
 			);
 		}
 

@@ -36,6 +36,10 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 
 	private boolean mip=false;
 	
+	public CalculateNumVoxels() {
+		this(false);
+	}
+	
 	public CalculateNumVoxels(boolean mip) {
 		super();
 		this.mip = mip;
@@ -50,8 +54,9 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 	}
 	
 
+	// Public, as it's needed by Mockito in test verifications
 	@Override
-	protected Double execute(FeatureInputSingleObj params) {
+	public Double execute(FeatureInputSingleObj params) {
 		return calc( params.getObjMask(), mip );
 	}
 	

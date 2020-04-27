@@ -85,29 +85,29 @@ public interface SessionInput<T extends FeatureInput> {
 	 * 
 	 * @param <S> input-type for feature to calculate
 	 * @param feature feature to calculate with
-	 * @param cc cached-calculation to generate input for the feature
+	 * @param calculation feature-calculation to generate input for the feature
 	 * @param childCacheName a unique-name for a child-cache to use for the feature-calculation
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	<S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> cc, String childCacheName) throws FeatureCalcException;
+	<S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> calculation, String childCacheName) throws FeatureCalcException;
 	
 	
 	/**
-	 * Calculates a Cacheable-Calculation after resolving it against the main cache
+	 * Calculates a feature-calculation after resolving it against the main cache
 	 * 
-	 * @param <S> return-type of the cacheable-calculation
-	 * @param cc the cacheable-calculation
+	 * @param <S> return-type of the calculation
+	 * @param calculation the feature-calculation to resolve
 	 * @return the result of the calculation
 	 * @throws FeatureCalcException
 	 */
-	<S> S calc(FeatureCalculation<S,T> cc) throws FeatureCalcException;
+	<S> S calc(FeatureCalculation<S,T> calculation) throws FeatureCalcException;
 	
 	
 	/**
-	 * Calculates a resolved Cacheable-Calculation
-	 * @param <S> return-type of the cacheable-calculation
-	 * @param cc the cacheable-calculation
+	 * Calculates a resolved Feature-calculation
+	 * @param <S> return-type of the calculation
+	 * @param cc the feature-calculation to resolve
 	 * @return the result of the calculation
 	 * @throws FeatureCalcException
 	 */

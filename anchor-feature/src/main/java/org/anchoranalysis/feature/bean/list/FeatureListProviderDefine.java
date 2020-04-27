@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.bean.list;
 
+import java.util.Arrays;
+
 /*
  * #%L
  * anchor-feature
@@ -46,6 +48,20 @@ public class FeatureListProviderDefine<T extends FeatureInput> extends FeatureLi
 	@BeanField @SkipInit
 	private List<Feature<T>> list;
 	// END BEAN PROPERTIES
+	
+	public FeatureListProviderDefine() {
+		// DEFAULT, nothing to do
+	}
+	
+	public FeatureListProviderDefine( Feature<T> feature ) {
+		this(
+			Arrays.asList(feature)
+		);
+	}
+	
+	public FeatureListProviderDefine( List<Feature<T>> list ) {
+		this.list = list;
+	}
 	
 	@Override
 	public FeatureList<T> create() throws CreateException {
