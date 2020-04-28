@@ -27,6 +27,7 @@ package org.anchoranalysis.annotation.io.assignment;
  */
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -143,9 +144,11 @@ public class AssignmentObjMaskFactory {
 	}
 	
 	private static FeatureInputPairObjs paramsFor( ObjMask objMask1, ObjMask objMask2, NRGStackWithParams nrgStack) {
-		FeatureInputPairObjs params = new FeatureInputPairObjs(objMask1, objMask2);
-		params.setNrgStack(nrgStack);
-		return params;
+		return new FeatureInputPairObjs(
+			objMask1,
+			objMask2,
+			Optional.of(nrgStack)
+		);
 	}
 	
 	private static AssignmentObjMask createAssignment( ObjMaskCollectionDistanceMatrix costMatrix, int[] assign, double maxAcceptedCost) {
