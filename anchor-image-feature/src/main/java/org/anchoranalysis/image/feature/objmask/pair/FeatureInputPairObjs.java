@@ -39,7 +39,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 /**
- * A pair of objects (left, and right) and maybe a merged version of both
+ * A pair of objects (first and second) and maybe a merged version of both
  * 
  * <p>Note that left and right simply identify two parts of the pair (tuple). It has no physical meaning
  * related to where the objects are located in the scene.</p>.
@@ -51,44 +51,44 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class FeatureInputPairObjs extends FeatureInputNRGStack {
 
-	private ObjMask left;
-	private ObjMask right;
+	private ObjMask first;
+	private ObjMask second;
 	
 	private Optional<ObjMask> merged = Optional.empty();
 	
-	public FeatureInputPairObjs(ObjMask left, ObjMask right) {
-		this(left, right, Optional.empty() );
+	public FeatureInputPairObjs(ObjMask first, ObjMask second) {
+		this(first, second, Optional.empty() );
 	}
 	
-	public FeatureInputPairObjs(ObjMask left, ObjMask right, Optional<NRGStackWithParams> nrgStack) {
-		this(left, right, nrgStack, Optional.empty() );
+	public FeatureInputPairObjs(ObjMask first, ObjMask second, Optional<NRGStackWithParams> nrgStack) {
+		this(first, second, nrgStack, Optional.empty() );
 	}
 	
 	public FeatureInputPairObjs(
-		ObjMask left,
-		ObjMask right,
+		ObjMask first,
+		ObjMask second,
 		Optional<NRGStackWithParams> nrgStack,
 		Optional<ObjMask> merged
 	) {
 		super(nrgStack);
-		this.left = left;
-		this.right = right;
+		this.first = first;
+		this.second = second;
 		this.merged = merged;
 	}
 		
 	protected FeatureInputPairObjs( FeatureInputPairObjs src ) {
 		super( src.getNrgStackOptional()  );
-		this.left = src.left;
-		this.right = src.right;
+		this.first = src.first;
+		this.second = src.second;
 		this.merged = src.merged;
 	}
 
-	public ObjMask getLeft() {
-		return left;
+	public ObjMask getFirst() {
+		return first;
 	}
 
-	public ObjMask getRight() {
-		return right;
+	public ObjMask getSecond() {
+		return second;
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	public ObjMask getMerged() {
 		if (!merged.isPresent()) {
 			merged = Optional.of(
-				ObjMaskMerger.merge(left, right)
+				ObjMaskMerger.merge(first, second)
 			);
 		}
 		return merged.get();
@@ -108,8 +108,8 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	@Override
 	public FeatureInputPairObjs createInverse() {
 		return new FeatureInputPairObjs(
-			right,
-			left,
+			second,
+			first,
 			getNrgStackOptional(),
 			merged
 		);
@@ -119,8 +119,8 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	public String toString() {
 		return String.format(
 			"%s vs %s",
-			left.centerOfGravity(),
-			right.centerOfGravity()
+			first.centerOfGravity(),
+			second.centerOfGravity()
 		);
 	}
 
@@ -133,11 +133,11 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		
 		FeatureInputPairObjs objCast = (FeatureInputPairObjs) obj;
 		
-		if (!left.equals(objCast.left)) {
+		if (!first.equals(objCast.first)) {
 			return false;
 		}
 		
-		if (!right.equals(objCast.right)) {
+		if (!second.equals(objCast.second)) {
 			return false;
 		}
 		
@@ -153,8 +153,8 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.appendSuper( super.hashCode() )
-				.append(left)
-				.append(right)
+				.append(first)
+				.append(second)
 				.append(merged)
 				.toHashCode();
 	}
