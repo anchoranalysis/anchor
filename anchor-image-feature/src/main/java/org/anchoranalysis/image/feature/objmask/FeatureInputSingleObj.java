@@ -32,14 +32,21 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
  */
 
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * An input representing a single object-mask (with maybe an NRG-stack associated)
+ * 
+ * <p>Equals and hash-code must be sensibly defined as these inputs can be used as keys
+ * in a cache</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FeatureInputSingleObj extends FeatureInputNRGStack {
 
 	private ObjMask objMask;
-	
-	public FeatureInputSingleObj() {
-		
-	}
 	
 	public FeatureInputSingleObj(ObjMask objMask) {
 		super();
@@ -69,5 +76,29 @@ public class FeatureInputSingleObj extends FeatureInputNRGStack {
 	@Override
 	public String toString() {
 		return objMask.toString();
+	}
+
+	/** This assumes objMask's equals() is cheap i.e. shallow-equals not deep-equals */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		FeatureInputSingleObj rhs = (FeatureInputSingleObj) obj;
+		return new EqualsBuilder()
+			.appendSuper( super.equals(obj) )
+            .append(objMask, rhs.objMask)
+            .isEquals();
+	}
+
+	/** This assumes objMask's equals() is cheap i.e. shallow-equals not deep-equals */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.appendSuper( super.hashCode() )
+			.append(objMask)
+			.toHashCode();
 	}
 }

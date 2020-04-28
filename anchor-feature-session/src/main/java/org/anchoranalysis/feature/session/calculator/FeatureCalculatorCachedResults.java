@@ -69,11 +69,11 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(T params,
-			ErrorReporter errorReporter) {
+	public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
+		
 		this.errorReporter = errorReporter;
 		try {
-			return cacheResults.get(params);
+			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
 			errorReporter.recordError(FeatureCalculatorCachedResults.class, e.getCause());
 			return createNaNVector(e);
@@ -81,10 +81,10 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	}
 
 	@Override
-	public ResultsVector calc(T params)
-			throws FeatureCalcException {
+	public ResultsVector calc(T input) throws FeatureCalcException {
+		
 		try {
-			return cacheResults.get(params);
+			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
 			throw new FeatureCalcException(e.getCause());
 		}
@@ -92,7 +92,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	
 
 	@Override
-	public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws FeatureCalcException {
+	public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws FeatureCalcException {
 		// TODO how should we cache?
 		throw new FeatureCalcException("This operation is not supported");
 	}
@@ -101,6 +101,16 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	@Override
 	public int sizeFeatures() {
 		return delegate.sizeFeatures();
+	}
+	
+	/** Checks whether the cache contains a particular input already. Useful for tests. */
+	public boolean has(T key) {
+		return cacheResults.has(key);
+	}
+	
+	/** Number of items currently in the cache */
+	public long sizeCurrentLoad() {
+		return cacheResults.sizeCurrentLoad();
 	}
 	
 	private class GetterImpl implements CalculateForCache<T,ResultsVector> {
@@ -126,5 +136,6 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 		rv.setErrorAll(e);
 		return rv;
 	}
+
 
 }

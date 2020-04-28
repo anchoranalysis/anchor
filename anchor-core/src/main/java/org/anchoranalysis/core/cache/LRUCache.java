@@ -73,4 +73,9 @@ public class LRUCache<K,V> {
 	public boolean has(K key) {
 		return cache.getIfPresent(key)!=null;
 	}
+
+	/** Number of items currently in the cache */
+	public long sizeCurrentLoad() {
+		return cache.size();
+	}
 }
