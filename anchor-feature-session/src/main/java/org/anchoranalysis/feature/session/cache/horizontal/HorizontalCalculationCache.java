@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
@@ -59,8 +60,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  */
 public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
 	
-	private ResettableSet<FeatureCalculation<?,T>> setCC = new ResettableSet<>(false);
-	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCCMap = new ResettableSet<>(false);
+	private ResettableSet<FeatureCalculation<?,T>> setCalculation = new ResettableSet<>(false);
+	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCalculationMap = new ResettableSet<>(false);
 	
 	private Calculator retriever = new Calculator();
 	
@@ -68,7 +69,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	private boolean logCacheInit;
 	private SharedFeatureSet<T> sharedFeatures;
 		
-	private Map<String, FeatureSessionCache<FeatureInput>> children = new HashMap<>();
+	private Map<ChildCacheName, FeatureSessionCache<FeatureInput>> children = new HashMap<>();
 	
 	HorizontalCalculationCache( SharedFeatureSet<T> sharedFeatures ) {
 		super();
@@ -94,7 +95,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 			
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new ResolvedCalculation<>(
-				(CacheableCalculation<U,T,FeatureCalcException>) setCC.findOrAdd(calculation,loggerToPass)
+				(CacheableCalculation<U,T,FeatureCalcException>) setCalculation.findOrAdd(calculation,loggerToPass)
 			);
 		}
 
@@ -105,7 +106,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 		) {
 			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
 			return new ResolvedCalculationMap<>( 
-				(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCCMap.findOrAdd(calculation,loggerToPass)
+				(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCalculationMap.findOrAdd(calculation,loggerToPass)
 			);
 		}
 
@@ -141,8 +142,8 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	@Override
 	public void invalidate() {
 		
-		setCC.invalidate();
-		setCCMap.invalidate();
+		setCalculation.invalidate();
+		setCalculationMap.invalidate();
 
 		// Invalidate each of the child caches
 		for (FeatureSessionCache<FeatureInput> childCache : children.values()) {
@@ -157,7 +158,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator) {
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> paramsType, CacheCreator cacheCreator) {
 		// Creates a new child-cache if it doesn't already exist for a particular name
 		return (FeatureSessionCache<V>) children.computeIfAbsent(
 			childName,

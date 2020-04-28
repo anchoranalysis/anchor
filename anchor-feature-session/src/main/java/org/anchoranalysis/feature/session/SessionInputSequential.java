@@ -3,6 +3,7 @@ package org.anchoranalysis.feature.session;
 import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
@@ -60,12 +61,12 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 	
 	@Override
-	public <V extends FeatureInput> FeatureSessionCacheCalculator<V> resolverForChild(String childName, Class<?> paramsType) {
+	public <V extends FeatureInput> FeatureSessionCacheCalculator<V> resolverForChild(ChildCacheName childName, Class<?> paramsType) {
 		FeatureSessionCache<V> cache = cacheForInternal(childName, paramsType);
 		return cache.calculator();
 	}
 	
-	private <V extends FeatureInput> FeatureSessionCache<V> cacheForInternal(String childName, Class<?> paramsType) {
+	private <V extends FeatureInput> FeatureSessionCache<V> cacheForInternal(ChildCacheName childName, Class<?> paramsType) {
 		return cache.childCacheFor(childName, paramsType, factory);
 	}
 
@@ -96,7 +97,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 	
 	@Override
-	public <S extends FeatureInput> double calcChild(Feature<S> feature, S input, String childCacheName) throws FeatureCalcException {
+	public <S extends FeatureInput> double calcChild(Feature<S> feature, S input, ChildCacheName childCacheName) throws FeatureCalcException {
 		
 		FeatureSessionCache<S> child = cacheForInternal(childCacheName, input.getClass()); 
 		return child.calculator().calc(
@@ -110,7 +111,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 		
 	@Override
-	public <S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> cc, String childCacheName) throws FeatureCalcException {
+	public <S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> cc, ChildCacheName childCacheName) throws FeatureCalcException {
 		return calcChild(
 			feature,
 			calc(cc),

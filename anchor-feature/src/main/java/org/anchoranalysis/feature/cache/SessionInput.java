@@ -77,7 +77,7 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	<S extends FeatureInput> double calcChild(Feature<S> feature, S input, String childCacheName) throws FeatureCalcException;
+	<S extends FeatureInput> double calcChild(Feature<S> feature, S input, ChildCacheName childCacheName) throws FeatureCalcException;
 	
 	
 	/**
@@ -90,7 +90,7 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	<S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> calculation, String childCacheName) throws FeatureCalcException;
+	<S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> calculation, ChildCacheName childCacheName) throws FeatureCalcException;
 	
 	
 	/**
@@ -131,7 +131,7 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @param paramsType the type of V
 	 * @return the existing or new child cache of the given name
 	 */
-	<V extends FeatureInput> CalculationResolver<V> resolverForChild(String childCacheName, Class<?> paramsType);
+	<V extends FeatureInput> CalculationResolver<V> resolverForChild(ChildCacheName childCacheName, Class<?> paramsType);
 	
 	
 	/**

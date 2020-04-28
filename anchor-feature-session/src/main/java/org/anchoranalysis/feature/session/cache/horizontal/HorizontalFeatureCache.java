@@ -34,6 +34,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
@@ -102,8 +103,11 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 	}
 
 	@Override
-	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType,
-			CacheCreator cacheCreator) {
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+		ChildCacheName childName,
+		Class<?> paramsType,
+		CacheCreator cacheCreator
+	) {
 		return delegate.childCacheFor(childName, paramsType, cacheCreator);
 	}
 	

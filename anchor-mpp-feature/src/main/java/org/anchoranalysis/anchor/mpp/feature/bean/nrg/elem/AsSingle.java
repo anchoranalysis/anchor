@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
@@ -56,13 +57,16 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInpu
 	private boolean first = true;
 	// END BEAN PROPERTIES
 	
+	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(AsSingle.class, "first");
+	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(AsSingle.class, "second");
+	
 	@Override
 	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input
 			.calcChild(
 				getItem(),
 				new CalculateDeriveSingleMemoFromPair(first),
-				"ind"
+				first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND
 			);		
 	}
 	

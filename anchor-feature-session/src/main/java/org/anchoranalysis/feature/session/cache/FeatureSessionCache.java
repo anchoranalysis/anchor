@@ -30,6 +30,7 @@ import org.anchoranalysis.core.error.InitException;
 
 
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
@@ -87,5 +88,5 @@ public abstract class FeatureSessionCache<T extends FeatureInput> {
 	 * @param cacheCreator TODO
 	 * @return the existing or new child cache of the given name
 	 */
-	public abstract <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(String childName, Class<?> paramsType, CacheCreator cacheCreator);
+	public abstract <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> paramsType, CacheCreator cacheCreator);
 }
