@@ -29,7 +29,9 @@ package org.anchoranalysis.feature.cache;
 import java.util.List;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -68,32 +70,6 @@ public interface SessionInput<T extends FeatureInput> {
 	ResultsVector calc(List<Feature<T>> features) throws FeatureCalcException;
 		
 	/**
-	 * Calculates a feature in a child-cache
-	 * 
-	 * @param <S> input-type for feature to calculate
-	 * @param feature feature to calculate with
-	 * @param input input for feature
-	 * @param childCacheName a unique-name for a child-cache to use for the feature-calculation
-	 * @return the result of the feature calculation
-	 * @throws FeatureCalcException
-	 */
-	<S extends FeatureInput> double calcChild(Feature<S> feature, S input, ChildCacheName childCacheName) throws FeatureCalcException;
-	
-	
-	/**
-	 * Calculates a feature in a child-cache using a new input created from a {@link #CachedCalculation}
-	 * 
-	 * @param <S> input-type for feature to calculate
-	 * @param feature feature to calculate with
-	 * @param calculation feature-calculation to generate input for the feature
-	 * @param childCacheName a unique-name for a child-cache to use for the feature-calculation
-	 * @return the result of the feature calculation
-	 * @throws FeatureCalcException
-	 */
-	<S extends FeatureInput> double calcChild(Feature<S> feature, FeatureCalculation<S,T> calculation, ChildCacheName childCacheName) throws FeatureCalcException;
-	
-	
-	/**
 	 * Calculates a feature-calculation after resolving it against the main cache
 	 * 
 	 * @param <S> return-type of the calculation
@@ -121,17 +97,13 @@ public interface SessionInput<T extends FeatureInput> {
 	 */
 	CalculationResolver<T> resolver();
 	
+	
 	/**
-	 * A resolver associated with a particular child-cache
+	 * Performs calculations not on the main cache, but on a child cache
 	 * 
-	 * <p>This function trusts the caller to use the correct type associated with the child-cache.</p>
-	 * 
-	 * @param <V> params-type of the child cache to found
-	 * @param childCacheName name of the child-cache
-	 * @param paramsType the type of V
-	 * @return the existing or new child cache of the given name
+	 * @return
 	 */
-	<V extends FeatureInput> CalculationResolver<V> resolverForChild(ChildCacheName childCacheName, Class<?> paramsType);
+	CalcForChild<T> forChild();
 	
 	
 	/**
@@ -139,4 +111,6 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @return
 	 */
 	FeatureSymbolCalculator<T> bySymbol();
+	
+	public abstract FeatureSessionCache<T> getCache();
 }

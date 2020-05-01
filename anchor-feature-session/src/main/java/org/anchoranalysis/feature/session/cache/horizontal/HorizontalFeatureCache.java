@@ -35,11 +35,11 @@ import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -92,8 +92,8 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 
 	@Override
 	public void init(FeatureInitParams featureInitParams,
-			LogErrorReporter logger, boolean logCacheInit) throws InitException {
-		delegate.init(featureInitParams, logger, logCacheInit);
+			LogErrorReporter logger) throws InitException {
+		delegate.init(featureInitParams, logger);
 	}
 
 	@Override
@@ -115,5 +115,4 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 	public FeatureSessionCacheCalculator<T> calculator() {
 		return retriever;
 	}
-
 }

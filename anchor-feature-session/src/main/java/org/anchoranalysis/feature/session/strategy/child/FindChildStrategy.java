@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.calculator;
+package org.anchoranalysis.feature.session.strategy.child;
 
 /*-
  * #%L
@@ -26,27 +26,36 @@ package org.anchoranalysis.feature.session.calculator;
  * #L%
  */
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-class FeatureCalculatorMultiFixture {
+public abstract class FindChildStrategy {
+
+	/**
+	 * Selects a child-cache given a parent and a child-name
+	 * 
+	 * <p>This may involve reusing an existing cache, or creating a new one, depending on the strategy.</p>.
+	 * 
+	 * @param <V> type-of-input to be used to calculate on the child-cache
+	 * @param parentCache the existing parent-cache
+	 * @param factory how to create new caches
+	 * @param childCacheName name of child-cache
+	 * @param input input to be used for calculations on the child-cache
+	 * @return an existing or newly created child-cache depending on the strategy.
+	 */
+	public abstract <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+		FeatureSessionCache<?> parentCache,
+		CacheCreator factory,
+		ChildCacheName childCacheName,
+		V input
+	);
 	
-	/** Creates a feature-calculator than returns a constant result */
-	public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator( ResultsVector rv ) throws FeatureCalcException {
-		
-		@SuppressWarnings("unchecked")
-		FeatureCalculatorMulti<T> calculator = mock(FeatureCalculatorMulti.class);
-		when(
-			calculator.calc(any())
-		).thenReturn(rv);
-		when(
-			calculator.calcSuppressErrors(any(), any())
-		).thenReturn(rv);
-		return calculator;
-	}
+	/**
+	 * What strategy to use for children-of-children?
+	 * 
+	 * @return the strategy
+	 */
+	public abstract FindChildStrategy strategyForGrandchild();
 }

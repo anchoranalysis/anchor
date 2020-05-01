@@ -1,8 +1,8 @@
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.session.strategy.child;
 
 /*-
  * #%L
- * anchor-feature
+ * anchor-feature-session
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -26,50 +26,37 @@ package org.anchoranalysis.feature.cache.calculation;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A {@link CalculationMap} that has been resolved against a cache.
- * 
- * @author Owen Feehan
- *
- * @param <S> result-type
- * @param <T> feature input-type
- * @param <U> key-type
+ * The default strategy for finding children by always directly taking (or creating a child-cache) as necessary.
  */
-public class ResolvedCalculationMap<S, T extends FeatureInput,U> {
+public class DefaultFindChildStrategy extends FindChildStrategy {
 
-	private CacheableCalculationMap<S,T,U,FeatureCalcException> map;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param map the cacheable-calculation map that is now considered resolved
-	 */
-	public ResolvedCalculationMap(CacheableCalculationMap<S,T,U,FeatureCalcException> map) {
-		super();
-		this.map = map;
-	}
+	public final static FindChildStrategy instance = new DefaultFindChildStrategy();
 	
-	public S getOrCalculate(T params, U key) throws FeatureCalcException {
-		return map.getOrCalculate(params, key);
-	}
+	private DefaultFindChildStrategy() {}
 	
-	// We delegate to the CachedCalculationMap to check equality. Needed for the search.
-	@SuppressWarnings("unchecked")
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ResolvedCalculationMap) {
-			return ((ResolvedCalculationMap<S, T, U>) obj).map.equals(map);
-		} else {
-			return false;
-		}
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+		FeatureSessionCache<?> parentCache,
+		CacheCreator factory,
+		ChildCacheName childName,
+		V input
+	) {
+		return parentCache.childCacheFor(childName, input.getClass(), factory);
 	}
 
-	// We delegate to the CachedCalculationMap to check hashCode. Needed for the search.
 	@Override
-	public int hashCode() {
-		return map.hashCode();
+	public FindChildStrategy strategyForGrandchild() {
+		return instance;
 	}
+
+	public static FindChildStrategy instance() {
+		return instance;
+	}
+
 }

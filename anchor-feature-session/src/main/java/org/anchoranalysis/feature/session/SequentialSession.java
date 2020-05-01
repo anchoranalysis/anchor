@@ -30,7 +30,6 @@ package org.anchoranalysis.feature.session;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -43,9 +42,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
-import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -71,10 +71,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	// Should feature calculation errors be printed to the console?
 	private boolean reportErrors = false;
 	
-	private CacheCreator cacheCreator;
+	private ReplaceStrategy<T> replaceSession;
 	
-	private SessionInputSequential<T> sessionInput = null;
-		
+	private BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory;
+			
 	/**
 	 * Constructor of a session
 	 * 
@@ -91,7 +91,13 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 */
 	@SuppressWarnings("unchecked")
 	SequentialSession(Iterable<Feature<T>> iterFeatures) {
-		this( iterFeatures, (Collection<String>) CollectionUtils.EMPTY_COLLECTION );
+		this(
+			iterFeatures,
+			(Collection<String>) CollectionUtils.EMPTY_COLLECTION,
+			new BoundReplaceStrategy<>(
+				cacheCreator -> new ReuseSingletonStrategy<>(cacheCreator)
+			)
+		);
 	}
 	
 	/**
@@ -101,7 +107,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param prependFeatureName a string that can be prepended to feature-ID references e.g. when looking for  featureX,  concat(prependFeatureName,featureX)
 	 *         is also considered. This helps with scoping.
 	 */
-	SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes) {
+	SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes, BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory) {
+		this.replacePolicyFactory = replacePolicyFactory;
 		this.listFeatures = new FeatureList<>(iterFeatures);
 		assert(listFeatures!=null);
 	}
@@ -155,7 +162,9 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 			throw new FeatureCalcException("Session has not been started yet. Call start().");
 		}
 		
-		return createOrReuseCache(params).calc(featuresSubset);
+		return replaceSession.createOrReuse(
+			params
+		).calc(featuresSubset);
 	}
 	
 	/**
@@ -180,21 +189,6 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		return res;
 	}
 	
-	private SessionInput<T> createOrReuseCache(T input) throws FeatureCalcException {
-		
-		if (input==null) {
-			throw new FeatureCalcException("The input may not be null");
-		}
-		
-		if (sessionInput==null) {
-			sessionInput = new SessionInputSequential<T>(input, cacheCreator);
-		} else {
-			sessionInput.replaceInput(input);
-		}
-		
-		return sessionInput;
-	}
-	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
 	}
@@ -213,7 +207,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		// Create cacheable params, and record any errors for all features
 		SessionInput<T> cacheableParams;
 		try {
-			cacheableParams = createOrReuseCache(params);
+			cacheableParams = replaceSession.createOrReuse(params);
 		} catch (FeatureCalcException e) {
 			// Return all features as errored
 			if (reportErrors) {
@@ -244,15 +238,15 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}	
 	}
 	
-	private ResultsVector calcCommonExceptionAsVector( T params ) throws FeatureCalcException {
+	private ResultsVector calcCommonExceptionAsVector( T input ) throws FeatureCalcException {
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 
-		SessionInput<T> cacheableParams = createOrReuseCache(params); 
+		SessionInput<T> sessionInput = replaceSession.createOrReuse(input); 
 		
 		for( int i=0; i<listFeatures.size(); i++) {
 			Feature<T> f = listFeatures.get(i);
 			
-			double val = cacheableParams.calc(f);
+			double val = sessionInput.calc(f);
 			res.set(i,val);
 		}
 		
@@ -289,9 +283,14 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	}
 		
 	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
-
+		
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
-		cacheCreator = new CacheCreatorSimple(listFeatures, sharedFeatures, featureInitParamsDup, logger);
 		listFeatures.initRecursive(featureInitParamsDup, logger);
+		
+		replaceSession = replacePolicyFactory.bind(listFeatures, featureInitParamsDup, sharedFeatures, logger);
+			
+		
+		//replaceSession = new ReuseSingletonPolicy<>(cacheCreator);
+		//replaceSession = new LRUCachedSessionInputPolicy<>(cacheCreator);
 	}
 }

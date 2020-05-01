@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.anchoranalysis.core.error.InitException;
 
+
 /*
  * #%L
  * anchor-feature
@@ -33,127 +34,57 @@ import org.anchoranalysis.core.error.InitException;
 
 
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
-import org.anchoranalysis.feature.session.cache.creator.CacheCreator;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
- * Caches CachedCalculations that occur repeatedly across many features
+ * Caches CachedCalculations that occur repeatedly across many features, and store similar child caches.
  * 
- * The caches are reset, every time reset() is called
+ * <p>The caches are reset every time invalidate() is called</p>
  * 
  * @author Owen Feehan
  * @param parameter-type
  */
 public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
 	
-	private ResettableSet<FeatureCalculation<?,T>> setCalculation = new ResettableSet<>(false);
-	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCalculationMap = new ResettableSet<>(false);
+	private ResettableCachedCalculator<T> calculator;
 	
-	private Calculator retriever = new Calculator();
-	
-	private LogErrorReporter logger;
-	private boolean logCacheInit;
+	@SuppressWarnings("unused")
 	private SharedFeatureSet<T> sharedFeatures;
 		
-	private Map<ChildCacheName, FeatureSessionCache<FeatureInput>> children = new HashMap<>();
+	private Map<ChildCacheName, FeatureSessionCache<? extends FeatureInput>> children = new HashMap<>();
 	
 	HorizontalCalculationCache( SharedFeatureSet<T> sharedFeatures ) {
 		super();
 		this.sharedFeatures = sharedFeatures;
-	}
-	
-	private class Calculator extends FeatureSessionCacheCalculator<T> {
-		
-		@Override
-		public double calc(Feature<T> feature, SessionInput<T> input )
-				throws FeatureCalcException {
-			double val = feature.calcCheckInit(input);
-			if (Double.isNaN(val)) {
-				logger.getLogReporter().logFormatted("WARNING: NaN returned from feature %s", feature.getFriendlyName() );
-			}
-			return val;
-		}
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> calculation) {
-			assert(calculation!=null);
-			
-			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return new ResolvedCalculation<>(
-				(CacheableCalculation<U,T,FeatureCalcException>) setCalculation.findOrAdd(calculation,loggerToPass)
-			);
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public <S, U> ResolvedCalculationMap<S,T,U> search(
-			CacheableCalculationMap<S,T,U,FeatureCalcException> calculation
-		) {
-			LogErrorReporter loggerToPass = logCacheInit ? logger : null;
-			return new ResolvedCalculationMap<>( 
-				(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCalculationMap.findOrAdd(calculation,loggerToPass)
-			);
-		}
-
-		@Override
-		public double calcFeatureByID(String id, SessionInput<T> input)
-				throws FeatureCalcException {
-			try {
-				Feature<T> feature = sharedFeatures.getException(id);
-				return calc( feature, input );
-			} catch (NamedProviderGetException e) {
-				throw new FeatureCalcException(
-					String.format("Cannot locate feature with resolved-ID: %s", id ),
-					e.summarize()
-				);
-			}
-		}
-
-		@Override
-		public String resolveFeatureID(String id) {
-			return id;
-		}
+		this.calculator = new ResettableCachedCalculator<>(sharedFeatures);
 	}
 	
 	// Set up the cache
 	@Override
-	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger, boolean logCacheInit) throws InitException {
-		this.logger = logger;
-		this.logCacheInit = logCacheInit;
+	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException {
 		assert(logger!=null);
-
+		calculator.init(logger);
 	}
 	
 	@Override
 	public void invalidate() {
-		
-		setCalculation.invalidate();
-		setCalculationMap.invalidate();
+		calculator.invalidate();
 
 		// Invalidate each of the child caches
-		for (FeatureSessionCache<FeatureInput> childCache : children.values()) {
+		for (FeatureSessionCache<? extends FeatureInput> childCache : children.values()) {
 			childCache.invalidate();
 		}
 	}
 
 	@Override
 	public FeatureSessionCacheCalculator<T> calculator() {
-		return retriever;
+		return calculator;
 	}
 	
 	@SuppressWarnings("unchecked")

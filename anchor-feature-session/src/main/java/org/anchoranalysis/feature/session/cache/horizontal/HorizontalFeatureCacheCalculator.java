@@ -31,11 +31,11 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 
 /**
  * 
@@ -55,6 +55,7 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 		Collection<String> ignorePrefixes
 	) {
 		super();
+		assert(delegate!=null);
 		this.delegate = delegate;
 		this.map = map;
 		this.ignorePrefixes = ignorePrefixes;

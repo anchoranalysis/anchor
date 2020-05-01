@@ -63,7 +63,8 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInpu
 	@Override
 	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input
-			.calcChild(
+			.forChild()
+			.calc(
 				getItem(),
 				new CalculateDeriveSingleMemoFromPair(first),
 				first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND

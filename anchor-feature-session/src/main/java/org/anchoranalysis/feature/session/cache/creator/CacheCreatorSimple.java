@@ -34,9 +34,10 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
@@ -128,7 +129,7 @@ public class CacheCreatorSimple implements CacheCreator {
 			sharedFeatures.duplicate()
 		);
 		try {
-			cache.init(featureInitParams, logger, false);
+			cache.init(featureInitParams, logger);
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}

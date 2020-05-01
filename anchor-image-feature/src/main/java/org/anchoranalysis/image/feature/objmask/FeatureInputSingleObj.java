@@ -49,8 +49,10 @@ public class FeatureInputSingleObj extends FeatureInputNRGStack {
 	private ObjMask objMask;
 	
 	public FeatureInputSingleObj(ObjMask objMask) {
-		super();
-		this.objMask = objMask;
+		this(
+			objMask,
+			Optional.empty()
+		);
 	}
 	
 	public FeatureInputSingleObj(ObjMask objMask, NRGStackWithParams nrgStack) {

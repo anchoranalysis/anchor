@@ -32,7 +32,10 @@ import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class FeatureInputStack extends FeatureInputNRGStack {
 	
@@ -70,5 +73,20 @@ public class FeatureInputStack extends FeatureInputNRGStack {
 
 	public Optional<ImageInitParams> getSharedObjs() {
 		return so;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

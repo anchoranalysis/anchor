@@ -1,8 +1,8 @@
-package org.anchoranalysis.feature.cache.calculation;
+package org.anchoranalysis.feature.session.strategy.replace;
 
 /*-
  * #%L
- * anchor-feature
+ * anchor-feature-session
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -26,50 +26,47 @@ package org.anchoranalysis.feature.cache.calculation;
  * #L%
  */
 
+import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.session.SessionInputSequential;
+
+
 
 /**
- * A {@link CalculationMap} that has been resolved against a cache.
+ * Reuse (without needing to invalidate) an existing session-input as stored in a least-recently used cache, otherwise create a new one.
  * 
  * @author Owen Feehan
  *
- * @param <S> result-type
- * @param <T> feature input-type
- * @param <U> key-type
+ * @param <T> feature-input
  */
-public class ResolvedCalculationMap<S, T extends FeatureInput,U> {
+public class CacheAndReuseStrategy<T extends FeatureInput> extends ReplaceStrategy<T> {
 
-	private CacheableCalculationMap<S,T,U,FeatureCalcException> map;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param map the cacheable-calculation map that is now considered resolved
-	 */
-	public ResolvedCalculationMap(CacheableCalculationMap<S,T,U,FeatureCalcException> map) {
+	private final static int CACHE_SIZE = 200;
+	
+	private LRUCache<T, SessionInput<T>> cache;
+	
+	public CacheAndReuseStrategy(CacheCreator cacheCreator) {
 		super();
-		this.map = map;
+		cache = new LRUCache<>(
+			CACHE_SIZE,
+			input -> new SessionInputSequential<T>(input, cacheCreator)
+		);
 	}
 	
-	public S getOrCalculate(T params, U key) throws FeatureCalcException {
-		return map.getOrCalculate(params, key);
-	}
-	
-	// We delegate to the CachedCalculationMap to check equality. Needed for the search.
-	@SuppressWarnings("unchecked")
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ResolvedCalculationMap) {
-			return ((ResolvedCalculationMap<S, T, U>) obj).map.equals(map);
-		} else {
-			return false;
+	public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
+		try {
+			return cache.get(input);
+		} catch (GetOperationFailedException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 
-	// We delegate to the CachedCalculationMap to check hashCode. Needed for the search.
-	@Override
-	public int hashCode() {
-		return map.hashCode();
+	public LRUCache<T, SessionInput<T>> getCache() {
+		return cache;
 	}
 }

@@ -56,6 +56,14 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	// We update this every time so it matches whatever is passed to calcSuppressErrors
 	private ErrorReporter errorReporter = null;
 	
+	
+	/**
+	 * Creates a feature-calculator with a new cache
+	 * 
+	 * @param delegate the underlying feature-calculator to use for calculating unknown results
+	 * 
+	 * @param suppressErrors
+	 */
 	public FeatureCalculatorCachedResults(FeatureCalculatorMulti<T> delegate, boolean suppressErrors) {
 		super();
 		this.delegate = delegate;
@@ -136,6 +144,4 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 		rv.setErrorAll(e);
 		return rv;
 	}
-
-
 }

@@ -39,6 +39,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
+import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
@@ -114,7 +117,16 @@ public class FeatureSession {
 		SharedFeatureSet<T> sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
-		return with(features, initParams, sharedFeatures, logger, new ArrayList<>() );
+		return with(
+			features,
+			initParams,
+			sharedFeatures,
+			logger,
+			new ArrayList<>(),
+			new BoundReplaceStrategy<>(
+				cacheCreator -> new ReuseSingletonStrategy<>(cacheCreator)
+			)
+		);
 	}
 	
 	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
@@ -122,9 +134,10 @@ public class FeatureSession {
 		FeatureInitParams initParams,
 		SharedFeatureSet<T> sharedFeatures,
 		LogErrorReporter logger,
-		Collection<String> ignoreFeaturePrefixes
+		Collection<String> ignoreFeaturePrefixes,
+		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
 	) throws FeatureCalcException {
-		SequentialSession<T> session = new SequentialSession<>(features, ignoreFeaturePrefixes); 
+		SequentialSession<T> session = new SequentialSession<>(features, ignoreFeaturePrefixes, replacePolicyFactory); 
 		startSession(session, initParams, sharedFeatures, logger);
 		return session;
 	}

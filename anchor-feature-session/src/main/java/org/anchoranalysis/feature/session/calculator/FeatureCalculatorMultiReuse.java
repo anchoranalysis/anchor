@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
+
+
 /*
  * #%L
  * anchor-feature
@@ -75,6 +77,4 @@ public class FeatureCalculatorMultiReuse<T extends FeatureInput> implements Feat
 	public int sizeFeatures() {
 		return delegate.sizeFeatures();
 	}
-
-
 }

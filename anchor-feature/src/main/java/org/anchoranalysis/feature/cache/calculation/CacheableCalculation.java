@@ -56,14 +56,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public abstract class CacheableCalculation<S, T extends FeatureInput, E extends Throwable> implements ResettableCalculation {
 	
-	private transient T params;
+	private transient T input;
 	
 	// We delegate the actualy execution of the cache
 	private transient CachedOperation<S,E> delegate = new CachedOperation<S,E>() {
 
 		@Override
 		protected S execute() throws E {
-			return CacheableCalculation.this.execute( params );
+			return CacheableCalculation.this.execute( input );
 		}
 	};
 	
@@ -98,20 +98,20 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
 	@Override
 	public synchronized void invalidate() {
 		delegate.reset();
-		this.params = null;	// Just to be clean, release memory, before the next getOrCalculate
+		this.input = null;	// Just to be clean, release memory, before the next getOrCalculate
 	}
 	
 	/** This performs the actual calculation when needed. It should only be called once, until invalidate() is called. */
 	protected abstract S execute( T input ) throws E;
 	
 	private synchronized void initParams(T input) {
-		this.params = input;
+		this.input = input;
 	}
 	
 	/** A check that if params are already set, any new inputs must be identical */
 	private boolean checkParamsMatchesInput( T input ) {
 		if (hasCachedCalculation()) {
-			if (input!=null && !input.equals(this.params)) {
+			if (input!=null && !input.equals(this.input)) {
 				throw new AnchorFriendlyRuntimeException("This feature already has been used, its cache is already set to different params");
 			}
 		}
