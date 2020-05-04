@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel.box;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -171,7 +172,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @param clipRegion a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extnt is absolute
 	 */
-	public BoundingBox dilate( boolean do3D, Extent clipRegion ) {
+	public BoundingBox dilate( boolean do3D, Optional<Extent> clipRegion ) {
 		Point3i allOnes = do3D ? allOnes3D : allOnes2D;
 		return createGrownBoxAbsolute(allOnes,allOnes, clipRegion);
 	}
@@ -185,7 +186,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @param clipRegion a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extnt is absolute
 	 */
-	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Extent clipRegion ) {
+	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
 		relBox.getCrnrMin().scale(-1);
 		relBox.getCrnrMin().add( boundingBox.getCrnrMin() );
@@ -202,7 +203,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @param a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box (multipled by -1), the extnt is absolute
 	 */
-	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Extent clipRegion ) {
+	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		
 		Point3i negClip = new Point3i(neg);
 		negClip.setX( clipNeg(boundingBox.getCrnrMin().getX(), neg.getX()));
@@ -214,10 +215,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 		int maxPossibleX;
 		int maxPossibleY;
 		int maxPossibleZ;
-		if (clipRegion!=null) {
-			maxPossibleX = clipRegion.getX();
-			maxPossibleY = clipRegion.getY();
-			maxPossibleZ = clipRegion.getZ();
+		if (clipRegion.isPresent()) {
+			maxPossibleX = clipRegion.get().getX();
+			maxPossibleY = clipRegion.get().getY();
+			maxPossibleZ = clipRegion.get().getZ();
 		} else {
 			maxPossibleX = Integer.MAX_VALUE;
 			maxPossibleY = Integer.MAX_VALUE;
@@ -247,13 +248,13 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * 
 	 * @param neg
 	 * @param pos
-	 * @param clipRegion if non-NULL, clips the buffer to this region
+	 * @param clipRegion if defined, clips the buffer to this region
 	 * @param factory
 	 * @return
 	 */
-	public BoundedVoxelBox<T> growBuffer( Point3i neg, Point3i pos, Extent clipRegion, VoxelBoxFactoryTypeBound<T> factory ) throws OperationFailedException {
+	public BoundedVoxelBox<T> growBuffer( Point3i neg, Point3i pos, Optional<Extent> clipRegion, VoxelBoxFactoryTypeBound<T> factory ) throws OperationFailedException {
 		
-		if(!clipRegion.contains(this.boundingBox) ) {
+		if(clipRegion.isPresent() && !clipRegion.get().contains(this.boundingBox) ) {
 			throw new OperationFailedException("Cannot grow the bounding-box of the object-mask, as it is already outside the clipping region.");
 		}
 		

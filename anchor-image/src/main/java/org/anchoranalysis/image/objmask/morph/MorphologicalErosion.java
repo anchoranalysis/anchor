@@ -28,6 +28,7 @@ package org.anchoranalysis.image.objmask.morph;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -41,7 +42,7 @@ public class MorphologicalErosion {
 
 	public static ObjMask createErodedObjMask(
 		ObjMask om,
-		Extent e,
+		Extent extent,
 		boolean do3D,
 		int iterations,
 		boolean outsideAtThreshold,
@@ -57,7 +58,10 @@ public class MorphologicalErosion {
 			// If we want to treat the outside of the image as if it's at a threshold, then
 			//  we put an extra 1-pixel border around the object-mask, so that there's always
 			//  whitespace around the object-mask, so long as it exists in the image scene
-			BoundingBox bbox = om.getVoxelBoxBounded().dilate( do3D, e );
+			BoundingBox bbox = om.getVoxelBoxBounded().dilate(
+				do3D,
+				Optional.of(extent)
+			);
 			omOut = om.createIntersectingMaskAlwaysNew(bbox);
 			
 		} else {

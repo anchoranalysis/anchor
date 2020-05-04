@@ -52,8 +52,7 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
 	ResultsVector calc( T input, FeatureList<T> featuresSubset ) throws FeatureCalcException;
 
 	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
-	ResultsVector calcSuppressErrors(T input
-			, ErrorReporter errorReporter );
+	ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter );
 	
 	/** The number of features that is calculated on each call to calc(), and therefore the size of the ResultsVector returned */
 	int sizeFeatures();

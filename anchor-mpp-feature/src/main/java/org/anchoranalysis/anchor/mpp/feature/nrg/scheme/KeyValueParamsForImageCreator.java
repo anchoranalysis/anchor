@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 
 /*-
@@ -82,7 +84,9 @@ public class KeyValueParamsForImageCreator {
 		FeatureInputStack params = new FeatureInputStack(nrgStack);
 		
 		FeatureInitParams paramsInit = new FeatureInitParams(kvp);
-		paramsInit.setNrgStack(nrgStack);
+		paramsInit.setNrgStack(
+			Optional.of(nrgStack)
+		);
 				
 		for( NamedBean<Feature<FeatureInputStack>> ni : nrgScheme.getListImageFeatures() ) {
 			

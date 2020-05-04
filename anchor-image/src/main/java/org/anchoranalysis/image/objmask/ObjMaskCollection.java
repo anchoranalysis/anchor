@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -407,7 +408,13 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 	public ObjMaskCollection growBuffer( Point3i neg, Point3i pos, Extent clipRegion ) throws OperationFailedException {
 		ObjMaskCollection omc = new ObjMaskCollection();
 		for (ObjMask om : this) {
-			omc.add( om.growBuffer(neg, pos, clipRegion) );
+			omc.add(
+				om.growBuffer(
+					neg,
+					pos,
+					Optional.of(clipRegion)
+				)
+			);
 		}
 		return omc;
 	}

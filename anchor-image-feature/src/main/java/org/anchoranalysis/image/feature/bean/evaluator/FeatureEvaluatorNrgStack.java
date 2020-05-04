@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.bean.evaluator;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-feature
@@ -79,20 +81,20 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 		
 		FeatureCalculatorSingle<T> session = super.createAndStartSession();
 		
-		final NRGStackWithParams nrgStack = nrgStackOrNull();
+		final Optional<NRGStackWithParams> nrgStack = nrgStack();
 		
 		return new FeatureCalculatorSingleChangeInput<>(
 			session,
 			params -> {
 				// Use reflection, to only set the nrgStack on params that supports them
-				if (params instanceof FeatureInputNRGStack) {
-					((FeatureInputNRGStack) params).setNrgStack( nrgStack );
+				if (params instanceof FeatureInputNRGStack && nrgStack.isPresent()) {
+					((FeatureInputNRGStack) params).setNrgStack( nrgStack.get() );
 				}
 			}
 		);
 	}
 	
-	private NRGStackWithParams nrgStackOrNull() throws OperationFailedException {
+	public Optional<NRGStackWithParams> nrgStack() throws OperationFailedException {
 		try {
 			if (stackProviderNRG!=null) {
 				
@@ -100,9 +102,9 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 				nrgStack.setParams(
 					createKeyValueParams()
 				);
-				return nrgStack;
+				return Optional.of(nrgStack);
 			} else {
-				return null;
+				return Optional.empty();
 			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

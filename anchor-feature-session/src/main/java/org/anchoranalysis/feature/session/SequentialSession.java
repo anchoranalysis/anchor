@@ -283,7 +283,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	}
 		
 	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
-		
+		assert(featureInitParams!=null);
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);
 		

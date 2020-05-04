@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 @FunctionalInterface
-public interface EvaluateSingleObjMask {
+public interface PayloadCalculator {
 
 	double calc( ObjMask om ) throws FeatureCalcException;
 }

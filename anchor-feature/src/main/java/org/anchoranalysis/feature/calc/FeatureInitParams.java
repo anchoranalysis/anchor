@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.calc;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-feature
@@ -30,6 +32,7 @@ package org.anchoranalysis.feature.calc;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 /**
  * Parameters used to initialize a feature before any calculations
@@ -39,16 +42,32 @@ import org.anchoranalysis.feature.nrg.NRGStack;
  */
 public class FeatureInitParams extends BeanInitParams {
 
-	private KeyValueParams keyValueParams;
-	private NRGStack nrgStack;
+	private Optional<KeyValueParams> keyValueParams;
+	private Optional<NRGStack> nrgStack;
 	
 	public FeatureInitParams() {
-		super();
+		this( Optional.empty() );
 	}
 	
 	public FeatureInitParams(KeyValueParams keyValueParams) {
+		this(
+			Optional.of(keyValueParams)
+		);
+	}
+	
+	public FeatureInitParams(Optional<KeyValueParams> keyValueParams) {
 		super();
 		this.keyValueParams = keyValueParams;
+		this.nrgStack = Optional.empty();
+	}
+	
+	public FeatureInitParams( NRGStackWithParams nrgStack ) {
+		this.nrgStack = Optional.of(
+			nrgStack.getNrgStack()
+		);
+		this.keyValueParams = Optional.of(
+			nrgStack.getParams()
+		);
 	}
 		
 	protected FeatureInitParams( FeatureInitParams src ) {
@@ -65,19 +84,19 @@ public class FeatureInitParams extends BeanInitParams {
 		return out;
 	}
 	
-	public KeyValueParams getKeyValueParams() {
+	public Optional<KeyValueParams> getKeyValueParams() {
 		return keyValueParams;
 	}
 
-	public void setKeyValueParams(KeyValueParams keyValueParams) {
+	public void setKeyValueParams(Optional<KeyValueParams> keyValueParams) {
 		this.keyValueParams = keyValueParams;
 	}
 
-	public NRGStack getNrgStack() {
+	public Optional<NRGStack> getNrgStack() {
 		return nrgStack;
 	}
 
-	public void setNrgStack(NRGStack nrgStack) {
+	public void setNrgStack(Optional<NRGStack> nrgStack) {
 		this.nrgStack = nrgStack;
 	}
 }

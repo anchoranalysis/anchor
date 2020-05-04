@@ -30,6 +30,7 @@ package org.anchoranalysis.image.io.bean.feature;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -94,7 +95,11 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			
 			// Init
 			FeatureInitParamsSharedObjs paramsInit = new FeatureInitParamsSharedObjs( getSharedObjects() );
-			paramsInit.setKeyValueParams( createKeyValueParams() );
+			paramsInit.setKeyValueParams(
+				Optional.of(
+					createKeyValueParams()
+				)
+			);
 			
 			// Create NRG stack
 			final NRGStackWithParams nrgStack = stackProviderNRG!=null ? new NRGStackWithParams( stackProviderNRG.create() ) : null;

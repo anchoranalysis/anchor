@@ -30,6 +30,7 @@ package org.anchoranalysis.image.objmask.morph;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -58,7 +59,7 @@ public class MorphologicalDilation {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static ObjMask createDilatedObjMask( ObjMask om, Extent extnt, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
+	public static ObjMask createDilatedObjMask( ObjMask om, Optional<Extent> extnt, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
 		
 		Point3i grow = do3D ? new Point3i(iterations,iterations,iterations) : new Point3i(iterations,iterations,0);
 		

@@ -153,8 +153,7 @@ public class ObjMask {
 		);
 	}
 
-	public ObjMask growBuffer(Point3i neg, Point3i pos,
-			Extent clipRegion) throws OperationFailedException {
+	public ObjMask growBuffer(Point3i neg, Point3i pos,	Optional<Extent> clipRegion) throws OperationFailedException {
 		return new ObjMask(
 			delegate.growBuffer(
 				neg,

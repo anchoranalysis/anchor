@@ -30,6 +30,7 @@ package org.anchoranalysis.image.objmask.properties;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -75,7 +76,11 @@ public class ObjMaskWithProperties {
 
 	public ObjMaskWithProperties growBuffer(Point3i neg, Point3i pos, Extent clipRegion) throws OperationFailedException {
 		return new ObjMaskWithProperties(
-			mask.growBuffer(neg, pos, clipRegion),
+			mask.growBuffer(
+				neg,
+				pos,
+				Optional.of(clipRegion)
+			),
 			properties
 		);
 	}
