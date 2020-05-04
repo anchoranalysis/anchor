@@ -219,7 +219,9 @@ public class HistogramFactoryUtilities {
 	
 	public static Histogram createHistogramIgnoreZero( Chnl chnl, ObjMask objMask, boolean ignoreZero ) {
 		Histogram hist = create(chnl, objMask);
-		hist.zeroVal(0);
+		if (ignoreZero) {
+			hist.zeroVal(0);
+		}
 		return hist;
 	}
 	
