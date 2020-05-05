@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.calculator;
+package org.anchoranalysis.feature.session.calculator.cached;
 
 /*-
  * #%L
@@ -30,11 +30,10 @@ import static org.junit.Assert.*;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedMulti;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FeatureCalculatorCachedResultsTest {
+public class FeatureCalculatorCachedMultiTest {
 
 	private final static MockFeatureInput INPUT_1 = new MockFeatureInput("1");
 	private final static MockFeatureInput INPUT_2 = new MockFeatureInput("2");

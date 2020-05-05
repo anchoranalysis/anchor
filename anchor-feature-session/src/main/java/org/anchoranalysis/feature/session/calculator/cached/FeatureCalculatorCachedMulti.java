@@ -91,9 +91,6 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 
 	@Override
 	public ResultsVector calc(T input) throws FeatureCalcException {
-		
-		System.out.printf("Calc for input=%s... alreadyThere=%s%n", input, cacheResults.has(input) ? "yes" : "no");
-		
 		try {
 			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
