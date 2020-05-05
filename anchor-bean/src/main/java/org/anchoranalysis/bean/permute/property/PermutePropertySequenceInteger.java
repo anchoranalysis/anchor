@@ -55,7 +55,7 @@ public class PermutePropertySequenceInteger extends PermutePropertySequence<Inte
 	
 	@Override
 	public String nameForPropValue(Integer value) {
-		int numDigitsEnd = Integer.toString(getEnd()).length();
+		int numDigitsEnd = Integer.toString(getSequence().getEnd()).length();
 		if (numDigitsEnd==1) {
 			return value.toString();
 		} else {

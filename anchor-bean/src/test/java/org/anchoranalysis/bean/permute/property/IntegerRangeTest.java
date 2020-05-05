@@ -29,13 +29,14 @@ package org.anchoranalysis.bean.permute.property;
 
 import static org.junit.Assert.*;
 
+import org.anchoranalysis.bean.sequence.IntegerSequenceIterator;
 import org.junit.Test;
 
 public class IntegerRangeTest {
 
 	@Test
 	public void test1() {
-		IntegerRange range = new IntegerRange(2, 8, 3);
+		IntegerSequenceIterator range = new IntegerSequenceIterator(2, 8, 3);
 		assertTrue(range.hasNext()==true);
 		assertTrue(range.next()==2);
 		assertTrue(range.hasNext()==true);
@@ -47,7 +48,7 @@ public class IntegerRangeTest {
 	
 	@Test
 	public void test2() {
-		IntegerRange range = new IntegerRange(-12, -4, 2);
+		IntegerSequenceIterator range = new IntegerSequenceIterator(-12, -4, 2);
 		assertTrue(range.hasNext()==true);
 		assertTrue(range.next()==-12);
 		range.next();

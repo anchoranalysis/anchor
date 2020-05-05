@@ -29,8 +29,7 @@ package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
 
-class IteratorIntegerWithPrefixSuffix implements Iterator<String>
-{
+class IteratorIntegerWithPrefixSuffix implements Iterator<String> {
     private String prefix;
     private String suffix;
     private Iterator<Integer> delegate;

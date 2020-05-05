@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.permute.property;
+package org.anchoranalysis.bean.sequence;
 
 /*
  * #%L
@@ -39,14 +39,14 @@ import java.util.NoSuchElementException;
  * @author Owen Feehan
  *
  */
-class IntegerRange implements Iterator<Integer>
-{
+public class IntegerSequenceIterator implements Iterator<Integer> {
+	
 	private int end;
 	private int increment;
 	
     private int current;
     
-    public IntegerRange(int start, int end, int increment) {
+    public IntegerSequenceIterator(int start, int end, int increment) {
 		super();
 		this.current = start;
 		this.end = end;

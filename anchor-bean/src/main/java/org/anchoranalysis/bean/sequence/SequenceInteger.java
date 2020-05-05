@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.shared;
+package org.anchoranalysis.bean.sequence;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -63,6 +63,10 @@ public class SequenceInteger extends AnchorBean<SequenceInteger> {
 				)
 			);
 		}
+	}
+	
+	public IntegerSequenceIterator iterator() {
+		return new IntegerSequenceIterator(start,end,increment);
 	}
 
 	public int getStart() {
