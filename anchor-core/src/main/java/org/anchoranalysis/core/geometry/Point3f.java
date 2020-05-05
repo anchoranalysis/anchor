@@ -27,21 +27,14 @@ package org.anchoranalysis.core.geometry;
  */
 
 
-import java.io.Serializable;
 
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class Point3f implements Serializable {
+public class Point3f extends Tuple3f {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private float x = 0.0f;
-	private float y = 0.0f;
-	private float z = 0.0f;
 	
 	public Point3f() {
 		// Initializes with [0, 0, 0]
@@ -59,108 +52,19 @@ public class Point3f implements Serializable {
 		this.z = z;
 	}
 	
-	public void setValueByDimension( int dimIndex, float val ) {
-		switch( dimIndex ) {
-		case 0:
-			this.x = val;
-			break;
-		case 1:
-			this.y = val;
-			break;
-		case 2:
-			this.z = val;
-			break;
-		default:
-			assert false;
-		}
-
-	}
-	
-	public float getValueByDimension( int dimIndex ) {
-		switch( dimIndex ) {
-		case 0:
-			return x;
-		case 1:
-			return y;
-		case 2:
-			return z;
-		default:
-			assert false;
-			return 0;
-		}
-	}
-	
-	public float distanceSquared( Point3f pnt ) {
-		float sx = this.x - pnt.x;
-		float sy = this.y - pnt.y;
-		float sz = this.z - pnt.z;
-		return (sx*sx) + (sy*sy) + (sz*sz);
-	}
-	
-	public double distance( Point3f pnt ) {
-		return Math.sqrt( distanceSquared(pnt) );
-	}
-
-	public float getX() {
-		return x;
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public float getY() {
-		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
-	}
-
-	public float getZ() {
-		return z;
-	}
-
-	public void setZ(float z) {
-		this.z = z;
-	}
 	
 	@Override
-	public String toString() {
-		return String.format("[%f,%f,%f]",x,y,z);
-	}
-	
-	@Override
-	public boolean equals( Object obj ) {
+	public boolean equals(Object obj) { // NOSONAR
+		
 		if (this == obj) {
 			return true;
 		}
-	    if (!(obj instanceof Point3f)) {
-	        return false;
-	    }
-	    Point3f objCast = (Point3f) obj;
-	    
-	    if (!FloatUtilities.areEqual(x, objCast.x)) {
-	    	return false;
-	    }
-	    
-	    if (!FloatUtilities.areEqual(y, objCast.y)) {
-	    	return false;
-	    }
-	    
-	    if (!FloatUtilities.areEqual(z, objCast.z)) {
-	    	return false;
-	    }
-	    
-	    return true;
+		
+		if( obj instanceof Point3f ) {
+			return super.equals(obj);
+		} else {
+			return false;
+		}
 	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-	        .append(x)
-	        .append(y)
-	        .append(z)
-	        .toHashCode();
-	}
+
 }

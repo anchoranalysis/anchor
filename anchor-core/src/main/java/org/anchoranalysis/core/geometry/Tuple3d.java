@@ -29,9 +29,7 @@ package org.anchoranalysis.core.geometry;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
 import org.anchoranalysis.core.axis.AxisType;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public abstract class Tuple3d implements Serializable {
 
@@ -120,39 +118,9 @@ public abstract class Tuple3d implements Serializable {
 		return String.format("[%5.1f,%5.1f,%5.1f]",x,y,z);
 	}
 	
-	@Override
-	public boolean equals( Object obj ) {
-		if (this == obj) {
-			return true;
-		}
-	    if (!(obj instanceof Tuple3d)) {
-	        return false;
-	    }
-	    Tuple3d objCast = (Tuple3d) obj;
-	    
-	    if (!FloatUtilities.areEqual(x, objCast.x)) {
-	    	return false;
-	    }
-	    
-	    if (!FloatUtilities.areEqual(y, objCast.y)) {
-	    	return false;
-	    }
-	    
-	    if (!FloatUtilities.areEqual(z, objCast.z)) {
-	    	return false;
-	    }
 
-	    return true;
-	}
 	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-	        .append(x)
-	        .append(y)
-	        .append(z)
-	        .toHashCode();
-	}
+
 	
 	public void setX(int x) {
 		this.x = (double) x;
@@ -164,5 +132,37 @@ public abstract class Tuple3d implements Serializable {
 	
 	public void setZ(int z) {
 		this.z = (double) z;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(x);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tuple3d other = (Tuple3d) obj;
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+			return false;
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+			return false;
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
+			return false;
+		return true;
 	}
 }
