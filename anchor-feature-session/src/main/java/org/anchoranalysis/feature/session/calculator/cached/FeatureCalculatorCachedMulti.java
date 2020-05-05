@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.session.calculator;
+package org.anchoranalysis.feature.session.calculator.cached;
 
 /*
  * #%L
@@ -36,16 +36,17 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 /**
- * A {@link #FeatureCalculatorMulti} but calculations are cached to avoid repetition if identical {@link FeatureInput} are passed.
+ * A {@link #FeatureCalculatorMulti} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
  * 
  * @author Owen Feehan
  *
  */
-public class FeatureCalculatorCachedResults<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
-	private FeatureCalculatorMulti<T> delegate;
+	private FeatureCalculatorMulti<T> source;
 	
 	private LRUCache<T,ResultsVector> cacheResults;
 
@@ -60,13 +61,13 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	/**
 	 * Creates a feature-calculator with a new cache
 	 * 
-	 * @param delegate the underlying feature-calculator to use for calculating unknown results
+	 * @param source the underlying feature-calculator to use for calculating unknown results
 	 * 
 	 * @param suppressErrors
 	 */
-	public FeatureCalculatorCachedResults(FeatureCalculatorMulti<T> delegate, boolean suppressErrors) {
+	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors) {
 		super();
-		this.delegate = delegate;
+		this.source = source;
 		this.suppressErrors = suppressErrors;
 		
 		this.cacheResults = new LRUCache<T,ResultsVector>(
@@ -83,13 +84,15 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 		try {
 			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
-			errorReporter.recordError(FeatureCalculatorCachedResults.class, e.getCause());
+			errorReporter.recordError(FeatureCalculatorCachedMulti.class, e.getCause());
 			return createNaNVector(e);
 		}
 	}
 
 	@Override
 	public ResultsVector calc(T input) throws FeatureCalcException {
+		
+		System.out.printf("Calc for input=%s... alreadyThere=%s%n", input, cacheResults.has(input) ? "yes" : "no");
 		
 		try {
 			return cacheResults.get(input);
@@ -108,7 +111,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 
 	@Override
 	public int sizeFeatures() {
-		return delegate.sizeFeatures();
+		return source.sizeFeatures();
 	}
 	
 	/** Checks whether the cache contains a particular input already. Useful for tests. */
@@ -127,9 +130,9 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 		public ResultsVector calculate(T index)	throws CacheRetrievalFailed {
 			try {
 				if (suppressErrors) {
-					return delegate.calcSuppressErrors(index,errorReporter);
+					return source.calcSuppressErrors(index,errorReporter);
 				} else {
-					return delegate.calc(index);
+					return source.calc(index);
 				}
 			} catch (FeatureCalcException e) {
 				throw new CacheRetrievalFailed(e);
@@ -140,7 +143,7 @@ public class FeatureCalculatorCachedResults<T extends FeatureInput> implements F
 	
 	/** Return a vector with all NaNs */
 	private ResultsVector createNaNVector(GetOperationFailedException e) {
-		ResultsVector rv = new ResultsVector( delegate.sizeFeatures() );
+		ResultsVector rv = new ResultsVector( source.sizeFeatures() );
 		rv.setErrorAll(e);
 		return rv;
 	}

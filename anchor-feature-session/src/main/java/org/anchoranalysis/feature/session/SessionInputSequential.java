@@ -27,6 +27,8 @@ package org.anchoranalysis.feature.session;
  */
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.anchoranalysis.feature.bean.Feature;
@@ -103,8 +105,9 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 			return resolvedCalc.getOrCalculate(input);
 		}
 
-		/** Determines which session-cache should be used for a child */
-		private <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, V input) {
+		/** Determines which session-cache should be used for a child 
+		 * @throws FeatureCalcException */
+		private <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, V input) throws FeatureCalcException {
 			return findChild.childCacheFor(cache, cacheFactory, childName, input);
 		}
 	}
@@ -114,6 +117,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	private T input;
 	private CacheCreator cacheFactory;
 	private ChildCalculator childCalc;
+	private FindChildStrategy findChild;
 	
 	/**
 	 * Constructor
@@ -139,6 +143,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 		// Deliberately two lines, as it needs an explicitly declared type for the template type inference to work
 		this.cache = cacheFactory.create( input.getClass() ); 
 		this.childCalc = new ChildCalculator(findChild);
+		this.findChild = findChild;
 	}
 	
 	/**
@@ -162,7 +167,15 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	 * @param input new parameters which will replace existing ones
 	 **/
 	public void replaceInput(T input) {
-		cache.invalidate();
+		
+		Optional<Set<ChildCacheName>> exceptedChildren = this.findChild.cachesToAvoidInvalidating();
+		if (exceptedChildren.isPresent()) {
+			// Invalidate everything apart from particular exceptions
+			cache.invalidateExcept(exceptedChildren.get());
+		} else {
+			// Invalidate everything
+			cache.invalidate();
+		}
 		this.input = input;
 	}
 

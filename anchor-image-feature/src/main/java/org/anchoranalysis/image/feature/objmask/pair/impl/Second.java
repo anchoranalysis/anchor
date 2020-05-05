@@ -1,12 +1,13 @@
-package org.anchoranalysis.feature.session.calculator;
+package org.anchoranalysis.image.feature.objmask.pair.impl;
 
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.SessionInput;
 
-
-/*-
+/*
  * #%L
- * anchor-feature-session
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +29,36 @@ package org.anchoranalysis.feature.session.calculator;
  * #L%
  */
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 /**
- * Calculates the result of a feature for particular params
+ * Evaluates the first-object in a pair only
  * 
  * @author owen
  *
- * @param <T> feature input-type
  */
-public interface FeatureCalculatorSingle<T extends FeatureInput> {
+public class Second extends FeatureDeriveFromPair {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	/** Performs one calculation throwing an exception if something goes wrong */
-	double calc( T input ) throws FeatureCalcException;
+	public Second() {
+		// BEAN Constructor
+	}
 	
-	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
-	double calcSuppressErrors(T input, ErrorReporter errorReporter );
+	public Second(Feature<FeatureInputSingleObj> item) {
+		super(item);
+	}
+	
+	@Override
+	public double calc(SessionInput<FeatureInputPairObjs> params)
+			throws FeatureCalcException {
+		return valueFromSecond(params);
+	}
 }

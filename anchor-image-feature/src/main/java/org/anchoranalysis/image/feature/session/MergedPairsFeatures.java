@@ -2,6 +2,7 @@ package org.anchoranalysis.image.feature.session;
 
 import org.anchoranalysis.core.error.InitException;
 
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -30,6 +31,7 @@ import org.anchoranalysis.core.error.InitException;
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
@@ -142,15 +144,14 @@ public class MergedPairsFeatures {
 	public FeatureCalculatorMulti<FeatureInputPairObjs> createPairSession(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyMerged
+		CacheTransferSourceCollection cacheTransferSource
 	) throws InitException {
-		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()		
+		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()
 		return cc.createPair(
 			getPair(),
 			soImage,
-			() -> cachingStrategyFirstSecond.getStrategy().getCache(),
-			() -> cachingStrategyMerged.getStrategy().getCache()
+			cacheTransferSource
 		);
+
 	}
 }

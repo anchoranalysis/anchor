@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedMulti;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,11 +40,11 @@ public class FeatureCalculatorCachedResultsTest {
 	private final static MockFeatureInput INPUT_2 = new MockFeatureInput("2");
 	private final static MockFeatureInput INPUT_1_REPEATED = new MockFeatureInput("1");
 	
-	private FeatureCalculatorCachedResults<MockFeatureInput> cached;
+	private FeatureCalculatorCachedMulti<MockFeatureInput> cached;
 	
 	@Before
 	public void setup() throws FeatureCalcException {
-		cached = new FeatureCalculatorCachedResults<>(
+		cached = new FeatureCalculatorCachedMulti<>(
 			FeatureCalculatorMultiFixture.createFeatureCalculator(
 				new ResultsVector(1)	// Result is irrelevant
 			),

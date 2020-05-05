@@ -658,7 +658,7 @@ public class ObjMask {
 	
 	@Override
 	public String toString() {
-		return String.format("%s (cog=%s,numPixels=%d)", super.toString(), centerOfGravity().toString(), numPixels() );
+		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numPixels() );
 	}
 
 

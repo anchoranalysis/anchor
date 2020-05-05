@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.session;
 
+import java.util.Arrays;
+
 /*
  * #%L
  * anchor-image-feature
@@ -29,21 +31,27 @@ package org.anchoranalysis.image.feature.session;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.strategy.child.CacheTransferSource;
+import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -54,18 +62,23 @@ import org.anchoranalysis.image.init.ImageInitParams;
  * 
  * <div>
  * <ul>
- * the image in which the object exists (on {@link #listImage}) i.e. the nrg-stack.
- * the left-object in the pair (on {@link #listSingle})
- * the right-object in the pair (on {@link #listSingle})
- * the pair (on {@link #listPair})
- * both objects merged together (on {@link #listSingle}}
+ * <li>the image in which the object exists (on {@link #listImage}) i.e. the nrg-stack.</li>
+ * <li>the left-object in the pair (on {@link #listSingle})</li>
+ * <li>the right-object in the pair (on {@link #listSingle})</li>
+ * <li>the pair (on {@link #listPair})</li>
+ * <li>both objects merged together (on {@link #listSingle}}</li>
  * </ul>
  * </div>
  * 
  * <p>Due to the predictable pattern, feature-calculations can be cached predictably and appropriately to avoid redundancies</p>.
  * 
  * <div>
- * Two types of caching are applied to avoid redundant 
+ * Two types of caching are applied to avoid redundancy
+ * <li>The internal calculation caches of first/second/merged are reused as the internal calculation sub-caches in pair.</li>
+ * <li>The entire results are cached (as a function of the input) for first/second, as the same inputs reappear multiple times.</li>
+ * </div>
+ * 
+ * <p>TODO a further type of caching (of the results of internal feature calculations for the same inputs)</p>
  * 
  * @author Owen Feehan
  *
@@ -74,6 +87,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 
 	private boolean includeFirst;
 	private boolean includeSecond;
+	private boolean includeMerged;
 	
 	// Our sessions
 	private FeatureCalculatorMulti<FeatureInputStack> sessionImage;
@@ -94,12 +108,13 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	private boolean suppressErrors;
 	
 	public MergedPairsSession(MergedPairsFeatures features) {
-		this(false, false, features, Collections.emptySet(), false, true);
+		this(false, false, false, features, Collections.emptySet(), false, true);
 	}
 		
 	public MergedPairsSession(
 		boolean includeFirst,
 		boolean includeSecond,
+		boolean includeMerged,
 		MergedPairsFeatures features,
 		Collection<String> ignoreFeaturePrefixes,
 		boolean checkInverse,
@@ -107,6 +122,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	) {
 		this.includeFirst = includeFirst;
 		this.includeSecond = includeSecond;
+		this.includeMerged = includeMerged;
 		this.features = features;
 		this.checkInverse = checkInverse;
 		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
@@ -153,9 +169,51 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		
 		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyMerged
 			= MergedPairsCachingStrategies.cacheAndReuse();
-		sessionMerged = features.createSingleSession(cc, soImage, cachingStrategyMerged, suppressErrors);
+		if (includeMerged) {
+			sessionMerged = features.createSingleSession(cc, soImage, cachingStrategyMerged, suppressErrors);
+		}
 				
-		sessionPair = features.createPairSession(cc, soImage, cachingStrategyFirstSecond, cachingStrategyMerged);
+		sessionPair = features.createPairSession(
+			cc,
+			soImage,
+			createTransferSource(
+				cachingStrategyFirstSecond,
+				cachingStrategyMerged
+			)
+		);
+	}
+	
+	private CacheTransferSourceCollection createTransferSource(
+		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategyFirstAndSecond,
+		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategyMerged		
+	) {
+
+		CacheTransferSourceCollection source = new CacheTransferSourceCollection();
+		source.add(
+			sourceFromExistingCache(
+				replaceStrategyFirstAndSecond,
+				Arrays.asList(FeatureDeriveFromPair.CACHE_NAME_FIRST, FeatureDeriveFromPair.CACHE_NAME_SECOND)
+			)	
+		);
+		source.add(
+			sourceFromExistingCache(
+				replaceStrategyMerged,
+				Arrays.asList(FeatureDeriveFromPair.CACHE_NAME_MERGED)
+			)
+		);
+		return source;
+	}
+	
+	private static CacheTransferSource<FeatureInputSingleObj> sourceFromExistingCache(
+		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategy,			
+		List<ChildCacheName> cacheNames
+	) {
+		return new CacheTransferSource<>(
+			() -> replaceStrategy.getStrategy().map( strategy -> 
+				strategy.getCache()
+			),
+			new HashSet<>(cacheNames)
+		);
 	}
 	
 	@Override
@@ -211,7 +269,9 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 			out.addCustomNamesWithPrefix( "second.", features.getSingle() );
 		}
 				
-		out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
+		if (includeMerged) {
+			out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
+		}
 		
 		out.addCustomNamesWithPrefix( "pair.", features.getPair() );
 		
@@ -234,6 +294,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		return new MergedPairsSession(
 			includeFirst,
 			includeSecond,
+			includeMerged,
 			features.duplicate(),
 			ignoreFeaturePrefixes,	// NOT DUPLICATED
 			checkInverse,
@@ -290,7 +351,9 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		}
 		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
-		helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
+		if (includeMerged) {
+			helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
+		}
 
 		// Pair features
 		helper.calcAndInsert(input, sessionPair );

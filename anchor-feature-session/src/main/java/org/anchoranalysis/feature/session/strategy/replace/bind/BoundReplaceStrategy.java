@@ -1,6 +1,9 @@
 package org.anchoranalysis.feature.session.strategy.replace.bind;
 
+import java.util.Optional;
 import java.util.function.Function;
+
+import org.anchoranalysis.core.error.OperationFailedException;
 
 /*-
  * #%L
@@ -44,7 +47,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  **/
 public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrategy<T>> {
 
-	private S strategy;
+	private Optional<S> strategy = Optional.empty();
 	
 	private Function<CacheCreator,S> funcCreateStrategy;
 	
@@ -60,15 +63,15 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 		LogErrorReporter logger
 	) {
 		CacheCreator cacheCreator = new CacheCreatorSimple(featureList, sharedFeatures, featureInitParams, logger);
-		if (strategy==null) {
-			// TODO this is a hack for multiple reuse
-			//strategy = new CacheAndReuseStrategy<>(cacheCreator);
-			strategy = funcCreateStrategy.apply(cacheCreator);
+		if (!strategy.isPresent()) {
+			strategy = Optional.of(
+				funcCreateStrategy.apply(cacheCreator)
+			);
 		}
-		return strategy;
+		return strategy.get();
 	}
 
-	public S getStrategy() {
+	public Optional<S> getStrategy() throws OperationFailedException {
 		return strategy;
 	}
 }

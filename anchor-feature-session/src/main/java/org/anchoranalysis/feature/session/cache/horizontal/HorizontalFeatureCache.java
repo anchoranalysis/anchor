@@ -28,6 +28,8 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 
 
 import java.util.Collection;
+import java.util.Set;
+
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -103,6 +105,12 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 	}
 
 	@Override
+	public void invalidateExcept(Set<ChildCacheName> childCacheNames) {
+		map.clear();
+		delegate.invalidateExcept(childCacheNames);
+	}
+	
+	@Override
 	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
 		ChildCacheName childName,
 		Class<?> paramsType,
@@ -115,4 +123,6 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 	public FeatureSessionCacheCalculator<T> calculator() {
 		return retriever;
 	}
+
+
 }

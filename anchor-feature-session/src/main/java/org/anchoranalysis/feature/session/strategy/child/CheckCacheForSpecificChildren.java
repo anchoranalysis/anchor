@@ -1,6 +1,6 @@
 package org.anchoranalysis.feature.session.strategy.child;
 
-import java.util.Collection;
+
 
 /*-
  * #%L
@@ -30,14 +30,15 @@ import java.util.Collection;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
-
-import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
+
 
 /**
  * For particular child-caches, check if a session-input is available from another LRU-cache and reuse.
@@ -51,61 +52,76 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class CheckCacheForSpecificChildren<T extends FeatureInput> extends FindChildStrategy {
 	
 	private Class<?> cacheInputType;
-	private Collection<Source<? extends FeatureInput>> sources;
+	private CacheTransferSourceCollection source;
 	
-	public static class Source<T extends FeatureInput> {
-		
-		private Supplier<LRUCache<T, SessionInput<T>>> cacheToSearch;
-		private Set<ChildCacheName> specificChildren;
-		
-		public Source(Supplier<LRUCache<T, SessionInput<T>>> cacheToSearch, Set<ChildCacheName> specificChildren) {
-			super();
-			this.cacheToSearch = cacheToSearch;
-			this.specificChildren = specificChildren;
-		}
-
-		public boolean containsChild(ChildCacheName name) {
-			return specificChildren.contains(name);
-		}
-		
-		public Optional<SessionInput<T>> getInputIfPresent( T input ) {
-			return cacheToSearch.get().getIfPresent( (T) input);
-		}
-	}
-		
+	// The fallback cache is used if none of the existing child caches contain the item, or have
+	//  been initialized yet. It's created lazily.
+	private CacheAndReuseStrategy<FeatureInput> fallbackCache = null;
+	
 	public CheckCacheForSpecificChildren(
 		Class<?> cacheInputType,
-		Collection<Source<? extends FeatureInput>> sources
+		CacheTransferSourceCollection source
 	) {
 		super();
-		this.sources = sources;
+		this.source = source;
 		this.cacheInputType = cacheInputType;
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(FeatureSessionCache<?> parentCache,
-			CacheCreator factory, ChildCacheName childName, V input) {
+			CacheCreator factory, ChildCacheName childName, V input) throws FeatureCalcException {
 		
 		if (cacheInputType.isAssignableFrom(input.getClass())) {
 			
-			for (Source<?> src : sources) {
+			if (source.contains(childName)) {
+				return useSessionFromSource(childName, input, factory);
+			}
 			
-				if (src.containsChild(childName)) {
+			
+		}
+		
+		return parentCache.childCacheFor(childName, input.getClass(), factory);
+	}
+	
+	private <V extends FeatureInput> FeatureSessionCache<V> useSessionFromSource(ChildCacheName childName, V input, CacheCreator factory) throws FeatureCalcException {
+		for (CacheTransferSource<?> src : source) {
+			
+			if (src.containsChild(childName)) {
+				
+				try {
 					// Check cache if has a session input to match, and if so, reuse it
-					Optional<SessionInput<V>> opt = ((Source<V>) src).getInputIfPresent(input);
+					@SuppressWarnings("unchecked")
+					Optional<SessionInput<V>> opt = ((CacheTransferSource<V>) src).getInputIfPresent(input);
 					if (opt.isPresent()) {
 						return (FeatureSessionCache<V>) opt.get().getCache();
 					}
+				} catch (OperationFailedException e) {
+					throw new FeatureCalcException(e);
 				}
 			}
 		}
 		
-		return parentCache.childCacheFor(childName, input.getClass(), factory);
+		// If we haven't found a session-input in any of our existing caches, then we create a new session-input of our own
+		return useFallbackCache(input, factory);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <V extends FeatureInput> FeatureSessionCache<V> useFallbackCache( V input, CacheCreator factory ) throws FeatureCalcException {
+		if (fallbackCache==null) {
+			fallbackCache = new CacheAndReuseStrategy<>(factory);
+		}
+		return (FeatureSessionCache<V>) fallbackCache.createOrReuse(input).getCache();
 	}
 
 	@Override
 	public FindChildStrategy strategyForGrandchild() {
 		return DefaultFindChildStrategy.instance;
+	}
+
+	@Override
+	public Optional<Set<ChildCacheName>> cachesToAvoidInvalidating() {
+		return Optional.of(
+			source.getAllCacheNames()
+		);
 	}	
 }

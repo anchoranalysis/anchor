@@ -2,6 +2,8 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.anchoranalysis.core.error.InitException;
 
@@ -81,6 +83,18 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 			childCache.invalidate();
 		}
 	}
+	
+	@Override
+	public void invalidateExcept(Set<ChildCacheName> childCacheNames) {
+
+		calculator.invalidate();
+
+		for (Entry<ChildCacheName,FeatureSessionCache<? extends FeatureInput>> entry : children.entrySet()) {
+			if (!childCacheNames.contains(entry.getKey())) {
+				entry.getValue().invalidate();
+			}
+		}
+	}
 
 	@Override
 	public FeatureSessionCacheCalculator<T> calculator() {
@@ -96,4 +110,6 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 			s -> cacheCreator.create(paramsType)
 		);
 	}
+
+
 }

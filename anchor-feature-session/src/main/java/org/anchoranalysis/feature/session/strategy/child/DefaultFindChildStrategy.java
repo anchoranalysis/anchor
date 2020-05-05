@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.session.strategy.child;
 
+import java.util.Optional;
+import java.util.Set;
+
 /*-
  * #%L
  * anchor-feature-session
@@ -59,4 +62,8 @@ public class DefaultFindChildStrategy extends FindChildStrategy {
 		return instance;
 	}
 
+	@Override
+	public Optional<Set<ChildCacheName>> cachesToAvoidInvalidating() {
+		return Optional.empty();
+	}
 }

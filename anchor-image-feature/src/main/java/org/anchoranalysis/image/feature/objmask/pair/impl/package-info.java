@@ -1,10 +1,9 @@
-package org.anchoranalysis.feature.session.calculator;
-
-
-
+/** Evaluating FeatureObjMaskPair in terms of the order of the elements
+ * (first object, second order etc.) */
+package org.anchoranalysis.image.feature.objmask.pair.impl;
 /*-
  * #%L
- * anchor-feature-session
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -27,23 +26,3 @@ package org.anchoranalysis.feature.session.calculator;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInput;
-
-/**
- * Calculates the result of a feature for particular params
- * 
- * @author owen
- *
- * @param <T> feature input-type
- */
-public interface FeatureCalculatorSingle<T extends FeatureInput> {
-	
-	/** Performs one calculation throwing an exception if something goes wrong */
-	double calc( T input ) throws FeatureCalcException;
-	
-	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
-	double calcSuppressErrors(T input, ErrorReporter errorReporter );
-}

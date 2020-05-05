@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.feature.session;
 
-import java.util.Arrays;
+
 
 /*-
  * #%L
@@ -29,30 +29,25 @@ import java.util.Arrays;
  */
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.function.Supplier;
-
-import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorCachedResults;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeInput;
+import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedMulti;
+import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.child.CheckCacheForSpecificChildren;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 class CreateCalculatorHelper {
@@ -81,7 +76,7 @@ class CreateCalculatorHelper {
 	) throws InitException {
 		
 		return wrapWithNrg( 
-			new FeatureCalculatorCachedResults<>(
+			new FeatureCalculatorCachedMulti<>(
 				createWithoutNrg(features, soImage, replacePolicyFactory ),
 				suppressErrors
 			)
@@ -100,36 +95,20 @@ class CreateCalculatorHelper {
 	 * @throws InitException
 	 */
 	public <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createPair(
-			FeatureList<T> features,
-			ImageInitParams soImage,
-			Supplier<LRUCache<
-				FeatureInputSingleObj,SessionInput<FeatureInputSingleObj>
-			>> replaceStrategyFirstAndSecond,
-			Supplier<LRUCache<
-				FeatureInputSingleObj,SessionInput<FeatureInputSingleObj>
-			>> replaceStrategyMerged
-		) throws InitException {
+		FeatureList<T> features,
+		ImageInitParams soImage,
+		CacheTransferSourceCollection cacheTransferSource
+	) throws InitException {
 		
-		CheckCacheForSpecificChildren.Source<FeatureInputSingleObj> srcFirstSecond = new CheckCacheForSpecificChildren.Source<>(
-			replaceStrategyFirstAndSecond,
-			new HashSet<>(Arrays.asList(FeatureDeriveFromPair.CACHE_NAME_FIRST, FeatureDeriveFromPair.CACHE_NAME_SECOND))
-		);
-		
-		CheckCacheForSpecificChildren.Source<FeatureInputSingleObj> srcMerged = new CheckCacheForSpecificChildren.Source<>(
-			replaceStrategyMerged,
-			new HashSet<>(Arrays.asList(FeatureDeriveFromPair.CACHE_NAME_MERGED))
-		);
-		
-		BoundReplaceStrategy<T,ReplaceStrategy<T>> replaceStrategy =
-			new	BoundReplaceStrategy<>(
-				cacheCreator -> new ReuseSingletonStrategy<>(
-					cacheCreator,
-					new CheckCacheForSpecificChildren<>(
-						FeatureInputSingleObj.class,
-						Arrays.asList(srcFirstSecond, srcMerged)
-					)
+		BoundReplaceStrategy<T,ReplaceStrategy<T>> replaceStrategy = new BoundReplaceStrategy<>( cacheCreator ->
+			new ReuseSingletonStrategy<>(
+				cacheCreator,
+				new CheckCacheForSpecificChildren<>(
+					FeatureInputSingleObj.class,
+					cacheTransferSource
 				)
-			);
+			)
+		);
 	
 		return wrapWithNrg(
 			createWithoutNrg(features, soImage, replaceStrategy)

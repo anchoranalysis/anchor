@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.cache.calculation;
 
+import java.util.Set;
+
 import org.anchoranalysis.core.error.InitException;
 
 
@@ -64,9 +66,14 @@ public abstract class FeatureSessionCache<T extends FeatureInput> {
 	public abstract void init(FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException;
 	
 	/**
-	 * Triggered before a new calculation occurs
+	 * Invalidates existing caches so all calculations occur freshly
 	 */
 	public abstract void invalidate();
+	
+	/**
+	 * Invalidates existing caches so all calculations occur freshly - except some particular child-caches who are not invalidated
+	 */
+	public abstract void invalidateExcept( Set<ChildCacheName> childCacheNames );
 	
 	
 	/**

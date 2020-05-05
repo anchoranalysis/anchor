@@ -1,5 +1,10 @@
 package org.anchoranalysis.feature.session.strategy.child;
 
+
+
+import java.util.Optional;
+import java.util.Set;
+
 /*-
  * #%L
  * anchor-feature-session
@@ -29,6 +34,7 @@ package org.anchoranalysis.feature.session.strategy.child;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FindChildStrategy {
@@ -50,7 +56,7 @@ public abstract class FindChildStrategy {
 		CacheCreator factory,
 		ChildCacheName childCacheName,
 		V input
-	);
+	) throws FeatureCalcException;
 	
 	/**
 	 * What strategy to use for children-of-children?
@@ -58,4 +64,7 @@ public abstract class FindChildStrategy {
 	 * @return the strategy
 	 */
 	public abstract FindChildStrategy strategyForGrandchild();
+	
+	/** If set, these particular-caches are exceptionall NOT invalidated during the typical invalidation operation on their parent. If not-set, there are no exceptions. */
+	public abstract Optional<Set<ChildCacheName>> cachesToAvoidInvalidating();
 }
