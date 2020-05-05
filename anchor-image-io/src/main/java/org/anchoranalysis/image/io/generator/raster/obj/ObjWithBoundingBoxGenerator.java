@@ -63,7 +63,7 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 		
 		// We create an iterable bridge from ObjMask to BoundingBox
 		IterableGeneratorBridge<ObjMask, BoundingBox> generatorBBox = new IterableGeneratorBridge<>(
-				new ObjectOutputStreamGenerator<BoundingBox>("BoundingBox"),
+				new ObjectOutputStreamGenerator<>("BoundingBox"),
 				sourceObject -> sourceObject.getBoundingBox() 
 		);
 		

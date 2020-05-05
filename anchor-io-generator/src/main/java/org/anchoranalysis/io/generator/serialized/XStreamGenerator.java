@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.serialized;
 
+
+
 /*
  * #%L
  * anchor-io
@@ -33,29 +35,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 import com.thoughtworks.xstream.XStream;
 
-public class XStreamGenerator<T> extends SerializedGenerator implements IterableGenerator<T> {
-
-	private T rootObject = null;
-	
-	private String manifestFunction;
+public class XStreamGenerator<T> extends SerializedIterableGenerator<T> {
 	
 	public XStreamGenerator( String manifestFunction ) {
-		super();
-		this.manifestFunction = manifestFunction;
+		super(manifestFunction);
 	}
 	
 	public XStreamGenerator(T rootObject, String manifestFunction) {
-		super();
-		this.rootObject = rootObject;
-		this.manifestFunction = manifestFunction;
+		super(rootObject, manifestFunction);
 	}
 
 	public static <T> void writeObjectToFile(T rootObject, Path filePath ) throws FileNotFoundException, IOException {
@@ -70,58 +62,17 @@ public class XStreamGenerator<T> extends SerializedGenerator implements Iterable
 	}
 	
 	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings,
-			Path filePath) throws OutputWriteFailedException {
-		
-		if (getIterableElement()==null) {
-			throw new OutputWriteFailedException("no mutable element set");
-		}
-		
+	protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
+			throws OutputWriteFailedException {
 		try {
-			writeObjectToFile( rootObject, filePath );
-			
-		} catch (FileNotFoundException e) {
-			throw new OutputWriteFailedException(e);
+			writeObjectToFile( getIterableElement(), filePath );
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);
 		}
-		
-		
-		
 	}
 
 	@Override
-	public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-		return outputWriteSettings.getExtensionSerialized() + "." + outputWriteSettings.getExtensionXML();
+	protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
+		return "." + outputWriteSettings.getExtensionXML();
 	}
-
-	@Override
-	public T getIterableElement() {
-		return this.rootObject;
-	}
-
-	@Override
-	public void setIterableElement(T element) {
-		this.rootObject = element;
-	}
-
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
-
-	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("serialized", this.manifestFunction );
-	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
 }
