@@ -30,8 +30,8 @@ package org.anchoranalysis.image.voxel.statistics;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 
@@ -71,21 +71,20 @@ public class VoxelStatisticsCombined extends VoxelStatistics {
 	}
 
 	@Override
-	public VoxelStatistics threshold(RelationToValue relationToThreshold,
-			double threshold) {
+	public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
 
 		VoxelStatisticsCombined out = new VoxelStatisticsCombined();
 		for( VoxelStatistics ps : list) {
-			out.add( ps.threshold(relationToThreshold, threshold) );
+			out.add( ps.threshold(relationToThreshold) );
 		}
 		return out;
 	}
 
 	@Override
-	public long countThreshold(RelationToValue relationToThreshold, double threshold) {
+	public long countThreshold(RelationToThreshold relationToThreshold) {
 		long cnt = 0;
 		for( VoxelStatistics ps : list) {
-			cnt += ps.countThreshold(relationToThreshold, threshold);
+			cnt += ps.countThreshold(relationToThreshold);
 		}
 		return cnt;
 	}

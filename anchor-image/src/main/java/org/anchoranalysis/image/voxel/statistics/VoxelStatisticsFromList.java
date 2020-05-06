@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.statistics;
 
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+
 /*-
  * #%L
  * anchor-image
@@ -56,20 +58,22 @@ public class VoxelStatisticsFromList extends VoxelStatistics {
 	}	
 
 	@Override
-	public VoxelStatistics threshold(RelationToValue relationToThreshold,
-			double threshold) {
-		VoxelIntensityList pixelListThresholded = thresholdPxlList(pixelList, relationToThreshold, threshold);
+	public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
+		VoxelIntensityList pixelListThresholded = thresholdPxlList(pixelList, relationToThreshold);
 		return new VoxelStatisticsFromList(pixelListThresholded);
 	}
 		
-	private static VoxelIntensityList thresholdPxlList( VoxelIntensityList list, RelationToValue relationToThreshold, double threshold ) {
+	private static VoxelIntensityList thresholdPxlList( VoxelIntensityList list, RelationToThreshold relationToThreshold ) {
 		
 		VoxelIntensityList pxlList = new VoxelIntensityList();
+		
+		RelationToValue relation = relationToThreshold.relation();
+		double threshold = relationToThreshold.threshold();
 		
 		for (int i=0; i<list.size(); i++) {
 			double pxlVal = list.get(i);
 			
-			if (relationToThreshold.isRelationToValueTrue(pxlVal,threshold)) {
+			if (relation.isRelationToValueTrue(pxlVal,threshold)) {
 				pxlList.add(pxlVal);
 			}
 		}
@@ -77,13 +81,17 @@ public class VoxelStatisticsFromList extends VoxelStatistics {
 	}
 	
 	@Override
-	public long countThreshold( RelationToValue relationToThreshold, double threshold ) {
+	public long countThreshold(RelationToThreshold relationToThreshold) {
+		
+		RelationToValue relation = relationToThreshold.relation();
+		double threshold = relationToThreshold.threshold();
+		
 		long count = 0;
 		
 		for (int i=0; i<pixelList.size(); i++) {
 			double pxlVal = pixelList.get(i);
 			
-			if (relationToThreshold.isRelationToValueTrue(pxlVal,threshold)) {
+			if (relation.isRelationToValueTrue(pxlVal,threshold)) {
 				count++;
 			}
 		}
