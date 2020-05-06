@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterList;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterUtilities;
 import org.anchoranalysis.core.error.CreateException;
 
 /**

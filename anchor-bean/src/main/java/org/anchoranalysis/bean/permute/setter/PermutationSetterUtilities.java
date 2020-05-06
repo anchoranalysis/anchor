@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.permute.property;
+package org.anchoranalysis.bean.permute.setter;
 
 /*-
  * #%L
@@ -30,13 +30,14 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.permute.setter.PermutationSetter;
-import org.anchoranalysis.bean.permute.setter.PermutationSetterSingle;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 
-class PermutationSetterUtilities {
+public class PermutationSetterUtilities {
+	
+	private PermutationSetterUtilities() {}
 
-	// Searches through a list of property fields to find one that matches the propertyName
+	/** Searches through a list of property fields to find one that matches the propertyName */
 	public static PermutationSetter createForSingle( AnchorBean<?> parentBean, String propertyPath ) throws CreateException {
 				
 		// Get all the components of propertyPath
@@ -48,6 +49,32 @@ class PermutationSetterUtilities {
 			return new PermutationSetterSingle(finalField);
 		} else {
 			return createWithIntermediateProperties( parentBean, tokens );
+		}
+	}
+	
+	/** 
+	 * Finds a bean corresponding to a field (exceptionally handling a List by taking the first item in it)
+	 * 
+	 * @param field a field corresponding to an AnchorBean or a {@param java.util.List}
+	 * @param currentBean the bean object to which the field refers to
+	 * @return an AnchorBean corresponding to this particular field on this particular object (exceptionally handling lists)
+	 * */
+	public static AnchorBean<?> beanFor(Field field, AnchorBean<?> currentBean ) throws SetOperationFailedException {
+		
+		try {
+			Object currentObj = field.get(currentBean);
+			
+			if (currentObj instanceof AnchorBean) {
+				return (AnchorBean<?>) currentObj;
+			} else if (currentObj instanceof List) {
+				List<?> list = ((List<?>) currentObj);
+				return (AnchorBean<?>) list.get(0);
+			} else {
+				throw new SetOperationFailedException("A field must be an Anchor-Bean or a List of Anchor-Beans. No other types are supported");
+			}
+			
+		} catch (IllegalAccessException e) {
+			throw new SetOperationFailedException(e);
 		}
 	}
 	
@@ -78,9 +105,8 @@ class PermutationSetterUtilities {
 				Field matchedField = findMatchingField(currentList, currentPropertyName);
 				
 				setter.addField(matchedField);
-				
-				AnchorBean<?> childBean = (AnchorBean<?>) matchedField.get(currentBean);
-				currentBean = childBean;
+								
+				currentBean = PermutationSetterUtilities.beanFor(matchedField, currentBean);
 				currentList = currentBean.getOrCreateBeanFields();
 			}
 			
@@ -91,7 +117,7 @@ class PermutationSetterUtilities {
 			
 			return setter;		
 			
-		} catch (IllegalAccessException e) {
+		} catch (SetOperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
