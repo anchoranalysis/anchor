@@ -70,41 +70,6 @@ public class ImageDim implements Serializable {
 		this.res = new ImageRes( dim.res );
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		long temp;
-		temp = Double.doubleToLongBits( this.res.getX() );
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits( this.res.getY() );
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits( this.res.getZ() );
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ImageDim other = (ImageDim) obj;
-		if (!equalsLongBits( this.res.getX(), other.res.getX() )) {
-			return false;
-		}
-		if (!equalsLongBits( this.res.getY(), other.res.getY() )) {
-			return false;
-		}
-		if (!equalsLongBits( this.res.getZ(), other.res.getZ() )) {
-			return false;
-		}
-		return true;
-	}
-	
 	public void scaleXYTo( int x, int y ) {
 		
 		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(
@@ -200,8 +165,35 @@ public class ImageDim implements Serializable {
 	public String toString() {
 		return extent.toString();
 	}
-		
-	private static boolean equalsLongBits( double a, double b ) {
-		return Double.doubleToLongBits(a)==Double.doubleToLongBits(b);
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((extent == null) ? 0 : extent.hashCode());
+		result = prime * result + ((res == null) ? 0 : res.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImageDim other = (ImageDim) obj;
+		if (extent == null) {
+			if (other.extent != null)
+				return false;
+		} else if (!extent.equals(other.extent))
+			return false;
+		if (res == null) {
+			if (other.res != null)
+				return false;
+		} else if (!res.equals(other.res))
+			return false;
+		return true;
 	}
 }

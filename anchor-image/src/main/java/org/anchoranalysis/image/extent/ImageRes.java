@@ -230,4 +230,29 @@ public class ImageRes implements Serializable {
 	public String toString() {
 		return String.format("[%6.3e,%6.3e,%6.3e]", res.getX(), res.getY(), res.getZ());
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((res == null) ? 0 : res.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImageRes other = (ImageRes) obj;
+		if (res == null) {
+			if (other.res != null)
+				return false;
+		} else if (!res.equals(other.res))
+			return false;
+		return true;
+	}
 }
