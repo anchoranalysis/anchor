@@ -50,7 +50,7 @@ public class TypedValue {
 		super();
 		if (Double.isNaN(value)) {
 			this.value = "NaN";
-			this.isNumeric = false;
+			this.isNumeric = true;
 		} else {
 			DecimalFormat decimalFormat = new DecimalFormat();
 			decimalFormat.setMinimumFractionDigits(numDecimalPlaces);

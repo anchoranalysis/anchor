@@ -27,46 +27,35 @@ package org.anchoranalysis.experiment.task;
  */
 
 
-import java.io.IOException;
-import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+
 
 class HelperBindOutputManager {
-
+	
 	// If pathForBinding is null, we bind to the root folder instead
 	public static BoundOutputManager createOutputManagerForTask(
 		InputFromManager input,
-		ManifestRecorder manifestTask,
+		Optional<ManifestRecorder> manifestTask,
 		ParametersExperiment params
 	) throws JobExecutionException {
 		try {
 			if (input.pathForBinding()!=null) {
-				BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
-					input,
-					params.getExperimentIdentifier(),
-					manifestTask,
-					params.getExperimentalManifest(),
-					params.getExperimentArguments().createParamsContext()
-				);
-				throwExceptionIfClashes( params.getExperimentalManifest(), boundOutput, input.pathForBinding() );
-				return boundOutput;
+				return createWithBindingPath(input, manifestTask, params);
 			} else {
-				// If pathForBinding is null, we reuse the existing root output-manager (but adding a recorder for manifestTask)
-				manifestTask.init( params.getOutputManager().getOutputFolderPath() );
-				params.getOutputManager().addOperationRecorder( manifestTask.getRootFolder() );
-				return params.getOutputManager().getDelegate();
+				return createWithoutBindingPath(manifestTask, params.getOutputManager() );
 			}
 		} catch (AnchorIOException e) {
 			throw new JobExecutionException(
 				String.format(
 					"Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'%n%s",
-					input.pathForBinding()!=null ? quoteString(input.pathForBinding().toString()) : "null",
+					describeInputForBinding(input),
 					params.getExperimentIdentifier(),
 					e.toString()
 				),
@@ -75,49 +64,45 @@ class HelperBindOutputManager {
 		}
 	}
 
-	private static void throwExceptionIfClashes( ManifestRecorder manifestExperiment, BoundOutputManager boundOutput, Path pathForBinding ) throws JobExecutionException {
-		// Now we do a check, to ensure that our experimentalManifest and manifest are going to write files
-		//  to the same folder (without at least having some kind of prefix, to prevent files overwriting each other)
-		Path experimentalRoot = manifestExperiment.getRootFolder().getRelativePath();
-		if (wouldClashWithExperimentRoot(experimentalRoot,boundOutput.getBoundFilePathPrefix())) {
-			throw new JobExecutionException(
-				String.format(
-					"There is a clash between the bound-prefixer the root experiment directory.%n   Path for binding: %s%n   Root experiment directory: %s%nThey are writing to the same directory, without any prefix, and outputs may collide.",
-					pathForBinding,
-					experimentalRoot.toString()
-				)
+	private static BoundOutputManager createWithBindingPath(
+		InputFromManager input,
+		Optional<ManifestRecorder> manifestTask,
+		ParametersExperiment params
+	) throws AnchorIOException, JobExecutionException {
+		BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
+			input,
+			params.getExperimentIdentifier(),
+			manifestTask,
+			params.getExperimentalManifest(),
+			params.getExperimentArguments().createParamsContext()
+		);
+		if (params.getExperimentalManifest().isPresent()) {
+			ManifestClashChecker.throwExceptionIfClashes(
+				params.getExperimentalManifest().get(),
+				boundOutput,
+				input.pathForBinding()
 			);
+		}
+		return boundOutput;
+	}
+			
+	private static BoundOutputManager createWithoutBindingPath( Optional<ManifestRecorder> manifestTask, BoundOutputManagerRouteErrors outputManager ) {
+		manifestTask.ifPresent( mt-> {
+			mt.init( outputManager.getOutputFolderPath() );
+			outputManager.addOperationRecorder( mt.getRootFolder() );
+		});
+		return outputManager.getDelegate();
+	}
+
+	private static String describeInputForBinding( InputFromManager input ) {
+		if (input.pathForBinding()!=null) {
+			return quoteString(input.pathForBinding().toString());
+		} else {
+			return "null";
 		}
 	}
 	
 	private static String quoteString( String input ) {
 		return String.format("'%s'", input);
-	}
-	
-	
-	/**
-	 * Checks to see if this prefixer would clash with a particular experimentalDirectory by
-	 * writing files to the same locations that an experiment might do
-	 * 
-	 * This is particular dangerous for conflicting messagelog.txt
-	 * 
-	 * To avoid this happening, the prefixer should be either:
-	 * 1. writing out to a differerent directory
-	 * 2. have a prefix, which is prepended to all files, and keeps them unique
-	 * 
-	 * @param experimentalDirectory the root directory associated with the experiment
-	 * @return TRUE if it would clash, FALSE otherwise
-	 * @throws IOException 
-	 */
-	private static boolean wouldClashWithExperimentRoot( Path experimentalDirectory, FilePathPrefix fpp ) {
-		if (!fpp.getFilenamePrefix().isEmpty()) {
-			// We're safe if there's a non-empty filename prefix
-			return false;
-		}
-		
-		Path pathPrefixDir = fpp.getFolderPath();
-
-		// We're also safe if they are different directories
-		return (pathPrefixDir.normalize().equals(experimentalDirectory.normalize()));
 	}
 }

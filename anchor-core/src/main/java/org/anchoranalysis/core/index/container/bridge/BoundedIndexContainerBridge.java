@@ -1,6 +1,6 @@
 package org.anchoranalysis.core.index.container.bridge;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -40,9 +40,9 @@ import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
  * @author Owen Feehan
  *
  * @param <H> hidden-type (type passed to the delegate)
- * @param <E> external-type (type exposed in an interface from this class)
+ * @param <S> external-type (type exposed in an interface from this class)
  */
-public abstract class BoundedIndexContainerBridge <H,E> implements IBoundedIndexContainer<E> {
+public abstract class BoundedIndexContainerBridge<H,S> implements IBoundedIndexContainer<S> {
 
 	private IBoundedIndexContainer<H> delegate;
 	
@@ -52,17 +52,17 @@ public abstract class BoundedIndexContainerBridge <H,E> implements IBoundedIndex
 	}
 	
 	@Override
-	public E get(int index) throws GetOperationFailedException {
+	public S get(int index) throws GetOperationFailedException {
 		
 		H internalState = delegate.get(index);
 		try {
 			return bridge(index, internalState);
-		} catch (BridgeElementException e) {
+		} catch (Throwable e) {
 			throw new GetOperationFailedException(e);
 		}
 	}
 	
-	protected abstract E bridge(int index, H internalState) throws BridgeElementException;
+	protected abstract S bridge(int index, H internalState) throws Exception;
 	
 	@Override
 	public void addBoundChangeListener(BoundChangeListener cl) {

@@ -34,14 +34,17 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMarkHistogram;
 
 
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.histogram.Histogram;
 
-// Memoization of retrieving a PxlMark from a mark
-// So we only ever need to do this calculation once for a given instantiation
-public class PxlMarkMemo extends CachedOperation<PxlMark> {
+/** 
+ * Memoization of retrieving a PxlMark from a mark
+ * 
+ * <p>This is avoid repeated expensive operations (rasterization of a mark).</p>
+ */
+public class PxlMarkMemo extends CachedOperation<PxlMark,AnchorNeverOccursException> {
 
 	// Parameters
 	private Mark mark;
@@ -69,7 +72,7 @@ public class PxlMarkMemo extends CachedOperation<PxlMark> {
 	
 	// calculation
 	@Override
-	protected PxlMark execute() throws ExecuteException {
+	protected PxlMark execute() {
 		return new PxlMarkHistogram(mark, stack, regionMap, factoryHistogram);
 	}
 

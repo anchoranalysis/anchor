@@ -29,7 +29,6 @@ package org.anchoranalysis.core.name.store;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
@@ -41,8 +40,8 @@ import org.anchoranalysis.core.name.value.NameValue;
  * 
  * @author Owen Feehan
  *
- * @param <T> item-type in store
- */
+ * @param <T> item-type in the store
+ *  */
 public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 
 	private NameValueSet<T> delegate = new NameValueSet<>();
@@ -62,26 +61,18 @@ public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 	}
 
 	@Override
-	public void add(String name, Operation<T> getter) throws OperationFailedException {
+	public void add(String name, Operation<T,OperationFailedException> getter) throws OperationFailedException {
 
-		try {
-			NameValue<T> item = new NameValue<>(
-				new String(name),
-				getter.doOperation()
-			);
-			
-			delegate.add(item);
-		} catch (ExecuteException e) {
-			throw new OperationFailedException(e);
-		}
+		NameValue<T> item = new NameValue<>(
+			new String(name),
+			getter.doOperation()
+		);
 		
+		delegate.add(item);
 	}
 
 	@Override
 	public T getNull(String key) throws NamedProviderGetException {
 		return delegate.getException(key);
 	}
-
-
-
 }

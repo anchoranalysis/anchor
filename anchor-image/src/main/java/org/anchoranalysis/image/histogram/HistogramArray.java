@@ -104,9 +104,6 @@ public class HistogramArray extends Histogram {
 		incrValBy( val, toIntExact(increase) );
 	}
 	
-	
-	
-	
 	@Override
 	public void removeBelowThreshold( int threshold ) {
 		for( int i=getMinBin(); i<threshold; i++) {
@@ -145,7 +142,9 @@ public class HistogramArray extends Histogram {
 		}
 	}
 	
-	public double mean() {
+	public double mean() throws OperationFailedException {
+		
+		checkAtLeastOneItemExists();
 		
 		long sum = 0;
 		
@@ -154,14 +153,11 @@ public class HistogramArray extends Histogram {
 			assert(sum>=0);
 		}
 		
-		if (cnt==0) {
-			return Double.POSITIVE_INFINITY;
-		}
-		
 		return ((double) sum) / cnt;
 	}
 	
-	public double meanGreaterEqualTo( int val ) {
+	public double meanGreaterEqualTo( int val ) throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		long sum = 0;
 		long c = 0;
@@ -177,14 +173,11 @@ public class HistogramArray extends Histogram {
 			assert(c>=0);
 		}
 		
-		if (c==0) {
-			return Double.POSITIVE_INFINITY;
-		}
-		
 		return ((double) sum)/c;
 	}
 	
-	public double meanNonZero() {
+	public double meanNonZero() throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		long sum = 0;
 		
@@ -218,7 +211,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 	@Override
-	public int quantile( double quantile ) {
+	public int quantile( double quantile ) throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		double pos = quantile * cnt;
 		
@@ -234,7 +228,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 	@Override
-	public int quantileAboveZero( double quantile ) {
+	public int quantileAboveZero( double quantile ) throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		long cntMinusZero = cnt - getCount(0);
 		
@@ -277,12 +272,13 @@ public class HistogramArray extends Histogram {
 		return ((double) sum) / cnt;
 	}
 	
-	public int calcMode() {
+	public int calcMode() throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		return calcMode(0);
 	}
 	
-	// Should only be called on a histogram with at least one item
-	public int calcMode( int startVal ) {
+	public int calcMode( int startVal ) throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		int maxIndex = -1;
 		int maxValue = -1;
@@ -298,9 +294,9 @@ public class HistogramArray extends Histogram {
 		return maxIndex;
 	}
 	
-	
-	// Should only be called on a histogram with at least one item
-	public int calcMax() {
+
+	public int calcMax() throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		for( int i=maxBinVal; i>=minBinVal ;i--) {
 			if (arrGet(i)>0) {
@@ -312,8 +308,8 @@ public class HistogramArray extends Histogram {
 		return -1;
 	}
 
-	// Should only be called on a histogram with at least one item
-	public int calcMin() {
+	public int calcMin() throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		
 		for (int i=minBinVal; i<=maxBinVal; i++) {
 			if (arrGet(i)>0) {
@@ -324,7 +320,6 @@ public class HistogramArray extends Histogram {
 		assert false;
 		return -1;
 	}
-	
 
 	@Override
 	public long calcSum() {
@@ -355,7 +350,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 
-	public double stdDev() {
+	public double stdDev() throws OperationFailedException {
+		checkAtLeastOneItemExists();
 		return Math.sqrt( variance() );
 	}
 	
@@ -507,6 +503,26 @@ public class HistogramArray extends Histogram {
 		return out;
 	}
 	
+	@Override
+	public double mean(double power) throws OperationFailedException {
+		checkAtLeastOneItemExists();
+		return mean(power, 0.0);
+	}
+
+	@Override
+	public double mean(double power, double subtractVal) throws OperationFailedException {
+		checkAtLeastOneItemExists();
+		
+		double sum = 0;
+		
+		for( int i=minBinVal; i<=maxBinVal; i++) {
+			double iSub = (i-subtractVal);
+			sum += arrGetLong(i) * Math.pow( iSub , power);
+		}
+		
+		return sum / cnt;
+	}
+	
 	private long calcSumHelper( Function<Long,Long> funcInteger ) {
 		
 		long sum = 0;
@@ -547,22 +563,10 @@ public class HistogramArray extends Histogram {
 	private void chopArrBefore( int indx ) {
 		arr = Arrays.copyOfRange(arr, indx, arr.length);
 	}
-
-	@Override
-	public double mean(double power) {
-		return mean(power, 0.0);
-	}
-
-	@Override
-	public double mean(double power, double subtractVal) {
-		
-		double sum = 0;
-		
-		for( int i=minBinVal; i<=maxBinVal; i++) {
-			double iSub = (i-subtractVal);
-			sum += arrGetLong(i) * Math.pow( iSub , power);
+	
+	private void checkAtLeastOneItemExists() throws OperationFailedException {
+		if (isEmpty()) {
+			throw new OperationFailedException("There are no items in the histogram so this operation cannot occur");
 		}
-		
-		return sum / cnt;
 	}
 }

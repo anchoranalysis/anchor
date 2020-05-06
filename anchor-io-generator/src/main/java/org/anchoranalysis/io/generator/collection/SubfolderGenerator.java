@@ -103,16 +103,6 @@ public class SubfolderGenerator<T,CollectionType extends Collection<T>> extends 
 	}
 
 	@Override
-	public void start() throws OutputWriteFailedException {
-
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-
-	}
-
-	@Override
 	public Generator getGenerator() {
 		return this;
 	}

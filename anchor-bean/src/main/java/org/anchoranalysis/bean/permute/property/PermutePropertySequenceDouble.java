@@ -37,27 +37,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
  * @author Owen Feehan
  *
  */
-public class PermutePropertySequenceDouble extends PermutePropertyWithPath<Double> {
+public class PermutePropertySequenceDouble extends PermutePropertySequence<Double> {
 
-	// START BEAN PROPERTIES
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Integer sequence
-	 */
-	@BeanField
-	private int start;
-	
-	@BeanField
-	private int end;
-	
-	@BeanField
-	private int increment;
-	
+	// START BEAN PROPERTIES
 	/**
 	 * Divide by
 	 */
@@ -69,7 +56,6 @@ public class PermutePropertySequenceDouble extends PermutePropertyWithPath<Doubl
 	public Iterator<Double> propertyValues() {
 		return new DoubleRange();
 	}
-	
 	// END BEAN PROPERTIES
 	
 	// http://stackoverflow.com/questions/371026/shortest-way-to-get-an-iterator-over-a-range-of-integers-in-java
@@ -80,7 +66,7 @@ public class PermutePropertySequenceDouble extends PermutePropertyWithPath<Doubl
 	    private Iterator<Integer> itr;
 
 	    public DoubleRange() {
-	        itr = new IntegerRange(start,end,increment);
+	        itr = range();
 	    }
 
 	    @Override
@@ -105,30 +91,6 @@ public class PermutePropertySequenceDouble extends PermutePropertyWithPath<Doubl
 
 	public void setDivisor(double divisor) {
 		this.divisor = divisor;
-	}
-
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getEnd() {
-		return end;
-	}
-
-	public void setEnd(int end) {
-		this.end = end;
-	}
-
-	public int getIncrement() {
-		return increment;
-	}
-
-	public void setIncrement(int increment) {
-		this.increment = increment;
 	}
 
 	@Override

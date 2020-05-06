@@ -31,6 +31,7 @@ package org.anchoranalysis.io.output.bound;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
@@ -40,6 +41,7 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
+import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -117,7 +119,7 @@ public class BoundOutputManager {
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
-	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
+	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
 		FilePathPrefix fpp = outputManager.prefixForFile(
 			input,
 			expIdentifier,
@@ -125,7 +127,22 @@ public class BoundOutputManager {
 			experimentalManifestRecorder,
 			context
 		);
-		return new BoundOutputManager( outputManager, fpp, outputWriteSettings, manifestRecorder.getRootFolder(), lazyDirectoryFactory, initIfNeeded );
+		return new BoundOutputManager(
+			outputManager,
+			fpp,
+			outputWriteSettings,
+			writeRecorder(manifestRecorder),
+			lazyDirectoryFactory,
+			initIfNeeded
+		);
+	}
+	
+	private static IWriteOperationRecorder writeRecorder( Optional<ManifestRecorder> manifestRecorder ) {
+		Optional<IWriteOperationRecorder> opt = manifestRecorder
+			.map( mr->mr.getRootFolder() );
+		return opt.orElse(
+			new NullWriteOperationRecorder()
+		);
 	}
 
 	public boolean isOutputAllowed(String outputName) {

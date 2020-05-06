@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.bean.evaluator;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-feature
@@ -28,17 +30,17 @@ package org.anchoranalysis.image.feature.bean.evaluator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 /**
  * TODO make more generic than FeatureObjMaskParams
@@ -46,7 +48,7 @@ import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
  *
  * @param <T> feature-calculation parameters
  */
-public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends FeatureEvaluator<T> {
+public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEvaluator<T> {
 
 	/**
 	 * 
@@ -54,10 +56,10 @@ public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends Featu
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StackProvider stackProviderNRG;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
 		
@@ -79,20 +81,20 @@ public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends Featu
 		
 		FeatureCalculatorSingle<T> session = super.createAndStartSession();
 		
-		final NRGStackWithParams nrgStack = nrgStackOrNull();
+		final Optional<NRGStackWithParams> nrgStack = nrgStack();
 		
-		return new FeatureCalculatorSingleChangeParams<>(
+		return new FeatureCalculatorSingleChangeInput<>(
 			session,
 			params -> {
 				// Use reflection, to only set the nrgStack on params that supports them
-				if (params instanceof FeatureNRGStackParams) {
-					((FeatureNRGStackParams) params).setNrgStack( nrgStack );
+				if (params instanceof FeatureInputNRGStack && nrgStack.isPresent()) {
+					((FeatureInputNRGStack) params).setNrgStack( nrgStack.get() );
 				}
 			}
 		);
 	}
 	
-	private NRGStackWithParams nrgStackOrNull() throws OperationFailedException {
+	public Optional<NRGStackWithParams> nrgStack() throws OperationFailedException {
 		try {
 			if (stackProviderNRG!=null) {
 				
@@ -100,9 +102,9 @@ public class FeatureEvaluatorNrgStack<T extends FeatureCalcParams> extends Featu
 				nrgStack.setParams(
 					createKeyValueParams()
 				);
-				return nrgStack;
+				return Optional.of(nrgStack);
 			} else {
-				return null;
+				return Optional.empty();
 			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

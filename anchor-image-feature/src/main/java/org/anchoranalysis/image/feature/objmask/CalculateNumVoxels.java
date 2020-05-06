@@ -27,16 +27,18 @@ package org.anchoranalysis.image.feature.objmask;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateNumVoxels extends CachedCalculationCastParams<Double,FeatureObjMaskParams> {
+public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSingleObj> {
 
 	private boolean mip=false;
+	
+	public CalculateNumVoxels() {
+		this(false);
+	}
 	
 	public CalculateNumVoxels(boolean mip) {
 		super();
@@ -52,14 +54,10 @@ public class CalculateNumVoxels extends CachedCalculationCastParams<Double,Featu
 	}
 	
 
+	// Public, as it's needed by Mockito in test verifications
 	@Override
-	protected Double execute(FeatureObjMaskParams params) throws ExecuteException {
+	public Double execute(FeatureInputSingleObj params) {
 		return calc( params.getObjMask(), mip );
-	}
-
-	@Override
-	public CachedCalculation<Double> duplicate() {
-		return new CalculateNumVoxels(mip);
 	}
 	
 	@Override

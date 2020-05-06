@@ -40,6 +40,9 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
 
 public class PointsFromBinaryVoxelBox {
+	
+	private PointsFromBinaryVoxelBox() {}
+	
 
 	// Add: is added to each point before they are added to the list 
 	public static void addPointsFromVoxelBox( BinaryVoxelBox<ByteBuffer> voxelBox, Point3i add, List<Point2i> listOut  ) throws CreateException {

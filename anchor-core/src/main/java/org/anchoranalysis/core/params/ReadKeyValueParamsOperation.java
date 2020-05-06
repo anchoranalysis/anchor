@@ -31,25 +31,22 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 
-public class ReadKeyValueParamsOperation extends CachedOperation<KeyValueParams> {
+public class ReadKeyValueParamsOperation extends CachedOperation<KeyValueParams,IOException> {
 
-	private final Operation<Path> opPath;
+	private final Operation<Path,IOException> opPath;
 			
-	private ReadKeyValueParamsOperation(Operation<Path> opPath) {
+	private ReadKeyValueParamsOperation(Operation<Path,IOException> opPath) {
 		super();
 		this.opPath = opPath;
 	}
 
 	@Override
-	protected KeyValueParams execute() throws ExecuteException {
-		try {
-			return KeyValueParams.readFromFile(opPath.doOperation());
-		} catch (IOException e) {
-			throw new ExecuteException(e);
-		}
+	protected KeyValueParams execute() throws IOException {
+		return KeyValueParams.readFromFile(
+			opPath.doOperation()
+		);
 	}
 	
 }

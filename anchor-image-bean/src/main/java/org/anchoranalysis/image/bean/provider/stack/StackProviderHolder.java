@@ -33,7 +33,7 @@ import org.anchoranalysis.image.stack.Stack;
 
 // We don't really use this as a bean, convenient way of inserting stack into providers in bean
 // parameters
-// This is hack
+// This is hack. When inserted into the usual framework, lots of standard bean behaviour wont work.
 public class StackProviderHolder extends StackProvider {
 
 	/**
@@ -46,6 +46,10 @@ public class StackProviderHolder extends StackProvider {
 	private Stack stack;
 	// END BEAN PROPERTIES
 
+	public StackProviderHolder() {
+		// Needed to allow duplication in bean framework
+	}
+	
 	public StackProviderHolder(Stack stack) {
 		super();
 		this.stack = stack;

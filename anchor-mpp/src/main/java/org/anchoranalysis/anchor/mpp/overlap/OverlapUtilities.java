@@ -32,13 +32,14 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class OverlapUtilities {
 
-	public static double overlapWith( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) throws ExecuteException {
+	private OverlapUtilities() {}
+	
+	public static double overlapWith( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
 
 		// If we have a quick routine available, we use this
 		if (pmm2.getMark().hasOverlapWithQuick()) {
@@ -69,7 +70,7 @@ public class OverlapUtilities {
 		int regionID,
 		VoxelBox<ByteBuffer> globalMask,
 		byte onGlobalMask
-	) throws ExecuteException {
+	) {
 
 		// If we have a quick routine available, we use this
 		if (pmm2.getMark().hasOverlapWithQuick()) {
@@ -104,7 +105,7 @@ public class OverlapUtilities {
 		byte onGlobalMask,
 		double quantileLow,
 		double quantileHigh
-	) throws ExecuteException {
+	) {
 
 		// If we have a quick routine available, we use this
 		if (pmm2.getMark().hasOverlapWithQuick()) {
@@ -132,7 +133,7 @@ public class OverlapUtilities {
 		);
 	}
 		
-	public static MaxIntensityProjectionPair createMaxIntensityProjectionPair( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) throws ExecuteException {
+	public static MaxIntensityProjectionPair createMaxIntensityProjectionPair( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
 			
 		// Otherwise we do it the slow way by seeing if any pixels intersect
 		// between the two bounding box

@@ -43,7 +43,7 @@ public abstract class VoxelStatistics {
 	
 	public abstract VoxelStatistics threshold( RelationToValue relationToThreshold, double threshold );
 	
-	public abstract double quantile( double quantile );
+	public abstract double quantile( double quantile ) throws OperationFailedException;
 	
 	public abstract Histogram histogram() throws OperationFailedException;
 	

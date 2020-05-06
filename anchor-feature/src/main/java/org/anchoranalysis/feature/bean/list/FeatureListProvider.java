@@ -29,16 +29,16 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.provider.FeatureProviderBean;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * 
  * @author owen
  *
- * @param <T> calc-params type for feature list
+ * @param <T> input type for feature list
  */
 @GroupingRoot
-public abstract class FeatureListProvider<T extends FeatureCalcParams> extends FeatureProviderBean<FeatureListProvider<T>,FeatureList<T>> {
+public abstract class FeatureListProvider<T extends FeatureInput> extends FeatureProviderBean<FeatureListProvider<T>,FeatureList<T>> {
 
 	/**
 	 * 

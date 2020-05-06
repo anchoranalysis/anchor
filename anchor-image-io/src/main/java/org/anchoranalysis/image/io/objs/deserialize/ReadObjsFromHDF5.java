@@ -36,6 +36,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
+import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 
 class ReadObjsFromHDF5 extends Deserializer<ObjMaskCollection> {
 
@@ -44,13 +45,14 @@ class ReadObjsFromHDF5 extends Deserializer<ObjMaskCollection> {
 	@Override
 	public ObjMaskCollection deserialize(Path path) throws DeserializationFailedException {
 
-		IHDF5Reader reader = HDF5Factory.openForReading(path.toString());
-		
-		try {
+		try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
+
 			return readObjs(reader, PathUtilities.objsRootPath() );
-			
-		} finally {
-			reader.close();
+		
+		} catch (HDF5FileNotFoundException e) {
+			throw new DeserializationFailedException(
+				String.format("HDF5 file not found at %s", path)	
+			);
 		}
 	}
 	

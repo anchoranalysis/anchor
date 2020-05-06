@@ -45,7 +45,7 @@ public class ChnlFactoryByte extends ChnlFactorySingleType {
 	private static Log log = LogFactory.getLog(ChnlFactoryByte.class);
 	private static VoxelDataTypeUnsignedByte dataType = VoxelDataTypeUnsignedByte.instance;
 	
-	private static VoxelBoxFactoryTypeBound<ByteBuffer> factoryVoxelBox = VoxelBoxFactory.getByte();
+	private static VoxelBoxFactoryTypeBound<ByteBuffer> factoryVoxelBox = VoxelBoxFactory.instance().getByte();
 	
 	@Override
 	public Chnl createEmptyInitialised(ImageDim dim) {

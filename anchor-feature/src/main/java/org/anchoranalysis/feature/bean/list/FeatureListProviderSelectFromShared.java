@@ -28,11 +28,11 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Selects a number of features of shared-features matching against a regular-expression
@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderSelectFromShared<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderSelectFromShared<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -48,7 +48,7 @@ public class FeatureListProviderSelectFromShared<T extends FeatureCalcParams> ex
 	private static final long serialVersionUID = -3698511957662882985L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private RegEx match = null;
 	// END BEAN PROPERTIES
 	

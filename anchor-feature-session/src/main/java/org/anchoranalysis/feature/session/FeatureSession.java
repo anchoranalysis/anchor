@@ -1,10 +1,13 @@
 package org.anchoranalysis.feature.session;
 
-/*
+import java.util.ArrayList;
+import java.util.Collection;
+
+/*-
  * #%L
- * anchor-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,20 +29,129 @@ package org.anchoranalysis.feature.session;
  * #L%
  */
 
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
+import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
+import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
- * When a user calculates a feature, he/she typically calculates the one or more features on many different objects
+ * A single-point in the code for creating feature-sessions (a factory).
  * 
- * This creates possibilities for various different forms of caching of results, and different initialisation
- *   strategies.
- *   
- * The FeatureSession object represents one such bunch of calculations. Different implementations provide
- *   different strategies for caching.
- *
+ * <p>A feature session is a context needed to calculate one or more parameters (inptus to features) on one or more features</p>
+ * 
+ * <p>Within this context, caching of intermediate results and other efficiencies are implemented beneath the hood.</p>
  * 
  * @author Owen Feehan
  *
  */
-public abstract class FeatureSession {
+public class FeatureSession {
 
+	private FeatureSession() {}
+	
+	/**
+	 * Starts a feature-session for a single feature
+	 * 
+	 * @param <T> type of parameters
+	 * @param feature the feature
+	 * @param logger a logger
+	 * @return a calculator that will calculate just this feature for each parameter.
+	 * @throws FeatureCalcException
+	 */
+	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
+		Feature<T> feature,
+		LogErrorReporter logger
+	) throws FeatureCalcException {
+		return with(
+			feature,
+			new FeatureInitParams(),
+			new SharedFeatureSet<T>(),
+			logger
+		);
+	}
+
+	/**
+	 * Starts a feature-session for a list of features
+	 * 
+	 * @param <T> type of parameters for all features
+	 * @param features a list of features accepting uniform type
+	 * @param logger a logger
+	 * @return a calculator that will call calculate all the features in the list for each parameter.
+	 * @throws FeatureCalcException
+	 */
+	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
+		FeatureList<T> features,
+		LogErrorReporter logger
+	) throws FeatureCalcException {
+		return with(
+			features,
+			new FeatureInitParams(),
+			new SharedFeatureSet<T>(),
+			logger				
+		);
+	}
+	
+	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
+		Feature<T> feature,
+		FeatureInitParams initParams,
+		SharedFeatureSet<T> sharedFeatures,
+		LogErrorReporter logger
+	) throws FeatureCalcException {
+		SequentialSession<T> session = new SequentialSession<>(feature); 
+		startSession(session, initParams, sharedFeatures, logger);			
+		return new FeatureCalculatorSingleFromMulti<>(session);
+	}
+	
+	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
+		FeatureList<T> features,
+		FeatureInitParams initParams,
+		SharedFeatureSet<T> sharedFeatures,
+		LogErrorReporter logger
+	) throws FeatureCalcException {
+		return with(
+			features,
+			initParams,
+			sharedFeatures,
+			logger,
+			new ArrayList<>(),
+			new BoundReplaceStrategy<>(
+				cacheCreator -> new ReuseSingletonStrategy<>(cacheCreator)
+			)
+		);
+	}
+	
+	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
+		FeatureList<T> features,
+		FeatureInitParams initParams,
+		SharedFeatureSet<T> sharedFeatures,
+		LogErrorReporter logger,
+		Collection<String> ignoreFeaturePrefixes,
+		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
+	) throws FeatureCalcException {
+		SequentialSession<T> session = new SequentialSession<>(features, ignoreFeaturePrefixes, replacePolicyFactory); 
+		startSession(session, initParams, sharedFeatures, logger);
+		return session;
+	}
+	
+	private static <T extends FeatureInput> void startSession(
+		SequentialSession<T> session,
+		FeatureInitParams initParams,
+		SharedFeatureSet<T> sharedFeatures,
+		LogErrorReporter logger
+	) throws FeatureCalcException {
+		try {
+			session.start( initParams, sharedFeatures, logger );
+		} catch (InitException e) {
+			throw new FeatureCalcException("An error occurred starting the feature (sequential) session", e);
+		}
+	}
 }

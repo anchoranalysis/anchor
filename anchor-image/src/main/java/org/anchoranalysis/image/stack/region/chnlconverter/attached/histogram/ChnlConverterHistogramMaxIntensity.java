@@ -29,6 +29,7 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram;
 
 import java.nio.ByteBuffer;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
@@ -51,7 +52,7 @@ public class ChnlConverterHistogramMaxIntensity extends ChnlConverterAttached<Hi
 	}
 	
 	@Override
-	public void attachObject(Histogram hist) {
+	public void attachObject(Histogram hist) throws OperationFailedException {
 		
 		int maxValue = hist.calcMax();
 		voxelBoxConverter.setMaxValue(maxValue);

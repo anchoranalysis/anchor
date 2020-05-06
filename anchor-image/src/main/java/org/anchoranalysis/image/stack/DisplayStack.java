@@ -299,10 +299,10 @@ public class DisplayStack {
 		if (converter!=null) {
 			BoundingBox allLocalBox = new BoundingBox(destBox.extnt());
 			
-			VoxelBoxWrapper destBoxNonByte = VoxelBoxFactory.create( destBox.extnt(), chnl.getVoxelDataType() );
+			VoxelBoxWrapper destBoxNonByte = VoxelBoxFactory.instance().create( destBox.extnt(), chnl.getVoxelDataType() );
 			chnl.getVoxelBox().copyPixelsTo(sourceBox, destBoxNonByte, allLocalBox );
 			
-			VoxelBox<ByteBuffer> destBoxByte = VoxelBoxFactory.getByte().create( destBox.extnt());
+			VoxelBox<ByteBuffer> destBoxByte = VoxelBoxFactory.instance().getByte().create( destBox.extnt());
 			converter.getVoxelBoxConverter().convertFrom(destBoxNonByte, destBoxByte);
 			
 			destBoxByte.copyPixelsTo(allLocalBox, destVoxelBox, destBox);
@@ -387,7 +387,7 @@ public class DisplayStack {
 		if (converter!=null) {
 			return converter.getVoxelBoxConverter().convertFrom(
 				chnl.getVoxelBox(),
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			);
 		} else {
 			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
@@ -410,7 +410,7 @@ public class DisplayStack {
 		if (converter!=null) {
 			return converter.getVoxelBoxConverter().convertFrom(
 				new VoxelBoxWrapper(vbUnconverted),
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			);
 		} else {
 			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {

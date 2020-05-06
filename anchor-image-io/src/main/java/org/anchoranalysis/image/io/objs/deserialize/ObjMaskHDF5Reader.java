@@ -74,7 +74,7 @@ class ObjMaskHDF5Reader {
 	 */
 	private VoxelBox<ByteBuffer> createVoxelBox( MDByteArray mdb ) {
 		Extent e = extractExtnt(mdb);
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create( e );
 		
 		for( int z=0; z<e.getZ(); z++) {
 			

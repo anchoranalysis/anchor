@@ -26,14 +26,12 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * #L%
  */
 
-import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
 import loci.formats.IFormatReader;
 
-public class ForceNumChnl extends ReadOptions {
+public class ForceNumChnl extends ReadOptionsDelegate {
 	
 	/**
 	 * 
@@ -41,9 +39,6 @@ public class ForceNumChnl extends ReadOptions {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ReadOptions options = new Default();
-		
 	@BeanField @Positive
 	private int numChnl;
 	// END BEAN PROPERTIES
@@ -52,44 +47,11 @@ public class ForceNumChnl extends ReadOptions {
 	public int sizeC(IFormatReader reader) {
 		return numChnl;
 	}
-
-	@Override
-	public int sizeT(IFormatReader reader) {
-		return options.sizeT(reader);
-	}
-
-	@Override
-	public int sizeZ(IFormatReader reader) {
-		return options.sizeZ(reader);
-	}
-
-	@Override
-	public int effectiveBitsPerPixel(IFormatReader reader) {
-		return options.effectiveBitsPerPixel(reader);
-	}
-
-	@Override
-	public int chnlsPerByteArray(IFormatReader reader) {
-		return options.chnlsPerByteArray(reader);
-	}
 	
 	@Override
 	public boolean isRGB(IFormatReader reader) {
-		// Not supporte when the numer of channels is being forced
+		// Not supported when the numer of channels is being forced
 		return false;
-	}
-
-	@Override
-	public List<String> determineChannelNames(IFormatReader reader) {
-		return options.determineChannelNames(reader);
-	}
-
-	public ReadOptions getOptions() {
-		return options;
-	}
-
-	public void setOptions(ReadOptions options) {
-		this.options = options;
 	}
 
 	public int getNumChnl() {

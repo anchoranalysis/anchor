@@ -36,7 +36,6 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.anchoranalysis.io.xml.XmlOutputter;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;

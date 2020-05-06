@@ -32,23 +32,23 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
  * An NRG Scheme sums lists of features, that can be divided into different cliques:
@@ -60,7 +60,7 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
  * @author Owen Feehan
  *
  */
-public class NRGScheme extends FeatureBean<NRGScheme> {
+public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 
 	/**
 	 * 
@@ -68,26 +68,26 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 	private static final long serialVersionUID = -3182282741823034283L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
-	private FeatureList<NRGElemPairCalcParams> elemPair = null;
+	@BeanField @OptionalBean
+	private FeatureList<FeatureInputPairMemo> elemPair = null;
 	
-	@BeanField @Optional
-	private FeatureList<NRGElemIndCalcParams> elemInd = null;
+	@BeanField @OptionalBean
+	private FeatureList<FeatureInputSingleMemo> elemInd = null;
 	
-	@BeanField @Optional
-	private FeatureList<NRGElemAllCalcParams> elemAll = null;
+	@BeanField @OptionalBean
+	private FeatureList<FeatureInputAllMemo> elemAll = null;
 	
 	@BeanField
 	private RegionMap regionMap;
 	
 	/** A list of features of the image that are calculated first, and exposed to the other features as parameters */
 	@BeanField
-	private List<NamedBean<Feature<FeatureStackParams>>> listImageFeatures;
+	private List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures;
 	
 	@BeanField
 	private AddCriteriaPair pairAddCriteria = null;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
 	
@@ -95,11 +95,11 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 		elemPair = new FeatureList<>();
 		elemInd = new FeatureList<>();
 		elemAll = new FeatureList<>();
-		listImageFeatures = new ArrayList<NamedBean<Feature<FeatureStackParams>>>();
+		listImageFeatures = new ArrayList<NamedBean<Feature<FeatureInputStack>>>();
 		regionMap = RegionMapSingleton.instance(); 
 	}
 	
-	public NRGScheme( FeatureList<NRGElemIndCalcParams> elemInd, FeatureList<NRGElemPairCalcParams> elemPair, RegionMap regionMap ) {
+	public NRGScheme( FeatureList<FeatureInputSingleMemo> elemInd, FeatureList<FeatureInputPairMemo> elemPair, RegionMap regionMap ) {
 		this.elemPair = elemPair;
 		this.elemInd = elemInd;
 		this.elemAll = new FeatureList<>();
@@ -150,11 +150,11 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 	}
 
 	
-	public List<Feature<NRGElemPairCalcParams>> getElemPair() {
+	public List<Feature<FeatureInputPairMemo>> getElemPair() {
 		return elemPair;
 	}
 
-	public void setElemPair(List<Feature<NRGElemPairCalcParams>> elemPair) {
+	public void setElemPair(List<Feature<FeatureInputPairMemo>> elemPair) {
 		this.elemPair = new FeatureList<>(elemPair);
 	}
 
@@ -166,7 +166,7 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends FeatureCalcParams> FeatureList<T> getElemByCliqueSize( int cliqueSize ) {
+	public <T extends FeatureInput> FeatureList<T> getElemByCliqueSize( int cliqueSize ) {
 		
 		if (cliqueSize==0) {
 			return (FeatureList<T>) getElemIndAsFeatureList();
@@ -180,36 +180,36 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 		}
 	}
 	
-	public FeatureList<NRGElemIndCalcParams> getElemIndAsFeatureList() {
+	public FeatureList<FeatureInputSingleMemo> getElemIndAsFeatureList() {
 		return elemInd;
 	}
 	
-	public FeatureList<NRGElemPairCalcParams> getElemPairAsFeatureList() {
+	public FeatureList<FeatureInputPairMemo> getElemPairAsFeatureList() {
 		return elemPair;
 	}
 	
-	public FeatureList<NRGElemAllCalcParams> getElemAllAsFeatureList() {
+	public FeatureList<FeatureInputAllMemo> getElemAllAsFeatureList() {
 		return elemAll;
 	}	
 	
-	public List<Feature<NRGElemIndCalcParams>> getElemInd() {
+	public List<Feature<FeatureInputSingleMemo>> getElemInd() {
 		return elemInd;
 	}
 	
 
 
-	public List<Feature<NRGElemAllCalcParams>> getElemAll() {
+	public List<Feature<FeatureInputAllMemo>> getElemAll() {
 		return elemAll;
 	}
 	
-	public void setElemAll(List<Feature<NRGElemAllCalcParams>> elemAll) {
+	public void setElemAll(List<Feature<FeatureInputAllMemo>> elemAll) {
 		this.elemAll = new FeatureList<>(elemAll);
 	}
 	
 
 
 	// We put our normal setters and getters as List<Feature> so that the bean xml can use the normal factories for Lists
-	public void setElemInd(List<Feature<NRGElemIndCalcParams>> elemInd) {
+	public void setElemInd(List<Feature<FeatureInputSingleMemo>> elemInd) {
 		this.elemInd = new FeatureList<>(elemInd);
 	}
 
@@ -228,12 +228,12 @@ public class NRGScheme extends FeatureBean<NRGScheme> {
 		return out;
 	}
 
-	public List<NamedBean<Feature<FeatureStackParams>>> getListImageFeatures() {
+	public List<NamedBean<Feature<FeatureInputStack>>> getListImageFeatures() {
 		return listImageFeatures;
 	}
 
 	public void setListImageFeatures(
-			List<NamedBean<Feature<FeatureStackParams>>> listImageFeatures) {
+			List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures) {
 		this.listImageFeatures = listImageFeatures;
 	}
 

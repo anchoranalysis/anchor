@@ -30,7 +30,7 @@ package org.anchoranalysis.bean.xml.mock;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 
 public class MockBeanNested extends AnchorBean<MockBeanNested> {
 
@@ -48,7 +48,7 @@ public class MockBeanNested extends AnchorBean<MockBeanNested> {
 	@BeanField
 	private MockBeanSimple fieldBeanNecessary;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MockBeanSimple fieldBeanOptional;
 	
 	public String getFieldSimpleNecessary() {

@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
@@ -42,16 +42,16 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -91,7 +91,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private transient boolean hasInit = false;
 	private transient NRGStackWithParams nrgStack;
 	private transient LogErrorReporter logger;
-	private transient SharedFeatureSet<FeatureCalcParams> sharedFeatures;
+	private transient SharedFeatureSet<FeatureInput> sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
 		this.pairTypeClass = pairTypeClass;
@@ -121,7 +121,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException {
 		assert( sharedFeatures!=null );
 		assert( logger!=null );
 		this.logger = logger;
@@ -135,12 +135,12 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				graph.addVertex( marks.getMemoForIndex(i).getMark() );
 			}
 			
-			FeatureList<NRGElemPairCalcParams> features = addCriteria.orderedListOfFeatures();
+			FeatureList<FeatureInputPairMemo> features = addCriteria.orderedListOfFeatures();
 			if (features==null) {
 				features = new FeatureList<>();
 			}
 			
-			FeatureCalculatorMulti<NRGElemPairCalcParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorMulti<FeatureInputPairMemo> session = FeatureSession.with(
 				features,
 				new FeatureInitParams(stack.getParams()),
 				sharedFeatures.downcast(),
@@ -174,7 +174,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		assert hasInit;
 		
 		// We need to make a copy of the list, so we can perform the removal operation after the add
-		PxlMarkMemoList memoList = new PxlMarkMemoList(); 
+		MemoList memoList = new MemoList(); 
 		memoList.addAll( pxlMarkMemoList );
 		
 		rmv(pxlMarkMemoList, oldMark);
@@ -259,7 +259,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		int index = (int) (re.nextDouble() * count);
 		
 		int i =0;
-		for( GraphWithEdgeTypes.EdgeTypeWithVertices<Mark,T> di : getPairsWithPossibleDuplicates()) {
+		for( EdgeTypeWithVertices<Mark,T> di : getPairsWithPossibleDuplicates()) {
 			if (i++==index) {
 				return di.getEdge();
 			}
@@ -284,7 +284,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		this.pairTypeClass = pairTypeClass;
 	}
 	
-	private void initGraph( MemoForIndex marks, NRGStackWithParams stack, FeatureCalculatorMulti<NRGElemPairCalcParams> session ) throws CreateException {
+	private void initGraph( MemoForIndex marks, NRGStackWithParams stack, FeatureCalculatorMulti<FeatureInputPairMemo> session ) throws CreateException {
 		// Some nrg components need to be calculated individually
 		for( int i=0; i< marks.size(); i++ ) {
 			
@@ -306,9 +306,9 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		assert sharedFeatures!=null;
 		assert logger!=null;
 		
-		FeatureCalculatorMulti<NRGElemPairCalcParams> session;
+		FeatureCalculatorMulti<FeatureInputPairMemo> session;
 		try {
-			session = SessionFactory.createAndStart(
+			session = FeatureSession.with(
 				addCriteria.orderedListOfFeatures(),
 				new FeatureInitParams(nrgStack.getParams()),
 				sharedFeatures.downcast(),

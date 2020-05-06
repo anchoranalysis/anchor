@@ -26,14 +26,12 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * #L%
  */
 
-import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
 import loci.formats.IFormatReader;
 
-public class ForceBitsPerPixel extends ReadOptions {
+public class ForceBitsPerPixel extends ReadOptionsDelegate {
 
 	/**
 	 * 
@@ -41,51 +39,17 @@ public class ForceBitsPerPixel extends ReadOptions {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ReadOptions options = new Default();
-	
 	@BeanField @Positive
 	private int bitsPerPixel = 0;
 	// END BEAN PROPERTIES
-	
-	// Overridden with a constant
-	@Override
-	public int effectiveBitsPerPixel(IFormatReader reader) {
-		return bitsPerPixel;
-	}
-	
-	@Override
-	public List<String> determineChannelNames(IFormatReader reader) {
-		return options.determineChannelNames(reader);
-	}
-	
-	@Override
-	public int sizeT(IFormatReader reader) {
-		return options.sizeT(reader);
-	}
-
-	@Override
-	public int sizeZ(IFormatReader reader) {
-		return options.sizeZ(reader);
-	}
-
-	@Override
-	public int sizeC(IFormatReader reader) {
-		return options.sizeC(reader);
-	}
 
 	@Override
 	public boolean isRGB(IFormatReader reader) {
 		if (bitsPerPixel==8) {
-			return options.isRGB(reader);
+			return delegate().isRGB(reader);
 		} else {
 			return false;
 		}
-	}
-	
-	@Override
-	public int chnlsPerByteArray(IFormatReader reader) {
-		return options.chnlsPerByteArray(reader);
 	}
 
 	public int getBitsPerPixel() {
@@ -95,14 +59,4 @@ public class ForceBitsPerPixel extends ReadOptions {
 	public void setBitsPerPixel(int bitsPerPixel) {
 		this.bitsPerPixel = bitsPerPixel;
 	}
-
-	public ReadOptions getOptions() {
-		return options;
-	}
-
-	public void setOptions(ReadOptions options) {
-		this.options = options;
-	}
-
-
 }

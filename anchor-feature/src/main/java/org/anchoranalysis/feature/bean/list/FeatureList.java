@@ -42,17 +42,17 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 /**
  * 
  * @author owen
  *
- * @param <T> calc-params type of features contained in the list
+ * @param <T> input type of features contained in the list
  */
-public class FeatureList<T extends FeatureCalcParams> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>>, Serializable {
+public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>>, Serializable {
 	
 	/**
 	 * 
@@ -94,13 +94,13 @@ public class FeatureList<T extends FeatureCalcParams> extends AnchorBean<Feature
 	}
 	
 	@SuppressWarnings("unchecked")
-	public FeatureList<FeatureCalcParams> upcast() {
-		return (FeatureList<FeatureCalcParams>) this;
+	public FeatureList<FeatureInput> upcast() {
+		return (FeatureList<FeatureInput>) this;
 	}
 	
 	
 	@SuppressWarnings("unchecked")
-	public <S extends FeatureCalcParams> FeatureList<S> downcast() {
+	public <S extends FeatureInput> FeatureList<S> downcast() {
 		return (FeatureList<S>) this;
 	}
 	

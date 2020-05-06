@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
@@ -46,7 +47,7 @@ public abstract class PointsProposer extends NullParamsBean<PointsProposer> impl
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public abstract List<Point3i> propose( Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode );
+	public abstract Optional<List<Point3i>> propose( Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode );
 	
 	public abstract ICreateProposalVisualization proposalVisualization(boolean detailed);
 }

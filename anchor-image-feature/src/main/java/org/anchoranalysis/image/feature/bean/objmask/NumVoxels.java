@@ -28,11 +28,10 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class NumVoxels extends FeatureObjMask {
 
@@ -47,14 +46,10 @@ public class NumVoxels extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		try {
-			return params.calc(
-				new CalculateNumVoxels(mip)
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+		return input.calc(
+			new CalculateNumVoxels(mip)
+		);
 	}
 
 	public boolean isMip() {

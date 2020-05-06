@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.bean.io;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-experiment
@@ -41,6 +43,7 @@ import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
+import org.anchoranalysis.io.generator.serialized.SerializedGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
@@ -121,7 +124,10 @@ public abstract class OutputExperiment extends Experiment {
 			
 			execExperiment( params );
 			
-			writeManifests(params.getOutputManager(), params.getExperimentalManifest());
+			writeManifests(
+				params.getOutputManager(),
+				params.getExperimentalManifest()
+			);
 			writeExecutionTime(params.getOutputManager(), stopWatchExperiment);
 			
 			// Outputs after processing
@@ -163,7 +169,7 @@ public abstract class OutputExperiment extends Experiment {
 		return new ParametersExperiment(
 			expArgs,
 			experimentId,
-			experimentalManifest,
+			Optional.of(experimentalManifest),
 			rootOutputManager,
 			logReporter,
 			useDetailedLogging()
@@ -199,14 +205,18 @@ public abstract class OutputExperiment extends Experiment {
 	}
 	
 	/** Maybe writes the experimental-manifest to the file-system in two different formats */
-	private void writeManifests(BoundOutputManagerRouteErrors rootOutputManager, ManifestRecorder experimentalManifest) {
+	private void writeManifests(BoundOutputManagerRouteErrors rootOutputManager, Optional<ManifestRecorder> experimentalManifest) {
+		experimentalManifest.ifPresent( manifest-> {
+			writeManifestIfAllowed(rootOutputManager, new XStreamGenerator<Object>( manifest, "ManifestRecorder") );
+			writeManifestIfAllowed(rootOutputManager, new ObjectOutputStreamGenerator<>( manifest, "ManifestRecorder") );
+			
+		});
+	}
+	
+	private void writeManifestIfAllowed( BoundOutputManagerRouteErrors rootOutputManager, SerializedGenerator generator ) {
 		rootOutputManager.getWriterCheckIfAllowed().write(
 			outputNameManifestExperiment,
-			() -> new XStreamGenerator<Object>( experimentalManifest, "ManifestRecorder")
-		);
-		rootOutputManager.getWriterCheckIfAllowed().write(
-			outputNameManifestExperiment,
-			() -> new ObjectOutputStreamGenerator<>( experimentalManifest, "ManifestRecorder")
+			() -> generator
 		);
 	}
 	

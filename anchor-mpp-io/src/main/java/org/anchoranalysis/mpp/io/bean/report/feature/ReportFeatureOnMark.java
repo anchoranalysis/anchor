@@ -2,7 +2,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 
-public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureMarkParams> {
+public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
 	/**
 	 * 
@@ -80,12 +80,12 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureMarkParams> 
 		
 					
 		try {
-			FeatureCalculatorSingle<FeatureMarkParams> session = createAndStartSession();
+			FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
 			
 			ImageDim dims = createImageDim();
 			
-			double val = session.calcOne(
-				new FeatureMarkParams(mark, dims.getRes())
+			double val = session.calc(
+				new FeatureInputMark(mark, dims.getRes())
 			);
 			return Double.toString(val);
 		} catch (FeatureCalcException | CreateException e) {

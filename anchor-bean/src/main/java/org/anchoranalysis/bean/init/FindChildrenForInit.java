@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.InitException;
 
@@ -53,7 +53,7 @@ class FindChildrenForInit {
 			if (!field.isAnnotationPresent(SkipInit.class)) {
 			
 				// Create a FIFO queue of items to be initialised
-				addChildrenMany( listOut, bean, field, field.isAnnotationPresent(Optional.class) );
+				addChildrenMany( listOut, bean, field, field.isAnnotationPresent(OptionalBean.class) );
 			}
 		}
 	}

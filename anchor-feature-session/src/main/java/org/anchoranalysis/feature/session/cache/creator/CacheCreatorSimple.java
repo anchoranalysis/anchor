@@ -29,28 +29,30 @@ package org.anchoranalysis.feature.session.cache.creator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.creator.CacheCreator;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.CachePlus;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.session.cache.HorizontalCalculationCacheFactory;
-import org.anchoranalysis.feature.session.cache.HorizontalFeatureCacheFactory;
+import org.anchoranalysis.feature.cache.calculation.CacheCreator;
+import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
+import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class CacheCreatorSimple implements CacheCreator {
 
-	private FeatureList<? extends FeatureCalcParams> namedFeatures;
-	private SharedFeatureSet<? extends FeatureCalcParams> sharedFeatures;
+	private FeatureList<? extends FeatureInput> namedFeatures;
+	private SharedFeatureSet<? extends FeatureInput> sharedFeatures;
 	private FeatureInitParams featureInitParams;
 	private LogErrorReporter logger;
 	
-	public CacheCreatorSimple(FeatureList<? extends FeatureCalcParams> namedFeatures,
-			SharedFeatureSet<? extends  FeatureCalcParams> sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
+	private static FeatureSessionCacheFactory factory = new HorizontalFeatureCacheFactory();
+	
+	public CacheCreatorSimple(FeatureList<? extends FeatureInput> namedFeatures,
+			SharedFeatureSet<? extends  FeatureInput> sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
 		super();
 		this.namedFeatures = namedFeatures;
 		this.sharedFeatures = sharedFeatures;
@@ -59,26 +61,29 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	@Override
-	public <T extends FeatureCalcParams> FeatureSessionCache<T> create( Class<?> paramsType ) {
+	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType ) {
 		
 		FeatureList<T> featureList = filterFeatureList(paramsType);
 		SharedFeatureSet<T> sharedFeaturesCast = maybeCastSharedFeatures(paramsType); 
-		
-		CachePlus<T> cache = new CachePlus<>(
-			new HorizontalFeatureCacheFactory( new HorizontalCalculationCacheFactory() ),
-			featureList,
-			sharedFeaturesCast
-		);
+				
 		try {
-			cache.init(featureInitParams, logger, false);
-		} catch (InitException e) {
+			return createCache(
+				featureList,
+				sharedFeaturesCast,
+				featureInitParams,
+				logger	
+			);
+		} catch (CreateException e) {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
+			assert(false);
+			return null;
 		}
-		return cache.createCache();
+
 	}
 
-	private <T extends FeatureCalcParams> FeatureList<T> filterFeatureList(Class<?> paramsType) {
-		@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
+	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
+		
 		List<Feature<T>> list = namedFeatures.getList().stream()
 			.filter( f -> paramsType.isAssignableFrom(f.getClass()) )
 			.map( f -> (Feature<T>) f )
@@ -89,7 +94,7 @@ public class CacheCreatorSimple implements CacheCreator {
 	
 	// Assumes either all features in the set match paramsType or none do
 	@SuppressWarnings("unchecked")
-	private <T extends FeatureCalcParams> SharedFeatureSet<T> maybeCastSharedFeatures(Class<?> paramsType) {
+	private <T extends FeatureInput> SharedFeatureSet<T> maybeCastSharedFeatures(Class<?> paramsType) {
 		
 		if (sharedFeatures.keys().isEmpty()) {
 			return new SharedFeatureSet<T>();
@@ -103,5 +108,31 @@ public class CacheCreatorSimple implements CacheCreator {
 		}
 		
 		return new SharedFeatureSet<T>();	
+	}
+	
+	private <T extends FeatureInput> FeatureSessionCache<T> createCache(
+		FeatureList<T> namedFeatures,
+		SharedFeatureSet<T> sharedFeatures,
+		FeatureInitParams featureInitParams,
+		LogErrorReporter logger			
+	) throws CreateException {
+		
+		try {
+			sharedFeatures.initRecursive( featureInitParams, logger );
+		} catch (InitException e) {
+			throw new CreateException(e);
+		}
+		
+		assert(logger!=null);
+		FeatureSessionCache<T> cache = factory.create(
+			namedFeatures,
+			sharedFeatures.duplicate()
+		);
+		try {
+			cache.init(featureInitParams, logger);
+		} catch (InitException e) {
+			throw new CreateException(e);
+		}
+		return cache;
 	}
 }

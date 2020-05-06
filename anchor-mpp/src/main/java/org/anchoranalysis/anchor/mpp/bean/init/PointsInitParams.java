@@ -3,9 +3,7 @@ package org.anchoranalysis.anchor.mpp.bean.init;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.bean.init.params.IdentityBridgeInit;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.bean.store.BeanStoreAdder;
 
 /*
  * #%L
@@ -39,6 +37,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.init.PopulateStoreFromDefine;
 
 public class PointsInitParams extends BeanInitParams {
 	
@@ -65,8 +64,10 @@ public class PointsInitParams extends BeanInitParams {
 		return storePointsFitter;
 	}
 
-	public void populate( PropertyInitializer<?> pi, Define namedDefinitions, LogErrorReporter logger ) throws OperationFailedException {
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(PointsFitter.class), storePointsFitter, new IdentityBridgeInit<PointsFitter,PointsInitParams>(pi,logger) );
+	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
+		
+		PopulateStoreFromDefine<PointsInitParams> populater = new PopulateStoreFromDefine<>(define, pi, logger);
+		populater.copyInit(PointsFitter.class, storePointsFitter);
 	}
 
 	public ImageInitParams getImage() {

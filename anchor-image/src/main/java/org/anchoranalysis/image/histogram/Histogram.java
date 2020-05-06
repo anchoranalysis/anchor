@@ -55,42 +55,42 @@ public abstract class Histogram {
 	
 	public abstract void addHistogram( Histogram other ) throws OperationFailedException;
 	
-	public abstract double mean();
+	public abstract double mean() throws OperationFailedException;
 	
 	/** calculates the mean after raising each histogram value to a power i.e. mean of histogramVal^power */
-	public abstract double mean( double power );
+	public abstract double mean( double power ) throws OperationFailedException;
 	
 	/** calculates the mean of (histogramVal - subtractVal)^power */
-	public abstract double mean( double power, double subtractVal );
+	public abstract double mean( double power, double subtractVal ) throws OperationFailedException;
 			
-	public abstract double meanGreaterEqualTo( int val );
+	public abstract double meanGreaterEqualTo( int val ) throws OperationFailedException;
 			
-	public abstract double meanNonZero();
+	public abstract double meanNonZero() throws OperationFailedException;
 	
 	public abstract long sumNonZero();
 	
 	public abstract void scaleBy( double factor );
 			
-	public abstract int quantile( double quantile );
+	public abstract int quantile( double quantile ) throws OperationFailedException;
 			
-	public abstract int quantileAboveZero( double quantile );
+	public abstract int quantileAboveZero( double quantile ) throws OperationFailedException;
 	
 	public abstract boolean hasAboveZero();
 	
 	public abstract double percentGreaterEqualTo( int intensity );
 	
-	public int calcMode() {
+	public int calcMode() throws OperationFailedException {
 		return calcMode(0);
 	}
 	
 	// Should only be called on a histogram with at least one item
-	public abstract int calcMode( int startIndex );
+	public abstract int calcMode( int startIndex ) throws OperationFailedException;
 
 	// Should only be called on a histogram with at least one item
-	public abstract int calcMax();
+	public abstract int calcMax() throws OperationFailedException;
 
 	// Should only be called on a histogram with at least one item
-	public abstract int calcMin();
+	public abstract int calcMin() throws OperationFailedException;
 
 	public abstract long calcSum();
 	
@@ -103,11 +103,11 @@ public abstract class Histogram {
 	public abstract int calcNumNonZero();
 	
 
-	public double stdDev() {
+	public double stdDev() throws OperationFailedException {
 		return Math.sqrt( variance() );
 	}
 	
-	public double variance() {
+	public double variance() throws OperationFailedException {
 		return new VarianceCalculator( calcSum(), calcSumSquares(),  getTotalCount() ).variance();
 	}
 	

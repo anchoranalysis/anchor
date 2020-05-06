@@ -56,7 +56,7 @@ class ConnectedComponentUnionFind {
 	
 		UnionFind<Integer> unionIndex = new UnionFind<Integer>( new HashSet<Integer>() );
 	
-		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.getInt().create( visited.extnt() );
+		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
 		
 		SlidingBuffer<IntBuffer> slidingIndex = new SlidingBuffer<>( indexBuffer );
 		slidingIndex.init();
@@ -83,7 +83,7 @@ class ConnectedComponentUnionFind {
 	
 		UnionFind<Integer> unionIndex = new UnionFind<Integer>( new HashSet<Integer>() );
 	
-		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.getInt().create( visited.extnt() );
+		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
 		
 		SlidingBuffer<IntBuffer> slidingIndex = new SlidingBuffer<>( indexBuffer );
 		slidingIndex.init();

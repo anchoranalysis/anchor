@@ -30,18 +30,18 @@ import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-public abstract class FeatureBase<T extends FeatureCalcParams> extends InitializableBean<Feature<T>,FeatureInitParams> {
+public abstract class FeatureBase<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
+	private transient FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
 	protected FeatureBase() {
 		super( new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class) );
@@ -57,6 +57,6 @@ public abstract class FeatureBase<T extends FeatureCalcParams> extends Initializ
 		return featureDefiner;
 	}
 		
-	public abstract FeatureParamsDescriptor paramType()
+	public abstract FeatureInputDescriptor paramType()
 			throws FeatureCalcException;
 }

@@ -27,7 +27,6 @@ package org.anchoranalysis.core.graph;
  */
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -43,13 +42,7 @@ import com.google.common.collect.HashBasedTable;
  * @param <V> Vertex-type
  * @param <E> Edge-type
  */
-public class GraphWithEdgeTypes<V,E> implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+public class GraphWithEdgeTypes<V,E> {
 	
 	private HashSet<V> setVertices;
 	private HashBasedTable<V, V, EdgeTypeWithVertices<V,E>> tableEdge;
@@ -57,50 +50,6 @@ public class GraphWithEdgeTypes<V,E> implements Serializable {
 	// If TRUE it's an undirected graph, otherwise directed graph
 	private boolean undirected = true;
 
-	public static class EdgeTypeWithVertices<V,E> implements Serializable {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		private E edge;
-		private V node1;
-		private V node2;
-		
-		public EdgeTypeWithVertices(E edge, V node1,
-				V node2) {
-			super();
-			this.edge = edge;
-			this.node1 = node1;
-			this.node2 = node2;
-		}
-
-		public E getEdge() {
-			return edge;
-		}
-
-		public V getNode1() {
-			return node1;
-		}
-
-		public V getNode2() {
-			return node2;
-		}
-		
-
-		// Returns the OTHER vertex on the edge i.e. the one that isn't vertex 
-		public V otherVertex( V vertex ) {
-			assert node1!=node2;
-			if (node1==vertex) {
-				return node2;
-			} else {
-				assert node2==vertex;
-				return node1;
-			}
-		}
-	}
-	
 	public GraphWithEdgeTypes( boolean undirected ) {
 		this.tableEdge = HashBasedTable.create();
 		this.setVertices = new HashSet<>();

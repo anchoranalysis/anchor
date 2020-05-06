@@ -31,9 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
  * A tree map that creates a new item, if it doesn't already exist, after a GET operation
@@ -42,14 +40,15 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
  *
  * @param <K> key
  * @param <V> value
+ * @param <E> exception thrown when creating a new item in the map
  */
-public class TreeMapCreate<K,V> {
+public class TreeMapCreate<K,V,E extends Throwable> {
 	
 	// We use a tree-map to retain a deterministic order in the keys
 	private Map<K,V> groupMap = new TreeMap<>();
-	private Operation<V> opCreateNew;
+	private Operation<V,E> opCreateNew;
 	
-	public TreeMapCreate(Operation<V> opCreateNew) {
+	public TreeMapCreate(Operation<V,E> opCreateNew) {
 		super();
 		this.opCreateNew = opCreateNew;
 	}
@@ -58,15 +57,11 @@ public class TreeMapCreate<K,V> {
 		return groupMap.get(key);
 	}
 	
-	public synchronized V getOrCreateNew( K groupID ) throws GetOperationFailedException {
+	public synchronized V getOrCreateNew( K groupID ) throws E {
 		
 		V groupObjs = groupMap.get(groupID);
 		if (groupObjs==null) {
-			try {
-				groupObjs = opCreateNew.doOperation();
-			} catch (ExecuteException e) {
-				throw new GetOperationFailedException(e);
-			}
+			groupObjs = opCreateNew.doOperation();
 			groupMap.put(groupID, groupObjs);
 		}
 		return groupObjs;

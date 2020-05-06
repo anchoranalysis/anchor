@@ -33,17 +33,21 @@ import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
-/** Stores objects as operations */
+/** 
+ * Stores objects as operations
+ * 
+ *  @param T object-type
+ **/
 public class OperationMap<T> implements MultiInputSubMap<T> {
 
-	private Map<String,Operation<T>> map = new HashMap<>();
+	private Map<String,Operation<T,OperationFailedException>> map = new HashMap<>();
 
-	public Map<String, Operation<T>> getMap() {
+	public Map<String, Operation<T,OperationFailedException>> getMap() {
 		return map;
 	}
 	
 	@Override
-	public void add( String name, Operation<T> op ) {
+	public void add( String name, Operation<T,OperationFailedException> op ) {
 		map.put(name, op);
 	}
 	
@@ -56,8 +60,8 @@ public class OperationMap<T> implements MultiInputSubMap<T> {
 	}
 
 	@Override
-	public Operation<T> get(String name) throws OperationFailedException {
-		Operation<T> ret = map.get(name);
+	public Operation<T,OperationFailedException> get(String name) throws OperationFailedException {
+		Operation<T,OperationFailedException> ret = map.get(name);
 		if (ret==null) {
 			throw new OperationFailedException(
 				String.format("Cannot find key '%s'", name)

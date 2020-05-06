@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
 
 /**
  * 
- * Creates am undirected graph where each vertex is an object, and edge exists if the objects neighbour
+ * Creates an undirected graph where each vertex is an object, and edge exists if the objects neighbour
  * 
  * @author FEEHANO
  *
@@ -146,6 +146,7 @@ public class CreateNghbGraph<V> {
 		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<V,E>(undirected);
 		
 		ObjMaskCollection objs = objsFromVertices(vertices, vertexToObjMask);
+		checkObjsInScene(objs, sceneExtnt);
 		ObjMaskCollectionRTree rTree = new ObjMaskCollectionRTree(objs);
 				
 		EdgeAdder<V> edgeAdder = new EdgeAdder<V>(
@@ -169,6 +170,20 @@ public class CreateNghbGraph<V> {
 		}
 		
 		return graph;
+	}
+	
+	private static void checkObjsInScene( ObjMaskCollection objs, Extent sceneExtnt ) throws CreateException {
+		for( ObjMask om : objs ) {
+			if (!sceneExtnt.contains(om.getBoundingBox())) {
+				throw new CreateException(
+					String.format(
+						"Object is not contained (fully or partially) inside scene extent: %s is not in %s",
+						om.getBoundingBox(),
+						sceneExtnt
+					)
+				);
+			}
+		}
 	}
 	
 	private static <V,E> AddEdge<V> createAndAddEdge(

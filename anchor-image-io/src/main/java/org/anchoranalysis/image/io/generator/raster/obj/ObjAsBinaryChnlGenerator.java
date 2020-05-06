@@ -100,15 +100,6 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 	public ManifestDescription createManifestDescription() {
 		return new ManifestDescription("raster", "mask");
 	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
 
 	@Override
 	public boolean isRGB() {

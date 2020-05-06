@@ -31,8 +31,8 @@ import static org.junit.Assert.assertTrue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.operator.Constant;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public class ConstantsInListFixture {
 
@@ -43,7 +43,7 @@ public class ConstantsInListFixture {
 	private static double eps = 1e-16;
 	
 	/** creates a feature-list associated with the fixture */
-	public static <T extends FeatureCalcParams> FeatureList<T> create() {
+	public static <T extends FeatureInput> FeatureList<T> create() {
 		Feature<T> f1 = new Constant<>(f1Value);
 		Feature<T> f2 = new Constant<>(f2Value);
 		Feature<T> f3 = new Constant<>(f3Value);

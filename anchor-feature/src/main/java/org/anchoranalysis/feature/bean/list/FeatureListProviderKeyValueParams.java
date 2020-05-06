@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.operator.Constant;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Loads a set of KeyValueParams as features
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderKeyValueParams<T extends FeatureCalcParams> extends FeatureListProvider<T> {
+public class FeatureListProviderKeyValueParams<T extends FeatureInput> extends FeatureListProvider<T> {
 
 	/**
 	 * 

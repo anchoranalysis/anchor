@@ -28,11 +28,11 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParamsDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObjDescriptor;
 
-public abstract class FeatureObjMask extends Feature<FeatureObjMaskParams> {
+public abstract class FeatureObjMask extends Feature<FeatureInputSingleObj> {
 
 	/**
 	 * 
@@ -40,8 +40,8 @@ public abstract class FeatureObjMask extends Feature<FeatureObjMaskParams> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureObjMaskParamsDescriptor.instance;
+		return FeatureInputSingleObjDescriptor.instance;
 	}
 }

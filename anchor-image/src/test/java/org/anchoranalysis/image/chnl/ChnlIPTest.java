@@ -31,7 +31,6 @@ import static org.junit.Assert.*;
 
 import java.nio.FloatBuffer;
 
-import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryFloat;
 import org.anchoranalysis.image.extent.ImageDim;

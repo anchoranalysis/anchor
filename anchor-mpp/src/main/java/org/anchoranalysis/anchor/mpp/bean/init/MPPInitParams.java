@@ -1,12 +1,10 @@
 package org.anchoranalysis.anchor.mpp.bean.init;
 
-import java.nio.file.Path;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +26,7 @@ import java.nio.file.Path;
  * #L%
  */
 
-
-import java.util.List;
+import java.nio.file.Path;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
@@ -44,14 +41,10 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
 import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
-import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.bean.init.params.IdentityBridgeInit;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.bean.store.BeanStoreAdder;
-import org.anchoranalysis.core.bridge.IdentityBridge;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -61,7 +54,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.provider.ProviderBridge;
+import org.anchoranalysis.image.init.PopulateStoreFromDefine;
 
 // A wrapper around SharedObjects which types certain MPP entities
 public class MPPInitParams extends BeanInitParams {
@@ -106,17 +99,19 @@ public class MPPInitParams extends BeanInitParams {
 	}
 	
 	public static MPPInitParams create(
-			SharedObjects so,
-			Define namedDefinitions,
-			GeneralInitParams paramsGeneral
+		SharedObjects so,
+		Define namedDefinitions,
+		GeneralInitParams paramsGeneral
 	) throws CreateException {
 		ImageInitParams soImage = ImageInitParams.create( so, paramsGeneral.getRe(), paramsGeneral.getModelDir() );
 		MPPInitParams soMPP = create( soImage, so);
 		if (namedDefinitions!=null) {
 			try {
-				PropertyInitializer<MPPInitParams> pi = new MPPBean.Initializer();
+				// Tries to initialize any properties (of type MPPInitParams) found in the NamedDefinitions
+				PropertyInitializer<MPPInitParams> pi = MPPBean.initializerForMPPBeans();
 				pi.setParam(soMPP);
 				soMPP.populate( pi, namedDefinitions, paramsGeneral.getLogErrorReporter() );
+
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
 			}
@@ -186,25 +181,20 @@ public class MPPInitParams extends BeanInitParams {
 		return getMarkBoundsSet().getException("primary");
 	}
 
-	@SuppressWarnings("unchecked")
-	public void populate( PropertyInitializer<?> pi, Define namedDefinitions, LogErrorReporter logger ) throws OperationFailedException {
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(MarkBounds.class), getMarkBoundsSet(), new IdentityBridge<MarkBounds>() );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(CfgProvider.class), getCfgCollection(), new ProviderBridge<CfgProvider,Cfg,MPPInitParams>(pi, logger) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(MarkProposer.class), getMarkProposerSet(), new IdentityBridgeInit<MarkProposer,MPPInitParams>(pi,logger) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(CfgProposer.class), getCfgProposerSet(), new IdentityBridgeInit<CfgProposer,MPPInitParams>(pi,logger) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(ProbMapProvider.class), getProbMapSet(), new ProviderBridge<ProbMapProvider,ProbMap,MPPInitParams>(pi, logger) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(MarkSplitProposer.class), getMarkSplitProposerSet(), new IdentityBridgeInit<MarkSplitProposer,MPPInitParams>(pi,logger) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList(MarkMergeProposer.class), getMarkMergeProposerSet(), new IdentityBridgeInit<MarkMergeProposer,MPPInitParams>(pi,logger) );
+	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
 		
-		// We upcast to Object first so that we can convert the list
-		List<? extends Object> pairCollectionList = namedDefinitions.getList(PairCollection.class);
-		BeanStoreAdder.addPreserveName( (List<NamedBean<PairCollection<Pair<Mark>>>>) pairCollectionList, getSimplePairCollection(), new IdentityBridge<PairCollection<Pair<Mark>>>() );
+		PopulateStoreFromDefine<MPPInitParams> populater = new PopulateStoreFromDefine<>(define, pi, logger);
+		populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
+		populater.copyInit(MarkProposer.class, getMarkProposerSet());
+		populater.copyInit(CfgProposer.class, getCfgProposerSet());
+		populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
+		populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
+		populater.copyWithoutInit(PairCollection.class, getSimplePairCollection());
 		
+		populater.copyProvider(CfgProvider.class, getCfgCollection());
+		populater.copyProvider(ProbMapProvider.class, getProbMapSet());
 		
-		soImage.populate(pi, namedDefinitions, logger);
-		soPoints.populate(pi, namedDefinitions, logger );
+		soImage.populate(pi, define, logger);
+		soPoints.populate(pi, define, logger );
 	}
-	
-
-	
 }

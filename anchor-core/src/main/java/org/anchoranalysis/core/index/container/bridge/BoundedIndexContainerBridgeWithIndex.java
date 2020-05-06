@@ -1,6 +1,6 @@
 package org.anchoranalysis.core.index.container.bridge;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -39,19 +39,19 @@ import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
  * @author Owen Feehan
  *
  * @param <H> hidden-type (type passed to the delegate)
- * @param <E> external-type (type exposed in an interface from this class)
+ * @param <S> external-type (type exposed in an interface from this class)
  */
-public class BoundedIndexContainerBridgeWithIndex<H,E> extends BoundedIndexContainerBridge<H, E> {
+public class BoundedIndexContainerBridgeWithIndex<H,S> extends BoundedIndexContainerBridge<H, S> {
 	
-	private IObjectBridgeIndex<H, E> bridge;
+	private IObjectBridgeIndex<H, S, ? extends Exception> bridge;
 	
-	public BoundedIndexContainerBridgeWithIndex(IBoundedIndexContainer<H> source, IObjectBridgeIndex<H, E> bridge) {
+	public BoundedIndexContainerBridgeWithIndex(IBoundedIndexContainer<H> source, IObjectBridgeIndex<H, S, ? extends Exception> bridge) {
 		super(source);
 		this.bridge = bridge;
 	}
 
 	@Override
-	protected E bridge(int index, H internalState) throws BridgeElementException {
+	protected S bridge(int index, H internalState) throws Exception {
 		return bridge.bridgeElement(index, internalState);
 	}
 }

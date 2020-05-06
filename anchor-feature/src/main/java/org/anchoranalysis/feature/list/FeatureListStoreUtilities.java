@@ -30,12 +30,12 @@ import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class FeatureListStoreUtilities {
 	
-	public static <T extends FeatureCalcParams> void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<T>> featureListProvider, SharedFeatureSet<T> out ) {
+	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<T>> featureListProvider, SharedFeatureSet<T> out ) {
 		
 		for( String key : featureListProvider.keys()) {
 			try {
@@ -49,7 +49,7 @@ public class FeatureListStoreUtilities {
 		
 	}
 	
-	public static <T extends FeatureCalcParams> void addFeatureListToStoreNoDuplicateWithExtraName( FeatureList<T> featureList, String name, SharedFeatureSet<T> out ) {
+	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateWithExtraName( FeatureList<T> featureList, String name, SharedFeatureSet<T> out ) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
 		for( Feature<T> f : featureList) {
@@ -63,7 +63,7 @@ public class FeatureListStoreUtilities {
 	}
 	
 	
-	public static <T extends FeatureCalcParams> void addFeatureListToStore( FeatureList<T> featureList, String name, NamedFeatureStore<T> out ) {
+	public static <T extends FeatureInput> void addFeatureListToStore( FeatureList<T> featureList, String name, NamedFeatureStore<T> out ) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
 		for( Feature<T> f : featureList) {
@@ -85,7 +85,7 @@ public class FeatureListStoreUtilities {
 	 * @param nameParent
 	 * @param useOnlyParentName
 	 */
-	private static <T extends FeatureCalcParams> String determineFeatureName( Feature<T> feature, String nameParent, boolean useOnlyParentName ) {
+	private static <T extends FeatureInput> String determineFeatureName( Feature<T> feature, String nameParent, boolean useOnlyParentName ) {
 		if (useOnlyParentName) {
 			return nameParent;
 		} else {

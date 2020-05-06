@@ -39,8 +39,8 @@ import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A group of features made available for references to other features
@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
  *
  * @param <T> feature-calc params type
  */
-public class SharedFeatureSet<T extends FeatureCalcParams> implements INamedProvider<Feature<T>>, Iterable<INameValue<Feature<T>>> {
+public class SharedFeatureSet<T extends FeatureInput> implements INamedProvider<Feature<T>>, Iterable<INameValue<Feature<T>>> {
 
 	private NameValueSet<Feature<T>> delegate;
 
@@ -59,8 +59,8 @@ public class SharedFeatureSet<T extends FeatureCalcParams> implements INamedProv
 	}
 	
 	@SuppressWarnings("unchecked")
-	public SharedFeatureSet<FeatureCalcParams> upcast() {
-		return (SharedFeatureSet<FeatureCalcParams>) this;
+	public SharedFeatureSet<FeatureInput> upcast() {
+		return (SharedFeatureSet<FeatureInput>) this;
 	}
 	
 	// TODO go through all uses of downcast, and replace with something valid
@@ -75,7 +75,7 @@ public class SharedFeatureSet<T extends FeatureCalcParams> implements INamedProv
 	}
 	
 	// TODO inefficient, let's move towards a map
-	public boolean contains( Feature<FeatureCalcParams> feature ) {
+	public boolean contains( Feature<FeatureInput> feature ) {
 		for( INameValue<Feature<T>> nv : this) {
 			Feature<T> f = nv.getValue();
 			if (feature.equals(f)) {

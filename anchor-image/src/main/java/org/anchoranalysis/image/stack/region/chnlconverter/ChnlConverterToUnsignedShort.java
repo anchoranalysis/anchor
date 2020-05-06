@@ -45,7 +45,7 @@ public class ChnlConverterToUnsignedShort extends ChnlConverter<ShortBuffer> {
 		super(
 			VoxelDataTypeUnsignedShort.instance,
 			voxelBoxConverter,
-			VoxelBoxFactory.getShort()
+			VoxelBoxFactory.instance().getShort()
 		);
 	}
 

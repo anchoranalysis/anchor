@@ -31,18 +31,18 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
 /**
  * Calculates a vector of results, based upon 3 features that define the x, y and z components of the vector
  * 
  * @author Owen Feehan
  */
-public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<T> {
+public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 
 	/**
 	 * 
@@ -64,11 +64,11 @@ public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<
 		super();
 	}
 	
-	public Vector3d calc( CacheableParams<T> params  ) throws FeatureCalcException {
+	public Vector3d calc( SessionInput<T> input ) throws FeatureCalcException {
 		
-		double valX = params.calc(x);
-		double valY = params.calc(y);
-		double valZ = params.calc(z);
+		double valX = input.calc(x);
+		double valY = input.calc(y);
+		double valZ = input.calc(z);
 		
 		return new Vector3d(valX,valY,valZ);
 	}
@@ -98,7 +98,7 @@ public class VectorFromFeature<T extends FeatureCalcParams> extends FeatureBase<
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForThree(x,y,z);
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
+		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
 	}
 }

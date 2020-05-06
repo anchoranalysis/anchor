@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -55,7 +55,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	}
 
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureCalcParams> sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException {
 		for (UpdatableMarkSet item : delegate) {
 			item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);
 		}
@@ -70,7 +70,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 
 	
 	// Modifies marksExisting
-	private void add( PxlMarkMemoList marksExisting, MemoForIndex listToAdd ) throws UpdateMarkSetException {
+	private void add( MemoList marksExisting, MemoForIndex listToAdd ) throws UpdateMarkSetException {
 		for (int i=0; i<listToAdd.size(); i++) {
 			PxlMarkMemo item = listToAdd.getMemoForIndex(i);
 			add( marksExisting, item );
@@ -80,7 +80,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	
 	// Assumes no existing marks
 	public void add( MemoForIndex listToAdd ) throws UpdateMarkSetException {
-		add( new PxlMarkMemoList(), listToAdd );
+		add( new MemoList(), listToAdd );
 	}
 	
 	public int numProbMap() {

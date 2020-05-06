@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -61,7 +61,7 @@ class HelperBeanFields {
 				
 				// If it's non-optional, then we insist it's non-null
 				if (value==null) {
-					if (field.isAnnotationPresent(Optional.class)) {
+					if (field.isAnnotationPresent(OptionalBean.class)) {
 						continue;
 					} else {
 						throwMissingPropertyException( field.getName(), bean.getBeanName() );

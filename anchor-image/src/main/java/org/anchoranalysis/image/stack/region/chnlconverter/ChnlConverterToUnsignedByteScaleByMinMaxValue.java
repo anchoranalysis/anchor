@@ -41,7 +41,7 @@ public class ChnlConverterToUnsignedByteScaleByMinMaxValue extends ChnlConverter
 		super(
 			VoxelDataTypeUnsignedByte.instance,
 			new VoxelBoxConverterToByteScaleByMinMaxValue(min,max),
-			VoxelBoxFactory.getByte()
+			VoxelBoxFactory.instance().getByte()
 		);
 	}
 

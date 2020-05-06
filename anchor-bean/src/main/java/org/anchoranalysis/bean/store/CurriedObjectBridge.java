@@ -1,6 +1,5 @@
 package org.anchoranalysis.bean.store;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 
 /*
@@ -30,7 +29,6 @@ import org.anchoranalysis.core.bridge.IObjectBridge;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 
 /**
@@ -39,26 +37,21 @@ import org.anchoranalysis.core.cache.Operation;
  *
  * @param <S> source-type
  * @param <D> destination-type
+ * @param <E> exception-type if something goes wrong
  */
-class CurriedObjectBridge<S,D> implements Operation<D> {
+class CurriedObjectBridge<S, D, E extends Throwable> implements Operation<D,E> {
 
-	private IObjectBridge<S,D> bridge;
+	private IObjectBridge<S,D,E> bridge;
 	private S sourceObject;
 	
-	public CurriedObjectBridge(	IObjectBridge<S,D> bridge, S sourceObject) {
+	public CurriedObjectBridge(	IObjectBridge<S,D,E> bridge, S sourceObject) {
 		super();
 		this.bridge = bridge;
 		this.sourceObject = sourceObject;
 	}
 
 	@Override
-	public D doOperation() throws ExecuteException {
-		try {
-			return bridge.bridgeElement(sourceObject);
-		} catch (BridgeElementException e) {
-			throw new ExecuteException(e);
-		}
+	public D doOperation() throws E {
+		return bridge.bridgeElement(sourceObject);
 	}
-	
-	
 }

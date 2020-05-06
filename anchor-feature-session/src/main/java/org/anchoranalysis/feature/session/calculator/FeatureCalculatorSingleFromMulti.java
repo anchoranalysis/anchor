@@ -1,7 +1,6 @@
 package org.anchoranalysis.feature.session.calculator;
 
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 /*-
  * #%L
@@ -31,16 +30,16 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Exposes a FeatureCalculatorMulti as a FeatureCalculatorSingle
+ * Exposes a {@link FeatureCalculatorMulti} as a {@link FeatureCalculatorSingle}
+ * 
  * @author owen
  *
- * @param <T> feature-params type
+ * @param <T> feature input-type
  */
-public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> implements FeatureCalculatorSingle<T> {
+public class FeatureCalculatorSingleFromMulti<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
 	private FeatureCalculatorMulti<T> delegate;
 		
@@ -49,27 +48,23 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureCalcParams> imple
 		this.delegate = multi;
 		if (delegate.sizeFeatures()!=1) {
 			throw new FeatureCalcException(
-				String.format("When creating a %s, the multi must have exactly one feature")
+				String.format(
+					"When creating a %s, the multi must have exactly one feature",
+					FeatureCalculatorSingle.class.getSimpleName()
+				)
 			);
 		}
 	}
 
 	@Override
-	public double calcOneSuppressErrors(T params, ErrorReporter errorReporter) {
-		return delegate.calcOneSuppressErrors(params, errorReporter).get(0);
+	public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
+		return delegate.calcSuppressErrors(input, errorReporter).get(0);
 	}
 
 	@Override
-	public double calcOne(T params) throws FeatureCalcException {
-		return delegate.calcOne(params).get(0);
+	public double calc(T params) throws FeatureCalcException {
+		return delegate.calc(params).get(0);
 	}
 
-	@Override
-	public List<Double> calcMany(List<T> listParams) throws FeatureCalcException {
-		List<ResultsVector> list = delegate.calcMany(listParams);
-		return list.stream().map(
-			rv -> rv.get(0)
-		).collect( Collectors.toList());
-	}
 
 }

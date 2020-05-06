@@ -1,10 +1,10 @@
 package org.anchoranalysis.image.feature.bean.objmask;
 
-/*
+/*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,18 +26,15 @@ package org.anchoranalysis.image.feature.bean.objmask;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.FeatureCastInitParams;
+
+
+
+
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.shared.FeatureObjMaskSharedObjectsParamsDescriptor;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObjDescriptor;
 
 /**
  * A feature that requires shared-objects during intialization
@@ -45,51 +42,15 @@ import org.anchoranalysis.image.init.ImageInitParams;
  * @author owen
  *
  */
-public abstract class FeatureObjMaskSharedObjects extends FeatureCastInitParams<FeatureInitParamsImageInit, FeatureObjMaskParams> {
+public abstract class FeatureObjMaskSharedObjects extends FeatureSharedObjs<FeatureInputSingleObj> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	private static class Initializer extends PropertyInitializer<FeatureInitParams> {
-
-		public Initializer() {
-			super( FeatureInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, ImageInitParams.class );
-			if (pd!=null && getParam() instanceof FeatureInitParamsImageInit ) {
-				
-				FeatureInitParamsImageInit paramCast = (FeatureInitParamsImageInit) getParam();
-				pd.doInitFor( propertyValue, paramCast.getSharedObjects(), parent, logger );
-				return true;
-			}
-			
-			return false;
-		}
-	}
-	
-	protected FeatureObjMaskSharedObjects() {
-		super(FeatureInitParamsImageInit.class, new Initializer() );
-	}
-
 	@Override
-	public FeatureParamsDescriptor paramType()
-			throws FeatureCalcException {
-		return FeatureObjMaskSharedObjectsParamsDescriptor.instance;
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
+		return FeatureInputSingleObjDescriptor.instance;
 	}
-
-
 }

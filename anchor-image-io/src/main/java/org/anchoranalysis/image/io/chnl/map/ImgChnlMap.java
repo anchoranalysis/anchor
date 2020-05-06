@@ -30,11 +30,8 @@ import java.util.Collection;
 
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 
 /**
@@ -78,22 +75,5 @@ public class ImgChnlMap {
 		} else {
 			throw new IndexOutOfBoundsException( String.format("No channel index for '%s' in imgChnlMap", name) );
 		} 
-	}
-
-	
-	public static class CreateImgChnlMapFromEntries implements IObjectBridge<List<ImgChnlMapEntry>,ImgChnlMap> {
-
-		@Override
-		public ImgChnlMap bridgeElement(List<ImgChnlMapEntry> list)
-				throws BridgeElementException {
-			
-			ImgChnlMap beanOut = new ImgChnlMap();
-	    	
-	    	for( ImgChnlMapEntry entry : list ) {
-	    		beanOut.add( entry );
-	    	}
-	    	
-    	    return beanOut;		
-		}
 	}
 }

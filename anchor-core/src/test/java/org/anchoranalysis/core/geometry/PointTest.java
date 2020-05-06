@@ -29,12 +29,6 @@ package org.anchoranalysis.core.geometry;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.core.geometry.Point2f;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.junit.Test;
 
 public class PointTest {

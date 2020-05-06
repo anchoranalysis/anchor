@@ -41,10 +41,6 @@ public class BBoxSetOnPlane implements Iterable<BoundingBox> {
 	
 	private List<BoundingBox> list = new ArrayList<>();
 	
-	public BBoxSetOnPlane() {
-		
-	}
-	
 	public void add( BoundingBox obj ) {
 		list.add(obj);
 	}

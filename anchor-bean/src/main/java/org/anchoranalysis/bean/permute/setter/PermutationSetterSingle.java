@@ -34,6 +34,21 @@ import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 
+
+/**
+ * Sets a permutation from a list of fields
+ * 
+ * <div>
+ * All fields must refer to either:
+ * <li>
+ * <ol>An {@link AnchorBean}</ol>
+ * <ol>(as an exception) A {@link java.util.List} of containing at least one item of type {@link AnchorBean}. The first item of the list will be taken as the corresponding Anchor-Bean.
+ * </li>
+ * </div>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class PermutationSetterSingle extends PermutationSetter {
 
 	/**
@@ -64,7 +79,8 @@ public class PermutationSetterSingle extends PermutationSetter {
 			AnchorBean<?> currentBean = bean;
 			for( int i=0; i<numIntermediate; i++ ) {
 				Field p = listFields.get(i);
-				currentBean = next(p, currentBean);
+				
+				currentBean = PermutationSetterUtilities.beanFor(p, currentBean);
 			}
 			
 			// Now do the final field, where we actually set the value
@@ -91,9 +107,5 @@ public class PermutationSetterSingle extends PermutationSetter {
 			return val.toString();
 		}
 		return val;
-	}
-	
-	private static AnchorBean<?> next( Field field, AnchorBean<?> in ) throws IllegalArgumentException, IllegalAccessException {
-		return (AnchorBean<?>) field.get(in);
 	}
 }

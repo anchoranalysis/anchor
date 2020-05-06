@@ -83,7 +83,7 @@ public class ExtendObjsInto3DMask {
 		
 		BoundedVoxelBox<ByteBuffer> newMask = new BoundedVoxelBox<>(
 			newBBox,
-			VoxelBoxFactory.getByte()
+			VoxelBoxFactory.instance().getByte()
 		);
 		
 		Point3i max = newBBox.calcCrnrMax();

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.box.factory;
 
+import java.nio.Buffer;
+
 /*
  * #%L
  * anchor-image
@@ -33,66 +35,66 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class VoxelBoxFactory {
+public class VoxelBoxFactory extends VoxelDataTypeFactoryMultiplexer<VoxelBoxFactoryTypeBound<? extends Buffer>> {
 
-	private VoxelBoxFactory() {
-		// FORCE STATIC USAGE
-	}
-		
+	// Singleton
+	private static VoxelBoxFactory instance;
+	
 	private static VoxelBoxFactoryTypeBound<ByteBuffer> factoryByte = new VoxelBoxFactoryByte();
 	private static VoxelBoxFactoryTypeBound<ShortBuffer> factoryShort = new VoxelBoxFactoryShort();
 	private static VoxelBoxFactoryTypeBound<IntBuffer> factoryInt = new VoxelBoxFactoryInt();
 	private static VoxelBoxFactoryTypeBound<FloatBuffer> factoryFloat = new VoxelBoxFactoryFloat();
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static VoxelBoxWrapper create( IPixelsForPlane<?> pixelsForPlane, VoxelDataType dataType ) {
-		VoxelBoxFactoryTypeBound factory = multiplex(dataType);
-		return new VoxelBoxWrapper(factory.create(pixelsForPlane));
+	private VoxelBoxFactory() {
+		super(
+			factoryByte,
+			factoryShort,
+			factoryInt,
+			factoryFloat
+		);
+	}
+	
+	/** Singleton */
+	public static VoxelBoxFactory instance() {
+		if (instance==null) {
+			instance = new VoxelBoxFactory();
+		}
+		return instance;
 	}
 
-	public static VoxelBoxWrapper create( Extent e, VoxelDataType dataType ) {
-		VoxelBoxFactoryTypeBound<?> factory = multiplex(dataType);
-		return new VoxelBoxWrapper(factory.create(e));
+	public <T extends Buffer> VoxelBoxWrapper create( IPixelsForPlane<T> pixelsForPlane, VoxelDataType dataType ) {
+		@SuppressWarnings("unchecked")
+		VoxelBoxFactoryTypeBound<T> factory = (VoxelBoxFactoryTypeBound<T>) get(dataType);
+		VoxelBox<T> buffer = factory.create(pixelsForPlane);
+		return new VoxelBoxWrapper(buffer);
+	}
+
+	public VoxelBoxWrapper create( Extent e, VoxelDataType dataType ) {
+		VoxelBoxFactoryTypeBound<?> factory = get(dataType);
+		VoxelBox<? extends Buffer> buffer = factory.create(e);
+		return new VoxelBoxWrapper(buffer);
 	}
 
 
-	public static VoxelBoxFactoryTypeBound<ByteBuffer> getByte() {
+	public VoxelBoxFactoryTypeBound<ByteBuffer> getByte() {
 		return factoryByte;
 	}
 
-	public static VoxelBoxFactoryTypeBound<ShortBuffer> getShort() {
+	public VoxelBoxFactoryTypeBound<ShortBuffer> getShort() {
 		return factoryShort;
 	}
 
-	public static VoxelBoxFactoryTypeBound<IntBuffer> getInt() {
+	public VoxelBoxFactoryTypeBound<IntBuffer> getInt() {
 		return factoryInt;
 	}
 
-	public static VoxelBoxFactoryTypeBound<FloatBuffer> getFloat() {
+	public VoxelBoxFactoryTypeBound<FloatBuffer> getFloat() {
 		return factoryFloat;
-	}
-	
-	private static VoxelBoxFactoryTypeBound<?> multiplex( VoxelDataType dataType ) {
-		
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
-			return factoryByte;
-		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
-			return factoryShort;
-		} else if (dataType.equals(VoxelDataTypeUnsignedInt.instance)) {
-			return factoryInt;
-		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
-			return factoryFloat;
-		} else {
-			throw new IncorrectVoxelDataTypeException("Non-existent type");
-		}
 	}
 }

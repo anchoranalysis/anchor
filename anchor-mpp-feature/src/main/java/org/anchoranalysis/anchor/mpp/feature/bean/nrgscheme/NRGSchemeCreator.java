@@ -27,10 +27,10 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 // Creates NRG Elem
-public abstract class NRGSchemeCreator extends FeatureBean<NRGSchemeCreator> {
+public abstract class NRGSchemeCreator extends FeatureRelatedBean<NRGSchemeCreator> {
 
 	/**
 	 * 

@@ -30,11 +30,11 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
-public abstract class FeatureDoubleElem<T extends FeatureCalcParams> extends Feature<T> {
+public abstract class FeatureDoubleElem<T extends FeatureInput> extends Feature<T> {
 
 	/**
 	 * 
@@ -50,8 +50,8 @@ public abstract class FeatureDoubleElem<T extends FeatureCalcParams> extends Fea
 	// END BEAN PARAMETERS
 
 	@Override
-	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForTwo(item1, item2);
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
+		return FeatureInputDescriptorUtilities.paramTypeForTwo(item1, item2);
 	}
 	
 	public Feature<T> getItem1() {

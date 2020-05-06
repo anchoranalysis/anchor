@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -36,21 +36,21 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 
-	private FeatureList<NRGElemPairCalcParams> nrgElemPairList;
+	private FeatureList<FeatureInputPairMemo> nrgElemPairList;
 	
 	// List of criteria for adding pairs
 	private AddCriteriaPair pairAddCriteria;
 
-	private FeatureList<NRGElemPairCalcParams> featuresAddCriteria;
+	private FeatureList<FeatureInputPairMemo> featuresAddCriteria;
 	
-	public AddCriteriaNRGElemPair( FeatureList<NRGElemPairCalcParams> nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
+	public AddCriteriaNRGElemPair( FeatureList<FeatureInputPairMemo> nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
 		super();
 		
 		this.nrgElemPairList = nrgElemPairList;
@@ -69,9 +69,9 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	 * 
 	 */
 	@Override
-	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() throws CreateException {
+	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() throws CreateException {
 
-		FeatureList<NRGElemPairCalcParams> out = new FeatureList<>();
+		FeatureList<FeatureInputPairMemo> out = new FeatureList<>();
 		
 		// Now we add all the features we need from the nrgElemPairList
 		out.addAll( nrgElemPairList );
@@ -88,7 +88,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
-		FeatureCalculatorMulti<NRGElemPairCalcParams> session,
+		FeatureCalculatorMulti<FeatureInputPairMemo> session,
 		boolean use3D
 	) throws CreateException {
 		
@@ -111,12 +111,12 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	
 		if (calc) {
 			try {
-				NRGElemPairCalcParams params = new NRGElemPairCalcParams(
+				FeatureInputPairMemo params = new FeatureInputPairMemo(
 					mark1,
 					mark2,
 					nrgStack
 				);
-				ResultsVector rv = session.createCacheable(params).calc(nrgElemPairList);
+				ResultsVector rv = session.calc(params, nrgElemPairList);
 
 				Pair<Mark> pair = new Pair<>( mark1.getMark(), mark2.getMark() );
 				return new NRGPair(pair, new NRGTotal(rv.total()) );

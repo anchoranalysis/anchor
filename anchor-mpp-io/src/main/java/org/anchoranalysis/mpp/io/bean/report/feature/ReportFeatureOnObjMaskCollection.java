@@ -29,10 +29,10 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
+import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjs;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ReportFeatureOnObjMaskCollection extends ReportFeatureOnObjMaskBase<FeatureObjMaskCollectionParams> {
+public class ReportFeatureOnObjMaskCollection extends ReportFeatureOnObjMaskBase<FeatureInputObjs> {
 
 	/**
 	 * 
@@ -40,10 +40,10 @@ public class ReportFeatureOnObjMaskCollection extends ReportFeatureOnObjMaskBase
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected double calcFeatureOn(ObjMaskCollection objs, FeatureCalculatorSingle<FeatureObjMaskCollectionParams> session)
+	protected double calcFeatureOn(ObjMaskCollection objs, FeatureCalculatorSingle<FeatureInputObjs> session)
 			throws FeatureCalcException {
-		return session.calcOne(
-			new FeatureObjMaskCollectionParams(objs)
+		return session.calc(
+			new FeatureInputObjs(objs)
 		);
 	}
 }

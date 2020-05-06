@@ -40,14 +40,30 @@ import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 public class IterableGeneratorWriter {
 	
-	public static <T> void writeSubfolder(BoundOutputManager outputManager, String outputNameFolder, String outputNameSubfolder, IterableGenerator<T> generatorIterable, Collection<T> collection, boolean checkIfAllowed) throws OutputWriteFailedException {
+	private IterableGeneratorWriter() {}
+	
+	public static <T> void writeSubfolder(
+		BoundOutputManager outputManager,
+		String outputNameFolder,
+		String outputNameSubfolder,
+		IterableGenerator<T> generatorIterable,
+		Collection<T> collection,
+		boolean checkIfAllowed
+	) throws OutputWriteFailedException {
 		extractWriter(outputManager, checkIfAllowed).writeSubfolder(
 			outputNameSubfolder,
 			() -> createOutputWriter(collection, outputNameFolder, generatorIterable, outputManager, checkIfAllowed)
 		);
 	}
 	
-	public static <T> void writeSubfolder(BoundOutputManagerRouteErrors outputManager, String outputNameFolder, String outputNameSubfolder, Operation<IterableGenerator<T>> generatorIterable, Collection<T> collection, boolean checkIfAllowed) {
+	public static <T> void writeSubfolder(
+		BoundOutputManagerRouteErrors outputManager,
+		String outputNameFolder,
+		String outputNameSubfolder,
+		Operation<IterableGenerator<T>,OutputWriteFailedException> generatorIterable,
+		Collection<T> collection,
+		boolean checkIfAllowed
+	) {
 		extractWriter(outputManager, checkIfAllowed).writeSubfolder(
 			outputNameSubfolder,
 			() -> createOutputWriter(collection, outputNameFolder, generatorIterable.doOperation(), outputManager.getDelegate(), checkIfAllowed)

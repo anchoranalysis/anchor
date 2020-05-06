@@ -1,5 +1,8 @@
 package org.anchoranalysis.io.output.bean;
 
+import java.nio.file.Path;
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-output
@@ -64,7 +67,13 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		
 	// Binds the output to be connected to a particular file and experiment
 	@Override
-	public FilePathPrefix prefixForFile( InputFromManager input, String expIdentifier, ManifestRecorder manifestRecorder, ManifestRecorder experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
+	public FilePathPrefix prefixForFile(
+		InputFromManager input,
+		String expIdentifier,
+		Optional<ManifestRecorder> manifestRecorder,
+		Optional<ManifestRecorder> experimentalManifestRecorder,
+		FilePathPrefixerParams context
+	) throws AnchorIOException {
 		
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( input, expIdentifier, context );
@@ -75,12 +84,23 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 			fpp.getCombinedPrefix()
 		);
 		
-		experimentalManifestRecorder.getRootFolder().writeFolder( fpd.getRemainderCombined(), new ManifestFolderDescription(), 
-				new ExperimentFileFolder() );
-		
-		manifestRecorder.init( fpp.getFolderPath() );
+		experimentalManifestRecorder.ifPresent(
+			mr -> writeManifestExperimentFolder(mr, fpd.getRemainderCombined())
+		);
+
+		manifestRecorder.ifPresent(
+			mr -> mr.init( fpp.getFolderPath() )	
+		);
 		
 		return fpp;
+	}
+	
+	private static void writeManifestExperimentFolder( ManifestRecorder manifestRecorderExperiment, Path rootPath ) {
+		manifestRecorderExperiment.getRootFolder().writeFolder(
+			rootPath,
+			new ManifestFolderDescription(), 
+			new ExperimentFileFolder()
+		);	
 	}
 	
 	@Override

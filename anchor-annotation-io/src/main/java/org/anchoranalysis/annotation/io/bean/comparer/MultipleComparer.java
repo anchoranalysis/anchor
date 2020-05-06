@@ -51,7 +51,7 @@ import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -70,7 +70,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputPairObjs> featureEvaluator;
 	
 	@BeanField @NonEmpty
 	private List<NamedBean<Comparer>> listComparers = new ArrayList<NamedBean<Comparer>>();
@@ -180,11 +180,11 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		}
 	}
 	
-	public FeatureEvaluator<FeatureObjMaskPairParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputPairObjs> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputPairObjs> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

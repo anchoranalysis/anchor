@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.bean.list;
 
+import java.util.Arrays;
+
 /*
  * #%L
  * anchor-feature
@@ -33,9 +35,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public class FeatureListProviderDefine<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderDefine<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -46,6 +48,20 @@ public class FeatureListProviderDefine<T extends FeatureCalcParams> extends Feat
 	@BeanField @SkipInit
 	private List<Feature<T>> list;
 	// END BEAN PROPERTIES
+	
+	public FeatureListProviderDefine() {
+		// DEFAULT, nothing to do
+	}
+	
+	public FeatureListProviderDefine( Feature<T> feature ) {
+		this(
+			Arrays.asList(feature)
+		);
+	}
+	
+	public FeatureListProviderDefine( List<Feature<T>> list ) {
+		this.list = list;
+	}
 	
 	@Override
 	public FeatureList<T> create() throws CreateException {

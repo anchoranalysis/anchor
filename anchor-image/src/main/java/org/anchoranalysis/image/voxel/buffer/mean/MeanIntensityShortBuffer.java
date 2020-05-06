@@ -32,48 +32,31 @@ import java.nio.ShortBuffer;
 
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
-public class MeanIntensityShortBuffer {
-	
-	private VoxelBox<ShortBuffer> flatVoxelBox;
-	private VoxelBox<FloatBuffer> sumVoxelBox;
-	private int cntVoxelBox = 0;
+public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
 
 	/** Simple constructor since no preprocessing is necessary. */
 	public MeanIntensityShortBuffer( Extent srcExtnt ) {
-		flatVoxelBox = VoxelBoxFactory.getShort().create( new Extent( srcExtnt.getX(), srcExtnt.getY(), 1 ));
-		sumVoxelBox = VoxelBoxFactory.getFloat().create( new Extent( srcExtnt.getX(), srcExtnt.getY(), 1 ));
+		super( VoxelBoxFactory.instance().getShort(), srcExtnt );
 	}
 	
-	public void projectSlice(ShortBuffer pixels) {
-		
-		int maxIndex = flatVoxelBox.extnt().getVolumeXY();
-		for( int i=0; i<maxIndex; i++) {
-			processPixel( pixels, i );
-    	}
-		cntVoxelBox++;
-	}
-	
-	private void processPixel( ShortBuffer pixels, int index ) {
+	@Override
+	protected void processPixel( ShortBuffer pixels, int index ) {
 		short inPixel = pixels.get( index );
-		
-		int p = ByteConverter.unsignedShortToInt( inPixel );
-		sumVoxelBox.getPixelsForPlane(0).buffer().put( index, sumVoxelBox.getPixelsForPlane(0).buffer().get(index) + p );
+		incrSumBuffer(
+			index,
+			ByteConverter.unsignedShortToInt( inPixel )
+		);
 	}
 	
 	public void finalize() {
-		int maxIndex = flatVoxelBox.extnt().getVolumeXY();
+		int maxIndex = volumeXY();
 		
-		ShortBuffer bbFlat = flatVoxelBox.getPixelsForPlane(0).buffer();
-		FloatBuffer bbSum = sumVoxelBox.getPixelsForPlane(0).buffer();
+		ShortBuffer bbFlat = flatBuffer();
+		FloatBuffer bbSum = sumBuffer();
 		for( int i=0; i<maxIndex; i++) {
-			bbFlat.put( i, (byte) (bbSum.get(i)/cntVoxelBox) );
+			bbFlat.put( i, (byte) (bbSum.get(i)/count()) );
     	}
-	}
-	
-	public VoxelBox<ShortBuffer> getFlatBuffer() {
-		return flatVoxelBox;
 	}
 }

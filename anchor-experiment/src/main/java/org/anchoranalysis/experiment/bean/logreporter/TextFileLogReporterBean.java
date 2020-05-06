@@ -39,9 +39,6 @@ public class TextFileLogReporterBean extends LogReporterBean {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public TextFileLogReporterBean() {
-	}
-	
 	@Override
 	public StatefulLogReporter create( String outputName, BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
 		return new TextFileLogReporter( outputName, bom, errorReporter );

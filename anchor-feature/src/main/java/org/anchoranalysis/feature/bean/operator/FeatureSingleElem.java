@@ -30,18 +30,18 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 /**
  * A feature that contains another feature as a property (the single element)
  * 
  * @author owen
  *
- * @param <T> calc-params used for calculating feature
- * @param <S> calc-params used for the "item" that is the single element
+ * @param <T> input-type used for calculating feature
+ * @param <S> input-type used for the "item" that is the single element
  */
-public abstract class FeatureSingleElem<T extends FeatureCalcParams, S extends FeatureCalcParams> extends Feature<T> {
+public abstract class FeatureSingleElem<T extends FeatureInput, S extends FeatureInput> extends Feature<T> {
 
 	/**
 	 * 
@@ -70,7 +70,7 @@ public abstract class FeatureSingleElem<T extends FeatureCalcParams, S extends F
 	}
 	
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
 		return item.paramType();
 	}

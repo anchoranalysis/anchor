@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
@@ -100,7 +101,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 		input.close(errorReporter);
 	}
 
-	public OperationWithProgressReporter<INamedProvider<Stack>> stacks() {
+	public OperationWithProgressReporter<INamedProvider<Stack>,CreateException> stacks() {
 		return new OperationCreateStackCollection(input);
 	}
 	

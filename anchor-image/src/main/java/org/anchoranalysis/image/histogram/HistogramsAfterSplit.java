@@ -111,14 +111,19 @@ public class HistogramsAfterSplit {
 		
 		return h;
 	}
-	
-	
-	public List<IndexMean> indicesSortedByMeanAscending() {
+		
+	public List<IndexMean> indicesSortedByMeanAscending() throws OperationFailedException {
 		ArrayList<IndexMean> out = new ArrayList<IndexMean>();
 		
 		int i = 0;
 		for( Histogram h : list ) {
-			out.add( new IndexMean(i++,h.mean(),h.variance()) );
+			out.add(
+				new IndexMean(
+					i++,
+					h.mean(),
+					h.variance()
+				)
+			);
 		}
 		
 		Collections.sort(out);

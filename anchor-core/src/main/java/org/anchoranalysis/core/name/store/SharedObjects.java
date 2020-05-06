@@ -65,6 +65,7 @@ public class SharedObjects {
 	 * 
 	 * @param key unique-identifier for the store
 	 * @param <T> type of item in store
+	 * @param <E> exception thrown by type in store
 	 * @return an existing-store, or a newly-created one
 	 */
 	@SuppressWarnings("unchecked")

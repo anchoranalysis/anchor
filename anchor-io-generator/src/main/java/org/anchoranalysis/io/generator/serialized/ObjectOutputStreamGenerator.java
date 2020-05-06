@@ -33,81 +33,37 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
 
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedGenerator implements IterableGenerator<T> {
-
-	private T rootObject = null;
+public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedIterableGenerator<T> {
 	
-	private String objectType;
-	
-	public ObjectOutputStreamGenerator( String objectType ) {
-		super();
-		this.objectType = objectType;
+	public ObjectOutputStreamGenerator( String manifestFunction ) {
+		super(manifestFunction);
 	}
 	
-	public ObjectOutputStreamGenerator(T rootObject, String objectType ) {
-		super();
-		this.rootObject = rootObject;
-		this.objectType = objectType;
+	public ObjectOutputStreamGenerator(T rootObject, String manifestFunction ) {
+		super(rootObject, manifestFunction);
 	}
-
+	
 	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings,
-			Path filePath) throws OutputWriteFailedException {
-		
-		if (getIterableElement()==null) {
-			throw new OutputWriteFailedException("no mutable element set");
-		}
-		
+	protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
+			throws OutputWriteFailedException {
+
 		try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
 			
 			ObjectOutputStream out = new ObjectOutputStream(fos);
-			out.writeObject( getIterableElement() );
+			out.writeObject( element );
 			out.close();
 			fos.close();
 			
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);
 		}
-}
-
-	@Override
-	public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-		return outputWriteSettings.getExtensionSerialized();
-	}
-
-	@Override
-	public T getIterableElement() {
-		return this.rootObject;
-	}
-
-	@Override
-	public void setIterableElement(T element) {
-		this.rootObject = element;
-	}
-
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
-
-	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("serialized", objectType);
 	}
 	
 	@Override
-	public void start() throws OutputWriteFailedException {
+	protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
+		return "";
 	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
 }

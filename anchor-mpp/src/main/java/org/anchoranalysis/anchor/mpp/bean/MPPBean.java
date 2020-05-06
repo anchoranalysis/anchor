@@ -1,5 +1,8 @@
 package org.anchoranalysis.anchor.mpp.bean;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
 
@@ -30,12 +33,11 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  */
 
 import org.anchoranalysis.bean.init.InitializableBeanSimple;
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
+import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
@@ -50,7 +52,10 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 	private transient MPPInitParams soMPP;
 	
 	protected MPPBean() {
-		super( new Initializer(), new SimplePropertyDefiner<MPPInitParams>(MPPInitParams.class) );
+		super(
+			initializerForMPPBeans(),
+			new SimplePropertyDefiner<>(MPPInitParams.class)
+		);
 	}
 	
 	@Override
@@ -59,51 +64,43 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 		this.soMPP = soMPP;
 	}
 
-	public static class Initializer extends PropertyInitializer<MPPInitParams> {
-
-		public Initializer() {
-			super( MPPInitParams.class );
-		}
-
-		@Override
-		public boolean execIfInheritsFrom(Object propertyValue, Object parent, LogErrorReporter logger)
-				throws InitException {
-
-			boolean succ = super.execIfInheritsFrom(propertyValue,parent, logger);
-			
-			if (succ) {
-				return succ;
-			}
-			
-			PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, PointsInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getPoints(), parent, logger );
-				return true;
-			}
-			
-			pd = findPropertyThatDefines( propertyValue, SharedFeaturesInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getFeature(), parent, logger );
-				return true;
-			}
-			
-			pd = findPropertyThatDefines( propertyValue, KeyValueParamsInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getParams(), parent, logger );
-				return true;
-			}
-			
-			pd = findPropertyThatDefines( propertyValue, ImageInitParams.class );
-			if (pd!=null) {
-				pd.doInitFor( propertyValue, getParam().getImage(), parent, logger );
-				return true;
-			}
-			
-			return false;
-		}
-	}
+	/**
+	 * Creates a property-initializes for MPP-Beans
+	 * 
+	 * <p>Beware concuirrency. Initializers are stateful with the {#link {@link PropertyInitializer#setParam(Object)}
+	 * method so this should be created newly for each thread, rather reused statically</p>
+	 * 
+	 * @return
+	 */
+	public static PropertyInitializer<MPPInitParams> initializerForMPPBeans() {
+		return new PropertyInitializer<>(
+			MPPInitParams.class,
+			paramExtracters()
+		);
+	}	
 
 	public MPPInitParams getSharedObjects() {
 		return soMPP;
+	}
+	
+	private static List<ExtractFromParam<MPPInitParams,?>> paramExtracters() {
+		return Arrays.asList(
+			new ExtractFromParam<>(
+				PointsInitParams.class,
+				MPPInitParams::getPoints
+			),
+			new ExtractFromParam<>(
+				SharedFeaturesInitParams.class,
+				MPPInitParams::getFeature
+			),
+			new ExtractFromParam<>(
+				KeyValueParamsInitParams.class,
+				MPPInitParams::getParams
+			),
+			new ExtractFromParam<>(
+				ImageInitParams.class,
+				MPPInitParams::getImage
+			)			
+		);
 	}
 }

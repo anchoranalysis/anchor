@@ -4,10 +4,10 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.bean.init.params.IdentityBridgeInit;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
+import org.anchoranalysis.core.bridge.IObjectBridge;
 
 /*
  * #%L
@@ -59,7 +59,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.provider.ProviderBridge;
 import org.anchoranalysis.image.stack.Stack;
 
 // A wrapper around SharedObjects which types certain Image entities
@@ -84,7 +83,7 @@ public class ImageInitParams extends BeanInitParams {
 	private Path modelDir;
 	// END: Single Items
 	
-	private ProviderBridge<StackProvider,Stack,ImageInitParams> stackProviderBridge;
+	private IObjectBridge<StackProvider,Stack,OperationFailedException> stackProviderBridge;
 
 	private ImageInitParams(SharedObjects so, RandomNumberGenerator re, Path modelDir) {
 		super();
@@ -146,22 +145,23 @@ public class ImageInitParams extends BeanInitParams {
 		return soFeature;
 	}
 	
-	public void populate( PropertyInitializer<?> pi, Define namedDefinitions, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
 		
 		soFeature.addAll(
-			namedDefinitions.getList(FeatureListProvider.class),
-			logErrorReporter
+			define.getList(FeatureListProvider.class),
+			logger
 		);
 		
-		stackProviderBridge = new ProviderBridge<StackProvider,Stack,ImageInitParams>(pi, logErrorReporter );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList( BinarySgmn.class ), getBinarySgmnSet(), new IdentityBridgeInit<BinarySgmn,ImageInitParams>(pi,logErrorReporter) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList( StackProvider.class ), getStackCollection(), stackProviderBridge );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList( BinaryImgChnlProvider.class ), getBinaryImageCollection(), new ProviderBridge<BinaryImgChnlProvider,BinaryChnl,ImageInitParams>(pi, logErrorReporter ) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList( ChnlProvider.class ), getChnlCollection(), new ProviderBridge<ChnlProvider,Chnl,ImageInitParams>(pi, logErrorReporter ) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList( ObjMaskProvider.class ), getObjMaskCollection(), new ProviderBridge<ObjMaskProvider,ObjMaskCollection,ImageInitParams>(pi, logErrorReporter ) );
-		BeanStoreAdder.addPreserveName( namedDefinitions.getList( HistogramProvider.class ), getHistogramCollection(), new ProviderBridge<HistogramProvider,Histogram,ImageInitParams>(pi, logErrorReporter ) );
+		PopulateStoreFromDefine<ImageInitParams> populate = new PopulateStoreFromDefine<>(define, pi, logger);
+		
+		populate.copyInit(BinarySgmn.class, getBinarySgmnSet());
+		populate.copyProvider(BinaryImgChnlProvider.class, getBinaryImageCollection());
+		populate.copyProvider(ChnlProvider.class, getChnlCollection());
+		populate.copyProvider(ObjMaskProvider.class, getObjMaskCollection());
+		populate.copyProvider(HistogramProvider.class, getHistogramCollection());
+		
+		stackProviderBridge = populate.copyProvider(StackProvider.class, getStackCollection());
 	}
-	
 	
 	public void addToStackCollection(String identifier, Stack inputImage) throws OperationFailedException {
 		getStackCollection().add(identifier, new IdentityOperation<>(inputImage));
@@ -191,7 +191,7 @@ public class ImageInitParams extends BeanInitParams {
 			for (String id : collectionSource.keys()) {
 				ObjMaskCollection objs = collectionSource.getException(id);
 				if (objs!=null) {
-					addToObjMaskCollection(id, new IdentityOperation<ObjMaskCollection>(objs) );
+					addToObjMaskCollection(id, new IdentityOperation<>(objs) );
 				}
 			}
 		} catch (NamedProviderGetException e) {
@@ -199,12 +199,15 @@ public class ImageInitParams extends BeanInitParams {
 		}
 	}
 	
-	public void addToObjMaskCollection(String identifier, final Operation<ObjMaskCollection> opObjMaskCollection) throws OperationFailedException {
+	public void addToObjMaskCollection(String identifier, Operation<ObjMaskCollection,OperationFailedException> opObjMaskCollection) throws OperationFailedException {
 		getObjMaskCollection().add(identifier, opObjMaskCollection);
 	}
 	
 	public void addToKeyValueParamsCollection( String identifier, KeyValueParams params ) throws OperationFailedException {
-		getParams().getNamedKeyValueParamsCollection().add( identifier, new IdentityOperation<>(params));
+		getParams().getNamedKeyValueParamsCollection().add(
+			identifier,
+			new IdentityOperation<>(params)
+		);
 	}
 
 	public RandomNumberGenerator getRandomNumberGenerator() {

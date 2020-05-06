@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.manifest.finder;
 
+import java.io.IOException;
+
 /*
  * #%L
  * anchor-io
@@ -29,11 +31,9 @@ package org.anchoranalysis.io.manifest.finder;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
@@ -43,22 +43,37 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFunctionType;
 
-public class FinderSerializedObject<ObjectType> extends FinderSingleFile {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> object-type
+ */
+public class FinderSerializedObject<T> extends FinderSingleFile {
 	
-	private ObjectType deserializedObject;
+	private T deserializedObject;
 	private String function;
+	
+	private Operation<T,IOException> operation = new WrapOperationAsCached<>(
+		() -> {
+			if (!exists()) {
+				return null;
+			}
+			return get();
+		}
+	);
 	
 	public FinderSerializedObject(String function, ErrorReporter errorReporter) {
 		super(errorReporter);
 		this.function = function;
 	}
 	
-	private ObjectType deserialize( FileWrite fileWrite )
+	private T deserialize( FileWrite fileWrite )
 			throws DeserializationFailedException {
 		
-		Deserializer<ObjectType> deserializer;
+		Deserializer<T> deserializer;
 		if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {
-			deserializer = new KeyValueParamsDeserializer<ObjectType>();
+			deserializer = new KeyValueParamsDeserializer<T>();
 		} else if (fileWrite.getFileName().toLowerCase().endsWith(".xml")) {
 			deserializer = new XStreamDeserializer<>();
 		} else {
@@ -69,13 +84,13 @@ public class FinderSerializedObject<ObjectType> extends FinderSingleFile {
 		return deserializer.deserialize( fileWrite.calcPath() );
 	}
 
-	public ObjectType get() throws GetOperationFailedException {
+	public T get() throws IOException {
 		assert( exists() );
 		if (deserializedObject==null) {
 			try {
 				deserializedObject = deserialize( getFoundFile() );
 			} catch (DeserializationFailedException e) {
-				throw new GetOperationFailedException(e);
+				throw new IOException(e);
 			}
 		}
 		return deserializedObject;
@@ -83,9 +98,11 @@ public class FinderSerializedObject<ObjectType> extends FinderSingleFile {
 
 
 	@Override
-	protected FileWrite findFile(ManifestRecorder manifestRecorder)
-			throws MultipleFilesException {
-		List<FileWrite> files = FinderUtilities.findListFile( manifestRecorder, new FileWriteFileFunctionType(function, "serialized") );
+	protected FileWrite findFile(ManifestRecorder manifestRecorder)	throws MultipleFilesException {
+		List<FileWrite> files = FinderUtilities.findListFile(
+			manifestRecorder,
+			new FileWriteFileFunctionType(function, "serialized")
+		);
 		
 		if (files.size()==0) {
 			return null;
@@ -101,23 +118,7 @@ public class FinderSerializedObject<ObjectType> extends FinderSingleFile {
 		return files.get(0);
 	}
 	
-	private Operation<ObjectType> operation =  new CachedOperation<ObjectType>() {
-
-		@Override
-		protected ObjectType execute() throws ExecuteException {
-			try {
-				if (!exists()) {
-					return null;
-				}
-				return get();
-			} catch (GetOperationFailedException e) {
-				throw new ExecuteException(e);
-			}
-		}
-		
-	};
-	
-	public Operation<ObjectType> operation() {
+	public Operation<T,IOException> operation() {
 		return operation;
 	}
 }

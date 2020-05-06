@@ -37,25 +37,24 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.init.IInitFeatures;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.InitializableFeature;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 
 /**
  * Feature that calculates a result (double) for some parameters
  * 
- * <p>It should be initialized before any other methods are called.</p>
- * <p>
+ * <p>It should always be called in a context of a session, which first initializes the feature before doing calculations.</p>
  * 
  * @author owen
  *
- * @param <T> type of parameters used during calculation 
+ * @param <T> input-type 
  */
-public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T> implements
-		Serializable, IInitFeatures<T> {
+public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements
+		Serializable, InitializableFeature<T> {
 
 	/**
 	 * 
@@ -119,45 +118,47 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 				: getBeanDscr();
 	}
 
-	public double calcCheckInit(CacheableParams<T> params) throws FeatureCalcException {
+	public double calcCheckInit(SessionInput<T> input) throws FeatureCalcException {
 		if (!hasBeenInit) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
 					this.toString()));
 		}
 	
-		double ret = calc( params );
+		double ret = calc( input );
 		
 		assert( !Double.isNaN(ret) );
+		assert( Double.isFinite(ret) );
+		
 		return ret;
 	}
 	
 	// Calculates a value for some parameters
-	protected abstract double calc(CacheableParams<T> params) throws FeatureCalcException;
+	protected abstract double calc(SessionInput<T> input) throws FeatureCalcException;
 
 	/**
 	 * Optionally transforms the parameters passed into this feature, before
 	 * they are passed to a dependent feature
 	 * 
-	 * @param params
+	 * @param input
 	 *            params passed to this feature
 	 * @param dependentFeature
 	 *            a dependent-feature
 	 */
 	@SuppressWarnings("unchecked")
-	public CacheableParams<FeatureCalcParams> transformParams(CacheableParams<T> params,
-			Feature<FeatureCalcParams> dependentFeature) throws FeatureCalcException {
-		return (CacheableParams<FeatureCalcParams>) params;
+	public SessionInput<FeatureInput> transformInput(SessionInput<T> input,
+			Feature<FeatureInput> dependentFeature) throws FeatureCalcException {
+		return (SessionInput<FeatureInput>) input;
 	}
 
-	protected void duplicateHelper(Feature<FeatureCalcParams> out) {
+	protected void duplicateHelper(Feature<FeatureInput> out) {
 		out.customName = new String(customName);
 	}
 	
 	/**
-	 * Initialises the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
+	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
 	 * 
-	 * @param params parameters used for initialisation that are simply passed to beforeCalc()
+	 * @param params parameters used for initialization that are simply passed to beforeCalc()
 	 * @param logger logger
 	 * 
 	 * @param logger the logger, saved and made available to the feature
@@ -171,7 +172,7 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 				
 		hasBeenInit = true;
 		this.logger = logger;
-		beforeCalc(	params );
+		beforeCalc( );
 	}
 	
 
@@ -187,12 +188,12 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	 * @throws CreateException
 	 * @throws BeanMisconfiguredException
 	 */
-	public final FeatureList<FeatureCalcParams> createListChildFeatures(boolean includeAdditionallyUsed)
+	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)
 			throws BeanMisconfiguredException {
 		
-		List<Feature<FeatureCalcParams>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
+		List<Feature<FeatureInput>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
 
-		FeatureList<FeatureCalcParams> out = new FeatureList<>(outUpcast);
+		FeatureList<FeatureInput> out = new FeatureList<>(outUpcast);
 
 		if (includeAdditionallyUsed) {
 			addAdditionallyUsedFeatures(out);
@@ -215,11 +216,11 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	 * @param out a list to add these features to
 	 *            
 	 */
-	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 	}
 
 	// Dummy method, that children can optionally override
-	public void beforeCalc(FeatureInitParams params) throws InitException {
+	public void beforeCalc() throws InitException {
 
 	}
 
@@ -235,8 +236,8 @@ public abstract class Feature<T extends FeatureCalcParams> extends FeatureBase<T
 	
 	/** Upcasts the feature to FeatureCalcParams */
 	@SuppressWarnings("unchecked")
-	public Feature<FeatureCalcParams> upcast() {
-		return (Feature<FeatureCalcParams>) this;
+	public Feature<FeatureInput> upcast() {
+		return (Feature<FeatureInput>) this;
 	}
 	
 	/** Downcasts the feature  */

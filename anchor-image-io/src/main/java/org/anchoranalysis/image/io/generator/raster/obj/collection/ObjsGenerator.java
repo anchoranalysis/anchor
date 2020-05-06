@@ -33,7 +33,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 /**
@@ -75,16 +74,6 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 	public void setIterableElement(ObjMaskCollection element)
 			throws SetOperationFailedException {
 		this.objs = element;
-	}
-
-	@Override
-	public void start() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		
 	}
 
 	@Override

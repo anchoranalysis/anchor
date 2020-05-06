@@ -29,13 +29,13 @@ package org.anchoranalysis.image.feature.bean.physical;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-public class VolumeMinMax<T extends FeatureCalcParamsWithRes> extends FeatureNRGRange<T> {
+public class VolumeMinMax<T extends FeatureInputWithRes> extends FeatureNRGRange<T> {
 
 	/**
 	 * 

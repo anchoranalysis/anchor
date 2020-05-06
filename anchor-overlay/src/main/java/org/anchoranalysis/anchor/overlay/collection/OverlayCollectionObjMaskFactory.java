@@ -27,7 +27,6 @@ package org.anchoranalysis.anchor.overlay.collection;
  */
 
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.anchor.overlay.objmask.OverlayObjMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.objmask.ObjMask;

@@ -28,14 +28,14 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.bean.shared.SequenceInteger;
+import org.anchoranalysis.bean.sequence.SequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Reference;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Populates a FeatureListElem with references to other features formed by one
@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderListSequence<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderListSequence<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -76,7 +76,7 @@ public class FeatureListProviderListSequence<T extends FeatureCalcParams> extend
 	/**
 	 * Another number range that is appended
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private SequenceInteger sequenceAdditional;
 	
 	@BeanField

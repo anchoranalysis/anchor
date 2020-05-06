@@ -27,11 +27,11 @@ package org.anchoranalysis.feature.bean.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public class Sum<T extends FeatureCalcParams> extends FeatureListElem<T> {
+public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -46,12 +46,12 @@ public class Sum<T extends FeatureCalcParams> extends FeatureListElem<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
 		double result = 0;
 		
 		for (Feature<T> elem : getList()) {
-			double resultInd = params.calc( elem );
+			double resultInd = input.calc( elem );
 			
 			if (ignoreNaN && Double.isNaN(resultInd)) {
 				continue;

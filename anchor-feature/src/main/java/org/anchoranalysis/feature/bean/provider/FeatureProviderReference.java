@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
-public class FeatureProviderReference extends FeatureProvider<FeatureCalcParams> {
+public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
 	/**
 	 * 
@@ -49,7 +49,7 @@ public class FeatureProviderReference extends FeatureProvider<FeatureCalcParams>
 	private String featureListRef = "";
 	// END BEAN PROPERTIES
 	
-	private Feature<FeatureCalcParams> feature;
+	private Feature<FeatureInput> feature;
 	
 	@Override
 	public void onInit(SharedFeaturesInitParams so) throws InitException {
@@ -77,7 +77,7 @@ public class FeatureProviderReference extends FeatureProvider<FeatureCalcParams>
 	}
 
 	@Override
-	public Feature<FeatureCalcParams> create() {
+	public Feature<FeatureInput> create() {
 		assert(feature!=null);
 		return feature;
 	}

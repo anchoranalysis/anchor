@@ -30,13 +30,13 @@ import org.anchoranalysis.bean.StringSet;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
-public abstract class FeatureListProviderReferencedFeatures<T extends FeatureCalcParams> extends FeatureListProvider<T> {
+public abstract class FeatureListProviderReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public abstract class FeatureListProviderReferencedFeatures<T extends FeatureCal
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	// END BEAN PROPERITES
 	

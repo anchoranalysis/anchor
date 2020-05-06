@@ -27,22 +27,22 @@ package org.anchoranalysis.core.progress;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 
 /**
  * 
  * @author Owen Feehan
  *
- * @param <R> Result-type
+ * @param <R> result-type
+ * @param <E> exception thrown during operation
  */
-public abstract class CachedOperationWithProgressReporter<R> implements OperationWithProgressReporter<R>, Operation<R> {
+public abstract class CachedOperationWithProgressReporter<R, E extends Throwable> implements OperationWithProgressReporter<R,E>, Operation<R,E> {
 
 	private R result = null;
 	private boolean done = false;
 	
 	@Override
-	public synchronized R doOperation( ProgressReporter progressReporter ) throws ExecuteException {
+	public synchronized R doOperation( ProgressReporter progressReporter ) throws E {
 		
 		if (!done) {
 			result = execute( progressReporter );
@@ -52,7 +52,7 @@ public abstract class CachedOperationWithProgressReporter<R> implements Operatio
 		return result;
 	}
 	
-	public synchronized void assignFrom( CachedOperationWithProgressReporter<R> src ) {
+	public synchronized void assignFrom( CachedOperationWithProgressReporter<R,E> src ) {
 		this.result = src.result;
 		this.done = src.done;
 	}
@@ -66,14 +66,14 @@ public abstract class CachedOperationWithProgressReporter<R> implements Operatio
 		return done;
 	}
 	
-	protected abstract R execute( ProgressReporter progressReporter ) throws ExecuteException;
+	protected abstract R execute( ProgressReporter progressReporter ) throws E;
 
 	protected synchronized R getResult() {
 		return result;
 	}
 
 	@Override
-	public R doOperation() throws ExecuteException {
+	public R doOperation() throws E {
 		return doOperation( ProgressReporterNull.get() );
 	}
 }

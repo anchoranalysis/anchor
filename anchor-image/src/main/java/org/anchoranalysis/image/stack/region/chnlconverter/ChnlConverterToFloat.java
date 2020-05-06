@@ -40,7 +40,7 @@ public class ChnlConverterToFloat extends ChnlConverter<FloatBuffer> {
 		super(
 			VoxelDataTypeFloat.instance,
 			new VoxelBoxConverterToFloatNoScaling(),
-			VoxelBoxFactory.getFloat()
+			VoxelBoxFactory.instance().getFloat()
 		);
 	}
 }

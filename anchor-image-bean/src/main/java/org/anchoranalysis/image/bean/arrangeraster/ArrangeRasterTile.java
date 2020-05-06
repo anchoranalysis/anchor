@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.arrangeraster.ArrangeRasterException;
@@ -57,7 +57,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	@BeanField @Positive
 	private int numCols = -1;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<ArrangeRasterCell> cells = new ArrayList<>();
 	
 	@BeanField

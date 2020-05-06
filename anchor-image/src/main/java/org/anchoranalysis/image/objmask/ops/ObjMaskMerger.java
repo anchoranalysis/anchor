@@ -61,7 +61,7 @@ public class ObjMaskMerger {
 		
 		ObjMask omOut = new ObjMask(
 			bbox,
-			VoxelBoxFactory.getByte().create(
+			VoxelBoxFactory.instance().getByte().create(
 				bbox.extnt()
 			)
 		);
@@ -104,7 +104,7 @@ public class ObjMaskMerger {
 		
 		BoundingBox bbox = mergeBBoxFromObjs(objs);
 		
-		ObjMask omOut = new ObjMask( bbox, VoxelBoxFactory.getByte().create(bbox.extnt()) );
+		ObjMask omOut = new ObjMask( bbox, VoxelBoxFactory.instance().getByte().create(bbox.extnt()) );
 		
 		BinaryValues bv = null;
 		for( ObjMask om : objs ) {

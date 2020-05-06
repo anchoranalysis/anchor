@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Prepends a string to each feature in the list
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderPrependName extends FeatureListProvider<FeatureCalcParams> {
+public class FeatureListProviderPrependName extends FeatureListProvider<FeatureInput> {
 
 	/**
 	 * 
@@ -47,23 +47,23 @@ public class FeatureListProviderPrependName extends FeatureListProvider<FeatureC
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider<FeatureCalcParams> item;
+	private FeatureListProvider<FeatureInput> item;
 	
 	@BeanField
 	private String prependString;
 	// END BEAN PROPERTIES
 
-	public static void setNewNameOnFeature( Feature<? extends FeatureCalcParams> f, String existingName, String prependString ) {
+	public static void setNewNameOnFeature( Feature<? extends FeatureInput> f, String existingName, String prependString ) {
 		String nameNew = String.format("%s%s", prependString, existingName);
 		f.setCustomName(nameNew);
 	}
 	
 	@Override
-	public FeatureList<FeatureCalcParams> create() throws CreateException {
+	public FeatureList<FeatureInput> create() throws CreateException {
 
-		FeatureList<FeatureCalcParams> features = item.create();
+		FeatureList<FeatureInput> features = item.create();
 		
-		for( Feature<FeatureCalcParams> f : features ) {
+		for( Feature<FeatureInput> f : features ) {
 			String existingName = f.getFriendlyName();
 			setNewNameOnFeature( f, existingName, prependString );
 			
@@ -80,11 +80,11 @@ public class FeatureListProviderPrependName extends FeatureListProvider<FeatureC
 		this.prependString = prependString;
 	}
 
-	public FeatureListProvider<FeatureCalcParams> getItem() {
+	public FeatureListProvider<FeatureInput> getItem() {
 		return item;
 	}
 
-	public void setItem(FeatureListProvider<FeatureCalcParams> item) {
+	public void setItem(FeatureListProvider<FeatureInput> item) {
 		this.item = item;
 	}
 }

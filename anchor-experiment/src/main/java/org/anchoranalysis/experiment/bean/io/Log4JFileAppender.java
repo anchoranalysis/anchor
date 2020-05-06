@@ -81,11 +81,6 @@ class Log4JFileAppender implements Appender, OptionHandler {
 		return delegate.equals(obj);
 	}
 
-	@Override
-	public void finalize() {
-		delegate.finalize();
-	}
-
 	public boolean getAppend() {
 		return delegate.getAppend();
 	}

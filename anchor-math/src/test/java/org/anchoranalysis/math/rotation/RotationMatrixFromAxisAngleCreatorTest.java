@@ -29,8 +29,6 @@ package org.anchoranalysis.math.rotation;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.core.geometry.Vector3d;
-import org.anchoranalysis.math.rotation.RotationMatrix;
-import org.anchoranalysis.math.rotation.RotationMatrixFromAxisAngleCreator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

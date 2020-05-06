@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.nghb;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
@@ -99,7 +100,7 @@ class EdgeAdder<V> {
 		
 		ObjMask omDilated = MorphologicalDilation.createDilatedObjMask(
 			om,
-			sceneExtnt,
+			Optional.of(sceneExtnt),
 			do3D && sceneExtnt.getZ()>1,
 			1,
 			bigNghb

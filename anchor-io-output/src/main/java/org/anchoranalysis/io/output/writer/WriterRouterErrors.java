@@ -66,7 +66,7 @@ public class WriterRouterErrors {
 	}
 
 	public <T> void writeSubfolder(String outputName,
-			Operation<WritableItem> collectionGenerator)	{
+			Operation<WritableItem,OutputWriteFailedException> collectionGenerator)	{
 		try {
 			delegate.writeSubfolder(outputName, collectionGenerator);
 		} catch (OutputWriteFailedException e) {
@@ -75,7 +75,7 @@ public class WriterRouterErrors {
 	}
 
 	public int write(IndexableOutputNameStyle outputNameStyle,
-			Operation<WritableItem> generator, String index) {
+			Operation<WritableItem,OutputWriteFailedException> generator, String index) {
 		try {
 			return delegate.write(outputNameStyle, generator, index);
 		} catch (OutputWriteFailedException e) {
@@ -85,7 +85,7 @@ public class WriterRouterErrors {
 	}
 
 	public int write(IndexableOutputNameStyle outputNameStyle,
-			Operation<WritableItem> generator, int index) {
+			Operation<WritableItem,OutputWriteFailedException> generator, int index) {
 		try {		
 			return delegate.write(outputNameStyle, generator, index);
 		} catch (OutputWriteFailedException e) {
@@ -94,7 +94,7 @@ public class WriterRouterErrors {
 		}				
 	}
 
-	public void write(OutputNameStyle outputNameStyle, Operation<WritableItem> generator) {
+	public void write(OutputNameStyle outputNameStyle, Operation<WritableItem,OutputWriteFailedException> generator) {
 		try {
 			delegate.write(outputNameStyle, generator);
 		} catch (OutputWriteFailedException e) {
@@ -102,7 +102,7 @@ public class WriterRouterErrors {
 		}						
 	}
 
-	public void write(String outputName, Operation<WritableItem> generator) {
+	public void write(String outputName, Operation<WritableItem,OutputWriteFailedException> generator) {
 		try {
 			delegate.write(outputName, generator);
 		} catch (OutputWriteFailedException e) {

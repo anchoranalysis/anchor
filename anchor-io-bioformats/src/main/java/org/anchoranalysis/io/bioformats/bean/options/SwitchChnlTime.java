@@ -28,49 +28,15 @@ package org.anchoranalysis.io.bioformats.bean.options;
 
 import java.util.List;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-
 import loci.formats.IFormatReader;
 
 /** Treats the channel information as if it's time, and vice versa */
-public class SwitchChnlTime extends ReadOptions {
+public class SwitchChnlTime extends ReadOptionsDelegate {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ReadOptions options = new Default();
-	// END BEAN PROPERTIES
-	
-	@Override
-	public int sizeC(IFormatReader reader) {
-		// Switched to T
-		return options.sizeT(reader);
-	}
-
-	@Override
-	public int sizeT(IFormatReader reader) {
-		// Switched to C
-		return options.sizeC(reader);
-	}
-
-	@Override
-	public int sizeZ(IFormatReader reader) {
-		return options.sizeZ(reader);
-	}
-
-	@Override
-	public int effectiveBitsPerPixel(IFormatReader reader) {
-		return options.effectiveBitsPerPixel(reader);
-	}
-
-	@Override
-	public int chnlsPerByteArray(IFormatReader reader) {
-		return options.chnlsPerByteArray(reader);
-	}
 
 	@Override
 	public List<String> determineChannelNames(IFormatReader reader) {
@@ -83,13 +49,4 @@ public class SwitchChnlTime extends ReadOptions {
 		// Not supported when switching
 		return false;
 	}
-
-	public ReadOptions getOptions() {
-		return options;
-	}
-
-	public void setOptions(ReadOptions options) {
-		this.options = options;
-	}
-
 }

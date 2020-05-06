@@ -1,6 +1,6 @@
 package org.anchoranalysis.io.generator;
 
-import org.anchoranalysis.core.bridge.BridgeElementException;
+
 
 /*-
  * #%L
@@ -32,42 +32,50 @@ import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// Allows us to call an IterableGenerator<ExternalType> as if it was an IterableGenerator<InternalType>
-//   using an interface function to connect the two
-public class IterableObjectGeneratorBridge<GeneratorType,ExposedIteratorType,HiddenIteratorType> implements IterableObjectGenerator<ExposedIteratorType,GeneratorType> {
+/**
+ * Allows us to call an IterableGenerator<ExternalType> as if it was an IterableGenerator<InternalType>
+ *   using an interface function to connect the two
+ * 
+ * @author Owen Feehan
+ *
+ * @param <S> generator-type
+ * @param <T> exposed-iterator type
+ * @param <V> hidden-iterator-type
+ */
+public class IterableObjectGeneratorBridge<S,T,V> implements IterableObjectGenerator<T,S> {
 
-	private ExposedIteratorType element;
+	private T element;
 	
-	private IterableObjectGenerator<HiddenIteratorType,GeneratorType> internalGenerator;
+	private IterableObjectGenerator<V,S> internalGenerator;
 	
-	private IObjectBridge<ExposedIteratorType,HiddenIteratorType> elementBridge;
+	private IObjectBridge<T,V,? extends Throwable> elementBridge;
 	
-	public IterableObjectGeneratorBridge(IterableObjectGenerator<HiddenIteratorType,GeneratorType> internalGenerator, IObjectBridge<ExposedIteratorType,HiddenIteratorType> elementBridge) {
+	public IterableObjectGeneratorBridge(IterableObjectGenerator<V,S> internalGenerator, IObjectBridge<T,V,? extends Throwable> elementBridge) {
 		super();
 		this.internalGenerator = internalGenerator;
 		this.elementBridge = elementBridge;
 	}
 
 	@Override
-	public ExposedIteratorType getIterableElement() {
+	public T getIterableElement() {
 		return this.element;
 	}
 
 	@Override
-	public void setIterableElement(ExposedIteratorType element) throws SetOperationFailedException {
+	public void setIterableElement(T element) throws SetOperationFailedException {
 		
 		assert(element!=null);
 		this.element = element;
 		try {
-			HiddenIteratorType bridgedElement = elementBridge.bridgeElement(element); 
+			V bridgedElement = elementBridge.bridgeElement(element); 
 			internalGenerator.setIterableElement( bridgedElement );
-		} catch (BridgeElementException e) {
+		} catch (Throwable e) {
 			throw new SetOperationFailedException(e);
 		}
 	}
 
 	@Override
-	public ObjectGenerator<GeneratorType> getGenerator() {
+	public ObjectGenerator<S> getGenerator() {
 		return internalGenerator.getGenerator();
 	}
 

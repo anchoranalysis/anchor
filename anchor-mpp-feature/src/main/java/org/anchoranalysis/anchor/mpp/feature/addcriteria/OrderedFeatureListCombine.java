@@ -31,11 +31,11 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 class OrderedFeatureListCombine {
 	
-	public static <T extends FeatureCalcParams> FeatureList<T> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
+	public static <T extends FeatureInput> FeatureList<T> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
 		
 		FeatureList<T> out = new FeatureList<>();
 		

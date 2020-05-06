@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.convert;
 
+import java.nio.Buffer;
+
 /*
  * #%L
  * anchor-image
@@ -30,6 +32,10 @@ package org.anchoranalysis.image.convert;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -41,42 +47,52 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import net.imglib2.img.AbstractNativeImg;
+import net.imglib2.img.Img;
 import net.imglib2.img.NativeImg;
 import net.imglib2.img.array.ArrayImg;
+import net.imglib2.img.basictypeaccess.array.ArrayDataAccess;
 import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.img.basictypeaccess.array.ShortArray;
 import net.imglib2.img.planar.PlanarImg;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Fraction;
 
+/**
+ * Converts the {@link VoxelBox} and {@link VoxelBuffer} data-types used in Anchor to the {@link NativeImg} used in ImgLib2
+ * 
+ * @author owen
+ *
+ */
 public class ImgLib2Wrap {
 	
 	private ImgLib2Wrap() {
 		// Force static access
 	}
 	
-	public static NativeImg<? extends RealType<?>,?> wrap( VoxelBoxWrapper box, boolean do3D ) {
+	public static Img<? extends RealType<?>> wrap( VoxelBoxWrapper box ) {
 		
 		VoxelDataType dataType = box.getVoxelDataType();
 		
 		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
-			return wrapByte(box.asByte(), do3D);
+			return wrapByte(box.asByte());
 		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
-			return wrapShort(box.asShort(), do3D);
+			return wrapShort(box.asShort());
 		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
-				return wrapFloat(box.asFloat(), do3D);			
+			return wrapFloat(box.asFloat());			
 		} else {
-			throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");
+			throw new IncorrectVoxelDataTypeException("Only unsigned byte, short and float are supported");
 		}
 		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static NativeImg<?,?> wrap( VoxelBuffer<?> vb, Extent e) {
+	public static Img<? extends RealType<?>> wrap( VoxelBuffer<?> vb, Extent e) {
 		
 		VoxelDataType dataType = vb.dataType();
 		
@@ -84,92 +100,124 @@ public class ImgLib2Wrap {
 			return wrapByte( (VoxelBuffer<ByteBuffer>) vb, e);
 		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			return wrapShort( (VoxelBuffer<ShortBuffer>) vb, e);
+		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
+			return wrapFloat( (VoxelBuffer<FloatBuffer>) vb, e);			
 		} else {
-			throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");
+			throw new IncorrectVoxelDataTypeException("Only unsigned byte, short and float are supported");
 		}
 		
 	}
 	
-	
-	public static NativeImg<UnsignedByteType,ByteArray> wrapByte( VoxelBox<ByteBuffer> box, boolean do3D ) {
-		
-		Extent e = box.extnt();
-		
-		if (!do3D) {
-			return wrapByte( box.getPixelsForPlane(0), e );
-		}
-		
-		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
-		
-		PlanarImg<UnsignedByteType,ByteArray> imgOut = new PlanarImg<>(dim, new Fraction() );
-		for( int z=0; z<e.getZ(); z++) {
-			imgOut.setPlane(z, new ByteArray(box.getPixelsForPlane(z).buffer().array()) );
-		}
-				
-		imgOut.setLinkedType(new UnsignedByteType(imgOut));
-		return imgOut;
+	public static NativeImg<UnsignedByteType,ByteArray> wrapByte( VoxelBox<ByteBuffer> box ) {
+		return wrapBox(
+			box,
+			b -> new ByteArray(b.array()),
+			img -> new UnsignedByteType(img)
+		);
 	}
 
-	public static NativeImg<UnsignedShortType,ShortArray> wrapShort( VoxelBox<ShortBuffer> box, boolean do3D ) {
-		
-		Extent e = box.extnt();
-		
-		if (!do3D) {
-			return wrapShort( box.getPixelsForPlane(0), e );
-		}
-		
-		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
-		
-		PlanarImg<UnsignedShortType,ShortArray> imgOut = new PlanarImg<>(dim, new Fraction() );
-		for( int z=0; z<e.getZ(); z++) {
-			imgOut.setPlane(z, new ShortArray(box.getPixelsForPlane(z).buffer().array()) );
-		}
-				
-		imgOut.setLinkedType(new UnsignedShortType(imgOut));
-		return imgOut;
+	public static NativeImg<UnsignedShortType,ShortArray> wrapShort( VoxelBox<ShortBuffer> box ) {
+		return wrapBox(
+			box,
+			b -> new ShortArray(b.array()),
+			img -> new UnsignedShortType(img)
+		);
+	}
+	
+	public static NativeImg<FloatType,FloatArray> wrapFloat( VoxelBox<FloatBuffer> box ) {
+		return wrapBox(
+			box,
+			b -> new FloatArray(b.array()),
+			img -> new FloatType(img)
+		);
 	}
 	
 	
-	public static NativeImg<FloatType,FloatArray> wrapFloat( VoxelBox<FloatBuffer> box, boolean do3D ) {
-		
-		Extent e = box.extnt();
-		
-		if (!do3D) {
-			return wrapFloat( box.getPixelsForPlane(0), e );
-		}
-		
-		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
-		
-		PlanarImg<FloatType,FloatArray> imgOut = new PlanarImg<>(dim, new Fraction() );
-		for( int z=0; z<e.getZ(); z++) {
-			imgOut.setPlane(z, new FloatArray(box.getPixelsForPlane(z).buffer().array()) );
-		}
-				
-		imgOut.setLinkedType(new FloatType(imgOut));
-		return imgOut;
-	}
-	
-	// Only uses X and Y of e, ignores Z
-	public static ArrayImg<UnsignedByteType, ByteArray> wrapByte( VoxelBuffer<ByteBuffer> buffer, Extent e ) {
-		long dim[] = new long[]{e.getX(),e.getY()};
-		ArrayImg<UnsignedByteType, ByteArray> img = new ArrayImg<UnsignedByteType, ByteArray>(new ByteArray(buffer.buffer().array()), dim, new Fraction());
-		img.setLinkedType(new UnsignedByteType(img));
-		return img;
+	/** Only uses X and Y of e, ignores Z */
+	public static NativeImg<UnsignedByteType, ByteArray> wrapByte( VoxelBuffer<ByteBuffer> buffer, Extent e ) {
+		return wrapBuffer(
+			buffer,
+			e,
+			b -> new ByteArray(b.array()),
+			img -> new UnsignedByteType(img)
+		);
 	}
 
-	// Only uses X and Y of e, ignores Z
-	public static ArrayImg<UnsignedShortType, ShortArray> wrapShort( VoxelBuffer<ShortBuffer> buffer, Extent e ) {
-		long dim[] = new long[]{e.getX(),e.getY()};
-		ArrayImg<UnsignedShortType, ShortArray> img = new ArrayImg<UnsignedShortType, ShortArray>(new ShortArray(buffer.buffer().array()), dim, new Fraction());
-		img.setLinkedType(new UnsignedShortType(img));
-		return img;
+	/** Only uses X and Y of e, ignores Z */
+	public static NativeImg<UnsignedShortType, ShortArray> wrapShort( VoxelBuffer<ShortBuffer> buffer, Extent e ) {
+		return wrapBuffer(
+			buffer,
+			e,
+			b -> new ShortArray(b.array()),
+			img -> new UnsignedShortType(img)
+		);
 	}
 	
-	// Only uses X and Y of e, ignores Z
-	public static ArrayImg<FloatType, FloatArray> wrapFloat( VoxelBuffer<FloatBuffer> buffer, Extent e ) {
-			long dim[] = new long[]{e.getX(),e.getY()};
-			ArrayImg<FloatType, FloatArray> img = new ArrayImg<FloatType, FloatArray>(new FloatArray(buffer.buffer().array()), dim, new Fraction());
-			img.setLinkedType(new FloatType(img));
-			return img;
-		}
+	/** Only uses X and Y of e, ignores Z */
+	public static NativeImg<FloatType, FloatArray> wrapFloat( VoxelBuffer<FloatBuffer> buffer, Extent e ) {
+		return wrapBuffer(
+			buffer,
+			e,
+			b -> new FloatArray(b.array()),
+			img -> new FloatType(img)
+		);
+	}
+	
+	private static <S extends NativeType<S>,T extends ArrayDataAccess<T>,U extends Buffer> NativeImg<S,T> wrapBox(
+		VoxelBox<U> box,
+		Function<U,T> transform,
+		Function<AbstractNativeImg<S,T>,S> createType	
+	) {
+		return wrapAllSlicesFor(box, transform, createType);
+	}
+	
+	private static <S extends NativeType<S>,T extends ArrayDataAccess<T>,U extends Buffer> NativeImg<S,T> wrapAllSlicesFor(
+		VoxelBox<U> box,
+		Function<U,T> transform,
+		Function<AbstractNativeImg<S,T>,S> createType
+	) {
+		Extent e = box.extnt();
+		
+		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
+		
+		PlanarImg<S,T> img = new PlanarImg<>(
+			slicesFor(box, transform),
+			dim,
+			new Fraction()
+		);
+		return updateLinkedTypeOnImage(img, createType);	
+	}
+	
+	private static <T,U extends Buffer> List<T> slicesFor( VoxelBox<U> box, Function<U,T> transformSlice ) {
+		return IntStream.range(0, box.extnt().getZ()).mapToObj( z->
+			transformSlice.apply(
+				box.getPixelsForPlane(z).buffer()
+			)
+		).collect( Collectors.toList() );		
+	}
+	
+	private static <S extends NativeType<S>,T,U extends Buffer> NativeImg<S, T> wrapBuffer(
+		VoxelBuffer<U> buffer,
+		Extent e,
+		Function<U,T> transform,
+		Function<AbstractNativeImg<S,T>,S> createType
+	) {
+		long dim[] = new long[]{e.getX(),e.getY()};
+		ArrayImg<S, T> img = new ArrayImg<>(
+			transform.apply(buffer.buffer()),
+			dim,
+			new Fraction()
+		);
+		return updateLinkedTypeOnImage(img, createType);
+	}
+	
+	private static <S extends NativeType<S>,T> NativeImg<S, T> updateLinkedTypeOnImage(
+		AbstractNativeImg<S,T> img,
+		Function<AbstractNativeImg<S,T>,S> createType
+	) {
+		img.setLinkedType(
+			createType.apply(img)
+		);
+		return img;
+	}
 }

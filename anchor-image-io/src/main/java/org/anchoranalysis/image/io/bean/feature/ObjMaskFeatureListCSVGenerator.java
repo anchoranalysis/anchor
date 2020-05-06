@@ -35,18 +35,18 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.TableCSVGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.orientation.DirectionVector;
@@ -68,31 +68,21 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	
 	private ObjMaskCollection objs;
 	
-	private FeatureList<FeatureObjMaskParams> features;
+	private FeatureList<FeatureInputSingleObj> features;
 	
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
-	private SharedFeatureSet<FeatureObjMaskParams> sharedFeatures = new SharedFeatureSet<>();
+	private SharedFeatureSet<FeatureInputSingleObj> sharedFeatures = new SharedFeatureSet<>();
 	
 	private NRGStackWithParams nrgStack;
 	private LogErrorReporter logErrorReporter;
 	
-	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureObjMaskParams> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
+	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObj> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
 		this.logErrorReporter = logErrorReporter;
 		this.features = createFullFeatureList( features, logErrorReporter );
 		
 		delegate = new FeatureListCSVGeneratorVertical( "objMaskFeatures", features.createNames() );
-	}
-
-	@Override
-	public void start() throws OutputWriteFailedException {
-		
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		
 	}
 
 	@Override
@@ -106,7 +96,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 				
 		ResultsVectorCollection rvc;
 		try {
-			 FeatureCalculatorMulti<FeatureObjMaskParams> session = SessionFactory.createAndStart(
+			 FeatureCalculatorMulti<FeatureInputSingleObj> session = FeatureSession.with(
 				features,
 				paramsInit,
 				sharedFeatures,
@@ -117,7 +107,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			rvc = new ResultsVectorCollection();
 			for( ObjMask om : objs ) {
 				rvc.add( 
-					session.calcOneSuppressErrors(
+					session.calcSuppressErrors(
 						createParams(om, nrgStack),
 						logErrorReporter.getErrorReporter()
 					)
@@ -141,18 +131,18 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.objs = element;
 	}
 
-	private void addFeature( Feature<FeatureObjMaskParams> feature, String prefix, FeatureList<FeatureObjMaskParams> featureList ) throws BeanMisconfiguredException {
+	private void addFeature( Feature<FeatureInputSingleObj> feature, String prefix, FeatureList<FeatureInputSingleObj> featureList ) throws BeanMisconfiguredException {
 		featureList.addWithCustomName( feature.duplicateBean(), prefix + feature.getFriendlyName() );
 	}
 	
 	// Puts in some extra descriptive features at the start
-	private FeatureList<FeatureObjMaskParams> createFullFeatureList( FeatureList<FeatureObjMaskParams> features, LogErrorReporter logger ) {
+	private FeatureList<FeatureInputSingleObj> createFullFeatureList( FeatureList<FeatureInputSingleObj> features, LogErrorReporter logger ) {
 		
-		FeatureList<FeatureObjMaskParams> featuresAll = new FeatureList<>();
+		FeatureList<FeatureInputSingleObj> featuresAll = new FeatureList<>();
 		
-		Feature<FeatureObjMaskParams> cogX = new CenterOfGravity("x");
-		Feature<FeatureObjMaskParams> cogY = new CenterOfGravity("y");
-		Feature<FeatureObjMaskParams> cogZ = new CenterOfGravity("z");
+		Feature<FeatureInputSingleObj> cogX = new CenterOfGravity("x");
+		Feature<FeatureInputSingleObj> cogY = new CenterOfGravity("y");
+		Feature<FeatureInputSingleObj> cogZ = new CenterOfGravity("z");
 		
 		featuresAll.addWithCustomName( cogX, "x" );
 		featuresAll.addWithCustomName( cogY, "y" );
@@ -164,7 +154,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 
 		featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
 		
-		for (Feature<FeatureObjMaskParams> f : features) {
+		for (Feature<FeatureInputSingleObj> f : features) {
 			try {
 				addFeature(f, "", featuresAll);
 			} catch (BeanMisconfiguredException e) {
@@ -175,11 +165,11 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		return featuresAll;
 	}
 	
-	private static void addConvertedFeature( FeatureList<FeatureObjMaskParams> featuresAll, Feature<FeatureObjMaskParams> feature, DirectionVector dir, String name ) {
+	private static void addConvertedFeature( FeatureList<FeatureInputSingleObj> featuresAll, Feature<FeatureInputSingleObj> feature, DirectionVector dir, String name ) {
 		featuresAll.addWithCustomName( convert(feature, dir), name );
 	}
 	
-	private static Feature<FeatureObjMaskParams> convert( Feature<FeatureObjMaskParams> feature, DirectionVector dir ) {
+	private static Feature<FeatureInputSingleObj> convert( Feature<FeatureInputSingleObj> feature, DirectionVector dir ) {
 		return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
 	}
 	
@@ -191,18 +181,15 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.paramsInit = paramsInit;
 	}
 
-	public SharedFeatureSet<FeatureObjMaskParams> getSharedFeatures() {
+	public SharedFeatureSet<FeatureInputSingleObj> getSharedFeatures() {
 		return sharedFeatures;
 	}
 
-	public void setSharedFeatures(SharedFeatureSet<FeatureObjMaskParams> sharedFeatures) {
+	public void setSharedFeatures(SharedFeatureSet<FeatureInputSingleObj> sharedFeatures) {
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	private static FeatureObjMaskParams createParams(ObjMask om, NRGStackWithParams nrgStack) {
-		FeatureObjMaskParams params = new FeatureObjMaskParams();
-		params.setObjMask(om);
-		params.setNrgStack(nrgStack);
-		return params;
+	private static FeatureInputSingleObj createParams(ObjMask om, NRGStackWithParams nrgStack) {
+		return new FeatureInputSingleObj(om, nrgStack);
 	}
 }

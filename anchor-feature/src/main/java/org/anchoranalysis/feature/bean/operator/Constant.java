@@ -29,13 +29,13 @@ package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 
-public class Constant<T extends FeatureCalcParams> extends Feature<T> {
+public class Constant<T extends FeatureInput> extends Feature<T> {
 
 	/**
 	 * 
@@ -55,7 +55,7 @@ public class Constant<T extends FeatureCalcParams> extends Feature<T> {
 	}
 	
 	@Override
-	public double calc( CacheableParams<T> params ) {
+	public double calc( SessionInput<T> input ) {
 		return value;
 	}
 
@@ -78,9 +78,9 @@ public class Constant<T extends FeatureCalcParams> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureCalcParamsDescriptor.instance;
+		return FeatureInputGenericDescriptor.instance;
 	}
 
 }

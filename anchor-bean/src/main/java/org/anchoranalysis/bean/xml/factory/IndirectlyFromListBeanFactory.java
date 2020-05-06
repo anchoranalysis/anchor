@@ -36,11 +36,14 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
-public class IndirectlyFromListBeanFactory<T extends AnchorBean<T>,S> extends AnchorBeanFactory {
+public class IndirectlyFromListBeanFactory<
+	T extends AnchorBean<T>,
+	S
+> extends AnchorBeanFactory {
     
-	private IObjectBridge<List<T>,S> bridge;
+	private IObjectBridge<List<T>,S,? extends Exception> bridge;
 	
-	public IndirectlyFromListBeanFactory( IObjectBridge<List<T>,S> bridge ) {
+	public IndirectlyFromListBeanFactory( IObjectBridge<List<T>,S,? extends Exception> bridge ) {
 		this.bridge = bridge;
 	}
 	
@@ -56,6 +59,5 @@ public class IndirectlyFromListBeanFactory<T extends AnchorBean<T>,S> extends An
     	List<T> list = new ArrayList<>(); 
     	HelperListUtilities.addListOfBeansToCollection("mapEntryList.mapEntry", subConfig, list, param);
 	    return bridge.bridgeElement(list);
-
     }
 }

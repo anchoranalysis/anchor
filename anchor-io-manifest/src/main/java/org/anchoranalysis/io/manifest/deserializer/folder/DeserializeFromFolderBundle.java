@@ -29,7 +29,6 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -40,12 +39,12 @@ public abstract class DeserializeFromFolderBundle<HistoryType,CacheType extends 
 
 	private final BundleDeserializers<CacheType> deserializers;
 	private FolderWrite folder;
-	private CacheMonitor cacheMonitor;
 	
-	public DeserializeFromFolderBundle( final BundleDeserializers<CacheType> deserializers, FolderWrite folder, CacheMonitor cacheMonitor ) {
+	private static final int CACHE_SIZE = 5;
+	
+	public DeserializeFromFolderBundle( final BundleDeserializers<CacheType> deserializers, FolderWrite folder) {
 		this.deserializers = deserializers;
 		this.folder = folder;
-		this.cacheMonitor = cacheMonitor;
 	}
 	
 	@Override
@@ -53,33 +52,26 @@ public abstract class DeserializeFromFolderBundle<HistoryType,CacheType extends 
 		
 		assert( folder.getManifestFolderDescription().getSequenceType() != null );
 		
-		int cacheSize = 5;
-		
-		DeserializedObjectFromFolderBundle<CacheType> deserializeFromBundle = new DeserializedObjectFromFolderBundle<>( folder, deserializers, cacheSize, cacheMonitor );
+		DeserializedObjectFromFolderBundle<CacheType> deserializeFromBundle = new DeserializedObjectFromFolderBundle<>( folder, deserializers, CACHE_SIZE );
 
 		IBoundedIndexContainer<HistoryType> boundedContainer = new BoundsFromSequenceType<>(
-				createCntr(deserializeFromBundle),
-				deserializeFromBundle.getBundleParameters().getSequenceType() 
-			);
-		
+			createCntr(deserializeFromBundle),
+			deserializeFromBundle.getBundleParameters().getSequenceType() 
+		);
 		
 		LoadContainer<HistoryType> history = new LoadContainer<>();
 		history.setCntr( boundedContainer );
-		
-		int numberOfBundles = folder.getManifestFolderDescription().getSequenceType().getNumElements();
-		if ( numberOfBundles > cacheSize ) {
-			// If we have more bundles than the size of the cache, then we leave adjusting mode off
-			history.setExpensiveLoad(true);
-		} else {
-			// If our cache is big enough for all our bundles then we go into adjusting mode
-			history.setExpensiveLoad(false);
-		}
-		//history.setExpensiveLoad(true);
-		
-		//assert( history.getCfgNRGCntnr().get(0)!=null );
+		history.setExpensiveLoad( expensiveLoad() );
 		
 		return history;
 	}
 	
 	protected abstract ITypedGetFromIndex<HistoryType> createCntr( DeserializedObjectFromFolderBundle<CacheType> deserializeFromBundle);
+		
+	private boolean expensiveLoad() {
+		int numberOfBundles = folder.getManifestFolderDescription().getSequenceType().getNumElements();
+		// If we have more bundles than the size of the cache, then we leave adjusting mode off
+		// If our cache is big enough for all our bundles then we go into adjusting mode
+		return numberOfBundles > CACHE_SIZE;
+	}
 }

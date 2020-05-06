@@ -65,11 +65,7 @@ public class RecursivelyDescribeExceptionStack {
 		boolean firstLine = true;
 		
 		Iterator<Throwable> itr = new ExceptionToPrintIterator(excDescribe);
-		while( itr.hasNext() ) {
-
-			e = itr.next();
-
-			
+		do {
 			// Unless it's the very first line of the exception, we add a newline
 			if( firstLine)	{ // Test for being the first line
 				firstLine = false;
@@ -87,7 +83,14 @@ public class RecursivelyDescribeExceptionStack {
 			);
 			
 			prefixCurrent = prefixCurrent + prefix;
-		}
+			
+			if (itr.hasNext()) {
+				e = itr.next();
+			} else {
+				break;
+			}
+			
+		} while( true );
 	}
 
 	
@@ -107,11 +110,10 @@ public class RecursivelyDescribeExceptionStack {
 		
 		int prefixCurrentLength = 0;
 		
+		Throwable e = excDescribe;
+		
 		Iterator<Throwable> itr = new ExceptionToPrintIterator(excDescribe);
-		while( itr.hasNext() ) {
-
-			Throwable e = itr.next();
-			
+		do {
 			SplitString splitMessage = splitFromExc(e);
 			
 			// Size of message we are considering
@@ -124,7 +126,13 @@ public class RecursivelyDescribeExceptionStack {
 			
 			// Update current size of the prepended string
 			prefixCurrentLength += prefix.length();
-		}
+			
+			if (itr.hasNext()) {
+				e = itr.next();
+			} else {
+				break;
+			}
+		} while( true );
 		return maxLength;
 	}
 	

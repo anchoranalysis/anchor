@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.statistics;
 
+import org.anchoranalysis.core.error.OperationFailedException;
+
 /*-
  * #%L
  * anchor-image
@@ -56,9 +58,7 @@ public class VoxelStatisticsFromHistogram extends VoxelStatistics {
 	@Override
 	public VoxelStatistics threshold(RelationToValue relationToThreshold,
 			double threshold) {
-		// NOT CURRENTLY SUPPORTED
-		assert false;
-		return null;
+		throw new UnsupportedOperationException("The threshold operation is not currently supported");
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class VoxelStatisticsFromHistogram extends VoxelStatistics {
 	}
 
 	@Override
-	public double quantile(double quantile) {
+	public double quantile(double quantile) throws OperationFailedException {
 		return histogram.quantile(quantile);
 	}
 

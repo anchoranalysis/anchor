@@ -37,7 +37,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class RasterGenerator extends ObjectGenerator<Stack> {
 
-	public abstract boolean isRGB();
+	public abstract boolean isRGB() throws OutputWriteFailedException;
 	
 	@Override
 	public void writeToFile( OutputWriteSettings outputWriteSettings, Path filePath ) throws OutputWriteFailedException {

@@ -34,9 +34,9 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.feature.bean.FeatureBean;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
-public class MarkEvaluator extends FeatureBean<MarkEvaluator> {
+public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 	
 	/**
 	 * 

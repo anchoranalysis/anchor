@@ -29,8 +29,9 @@ package org.anchoranalysis.io.manifest.deserializer;
 
 import java.io.File;
 
-import org.anchoranalysis.core.cache.CalculationFailedException;
-import org.anchoranalysis.core.cache.LRUListCache;
+import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 
@@ -41,7 +42,7 @@ public class CachedManifestDeserializer extends ManifestDeserializer {
 
 
 	
-	private LRUListCache<File,ManifestRecorder> cachedItems;
+	private LRUCache<File,ManifestRecorder> cachedItems;
 	
 	// Cache, last-used gets deleted when the cacheSize is reached
 	public CachedManifestDeserializer(final ManifestDeserializer delegate, int cacheSize) {
@@ -49,19 +50,14 @@ public class CachedManifestDeserializer extends ManifestDeserializer {
 		
 		assert(cacheSize > 0);
 		
-		cachedItems = new LRUListCache<>(
+		cachedItems = new LRUCache<>(
 			cacheSize,
-			new LRUListCache.ICalculateData<File,ManifestRecorder>() {
-
-				@Override
-				public ManifestRecorder calculate(File index) throws CalculationFailedException {
-					try {
-						return delegate.deserializeManifest(index);
-					} catch (DeserializationFailedException e) {
-						throw new CalculationFailedException(e);
-					}
+			index -> {
+				try {
+					return delegate.deserializeManifest(index);
+				} catch (DeserializationFailedException e) {
+					throw new CacheRetrievalFailed(e);
 				}
-				
 			}
 		);
 	}
@@ -74,7 +70,7 @@ public class CachedManifestDeserializer extends ManifestDeserializer {
 	public ManifestRecorder deserializeManifest(File file) throws DeserializationFailedException {
 		try {
 			return cachedItems.get(file);
-		} catch (CalculationFailedException e) {
+		} catch (GetOperationFailedException e) {
 			throw new DeserializationFailedException(e);
 		}
 	}

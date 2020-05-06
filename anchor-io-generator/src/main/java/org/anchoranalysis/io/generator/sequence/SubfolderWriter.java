@@ -106,7 +106,7 @@ public class SubfolderWriter extends SequenceWriter {
 	}
 
 	@Override
-	public void write(Operation<Generator> generator, String index) throws OutputWriteFailedException {
+	public void write(Operation<Generator,OutputWriteFailedException> generator, String index) throws OutputWriteFailedException {
 		
 		if (!isOn()) {
 			return;

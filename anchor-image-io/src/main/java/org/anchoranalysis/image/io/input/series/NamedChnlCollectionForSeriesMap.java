@@ -31,9 +31,8 @@ package org.anchoranalysis.image.io.input.series;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -124,7 +123,6 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 		return chnlMap.keySet();
 	}
 	
-
 	@Override
 	public boolean hasChnl(String chnlName) {
 		return chnlMap.keySet().contains(chnlName);
@@ -155,46 +153,20 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	public void addAsSeparateChnls( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException  {
 		// Populate our stack from all the channels
 		for (final String chnlName : chnlMap.keySet() ) {
-			
-			Operation<TimeSequence> op = new CachedOperation<TimeSequence>() {
-
-				@Override
-				protected TimeSequence execute() throws ExecuteException {
-					Chnl image;
-					try {
-						image = getChnl(chnlName,  t, ProgressReporterNull.get());
-					} catch (GetOperationFailedException e) {
-						throw new ExecuteException(e);
-					}
-					return new TimeSequence( new Stack(image) );
-				}
-
-	
-			}; 
-			stackCollection.add( chnlName, op );
+			stackCollection.add(
+				chnlName,
+				new WrapOperationAsCached<TimeSequence,OperationFailedException>(
+					() -> extractChnlAsTimeSequence(chnlName, t)
+				)
+			);
 		}
 	}
 	
 	@Override
-	public Operation<Stack> allChnlsAsStack(int t) throws OperationFailedException {
-		return new CachedOperation<Stack>() {
-
-			@Override
-			protected Stack execute() throws ExecuteException {
-				
-				Stack out = new Stack();
-				
-				for( ImgChnlMapEntry entry : chnlMap.entryCollection() ) {
-					try {
-						out.addChnl( getChnl(entry.getName(), t, ProgressReporterNull.get()) );
-					} catch (IncorrectImageSizeException | GetOperationFailedException e) {
-						throw new ExecuteException(e);
-					}
-				}
-				
-				return out;
-			}
-		};
+	public Operation<Stack,OperationFailedException> allChnlsAsStack(int t) {
+		return new WrapOperationAsCached<Stack,OperationFailedException>(
+			() -> stackForAllChnls(t)
+		);
 	}
 	
 	private TimeSequence createTs( ProgressReporter progressReporter ) throws GetOperationFailedException {
@@ -207,5 +179,32 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 			}
 		}
 		return ts;
+	}
+	
+	private Stack stackForAllChnls(int t) throws OperationFailedException {
+		Stack out = new Stack();
+		
+		for( ImgChnlMapEntry entry : chnlMap.entryCollection() ) {
+			try {
+				out.addChnl(
+					getChnl(entry.getName(),
+					t,
+					ProgressReporterNull.get())
+				);
+			} catch (IncorrectImageSizeException | GetOperationFailedException e) {
+				throw new OperationFailedException(e);
+			}
+		}
+		
+		return out;
+	}
+	
+	private TimeSequence extractChnlAsTimeSequence( String chnlName, int t ) throws OperationFailedException {
+		try {
+			Chnl image = getChnl(chnlName, t, ProgressReporterNull.get());
+			return new TimeSequence( new Stack(image) );
+		} catch (GetOperationFailedException e) {
+			throw new OperationFailedException(e);
+		}
 	}
 }

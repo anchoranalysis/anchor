@@ -28,7 +28,7 @@ package org.anchoranalysis.image.objmask;
 
 
 import java.nio.ByteBuffer;
-
+import java.util.Optional;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -72,7 +72,7 @@ public class ObjMask {
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
 	public ObjMask(BoundingBox bbox) {
 		super();
-		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.getByte() );
+		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.instance().getByte() );
 	}
 	
 	public ObjMask(BoundedVoxelBox<ByteBuffer> voxelBox) {
@@ -148,19 +148,18 @@ public class ObjMask {
 		return new ObjMask(
 			delegate.growToZ(
 				sz,
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			)
 		);
 	}
 
-	public ObjMask growBuffer(Point3i neg, Point3i pos,
-			Extent clipRegion) {
+	public ObjMask growBuffer(Point3i neg, Point3i pos,	Optional<Extent> clipRegion) throws OperationFailedException {
 		return new ObjMask(
 			delegate.growBuffer(
 				neg,
 				pos,
 				clipRegion,
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			)
 		);
 	}
@@ -307,14 +306,12 @@ public class ObjMask {
 					cnt++;
 					
 					if (cnt>=num) {
-						//System.out.println( String.format("Reached count %d",cnt) );
 						return false;
 					}
 				}
 			}
 			
 		}
-		//System.out.println( String.format("Did NOT reach count %d",cnt) );
 		return true;
 	}
 	
@@ -334,45 +331,96 @@ public class ObjMask {
 					cnt++;
 					
 					if (cnt>num) {
-						//System.out.println( String.format("Reached count %d",cnt) );
 						return true;
 					}
 				}
 			}
 			
 		}
-		//System.out.println( String.format("Did NOT reach count %d",cnt) );
 		return false;
 	}
 	
-	public ObjMask intersect( ObjMask othr, ImageDim dim ) {
+	/**
+	 * Intersects this object-mask with another
+	 * 
+	 * @param other the other object-mask to intersect with
+	 * @param dim dimensions to constrain any intersection
+	 * @return a new mask of the intersection iff it exists
+	 */
+	public Optional<ObjMask> intersect( ObjMask other, ImageDim dim ) {
 		
 		// we combine the two masks
-		BoundingBox bboxIntersect = getBoundingBox().intersectCreateNew( othr.getBoundingBox(), dim.getExtnt() );
+		BoundingBox bboxIntersect = getBoundingBox().intersectCreateNew( other.getBoundingBox(), dim.getExtnt() );
 		
 		if (bboxIntersect==null) {
-			return null;
+			return Optional.empty();
 		}
 		
 		// We calculate a bounding box, which we write into in the omDest
 		Point3i pntIntersectRelToSrc = bboxIntersect.relPosTo( getBoundingBox() );
-		Point3i pntIntersectRelToOthr = bboxIntersect.relPosTo( othr.getBoundingBox() );
-		
-		
-		
-		BoundingBox bboxSrcMask = new BoundingBox(pntIntersectRelToSrc, bboxIntersect.extnt() );
-		BoundingBox bboxOthrMask = new BoundingBox(pntIntersectRelToOthr, bboxIntersect.extnt() );
-		
+		Point3i pntIntersectRelToOthr = bboxIntersect.relPosTo( other.getBoundingBox() );
+				
 		BinaryValues bvOut = BinaryValues.getDefault();
-		
-		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.getByte().create( bboxIntersect.extnt() );
+
+		// We initially set all pixels to ON
+		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.instance().getByte().create(
+			bboxIntersect.extnt()
+		);
 		vbMaskOut.setAllPixelsTo( bvOut.getOnInt() );
 		
-		BoundingBox allOut = new BoundingBox( vbMaskOut.extnt() );
-		vbMaskOut.setPixelsCheckMask(allOut, getVoxelBox(), bboxSrcMask, bvOut.getOffInt(), this.getBinaryValuesByte().getOffByte() );
-		vbMaskOut.setPixelsCheckMask(allOut, othr.getVoxelBox(), bboxOthrMask, bvOut.getOffInt(), othr.getBinaryValuesByte().getOffByte() );
+		// Then we set any pixels NOT on either mask to OFF..... leaving only the intersecting pixels as ON in the output buffer
+		setPixelsTwoMasks(
+			vbMaskOut,
+			getVoxelBox(),
+			other.getVoxelBox(),
+			new BoundingBox(pntIntersectRelToSrc, bboxIntersect.extnt() ),
+			new BoundingBox(pntIntersectRelToOthr, bboxIntersect.extnt() ),
+			bvOut.getOffInt(),
+			this.getBinaryValuesByte().getOffByte(),
+			other.getBinaryValuesByte().getOffByte()
+		);
 		
-		return new ObjMask(bboxIntersect, new BinaryVoxelBoxByte(vbMaskOut, bvOut));
+		ObjMask om = new ObjMask(
+			bboxIntersect,
+			new BinaryVoxelBoxByte(vbMaskOut, bvOut)
+		);
+		
+		
+		// If there no pixels left that haven't been set, then the intersection mask is zero
+		if (!om.hasPixelsGreaterThan(0)) {
+			return Optional.empty();
+		} else {
+			return Optional.of(om);	
+		}
+	}
+	
+	/**
+	 * Sets pixels in a voxel box that match either of two masks
+	 * 
+	 * @param vbMaskOut voxel-box to write to
+	 * @param voxelBox1 voxel-box for first mask
+	 * @param voxelBox2 voxel-box for second mask
+	 * @param bboxSrcMask bounding-box for first mask
+	 * @param bboxOthrMask bounding-box for second mask
+	 * @param value value to write
+	 * @param maskMatchValue mask-value to match against for first mask
+	 * @param maskMatchValue mask-value to match against for second mask
+	 * @return the total number of pixels written
+	 */
+	private static int setPixelsTwoMasks(
+		VoxelBox<ByteBuffer> vbMaskOut,
+		VoxelBox<ByteBuffer> voxelBox1,
+		VoxelBox<ByteBuffer> voxelBox2,
+		BoundingBox bboxSrcMask,
+		BoundingBox bboxOthrMask,
+		int value,
+		byte maskMatchValue1,
+		byte maskMatchValue2
+	) {
+		BoundingBox allOut = new BoundingBox( vbMaskOut.extnt() );
+		int cntSetFirst = vbMaskOut.setPixelsCheckMask(allOut, voxelBox1, bboxSrcMask, value, maskMatchValue1 );
+		int cntSetSecond = vbMaskOut.setPixelsCheckMask(allOut, voxelBox2, bboxOthrMask, value, maskMatchValue2 );
+		return cntSetFirst+cntSetSecond;
 	}
 	
 	public boolean contains( Point3i pnt ) {
@@ -510,7 +558,7 @@ public class ObjMask {
 			delegate.createVirtualSubrange(
 				zMin,
 				zMax,
-				VoxelBoxFactory.getByte()
+				VoxelBoxFactory.instance().getByte()
 			),
 			this.bv
 		);
@@ -595,7 +643,7 @@ public class ObjMask {
 			rel2,
 			dim,
 			setVal,
-			VoxelBoxFactory.getByte()
+			VoxelBoxFactory.instance().getByte()
 		);
 	}
 	
@@ -610,7 +658,7 @@ public class ObjMask {
 	
 	@Override
 	public String toString() {
-		return String.format("%s (cog=%s,numPixels=%d)", super.toString(), centerOfGravity().toString(), numPixels() );
+		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numPixels() );
 	}
 
 

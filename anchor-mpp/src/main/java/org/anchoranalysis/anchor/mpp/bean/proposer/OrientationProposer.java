@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
@@ -42,5 +44,5 @@ public abstract class OrientationProposer extends MPPBean<OrientationProposer> i
 	 */
 	private static final long serialVersionUID = 2732804716704675051L;
 
-	public abstract Orientation propose( Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription );
+	public abstract Optional<Orientation> propose( Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription );
 }

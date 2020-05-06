@@ -34,13 +34,13 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public abstract class ReportFeatureOnObjMaskBase<T extends FeatureCalcParams> extends ReportFeatureForSharedObjects {
+public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends ReportFeatureForSharedObjects {
 
 	
 	/**

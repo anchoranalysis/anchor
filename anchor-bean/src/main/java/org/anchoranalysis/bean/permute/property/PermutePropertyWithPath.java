@@ -29,9 +29,10 @@ package org.anchoranalysis.bean.permute.property;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterList;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterUtilities;
 import org.anchoranalysis.core.error.CreateException;
 
 /**
@@ -59,7 +60,7 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
 	private String propertyPath;
 	
 	/** Additional property paths that are also changed, along with the main propertyPath **/
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StringSet additionalPropertyPaths;
 	// END BEAN PROPERTIES
 	

@@ -1,6 +1,6 @@
 package org.anchoranalysis.feature.session.calculator;
 
-import java.util.List;
+
 
 /*-
  * #%L
@@ -30,20 +30,20 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Calculates the result of a feature for particular params
  * 
  * @author owen
  *
- * @param <T> params-type
+ * @param <T> feature input-type
  */
-public interface FeatureCalculatorSingle<T extends FeatureCalcParams> {
-
-	double calcOneSuppressErrors(T params, ErrorReporter errorReporter );
+public interface FeatureCalculatorSingle<T extends FeatureInput> {
 	
-	double calcOne( T params ) throws FeatureCalcException;
+	/** Performs one calculation throwing an exception if something goes wrong */
+	double calc( T input ) throws FeatureCalcException;
 	
-	List<Double> calcMany(List<T> listParams) throws FeatureCalcException;
+	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
+	double calcSuppressErrors(T input, ErrorReporter errorReporter );
 }

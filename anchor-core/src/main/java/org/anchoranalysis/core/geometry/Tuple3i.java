@@ -29,8 +29,6 @@ package org.anchoranalysis.core.geometry;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 public abstract class Tuple3i implements Serializable {
 
 	/**
@@ -150,37 +148,35 @@ public abstract class Tuple3i implements Serializable {
 	}
 	
 	@Override
-	public boolean equals( Object obj ) {
-		if (this == obj) {
-			return true;
-		}
-	    if (!(obj instanceof Tuple3i)) {
-	        return false;
-	    }
-	    Tuple3i objCast = (Tuple3i) obj;
-	    if (x!=objCast.x) {
-	    	return false;
-	    }
-	    if (y!=objCast.y) {
-	    	return false;
-	    }
-	    if (z!=objCast.z) {
-	    	return false;
-	    }
-	    return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-	        .append(x)
-	        .append(y)
-	        .append(z)
-	        .toHashCode();
+	public String toString() {
+		return String.format("[%d,%d,%d]",x,y,z);
 	}
 
 	@Override
-	public String toString() {
-		return String.format("[%d,%d,%d]",x,y,z);
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		result = prime * result + z;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tuple3i other = (Tuple3i) obj;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		if (z != other.z)
+			return false;
+		return true;
 	}
 }

@@ -2,6 +2,8 @@ package org.anchoranalysis.experiment.task;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-experiment
@@ -99,7 +101,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		// Bind an outputManager for the task
 		BoundOutputManager outputManagerTask = HelperBindOutputManager.createOutputManagerForTask(
 			paramsUnbound.getInputObject(),
-			manifestTask,
+			Optional.of(manifestTask),
 			paramsUnbound.getParametersExperiment()
 		);
 		

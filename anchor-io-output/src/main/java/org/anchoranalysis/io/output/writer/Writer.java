@@ -54,18 +54,18 @@ public abstract class Writer {
 
 	public abstract BoundOutputManager bindAsSubFolder( String outputName, ManifestFolderDescription manifestDescription, FolderWriteWithPath folder ) throws OutputWriteFailedException;
 	
-	public abstract void writeSubfolder( String outputName, Operation<? extends WritableItem> collectionGenerator ) throws OutputWriteFailedException;
+	public abstract void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException;
 	
-	public abstract int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator, String index ) throws OutputWriteFailedException;
+	public abstract int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, String index ) throws OutputWriteFailedException;
 
-	public abstract void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator ) throws OutputWriteFailedException;
+	public abstract void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException;
 	
-	public void write( String outputName, Operation<? extends WritableItem> generator ) throws OutputWriteFailedException {
+	public void write( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException {
 		write( new SimpleOutputNameStyle(outputName), generator);
 	}
 	
 	// Write a file with an index represented by an int, returns the number of files created
-	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem> generator, int index ) throws OutputWriteFailedException {
+	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, int index ) throws OutputWriteFailedException {
 		return write( outputNameStyle, generator, Integer.toString(index) );
 	}
 

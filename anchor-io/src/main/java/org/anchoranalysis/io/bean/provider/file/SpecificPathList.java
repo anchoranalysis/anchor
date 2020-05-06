@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -55,11 +55,11 @@ public class SpecificPathList extends FileProvider {
 	
 	// START BEAN PROPERTIES
 	/** If specified, this forms the list of paths which is provided as input. If not, then the input-context is asked. If still not, then the fallback. */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<String> listPaths;
 	
 	/** If no paths can be found either from listPaths or the input-context, then the fallback is called if exists, otherwise an error is thrown */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FileProvider fallback;
 	// END BEAN PROPERTIES
 	
