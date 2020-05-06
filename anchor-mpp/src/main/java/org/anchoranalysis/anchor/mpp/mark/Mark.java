@@ -116,13 +116,15 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	public double overlapWithQuick( Mark m, int regionID ) {
 		return 0.0;
 	}
-
 	
-	// Does a quick test to see if we can reject the possibility
-	// of overlap
-	//   true -> no overlap
-	//   false -> maybe overlap, maybe not
-	public boolean quickTestNoOverlap( Mark m, int regionID ) {
+	/**
+	 * A quick (computationally-efficient) test to see if we can reject the possibility of overlap
+	 * 
+	 * @param mark the other mark to assess overlap with
+	 * @param regionID the region to check for overlap
+	 * @return TRUE if there's definitely no overlap, FLASE if there is maybe overlap or not
+	 */
+	public boolean quickTestNoOverlap( Mark mark, int regionID ) {
 		return false;
 	}
 	

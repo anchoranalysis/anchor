@@ -281,7 +281,7 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 			bboxMatrix.assign( Functions.mult(shellExtOut) );
 		} 
             
-		return BoundsCalculator.bboxFromBounds( getPos(), bboxMatrix, false, bndScene );
+		return BoundingBoxCalculator.bboxFromBounds( getPos(), bboxMatrix, false, bndScene );
 	}
 
 	// Does a quick test to see if we can reject the possibility

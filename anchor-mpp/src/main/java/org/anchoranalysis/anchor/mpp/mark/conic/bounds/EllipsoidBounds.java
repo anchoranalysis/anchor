@@ -1,7 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark.conic;
+package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
+import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
 
 /*
  * #%L

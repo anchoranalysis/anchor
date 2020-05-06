@@ -2,8 +2,8 @@ package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.EllipseBounds;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipseBounds;
 
 /*-
  * #%L

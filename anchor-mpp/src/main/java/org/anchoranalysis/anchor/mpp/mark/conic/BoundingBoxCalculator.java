@@ -41,7 +41,7 @@ import cern.colt.matrix.DoubleMatrix1D;
  * Functions to calculate a bounding-box for a point surrounded by some form of radii
  *
  */
-class BoundsCalculator {
+public class BoundingBoxCalculator {
 
 	/**
 	 * Calculates a bounding box for a point with a scalar radius in all dimensions
