@@ -22,7 +22,7 @@ public class BinaryHighVoxels extends RelationToThreshold {
 	
 	@Override
 	public double threshold() {
-		return BinaryValues.getDefault().getOnInt() - 1;
+		return (double) (BinaryValues.getDefault().getOnInt() - 1);
 	}
 
 	@Override
