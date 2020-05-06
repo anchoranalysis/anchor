@@ -27,63 +27,23 @@ package org.anchoranalysis.io.namestyle;
  */
 
 
-public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
+public class IntegerSuffixOutputNameStyle extends IntegerOutputNameStyle {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3128734431534880903L;
 	
-	private String outputFormatString;
-
-	private String outputName;
-	
-	private String prefix;
-	private String integerFormatString;
-	
-	// Only for deserialization
 	public IntegerSuffixOutputNameStyle() {
-		super();
+		// Here as the empty constructor is needed for deserialization
 	}
 	
-	public IntegerSuffixOutputNameStyle(String outputName, int numDigitsInteger ) {
-		this(outputName, "",  "_%0" + Integer.toString(numDigitsInteger) + "d");
+	private IntegerSuffixOutputNameStyle(IntegerSuffixOutputNameStyle src) {
+		super(src);
 	}
 	
-	public IntegerSuffixOutputNameStyle(String outputName, String integerFormatString) {
-		this(outputName, "", integerFormatString);
-	}
-	
-	public IntegerSuffixOutputNameStyle(String outputName, String prefix, String integerFormatString) {
-		this.outputName = outputName;
-		this.prefix = prefix;
-		this.integerFormatString = integerFormatString;
-		updateFormatString();
-	}
-	
-	private void updateFormatString() {
-		this.outputFormatString = outputName + prefix + integerFormatString;
-	}
-	
-
-	@Override
-	public String getPhysicalName(String index) {
-		
-		int indexInt = Integer.parseInt(index);
-		return String.format( outputFormatString, indexInt );
-	}
-
-	@Override
-	public String getPhysicalName() {
-		throw new UnsupportedOperationException("an index is required for getPhysicalName in this class");
-	}
-
-	public String getOutputFormatString() {
-		return outputFormatString;
-	}
-
-	public void setOutputFormatString(String outputFormatString) {
-		this.outputFormatString = outputFormatString;
+	public IntegerSuffixOutputNameStyle(String outputName, int numDigitsInteger) {
+		super(outputName, numDigitsInteger);
 	}
 
 	@Override
@@ -92,19 +52,13 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 	}
 
 	@Override
-	public String getOutputName() {
-		return outputName;
-	}
-
-	@Override
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-		updateFormatString();
-	}
-
-	@Override
 	public IndexableOutputNameStyle duplicate() {
-		return new IntegerSuffixOutputNameStyle(outputName, integerFormatString);
+		return new IntegerSuffixOutputNameStyle(this);
+	}
+	
+	@Override
+	protected String combineIntegerAndOutputName(String outputName, String integerFormatString) {
+		return outputName + "_" + integerFormatString;
 	}
 
 }

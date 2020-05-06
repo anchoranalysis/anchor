@@ -69,7 +69,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 	
 	// We generate an OutputName class from the outputName string
 	protected IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,"_%010d");
+		return new IntegerSuffixOutputNameStyle(outputName,10);
 	}
 	
 	// We setup the manifest from an IterableGenerator

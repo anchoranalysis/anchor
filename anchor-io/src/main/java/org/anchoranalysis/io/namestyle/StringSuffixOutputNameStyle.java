@@ -27,8 +27,6 @@ package org.anchoranalysis.io.namestyle;
  */
 
 
-// TODO.  It doesn't seem correct that we use outputFormatString as our outputName
-// We should fix
 public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
 	/**
@@ -36,43 +34,39 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
 	 */
 	private static final long serialVersionUID = 4582344790084798682L;
 	
-	private String outputName;
 	private String outputFormatString;
 	
+	public StringSuffixOutputNameStyle() {
+		// Here as the empty constructor is needed for deserialization
+	}
+	
 	public StringSuffixOutputNameStyle(String outputName, String outputFormatString) {
-		this.outputName = outputName;
+		super(outputName);
 		this.outputFormatString = outputFormatString;
 	}
-
+	
+	private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
+		super(src);
+	}
+	
 	@Override
-	public String getPhysicalName(String index) {
-		
+	protected String nameFromOutputFormatString(String outputFormatString, String index) {
 		return String.format( outputFormatString, index );
 	}
 
 	@Override
-	public String getPhysicalName() {
-		throw new UnsupportedOperationException("an index is required for getPhysicalName in this class");
-	}
-
-	@Override
 	public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
-		return new StringSuffixOutputNameStyle( this.getOutputName(), outputFormatString );
-	}
-	
-	@Override
-	public String getOutputName() {
-		return outputName;
-	}
-
-	@Override
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
+		// Number-of-digits is ignored and not relevant
+		return duplicate();
 	}
 
 	@Override
 	public IndexableOutputNameStyle duplicate() {
-		return new StringSuffixOutputNameStyle(outputName,outputFormatString);
+		return new StringSuffixOutputNameStyle(this);
 	}
 
+	@Override
+	protected String outputFormatString() {
+		return outputFormatString;
+	}
 }

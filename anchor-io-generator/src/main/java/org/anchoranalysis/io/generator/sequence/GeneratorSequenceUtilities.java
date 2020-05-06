@@ -48,9 +48,6 @@ public class GeneratorSequenceUtilities {
 		BoundOutputManagerRouteErrors outputManager,
 		ErrorReporter errorReporter
 	) {
-		
-		//CfgGenerator generator = new CfgGenerator( new RGBOutlineWriter(2), colorIndex, new IDGetterMarkID() );
-		
 		IndexableOutputNameStyle outputStyle = new IntegerSuffixOutputNameStyle(folderName,numDigits);
 		
 		GeneratorSequenceIncrementalRerouteErrors<T> sequenceWriter = new GeneratorSequenceIncrementalRerouteErrors<>( 
@@ -83,8 +80,6 @@ public class GeneratorSequenceUtilities {
 			IterableObjectGenerator<T,Stack> generator,
 			BoundOutputManagerRouteErrors outputManager
 		) throws OutputWriteFailedException {
-			
-			//CfgGenerator generator = new CfgGenerator( new RGBOutlineWriter(2), colorIndex, new IDGetterMarkID() );
 			
 			IndexableOutputNameStyle outputStyle = new IntegerSuffixOutputNameStyle(folderName,numDigits);
 			
