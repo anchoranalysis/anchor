@@ -45,7 +45,7 @@ public class AnchorFriendlyRuntimeException extends AnchorRuntimeException imple
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * A user-friendly error message and its cause. The message is displayed to the user.
 	 * 
