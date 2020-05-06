@@ -64,6 +64,6 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
 	
 	@Override
 	protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
-		return outputWriteSettings.getExtensionSerialized();
+		return "";
 	}
 }
