@@ -47,6 +47,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -60,18 +61,19 @@ public class StackCollectionOutputter {
 	 * @throws OutputWriteFailedException */
 	public static void outputSubset(
 		INamedProvider<Stack> stacks,
-		BoundOutputManagerRouteErrors outputManager,
 		String secondLevelOutputKey,
 		boolean suppressSubfolders,
-		ErrorReporter errorReporter
+		BoundIOContext context
 	) {
+		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+		
 		assert(outputManager.getOutputWriteSettings().hasBeenInit());		
 		StackCollectionOutputter.output(
 			stackSubset(stacks, secondLevelOutputKey, outputManager ),
 			outputManager.getDelegate(),
 			OUTPUT_NAME,
 			PREFIX,
-			errorReporter,
+			context.getErrorReporter(),
 			suppressSubfolders
 		);
 	}

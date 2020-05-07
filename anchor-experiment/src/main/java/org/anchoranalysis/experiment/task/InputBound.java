@@ -36,15 +36,14 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
- * Parameters for executing a task, when the manifest, log etc. have
- *   become bound to the task specifically
+ * Input for executing a task, associated with shared-state and other parameters. 
  * 
  * @author Owen Feehan
  *
  * @param <T> input-object type
  * @aram <S> shared-state type
  */
-public class ParametersBound<T,S> {
+public class InputBound<T,S> {
 
 	private ManifestRecorder manifest;
 	
@@ -55,7 +54,7 @@ public class ParametersBound<T,S> {
 	
 	private BoundContextSpecify context;
 	
-	public ParametersBound(
+	public InputBound(
 		ExperimentExecutionArguments experimentArguments,
 		BoundOutputManagerRouteErrors outputManager,
 		StatefulLogReporter logReporter,
@@ -69,13 +68,13 @@ public class ParametersBound<T,S> {
 		);
 	}
 	
-	private ParametersBound(BoundContextSpecify context) {
+	private InputBound(BoundContextSpecify context) {
 		this.context = context;
 	}
 
 	/** Immutably changes the input-object */
-	public <U> ParametersBound<U,S> changeInputObject( U inputObjectNew ) {
-		ParametersBound<U,S> out = new ParametersBound<U,S>(context);
+	public <U> InputBound<U,S> changeInputObject( U inputObjectNew ) {
+		InputBound<U,S> out = new InputBound<U,S>(context);
 		out.setManifest(manifest);
 		out.setSharedState(sharedState);
 		out.setDetailedLogging(detailedLogging);

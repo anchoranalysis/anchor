@@ -108,7 +108,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		
 		// Create other bound arguments
 		
-		ParametersBound<T,S> paramsBound = bindOtherParams( paramsUnbound, outputManagerTask, manifestTask );
+		InputBound<T,S> paramsBound = bindOtherParams( paramsUnbound, outputManagerTask, manifestTask );
 		return executeJobLogExceptions( paramsBound, paramsUnbound.isSupressExceptions() );
 		
 	}
@@ -124,7 +124,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	 **/
 	public abstract InputTypesExpected inputTypesExpected();
 		
-	public abstract void doJobOnInputObject( ParametersBound<T,S> params ) throws JobExecutionException;
+	public abstract void doJobOnInputObject( InputBound<T,S> params ) throws JobExecutionException;
 	
 	
 	/**
@@ -135,7 +135,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	 * @param manifestTask a bound manifest for the task
 	 * @return a complete ParametersBound object with all parameters set to objects bound for the specific task
 	 */
-	private ParametersBound<T,S> bindOtherParams( ParametersUnbound<T,S> paramsUnbound, BoundOutputManager outputManagerTask, ManifestRecorder manifestTask ) {
+	private InputBound<T,S> bindOtherParams( ParametersUnbound<T,S> paramsUnbound, BoundOutputManager outputManagerTask, ManifestRecorder manifestTask ) {
 		
 		// We create a new log reporter for this job only
 		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
@@ -155,7 +155,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		);
 		
 		// We create new parameters bound specifically to the job
-		ParametersBound<T,S> paramsBound = new ParametersBound<>(
+		InputBound<T,S> paramsBound = new InputBound<>(
 			paramsUnbound.getParametersExperiment().getExperimentArguments(),
 			outputManagerTaskRouteErrors,
 			logReporterJob,
@@ -170,7 +170,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	
 	
 	private boolean executeJobLogExceptions(
-		ParametersBound<T,S> params,
+		InputBound<T,S> params,
 		boolean supressExceptions
 	) throws JobExecutionException {
 		
@@ -220,7 +220,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	
 	
 	private void executeJobAdditionalOutputs(
-		ParametersBound<T,S> params,
+		InputBound<T,S> params,
 		StopWatch stopWatchFile
 	) throws JobExecutionException {
 

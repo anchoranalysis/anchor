@@ -11,7 +11,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -22,7 +22,11 @@ public class MPPInitParamsFactory {
 
 	private MPPInitParamsFactory() {}
 	
-	public static MPPInitParams createFromInput( ParametersBound<? extends InputForMPPBean,?> params, Optional<Define> define ) throws CreateException {
+	public static ImageInitParams createFromInputAsImage( InputBound<? extends InputForMPPBean,?> params, Optional<Define> define ) throws CreateException {
+		return createFromInput(params, define).getImage();
+	}
+	
+	public static MPPInitParams createFromInput( InputBound<? extends InputForMPPBean,?> params, Optional<Define> define ) throws CreateException {
 
 		InputForMPPBean inputObject = params.getInputObject();
 		
