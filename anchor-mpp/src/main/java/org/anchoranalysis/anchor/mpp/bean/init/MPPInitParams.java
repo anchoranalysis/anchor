@@ -26,9 +26,6 @@ package org.anchoranalysis.anchor.mpp.bean.init;
  * #L%
  */
 
-import java.nio.file.Path;
-
-import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
@@ -45,7 +42,6 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -75,7 +71,7 @@ public class MPPInitParams extends BeanInitParams {
 	private NamedProviderStore<PairCollection<Pair<Mark>>> storePairCollection;
 	// END: Stores
 
-	private MPPInitParams(ImageInitParams soImage, SharedObjects so) {
+	public MPPInitParams(ImageInitParams soImage, SharedObjects so) {
 		super();
 		this.soImage = soImage;
 		this.soPoints = PointsInitParams.create( soImage, so );
@@ -88,36 +84,6 @@ public class MPPInitParams extends BeanInitParams {
 		storeMarkSplitProposer = so.getOrCreate(MarkSplitProposer.class);
 		storeProbMap = so.getOrCreate(ProbMap.class);
 		storePairCollection = so.getOrCreate(PairCollection.class);
-	}
-	
-	public static MPPInitParams create( ImageInitParams soImage, SharedObjects so ) {
-		return new MPPInitParams( soImage, so);
-	}
-	
-	public static MPPInitParams create( SharedObjects so, Path modelDir ) {
-		return create( ImageInitParams.create(so, modelDir), so );
-	}
-	
-	public static MPPInitParams create(
-		SharedObjects so,
-		Define namedDefinitions,
-		GeneralInitParams paramsGeneral
-	) throws CreateException {
-		ImageInitParams soImage = ImageInitParams.create( so, paramsGeneral.getRe(), paramsGeneral.getModelDir() );
-		MPPInitParams soMPP = create( soImage, so);
-		if (namedDefinitions!=null) {
-			try {
-				// Tries to initialize any properties (of type MPPInitParams) found in the NamedDefinitions
-				PropertyInitializer<MPPInitParams> pi = MPPBean.initializerForMPPBeans();
-				pi.setParam(soMPP);
-				soMPP.populate( pi, namedDefinitions, paramsGeneral.getLogErrorReporter() );
-
-			} catch (OperationFailedException e) {
-				throw new CreateException(e);
-			}
-		}
-		
-		return soMPP;
 	}
 
 	public ImageInitParams getImage() {

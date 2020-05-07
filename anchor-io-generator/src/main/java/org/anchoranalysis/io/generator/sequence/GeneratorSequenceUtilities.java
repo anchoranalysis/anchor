@@ -29,12 +29,12 @@ package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -45,14 +45,13 @@ public class GeneratorSequenceUtilities {
 		int numDigits,
 		Collection<T> items,
 		IterableObjectGenerator<T,Stack> generator,
-		BoundOutputManagerRouteErrors outputManager,
-		ErrorReporter errorReporter
+		BoundIOContext context
 	) {
 		IndexableOutputNameStyle outputStyle = new IntegerSuffixOutputNameStyle(folderName,numDigits);
 		
 		GeneratorSequenceIncrementalRerouteErrors<T> sequenceWriter = new GeneratorSequenceIncrementalRerouteErrors<>( 
 			new GeneratorSequenceIncrementalWriter<>( 
-				outputManager.getDelegate(),
+				context.getOutputManager().getDelegate(),
 				outputStyle.getOutputName(),
 				outputStyle,
 				generator,
@@ -60,7 +59,7 @@ public class GeneratorSequenceUtilities {
 				0,
 				true
 			),
-			errorReporter
+			context.getErrorReporter()
 		);
 		
 		sequenceWriter.start();

@@ -32,8 +32,8 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNodeNull;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.sgmn.kernel.CfgGenContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -44,24 +44,25 @@ public class OptSchemeInitContext {
 	private NRGSchemeWithSharedFeatures nrgScheme;
 	private DualStack dualStack;
 	private TriggerTerminationCondition triggerTerminationCondition;
-	private ExperimentExecutionArguments experimentArguments;
-	private LogErrorReporter logger;
-	private BoundOutputManagerRouteErrors outputManager;
+	private BoundIOContext context;
 	private RandomNumberGenerator re;
 	private CfgGen cfgGen;
 	
-	public OptSchemeInitContext(String experimentDescription, NRGSchemeWithSharedFeatures nrgScheme,
-			DualStack dualStack, TriggerTerminationCondition triggerTerminationCondition,
-			ExperimentExecutionArguments experimentArguments, LogErrorReporter logger,
-			BoundOutputManagerRouteErrors outputManager, RandomNumberGenerator re, CfgGen cfgGen) {
+	public OptSchemeInitContext(
+		String experimentDescription,
+		NRGSchemeWithSharedFeatures nrgScheme,
+		DualStack dualStack,
+		TriggerTerminationCondition triggerTerminationCondition,
+		BoundIOContext context,
+		RandomNumberGenerator re,
+		CfgGen cfgGen
+	) {
 		super();
 		this.experimentDescription = experimentDescription;
 		this.nrgScheme = nrgScheme;
 		this.dualStack = dualStack;
 		this.triggerTerminationCondition = triggerTerminationCondition;
-		this.experimentArguments = experimentArguments;
-		this.logger = logger;
-		this.outputManager = outputManager;
+		this.context = context;
 		this.re = re;
 		this.cfgGen = cfgGen;
 	}
@@ -96,17 +97,19 @@ public class OptSchemeInitContext {
 	public TriggerTerminationCondition getTriggerTerminationCondition() {
 		return triggerTerminationCondition;
 	}
-	public ExperimentExecutionArguments getExperimentArguments() {
-		return experimentArguments;
-	}
+
 	public LogErrorReporter getLogger() {
-		return logger;
+		return context.getLogger();
 	}
 	public BoundOutputManagerRouteErrors getOutputManager() {
-		return outputManager;
+		return context.getOutputManager();
 	}
 
 	public CfgGen getCfgGen() {
 		return cfgGen;
+	}
+
+	public boolean isDebugEnabled() {
+		return context.isDebugEnabled();
 	}
 }

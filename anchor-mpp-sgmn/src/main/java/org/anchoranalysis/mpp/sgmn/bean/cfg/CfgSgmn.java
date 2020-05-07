@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 /*
@@ -30,15 +32,13 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 
@@ -55,7 +55,12 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 	// Creates state for the experiment in general, that is not tied to any particular image
 	public abstract ExperimentState createExperimentState();
 	
-	public abstract Cfg sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, ExperimentExecutionArguments expArgs, KeyValueParams params, LogErrorReporter logger, BoundOutputManagerRouteErrors outputManager ) throws SgmnFailedException;
+	public abstract Cfg sgmn(
+		NamedImgStackCollection stackCollection,
+		INamedProvider<ObjMaskCollection> objMaskCollection,
+		Optional<KeyValueParams> keyValueParams,
+		BoundIOContext context
+	) throws SgmnFailedException;
 
 	public String getBackgroundStackName() {
 		return backgroundStackName;

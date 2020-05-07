@@ -63,7 +63,7 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
 	
 	@Override
 	public void doJobOnInputObject(ParametersBound<S,Object> params) throws JobExecutionException {
-		printMessage( params.getLogErrorReporter().getLogReporter() );
+		printMessage( params.getLogger().getLogReporter() );
 		
 	}
 

@@ -27,15 +27,13 @@ package org.anchoranalysis.image.experiment.bean.sgmn;
  */
 
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCollection> {
 
@@ -46,5 +44,5 @@ public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCo
 	
 	// Performs the segmentation
 	// Seeds can be null, for segmentations that do not require seeds
-	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, ExperimentExecutionArguments expArgs, LogErrorReporter logger, BoundOutputManagerRouteErrors outputManager ) throws SgmnFailedException;
+	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
 }

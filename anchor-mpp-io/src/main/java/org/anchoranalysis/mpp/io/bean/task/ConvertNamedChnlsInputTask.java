@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.io.bean.task;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.io.IReplaceTask;
@@ -38,6 +37,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
@@ -116,9 +116,8 @@ public class ConvertNamedChnlsInputTask<T extends NamedChnlsInput,S,U extends Na
 	}
 	
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, S sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
-		task.afterAllJobsAreExecuted(outputManager, sharedState, logReporter);
+	public void afterAllJobsAreExecuted(S sharedState, BoundIOContext context) throws ExperimentExecutionException {
+		task.afterAllJobsAreExecuted(sharedState, context);
 	}
 	
 	@Override

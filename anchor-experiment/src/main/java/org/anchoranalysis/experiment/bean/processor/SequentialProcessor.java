@@ -80,7 +80,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 			logReporterForMonitor(paramsExperiment)
 		);
 		
-		getTask().afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment());
+		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.context() );
 		
 		return stats;
 	}

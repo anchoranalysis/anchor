@@ -26,33 +26,31 @@ package org.anchoranalysis.mpp.io.output;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class NRGStackWriter {
 
 	private NRGStackWriter() {
 	}
 	
-	public static void writeNRGStack( NRGStackWithParams nrgStack,	BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
+	public static void writeNRGStack( NRGStackWithParams nrgStack, BoundIOContext context) {
 		// We write the nrg stack seperately as individual channels
 		GeneratorSequenceUtilities.generateListAsSubfolder(
 			"nrgStack",
 			2,
 			nrgStack.getNrgStack().asStack().asListChnls(),
 			new ChnlGenerator("nrgStackChnl"),
-			outputManager,
-			logErrorReporter.getErrorReporter()
+			context
 		);
 		
 		if (nrgStack.getParams()!=null) {
 
 			//XStreamGenerator<NRGElemParamsFromImage> generatorParamsImage = new XStreamGenerator<NRGElemParamsFromImage>(nrgStack.getParams(),"nrgStackImageParams");
-			outputManager.getWriterCheckIfAllowed().write(
+			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"nrgStackParams",
 				() ->  new KeyValueParamsGenerator(nrgStack.getParams(), "nrgStackParams")
 			);

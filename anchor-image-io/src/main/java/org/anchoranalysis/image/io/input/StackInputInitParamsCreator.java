@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.io.input;
 
-import java.nio.file.Path;
+
 
 /*-
  * #%L
@@ -29,16 +29,15 @@ import java.nio.file.Path;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class StackInputInitParamsCreator {
 	
-	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneConstant(), modelDir );
+	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, BoundIOContext context ) throws OperationFailedException {
+		ImageInitParams soImage = ImageInitParamsFactory.create(context);
 		addInput(soImage, inputObject);
 		return soImage;
 	}

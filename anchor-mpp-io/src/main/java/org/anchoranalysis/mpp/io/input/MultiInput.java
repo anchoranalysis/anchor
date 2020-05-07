@@ -43,7 +43,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
-public class MultiInput extends ProvidesStackInput {
+public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 	
 	public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 	
@@ -87,7 +87,7 @@ public class MultiInput extends ProvidesStackInput {
 		throw new OperationFailedException("Not supported");
 	}
 	
-	
+	@Override
 	public void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage ) throws OperationFailedException {
 		
 		cfg().addToStore( soMPP.getCfgCollection() );

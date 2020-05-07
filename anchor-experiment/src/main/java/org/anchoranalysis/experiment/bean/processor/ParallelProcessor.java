@@ -121,7 +121,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 
 	    }
 		
-		getTask().afterAllJobsAreExecuted( rootOutputManager, sharedState, paramsExperiment.getLogReporterExperiment() );
+		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.context() );
 		return monitor.createStatistics();
 	}
 	

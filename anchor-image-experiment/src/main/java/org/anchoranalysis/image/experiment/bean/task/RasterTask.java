@@ -27,8 +27,6 @@ package org.anchoranalysis.image.experiment.bean.task;
  */
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -36,6 +34,7 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * An experiment that primarily takes a raster image as an input
@@ -64,21 +63,27 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 	@Override
 	public void doJobOnInputObject( ParametersBound<NamedChnlsInput,Object> params ) throws JobExecutionException {
 
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		NamedChnlsInput inputObject = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
-		try
-		{
+		try	{
 			int numSeries = inputObject.numSeries();
 			
-			startSeries( outputManager, logErrorReporter.getErrorReporter() );
+			startSeries(
+				outputManager,
+				params.getLogger().getErrorReporter()
+			);
 			
 			for (int s=0; s<numSeries; s++) {
-				doStack( inputObject, s, numSeries, outputManager, logErrorReporter, params.getExperimentArguments() );
+				doStack(
+					inputObject,
+					s,
+					numSeries,
+					params.context()
+				);
 			}
 			
-			endSeries( outputManager );
+			endSeries(outputManager);
 			
 		} catch (RasterIOException e) {
 			throw new JobExecutionException(e);
@@ -93,14 +98,10 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 	 * @param inputObject the input-object corresponding to this stack (a set of named-channels)
 	 * @param seriesIndex the index that is being currently processed from the series
 	 * @param numSeries the total number of images in the series (constant for a given task)
-	 * @param outputManager output-manager
-	 * @param logErrorReporter log-error reporter
-	 * @param expArgs experiment-arguments
+	 * @param context TODO
 	 * @throws JobExecutionException
 	 */
-	public abstract void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException;
+	public abstract void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context ) throws JobExecutionException;
 	
 	public abstract void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException;
-	
-	
 }

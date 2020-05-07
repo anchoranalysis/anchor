@@ -49,6 +49,7 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -133,12 +134,21 @@ public class GroupedResultsVectorCollection {
 	public void writeResultsForAllGroups(
 		FeatureNameList featureNamesNonAggregate,			
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws AnchorIOException {
 		
-		FeatureCSVWriter csvWriterAll = FeatureCSVWriter.create("csvAll", outputManager, groupHeaderNames, featureNamesNonAggregate );
-		FeatureCSVWriter csvWriterAggregate = featuresAggregate!=null ? FeatureCSVWriter.create("csvAgg", outputManager, groupHeaderNamesAggregate, featuresAggregate.createFeatureNames() ) : null;
+		FeatureCSVWriter csvWriterAll = FeatureCSVWriter.create(
+			"csvAll",
+			context.getOutputManager(),
+			groupHeaderNames,
+			featureNamesNonAggregate
+		);
+		FeatureCSVWriter csvWriterAggregate = featuresAggregate!=null ? FeatureCSVWriter.create(
+			"csvAgg",
+			context.getOutputManager(),
+			groupHeaderNamesAggregate,
+			featuresAggregate.createFeatureNames()
+		) : null;
 		
 		try {
 			for( MultiName group : groupMap.keySet() ) {
@@ -156,8 +166,7 @@ public class GroupedResultsVectorCollection {
 					featuresAggregate,
 					csvWriterAll,
 					csvWriterAggregate,
-					outputManager,
-					logErrorReporter
+					context
 				);
 			}
 		} finally {
@@ -178,13 +187,12 @@ public class GroupedResultsVectorCollection {
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,	// If null, we don't do any feature aggregation
 		FeatureCSVWriter csvWriterAll,			// If null, disabled
 		FeatureCSVWriter csvWriterAggregate,	// If null, disabled
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws AnchorIOException {
 		
 		assert(group!=null);
 		
-		BoundOutputManagerRouteErrors outputManagerGroup = outputManager.resolveFolder(
+		BoundOutputManagerRouteErrors outputManagerGroup = context.getOutputManager().resolveFolder(
 			group.getUniqueName()
 		);
 		assert(resultsVectorCollection!=null);
@@ -211,11 +219,11 @@ public class GroupedResultsVectorCollection {
 				featuresAggregate,
 				featureNames,
 				resultsVectorCollection,
-				logErrorReporter
+				context.getLogger()
 			);
 			
 			// Write aggregate-feature-results to a KeyValueparams file
-			writeKeyValueParams( featuresAggregate, rv, outputManagerGroup, logErrorReporter );
+			writeKeyValueParams( featuresAggregate, rv, outputManagerGroup, context.getLogger() );
 
 			if (csvWriterAggregate!=null) {
 				assert(rv!=null);

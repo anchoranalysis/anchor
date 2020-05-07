@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task;
 
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+
 /*-
  * #%L
  * anchor-experiment
@@ -31,6 +33,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. have
@@ -44,29 +47,48 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class ParametersBound<T,S> {
 
 	private ManifestRecorder manifest;
-	private BoundOutputManagerRouteErrors outputManager;
-	private LogErrorReporter logErrorReporter;
+	
 	private T inputObject;
-	private ExperimentExecutionArguments experimentArguments;
 	private S sharedState;
-	private StatefulLogReporter logReporterJob;
+	
 	private boolean detailedLogging;
+	
+	private BoundContextSpecify context;
+	
+	public ParametersBound(
+		ExperimentExecutionArguments experimentArguments,
+		BoundOutputManagerRouteErrors outputManager,
+		StatefulLogReporter logReporter,
+		ErrorReporter errorReporter
+	) {
+		this.context = new BoundContextSpecify(
+			experimentArguments,
+			outputManager,
+			logReporter,
+			errorReporter
+		);
+	}
+	
+	private ParametersBound(BoundContextSpecify context) {
+		this.context = context;
+	}
 
 	/** Immutably changes the input-object */
 	public <U> ParametersBound<U,S> changeInputObject( U inputObjectNew ) {
-		ParametersBound<U,S> out = new ParametersBound<U,S>();
+		ParametersBound<U,S> out = new ParametersBound<U,S>(context);
 		out.setManifest(manifest);
-		out.setOutputManager(outputManager);
-		out.setLogErrorReporter(logErrorReporter);
-		out.setExperimentArguments(experimentArguments);
 		out.setSharedState(sharedState);
-		out.setLogReporterJob(logReporterJob);
 		out.setDetailedLogging(detailedLogging);
 		
 		// The new input-object
 		out.setInputObject(inputObjectNew);
 		return out;
 	}
+
+	public BoundIOContext context() {
+		return context;
+	}
+	
 	
 	public boolean isDetailedLogging() {
 		return detailedLogging;
@@ -85,19 +107,11 @@ public class ParametersBound<T,S> {
 	}
 
 	public BoundOutputManagerRouteErrors getOutputManager() {
-		return outputManager;
+		return context.getOutputManager();
 	}
-
-	public void setOutputManager(BoundOutputManagerRouteErrors outputManager) {
-		this.outputManager = outputManager;
-	}
-
-	public LogErrorReporter getLogErrorReporter() {
-		return logErrorReporter;
-	}
-
-	public void setLogErrorReporter(LogErrorReporter logErrorReporter) {
-		this.logErrorReporter = logErrorReporter;
+	
+	public LogErrorReporter getLogger() {
+		return context.getLogger();
 	}
 
 	public T getInputObject() {
@@ -106,14 +120,6 @@ public class ParametersBound<T,S> {
 
 	public void setInputObject(T inputObject) {
 		this.inputObject = inputObject;
-	}
-
-	public ExperimentExecutionArguments getExperimentArguments() {
-		return experimentArguments;
-	}
-
-	public void setExperimentArguments(ExperimentExecutionArguments experimentArguments) {
-		this.experimentArguments = experimentArguments;
 	}
 
 	public S getSharedState() {
@@ -125,10 +131,6 @@ public class ParametersBound<T,S> {
 	}
 
 	public StatefulLogReporter getLogReporterJob() {
-		return logReporterJob;
+		return context.getStatefulLogReporter();
 	}
-
-	public void setLogReporterJob(StatefulLogReporter logReporterJob) {
-		this.logReporterJob = logReporterJob;
-	}	
 }

@@ -1,13 +1,10 @@
-package org.anchoranalysis.bean.shared.random;
+package org.anchoranalysis.core.random;
 
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
-
-/*
+/*-
  * #%L
- * anchor-beans-shared
+ * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +26,45 @@ import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
  * #L%
  */
 
+import cern.jet.random.Normal;
+import cern.jet.random.Poisson;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 
-public class RandomNumberGeneratorMersenneConstantBean extends RandomNumberGeneratorBean {
+public class RandomNumberGeneratorMersenne implements RandomNumberGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private RandomEngine randomEngine;
+	
+	public RandomNumberGeneratorMersenne( boolean fixedSeed ) {
+		randomEngine = createTwister(fixedSeed);
+	}
 
 	@Override
-	public RandomNumberGenerator create() {
-		return new RandomNumberGeneratorMersenneConstant();
+	public int nextInt() {
+		return randomEngine.nextInt();
 	}
+
+	@Override
+	public double nextDouble() {
+		return randomEngine.nextDouble();
+	}
+
+	@Override
+	public Poisson generatePossion(double param) {
+		return new Poisson(param, randomEngine);
+	}
+
+	@Override
+	public Normal generateNormal(double mean, double sd) {
+		return new Normal(mean,sd,randomEngine);
+	}
+		
+	private static RandomEngine createTwister( boolean fixedSeed ) {
+		if (fixedSeed) {
+			return new MersenneTwister();
+		} else {
+			return new MersenneTwister( new java.util.Date() );
+		}
+	}
+	
 }

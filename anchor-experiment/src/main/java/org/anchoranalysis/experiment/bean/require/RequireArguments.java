@@ -1,11 +1,10 @@
-package org.anchoranalysis.bean.shared.random;
+package org.anchoranalysis.experiment.bean.require;
 
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneTime;
+import org.anchoranalysis.bean.AnchorBean;
 
 /*
  * #%L
- * anchor-beans-shared
+ * anchor-experiment
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -29,16 +28,12 @@ import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneTime;
  * #L%
  */
 
-
-public class RandomNumberGeneratorMersenneTimeBean extends RandomNumberGeneratorBean {
+public abstract class RequireArguments extends AnchorBean<RequireArguments> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public RandomNumberGenerator create() {
-		return new RandomNumberGeneratorMersenneTime();
-	}
+	public abstract boolean hasAllRequiredArguments( boolean debugModeEnabled );
 }

@@ -172,6 +172,7 @@ public abstract class OutputExperiment extends Experiment {
 			Optional.of(experimentalManifest),
 			rootOutputManager,
 			logReporter,
+			new ErrorReporterIntoLog(logReporter),
 			useDetailedLogging()
 		);
 	}
