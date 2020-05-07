@@ -30,15 +30,14 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 
 public class PermutationSetterUtilities {
 	
 	private PermutationSetterUtilities() {}
 
-	/** Searches through a list of property fields to find one that matches the propertyName */
-	public static PermutationSetter createForSingle( AnchorBean<?> parentBean, String propertyPath ) throws CreateException {
+	/** Searches through a list of property fields to find one that matches the propertyName 
+	 * @throws PermutationSetterException */
+	public static PermutationSetter createForSingle( AnchorBean<?> parentBean, String propertyPath ) throws PermutationSetterException {
 				
 		// Get all the components of propertyPath
 		String[] tokens = propertyPath.split("\\.");
@@ -59,7 +58,7 @@ public class PermutationSetterUtilities {
 	 * @param currentBean the bean object to which the field refers to
 	 * @return an AnchorBean corresponding to this particular field on this particular object (exceptionally handling lists)
 	 * */
-	public static AnchorBean<?> beanFor(Field field, AnchorBean<?> currentBean ) throws SetOperationFailedException {
+	public static AnchorBean<?> beanFor(Field field, AnchorBean<?> currentBean ) throws PermutationSetterException {
 		
 		try {
 			Object currentObj = field.get(currentBean);
@@ -70,55 +69,53 @@ public class PermutationSetterUtilities {
 				List<?> list = ((List<?>) currentObj);
 				return (AnchorBean<?>) list.get(0);
 			} else {
-				throw new SetOperationFailedException("A field must be an Anchor-Bean or a List of Anchor-Beans. No other types are supported");
+				throw new PermutationSetterException("A field must be an Anchor-Bean or a List of Anchor-Beans. No other types are supported");
 			}
 			
 		} catch (IllegalAccessException e) {
-			throw new SetOperationFailedException(e);
+			throw new PermutationSetterException(
+				String.format("An illegal access exception occurred accessing field %s", field)
+			);
 		}
 	}
 	
-	private static Field findMatchingField( List<Field> list, String propertyName ) throws CreateException {
+	private static Field findMatchingField( List<Field> list, String propertyName ) throws PermutationSetterException {
 		for( Field f : list ) {
 			if (f.getName().equals(propertyName)) {
 				return f;
 			}
 		}
-		throw new CreateException( String.format("Cannot find matching field for property '%s'", propertyName) );
+		throw new PermutationSetterException( String.format("Cannot find matching field for property '%s'", propertyName) );
 	}
 	
-	private static PermutationSetter createWithIntermediateProperties( AnchorBean<?> parentBean, String[] tokens ) throws CreateException {
+	private static PermutationSetter createWithIntermediateProperties( AnchorBean<?> parentBean, String[] tokens ) throws PermutationSetterException {
 		PermutationSetterSingle setter = new PermutationSetterSingle();
+
+		AnchorBean<?> currentBean = parentBean;
+		List<Field> currentList = currentBean.getOrCreateBeanFields();
 		
-		try {
-			AnchorBean<?> currentBean = parentBean;
-			List<Field> currentList = currentBean.getOrCreateBeanFields();
+		int intermediateFields = tokens.length - 1;
+		
+		// We add each child along the way, keep the final field property
+		for( int i=0; i<intermediateFields; i++ ) {
 			
-			int intermediateFields = tokens.length - 1;
+			String currentPropertyName = tokens[i];
 			
-			// We add each child along the way, keep the final field property
-			for( int i=0; i<intermediateFields; i++ ) {
-				
-				String currentPropertyName = tokens[i];
-				
-				// Find a matching property for the first child
-				Field matchedField = findMatchingField(currentList, currentPropertyName);
-				
-				setter.addField(matchedField);
-								
-				currentBean = PermutationSetterUtilities.beanFor(matchedField, currentBean);
-				currentList = currentBean.getOrCreateBeanFields();
-			}
-			
-			// Find a matching property for the final setter
-			Field matchedField = findMatchingField(currentList, tokens[intermediateFields] );
+			// Find a matching property for the first child
+			Field matchedField = findMatchingField(currentList, currentPropertyName);
 			
 			setter.addField(matchedField);
-			
-			return setter;		
-			
-		} catch (SetOperationFailedException e) {
-			throw new CreateException(e);
+							
+			currentBean = PermutationSetterUtilities.beanFor(matchedField, currentBean);
+			currentList = currentBean.getOrCreateBeanFields();
 		}
+		
+		// Find a matching property for the final setter
+		Field matchedField = findMatchingField(currentList, tokens[intermediateFields] );
+		
+		setter.addField(matchedField);
+		
+		return setter;		
+
 	}
 }

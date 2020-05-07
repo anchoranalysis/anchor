@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 
 /**
  * Applies several permutation setters to the same object
@@ -45,8 +44,7 @@ public class PermutationSetterList extends PermutationSetter {
 	
 	
 	@Override
-	public void setPermutation(AnchorBean<?> bean, Object val)
-			throws SetOperationFailedException {
+	public void setPermutation(AnchorBean<?> bean, Object val) throws PermutationSetterException {
 		
 		for( PermutationSetter ps : list ) {
 			ps.setPermutation(bean, val);

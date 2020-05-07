@@ -28,7 +28,6 @@ package org.anchoranalysis.bean.permute.setter;
 
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 
 /**
  * Imposes a permutation on some property of a bean. This can be an immediate property of a bean, or property
@@ -44,5 +43,5 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
  */
 public abstract class PermutationSetter {
 	
-	public abstract void setPermutation( AnchorBean<?> bean, Object val ) throws SetOperationFailedException;
+	public abstract void setPermutation( AnchorBean<?> bean, Object val ) throws PermutationSetterException;
 }

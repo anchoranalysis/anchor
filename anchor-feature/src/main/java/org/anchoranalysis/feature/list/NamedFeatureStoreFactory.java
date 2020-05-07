@@ -39,11 +39,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class NamedFeatureStoreFactory {
 
 	public static <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList( List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider ) throws CreateException {
-		
-		try {
-			NamedFeatureStore<T> out = new NamedFeatureStore<>();
-			for( NamedBean<FeatureListProvider<T>> ni : listFeatureListProvider ) {
-								
+				
+		NamedFeatureStore<T> out = new NamedFeatureStore<>();
+		for( NamedBean<FeatureListProvider<T>> ni : listFeatureListProvider ) {
+	
+			try {
 				// NOTE: Naming convention
 				//  When a featureList contains a single item, we use the name of the featureList, rather than the feature 
 				FeatureList<T> featureList = ni.getValue().create();
@@ -53,11 +53,14 @@ public class NamedFeatureStoreFactory {
 				}
 				
 				FeatureListStoreUtilities.addFeatureListToStore( featureList, ni.getName(), out );
-			}
-			return out;
 			
-		} catch (BeanDuplicateException e) {
-			throw new CreateException(e);
-		}		
+			} catch (BeanDuplicateException | CreateException e) {
+				throw new CreateException(
+					String.format("An error occurred creating a named-feature-list from provider '%s'", ni.getName()),
+					e
+				);
+			}		
+		}
+		return out;
 	}
 }

@@ -28,7 +28,6 @@ package org.anchoranalysis.core.error.friendly;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 /**
  * Generates a nice string representation of an Exception and its causes according to certain rules.
@@ -61,10 +60,10 @@ public class RecursivelyDescribeExceptionStack {
 		
 		String prefixCurrent = "";
 		
-		Throwable e = excDescribe;
 		boolean firstLine = true;
 		
-		Iterator<Throwable> itr = new ExceptionToPrintIterator(excDescribe);
+		ExceptionToPrintIterator itr = new ExceptionToPrintIterator(excDescribe);
+		Throwable e = itr.getCurrent();
 		do {
 			// Unless it's the very first line of the exception, we add a newline
 			if( firstLine)	{ // Test for being the first line
@@ -75,7 +74,7 @@ public class RecursivelyDescribeExceptionStack {
 			
 			// Extract a message from the exception, and append it to the writer
 			// with maybe prefix and suffix
-			splitFromExc(e).appendNicelyWrappedLines(
+			splitFromExc( e ).appendNicelyWrappedLines(
 				writer,
 				prefixCurrent,
 				suffixFor(showExceptionType, e),
@@ -110,9 +109,8 @@ public class RecursivelyDescribeExceptionStack {
 		
 		int prefixCurrentLength = 0;
 		
-		Throwable e = excDescribe;
-		
-		Iterator<Throwable> itr = new ExceptionToPrintIterator(excDescribe);
+		ExceptionToPrintIterator itr = new ExceptionToPrintIterator(excDescribe);
+		Throwable e = itr.getCurrent();
 		do {
 			SplitString splitMessage = splitFromExc(e);
 			

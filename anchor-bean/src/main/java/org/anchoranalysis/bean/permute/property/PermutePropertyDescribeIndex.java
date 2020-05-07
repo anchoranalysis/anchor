@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.StringList;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
@@ -66,7 +66,7 @@ public class PermutePropertyDescribeIndex extends PermuteProperty<Integer> {
 	}
 	
 	@Override
-	public PermutationSetter createSetter(AnchorBean<?> parentBean) throws CreateException {
+	public PermutationSetter createSetter(AnchorBean<?> parentBean) throws PermutationSetterException {
 		return permuteProperty.createSetter(parentBean);
 	}
 

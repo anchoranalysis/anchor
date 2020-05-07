@@ -71,4 +71,8 @@ class ExceptionToPrintIterator implements Iterator<Throwable> {
 		
 		return e;
 	}
+
+	public Throwable getCurrent() {
+		return current;
+	}
 }

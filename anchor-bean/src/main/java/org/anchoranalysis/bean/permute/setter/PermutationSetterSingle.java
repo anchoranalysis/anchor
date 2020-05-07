@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 
 
 /**
@@ -70,7 +69,7 @@ public class PermutationSetterSingle extends PermutationSetter {
 	}
 
 	@Override
-	public void setPermutation( AnchorBean<?> bean, Object val ) throws SetOperationFailedException {
+	public void setPermutation( AnchorBean<?> bean, Object val ) throws PermutationSetterException {
 		
 		try {
 			int numIntermediate = listFields.size() - 1;
@@ -90,7 +89,9 @@ public class PermutationSetterSingle extends PermutationSetter {
 			finalField.set(currentBean, valMaybeConverted);
 			
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new SetOperationFailedException(e);
+			throw new PermutationSetterException(
+				"An illegal argument or access exception occurred setting a permutation on the bean"
+			);
 		}
 	}
 	

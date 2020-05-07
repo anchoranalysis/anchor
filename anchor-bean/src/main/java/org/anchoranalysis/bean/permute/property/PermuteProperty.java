@@ -30,7 +30,7 @@ package org.anchoranalysis.bean.permute.property;
 import java.util.Iterator;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
@@ -52,7 +52,7 @@ public abstract class PermuteProperty<T> extends AnchorBean<PermuteProperty<T>> 
 	 */
 	public abstract String nameForPropValue( T value ) throws OperationFailedException;
 		
-	public abstract PermutationSetter createSetter( AnchorBean<?> parentBean ) throws CreateException;
+	public abstract PermutationSetter createSetter( AnchorBean<?> parentBean ) throws PermutationSetterException;
 
 	/**
 	 * An iterator (of size numPermutations()) with the values for the property 
