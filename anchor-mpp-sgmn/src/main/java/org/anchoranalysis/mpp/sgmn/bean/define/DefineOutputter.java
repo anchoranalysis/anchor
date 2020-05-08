@@ -30,7 +30,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 	private Define define;
 	
 	@BeanField
-	private boolean suppressSubfolders = true;
+	private boolean suppressSubfolders = false;
 	
 	@BeanField
 	private boolean suppressOutputExceptions = false;

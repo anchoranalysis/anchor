@@ -38,20 +38,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
 class SharedObjectsOutputter {
-		
-	public static void output(
-		MPPInitParams soMPP,
-		boolean suppressSubfolders,
-		BoundIOContext context
-	) {
-		ErrorReporter errorReporter = context.getErrorReporter();
-		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
-				
-		SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
-		factory.cfg().outputSubset(errorReporter);
-		factory.histogram().outputSubset(errorReporter);
-		factory.objMask().outputSubset(errorReporter);
-	}
 	
 	public static void output(
 		ImageInitParams imageInit,
@@ -78,6 +64,21 @@ class SharedObjectsOutputter {
 			suppressSubfolders
 		);
 	}
+
+	
+	public static void output(
+			MPPInitParams soMPP,
+			boolean suppressSubfolders,
+			BoundIOContext context
+		) {
+			ErrorReporter errorReporter = context.getErrorReporter();
+			BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+					
+			SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
+			factory.cfg().outputSubset(errorReporter);
+			factory.histogram().outputSubset(errorReporter);
+			factory.objMask().outputSubset(errorReporter);
+		}
 	
 	public static void outputWithException(
 		MPPInitParams soMPP,
@@ -85,13 +86,6 @@ class SharedObjectsOutputter {
 		boolean suppressSubfolders
 	) throws OutputWriteFailedException {
 		assert(outputManager.getOutputWriteSettings().hasBeenInit());	
-		
-		StackCollectionOutputter.outputSubsetWithException(
-			CreateCombinedStack.apply(soMPP.getImage() ),
-			outputManager,
-			StackOutputKeys.STACK,
-			suppressSubfolders
-		);
 
 		SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
 		factory.cfg().outputSubsetWithException();

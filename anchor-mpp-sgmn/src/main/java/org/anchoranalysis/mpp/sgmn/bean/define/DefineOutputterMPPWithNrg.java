@@ -44,7 +44,7 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 
 		try {
 			MPPInitParams initParams = super.createInitParams(input,context);
-			return processWithNRGStack(initParams.getImage(), initParams.getImage(), operation, context);
+			return processWithNRGStack(initParams.getImage(), initParams.getImage(), initParams, operation, context);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -59,7 +59,7 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 	) throws OperationFailedException {
 		try {
 			MPPInitParams initParams = super.createInitParams(context, stacks, objs, keyValueParams);
-			return processWithNRGStack(initParams, initParams.getImage(), operation, context);
+			return processWithNRGStack(initParams, initParams.getImage(), initParams, operation, context);
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -69,6 +69,7 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 	private <T,S> S processWithNRGStack(
 		T initParams,
 		ImageInitParams imageParams,
+		MPPInitParams mppParams,
 		OperationWithNRGStack<T,S> operation,
 		BoundIOContext context
 	) throws OperationFailedException {
@@ -80,7 +81,7 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 			
 			S result = operation.process(initParams, nrgStack);
 			
-			outputSharedObjs(imageParams, nrgStack, context);
+			outputSharedObjs(mppParams, nrgStack, context);
 			
 			return result;
 			
@@ -91,7 +92,7 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 	
 	
 	// General objects can be outputted
-	private void outputSharedObjs(ImageInitParams initParams, NRGStackWithParams nrgStack, BoundIOContext context) throws OutputWriteFailedException {
+	private void outputSharedObjs(MPPInitParams initParams, NRGStackWithParams nrgStack, BoundIOContext context) throws OutputWriteFailedException {
 		
 		super.outputSharedObjs(initParams, context);
 		
