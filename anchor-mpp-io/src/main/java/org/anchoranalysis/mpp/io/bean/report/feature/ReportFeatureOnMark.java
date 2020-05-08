@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
@@ -82,10 +84,13 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 		try {
 			FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
 			
-			ImageDim dims = createImageDim();
+			ImageDim dim = createImageDim();
 			
 			double val = session.calc(
-				new FeatureInputMark(mark, dims.getRes())
+				new FeatureInputMark(
+					mark,
+					Optional.of(dim)
+				)
 			);
 			return Double.toString(val);
 		} catch (FeatureCalcException | CreateException e) {

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.orientation;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+
 /*-
  * #%L
  * anchor-image
@@ -72,6 +74,19 @@ public class DirectionVector {
 
 	public final void setZ(double arg0) {
 		vector.setZ(arg0);
+	}
+	
+	/** Sets an element of the vector by the index of its position,  index=0 is the X-element, index=1 is the Y-element etc. */
+	public void setIndex( int index, double value ) {
+		if (index==0) {
+			vector.setX(value);
+		} else if (index==1) {
+			vector.setY(value);
+		} else if (index==2) {
+			vector.setZ(value);
+		} else {
+			throw new AnchorFriendlyRuntimeException("Index must be >= 0 and < 3");
+		}
 	}
 	
 	public static DirectionVector createBetweenTwoPoints( Point3d pnt1, Point3d pnt2 ) {
