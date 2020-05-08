@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.session;
+package org.anchoranalysis.image.feature.session.merged;
 
 import java.util.Arrays;
 
@@ -49,10 +49,10 @@ import org.anchoranalysis.feature.session.strategy.child.CacheTransferSource;
 import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 
@@ -84,10 +84,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
  *
  */
 public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs> {
-
-	private boolean includeFirst;
-	private boolean includeSecond;
-	private boolean includeMerged;
 	
 	// Our sessions
 	private FeatureCalculatorMulti<FeatureInputStack> sessionImage;
@@ -100,6 +96,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 
 	// The lists we need
 	private MergedPairsFeatures features;
+	private MergedPairsInclude include;
 	private boolean checkInverse = false;
 	
 	// Prefixes that are ignored
@@ -108,21 +105,23 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	private boolean suppressErrors;
 	
 	public MergedPairsSession(MergedPairsFeatures features) {
-		this(false, false, false, features, Collections.emptySet(), false, true);
+		this(
+			features,
+			new MergedPairsInclude(),
+			Collections.emptySet(),
+			false,
+			true
+		);
 	}
 		
 	public MergedPairsSession(
-		boolean includeFirst,
-		boolean includeSecond,
-		boolean includeMerged,
 		MergedPairsFeatures features,
+		MergedPairsInclude include,
 		Collection<String> ignoreFeaturePrefixes,
 		boolean checkInverse,
 		boolean suppressErrors
 	) {
-		this.includeFirst = includeFirst;
-		this.includeSecond = includeSecond;
-		this.includeMerged = includeMerged;
+		this.include = include;
 		this.features = features;
 		this.checkInverse = checkInverse;
 		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
@@ -140,10 +139,11 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	@Override
 	public void start(
 		ImageInitParams soImage,
-		SharedFeaturesInitParams soFeature,
 		Optional<NRGStackWithParams> nrgStack,
 		LogErrorReporter logErrorReporter
 	) throws InitException {
+
+		//SharedFeaturesInitParams soFeature = soImage.getFeature();
 		
 		// We create our SharedFeatures including anything from the NamedDefinitions, and all our additional features
 		// TODO fix
@@ -158,18 +158,18 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		
 		CreateCalculatorHelper cc = new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter);
 		
-		sessionImage = features.createImageSession(cc, soImage, MergedPairsCachingStrategies.noCache(), suppressErrors);
+		sessionImage = features.createImageSession(cc, soImage, CachingStrategies.noCache(), suppressErrors);
 		
 		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond
-			= MergedPairsCachingStrategies.cacheAndReuse();
+			= CachingStrategies.cacheAndReuse();
 		
-		if (includeFirst || includeSecond) {
+		if (include.includeFirstOrSecond()) {
 			sessionFirstSecond = features.createSingleSession(cc, soImage, cachingStrategyFirstSecond, suppressErrors);
 		}
 		
 		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyMerged
-			= MergedPairsCachingStrategies.cacheAndReuse();
-		if (includeMerged) {
+			= CachingStrategies.cacheAndReuse();
+		if (include.includeMerged()) {
 			sessionMerged = features.createSingleSession(cc, soImage, cachingStrategyMerged, suppressErrors);
 		}
 				
@@ -261,15 +261,15 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		
 		out.addCustomNamesWithPrefix( "image.", features.getImage() );
 		
-		if (includeFirst) {
+		if (include.includeFirst()) {
 			out.addCustomNamesWithPrefix( "first.", features.getSingle() );
 		}
 		
-		if (includeSecond) {
+		if (include.includeSecond()) {
 			out.addCustomNamesWithPrefix( "second.", features.getSingle() );
 		}
 				
-		if (includeMerged) {
+		if (include.includeMerged()) {
 			out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
 		}
 		
@@ -282,20 +282,24 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	public int sizeFeatures() {
 		
 		// Number of times we use the listSingle
-		int numSingle = 1 + integerFromBoolean(includeFirst) + integerFromBoolean(includeSecond);
+		int numSingle = (
+			1 
+			+ integerFromBoolean( include.includeFirst() )
+			+ integerFromBoolean( include.includeSecond() )
+		);
 				
-		return features.numImageFeatures()
+		return (
+			features.numImageFeatures()
 			+ features.numPairFeatures()
-			+ (numSingle * features.numSingleFeatures());
+			+ (numSingle * features.numSingleFeatures())
+		);
 	}
 	
 	@Override
 	public FeatureTableSession<FeatureInputPairObjs> duplicateForNewThread() {
 		return new MergedPairsSession(
-			includeFirst,
-			includeSecond,
-			includeMerged,
 			features.duplicate(),
+			include,
 			ignoreFeaturePrefixes,	// NOT DUPLICATED
 			checkInverse,
 			suppressErrors
@@ -315,8 +319,8 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 			);
 			
 			InverseChecker checker = new InverseChecker(
-				includeFirst,
-				includeSecond,
+				include.includeFirst(),
+				include.includeSecond(),
 				features.numImageFeatures(),
 				features.numSingleFeatures(),
 				() -> createFeatureNames()
@@ -341,17 +345,17 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		helper.calcAndInsert(new FeatureInputStack(), sessionImage );
 		
 		// First features
-		if (includeFirst) {
+		if (include.includeFirst()) {
 			helper.calcAndInsert( input, FeatureInputPairObjs::getFirst, sessionFirstSecond );
 		}
 		
 		// Second features
-		if (includeSecond) {
+		if (include.includeSecond()) {
 			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, sessionFirstSecond );
 		}
 		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
-		if (includeMerged) {
+		if (include.includeMerged()) {
 			helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
 		}
 

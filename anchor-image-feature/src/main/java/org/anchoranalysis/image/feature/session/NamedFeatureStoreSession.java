@@ -58,13 +58,12 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 	@Override
 	public void start(
 		ImageInitParams soImage,
-		SharedFeaturesInitParams soFeature,
 		Optional<NRGStackWithParams> nrgStack,
 		LogErrorReporter logErrorReporter
 	) throws InitException {
 		
 		// TODO temporarily disabled
-		SharedFeatureSet<T> sharedFeatures = createSharedFeatures(soFeature);
+		SharedFeatureSet<T> sharedFeatures = createSharedFeatures( soImage.getFeature() );
 		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
 		
 		// Init all the features

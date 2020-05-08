@@ -287,6 +287,11 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);
 		
+		
+		// 1. Extract the set of relevant shared-features from the set, duplicate and initialize
+		// 2. Add all the features in the list to these-features
+		
+		
 		replaceSession = replacePolicyFactory.bind(listFeatures, featureInitParamsDup, sharedFeatures, logger);
 			
 		

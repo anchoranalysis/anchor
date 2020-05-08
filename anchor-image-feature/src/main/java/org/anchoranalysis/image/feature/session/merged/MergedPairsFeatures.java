@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.session;
+package org.anchoranalysis.image.feature.session.merged;
 
 import org.anchoranalysis.core.error.InitException;
 

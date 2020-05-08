@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-class InitParamsHelper {
+public class InitParamsHelper {
 	
 	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
 		

@@ -34,7 +34,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 /**
@@ -55,7 +54,7 @@ public abstract class FeatureTableSession<T extends FeatureInput> implements Fea
 	 * @param inputFeatureSize TODO
 	 * @param features
 	 */
-	public abstract void start( ImageInitParams soImage, SharedFeaturesInitParams soFeature, Optional<NRGStackWithParams> nrgStack, LogErrorReporter logErrorReporter ) throws InitException;
+	public abstract void start( ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, LogErrorReporter logErrorReporter ) throws InitException;
 	
 	/**
 	 * Makes a copy of the feature-store for a new thread. Deep-copies the features. Shallow-copies everything else.

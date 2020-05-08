@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.session;
+package org.anchoranalysis.image.feature.session.merged;
 
 
 
@@ -46,8 +46,8 @@ import org.anchoranalysis.feature.session.strategy.child.CheckCacheForSpecificCh
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.session.InitParamsHelper;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 class CreateCalculatorHelper {
@@ -135,7 +135,7 @@ class CreateCalculatorHelper {
 			return FeatureSession.with(
 				features,
 				createInitParams(soImage),
-				new SharedFeatureSet<>(),
+				Optional.empty(),
 				logErrorReporter,
 				ignoreFeaturePrefixes,
 				replacePolicyFactory

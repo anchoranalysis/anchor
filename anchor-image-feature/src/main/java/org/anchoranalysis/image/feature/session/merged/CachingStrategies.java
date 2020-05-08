@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.session;
+package org.anchoranalysis.image.feature.session.merged;
 
 /*-
  * #%L
@@ -39,9 +39,9 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  * @author Owen Feehan
  *
  */
-class MergedPairsCachingStrategies {
+class CachingStrategies {
 
-	private MergedPairsCachingStrategies() {}
+	private CachingStrategies() {}
 	
 	/** Cache and re-use inputs */
 	public static BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cacheAndReuse() {
