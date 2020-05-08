@@ -123,6 +123,22 @@ public abstract class Tuple3d implements Serializable {
 		}
 	}
 	
+	public final void setValueByDimension( int dimIndex, double val ) {
+		switch( dimIndex ) {
+		case 0:
+			this.x = val;
+			break;
+		case 1:
+			this.y = val;
+			break;
+		case 2:
+			this.z = val;
+			break;
+		default:
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+		}
+	}
+	
 	public final double dot( Tuple3d vec ) {
 		return (x*vec.x) + (y*vec.y) + (z*vec.z);
 	}
