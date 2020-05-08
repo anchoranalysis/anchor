@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.mark;
-
-
-
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
+package org.anchoranalysis.image.bean.provider.stack;
 
 /*
  * #%L
- * anchor-gui
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -33,49 +28,53 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.feature.bean.FeatureRelatedBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.stack.Stack;
 
-public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
-	
+public class StackProviderReference extends StackProvider {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8930110016806371922L;
+	private static final long serialVersionUID = -1575473809798849759L;
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private CfgGen cfgGen;
-	
-	@BeanField
-	private Define define;
-	
-	@BeanField
-	private NRGSchemeCreator nrgSchemeCreator;
+	private String id = "";
 	// END BEAN PROPERTIES
+	
+	private Stack stack;
 
-
-	public CfgGen getCfgGen() {
-		return cfgGen;
+	public StackProviderReference() {
+		
+	}
+	
+	public StackProviderReference( String id ) {
+		this.id = id;
+	}
+	
+	@Override
+	public Stack create() throws CreateException {
+		
+		if(stack==null) {
+			try {
+				this.stack = getSharedObjects().getStackCollection().getException(id);
+			} catch (NamedProviderGetException e) {
+				throw new CreateException(e);
+			}		
+		}
+		
+		return stack;
 	}
 
-	public void setCfgGen(CfgGen cfgGen) {
-		this.cfgGen = cfgGen;
+	public String getId() {
+		return id;
 	}
 
-	public NRGSchemeCreator getNrgSchemeCreator() {
-		return nrgSchemeCreator;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public void setNrgSchemeCreator(NRGSchemeCreator nrgSchemeCreator) {
-		this.nrgSchemeCreator = nrgSchemeCreator;
-	}
 
-	public Define getDefine() {
-		return define;
-	}
-
-	public void setDefine(Define define) {
-		this.define = define;
-	}
 }

@@ -27,14 +27,14 @@ public class MPPInitParamsFactory {
 	}
 	
 	public static MPPInitParams createFromInput( InputBound<? extends InputForMPPBean,?> params, Optional<Define> define ) throws CreateException {
-
-		InputForMPPBean inputObject = params.getInputObject();
+		return createFromInput(params.getInputObject(), params.context(), define);
+	}
+	
+	public static MPPInitParams createFromInput( InputForMPPBean inputObject,
+			BoundIOContext context, Optional<Define> define ) throws CreateException {
 		
 		try {
-			MPPInitParams soMPP = create(
-				params.context(),
-				define
-			);
+			MPPInitParams soMPP = create(context,define);
 			inputObject.addToSharedObjects( soMPP, soMPP.getImage() );
 			return soMPP;
 			
