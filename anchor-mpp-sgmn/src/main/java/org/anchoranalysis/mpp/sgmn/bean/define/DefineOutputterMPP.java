@@ -24,8 +24,8 @@ public class DefineOutputterMPP extends DefineOutputter {
 	private static final long serialVersionUID = 1L;
 	
 	@FunctionalInterface
-	public interface OperationWithImageInitParams {
-		void process(ImageInitParams initParams) throws OperationFailedException;
+	public interface OperationWithInitParams<T> {
+		void process(T initParams) throws OperationFailedException;
 	}
 	
 	public void processInput(
@@ -48,10 +48,10 @@ public class DefineOutputterMPP extends DefineOutputter {
 		}
 	}
 	
-	public void processInput(
+	public void processInputImage(
 		MultiInput input,
 		BoundIOContext context,
-		OperationWithImageInitParams operation
+		OperationWithInitParams<ImageInitParams> operation
 	) throws OperationFailedException {
 		try {
 			MPPInitParams initParams = super.createInitParams(input, context);
@@ -64,4 +64,23 @@ public class DefineOutputterMPP extends DefineOutputter {
 			throw new OperationFailedException(e);
 		}
 	}
+	
+	public void processInputMPP(
+			MultiInput input,
+			BoundIOContext context,
+			OperationWithInitParams<MPPInitParams> operation
+		) throws OperationFailedException {
+			try {
+				MPPInitParams initParams = super.createInitParams(input, context);
+				
+				operation.process(initParams);
+				
+				super.outputSharedObjs(initParams, context);
+				
+			} catch (CreateException | OutputWriteFailedException e) {
+				throw new OperationFailedException(e);
+			}
+		}
+	
+	
 }
