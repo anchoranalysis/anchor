@@ -1,10 +1,10 @@
-package org.anchoranalysis.bean.shared.relation;
+package org.anchoranalysis.image.feature.histogram;
 
-/*
+/*-
  * #%L
- * anchor-beans-shared
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,40 +26,29 @@ package org.anchoranalysis.bean.shared.relation;
  * #L%
  */
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.GenerateUniqueParameterization;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.bean.FeatureHistogram;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public abstract class RelationBean extends AnchorBean<RelationBean> implements GenerateUniqueParameterization {
+public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4274194584824964885L;
-
-	public abstract RelationToValue create();
-	
-	public abstract String toString();
-	
-	@Override
-	public int hashCode() {
-		return 11;
-	}
+	private static final long serialVersionUID = 1L;
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		return true;
+	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
+		try {
+			return calcStatisticFrom(
+				input.get().getHistogram()
+			);
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
-	// This is sufficient for all base-classes, as we rely on them not being further parameterized
-	@Override
-	public String uniqueName() {
-		return getClass().getCanonicalName();
-	}
+	protected abstract double calcStatisticFrom( Histogram histogram ) throws OperationFailedException;
 }

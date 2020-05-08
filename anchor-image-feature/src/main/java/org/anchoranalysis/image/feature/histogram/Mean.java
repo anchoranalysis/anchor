@@ -1,8 +1,10 @@
-package org.anchoranalysis.bean.shared.relation;
+package org.anchoranalysis.image.feature.histogram;
+
+import org.anchoranalysis.core.error.OperationFailedException;
 
 /*
  * #%L
- * anchor-beans-shared
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,40 +28,18 @@ package org.anchoranalysis.bean.shared.relation;
  * #L%
  */
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.GenerateUniqueParameterization;
-import org.anchoranalysis.core.relation.RelationToValue;
 
-public abstract class RelationBean extends AnchorBean<RelationBean> implements GenerateUniqueParameterization {
+import org.anchoranalysis.image.histogram.Histogram;
+
+public class Mean extends FeatureHistogramStatistic {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4274194584824964885L;
-
-	public abstract RelationToValue create();
-	
-	public abstract String toString();
+	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public int hashCode() {
-		return 11;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		return true;
-	}
-	
-	// This is sufficient for all base-classes, as we rely on them not being further parameterized
-	@Override
-	public String uniqueName() {
-		return getClass().getCanonicalName();
+	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
+		return histogram.mean();
 	}
 }

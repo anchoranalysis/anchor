@@ -1,6 +1,5 @@
 package org.anchoranalysis.image.bean.threshold.relation;
 
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -15,7 +14,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  * @author Owen Feehan
  *
  */
-public class BinaryNotHighVoxels extends RelationToThreshold {
+public class BinaryNotHighVoxels extends BinaryVoxelsBase {
 
 	/**
 	 * 

@@ -1,6 +1,7 @@
 package org.anchoranalysis.bean.shared.relation.threshold;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.relation.RelationToValue;
 
 /**
@@ -9,7 +10,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
  * @author Owen Feehan
  *
  */
-public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold> {
+public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold> implements GenerateUniqueParameterization {
 
 	/**
 	 * 
@@ -21,5 +22,4 @@ public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold
 	
 	/** The relation to the threshold to consider */
 	public abstract RelationToValue relation();
-	
 }
