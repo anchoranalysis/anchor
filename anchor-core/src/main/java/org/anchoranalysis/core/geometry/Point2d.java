@@ -32,7 +32,7 @@ import java.io.Serializable;
 import org.anchoranalysis.core.arithmetic.FloatUtilities;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class Point2d implements Serializable {
+public final class Point2d implements Serializable {
 
 	/**
 	 * 

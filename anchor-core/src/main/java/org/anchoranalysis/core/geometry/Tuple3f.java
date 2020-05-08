@@ -3,6 +3,9 @@ package org.anchoranalysis.core.geometry;
 import java.io.Serializable;
 
 import org.anchoranalysis.core.arithmetic.FloatUtilities;
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 public class Tuple3f implements Serializable {
 	
@@ -15,7 +18,33 @@ public class Tuple3f implements Serializable {
 	protected float y = 0.0f;
 	protected float z = 0.0f;
 		
-	public void setValueByDimension( int dimIndex, float val ) {
+	public final float getValueByDimension(int dimIndex) {
+		if (dimIndex==0) {
+			return x;
+		} else if (dimIndex==1) {
+			return y;
+		} else if (dimIndex==2) {
+			return z;
+		} else {
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+		}
+	}
+	
+	public final float getValueByDimension( AxisType axisType ) {
+		switch( axisType ) {
+		case X:
+			return x;
+		case Y:
+			return y;
+		case Z:
+			return z;
+		default:
+			assert false;
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.UNKNOWN_AXIS_TYPE);
+		}
+	}
+	
+	public final void setValueByDimension( int dimIndex, float val ) {
 		switch( dimIndex ) {
 		case 0:
 			this.x = val;
@@ -27,22 +56,7 @@ public class Tuple3f implements Serializable {
 			this.z = val;
 			break;
 		default:
-			assert false;
-		}
-
-	}
-	
-	public float getValueByDimension( int dimIndex ) {
-		switch( dimIndex ) {
-		case 0:
-			return x;
-		case 1:
-			return y;
-		case 2:
-			return z;
-		default:
-			assert false;
-			return 0;
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
 		}
 	}
 	
@@ -53,31 +67,31 @@ public class Tuple3f implements Serializable {
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
-	public double distance( Point3f pnt ) {
+	public final double distance( Point3f pnt ) {
 		return Math.sqrt( distanceSquared(pnt) );
 	}
 
-	public float getX() {
+	public final float getX() {
 		return x;
 	}
 
-	public void setX(float x) {
+	public final void setX(float x) {
 		this.x = x;
 	}
 
-	public float getY() {
+	public final float getY() {
 		return y;
 	}
 
-	public void setY(float y) {
+	public final void setY(float y) {
 		this.y = y;
 	}
 
-	public float getZ() {
+	public final float getZ() {
 		return z;
 	}
 
-	public void setZ(float z) {
+	public final void setZ(float z) {
 		this.z = z;
 	}
 	

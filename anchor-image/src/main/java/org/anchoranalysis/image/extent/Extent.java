@@ -30,7 +30,7 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -163,16 +163,12 @@ public final class Extent implements Serializable {
 		return len.getZ() + 1;
 	}
 		
-	public final int getIndex(int index) {
-		if (index==0) {
-			return getX();
-		} else if (index==1) {
-			return getY();
-		} else if (index==2) {
-			return getZ();
-		} else {
-			throw new AnchorFriendlyRuntimeException("Index must be >=0 and <3");
-		}
+	public final int getValueByDimension(int dimIndex) {
+		return len.getValueByDimension(dimIndex);
+	}
+	
+	public final int getValueByDimension(AxisType axis) {
+		return len.getValueByDimension(axis);
 	}
 
 	public final void setX(int x) {
@@ -188,21 +184,7 @@ public final class Extent implements Serializable {
 	public final void setZ(int z) {
 		len.setZ(z);
 	}
-	
-	public final int getValueByDimension( int dimIndex ) {
-		switch( dimIndex ) {
-		case 0:
-			return getX();
-		case 1:
-			return getY();
-		case 2:
-			return getZ();
-		default:
-			assert false;
-			return 0;
-		}
-	}
-	
+		
 	public Tuple3i asTuple() {
 		return len;
 	}

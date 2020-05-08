@@ -31,7 +31,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class Point2i implements Serializable {
+public final class Point2i implements Serializable {
 
 	/**
 	 * 

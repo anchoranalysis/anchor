@@ -27,7 +27,7 @@ package org.anchoranalysis.core.geometry;
  */
 
 
-public class Point3i extends Tuple3i {
+public final class Point3i extends Tuple3i {
 	
 	/**
 	 * 

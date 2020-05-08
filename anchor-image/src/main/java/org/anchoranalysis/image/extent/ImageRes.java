@@ -29,6 +29,7 @@ package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -254,5 +255,13 @@ public class ImageRes implements Serializable {
 		} else if (!res.equals(other.res))
 			return false;
 		return true;
+	}
+
+	public final double getValueByDimension(int dimIndex) {
+		return res.getValueByDimension(dimIndex);
+	}
+
+	public final double getValueByDimension(AxisType axisType) {
+		return res.getValueByDimension(axisType);
 	}
 }

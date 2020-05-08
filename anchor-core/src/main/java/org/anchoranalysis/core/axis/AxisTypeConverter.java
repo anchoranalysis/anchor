@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.axis;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+
 /*
  * #%L
  * anchor-core
@@ -27,12 +29,21 @@ package org.anchoranalysis.core.axis;
  */
 
 
-public class AxisTypeUtilities {
+/**
+ * Converts to/from {@link AxisType} to string representations and integer index (0 for X, 1 for Y, 2 for Z)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class AxisTypeConverter {
 
-	private AxisTypeUtilities() {
-		
-	}
+	public final static String INVALID_AXIS_INDEX = "Index must be >=0 and <3";
 	
+	public final static String UNKNOWN_AXIS_TYPE = "Unknown axis type";
+	
+	private AxisTypeConverter() {}
+	
+	/** Maps a string of x, y, z (case ignored) to a corresponding axis type */
 	public static AxisType createFromString( String axis ) {
 		if ("x".equalsIgnoreCase(axis)) {
 			return AxisType.X;
@@ -44,8 +55,21 @@ public class AxisTypeUtilities {
 			return AxisType.Z;
 			
 		} else {
-			assert false;
-			return AxisType.X;
+			throw new AnchorFriendlyRuntimeException(INVALID_AXIS_INDEX);
+		}
+	}
+	
+	/** An index representing each dimension where X->0, Y->1, Z->2 */
+	public static int dimensionIndexFor( AxisType axis ) {
+		switch (axis) {
+		case X:
+			return 0;
+		case Y:
+			return 1;
+		case Z:
+			return 2;
+		default:
+			throw new AnchorFriendlyRuntimeException(UNKNOWN_AXIS_TYPE);
 		}
 	}
 }

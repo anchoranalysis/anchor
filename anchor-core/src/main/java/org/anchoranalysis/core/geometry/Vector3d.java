@@ -27,7 +27,7 @@ package org.anchoranalysis.core.geometry;
  */
 
 
-public class Vector3d extends Tuple3d {
+public final class Vector3d extends Tuple3d {
 
 	/**
 	 * 
@@ -61,9 +61,7 @@ public class Vector3d extends Tuple3d {
 		this.y /= length;
 		this.z /= length;
 	}
-	
-
-	
+		
 	// Cross product
 	public static Vector3d cross( Vector3d u, Vector3d v ) {
 		Vector3d out = new Vector3d();

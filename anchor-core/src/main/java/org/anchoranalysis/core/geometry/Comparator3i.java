@@ -29,7 +29,7 @@ package org.anchoranalysis.core.geometry;
 
 import java.util.Comparator;
 
-public class Comparator3i<T extends Tuple3i> implements Comparator<T>{
+public final class Comparator3i<T extends Tuple3i> implements Comparator<T>{
 
 	@Override
 	public int compare(T arg0, T arg1) {
