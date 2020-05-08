@@ -59,9 +59,6 @@ public class MatchRegEx extends FileMatcher {
 	private String expression;
 	// END BEAN FIELDS
 	
-	public MatchRegEx() {
-	}
-
 	@Override
 	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
 		if (applyToPath) {

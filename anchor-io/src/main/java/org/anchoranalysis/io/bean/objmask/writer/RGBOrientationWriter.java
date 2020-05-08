@@ -58,10 +58,6 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	private boolean drawReverseLine = false;
 	// END BEAN PROPERTIES
 	
-	public RGBOrientationWriter() {
-		
-	}
-
 	public static Point3d calcPoint(ObjMaskWithProperties mask, String propertyName) {
 		
 		if (!mask.hasProperty(propertyName)) {

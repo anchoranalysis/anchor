@@ -34,9 +34,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner<FeatureInitParams> {
 
-	public FeatureDefiner() {
-	}
-
 	@Override
 	public boolean accepts( Class<?> paramType ) {
 		return FeatureInitParams.class.isAssignableFrom(paramType);

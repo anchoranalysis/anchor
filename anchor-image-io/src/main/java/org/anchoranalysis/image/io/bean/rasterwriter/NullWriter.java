@@ -50,16 +50,17 @@ public class NullWriter extends RasterWriter {
 	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries,
 			Path filePath, boolean makeRGB)
 			throws RasterIOException {
+		// NOTHING TO DO
 	}
 
 	@Override
-	public void writeStackShort(Stack stack, Path filePath,
-			boolean makeRGB) throws RasterIOException {
+	public void writeStackShort(Stack stack, Path filePath,	boolean makeRGB) throws RasterIOException {
+		// NOTHING TO DO
 	}
 
 	@Override
-	public void writeStackByte(Stack stack, Path filePath,
-			boolean makeRGB) throws RasterIOException {
+	public void writeStackByte(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
+		// NOTHING TO DO
 	}
 
 }

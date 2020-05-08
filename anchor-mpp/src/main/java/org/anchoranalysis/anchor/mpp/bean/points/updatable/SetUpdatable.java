@@ -74,10 +74,6 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	private BinaryChnl binaryImage;
 	private Chnl binaryImageChnl;
 	
-	public SetUpdatable() {
-		super();
-	}
-	
 	@Override
 	public void init(BinaryChnl binaryImage) throws InitException {
 		this.binaryImage = binaryImage;

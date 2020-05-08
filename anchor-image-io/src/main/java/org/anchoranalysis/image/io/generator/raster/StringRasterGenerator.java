@@ -92,16 +92,6 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 		
 	// A generator associated with this bean
 	private class Generator extends RasterGenerator implements IterableObjectGenerator<String, Stack> {
-		
-		@Override
-		public void start() throws OutputWriteFailedException {
-			
-		}
-
-		@Override
-		public void end() throws OutputWriteFailedException {
-			
-		}
 
 		@Override
 		public String getIterableElement() {

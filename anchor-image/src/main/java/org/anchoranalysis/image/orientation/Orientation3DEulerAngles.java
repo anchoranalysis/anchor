@@ -46,11 +46,9 @@ public class Orientation3DEulerAngles extends Orientation {
 	private double rotZRadians;	// Gamma
 	
 	public Orientation3DEulerAngles() {
-		
+		this(0.0, 0.0, 0.0);
 	}
-	
-	
-	
+		
 	public Orientation3DEulerAngles(double rotXRadians, double rotYRadians,
 			double rotZRadians) {
 		super();
@@ -58,8 +56,6 @@ public class Orientation3DEulerAngles extends Orientation {
 		this.rotYRadians = rotYRadians;
 		this.rotZRadians = rotZRadians;
 	}
-
-
 
 	@Override
 	public Orientation3DEulerAngles duplicate() {

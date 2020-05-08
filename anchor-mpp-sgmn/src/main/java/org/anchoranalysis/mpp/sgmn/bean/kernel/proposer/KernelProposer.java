@@ -61,10 +61,6 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 	private double[] cumProbArr;
 	private ArrayList<WeightedKernel<T>> lstKernelFactories = null;
 	
-	// We need a list of options
-	public KernelProposer() {
-	}
-			
 	public void init() throws InitException {
 		calcCumProb( optionList );
 		

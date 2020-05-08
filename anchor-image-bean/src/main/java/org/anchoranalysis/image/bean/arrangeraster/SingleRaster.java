@@ -43,10 +43,6 @@ public class SingleRaster extends ArrangeRasterBean {
 	 * 
 	 */
 	private static final long serialVersionUID = -1134691897037321537L;
-
-	public SingleRaster() {
-		
-	}
 	
 	@Override
 	public BBoxSetOnPlane createBBoxSetOnPlane(

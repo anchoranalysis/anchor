@@ -39,7 +39,6 @@ public class PixelPartFactoryPixelList extends PixelPartFactory<VoxelIntensityLi
 
 	@Override
 	public void addUnused(VoxelIntensityList part) {
+		// NOTHING TO DO
 	}
-
-
 }

@@ -35,11 +35,13 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 public class NullWriteOperationRecorder implements IWriteOperationRecorder {
 
 	@Override
-	public void write(String outputName,
-			ManifestDescription manifestDescription, Path outFilePath,
-			String index) {
-		
-
+	public void write(
+		String outputName,
+		ManifestDescription manifestDescription,
+		Path outFilePath,
+		String index
+	) {
+		// NOTHING TO DO
 	}
 
 	@Override
