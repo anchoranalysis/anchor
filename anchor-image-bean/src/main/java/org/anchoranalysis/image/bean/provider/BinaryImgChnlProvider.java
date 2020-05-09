@@ -36,8 +36,7 @@ import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class BinaryImgChnlProvider
-	extends BeanImgStackProvider<BinaryImgChnlProvider,BinaryChnl> {
+public abstract class BinaryImgChnlProvider extends BeanImgStackProvider<BinaryImgChnlProvider,BinaryChnl> {
 
 	@Override
 	public abstract BinaryChnl create() throws CreateException;
