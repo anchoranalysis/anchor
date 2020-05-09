@@ -45,6 +45,7 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
 	
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
+		// NOTHING TO DO
 	}
 
 	@Override
