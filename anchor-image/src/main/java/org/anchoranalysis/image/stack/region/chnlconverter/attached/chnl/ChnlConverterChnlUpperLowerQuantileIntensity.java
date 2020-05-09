@@ -29,46 +29,14 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
-import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram.ChnlConverterHistogramUpperLowerQuantileIntensity;
-import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
 // Scales by a quantile of the intensity values of an image
-public class ChnlConverterChnlUpperLowerQuantileIntensity extends ChnlConverterAttached<Chnl, ByteBuffer>{
-
-	private ChnlConverterHistogramUpperLowerQuantileIntensity delegate;
+public class ChnlConverterChnlUpperLowerQuantileIntensity extends ChnlConverterDelegateToHistogram<ByteBuffer>{
 	
 	public ChnlConverterChnlUpperLowerQuantileIntensity( double quantileLower, double quantileUpper ) {
-		delegate = new ChnlConverterHistogramUpperLowerQuantileIntensity(quantileLower,quantileUpper);
+		super(
+			new ChnlConverterHistogramUpperLowerQuantileIntensity(quantileLower,quantileUpper)
+		);
 	}
-	
-	@Override
-	public void attachObject(Chnl obj) throws OperationFailedException {
-
-		try {
-			Histogram hist = HistogramFactoryUtilities.create(obj);
-			delegate.attachObject(hist);
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-
-	@Override
-	public Chnl convert(Chnl chnl, ConversionPolicy changeExisting) {
-		return delegate.convert(chnl, changeExisting);
-	}
-
-	@Override
-	public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
-		return delegate.getVoxelBoxConverter();
-	}
-
-
 }

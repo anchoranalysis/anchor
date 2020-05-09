@@ -34,12 +34,19 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
-// A ChnlConverter that has been permanently attached to a particular object (to give more information for the conversion)
-public abstract class ChnlConverterAttached<AttachmentType,DestinationType extends Buffer> {
+/**
+ * A ChnlConverter that has been permanently attached to a particular object (to give more information for the conversion)
+ * 
+ * @author Owen Feehan
+ *
+ * @param <S> attachment-type
+ * @param <T> destination-type
+ */
+public abstract class ChnlConverterAttached<S,T extends Buffer> {
 
-	public abstract void attachObject( AttachmentType obj ) throws OperationFailedException;
+	public abstract void attachObject( S obj ) throws OperationFailedException;
 
 	public abstract Chnl convert(Chnl chnl, ConversionPolicy changeExisting);
 	
-	public abstract VoxelBoxConverter<DestinationType> getVoxelBoxConverter();
+	public abstract VoxelBoxConverter<T> getVoxelBoxConverter();
 }

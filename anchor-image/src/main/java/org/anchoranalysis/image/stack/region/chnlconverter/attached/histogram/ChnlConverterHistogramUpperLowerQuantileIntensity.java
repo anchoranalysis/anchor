@@ -84,6 +84,4 @@ public class ChnlConverterHistogramUpperLowerQuantileIntensity extends ChnlConve
 	public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
 		return voxelBoxConverter;
 	}
-
-
 }

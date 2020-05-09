@@ -34,12 +34,19 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
-// Simply passes everything onto a ChnlConverter
-public class ChnlConverterAttachedSimple<AttachmentType,DestinationType extends Buffer> extends ChnlConverterAttached<AttachmentType,DestinationType> {
+/**
+ * Simply passes everything onto a ChnlConverter
+ * 
+ * @author Owen Feehan
+ *
+ * @param <S> attachment-type
+ * @param <T> destination-type
+ */
+public class ChnlConverterAttachedSimple<S,T extends Buffer> extends ChnlConverterAttached<S,T> {
 
-	private ChnlConverter<DestinationType> delegate;
+	private ChnlConverter<T> delegate;
 		
-	public ChnlConverterAttachedSimple(ChnlConverter<DestinationType> delegate) {
+	public ChnlConverterAttachedSimple(ChnlConverter<T> delegate) {
 		super();
 		this.delegate = delegate;
 	}
@@ -50,12 +57,12 @@ public class ChnlConverterAttachedSimple<AttachmentType,DestinationType extends 
 	}
 
 	@Override
-	public void attachObject(AttachmentType obj) {
+	public void attachObject(S obj) {
 		// Nothing happens
 	}
 
 	@Override
-	public VoxelBoxConverter<DestinationType> getVoxelBoxConverter() {
+	public VoxelBoxConverter<T> getVoxelBoxConverter() {
 		return delegate.getVoxelBoxConverter();
 	}
 
