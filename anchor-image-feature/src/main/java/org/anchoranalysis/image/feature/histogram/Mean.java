@@ -33,11 +33,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class Mean extends FeatureHistogramStatistic {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
 		return histogram.mean();

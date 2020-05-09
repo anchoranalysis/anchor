@@ -34,11 +34,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
 		try {

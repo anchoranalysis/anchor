@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor
 
 public class Constant<T extends FeatureInput> extends Feature<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private double value;

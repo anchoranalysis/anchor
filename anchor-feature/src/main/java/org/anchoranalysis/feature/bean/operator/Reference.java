@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor
 
 public class Reference<T extends FeatureInput> extends Feature<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2384735833480137231L;
-	
 	// START BEAN
 	@BeanField
 	private String id;

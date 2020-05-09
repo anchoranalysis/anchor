@@ -38,11 +38,6 @@ import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 public abstract class FeatureConvertRes<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String unitType;

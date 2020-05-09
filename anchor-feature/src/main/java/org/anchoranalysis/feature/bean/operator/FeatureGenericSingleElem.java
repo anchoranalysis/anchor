@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public abstract class FeatureGenericSingleElem<T extends FeatureInput> extends FeatureSingleElem<T, T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public FeatureGenericSingleElem() {
 		super();
 	}

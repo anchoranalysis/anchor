@@ -43,11 +43,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class FeatureCastInitParams<S extends FeatureInitParams, T extends FeatureInput> extends Feature<T> {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private Class<?> castInitParamsType;
 	
 	protected FeatureCastInitParams( Class<?> castInitParamsType ) {

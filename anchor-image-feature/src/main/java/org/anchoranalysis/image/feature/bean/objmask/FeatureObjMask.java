@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObjDescriptor;
 
 public abstract class FeatureObjMask extends Feature<FeatureInputSingleObj> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {

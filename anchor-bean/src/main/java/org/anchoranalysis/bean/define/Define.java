@@ -27,7 +27,6 @@ package org.anchoranalysis.bean.define;
  */
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,12 +45,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * @author Owen Feehan
  *
  */
-public class Define extends AnchorBean<Define> implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Define extends AnchorBean<Define> {
 
 	/**
 	 * A map from GroupingRoot to a list of NamedBeans that must subclass from this root 

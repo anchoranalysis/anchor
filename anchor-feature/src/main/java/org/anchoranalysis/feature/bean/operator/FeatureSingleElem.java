@@ -43,11 +43,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
  */
 public abstract class FeatureSingleElem<T extends FeatureInput, S extends FeatureInput> extends Feature<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private Feature<S> item = null;

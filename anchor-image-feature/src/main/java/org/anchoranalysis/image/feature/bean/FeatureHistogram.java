@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescrip
 
 public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {

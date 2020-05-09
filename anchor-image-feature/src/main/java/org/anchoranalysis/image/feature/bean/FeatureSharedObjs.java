@@ -49,11 +49,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 public abstract class FeatureSharedObjs<T extends FeatureInput> extends FeatureCastInitParams<FeatureInitParamsSharedObjs, T> {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	protected FeatureSharedObjs() {
 		super(
 			FeatureInitParamsSharedObjs.class,

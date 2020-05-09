@@ -45,12 +45,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
  */
 public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInputSingleMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	/** Iff true, first object is used, otherwise the second */
 	@BeanField

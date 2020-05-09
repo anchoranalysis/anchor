@@ -41,10 +41,7 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 // 
 public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	// START BEAN PROPERTIES
 	

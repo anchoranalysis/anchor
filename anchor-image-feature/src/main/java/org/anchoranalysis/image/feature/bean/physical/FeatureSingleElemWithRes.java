@@ -35,11 +35,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public FeatureSingleElemWithRes() {
 		
 	}

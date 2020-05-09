@@ -33,11 +33,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureCfg extends Feature<FeatureInputCfg> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc( SessionInput<FeatureInputCfg> input ) throws FeatureCalcException {
 		return calc( input.get() );

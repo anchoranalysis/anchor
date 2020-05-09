@@ -27,7 +27,6 @@ package org.anchoranalysis.feature.bean;
  */
 
 
-import java.io.Serializable;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -53,13 +52,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <T> input-type 
  */
-public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements
-		Serializable, InitializableFeature<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements InitializableFeature<T> {
 
 	// START BEAN PROPERTIES
 	@BeanField

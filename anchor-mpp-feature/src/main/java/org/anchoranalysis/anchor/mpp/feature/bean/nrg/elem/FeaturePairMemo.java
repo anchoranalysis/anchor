@@ -35,11 +35,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeaturePairMemo extends Feature<FeatureInputPairMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {

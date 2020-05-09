@@ -36,11 +36,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public abstract double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException;
 

@@ -42,11 +42,6 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
  */
 public class SubtractSecondFromFirst extends FeatureDeriveFromPair {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> params)
 			throws FeatureCalcException {
