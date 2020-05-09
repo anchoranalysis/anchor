@@ -50,7 +50,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		return vbOut;
 	}
 	
-	public void convertFrom( VoxelBoxWrapper vbIn, VoxelBox<DestinationType> vbOut ) {
+	public final void convertFrom( VoxelBoxWrapper vbIn, VoxelBox<DestinationType> vbOut ) {
 		// Otherwise, depending on the input type we spawn in different directions
 		if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			convertFromByte(vbIn.asByte(), vbOut);
@@ -63,7 +63,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public void convertFromByte(VoxelBox<ByteBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	public final void convertFromByte(VoxelBox<ByteBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
 		
 		for (int z=0; z<vbIn.extnt().getZ(); z++) {
 			VoxelBuffer<ByteBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -71,7 +71,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public void convertFromFloat(VoxelBox<FloatBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	public final void convertFromFloat(VoxelBox<FloatBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
 		
 		for (int z=0; z<vbIn.extnt().getZ(); z++) {
 			VoxelBuffer<FloatBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -79,7 +79,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public void convertFromInt(VoxelBox<IntBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	public final void convertFromInt(VoxelBox<IntBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
 		
 		for (int z=0; z<vbIn.extnt().getZ(); z++) {
 			VoxelBuffer<IntBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -87,7 +87,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public void convertFromShort(VoxelBox<ShortBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	public final void convertFromShort(VoxelBox<ShortBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
 		
 		for (int z=0; z<vbIn.extnt().getZ(); z++) {
 			VoxelBuffer<ShortBuffer> bufferIn = vbIn.getPixelsForPlane(z);

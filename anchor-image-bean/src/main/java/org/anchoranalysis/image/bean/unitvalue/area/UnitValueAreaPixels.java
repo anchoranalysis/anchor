@@ -27,40 +27,31 @@ package org.anchoranalysis.image.bean.unitvalue.area;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageRes;
 
+/**
+ * Area expressed as square pixels
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class UnitValueAreaPixels extends UnitValueArea {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
 
 	public UnitValueAreaPixels() {
-		
+		// Standard bean constructor
 	}
 	
 	public UnitValueAreaPixels(double value) {
-		super();
-		this.value = value;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
+		super(value);
 	}
 
 	@Override
 	public double rslv(ImageRes res) {
-		return value;
+		return getValue();
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%.2f",value);
+		return String.format("%.2f",getValue());
 	}
 }

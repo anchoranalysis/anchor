@@ -34,33 +34,27 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-// Measures either area or volume (depending if the use3D flag is employed)
+/**
+ * Area expressed in physical co-ordinates
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class UnitValueAreaPhysical extends UnitValueArea {
 
-	// START VALUE
-	@BeanField
-	private double value;	// value in metres
-	
+	// START BEAN PROPERTIES
 	@BeanField
 	private String prefix = "";
-	// END VALUE
+	// END BEAN PROPERTIES
 	
 	@Override
 	public double rslv(ImageRes res) throws UnitValueException {
 		
 		UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(prefix);
 		
-		double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
+		double valueAsBase = SpatialConversionUtilities.convertFromUnits(getValue(), unitPrefix);
 		
 		return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, res);
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
 	}
 
 	public String getPrefix() {
@@ -74,9 +68,9 @@ public class UnitValueAreaPhysical extends UnitValueArea {
 	@Override
 	public String toString() {
 		if (prefix!=null && !prefix.isEmpty()) {
-			return String.format("%.2f%s",value,prefix);
+			return String.format("%.2f%s", getValue(),prefix);
 		} else {
-			return String.format("%.2f",value);
+			return String.format("%.2f", getValue());
 		}
 	}
 

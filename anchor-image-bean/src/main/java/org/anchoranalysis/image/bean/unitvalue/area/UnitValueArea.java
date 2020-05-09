@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.area;
 
+import org.anchoranalysis.bean.annotation.BeanField;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -29,4 +31,24 @@ package org.anchoranalysis.image.bean.unitvalue.area;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 
 public abstract class UnitValueArea extends UnitValueAreaOrVolume {
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private double value;
+	// END BEAN PROPERTIES
+
+	public UnitValueArea() {}
+	
+	public UnitValueArea(double value) {
+		super();
+		this.value = value;
+	}
+	
+	public final double getValue() {
+		return value;
+	}
+
+	public final void setValue(double value) {
+		this.value = value;
+	}
 }
