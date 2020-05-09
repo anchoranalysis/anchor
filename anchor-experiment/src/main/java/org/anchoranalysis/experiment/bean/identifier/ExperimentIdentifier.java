@@ -32,11 +32,6 @@ import org.anchoranalysis.bean.AnchorBean;
 public abstract class ExperimentIdentifier extends AnchorBean<ExperimentIdentifier> {
 	
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7846340573699806634L;
-	
-	/**
 	 * Creates an identifier for the experiment
 	 * 
 	 * @param taskName if non-null, a name describing the current task.

@@ -33,11 +33,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 public class UnitValueDistanceVoxels extends UnitValueDistance {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double value;

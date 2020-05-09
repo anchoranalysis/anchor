@@ -42,11 +42,6 @@ import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 
 public class ThresholderGlobal extends Thresholder {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private CalculateLevel calculateLevel;

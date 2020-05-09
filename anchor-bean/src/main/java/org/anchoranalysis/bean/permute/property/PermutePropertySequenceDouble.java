@@ -39,11 +39,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class PermutePropertySequenceDouble extends PermutePropertySequence<Double> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * Divide by

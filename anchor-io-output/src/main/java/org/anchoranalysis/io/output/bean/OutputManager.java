@@ -45,11 +45,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
  */
 public abstract class OutputManager extends AnchorBean<OutputManager> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6960949966148383845L;
-	
 	public abstract boolean isOutputAllowed( String outputName );
 	
 	/** A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key */ 

@@ -51,11 +51,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public class SequentialProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN
 	@BeanField
 	private boolean supressExceptions = true;

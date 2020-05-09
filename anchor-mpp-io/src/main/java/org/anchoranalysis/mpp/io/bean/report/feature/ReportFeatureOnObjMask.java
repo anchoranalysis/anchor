@@ -35,11 +35,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureInputSingleObj> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double calcFeatureOn(ObjMaskCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> session)
 			throws FeatureCalcException {

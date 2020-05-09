@@ -56,11 +56,6 @@ public class ConvertNamedChnlsInputTask<T extends NamedChnlsInput,S,U extends Na
 	extends Task<T,S>
 	implements IReplaceTask<U,S> {		
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Task<U,S> task;

@@ -45,11 +45,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public class DebugDependentProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int maxNumProcessors;

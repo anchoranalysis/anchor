@@ -32,11 +32,6 @@ import org.anchoranalysis.core.relation.RelationToValue;
 
 public class LessThanBean extends RelationBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8304170530548309146L;
-
 	@Override
 	public String toString() {
 		return LessThanBean.class.getSimpleName();

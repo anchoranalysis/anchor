@@ -40,11 +40,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
  */
 public class FilePathGeneratorReplace extends FilePathGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
 	/** Regular expression to match against string */
 	@BeanField

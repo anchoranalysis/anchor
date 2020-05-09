@@ -37,11 +37,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 public abstract class FileProviderWithDirectory extends FileProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** Like getDirectory as Path but converts any relative path to absolute one */
 	public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {
 		Path path = getDirectoryAsPath(inputContext);

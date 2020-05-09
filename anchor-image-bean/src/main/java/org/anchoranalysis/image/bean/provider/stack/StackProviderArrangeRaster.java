@@ -45,11 +45,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 // Creates new stacks that tile each provider
 public class StackProviderArrangeRaster extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4178845846029799957L;
-	
 	// START BEAN
 	@BeanField
 	private ArrangeRasterBean arrangeRaster;

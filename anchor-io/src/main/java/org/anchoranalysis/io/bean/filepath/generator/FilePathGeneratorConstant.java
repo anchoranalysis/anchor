@@ -35,11 +35,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 /** Always generates a constant string no matter what the input */
 public class FilePathGeneratorConstant extends FilePathGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public FilePathGeneratorConstant() {
 		
 	}

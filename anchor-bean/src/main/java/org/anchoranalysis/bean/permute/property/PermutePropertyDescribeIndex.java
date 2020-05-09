@@ -47,11 +47,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public class PermutePropertyDescribeIndex extends PermuteProperty<Integer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
 	@BeanField
 	private PermuteProperty<Integer> permuteProperty;

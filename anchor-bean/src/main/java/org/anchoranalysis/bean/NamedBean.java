@@ -38,11 +38,6 @@ import org.anchoranalysis.core.name.value.INameValue;
  */
 public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean<T>> implements INameValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2969907836084541311L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String name;

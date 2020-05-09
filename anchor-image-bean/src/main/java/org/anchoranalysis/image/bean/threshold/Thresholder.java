@@ -41,11 +41,6 @@ import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 // Needs SharedObjects due to Thresholder
 public abstract class Thresholder extends NullParamsBean<VoxelBoxThresholder> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5994509900907883499L;
-	
 	// Returns a BinaryVoxelBox<ByteBuffer> if successful, or NULL if not
 	// The output buffer can be constructed from the input buffer where possible
 	// Histogram is an optional param

@@ -43,10 +43,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
 
 public class RadiiForOrientationProposer extends RadiiProposerWithBoundProposer {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6229777913998235600L;
 	private double boundsRatioThreshold = 1.3;
 	
 	private enum Axes {

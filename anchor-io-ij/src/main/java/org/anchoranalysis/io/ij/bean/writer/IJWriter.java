@@ -49,11 +49,6 @@ import ij.io.FileSaver;
 public abstract class IJWriter extends RasterWriter {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static Log log = LogFactory.getLog(IJWriter.class);
 
 	@Override

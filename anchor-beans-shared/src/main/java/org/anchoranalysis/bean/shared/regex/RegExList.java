@@ -33,11 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class RegExList extends RegEx {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<RegEx> list = new ArrayList<>();

@@ -39,11 +39,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class EllipseBoundsProposer extends RadiiProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8713626984466863980L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipse;

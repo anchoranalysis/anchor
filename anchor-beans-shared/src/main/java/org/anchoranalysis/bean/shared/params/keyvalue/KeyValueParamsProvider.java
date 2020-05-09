@@ -33,11 +33,6 @@ import org.anchoranalysis.core.params.KeyValueParams;
 
 public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider> implements Provider<KeyValueParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public abstract KeyValueParams create() throws CreateException;
 }

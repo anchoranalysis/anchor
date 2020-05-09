@@ -30,10 +30,5 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class OutputAllowed extends AnchorBean<OutputAllowed> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 52347011093112941L;
-
 	public abstract boolean isOutputAllowed( String outputName );
 }

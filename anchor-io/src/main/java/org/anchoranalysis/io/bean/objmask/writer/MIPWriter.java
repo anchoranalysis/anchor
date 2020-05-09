@@ -44,11 +44,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 // Note doesn't cache the underlying maskWriter
 public class MIPWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 689470597161517904L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskWriter maskWriter;

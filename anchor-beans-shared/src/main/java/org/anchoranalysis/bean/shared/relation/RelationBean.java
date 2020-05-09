@@ -32,11 +32,6 @@ import org.anchoranalysis.core.relation.RelationToValue;
 
 public abstract class RelationBean extends AnchorBean<RelationBean> implements GenerateUniqueParameterization {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4274194584824964885L;
-
 	public abstract RelationToValue create();
 	
 	public abstract String toString();

@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 public abstract class RadiiProposerWithBoundProposer extends RadiiProposer {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1365883871533622988L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BoundProposer boundProposer = null;

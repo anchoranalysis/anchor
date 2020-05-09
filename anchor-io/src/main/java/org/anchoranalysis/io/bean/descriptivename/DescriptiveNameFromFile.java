@@ -41,11 +41,6 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveNameFromFile> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private final static String DEFAULT_ELSE_NAME = "unknownName";
 	
 	/** Like descriptiveNamesForCheckUniqueness but with a default for emptyName */

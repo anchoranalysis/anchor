@@ -39,11 +39,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class SingleRaster extends ArrangeRasterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1134691897037321537L;
-	
 	@Override
 	public BBoxSetOnPlane createBBoxSetOnPlane(
 			Iterator<RGBStack> rasterIterator)

@@ -53,11 +53,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	/**
 	 * Finds a collection of files that match particular conditions
 	 * 
 	 * @param dir root directory to search

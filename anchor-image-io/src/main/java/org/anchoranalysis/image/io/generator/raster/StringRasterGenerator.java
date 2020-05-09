@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1998949245402929691L;
-
 	public StringRasterGenerator() {
 		
 	}

@@ -32,10 +32,7 @@ public class TriggerTerminationCondition extends TerminationCondition {
 
 	// We don't bother with synchronize
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7206690369243564190L;
+	
 	
 	// START BEAN PROPERTIES
 	

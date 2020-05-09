@@ -16,11 +16,6 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  */
 public class BinaryNotHighVoxels extends BinaryVoxelsBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public double threshold() {
 		return BinaryValues.getDefault().getOnInt();

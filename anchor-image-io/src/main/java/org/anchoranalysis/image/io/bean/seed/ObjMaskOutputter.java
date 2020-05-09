@@ -35,10 +35,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class ObjMaskOutputter extends SeedCollectionOutputter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

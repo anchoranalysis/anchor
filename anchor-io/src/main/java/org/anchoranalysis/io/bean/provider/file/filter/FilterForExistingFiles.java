@@ -39,11 +39,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FilterForExistingFiles extends FilterFileProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>();	// All files need to be present

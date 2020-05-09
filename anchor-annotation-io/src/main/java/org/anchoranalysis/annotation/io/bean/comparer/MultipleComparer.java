@@ -63,11 +63,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // Allows comparison of an annotation with multiple other entities
 public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluator<FeatureInputPairObjs> featureEvaluator;

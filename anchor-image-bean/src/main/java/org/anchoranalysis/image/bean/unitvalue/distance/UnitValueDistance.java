@@ -34,11 +34,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
 	public double rslv( ImageRes res, Point3d pnt1, Point3d pnt2 ) {

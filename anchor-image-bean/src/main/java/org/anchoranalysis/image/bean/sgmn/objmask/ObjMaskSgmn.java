@@ -35,11 +35,6 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public abstract class ObjMaskSgmn extends SgmnBean<ObjMaskSgmn> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6786039533253653700L;
-	
 	// Performs the segmentation
 	// Seeds can be null, for segmentations that do not require seeds
 	public abstract ObjMaskCollection sgmn( Chnl chnl, SeedCollection seeds ) throws SgmnFailedException;

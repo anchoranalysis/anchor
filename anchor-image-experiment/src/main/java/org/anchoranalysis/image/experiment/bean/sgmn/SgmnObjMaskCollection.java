@@ -37,11 +37,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCollection> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6786039533253653700L;
-	
 	// Performs the segmentation
 	// Seeds can be null, for segmentations that do not require seeds
 	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;

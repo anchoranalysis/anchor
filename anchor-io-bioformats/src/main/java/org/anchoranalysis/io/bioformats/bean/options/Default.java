@@ -34,10 +34,7 @@ import loci.formats.IFormatReader;
 public class Default extends ReadOptions {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	// START BEAN FIELDS
 	// END BEAN FIELDS

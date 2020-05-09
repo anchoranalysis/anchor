@@ -35,11 +35,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 // A bound resolved into pixel units
 public class RslvdBound extends AnchorBean<RslvdBound> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -18383561919022445L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double min = 0.0;

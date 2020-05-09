@@ -39,11 +39,6 @@ import java.util.Iterator;
  */
 public class PermutePropertySequenceInteger extends PermutePropertySequence<Integer> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Iterator<Integer> propertyValues() {
 		return propertyValuesDefinitelyInteger();

@@ -37,11 +37,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 // Measures either area or volume (depending if the use3D flag is employed)
 public class UnitValueAreaPhysical extends UnitValueArea {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START VALUE
 	@BeanField
 	private double value;	// value in metres

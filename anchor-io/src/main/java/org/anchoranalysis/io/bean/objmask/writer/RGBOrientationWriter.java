@@ -45,11 +45,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBOrientationWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1732346635451171139L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double xDiv = 1;

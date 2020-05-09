@@ -39,11 +39,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public abstract class StateTransformerBean<S,T> extends AnchorBean<StateTransformerBean<S,T>> implements StateTransformer<S, T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public abstract T transform( S in, TransformationContext context ) throws OperationFailedException;
 }

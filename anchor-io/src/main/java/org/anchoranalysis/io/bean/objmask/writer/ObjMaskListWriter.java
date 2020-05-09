@@ -46,11 +46,6 @@ public class ObjMaskListWriter extends ObjMaskWriter {
 
 	// Currently no way to add objects in bean mode
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4458953467764493258L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<ObjMaskWriter> list;

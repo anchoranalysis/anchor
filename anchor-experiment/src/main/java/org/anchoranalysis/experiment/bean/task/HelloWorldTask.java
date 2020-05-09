@@ -50,11 +50,6 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutSharedState<S>  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(InputFromManager.class);

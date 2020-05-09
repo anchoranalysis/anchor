@@ -37,10 +37,5 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 @GroupingRoot
 public abstract class CfgProposer extends ProposerBean<CfgProposer> implements ICompatibleWith {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5343121289470299500L;
-
 	public abstract Cfg propose( CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException;
 }

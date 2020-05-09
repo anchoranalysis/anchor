@@ -50,11 +50,6 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
  */
 public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEvaluator<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private StackProvider stackProviderNRG;

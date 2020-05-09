@@ -32,11 +32,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public class NRGSchemeCreatorDefine extends NRGSchemeCreator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4595339048378914025L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private NRGScheme item;

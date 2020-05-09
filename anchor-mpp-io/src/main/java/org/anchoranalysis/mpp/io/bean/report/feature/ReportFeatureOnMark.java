@@ -45,11 +45,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkProvider markProvider;

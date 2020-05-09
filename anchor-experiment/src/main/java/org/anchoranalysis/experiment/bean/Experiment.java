@@ -34,13 +34,6 @@ import org.apache.commons.configuration.XMLConfiguration;
 
 public abstract class Experiment extends AnchorBean<Experiment> implements IAssociateXmlUponLoad {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5773679140678984168L;
-
-	
-	
 	// Allows to reference the xml configuration from where the experiment was defined
 	private XMLConfiguration xmlConfiguration = null;
 	

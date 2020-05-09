@@ -36,11 +36,6 @@ import org.anchoranalysis.image.stack.Stack;
 // This is hack. When inserted into the usual framework, lots of standard bean behaviour wont work.
 public class StackProviderHolder extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Stack stack;

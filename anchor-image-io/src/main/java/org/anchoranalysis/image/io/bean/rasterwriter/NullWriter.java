@@ -36,11 +36,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class NullWriter extends RasterWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public String dfltExt() {
 		return "tif";

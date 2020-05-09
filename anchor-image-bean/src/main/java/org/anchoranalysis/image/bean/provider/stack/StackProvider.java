@@ -34,11 +34,6 @@ import org.anchoranalysis.image.stack.Stack;
 @GroupingRoot
 public abstract class StackProvider extends BeanImgStackProvider<StackProvider,Stack> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3791187543366929792L;
-
 	@Override
 	public abstract Stack create() throws CreateException;
 	

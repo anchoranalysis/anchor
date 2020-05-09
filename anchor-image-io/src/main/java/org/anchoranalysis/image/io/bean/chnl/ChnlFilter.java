@@ -48,11 +48,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 // Uses a ChnlProvider initialised with a stack called "input_chnl"
 public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String chnlName;

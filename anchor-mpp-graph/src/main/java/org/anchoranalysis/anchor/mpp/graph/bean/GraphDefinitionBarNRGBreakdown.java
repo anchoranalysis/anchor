@@ -40,10 +40,6 @@ import org.anchoranalysis.core.error.InitException;
 
 public class GraphDefinitionBarNRGBreakdown extends GraphDefinition<NRGGraphItem> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8653709262024962761L;
 	private BarChart<NRGGraphItem> delegate;
 	
 	public GraphDefinitionBarNRGBreakdown() throws InitException {

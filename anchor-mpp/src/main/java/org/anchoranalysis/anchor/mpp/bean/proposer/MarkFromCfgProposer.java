@@ -35,11 +35,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 public abstract class MarkFromCfgProposer extends ProposerBean<MarkFromCfgProposer> implements ICompatibleWith  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3752172396013943340L;
-	
 	public abstract Mark markFromCfg( Cfg cfg, ProposerContext context ) throws ProposalAbnormalFailureException;
 
 }

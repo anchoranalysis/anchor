@@ -34,11 +34,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class StackProviderReference extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1575473809798849759L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

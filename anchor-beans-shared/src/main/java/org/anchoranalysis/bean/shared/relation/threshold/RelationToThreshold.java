@@ -12,11 +12,6 @@ import org.anchoranalysis.core.relation.RelationToValue;
  */
 public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold> implements GenerateUniqueParameterization {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	/** The threshold-value */
 	public abstract double threshold();
 	

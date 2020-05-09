@@ -38,11 +38,6 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 // If the list is too small for size, then we extend with the final item
 public class ColorListGenerator extends ColorSetGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<RGBColorBean> list;

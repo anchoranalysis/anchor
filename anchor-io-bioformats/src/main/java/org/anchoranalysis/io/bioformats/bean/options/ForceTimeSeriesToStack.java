@@ -31,11 +31,6 @@ import loci.formats.IFormatReader;
 /** Treats a time-series as if it was a z-stack */
 public class ForceTimeSeriesToStack extends ReadOptionsDelegate {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public int sizeT(IFormatReader reader) {
 		// Block normal time-series

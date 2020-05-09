@@ -43,11 +43,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBSolidWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5929656081616731935L;
-
 	@Override
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {

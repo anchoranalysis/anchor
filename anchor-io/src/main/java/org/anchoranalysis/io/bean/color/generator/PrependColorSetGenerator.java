@@ -35,11 +35,6 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 public class PrependColorSetGenerator extends ColorSetGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4335747238546845287L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ColorSetGenerator source = null;

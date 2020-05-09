@@ -36,11 +36,6 @@ import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 
 public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ReportFeature<MPPInitParams> item;

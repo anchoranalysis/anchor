@@ -58,11 +58,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class SetUpdatable extends UpdatablePointsContainer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5569567716288411080L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;

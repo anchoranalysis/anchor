@@ -52,11 +52,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

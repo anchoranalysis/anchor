@@ -44,11 +44,6 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
  */
 public abstract class DescriptiveNameFromFileIndependent extends DescriptiveNameFromFile {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private Logger log = Logger.getLogger(DescriptiveNameFromFile.class.getName());
 
 	@Override

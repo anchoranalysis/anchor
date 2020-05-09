@@ -42,11 +42,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String backgroundStackName = ImgStackIdentifiers.INPUT_IMAGE;

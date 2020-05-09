@@ -31,11 +31,6 @@ import org.anchoranalysis.bean.AnchorBean;
 public abstract class RegEx extends AnchorBean<RegEx> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
 	 * Returns an array of string components it matches successfully, or NULL if it fails
 	 * 
 	 * @param str string to match against the regular-expression

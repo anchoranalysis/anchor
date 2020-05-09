@@ -52,12 +52,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public abstract class TaskWithoutSharedState<T extends InputFromManager> extends Task<T,Object> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
 	@Override
 	public final Object beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)

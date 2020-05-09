@@ -43,10 +43,5 @@ import org.anchoranalysis.image.histogram.Histogram;
  */
 public abstract class CalculateLevel extends NullParamsBean<CalculateLevel> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-		
 	public abstract int calculateLevel( Histogram h ) throws OperationFailedException;
 }

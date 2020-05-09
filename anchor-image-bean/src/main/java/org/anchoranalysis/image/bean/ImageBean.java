@@ -39,12 +39,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public abstract class ImageBean<T> extends InitializableBeanSimple<T,ImageInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	private transient ImageInitParams so;
 	
 	protected ImageBean() {

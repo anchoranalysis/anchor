@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 
 public class MockBeanNested extends AnchorBean<MockBeanNested> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@BeanField
 	private String fieldSimpleNecessary;
 	

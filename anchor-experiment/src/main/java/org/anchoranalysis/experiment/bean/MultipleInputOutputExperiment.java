@@ -54,11 +54,6 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 // Not finished
 public class MultipleInputOutputExperiment<T extends InputFromManager, S> extends Experiment {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProvider inputManagerBeanPathProvider;

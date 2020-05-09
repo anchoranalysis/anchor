@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8930110016806371922L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgGen cfgGen;

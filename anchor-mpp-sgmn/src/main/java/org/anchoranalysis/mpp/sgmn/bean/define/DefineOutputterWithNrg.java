@@ -14,11 +14,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public abstract class DefineOutputterWithNrg extends DefineOutputter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StackProvider nrgStackProvider = new StackProviderReference(ImgStackIdentifiers.NRG_STACK);

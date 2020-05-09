@@ -43,11 +43,6 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public abstract class InputManager<T extends InputFromManager> extends AnchorBean<InputManager<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8305744272662659794L;
-
 	public abstract List<T> inputObjects(InputManagerParams params) throws AnchorIOException;
 
 }

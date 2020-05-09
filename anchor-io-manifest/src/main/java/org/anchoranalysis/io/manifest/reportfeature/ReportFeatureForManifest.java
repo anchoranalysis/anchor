@@ -31,9 +31,4 @@ import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 
 public abstract class ReportFeatureForManifest extends ReportFeature<ManifestRecorderFile> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 }

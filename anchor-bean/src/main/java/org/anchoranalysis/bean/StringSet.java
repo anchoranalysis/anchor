@@ -53,11 +53,6 @@ import java.util.TreeSet;
  */
 public class StringSet extends AnchorBean<StringSet> implements StringBeanCollection {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4772214761539368662L;
-	
 	private Set<String> set = new TreeSet<>();
 
 	@Override

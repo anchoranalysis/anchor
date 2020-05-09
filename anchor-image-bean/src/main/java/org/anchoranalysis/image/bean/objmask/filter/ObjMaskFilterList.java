@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class ObjMaskFilterList extends NullParamsBean<ObjMaskFilterList> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1564079429359322186L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<ObjMaskFilter> list = new ArrayList<>();

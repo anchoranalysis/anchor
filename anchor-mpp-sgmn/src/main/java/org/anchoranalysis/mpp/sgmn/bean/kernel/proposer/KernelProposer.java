@@ -45,11 +45,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 
 public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3588049652758462324L;
-	
 	// START BEAN
 	@BeanField
 	private List<KernelProposerOption<T>> optionList = new ArrayList<>();

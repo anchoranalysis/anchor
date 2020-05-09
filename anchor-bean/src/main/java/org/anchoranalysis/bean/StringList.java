@@ -53,11 +53,6 @@ import java.util.List;
  */
 public class StringList extends AnchorBean<StringList> implements StringBeanCollection {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4772214761539368662L;
-	
 	private List<String> list = new ArrayList<>();
 
 	@Override

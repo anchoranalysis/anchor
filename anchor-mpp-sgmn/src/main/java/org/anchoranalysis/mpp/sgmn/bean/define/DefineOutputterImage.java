@@ -8,11 +8,6 @@ import org.anchoranalysis.bean.define.Define;
  * @param <T> input-object type
  * */
 public class DefineOutputterImage extends DefineOutputter {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	
 

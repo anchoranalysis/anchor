@@ -31,9 +31,4 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 
 public abstract class MultiInputManagerBase extends InputManager<MultiInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 }

@@ -55,11 +55,6 @@ import org.apache.commons.lang.time.StopWatch;
 
 public abstract class OutputExperiment extends Experiment {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3175946512104697326L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private OutputManager output = null;

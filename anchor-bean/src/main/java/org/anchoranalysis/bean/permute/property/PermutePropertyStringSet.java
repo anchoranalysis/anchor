@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class PermutePropertyStringSet extends PermutePropertyWithPath<String> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet values;

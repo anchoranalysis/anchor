@@ -36,11 +36,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public abstract class ObjMaskMatcher extends NullParamsBean<ObjMaskMatcher> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// order of List<ObjWithMatches> must be the same as order of the sourceObjs
 	public abstract List<ObjWithMatches> findMatch( ObjMaskCollection sourceObjs ) throws OperationFailedException;
 

@@ -37,11 +37,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
  */
 public abstract class StateReporter<T,S> extends AnchorBean<StateReporter<T,S>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract StateTransformer<T, S> primaryReport();
 
 	/** Is there a secondary report available? */

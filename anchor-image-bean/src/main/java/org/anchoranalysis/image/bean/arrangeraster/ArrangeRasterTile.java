@@ -45,11 +45,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ArrangeRasterTile extends ArrangeRasterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6916932758118166834L;
-
 	// START BEAN PROPERTIES
 	@BeanField @Positive
 	private int numRows = -1;

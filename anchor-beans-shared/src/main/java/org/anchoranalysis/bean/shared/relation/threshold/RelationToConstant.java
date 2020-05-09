@@ -7,11 +7,6 @@ import org.anchoranalysis.core.relation.RelationToValue;
 
 public class RelationToConstant extends RelationToThreshold {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @NonNegative
 	private double threshold = -1;

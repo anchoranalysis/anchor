@@ -40,11 +40,6 @@ import org.anchoranalysis.core.geometry.Point3f;
 @GroupingRoot
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer> implements ICompatibleWith {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8280455757195616437L;
-
 	// Returns a merged mark or NULL
 	public abstract Mark propose( PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context ) throws ProposalAbnormalFailureException;
 	

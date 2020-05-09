@@ -41,11 +41,6 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 
 public abstract class ReportFeatureForMPP<T extends FeatureInput> extends ReportFeatureForSharedObjects {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES	
 	@BeanField
 	private FeatureEvaluator<T> featureEvaluator;

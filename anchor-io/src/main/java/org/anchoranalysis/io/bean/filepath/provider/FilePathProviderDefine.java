@@ -41,11 +41,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 public class FilePathProviderDefine extends FilePathProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProvider fileProvider;

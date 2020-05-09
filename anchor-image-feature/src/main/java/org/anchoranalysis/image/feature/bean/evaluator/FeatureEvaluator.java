@@ -40,11 +40,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
 public abstract class FeatureEvaluator<T extends FeatureInput> extends FeatureRelatedBean<FeatureEvaluator<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureProvider<T> featureProvider;

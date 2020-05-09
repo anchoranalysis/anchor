@@ -40,11 +40,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implements AddCriteria<Pair<Mark>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4297170419831364319L;
-	
 	@Override
 	public Pair<Mark> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws CreateException {
 

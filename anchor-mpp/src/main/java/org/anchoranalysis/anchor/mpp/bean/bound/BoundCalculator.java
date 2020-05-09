@@ -36,11 +36,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class BoundCalculator extends MPPBean<BoundCalculator> implements IParamsEquals {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6942268710920746777L;
-
 	// angle is in radians
 	public abstract BidirectionalBound calcBound( Point3d point, RotationMatrix rotMatrix, ErrorNode errorNode );
 }

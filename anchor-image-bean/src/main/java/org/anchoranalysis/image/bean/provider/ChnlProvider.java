@@ -35,11 +35,6 @@ import org.anchoranalysis.image.stack.Stack;
 public abstract class ChnlProvider
 	extends BeanImgStackProvider<ChnlProvider,Chnl> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6523913580861421733L;
-
 	public abstract Chnl create() throws CreateException;
 	
 	public Stack createStack() throws CreateException {

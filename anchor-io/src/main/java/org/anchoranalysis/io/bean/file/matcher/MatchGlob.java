@@ -35,11 +35,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 public class MatchGlob extends FileMatcher {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN FIELDS
 	/** The string describing a glob e.g. "*.jpg". If empty, then the inputFilterGlob from inputContext is used */
 	@BeanField @AllowEmpty

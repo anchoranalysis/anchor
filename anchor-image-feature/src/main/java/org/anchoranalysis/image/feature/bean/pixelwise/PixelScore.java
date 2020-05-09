@@ -42,11 +42,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 public abstract class PixelScore extends AnchorBean<PixelScore> {
 	
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	/**
 	 * Initializes the pixels-score.
 	 * 
 	 * <p>Must be called before calc()</p>

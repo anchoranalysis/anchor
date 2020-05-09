@@ -20,11 +20,6 @@ import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 
 public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private Define define;

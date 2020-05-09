@@ -4,11 +4,6 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 
 public abstract class BinaryVoxelsBase extends RelationToThreshold {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public int hashCode() {
 		return 51;

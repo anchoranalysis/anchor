@@ -29,9 +29,4 @@ package org.anchoranalysis.image.bean.unitvalue.area;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 
 public abstract class UnitValueArea extends UnitValueAreaOrVolume {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 }

@@ -39,11 +39,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 // This IParamsEquals interface is redundant, can be removed
 public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements ICompatibleWith {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5448717124153679176L;
-
 	// When we have no bounds, we should create bounds from the boundCalculator
 	public abstract Point3d propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re, ImageDim bndScene, Orientation orientation, ErrorNode proposerFailureDescription);
 }

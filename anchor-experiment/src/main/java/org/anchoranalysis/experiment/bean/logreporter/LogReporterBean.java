@@ -35,12 +35,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 public abstract class LogReporterBean extends AnchorBean<LogReporterBean> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
-	/**
 	 * Creates a log-reporter
 	 * 
 	 * @param outputName what name to use iff the log is outputted to the file-system, otherwise ignroed

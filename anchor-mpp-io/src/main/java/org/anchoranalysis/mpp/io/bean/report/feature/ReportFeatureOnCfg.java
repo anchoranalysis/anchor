@@ -45,11 +45,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgProvider cfgProvider;

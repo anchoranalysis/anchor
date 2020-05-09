@@ -46,11 +46,6 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
 	// START BEAN PROPERTIES
 	
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
 	 * Either a direct property of a bean e.g. "someproperty"
 	 * Or a nested-property with the children separated by full-stops:  e.g. "somechild1.somechild2.someproperty"
 	 * 

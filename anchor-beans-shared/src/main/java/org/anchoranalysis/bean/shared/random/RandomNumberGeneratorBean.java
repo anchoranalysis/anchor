@@ -31,10 +31,5 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 public abstract class RandomNumberGeneratorBean extends AnchorBean<RandomNumberGeneratorBean> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract RandomNumberGenerator create();
 }

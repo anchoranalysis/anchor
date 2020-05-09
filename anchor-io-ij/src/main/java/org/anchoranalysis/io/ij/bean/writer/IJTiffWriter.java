@@ -33,11 +33,6 @@ import ij.io.FileSaver;
 
 public class IJTiffWriter extends IJWriterSupportsStack {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4991456075149651250L;
-
 	@Override
 	protected boolean writeRaster( FileSaver fs, String outPath, boolean asStack ) {
 		if (asStack) {

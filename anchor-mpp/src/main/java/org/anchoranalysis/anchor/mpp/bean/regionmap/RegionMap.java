@@ -38,11 +38,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 // Maps integer IDs to sub-regions in the map
 public class RegionMap extends AnchorBean<RegionMap> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<RegionMembership> list = new ArrayList<>();

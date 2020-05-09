@@ -38,11 +38,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 // Measures either area or volume (depending if the use3D flag is employed)
 public class UnitValueDistancePhysical extends UnitValueDistance {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double value;

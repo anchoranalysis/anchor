@@ -39,11 +39,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 // Generates an out string where $digit$ is replaced with the #digit group from a regex
 public class FilePathGeneratorRegEx extends FilePathGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String regEx = "";

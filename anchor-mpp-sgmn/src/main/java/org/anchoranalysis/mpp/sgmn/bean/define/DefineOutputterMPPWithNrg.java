@@ -21,11 +21,6 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 
 	/**
 	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * 
 	 * @author Owen Feehan
 	 *
 	 * @param <T> init-params-type

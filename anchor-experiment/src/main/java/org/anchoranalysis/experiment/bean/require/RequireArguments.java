@@ -30,10 +30,5 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class RequireArguments extends AnchorBean<RequireArguments> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract boolean hasAllRequiredArguments( boolean debugModeEnabled );
 }

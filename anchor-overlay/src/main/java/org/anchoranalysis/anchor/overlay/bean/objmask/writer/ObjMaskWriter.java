@@ -51,11 +51,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4730974097336176794L;
-
-	/**
 	 * Writes a single-mask to a stack
 	 * 
 	 * @param mask 			the input-mask to write

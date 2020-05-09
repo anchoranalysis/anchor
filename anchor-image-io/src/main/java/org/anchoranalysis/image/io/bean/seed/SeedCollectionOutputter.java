@@ -34,10 +34,5 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 // Selects a mechanism by which seeds are outputted to the file system
 public abstract class SeedCollectionOutputter extends AnchorBean<SeedCollectionOutputter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract void output( SeedCollection seeds, ImageRes res, BoundOutputManagerRouteErrors outputManager );
 }

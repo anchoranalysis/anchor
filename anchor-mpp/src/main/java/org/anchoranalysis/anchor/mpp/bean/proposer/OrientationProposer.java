@@ -39,10 +39,5 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class OrientationProposer extends MPPBean<OrientationProposer> implements ICompatibleWith {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2732804716704675051L;
-
 	public abstract Optional<Orientation> propose( Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription );
 }

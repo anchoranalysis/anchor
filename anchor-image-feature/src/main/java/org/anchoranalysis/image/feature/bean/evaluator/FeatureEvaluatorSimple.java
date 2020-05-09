@@ -30,10 +30,5 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class FeatureEvaluatorSimple<T extends FeatureInput> extends FeatureEvaluator<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 
 }

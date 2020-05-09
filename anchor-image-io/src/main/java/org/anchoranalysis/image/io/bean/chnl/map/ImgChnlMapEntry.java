@@ -33,11 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class ImgChnlMapEntry extends AnchorBean<ImgChnlMapEntry> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int index;

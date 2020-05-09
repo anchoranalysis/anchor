@@ -35,11 +35,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 
 public abstract class UpdatablePointsContainer extends AnchorBean<UpdatablePointsContainer> implements UpdatableMarkSet, PointSampler {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6700821148523780244L;
-
 	public abstract void init(BinaryChnl binaryImage) throws InitException;
 	
 	public abstract int size();

@@ -51,11 +51,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorBean<JobProcessor<T,S>> implements IReplaceTask<T, S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Task<T,S> task;

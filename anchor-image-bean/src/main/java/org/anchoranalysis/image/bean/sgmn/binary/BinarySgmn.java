@@ -39,11 +39,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 @GroupingRoot
 public abstract class BinarySgmn extends SgmnBean<BinarySgmn> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	// Returns a BinaryVoxelBox associated with the input buffer or null if nothing has changed
 	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params ) throws SgmnFailedException;

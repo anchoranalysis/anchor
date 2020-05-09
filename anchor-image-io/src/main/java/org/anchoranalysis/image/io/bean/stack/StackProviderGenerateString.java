@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackProviderGenerateString extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEANS
 	@BeanField
 	private StringRasterGenerator stringRasterGenerator;

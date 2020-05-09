@@ -48,11 +48,6 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1630468482485141236L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureListProvider<FeatureInputSingleMemo> elemIndCreator;

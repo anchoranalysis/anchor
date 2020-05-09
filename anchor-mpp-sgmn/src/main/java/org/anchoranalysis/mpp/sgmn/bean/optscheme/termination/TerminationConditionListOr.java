@@ -36,11 +36,6 @@ import org.anchoranalysis.core.log.LogReporter;
 // An OR list of termination conditions
 public class TerminationConditionListOr extends TerminationCondition {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4023747161536462292L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<TerminationCondition> list;

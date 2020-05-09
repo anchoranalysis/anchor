@@ -32,11 +32,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public class UnitValueAreaPixels extends UnitValueArea {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double value;

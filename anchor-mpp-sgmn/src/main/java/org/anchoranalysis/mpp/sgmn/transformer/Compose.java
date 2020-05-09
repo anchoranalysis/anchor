@@ -40,11 +40,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public class Compose<S, T, U> extends StateTransformerBean<S, T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StateTransformerBean<S, U> first;

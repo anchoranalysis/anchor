@@ -34,11 +34,6 @@ import org.anchoranalysis.core.params.KeyValueParams;
 
 public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

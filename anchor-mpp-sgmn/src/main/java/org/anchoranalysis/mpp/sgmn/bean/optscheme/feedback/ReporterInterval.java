@@ -32,11 +32,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ReporterInterval<T> extends ReporterOptimizationStep<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6073794312878037709L;
-
 	// START BEAN Parameters
 	@BeanField
 	private double aggIntervalLog10 = -1;

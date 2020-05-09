@@ -42,11 +42,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class BinarySgmnThrshld extends BinarySgmn {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	// START PARAMETERS
 	@BeanField

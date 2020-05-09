@@ -18,11 +18,6 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
  * */
 public class DefineOutputterMPP extends DefineOutputter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@FunctionalInterface
 	public interface OperationWithInitParams<T> {
 		void process(T initParams) throws OperationFailedException;

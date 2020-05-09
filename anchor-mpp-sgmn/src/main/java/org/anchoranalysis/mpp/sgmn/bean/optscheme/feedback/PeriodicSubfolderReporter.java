@@ -48,11 +48,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgNRGPixelized> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5947180574365100731L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String outputName;

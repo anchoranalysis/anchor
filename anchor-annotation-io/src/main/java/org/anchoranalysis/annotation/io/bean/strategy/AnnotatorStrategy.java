@@ -42,11 +42,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private AnnotationBackgroundDefinition background;

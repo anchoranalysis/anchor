@@ -34,11 +34,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 public class FailureOnlyTextFileLogReporterBean extends LogReporterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public StatefulLogReporter create(String outputName, BoundOutputManager bom,
 			ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {

@@ -41,11 +41,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 public abstract class PermuteProperty<T> extends AnchorBean<PermuteProperty<T>> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
 	 * Converts a particular value to a string representation
 	 *  
 	 * @param value

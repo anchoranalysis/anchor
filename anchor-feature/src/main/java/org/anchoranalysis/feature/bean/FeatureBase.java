@@ -36,11 +36,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureBase<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private transient FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
 	protected FeatureBase() {

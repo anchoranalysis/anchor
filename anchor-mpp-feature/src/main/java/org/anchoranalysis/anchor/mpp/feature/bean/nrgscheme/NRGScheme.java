@@ -62,11 +62,6 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  */
 public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3182282741823034283L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private FeatureList<FeatureInputPairMemo> elemPair = null;

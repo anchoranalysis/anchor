@@ -80,11 +80,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	/** Is the execution-time of the task per-input expected to be very quick to execute? */
 	public abstract boolean hasVeryQuickPerInputExecution();
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8813467347709880743L;
-
 	// Return object is the shared state if it exists
 	public abstract S beforeAnyJobIsExecuted( BoundOutputManagerRouteErrors outputManager, ParametersExperiment params ) throws ExperimentExecutionException;
 	

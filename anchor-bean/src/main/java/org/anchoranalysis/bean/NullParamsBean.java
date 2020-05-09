@@ -35,11 +35,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 
 public abstract class NullParamsBean<BeanType> extends InitializableBeanSimple<BeanType,NullInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	protected NullParamsBean() {
 		super( new PropertyInitializer<NullInitParams>(NullInitParams.class), new SimplePropertyDefiner<NullInitParams>(NullInitParams.class) );
 	}

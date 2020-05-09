@@ -33,10 +33,5 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 public abstract class ImgChnlMapCreator extends AnchorBean<ImgChnlMapCreator> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract ImgChnlMap createMap( OpenedRaster openedRaster ) throws CreateException;
 }

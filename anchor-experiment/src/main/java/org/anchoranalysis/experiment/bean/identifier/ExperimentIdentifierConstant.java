@@ -38,11 +38,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class ExperimentIdentifierConstant extends ExperimentIdentifier {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7846340573699806634L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String name;

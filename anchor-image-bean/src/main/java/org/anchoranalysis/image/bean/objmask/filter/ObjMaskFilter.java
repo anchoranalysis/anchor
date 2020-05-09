@@ -34,10 +34,5 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class ObjMaskFilter extends ImageBean<ObjMaskFilter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6524646813002220190L;
-
 	public abstract void filter( ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected ) throws OperationFailedException;
 }

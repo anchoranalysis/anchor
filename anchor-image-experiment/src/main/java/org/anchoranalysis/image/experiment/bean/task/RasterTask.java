@@ -46,11 +46,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  */
 public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 705155901397357783L;
-	
 	// Raster experiment
 	public RasterTask() {
 	}

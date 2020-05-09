@@ -35,11 +35,6 @@ import org.anchoranalysis.core.error.CreateException;
 @GroupingRoot
 public abstract class CfgProvider extends MPPProvider<CfgProvider,Cfg> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3791187543366929792L;
-
 	@Override
 	public abstract Cfg create() throws CreateException;
 }

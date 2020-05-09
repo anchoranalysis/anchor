@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 public abstract class CheckMark extends MPPBean<CheckMark> implements ICompatibleWith {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8676574486398286141L;
-	
-	/**
 	 * Called before any calls to check()
 	 * @param nrgStack TODO
 	 */

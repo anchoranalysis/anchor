@@ -51,11 +51,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // The order of generators is left to right, then top to bottom
 public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRasterGenerator<IterationType>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4553520179688231697L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ArrangeRasterBean arrangeRaster;

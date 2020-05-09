@@ -40,11 +40,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class AddCriteriaOr extends AddCriteriaPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6308867732472891401L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<AddCriteriaPair> list = new ArrayList<>();

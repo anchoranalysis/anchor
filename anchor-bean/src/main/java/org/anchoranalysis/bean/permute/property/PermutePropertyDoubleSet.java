@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class PermutePropertyDoubleSet extends PermutePropertyWithPath<Double> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet values;

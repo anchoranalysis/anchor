@@ -34,10 +34,5 @@ import org.anchoranalysis.core.error.CreateException;
 @GroupingRoot
 public abstract class ProbMapProvider extends MPPProvider<ProbMapProvider,ProbMap> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6523913580861421733L;
-
 	public abstract ProbMap create() throws CreateException;
 }

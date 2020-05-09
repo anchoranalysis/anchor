@@ -33,11 +33,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public abstract class ColorListProvider extends NullParamsBean<ColorListProvider> implements Provider<ColorList> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8189789724960644924L;
-
 	public abstract ColorList create() throws CreateException;
 }
 

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 
 public abstract class MovieWriter extends AnchorBean<MovieWriter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract MovieOutputHandle writeMovie( Path filePath, ImageDim dim, int numChnl, int numFrames, int framesPerSecond ) throws IOException;
 	
 	public abstract String getDefaultFileExt();

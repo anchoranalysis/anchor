@@ -43,11 +43,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
  */
 public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extends InitializableBean<B, P> implements IInitParams<P> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private boolean hasBeenInit = false;
 	private transient LogErrorReporter logger;
 	private transient PropertyDefiner<P> propertyDefiner;

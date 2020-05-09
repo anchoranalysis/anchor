@@ -37,11 +37,6 @@ import org.anchoranalysis.core.log.LogReporter;
  */
 public abstract class TerminationCondition extends AnchorBean<TerminationCondition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 9067233969208747094L;
-
 	public abstract boolean continueIterations( int crntIter, double score, int size, LogReporter logReporter );
 	
 	public void init() {

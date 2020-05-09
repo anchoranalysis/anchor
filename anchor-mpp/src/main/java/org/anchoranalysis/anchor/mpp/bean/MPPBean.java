@@ -43,12 +43,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	private transient MPPInitParams soMPP;
 	
 	protected MPPBean() {
