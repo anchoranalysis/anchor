@@ -43,10 +43,6 @@ public abstract class PxlMark {
 	private ObjMask objMask;
 	private ObjMask objMaskMIP;		// null until we ned it
 	
-	public PxlMark() {
-		
-	}
-	
 	public abstract void initForMark( Mark mark, NRGStack stack, RegionMap regionMap );
 	
 	public BoundedVoxelBox<ByteBuffer> getVoxelBox() {
@@ -86,4 +82,15 @@ public abstract class PxlMark {
 	public abstract VoxelStatistics statisticsFor( int chnlID, int regionID, int sliceID );
 	
 	public abstract void cleanUp();
+	
+
+	@Override
+	public boolean equals( Object other ) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int hashCode() {
+		throw new UnsupportedOperationException();
+	}	
 }

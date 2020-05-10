@@ -33,7 +33,6 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -48,41 +47,30 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-public class PxlMarkHistogram extends PxlMark {
+public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 
-	// Quick access to what is inside and what is outside
-	private IndexByChnl<Histogram> partitionList = null;
 	private PixelPartFactory<Histogram> factoryHistogram;
 	
 	public PxlMarkHistogram( PixelPartFactory<Histogram> factoryHistogram ) {
 		this.factoryHistogram = factoryHistogram;
-		partitionList = new IndexByChnl<>();
 	}
 	
 	public PxlMarkHistogram( Mark mark, NRGStack stack, RegionMap regionMap, PixelPartFactory<Histogram> factoryHistogram ) {
 		assert( regionMap!=null );
 		this.factoryHistogram = factoryHistogram;
-		partitionList = new IndexByChnl<>();
 		initForMark( mark, stack, regionMap );
 	}
 	
-	/** Does only a shallow copy */
+	private PxlMarkHistogram( PxlMarkHistogram src ) {
+		super(src);
+		this.factoryHistogram = src.factoryHistogram;
+	}
+	
+	/** Does only a shallow copy of partition-list */
 	@Override
 	public PxlMark duplicate() {
-		PxlMarkHistogram out = new PxlMarkHistogram(factoryHistogram);
-		out.partitionList = partitionList;	// NO DUPLICATION This might need to be changed
-		return out;
+		return new PxlMarkHistogram(this);
 	}
-
-	@Override
-	public boolean equals( Object other ) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int hashCode() {
-		throw new UnsupportedOperationException();
-	}	
 	
 	// Calculates the pixels for a mark
 	@Override

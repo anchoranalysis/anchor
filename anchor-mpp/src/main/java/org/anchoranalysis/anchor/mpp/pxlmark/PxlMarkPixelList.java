@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryPixelList;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -47,28 +46,25 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromList;
 
-public class PxlMarkPixelList extends PxlMark {
-
-	// Quick access to what is inside and what is outside
-	private IndexByChnl<VoxelIntensityList> partitionList = null;
+public class PxlMarkPixelList extends PxlMarkWithPartition<VoxelIntensityList> {
 	
 	public PxlMarkPixelList() {
-		partitionList = new IndexByChnl<>();
+		super();
 	}
 	
 	public PxlMarkPixelList( Mark mark, NRGStack stack, RegionMap regionMap, VoxelBoxFactoryTypeBound<ByteBuffer> factory ) {
-		partitionList = new IndexByChnl<>();
+		super();
 		initForMark( mark, stack, regionMap );
 	}
 	
-	@Override
-	public boolean equals( Object othr ) {
-		throw new UnsupportedOperationException();
+	private PxlMarkPixelList( PxlMarkPixelList src ) {
+		super(src);
 	}
 	
+	/** Does only a shallow copy of partition-list */
 	@Override
-	public int hashCode() {
-		throw new UnsupportedOperationException();
+	public PxlMark duplicate() {
+		return new PxlMarkPixelList(this);
 	}
 	
 	// Calculates the pixels for a mark
@@ -174,13 +170,4 @@ public class PxlMarkPixelList extends PxlMark {
 		assert false;
 		return null;
 	}
-
-	/** Does only a shallow copy */
-	@Override
-	public PxlMark duplicate() {
-		PxlMarkPixelList out = new PxlMarkPixelList();
-		out.partitionList = partitionList;	// NO DUPLICATION This might need to be changed
-		return out;
-	}
-
 }
