@@ -34,49 +34,50 @@ public abstract class ChnlProviderThree extends ChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider1;
+	private ChnlProvider chnl1;
 	
 	@BeanField
-	private ChnlProvider chnlProvider2;
+	private ChnlProvider chnl2;
 	
 	@BeanField
-	private ChnlProvider chnlProvider3;
+	private ChnlProvider chnl3;
 	// END BEAN PROPERTIES
 		
 	@Override
 	public Chnl create() throws CreateException {
 
 		return process(
-			chnlProvider1.create(),
-			chnlProvider2.create(),
-			chnlProvider3.create()
+			chnl1.create(),
+			chnl2.create(),
+			chnl3.create()
 		);
 	}
 	
 	protected abstract Chnl process( Chnl chnl1, Chnl chnl2, Chnl chnl3 ) throws CreateException;
 
-	public ChnlProvider getChnlProvider1() {
-		return chnlProvider1;
+	public ChnlProvider getChnl1() {
+		return chnl1;
 	}
 
-	public void setChnlProvider1(ChnlProvider chnlProvider1) {
-		this.chnlProvider1 = chnlProvider1;
+	public void setChnl1(ChnlProvider chnl1) {
+		this.chnl1 = chnl1;
 	}
 
-	public ChnlProvider getChnlProvider2() {
-		return chnlProvider2;
+	public ChnlProvider getChnl2() {
+		return chnl2;
 	}
 
-	public void setChnlProvider2(ChnlProvider chnlProvider2) {
-		this.chnlProvider2 = chnlProvider2;
+	public void setChnl2(ChnlProvider chnl2) {
+		this.chnl2 = chnl2;
+	}
+
+	public ChnlProvider getChnl3() {
+		return chnl3;
+	}
+
+	public void setChnl3(ChnlProvider chnl3) {
+		this.chnl3 = chnl3;
 	}
 
 
-	public ChnlProvider getChnlProvider3() {
-		return chnlProvider3;
-	}
-
-	public void setChnlProvider3(ChnlProvider chnlProvider3) {
-		this.chnlProvider3 = chnlProvider3;
-	}
 }

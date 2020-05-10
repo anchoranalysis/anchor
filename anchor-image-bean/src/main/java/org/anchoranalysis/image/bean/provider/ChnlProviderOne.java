@@ -8,23 +8,23 @@ public abstract class ChnlProviderOne extends ChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Chnl create() throws CreateException {
 		return createFromChnl(
-			chnlProvider.create()	
+			chnl.create()	
 		);
 	}
 	
 	protected abstract Chnl createFromChnl(Chnl chnl) throws CreateException;
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
+	public ChnlProvider getChnl() {
+		return chnl;
 	}
 
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 }

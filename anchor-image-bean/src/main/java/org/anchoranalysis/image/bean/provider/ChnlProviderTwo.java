@@ -41,41 +41,40 @@ public abstract class ChnlProviderTwo extends ChnlProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider1;
+	private ChnlProvider chnl1;
 	
 	@BeanField
-	private ChnlProvider chnlProvider2;
+	private ChnlProvider chnl2;
 	// END BEAN PROPERTIES
 
 	@Override
 	public Chnl create() throws CreateException {
 		
-		Chnl chnl1 = chnlProvider1.create();
-		Chnl chnl2 = chnlProvider2.create();
+		Chnl chnlFirst = chnl1.create();
+		Chnl chnlSecond = chnl2.create();
 				
-		if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
+		if (!chnlFirst.getDimensions().equals(chnlSecond.getDimensions())) {
 			throw new CreateException("Dimensions of channels do not match");
 		}
 		
-		return process( chnl1, chnl2 );
+		return process( chnlFirst, chnlSecond );
 	}
 	
 	protected abstract Chnl process( Chnl chnl1, Chnl chnl2 ) throws CreateException;
-	
-	public ChnlProvider getChnlProvider1() {
-		return chnlProvider1;
+
+	public ChnlProvider getChnl1() {
+		return chnl1;
 	}
 
-	public void setChnlProvider1(ChnlProvider chnlProvider1) {
-		this.chnlProvider1 = chnlProvider1;
+	public void setChnl1(ChnlProvider chnl1) {
+		this.chnl1 = chnl1;
 	}
 
-	public ChnlProvider getChnlProvider2() {
-		return chnlProvider2;
+	public ChnlProvider getChnl2() {
+		return chnl2;
 	}
 
-	public void setChnlProvider2(ChnlProvider chnlProvider2) {
-		this.chnlProvider2 = chnlProvider2;
+	public void setChnl2(ChnlProvider chnl2) {
+		this.chnl2 = chnl2;
 	}
-	
 }
