@@ -32,8 +32,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class ChnlProvider
-	extends BeanImgStackProvider<ChnlProvider,Chnl> {
+public abstract class ChnlProvider extends BeanImgStackProvider<ChnlProvider,Chnl> {
 
 	public abstract Chnl create() throws CreateException;
 	
