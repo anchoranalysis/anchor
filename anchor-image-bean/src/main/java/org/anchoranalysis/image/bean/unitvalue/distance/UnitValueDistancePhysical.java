@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.distance;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -29,6 +31,7 @@ package org.anchoranalysis.image.bean.unitvalue.distance;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
@@ -47,13 +50,21 @@ public class UnitValueDistancePhysical extends UnitValueDistance {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double rslv(ImageRes res, DirectionVector dirVector) {
+	public double rslv(Optional<ImageRes> res, DirectionVector dirVector) throws OperationFailedException {
 		
+		if (!res.isPresent()) {
+			throw new OperationFailedException("An image-resolution is missing, so cannot calculate physical distances");
+		}
+				
 		UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(unitType);
 		
 		double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
 		
-		return ImageUnitConverter.convertFromPhysicalDistance(valueAsBase,res,dirVector);
+		return ImageUnitConverter.convertFromPhysicalDistance(
+			valueAsBase,
+			res.get(),
+			dirVector
+		);
 	}
 
 	public double getValue() {

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.distance;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -27,6 +29,7 @@ package org.anchoranalysis.image.bean.unitvalue.distance;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -36,18 +39,18 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance> {
 
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
-	public double rslv( ImageRes res, Point3d pnt1, Point3d pnt2 ) {
+	public double rslv( Optional<ImageRes> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
 		DirectionVector dirVector = DirectionVector.createBetweenTwoPoints( pnt1, pnt2 );
 		return rslv(res,dirVector);
 	}
 	
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
-	public double rslv( ImageRes res, Point3i pnt1, Point3i pnt2 ) {
+	public double rslv( Optional<ImageRes> res, Point3i pnt1, Point3i pnt2 ) throws OperationFailedException {
 		DirectionVector dirVector = DirectionVector.createBetweenTwoPoints( pnt1, pnt2 );
 		return rslv(res,dirVector);
 	}
 	
 	// Returns value in voxels
-	public abstract double rslv( ImageRes res, DirectionVector dirVector );
+	public abstract double rslv( Optional<ImageRes> res, DirectionVector dirVector ) throws OperationFailedException;
 }
