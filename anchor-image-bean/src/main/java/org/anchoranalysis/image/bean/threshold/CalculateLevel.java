@@ -44,4 +44,10 @@ import org.anchoranalysis.image.histogram.Histogram;
 public abstract class CalculateLevel extends NullParamsBean<CalculateLevel> {
 
 	public abstract int calculateLevel( Histogram h ) throws OperationFailedException;
+
+	@Override
+	public abstract boolean equals(Object obj);
+
+	@Override
+	public abstract int hashCode();
 }
