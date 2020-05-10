@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.areavolume;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -33,5 +35,5 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
 
 	// Value in pixels or voxels
-	public abstract double rslv( ImageRes res ) throws UnitValueException;
+	public abstract double rslv( Optional<ImageRes> res ) throws UnitValueException;
 }

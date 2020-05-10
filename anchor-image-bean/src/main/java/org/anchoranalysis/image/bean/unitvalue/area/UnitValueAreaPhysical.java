@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.area;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -48,13 +50,17 @@ public class UnitValueAreaPhysical extends UnitValueArea {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double rslv(ImageRes res) throws UnitValueException {
+	public double rslv(Optional<ImageRes> res) throws UnitValueException {
+		
+		if (!res.isPresent()) {
+			throw new UnitValueException("An image resolution is required to calculate physical-area but it is missing");
+		}
 		
 		UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(prefix);
 		
 		double valueAsBase = SpatialConversionUtilities.convertFromUnits(getValue(), unitPrefix);
 		
-		return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, res);
+		return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, res.get());
 	}
 
 	public String getPrefix() {

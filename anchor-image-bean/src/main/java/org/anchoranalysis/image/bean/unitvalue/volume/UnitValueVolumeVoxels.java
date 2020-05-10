@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.volume;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -55,7 +57,7 @@ public class UnitValueVolumeVoxels extends UnitValueVolume {
 	}
 
 	@Override
-	public double rslv(ImageRes res) {
+	public double rslv(Optional<ImageRes> res) {
 		return value;
 	}
 
