@@ -19,7 +19,7 @@ public abstract class BinaryKernelMorph3 extends BinaryKernel {
 	
 
 	@Override
-	public final void notifyZChange(LocalSlices inSlices, int z) {
+	public void notifyZChange(LocalSlices inSlices, int z) {
 		this.inSlices = inSlices;
 	}
 }
