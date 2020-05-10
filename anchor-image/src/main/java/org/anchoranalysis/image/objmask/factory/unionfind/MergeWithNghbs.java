@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.objmask.factory;
+package org.anchoranalysis.image.objmask.factory.unionfind;
 
 /*
  * #%L

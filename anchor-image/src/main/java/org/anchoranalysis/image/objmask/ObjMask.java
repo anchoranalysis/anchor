@@ -279,8 +279,7 @@ public class ObjMask {
 	 */
 	public boolean checkIfConnected() throws OperationFailedException {
 		
-		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
-		creator.setBigNghb(true);
+		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory(true);
 		ObjMaskCollection objs;
 		try {
 			objs = creator.createConnectedComponents(this.binaryVoxelBox().duplicate());

@@ -1,4 +1,6 @@
-package org.anchoranalysis.image.objmask.factory;
+package org.anchoranalysis.image.objmask.factory.unionfind;
+
+import java.nio.Buffer;
 
 /*
  * #%L
@@ -37,10 +39,7 @@ import java.util.TreeSet;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -49,158 +48,69 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.jgrapht.alg.util.UnionFind;
 
-class ConnectedComponentUnionFind {
+public class ConnectedComponentUnionFind {
 
-
-	public static void visitRegionByte( BinaryVoxelBox<ByteBuffer> visited, ObjMaskCollection omc, int minNumberVoxels, boolean bigNghb ) throws OperationFailedException {
+	private final int minNumberVoxels;
 	
-		UnionFind<Integer> unionIndex = new UnionFind<Integer>( new HashSet<Integer>() );
+	private final boolean bigNghb;
 	
-		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
+	public ConnectedComponentUnionFind(int minNumberVoxels, boolean bigNghb) {
+		super();
+		this.minNumberVoxels = minNumberVoxels;
+		this.bigNghb = bigNghb;
+	}	
 		
-		SlidingBuffer<IntBuffer> slidingIndex = new SlidingBuffer<>( indexBuffer );
-		slidingIndex.init();
-
-		int maxBigIDAdded = populateIndexFromBinaryByte(
+	public void visitRegionByte( BinaryVoxelBox<ByteBuffer> visited, ObjMaskCollection omc ) throws OperationFailedException {
+		visitRegion(
 			visited,
-			indexBuffer,
-			slidingIndex,
-			unionIndex,
-			bigNghb
-		);
-		
-		processIndexBuffer(
-			maxBigIDAdded,
-			unionIndex,
-			indexBuffer,
 			omc,
-			minNumberVoxels
+			minNumberVoxels,
+			bigNghb,
+			new PopulateFromByte()
+		);
+	}
+		
+	public void visitRegionInt( BinaryVoxelBox<IntBuffer> visited, ObjMaskCollection omc ) throws OperationFailedException {
+		visitRegion(
+			visited,
+			omc,
+			minNumberVoxels,
+			bigNghb,
+			new PopulateFromInt()
 		);
 	}
 	
-	
-	public static void visitRegionInt( BinaryVoxelBox<IntBuffer> visited, ObjMaskCollection omc, int minNumberVoxels, boolean bigNghb ) throws OperationFailedException {
-	
-		UnionFind<Integer> unionIndex = new UnionFind<Integer>( new HashSet<Integer>() );
-	
-		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
-		
-		SlidingBuffer<IntBuffer> slidingIndex = new SlidingBuffer<>( indexBuffer );
-		slidingIndex.init();
-
-		int maxBigIDAdded = populateIndexFromBinaryInt(
-			visited,
-			indexBuffer,
-			slidingIndex,
-			unionIndex,
-			bigNghb
-		);
-		
-		processIndexBuffer(
-			maxBigIDAdded,
-			unionIndex,
-			indexBuffer,
-			omc,
-			minNumberVoxels
-		);
-	}
-	
-	private static int populateIndexFromBinaryByte(
-		BinaryVoxelBox<ByteBuffer> visited,
-		VoxelBox<IntBuffer> indexBuffer,
-		SlidingBuffer<IntBuffer> slidingIndex,
-		UnionFind<Integer> unionIndex,
-		boolean bigNghb
+	private static <T extends Buffer> void visitRegion(
+		BinaryVoxelBox<T> visited,
+		ObjMaskCollection omc,
+		int minNumberVoxels,
+		boolean bigNghb,
+		PopulateIndexFromBinary<T> populateIndex
 	) throws OperationFailedException {
-		boolean do3D = indexBuffer.extnt().getZ()>1;
 		
-		MergeWithNghbs mergeWithNgbs = new MergeWithNghbs(slidingIndex, unionIndex, do3D, bigNghb);
+		UnionFind<Integer> unionIndex = new UnionFind<>( new HashSet<Integer>() );
 	
-		int cnt = 1;
-		BinaryValuesByte bvb = visited.getBinaryValues().createByte();
-		Extent extnt = visited.extnt();
-		for (int z=0; z<extnt.getZ(); z++) {
-			
-			ByteBuffer bbBinary = visited.getVoxelBox().getPixelsForPlane(z).buffer();
-			IntBuffer bbIndex = indexBuffer.getPixelsForPlane(z).buffer();
-			
-			int offset = 0;
-			
-			for (int y=0; y<extnt.getY(); y++) {
-				for (int x=0; x<extnt.getX(); x++) {
-					
-					if (bbBinary.get(offset)==bvb.getOnByte() && bbIndex.get(offset)==0) {
-						
-						int nghbLab = mergeWithNgbs.calcMinNghbLabel(x, y, z, offset);
-						if (nghbLab==-1) {
-							bbBinary.put(offset, (byte) cnt );
-							bbIndex.put(offset, cnt);
-							unionIndex.addElement(cnt);
-							cnt++;
-						} else {
-							bbIndex.put(offset, nghbLab);
-						}
-					}
-					
-					offset++;
-				}
-				
-			}
-			
-			slidingIndex.shift();
-		}
-		return cnt-1;
-	
-	}
-	
-	
-	private static int populateIndexFromBinaryInt(
-			BinaryVoxelBox<IntBuffer> visited,
-			VoxelBox<IntBuffer> indexBuffer,
-			SlidingBuffer<IntBuffer> slidingIndex,
-			UnionFind<Integer> unionIndex,
-			boolean bigNghb
-		) {
-			boolean do3D = indexBuffer.extnt().getZ()>1;
-			
-			MergeWithNghbs mergeWithNgbs = new MergeWithNghbs(slidingIndex, unionIndex, do3D, bigNghb);
-			
-			int cnt = 1;
-			BinaryValues bv = visited.getBinaryValues();
-			Extent extnt = visited.extnt();
-			for (int z=0; z<extnt.getZ(); z++) {
-				
-				IntBuffer bbBinary = visited.getVoxelBox().getPixelsForPlane(z).buffer();
-				IntBuffer bbIndex = indexBuffer.getPixelsForPlane(z).buffer();
-				
-				int offset = 0;
-				
-				for (int y=0; y<extnt.getY(); y++) {
-					for (int x=0; x<extnt.getX(); x++) {
-						
-						if (bbBinary.get(offset)==bv.getOnInt() && bbIndex.get(offset)==0) {
-							
-							int nghbLab = mergeWithNgbs.calcMinNghbLabel(x, y, z, offset);
-							if (nghbLab==-1) {
-								bbBinary.put(offset, (byte) cnt );
-								bbIndex.put(offset, cnt);
-								unionIndex.addElement(cnt);
-								cnt++;
-							} else {
-								bbIndex.put(offset, nghbLab);
-							}
-						}
-						
-						offset++;
-					}
-					
-				}
-				
-				slidingIndex.shift();
-			}
-			return cnt-1;
+		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
+		
+		SlidingBuffer<IntBuffer> slidingIndex = new SlidingBuffer<>( indexBuffer );
+		slidingIndex.init();
 
-		}
+		int maxBigIDAdded = populateIndex.populateIndexFromBinary(
+			visited,
+			indexBuffer,
+			slidingIndex,
+			unionIndex,
+			bigNghb
+		);
+		
+		processIndexBuffer(
+			maxBigIDAdded,
+			unionIndex,
+			indexBuffer,
+			omc,
+			minNumberVoxels
+		);
+	}
 	
 	// Assumes unionFind begins at 1
 	private static Set<Integer> setFromUnionFind( int maxValue, UnionFind<Integer> unionIndex ) {
@@ -222,34 +132,7 @@ class ConnectedComponentUnionFind {
 		}
 		return mapIDOrdered;
 	}
-	
-	
-	
-	private static class BoundingBoxWithCount {
-	
-		private static Extent extnt1 = new Extent(1,1,1);
 		
-		private BoundingBox BoundingBox;
-		private int cnt = 0;
-		
-		public void add( Point3i pnt ) {
-			if (BoundingBox==null) {
-				BoundingBox = new BoundingBox( pnt, extnt1 );
-			} else {
-				BoundingBox.add(pnt);
-			}
-			cnt++;
-		}
-
-		public int getCnt() {
-			return cnt;
-		}
-
-		public BoundingBox getBoundingBox() {
-			return BoundingBox;
-		}
-	}
-	
 	private static BoundingBoxWithCount[] createBBoxArray( int size ) {
 		BoundingBoxWithCount[] bboxArr = new BoundingBoxWithCount[size];
 		for( int i=0; i<bboxArr.length; i++) {
