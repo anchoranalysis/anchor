@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -34,5 +36,5 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class ObjMaskFilter extends ImageBean<ObjMaskFilter> {
 
-	public abstract void filter( ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected ) throws OperationFailedException;
+	public abstract void filter( ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected ) throws OperationFailedException;
 }
