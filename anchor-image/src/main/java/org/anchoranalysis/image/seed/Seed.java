@@ -27,19 +27,12 @@ package org.anchoranalysis.image.seed;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 // A seed provides an ObjMask of pixels that exclusively
 //   belong to a particular object
-public abstract class Seed implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5152464097682828755L;
+public abstract class Seed {
 
 	public abstract ObjMask createMask();
 

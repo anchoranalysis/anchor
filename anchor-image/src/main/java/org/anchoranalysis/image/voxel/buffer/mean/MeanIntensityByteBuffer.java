@@ -50,7 +50,8 @@ public class MeanIntensityByteBuffer extends MeanIntensityBuffer<ByteBuffer> {
 		);
 	}
 	
-	public void finalize() {
+	@Override
+	public void finalizeBuffer() {
 		int maxIndex = volumeXY();
 		
 		ByteBuffer bbFlat = flatBuffer();
