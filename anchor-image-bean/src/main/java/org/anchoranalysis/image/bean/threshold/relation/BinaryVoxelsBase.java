@@ -41,9 +41,7 @@ public abstract class BinaryVoxelsBase extends RelationToThreshold {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		return true;
+		return (getClass() == obj.getClass());
 	}
 
 	// This is sufficient for all base-classes, as we can rely on them not being further parameterized

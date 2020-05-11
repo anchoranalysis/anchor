@@ -51,10 +51,6 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 
 	private PixelPartFactory<Histogram> factoryHistogram;
 	
-	public PxlMarkHistogram( PixelPartFactory<Histogram> factoryHistogram ) {
-		this.factoryHistogram = factoryHistogram;
-	}
-	
 	public PxlMarkHistogram( Mark mark, NRGStack stack, RegionMap regionMap, PixelPartFactory<Histogram> factoryHistogram ) {
 		assert( regionMap!=null );
 		this.factoryHistogram = factoryHistogram;
