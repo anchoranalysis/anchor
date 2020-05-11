@@ -147,13 +147,23 @@ public class Orientation3DEulerAngles extends Orientation {
 
 	@Override
 	public void addProperties(NameValueSet<String> nvc) {
-		nvc.add( new NameValue<>("Orientation Angle X (radians)",  String.format("%1.2f", rotXRadians )) );
-		nvc.add( new NameValue<>("Orientation Angle Y (radians)",  String.format("%1.2f", rotYRadians )) );
-		nvc.add( new NameValue<>("Orientation Angle Z (radians)",  String.format("%1.2f", rotZRadians )) );
+		addProperty(nvc, "X", rotXRadians);
+		addProperty(nvc, "Y", rotYRadians);
+		addProperty(nvc, "Z", rotZRadians);
+	}
+	
+	private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
+		nvc.add(
+			new NameValue<>(
+				String.format("Orientation Angle %s (radians)", dimension),
+				String.format("%1.2f", rotXRadians)
+			)
+		);
 	}
 
 	@Override
 	public void addPropertiesToMask(ObjMaskWithProperties mask) {
+		// NOTHING TO ADD
 	}
 
 	@Override

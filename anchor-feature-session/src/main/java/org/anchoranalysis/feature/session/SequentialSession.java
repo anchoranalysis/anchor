@@ -64,6 +64,8 @@ import org.apache.commons.collections.CollectionUtils;
  */
 public class SequentialSession<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
+	private final static String ERROR_NOT_STARTED = "Session has not been started yet. Call start().";
+	
 	private FeatureList<T> listFeatures;
 	
 	private boolean isStarted = false;
@@ -145,11 +147,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 */
 	@Override
 	public ResultsVector calc( T params ) throws FeatureCalcException {
-		
-		if (!isStarted) {
-			throw new FeatureCalcException("Session has not been started yet. Call start().");
-		}
-
+		checkIsStarted();
 		return calcCommonExceptionAsVector(params);
 	}
 
@@ -157,11 +155,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 
 	@Override
 	public ResultsVector calc(T params, FeatureList<T> featuresSubset) throws FeatureCalcException {
-
-		if (!isStarted) {
-			throw new FeatureCalcException("Session has not been started yet. Call start().");
-		}
-		
+		checkIsStarted();
+	
 		return replaceSession.createOrReuse(
 			params
 		).calc(featuresSubset);
@@ -179,12 +174,11 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		ResultsVector res = new ResultsVector( listFeatures.size() );
 		
 		if (!isStarted) {
-			String errorMsg = "Session has not been started yet. Call start().";
-			errorReporter.recordError(SequentialSession.class, errorMsg);
-			res.setErrorAll( new OperationFailedException(errorMsg) );
+			errorReporter.recordError(SequentialSession.class, ERROR_NOT_STARTED);
+			res.setErrorAll( new OperationFailedException(ERROR_NOT_STARTED) );
+		} else {
+			calcCommonSuppressErrors(res, params, errorReporter);
 		}
-		
-		calcCommonSuppressErrors(res, params, errorReporter);
 		
 		return res;
 	}
@@ -287,15 +281,15 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);
 		
-		
 		// 1. Extract the set of relevant shared-features from the set, duplicate and initialize
 		// 2. Add all the features in the list to these-features
 		
-		
 		replaceSession = replacePolicyFactory.bind(listFeatures, featureInitParamsDup, sharedFeatures, logger);
-			
-		
-		//replaceSession = new ReuseSingletonPolicy<>(cacheCreator);
-		//replaceSession = new LRUCachedSessionInputPolicy<>(cacheCreator);
+	}
+	
+	private void checkIsStarted() throws FeatureCalcException {
+		if (!isStarted) {
+			throw new FeatureCalcException(ERROR_NOT_STARTED);
+		}
 	}
 }

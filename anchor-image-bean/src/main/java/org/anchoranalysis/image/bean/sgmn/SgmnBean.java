@@ -28,5 +28,11 @@ package org.anchoranalysis.image.bean.sgmn;
 
 import org.anchoranalysis.image.bean.ImageBean;
 
-public abstract class SgmnBean<BeanType> extends ImageBean<BeanType> {
+/**
+ *  
+ * @author Owen Feehan
+ *
+ * @param <T> bean-type
+ */
+public abstract class SgmnBean<T> extends ImageBean<T> {
 }
