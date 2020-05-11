@@ -28,6 +28,7 @@ package org.anchoranalysis.image.bean.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -54,7 +55,7 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
 		try {
-			return thresholder.threshold(voxelBox, bvOut, null);
+			return thresholder.threshold(voxelBox, bvOut, Optional.empty());
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
@@ -81,7 +82,12 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		try {		
-			return thresholder.threshold( voxelBox,new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()), bvOut, params.getIntensityHistogram() );
+			return thresholder.threshold(
+				voxelBox,
+				new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()),
+				bvOut,
+				params.getIntensityHistogram()
+			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
@@ -94,10 +100,5 @@ public class BinarySgmnThrshld extends BinarySgmn {
 
 	public void setThresholder(Thresholder thresholder) {
 		this.thresholder = thresholder;
-	}
-	
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

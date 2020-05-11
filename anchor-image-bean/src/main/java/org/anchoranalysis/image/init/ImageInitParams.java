@@ -47,7 +47,7 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -138,7 +138,7 @@ public class ImageInitParams extends BeanInitParams {
 		PopulateStoreFromDefine<ImageInitParams> populate = new PopulateStoreFromDefine<>(define, pi, logger);
 		
 		populate.copyInit(BinarySgmn.class, getBinarySgmnSet());
-		populate.copyProvider(BinaryImgChnlProvider.class, getBinaryImageCollection());
+		populate.copyProvider(BinaryChnlProvider.class, getBinaryImageCollection());
 		populate.copyProvider(ChnlProvider.class, getChnlCollection());
 		populate.copyProvider(ObjMaskProvider.class, getObjMaskCollection());
 		populate.copyProvider(HistogramProvider.class, getHistogramCollection());

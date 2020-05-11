@@ -4,11 +4,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public abstract class BinaryImgChnlProviderOne extends BinaryImgChnlProvider {
+public abstract class BinaryImgChnlProviderOne extends BinaryChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -20,11 +20,11 @@ public abstract class BinaryImgChnlProviderOne extends BinaryImgChnlProvider {
 	
 	protected abstract BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException;
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 }

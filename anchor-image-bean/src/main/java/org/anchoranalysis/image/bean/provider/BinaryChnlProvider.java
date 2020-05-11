@@ -30,26 +30,26 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class BinaryImgChnlProvider extends BeanImgStackProvider<BinaryImgChnlProvider,BinaryChnl> {
+public abstract class BinaryChnlProvider extends BeanImgStackProvider<BinaryChnlProvider,BinaryChnl> {
 
 	@Override
 	public abstract BinaryChnl create() throws CreateException;
 	
 	public Stack createStack() throws CreateException {
-		BinaryChnl chnl = createChnlFromBinaryImgChnl( create(), BinaryValues.getDefault() );
-		return new Stack( chnl.getChnl() ); 
+		Chnl chnl = createChnlFromBinary( create(), BinaryValues.getDefault() );
+		return new Stack( chnl ); 
 	}
 
-	private static BinaryChnl createChnlFromBinaryImgChnl( BinaryChnl binaryImgChnl, BinaryValues bvOut ) throws CreateException {
-		
+	private static Chnl createChnlFromBinary( BinaryChnl binaryImgChnl, BinaryValues bvOut ) throws CreateException {
 		ObjMaskCollection omc = expressAsObj(binaryImgChnl);
-		return BinaryChnlFromObjs.createFromObjs( omc, binaryImgChnl.getDimensions(), bvOut );
+		return BinaryChnlFromObjs.createFromObjs( omc, binaryImgChnl.getDimensions(), bvOut ).getChnl();
 	}
 		
 	private static ObjMaskCollection expressAsObj( BinaryChnl binaryImgChnl ) throws CreateException {
