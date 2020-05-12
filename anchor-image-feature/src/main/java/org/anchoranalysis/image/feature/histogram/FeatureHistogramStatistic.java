@@ -26,7 +26,6 @@ package org.anchoranalysis.image.feature.histogram;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
@@ -36,14 +35,10 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
-		try {
-			return calcStatisticFrom(
-				input.get().getHistogram()
-			);
-		} catch (OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
+		return calcStatisticFrom(
+			input.get().getHistogram()
+		);
 	}
 	
-	protected abstract double calcStatisticFrom( Histogram histogram ) throws OperationFailedException;
+	protected abstract double calcStatisticFrom( Histogram histogram ) throws FeatureCalcException;
 }

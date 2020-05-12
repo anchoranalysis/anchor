@@ -69,8 +69,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 	public void reset() {
+		cnt = 0;
 		for( int i=minBinVal;i<=maxBinVal;i++) {
-			cnt = 0;
 			arrSet(i,0);
 		}
 	}
@@ -564,8 +564,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 	// Sets a count for a value
-	private void arrSet( int val, int cnt ) {
-		arr[ index(val) ] = cnt;
+	private void arrSet( int val, int cntToSet ) {
+		arr[ index(val) ] = cntToSet;
 	}
 	
 	// Sets a count for a value

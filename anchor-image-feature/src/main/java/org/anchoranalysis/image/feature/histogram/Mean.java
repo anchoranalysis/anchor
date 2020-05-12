@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.feature.histogram;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 /*
  * #%L
@@ -34,7 +35,11 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Mean extends FeatureHistogramStatistic {
 
 	@Override
-	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
-		return histogram.mean();
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		try {
+			return histogram.mean();
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}			
 	}
 }
