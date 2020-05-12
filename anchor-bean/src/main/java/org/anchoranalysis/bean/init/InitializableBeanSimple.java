@@ -64,8 +64,9 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 		onInit(params);
 	}
 	
+	/** Called after initialization. An empty impelmentation is provided, to be overridden as needed in the sub-classes. */
 	public void onInit(P params) throws InitException {
-
+		// Empty implementation to be replaced in sub-classes
 	}
 	
 	protected LogErrorReporter getLogger() {

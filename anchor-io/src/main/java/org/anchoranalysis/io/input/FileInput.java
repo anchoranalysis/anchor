@@ -30,7 +30,6 @@ package org.anchoranalysis.io.input;
 import java.io.File;
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
@@ -62,9 +61,5 @@ public class FileInput implements InputFromManager {
 	
 	public File getFile() {
 		return file;
-	}
-
-	@Override
-	public void close(ErrorReporter errorReporter) {
 	}
 }

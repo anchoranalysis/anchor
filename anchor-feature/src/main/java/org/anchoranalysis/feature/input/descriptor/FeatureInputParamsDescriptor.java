@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.input.descriptor;
 
+import org.anchoranalysis.feature.input.FeatureInputParams;
+
 /*-
  * #%L
  * anchor-feature
@@ -43,5 +45,9 @@ public class FeatureInputParamsDescriptor extends FeatureInputDescriptor {
 	public boolean isCompatibleWithEverything() {
 		return false;
 	}
-
+	
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputParams.class;
+	}
 }

@@ -53,12 +53,12 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public class NRGSchemeWithSharedFeatures {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureSet<FeatureInput> sharedFeatures;
+	private SharedFeatureMulti<FeatureInput> sharedFeatures;
 	
 	private LRUCache<Integer,NRGTotal> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
@@ -127,7 +127,7 @@ public class NRGSchemeWithSharedFeatures {
 
 	
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureSet<FeatureInput> sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
+			SharedFeatureMulti<FeatureInput> sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
@@ -219,7 +219,7 @@ public class NRGSchemeWithSharedFeatures {
 		}
 	}
 
-	public SharedFeatureSet<FeatureInput> getSharedFeatures() {
+	public SharedFeatureMulti<FeatureInput> getSharedFeatures() {
 		return sharedFeatures;
 	}
 

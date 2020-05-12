@@ -31,11 +31,11 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public class FeatureListStoreUtilities {
 	
-	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<T>> featureListProvider, SharedFeatureSet<T> out ) {
+	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<T>> featureListProvider, SharedFeatureMulti<T> out ) {
 		
 		for( String key : featureListProvider.keys()) {
 			try {
@@ -49,7 +49,7 @@ public class FeatureListStoreUtilities {
 		
 	}
 	
-	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateWithExtraName( FeatureList<T> featureList, String name, SharedFeatureSet<T> out ) {
+	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateWithExtraName( FeatureList<T> featureList, String name, SharedFeatureMulti<T> out ) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
 		for( Feature<T> f : featureList) {

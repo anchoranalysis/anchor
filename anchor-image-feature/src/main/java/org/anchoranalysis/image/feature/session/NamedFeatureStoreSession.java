@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
@@ -63,7 +63,7 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 	) throws InitException {
 		
 		// TODO temporarily disabled
-		SharedFeatureSet<T> sharedFeatures = createSharedFeatures( soImage.getFeature() );
+		SharedFeatureMulti<T> sharedFeatures = createSharedFeatures( soImage.getFeature() );
 		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
 		
 		// Init all the features
@@ -115,8 +115,8 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 		return namedFeatureStore.createFeatureNames();
 	}
 	
-	private SharedFeatureSet<T> createSharedFeatures( SharedFeaturesInitParams soFeature ) {
-		SharedFeatureSet<T> out = new SharedFeatureSet<>();
+	private SharedFeatureMulti<T> createSharedFeatures( SharedFeaturesInitParams soFeature ) {
+		SharedFeatureMulti<T> out = new SharedFeatureMulti<>();
 		out.addDuplicate( soFeature.getSharedFeatureSet().downcast() );
 		namedFeatureStore.copyToDuplicate(out.getSet());
 		return out;

@@ -46,7 +46,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
@@ -123,7 +123,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param sharedFeatures		A list of features that are shared between the features we are calculating (and thus also init-ed)
 	 * @throws InitException
 	 */
-	public void start( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException{
+	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti<T> sharedFeatures, LogErrorReporter logger ) throws InitException{
 		
 		if (isStarted) {
 			throw new InitException("Session has already been started.");
@@ -254,7 +254,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param sharedFeatures
 	 * @throws InitException
 	 */
-	private void checkNoIntersectionWithSharedFeatures( SharedFeatureSet<T> sharedFeatures ) throws InitException {
+	private void checkNoIntersectionWithSharedFeatures( SharedFeatureMulti<T> sharedFeatures ) throws InitException {
 		assert(listFeatures!=null);
 		try {
 			for( Feature<T> f : listFeatures ) {
@@ -276,13 +276,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}
 	}
 		
-	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureSet<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
+	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
 		assert(featureInitParams!=null);
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);
-		
-		// 1. Extract the set of relevant shared-features from the set, duplicate and initialize
-		// 2. Add all the features in the list to these-features
 		
 		replaceSession = replacePolicyFactory.bind(listFeatures, featureInitParamsDup, sharedFeatures, logger);
 	}

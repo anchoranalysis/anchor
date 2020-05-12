@@ -41,4 +41,8 @@ public class FeatureInputResultsDescriptor extends FeatureInputDescriptor {
 		return false;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputResults.class;
+	}
 }

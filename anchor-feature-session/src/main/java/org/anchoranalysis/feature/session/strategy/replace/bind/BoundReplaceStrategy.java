@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.creator.CacheCreatorSimple;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /** 
  * Attaches a replacement-strategy to a session lazily (i.e. when it is needed)
@@ -59,9 +59,16 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 	public ReplaceStrategy<T> bind(
 		FeatureList<T> featureList,
 		FeatureInitParams featureInitParams,
-		SharedFeatureSet<T> sharedFeatures, 
+		SharedFeatureMulti<T> sharedFeatures, 
 		LogErrorReporter logger
 	) {
+		
+		// 1. Extract the set of relevant shared-features from the set, duplicate and initialize
+		// 2. Add all the features in the list to these-features
+		/*SharedFeatureMulti<T> sharedSet = new SharedFeatureMulti<>(
+			sharedFeatures.getSet()
+		);*/
+		
 		CacheCreator cacheCreator = new CacheCreatorSimple(featureList, sharedFeatures, featureInitParams, logger);
 		if (!strategy.isPresent()) {
 			strategy = Optional.of(

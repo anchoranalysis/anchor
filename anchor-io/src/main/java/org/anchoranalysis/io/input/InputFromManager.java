@@ -36,6 +36,6 @@ public interface InputFromManager {
 	
 	Path pathForBinding();
 	
-	// Performs all tidying up, file-closing etc. after we are done with the inputmanager
-	void close(ErrorReporter errorReporter);
+	/** Performs all tidying up, file-closing etc. after we are finished using the {@link InputFromManager} */
+	default void close(ErrorReporter errorReporter) {}
 }

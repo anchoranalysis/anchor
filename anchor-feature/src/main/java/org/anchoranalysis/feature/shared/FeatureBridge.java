@@ -44,11 +44,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 class FeatureBridge<T extends FeatureInput> implements IObjectBridge<NamedBean<FeatureListProvider<T>>, FeatureList<T>,OperationFailedException> {
 
-	private SharedFeatureSet<T> sharedFeatureSet;
+	private SharedFeatureMulti<T> sharedFeatureSet;
 	private SharedFeaturesInitParams so;
 	private LogErrorReporter logger;
 	
-	public FeatureBridge(SharedFeatureSet<T> sharedFeatureSet, SharedFeaturesInitParams so, LogErrorReporter logger ) {
+	public FeatureBridge(SharedFeatureMulti<T> sharedFeatureSet, SharedFeaturesInitParams so, LogErrorReporter logger ) {
 		super();
 		this.sharedFeatureSet = sharedFeatureSet;
 		this.so = so;

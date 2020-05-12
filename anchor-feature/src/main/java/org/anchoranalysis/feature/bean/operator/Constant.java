@@ -30,7 +30,6 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
@@ -73,8 +72,7 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() {
 		return FeatureInputGenericDescriptor.instance;
 	}
 

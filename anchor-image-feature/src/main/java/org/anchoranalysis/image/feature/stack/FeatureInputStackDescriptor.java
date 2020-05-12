@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.stack;
 
+
+
 /*-
  * #%L
  * anchor-image-feature
@@ -32,14 +34,15 @@ public class FeatureInputStackDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputStackDescriptor instance = new FeatureInputStackDescriptor();
 	
-	private FeatureInputStackDescriptor() {
-		
-	}
+	private FeatureInputStackDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return false;
 	}
 
-
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputStack.class;
+	}
 }

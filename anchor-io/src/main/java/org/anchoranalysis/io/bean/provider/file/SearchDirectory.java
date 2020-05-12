@@ -79,9 +79,6 @@ public class SearchDirectory extends FileProviderWithDirectoryString {
 	private boolean acceptDirectoryErrors = false;
 	// END BEAN PROPERTIES
 	
-	public SearchDirectory() {
-	}
-	
 	// Matching files
 	@Override
 	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {

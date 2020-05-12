@@ -53,7 +53,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	// END: Stores
 	
 	// START: Single Items
-	private SharedFeatureSet<FeatureInput> sharedFeatureSet;
+	private SharedFeatureMulti<FeatureInput> sharedFeatureSet;
 	// END: Single Items
 
 	private SharedFeaturesInitParams(SharedObjects so) {
@@ -63,7 +63,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		storeFeatureList = so.getOrCreate(FeatureList.class);
 		
 		// We populate our shared features from our storeFeatureList
-		sharedFeatureSet = new SharedFeatureSet<>();
+		sharedFeatureSet = new SharedFeatureMulti<>();
 		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(storeFeatureList, sharedFeatureSet);
 	}
 	
@@ -104,7 +104,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		return soParams;
 	}
 	
-	public SharedFeatureSet<FeatureInput> getSharedFeatureSet() {
+	public SharedFeatureMulti<FeatureInput> getSharedFeatureSet() {
 		return sharedFeatureSet;
 	}
 }

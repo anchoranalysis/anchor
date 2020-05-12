@@ -76,7 +76,7 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 				map.add(f);
 			}
 			
-			for( INameValue<Feature<T>> f : sharedFeatures ) {
+			for( INameValue<Feature<T>> f : sharedFeatures.getSet() ) {
 				map.add(f.getValue());
 			}
 			

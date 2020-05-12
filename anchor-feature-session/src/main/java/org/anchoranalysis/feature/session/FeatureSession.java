@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFrom
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**
  * A single-point in the code for creating feature-sessions (a factory).
@@ -75,7 +75,7 @@ public class FeatureSession {
 		return with(
 			feature,
 			new FeatureInitParams(),
-			new SharedFeatureSet<>(),
+			new SharedFeatureMulti<>(),
 			logger
 		);
 	}
@@ -83,7 +83,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
 		Feature<T> feature,
 		FeatureInitParams initParams,
-		SharedFeatureSet<T> sharedFeatures,
+		SharedFeatureMulti<T> sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
 		SequentialSession<T> session = new SequentialSession<>(feature); 
@@ -112,7 +112,7 @@ public class FeatureSession {
 		return with(
 			features,
 			new FeatureInitParams(),
-			new SharedFeatureSet<>(),
+			new SharedFeatureMulti<>(),
 			logger				
 		);
 	}
@@ -121,7 +121,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
 		FeatureList<T> features,
 		FeatureInitParams initParams,
-		SharedFeatureSet<T> sharedFeatures,
+		SharedFeatureMulti<T> sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
 		return with(
@@ -139,7 +139,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
 		FeatureList<T> features,
 		FeatureInitParams initParams,
-		Optional<SharedFeatureSet<T>> sharedFeatures,
+		Optional<SharedFeatureMulti<T>> sharedFeatures,
 		LogErrorReporter logger,
 		Collection<String> ignoreFeaturePrefixes,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
@@ -148,7 +148,7 @@ public class FeatureSession {
 		startSession(
 			session,
 			initParams,
-			sharedFeatures.orElse( new SharedFeatureSet<>() ),
+			sharedFeatures.orElse( new SharedFeatureMulti<>() ),
 			logger
 		);
 		return session;
@@ -157,7 +157,7 @@ public class FeatureSession {
 	private static <T extends FeatureInput> void startSession(
 		SequentialSession<T> session,
 		FeatureInitParams initParams,
-		SharedFeatureSet<T> sharedFeatures,
+		SharedFeatureMulti<T> sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
 		try {

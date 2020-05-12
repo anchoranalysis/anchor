@@ -32,14 +32,15 @@ public class FeatureInputObjsDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputObjsDescriptor instance = new FeatureInputObjsDescriptor();
 	
-	private FeatureInputObjsDescriptor() {
-		
-	}
+	private FeatureInputObjsDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return false;
 	}
 
-
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputObjsDescriptor.class;
+	}
 }

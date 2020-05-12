@@ -27,7 +27,6 @@ package org.anchoranalysis.image.feature.bean;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescriptor;
@@ -35,8 +34,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescrip
 public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() {
 		return FeatureInputPairObjsDescriptor.instance;
 	}
 

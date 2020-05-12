@@ -68,8 +68,8 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 		super();
 	}
 	
-	protected Feature( PropertyInitializer<FeatureInitParams> propertyInitializer ) {
-		super( propertyInitializer );
+	protected Feature(PropertyInitializer<FeatureInitParams> propertyInitializer) {
+		super(propertyInitializer);
 	}
 	
 	@Override
@@ -212,9 +212,9 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 	}
 
-	// Dummy method, that children can optionally override
+	/** Dummy method, that children can optionally override */
 	public void beforeCalc() throws InitException {
-
+		// Does nothing. To be overridden in children if needed.
 	}
 
 	protected LogErrorReporter getLogger() {

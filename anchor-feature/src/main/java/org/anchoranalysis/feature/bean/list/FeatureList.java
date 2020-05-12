@@ -295,4 +295,14 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		this.list = list;
 	}
 
+	@Override
+	public String getBeanDscr() {
+		return String.format(
+			"%s with %d items",
+			super.getBeanDscr(),
+			list.size()
+		);
+	}
+
+	
 }

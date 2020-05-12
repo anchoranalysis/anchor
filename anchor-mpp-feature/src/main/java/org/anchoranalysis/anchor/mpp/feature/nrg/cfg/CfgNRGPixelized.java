@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /* Contains a particular energy configuration */
 
@@ -96,7 +96,7 @@ public final class CfgNRGPixelized {
 		cfgNrg.assertValid();
 	}
 	
-	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureInput> sharedFeatures ) throws FeatureCalcException, InitException {
+	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureMulti<FeatureInput> sharedFeatures ) throws FeatureCalcException, InitException {
 
 		double old = cfgNrg.getNrgTotal();
 		this.init( nrgStack, sharedFeatures );
@@ -104,7 +104,7 @@ public final class CfgNRGPixelized {
 	}
 	
 	// The initial calculation of the NRG, thereafter it can be updated
-	public void init( NRGStackWithParams nrgStack, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException, FeatureCalcException {
+	public void init( NRGStackWithParams nrgStack, SharedFeatureMulti<FeatureInput> sharedFeatures ) throws InitException, FeatureCalcException {
 
 		cfgNrg.init();
 		

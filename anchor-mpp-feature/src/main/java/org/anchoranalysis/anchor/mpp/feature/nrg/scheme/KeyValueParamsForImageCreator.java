@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 
@@ -54,10 +54,10 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 public class KeyValueParamsForImageCreator {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureSet<FeatureInputStack> sharedFeatures;
+	private SharedFeatureMulti<FeatureInputStack> sharedFeatures;
 	private LogErrorReporter logger;
 	
-	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureSet<FeatureInputStack> sharedFeatures,
+	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureMulti<FeatureInputStack> sharedFeatures,
 			LogErrorReporter logger) {
 		super();
 		this.nrgScheme = nrgScheme;

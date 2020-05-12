@@ -50,8 +50,7 @@ public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
 	public abstract double calcCast( FeatureInputNRGStack params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() {
 		return FeatureInputNRGStackDescriptor.instance;
 	}
 }

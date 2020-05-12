@@ -37,8 +37,7 @@ public abstract class FeatureMark extends Feature<FeatureInputMark> {
 	public abstract double calc( SessionInput<FeatureInputMark> input ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() {
 		return FeatureInputMarkDescriptor.instance;
 	}
 

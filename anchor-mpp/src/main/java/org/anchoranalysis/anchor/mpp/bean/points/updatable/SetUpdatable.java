@@ -47,7 +47,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -107,7 +107,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
 	@Override
-	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures) throws InitException {
+	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureMulti<FeatureInput> sharedFeatures) throws InitException {
 		
 		
 

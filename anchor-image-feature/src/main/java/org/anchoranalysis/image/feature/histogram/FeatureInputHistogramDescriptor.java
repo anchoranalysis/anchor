@@ -32,13 +32,16 @@ public class FeatureInputHistogramDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputHistogramDescriptor instance = new FeatureInputHistogramDescriptor();
 	
-	private FeatureInputHistogramDescriptor() {
-		
-	}
+	private FeatureInputHistogramDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return false;
+	}
+
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputHistogram.class;
 	}
 
 }
