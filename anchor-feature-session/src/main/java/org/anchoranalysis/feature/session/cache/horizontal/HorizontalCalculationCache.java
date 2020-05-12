@@ -103,11 +103,11 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> paramsType, CacheCreator cacheCreator) {
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> inputType, CacheCreator cacheCreator) {
 		// Creates a new child-cache if it doesn't already exist for a particular name
 		return (FeatureSessionCache<V>) children.computeIfAbsent(
 			childName,
-			s -> cacheCreator.create(paramsType)
+			s -> cacheCreator.create(inputType)
 		);
 	}
 

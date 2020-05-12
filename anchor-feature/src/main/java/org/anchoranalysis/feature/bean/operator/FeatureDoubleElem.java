@@ -44,7 +44,7 @@ public abstract class FeatureDoubleElem<T extends FeatureInput> extends Feature<
 	// END BEAN PARAMETERS
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputDescriptorUtilities.paramTypeForTwo(item1, item2);
 	}
 	

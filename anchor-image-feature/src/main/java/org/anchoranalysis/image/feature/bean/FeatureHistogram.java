@@ -34,7 +34,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescrip
 public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputPairObjsDescriptor.instance;
 	}
 

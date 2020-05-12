@@ -52,5 +52,5 @@ public abstract class FeatureBase<T extends FeatureInput> extends InitializableB
 		return featureDefiner;
 	}
 		
-	public abstract FeatureInputDescriptor paramType();
+	public abstract FeatureInputDescriptor inputDescriptor();
 }

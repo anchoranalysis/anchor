@@ -75,7 +75,7 @@ public class FeatureSession {
 		return with(
 			feature,
 			new FeatureInitParams(),
-			new SharedFeatureMulti<>(),
+			new SharedFeatureMulti(),
 			logger
 		);
 	}
@@ -83,7 +83,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
 		Feature<T> feature,
 		FeatureInitParams initParams,
-		SharedFeatureMulti<T> sharedFeatures,
+		SharedFeatureMulti sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
 		SequentialSession<T> session = new SequentialSession<>(feature); 
@@ -112,7 +112,7 @@ public class FeatureSession {
 		return with(
 			features,
 			new FeatureInitParams(),
-			new SharedFeatureMulti<>(),
+			new SharedFeatureMulti(),
 			logger				
 		);
 	}
@@ -121,7 +121,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
 		FeatureList<T> features,
 		FeatureInitParams initParams,
-		SharedFeatureMulti<T> sharedFeatures,
+		SharedFeatureMulti sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
 		return with(
@@ -139,7 +139,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
 		FeatureList<T> features,
 		FeatureInitParams initParams,
-		Optional<SharedFeatureMulti<T>> sharedFeatures,
+		Optional<SharedFeatureMulti> sharedFeatures,
 		LogErrorReporter logger,
 		Collection<String> ignoreFeaturePrefixes,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
@@ -148,7 +148,7 @@ public class FeatureSession {
 		startSession(
 			session,
 			initParams,
-			sharedFeatures.orElse( new SharedFeatureMulti<>() ),
+			sharedFeatures.orElse( new SharedFeatureMulti() ),
 			logger
 		);
 		return session;
@@ -157,7 +157,7 @@ public class FeatureSession {
 	private static <T extends FeatureInput> void startSession(
 		SequentialSession<T> session,
 		FeatureInitParams initParams,
-		SharedFeatureMulti<T> sharedFeatures,
+		SharedFeatureMulti sharedFeatures,
 		LogErrorReporter logger
 	) throws FeatureCalcException {
 		try {

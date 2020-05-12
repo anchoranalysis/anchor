@@ -47,7 +47,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
@@ -58,7 +57,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 public class NRGSchemeWithSharedFeatures {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureMulti<FeatureInput> sharedFeatures;
+	private SharedFeatureMulti sharedFeatures;
 	
 	private LRUCache<Integer,NRGTotal> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
@@ -83,7 +82,7 @@ public class NRGSchemeWithSharedFeatures {
 						
 			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator(
 				nrgScheme,
-				sharedFeatures.downcast(),
+				sharedFeatures,
 				logger
 			);
 			this.kvp = creator.createParamsForImage( raster );
@@ -106,7 +105,7 @@ public class NRGSchemeWithSharedFeatures {
 				session = FeatureSession.with(
 					nrgScheme.getElemIndAsFeatureList(),
 					createInitParams(kvp),
-					sharedFeatures.downcast(),
+					sharedFeatures,
 					logger
 				);
 
@@ -127,7 +126,7 @@ public class NRGSchemeWithSharedFeatures {
 
 	
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureMulti<FeatureInput> sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
+			SharedFeatureMulti sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
@@ -146,7 +145,7 @@ public class NRGSchemeWithSharedFeatures {
 			FeatureCalculatorMulti<FeatureInputAllMemo> session = FeatureSession.with(
 				nrgScheme.getElemAllAsFeatureList(),
 				createInitParams(nrgStack.getParams()),
-				sharedFeatures.downcast(),
+				sharedFeatures,
 				logger
 			);
 			
@@ -219,7 +218,7 @@ public class NRGSchemeWithSharedFeatures {
 		}
 	}
 
-	public SharedFeatureMulti<FeatureInput> getSharedFeatures() {
+	public SharedFeatureMulti getSharedFeatures() {
 		return sharedFeatures;
 	}
 

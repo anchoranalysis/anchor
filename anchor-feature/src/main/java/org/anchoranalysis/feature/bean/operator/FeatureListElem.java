@@ -52,7 +52,7 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputDescriptorUtilities.paramTypeForList(list);
 	}
 }

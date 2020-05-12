@@ -35,7 +35,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescrip
 public abstract class FeatureObjMaskPair extends Feature<FeatureInputPairObjs> {
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputPairObjsDescriptor.instance;
 	}
 }

@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.shared;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 /*
  * #%L
  * anchor-feature
@@ -38,162 +41,124 @@ import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 
 /**
- * A group of features (of possibly hetregenous type) made available to other features to reference
+ * A group of features (of possibly heterogeneous type) made available to other features to reference
  * 
  * @author owen
- *
- * @param <T> feature-calc params type
  */
-public class SharedFeatureMulti<T extends FeatureInput> implements INamedProvider<Feature<T>>, Iterable<INameValue<Feature<T>>> {
+public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>, Iterable<INameValue<Feature<FeatureInput>>> {
+	
+	/** For searching by key */
+	private NameValueSet<Feature<FeatureInput>> mapByKey;
+	
+	/**
+	 *  For subsetting by descriptor-type
+	 *  
+	 *  <pre>Key=<FeatureInputDescriptor</pre>
+	 *  <pre>Value=INameValue<Feature<FeatureInput>>></pre>
+	 */
+	private MultiMap mapByDescriptor;
+	
+	/** For checking if a feature already exists */
+	private Set<Feature<FeatureInput>> setFeatures;
 
-	private NameValueSet<Feature<T>> delegate;
-
-	// Create an empty set
 	public SharedFeatureMulti() {
-		delegate = new NameValueSet<>();
+		mapByKey = new NameValueSet<>();
+		mapByDescriptor = new MultiValueMap();
+		setFeatures = new HashSet<>();
 	}
 	
-	// Assumes either all features in the set match paramsType or none do
+	/** Extracts the subset of inputs that are compatible with a particular input-type */ 
 	@SuppressWarnings("unchecked")
-	public <S extends FeatureInput> SharedFeatureSet<S> maybeCastSharedFeatures(Class<?> paramsType) {
+	public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(Class<?> inputType) {
 		
-		/*if (keys().isEmpty()) {
-			return new SharedFeatureSet<S>();
-		}
-		
-		Class<?> classOfArbitraryItem = arbitraryItem().getClass(); 
-		
-		// Take an arbitrary item
-		if(paramsType.isAssignableFrom(classOfArbitraryItem)) {
-			return (SharedFeatureSet<S>) this;
-		}*/
-		
-		return new SharedFeatureSet<S>( new NameValueSet<>() );	
-	}
-	
-	@SuppressWarnings("unchecked")
-	public SharedFeatureMulti<FeatureInput> upcast() {
-		return (SharedFeatureMulti<FeatureInput>) this;
-	}
-	
-	// TODO go through all uses of downcast, and replace with something valid
-	@SuppressWarnings("unchecked")
-	public <S extends T> SharedFeatureMulti<S> downcast() {
-		return (SharedFeatureMulti<S>) this;
+		 NameValueSet<Feature<S>> out = new  NameValueSet<>();
+		 
+		 for(FeatureInputDescriptor descriptor : (Set<FeatureInputDescriptor>) mapByDescriptor.keySet()) {
+			 if (descriptor.isCompatibleWith(inputType)) {
+				 transferToSet(
+					(Collection<INameValue<Feature<S>>>) mapByDescriptor.get(descriptor),
+					out
+				);
+			 }
+		 }
+				
+		return new SharedFeatureSet<S>(out);	
 	}
 	
 	@Override
 	public String toString() {
-		return delegate.keys().toString();
+		return mapByKey.keys().toString();
 	}
 	
-	// TODO inefficient, let's move towards a map
 	public boolean contains( Feature<FeatureInput> feature ) {
-		for( INameValue<Feature<T>> nv : this) {
-			Feature<T> f = nv.getValue();
-			if (feature.equals(f)) {
-				return true;
-			}
-		}
-		return false;
+		return setFeatures.contains(feature);
 	}
 		
-	public SharedFeatureMulti<T> duplicate() {
-		SharedFeatureMulti<T> out = new SharedFeatureMulti<>();
-		for( String key : delegate.keys() ) {
-			Feature<T> item = delegate.getNull(key);
-			out.delegate.add( new String(key), item.duplicateBean());
+	public SharedFeatureMulti duplicate() {
+		SharedFeatureMulti out = new SharedFeatureMulti();
+		
+		for (INameValue<Feature<FeatureInput>> nv : mapByKey) {
+			out.addNoDuplicate(nv);
 		}
 		return out;
 	}
 	
-	public void add( SharedFeatureMulti<T> other ) {
-		delegate.add( other.delegate );
-	}
-	
-	// Uses names of features
-	public void addDuplicate( FeatureList<T> features ) {
-		for( Feature<T> f : features ) {
-			delegate.add( f.getFriendlyName(), f.duplicateBean() );
-		}
-	}
-	
-	public void addNoDuplicate( FeatureList<T> features) {
+	public void addNoDuplicate(FeatureList<FeatureInput> features) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
-		for( Feature<T> f : features) {
-			add( new NameValue<>(f.getFriendlyName(), f) );
+		for( Feature<FeatureInput> f : features) {
+			
+			addNoDuplicate(
+				new NameValue<>(f.getFriendlyName(), f)
+			);
 		}
 	}
 	
-	public void addDuplicate( NameValueSet<Feature<T>> src ) {
-		addDuplicate( src, delegate );
+	private void addNoDuplicate(INameValue<Feature<FeatureInput>> nv) {
+		mapByKey.add(nv);
+		mapByDescriptor.put(nv.getValue().inputDescriptor(), nv);
+		setFeatures.add(nv.getValue());
 	}
 	
-	public void addDuplicate( SharedFeatureMulti<T> other ) {
-		addDuplicate( other.delegate, delegate );
-	}
-	
-	public void removeIfExists( FeatureList<T> features) {
+	public void removeIfExists(FeatureList<FeatureInput> features) {
 		// We loop over all features in the ni, and call them all the same thing with a number
-		for( Feature<T> f : features) {
-			delegate.removeIfExists(f);
-		}
-	}
-	
-	/** Returns an arbitrary-item from the set, or null if the set is empty */
-	public Feature<T> arbitraryItem() {
-		
-		if (keys().isEmpty()) {
-			return null;
-		}
-		
-		return getNull(
-			keys().iterator().next()
-		);
-	}
-	
-	private void addDuplicate( NameValueSet<Feature<T>> src, NameValueSet<Feature<T>> target ) {
-		for ( String key : src.keys() ) {
-			try {
-				target.add( key, src.getException(key).duplicateBean() );
-			} catch (NamedProviderGetException e) {
-				assert false;
-			}
+		for( Feature<FeatureInput> f : features) {
+			mapByKey.removeIfExists(f);
 		}
 	}
 
-	public void add(INameValue<Feature<T>> ni) {
-		delegate.add(ni);
-	}
-
-	public NameValueSet<Feature<T>> getSet() {
-		return delegate;
+	@Override
+	public Iterator<INameValue<Feature<FeatureInput>>> iterator() {
+		return mapByKey.iterator();
 	}
 
 	@Override
-	public Iterator<INameValue<Feature<T>>> iterator() {
-		return delegate.iterator();
+	public Feature<FeatureInput> getException(String key) throws NamedProviderGetException {
+		return mapByKey.getException(key);
 	}
 
 	@Override
-	public Feature<T> getException(String key) throws NamedProviderGetException {
-		return delegate.getException(key);
-	}
-
-	@Override
-	public Feature<T> getNull(String key) {
-		return delegate.getNull(key);
+	public Feature<FeatureInput> getNull(String key) {
+		return mapByKey.getNull(key);
 	}
 
 	@Override
 	public Set<String> keys() {
-		return delegate.keys();
+		return mapByKey.keys();
 	}
-
-	public void add(String name, Feature<T> item) {
-		delegate.add(name, item);
+	
+	/** Transfers from a collection of name-values into a {@link NameValueSet} */
+	private static <S extends FeatureInput> void transferToSet(
+		Collection<INameValue<Feature<S>>> collectionNv,
+		NameValueSet<Feature<S>> out
+	) {
+		 for( INameValue<Feature<S>> nv : collectionNv) {
+			 out.add(nv);
+		 }
 	}
 }

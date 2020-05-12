@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.feature.session.merged;
 
-import java.util.Arrays;
+
 
 /*
  * #%L
@@ -31,29 +31,18 @@ import java.util.Arrays;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.strategy.child.CacheTransferSource;
-import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
-import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 
@@ -84,15 +73,8 @@ import org.anchoranalysis.image.init.ImageInitParams;
  *
  */
 public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs> {
-	
-	// Our sessions
-	private FeatureCalculatorMulti<FeatureInputStack> sessionImage;
-	
-	// We avoid using seperate sessions for First and Second, as we want them
-	//  to share the same Vertical-Cache for object calculation.
-	private FeatureCalculatorMulti<FeatureInputSingleObj> sessionFirstSecond;
-	private FeatureCalculatorMulti<FeatureInputSingleObj> sessionMerged;
-	private FeatureCalculatorMulti<FeatureInputPairObjs> sessionPair;
+		
+	private MergedPairsCalculator calculator;
 
 	// The lists we need
 	private MergedPairsFeatures features;
@@ -128,91 +110,19 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		this.suppressErrors = suppressErrors;
 	}
 	
-	
-//	private SharedFeatureList createSharedFeatures( SharedObjectsFeature soFeature, FeatureList fl ) {
-//		SharedFeatureList out = new SharedFeatureList();
-//		out.add( soFeature.getSharedFeatureSet() );
-//		fl.copyToCustomName(out.getSet(),false);
-//		return out;
-//	}
-	
 	@Override
 	public void start(
 		ImageInitParams soImage,
 		Optional<NRGStackWithParams> nrgStack,
 		LogErrorReporter logErrorReporter
 	) throws InitException {
-
-		//SharedFeaturesInitParams soFeature = soImage.getFeature();
 		
-		// We create our SharedFeatures including anything from the NamedDefinitions, and all our additional features
-		// TODO fix
-		//SharedFeatureSet<FeatureCalcParams> sharedFeatures = soFeature.getSharedFeatureSet();
-		// sharedFeatures = createSharedFeatures(soFeature,listSingle);
-		//listImage.copyToCustomName(sharedFeatures.getSet(),false);
-		//listSingle.copyToCustomName(sharedFeatures.getSet(),false);
-		//listPair.copyToCustomName(sharedFeatures.getSet(),false);
-		
-		
-		// We create more caches for the includeFirst and includeSecond Features and merged features.
-		
-		CreateCalculatorHelper cc = new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter);
-		
-		sessionImage = features.createImageSession(cc, soImage, CachingStrategies.noCache(), suppressErrors);
-		
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond
-			= CachingStrategies.cacheAndReuse();
-		
-		if (include.includeFirstOrSecond()) {
-			sessionFirstSecond = features.createSingleSession(cc, soImage, cachingStrategyFirstSecond, suppressErrors);
-		}
-		
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyMerged
-			= CachingStrategies.cacheAndReuse();
-		if (include.includeMerged()) {
-			sessionMerged = features.createSingleSession(cc, soImage, cachingStrategyMerged, suppressErrors);
-		}
-				
-		sessionPair = features.createPairSession(
-			cc,
+		calculator = new MergedPairsCalculator(
+			features,
+			new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter),
+			include,			
 			soImage,
-			createTransferSource(
-				cachingStrategyFirstSecond,
-				cachingStrategyMerged
-			)
-		);
-	}
-	
-	private CacheTransferSourceCollection createTransferSource(
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategyFirstAndSecond,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategyMerged		
-	) {
-
-		CacheTransferSourceCollection source = new CacheTransferSourceCollection();
-		source.add(
-			sourceFromExistingCache(
-				replaceStrategyFirstAndSecond,
-				Arrays.asList(FeatureDeriveFromPair.CACHE_NAME_FIRST, FeatureDeriveFromPair.CACHE_NAME_SECOND)
-			)	
-		);
-		source.add(
-			sourceFromExistingCache(
-				replaceStrategyMerged,
-				Arrays.asList(FeatureDeriveFromPair.CACHE_NAME_MERGED)
-			)
-		);
-		return source;
-	}
-	
-	private static CacheTransferSource<FeatureInputSingleObj> sourceFromExistingCache(
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategy,			
-		List<ChildCacheName> cacheNames
-	) {
-		return new CacheTransferSource<>(
-			() -> replaceStrategy.getStrategy().map( strategy -> 
-				strategy.getCache()
-			),
-			new HashSet<>(cacheNames)
+			suppressErrors
 		);
 	}
 	
@@ -280,19 +190,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	
 	@Override
 	public int sizeFeatures() {
-		
-		// Number of times we use the listSingle
-		int numSingle = (
-			1 
-			+ integerFromBoolean( include.includeFirst() )
-			+ integerFromBoolean( include.includeSecond() )
-		);
-				
-		return (
-			features.numImageFeatures()
-			+ features.numPairFeatures()
-			+ (numSingle * features.numSingleFeatures())
-		);
+		return calculator.sizeFeatures();
 	}
 	
 	@Override
@@ -309,11 +207,11 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	
 	private ResultsVector calcForInputAndMaybeInverse(FeatureInputPairObjs input, Optional<ErrorReporter> errorReporter) throws FeatureCalcException {
 		
-		ResultsVector rv = calcForInput(input, errorReporter);
+		ResultsVector rv = calculator.calcForInput(input, errorReporter);
 		
 		if (checkInverse) {
 			
-			ResultsVector rvInverse = calcForInput(
+			ResultsVector rvInverse = calculator.calcForInput(
 				input.createInverse(),
 				errorReporter
 			);
@@ -329,50 +227,5 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		}
 		
 		return rv;
-	}
-	
-	
-	private ResultsVector calcForInput(FeatureInputPairObjs input, Optional<ErrorReporter> errorReporter) throws FeatureCalcException {
-		
-		ResultsVectorBuilder helper = new ResultsVectorBuilder(
-			sizeFeatures(),
-			errorReporter
-		);
-		
-		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
-		
-		// TODO these are identical and do not need to be repeatedly calculated
-		helper.calcAndInsert(new FeatureInputStack(), sessionImage );
-		
-		// First features
-		if (include.includeFirst()) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getFirst, sessionFirstSecond );
-		}
-		
-		// Second features
-		if (include.includeSecond()) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, sessionFirstSecond );
-		}
-		
-		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
-		if (include.includeMerged()) {
-			helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
-		}
-
-		// Pair features
-		helper.calcAndInsert(input, sessionPair );
-		
-		assert(helper.getResultsVector().hasNoNulls());
-		return helper.getResultsVector();
-	}
-	
-	/**
-	 * Integer value from boolean
-	 * 
-	 * @param b
-	 * @return 0 for FALSE, 1 for TRUE
-	 */
-	private static int integerFromBoolean( boolean b ) {
-		return b ? 1 : 0;
 	}
 }

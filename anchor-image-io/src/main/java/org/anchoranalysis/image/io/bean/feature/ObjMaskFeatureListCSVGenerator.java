@@ -71,7 +71,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	private FeatureList<FeatureInputSingleObj> features;
 	
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
-	private SharedFeatureMulti<FeatureInputSingleObj> sharedFeatures = new SharedFeatureMulti<>();
+	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
 	
 	private NRGStackWithParams nrgStack;
 	private LogErrorReporter logErrorReporter;
@@ -181,11 +181,11 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.paramsInit = paramsInit;
 	}
 
-	public SharedFeatureMulti<FeatureInputSingleObj> getSharedFeatures() {
+	public SharedFeatureMulti getSharedFeatures() {
 		return sharedFeatures;
 	}
 
-	public void setSharedFeatures(SharedFeatureMulti<FeatureInputSingleObj> sharedFeatures) {
+	public void setSharedFeatures(SharedFeatureMulti sharedFeatures) {
 		this.sharedFeatures = sharedFeatures;
 	}
 	

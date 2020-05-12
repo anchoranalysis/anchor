@@ -35,11 +35,11 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public class FeatureListStoreUtilities {
 	
-	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<T>> featureListProvider, SharedFeatureMulti<T> out ) {
+	public static void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<FeatureInput>> featureListProvider, SharedFeatureMulti out ) {
 		
 		for( String key : featureListProvider.keys()) {
 			try {
-				FeatureList<T> fl = featureListProvider.getException(key);
+				FeatureList<FeatureInput> fl = featureListProvider.getException(key);
 				out.addNoDuplicate(fl);
 				
 			} catch (NamedProviderGetException e) {
@@ -48,20 +48,6 @@ public class FeatureListStoreUtilities {
 		}
 		
 	}
-	
-	public static <T extends FeatureInput> void addFeatureListToStoreNoDuplicateWithExtraName( FeatureList<T> featureList, String name, SharedFeatureMulti<T> out ) {
-		
-		// We loop over all features in the ni, and call them all the same thing with a number
-		for( Feature<T> f : featureList) {
-			
-			String chosenName = determineFeatureName(f,name, featureList.size()==1);
-			
-			// We duplicate so that when run in parallel each thread has its own local state for each feature
-			//  and uses seperate cached calculation lists
-			out.add(chosenName, f );
-		}
-	}
-	
 	
 	public static <T extends FeatureInput> void addFeatureListToStore( FeatureList<T> featureList, String name, NamedFeatureStore<T> out ) {
 		

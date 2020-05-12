@@ -34,7 +34,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObjDescriptor;
 public abstract class FeatureObjMask extends Feature<FeatureInputSingleObj> {
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputSingleObjDescriptor.instance;
 	}
 }

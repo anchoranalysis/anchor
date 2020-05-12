@@ -72,7 +72,7 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputGenericDescriptor.instance;
 	}
 

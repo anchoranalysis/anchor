@@ -49,7 +49,7 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 			map.put( nmp.getName(), nmp );
 		}
 	}
-	
+		
 	@Override
 	public Set<String> keys() {
 		return map.keySet();

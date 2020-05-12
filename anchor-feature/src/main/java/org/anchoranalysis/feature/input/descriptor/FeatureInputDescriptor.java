@@ -45,7 +45,7 @@ public abstract class FeatureInputDescriptor {
 	 *  
 	 * @throws FeatureCalcException */
 	public boolean isCompatibleWith(Feature<?> feature) {
-		return inputClass().isAssignableFrom( feature.paramType().inputClass() );
+		return inputClass().isAssignableFrom( feature.inputDescriptor().inputClass() );
 	}
 	
 	/** 
@@ -82,5 +82,19 @@ public abstract class FeatureInputDescriptor {
 			return first;
 		}
 		return dscr.preferTo(this);
+	}
+
+	@Override
+	public int hashCode() {
+		return 31;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		return (getClass() == obj.getClass());
 	}
 }

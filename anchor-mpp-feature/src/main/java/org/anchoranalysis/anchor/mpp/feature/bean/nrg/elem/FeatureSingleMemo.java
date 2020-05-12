@@ -40,7 +40,7 @@ public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> 
 	public abstract double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputSingleMemoDescriptor.instance;
 	}
 }

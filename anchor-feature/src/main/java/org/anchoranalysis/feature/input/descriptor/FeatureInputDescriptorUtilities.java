@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class FeatureInputDescriptorUtilities {
 
 	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) {
-		return paramTypeForTwo( item1.paramType(), item2.paramType() );
+		return paramTypeForTwo( item1.inputDescriptor(), item2.inputDescriptor() );
 	}
 	
 	public static FeatureInputDescriptor paramTypeForTwo( FeatureInputDescriptor c1, FeatureInputDescriptor c2 ) {
@@ -93,7 +93,7 @@ public class FeatureInputDescriptorUtilities {
 		FeatureInputDescriptor chosenParamType = null;
 		for (Feature<?> f : list) {
 			
-			FeatureInputDescriptor paramType = f.paramType();
+			FeatureInputDescriptor paramType = f.inputDescriptor();
 			
 			if (paramType.isCompatibleWithEverything()) {
 				continue;

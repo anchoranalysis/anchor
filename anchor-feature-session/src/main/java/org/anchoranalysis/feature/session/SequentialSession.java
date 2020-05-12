@@ -123,7 +123,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param sharedFeatures		A list of features that are shared between the features we are calculating (and thus also init-ed)
 	 * @throws InitException
 	 */
-	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti<T> sharedFeatures, LogErrorReporter logger ) throws InitException{
+	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException{
 		
 		if (isStarted) {
 			throw new InitException("Session has already been started.");
@@ -254,7 +254,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param sharedFeatures
 	 * @throws InitException
 	 */
-	private void checkNoIntersectionWithSharedFeatures( SharedFeatureMulti<T> sharedFeatures ) throws InitException {
+	private void checkNoIntersectionWithSharedFeatures( SharedFeatureMulti sharedFeatures ) throws InitException {
 		assert(listFeatures!=null);
 		try {
 			for( Feature<T> f : listFeatures ) {
@@ -276,7 +276,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}
 	}
 		
-	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti<T> sharedFeatures, LogErrorReporter logger ) throws InitException {
+	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException {
 		assert(featureInitParams!=null);
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);

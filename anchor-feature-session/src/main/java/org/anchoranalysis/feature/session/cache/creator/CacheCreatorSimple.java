@@ -46,14 +46,14 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 public class CacheCreatorSimple implements CacheCreator {
 
 	private FeatureList<? extends FeatureInput> namedFeatures;
-	private SharedFeatureMulti<? extends FeatureInput> sharedFeatures;
+	private SharedFeatureMulti sharedFeatures;
 	private FeatureInitParams featureInitParams;
 	private LogErrorReporter logger;
 	
 	private static FeatureSessionCacheFactory factory = new HorizontalFeatureCacheFactory();
 	
 	public CacheCreatorSimple(FeatureList<? extends FeatureInput> namedFeatures,
-			SharedFeatureMulti<? extends  FeatureInput> sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
+			SharedFeatureMulti sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
 		super();
 		this.namedFeatures = namedFeatures;
 		this.sharedFeatures = sharedFeatures;
@@ -62,14 +62,14 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	@Override
-	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType ) {
+	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> inputType ) {
 		
-		FeatureList<T> featureList = filterFeatureList(paramsType);
+		FeatureList<T> featureList = filterFeatureList(inputType);
 				
 		try {
 			return createCache(
 				featureList,
-				paramsType,
+				inputType,
 				featureInitParams,
 				logger	
 			);
@@ -85,7 +85,7 @@ public class CacheCreatorSimple implements CacheCreator {
 	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
 		
 		List<Feature<T>> list = namedFeatures.getList().stream()
-			.filter( f -> f.paramType().isCompatibleWith(paramsType) )
+			.filter( f -> f.inputDescriptor().isCompatibleWith(paramsType) )
 			.map( f -> (Feature<T>) f )
 			.collect( Collectors.toList() );
 		
@@ -94,12 +94,12 @@ public class CacheCreatorSimple implements CacheCreator {
 		
 	private <T extends FeatureInput> FeatureSessionCache<T> createCache(
 		FeatureList<T> namedFeatures,
-		Class<?> paramsType,
+		Class<?> inputType,
 		FeatureInitParams featureInitParams,
 		LogErrorReporter logger			
 	) throws CreateException {
 		
-		SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.maybeCastSharedFeatures(paramsType);
+		SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 		
 		try {
 			sharedFeaturesSet.initRecursive(featureInitParams, logger);

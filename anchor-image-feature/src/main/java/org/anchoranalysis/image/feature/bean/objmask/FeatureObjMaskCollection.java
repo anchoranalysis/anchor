@@ -49,7 +49,7 @@ public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs>
 	public abstract double calc( FeatureInputObjs params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputObjsDescriptor.instance;
 	}
 	

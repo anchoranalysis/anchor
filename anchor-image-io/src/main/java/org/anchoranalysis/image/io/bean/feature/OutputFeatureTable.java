@@ -119,7 +119,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			logErrorReporter
 		);
 		generator.setParamsInit(paramsInit);
-		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet().downcast() );
+		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet() );
 		generator.setIterableElement(objsCollection);
 		return generator;
 	}

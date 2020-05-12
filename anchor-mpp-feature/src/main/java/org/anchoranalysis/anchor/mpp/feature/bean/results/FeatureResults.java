@@ -54,7 +54,7 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
 	public abstract double calc( FeatureInputResults params ) throws FeatureCalcException;
 	
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputResultsDescriptor.instance;
 	}
 

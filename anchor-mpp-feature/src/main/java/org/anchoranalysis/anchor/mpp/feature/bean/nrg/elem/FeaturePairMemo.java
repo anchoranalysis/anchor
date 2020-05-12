@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 public abstract class FeaturePairMemo extends Feature<FeatureInputPairMemo> {
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputPairMemoDescriptor.instance;
 	}
 }

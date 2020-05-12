@@ -93,7 +93,7 @@ public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
 	}
 }

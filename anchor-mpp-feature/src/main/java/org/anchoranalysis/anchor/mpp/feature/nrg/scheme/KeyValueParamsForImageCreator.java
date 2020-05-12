@@ -54,10 +54,10 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 public class KeyValueParamsForImageCreator {
 
 	private NRGScheme nrgScheme;
-	private SharedFeatureMulti<FeatureInputStack> sharedFeatures;
+	private SharedFeatureMulti sharedFeatures;
 	private LogErrorReporter logger;
 	
-	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureMulti<FeatureInputStack> sharedFeatures,
+	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureMulti sharedFeatures,
 			LogErrorReporter logger) {
 		super();
 		this.nrgScheme = nrgScheme;

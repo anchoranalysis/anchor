@@ -64,7 +64,7 @@ public abstract class FeatureSingleElem<T extends FeatureInput, S extends Featur
 	}
 	
 	@Override
-	public FeatureInputDescriptor paramType() {
-		return item.paramType();
+	public FeatureInputDescriptor inputDescriptor() {
+		return item.inputDescriptor();
 	}
 }

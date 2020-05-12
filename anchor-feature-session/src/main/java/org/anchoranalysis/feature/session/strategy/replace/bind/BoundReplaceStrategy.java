@@ -59,13 +59,13 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 	public ReplaceStrategy<T> bind(
 		FeatureList<T> featureList,
 		FeatureInitParams featureInitParams,
-		SharedFeatureMulti<T> sharedFeatures, 
+		SharedFeatureMulti sharedFeatures, 
 		LogErrorReporter logger
 	) {
 		
 		// 1. Extract the set of relevant shared-features from the set, duplicate and initialize
 		// 2. Add all the features in the list to these-features
-		/*SharedFeatureMulti<T> sharedSet = new SharedFeatureMulti<>(
+		/*SharedFeatureMulti sharedSet = new SharedFeatureMulti(
 			sharedFeatures.getSet()
 		);*/
 		
