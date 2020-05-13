@@ -26,17 +26,33 @@ package org.anchoranalysis.core.arithmetic;
  * #L%
  */
 
-public class DivideUtilities {
+/**
+ * Utilities for arithmetic operations involving type {@link double}
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class DoubleUtilities {
 
-	private DivideUtilities() {
-		
+	private DoubleUtilities() {}
+	
+	/** Are the two numbers equal? */
+	public static boolean areEqual( double d1, double d2 ) {
+		return Math.abs(d1-d2) < PrecisionConstants.EPSILON;
 	}
-
-	// Replaces a value with a constant if the divider is 0
-	public static double divideByZeroReplace( double num, double dem, double replaceConst ) {
+	
+	/**
+	 * Replaces a value with a constant if the divider is 0
+	 * 
+	 * @param num numerator
+	 * @param dem denominator
+	 * @param replaceWithIfZero what to replace with if zero
+	 * @return numerator divided denominator or replaceWithIfZero (if denominator is zero)
+	 */
+	public static double divideByZeroReplace( double num, double dem, double replaceWithIfZero ) {
 		
-		if (FloatUtilities.areEqual(dem, 0)) {
-			return replaceConst;
+		if (areEqual(dem, 0.0)) {
+			return replaceWithIfZero;
 		}
 		else {
 			return num/dem;

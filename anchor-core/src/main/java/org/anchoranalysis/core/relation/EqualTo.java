@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.relation;
 
+import org.anchoranalysis.core.arithmetic.DoubleUtilities;
+
 /*-
  * #%L
  * anchor-core
@@ -26,13 +28,11 @@ package org.anchoranalysis.core.relation;
  * #L%
  */
 
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
-
 public class EqualTo implements RelationToValue {
 
 	@Override
 	public boolean isRelationToValueTrue(double valueFirst, double valueSecond) {
-		return FloatUtilities.areEqual(valueFirst, valueSecond);
+		return DoubleUtilities.areEqual(valueFirst, valueSecond);
 	}
 
 }

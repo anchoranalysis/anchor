@@ -29,7 +29,7 @@ package org.anchoranalysis.core.geometry;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
+import org.anchoranalysis.core.arithmetic.DoubleUtilities;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public final class Point2d implements Serializable {
@@ -108,11 +108,11 @@ public final class Point2d implements Serializable {
 	    }
 	    Point2d objCast = (Point2d) obj;
 	    
-	    if (!FloatUtilities.areEqual(x, objCast.x)) {
+	    if (!DoubleUtilities.areEqual(x, objCast.x)) {
 	    	return false;
 	    }
 	    
-	    if (!FloatUtilities.areEqual(y, objCast.y)) {
+	    if (!DoubleUtilities.areEqual(y, objCast.y)) {
 	    	return false;
 	    }
     
