@@ -36,10 +36,11 @@ import org.anchoranalysis.core.params.KeyValueParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /** Calculates a per-pixel score */
-public abstract class PixelScore extends AnchorBean<PixelScore> {
+public abstract class PixelScore extends ImageBean<PixelScore> {
 	
 	/**
 	 * Initializes the pixels-score.
