@@ -32,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
-import org.anchoranalysis.anchor.mpp.bean.provider.ProbMapProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
@@ -158,7 +157,6 @@ public class MPPInitParams extends BeanInitParams {
 		populater.copyWithoutInit(PairCollection.class, getSimplePairCollection());
 		
 		populater.copyProvider(CfgProvider.class, getCfgCollection());
-		populater.copyProvider(ProbMapProvider.class, getProbMapSet());
 		
 		soImage.populate(pi, define, logger);
 		soPoints.populate(pi, define, logger );

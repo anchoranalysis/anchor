@@ -32,13 +32,9 @@ public class FileWriteAnd extends MatchAnd<FileWrite> {
 
 	public FileWriteAnd() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public FileWriteAnd(Match<FileWrite> condition1, Match<FileWrite> condition2) {
 		super(condition1, condition2);
-		// TODO Auto-generated constructor stub
 	}
-	
-	
 }
