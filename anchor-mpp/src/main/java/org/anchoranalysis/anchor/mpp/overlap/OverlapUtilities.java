@@ -64,6 +64,16 @@ public class OverlapUtilities {
 	}
 	
 	
+	/**
+	 * Counts the number of overlapping voxels between two {@link PxlMarkMemo}
+	 * 
+	 * @param pmm1
+	 * @param pmm2
+	 * @param regionID
+	 * @param globalMask
+	 * @param onGlobalMask
+	 * @return the total number of overlapping boxels
+	 */
 	public static double overlapWithMaskGlobal(
 		PxlMarkMemo pmm1,
 		PxlMarkMemo pmm2,
@@ -96,43 +106,6 @@ public class OverlapUtilities {
 		);
 	}
 	
-	
-	public static double overlapWithMaskGlobalMiddleRange(
-		PxlMarkMemo pmm1,
-		PxlMarkMemo pmm2,
-		int regionID,
-		VoxelBox<ByteBuffer> globalMask,
-		byte onGlobalMask,
-		double quantileLow,
-		double quantileHigh
-	) {
-
-		// If we have a quick routine available, we use this
-		if (pmm2.getMark().hasOverlapWithQuick()) {
-			return pmm1.getMark().overlapWithQuick( pmm2.getMark(), regionID );	
-		}
-		
-		// We do some quick tests to get rid of obvious cases which do not overlap
-		if ( pmm1.getMark().quickTestNoOverlap( pmm2.getMark(), regionID) ) {
-			return 0.0;
-		}
-			
-		// Otherwise we do it the slow way by seeing if any pixels intersect
-		// between the two bounding box
-		PxlMark mark1 = pmm1.doOperation(); 
-		PxlMark mark2 = pmm2.doOperation();
-		
-		byte flag = RegionMembershipUtilities.flagForRegion(regionID);
-		return new CountIntersectingPixelsRegionMembershipMask(flag).countIntersectingPixelsMaskGlobalMiddleRange(
-			mark1.getVoxelBox(),
-			mark2.getVoxelBox(),
-			globalMask,
-			onGlobalMask,
-			quantileLow,
-			quantileHigh
-		);
-	}
-		
 	public static MaxIntensityProjectionPair createMaxIntensityProjectionPair( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
 			
 		// Otherwise we do it the slow way by seeing if any pixels intersect
