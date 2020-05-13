@@ -53,7 +53,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 	private String chnlName;
 	
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
 	private ChnlGetter chnlCollection;
@@ -77,7 +77,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 				return chnlCollection.getChnl(name, t, progressReporter);
 			}
 			
-			ChnlProvider chnlProviderDup = chnlProvider.duplicateBean();
+			ChnlProvider chnlProviderDup = chnl.duplicateBean();
 			
 			Chnl chnlIn = chnlCollection.getChnl(name, t, progressReporter);
 			
@@ -101,17 +101,17 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 		this.chnlName = chnlName;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	@Override
 	public boolean hasChnl(String chnlName) {
 		return chnlCollection.hasChnl(chnlName);
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 	
 }
