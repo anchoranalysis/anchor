@@ -37,9 +37,7 @@ import java.util.List;
 
 class HelperReflection {
 
-	private HelperReflection() {
-		
-	}
+	private HelperReflection() {}
 	
 	public static PropertyDescriptor[] findAllPropertyDescriptors( Class<?> beanClass ) throws IntrospectionException {
 		BeanInfo beanInfo = Introspector.getBeanInfo(beanClass, Object.class);

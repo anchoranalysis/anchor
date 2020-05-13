@@ -33,7 +33,7 @@ import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 
 /**
  * Evaluates items via their Getter as soon as they are added
@@ -63,7 +63,7 @@ public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 	@Override
 	public void add(String name, Operation<T,OperationFailedException> getter) throws OperationFailedException {
 
-		NameValue<T> item = new NameValue<>(
+		SimpleNameValue<T> item = new SimpleNameValue<>(
 			new String(name),
 			getter.doOperation()
 		);

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
@@ -142,7 +142,7 @@ public class IterableGeneratorOutputHelper {
 			
 			if (oa.isOutputAllowed(name)) {
 				try {
-					out.add( new NameValue<>(name,providers.getException(name)) );
+					out.add( new SimpleNameValue<>(name,providers.getException(name)) );
 				} catch (NamedProviderGetException e) {
 					errorReporter.recordError(IterableGeneratorOutputHelper.class, e.summarize());
 				}
@@ -161,7 +161,7 @@ public class IterableGeneratorOutputHelper {
 			
 			if (oa.isOutputAllowed(name)) {
 				try {
-					out.add( new NameValue<>(name,providers.getException(name)) );
+					out.add( new SimpleNameValue<>(name,providers.getException(name)) );
 				} catch (NamedProviderGetException e) {
 					throw new OutputWriteFailedException(e.summarize());
 				}

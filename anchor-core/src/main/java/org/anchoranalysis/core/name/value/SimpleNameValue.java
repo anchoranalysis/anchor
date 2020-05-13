@@ -1,10 +1,10 @@
 package org.anchoranalysis.core.name.value;
 
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +26,43 @@ package org.anchoranalysis.core.name.value;
  * #L%
  */
 
-
 /**
- * An object that has an associated textual name and value
- *  
+ * 
+ * A simple container expressing a name-value pair
+ * 
  * @author Owen Feehan
  *
- * @param <T> value-type
+ * @param <V> value-type
  */
-public interface NameValue<T> {
+public class SimpleNameValue<V> implements NameValue<V> {
 
-	/** The associated name */
-	String getName();
+	private String name;
 	
-	/** @link getName() */
-	void setName(String name);
-	
-	/** The associated value */
-	T getValue();
-	
-	/** @link getValue() */
-	void setValue(T item);
+	private V value;
+
+	public SimpleNameValue(String name, V value) {
+		super();
+		this.name = name;
+		this.value = value;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public V getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(V value) {
+		this.value = value;
+	}
 }

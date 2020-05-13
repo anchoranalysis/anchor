@@ -1,10 +1,12 @@
-package org.anchoranalysis.core.name.value;
-
-/*
+/** 
+ * Beans to specify and iterate over a sequence of integers.
+ **/
+package org.anchoranalysis.bean.sequence;
+/*-
  * #%L
- * anchor-core
+ * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +27,3 @@ package org.anchoranalysis.core.name.value;
  * THE SOFTWARE.
  * #L%
  */
-
-
-public interface INameValue<T> {
-
-	String getName();
-	
-	void setName(String name);
-	
-	T getValue();
-	
-	void setValue(T item);
-}

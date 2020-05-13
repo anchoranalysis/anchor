@@ -4,7 +4,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.INameValue;
+import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -26,7 +26,7 @@ public class SharedFeatureSet<T extends FeatureInput> {
 	}*/
 
 	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logger ) throws InitException {
-		for( INameValue<Feature<T>> nv : set ) {
+		for( NameValue<Feature<T>> nv : set ) {
 			nv.getValue().initRecursive( featureInitParams, logger);
 		}
 	}

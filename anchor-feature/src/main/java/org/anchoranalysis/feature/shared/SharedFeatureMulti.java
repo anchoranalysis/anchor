@@ -36,8 +36,8 @@ import java.util.Set;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -50,7 +50,7 @@ import org.apache.commons.collections.map.MultiValueMap;
  * 
  * @author owen
  */
-public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>, Iterable<INameValue<Feature<FeatureInput>>> {
+public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>, Iterable<NameValue<Feature<FeatureInput>>> {
 	
 	/** For searching by key */
 	private NameValueSet<Feature<FeatureInput>> mapByKey;
@@ -81,7 +81,7 @@ public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>
 		 for(FeatureInputDescriptor descriptor : (Set<FeatureInputDescriptor>) mapByDescriptor.keySet()) {
 			 if (descriptor.isCompatibleWith(inputType)) {
 				 transferToSet(
-					(Collection<INameValue<Feature<S>>>) mapByDescriptor.get(descriptor),
+					(Collection<NameValue<Feature<S>>>) mapByDescriptor.get(descriptor),
 					out
 				);
 			 }
@@ -102,7 +102,7 @@ public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>
 	public SharedFeatureMulti duplicate() {
 		SharedFeatureMulti out = new SharedFeatureMulti();
 		
-		for (INameValue<Feature<FeatureInput>> nv : mapByKey) {
+		for (NameValue<Feature<FeatureInput>> nv : mapByKey) {
 			out.addNoDuplicate(nv);
 		}
 		return out;
@@ -114,12 +114,12 @@ public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>
 		for( Feature<FeatureInput> f : features) {
 			
 			addNoDuplicate(
-				new NameValue<>(f.getFriendlyName(), f)
+				new SimpleNameValue<>(f.getFriendlyName(), f)
 			);
 		}
 	}
 	
-	private void addNoDuplicate(INameValue<Feature<FeatureInput>> nv) {
+	private void addNoDuplicate(NameValue<Feature<FeatureInput>> nv) {
 		mapByKey.add(nv);
 		mapByDescriptor.put(nv.getValue().inputDescriptor(), nv);
 		setFeatures.add(nv.getValue());
@@ -133,7 +133,7 @@ public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>
 	}
 
 	@Override
-	public Iterator<INameValue<Feature<FeatureInput>>> iterator() {
+	public Iterator<NameValue<Feature<FeatureInput>>> iterator() {
 		return mapByKey.iterator();
 	}
 
@@ -154,10 +154,10 @@ public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>
 	
 	/** Transfers from a collection of name-values into a {@link NameValueSet} */
 	private static <S extends FeatureInput> void transferToSet(
-		Collection<INameValue<Feature<S>>> collectionNv,
+		Collection<NameValue<Feature<S>>> in,
 		NameValueSet<Feature<S>> out
 	) {
-		 for( INameValue<Feature<S>> nv : collectionNv) {
+		 for( NameValue<Feature<S>> nv : in) {
 			 out.add(nv);
 		 }
 	}

@@ -29,8 +29,8 @@ package org.anchoranalysis.io.generator.combined;
 
 import java.util.ArrayList;
 
-import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
@@ -45,7 +45,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // currently untested
 public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 
-	private ArrayList<INameValue<Generator>> list = new ArrayList<>();
+	private ArrayList<NameValue<Generator>> list = new ArrayList<>();
 	
 	public CombinedListGenerator() {
 		
@@ -56,7 +56,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 
 		ArrayList<FileType> all = new ArrayList<>();
 		
-		for( INameValue<Generator> ni : list) {
+		for( NameValue<Generator> ni : list) {
 			FileType[] arr = ni.getValue().getFileTypes(outputWriteSettings);
 			for (int i=0; i<arr.length; i++) {
 				all.add( arr[i] );
@@ -72,7 +72,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 			IWriteOperationRecorder writeOperationRecorder,
 			BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
-		for( INameValue<Generator> ni : list) {
+		for( NameValue<Generator> ni : list) {
 
 			if (ni.getName()!=null) {
 				outputNameStyle.setOutputName( ni.getName() );
@@ -91,7 +91,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 			throws OutputWriteFailedException {
 		
 		int maxWritten = -1;
-		for( INameValue<Generator> ni : list) {
+		for( NameValue<Generator> ni : list) {
 			
 			if (ni.getName()!=null) {
 				outputNameStyle = outputNameStyle.duplicate();
@@ -108,6 +108,6 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 	// A null name is allowed, in which case, the iterableObjectGenerator is not changed
 	// Either everything should have a null name, or not.  Mixed is not a good idea!
 	public boolean add(String name, Generator generator) {
-		return list.add( new NameValue<>(name,generator) );
+		return list.add( new SimpleNameValue<>(name,generator) );
 	}
 }

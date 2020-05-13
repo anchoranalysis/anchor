@@ -27,7 +27,7 @@ package org.anchoranalysis.image.orientation;
  */
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix2DFromRadianCreator;
@@ -91,8 +91,8 @@ public class Orientation2D extends Orientation {
 
 	@Override
 	public void addProperties(NameValueSet<String> nvc) {
-		nvc.add( new NameValue<>("Orientation Angle (radians)",  String.format("%1.2f", getAngleRadians() )) );
-		nvc.add( new NameValue<>("Orientation Angle (degrees)",  String.format("%1.2f", getAngleDegrees() )) );
+		nvc.add( new SimpleNameValue<>("Orientation Angle (radians)",  String.format("%1.2f", getAngleRadians() )) );
+		nvc.add( new SimpleNameValue<>("Orientation Angle (degrees)",  String.format("%1.2f", getAngleDegrees() )) );
 	}
 
 	@Override

@@ -27,7 +27,7 @@ package org.anchoranalysis.image.orientation;
  */
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
@@ -154,7 +154,7 @@ public class Orientation3DEulerAngles extends Orientation {
 	
 	private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
 		nvc.add(
-			new NameValue<>(
+			new SimpleNameValue<>(
 				String.format("Orientation Angle %s (radians)", dimension),
 				String.format("%1.2f", rotXRadians)
 			)

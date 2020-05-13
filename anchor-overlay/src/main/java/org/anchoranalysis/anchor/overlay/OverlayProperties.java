@@ -30,12 +30,12 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 
-public class OverlayProperties implements Iterable<INameValue<String>> {
+public class OverlayProperties implements Iterable<NameValue<String>> {
 
 	private NameValueSet<String> nameValueSet;
 
@@ -46,7 +46,7 @@ public class OverlayProperties implements Iterable<INameValue<String>> {
 	
 	public void add( String name, String value ) {
 		nameValueSet.add(
-			new NameValue<>(name, value)
+			new SimpleNameValue<>(name, value)
 		);
 	}
 	
@@ -87,7 +87,7 @@ public class OverlayProperties implements Iterable<INameValue<String>> {
 	}
 	
 	@Override
-	public Iterator<INameValue<String>> iterator() {
+	public Iterator<NameValue<String>> iterator() {
 		return nameValueSet.iterator();
 	}
 
