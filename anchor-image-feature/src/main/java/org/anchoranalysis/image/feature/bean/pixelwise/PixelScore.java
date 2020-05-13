@@ -5,7 +5,6 @@ package org.anchoranalysis.image.feature.bean.pixelwise;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 
