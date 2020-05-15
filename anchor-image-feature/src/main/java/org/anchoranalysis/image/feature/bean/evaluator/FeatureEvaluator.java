@@ -54,7 +54,11 @@ public abstract class FeatureEvaluator<T extends FeatureInput> extends FeatureRe
 				throw new OperationFailedException("FeatureProvider returns null. A feature is required.");
 			}
 			
-			return FeatureSession.with(feature, getLogger());
+			return FeatureSession.with(
+				feature,
+				getSharedObjects().getSharedFeatureSet(),
+				getLogger()
+			);
 			
 		} catch (CreateException | FeatureCalcException e) {
 			throw new OperationFailedException(e);
