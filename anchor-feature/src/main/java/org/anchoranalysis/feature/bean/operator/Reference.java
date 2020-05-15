@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -38,11 +37,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor
 
 public class Reference<T extends FeatureInput> extends Feature<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2384735833480137231L;
-	
 	// START BEAN
 	@BeanField
 	private String id;
@@ -71,14 +65,6 @@ public class Reference<T extends FeatureInput> extends Feature<T> {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	@Override
-	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
-		super.addAdditionallyUsedFeatures(out);
-//		if (feature!=null) {
-//			out.add( feature );
-//		}
-	}
 
 	@Override
 	public String getDscrLong() {
@@ -86,23 +72,8 @@ public class Reference<T extends FeatureInput> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
-
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputGenericDescriptor.instance;
-//		assert(sharedFeatures!=null);
-//		
-//		try {
-//			feature = sharedFeatures.getException(id);
-//		} catch (GetOperationFailedException e) {
-//			throw new FeatureCalcException(e);
-//		}
-//		
-//		if (feature==null) {
-//			throw new FeatureCalcException( String.format("Matching id '%s' not found in sharedFeatures", id) );
-//		}
-//		
-//		return feature.paramType();
 	}
 
 

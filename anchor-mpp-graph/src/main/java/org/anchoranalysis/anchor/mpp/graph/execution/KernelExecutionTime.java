@@ -26,7 +26,7 @@ package org.anchoranalysis.anchor.mpp.graph.execution;
  * #L%
  */
 
-import org.anchoranalysis.core.arithmetic.DivideUtilities;
+import org.anchoranalysis.core.arithmetic.DoubleUtilities;
 
 public class KernelExecutionTime {
 
@@ -51,7 +51,7 @@ public class KernelExecutionTime {
 
 	
 	public double meanExecutionTime() {
-		return DivideUtilities.divideByZeroReplace(getExecutionTime(), getExecutionCnt(), 0);
+		return DoubleUtilities.divideByZeroReplace(getExecutionTime(), getExecutionCnt(), 0);
 	}
 
 

@@ -34,11 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public abstract class FilePathProvider extends ParamsBean<FilePathProvider> implements Provider<Path> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public abstract Path create() throws CreateException;
 }

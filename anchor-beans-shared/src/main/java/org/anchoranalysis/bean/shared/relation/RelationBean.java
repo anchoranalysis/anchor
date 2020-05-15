@@ -27,16 +27,33 @@ package org.anchoranalysis.bean.shared.relation;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.relation.RelationToValue;
 
-public abstract class RelationBean extends AnchorBean<RelationBean> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4274194584824964885L;
+public abstract class RelationBean extends AnchorBean<RelationBean> implements GenerateUniqueParameterization {
 
 	public abstract RelationToValue create();
 	
+	@Override
 	public abstract String toString();
+	
+	@Override
+	public int hashCode() {
+		return 11;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		return (getClass() == obj.getClass());
+	}
+	
+	// This is sufficient for all base-classes, as we rely on them not being further parameterized
+	@Override
+	public String uniqueName() {
+		return getClass().getCanonicalName();
+	}
 }

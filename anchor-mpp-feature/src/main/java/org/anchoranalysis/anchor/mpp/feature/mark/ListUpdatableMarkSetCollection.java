@@ -40,9 +40,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 // The pxlMarkMemoList must always match the current state of the underlzing updatable items
 public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<UpdatableMarkSet> {
@@ -55,7 +54,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	}
 
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
 		for (UpdatableMarkSet item : delegate) {
 			item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);
 		}

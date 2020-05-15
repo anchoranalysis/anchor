@@ -46,11 +46,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
  */
 public abstract class OptScheme<S,U> extends AnchorBean<OptScheme<S,U>> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5243971680667015706L;
-
 	// Find optimum configuration
 	public abstract S findOpt(
 		KernelProposer<U> kernelProposer,

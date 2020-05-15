@@ -37,11 +37,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class Rooted extends FilePathGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathGenerator item;

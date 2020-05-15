@@ -35,11 +35,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7319481577166675797L;
-	
 	private LogErrorReporter logger;
 	
 	// Constructor

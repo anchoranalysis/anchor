@@ -32,10 +32,4 @@ import org.anchoranalysis.bean.Provider;
 
 public abstract class MPPProvider<BeanType,ProviderType> extends MPPBean<BeanType> implements Provider<ProviderType> {
 
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 }

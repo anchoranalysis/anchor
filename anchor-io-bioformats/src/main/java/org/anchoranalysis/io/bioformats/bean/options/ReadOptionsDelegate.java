@@ -42,12 +42,6 @@ import loci.formats.IFormatReader;
  */
 public abstract class ReadOptionsDelegate extends ReadOptions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ReadOptions options = new Default();

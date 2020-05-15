@@ -57,24 +57,6 @@ class CountIntersectingPixelsRegionMembershipMask {
 	) {
 		return countCheckIntersection( src, other, src.getBoundingBox(), other.getBoundingBox(), maskGlobal, onMaskGlobal );
 	}
-		
-	public int countIntersectingPixelsMaskGlobalMiddleRange(
-		BoundedVoxelBox<ByteBuffer> src,
-		BoundedVoxelBox<ByteBuffer> other,
-		VoxelBox<ByteBuffer> maskGlobal,
-		byte onMaskGlobal,
-		double quantileLower,
-		double quantileHigher
-	) {
-		return countCheckIntersection(
-			src,
-			other,
-			createShrinkedBox(src.getBoundingBox(), quantileLower, quantileHigher),
-			createShrinkedBox(other.getBoundingBox(), quantileLower, quantileHigher),
-			maskGlobal,
-			onMaskGlobal
-		);
-	}
 	
 	private int countCheckIntersection(
 		BoundedVoxelBox<ByteBuffer> src,
@@ -189,11 +171,5 @@ class CountIntersectingPixelsRegionMembershipMask {
 		
 	private boolean isPixelInRegion( byte pixelVal ) {
 		return RegionMembershipUtilities.isMemberFlagAnd(pixelVal, regionMembershipFlag);
-	}
-		
-	private static BoundingBox createShrinkedBox( BoundingBox bbox, double quantileLower, double quantileHigher ) {
-		BoundingBox bboxDup = new BoundingBox( bbox );	// Duplicate
-		bboxDup.shrinkByQuantiles( quantileLower, quantileHigher );
-		return bboxDup;
 	}
 }

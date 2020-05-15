@@ -38,29 +38,17 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8930110016806371922L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgGen cfgGen;
 	
 	@BeanField
-	private Define namedDefinitions;
+	private Define define;
 	
 	@BeanField
 	private NRGSchemeCreator nrgSchemeCreator;
 	// END BEAN PROPERTIES
 
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
-	}
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
 
 	public CfgGen getCfgGen() {
 		return cfgGen;
@@ -76,5 +64,13 @@ public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 
 	public void setNrgSchemeCreator(NRGSchemeCreator nrgSchemeCreator) {
 		this.nrgSchemeCreator = nrgSchemeCreator;
+	}
+
+	public Define getDefine() {
+		return define;
+	}
+
+	public void setDefine(Define define) {
+		this.define = define;
 	}
 }

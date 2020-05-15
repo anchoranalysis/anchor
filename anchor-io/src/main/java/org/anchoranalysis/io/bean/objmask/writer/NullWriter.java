@@ -42,11 +42,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class NullWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3514576997387450973L;
-
 	@Override
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
 			ImageDim dim) throws CreateException {

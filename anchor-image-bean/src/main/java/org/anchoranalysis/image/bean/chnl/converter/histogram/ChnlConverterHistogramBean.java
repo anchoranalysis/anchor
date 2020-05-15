@@ -32,7 +32,5 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 
 public abstract class ChnlConverterHistogramBean extends AnchorBean<ChnlConverterHistogramBean> {
 
-	private static final long serialVersionUID = 1L;
-		
 	public abstract ChnlConverterAttached<Histogram,?> createConverter();
 }

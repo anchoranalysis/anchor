@@ -40,11 +40,6 @@ public class FileOutput extends AnchorBean<FileOutput> {
 
 	// START BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// If set we output CSV to this path
 	@BeanField
 	private String filePath = null;

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.bean.threshold;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,18 +42,13 @@ import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 // Needs SharedObjects due to Thresholder
 public abstract class Thresholder extends NullParamsBean<VoxelBoxThresholder> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5994509900907883499L;
-	
 	// Returns a BinaryVoxelBox<ByteBuffer> if successful, or NULL if not
 	// The output buffer can be constructed from the input buffer where possible
 	// Histogram is an optional param
-	public abstract BinaryVoxelBox<ByteBuffer> threshold( VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Histogram histogram ) throws OperationFailedException;
+	public abstract BinaryVoxelBox<ByteBuffer> threshold( VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Optional<Histogram> histogram ) throws OperationFailedException;
 	
 	// True if it was a successful threshold, false if we failed to find a threshold value
-	public abstract BinaryVoxelBox<ByteBuffer> threshold( VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Histogram histogram ) throws OperationFailedException;
+	public abstract BinaryVoxelBox<ByteBuffer> threshold( VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Optional<Histogram> histogram ) throws OperationFailedException;
 	
 	public abstract int getLastThreshold();
 }

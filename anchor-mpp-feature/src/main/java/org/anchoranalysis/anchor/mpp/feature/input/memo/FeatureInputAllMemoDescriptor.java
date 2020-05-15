@@ -39,4 +39,9 @@ public class FeatureInputAllMemoDescriptor extends FeatureInputDescriptor {
 		return false;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputAllMemo.class;
+	}
+
 }

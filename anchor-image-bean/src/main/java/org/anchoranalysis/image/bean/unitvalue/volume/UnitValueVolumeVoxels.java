@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.volume;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -32,11 +34,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public class UnitValueVolumeVoxels extends UnitValueVolume {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double value;
@@ -60,7 +57,7 @@ public class UnitValueVolumeVoxels extends UnitValueVolume {
 	}
 
 	@Override
-	public double rslv(ImageRes res) {
+	public double rslv(Optional<ImageRes> res) {
 		return value;
 	}
 

@@ -32,11 +32,6 @@ import org.anchoranalysis.image.chnl.Chnl;
 
 public class DummyChnlProvider extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Chnl create() throws CreateException {
 		return null;

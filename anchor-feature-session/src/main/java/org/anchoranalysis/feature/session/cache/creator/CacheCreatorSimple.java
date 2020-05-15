@@ -40,19 +40,20 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class CacheCreatorSimple implements CacheCreator {
 
 	private FeatureList<? extends FeatureInput> namedFeatures;
-	private SharedFeatureSet<? extends FeatureInput> sharedFeatures;
+	private SharedFeatureMulti sharedFeatures;
 	private FeatureInitParams featureInitParams;
 	private LogErrorReporter logger;
 	
 	private static FeatureSessionCacheFactory factory = new HorizontalFeatureCacheFactory();
 	
 	public CacheCreatorSimple(FeatureList<? extends FeatureInput> namedFeatures,
-			SharedFeatureSet<? extends  FeatureInput> sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
+			SharedFeatureMulti sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
 		super();
 		this.namedFeatures = namedFeatures;
 		this.sharedFeatures = sharedFeatures;
@@ -61,15 +62,14 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	@Override
-	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType ) {
+	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> inputType ) {
 		
-		FeatureList<T> featureList = filterFeatureList(paramsType);
-		SharedFeatureSet<T> sharedFeaturesCast = maybeCastSharedFeatures(paramsType); 
+		FeatureList<T> featureList = filterFeatureList(inputType);
 				
 		try {
 			return createCache(
 				featureList,
-				sharedFeaturesCast,
+				inputType,
 				featureInitParams,
 				logger	
 			);
@@ -85,49 +85,30 @@ public class CacheCreatorSimple implements CacheCreator {
 	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
 		
 		List<Feature<T>> list = namedFeatures.getList().stream()
-			.filter( f -> paramsType.isAssignableFrom(f.getClass()) )
+			.filter( f -> f.inputDescriptor().isCompatibleWith(paramsType) )
 			.map( f -> (Feature<T>) f )
 			.collect( Collectors.toList() );
 		
 		return new FeatureList<>(list);
 	}
-	
-	// Assumes either all features in the set match paramsType or none do
-	@SuppressWarnings("unchecked")
-	private <T extends FeatureInput> SharedFeatureSet<T> maybeCastSharedFeatures(Class<?> paramsType) {
 		
-		if (sharedFeatures.keys().isEmpty()) {
-			return new SharedFeatureSet<T>();
-		}
-		
-		Class<?> classOfArbitraryItem = sharedFeatures.arbitraryItem().getClass(); 
-		
-		// Take an arbitrary item
-		if(paramsType.isAssignableFrom(classOfArbitraryItem)) {
-			return (SharedFeatureSet<T>) sharedFeatures;
-		}
-		
-		return new SharedFeatureSet<T>();	
-	}
-	
 	private <T extends FeatureInput> FeatureSessionCache<T> createCache(
 		FeatureList<T> namedFeatures,
-		SharedFeatureSet<T> sharedFeatures,
+		Class<?> inputType,
 		FeatureInitParams featureInitParams,
 		LogErrorReporter logger			
 	) throws CreateException {
 		
+		SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
+		
 		try {
-			sharedFeatures.initRecursive( featureInitParams, logger );
+			sharedFeaturesSet.initRecursive(featureInitParams, logger);
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}
 		
 		assert(logger!=null);
-		FeatureSessionCache<T> cache = factory.create(
-			namedFeatures,
-			sharedFeatures.duplicate()
-		);
+		FeatureSessionCache<T> cache = factory.create(namedFeatures, sharedFeaturesSet);
 		try {
 			cache.init(featureInitParams, logger);
 		} catch (InitException e) {

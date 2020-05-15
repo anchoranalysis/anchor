@@ -1,5 +1,6 @@
 package org.anchoranalysis.image.voxel.statistics;
 
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /*-
@@ -28,7 +29,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * #L%
  */
 
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class VoxelStatisticsFromHistogram extends VoxelStatistics {
@@ -56,14 +56,13 @@ public class VoxelStatisticsFromHistogram extends VoxelStatistics {
 	}
 
 	@Override
-	public VoxelStatistics threshold(RelationToValue relationToThreshold,
-			double threshold) {
+	public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
 		throw new UnsupportedOperationException("The threshold operation is not currently supported");
 	}
 
 	@Override
-	public long countThreshold(RelationToValue relationToThreshold, double threshold) {
-		return histogram.countThreshold(relationToThreshold, threshold);
+	public long countThreshold(RelationToThreshold relationToThreshold) {
+		return histogram.countThreshold(relationToThreshold);
 	}
 
 	@Override

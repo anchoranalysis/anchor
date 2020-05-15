@@ -36,11 +36,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class NullWriter extends RasterWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public String dfltExt() {
 		return "tif";
@@ -50,16 +45,17 @@ public class NullWriter extends RasterWriter {
 	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries,
 			Path filePath, boolean makeRGB)
 			throws RasterIOException {
+		// NOTHING TO DO
 	}
 
 	@Override
-	public void writeStackShort(Stack stack, Path filePath,
-			boolean makeRGB) throws RasterIOException {
+	public void writeStackShort(Stack stack, Path filePath,	boolean makeRGB) throws RasterIOException {
+		// NOTHING TO DO
 	}
 
 	@Override
-	public void writeStackByte(Stack stack, Path filePath,
-			boolean makeRGB) throws RasterIOException {
+	public void writeStackByte(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
+		// NOTHING TO DO
 	}
 
 }

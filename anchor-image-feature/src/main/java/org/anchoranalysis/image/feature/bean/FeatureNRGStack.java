@@ -36,11 +36,6 @@ import org.anchoranalysis.image.feature.stack.nrg.FeatureInputNRGStackDescriptor
 public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public double calc( SessionInput<FeatureInputNRGStack> input ) throws FeatureCalcException {
 		
@@ -55,8 +50,7 @@ public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
 	public abstract double calcCast( FeatureInputNRGStack params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputNRGStackDescriptor.instance;
 	}
 }

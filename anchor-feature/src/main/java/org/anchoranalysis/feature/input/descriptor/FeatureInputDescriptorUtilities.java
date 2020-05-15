@@ -30,17 +30,17 @@ package org.anchoranalysis.feature.input.descriptor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public class FeatureInputDescriptorUtilities {
 
-	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) throws FeatureCalcException {
-		return paramTypeForTwo( item1.paramType(), item2.paramType() );
+	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) {
+		return paramTypeForTwo( item1.inputDescriptor(), item2.inputDescriptor() );
 	}
 	
-	public static FeatureInputDescriptor paramTypeForTwo( FeatureInputDescriptor c1, FeatureInputDescriptor c2 ) throws FeatureCalcException {
+	public static FeatureInputDescriptor paramTypeForTwo( FeatureInputDescriptor c1, FeatureInputDescriptor c2 ) {
 		
 		if (c1.isCompatibleWithEverything()) {
 			return c2;
@@ -56,14 +56,14 @@ public class FeatureInputDescriptorUtilities {
 		
 		FeatureInputDescriptor preferred = c1.preferToBidirectional(c2);
 		if (preferred==null) {
-			throw new FeatureCalcException("item1 and item2 must accept the same paramType, or be compatible.");
+			throw new AnchorFriendlyRuntimeException("item1 and item2 must accept the same paramType, or be compatible.");
 		}
 		
 		return preferred;	
 	}
 	
 	
-	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) throws FeatureCalcException {
+	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) {
 		
 		List<Feature<T>> list = new ArrayList<>();
 		list.add( item1 );
@@ -73,7 +73,7 @@ public class FeatureInputDescriptorUtilities {
 	}
 	
 	
-	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForList( List<Feature<T>> list ) throws FeatureCalcException {
+	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForList( List<Feature<T>> list ) {
 		
 		if (list.size()==0) {
 			return FeatureInputGenericDescriptor.instance;
@@ -89,11 +89,11 @@ public class FeatureInputDescriptorUtilities {
 		
 	}
 	
-	private static <T extends FeatureInput> FeatureInputDescriptor chooseParamType( List<Feature<T>> list ) throws FeatureCalcException {
+	private static <T extends FeatureInput> FeatureInputDescriptor chooseParamType( List<Feature<T>> list ) {
 		FeatureInputDescriptor chosenParamType = null;
 		for (Feature<?> f : list) {
 			
-			FeatureInputDescriptor paramType = f.paramType();
+			FeatureInputDescriptor paramType = f.inputDescriptor();
 			
 			if (paramType.isCompatibleWithEverything()) {
 				continue;
@@ -107,7 +107,7 @@ public class FeatureInputDescriptorUtilities {
 					FeatureInputDescriptor preferred = paramType.preferToBidirectional(chosenParamType);
 					if (preferred==null) {
 						// We don't know which parameter to prefer
-						throw new FeatureCalcException("All features in the list must have the same paramType, or a simple type, or a preference between conflicting type");
+						throw new AnchorFriendlyRuntimeException("All features in the list must have the same paramType, or a simple type, or a preference between conflicting type");
 					}
 					chosenParamType = preferred;
 				}

@@ -32,12 +32,6 @@ import org.anchoranalysis.core.color.RGBColor;
 
 public class VeryBrightColorSetGenerator extends ColorSetGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	// From http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
 	private static String[] hexCodes = new String[] {
 		"#fce94f",	// Butter

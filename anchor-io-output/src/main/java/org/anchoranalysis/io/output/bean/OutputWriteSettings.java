@@ -55,11 +55,6 @@ import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
  */
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6121719065672985707L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ColorSetGenerator defaultColorSetGenerator = new ShuffleColorSetGenerator( new HSBColorSetGenerator() );

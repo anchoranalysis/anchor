@@ -38,7 +38,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
 
-public class ChnlConverterHistogramMaxIntensity extends ChnlConverterAttached<Histogram, ByteBuffer>{
+public class ChnlConverterHistogramMaxIntensity extends ChnlConverterAttached<Histogram, ByteBuffer> {
 
 	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
 	

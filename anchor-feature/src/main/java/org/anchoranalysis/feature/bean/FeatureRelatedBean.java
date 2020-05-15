@@ -46,12 +46,6 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  */
 public abstract class FeatureRelatedBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	private transient SharedFeaturesInitParams soFeature;
 	
 	protected FeatureRelatedBean() {

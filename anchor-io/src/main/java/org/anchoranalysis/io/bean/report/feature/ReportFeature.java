@@ -34,11 +34,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 
 public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract boolean isNumeric();
 	
 	public abstract String genTitleStr() throws OperationFailedException;

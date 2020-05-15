@@ -38,11 +38,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class MockBeanSimple extends AnchorBean<MockBeanSimple> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@BeanField
 	private String message;
 

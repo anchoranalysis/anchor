@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class RegExSimple extends RegEx {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String matchString;

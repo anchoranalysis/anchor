@@ -32,11 +32,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public abstract class MarkProvider extends MPPProvider<MarkProvider,Mark>  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3791187543366929792L;
-
 	public abstract Mark create() throws CreateException;
 
 	

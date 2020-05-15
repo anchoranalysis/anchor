@@ -151,56 +151,77 @@ public class CopyConvert {
 		ApplyIterationToChnl chnlIteration
 	) throws IOException, FormatException {
 		
-		int chnlIndex = 0;
-		
 		if (dimOrder.equalsIgnoreCase("XYCZT")) {
-			
-			for( int t=0; t<numFrames; t++) {
-				for (int z=0; z<dim.getZ(); z++) {
-					for (int c=0; c<numByteArrays; c++ ) {
-						chnlIteration.apply(t, z, c, chnlIndex++);
-					}
-				}
-			}
+			applyXYCZT(dim, numByteArrays, numFrames, chnlIteration);
 			
 		} else if (dimOrder.equalsIgnoreCase("XYZCT")) {
-			
-			for( int t=0; t<numFrames; t++) {
-				for (int c=0; c<numByteArrays; c++ ) {
-					for (int z=0; z<dim.getZ(); z++) {
-						chnlIteration.apply(t, z, c, chnlIndex++);
-					}
-				}
-			}			
+			applyXYZCT(dim, numByteArrays, numFrames, chnlIteration);
+					
 		} else if (dimOrder.equalsIgnoreCase("XYZTC")) {
-				
-			for (int c=0; c<numByteArrays; c++ ) {
-				for( int t=0; t<numFrames; t++) {
-					for (int z=0; z<dim.getZ(); z++) {
-						chnlIteration.apply(t, z, c, chnlIndex++);
-					}
-				}
-			}
+			applyXYZTC(dim, numByteArrays, numFrames, chnlIteration);
+			
 		} else if (dimOrder.equalsIgnoreCase("XYCTZ")) {
+			applyXYCTZ(dim, numByteArrays, numFrames, chnlIteration);
 			
-			for (int z=0; z<dim.getZ(); z++) {
-				for( int t=0; t<numFrames; t++) {	
-					for (int c=0; c<numByteArrays; c++ ) {
-						chnlIteration.apply(t, z, c, chnlIndex++);
-					}
-				}
-			}
 		} else if (dimOrder.equalsIgnoreCase("XYTCZ")) {
-			
-			for (int z=0; z<dim.getZ(); z++) {
-				for (int c=0; c<numByteArrays; c++ ) {
-					for( int t=0; t<numFrames; t++) {	
-						chnlIteration.apply(t, z, c, chnlIndex++);
-					}
-				}
-			}			
+			applyXYTCZ(dim, numByteArrays, numFrames, chnlIteration);
 		} else {
 			throw new IOException( String.format("dimOrder '%s' not supported", dimOrder) );
 		}
+	}
+	
+	private static void applyXYCZT(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+		int chnlIndex = 0;
+		for( int t=0; t<numFrames; t++) {
+			for (int z=0; z<dim.getZ(); z++) {
+				for (int c=0; c<numByteArrays; c++ ) {
+					chnlIteration.apply(t, z, c, chnlIndex++);
+				}
+			}
+		}		
+	}
+	
+	private static void applyXYZCT(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+		int chnlIndex = 0;
+		for( int t=0; t<numFrames; t++) {
+			for (int c=0; c<numByteArrays; c++ ) {
+				for (int z=0; z<dim.getZ(); z++) {
+					chnlIteration.apply(t, z, c, chnlIndex++);
+				}
+			}
+		}	
+	}
+	
+	private static void applyXYZTC(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+		int chnlIndex = 0;
+		for (int c=0; c<numByteArrays; c++ ) {
+			for( int t=0; t<numFrames; t++) {
+				for (int z=0; z<dim.getZ(); z++) {
+					chnlIteration.apply(t, z, c, chnlIndex++);
+				}
+			}
+		}
+	}
+	
+	private static void applyXYCTZ(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+		int chnlIndex = 0;
+		for (int z=0; z<dim.getZ(); z++) {
+			for( int t=0; t<numFrames; t++) {	
+				for (int c=0; c<numByteArrays; c++ ) {
+					chnlIteration.apply(t, z, c, chnlIndex++);
+				}
+			}
+		}
+	}
+		
+	private static void applyXYTCZ(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+		int chnlIndex = 0;
+		for (int z=0; z<dim.getZ(); z++) {
+			for (int c=0; c<numByteArrays; c++ ) {
+				for( int t=0; t<numFrames; t++) {	
+					chnlIteration.apply(t, z, c, chnlIndex++);
+				}
+			}
+		}			
 	}
 }

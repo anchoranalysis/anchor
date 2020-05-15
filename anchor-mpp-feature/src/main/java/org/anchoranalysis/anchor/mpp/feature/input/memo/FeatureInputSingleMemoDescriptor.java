@@ -32,13 +32,15 @@ public class FeatureInputSingleMemoDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputSingleMemoDescriptor instance = new FeatureInputSingleMemoDescriptor();
 	
-	private FeatureInputSingleMemoDescriptor() {
-		
-	}
+	private FeatureInputSingleMemoDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return false;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputSingleMemo.class;
+	}
 }

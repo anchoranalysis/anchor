@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.bean.store.BeanStoreAdder;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -53,7 +53,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	// END: Stores
 	
 	// START: Single Items
-	private SharedFeatureSet<FeatureInput> sharedFeatureSet;
+	private SharedFeatureMulti sharedFeatureSet;
 	// END: Single Items
 
 	private SharedFeaturesInitParams(SharedObjects so) {
@@ -63,7 +63,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		storeFeatureList = so.getOrCreate(FeatureList.class);
 		
 		// We populate our shared features from our storeFeatureList
-		sharedFeatureSet = new SharedFeatureSet<>();
+		sharedFeatureSet = new SharedFeatureMulti();
 		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(storeFeatureList, sharedFeatureSet);
 	}
 	
@@ -93,18 +93,47 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	) throws OperationFailedException {
 		
 		assert( getFeatureListSet()!=null );
-		BeanStoreAdder.addPreserveNameEmbedded(
+		
+		// Rather than lazily adding the feature-list providers, instead they are all eagerly
+		// turned into feature-lists, and initialized, so as to be available to both the sharedFeatureSet
+		// as well as the store
+		/*BeanStoreAdder.addPreserveNameEmbedded(
 			namedFeatureListCreator,
-			getFeatureListSet(),
+			storeFeatureList,
 			new FeatureBridge<>(getSharedFeatureSet(), this, logger )
-		);
+		);*/
+		
+		for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
+			addFeatureList(namedBean, logger);
+		}
 	}
+	
+	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb, LogErrorReporter logger ) throws OperationFailedException {
+		
+		try {
+			FeatureList<FeatureInput> fl = nb.getItem().create();
+			String name = nb.getName();
+
+			// If there's only one item in the feature list, then we set it as the custom
+			//  name of teh feature
+			if (fl.size()==1) {
+				fl.get(0).setCustomName(name);
+			}
+			
+			storeFeatureList.add( name, ()->fl );
+			sharedFeatureSet.addNoDuplicate(fl);
+						
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
 
 	public KeyValueParamsInitParams getParams() {
 		return soParams;
 	}
 	
-	public SharedFeatureSet<FeatureInput> getSharedFeatureSet() {
+	public SharedFeatureMulti getSharedFeatureSet() {
 		return sharedFeatureSet;
 	}
 }

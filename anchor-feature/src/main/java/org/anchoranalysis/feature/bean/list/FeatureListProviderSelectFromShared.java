@@ -42,11 +42,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class FeatureListProviderSelectFromShared<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3698511957662882985L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private RegEx match = null;

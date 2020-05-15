@@ -28,6 +28,7 @@ package org.anchoranalysis.image.bean.threshold;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -42,11 +43,6 @@ import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 
 public class ThresholderGlobal extends Thresholder {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private CalculateLevel calculateLevel;
@@ -55,28 +51,12 @@ public class ThresholderGlobal extends Thresholder {
 	private int lastThreshold;
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Histogram histogram) throws OperationFailedException {
-		
-		if (histogram==null) {
-			histogram = HistogramFactoryUtilities.create(inputBuffer);
-		}
-		
-		// We use the histogram if there is one
-		int thresholdVal = calculateLevel.calculateLevel(histogram);
-		
-		//System.out.printf("Calculate level: %d\n", thresholdVal);
-		
-		lastThreshold = thresholdVal;
-		
-		if (thresholdVal==-1) {
-			return null;
-		}
-		
-		try {
-			return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, false );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Optional<Histogram> histogram) throws OperationFailedException {
+		return thresholdForHistogram(
+			histogramBuffer(inputBuffer, histogram),
+			inputBuffer,
+			bvOut
+		);
 	}
 
 	@Override
@@ -84,28 +64,31 @@ public class ThresholderGlobal extends Thresholder {
 		return lastThreshold;
 	}
 
-
 	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Histogram histogram) throws OperationFailedException {
-		
-		if (histogram==null) {
-			histogram = HistogramFactoryUtilities.createWithMask(inputBuffer.any(), objMask);
-		}
-		
+	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Optional<Histogram> histogram) throws OperationFailedException {
+		return thresholdForHistogram(
+			histogramBuffer(inputBuffer, histogram, objMask),
+			inputBuffer,
+			bvOut
+		);
+	}
+	
+	private BinaryVoxelBox<ByteBuffer> thresholdForHistogram(
+		Histogram hist,
+		VoxelBoxWrapper inputBuffer,
+		BinaryValuesByte bvOut
+	) throws OperationFailedException {
 		// We use the histogram if there is one
-		int thresholdVal = calculateLevel.calculateLevel(histogram);
+		int thresholdVal = calculateLevel.calculateLevel(hist);
+		assert(thresholdVal>=0);
 		
 		lastThreshold = thresholdVal;
-		
-		if (thresholdVal==-1) {
-			return null;
-		}
 		
 		try {
 			return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, false );
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
-		}
+		}		
 	}
 
 	public CalculateLevel getCalculateLevel() {
@@ -114,5 +97,17 @@ public class ThresholderGlobal extends Thresholder {
 
 	public void setCalculateLevel(CalculateLevel calculateLevel) {
 		this.calculateLevel = calculateLevel;
+	}
+	
+	private Histogram histogramBuffer(VoxelBoxWrapper inputBuffer, Optional<Histogram> histogram) {
+		return histogram.orElseGet( ()->
+			HistogramFactoryUtilities.create(inputBuffer)
+		);
+	}
+	
+	private Histogram histogramBuffer(VoxelBoxWrapper inputBuffer, Optional<Histogram> histogram, ObjMask objMask) {
+		return histogram.orElseGet( ()->
+			HistogramFactoryUtilities.createWithMask(inputBuffer.any(), objMask)
+		);
 	}
 }

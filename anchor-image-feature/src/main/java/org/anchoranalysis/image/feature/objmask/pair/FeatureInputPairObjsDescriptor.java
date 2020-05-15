@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.objmask.pair;
 
+
+
 /*-
  * #%L
  * anchor-image-feature
@@ -41,5 +43,8 @@ public class FeatureInputPairObjsDescriptor extends FeatureInputDescriptor {
 		return false;
 	}
 
-
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputPairObjs.class;
+	}
 }

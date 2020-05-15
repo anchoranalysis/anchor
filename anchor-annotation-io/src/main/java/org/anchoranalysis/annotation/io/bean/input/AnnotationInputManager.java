@@ -44,11 +44,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<T> input;

@@ -50,7 +50,8 @@ public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
 		);
 	}
 	
-	public void finalize() {
+	@Override
+	public void finalizeBuffer() {
 		int maxIndex = volumeXY();
 		
 		ShortBuffer bbFlat = flatBuffer();

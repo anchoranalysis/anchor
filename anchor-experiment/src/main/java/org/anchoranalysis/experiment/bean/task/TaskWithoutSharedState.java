@@ -1,6 +1,5 @@
 package org.anchoranalysis.experiment.bean.task;
 
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -33,6 +32,7 @@ import org.anchoranalysis.experiment.task.Task;
 
 
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
@@ -52,12 +52,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public abstract class TaskWithoutSharedState<T extends InputFromManager> extends Task<T,Object> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
 	@Override
 	public final Object beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
@@ -68,7 +62,7 @@ public abstract class TaskWithoutSharedState<T extends InputFromManager> extends
 
 	@Override
 	public final void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager, Object sharedState, LogReporter logReporter)
+			Object sharedState, BoundIOContext context)
 			throws ExperimentExecutionException {
 	
 	}

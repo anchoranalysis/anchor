@@ -43,11 +43,6 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 /** Lists all directories to a certain depth */
 public class DirectoryDepth extends FileProviderWithDirectoryString {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int exactDepth = 0;

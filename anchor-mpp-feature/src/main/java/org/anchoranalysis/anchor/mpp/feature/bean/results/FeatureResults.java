@@ -45,11 +45,6 @@ import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResultsDes
  */
 public abstract class FeatureResults extends Feature<FeatureInputResults> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc( SessionInput<FeatureInputResults> input ) throws FeatureCalcException {
 		return calc( input.get() );
@@ -59,8 +54,7 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
 	public abstract double calc( FeatureInputResults params ) throws FeatureCalcException;
 	
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputResultsDescriptor.instance;
 	}
 

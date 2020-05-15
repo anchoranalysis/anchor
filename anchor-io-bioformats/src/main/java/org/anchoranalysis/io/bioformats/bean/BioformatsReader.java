@@ -53,11 +53,6 @@ import loci.formats.services.OMEXMLService;
 
 public class BioformatsReader extends RasterReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1998738033753297842L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ReadOptions options = new Default();

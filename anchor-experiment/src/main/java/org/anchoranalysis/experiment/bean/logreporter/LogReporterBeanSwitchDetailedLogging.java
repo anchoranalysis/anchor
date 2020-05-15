@@ -40,11 +40,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
  */
 public class LogReporterBeanSwitchDetailedLogging extends LogReporterBean {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private LogReporterBean detailed;

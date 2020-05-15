@@ -36,9 +36,4 @@ import org.anchoranalysis.image.bean.ImageBean;
  * @param <S> provider-type what is provided
  */
 public abstract class BeanImgStackProvider<T,S> extends ImageBean<T> implements ProviderImgStack, Provider<S> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 }

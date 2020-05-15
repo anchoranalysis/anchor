@@ -33,11 +33,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class ObjectSerializer extends SeedCollectionOutputter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public void output(SeedCollection seeds,
 			ImageRes res, BoundOutputManagerRouteErrors outputManager) {

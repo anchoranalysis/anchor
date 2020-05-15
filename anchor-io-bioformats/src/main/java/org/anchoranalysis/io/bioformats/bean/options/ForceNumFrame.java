@@ -33,11 +33,6 @@ import loci.formats.IFormatReader;
 
 public class ForceNumFrame extends ReadOptionsDelegate {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @Positive
 	private int numFrame;

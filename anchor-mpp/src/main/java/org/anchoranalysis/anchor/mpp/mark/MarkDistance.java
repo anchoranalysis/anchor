@@ -32,10 +32,5 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class MarkDistance extends AnchorBean<MarkDistance> implements ICompatibleWith {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1350088930982295681L;
-
 	public abstract double distance( Mark mark1, Mark mark2 ) throws UnsupportedMarkTypeException;
 }

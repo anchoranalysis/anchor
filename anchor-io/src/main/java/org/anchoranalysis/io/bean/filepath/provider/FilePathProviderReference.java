@@ -36,11 +36,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class FilePathProviderReference extends FilePathProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

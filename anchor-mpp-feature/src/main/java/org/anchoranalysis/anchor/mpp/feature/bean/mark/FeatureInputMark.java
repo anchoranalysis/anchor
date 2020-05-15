@@ -31,40 +31,35 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 
 public class FeatureInputMark extends FeatureInputParams {
 
 	private Mark mark;
-	private Optional<ImageRes> res;
+	private Optional<ImageDim> dim;
 	private Optional<KeyValueParams> params;
-	
-	public FeatureInputMark(Mark mark, ImageRes res) {
-		this(
-			mark,
-			Optional.of(res)
-		);
-	}
-	
-	public FeatureInputMark(Mark mark, Optional<ImageRes> res) {
+		
+	public FeatureInputMark(Mark mark, Optional<ImageDim> dim) {
 		this.mark = mark;
-		this.res = res;
+		this.dim = dim;
 		this.params = Optional.empty();
 	}
 	
-	public FeatureInputMark(Mark mark, ImageRes res, KeyValueParams params) {
+	public FeatureInputMark(Mark mark, ImageDim dim, KeyValueParams params) {
 		this(
 			mark,
-			Optional.of(res),
+			Optional.of(dim),
 			Optional.of(params)
 		);
 	}
 	
-	public FeatureInputMark(Mark mark, Optional<ImageRes> res, Optional<KeyValueParams> params) {
+	public FeatureInputMark(Mark mark, Optional<ImageDim> dim, Optional<KeyValueParams> params) {
 		super();
 		this.mark = mark;
-		this.res = res;
+		this.dim = dim;
 		this.params = params;
 	}
 
@@ -78,15 +73,21 @@ public class FeatureInputMark extends FeatureInputParams {
 
 	@Override
 	public Optional<ImageRes> getResOptional() {
-		return res;
-	}
-
-	public void setRes(Optional<ImageRes> res) {
-		this.res = res;
+		return dim.map( ImageDim::getRes );
 	}
 
 	@Override
 	public Optional<KeyValueParams> getParamsOptional() {
 		return params;
+	}
+	
+	public Optional<ImageDim> getDimensionsOptional() {
+		return dim;
+	}
+	
+	public ImageDim getDimensionsRequired() throws FeatureCalcException {
+		return dim.orElseThrow(
+			() -> new FeatureCalcException("Dimensions are required in the input for this operation")
+		);
 	}
 }

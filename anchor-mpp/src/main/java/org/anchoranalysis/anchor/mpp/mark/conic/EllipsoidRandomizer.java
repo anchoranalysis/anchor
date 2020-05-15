@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipsoidBounds;
+
 /*-
  * #%L
  * anchor-mpp

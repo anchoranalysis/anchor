@@ -37,35 +37,21 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends ReportFeatureForSharedObjects {
-
+public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;
-	
-	@BeanField
-	private FeatureEvaluator<T> featureEvaluator;
-	
-	@BeanField
-	private String title;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public String genFeatureStrFor(MPPInitParams so, LogErrorReporter logger)
 			throws OperationFailedException {
-
 		try {
 			objs.initRecursive( so.getImage(), logger );
-			featureEvaluator.initRecursive( so.getFeature(), logger );
+			super.init(so, logger);
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
@@ -73,7 +59,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends
 		try {
 			ObjMaskCollection objsCollection = objs.create();
 						
-			FeatureCalculatorSingle<T> session = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<T> session = super.createAndStartSession();
 			double val = calcFeatureOn( objsCollection, session );
 			return Double.toString(val);
 			
@@ -89,33 +75,11 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends
 		return true;
 	}
 
-	@Override
-	public String genTitleStr() throws OperationFailedException {
-		return title;
-	}
-	
 	public ObjMaskProvider getObjs() {
 		return objs;
 	}
 
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public FeatureEvaluator<T> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-
-	public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
 	}
 }

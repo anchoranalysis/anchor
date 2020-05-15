@@ -1,10 +1,10 @@
 package org.anchoranalysis.image.bean.unitvalue.area;
 
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,46 +26,33 @@ package org.anchoranalysis.image.bean.unitvalue.area;
  * #L%
  */
 
+import java.util.Optional;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageRes;
 
+/**
+ * Area expressed as square pixels
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class UnitValueAreaPixels extends UnitValueArea {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
 
 	public UnitValueAreaPixels() {
-		
+		// Standard bean constructor
 	}
 	
 	public UnitValueAreaPixels(double value) {
-		super();
-		this.value = value;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
+		super(value);
 	}
 
 	@Override
-	public double rslv(ImageRes res) {
-		return value;
+	public double rslv(Optional<ImageRes> res) {
+		return getValue();
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%.2f",value);
+		return String.format("%.2f",getValue());
 	}
 }

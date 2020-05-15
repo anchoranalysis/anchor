@@ -35,11 +35,6 @@ import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjs;
 
 public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc( SessionInput<FeatureInputObjs> input ) throws FeatureCalcException {
 		
@@ -54,8 +49,7 @@ public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs>
 	public abstract double calc( FeatureInputObjs params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputObjsDescriptor.instance;
 	}
 	

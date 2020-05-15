@@ -27,8 +27,6 @@ package org.anchoranalysis.image.orientation;
  */
 
 import org.anchoranalysis.core.geometry.Vector3d;
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrixFromAxisAngleCreator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -90,14 +88,6 @@ public class OrientationAxisAngle extends Orientation {
 		OrientationAxisAngle dup = duplicate();
 		dup.angle = dup.angle + Math.PI;
 		return dup;
-	}
-
-	@Override
-	public void addProperties(NameValueSet<String> nvc) {
-	}
-
-	@Override
-	public void addPropertiesToMask(ObjMaskWithProperties mask) {
 	}
 
 	public static Orientation rotateOneVectorOntoAnother( Vector3d vecSrc, Vector3d vecOnto ) {

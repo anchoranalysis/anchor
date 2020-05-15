@@ -28,24 +28,16 @@ package org.anchoranalysis.image.bean.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class BinarySgmnReference extends BinarySgmn {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -65,14 +57,14 @@ public class BinarySgmnReference extends BinarySgmn {
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
-		return proxy.sgmn(voxelBox, params, re);
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
+		return proxy.sgmn(voxelBox, params);
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
-		return proxy.sgmn(voxelBox, params, objMask, re);
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+		return proxy.sgmn(voxelBox, params, objMask);
 	}
 
 	public String getId() {
@@ -81,10 +73,5 @@ public class BinarySgmnReference extends BinarySgmn {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return proxy.getAdditionalOutput();
 	}
 }

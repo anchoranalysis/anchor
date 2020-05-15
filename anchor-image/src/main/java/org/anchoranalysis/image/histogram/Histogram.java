@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.histogram;
 
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+
 /*
  * #%L
  * anchor-image
@@ -28,7 +30,6 @@ package org.anchoranalysis.image.histogram;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 
 public abstract class Histogram {
@@ -111,13 +112,13 @@ public abstract class Histogram {
 		return new VarianceCalculator( calcSum(), calcSumSquares(),  getTotalCount() ).variance();
 	}
 	
-	public abstract long countThreshold(RelationToValue relationToThreshold, double threshold);
+	public abstract long countThreshold(RelationToThreshold relationToThreshold);
 	
 	// The value split becomes part of the higher histogram
 	public abstract HistogramsAfterSplit splitAt( int split );	
 	
 	// Thresholds (generates a new histogram, existing object is unchanged)
-	public abstract Histogram threshold(RelationToValue relationToThreshold, double threshold);
+	public abstract Histogram threshold(RelationToThreshold relationToThreshold);
 	
 	public abstract String toString();
 	

@@ -43,10 +43,7 @@ import org.anchoranalysis.image.extent.ImageDim;
  *  */
 public class ArbitraryPointCommon extends AddCriteriaPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7032818241337209355L;
+	
 	
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES

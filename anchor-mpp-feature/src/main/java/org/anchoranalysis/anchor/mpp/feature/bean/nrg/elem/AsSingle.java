@@ -45,12 +45,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
  */
 public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInputSingleMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	/** Iff true, first object is used, otherwise the second */
 	@BeanField
@@ -74,8 +68,7 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInpu
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputPairMemoDescriptor.instance;
 	}
 

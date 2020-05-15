@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1998949245402929691L;
-
 	public StringRasterGenerator() {
 		
 	}
@@ -92,16 +87,6 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 		
 	// A generator associated with this bean
 	private class Generator extends RasterGenerator implements IterableObjectGenerator<String, Stack> {
-		
-		@Override
-		public void start() throws OutputWriteFailedException {
-			
-		}
-
-		@Override
-		public void end() throws OutputWriteFailedException {
-			
-		}
 
 		@Override
 		public String getIterableElement() {

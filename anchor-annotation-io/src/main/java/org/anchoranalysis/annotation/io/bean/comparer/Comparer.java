@@ -37,11 +37,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class Comparer extends AnchorBean<Comparer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// A null value means that there are no objects to compare (e.g. they have been skipped)
 	public abstract Findable<ObjMaskCollection> createObjs( Path filePathSource, ImageDim dim, boolean debugMode ) throws CreateException;
 }

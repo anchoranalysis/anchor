@@ -118,15 +118,6 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 	public ManifestDescription createManifestDescription() {
 		return new ManifestDescription("raster", manifestFunction);
 	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
 
 	@Override
 	public boolean isRGB() {

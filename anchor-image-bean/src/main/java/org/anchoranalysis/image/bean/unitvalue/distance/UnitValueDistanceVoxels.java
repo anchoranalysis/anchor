@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.distance;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -33,11 +35,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 public class UnitValueDistanceVoxels extends UnitValueDistance {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double value;
@@ -60,7 +57,7 @@ public class UnitValueDistanceVoxels extends UnitValueDistance {
 	}
 
 	@Override
-	public double rslv(ImageRes res, DirectionVector dirVector) {
+	public double rslv(Optional<ImageRes> res, DirectionVector dirVector) {
 		return value;
 	}
 

@@ -31,10 +31,5 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 
 public abstract class InterpolatorBean extends AnchorBean<InterpolatorBean> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract Interpolator create();
 }

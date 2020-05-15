@@ -50,10 +50,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 		
 public class RootPath extends AnchorBean<RootPath> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START PROPERTIES
 	

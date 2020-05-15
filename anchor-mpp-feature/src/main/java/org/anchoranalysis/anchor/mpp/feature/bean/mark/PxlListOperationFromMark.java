@@ -35,10 +35,5 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public abstract class PxlListOperationFromMark extends AnchorBean<PxlListOperationFromMark> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8768215241555595940L;
-
 	public abstract double doOperation( PxlMarkMemo pxlMarkMemo, ImageDim dim ) throws OperationFailedException;
 }

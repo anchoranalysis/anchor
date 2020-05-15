@@ -1,7 +1,5 @@
 package org.anchoranalysis.bean;
 
-import java.io.Serializable;
-
 /*
  * #%L
  * anchor-bean
@@ -50,13 +48,8 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
  *
  * @param <F> family-type when the duplicate method is called, what type is returned
  */
-public abstract class AnchorBean<F> implements Serializable {
+public abstract class AnchorBean<F> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1478084098759248229L;
-	
 	/**
 	 * Lazy-loading of a list of Fields associated with properties of the bean.
 	 * 

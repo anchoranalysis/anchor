@@ -34,11 +34,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 public abstract class RasterReader extends AnchorBean<RasterReader> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8368544969541490509L;
-
 	public abstract OpenedRaster openFile( Path filepath ) throws RasterIOException;
 
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.input.descriptor;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*
  * #%L
  * anchor-feature
@@ -37,12 +39,15 @@ public class FeatureInputGenericDescriptor extends FeatureInputDescriptor {
 
 	public final static FeatureInputGenericDescriptor instance = new FeatureInputGenericDescriptor();
 	
-	private FeatureInputGenericDescriptor() {
-		
-	}
+	private FeatureInputGenericDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return true;
+	}
+
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInput.class;
 	}
 }

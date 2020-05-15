@@ -29,6 +29,14 @@ package org.anchoranalysis.core.arithmetic;
 
 import java.io.Serializable;
 
+/**
+ * Mutable class that allows for incrementing jointly sum and count variables, so as to eventually calculate the mean.
+ * 
+ * <p>It can also be reset to zero, as needed.</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class RunningSum implements Serializable {
 	
 	/**
@@ -39,48 +47,74 @@ public class RunningSum implements Serializable {
 	private double sum = 0;
 	private int cnt = 0;
 	
-	public void add( double value ) {
-		sum += value;
-		cnt++;
-	}
-	
+	/**
+	 * Calculates the mean
+	 * 
+	 * @return the mean or <pre>NaN</pre> if the count is zero. 
+	 */
 	public double mean() {
 		return (cnt!=0) ? sum / cnt : Double.NaN;
 	}
 	
+	/** Calculate the mean and then reset to zero */
 	public double meanAndReset() {
 		double res = mean();
 		reset();
 		return res;
 	}
 	
+	/** Reset the sum and count to zero */
 	public void reset() {
 		sum = 0.0;
 		cnt = 0;			
 	}
 
+	/** The sum */
 	public double getSum() {
 		return sum;
 	}
 
-	public int getCnt() {
+	/** The count */
+	public int getCount() {
 		return cnt;
 	}
-	
-	public void addWithoutIncrement( double value ) {
-		sum += value;
+
+	/**
+	 * Adds a new item to the sum, and increments the count by 1.
+	 * 
+	 * @param sumIncrement the value to add to sum
+	 */
+	public void increment( double sumIncrement ) {
+		sum += sumIncrement;
+		cnt++;
 	}
 	
-	public void incr( double s, int c ) {
-		sum += s;
-		cnt += c;
+	/**
+	 * Increments both the sum and count by particular values
+	 * 
+	 * @param sumIncrement increment-value for sum
+	 * @param countIncrement increment-value for count
+	 */
+	public void increment(double sumIncrement, int countIncrement) {
+		sum += sumIncrement;
+		cnt += countIncrement;
 	}
 	
-	public void incr( RunningSum rs ) {
-		sum += rs.getSum();
-		cnt += rs.getCnt();
+	/**
+	 * Increments (adds) an existing {@link RunningSum} to the current.
+	 * 
+	 * @param runningSum the existing sum, which is unmodified.
+	 */
+	public void increment(RunningSum runningSum) {
+		sum += runningSum.getSum();
+		cnt += runningSum.getCount();
 	}
 	
+	/**
+	 * Deep-copy
+	 * 
+	 * @return a new object with new state
+	 */
 	public RunningSum duplicate() {
 		RunningSum out = new RunningSum();
 		out.sum = sum;

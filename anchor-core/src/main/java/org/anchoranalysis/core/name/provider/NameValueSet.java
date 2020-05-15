@@ -31,25 +31,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 
-public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<T> {
+public class NameValueSet<T> implements Iterable<NameValue<T>>, INamedProvider<T> {
 
-	private HashMap<String,INameValue<T>> map = new HashMap<>();
+	private HashMap<String,NameValue<T>> map = new HashMap<>();
 
 	public NameValueSet() {
 		super();
 	}
 	
-	public NameValueSet(Iterable<? extends INameValue<T>> list) {
+	public NameValueSet(Iterable<? extends NameValue<T>> list) {
 		super();
 		
-		for (INameValue<T> nmp : list) {
+		for (NameValue<T> nmp : list) {
 			map.put( nmp.getName(), nmp );
 		}
 	}
-	
+		
 	@Override
 	public Set<String> keys() {
 		return map.keySet();
@@ -57,7 +57,7 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 	
 	@Override
 	public T getException( String name ) throws NamedProviderGetException {
-		INameValue<T> item= map.get(name);
+		NameValue<T> item= map.get(name);
 		if (item==null) {
 			throw NamedProviderGetException.nonExistingItem(name);
 		}
@@ -67,21 +67,21 @@ public class NameValueSet<T> implements Iterable<INameValue<T>>, INamedProvider<
 
 	@Override
 	public T getNull(String key) {
-		INameValue<T> item = map.get(key); 
+		NameValue<T> item = map.get(key); 
 		return item!=null ? item.getValue() : null;
 	}
 	
 	@Override
-	public Iterator<INameValue<T>> iterator() {
+	public Iterator<NameValue<T>> iterator() {
 		return map.values().iterator();
 	}
 	
 	public void add( String name, T value ) {
-		INameValue<T> item = new NameValue<>(name,value);
+		NameValue<T> item = new SimpleNameValue<>(name,value);
 		map.put( name, item );
 	}
 	
-	public void add( INameValue<T> ni ) {
+	public void add( NameValue<T> ni ) {
 		map.put( ni.getName(), ni);
 	}
 	

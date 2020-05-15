@@ -9,6 +9,7 @@
   <version>0.0.8-SNAPSHOT</version>
 
    <dependencies>
+    
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
@@ -19,7 +20,12 @@
 	  <artifactId>anchor-math</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>	
+	  <artifactId>anchor-beans-shared</artifactId>
+  	  <version>0.0.8-SNAPSHOT</version>
+  	</dependency>
+  	
     <dependency>
 	  <groupId>colt</groupId>
 	  <artifactId>colt</artifactId>

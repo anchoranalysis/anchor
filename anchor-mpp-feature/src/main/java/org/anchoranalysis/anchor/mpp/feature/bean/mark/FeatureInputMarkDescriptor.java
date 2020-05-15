@@ -32,13 +32,16 @@ public class FeatureInputMarkDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputMarkDescriptor instance = new FeatureInputMarkDescriptor();
 	
-	private FeatureInputMarkDescriptor() {
-		
-	}
+	private FeatureInputMarkDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return false;
+	}
+
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputMarkDescriptor.class;
 	}
 
 }

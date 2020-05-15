@@ -104,9 +104,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	public void copyPixelsTo(BoundingBox sourceBox, VoxelBox<BufferType> destVoxelBox,
 			BoundingBox destBox) {
 		
-		if (sourceBox.extnt().getVolume()!=destBox.extnt().getVolume()) {
-			throw new IllegalArgumentException("Volume mismatch");
-		}
+		checkExtentMatch(sourceBox, destBox);
 		
 		Point3i srcStart = sourceBox.getCrnrMin();
 		Point3i srcEnd = sourceBox.calcCrnrMax();
@@ -138,13 +136,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBox<BufferType> destVoxelBox,
 			BoundingBox destBox, VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV ) {
 		
-		if (sourceBox.extnt().getVolume()!=destBox.extnt().getVolume()) {
-			throw new IllegalArgumentException("Volume mismatch");
-		}
-		
-		if (!sourceBox.extnt().equals(objMaskBuffer.extnt())) {
-			throw new IllegalArgumentException("objMask extent does not match bbox size");
-		}
+		checkExtentMatch(sourceBox, destBox);
 		
 		Point3i srcStart = sourceBox.getCrnrMin();
 		Point3i srcEnd = sourceBox.calcCrnrMax();
@@ -220,7 +212,6 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		);
 	}
 	
-	
 	/**
 	 * Sets pixels in a box to a particular value if they match an Object-Mask... with more customization
 	 *
@@ -241,10 +232,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		int value,
 		byte maskMatchValue
 	) {
-		
-		if (!bboxMask.extnt().equals(bboxToBeAssigned.extnt())) {
-			throw new IllegalArgumentException("Volume mismatch");
-		}
+		checkExtentMatch(bboxMask, bboxToBeAssigned);
 		
 		Extent eIntersectingBox = bboxMask.extnt();
 		
@@ -661,5 +649,19 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 
 	public VoxelBoxFactoryTypeBound<BufferType> getFactory() {
 		return factory;
+	}
+	
+	private static void checkExtentMatch(BoundingBox bbox1, BoundingBox bbox2) {
+		Extent extent1 = bbox1.extnt();
+		Extent extent2 = bbox2.extnt();
+		if (!extent1.equals(extent2)) {
+			throw new IllegalArgumentException(
+				String.format(
+					"The extents of the two bounding-boxes are not identical: %s vs %s",
+					extent1,
+					extent2
+				)
+			);
+		}
 	}
 }

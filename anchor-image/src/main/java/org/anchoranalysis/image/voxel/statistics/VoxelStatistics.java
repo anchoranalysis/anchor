@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.statistics;
 
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+
 /*
  * #%L
  * anchor-image
@@ -28,7 +30,6 @@ package org.anchoranalysis.image.voxel.statistics;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 
@@ -41,14 +42,14 @@ public abstract class VoxelStatistics {
 	
 	public abstract long sumOfSquares();
 	
-	public abstract VoxelStatistics threshold( RelationToValue relationToThreshold, double threshold );
+	public abstract VoxelStatistics threshold( RelationToThreshold relationToThreshold );
 	
 	public abstract double quantile( double quantile ) throws OperationFailedException;
 	
 	public abstract Histogram histogram() throws OperationFailedException;
 	
 	// Avoids the overhead with assigning new memory if we we are just counting
-	public abstract long countThreshold( RelationToValue relationToThreshold, double threshold );
+	public abstract long countThreshold( RelationToThreshold relationToThreshold );
 
 	public double variance() {
 		return new VarianceCalculator( sum(), sumOfSquares(),  size() ).variance();

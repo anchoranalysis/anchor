@@ -39,11 +39,6 @@ import org.anchoranalysis.bean.xml.error.BeanXmlException;
  */
 public class Concatenate extends DefineAdderBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<DefineAdderBean> list = new ArrayList<>();

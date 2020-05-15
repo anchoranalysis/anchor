@@ -40,11 +40,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -259845116749951095L;
-
 	// Get the default extension for a writer
 	public abstract String dfltExt();
 	

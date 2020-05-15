@@ -31,31 +31,33 @@ import cern.colt.matrix.DoubleMatrix1D;
 
 class TensorUtilities {
 	
-	public static double squared( double val ) {
+	private TensorUtilities() {}
+	
+	public final static double squared( double val ) {
 		return Math.pow(val,  2);
 	}
 
 	/** A two element array, where the second value is 0.0 */
-	public static double[] twoElementArray( double firstVal ) {
+	public final static double[] twoElementArray( double firstVal ) {
 		return twoElementArray( firstVal, 0 );
 	}
 	
-	public static double[] twoElementArray( double firstVal, double secondVal ) {
+	public final static double[] twoElementArray( double firstVal, double secondVal ) {
 		return new double[]{ firstVal, secondVal };
 	}
 	
-	public static double[] threeElementArray( double firstVal, double secondVal, double thirdVal ) {
+	public final static double[] threeElementArray( double firstVal, double secondVal, double thirdVal ) {
 		return new double[]{ firstVal, secondVal, thirdVal };
 	}
 	
-	public static DoubleMatrix1D twoElementMatrix(double x, double y) {
+	public final static DoubleMatrix1D twoElementMatrix(double x, double y) {
 		DoubleMatrix1D out = DoubleFactory1D.dense.make(2);
 		out.set(0, x);
 		out.set(1, y);
 		return out;
 	}
 	
-	public static DoubleMatrix1D threeElementMatrix(double x, double y, double z) {
+	public final static DoubleMatrix1D threeElementMatrix(double x, double y, double z) {
 		DoubleMatrix1D out = DoubleFactory1D.dense.make(3);
 		out.set(0, x);
 		out.set(1, y);

@@ -28,23 +28,16 @@ package org.anchoranalysis.core.arithmetic;
 
 
 /**
- * Are floating point numbers equal?
+ * Utilities for arithmetic operations involving type {@link float }
  * @author Owen Feehan
  *
  */
 public class FloatUtilities {
-
-	private static final float EPSILON = 1e-10f;
 	
-	private FloatUtilities() {
-		
-	}
+	private FloatUtilities() {}
 	
+	/** Are the two numbers equal? */
 	public static boolean areEqual( float f1, float f2 ) {
-		return Math.abs(f1-f2) < EPSILON;
-	}
-	
-	public static boolean areEqual( double d1, double d2 ) {
-		return Math.abs(d1-d2) < EPSILON;
+		return Math.abs(f1-f2) < PrecisionConstants.EPSILON;
 	}
 }

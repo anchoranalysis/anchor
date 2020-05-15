@@ -34,11 +34,6 @@ import org.anchoranalysis.core.color.RGBColor;
 
 public class RGBColorBean extends AnchorBean<RGBColorBean> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private RGBColor delegate;
 	
 	public RGBColorBean() {

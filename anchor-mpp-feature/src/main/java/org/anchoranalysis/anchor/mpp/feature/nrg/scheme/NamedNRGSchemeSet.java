@@ -32,8 +32,7 @@ import java.util.Iterator;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**
  * A set of NRGSchemes each with a name.
@@ -46,17 +45,17 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 public class NamedNRGSchemeSet implements Iterable<NamedBean<NRGScheme>> {
 
 	private HashMap<String,NamedBean<NRGScheme>> delegate = new HashMap<>();
-	private SharedFeatureSet<FeatureInputNRGStack> sharedFeatures;
+	private SharedFeatureMulti sharedFeatures;
 	
-	public NamedNRGSchemeSet(SharedFeatureSet<FeatureInputNRGStack> sharedFeatures) {
+	public NamedNRGSchemeSet(SharedFeatureMulti sharedFeatures) {
 		super();
 		this.sharedFeatures = sharedFeatures;
 	}
 
-	public SharedFeatureSet<FeatureInputNRGStack> getSharedFeatures() {
+	public SharedFeatureMulti getSharedFeatures() {
 		return sharedFeatures;
 	}
-	public void setSharedFeatures(SharedFeatureSet<FeatureInputNRGStack> sharedFeatures) {
+	public void setSharedFeatures(SharedFeatureMulti sharedFeatures) {
 		this.sharedFeatures = sharedFeatures;
 	}
 	

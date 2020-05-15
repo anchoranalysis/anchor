@@ -1,7 +1,5 @@
 package org.anchoranalysis.image.io.bean.chnl;
 
-import java.nio.file.Path;
-
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -37,43 +35,34 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 // Applies a filter to a particular channel
 // Uses a ChnlProvider initialised with a stack called "input_chnl"
 public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String chnlName;
 	
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
 	private ChnlGetter chnlCollection;
 
-	private LogErrorReporter logErrorReporter;
-	private RandomNumberGenerator re;
-	private Path modelDir;
+	private BoundIOContext context;
 	
-	public void init( ChnlGetter chnlCollection, Path modelDir, LogErrorReporter logErrorReporter, RandomNumberGenerator re ) {
+	public void init( ChnlGetter chnlCollection, BoundIOContext context ) {
 		this.chnlCollection = chnlCollection;
-		this.modelDir = modelDir;
-		this.logErrorReporter = logErrorReporter;
-		this.re = re;
+		this.context = context;
 	}
 	
 	@Override
@@ -88,14 +77,14 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 				return chnlCollection.getChnl(name, t, progressReporter);
 			}
 			
-			ChnlProvider chnlProviderDup = chnlProvider.duplicateBean();
+			ChnlProvider chnlProviderDup = chnl.duplicateBean();
 			
 			Chnl chnlIn = chnlCollection.getChnl(name, t, progressReporter);
 			
-			ImageInitParams soImage = ImageInitParams.create(logErrorReporter, re, modelDir);
+			ImageInitParams soImage = ImageInitParamsFactory.create(context);
 			soImage.addToStackCollection("input_chnl", new Stack(chnlIn) );
 			
-			chnlProviderDup.initRecursive(soImage, logErrorReporter);
+			chnlProviderDup.initRecursive(soImage, context.getLogger());
 			
 			return chnlProviderDup.create();
 			
@@ -112,17 +101,17 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 		this.chnlName = chnlName;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	@Override
 	public boolean hasChnl(String chnlName) {
 		return chnlCollection.hasChnl(chnlName);
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 	
 }

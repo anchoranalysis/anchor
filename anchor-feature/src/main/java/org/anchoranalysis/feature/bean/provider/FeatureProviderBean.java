@@ -38,9 +38,4 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
  * @param <P> provider-type
  */
 public abstract class FeatureProviderBean<B,P> extends FeatureRelatedBean<B> implements Provider<P> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 }

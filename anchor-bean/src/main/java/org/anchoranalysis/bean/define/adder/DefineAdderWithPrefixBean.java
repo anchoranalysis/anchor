@@ -42,11 +42,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** A prefix that is placed before the name of every bean created */
 	@BeanField @AllowEmpty

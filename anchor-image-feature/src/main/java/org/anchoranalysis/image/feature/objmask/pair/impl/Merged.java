@@ -43,11 +43,6 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
  */
 public class Merged extends FeatureDeriveFromPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public Merged() {
 		// BEAN Constructor
 	}

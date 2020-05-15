@@ -48,11 +48,6 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 // An input stack
 public class MultiInputManager extends MultiInputManagerBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;

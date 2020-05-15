@@ -28,10 +28,10 @@ package org.anchoranalysis.image.bean.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -43,11 +43,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class BinarySgmnThrshld extends BinarySgmn {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	// START PARAMETERS
 	@BeanField
@@ -55,19 +50,19 @@ public class BinarySgmnThrshld extends BinarySgmn {
 	// END PARAMETERS
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
 		try {
-			return thresholder.threshold(voxelBox, bvOut, null);
+			return thresholder.threshold(voxelBox, bvOut, Optional.empty());
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
 		
@@ -87,7 +82,12 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		try {		
-			return thresholder.threshold( voxelBox,new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()), bvOut, params.getIntensityHistogram() );
+			return thresholder.threshold(
+				voxelBox,
+				new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()),
+				bvOut,
+				params.getIntensityHistogram()
+			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
@@ -100,10 +100,5 @@ public class BinarySgmnThrshld extends BinarySgmn {
 
 	public void setThresholder(Thresholder thresholder) {
 		this.thresholder = thresholder;
-	}
-	
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

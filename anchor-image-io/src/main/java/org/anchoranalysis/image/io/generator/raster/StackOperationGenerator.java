@@ -87,17 +87,6 @@ public class StackOperationGenerator extends RasterGenerator implements Iterable
 	public void setIterableElement(Operation<Stack,OutputWriteFailedException> element) {
 		this.stackIn = element;
 	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-		this.stackIn = null;
-	}
-
 
 	@Override
 	public boolean isRGB() throws OutputWriteFailedException {

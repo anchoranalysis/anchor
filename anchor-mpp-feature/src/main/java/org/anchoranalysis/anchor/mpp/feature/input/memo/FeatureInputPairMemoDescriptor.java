@@ -32,13 +32,15 @@ public class FeatureInputPairMemoDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputPairMemoDescriptor instance = new FeatureInputPairMemoDescriptor();
 	
-	private FeatureInputPairMemoDescriptor() {
-		
-	}
+	private FeatureInputPairMemoDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
 		return false;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputPairMemo.class;
+	}
 }

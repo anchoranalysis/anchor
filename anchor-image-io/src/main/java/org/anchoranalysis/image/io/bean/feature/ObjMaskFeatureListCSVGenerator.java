@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.io.csv.TableCSVGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
@@ -71,7 +71,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	private FeatureList<FeatureInputSingleObj> features;
 	
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
-	private SharedFeatureSet<FeatureInputSingleObj> sharedFeatures = new SharedFeatureSet<>();
+	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
 	
 	private NRGStackWithParams nrgStack;
 	private LogErrorReporter logErrorReporter;
@@ -181,11 +181,11 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.paramsInit = paramsInit;
 	}
 
-	public SharedFeatureSet<FeatureInputSingleObj> getSharedFeatures() {
+	public SharedFeatureMulti getSharedFeatures() {
 		return sharedFeatures;
 	}
 
-	public void setSharedFeatures(SharedFeatureSet<FeatureInputSingleObj> sharedFeatures) {
+	public void setSharedFeatures(SharedFeatureMulti sharedFeatures) {
 		this.sharedFeatures = sharedFeatures;
 	}
 	

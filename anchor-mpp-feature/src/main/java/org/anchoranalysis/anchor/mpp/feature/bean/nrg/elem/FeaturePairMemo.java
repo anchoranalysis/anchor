@@ -30,19 +30,12 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDesc
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeaturePairMemo extends Feature<FeatureInputPairMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputPairMemoDescriptor.instance;
 	}
 }

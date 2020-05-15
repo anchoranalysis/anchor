@@ -33,11 +33,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public abstract class ImageDimProvider extends ImageBean<ImageDimProvider> implements Provider<ImageDim> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public abstract ImageDim create() throws CreateException;
 
 }

@@ -46,8 +46,8 @@ import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.value.INameValue;
 import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -63,11 +63,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // Allows comparison of an annotation with multiple other entities
 public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluator<FeatureInputPairObjs> featureEvaluator;
@@ -82,7 +77,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 	private double maxCost = 1.0;
 	// END BEAN PROPERTIES
 	
-	public List<INameValue<Stack>> createRasters(
+	public List<NameValue<Stack>> createRasters(
 		AnnotationWithCfg annotation,
 		DisplayStack background,
 		Path annotationPath,
@@ -98,7 +93,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 			throw new CreateException(e);
 		}
 		
-		List<INameValue<Stack>> out = new ArrayList<>();
+		List<NameValue<Stack>> out = new ArrayList<>();
 		
 		for( NamedBean<Comparer> ni : listComparers ) {
 			
@@ -120,7 +115,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		return out;
 	}
 	
-	private NameValue<Stack> compare(
+	private SimpleNameValue<Stack> compare(
 		ObjMaskCollection annotationObjs,
 		ObjMaskCollection compareObjs,
 		DisplayStack background,
@@ -160,7 +155,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 				true
 			);
 			
-			return new NameValue<>( rightName, generator.generate() );
+			return new SimpleNameValue<>( rightName, generator.generate() );
 			
 		} catch (FeatureCalcException | OutputWriteFailedException e1) {
 			throw new CreateException(e1);

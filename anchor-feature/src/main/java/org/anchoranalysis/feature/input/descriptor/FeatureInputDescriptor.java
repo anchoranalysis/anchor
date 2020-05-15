@@ -1,5 +1,8 @@
 package org.anchoranalysis.feature.input.descriptor;
 
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+
 /*
  * #%L
  * anchor-feature
@@ -37,6 +40,29 @@ public abstract class FeatureInputDescriptor {
 	 */
 	public abstract boolean isCompatibleWithEverything();
 	
+	/** 
+	 * Can these parameters be used with a particular feature?
+	 *  
+	 * @throws FeatureCalcException */
+	public boolean isCompatibleWith(Feature<?> feature) {
+		return inputClass().isAssignableFrom( feature.inputDescriptor().inputClass() );
+	}
+	
+	/** 
+	 * Can these parameters be used with a particular feature?
+	 *  
+	 * @throws FeatureCalcException */
+	public boolean isCompatibleWith(Class<?> paramTypeClass) {
+		return inputClass().isAssignableFrom( paramTypeClass );
+	}
+	
+	/**
+	 * Parameters-type
+	 * 
+	 * @return
+	 */
+	public abstract Class<?> inputClass();
+	
 	/**
 	 * Rules for preferring to keep one dscr over another.
 	 * 
@@ -56,5 +82,19 @@ public abstract class FeatureInputDescriptor {
 			return first;
 		}
 		return dscr.preferTo(this);
+	}
+
+	@Override
+	public int hashCode() {
+		return 31;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		return (getClass() == obj.getClass());
 	}
 }

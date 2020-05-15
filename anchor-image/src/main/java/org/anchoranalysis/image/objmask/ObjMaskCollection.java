@@ -300,7 +300,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		}
 	}
 	
-	public void rmvNumPixelsLessThan( int numPixels, ObjMaskCollection objsRemoved ) {
+	public void rmvNumPixelsLessThan( int numPixels, Optional<ObjMaskCollection> objsRemoved ) {
 
 		Iterator<ObjMask> itr = iterator();
 		while ( itr.hasNext() ) {
@@ -309,8 +309,8 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 			
 			if ( mask.getVoxelBox().countEqual( ByteConverter.unsignedByteToInt( mask.getBinaryValuesByte().getOnByte()) ) < numPixels ) {
 				
-				if (objsRemoved!=null) {
-					objsRemoved.add( mask );
+				if (objsRemoved.isPresent()) {
+					objsRemoved.get().add( mask );
 				}
 				
 				itr.remove();

@@ -30,9 +30,4 @@ import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
 public abstract class FeedbackReceiverBean<T> extends MPPBean<FeedbackReceiverBean<T>> implements FeedbackReceiver<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 }

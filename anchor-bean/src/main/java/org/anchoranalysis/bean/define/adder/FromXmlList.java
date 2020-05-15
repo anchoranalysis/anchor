@@ -44,11 +44,6 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
  */
 public class FromXmlList extends DefineAdderBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * The name of the file in the current working directory WITHOUT THE .xml EXTENSION

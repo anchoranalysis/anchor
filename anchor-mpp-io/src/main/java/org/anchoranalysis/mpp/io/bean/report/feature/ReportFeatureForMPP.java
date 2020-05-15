@@ -1,6 +1,6 @@
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 
 /*-
  * #%L
@@ -30,72 +30,26 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 
-public abstract class ReportFeatureForMPP<T extends FeatureInput> extends ReportFeatureForSharedObjects {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class ReportFeatureForMPP<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
 
 	// START BEAN PROPERTIES	
 	@BeanField
-	private FeatureEvaluator<T> featureEvaluator;
-	
-	@BeanField
-	private String title;
-		
-	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dim;
 	// END BEAN PROPERTIES
 	
-	protected void init( MPPInitParams so, LogErrorReporter logger ) throws InitException {
-		// Maybe we should duplicate the providers?
-		featureEvaluator.initRecursive( so.getFeature(), logger );
-	}
-	
-	protected FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
-		return featureEvaluator.createAndStartSession();
-	}
-	
 	protected ImageDim createImageDim() throws CreateException {
-		return dimProvider.create();
+		return dim.create();
 	}
 
-	@Override
-	public String genTitleStr() throws OperationFailedException {
-		return title;
-	}
-	
-	public String getTitle() {
-		return title;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public FeatureEvaluator<T> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-	
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

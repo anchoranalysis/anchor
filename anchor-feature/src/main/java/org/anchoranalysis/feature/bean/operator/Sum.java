@@ -33,11 +33,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * If TRUE, we ignore any NaN values. Otherwise the sum becomes NaN

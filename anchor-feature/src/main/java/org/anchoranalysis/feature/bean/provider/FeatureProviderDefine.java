@@ -35,11 +35,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class FeatureProviderDefine<T extends FeatureInput> extends FeatureProvider<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
 	private Feature<T> feature;

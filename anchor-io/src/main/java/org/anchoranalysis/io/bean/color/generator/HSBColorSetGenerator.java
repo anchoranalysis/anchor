@@ -32,11 +32,6 @@ import org.anchoranalysis.core.color.RGBColor;
 
 public class HSBColorSetGenerator extends ColorSetGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 555788948039525016L;
-
 	@Override
 	public ColorList genColors( int num_colors ) {
 	

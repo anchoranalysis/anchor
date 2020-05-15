@@ -42,9 +42,6 @@ class RandomSet<E> extends AbstractSet<E> {
     private List<E> dta = new ArrayList<>();
     private Map<E, Integer> idx = new HashMap<>();
 
-    public RandomSet() {
-    }
-
     @Override
     public boolean add(E item) {
         if (idx.containsKey(item)) {

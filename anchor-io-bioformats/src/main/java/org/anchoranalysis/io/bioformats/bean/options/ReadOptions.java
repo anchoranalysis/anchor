@@ -34,11 +34,6 @@ import loci.formats.IFormatReader;
 
 public abstract class ReadOptions extends AnchorBean<ReadOptions> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract int sizeC(IFormatReader reader);
 	
 	public abstract int sizeT(IFormatReader reader);

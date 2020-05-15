@@ -35,10 +35,6 @@ import org.anchoranalysis.image.arrangeraster.IArrangeRaster;
 
 public class ArrangeRasterCell extends AnchorBean<ArrangeRasterCell> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6748021779731076460L;
 	// START BEAN PROPERTIES
 	@BeanField
 	private IArrangeRaster arrangeRaster;

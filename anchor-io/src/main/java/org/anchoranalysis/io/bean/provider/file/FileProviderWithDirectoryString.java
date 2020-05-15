@@ -40,11 +40,6 @@ import org.anchoranalysis.io.params.InputContextParams;
  */
 public abstract class FileProviderWithDirectoryString extends FileProviderWithDirectory {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN FIELDS
 	/** A directory in which to look for files.
 	 * 

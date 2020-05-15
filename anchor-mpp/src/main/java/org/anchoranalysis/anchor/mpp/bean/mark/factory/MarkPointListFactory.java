@@ -31,10 +31,7 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 
 public class MarkPointListFactory extends MarkFactory {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES

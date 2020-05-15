@@ -42,11 +42,11 @@ public class MorphologicalErosion {
 
 	public static ObjMask createErodedObjMask(
 		ObjMask om,
-		Extent extent,
+		Optional<Extent> extent,
 		boolean do3D,
 		int iterations,
 		boolean outsideAtThreshold,
-		IAcceptIteration acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
+		Optional<IAcceptIteration> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
 	) throws CreateException {
 		
 		ObjMask omOut;
@@ -58,10 +58,7 @@ public class MorphologicalErosion {
 			// If we want to treat the outside of the image as if it's at a threshold, then
 			//  we put an extra 1-pixel border around the object-mask, so that there's always
 			//  whitespace around the object-mask, so long as it exists in the image scene
-			BoundingBox bbox = om.getVoxelBoxBounded().dilate(
-				do3D,
-				Optional.of(extent)
-			);
+			BoundingBox bbox = om.getVoxelBoxBounded().dilate(do3D,extent);
 			omOut = om.createIntersectingMaskAlwaysNew(bbox);
 			
 		} else {
@@ -72,7 +69,7 @@ public class MorphologicalErosion {
 			omOut.binaryVoxelBox(),
 			do3D,
 			iterations,
-			null,
+			Optional.empty(),
 			0,
 			outsideAtThreshold,
 			acceptConditionsDilation
@@ -98,10 +95,10 @@ public class MorphologicalErosion {
 			BinaryVoxelBox<ByteBuffer> bvb,
 			boolean do3D,
 			int iterations,
-			VoxelBox<ByteBuffer> backgroundVb,
+			Optional<VoxelBox<ByteBuffer>> backgroundVb,
 			int minIntensityValue,
 			boolean outsideAtThreshold,
-			IAcceptIteration acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
+			Optional<IAcceptIteration> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
 		) throws CreateException {
 
 			bvb.invert();

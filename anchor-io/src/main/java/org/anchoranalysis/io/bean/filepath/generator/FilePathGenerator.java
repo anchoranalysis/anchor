@@ -33,11 +33,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class FilePathGenerator extends AnchorBean<FilePathGenerator> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7572853192837916054L;
-
 	// Give a string that is prefixed to all output files, to give the output file path
 	public abstract Path outFilePath( Path pathIn, boolean debugMode ) throws AnchorIOException;
 }

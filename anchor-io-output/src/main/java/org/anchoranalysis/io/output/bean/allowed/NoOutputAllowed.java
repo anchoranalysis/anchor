@@ -29,11 +29,6 @@ package org.anchoranalysis.io.output.bean.allowed;
 
 public class NoOutputAllowed extends OutputAllowed {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6189493796393374208L;
-
 	@Override
 	public boolean isOutputAllowed(String outputName) {
 		return false;

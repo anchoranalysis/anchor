@@ -2,8 +2,8 @@ package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.EllipseBounds;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipseBounds;
 
 /*-
  * #%L
@@ -38,11 +38,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public class EllipseBoundsProposer extends RadiiProposer {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8713626984466863980L;
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {

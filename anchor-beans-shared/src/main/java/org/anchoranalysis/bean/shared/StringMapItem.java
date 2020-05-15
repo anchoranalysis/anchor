@@ -39,11 +39,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class StringMapItem extends AnchorBean<StringMapItem> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String source;

@@ -27,7 +27,6 @@ package org.anchoranalysis.feature.bean.list;
  */
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -52,12 +51,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
  *
  * @param <T> input type of features contained in the list
  */
-public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>>, Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>> {
 	
 	// START BEAN PARAMETERS
 	@BeanField
@@ -301,4 +295,14 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		this.list = list;
 	}
 
+	@Override
+	public String getBeanDscr() {
+		return String.format(
+			"%s with %d items",
+			super.getBeanDscr(),
+			list.size()
+		);
+	}
+
+	
 }

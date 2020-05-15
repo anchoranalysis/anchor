@@ -36,11 +36,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 @GroupingRoot
 public abstract class HistogramProvider extends ImageBean<HistogramProvider> implements Provider<Histogram> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6523913580861421733L;
-
 	public abstract Histogram create() throws CreateException;
 }
 

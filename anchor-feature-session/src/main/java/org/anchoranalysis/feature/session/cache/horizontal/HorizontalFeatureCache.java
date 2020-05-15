@@ -33,7 +33,7 @@ import java.util.Set;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.value.INameValue;
+import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -76,7 +76,7 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 				map.add(f);
 			}
 			
-			for( INameValue<Feature<T>> f : sharedFeatures ) {
+			for( NameValue<Feature<T>> f : sharedFeatures.getSet() ) {
 				map.add(f.getValue());
 			}
 			

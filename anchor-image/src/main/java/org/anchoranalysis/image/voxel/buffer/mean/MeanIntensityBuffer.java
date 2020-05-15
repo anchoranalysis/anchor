@@ -52,10 +52,13 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
 		for( int i=0; i<maxIndex; i++) {
 			processPixel( pixels, i );
     	}
+		finalizeBuffer();
 		cntVoxelBox++;
 	}
 	
 	protected abstract void processPixel( T pixels, int index );
+	
+	protected abstract void finalizeBuffer();
 	
 	/** Increments a particular offset in the sum bufffer by a certain amount */
 	protected void incrSumBuffer( int index, int toAdd ) {

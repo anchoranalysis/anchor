@@ -45,11 +45,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBOrientationWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1732346635451171139L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double xDiv = 1;
@@ -58,10 +53,6 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	private boolean drawReverseLine = false;
 	// END BEAN PROPERTIES
 	
-	public RGBOrientationWriter() {
-		
-	}
-
 	public static Point3d calcPoint(ObjMaskWithProperties mask, String propertyName) {
 		
 		if (!mask.hasProperty(propertyName)) {

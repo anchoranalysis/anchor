@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.unitvalue.volume;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-bean
@@ -37,11 +39,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 // Measures either area or volume (depending if the use3D flag is employed)
 public class UnitValueVolumePhysical extends UnitValueVolume {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START VALUE
 	@BeanField
 	private double value;	// value in metres
@@ -51,13 +48,16 @@ public class UnitValueVolumePhysical extends UnitValueVolume {
 	// END VALUE
 	
 	@Override
-	public double rslv(ImageRes res) throws UnitValueException {
+	public double rslv(Optional<ImageRes> res) throws UnitValueException {
+		if (!res.isPresent()) {
+			throw new UnitValueException("An image resolution is required to calculate physical-volume but it is missing");
+		}
 		
 		UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(unitType);
 		
 		double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
 		
-		return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, res);
+		return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, res.get());
 	}
 
 	public double getValue() {

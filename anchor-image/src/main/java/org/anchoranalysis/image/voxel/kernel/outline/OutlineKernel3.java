@@ -31,43 +31,17 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Keeps any on pixel that touches an off pixel, off otheriwse
-public class OutlineKernel3 extends BinaryKernel {
+public class OutlineKernel3 extends OutlineKernel3Base {
 	
-	private boolean outsideAtThreshold = false;
-	
-	// Disconsiders anything outside the threshold. Takes priority ahead of  outsideAtThreshold
-	private boolean ignoreAtThreshold = false;
-	
-	private boolean useZ;
-	
-	private BinaryValuesByte bv;
-	
-	private LocalSlices inSlices;
-	
-	private Extent extnt;
-	
-	// Constructor
 	public OutlineKernel3(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-		super(3);
-		this.outsideAtThreshold = outsideAtThreshold;
-		this.useZ = useZ;
-		this.bv = bv;
+		this(bv, outsideAtThreshold, useZ, false);
 	}
 	
-	@Override
-	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
-	}
+	public OutlineKernel3(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ, boolean ignoreAtThreshold) {
+		super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
 
-	@Override
-	public void notifyZChange(LocalSlices inSlices, int z) {
-		this.inSlices = inSlices;
 	}
 
 	@Override
@@ -167,13 +141,4 @@ public class OutlineKernel3 extends BinaryKernel {
 		
 		return false;
 	}
-
-	public boolean isIgnoreAtThreshold() {
-		return ignoreAtThreshold;
-	}
-
-	public void setIgnoreAtThreshold(boolean ignoreAtThreshold) {
-		this.ignoreAtThreshold = ignoreAtThreshold;
-	}
-
 }

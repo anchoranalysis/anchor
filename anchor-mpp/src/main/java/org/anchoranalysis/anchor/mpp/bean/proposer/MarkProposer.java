@@ -38,11 +38,6 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 public abstract class MarkProposer extends ProposerBean<MarkProposer> implements ICompatibleWith
 {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8973822953715696606L;
-	
 	// The inputMark's attributes become changed in accordance to the internal rules of the proposer
 	public abstract boolean propose(
 		PxlMarkMemo inputMark,

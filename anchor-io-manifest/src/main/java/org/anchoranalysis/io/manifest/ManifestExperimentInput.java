@@ -33,11 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class ManifestExperimentInput extends AnchorBean<ManifestExperimentInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2138421061294870267L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String file;

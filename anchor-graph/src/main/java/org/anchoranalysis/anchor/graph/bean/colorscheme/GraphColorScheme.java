@@ -40,11 +40,6 @@ import org.jfree.chart.title.LegendTitle;
 
 public class GraphColorScheme extends AnchorBean<GraphColorScheme> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private RGBColorBean backgroundColor = new RGBColorBean(255,255,255);

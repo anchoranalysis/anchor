@@ -47,16 +47,11 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;
@@ -74,13 +69,10 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private String outputName = "objsFeatureList";
 	// END BEAN PROPERTIES
 
-	public void output(
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
-	) throws IOException {
+	public void output(	BoundIOContext context ) throws IOException {
 		
 		// Early exit if we're not allowed output anything anyway
-		if (!outputManager.isOutputAllowed(getOutputName())) {
+		if (!context.getOutputManager().isOutputAllowed(getOutputName())) {
 			return;
 		}
 		
@@ -104,9 +96,9 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			// Create NRG stack
 			final NRGStackWithParams nrgStack = stackProviderNRG!=null ? new NRGStackWithParams( stackProviderNRG.create() ) : null;
 				
-			outputManager.getWriterCheckIfAllowed().write(
+			context.getOutputManager().getWriterCheckIfAllowed().write(
 				outputName,
-				() -> createGenerator(paramsInit, nrgStack, objsCollection, features, logErrorReporter)
+				() -> createGenerator(paramsInit, nrgStack, objsCollection, features, context.getLogger() )
 			);
 			
 		} catch (CreateException e) {
@@ -127,7 +119,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			logErrorReporter
 		);
 		generator.setParamsInit(paramsInit);
-		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet().downcast() );
+		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet() );
 		generator.setIterableElement(objsCollection);
 		return generator;
 	}

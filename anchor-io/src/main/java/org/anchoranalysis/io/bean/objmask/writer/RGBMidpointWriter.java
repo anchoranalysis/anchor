@@ -44,11 +44,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBMidpointWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9198559115358060005L;
-	
 	private static final String PROPERTY_MIDPOINT = "midpointInt";
 	
 	// START BEAN PROEPRTIES

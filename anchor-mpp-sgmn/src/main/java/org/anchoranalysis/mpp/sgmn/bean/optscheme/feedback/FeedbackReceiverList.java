@@ -41,11 +41,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 // Aggregates reporting across multiple entities
 public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 152537145907147222L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<FeedbackReceiver<T>> list;

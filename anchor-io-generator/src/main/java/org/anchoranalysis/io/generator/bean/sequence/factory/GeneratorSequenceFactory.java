@@ -34,11 +34,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public abstract class GeneratorSequenceFactory extends AnchorBean<GeneratorSequenceFactory> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6311501203708849194L;
-
 	public abstract <GeneratorType> IGeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
 			BoundOutputManagerRouteErrors outputManager,
 			String outputName,

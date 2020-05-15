@@ -28,20 +28,16 @@ package org.anchoranalysis.bean;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.name.value.INameValue;
+import org.anchoranalysis.core.name.value.NameValue;
 
 /**
+ * A bean with an associated (textual) name
  * 
  * @author Owen Feehan
  *
  * @param <T> item type
  */
-public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean<T>> implements INameValue<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2969907836084541311L;
+public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean<T>> implements NameValue<T> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -50,14 +46,21 @@ public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean
 	@BeanField
 	private T item;
 	// END BEAN PROPERTIES
-	
+
+	/***
+	 * Constructor - uses an empty-string as name, and a nullable-item. Needed for bean-construction.
+	 */
 	public NamedBean() {
-		// FOR BEAN-INITIALIZATION
-		
 		name = "";
 		item = null;
 	}
 	
+	/**
+	 * Constructor with a specific name and item
+	 * 
+	 * @param name name
+	 * @param item item
+	 */
 	public NamedBean( String name, T item ) {
 		this.name = name;
 		this.item = item;
@@ -78,19 +81,23 @@ public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean
 		this.item = item;
 	}
 	
+	/** The item that is to be named (i.e. the underlying bean) */
 	public T getItem() {
 		return item;
 	}
 	
+	/** {@link setItem} */
 	public void setItem(T item) {
 		setValue(item);
 	}
 
+	/** {@link getName} */
 	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/** The name of the bean */
 	@Override
 	public String getName() {
 		return name;

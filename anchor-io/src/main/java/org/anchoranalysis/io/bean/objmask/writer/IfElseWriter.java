@@ -42,11 +42,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class IfElseWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5841354498290382982L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskWriter trueWriter;

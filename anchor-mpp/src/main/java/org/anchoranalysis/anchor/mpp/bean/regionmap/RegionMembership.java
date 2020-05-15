@@ -35,11 +35,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class RegionMembership extends AnchorBean<RegionMembership> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean bit0 = false;

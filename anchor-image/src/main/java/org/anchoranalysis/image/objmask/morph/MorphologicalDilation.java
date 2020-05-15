@@ -76,7 +76,7 @@ public class MorphologicalDilation {
 	}
 	
 
-	private static BinaryKernel createDilationKernel( BinaryValuesByte bv, boolean do3D, VoxelBox<ByteBuffer> backgroundVb, int minIntensityValue, boolean zOnly, boolean outsideAtThreshold, boolean bigNghb ) throws CreateException {
+	private static BinaryKernel createDilationKernel( BinaryValuesByte bv, boolean do3D, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean zOnly, boolean outsideAtThreshold, boolean bigNghb ) throws CreateException {
 
 		BinaryKernel kernelDilation;
 		
@@ -93,8 +93,8 @@ public class MorphologicalDilation {
 		
 		// TODO HACK FIX , how we handle the different regions
 		
-		if(minIntensityValue>0 && backgroundVb!=null) {
-			return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb );
+		if(minIntensityValue>0 && backgroundVb.isPresent()) {
+			return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb.get() );
 		} else {
 			return kernelDilation;
 		}
@@ -103,8 +103,18 @@ public class MorphologicalDilation {
 	
 
 	
-	public static BinaryVoxelBox<ByteBuffer> dilate( BinaryVoxelBox<ByteBuffer> bvb, boolean do3D, int iterations, VoxelBox<ByteBuffer> backgroundVb, int minIntensityValue, boolean bigNghb ) throws CreateException {
-		return dilate(bvb, do3D, iterations, backgroundVb, minIntensityValue, false, false, null, bigNghb);
+	public static BinaryVoxelBox<ByteBuffer> dilate( BinaryVoxelBox<ByteBuffer> bvb, boolean do3D, int iterations, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean bigNghb ) throws CreateException {
+		return dilate(
+			bvb,
+			do3D,
+			iterations,
+			backgroundVb,
+			minIntensityValue,
+			false,
+			false,
+			Optional.empty(),
+			bigNghb
+		);
 	}
 	
 	/**
@@ -127,11 +137,11 @@ public class MorphologicalDilation {
 		BinaryVoxelBox<ByteBuffer> bvb,
 		boolean do3D,
 		int iterations,
-		VoxelBox<ByteBuffer> backgroundVb,
+		Optional<VoxelBox<ByteBuffer>> backgroundVb,
 		int minIntensityValue,
 		boolean zOnly,
 		boolean outsideAtThreshold,
-		IAcceptIteration acceptConditions,
+		Optional<IAcceptIteration> acceptConditions,
 		boolean bigNghb
 	) throws CreateException {
 
@@ -152,8 +162,8 @@ public class MorphologicalDilation {
 			VoxelBox<ByteBuffer> next = ApplyKernel.apply(kernelDilation, buf, bvb.getBinaryValues().createByte() );
 			
 			try {
-				if (acceptConditions!=null) {
-					if (!acceptConditions.acceptIteration(next, bvb.getBinaryValues())) {
+				if (acceptConditions.isPresent()) {
+					if (!acceptConditions.get().acceptIteration(next, bvb.getBinaryValues())) {
 						break;
 					}
 				}

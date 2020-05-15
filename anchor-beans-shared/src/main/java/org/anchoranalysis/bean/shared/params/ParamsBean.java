@@ -34,12 +34,6 @@ import org.anchoranalysis.core.error.InitException;
 
 public abstract class ParamsBean<T> extends InitializableBeanSimple<T,KeyValueParamsInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	private transient KeyValueParamsInitParams soParams;
 	
 	protected ParamsBean() {

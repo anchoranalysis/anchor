@@ -29,7 +29,7 @@ package org.anchoranalysis.core.geometry;
 
 
 
-public class Point3f extends Tuple3f {
+public final class Point3f extends Tuple3f {
 	
 	/**
 	 * 

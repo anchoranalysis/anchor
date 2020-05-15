@@ -36,8 +36,6 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -47,6 +45,7 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -81,15 +80,10 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	/** Is the execution-time of the task per-input expected to be very quick to execute? */
 	public abstract boolean hasVeryQuickPerInputExecution();
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8813467347709880743L;
-
 	// Return object is the shared state if it exists
 	public abstract S beforeAnyJobIsExecuted( BoundOutputManagerRouteErrors outputManager, ParametersExperiment params ) throws ExperimentExecutionException;
 	
-	public abstract void afterAllJobsAreExecuted( BoundOutputManagerRouteErrors outputManager, S sharedState, LogReporter logReporter ) throws ExperimentExecutionException;
+	public abstract void afterAllJobsAreExecuted( S sharedState, BoundIOContext context ) throws ExperimentExecutionException;
 	
 	// Runs the experiment on a particular file
 	public boolean executeJob(	ParametersUnbound<T,S> paramsUnbound ) throws JobExecutionException {
@@ -109,7 +103,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		
 		// Create other bound arguments
 		
-		ParametersBound<T,S> paramsBound = bindOtherParams( paramsUnbound, outputManagerTask, manifestTask );
+		InputBound<T,S> paramsBound = bindOtherParams( paramsUnbound, outputManagerTask, manifestTask );
 		return executeJobLogExceptions( paramsBound, paramsUnbound.isSupressExceptions() );
 		
 	}
@@ -125,7 +119,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	 **/
 	public abstract InputTypesExpected inputTypesExpected();
 		
-	public abstract void doJobOnInputObject( ParametersBound<T,S> params ) throws JobExecutionException;
+	public abstract void doJobOnInputObject( InputBound<T,S> params ) throws JobExecutionException;
 	
 	
 	/**
@@ -136,7 +130,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	 * @param manifestTask a bound manifest for the task
 	 * @return a complete ParametersBound object with all parameters set to objects bound for the specific task
 	 */
-	private ParametersBound<T,S> bindOtherParams( ParametersUnbound<T,S> paramsUnbound, BoundOutputManager outputManagerTask, ManifestRecorder manifestTask ) {
+	private InputBound<T,S> bindOtherParams( ParametersUnbound<T,S> paramsUnbound, BoundOutputManager outputManagerTask, ManifestRecorder manifestTask ) {
 		
 		// We create a new log reporter for this job only
 		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
@@ -146,6 +140,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			errorReporterFallback,
 			paramsUnbound.getParametersExperiment().getExperimentArguments(), paramsUnbound.getParametersExperiment().isDetailedLogging()
 		);
+		
 		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(logReporterJob);
 		
 		// We initialise the output manager
@@ -154,24 +149,23 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			errorReporterJob
 		);
 		
-		LogErrorReporter logErrorReporterJob = new LogErrorReporter(logReporterJob,errorReporterJob);
-		
 		// We create new parameters bound specifically to the job
-		ParametersBound<T,S> paramsBound = new ParametersBound<>();
+		InputBound<T,S> paramsBound = new InputBound<>(
+			paramsUnbound.getParametersExperiment().getExperimentArguments(),
+			outputManagerTaskRouteErrors,
+			logReporterJob,
+			errorReporterJob
+		);
 		paramsBound.setInputObject(paramsUnbound.getInputObject());
 		paramsBound.setSharedState(paramsUnbound.getSharedState());
-		paramsBound.setExperimentArguments(paramsUnbound.getParametersExperiment().getExperimentArguments());
-		paramsBound.setOutputManager( outputManagerTaskRouteErrors );
-		paramsBound.setLogErrorReporter(logErrorReporterJob);
 		paramsBound.setManifest(manifestTask);
-		paramsBound.setLogReporterJob(logReporterJob);
 		paramsBound.setDetailedLogging(paramsUnbound.isDetailedLogging());
 		return paramsBound;
 	}
 	
 	
 	private boolean executeJobLogExceptions(
-		ParametersBound<T,S> params,
+		InputBound<T,S> params,
 		boolean supressExceptions
 	) throws JobExecutionException {
 		
@@ -186,7 +180,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			
 			if (params.isDetailedLogging()) {
 				
-				params.getLogErrorReporter().getLogReporter().logFormatted(
+				params.getLogger().getLogReporter().logFormatted(
 					"Output Folder has path: \t%s",
 					params.getOutputManager().getOutputFolderPath().toString()
 				);
@@ -199,7 +193,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			successfullyFinished = true;
 			
 		} catch (Exception e) {
-			params.getLogErrorReporter().getErrorReporter().recordError(Task.class, e);
+			params.getLogger().getErrorReporter().recordError(Task.class, e);
 			logReporterJob.log("This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
 			if (!supressExceptions) {
 				throw new JobExecutionException("Job encountered a fatal error", e);	
@@ -221,7 +215,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	
 	
 	private void executeJobAdditionalOutputs(
-		ParametersBound<T,S> params,
+		InputBound<T,S> params,
 		StopWatch stopWatchFile
 	) throws JobExecutionException {
 
@@ -232,7 +226,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		} finally {
 			// We close the input objects as soon as the task is completed, so as to free up file handles
 			// NB Deal with this in the future... if a task is never called, then close() might never be called on the InputObject
-			params.getInputObject().close( params.getLogErrorReporter().getErrorReporter() );
+			params.getInputObject().close( params.getLogger().getErrorReporter() );
 		}
 		
 		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 

@@ -34,11 +34,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
 public abstract class KernelProposerOption<T> extends AnchorBean<KernelProposerOption<T>> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6228617550814806848L;
-	
 	// Add weighted kernel factories to a list, and returns the total weight
 	public abstract double addWeightedKernelFactories( List<WeightedKernel<T>> lst );
 	

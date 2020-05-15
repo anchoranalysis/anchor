@@ -44,10 +44,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 // We have no Z implemented yet, so we always overlay at z position 0
 public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1662304754796901111L;
+	
 
 	// START BEAN PROPERTIES
 	

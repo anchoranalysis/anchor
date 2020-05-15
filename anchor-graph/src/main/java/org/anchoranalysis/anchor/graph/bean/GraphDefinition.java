@@ -38,11 +38,6 @@ import org.anchoranalysis.core.error.CreateException;
 public abstract class GraphDefinition<ItemType> extends AnchorBean<GraphDefinition<ItemType>> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8558887934356230941L;
-
-	/**
 	 * Creates a graph
 	 * 
 	 * @param items the items which determine the graph contents

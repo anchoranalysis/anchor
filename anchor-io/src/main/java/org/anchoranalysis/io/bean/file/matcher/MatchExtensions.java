@@ -46,11 +46,6 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class MatchExtensions extends FileMatcher {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private FileMatcher matcher;

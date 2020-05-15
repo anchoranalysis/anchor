@@ -32,11 +32,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class DummyStackProvider extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Stack create() throws CreateException {
 		return null;

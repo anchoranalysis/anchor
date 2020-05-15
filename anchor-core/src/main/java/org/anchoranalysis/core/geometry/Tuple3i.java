@@ -29,6 +29,10 @@ package org.anchoranalysis.core.geometry;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+
 public abstract class Tuple3i implements Serializable {
 
 	/**
@@ -40,110 +44,135 @@ public abstract class Tuple3i implements Serializable {
 	protected int y = 0;
 	protected int z = 0;
 	
-	public void add( Tuple3i pnt ) {
+	public final void add( Tuple3i pnt ) {
 		this.x = this.x + pnt.x;
 		this.y = this.y + pnt.y;
 		this.z = this.z + pnt.z;
 	}
 	
-	public void sub( int val ) {
+	public final void sub( int val ) {
 		this.x = this.x - val;
 		this.y = this.y - val;
 		this.z = this.z - val;
 	}
 	
-	public void sub( Tuple3i pnt ) {
+	public final void sub( Tuple3i pnt ) {
 		this.x = this.x - pnt.x;
 		this.y = this.y - pnt.y;
 		this.z = this.z - pnt.z;
 	}
 	
-	public void scale( int factor ) {
+	public final void scale( int factor ) {
 		this.x = this.x * factor;
 		this.y = this.y * factor;
 		this.z = this.z * factor;
 	}
 	
-	public void div( int factor ) {
+	public final void div( int factor ) {
 		this.x = this.x / factor;
 		this.y = this.y / factor;
 		this.z = this.z / factor;
 	}
 	
-	public void scaleXY( double factor ) {
+	public final void scaleXY( double factor ) {
 		this.x = (int) (factor * this.x);
 		this.y = (int) (factor * this.y);
 	}
 
-	public int getX() {
+	public final int getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public final void setX(int x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public final int getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public final void setY(int y) {
 		this.y = y;
 	}
 
-	public int getZ() {
+	public final int getZ() {
 		return z;
 	}
 
-	public void setZ(int z) {
+	public final void setZ(int z) {
 		this.z = z;
 	}
+		
+	public final int getValueByDimension(int dimIndex) {
+		if (dimIndex==0) {
+			return x;
+		} else if (dimIndex==1) {
+			return y;
+		} else if (dimIndex==2) {
+			return z;
+		} else {
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+		}
+	}
 	
-	public void incrX() {
+	public final int getValueByDimension( AxisType axisType ) {
+		switch( axisType ) {
+		case X:
+			return x;
+		case Y:
+			return y;
+		case Z:
+			return z;
+		default:
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.UNKNOWN_AXIS_TYPE);
+		}
+	}
+	
+	public final void incrX() {
 		this.x++;
 	}
 	
-	public void incrY() {
+	public final void incrY() {
 		this.y++;
 	}
 	
-	public void incrZ() {
+	public final void incrZ() {
 		this.z++;
 	}
 	
-	public void incrX(int val) {
+	public final void incrX(int val) {
 		this.x += val;
 	}
 	
-	public void incrY(int val) {
+	public final void incrY(int val) {
 		this.y += val;
 	}
 	
-	public void incrZ(int val) {
+	public final void incrZ(int val) {
 		this.z += val;
 	}
 	
-	public void decrX() {
+	public final void decrX() {
 		this.x--;
 	}
 	
-	public void decrY() {
+	public final void decrY() {
 		this.y--;
 	}
 	
-	public void decrZ() {
+	public final void decrZ() {
 		this.z--;
 	}
 	
-	public void decrX(int val) {
+	public final void decrX(int val) {
 		this.x -= val;
 	}
 	
-	public void decrY(int val) {
+	public final void decrY(int val) {
 		this.y -= val;
 	}
 	
-	public void decrZ(int val) {
+	public final void decrZ(int val) {
 		this.z -= val;
 	}
 	

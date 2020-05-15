@@ -52,11 +52,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class FeatureListProviderListSequence<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * The list feature that is duplicated, and populated.

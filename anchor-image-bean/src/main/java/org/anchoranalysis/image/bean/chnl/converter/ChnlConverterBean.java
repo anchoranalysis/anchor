@@ -33,11 +33,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
 // Converts a channel from one type to another
 public abstract class ChnlConverterBean extends ImageBean<ChnlConverterBean> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public abstract ChnlConverter<?> createConverter() throws CreateException;
 
 }

@@ -31,6 +31,8 @@ import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
 class PropertyUtilities {
 	
+	private PropertyUtilities() {}
+	
 	public static void addPoint2dProperty( ObjMaskWithProperties mask, String propertyName, double x, double y ) {
 		mask.setProperty(
 			propertyName,

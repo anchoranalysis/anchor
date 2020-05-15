@@ -3,7 +3,7 @@ package org.anchoranalysis.experiment.bean.task;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 
 /*
  * #%L
@@ -50,11 +50,6 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutSharedState<S>  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(InputFromManager.class);
@@ -62,8 +57,8 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
 	
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<S,Object> params) throws JobExecutionException {
-		printMessage( params.getLogErrorReporter().getLogReporter() );
+	public void doJobOnInputObject(InputBound<S,Object> params) throws JobExecutionException {
+		printMessage( params.getLogger().getLogReporter() );
 		
 	}
 

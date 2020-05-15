@@ -41,11 +41,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7572853192837916054L;
-	
-	/**
 	 * Provides a prefix which can be prepended to all output files. The prefix should be an absolute path.
 	 * 
 	 * @param input an input to derive a prefix from

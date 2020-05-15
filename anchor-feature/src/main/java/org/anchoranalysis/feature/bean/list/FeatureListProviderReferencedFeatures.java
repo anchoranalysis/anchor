@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 public abstract class FeatureListProviderReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated

@@ -43,11 +43,6 @@ import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extr
  */
 public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleObj> item;

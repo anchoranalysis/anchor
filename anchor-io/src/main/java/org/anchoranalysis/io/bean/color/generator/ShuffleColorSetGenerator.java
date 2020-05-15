@@ -33,11 +33,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public class ShuffleColorSetGenerator extends ColorSetGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7356603980194493498L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ColorSetGenerator source = null;

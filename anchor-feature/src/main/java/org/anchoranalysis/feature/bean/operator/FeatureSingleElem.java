@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
@@ -43,18 +42,13 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
  */
 public abstract class FeatureSingleElem<T extends FeatureInput, S extends FeatureInput> extends Feature<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private Feature<S> item = null;
 	// END BEAN PARAMETERS
 	
 	public FeatureSingleElem() {
-		
+		// B
 	}
 
 	public FeatureSingleElem( Feature<S> feature  ) {
@@ -70,8 +64,7 @@ public abstract class FeatureSingleElem<T extends FeatureInput, S extends Featur
 	}
 	
 	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
-		return item.paramType();
+	public FeatureInputDescriptor inputDescriptor() {
+		return item.inputDescriptor();
 	}
 }

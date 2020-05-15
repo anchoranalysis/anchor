@@ -62,6 +62,12 @@ import ij.process.ShortProcessor;
 
 public class IJWrap {
 
+	private final static String IMAGEJ_UNIT_MICRON = "micron";
+	private final static String IMAGEJ_IMAGE_NAME = "imagename";
+	
+	/** A multiplication-factor to convert microns to meters */
+	private final static int MICRONS_TO_METERS = 1000000;
+	
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
 	
@@ -214,17 +220,17 @@ public class IJWrap {
 		// If we're making an RGB then we need to convert our stack
 		ImagePlus imp = null;
 		if (makeComposite) {
-			imp = createCompositeImagePlus( stack, num_chnl, sd.getZ(), num_frames, "imagename" );
+			imp = createCompositeImagePlus( stack, num_chnl, sd.getZ(), num_frames, IMAGEJ_IMAGE_NAME );
 		} else {
-			imp = createNonCompositeImagePlus( stack, 1, sd.getZ(), num_frames, "imagename" );
+			imp = createNonCompositeImagePlus( stack, 1, sd.getZ(), num_frames, IMAGEJ_IMAGE_NAME );
 		}
 		
-		imp.getCalibration().setXUnit("micron");
-		imp.getCalibration().setYUnit("micron");
-		imp.getCalibration().setZUnit("micron");
-		imp.getCalibration().pixelWidth = sd.getRes().getX() * 1000000;
-		imp.getCalibration().pixelHeight = sd.getRes().getY() * 1000000;
-		imp.getCalibration().pixelDepth = sd.getRes().getZ() * 1000000;
+		imp.getCalibration().setXUnit(IMAGEJ_UNIT_MICRON);
+		imp.getCalibration().setYUnit(IMAGEJ_UNIT_MICRON);
+		imp.getCalibration().setZUnit(IMAGEJ_UNIT_MICRON);
+		imp.getCalibration().pixelWidth = sd.getRes().getX() * MICRONS_TO_METERS;
+		imp.getCalibration().pixelHeight = sd.getRes().getY() * MICRONS_TO_METERS;
+		imp.getCalibration().pixelDepth = sd.getRes().getZ() * MICRONS_TO_METERS;
 		
 		assert( imp.getNSlices()==sd.getZ() );
 		

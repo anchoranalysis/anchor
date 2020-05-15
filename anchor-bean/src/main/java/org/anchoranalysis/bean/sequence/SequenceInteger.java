@@ -35,11 +35,6 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 
 public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int start = 0;

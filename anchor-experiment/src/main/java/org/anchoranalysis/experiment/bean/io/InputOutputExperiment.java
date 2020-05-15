@@ -57,11 +57,6 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  */
 public class InputOutputExperiment<T extends InputFromManager,S> extends OutputExperiment implements IReplaceInputManager, IReplaceOutputManager, IReplaceTask<T,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7738798921339761863L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<T> inputManager = null;

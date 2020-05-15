@@ -32,13 +32,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class ChnlProvider
-	extends BeanImgStackProvider<ChnlProvider,Chnl> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6523913580861421733L;
+public abstract class ChnlProvider extends BeanImgStackProvider<ChnlProvider,Chnl> {
 
 	public abstract Chnl create() throws CreateException;
 	

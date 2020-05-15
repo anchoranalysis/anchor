@@ -98,9 +98,13 @@ public class AlwaysAllowed extends Writer {
 	public void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException {
 		
 		preop.exec();
-		
-		IndexableOutputNameStyle outputNameStyle = new IntegerSuffixOutputNameStyle(outputName, "_%03d");
-		collectionGenerator.doOperation().write(outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom );
+
+		collectionGenerator.doOperation().write(
+			new IntegerSuffixOutputNameStyle(outputName,3),
+			bom.getBoundFilePathPrefix(),
+			bom.getWriteOperationRecorder(),
+			bom
+		);
 	}
 	
 	@Override

@@ -269,7 +269,7 @@ public class MarkEllipsoid extends MarkAbstractRadii implements Serializable, IS
 			s.assign( Functions.mult(shellInnerCore) );
 		}
 		
-		return BoundsCalculator.bboxFromBounds( getPos(), s, true, bndScene );
+		return BoundingBoxCalculator.bboxFromBounds( getPos(), s, true, bndScene );
 	}
 
 	private String strMarks() {

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.objmask;
 
+
+
 /*-
  * #%L
  * anchor-image-feature
@@ -41,4 +43,8 @@ public class FeatureInputSingleObjDescriptor extends FeatureInputDescriptor {
 		return false;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputSingleObj.class;
+	}
 }

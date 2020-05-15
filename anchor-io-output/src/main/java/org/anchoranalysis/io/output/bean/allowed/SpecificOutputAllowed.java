@@ -33,11 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class SpecificOutputAllowed extends OutputAllowed {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7783226379991535090L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet outputsAllowed;

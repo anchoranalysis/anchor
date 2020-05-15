@@ -5,7 +5,6 @@ package org.anchoranalysis.image.feature.bean.pixelwise;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 
@@ -36,15 +35,11 @@ import org.anchoranalysis.core.params.KeyValueParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /** Calculates a per-pixel score */
-public abstract class PixelScore extends AnchorBean<PixelScore> {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class PixelScore extends ImageBean<PixelScore> {
 	
 	/**
 	 * Initializes the pixels-score.

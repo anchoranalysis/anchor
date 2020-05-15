@@ -35,10 +35,5 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public abstract class ScalarProposer extends NullParamsBean<ScalarProposer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract double propose( RandomNumberGenerator re, ImageRes res ) throws OperationFailedException;
 }

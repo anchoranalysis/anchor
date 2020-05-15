@@ -39,11 +39,6 @@ import org.anchoranalysis.bean.sequence.SequenceInteger;
  */
 public abstract class PermutePropertySequence<T> extends PermutePropertyWithPath<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * Where the sequence starts

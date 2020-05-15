@@ -32,11 +32,6 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class MarkFactory extends AnchorBean<MarkFactory> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract Mark create();
 	
 

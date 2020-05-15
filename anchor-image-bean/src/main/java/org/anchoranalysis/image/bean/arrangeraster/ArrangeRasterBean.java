@@ -31,9 +31,4 @@ import org.anchoranalysis.image.arrangeraster.IArrangeRaster;
 
 public abstract class ArrangeRasterBean extends AnchorBean<ArrangeRasterBean> implements IArrangeRaster {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 }

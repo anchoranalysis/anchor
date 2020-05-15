@@ -38,11 +38,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class BBoxIntersection extends AddCriteriaPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7032818241337209355L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean suppressZ = false;

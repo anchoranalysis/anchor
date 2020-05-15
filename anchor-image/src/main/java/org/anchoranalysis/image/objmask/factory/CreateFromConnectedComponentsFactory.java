@@ -36,13 +36,28 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objmask.factory.unionfind.ConnectedComponentUnionFind;
 
 
 public class CreateFromConnectedComponentsFactory {
 	
-	private int minNumberVoxels = 1;
+	private final ConnectedComponentUnionFind unionFind; 
 	
-	private boolean bigNghb = false;
+	public CreateFromConnectedComponentsFactory() {
+		this(false);
+	}
+	
+	public CreateFromConnectedComponentsFactory(boolean bigNghb) {
+		this(bigNghb, 1);
+	}
+	
+	public CreateFromConnectedComponentsFactory(int minNumberVoxels) {
+		this(false, minNumberVoxels);
+	}
+	
+	public CreateFromConnectedComponentsFactory(boolean bigNghb, int minNumberVoxels) {
+		unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNghb);
+	}
 	
 	public ObjMaskCollection createConnectedComponents( BinaryChnl bi ) throws CreateException {
 		
@@ -60,7 +75,7 @@ public class CreateFromConnectedComponentsFactory {
 		
 		ObjMaskCollection omc = new ObjMaskCollection();
 		try {
-			ConnectedComponentUnionFind.visitRegionByte( vb, omc, minNumberVoxels, bigNghb );
+			unionFind.visitRegionByte( vb, omc );
 			//visitRegion( vb, omc, factoryByte );
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
@@ -73,7 +88,7 @@ public class CreateFromConnectedComponentsFactory {
 		
 		ObjMaskCollection omc = new ObjMaskCollection();
 		try {
-			ConnectedComponentUnionFind.visitRegionInt( vb, omc, minNumberVoxels, bigNghb );
+			unionFind.visitRegionInt( vb, omc);
 			//visitRegion( vb, omc, factory );
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
@@ -81,33 +96,13 @@ public class CreateFromConnectedComponentsFactory {
 		return omc;
 	}
 
-
 	// Uses 6-conn neighbours in 3d
 	private void visitImage( BinaryChnl chnlAll, ObjMaskCollection omc  ) throws OperationFailedException {
-		ConnectedComponentUnionFind.visitRegionByte(
+		unionFind.visitRegionByte(
 			new BinaryVoxelBoxByte(
 				chnlAll.getVoxelBox().duplicate(),
 				chnlAll.getBinaryValues()),
-				omc,
-				minNumberVoxels,
-				bigNghb
+				omc
 			);
-	}
-
-	public int getMinNumberVoxels() {
-		return minNumberVoxels;
-	}
-
-
-	public void setMinNumberVoxels(int minNumberVoxels) {
-		this.minNumberVoxels = minNumberVoxels;
-	}
-
-	public boolean isBigNghb() {
-		return bigNghb;
-	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
 	}
 }

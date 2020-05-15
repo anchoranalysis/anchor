@@ -2,6 +2,7 @@ package org.anchoranalysis.experiment.task;
 
 import java.util.Optional;
 
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.LogReporter;
 
@@ -35,6 +36,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -50,22 +52,18 @@ public class ParametersExperiment {
 
 	// Parameters for all tasks in general (the experiment)
 	private Optional<ManifestRecorder> experimentalManifest;
-	private BoundOutputManagerRouteErrors outputManager;
 	private String experimentIdentifier;
-	
-	// This is an actual log-reporter
-	private StatefulLogReporter logReporterExperiment;
 	
 	// This is a means to create new log-reporters for each task
 	private LogReporterBean logReporterTaskCreator;
-	
-	private ExperimentExecutionArguments experimentArguments;
 		
 	/**
 	 * Iff true, additional log messages are written to describe each job in terms of its unique name,
 	 *  output folder, average execution time etc.
 	 */
 	private boolean detailedLogging;
+
+	private BoundContextSpecify context;
 	
 	public ParametersExperiment(
 		ExperimentExecutionArguments experimentArguments,
@@ -73,14 +71,23 @@ public class ParametersExperiment {
 		Optional<ManifestRecorder> experimentalManifest,
 		BoundOutputManager outputManager,
 		StatefulLogReporter logReporterExperiment,
+		ErrorReporter errorReporterExperiment,
 		boolean detailedLogging
 	) {
-		this.experimentArguments = experimentArguments;
+		this.context = new BoundContextSpecify(
+			experimentArguments,
+			wrapErrors(outputManager, logReporterExperiment),
+			logReporterExperiment,
+			errorReporterExperiment
+		);
+		
 		this.experimentIdentifier = experimentIdentifier;
 		this.experimentalManifest = experimentalManifest;
 		this.detailedLogging = detailedLogging;
-		this.outputManager = wrapErrors(outputManager, logReporterExperiment);
-		this.logReporterExperiment = logReporterExperiment;
+	}
+
+	public BoundIOContext context() {
+		return context;
 	}
 	
 	public void setLogReporterTaskCreator(LogReporterBean logReporterTaskCreator) {
@@ -97,15 +104,15 @@ public class ParametersExperiment {
 	}
 
 	public BoundOutputManagerRouteErrors getOutputManager() {
-		return outputManager;
+		return context.getOutputManager();
 	}
 	
 	public StatefulLogReporter getLogReporterExperiment() {
-		return logReporterExperiment;
+		return context.getStatefulLogReporter();
 	}
 	
 	public ExperimentExecutionArguments getExperimentArguments() {
-		return experimentArguments;
+		return context.getExperimentArguments();
 	}
 
 	public LogReporterBean getLogReporterTaskCreator() {

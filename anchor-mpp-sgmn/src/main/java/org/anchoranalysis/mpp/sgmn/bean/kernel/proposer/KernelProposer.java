@@ -45,11 +45,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 
 public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3588049652758462324L;
-	
 	// START BEAN
 	@BeanField
 	private List<KernelProposerOption<T>> optionList = new ArrayList<>();
@@ -61,10 +56,6 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 	private double[] cumProbArr;
 	private ArrayList<WeightedKernel<T>> lstKernelFactories = null;
 	
-	// We need a list of options
-	public KernelProposer() {
-	}
-			
 	public void init() throws InitException {
 		calcCumProb( optionList );
 		

@@ -76,8 +76,6 @@ public class CheckCacheForSpecificChildren<T extends FeatureInput> extends FindC
 			if (source.contains(childName)) {
 				return useSessionFromSource(childName, input, factory);
 			}
-			
-			
 		}
 		
 		return parentCache.childCacheFor(childName, input.getClass(), factory);

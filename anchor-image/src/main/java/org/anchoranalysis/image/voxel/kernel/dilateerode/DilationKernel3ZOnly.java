@@ -32,32 +32,20 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Erosion with a 3x3 or 3x3x3 kernel
-public class DilationKernel3ZOnly extends BinaryKernel {
+public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
 	
-	private boolean outsideAtThreshold = false;
 	
-	private BinaryValuesByte bv;
-	
-	private LocalSlices inSlices;
 	
 	// Constructor
 	public DilationKernel3ZOnly(BinaryValuesByte bv, boolean outsideAtThreshold) {
-		super(3);
-		this.outsideAtThreshold = outsideAtThreshold;
-		this.bv = bv;
+		super(bv, outsideAtThreshold);
 	}
 	
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-	}
-
-	@Override
-	public void notifyZChange(LocalSlices inSlices, int z) {
-		this.inSlices = inSlices;
+		// NOTHING TO DO
 	}
 
 	@Override

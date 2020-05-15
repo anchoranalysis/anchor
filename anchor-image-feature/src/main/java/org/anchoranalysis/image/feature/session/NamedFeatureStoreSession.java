@@ -33,7 +33,6 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -41,8 +40,6 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTableSession<T> {
@@ -58,26 +55,15 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 	@Override
 	public void start(
 		ImageInitParams soImage,
-		SharedFeaturesInitParams soFeature,
 		Optional<NRGStackWithParams> nrgStack,
 		LogErrorReporter logErrorReporter
 	) throws InitException {
 		
-		// TODO temporarily disabled
-		SharedFeatureSet<T> sharedFeatures = createSharedFeatures(soFeature);
-		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
-		
-		// Init all the features
-		FeatureInitParams featureInitParams = InitParamsHelper.createInitParams(
-			soImage,
-			nrgStack
-		);
-		
 		try {
 			session = FeatureSession.with(
 				namedFeatureStore.listFeatures(),
-				featureInitParams,
-				sharedFeatures,
+				InitParamsHelper.createInitParams(soImage,nrgStack),
+				soImage.getFeature().getSharedFeatureSet(),
 				logErrorReporter
 			);
 		} catch (FeatureCalcException e) {
@@ -109,17 +95,9 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 	public int sizeFeatures() {
 		return namedFeatureStore.size();
 	}
-	
-	
+		
 	@Override
 	public FeatureNameList createFeatureNames() {
 		return namedFeatureStore.createFeatureNames();
-	}
-	
-	private SharedFeatureSet<T> createSharedFeatures( SharedFeaturesInitParams soFeature ) {
-		SharedFeatureSet<T> out = new SharedFeatureSet<>();
-		out.addDuplicate( soFeature.getSharedFeatureSet().downcast() );
-		namedFeatureStore.copyToDuplicate(out.getSet());
-		return out;
 	}
 }

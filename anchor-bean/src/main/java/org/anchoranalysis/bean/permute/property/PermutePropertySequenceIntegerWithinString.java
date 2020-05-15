@@ -39,11 +39,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class PermutePropertySequenceIntegerWithinString extends PermutePropertySequence<String> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty
 	private String prefix = "";

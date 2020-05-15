@@ -4,6 +4,11 @@ import static java.lang.Math.toIntExact;
 import java.util.Arrays;
 import java.util.function.Function;
 
+import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
+import org.anchoranalysis.bean.shared.relation.LessThanBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+
 /*
  * #%L
  * anchor-image
@@ -32,8 +37,6 @@ import java.util.function.Function;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -66,8 +69,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 	public void reset() {
+		cnt = 0;
 		for( int i=minBinVal;i<=maxBinVal;i++) {
-			cnt = 0;
 			arrSet(i,0);
 		}
 	}
@@ -355,13 +358,17 @@ public class HistogramArray extends Histogram {
 		return Math.sqrt( variance() );
 	}
 	
-	public long countThreshold(RelationToValue relationToThreshold, double threshold) {
+	@Override
+	public long countThreshold(RelationToThreshold relationToThreshold) {
 
+		RelationToValue relation = relationToThreshold.relation();
+		double threshold = relationToThreshold.threshold();
+		
 		long sum = 0;
 		
 		for (int i=minBinVal; i<=maxBinVal; i++) {
 			
-			if (relationToThreshold.isRelationToValueTrue(i, threshold)) {
+			if (relation.isRelationToValueTrue(i, threshold)) {
 				sum += arrGetLong(i);
 				assert(sum>=0);
 			}
@@ -374,8 +381,18 @@ public class HistogramArray extends Histogram {
 	public HistogramsAfterSplit splitAt( int split ) {
 		HistogramsAfterSplit out = new HistogramsAfterSplit();
 		
-		Histogram hLower = threshold( new LessThan(), split );
-		Histogram hHigher = threshold( new GreaterThan(), (double) split-1 );
+		Histogram hLower = threshold(
+			new RelationToConstant(
+				new LessThanBean(),
+				split
+			)
+		);
+		Histogram hHigher = threshold(
+			new RelationToConstant(
+				new GreaterThanBean(),
+				(double) split-1
+			)
+		);
 		
 		out.add( hLower );
 		out.add( hHigher );
@@ -383,13 +400,17 @@ public class HistogramArray extends Histogram {
 	}
 	
 	// Thresholds (generates a new histogram, existing object is unchanged)
-	public Histogram threshold(RelationToValue relationToThreshold, double threshold) {
+	@Override
+	public Histogram threshold(RelationToThreshold relationToThreshold) {
 
+		RelationToValue relation = relationToThreshold.relation();
+		double threshold = relationToThreshold.threshold();
+		
 		HistogramArray out = new HistogramArray(maxBinVal);
 		out.cnt = 0;
 		for (int i=minBinVal; i<=maxBinVal; i++) {
 			
-			if (relationToThreshold.isRelationToValueTrue(i, threshold)) {
+			if (relation.isRelationToValueTrue(i, threshold)) {
 				int s = arrGet(i);
 				out.arrSet(i, s);
 				out.cnt += s;
@@ -543,8 +564,8 @@ public class HistogramArray extends Histogram {
 	}
 	
 	// Sets a count for a value
-	private void arrSet( int val, int cnt ) {
-		arr[ index(val) ] = cnt;
+	private void arrSet( int val, int cntToSet ) {
+		arr[ index(val) ] = cntToSet;
 	}
 	
 	// Sets a count for a value

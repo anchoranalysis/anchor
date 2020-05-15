@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.sgmn.binary;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -26,50 +28,39 @@ package org.anchoranalysis.image.bean.sgmn.binary;
  * #L%
  */
 
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 /** Parameters that are optionally associated with BinarySgmn */
 public class BinarySgmnParameters {
 
-	private VoxelBox<?> voxelBoxGradient;
-	private Histogram intensityHistogram;
-	private ImageRes res;
-	private KeyValueParams keyValueParams;
-
-	public VoxelBox<?> getVoxelBoxGradient() {
-		return voxelBoxGradient;
+	private Optional<Histogram> histogram;
+	private Optional<ImageRes> res;
+	
+	public BinarySgmnParameters() {
+		this.res = Optional.empty();
+		this.histogram = Optional.empty();
+	}
+	
+	public BinarySgmnParameters(ImageRes res) {
+		this(res, Optional.empty());
+	}
+	
+	public BinarySgmnParameters(Optional<ImageRes> res) {
+		this.res = res;
+		this.histogram = Optional.empty();
+	}
+	
+	public BinarySgmnParameters(ImageRes res, Optional<Histogram> histogram) {
+		this.res = Optional.of(res);
+		this.histogram = histogram;
 	}
 
-	public void setVoxelBoxGradient(VoxelBox<?> voxelBoxGradient) {
-		this.voxelBoxGradient = voxelBoxGradient;
+	public Optional<Histogram> getIntensityHistogram() {
+		return histogram;
 	}
 
-	public Histogram getIntensityHistogram() {
-		return intensityHistogram;
-	}
-
-	public void setIntensityHistogram(Histogram intensityHistogram) {
-		this.intensityHistogram = intensityHistogram;
-	}
-
-	public ImageRes getRes() {
+	public Optional<ImageRes> getRes() {
 		return res;
 	}
-
-	public void setRes(ImageRes res) {
-		this.res = res;
-	}
-
-	public KeyValueParams getKeyValueParams() {
-		return keyValueParams;
-	}
-
-	public void setKeyValueParams(KeyValueParams keyValueParams) {
-		this.keyValueParams = keyValueParams;
-	}
-	
-	
 }

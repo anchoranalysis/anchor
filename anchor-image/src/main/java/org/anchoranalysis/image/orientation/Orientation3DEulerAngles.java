@@ -27,7 +27,7 @@ package org.anchoranalysis.image.orientation;
  */
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
@@ -46,11 +46,9 @@ public class Orientation3DEulerAngles extends Orientation {
 	private double rotZRadians;	// Gamma
 	
 	public Orientation3DEulerAngles() {
-		
+		this(0.0, 0.0, 0.0);
 	}
-	
-	
-	
+		
 	public Orientation3DEulerAngles(double rotXRadians, double rotYRadians,
 			double rotZRadians) {
 		super();
@@ -58,8 +56,6 @@ public class Orientation3DEulerAngles extends Orientation {
 		this.rotYRadians = rotYRadians;
 		this.rotZRadians = rotZRadians;
 	}
-
-
 
 	@Override
 	public Orientation3DEulerAngles duplicate() {
@@ -151,13 +147,23 @@ public class Orientation3DEulerAngles extends Orientation {
 
 	@Override
 	public void addProperties(NameValueSet<String> nvc) {
-		nvc.add( new NameValue<>("Orientation Angle X (radians)",  String.format("%1.2f", rotXRadians )) );
-		nvc.add( new NameValue<>("Orientation Angle Y (radians)",  String.format("%1.2f", rotYRadians )) );
-		nvc.add( new NameValue<>("Orientation Angle Z (radians)",  String.format("%1.2f", rotZRadians )) );
+		addProperty(nvc, "X", rotXRadians);
+		addProperty(nvc, "Y", rotYRadians);
+		addProperty(nvc, "Z", rotZRadians);
+	}
+	
+	private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
+		nvc.add(
+			new SimpleNameValue<>(
+				String.format("Orientation Angle %s (radians)", dimension),
+				String.format("%1.2f", rotXRadians)
+			)
+		);
 	}
 
 	@Override
 	public void addPropertiesToMask(ObjMaskWithProperties mask) {
+		// NOTHING TO ADD
 	}
 
 	@Override

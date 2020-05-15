@@ -34,11 +34,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 public class DirectionVectorBean extends AnchorBean<DirectionVectorBean> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double x = 0;

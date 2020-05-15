@@ -45,11 +45,9 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneTime;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -79,15 +77,13 @@ public class ImageInitParams extends BeanInitParams {
 	// END: Stores
 		
 	// START: Single Items
-	private RandomNumberGenerator re = new RandomNumberGeneratorMersenneTime();
 	private Path modelDir;
 	// END: Single Items
 	
 	private IObjectBridge<StackProvider,Stack,OperationFailedException> stackProviderBridge;
 
-	private ImageInitParams(SharedObjects so, RandomNumberGenerator re, Path modelDir) {
+	public ImageInitParams(SharedObjects so, Path modelDir) {
 		super();
-		this.re = re;
 		this.soParams = KeyValueParamsInitParams.create(so);
 		this.soFeature = SharedFeaturesInitParams.create(so);
 		
@@ -98,19 +94,6 @@ public class ImageInitParams extends BeanInitParams {
 		storeBinaryChnl = so.getOrCreate(BinaryChnl.class);
 		storeBinarySgmn = so.getOrCreate(BinarySgmn.class);
 		this.modelDir = modelDir;
-	}
-	
-	public static ImageInitParams create( SharedObjects so, Path modelDir ) {
-		return create(so, new RandomNumberGeneratorMersenneTime(), modelDir );
-	}
-	
-	public static ImageInitParams create( SharedObjects so, RandomNumberGenerator re, Path modelDir ) {
-		return new ImageInitParams(so, re, modelDir);
-	}
-	
-	public static ImageInitParams create( LogErrorReporter logErrorReporter, RandomNumberGenerator re, Path modelDir ) {
-		SharedObjects so = new SharedObjects(logErrorReporter);
-		return ImageInitParams.create(so,re, modelDir);
 	}
 	
 	public NamedProviderStore<Stack> getStackCollection() {
@@ -155,7 +138,7 @@ public class ImageInitParams extends BeanInitParams {
 		PopulateStoreFromDefine<ImageInitParams> populate = new PopulateStoreFromDefine<>(define, pi, logger);
 		
 		populate.copyInit(BinarySgmn.class, getBinarySgmnSet());
-		populate.copyProvider(BinaryImgChnlProvider.class, getBinaryImageCollection());
+		populate.copyProvider(BinaryChnlProvider.class, getBinaryImageCollection());
 		populate.copyProvider(ChnlProvider.class, getChnlCollection());
 		populate.copyProvider(ObjMaskProvider.class, getObjMaskCollection());
 		populate.copyProvider(HistogramProvider.class, getHistogramCollection());
@@ -208,10 +191,6 @@ public class ImageInitParams extends BeanInitParams {
 			identifier,
 			new IdentityOperation<>(params)
 		);
-	}
-
-	public RandomNumberGenerator getRandomNumberGenerator() {
-		return re;
 	}
 
 	public Path getModelDir() {

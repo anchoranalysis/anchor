@@ -51,8 +51,6 @@ import org.anchoranalysis.io.params.InputContextParams;
  */
 public class SpecificPathList extends FileProvider {
 
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** If specified, this forms the list of paths which is provided as input. If not, then the input-context is asked. If still not, then the fallback. */
 	@BeanField @OptionalBean

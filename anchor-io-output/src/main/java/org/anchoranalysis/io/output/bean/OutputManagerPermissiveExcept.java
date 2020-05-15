@@ -48,11 +48,6 @@ import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
  */
 public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet except;

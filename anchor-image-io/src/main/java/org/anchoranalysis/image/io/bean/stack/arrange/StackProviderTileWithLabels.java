@@ -44,11 +44,6 @@ import org.anchoranalysis.image.stack.Stack;
 // A short-cut provider for tiling a number of stack providers with labels
 public class StackProviderTileWithLabels extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<StackProviderWithLabel> list = new ArrayList<>();

@@ -32,81 +32,53 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Keeps any on pixel that touches an off pixel where the off pixel has a corresponding HIGH value in vbRequireHigh
-public class OutlineKernel3NghbMatchValue extends BinaryKernel {
-	
-	private boolean outsideAtThreshold = false;
-	private boolean ignoreAtThreshold = false;
-	
-	private boolean useZ;
-	
-	private BinaryValuesByte bv;
-	
-	private LocalSlices inSlices;
-	
-	private Extent extnt;
+public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	
 	private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
 	private LocalSlices localSlicesRequireHigh;
 	private BinaryValuesByte bvRequireHigh;
 	private ObjMask om;
 	
-	public OutlineKernel3NghbMatchValue(boolean outsideAtThreshold, boolean useZ, ObjMask om, BinaryVoxelBox<ByteBuffer> vbRequireHigh ) {
-		this( om.getBinaryValuesByte(), outsideAtThreshold, useZ, om, vbRequireHigh );
+	public OutlineKernel3NghbMatchValue(
+		boolean outsideAtThreshold,
+		boolean useZ,
+		ObjMask om,
+		BinaryVoxelBox<ByteBuffer> vbRequireHigh,
+		boolean ignoreAtThreshold
+	) {
+		this(
+			om.getBinaryValuesByte(),
+			outsideAtThreshold,
+			useZ,
+			om,
+			vbRequireHigh,
+			ignoreAtThreshold
+		);
 	}
 	
 	// Constructor
-	private OutlineKernel3NghbMatchValue(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ, ObjMask om, BinaryVoxelBox<ByteBuffer> vbRequireHigh ) {
-		super(3);
-		this.outsideAtThreshold = outsideAtThreshold;
-		this.useZ = useZ;
-		this.bv = bv;
+	private OutlineKernel3NghbMatchValue(
+		BinaryValuesByte bv,
+		boolean outsideAtThreshold,
+		boolean useZ,
+		ObjMask om,
+		BinaryVoxelBox<ByteBuffer> vbRequireHigh,
+		boolean ignoreAtThreshold
+	) {
+		super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
 		this.vbRequireHigh = vbRequireHigh;
 		this.om = om;
 		this.bvRequireHigh = vbRequireHigh.getBinaryValues().createByte();
 	}
-	
-	@Override
-	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
-	}
 
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
-		this.inSlices = inSlices;
-		
+		super.notifyZChange(inSlices, z);
 		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().getCrnrMin().getZ(),3, vbRequireHigh.getVoxelBox());
-	}
-
-	private boolean checkIfRequireHighIsTrue( ByteBuffer inArr, Point3i pnt, int xShift, int yShift ) {
-		
-		if (inArr==null) {
-			return outsideAtThreshold;
-		}
-		
-		int x1 = pnt.getX() + om.getBoundingBox().getCrnrMin().getX() + xShift;
-		
-		if (!vbRequireHigh.extnt().containsX(x1)) {
-			return outsideAtThreshold;
-		}
-		
-		int y1 = pnt.getY() + om.getBoundingBox().getCrnrMin().getY() + yShift; 
-
-		if (!vbRequireHigh.extnt().containsY(y1)) {
-			return outsideAtThreshold;
-		}
-		
-		int intGlobal = vbRequireHigh.extnt().offset(
-			x1,
-			y1
-		);
-		return bvRequireHigh.isOn(inArr.get(intGlobal));
 	}
 	
 	@Override
@@ -213,13 +185,29 @@ public class OutlineKernel3NghbMatchValue extends BinaryKernel {
 		
 		return false;
 	}
+	
+	private boolean checkIfRequireHighIsTrue( ByteBuffer inArr, Point3i pnt, int xShift, int yShift ) {
+		
+		if (inArr==null) {
+			return outsideAtThreshold;
+		}
+		
+		int x1 = pnt.getX() + om.getBoundingBox().getCrnrMin().getX() + xShift;
+		
+		if (!vbRequireHigh.extnt().containsX(x1)) {
+			return outsideAtThreshold;
+		}
+		
+		int y1 = pnt.getY() + om.getBoundingBox().getCrnrMin().getY() + yShift; 
 
-	public boolean isIgnoreAtThreshold() {
-		return ignoreAtThreshold;
+		if (!vbRequireHigh.extnt().containsY(y1)) {
+			return outsideAtThreshold;
+		}
+		
+		int intGlobal = vbRequireHigh.extnt().offset(
+			x1,
+			y1
+		);
+		return bvRequireHigh.isOn(inArr.get(intGlobal));
 	}
-
-	public void setIgnoreAtThreshold(boolean ignoreAtThreshold) {
-		this.ignoreAtThreshold = ignoreAtThreshold;
-	}
-
 }

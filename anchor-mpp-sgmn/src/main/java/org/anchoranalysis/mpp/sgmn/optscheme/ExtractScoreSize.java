@@ -30,11 +30,6 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class ExtractScoreSize<T> extends AnchorBean<ExtractScoreSize<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract double extractScore( T item );
 	
 	public abstract int extractSize( T item );

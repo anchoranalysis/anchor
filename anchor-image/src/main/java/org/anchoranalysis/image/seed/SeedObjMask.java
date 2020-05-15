@@ -33,15 +33,10 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class SeedObjMask extends Seed {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	private ObjMask om;
 	
-	SeedObjMask(ObjMask om) {
+	public SeedObjMask(ObjMask om) {
 		super();
 		this.om = om;
 	}

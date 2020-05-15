@@ -30,17 +30,12 @@ package org.anchoranalysis.experiment.bean.logreporter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.bean.RequireArguments;
+import org.anchoranalysis.experiment.bean.require.RequireArguments;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 public class LogReporterBeanRequireArguments extends LogReporterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private LogReporterBean logReporter;
@@ -68,7 +63,7 @@ public class LogReporterBeanRequireArguments extends LogReporterBean {
 	@Override
 	public StatefulLogReporter create(String outputName,
 			BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
-		if (requireArguments.hasAllRequiredArguments(expArgs)) {
+		if (requireArguments.hasAllRequiredArguments(expArgs.isDebugEnabled())) {
 			return logReporter.create(outputName, bom, errorReporter, expArgs, detailedLogging);
 		} else {
 			return new StatefulNullLogReporter();

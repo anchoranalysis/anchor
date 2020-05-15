@@ -28,10 +28,11 @@ package org.anchoranalysis.image.bean.sgmn;
 
 import org.anchoranalysis.image.bean.ImageBean;
 
-public abstract class SgmnBean<BeanType> extends ImageBean<BeanType> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+/**
+ *  
+ * @author Owen Feehan
+ *
+ * @param <T> bean-type
+ */
+public abstract class SgmnBean<T> extends ImageBean<T> {
 }

@@ -45,9 +45,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -57,11 +56,6 @@ import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class SetUpdatable extends UpdatablePointsContainer {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5569567716288411080L;
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -73,10 +67,6 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	private ImageDim dim;
 	private BinaryChnl binaryImage;
 	private Chnl binaryImageChnl;
-	
-	public SetUpdatable() {
-		super();
-	}
 	
 	@Override
 	public void init(BinaryChnl binaryImage) throws InitException {
@@ -116,7 +106,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
 	@Override
-	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures) throws InitException {
+	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures) throws InitException {
 		
 		
 

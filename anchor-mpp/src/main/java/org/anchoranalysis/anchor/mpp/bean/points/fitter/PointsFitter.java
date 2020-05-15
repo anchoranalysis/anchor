@@ -40,11 +40,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 @GroupingRoot
 public abstract class PointsFitter extends PointsBean<PointsFitter> implements ICompatibleWith {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1297074784958720994L;
-
 	public abstract void fit( List<Point3f> points, Mark mark, ImageDim dim ) throws PointsFitterException, InsufficientPointsException;
 	
 }

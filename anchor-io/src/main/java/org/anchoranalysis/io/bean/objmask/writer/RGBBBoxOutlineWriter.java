@@ -45,11 +45,6 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 790220184130344304L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int outlineWidth;

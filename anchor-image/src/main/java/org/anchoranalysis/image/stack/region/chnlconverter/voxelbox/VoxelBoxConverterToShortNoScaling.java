@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 // Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
 // So values larger than 255 are clipped
-public class VoxelBoxConverterToShortNoScaling extends VoxelBoxConverter<ShortBuffer> {
+public final class VoxelBoxConverterToShortNoScaling extends VoxelBoxConverter<ShortBuffer> {
 
 	@Override
 	public VoxelBuffer<ShortBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {

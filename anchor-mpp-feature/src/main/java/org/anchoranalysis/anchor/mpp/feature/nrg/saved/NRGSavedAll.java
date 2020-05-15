@@ -44,9 +44,6 @@ public class NRGSavedAll implements Serializable {
 	
 	private double nrgTotal;
 	
-	public NRGSavedAll() {
-	}
-	
 	public void calc( MemoCollection pxlMarkMemoList, NRGSchemeWithSharedFeatures nrgScheme, NRGStack nrgRaster ) throws FeatureCalcException {
 		nrgTotal = nrgScheme.calcElemAllTotal( pxlMarkMemoList, nrgRaster ).getTotal();
 	}
@@ -65,6 +62,4 @@ public class NRGSavedAll implements Serializable {
 		return shallowCopy();
 	}
 
-	
-	
 }

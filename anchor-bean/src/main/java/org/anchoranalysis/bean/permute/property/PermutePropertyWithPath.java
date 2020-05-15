@@ -31,9 +31,9 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterList;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterUtilities;
-import org.anchoranalysis.core.error.CreateException;
 
 /**
  * Base classes for PermuteProperty that requier a path
@@ -45,11 +45,6 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
 
 	// START BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Either a direct property of a bean e.g. "someproperty"
 	 * Or a nested-property with the children separated by full-stops:  e.g. "somechild1.somechild2.someproperty"
@@ -67,7 +62,7 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
 
 	// Searches through a list of property fields to find one that matches the propertyName
 	@Override
-	public PermutationSetter createSetter( AnchorBean<?> parentBean ) throws CreateException {
+	public PermutationSetter createSetter( AnchorBean<?> parentBean ) throws PermutationSetterException {
 		
 		PermutationSetterList out = new PermutationSetterList();
 		
@@ -83,7 +78,7 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
 		return out;
 	}
 	
-	private void addForPath( PermutationSetterList out, AnchorBean<?> parentBean, String path ) throws CreateException {
+	private void addForPath( PermutationSetterList out, AnchorBean<?> parentBean, String path ) throws PermutationSetterException {
 		out.add(
 			PermutationSetterUtilities.createForSingle( parentBean, path )
 		);

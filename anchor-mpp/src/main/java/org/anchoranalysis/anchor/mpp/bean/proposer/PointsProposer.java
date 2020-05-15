@@ -42,11 +42,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public abstract class PointsProposer extends NullParamsBean<PointsProposer> implements ICompatibleWith {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract Optional<List<Point3i>> propose( Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode );
 	
 	public abstract ICreateProposalVisualization proposalVisualization(boolean detailed);

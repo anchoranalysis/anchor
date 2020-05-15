@@ -33,11 +33,6 @@ import loci.formats.IFormatReader;
 /** Treats the channel information as if it's time, and vice versa */
 public class SwitchChnlTime extends ReadOptionsDelegate {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public List<String> determineChannelNames(IFormatReader reader) {
 		// Always return null, as we use the time-series instead

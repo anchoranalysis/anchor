@@ -95,10 +95,6 @@ public class OutputManagerFixture {
 
 	private static class FilePathPrefixerConstantPath extends FilePathPrefixer {
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 		private FilePathPrefix prefix;
 		
 		public FilePathPrefixerConstantPath(Path path) {

@@ -41,5 +41,10 @@ public class FeatureInputCfgDescriptor extends FeatureInputDescriptor {
 		return false;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputCfg.class;
+	}
+
 
 }

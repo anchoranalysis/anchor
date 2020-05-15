@@ -36,11 +36,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class StackProviderWithLabel extends NullParamsBean<StackProviderWithLabel> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private StackProvider stackProvider;

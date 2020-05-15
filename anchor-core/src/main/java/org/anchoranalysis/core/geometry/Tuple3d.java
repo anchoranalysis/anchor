@@ -30,6 +30,8 @@ package org.anchoranalysis.core.geometry;
 import java.io.Serializable;
 
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 public abstract class Tuple3d implements Serializable {
 
@@ -42,74 +44,102 @@ public abstract class Tuple3d implements Serializable {
 	protected double y = 0.0;
 	protected double z = 0.0;
 	
-	public void add( Point3d pnt ) {
+	public final void add( Point3d pnt ) {
 		this.x += pnt.x;
 		this.y += pnt.y;
 		this.z += pnt.z;
 	}
 	
-	public void sub( Point3d pnt ) {
+	public final void sub( Point3d pnt ) {
 		this.x -= pnt.x;
 		this.y -= pnt.y;
 		this.z -= pnt.z;
 	}
 	
-	public void scale( double factor ) {
+	public final void scale( double factor ) {
 		this.x *= factor;
 		this.y *= factor;
 		this.z *= factor;
 	}
 	
-	public void scaleXY( double factor ) {
+	public final void scaleXY( double factor ) {
 		this.x *= factor;
 		this.y *= factor;
 	}
 
-	public void absolute() {
+	public final void absolute() {
 		this.x = Math.abs(this.x);
 		this.y = Math.abs(this.y);
 		this.z = Math.abs(this.z);
 	}
 		
-	public double getX() {
+	public final double getX() {
 		return x;
 	}
 	
-	public void setX(double x) {
+	public final void setX(double x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public final double getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public final void setY(double y) {
 		this.y = y;
 	}
 
-	public double getZ() {
+	public final double getZ() {
 		return z;
 	}
 
-	public void setZ(double z) {
+	public final void setZ(double z) {
 		this.z = z;
 	}
 	
-	public double get( AxisType axisType ) {
-		switch( axisType ) {
-		case X:
-			return getX();
-		case Y:
-			return getY();
-		case Z:
-			return getZ();
-		default:
-			assert false;
-			return Double.NaN;
+	public final double getValueByDimension(int dimIndex) {
+		if (dimIndex==0) {
+			return x;
+		} else if (dimIndex==1) {
+			return y;
+		} else if (dimIndex==2) {
+			return z;
+		} else {
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
 		}
 	}
 	
-	public double dot( Tuple3d vec ) {
+	public final double getValueByDimension( AxisType axisType ) {
+		switch( axisType ) {
+		case X:
+			return x;
+		case Y:
+			return y;
+		case Z:
+			return z;
+		default:
+			assert false;
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.UNKNOWN_AXIS_TYPE);
+		}
+	}
+	
+	public final void setValueByDimension( int dimIndex, double val ) {
+		switch( dimIndex ) {
+		case 0:
+			this.x = val;
+			break;
+		case 1:
+			this.y = val;
+			break;
+		case 2:
+			this.z = val;
+			break;
+		default:
+			throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+		}
+	}
+	
+	public final double dot( Tuple3d vec ) {
 		return (x*vec.x) + (y*vec.y) + (z*vec.z);
 	}
 	
@@ -118,19 +148,15 @@ public abstract class Tuple3d implements Serializable {
 		return String.format("[%5.1f,%5.1f,%5.1f]",x,y,z);
 	}
 	
-
-	
-
-	
-	public void setX(int x) {
+	public final void setX(int x) {
 		this.x = (double) x;
 	}
 	
-	public void setY(int y) {
+	public final void setY(int y) {
 		this.y = (double) y;
 	}
 	
-	public void setZ(int z) {
+	public final void setZ(int z) {
 		this.z = (double) z;
 	}
 

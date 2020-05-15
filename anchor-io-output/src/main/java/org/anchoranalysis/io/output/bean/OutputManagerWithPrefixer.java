@@ -45,11 +45,6 @@ import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
 
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// BEAN PROPERTIES
 	@BeanField
 	private FilePathPrefixer filePathPrefixer = null;

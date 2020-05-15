@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackProviderGenerateString extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEANS
 	@BeanField
 	private StringRasterGenerator stringRasterGenerator;
@@ -68,6 +63,31 @@ public class StackProviderGenerateString extends StackProvider {
 	private StackProvider repeatZProvider;		// Repeats the generated (2D) string in z, so it's the same z-extent as repeatZProvider
 	// END BEANS
 
+	@Override
+	public Stack create() throws CreateException {
+		
+		Stack label2D = create2D();
+		
+		if (repeatZProvider!=null) {
+		
+			Stack repeatZ = repeatZProvider.create();
+			int zHeight = repeatZ.getDimensions().getZ();
+			
+			Stack out = new Stack();
+			for( Chnl chnl : label2D ) {
+				try {
+					out.addChnl( createExpandedChnl(chnl, zHeight) );
+				} catch (IncorrectImageSizeException e) {
+					throw new CreateException(e);
+				}
+			}
+			return out;
+			
+		} else {
+			return label2D;
+		}
+	}
+	
 	private static int maxValueFromStack( Stack stack ) {
 		int max = 0;
 		for( Chnl chnl : stack ) {
@@ -127,32 +147,6 @@ public class StackProviderGenerateString extends StackProvider {
 			chnl.getVoxelBox().copyPixelsTo(bboxSrc, chnlNew.getVoxelBox(), bboxDest);
 		}
 		return chnlNew;
-	}
-	
-	
-	@Override
-	public Stack create() throws CreateException {
-		
-		Stack label2D = create2D();
-		
-		if (repeatZProvider!=null) {
-		
-			Stack repeatZ = repeatZProvider.create();
-			int zHeight = repeatZ.getDimensions().getZ();
-			
-			Stack out = new Stack();
-			for( Chnl chnl : label2D ) {
-				try {
-					out.addChnl( createExpandedChnl(chnl, zHeight) );
-				} catch (IncorrectImageSizeException e) {
-					throw new CreateException(e);
-				}
-			}
-			return out;
-			
-		} else {
-			return label2D;
-		}
 	}
 
 	public StringRasterGenerator getStringRasterGenerator() {

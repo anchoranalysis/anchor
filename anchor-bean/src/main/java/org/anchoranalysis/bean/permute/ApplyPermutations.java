@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 
 /**
  * Applies a PermuteProperty to a bean to create new duplicated beans
@@ -108,7 +108,7 @@ public class ApplyPermutations<T extends AnchorBean<T>> {
 			
 			return listOut;
 			
-		} catch (BeanDuplicateException | IllegalArgumentException | SetOperationFailedException e) {
+		} catch (BeanDuplicateException | IllegalArgumentException | PermutationSetterException e) {
 			throw new CreateException(e);
 		}
 	}

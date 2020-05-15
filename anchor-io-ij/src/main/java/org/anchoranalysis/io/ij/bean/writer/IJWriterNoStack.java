@@ -34,12 +34,6 @@ import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
 
 public abstract class IJWriterNoStack extends IJWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
 	@Override
 	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries, Path filePath, boolean makeRGB)
 			throws RasterIOException {

@@ -40,10 +40,6 @@ import org.anchoranalysis.core.error.InitException;
 
 public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeItem> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5308159852260041758L;
 	private BarChart<ExecutionTimeItem> delegate;
 	
 	public GraphDefinitionExecutionTime() throws InitException {

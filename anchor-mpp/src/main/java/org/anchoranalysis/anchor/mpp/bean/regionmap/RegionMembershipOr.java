@@ -28,11 +28,6 @@ package org.anchoranalysis.anchor.mpp.bean.regionmap;
 
 public class RegionMembershipOr extends RegionMembership {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public boolean isMemberFlag( byte membership, byte flag ) {
 		return RegionMembershipUtilities.isMemberFlagOr(membership, flag);

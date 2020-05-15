@@ -36,22 +36,11 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	@Override
+	public abstract double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException;
 
 	@Override
-	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
-		return calcCast(input.get());
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException;
-
-	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputSingleMemoDescriptor.instance;
 	}
 }

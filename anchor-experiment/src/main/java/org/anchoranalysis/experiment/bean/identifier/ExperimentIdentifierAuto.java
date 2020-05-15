@@ -41,11 +41,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
 	/** If there's no task-name, then this constant is used as a fallback name */
 	@BeanField

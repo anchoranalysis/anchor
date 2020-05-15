@@ -28,16 +28,16 @@ package org.anchoranalysis.mpp.io.bean.task;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
@@ -56,11 +56,6 @@ public class ConvertNamedChnlsInputTask<T extends NamedChnlsInput,S,U extends Na
 	extends Task<T,S>
 	implements IReplaceTask<U,S> {		
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Task<U,S> task;
@@ -73,7 +68,7 @@ public class ConvertNamedChnlsInputTask<T extends NamedChnlsInput,S,U extends Na
 	}
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<T, S> params) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<T, S> params) throws JobExecutionException {
 
 		Class<? extends InputFromManager> inputObjClass = params.getInputObject().getClass();
 		
@@ -95,16 +90,16 @@ public class ConvertNamedChnlsInputTask<T extends NamedChnlsInput,S,U extends Na
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void doJobWithNamedChnlInput(ParametersBound<T, S> params) throws JobExecutionException {
-		task.doJobOnInputObject( (ParametersBound<U, S>) params);
+	private void doJobWithNamedChnlInput(InputBound<T, S> params) throws JobExecutionException {
+		task.doJobOnInputObject( (InputBound<U, S>) params);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void doJobWithMultiInput(ParametersBound<T, S> params) throws JobExecutionException {
-		ParametersBound<? extends InputFromManager, S> paramsChanged = params.changeInputObject(
+	private void doJobWithMultiInput(InputBound<T, S> params) throws JobExecutionException {
+		InputBound<? extends InputFromManager, S> paramsChanged = params.changeInputObject(
 			new MultiInput(params.getInputObject())
 		);
-		task.doJobOnInputObject( (ParametersBound<U, S>) paramsChanged );
+		task.doJobOnInputObject( (InputBound<U, S>) paramsChanged );
 	}
 	
 	@Override
@@ -116,9 +111,8 @@ public class ConvertNamedChnlsInputTask<T extends NamedChnlsInput,S,U extends Na
 	}
 	
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, S sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
-		task.afterAllJobsAreExecuted(outputManager, sharedState, logReporter);
+	public void afterAllJobsAreExecuted(S sharedState, BoundIOContext context) throws ExperimentExecutionException {
+		task.afterAllJobsAreExecuted(sharedState, context);
 	}
 	
 	@Override

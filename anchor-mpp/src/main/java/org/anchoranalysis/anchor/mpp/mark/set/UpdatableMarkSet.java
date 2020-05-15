@@ -31,13 +31,12 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public interface UpdatableMarkSet {
 
-	void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException;
+	void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException;
 	
 	void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException;
 	

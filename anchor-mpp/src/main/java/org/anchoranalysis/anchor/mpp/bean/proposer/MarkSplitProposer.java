@@ -41,11 +41,6 @@ import org.anchoranalysis.core.geometry.Point3f;
 @GroupingRoot
 public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer> implements ICompatibleWith {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8363470356486715808L;
-
 	public abstract PairPxlMarkMemo propose( PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen ) throws ProposalAbnormalFailureException;
 	
 	// A debug method for optionally associating points with the last proposal made

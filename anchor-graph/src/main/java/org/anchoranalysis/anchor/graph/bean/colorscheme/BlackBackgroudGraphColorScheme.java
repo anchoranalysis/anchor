@@ -30,11 +30,6 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 public class BlackBackgroudGraphColorScheme extends GraphColorScheme {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public BlackBackgroudGraphColorScheme() {
 		
 		setBackgroundColor( new RGBColorBean(0, 0, 0) );

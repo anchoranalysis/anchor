@@ -35,10 +35,10 @@ import java.util.Comparator;
  *
  * @param <V> value-type
  */
-public class ComparatorOrderByName<V> implements Comparator<INameValue<V>> {
+public class ComparatorOrderByName<V> implements Comparator<NameValue<V>> {
 
 	@Override
-	public int compare(INameValue<V> arg0, INameValue<V> arg1) {
+	public int compare(NameValue<V> arg0, NameValue<V> arg1) {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 

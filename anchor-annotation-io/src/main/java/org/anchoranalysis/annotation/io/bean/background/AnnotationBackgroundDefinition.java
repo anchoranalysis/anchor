@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.shared.StringMap;
 
 public class AnnotationBackgroundDefinition extends AnchorBean<AnnotationBackgroundDefinition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String stackNameVisualOriginal;

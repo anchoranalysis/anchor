@@ -34,11 +34,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ReporterOptimizationStep<T> extends FeedbackReceiverBean<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8027389571678499276L;
-
 	@Override
 	public abstract void reportBegin(OptimizationFeedbackInitParams<T> initParams) throws ReporterException;
 	

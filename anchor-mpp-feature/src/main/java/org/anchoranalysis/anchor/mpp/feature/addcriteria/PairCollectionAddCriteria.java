@@ -49,11 +49,10 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 // PairType is how we store the pair information
 
@@ -91,7 +90,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private transient boolean hasInit = false;
 	private transient NRGStackWithParams nrgStack;
 	private transient LogErrorReporter logger;
-	private transient SharedFeatureSet<FeatureInput> sharedFeatures;
+	private transient SharedFeatureMulti sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
 		this.pairTypeClass = pairTypeClass;
@@ -121,7 +120,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureSet<FeatureInput> sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
 		assert( sharedFeatures!=null );
 		assert( logger!=null );
 		this.logger = logger;
@@ -143,7 +142,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 			FeatureCalculatorMulti<FeatureInputPairMemo> session = FeatureSession.with(
 				features,
 				new FeatureInitParams(stack.getParams()),
-				sharedFeatures.downcast(),
+				sharedFeatures,
 				logger
 			);
 			
@@ -311,7 +310,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 			session = FeatureSession.with(
 				addCriteria.orderedListOfFeatures(),
 				new FeatureInitParams(nrgStack.getParams()),
-				sharedFeatures.downcast(),
+				sharedFeatures,
 				logger
 			);
 		} catch (FeatureCalcException e) {

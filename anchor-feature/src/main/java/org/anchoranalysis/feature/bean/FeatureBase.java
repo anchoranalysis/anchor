@@ -29,18 +29,12 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureBase<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private transient FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
 	protected FeatureBase() {
@@ -48,7 +42,8 @@ public abstract class FeatureBase<T extends FeatureInput> extends InitializableB
 	}
 	
 	protected FeatureBase(
-			PropertyInitializer<FeatureInitParams> propertyInitializer) {
+		PropertyInitializer<FeatureInitParams> propertyInitializer
+	) {
 		super(propertyInitializer);
 	}
 	
@@ -57,6 +52,5 @@ public abstract class FeatureBase<T extends FeatureInput> extends InitializableB
 		return featureDefiner;
 	}
 		
-	public abstract FeatureInputDescriptor paramType()
-			throws FeatureCalcException;
+	public abstract FeatureInputDescriptor inputDescriptor();
 }

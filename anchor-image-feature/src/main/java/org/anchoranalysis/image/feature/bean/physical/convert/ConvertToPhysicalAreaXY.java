@@ -35,11 +35,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 // converts a feature to a physical distance in a XY place that is isometric
 public class ConvertToPhysicalAreaXY<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double convertToPhysical(double value, ImageRes res) throws FeatureCalcException {
 		// We use arbitrary direction as everything should be the same in a isometric XY plane

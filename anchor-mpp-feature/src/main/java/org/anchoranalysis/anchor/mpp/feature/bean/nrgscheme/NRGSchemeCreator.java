@@ -32,10 +32,5 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 // Creates NRG Elem
 public abstract class NRGSchemeCreator extends FeatureRelatedBean<NRGSchemeCreator> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8762506300807397991L;
-
 	public abstract NRGScheme create() throws CreateException;
 }

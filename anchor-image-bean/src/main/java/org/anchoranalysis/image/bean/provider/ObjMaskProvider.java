@@ -35,11 +35,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 @GroupingRoot
 public abstract class ObjMaskProvider extends ImageBean<ObjMaskProvider> implements Provider<ObjMaskCollection> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public abstract ObjMaskCollection create() throws CreateException;
 }

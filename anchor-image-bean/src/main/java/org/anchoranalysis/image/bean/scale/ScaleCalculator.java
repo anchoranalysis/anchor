@@ -35,11 +35,6 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class ScaleCalculator extends NullParamsBean<ScaleCalculator> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract ScaleFactor calc( ImageDim srcDim ) throws OperationFailedException;
 
 }

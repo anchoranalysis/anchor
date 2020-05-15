@@ -32,11 +32,6 @@ import ij.io.FileSaver;
 
 public class IJPngWriter extends IJWriterNoStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected boolean writeRaster(FileSaver fs, String outPath, boolean asStack) throws RasterIOException {
 

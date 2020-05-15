@@ -48,11 +48,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	// NOTE no init occurs of pointsFitter	
 	@BeanField @SkipInit

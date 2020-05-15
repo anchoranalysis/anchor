@@ -38,11 +38,6 @@ import org.anchoranalysis.core.error.InitException;
 
 public class CfgGen extends NullParamsBean<CfgGen> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5302983097791973431L;
-
 	// START BEAN PARAMETERS
 	@BeanField
 	private double referencePoissonIntensity = 1e-5;

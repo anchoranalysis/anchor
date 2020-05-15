@@ -46,11 +46,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
  */
 public abstract class PointsBean<T> extends InitializableBeanSimple<T,PointsInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	protected PointsBean() {
 		super(
 			new PropertyInitializer<>(PointsInitParams.class, paramExtracters()),

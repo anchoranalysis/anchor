@@ -32,9 +32,7 @@ public class FeatureInputNRGStackDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputNRGStackDescriptor instance = new FeatureInputNRGStackDescriptor();
 	
-	private FeatureInputNRGStackDescriptor() {
-		
-	}
+	private FeatureInputNRGStackDescriptor() {}
 	
 	// TODO it's not really compatible with Params that don't have an NRG stack. We should refine this interface
 	@Override
@@ -42,4 +40,8 @@ public class FeatureInputNRGStackDescriptor extends FeatureInputDescriptor {
 		return true;
 	}
 
+	@Override
+	public Class<?> inputClass() {
+		return FeatureInputNRGStackDescriptor.class;
+	}
 }

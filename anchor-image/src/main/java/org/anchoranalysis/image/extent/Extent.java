@@ -30,6 +30,7 @@ package org.anchoranalysis.image.extent;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -161,6 +162,14 @@ public final class Extent implements Serializable {
 	public final int getZEx() {
 		return len.getZ() + 1;
 	}
+		
+	public final int getValueByDimension(int dimIndex) {
+		return len.getValueByDimension(dimIndex);
+	}
+	
+	public final int getValueByDimension(AxisType axis) {
+		return len.getValueByDimension(axis);
+	}
 
 	public final void setX(int x) {
 		len.setX(x);
@@ -175,21 +184,7 @@ public final class Extent implements Serializable {
 	public final void setZ(int z) {
 		len.setZ(z);
 	}
-	
-	public final int getValueByDimension( int dimIndex ) {
-		switch( dimIndex ) {
-		case 0:
-			return getX();
-		case 1:
-			return getY();
-		case 2:
-			return getZ();
-		default:
-			assert false;
-			return 0;
-		}
-	}
-	
+		
 	public Tuple3i asTuple() {
 		return len;
 	}

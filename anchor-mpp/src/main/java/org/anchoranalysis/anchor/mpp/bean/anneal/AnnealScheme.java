@@ -30,11 +30,6 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class AnnealScheme extends AnchorBean<AnnealScheme> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5831782295757933157L;
-
 	public abstract double calcTemp( int iter );
 	
 	public abstract double crntTemp();

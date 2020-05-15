@@ -40,10 +40,5 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @GroupingRoot
 public abstract class FeatureListProvider<T extends FeatureInput> extends FeatureProviderBean<FeatureListProvider<T>,FeatureList<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6274456303368095887L;
-
 	public abstract FeatureList<T> create() throws CreateException;
 }

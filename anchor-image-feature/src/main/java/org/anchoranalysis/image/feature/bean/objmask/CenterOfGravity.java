@@ -28,17 +28,12 @@ package org.anchoranalysis.image.feature.bean.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeUtilities;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class CenterOfGravity extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String axis = "x";
@@ -88,6 +83,6 @@ public class CenterOfGravity extends FeatureObjMask {
 	}
 	
 	private AxisType axisType() {
-		return AxisTypeUtilities.createFromString(axis);
+		return AxisTypeConverter.createFromString(axis);
 	}
 }

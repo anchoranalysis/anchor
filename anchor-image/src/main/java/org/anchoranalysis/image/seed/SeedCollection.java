@@ -46,11 +46,6 @@ public class SeedCollection implements Iterable<Seed>, Serializable {
 	 */
 	private static final long serialVersionUID = 1747671966079583686L;
 	private ArrayList<Seed> delegate = new ArrayList<>();
-
-	
-	SeedCollection() {
-		
-	}
 	
 	public SeedCollection duplicate() {
 		

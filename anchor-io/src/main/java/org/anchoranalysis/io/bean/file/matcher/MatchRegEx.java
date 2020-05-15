@@ -43,11 +43,6 @@ import org.anchoranalysis.io.params.InputContextParams;
  */
 public class MatchRegEx extends FileMatcher {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
 	/**
 	 * If true, the filter is applied to the path as a whole, not just the filename (using forward slashes as directory seperators)
@@ -59,9 +54,6 @@ public class MatchRegEx extends FileMatcher {
 	private String expression;
 	// END BEAN FIELDS
 	
-	public MatchRegEx() {
-	}
-
 	@Override
 	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
 		if (applyToPath) {
