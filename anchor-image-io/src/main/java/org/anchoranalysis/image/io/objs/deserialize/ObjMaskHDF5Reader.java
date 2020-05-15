@@ -54,6 +54,10 @@ class ObjMaskHDF5Reader {
 		return new ObjMask(bbox, vb);
 	}
 	
+	public static int extractIntAttr( IHDF5IntReader reader, String path, String attr) {
+		return reader.getAttr(path, attr);
+	}
+	
 	private static Extent extractExtnt( MDByteArray mdb ) {
 		int[] dims = mdb.dimensions();
 		return new Extent( dims[0], dims[1], dims[2] );
@@ -99,9 +103,5 @@ class ObjMaskHDF5Reader {
 			extractIntAttr( reader, path, "y"),
 			extractIntAttr( reader, path, "z")
 		);
-	}
-	
-	private static int extractIntAttr( IHDF5IntReader reader, String path, String attr) {
-		return reader.getAttr(path, attr);
 	}
 }

@@ -49,9 +49,12 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  */
 public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjMaskCollection> {
 
+	// Name of the attribute in the root of the HDF5 that stores the number of objects
+	public final static String NUM_OBJS_ATTR_NAME = "numberObjects";
+	
 	private ObjMaskCollection item;
 	private boolean compressed;
-
+	
 	public GeneratorHDF5(boolean compressed) {
 		super();
 		this.compressed = compressed;
@@ -102,7 +105,7 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	// Adds an attribute with the total number of objects, so it can be quickly queried
 	//  from the HDF5 without parsing all the datasets
 	private void addObjsSizeAttr(IHDF5Writer writer, ObjMaskCollection objs) {
-		writer.uint32().setAttr("/", "numberObjects", objs.size() );		
+		writer.uint32().setAttr("/", NUM_OBJS_ATTR_NAME, objs.size() );		
 	}
 
 	@Override

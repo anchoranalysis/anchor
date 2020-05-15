@@ -227,7 +227,7 @@ class AppendHelper {
 				outPath.doOperation()
 			);
 		} catch (Exception e) {
-			throw new OperationFailedException(e);
+			throw new OperationFailedException("An error occured reading objects", e);
 		}
 	}
 		
