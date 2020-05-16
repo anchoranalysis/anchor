@@ -46,9 +46,7 @@ class CenterOfGravityCalculator {
 		VoxelBox<ByteBuffer> vb = om.getVoxelBox();
 
 		int cnt = 0;
-		double sumX = 0.0;
-		double sumY = 0.0;
-		double sumZ = 0.0;
+		Point3d sum = new Point3d();
 		
 		for( int z=0; z<vb.extnt().getZ(); z++ ) {
 			
@@ -59,12 +57,8 @@ class CenterOfGravityCalculator {
 				for( int x=0; x<vb.extnt().getX(); x++ ) {
 					
 					if (bb.get(offset)==om.getBinaryValuesByte().getOnByte()) {
-						
+						sum.add(x,y,z);
 						cnt++;
-						
-						sumX += x;
-						sumY += y;
-						sumZ += z;
 					}
 					offset++;
 				}
@@ -75,18 +69,12 @@ class CenterOfGravityCalculator {
 		if (cnt==0) {
 			return emptyPoint();
 		}
-		
-		
-		double meanX = sumX / cnt;
-		double meanY = sumY / cnt;
-		double meanZ = sumZ / cnt;
-		
-		return new Point3d(
-			meanX + om.getBoundingBox().getCrnrMin().getX(),
-			meanY + om.getBoundingBox().getCrnrMin().getY(),
-			meanZ + om.getBoundingBox().getCrnrMin().getZ()
-		);
+
+		sum.divideBy(cnt);
+		sum.add(om.getBoundingBox().getCrnrMin());
+		return sum;
 	}
+	
 	
 	/**
 	 * Like {@link #calcCenterOfGravity} but for a specific axis.

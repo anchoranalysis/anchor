@@ -44,13 +44,25 @@ public abstract class Tuple3d implements Serializable {
 	protected double y = 0.0;
 	protected double z = 0.0;
 	
-	public final void add( Point3d pnt ) {
+	public final void add( Tuple3d pnt ) {
 		this.x += pnt.x;
 		this.y += pnt.y;
 		this.z += pnt.z;
 	}
 	
-	public final void sub( Point3d pnt ) {
+	public final void add( double x, double y, double z ) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
+	}
+	
+	public final void add( Tuple3i pnt ) {
+		this.x += pnt.x;
+		this.y += pnt.y;
+		this.z += pnt.z;
+	}
+	
+	public final void sub( Tuple3d pnt ) {
 		this.x -= pnt.x;
 		this.y -= pnt.y;
 		this.z -= pnt.z;
@@ -65,6 +77,18 @@ public abstract class Tuple3d implements Serializable {
 	public final void scaleXY( double factor ) {
 		this.x *= factor;
 		this.y *= factor;
+	}
+	
+	public final void divideBy( int divisor ) {
+		this.x /= divisor;
+		this.y /= divisor;
+		this.z /= divisor;
+	}
+	
+	public final void divideBy( double divisor ) {
+		this.x /= divisor;
+		this.y /= divisor;
+		this.z /= divisor;
 	}
 
 	public final void absolute() {
