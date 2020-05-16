@@ -32,7 +32,9 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-class CenterOfGravityCalculator {
+final class CenterOfGravityCalculator {
+	
+	private CenterOfGravityCalculator() {}
 	
 	/**
 	 * Calculates the center of gravity of an object-mask treating all pixels of equal weight.
@@ -99,20 +101,8 @@ class CenterOfGravityCalculator {
 				for( int x=0; x<vb.extnt().getX(); x++ ) {
 					
 					if (bb.get(offset)==om.getBinaryValuesByte().getOnByte()) {
-						
+						sum += valueForAxis(axisType, x, y, z);
 						cnt++;
-						
-						switch(axisType) {
-						case X:
-							sum += x;
-							break;
-						case Y:
-							sum += y;
-							break;
-						case Z:
-							sum += z;
-							break;
-						}
 					}
 					offset++;
 				}
@@ -124,10 +114,22 @@ class CenterOfGravityCalculator {
 			return Double.NaN;
 		}
 		
-		double mean = sum / cnt;
-		return mean + om.getBoundingBox().getCrnrMinForAxis(axisType);
+		return (sum / cnt) + om.getBoundingBox().getCrnrMinForAxis(axisType);
 	}
 	
+	private static int valueForAxis( AxisType axisType, int x, int y, int z) {
+		switch(axisType) {
+		case X:
+			return x;
+		case Y:
+			return y;
+		case Z:
+			return z;
+		default:
+			throw new UnsupportedOperationException();
+		}
+	}
+		
 	private static Point3d emptyPoint() {
 		return new Point3d( Double.NaN, Double.NaN, Double.NaN );
 	}
