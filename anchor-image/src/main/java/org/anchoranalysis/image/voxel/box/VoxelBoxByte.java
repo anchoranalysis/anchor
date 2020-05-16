@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityByteBuffer;
 
-public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
+public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
 	public VoxelBoxByte(IPixelsForPlane<ByteBuffer> pixelsForPlane) {
 		super(

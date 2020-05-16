@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferInt;
 
-public class VoxelBoxInt extends VoxelBox<IntBuffer> {
+public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	
 	public VoxelBoxInt(IPixelsForPlane<IntBuffer> pixelsForPlane) {
 		super(

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
 
 
-public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
+public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
 	public VoxelBoxShort(IPixelsForPlane<ShortBuffer> pixelsForPlane) {
 		super(

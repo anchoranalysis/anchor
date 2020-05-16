@@ -49,6 +49,7 @@ final class CenterOfGravityCalculator {
 
 		int cnt = 0;
 		Point3d sum = new Point3d();
+		byte onByte = om.getBinaryValuesByte().getOnByte();
 		
 		for( int z=0; z<vb.extnt().getZ(); z++ ) {
 			
@@ -58,7 +59,7 @@ final class CenterOfGravityCalculator {
 			for( int y=0; y<vb.extnt().getY(); y++ ) {
 				for( int x=0; x<vb.extnt().getX(); x++ ) {
 					
-					if (bb.get(offset)==om.getBinaryValuesByte().getOnByte()) {
+					if (bb.get(offset)==onByte) {
 						sum.add(x,y,z);
 						cnt++;
 					}
@@ -91,6 +92,7 @@ final class CenterOfGravityCalculator {
 
 		int cnt = 0;
 		double sum = 0.0;
+		byte onByte = om.getBinaryValuesByte().getOnByte();
 		
 		for( int z=0; z<vb.extnt().getZ(); z++ ) {
 			
@@ -100,7 +102,7 @@ final class CenterOfGravityCalculator {
 			for( int y=0; y<vb.extnt().getY(); y++ ) {
 				for( int x=0; x<vb.extnt().getX(); x++ ) {
 					
-					if (bb.get(offset)==om.getBinaryValuesByte().getOnByte()) {
+					if (bb.get(offset)==onByte) {
 						sum += valueForAxis(axisType, x, y, z);
 						cnt++;
 					}

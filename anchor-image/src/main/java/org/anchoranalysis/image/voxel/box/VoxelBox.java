@@ -46,8 +46,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public abstract class VoxelBox<BufferType extends Buffer> {
 
-	private IPixelsForPlane<BufferType> planeAccess;
-	private VoxelBoxFactoryTypeBound<BufferType> factory;
+	private final IPixelsForPlane<BufferType> planeAccess;
+	private final VoxelBoxFactoryTypeBound<BufferType> factory;
 	
 	public VoxelBox(IPixelsForPlane<BufferType> pixelsForPlane, VoxelBoxFactoryTypeBound<BufferType> factory) {
 		super();

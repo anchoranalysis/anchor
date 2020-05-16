@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferFloat;
 
-public class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
+public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	
 	public VoxelBoxFloat(IPixelsForPlane<FloatBuffer> pixelsForPlane) {
 		super(
