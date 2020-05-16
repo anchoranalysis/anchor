@@ -32,6 +32,6 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 public class ObjMaskCollectionWriter {
 	
 	public static IterableGenerator<ObjMaskCollection> generator() {
-		return new GeneratorHDF5(false);
+		return new GeneratorHDF5(true);
 	}
 }
