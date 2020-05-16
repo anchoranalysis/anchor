@@ -130,7 +130,7 @@ public class ImageInitParams extends BeanInitParams {
 	
 	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
 		
-		soFeature.addAll(
+		soFeature.populate(
 			define.getList(FeatureListProvider.class),
 			logger
 		);

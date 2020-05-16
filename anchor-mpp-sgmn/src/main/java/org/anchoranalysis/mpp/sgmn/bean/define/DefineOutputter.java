@@ -61,17 +61,18 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 		InputForMPPBean input,
 		BoundIOContext context
 	) throws CreateException {
-		return MPPInitParamsFactory.createFromInput(
-			input,
+		return MPPInitParamsFactory.create(
 			context,
-			Optional.ofNullable(define)
+			Optional.ofNullable(define),
+			Optional.of(input)
 		);
 	}
 	
 	protected MPPInitParams createInitParams(BoundIOContext context) throws CreateException {
 		return MPPInitParamsFactory.create(
 			context,
-			Optional.ofNullable(define)
+			Optional.ofNullable(define),
+			Optional.empty()
 		);
 	}
 	
