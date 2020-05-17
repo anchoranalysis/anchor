@@ -250,16 +250,12 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 					if (pixelsMask.get()==maskOnByte) {
 						int index = getPlaneAccess().extnt().offset(x, y);
 						
-						byte b = pixels.get(index);
-						
-						int intVal = (int) Math.round(value * ByteConverter.unsignedByteToInt(b));
-						if (intVal<0) {
-							intVal = 0;
-						}
-						if (intVal>255) {
-							intVal = 255;
-						}
-						
+						int intVal = scaleClipped(
+							value,
+							ByteConverter.unsignedByteToInt(
+								pixels.get(index)
+							)
+						);
 						pixels.put(index, (byte) intVal );
 					}
 				}
@@ -288,18 +284,12 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 					if (pixelsMask.get()==maskOnByte) {
 						int index = getPlaneAccess().extnt().offset(x, y);
 						
-						byte b = pixels.get(index);
-						
-						int intVal = ByteConverter.unsignedByteToInt(b) + value;
-						
-						if (intVal<0) {
-							intVal = 0;
-						}
-						if (intVal>255) {
-							intVal = 255;
-						}
-
-						
+						int intVal = addClipped(
+							value,
+							ByteConverter.unsignedByteToInt(
+								pixels.get(index)
+							)
+						);
 						pixels.put(index, (byte) intVal );
 					}
 				}
@@ -307,7 +297,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		}
 		
 	}
-
+	
 	@Override
 	public boolean isEqualTo(ByteBuffer buffer1, ByteBuffer buffer2) {
 		return buffer1.get()==buffer2.get();
@@ -355,9 +345,25 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		}
 	}
 		
-
+	private static int scaleClipped(double value, int pixelValue) {
+		int intVal = (int) Math.round(value * pixelValue);
+		if (intVal<0) {
+			return 0;
+		}
+		if (intVal>255) {
+			return 255;
+		}
+		return intVal;
+	}
 	
-	
-
-
+	private static int addClipped(int value, int pixelValue) {
+		int intVal = pixelValue + value;
+		if (intVal<0) {
+			return 0;
+		}
+		if (intVal>255) {
+			return 255;
+		}
+		return intVal;
+	}
 }

@@ -27,7 +27,6 @@ package org.anchoranalysis.image.seed;
  */
 
 
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,12 +38,8 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
-public class SeedCollection implements Iterable<Seed>, Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1747671966079583686L;
+public class SeedCollection implements Iterable<Seed> {
+
 	private ArrayList<Seed> delegate = new ArrayList<>();
 	
 	public SeedCollection duplicate() {
