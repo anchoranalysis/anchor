@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.sgmn.objmask;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -37,7 +39,7 @@ public abstract class ObjMaskSgmn extends SgmnBean<ObjMaskSgmn> {
 
 	// Performs the segmentation
 	// Seeds can be null, for segmentations that do not require seeds
-	public abstract ObjMaskCollection sgmn( Chnl chnl, SeedCollection seeds ) throws SgmnFailedException;
+	public abstract ObjMaskCollection sgmn( Chnl chnl, Optional<SeedCollection> seeds ) throws SgmnFailedException;
 	
-	public abstract ObjMaskCollection sgmn( Chnl chnl, ObjMask objMask, SeedCollection seeds ) throws SgmnFailedException;
+	public abstract ObjMaskCollection sgmn( Chnl chnl, ObjMask objMask, Optional<SeedCollection> seeds ) throws SgmnFailedException;
 }

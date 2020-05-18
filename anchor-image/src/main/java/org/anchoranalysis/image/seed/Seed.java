@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.seed;
 
+import org.anchoranalysis.core.error.OperationFailedException;
+
 /*
  * #%L
  * anchor-image
@@ -27,7 +29,6 @@ package org.anchoranalysis.image.seed;
  */
 
 
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 // A seed provides an ObjMask of pixels that exclusively
@@ -36,11 +37,11 @@ public abstract class Seed {
 
 	public abstract ObjMask createMask();
 
-	public abstract void scaleXY( double scale ) throws OptionalOperationUnsupportedException;
+	public abstract void scaleXY( double scale ) throws OperationFailedException;
 	
-	public abstract void flattenZ() throws OptionalOperationUnsupportedException;
+	public abstract void flattenZ();
 	
-	public abstract void growToZ(int sz) throws OptionalOperationUnsupportedException;
+	public abstract void growToZ(int sz);
 	
 	public abstract Seed duplicate();
 	

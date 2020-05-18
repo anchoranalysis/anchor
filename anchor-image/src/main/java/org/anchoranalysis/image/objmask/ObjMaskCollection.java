@@ -110,11 +110,25 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		return delegate.containsAll(arg0);
 	}
 
+	/** 
+	 * Checks if two collections are equal in a shallow way
+	 * 
+	 * <p>Specifically, objects are tested to be equal using their object references (i.e. they are equal iff they have the same reference)</p>
+	 * <p>This is a cheaper equality check than with {@link equalsDeep}</p>
+	 * <p>Both collections must have identical ordering.</p> 
+	 */
 	@Override
 	public boolean equals(Object arg0) {
 		return delegate.equals(arg0);
 	}
-	
+		
+	/** 
+	 * Checks if two collections are equal in a deeper way
+	 * 
+	 * <p>Specifically, objects are tested to be equal using a deep byte-by-byte comparison using {@link ObjMask.equalsDeep}. Their objects do not need to be equal.
+	 * <p>This is more expensive equality check than with {@link equalsDeep}, but is useful for comparing objects that were instantiated in different places.</p>
+	 * <p>Both collections must have identical ordering.</p>
+	 */	
 	public boolean equalsDeep(ObjMaskCollection othr) {
 		if (size()!=othr.size()) {
 			return false;
@@ -125,12 +139,12 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 	
 	/**
-	 * Does a deep comparison of both objects, but ignores their order
+	 * Similar to {@link equalsDeep} but ignores any differences in the ordering of the collectiosn.
+	 * 
 	 * @param othr to compare to
 	 * @return true if both obj mask collections are identical (except for order), false otherwise
 	 */
@@ -155,7 +169,6 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 

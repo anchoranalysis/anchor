@@ -29,7 +29,6 @@ package org.anchoranalysis.image.io.objs;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -54,6 +53,12 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	
 	private ObjMaskCollection item;
 	private boolean compressed;
+
+	public static void writeObjsToFile( ObjMaskCollection objs, Path filePath) throws OutputWriteFailedException {
+		GeneratorHDF5 generator = new GeneratorHDF5(true);
+		generator.setIterableElement(objs);
+		generator.writeToFile( new OutputWriteSettings(), filePath);
+	}
 	
 	public GeneratorHDF5(boolean compressed) {
 		super();
@@ -124,7 +129,7 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	}
 
 	@Override
-	public void setIterableElement(ObjMaskCollection element) throws SetOperationFailedException {
+	public void setIterableElement(ObjMaskCollection element) {
 		this.item = element;
 	}
 }

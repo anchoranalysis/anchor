@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.experiment.bean.sgmn;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-experiment
@@ -37,7 +39,16 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCollection> {
 
-	// Performs the segmentation
-	// Seeds can be null, for segmentations that do not require seeds
-	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
+	/**
+	 * Performs the segmentation
+	 * 
+	 * @param stackCollection
+	 * @param objMaskCollection
+	 * @param seeds
+	 * @param re
+	 * @param context
+	 * @return
+	 * @throws SgmnFailedException
+	 */
+	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, Optional<SeedCollection> seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
 }

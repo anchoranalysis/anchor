@@ -572,8 +572,7 @@ public class ObjMask {
 		);
 	}
 
-	public ObjMask createSubmaskAlwaysNew(BoundingBox bbox)
-			throws CreateException {
+	public ObjMask createSubmaskAlwaysNew(BoundingBox bbox) throws CreateException {
 		return new ObjMask(
 			delegate.createBufferAlwaysNew(bbox),
 			this.bv.duplicate()

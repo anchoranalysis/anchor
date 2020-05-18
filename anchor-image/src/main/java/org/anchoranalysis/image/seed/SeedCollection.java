@@ -31,8 +31,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -52,7 +50,7 @@ public class SeedCollection implements Iterable<Seed> {
 		return out;
 	}
 
-	public void scaleXY( double scale) throws OptionalOperationUnsupportedException {
+	public void scaleXY( double scale) throws OperationFailedException {
 		
 		for( Seed seed : this ) {
 			seed.scaleXY(scale);
@@ -71,14 +69,14 @@ public class SeedCollection implements Iterable<Seed> {
 		return objMasks;
 	}
 	
-	public void flattenZ() throws OptionalOperationUnsupportedException {
+	public void flattenZ() {
 		
 		for( Seed seed : delegate ) {
 			seed.flattenZ();
 		}
 	}
 	
-	public void growToZ(int sz) throws OptionalOperationUnsupportedException {
+	public void growToZ(int sz) {
 		
 		for( Seed seed : delegate ) {
 			seed.growToZ(sz);
@@ -149,22 +147,16 @@ public class SeedCollection implements Iterable<Seed> {
 	}
 	
 	
-	public void verifySeedsAreInside( Extent e ) throws OperationFailedException {
+	public boolean verifySeedsAreInside( Extent e ) {
 		for (Seed seed : this) {
 			
 			ObjMask om = seed.createMask();
 			
 			if (!e.contains(om.getBoundingBox())) {
-				
-				Point3d cp = om.getBoundingBox().midpoint();
-				throw new OperationFailedException(
-						String.format("Seed with centre %f,%f,%f is not within ImgChnl bounds %d,%d,%d",
-								cp.getX(), cp.getY(), cp.getZ(),
-								e.getX(), e.getY(), e.getZ()
-						 )
-				);
+				return false;
 			}
 		}
+		return true;
 	}
 
 }
