@@ -29,10 +29,10 @@ package org.anchoranalysis.image.voxel.nghb.iterator;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
 
-public class PointExtntIterator extends PointIterator {
+public final class PointExtntIterator extends PointIterator {
 
-	private Extent extnt;
-	private IProcessAbsolutePoint processAbsolutePoint;
+	private final Extent extnt;
+	private final IProcessAbsolutePoint processAbsolutePoint;
 	
 	private int pntX;
 	private int pntY;

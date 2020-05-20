@@ -34,12 +34,12 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 
-public class PointObjMaskIterator extends PointIterator {
+public final class PointObjMaskIterator extends PointIterator {
 
-	private IProcessAbsolutePointObjectMask pointProcesser;
+	private final IProcessAbsolutePointObjectMask pointProcesser;
 	private final ObjMask om;
 	private final Extent extnt;
-	private Point3i crnrMin;
+	private final Point3i crnrMin;
 	
 	private int pntX;
 	private int pntY;
