@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.cache;
 
+import org.anchoranalysis.core.functional.Operation;
+
 /*
  * #%L
  * anchor-core

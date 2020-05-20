@@ -31,9 +31,9 @@ package org.anchoranalysis.image.io.input.series;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;

@@ -28,7 +28,7 @@ package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
 
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.CollectionGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;

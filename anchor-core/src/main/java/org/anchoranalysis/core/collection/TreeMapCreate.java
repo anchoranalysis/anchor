@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.functional.Operation;
 
 /**
  * A tree map that creates a new item, if it doesn't already exist, after a GET operation

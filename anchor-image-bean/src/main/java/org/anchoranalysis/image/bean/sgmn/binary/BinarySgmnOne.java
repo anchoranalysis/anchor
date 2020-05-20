@@ -27,6 +27,7 @@ package org.anchoranalysis.image.bean.sgmn.binary;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -42,14 +43,13 @@ public abstract class BinarySgmnOne extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
-		return sgmnFromSgmn(voxelBox, params, sgmn);
-	}
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask)
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask)
 			throws SgmnFailedException {
-		return sgmnFromSgmn(voxelBox, params, objMask, sgmn);
+		if (mask.isPresent()) {
+			return sgmnFromSgmn(voxelBox, params, mask.get(), sgmn);
+		} else {
+			return sgmnFromSgmn(voxelBox, params, sgmn);	
+		}
 	}
 	
 	protected abstract BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(

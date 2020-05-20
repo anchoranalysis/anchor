@@ -33,7 +33,6 @@ import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.wrap.CachedOperationWrap;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -202,9 +201,7 @@ class AppendHelper {
 			
 			map.add(
 				ni.getName(),
-				new CachedOperationWrap<T,OperationFailedException>(
-					() -> readObjectForAppend(inputObject, reader, ni, debugMode)
-				)
+				() -> readObjectForAppend(inputObject, reader, ni, debugMode)
 			);
 		}
 	}

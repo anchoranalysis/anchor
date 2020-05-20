@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;

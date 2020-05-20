@@ -49,8 +49,18 @@ public class BinarySgmnThrshld extends BinarySgmn {
 	private Thresholder thresholder;
 	// END PARAMETERS
 
+
+	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
+		if (mask.isPresent()) {
+			return sgmnWithMask(voxelBox, params, mask.get());
+		} else {
+			return sgmnWithoutMask(voxelBox, params);
+		}
+	}
+	
+	private BinaryVoxelBox<ByteBuffer> sgmnWithoutMask(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
@@ -61,21 +71,19 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		}
 	}
 	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
-		
-		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
+	private BinaryVoxelBox<ByteBuffer> sgmnWithMask(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask mask) throws SgmnFailedException {
+		BoundingBox bboxE = new BoundingBox(mask.getVoxelBox().extnt());
 		
 		// We just want to return the area under the objMask
-		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.instance().getByte().create( objMask.getVoxelBox().extnt() );
+		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.instance().getByte().create( mask.getVoxelBox().extnt() );
 		VoxelBoxWrapper maskDupWrap = new VoxelBoxWrapper(maskDup);
 		
 		voxelBox.copyPixelsToCheckMask(
-			objMask.getBoundingBox(),
+			mask.getBoundingBox(),
 			maskDupWrap,
 			bboxE,
-			objMask.getVoxelBox(),
-			objMask.getBinaryValuesByte()
+			mask.getVoxelBox(),
+			mask.getBinaryValuesByte()
 		);
 		
 		// As we are thresholding a mask
@@ -84,7 +92,7 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		try {		
 			return thresholder.threshold(
 				voxelBox,
-				new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()),
+				new ObjMask(bboxE,mask.getVoxelBox(),mask.getBinaryValuesByte()),
 				bvOut,
 				params.getIntensityHistogram()
 			);

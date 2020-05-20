@@ -107,7 +107,7 @@ public class ObjMask {
 		this.bvb = new BinaryValuesByte( binaryValues );
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues ) throws CreateException {
+	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues ) {
 		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
 		this.bv = binaryValues.duplicate();
 		this.bvb = binaryValues.createByte();
@@ -504,16 +504,18 @@ public class ObjMask {
 	public void invertContainedMask( ObjMask omContained ) throws OperationFailedException {
 		
 		Point3i pntRel = omContained.getBoundingBox().relPosTo(getBoundingBox());
-		BoundingBox bboxRel = new BoundingBox(pntRel, omContained.getBoundingBox().extnt());
+		BoundingBox bboxRel = new BoundingBox(
+			pntRel,
+			omContained.getBoundingBox().extnt()
+		);
 		
-		try {
-			ObjMask omContainedRel = new ObjMask( bboxRel, omContained.getVoxelBox(), omContained.getBinaryValues() );
+		ObjMask omContainedRel = new ObjMask(
+			bboxRel,
+			omContained.getVoxelBox(),
+			omContained.getBinaryValues()
+		);
 			
-			getVoxelBox().setPixelsCheckMask(omContainedRel, getBinaryValuesByte().getOffByte());
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		getVoxelBox().setPixelsCheckMask(omContainedRel, getBinaryValuesByte().getOffByte());
 	}
 
 	// If keepZ is true the slice keeps its z coordinate, otherwise its set to 0

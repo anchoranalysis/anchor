@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.cache;
+package org.anchoranalysis.core.functional;
 
 /*
  * #%L
@@ -27,15 +27,20 @@ package org.anchoranalysis.core.cache;
  */
 
 
-/**
- * 
- * @author Owen Feehan
- *
- * @param <R> result-type
- * @param <E> exception that is thrown if something goes wrong
- */
-@FunctionalInterface
-public interface Operation<R,E extends Throwable> {
 
-	R doOperation() throws E;
+
+public class IdentityOperation<T,E extends Throwable> implements Operation<T,E> {
+
+	private T obj;
+			
+	public IdentityOperation(T obj) {
+		super();
+		this.obj = obj;
+	}
+
+	@Override
+	public T doOperation() throws E {
+		return obj;
+	}
+	
 }

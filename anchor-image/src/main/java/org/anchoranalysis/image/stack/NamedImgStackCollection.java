@@ -32,9 +32,9 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.anchoranalysis.core.cache.IdentityOperation;
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.IdentityOperation;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;

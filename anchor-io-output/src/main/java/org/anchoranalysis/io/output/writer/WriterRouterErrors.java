@@ -2,8 +2,6 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.cache.Operation;
-
 /*
  * #%L
  * anchor-io
@@ -32,6 +30,7 @@ import org.anchoranalysis.core.cache.Operation;
 
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;

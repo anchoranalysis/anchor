@@ -42,8 +42,8 @@ public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCo
 	/**
 	 * Performs the segmentation
 	 * 
-	 * @param stackCollection
-	 * @param objMaskCollection
+	 * @param stackCollection existing-stacks
+	 * @param objMaskCollection existing-objects
 	 * @param seeds
 	 * @param re
 	 * @param context

@@ -29,8 +29,8 @@ package org.anchoranalysis.core.name.store;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;

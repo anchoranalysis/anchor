@@ -29,7 +29,7 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestDescription;

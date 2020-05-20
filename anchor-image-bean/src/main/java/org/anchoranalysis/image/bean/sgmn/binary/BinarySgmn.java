@@ -28,6 +28,8 @@ package org.anchoranalysis.image.bean.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.sgmn.SgmnBean;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -37,10 +39,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 @GroupingRoot
 public abstract class BinarySgmn extends SgmnBean<BinarySgmn> {
-	
+		
 	// Returns a BinaryVoxelBox associated with the input buffer or null if nothing has changed
-	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params ) throws SgmnFailedException;
-	
-	// Segments only the object found within the ObjMask, if it returns NULL then no change has occurred (for sure)
-	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask ) throws SgmnFailedException;
+	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask ) throws SgmnFailedException;
 }
