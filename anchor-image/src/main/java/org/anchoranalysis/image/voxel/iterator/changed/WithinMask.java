@@ -40,13 +40,8 @@ final class WithinMask implements InitializableProcessChangedPoint {
 	private final Extent extnt;
 	private final Point3i crnrMin;
 	
-	private int pntX;
-	private int pntY;
-	private int pntZ;
-
-	private int relX;
-	private int relY;
-	private int relZ;
+	private Point3i pnt;
+	private Point3i rel;
 	
 	// Current ByteBuffer for the object mask
 	private ByteBuffer bbOM;
@@ -64,24 +59,21 @@ final class WithinMask implements InitializableProcessChangedPoint {
 	}
 	
 	@Override
-	public void initPnt( int pntX, int pntY, int pntZ ) {
-		this.pntX = pntX;
-		this.pntY = pntY;
-		this.pntZ = pntZ;
+	public void initPnt(Point3i pnt) {
+		this.pnt = pnt;
 		
-		this.relX = pntX - crnrMin.getX();
-		this.relY = pntY - crnrMin.getY();
-		this.relZ = pntZ - crnrMin.getZ();
+		rel = new Point3i(pnt);
+		rel.sub(crnrMin);
 		
-		offsetXYAtPnt = extnt.offset(relX, relY);
+		offsetXYAtPnt = extnt.offsetSlice(rel);
 	}
 
 
 	@Override
 	public boolean notifyChangeZ(int zChange) {
-		z1 = pntZ + zChange;
+		z1 = pnt.getZ() + zChange;
 		
-		int relZ1 = relZ + zChange;
+		int relZ1 = rel.getZ() + zChange;
 		
 		if (relZ1<0 || relZ1>=extnt.getZ()) {
 			this.bbOM = null;
@@ -98,11 +90,11 @@ final class WithinMask implements InitializableProcessChangedPoint {
 	@Override
 	public boolean processPoint(int xChange, int yChange) {
 
-		int x1 = pntX + xChange;
-		int y1 = pntY + yChange;
+		int x1 = pnt.getX() + xChange;
+		int y1 = pnt.getY() + yChange;
 		
-		int relX1 = relX + xChange;
-		int relY1 = relY + yChange;
+		int relX1 = rel.getX() + xChange;
+		int relY1 = rel.getY() + yChange;
 		
 		if (relX1<0) {
 			return false;

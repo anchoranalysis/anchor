@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -83,7 +84,10 @@ class PopulateFromByte extends PopulateIndexFromBinary<ByteBuffer> {
 				
 				if (bbBinary.get(offset)==bvb.getOnByte() && bbIndex.get(offset)==0) {
 					
-					int nghbLab = mergeWithNgbs.calcMinNghbLabel(x, y, z, offset);
+					int nghbLab = mergeWithNgbs.calcMinNghbLabel(
+						new Point3i(x, y, z),
+						offset
+					);
 					if (nghbLab==-1) {
 						bbBinary.put(offset, (byte) cnt );
 						bbIndex.put(offset, cnt);

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
@@ -39,6 +40,21 @@ public class IterateVoxels {
 	
 	
 	/**
+	 * Iterate over each voxel that is located on a mask if it exists, otherwise iterate over the entire extent
+	 * 
+	 * @param mask an optional mask that is used as a condition on what voxels to iterate
+	 * @param extent if mask isn't defined, then all the voxels in this {@link Extent} are iterated over instead
+	 * @param process process is called for each voxel (on the entire {@link Extent} or on the object-mask depending) using GLOBAL coordinates.
+	 */
+	public static void callEachPoint( Optional<ObjMask> mask, Extent extent, ProcessPoint process ) {
+		if (mask.isPresent()) {
+			callEachPoint(mask.get(), process);
+		} else {
+			callEachPoint(extent, process);
+		}
+	}
+	
+	/**
 	 * Iterate over each voxel that is located on a mask
 	 * 
 	 * @param mask the mask that is used as a condition on what voxels to iterate
@@ -48,6 +64,19 @@ public class IterateVoxels {
 		callEachPoint(
 			mask.getBoundingBox(),
 			new RequireIntersectionWithMask(process, mask)
+		);
+	}
+
+	/**
+	 * Iterate over each voxel in an {@link Extent}
+	 * 
+	 * @param extent the extent to be iterated over
+	 * @param process process is called for each voxel inside the extent using the same coordinates as the extent.
+	 */
+	public static void callEachPoint( Extent extent, ProcessPoint process ) {
+		callEachPoint(
+			new BoundingBox(extent),
+			process
 		);
 	}
 	

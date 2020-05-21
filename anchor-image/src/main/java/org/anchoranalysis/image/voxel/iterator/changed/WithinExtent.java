@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.iterator.changed;
 
+import org.anchoranalysis.core.geometry.Point3i;
+
 /*-
  * #%L
  * anchor-image
@@ -41,9 +43,7 @@ final class WithinExtent implements InitializableProcessChangedPoint {
 	private final Extent extnt;
 	private final ProcessChangedPointAbsolute processAbsolutePoint;
 	
-	private int pntX;
-	private int pntY;
-	private int pntZ;
+	private Point3i pnt;
 	
 	public WithinExtent( Extent extnt, ProcessChangedPointAbsolute processAbsolutePoint ) {
 		this.extnt = extnt;
@@ -51,17 +51,15 @@ final class WithinExtent implements InitializableProcessChangedPoint {
 	}
 
 	@Override
-	public void initPnt( int pntX, int pntY, int pntZ ) {
-		this.pntX = pntX;
-		this.pntY = pntY;
-		this.pntZ = pntZ;			
+	public void initPnt(Point3i pnt) {
+		this.pnt = pnt;			
 	}
 	
 	@Override
 	public boolean processPoint(int xChange, int yChange) {
 		
-		int x1 = pntX + xChange;
-		int y1 = pntY + yChange;
+		int x1 = pnt.getX() + xChange;
+		int y1 = pnt.getY() + yChange;
 		
 		if (x1 < 0 || x1 >=extnt.getX() || y1 < 0 || y1 >= extnt.getY()) {
 			return false;
@@ -72,7 +70,7 @@ final class WithinExtent implements InitializableProcessChangedPoint {
 
 	@Override
 	public boolean notifyChangeZ(int zChange) {
-		int z1 = pntZ + zChange;
+		int z1 = pnt.getZ() + zChange;
 		
 		if (!extnt.containsZ(z1)) {
 			return false;

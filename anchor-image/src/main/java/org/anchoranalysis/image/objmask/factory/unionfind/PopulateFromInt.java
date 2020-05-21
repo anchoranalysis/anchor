@@ -28,6 +28,7 @@ package org.anchoranalysis.image.objmask.factory.unionfind;
 
 import java.nio.IntBuffer;
 
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -74,7 +75,10 @@ class PopulateFromInt extends PopulateIndexFromBinary<IntBuffer> {
 				
 				if (bbBinary.get(offset)==bv.getOnInt() && bbIndex.get(offset)==0) {
 					
-					int nghbLab = mergeWithNgbs.calcMinNghbLabel(x, y, z, offset);
+					int nghbLab = mergeWithNgbs.calcMinNghbLabel(
+						new Point3i(x, y, z),
+						offset
+					);
 					if (nghbLab==-1) {
 						bbBinary.put(offset, (byte) cnt );
 						bbIndex.put(offset, cnt);

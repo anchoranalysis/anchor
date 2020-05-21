@@ -29,6 +29,7 @@ package org.anchoranalysis.image.objmask.factory.unionfind;
 
 import java.nio.IntBuffer;
 
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
@@ -126,9 +127,9 @@ class MergeWithNghbs {
 	
 	// Calculates the minimum label of the neighbours, making sure to merge any different values
 	//   -1 indicates that there is no indexed neighbour
-	public int calcMinNghbLabel( int x, int y, int z, int indxBuffer ) {
+	public int calcMinNghbLabel( Point3i pnt, int indxBuffer ) {
 		
-		this.pointIterator.initPnt(x, y, z);
+		this.pointIterator.initPnt(pnt);
 		this.pt.initPnt(indxBuffer);
 		
 		nghb.processAllPointsInNghb(do3D, pointIterator);
