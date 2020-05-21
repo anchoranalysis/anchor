@@ -8,7 +8,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPoint;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 
 /**
