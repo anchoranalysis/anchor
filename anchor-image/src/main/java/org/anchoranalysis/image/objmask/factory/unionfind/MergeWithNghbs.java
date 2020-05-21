@@ -27,20 +27,16 @@ package org.anchoranalysis.image.objmask.factory.unionfind;
  */
 
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 import org.anchoranalysis.image.voxel.nghb.SmallNghb;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 import org.jgrapht.alg.util.UnionFind;
 
 class MergeWithNghbs {
@@ -48,7 +44,7 @@ class MergeWithNghbs {
 	private boolean do3D = false;
 	
 	private PointTester pt;
-	private PointIterator pointIterator;
+	private InitializableProcessChangedPoint pointIterator;
 
 	private Nghb nghb;
 
@@ -59,20 +55,10 @@ class MergeWithNghbs {
 		nghb = bigNghb ? new BigNghb() : new SmallNghb();
 		
 		this.pt = new PointTester(slidingIndex,unionIndex);
-		this.pointIterator = new PointExtntIterator(slidingIndex.extnt(), pt);
+		this.pointIterator = ProcessChangedPointFactory.withinExtent(slidingIndex.extnt(), pt);
 	}
 	
-	// Masked
-	public MergeWithNghbs( SlidingBuffer<IntBuffer> slidingIndex, UnionFind<Integer> unionIndex, boolean do3D, boolean bigNghb, ObjMask om ) {
-		this.do3D = do3D;
-
-		nghb = bigNghb ? new BigNghb() : new SmallNghb();
-		
-		this.pt = new PointTester(slidingIndex,unionIndex);
-		this.pointIterator = new PointObjMaskIterator(pt, om);
-	}
-	
-	private static class PointTester implements IProcessAbsolutePoint, IProcessAbsolutePointObjectMask {
+	private static class PointTester implements ProcessChangedPointAbsolute {
 		
 		private int indxBuffer;
 		
@@ -125,13 +111,6 @@ class MergeWithNghbs {
 			}
 			return true;
 		}
-		
-		@Override
-		public boolean processPoint(int xChange, int yChange, int x1, int y1,
-				int objectMaskOffset) {
-			return processPoint(xChange, yChange, x1, y1);
-		}
-
 
 		@Override
 		public void notifyChangeZ(int zChange, int z1) {
@@ -139,19 +118,10 @@ class MergeWithNghbs {
 			assert(bbIndex!=null);
 		}
 
-		@Override
-		public void notifyChangeZ(int zChange, int z1,
-				ByteBuffer objectMaskBuffer) {
-			notifyChangeZ(zChange, z1);
-		}
-
 		public int getMinLabel() {
 			assert(minLabel!=0);
 			return minLabel;
 		}
-
-		
-
 	}
 	
 	// Calculates the minimum label of the neighbours, making sure to merge any different values

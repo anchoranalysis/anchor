@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb.iterator;
+package org.anchoranalysis.image.voxel.iterator.changed;
 
 /*-
  * #%L
@@ -27,18 +27,25 @@ package org.anchoranalysis.image.voxel.nghb.iterator;
  */
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
 
-public final class PointExtntIterator extends PointIterator {
+/**
+ * Only processes points within a certain extent
+ * 
+ * <p>Any points outside this extent are rejected.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+final class WithinExtent implements InitializableProcessChangedPoint {
 
 	private final Extent extnt;
-	private final IProcessAbsolutePoint processAbsolutePoint;
+	private final ProcessChangedPointAbsolute processAbsolutePoint;
 	
 	private int pntX;
 	private int pntY;
 	private int pntZ;
 	
-	public PointExtntIterator( Extent extnt, IProcessAbsolutePoint processAbsolutePoint ) {
+	public WithinExtent( Extent extnt, ProcessChangedPointAbsolute processAbsolutePoint ) {
 		this.extnt = extnt;
 		this.processAbsolutePoint = processAbsolutePoint;
 	}

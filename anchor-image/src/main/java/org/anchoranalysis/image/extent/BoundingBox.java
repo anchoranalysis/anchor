@@ -88,12 +88,37 @@ public class BoundingBox implements Serializable {
 		this.extnt.setZ( max.getZ() - min.getZ() + 1 );
 	}
 	
+	/** 
+	 * A mid-point in the bounding box, in the exact half way point between (crnr+extent)/2.
+	 *  
+	 * <p>It may not be integral, and could end with .5</p>
+	 *  
+	 * @return
+	 */
 	public Point3d midpoint() {
+		return meanOfPoints(0);
+	}
+
+	/** 
+	 * Similar to {@link midpoint} but not always identical. It is the mean of all the points in the box, and guaranteed to be integral.
+	 * 
+	 * <p>It should be the same in each dimension as (crnr+extent-1)/2</p>
+	 *  
+	 * @return
+	 */
+
+	public Point3i centerOfGravity() {
+		return new Point3i(
+			meanOfPoints(1)
+		);
+	}
+	
+	private Point3d meanOfPoints( int subtractFromEachDimension ) {
 		Point3d pnt = new Point3d();
 		
-		double e_x = ((double) this.extnt.getX())/2;
-		double e_y = ((double) this.extnt.getY())/2;
-		double e_z = ((double) this.extnt.getZ())/2;
+		double e_x = ((double) this.extnt.getX() - subtractFromEachDimension)/2;
+		double e_y = ((double) this.extnt.getY() - subtractFromEachDimension)/2;
+		double e_z = ((double) this.extnt.getZ() - subtractFromEachDimension)/2;
 		
 		pnt.setX( e_x + this.crnrMin.getX() ); 
 		pnt.setY( e_y + this.crnrMin.getY() );

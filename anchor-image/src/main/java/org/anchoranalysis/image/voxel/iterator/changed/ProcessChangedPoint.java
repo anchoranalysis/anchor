@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.iterator.changed;
 
 /*
  * #%L
@@ -27,13 +27,21 @@ package org.anchoranalysis.image.voxel.nghb;
  */
 
 
-public interface IProcessRelPoint {
+/**
+ * Processes a point that has been translated (changed) relative to another
+ * 
+ * @author Owen Feehan
+ *
+ */
+@FunctionalInterface
+public interface ProcessChangedPoint {
 
-	// Notifies the processor that there has been a change in z-coordinate
-	// If it returns false, there's no point further pursuing this z
-	public abstract boolean notifyChangeZ( int zChange );
+	/** Notifies the processor that there has been a change in z-coordinate
+	 *  @return true if processing should continue on this slice, or false if processing should stop for this slice
+	 **/
+	default boolean notifyChangeZ( int zChange ) { return true; }
 	
-	// Processes a particular point
-	public abstract boolean processPoint(int xChange, int yChange);
+	/** Processes a particular point */
+	boolean processPoint(int xChange, int yChange);
 	
 }

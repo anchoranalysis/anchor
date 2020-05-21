@@ -72,6 +72,7 @@ public class PixelsFromByteBufferArr implements IPixelsForPlane<ByteBuffer> {
 
 	@Override
 	public VoxelBuffer<ByteBuffer> getPixelsForPlane(int z) {
+		assert(z>=0);
 		VoxelBuffer<ByteBuffer> buf = buffer[z];
 		buf.buffer().clear();
 		return buf; 

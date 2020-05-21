@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.iterator.changed;
 
 /*
  * #%L
@@ -27,13 +27,16 @@ package org.anchoranalysis.image.voxel.nghb;
  */
 
 
-// Processes a point which has been translated from another point
-public interface IProcessAbsolutePoint {
+/** 
+ * Processes a point which has been translated (changed) relative to another point - and includes global coordinates
+ **/
+@FunctionalInterface
+public interface ProcessChangedPointAbsolute {
 
-	// Notifies the processor that there has been a change in z-coordinate
-	public abstract void notifyChangeZ( int zChange, int z );
+	/** Notifies the processor that there has been a change in z-coordinate */
+	default void notifyChangeZ( int zChange, int z ) {}
 	
-	// Processes a particular point
-	public abstract boolean processPoint(int xChange, int yChange, int x1, int y1);
+	/** Processes a particular point */
+	boolean processPoint(int xChange, int yChange, int x1, int y1);
 	
 }

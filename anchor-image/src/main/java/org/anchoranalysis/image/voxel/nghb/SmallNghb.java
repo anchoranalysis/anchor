@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.nghb;
 
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPoint;
+
 /*
  * #%L
  * anchor-image
@@ -32,7 +34,7 @@ package org.anchoranalysis.image.voxel.nghb;
 public class SmallNghb extends Nghb {
 
 	@Override
-	public void processAllPointsInNghb(boolean do3d, IProcessRelPoint testNghb) {
+	public void processAllPointsInNghb(boolean do3d, ProcessChangedPoint testNghb) {
 		
 		int numDims = do3d ? 3 : 2;
 		
@@ -55,7 +57,7 @@ public class SmallNghb extends Nghb {
 		}
 	}
 	
-	private final void processD( IProcessRelPoint testNghb, int j, int d) {
+	private final void processD( ProcessChangedPoint testNghb, int j, int d) {
 		switch(d) {
 			case 0:
 				testNghb.processPoint(j, 0);

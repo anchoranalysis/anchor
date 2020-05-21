@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb.iterator;
+package org.anchoranalysis.image.voxel.iterator.changed;
 
 /*
  * #%L
@@ -32,11 +32,10 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 
-public final class PointObjMaskIterator extends PointIterator {
+final class WithinMask implements InitializableProcessChangedPoint {
 
-	private final IProcessAbsolutePointObjectMask pointProcesser;
+	private final ProcessChangedPointAbsoluteMasked pointProcesser;
 	private final ObjMask om;
 	private final Extent extnt;
 	private final Point3i crnrMin;
@@ -56,8 +55,7 @@ public final class PointObjMaskIterator extends PointIterator {
 	
 	private int offsetXYAtPnt;
 	
-	public PointObjMaskIterator(IProcessAbsolutePointObjectMask pointProcesser,
-			ObjMask om) {
+	public WithinMask(ProcessChangedPointAbsoluteMasked pointProcesser,	ObjMask om) {
 		this.pointProcesser = pointProcesser;
 		this.om = om;
 		this.maskOffVal = om.getBinaryValuesByte().getOffByte();
@@ -94,9 +92,6 @@ public final class PointObjMaskIterator extends PointIterator {
 		this.bbOM = om.getVoxelBox().getPixelsForPlane(zRel).buffer();
 		
 		pointProcesser.notifyChangeZ(zChange, z1, bbOM);
-		
-		//offsetXYCurrent = 0;
-		
 		return true;
 	}
 
@@ -126,9 +121,6 @@ public final class PointObjMaskIterator extends PointIterator {
 		}
 
 		int offset = offsetXYAtPnt + xChange + (yChange*extnt.getX());
-		//offsetXYCurrent
-		
-		//int offset = extnt.offset(relX1, relY1);
 		
 		if (bbOM.get(offset)==maskOffVal) {
 			return false;

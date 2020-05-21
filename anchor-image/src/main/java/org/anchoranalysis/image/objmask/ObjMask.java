@@ -601,8 +601,7 @@ public class ObjMask {
 	public Point3i findAnyPntOnMask() {
 		
 		// First we try the mid-point
-		Point3d pntD = getBoundingBox().midpoint();
-		Point3i pnt = PointConverter.intFromDouble(pntD);
+		Point3i pnt = getBoundingBox().centerOfGravity();
 		if (contains(pnt)) {
 			return new Point3i(pnt);
 		}

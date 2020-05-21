@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.iterator.changed;
 
 /*
  * #%L
@@ -29,13 +29,15 @@ package org.anchoranalysis.image.voxel.nghb;
 
 import java.nio.ByteBuffer;
 
-// Processes a point which has been translated from another point
-public interface IProcessAbsolutePointObjectMask {
+/** 
+ * Processes a point which has been translated (changed) relative to another point - and includes global coordinates and includes an object-mask buffer
+ **/
+@FunctionalInterface
+public interface ProcessChangedPointAbsoluteMasked {
 
-	// Notifies the processor that there has been a change in z-coordinate
-	public abstract void notifyChangeZ( int zChange, int z, ByteBuffer objectMaskBuffer );
+	/** Notifies the processor that there has been a change in z-coordinate */
+	default void notifyChangeZ( int zChange, int z, ByteBuffer objectMaskBuffer ) {}
 	
-	// Processes a particular point
-	public abstract boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset );
-	
+	/** Processes a particular point */
+	boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset );
 }
