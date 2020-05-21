@@ -80,7 +80,7 @@ class PopulateFromInt extends PopulateIndexFromBinary<IntBuffer> {
 						offset
 					);
 					if (nghbLab==-1) {
-						bbBinary.put(offset, (byte) cnt );
+						bbBinary.put(offset, cnt );
 						bbIndex.put(offset, cnt);
 						unionIndex.addElement(cnt);
 						cnt++;
