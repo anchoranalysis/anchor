@@ -6,12 +6,9 @@ import java.util.function.Consumer;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
-import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.core.arithmetic.RunningSumPoint;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
