@@ -30,13 +30,14 @@ import java.nio.IntBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.jgrapht.alg.util.UnionFind;
 
-class PopulateFromInt extends PopulateIndexFromBinary<IntBuffer> {
+final class PopulateFromInt extends PopulateIndexFromBinary<IntBuffer> {
 
 	@Override
 	public int populateIndexFromBinary(
@@ -95,5 +96,15 @@ class PopulateFromInt extends PopulateIndexFromBinary<IntBuffer> {
 		}
 		
 		return cnt;
+	}
+
+	@Override
+	protected boolean isBufferOn(IntBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
+		return buffer.get(offset)==bv.getOnInt();
+	}
+
+	@Override
+	protected void putBufferCnt(IntBuffer buffer, int offset, int cnt) {
+		buffer.put(offset,cnt);
 	}
 }
