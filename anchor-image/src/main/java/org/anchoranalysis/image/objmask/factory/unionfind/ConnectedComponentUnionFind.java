@@ -54,30 +54,54 @@ public class ConnectedComponentUnionFind {
 	
 	private final boolean bigNghb;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param minNumberVoxels a minimum number of voxels necessary in the connected-component, otherwise it omitted from the output.
+	 * @param bigNghb whether to use a smaller or bigger neighbour (in 3D, 6-conn neighbours are used as small)
+	 */
 	public ConnectedComponentUnionFind(int minNumberVoxels, boolean bigNghb) {
 		super();
 		this.minNumberVoxels = minNumberVoxels;
 		this.bigNghb = bigNghb;
 	}	
 		
-	public void visitRegionByte( BinaryVoxelBox<ByteBuffer> visited, ObjMaskCollection omc ) throws OperationFailedException {
+	/**
+	 * Converts a binary-voxel-box (byte) into connected components.
+	 * 
+	 * @param voxels a binary voxel-box to be searched for connected components. It is consumed (modified) during processing.
+	 * @return the connected-components derived from the voxel-box
+	 * @throws OperationFailedException
+	 */
+	public ObjMaskCollection deriveConnectedByte(BinaryVoxelBox<ByteBuffer> voxels) throws OperationFailedException {
+		ObjMaskCollection omc = new ObjMaskCollection();
 		visitRegion(
-			visited,
+			voxels,
 			omc,
 			minNumberVoxels,
 			bigNghb,
 			new PopulateFromByte()
 		);
+		return omc;
 	}
-		
-	public void visitRegionInt( BinaryVoxelBox<IntBuffer> visited, ObjMaskCollection omc ) throws OperationFailedException {
+
+	/**
+	 * Converts a binary-voxel-box (int) into connected components.
+	 * 
+	 * @param voxels a binary voxel-box to be searched for connected components. It is consumed (modified) during processing.
+	 * @return the connected-components derived from the voxel-box
+	 * @throws OperationFailedException
+	 */
+	public ObjMaskCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels) throws OperationFailedException {
+		ObjMaskCollection omc = new ObjMaskCollection();
 		visitRegion(
-			visited,
+			voxels,
 			omc,
 			minNumberVoxels,
 			bigNghb,
 			new PopulateFromInt()
 		);
+		return omc;
 	}
 	
 	private static <T extends Buffer> void visitRegion(

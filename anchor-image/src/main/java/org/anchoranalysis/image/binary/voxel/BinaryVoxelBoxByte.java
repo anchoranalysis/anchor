@@ -38,19 +38,12 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 	
 	private BinaryValuesByte bvb;
 	
-	public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxelBox) {
-		super(voxelBox, BinaryValues.getDefault().duplicate() );
-		this.bvb = BinaryValues.getDefault().createByte();
-	}
-	
 	public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxelBox,
 			BinaryValues bv) {
 		super(voxelBox, new BinaryValues(bv) );
 		this.bvb = getBinaryValues().createByte();
 	}
 	
-	
-
 	@Override
 	public boolean isHigh(int x, int y, int z) {
 		int offset = getVoxelBox().extnt().offset(x, y);
