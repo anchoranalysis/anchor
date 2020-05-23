@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation.IAcceptIteration;
+import org.anchoranalysis.image.objmask.morph.accept.AcceptIterationConditon;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class MorphologicalErosion {
@@ -46,7 +46,7 @@ public class MorphologicalErosion {
 		boolean do3D,
 		int iterations,
 		boolean outsideAtThreshold,
-		Optional<IAcceptIteration> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
+		Optional<AcceptIterationConditon> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
 	) throws CreateException {
 		
 		ObjMask omOut;
@@ -92,28 +92,28 @@ public class MorphologicalErosion {
 	 * @throws CreateException
 	 */
 	public static BinaryVoxelBox<ByteBuffer> erode(
-			BinaryVoxelBox<ByteBuffer> bvb,
-			boolean do3D,
-			int iterations,
-			Optional<VoxelBox<ByteBuffer>> backgroundVb,
-			int minIntensityValue,
-			boolean outsideAtThreshold,
-			Optional<IAcceptIteration> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
-		) throws CreateException {
+		BinaryVoxelBox<ByteBuffer> bvb,
+		boolean do3D,
+		int iterations,
+		Optional<VoxelBox<ByteBuffer>> backgroundVb,
+		int minIntensityValue,
+		boolean outsideAtThreshold,
+		Optional<AcceptIterationConditon> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
+	) throws CreateException {
 
-			bvb.invert();
-			BinaryVoxelBox<ByteBuffer> dilated = MorphologicalDilation.dilate(
-				bvb,
-				do3D,
-				iterations,
-				backgroundVb,
-				minIntensityValue,
-				false,
-				outsideAtThreshold,
-				acceptConditionsDilation,
-				false
-			);
-			dilated.invert();
-			return dilated;
-		}
+		bvb.invert();
+		BinaryVoxelBox<ByteBuffer> dilated = MorphologicalDilation.dilate(
+			bvb,
+			do3D,
+			iterations,
+			backgroundVb,
+			minIntensityValue,
+			false,
+			outsideAtThreshold,
+			acceptConditionsDilation,
+			false
+		);
+		dilated.invert();
+		return dilated;
+	}
 }
