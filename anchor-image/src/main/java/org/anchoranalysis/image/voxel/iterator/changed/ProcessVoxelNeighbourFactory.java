@@ -32,10 +32,6 @@ public class ProcessVoxelNeighbourFactory {
 		);
 	}
 	
-	private static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute<T> process) {
-		return new WithinExtent<>(extnt, process);
-	}
-	
 	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjMask om, ProcessChangedPointAbsoluteMasked<T> process) {
 		return new WithinMask<>(process, om);
 	}
@@ -45,5 +41,9 @@ public class ProcessVoxelNeighbourFactory {
 			new WrapAbsoluteAsMasked<>(process),
 			om
 		);
+	}
+		
+	private static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute<T> process) {
+		return new WithinExtent<>(extnt, process);
 	}
 }
