@@ -40,26 +40,9 @@ import org.anchoranalysis.image.voxel.nghb.Nghb;
 import org.anchoranalysis.image.voxel.nghb.SmallNghb;
 import org.jgrapht.alg.util.UnionFind;
 
-class MergeWithNghbs {
+final class MergeWithNghbs {
 
-	private boolean do3D = false;
-	
-	private PointTester pt;
-	private ProcessVoxelNeighbour pointIterator;
-
-	private Nghb nghb;
-
-	// Without mask
-	public MergeWithNghbs( SlidingBuffer<IntBuffer> slidingIndex, UnionFind<Integer> unionIndex, boolean do3D, boolean bigNghb ) {
-		this.do3D = do3D;
-		
-		nghb = bigNghb ? new BigNghb() : new SmallNghb();
-		
-		this.pt = new PointTester(slidingIndex,unionIndex);
-		this.pointIterator = ProcessVoxelNeighbourFactory.withinExtent(slidingIndex.extnt(), pt);
-	}
-	
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Integer> {
 		
 		private int minLabel;
 		
@@ -102,17 +85,36 @@ class MergeWithNghbs {
 			return true;
 		}
 
-		public int getMinLabel() {
+		/** The minimum label in the neighbourhood */
+		@Override
+		public Integer collectResult() {
 			assert(minLabel!=0);
 			return minLabel;
 		}
 	}
+
+	private final boolean do3D;
 	
+	private final ProcessVoxelNeighbour<Integer> pointIterator;
+
+	private final Nghb nghb;
+
+	
+	// Without mask
+	public MergeWithNghbs( SlidingBuffer<IntBuffer> slidingIndex, UnionFind<Integer> unionIndex, boolean do3D, boolean bigNghb ) {
+		this.do3D = do3D;
+		
+		nghb = bigNghb ? new BigNghb() : new SmallNghb();
+		
+		this.pointIterator = ProcessVoxelNeighbourFactory.withinExtent(
+			slidingIndex.extnt(),
+			new PointTester(slidingIndex,unionIndex)
+		);
+	}
+			
 	// Calculates the minimum label of the neighbours, making sure to merge any different values
 	//   -1 indicates that there is no indexed neighbour
 	public int calcMinNghbLabel( Point3i pnt, int exstVal, int indxBuffer) {
-		this.pt.initSource(exstVal, indxBuffer);
-		IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointIterator);
-		return pt.getMinLabel();
+		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointIterator, exstVal, indxBuffer);
 	}
 }

@@ -4,7 +4,13 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer implements ProcessVoxelNeighbourAbsolute {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> result-type that is collected
+ */
+public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> implements ProcessVoxelNeighbourAbsolute<T> {
 
 	private final SlidingBuffer<?> rbb;
 	private final Extent extent;
@@ -13,19 +19,13 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer implements 
 	protected int zChange;
 	protected int sourceVal;	
 	private int sourceOffsetXY;
-	
-	
+		
 	protected ProcessVoxelNeighbourAbsoluteWithSlidingBuffer(SlidingBuffer<?> rbb) {
 		this.rbb = rbb;
 		this.extent = rbb.extnt();
 	}
-	
-	/**
-	 * The value and offset for the source point (around which we process neighbours)
-	 * 
-	 * @param sourceVal the value of the source pixel
-	 * @param sourceOffsetXY the offset of the source pixel in XY
-	 */
+
+	@Override
 	public void initSource(int sourceVal, int sourceOffsetXY) {
 		this.sourceOffsetXY = sourceOffsetXY;
 		this.sourceVal = sourceVal;
@@ -36,6 +36,9 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer implements 
 		bb = rbb.bufferRel(zChange);
 		this.zChange = zChange;
 	}
+	
+	/** Collects the result of the operation after processing neighbour pixels */
+	public abstract T collectResult();
 	
 	protected int offset(int xChange, int yChange) {
 		return extent.offset(xChange, yChange);
@@ -57,13 +60,5 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer implements 
 		return bb.getInt(
 			changedOffset(xChange,yChange)
 		);
-	}
-
-	protected int getzChange() {
-		return zChange;
-	}
-
-	protected int getSourceVal() {
-		return sourceVal;
 	}
 }

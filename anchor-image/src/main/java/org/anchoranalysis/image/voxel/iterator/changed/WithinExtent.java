@@ -34,25 +34,28 @@ import org.anchoranalysis.image.extent.Extent;
  * Only processes points within a certain extent
  * 
  * <p>Any points outside this extent are rejected.</p>
- * 
+ *
+ * @param <T> result-type that can be collected after processing
+ *  
  * @author Owen Feehan
  *
  */
-final class WithinExtent implements ProcessVoxelNeighbour {
+final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 
 	private final Extent extnt;
-	private final ProcessVoxelNeighbourAbsolute processAbsolutePoint;
+	private final ProcessVoxelNeighbourAbsolute<T> delegate;
 	
 	private Point3i pnt;
 	
-	public WithinExtent( Extent extnt, ProcessVoxelNeighbourAbsolute processAbsolutePoint ) {
+	public WithinExtent( Extent extnt, ProcessVoxelNeighbourAbsolute<T> processAbsolutePoint ) {
 		this.extnt = extnt;
-		this.processAbsolutePoint = processAbsolutePoint;
+		this.delegate = processAbsolutePoint;
 	}
 
 	@Override
-	public void initSource(Point3i pnt) {
+	public void initSource(Point3i pnt, int sourceVal, int sourceOffsetXY) {
 		this.pnt = pnt;
+		this.delegate.initSource(sourceVal, sourceOffsetXY);
 	}
 	
 	@Override
@@ -65,7 +68,7 @@ final class WithinExtent implements ProcessVoxelNeighbour {
 			return false;
 		}
 		
-		return processAbsolutePoint.processPoint(xChange, yChange, x1, y1);
+		return delegate.processPoint(xChange, yChange, x1, y1);
 	}
 
 	@Override
@@ -76,8 +79,12 @@ final class WithinExtent implements ProcessVoxelNeighbour {
 			return false;
 		}
 		
-		processAbsolutePoint.notifyChangeZ(zChange, z1);
+		delegate.notifyChangeZ(zChange, z1);
 		return true;
 	}
 
+	@Override
+	public T collectResult() {
+		return delegate.collectResult();
+	}
 }

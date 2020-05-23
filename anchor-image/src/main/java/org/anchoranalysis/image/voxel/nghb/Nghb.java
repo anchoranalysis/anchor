@@ -31,5 +31,5 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
 public abstract class Nghb {
 
-	public abstract void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour testNghb);
+	public abstract void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> testNghb);
 }

@@ -29,10 +29,22 @@ package org.anchoranalysis.image.voxel.iterator.changed;
 
 /** 
  * Processes a point that is a neighbour of another - includes global (absolute) coordinates for this point.
+ * 
+ * @param <T> result-type that can be collected after processing
  **/
-@FunctionalInterface
-public interface ProcessVoxelNeighbourAbsolute {
+public interface ProcessVoxelNeighbourAbsolute<T> {
 
+	/**
+	 * The value and offset for the source point (around which we process neighbours)
+	 * 
+	 * <p>This function should always be called before {@link processPoint}</p>
+	 * <p>It can be called repeatedly for different points (resetting state each time).</p>
+	 * 
+	 * @param sourceVal the value of the source pixel
+	 * @param sourceOffsetXY the offset of the source pixel in XY
+	 */
+	void initSource(int sourceVal, int sourceOffsetXY);
+	
 	/** 
 	 * Notifies the processor that there has been a change in z-coordinate
 	 * 
@@ -49,5 +61,8 @@ public interface ProcessVoxelNeighbourAbsolute {
 	 * 	@param y the cordinates for this point (the neighbouring point) in global (absolute) terms i.e. NOT relative to a bounding-box 
 	 **/
 	boolean processPoint(int xChange, int yChange, int x, int y);
+	
+	/** Collects the result of the operation after processing neighbour pixels */
+	public abstract T collectResult();
 	
 }

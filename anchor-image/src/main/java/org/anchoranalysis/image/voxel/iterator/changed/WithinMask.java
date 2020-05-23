@@ -33,25 +33,32 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-final class WithinMask implements ProcessVoxelNeighbour {
+/**
+ * Processes only neighbouring voxels that lie on a mask.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> result-type that can be collected after processing
+ */
+final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 
-	private final ProcessChangedPointAbsoluteMasked pointProcesser;
+	private final ProcessChangedPointAbsoluteMasked<T> delegate;
 	private final ObjMask om;
 	private final Extent extnt;
 	private final Point3i crnrMin;
 	
 	private Point3i pnt;
-	private Point3i rel;
+	private Point3i relativeToCrnr;
 	
 	// Current ByteBuffer for the object mask
 	private ByteBuffer bbOM;
 	private int z1;
 	private byte maskOffVal;
 	
-	private int offsetXYAtPnt;
+	private int maskOffsetXYAtPnt;
 	
-	public WithinMask(ProcessChangedPointAbsoluteMasked pointProcesser,	ObjMask om) {
-		this.pointProcesser = pointProcesser;
+	public WithinMask(ProcessChangedPointAbsoluteMasked<T> process,	ObjMask om) {
+		this.delegate = process;
 		this.om = om;
 		this.maskOffVal = om.getBinaryValuesByte().getOffByte();
 		this.extnt = om.getVoxelBox().extnt();
@@ -59,21 +66,20 @@ final class WithinMask implements ProcessVoxelNeighbour {
 	}
 	
 	@Override
-	public void initSource(Point3i pnt) {
+	public void initSource(Point3i pnt, int sourceVal, int sourceOffsetXY) {
 		this.pnt = pnt;
 		
-		rel = new Point3i(pnt);
-		rel.sub(crnrMin);
+		updateRel(pnt);
+		maskOffsetXYAtPnt = extnt.offsetSlice(relativeToCrnr);
 		
-		offsetXYAtPnt = extnt.offsetSlice(rel);
+		delegate.initSource(sourceVal, sourceOffsetXY);
 	}
-
 
 	@Override
 	public boolean notifyChangeZ(int zChange) {
 		z1 = pnt.getZ() + zChange;
 		
-		int relZ1 = rel.getZ() + zChange;
+		int relZ1 = relativeToCrnr.getZ() + zChange;
 		
 		if (relZ1<0 || relZ1>=extnt.getZ()) {
 			this.bbOM = null;
@@ -83,7 +89,7 @@ final class WithinMask implements ProcessVoxelNeighbour {
 		int zRel = z1-crnrMin.getZ();
 		this.bbOM = om.getVoxelBox().getPixelsForPlane(zRel).buffer();
 		
-		pointProcesser.notifyChangeZ(zChange, z1, bbOM);
+		delegate.notifyChangeZ(zChange, z1, bbOM);
 		return true;
 	}
 
@@ -93,8 +99,8 @@ final class WithinMask implements ProcessVoxelNeighbour {
 		int x1 = pnt.getX() + xChange;
 		int y1 = pnt.getY() + yChange;
 		
-		int relX1 = rel.getX() + xChange;
-		int relY1 = rel.getY() + yChange;
+		int relX1 = relativeToCrnr.getX() + xChange;
+		int relY1 = relativeToCrnr.getY() + yChange;
 		
 		if (relX1<0) {
 			return false;
@@ -112,13 +118,22 @@ final class WithinMask implements ProcessVoxelNeighbour {
 			return false;
 		}
 
-		int offset = offsetXYAtPnt + xChange + (yChange*extnt.getX());
+		int offset = maskOffsetXYAtPnt + xChange + (yChange*extnt.getX());
 		
 		if (bbOM.get(offset)==maskOffVal) {
 			return false;
 		}
 		
-		return pointProcesser.processPoint(xChange, yChange,x1,y1,offset);
+		return delegate.processPoint(xChange, yChange,x1,y1,offset);
 	}
 	
+	@Override
+	public T collectResult() {
+		return delegate.collectResult();
+	}
+	
+	private void updateRel(Point3i pnt) {
+		relativeToCrnr = new Point3i(pnt);
+		relativeToCrnr.sub(crnrMin);
+	}
 }

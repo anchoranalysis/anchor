@@ -132,18 +132,19 @@ public class IterateVoxels {
 	}
 	
 	/**
-	 * Iterate over each point in the neighbourhood of an existing point
+	 * Iterate over each point in the neighbourhood of an existing point - also setting the source of a delegate
 	 * 
 	 * @param sourcePnt the point to iterate over its neighbourhood
 	 * @param nghb a definition of what constitutes the neighbourhood
 	 * @param do3D whether to iterate in 2D or 3D
 	 * @param process is called for each voxel in the neighbourhood of the source-point.
+	 * @return the result after processing each point in the neighbourhood
 	 */
-	public static void callEachPointInNghb( Point3i sourcePnt, Nghb nghb, boolean do3D, ProcessVoxelNeighbour process) {
-		process.initSource(sourcePnt);
+	public static <T> T callEachPointInNghb( Point3i sourcePnt, Nghb nghb, boolean do3D, ProcessVoxelNeighbour<T> process, int sourceVal, int sourceOffsetXY) {
+		process.initSource(sourcePnt, sourceVal, sourceOffsetXY);
 		nghb.processAllPointsInNghb(do3D, process);
+		return process.collectResult();
 	}
-	
 		
 	private static ProcessVoxel requireIntersectionTwice( ProcessVoxel processor, ObjMask mask1, ObjMask mask2 ) {
 		ProcessVoxel inner = new RequireIntersectionWithMask(processor, mask2);

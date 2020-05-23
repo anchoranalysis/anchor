@@ -30,20 +30,25 @@ import org.anchoranalysis.core.geometry.Point3i;
 
 
 /**
- * Processes a point that is an neighbour of another
+ * Processes a point that is an neighbour of another.
+ * 
+ * <p>It assumes there is an associated sliding buffer containing voxel-values.</p> 
  * 
  * @author Owen Feehan
- *
+  @param <T> result-type that can be collected after processing
  */
-public interface ProcessVoxelNeighbour {
+public interface ProcessVoxelNeighbour<T> {
 
 	/**
 	 * Specify the source-point (of which all the processed points are neighbours)
 	 * 
 	 * <p>This must be called before any calls to {@link processPoint}</p>.
-	 * @param pntSource
+	 * 
+	 * @param pntSource the source point in global coordinates
+	 * @param sourceVal the value of the source pixel (in the associated sliding buffer)
+	 * @param sourceOffsetXY the offset of the source pixel in XY (in the associated sliding buffer)
 	 */
-	void initSource(Point3i pntSource);
+	void initSource(Point3i pntSource, int sourceVal, int sourceOffsetXY);
 	
 	/** 
 	 * Notifies the processor that there has been a change in z-coordinate
@@ -61,4 +66,6 @@ public interface ProcessVoxelNeighbour {
 	 **/
 	boolean processPoint(int xChange, int yChange);
 	
+	/** Collects the result of the operation after processing neighbour pixels */
+	public abstract T collectResult();
 }

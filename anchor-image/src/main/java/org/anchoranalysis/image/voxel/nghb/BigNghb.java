@@ -45,7 +45,7 @@ public class BigNghb extends Nghb {
 	}
 	
 	@Override
-	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour testNghb) {
+	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> testNghb) {
 		
 		if (do3D) {
 			

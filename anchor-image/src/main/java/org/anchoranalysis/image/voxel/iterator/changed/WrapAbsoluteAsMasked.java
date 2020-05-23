@@ -2,23 +2,37 @@ package org.anchoranalysis.image.voxel.iterator.changed;
 
 import java.nio.ByteBuffer;
 
-/** Wraps a {@link ProcessVoxelNeighbourAbsolute} as a {@link ProcessChangedPointAbsoluteMasked} */
-public final class WrapAbsoluteAsMasked implements ProcessChangedPointAbsoluteMasked {
+/** 
+ * Wraps a {@link ProcessVoxelNeighbourAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
+ *
+ * @param <T> result-type that can be collected after processing
+ **/
+public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
 
-	private final ProcessVoxelNeighbourAbsolute delegate;
+	private final ProcessVoxelNeighbourAbsolute<T> delegate;
 	
-	public WrapAbsoluteAsMasked(ProcessVoxelNeighbourAbsolute delegate) {
+	public WrapAbsoluteAsMasked(ProcessVoxelNeighbourAbsolute<T> delegate) {
 		super();
 		this.delegate = delegate;
 	}
 
+	@Override
+	public void initSource(int sourceVal, int sourceOffsetXY) {
+		delegate.initSource(sourceVal, sourceOffsetXY);
+	}
+	
+	@Override
+	public void notifyChangeZ(int zChange, int z, ByteBuffer objectMaskBuffer) {
+		delegate.notifyChangeZ(zChange, z);
+	}
+	
 	@Override
 	public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
 		return delegate.processPoint(xChange, yChange, x1, y1);
 	}
 
 	@Override
-	public void notifyChangeZ(int zChange, int z, ByteBuffer objectMaskBuffer) {
-		delegate.notifyChangeZ(zChange, z);
+	public T collectResult() {
+		return delegate.collectResult();
 	}
 }

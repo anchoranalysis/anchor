@@ -17,7 +17,7 @@ public class ProcessVoxelNeighbourFactory {
 	 * @param process a process which will be wrapped inside a restriction
 	 * @return a new process with a restriction on the existing process
 	 */
-	public static ProcessVoxelNeighbour within(Optional<ObjMask> containingMask, Extent extntFallback, ProcessVoxelNeighbourAbsolute process) {
+	public static<T> ProcessVoxelNeighbour<T> within(Optional<ObjMask> containingMask, Extent extntFallback, ProcessVoxelNeighbourAbsolute<T> process) {
 		return containingMask.map( mask->
 			withinMask(mask, process)
 		).orElseGet( ()->
@@ -25,17 +25,17 @@ public class ProcessVoxelNeighbourFactory {
 		);
 	}
 	
-	public static ProcessVoxelNeighbour withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute process) {
-		return new WithinExtent(extnt, process);
+	public static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute<T> process) {
+		return new WithinExtent<>(extnt, process);
 	}
 	
-	public static ProcessVoxelNeighbour withinMask(ObjMask om, ProcessChangedPointAbsoluteMasked process) {
-		return new WithinMask(process, om);
+	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjMask om, ProcessChangedPointAbsoluteMasked<T> process) {
+		return new WithinMask<>(process, om);
 	}
 	
-	public static ProcessVoxelNeighbour withinMask(ObjMask om, ProcessVoxelNeighbourAbsolute process) {
-		return new WithinMask(
-			new WrapAbsoluteAsMasked(process),
+	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjMask om, ProcessVoxelNeighbourAbsolute<T> process) {
+		return new WithinMask<>(
+			new WrapAbsoluteAsMasked<>(process),
 			om
 		);
 	}
