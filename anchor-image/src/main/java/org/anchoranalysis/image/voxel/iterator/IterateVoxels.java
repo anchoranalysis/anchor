@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -113,6 +114,25 @@ public class IterateVoxels {
 		);
 	}
 	
+	
+	/**
+	 * Iterate over each voxel that is located on a mask - with offsets
+	 *
+	 * <p>This is identical to the other {@link callEachPoint} but adds offsets, and is optimized for this circumstance.</p>
+	 *  
+	 * @param mask the mask that is used as a condition on what voxels to iterate
+	 * @param process process is called for each voxel with that satisfies the conditions using GLOBAL coordinates.
+	 */
+	public static void callEachPoint( BinaryChnl mask, ProcessVoxelOffsets process ) {
+		// Treat it as one giant object box. This will involve some additions and subtractions of 0 during the processing of voxels
+		// but after some quick emperical checks, it doesn't seem to make a performance difference. Probably the JVM is smart enough
+		// to optimize away these redundant calcualations.
+		callEachPoint(
+			new ObjMask(mask.binaryVoxelBox()),
+			mask.binaryVoxelBox().extnt(),
+			process
+		);
+	}
 
 	/**
 	 * Iterate over each voxel that is located on a mask - with offsets
@@ -120,6 +140,7 @@ public class IterateVoxels {
 	 * <p>This is identical to the other {@link callEachPoint} but adds offsets, and is optimized for this circumstance.</p>
 	 *  
 	 * @param mask the mask that is used as a condition on what voxels to iterate
+	 * @param extent the scene-size
 	 * @param process process is called for each voxel with that satisfies the conditions using GLOBAL coordinates.
 	 */
 	public static void callEachPoint( ObjMask mask, Extent extent, ProcessVoxelOffsets process ) {
@@ -162,7 +183,7 @@ public class IterateVoxels {
 			}
 		}
 	}
-
+	
 	/**
 	 * Iterate over each voxel in an {@link Extent}
 	 * 
