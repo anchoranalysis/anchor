@@ -32,14 +32,14 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramCreator;
 
 public class PixelPartHistogram extends PixelPart<Histogram> {
 
 	private Histogram combined;
 	private List<Histogram> list;
 	
-	public PixelPartHistogram( int numSlices, HistogramFactory histogramFactory ) {
+	public PixelPartHistogram( int numSlices, HistogramCreator histogramFactory ) {
 		
 		combined = histogramFactory.create();
 		

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
@@ -142,7 +142,7 @@ public class Chnl {
 	public String toString() {
 		Histogram h;
 		try {
-			h = HistogramFactoryUtilities.create(this);
+			h = HistogramFactory.create(this);
 		} catch (CreateException e) {
 			return String.format("Error: %s",e);
 		}

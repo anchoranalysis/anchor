@@ -30,12 +30,12 @@ import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartHistogram;
  */
 
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.histogram.HistogramFactorySimple;
+import org.anchoranalysis.image.histogram.HistogramCreator;
+import org.anchoranalysis.image.histogram.HistogramCreatorSimple;
 
 public class PixelPartFactoryHistogram extends PixelPartFactory<Histogram> {
 	
-	private HistogramFactory factorySimple = new HistogramFactorySimple();
+	private HistogramCreator factorySimple = new HistogramCreatorSimple();
 	
 	@Override
 	public PixelPart<Histogram> create(int numSlices) {

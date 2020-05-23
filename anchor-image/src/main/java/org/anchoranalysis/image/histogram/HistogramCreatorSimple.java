@@ -27,7 +27,7 @@ package org.anchoranalysis.image.histogram;
  */
 
 
-public class HistogramFactorySimple extends HistogramFactory {
+public class HistogramCreatorSimple extends HistogramCreator {
 
 	@Override
 	public Histogram create() {

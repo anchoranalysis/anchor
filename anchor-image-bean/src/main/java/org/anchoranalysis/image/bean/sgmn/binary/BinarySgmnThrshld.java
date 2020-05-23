@@ -65,7 +65,7 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
 		try {
-			return thresholder.threshold(voxelBox, bvOut, Optional.empty());
+			return thresholder.threshold(voxelBox, bvOut, Optional.empty(), Optional.empty());
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
@@ -92,14 +92,15 @@ public class BinarySgmnThrshld extends BinarySgmn {
 		try {		
 			return thresholder.threshold(
 				voxelBox,
-				new ObjMask(bboxE,mask.getVoxelBox(),mask.getBinaryValuesByte()),
 				bvOut,
-				params.getIntensityHistogram()
+				params.getIntensityHistogram(),
+				Optional.of(
+					new ObjMask(bboxE,mask.getVoxelBox(),mask.getBinaryValuesByte())		
+				)
 			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
-					
 	}
 
 	public Thresholder getThresholder() {

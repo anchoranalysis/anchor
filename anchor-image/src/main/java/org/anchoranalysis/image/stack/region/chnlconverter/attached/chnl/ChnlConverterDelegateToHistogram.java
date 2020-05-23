@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
@@ -50,7 +50,7 @@ public class ChnlConverterDelegateToHistogram<T extends Buffer> extends ChnlConv
 	public void attachObject(Chnl obj) throws OperationFailedException {
 
 		try {
-			Histogram hist = HistogramFactoryUtilities.create(obj);
+			Histogram hist = HistogramFactory.create(obj);
 			delegate.attachObject(hist);
 			
 		} catch (CreateException e) {

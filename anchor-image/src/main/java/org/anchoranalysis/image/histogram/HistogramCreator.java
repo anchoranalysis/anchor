@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.objmask;
+package org.anchoranalysis.image.histogram;
 
-/*-
+/*
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,28 +26,9 @@ package org.anchoranalysis.image.objmask;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
 
-public class ObjMaskWithHistogram {
-	private ObjMask objMask;
-	private Histogram histogram;
-	
-	public ObjMaskWithHistogram(ObjMask objMask, Chnl chnl) throws CreateException {
-		super();
-		this.objMask = objMask;
-		this.histogram = HistogramFactory.create( chnl, objMask );
-		
-	}
+// Creates a histogram of max size 255
+public abstract class HistogramCreator {
 
-	public ObjMask getObjMask() {
-		return objMask;
-	}
-
-	public Histogram getHistogram() {
-		return histogram;
-	}
-
+	public abstract Histogram create();
 }
