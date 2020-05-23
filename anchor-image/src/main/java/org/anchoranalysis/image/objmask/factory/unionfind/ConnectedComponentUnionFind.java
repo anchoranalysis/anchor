@@ -45,7 +45,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.jgrapht.alg.util.UnionFind;
 
 public class ConnectedComponentUnionFind {
@@ -80,11 +80,11 @@ public class ConnectedComponentUnionFind {
 			omc,
 			minNumberVoxels,
 			bigNghb,
-			new PopulateFromByte()
+			new ReadWriteByte()
 		);
 		return omc;
 	}
-
+	
 	/**
 	 * Converts a binary-voxel-box (int) into connected components.
 	 * 
@@ -99,30 +99,33 @@ public class ConnectedComponentUnionFind {
 			omc,
 			minNumberVoxels,
 			bigNghb,
-			new PopulateFromInt()
+			new ReadWriteInt()
 		);
 		return omc;
 	}
 	
-	private static <T extends Buffer> void visitRegion(
+	private <T extends Buffer> void visitRegion(
 		BinaryVoxelBox<T> visited,
 		ObjMaskCollection omc,
 		int minNumberVoxels,
 		boolean bigNghb,
-		PopulateIndexFromBinary<T> populateIndex
+		BufferReadWrite<T> bufferReaderWriter
 	) throws OperationFailedException {
 		
 		UnionFind<Integer> unionIndex = new UnionFind<>( new HashSet<Integer>() );
-	
 		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
-		
-		SlidingBuffer<IntBuffer> slidingIndex = new SlidingBuffer<>( indexBuffer );
-		slidingIndex.init();
 
-		int maxBigIDAdded = populateIndex.populateIndexFromBinary(
+		PopulateIndexProcessor<T> process = new PopulateIndexProcessor<>(
 			visited,
 			indexBuffer,
-			slidingIndex,
+			createMergeWithNghbs(indexBuffer, unionIndex),
+			bufferReaderWriter
+		);
+		
+		int maxBigIDAdded = populateIndexFromBinary(
+			visited,
+			process,
+			indexBuffer,
 			unionIndex,
 			bigNghb
 		);
@@ -134,6 +137,29 @@ public class ConnectedComponentUnionFind {
 			omc,
 			minNumberVoxels
 		);
+	}
+	
+	private MergeWithNghbs createMergeWithNghbs(VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
+		return new MergeWithNghbs(
+			indexBuffer,
+			unionIndex,
+			indexBuffer.extnt().getZ() > 1,
+			bigNghb
+		);
+	}
+	
+	private static <T extends Buffer> int populateIndexFromBinary(
+		BinaryVoxelBox<T> visited,
+		PopulateIndexProcessor<T> process,
+		VoxelBox<IntBuffer> indexBuffer,
+		UnionFind<Integer> unionIndex,
+		boolean bigNghb
+	) throws OperationFailedException {
+		IterateVoxels.callEachPoint(
+			visited.extnt(),
+			process
+		);
+		return process.getCount() - 1;
 	}
 	
 	// Assumes unionFind begins at 1

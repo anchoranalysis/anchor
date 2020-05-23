@@ -14,7 +14,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
  * @author Owen Feehan
  *
  */
-class RequireIntersectionWithMask implements ProcessVoxel {
+final class RequireIntersectionWithMask implements ProcessVoxel {
 
 	private final ProcessVoxel process;
 	
@@ -48,11 +48,16 @@ class RequireIntersectionWithMask implements ProcessVoxel {
 	
 	@Override
 	public void process(Point3i pnt) {
+		// We skip if our containing mask doesn't include it
+		if (isPointOnMask(pnt)) {
+			process.process(pnt);
+		}
+	}
+	
+	private boolean isPointOnMask(Point3i pnt) {
 		int offsetMask = extent.offset(pnt.getX()- crnrMin.getX(), pnt.getY() - crnrMin.getY());
 		
 		// We skip if our containing mask doesn't include it
-		if (bbMask.get(offsetMask)==byteOn) {
-			process.process(pnt);
-		}
+		return (bbMask.get(offsetMask)==byteOn);
 	}
 }

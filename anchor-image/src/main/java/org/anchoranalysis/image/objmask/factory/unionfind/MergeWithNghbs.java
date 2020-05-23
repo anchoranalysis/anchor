@@ -30,6 +30,7 @@ package org.anchoranalysis.image.objmask.factory.unionfind;
 import java.nio.IntBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
@@ -58,6 +59,8 @@ final class MergeWithNghbs {
 			super.initSource(sourceVal, sourceOffsetXY);
 			minLabel = -1;
 		}
+		
+		
 
 		@Override
 		public boolean processPoint( int xChange, int yChange, int x1, int y1) {
@@ -94,15 +97,17 @@ final class MergeWithNghbs {
 	}
 
 	private final boolean do3D;
-	
 	private final ProcessVoxelNeighbour<Integer> process;
-
 	private final Nghb nghb;
+	private final SlidingBuffer<IntBuffer> slidingIndex;
+	private final UnionFind<Integer> unionIndex;
 
 	
 	// Without mask
-	public MergeWithNghbs( SlidingBuffer<IntBuffer> slidingIndex, UnionFind<Integer> unionIndex, boolean do3D, boolean bigNghb ) {
+	public MergeWithNghbs(VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex, boolean do3D, boolean bigNghb ) {
 		this.do3D = do3D;
+		this.slidingIndex = new SlidingBuffer<>(indexBuffer);
+		this.unionIndex = unionIndex;
 		
 		nghb = bigNghb ? new BigNghb() : new SmallNghb();
 		
@@ -115,5 +120,13 @@ final class MergeWithNghbs {
 	//   -1 indicates that there is no indexed neighbour
 	public int calcMinNghbLabel( Point3i pnt, int exstVal, int indxBuffer) {
 		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, exstVal, indxBuffer);
+	}
+
+	public void shift() {
+		slidingIndex.shift();
+	}
+
+	public void addElement(Integer element) {
+		unionIndex.addElement(element);
 	}
 }

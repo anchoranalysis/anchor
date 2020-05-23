@@ -1,5 +1,6 @@
 package org.anchoranalysis.image.voxel.iterator;
 
+import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
@@ -49,9 +50,9 @@ public class IterateVoxels {
 	 * @param mask an optional mask that is used as a condition on what voxels to iterate
 	 * @param process process is called for each voxel (on the entire {@link SlidingBuffer} or on the object-mask depending) using GLOBAL coordinates.
 	 */
-	public static void callEachPoint( SlidingBuffer<?> buffer, Optional<ObjMask> mask, ProcessVoxel process ) {
+	public static void callEachPoint( Optional<ObjMask> mask, SlidingBuffer<?> buffer, ProcessVoxel process ) {
 		
-		buffer.init(
+		buffer.seek(
 			mask.map( om->
 				om.getBoundingBox().getCrnrMin().getZ()
 			).orElse(0)
@@ -80,6 +81,25 @@ public class IterateVoxels {
 		}
 	}
 	
+	
+	/**
+	 * Iterate over each voxel that is located on a mask if it exists, otherwise iterate over the entire extent - with offsets.
+	 * 
+	 * <p>This is identical to {@link callEachPoint} but adds offsets.</p>
+	 */
+	public static void callEachPoint( Optional<ObjMask> mask, Extent extent, ProcessVoxelOffsets process ) {
+		// Note the offsets must be added before any additional restriction like a mask, to make sure they are calculate for EVERY process.
+		// Therefore we {@link AddOffsets} must be interested as the top-most level in the processing chain
+		// (i.e. {@link AddOffsets} must delegate to {@link RequireIntersectionWithMask} but not the other way round.
+		if (mask.isPresent()) {
+			callEachPoint(mask.get(), extent, process);
+		} else {
+			callEachPoint(extent, process);
+		}
+	}
+	
+	
+	
 	/**
 	 * Iterate over each voxel that is located on a mask
 	 * 
@@ -91,6 +111,56 @@ public class IterateVoxels {
 			mask.getBoundingBox(),
 			new RequireIntersectionWithMask(process, mask)
 		);
+	}
+	
+
+	/**
+	 * Iterate over each voxel that is located on a mask - with offsets
+	 *
+	 * <p>This is identical to the other {@link callEachPoint} but adds offsets, and is optimized for this circumstance.</p>
+	 *  
+	 * @param mask the mask that is used as a condition on what voxels to iterate
+	 * @param process process is called for each voxel with that satisfies the conditions using GLOBAL coordinates.
+	 */
+	public static void callEachPoint( ObjMask mask, Extent extent, ProcessVoxelOffsets process ) {
+
+		// This is re-implemented in full, as reusing existing code with {@link AddOffsets} and
+		//  {@link RequireIntersectionWithMask} was not inling using default JVM settings
+		// Based on unit-tests, it seems to perform better emperically, even with the new Point3i() adding to the heap.
+		
+		Extent extentMask = mask.getVoxelBox().extnt();
+		Point3i crnrMin = mask.getBoundingBox().getCrnrMin();
+		byte valueOn = mask.getBinaryValuesByte().getOnByte();
+		
+		for (int z=0; z<extentMask.getZ(); z++) {
+
+			// For 3d we need to translate the global index back to local
+			int z1 = z + crnrMin.getZ();
+			
+			process.notifyChangeZ(z1);
+			
+			ByteBuffer bbOM = mask.getVoxelBox().getPixelsForPlane(z).buffer();
+			
+			int zOffset = extent.offset(0, 0, z1);
+			
+			for (int y=0; y<extentMask.getY(); y++) {
+				for (int x=0; x<extentMask.getX(); x++) {
+
+					if (bbOM.get()==valueOn) {
+						int x1 = x + crnrMin.getX();
+						int y1 = y + crnrMin.getY();
+ 
+						int offset = extent.offset(x1, y1);
+						
+						process.process(
+							new Point3i(x1,y1,z1),
+							zOffset + offset,
+							offset
+						);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -105,6 +175,21 @@ public class IterateVoxels {
 			process
 		);
 	}
+	
+	
+	/**
+	 * Iterate over each voxel in an {@link Extent} - with offsets
+	 * 
+	 * @param extent the extent to be iterated over
+	 * @param process process is called for each voxel inside the extent using the same coordinates as the extent.
+	 */
+	public static void callEachPoint( Extent extent, ProcessVoxelOffsets process ) {
+		callEachPoint(
+			extent,
+			new AddOffsets(process, extent)
+		);
+	}
+	
 	
 	/**
 	 * Iterate over each voxel in a bounding-box
@@ -130,6 +215,7 @@ public class IterateVoxels {
 			}
 		}
 	}
+		
 	
 	/**
 	 * Iterate over each point in the neighbourhood of an existing point - also setting the source of a delegate

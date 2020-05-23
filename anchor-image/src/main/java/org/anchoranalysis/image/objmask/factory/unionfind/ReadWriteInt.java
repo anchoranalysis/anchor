@@ -31,7 +31,7 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
-final class PopulateFromInt extends PopulateIndexFromBinary<IntBuffer> {
+final class ReadWriteInt extends BufferReadWrite<IntBuffer> {
 
 	@Override
 	protected boolean isBufferOn(IntBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
