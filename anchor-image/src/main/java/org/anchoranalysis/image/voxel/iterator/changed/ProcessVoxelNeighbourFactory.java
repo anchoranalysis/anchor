@@ -24,8 +24,15 @@ public class ProcessVoxelNeighbourFactory {
 			withinExtent(extntFallback, process)
 		);
 	}
+		
+	public static <T> ProcessVoxelNeighbour<T> withinExtent(ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> process) {
+		return withinExtent(
+			process.getExtent(),
+			process
+		);
+	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute<T> process) {
+	private static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute<T> process) {
 		return new WithinExtent<>(extnt, process);
 	}
 	

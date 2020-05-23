@@ -61,4 +61,8 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> implemen
 			changedOffset(xChange,yChange)
 		);
 	}
+
+	public Extent getExtent() {
+		return extent;
+	}
 }

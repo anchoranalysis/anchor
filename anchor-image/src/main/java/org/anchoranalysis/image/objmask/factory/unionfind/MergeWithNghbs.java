@@ -95,7 +95,7 @@ final class MergeWithNghbs {
 
 	private final boolean do3D;
 	
-	private final ProcessVoxelNeighbour<Integer> pointIterator;
+	private final ProcessVoxelNeighbour<Integer> process;
 
 	private final Nghb nghb;
 
@@ -106,8 +106,7 @@ final class MergeWithNghbs {
 		
 		nghb = bigNghb ? new BigNghb() : new SmallNghb();
 		
-		this.pointIterator = ProcessVoxelNeighbourFactory.withinExtent(
-			slidingIndex.extnt(),
+		this.process = ProcessVoxelNeighbourFactory.withinExtent(
 			new PointTester(slidingIndex,unionIndex)
 		);
 	}
@@ -115,6 +114,6 @@ final class MergeWithNghbs {
 	// Calculates the minimum label of the neighbours, making sure to merge any different values
 	//   -1 indicates that there is no indexed neighbour
 	public int calcMinNghbLabel( Point3i pnt, int exstVal, int indxBuffer) {
-		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointIterator, exstVal, indxBuffer);
+		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, exstVal, indxBuffer);
 	}
 }
