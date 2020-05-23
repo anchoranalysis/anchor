@@ -52,13 +52,11 @@ public class ByteConverter {
 	}
     
     public static long unsignedIntToLong( int v ) {
-    	assert false;
-    	return 0;
+    	return (long) v;
     }
     
     public static int unsignedIntToInt( int v ) {
-    	assert false;
-    	return 0;
+    	return v;
     }
     
         

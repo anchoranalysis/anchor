@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.iterator.changed;
 
+import org.anchoranalysis.core.geometry.Point3i;
+
 /*
  * #%L
  * anchor-image
@@ -27,16 +29,36 @@ package org.anchoranalysis.image.voxel.iterator.changed;
  */
 
 
-/** 
- * Processes a point which has been translated (changed) relative to another point - and includes global coordinates
- **/
-@FunctionalInterface
-public interface ProcessChangedPointAbsolute {
+/**
+ * Processes a point that is an neighbour of another
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface ProcessVoxelNeighbour {
 
-	/** Notifies the processor that there has been a change in z-coordinate */
-	default void notifyChangeZ( int zChange, int z ) {}
+	/**
+	 * Specify the source-point (of which all the processed points are neighbours)
+	 * 
+	 * <p>This must be called before any calls to {@link processPoint}</p>.
+	 * @param pntSource
+	 */
+	void initSource(Point3i pntSource);
 	
-	/** Processes a particular point */
-	boolean processPoint(int xChange, int yChange, int x1, int y1);
+	/** 
+	 * Notifies the processor that there has been a change in z-coordinate
+	 * 
+	 *  @param zChange the change in the Z-dimension to reach this neighbour relative to the source coordinate
+	 *  @return true if processing should continue on this slice, or false if processing should stop for this slice
+	 **/
+	default boolean notifyChangeZ( int zChange ) { return true; }
+	
+	/** 
+	 * Processes a particular point
+	 * 
+	 * @param zChange the change in X-dimension to reach this neighbour relative to the source coordinate
+	 * @param yChange the change in Y-dimension to reach this neighbour relative to the source coordinate
+	 **/
+	boolean processPoint(int xChange, int yChange);
 	
 }

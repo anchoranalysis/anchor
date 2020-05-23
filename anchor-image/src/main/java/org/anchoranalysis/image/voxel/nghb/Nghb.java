@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.voxel.nghb;
 
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
 /*
  * #%L
@@ -31,5 +31,5 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPoint;
 
 public abstract class Nghb {
 
-	public abstract void processAllPointsInNghb(boolean do3D, ProcessChangedPoint testNghb);
+	public abstract void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour testNghb);
 }

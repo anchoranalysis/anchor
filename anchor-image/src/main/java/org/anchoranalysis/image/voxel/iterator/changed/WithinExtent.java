@@ -38,21 +38,21 @@ import org.anchoranalysis.image.extent.Extent;
  * @author Owen Feehan
  *
  */
-final class WithinExtent implements InitializableProcessChangedPoint {
+final class WithinExtent implements ProcessVoxelNeighbour {
 
 	private final Extent extnt;
-	private final ProcessChangedPointAbsolute processAbsolutePoint;
+	private final ProcessVoxelNeighbourAbsolute processAbsolutePoint;
 	
 	private Point3i pnt;
 	
-	public WithinExtent( Extent extnt, ProcessChangedPointAbsolute processAbsolutePoint ) {
+	public WithinExtent( Extent extnt, ProcessVoxelNeighbourAbsolute processAbsolutePoint ) {
 		this.extnt = extnt;
 		this.processAbsolutePoint = processAbsolutePoint;
 	}
 
 	@Override
-	public void initPnt(Point3i pnt) {
-		this.pnt = pnt;			
+	public void initSource(Point3i pnt) {
+		this.pnt = pnt;
 	}
 	
 	@Override

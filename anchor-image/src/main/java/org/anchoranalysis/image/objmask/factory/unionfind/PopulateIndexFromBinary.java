@@ -107,6 +107,7 @@ abstract class PopulateIndexFromBinary<T extends Buffer> {
 					
 					int nghbLab = mergeWithNgbs.calcMinNghbLabel(
 						new Point3i(x, y, z),
+						0,
 						offset
 					);
 					if (nghbLab==-1) {

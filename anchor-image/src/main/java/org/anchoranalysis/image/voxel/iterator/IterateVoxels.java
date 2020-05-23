@@ -7,7 +7,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 
 /**
@@ -29,7 +29,7 @@ public class IterateVoxels {
 	 * @param secondMask an optional second-mask that can be a further condition
 	 * @param process is called for each voxel with that satisfies the conditions using GLOBAL co-ordinates for each voxel.
 	 **/
-	public static void overMasks( ObjMask firstMask, Optional<ObjMask> secondMask, ProcessPoint process ) {
+	public static void overMasks( ObjMask firstMask, Optional<ObjMask> secondMask, ProcessVoxel process ) {
 		if (secondMask.isPresent()) {
 			BoundingBox boxIntersection = firstMask.getBoundingBox().intersectCreateNewNoClip(secondMask.get().getBoundingBox());
 			callEachPoint(
@@ -49,7 +49,7 @@ public class IterateVoxels {
 	 * @param mask an optional mask that is used as a condition on what voxels to iterate
 	 * @param process process is called for each voxel (on the entire {@link SlidingBuffer} or on the object-mask depending) using GLOBAL coordinates.
 	 */
-	public static void callEachPoint( SlidingBuffer<?> buffer, Optional<ObjMask> mask, ProcessPoint process ) {
+	public static void callEachPoint( SlidingBuffer<?> buffer, Optional<ObjMask> mask, ProcessVoxel process ) {
 		
 		buffer.init(
 			mask.map( om->
@@ -60,7 +60,7 @@ public class IterateVoxels {
 		callEachPoint(
 			mask,
 			buffer.extnt(),
-			new ProcessPointSlide(buffer, process)
+			new ProcessVoxelSlide(buffer, process)
 		);
 	}
 	
@@ -72,7 +72,7 @@ public class IterateVoxels {
 	 * @param extent if mask isn't defined, then all the voxels in this {@link Extent} are iterated over instead
 	 * @param process process is called for each voxel (on the entire {@link Extent} or on the object-mask depending) using GLOBAL coordinates.
 	 */
-	public static void callEachPoint( Optional<ObjMask> mask, Extent extent, ProcessPoint process ) {
+	public static void callEachPoint( Optional<ObjMask> mask, Extent extent, ProcessVoxel process ) {
 		if (mask.isPresent()) {
 			callEachPoint(mask.get(), process);
 		} else {
@@ -86,7 +86,7 @@ public class IterateVoxels {
 	 * @param mask the mask that is used as a condition on what voxels to iterate
 	 * @param process process is called for each voxel with that satisfies the conditions using GLOBAL coordinates.
 	 */
-	public static void callEachPoint( ObjMask mask, ProcessPoint process ) {
+	public static void callEachPoint( ObjMask mask, ProcessVoxel process ) {
 		callEachPoint(
 			mask.getBoundingBox(),
 			new RequireIntersectionWithMask(process, mask)
@@ -99,7 +99,7 @@ public class IterateVoxels {
 	 * @param extent the extent to be iterated over
 	 * @param process process is called for each voxel inside the extent using the same coordinates as the extent.
 	 */
-	public static void callEachPoint( Extent extent, ProcessPoint process ) {
+	public static void callEachPoint( Extent extent, ProcessVoxel process ) {
 		callEachPoint(
 			new BoundingBox(extent),
 			process
@@ -112,7 +112,7 @@ public class IterateVoxels {
 	 * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels within these bounds
 	 * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
 	 */
-	public static void callEachPoint( BoundingBox box, ProcessPoint process ) {
+	public static void callEachPoint( BoundingBox box, ProcessVoxel process ) {
 		
 		Point3i crnrMin = box.getCrnrMin();
 		Point3i crnrMax = box.calcCrnrMax();
@@ -134,19 +134,19 @@ public class IterateVoxels {
 	/**
 	 * Iterate over each point in the neighbourhood of an existing point
 	 * 
-	 * @param pnt the point to iterate over its neighbourhood
+	 * @param sourcePnt the point to iterate over its neighbourhood
 	 * @param nghb a definition of what constitutes the neighbourhood
 	 * @param do3D whether to iterate in 2D or 3D
-	 * @param process is called for each voxel within the bounding-box using relative CHANGED coordinates.
+	 * @param process is called for each voxel in the neighbourhood of the source-point.
 	 */
-	public static void callEachPointInNghb( Point3i pnt, Nghb nghb, boolean do3D, InitializableProcessChangedPoint process) {
-		process.initPnt(pnt);
+	public static void callEachPointInNghb( Point3i sourcePnt, Nghb nghb, boolean do3D, ProcessVoxelNeighbour process) {
+		process.initSource(sourcePnt);
 		nghb.processAllPointsInNghb(do3D, process);
 	}
 	
 		
-	private static ProcessPoint requireIntersectionTwice( ProcessPoint processor, ObjMask mask1, ObjMask mask2 ) {
-		ProcessPoint inner = new RequireIntersectionWithMask(processor, mask2);
+	private static ProcessVoxel requireIntersectionTwice( ProcessVoxel processor, ObjMask mask1, ObjMask mask2 ) {
+		ProcessVoxel inner = new RequireIntersectionWithMask(processor, mask2);
 		return new RequireIntersectionWithMask(inner, mask1);
 	}
 }

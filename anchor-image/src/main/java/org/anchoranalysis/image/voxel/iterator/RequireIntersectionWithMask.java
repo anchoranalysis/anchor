@@ -14,9 +14,9 @@ import org.anchoranalysis.image.objmask.ObjMask;
  * @author Owen Feehan
  *
  */
-class RequireIntersectionWithMask implements ProcessPoint {
+class RequireIntersectionWithMask implements ProcessVoxel {
 
-	private final ProcessPoint process;
+	private final ProcessVoxel process;
 	
 	private final ObjMask mask;
 	private final Extent extent;
@@ -31,7 +31,7 @@ class RequireIntersectionWithMask implements ProcessPoint {
 	 * @param process the processor to call on the region of the mask
 	 * @param mask the mask that defines the "on" region which is processed only.
 	 */
-	public RequireIntersectionWithMask(ProcessPoint process, ObjMask mask) {
+	public RequireIntersectionWithMask(ProcessVoxel process, ObjMask mask) {
 		super();
 		this.process = process;
 		this.mask = mask;

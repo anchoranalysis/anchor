@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-final class WithinMask implements InitializableProcessChangedPoint {
+final class WithinMask implements ProcessVoxelNeighbour {
 
 	private final ProcessChangedPointAbsoluteMasked pointProcesser;
 	private final ObjMask om;
@@ -59,7 +59,7 @@ final class WithinMask implements InitializableProcessChangedPoint {
 	}
 	
 	@Override
-	public void initPnt(Point3i pnt) {
+	public void initSource(Point3i pnt) {
 		this.pnt = pnt;
 		
 		rel = new Point3i(pnt);

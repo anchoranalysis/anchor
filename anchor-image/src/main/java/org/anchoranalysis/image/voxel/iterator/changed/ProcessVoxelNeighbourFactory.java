@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class ProcessChangedPointFactory {
+public class ProcessVoxelNeighbourFactory {
 
-	private ProcessChangedPointFactory() {}
+	private ProcessVoxelNeighbourFactory() {}
 	
 	/**
 	 * Within either a mask or an extent (as a fallback)
@@ -17,7 +17,7 @@ public class ProcessChangedPointFactory {
 	 * @param process a process which will be wrapped inside a restriction
 	 * @return a new process with a restriction on the existing process
 	 */
-	public static InitializableProcessChangedPoint within(Optional<ObjMask> containingMask, Extent extntFallback, ProcessChangedPointAbsolute process) {
+	public static ProcessVoxelNeighbour within(Optional<ObjMask> containingMask, Extent extntFallback, ProcessVoxelNeighbourAbsolute process) {
 		return containingMask.map( mask->
 			withinMask(mask, process)
 		).orElseGet( ()->
@@ -25,15 +25,15 @@ public class ProcessChangedPointFactory {
 		);
 	}
 	
-	public static InitializableProcessChangedPoint withinExtent(Extent extnt, ProcessChangedPointAbsolute process) {
+	public static ProcessVoxelNeighbour withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute process) {
 		return new WithinExtent(extnt, process);
 	}
 	
-	public static InitializableProcessChangedPoint withinMask(ObjMask om, ProcessChangedPointAbsoluteMasked process) {
+	public static ProcessVoxelNeighbour withinMask(ObjMask om, ProcessChangedPointAbsoluteMasked process) {
 		return new WithinMask(process, om);
 	}
 	
-	public static InitializableProcessChangedPoint withinMask(ObjMask om, ProcessChangedPointAbsolute process) {
+	public static ProcessVoxelNeighbour withinMask(ObjMask om, ProcessVoxelNeighbourAbsolute process) {
 		return new WithinMask(
 			new WrapAbsoluteAsMasked(process),
 			om

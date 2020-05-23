@@ -9,7 +9,7 @@ import org.anchoranalysis.core.geometry.Point3i;
  *
  */
 @FunctionalInterface
-public interface ProcessPoint {
+public interface ProcessVoxel {
 	
 	/** Notifies the processor that there has been a change in z-coordinate */
 	default void notifyChangeZ(int z) {}

@@ -9,7 +9,7 @@ import org.anchoranalysis.core.geometry.Point3i;
  * @author Owen Feehan
  *
  */
-class AggregatePoints implements ProcessPoint {
+class AggregatePoints implements ProcessVoxel {
 
 	private RunningSumPoint runningSum = new RunningSumPoint();
 	

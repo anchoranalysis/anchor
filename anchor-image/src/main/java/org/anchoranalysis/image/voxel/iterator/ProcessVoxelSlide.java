@@ -9,12 +9,12 @@ import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
  * @author Owen Feehan
  *
  */
-final class ProcessPointSlide implements ProcessPoint {
+final class ProcessVoxelSlide implements ProcessVoxel {
 
 	private final SlidingBuffer<?> buffer;
-	private final ProcessPoint process;
+	private final ProcessVoxel process;
 	
-	public ProcessPointSlide(SlidingBuffer<?> buffer, ProcessPoint process) {
+	public ProcessVoxelSlide(SlidingBuffer<?> buffer, ProcessVoxel process) {
 		this.process = process;
 		this.buffer = buffer;
 	}
