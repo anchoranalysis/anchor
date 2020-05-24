@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
-public class GeneratorSequenceNonIncrementalWriter<T> implements IGeneratorSequenceNonIncremental<T> {
+public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequenceNonIncremental<T> {
 
 	private BoundOutputManager parentOutputManager = null;
 	

@@ -39,10 +39,6 @@ public class FirstSecondOrderStatistic {
 	 */
 	private double scale;
 	
-	public FirstSecondOrderStatistic() {
-		
-	}
-
 	public double getMean() {
 		return mean;
 	}

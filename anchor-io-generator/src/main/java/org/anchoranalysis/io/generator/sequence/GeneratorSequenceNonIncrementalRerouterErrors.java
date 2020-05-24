@@ -33,12 +33,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GeneratorSequenceNonIncrementalRerouterErrors<T> {
 
-	private IGeneratorSequenceNonIncremental<T> delegate;
+	private GeneratorSequenceNonIncremental<T> delegate;
 
 	private ErrorReporter errorReporter;
 	
 	public GeneratorSequenceNonIncrementalRerouterErrors(
-			IGeneratorSequenceNonIncremental<T> delegate, ErrorReporter errorReporter) {
+			GeneratorSequenceNonIncremental<T> delegate, ErrorReporter errorReporter) {
 		super();
 		this.delegate = delegate;
 		this.errorReporter = errorReporter;

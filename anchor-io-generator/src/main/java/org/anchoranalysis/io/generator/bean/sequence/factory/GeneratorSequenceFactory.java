@@ -29,12 +29,12 @@ package org.anchoranalysis.io.generator.bean.sequence.factory;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public abstract class GeneratorSequenceFactory extends AnchorBean<GeneratorSequenceFactory> {
 
-	public abstract <GeneratorType> IGeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
+	public abstract <GeneratorType> GeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
 			BoundOutputManagerRouteErrors outputManager,
 			String outputName,
 			IterableObjectGenerator<GeneratorType, Stack> generator		

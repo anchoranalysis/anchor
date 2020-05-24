@@ -44,20 +44,17 @@ public class ExperimentFileFolder extends FolderWriteWithPath {
 	 */
 	private static final long serialVersionUID = 4923049916867897251L;
 
-	public ExperimentFileFolder() {
-		
-	}
-
 	@Override
 	public void write(String outputName,
 			ManifestDescription manifestDescription, Path outFilePath,
 			String index) {
+		// NOTHING TO DO
 	}
 
 	@Override
 	public void findFile(List<FileWrite> foundList, Match<FileWrite> match,
 			boolean recursive) {
-		
+		// NOTHING TO DO		
 	}
 
 	@Override

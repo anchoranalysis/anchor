@@ -42,7 +42,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 // A folder contains a list of subfolders, contained files varies by implementation
-public abstract class FolderWrite extends SequencedFolder implements IWriteOperationRecorder, Serializable {
+public abstract class FolderWrite implements SequencedFolder, IWriteOperationRecorder, Serializable {
 
 	/**
 	 * 

@@ -49,7 +49,7 @@ public class MarkLineSegment extends Mark {
 	private double distToLineForInside = 0.5;
 	// END mark state
 	
-	private DistCalcToLine distCalcToLine = new DistCalcToLine();
+	private transient DistCalcToLine distCalcToLine = new DistCalcToLine();
 	
 	
 	// This isn't very efficient for lines, as we can analytically determine

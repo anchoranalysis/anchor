@@ -44,6 +44,7 @@ public class PixelPartFactoryHistogram extends PixelPartFactory<Histogram> {
 
 	@Override
 	public void addUnused(Histogram part) {
+		// NOTHING TO DO
 	}
 
 }

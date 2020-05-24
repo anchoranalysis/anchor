@@ -27,8 +27,6 @@ package org.anchoranalysis.anchor.mpp.pair;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.anchor.overlay.id.Identifiable;
 
 /**
@@ -36,12 +34,8 @@ import org.anchoranalysis.anchor.overlay.id.Identifiable;
  *
  * @param <T> item-type
  */
-public class Pair<T extends Identifiable> implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7867852145124991678L;
+public class Pair<T extends Identifiable> {
+
 	private final T source;
 	private final T destination;
 	

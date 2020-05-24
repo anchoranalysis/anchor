@@ -107,12 +107,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
 	@Override
 	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures) throws InitException {
-		
-		
-
+		// NOTHING TO DO
 	}
-	
-	
+		
 	private void addEntireScene( BinaryValuesByte bvb ) {
 		
 		Extent e = binaryImageChnl.getDimensions().getExtnt();

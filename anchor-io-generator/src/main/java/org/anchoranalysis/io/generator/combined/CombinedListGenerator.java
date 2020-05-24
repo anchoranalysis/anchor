@@ -47,10 +47,6 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 
 	private ArrayList<NameValue<Generator>> list = new ArrayList<>();
 	
-	public CombinedListGenerator() {
-		
-	}
-	
 	@Override
 	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
 

@@ -64,7 +64,7 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 	 */
 	private static final long serialVersionUID = -2678275834893266874L;
 
-	private static final int MatNumDim = 2;
+	private static final int NUM_DIM_MATRIX = 2;
 	
 	private static byte FLAG_SUBMARK_NONE = flagForNoRegion();
 	private static byte FLAG_SUBMARK_REGION0 = flagForRegion( SUBMARK_INSIDE, SUBMARK_CORE );
@@ -100,7 +100,7 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 		
 		this.radii = new Point2d();
 		
-		ellipsoidCalculator = new EllipsoidMatrixCalculator(MatNumDim);
+		ellipsoidCalculator = new EllipsoidMatrixCalculator(NUM_DIM_MATRIX);
 	}
 	
 	// Copy Constructor

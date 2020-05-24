@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest.deserializer.bundle;
 
 import java.io.Serializable;
 
-public class BundleItem<T> implements Serializable {
+public class BundleItem<T extends Serializable> implements Serializable {
 	/**
 	 * 
 	 */

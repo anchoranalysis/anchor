@@ -32,9 +32,9 @@ import java.util.List;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
-public abstract class SequencedFolder {
+public interface SequencedFolder {
 	
-	public abstract void findFileFromIndex( List<FileWrite> foundList, String index, boolean recursive );
+	void findFileFromIndex( List<FileWrite> foundList, String index, boolean recursive );
 	
-	public abstract SequenceType getAssociatedSequence();
+	SequenceType getAssociatedSequence();
 }

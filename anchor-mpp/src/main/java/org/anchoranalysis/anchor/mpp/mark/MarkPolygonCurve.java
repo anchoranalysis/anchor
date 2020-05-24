@@ -46,7 +46,7 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 	// Applied the same in all 3 dimensions, maybe we need to change this
 	private double distThresh = 0.7;
 	
-	private DistCalcToLine dctl = new DistCalcToLine();
+	private transient DistCalcToLine dctl = new DistCalcToLine();
 	
 	@Override
 	public byte evalPntInside(Point3d pnt) {

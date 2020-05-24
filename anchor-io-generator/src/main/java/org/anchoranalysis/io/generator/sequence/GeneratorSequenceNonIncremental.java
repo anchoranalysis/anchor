@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.generator.sequence.addableflush;
+package org.anchoranalysis.io.generator.sequence;
 
 /*-
  * #%L
@@ -26,26 +26,19 @@ package org.anchoranalysis.io.generator.sequence.addableflush;
  * #L%
  */
 
-import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceIncremental;
+import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// Wraps a GeneratorSequenceWriter to the implement the IAddableFlush interface
-public class GeneratorSequenceIncrementalWrapper<T> implements IAddableFlush<T> {
+public interface GeneratorSequenceNonIncremental<T> {
 
-	private IGeneratorSequenceIncremental<T> generatorSequence;
+	// totalNumAdd indicates in advance, how many times add will be called
+	// If this is unknown, it should be set to -1
+	// Not all writers support additions when this is unknown
+	void start( SequenceType sequenceType, int totalNumAdd ) throws OutputWriteFailedException;
 	
-	public GeneratorSequenceIncrementalWrapper( IGeneratorSequenceIncremental<T> generatorSequence ) {
-		
-		this.generatorSequence = generatorSequence;
-	}
+	void add( T element, String index ) throws OutputWriteFailedException;
 	
-	@Override
-	public void add( T element ) throws OutputWriteFailedException {
-		generatorSequence.add(element);
-	}
-	
-	@Override
-	public void flush() {
-		
-	}
+	void end() throws OutputWriteFailedException;
+
+	void setSuppressSubfolder(boolean suppressSubfolder);
 }

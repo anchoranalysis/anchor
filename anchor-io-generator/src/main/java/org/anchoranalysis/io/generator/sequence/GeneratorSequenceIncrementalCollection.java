@@ -33,7 +33,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class GeneratorSequenceIncrementalCollection<T,C> implements IGeneratorSequenceIncremental<T> {
+public class GeneratorSequenceIncrementalCollection<T,C> implements GeneratorSequenceIncremental<T> {
 	
 	private IterableObjectGenerator<T,C> iterableGenerator;
 	private Collection<C> collection;
