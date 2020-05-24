@@ -47,9 +47,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
  */
 public class ExtendObjsInto3DMask {
 	
-	private ExtendObjsInto3DMask() {
-		
-	}
+	private ExtendObjsInto3DMask() {}
 	
 	public static ObjMaskCollection extendObjs( ObjMaskCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
 		
