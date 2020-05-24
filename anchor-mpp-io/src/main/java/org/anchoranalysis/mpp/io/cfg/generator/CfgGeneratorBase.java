@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.io.cfg.generator;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp-io
@@ -106,8 +108,10 @@ public abstract class CfgGeneratorBase extends RasterGenerator implements Iterab
 	}
 	
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", manifestDescriptionFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", manifestDescriptionFunction)
+		);
 	}
 
 	@Override

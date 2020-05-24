@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.serialized;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -59,7 +60,9 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 		
 		ManifestDescription manifestDescription = new ManifestDescription("serializedBundle", manifestDescriptionFunction);
 		
-		outputGenerator = new ObjectOutputStreamGenerator<>( manifestDescriptionFunction );
+		outputGenerator = new ObjectOutputStreamGenerator<>(
+			Optional.of(manifestDescriptionFunction)
+		);
 		
 		generatorSequence = new GeneratorSequenceIncrementalWriter<>(
 				parentOutputManager,
@@ -105,7 +108,10 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 		
 		if (generatorSequence.isOn()) {
 		
-			Generator bundleParametersGenerator = new ObjectOutputStreamGenerator<>( bundleParameters,  "bundleParameters" );
+			Generator bundleParametersGenerator = new ObjectOutputStreamGenerator<>(
+				bundleParameters,
+				Optional.of("bundleParameters")
+			);
 			
 			BoundOutputManager subfolderOutputManager = generatorSequence.getSubFolderOutputManager().orElseThrow( ()->
 				new OutputWriteFailedException("No subfolder output-manager exists")
@@ -121,10 +127,13 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 	}
 	
 	@Override
-	public FileType[] getFileTypes( OutputWriteSettings outputWriteSettings ) {
-		return new FileType[] {
-			new FileType( outputGenerator.createManifestDescription(), outputGenerator.getFileExtension(outputWriteSettings) )
-		};
+	public Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings ) {
+		Optional<ManifestDescription> manifestDescription = outputGenerator.createManifestDescription(); 
+		return manifestDescription.map(md ->
+			new FileType[] {
+					new FileType(md, outputGenerator.getFileExtension(outputWriteSettings) )
+			}
+		);
 	}
 	
 	@Override

@@ -27,6 +27,7 @@ package org.anchoranalysis.image.io.objs;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -119,8 +120,10 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("hdf5", "objMaskCollection");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("hdf5", "objMaskCollection")
+		);
 	}
 	
 	@Override

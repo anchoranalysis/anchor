@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.collection;
 
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
@@ -77,7 +78,7 @@ public class SubfolderGenerator<T,CollectionType extends Collection<T>> extends 
 	}
 
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 		return generator.getGenerator().getFileTypes(outputWriteSettings);
 	}
 

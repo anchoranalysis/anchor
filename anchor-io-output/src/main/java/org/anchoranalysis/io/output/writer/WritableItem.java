@@ -40,11 +40,27 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public interface WritableItem {
 
+	/**
+	 * Writes a non-indexable output (an output that isn't part of a collection of other similar items)
+	 * 
+	 * @param outputNameStyle
+	 * @param outputManager
+	 * @throws OutputWriteFailedException
+	 */
 	public abstract void write(
 		OutputNameStyle outputNameStyle,
 		BoundOutputManager outputManager
 	) throws OutputWriteFailedException;
 	
+	/**
+	 * Writes an indexable output (many outputs of the same type, uniquely identified by an index)
+	 * 
+	 * @param outputNameStyle
+	 * @param index
+	 * @param outputManager
+	 * @return
+	 * @throws OutputWriteFailedException
+	 */
 	public abstract int write(
 		IndexableOutputNameStyle outputNameStyle,
 		String index,

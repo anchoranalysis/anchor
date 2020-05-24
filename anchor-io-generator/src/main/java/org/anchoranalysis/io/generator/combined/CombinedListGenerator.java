@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.combined;
 
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
@@ -46,18 +47,26 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 	private ArrayList<NameValue<Generator>> list = new ArrayList<>();
 	
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 
 		ArrayList<FileType> all = new ArrayList<>();
 		
 		for( NameValue<Generator> ni : list) {
-			FileType[] arr = ni.getValue().getFileTypes(outputWriteSettings);
-			for (int i=0; i<arr.length; i++) {
-				all.add( arr[i] );
-			}
+			Optional<FileType[]> arr = ni.getValue().getFileTypes(outputWriteSettings);
+			arr.ifPresent( a-> {
+				for (int i=0; i<a.length; i++) {
+					all.add( a[i] );
+				}
+			});
 		}
 		
-		return all.toArray( new FileType[]{} );
+		if (all.size()>0) {
+			return Optional.of(
+				all.toArray( new FileType[]{} )
+			);
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	@Override

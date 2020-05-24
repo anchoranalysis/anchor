@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -41,8 +43,10 @@ public class StackOperationGenerator extends RasterGenerator implements Iterable
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", manifestFunction)
+		);
 	}
 
 

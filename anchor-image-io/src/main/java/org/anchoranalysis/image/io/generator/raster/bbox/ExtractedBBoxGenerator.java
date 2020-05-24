@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.bbox;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-io
@@ -112,8 +114,10 @@ public class ExtractedBBoxGenerator extends RasterGenerator implements IterableO
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", manifestFunction)
+		);
 	}
 
 	@Override

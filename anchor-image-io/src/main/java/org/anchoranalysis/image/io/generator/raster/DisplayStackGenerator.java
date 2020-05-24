@@ -27,6 +27,7 @@ package org.anchoranalysis.image.io.generator.raster;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -91,7 +92,7 @@ public class DisplayStackGenerator extends ObjectGenerator<DisplayStack> impleme
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
+	public Optional<ManifestDescription> createManifestDescription() {
 		return delegate.createManifestDescription();
 	}
 

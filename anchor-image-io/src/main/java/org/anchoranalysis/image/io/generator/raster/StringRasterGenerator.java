@@ -34,6 +34,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -129,8 +130,10 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 		}
 		
 		@Override
-		public ManifestDescription createManifestDescription() {
-			return new ManifestDescription("raster", "text");
+		public Optional<ManifestDescription> createManifestDescription() {
+			return Optional.of(
+				new ManifestDescription("raster", "text")
+			);
 		}
 		
 		@Override

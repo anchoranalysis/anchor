@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.csv;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -44,7 +46,9 @@ public abstract class CSVGenerator extends SingleFileTypeGenerator {
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("csv", manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("csv", manifestFunction)
+		);
 	}
 }

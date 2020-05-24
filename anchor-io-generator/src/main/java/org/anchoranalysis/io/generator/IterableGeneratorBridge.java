@@ -2,6 +2,8 @@ package org.anchoranalysis.io.generator;
 
 
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -105,7 +107,7 @@ public class IterableGeneratorBridge<S,T> extends Generator implements IterableG
 	}
 
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 		return delegate.getGenerator().getFileTypes(outputWriteSettings);
 	}
 }

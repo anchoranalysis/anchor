@@ -27,6 +27,7 @@ package org.anchoranalysis.io.generator.serialized;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -37,14 +38,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public abstract class SerializedIterableGenerator<T> extends SerializedGenerator implements IterableGenerator<T> {
 
 	private T element = null;
-	private String manifestFunction;
+	private Optional<String> manifestFunction;
 	
-	public SerializedIterableGenerator( String manifestFunction ) {
+	public SerializedIterableGenerator( Optional<String> manifestFunction ) {
 		super();
 		this.manifestFunction = manifestFunction;
 	}
 	
-	public SerializedIterableGenerator(T element, String manifestFunction) {
+	public SerializedIterableGenerator(T element, Optional<String> manifestFunction) {
 		super();
 		this.element = element;
 		this.manifestFunction = manifestFunction;
@@ -70,8 +71,10 @@ public abstract class SerializedIterableGenerator<T> extends SerializedGenerator
 	}
 	
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("serialized", manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return manifestFunction.map( mf->
+			new ManifestDescription("serialized", mf)
+		);
 	}
 	
 	/** Writes a particular element to a file */

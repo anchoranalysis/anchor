@@ -66,7 +66,7 @@ public class WriterRouterErrors {
 			return Optional.empty();
 		}			
 	}
-
+	
 	public <T> void writeSubfolder(String outputName,
 			Operation<WritableItem,OutputWriteFailedException> collectionGenerator)	{
 		try {
@@ -103,7 +103,7 @@ public class WriterRouterErrors {
 			errorReporter.recordError( BoundOutputManagerRouteErrors.class, e);
 		}						
 	}
-
+	
 	public void write(String outputName, Operation<WritableItem,OutputWriteFailedException> generator) {
 		try {
 			delegate.write(outputName, generator);

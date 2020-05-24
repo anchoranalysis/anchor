@@ -2,6 +2,8 @@ package org.anchoranalysis.image.io.generator.raster.obj;
 
 
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-io
@@ -63,7 +65,9 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 		
 		// We create an iterable bridge from ObjMask to BoundingBox
 		IterableGeneratorBridge<ObjMask, BoundingBox> generatorBBox = new IterableGeneratorBridge<>(
-				new ObjectOutputStreamGenerator<>("BoundingBox"),
+				new ObjectOutputStreamGenerator<>(
+					Optional.of("BoundingBox")
+				),
 				sourceObject -> sourceObject.getBoundingBox() 
 		);
 		

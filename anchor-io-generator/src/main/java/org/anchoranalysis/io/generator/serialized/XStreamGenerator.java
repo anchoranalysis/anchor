@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -42,11 +43,11 @@ import com.thoughtworks.xstream.XStream;
 
 public class XStreamGenerator<T> extends SerializedIterableGenerator<T> {
 	
-	public XStreamGenerator( String manifestFunction ) {
+	public XStreamGenerator(Optional<String> manifestFunction) {
 		super(manifestFunction);
 	}
 	
-	public XStreamGenerator(T rootObject, String manifestFunction) {
+	public XStreamGenerator(T rootObject, Optional<String> manifestFunction) {
 		super(rootObject, manifestFunction);
 	}
 

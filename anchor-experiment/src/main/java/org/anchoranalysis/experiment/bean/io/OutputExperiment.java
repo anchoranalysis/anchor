@@ -42,9 +42,6 @@ import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
-import org.anchoranalysis.io.generator.serialized.SerializedGenerator;
-import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -119,10 +116,6 @@ public abstract class OutputExperiment extends Experiment {
 			
 			execExperiment( params );
 			
-			writeManifests(
-				params.getOutputManager(),
-				params.getExperimentalManifest()
-			);
 			writeExecutionTime(params.getOutputManager(), stopWatchExperiment);
 			
 			// Outputs after processing
@@ -197,22 +190,6 @@ public abstract class OutputExperiment extends Experiment {
 		rootOutputManager.getWriterCheckIfAllowed().write(
 			outputNameConfigCopy,
 			() -> new XMLConfigurationWrapperGenerator( getXMLConfiguration() )
-		);
-	}
-	
-	/** Maybe writes the experimental-manifest to the file-system in two different formats */
-	private void writeManifests(BoundOutputManagerRouteErrors rootOutputManager, Optional<ManifestRecorder> experimentalManifest) {
-		experimentalManifest.ifPresent( manifest-> {
-			writeManifestIfAllowed(rootOutputManager, new XStreamGenerator<Object>( manifest, "ManifestRecorder") );
-			writeManifestIfAllowed(rootOutputManager, new ObjectOutputStreamGenerator<>( manifest, "ManifestRecorder") );
-			
-		});
-	}
-	
-	private void writeManifestIfAllowed( BoundOutputManagerRouteErrors rootOutputManager, SerializedGenerator generator ) {
-		rootOutputManager.getWriterCheckIfAllowed().write(
-			outputNameManifestExperiment,
-			() -> generator
 		);
 	}
 	

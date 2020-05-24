@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-io
@@ -34,6 +36,6 @@ import org.anchoranalysis.io.output.writer.WritableItem;
 
 public abstract class Generator implements WritableItem {
 	
-	public abstract FileType[] getFileTypes( OutputWriteSettings outputWriteSettings );
+	public abstract Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings );
 }
 

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.bean.generator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -92,8 +93,10 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 		}
 
 		@Override
-		public ManifestDescription createManifestDescription() {
-			return new ManifestDescription("raster", "combinedNRG");
+		public Optional<ManifestDescription> createManifestDescription() {
+			return Optional.of(
+				new ManifestDescription("raster", "combinedNRG")
+			);
 		}
 
 		@Override

@@ -27,6 +27,7 @@ package org.anchoranalysis.image.io.generator.raster.obj;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -91,8 +92,10 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "maskChnl");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "maskChnl")
+		);
 	}
 
 	@Override

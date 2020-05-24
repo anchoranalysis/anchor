@@ -93,9 +93,9 @@ public class SubfolderWriter extends SequenceWriter {
 		}
 		
 		if (checkIfAllowed) {
-			this.subFolderOutputManager.get().getWriterCheckIfAllowed().write(outputNameStyle, generator, index );
+			this.subFolderOutputManager.get().getWriterCheckIfAllowed().write(outputNameStyle, generator, index);
 		} else {
-			this.subFolderOutputManager.get().getWriterAlwaysAllowed().write( outputNameStyle, generator, index );
+			this.subFolderOutputManager.get().getWriterAlwaysAllowed().write( outputNameStyle, generator, index);
 		}
 	}
 	

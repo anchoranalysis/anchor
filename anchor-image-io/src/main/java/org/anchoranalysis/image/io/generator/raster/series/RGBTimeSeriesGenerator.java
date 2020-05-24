@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.generator.raster.series;
 
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
@@ -65,7 +66,9 @@ public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "rgbTimeSeries");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "rgbTimeSeries")
+		);
 	}
 }

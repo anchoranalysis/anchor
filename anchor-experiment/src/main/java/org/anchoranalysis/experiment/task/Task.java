@@ -232,12 +232,19 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 
 		writeIfAllowed.write(
 			outputNameManifest,
-			() -> new XStreamGenerator<Object>( params.getManifest(), "ManifestRecorder")
+			() -> new XStreamGenerator<Object>(
+				params.getManifest(),
+				Optional.empty())	// Don't put into the manifest
 		);
 		writeIfAllowed.write(
 			outputNameManifest,
-			() -> new ObjectOutputStreamGenerator<>( params.getManifest(), "ManifestRecorder" )
+			() -> new ObjectOutputStreamGenerator<>(
+				params.getManifest(),
+				Optional.empty()	// Don't put into the manifest
+			)
 		);
+		
+		// This is written after the manfiests are already written, so it won't exist in the manifest
 		writeIfAllowed.write(
 			outputNameExecutionTime,
 			() -> new StringGenerator( Long.toString(stopWatchFile.getTime()) )

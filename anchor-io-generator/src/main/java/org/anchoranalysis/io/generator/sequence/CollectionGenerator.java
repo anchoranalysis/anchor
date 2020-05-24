@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.sequence;
 
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
@@ -112,7 +113,7 @@ public class CollectionGenerator<T> extends Generator implements IterableGenerat
 	}
 
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 		return generator.getGenerator().getFileTypes(outputWriteSettings);
 	}
 

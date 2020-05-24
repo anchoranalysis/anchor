@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-io
@@ -92,8 +94,10 @@ public class StackGenerator extends RasterGenerator implements IterableObjectGen
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", manifestFunction)
+		);
 	}
 
 

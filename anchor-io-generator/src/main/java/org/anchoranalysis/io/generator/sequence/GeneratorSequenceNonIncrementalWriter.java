@@ -77,7 +77,12 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequen
 	private void initOnFirstAdd() throws InitException {
 		
 		// For now we only take the first FileType from the generator, we will have to modify this in future
-		FileType[] fileTypes = iterableGenerator.getGenerator().getFileTypes( this.parentOutputManager.getOutputWriteSettings() );
+		FileType[] fileTypes = iterableGenerator
+				.getGenerator()
+				.getFileTypes( this.parentOutputManager.getOutputWriteSettings() )
+				.orElseThrow( ()->
+					new InitException("This operation requires file-types to be defined by the generator")
+				);
 				
 		this.sequenceWriter.init(fileTypes, this.sequenceType, this.suppressSubfolder );
 	}

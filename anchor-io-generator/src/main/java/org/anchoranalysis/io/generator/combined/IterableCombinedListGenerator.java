@@ -28,6 +28,7 @@ package org.anchoranalysis.io.generator.combined;
 
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
@@ -67,7 +68,7 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	}
 
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 		return delegate.getFileTypes(outputWriteSettings);
 	}
 
