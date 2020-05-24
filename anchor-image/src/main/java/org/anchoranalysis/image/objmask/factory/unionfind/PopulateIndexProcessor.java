@@ -8,18 +8,16 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelOffsets;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
-class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelOffsets {
+class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
 	
-	private BinaryVoxelBox<T> visited;
 	private VoxelBox<IntBuffer> indexBuffer;
 	private MergeWithNghbs mergeWithNgbs;
 	private BinaryValues bv;
 	private BinaryValuesByte bvb;
 	private final BufferReadWrite<T> bufferReaderWriter;
 	
-	private T bbBinary;
 	private IntBuffer bbIndex;
 	private int count=1;
 	
@@ -29,7 +27,6 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelOffsets {
 		MergeWithNghbs mergeWithNgbs,
 		BufferReadWrite<T> bufferReaderWriter
 	) {
-		this.visited = visited;
 		this.indexBuffer = indexBuffer;
 		this.mergeWithNgbs = mergeWithNgbs;
 		this.bufferReaderWriter = bufferReaderWriter;
@@ -40,7 +37,6 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelOffsets {
 	
 	@Override
 	public void notifyChangeZ(int z) {
-		bbBinary = visited.getVoxelBox().getPixelsForPlane(z).buffer();
 		bbIndex = indexBuffer.getPixelsForPlane(z).buffer();
 		if (z!=0) {
 			mergeWithNgbs.shift();
@@ -48,8 +44,8 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelOffsets {
 	}		
 	
 	@Override
-	public void process(Point3i pnt, int offset3d, int offsetSlice) {
-		if (bufferReaderWriter.isBufferOn(bbBinary,offsetSlice,bv,bvb) && bbIndex.get(offsetSlice)==0) {
+	public void process(Point3i pnt, T buffer, int offsetSlice) {
+		if (bufferReaderWriter.isBufferOn(buffer,offsetSlice,bv,bvb) && bbIndex.get(offsetSlice)==0) {
 			
 			int nghbLab = mergeWithNgbs.calcMinNghbLabel(
 				pnt,
@@ -57,7 +53,7 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelOffsets {
 				offsetSlice
 			);
 			if (nghbLab==-1) {
-				bufferReaderWriter.putBufferCnt(bbBinary, offsetSlice, count);
+				bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
 				bbIndex.put(offsetSlice, count);
 				mergeWithNgbs.addElement(count);
 				count++;

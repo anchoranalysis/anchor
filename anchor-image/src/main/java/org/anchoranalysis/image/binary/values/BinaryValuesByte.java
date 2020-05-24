@@ -42,8 +42,8 @@ public final class BinaryValuesByte implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private byte offByte = 0;
-	private byte onByte = 1;
+	private final byte offByte;
+	private final byte onByte;
 	
 	private static final BinaryValuesByte defaultBB = new BinaryValuesByte( (byte) 0, (byte) -1 );
 	

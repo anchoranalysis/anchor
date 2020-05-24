@@ -89,7 +89,7 @@ public class ImageDim implements Serializable {
 		res.scaleXY(sf);
 	}
 	
-	public int getVolume() {
+	public long getVolume() {
 		return extent.getVolume();
 	}
 	

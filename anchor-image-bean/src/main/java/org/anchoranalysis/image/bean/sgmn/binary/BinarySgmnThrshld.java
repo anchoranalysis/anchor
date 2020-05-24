@@ -35,12 +35,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class BinarySgmnThrshld extends BinarySgmn {
 	
@@ -48,61 +45,24 @@ public class BinarySgmnThrshld extends BinarySgmn {
 	@BeanField
 	private Thresholder thresholder;
 	// END PARAMETERS
-
-
 	
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
-		if (mask.isPresent()) {
-			return sgmnWithMask(voxelBox, params, mask.get());
-		} else {
-			return sgmnWithoutMask(voxelBox, params);
-		}
-	}
-	
-	private BinaryVoxelBox<ByteBuffer> sgmnWithoutMask(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
-		
+
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
 		try {
-			return thresholder.threshold(voxelBox, bvOut, Optional.empty(), Optional.empty());
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-	}
-	
-	private BinaryVoxelBox<ByteBuffer> sgmnWithMask(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask mask) throws SgmnFailedException {
-		BoundingBox bboxE = new BoundingBox(mask.getVoxelBox().extnt());
-		
-		// We just want to return the area under the objMask
-		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.instance().getByte().create( mask.getVoxelBox().extnt() );
-		VoxelBoxWrapper maskDupWrap = new VoxelBoxWrapper(maskDup);
-		
-		voxelBox.copyPixelsToCheckMask(
-			mask.getBoundingBox(),
-			maskDupWrap,
-			bboxE,
-			mask.getVoxelBox(),
-			mask.getBinaryValuesByte()
-		);
-		
-		// As we are thresholding a mask
-		
-		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
-		try {		
 			return thresholder.threshold(
 				voxelBox,
 				bvOut,
-				params.getIntensityHistogram(),
-				Optional.of(
-					new ObjMask(bboxE,mask.getVoxelBox(),mask.getBinaryValuesByte())		
-				)
+				mask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
+				mask
 			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 	}
-
+	
 	public Thresholder getThresholder() {
 		return thresholder;
 	}

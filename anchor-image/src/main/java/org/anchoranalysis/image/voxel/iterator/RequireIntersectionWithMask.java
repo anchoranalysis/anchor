@@ -47,6 +47,11 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	}
 	
 	@Override
+	public void notifyChangeY(int y) {
+		process.notifyChangeY(y);
+	}
+	
+	@Override
 	public void process(Point3i pnt) {
 		// We skip if our containing mask doesn't include it
 		if (isPointOnMask(pnt)) {
@@ -55,7 +60,10 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	}
 	
 	private boolean isPointOnMask(Point3i pnt) {
-		int offsetMask = extent.offset(pnt.getX()- crnrMin.getX(), pnt.getY() - crnrMin.getY());
+		int offsetMask = extent.offset(
+			pnt.getX() - crnrMin.getX(),
+			pnt.getY() - crnrMin.getY()
+		);
 		
 		// We skip if our containing mask doesn't include it
 		return (bbMask.get(offsetMask)==byteOn);

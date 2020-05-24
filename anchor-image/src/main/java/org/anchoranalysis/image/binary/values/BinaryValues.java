@@ -32,10 +32,10 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class BinaryValues {
+public final class BinaryValues {
 
-	private int offInt;
-	private int onInt;
+	private final int offInt;
+	private final int onInt;
 	
 	private static final BinaryValues defaultBB = new BinaryValues( 0, 255 );
 	

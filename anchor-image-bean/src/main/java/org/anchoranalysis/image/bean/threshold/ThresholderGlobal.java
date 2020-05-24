@@ -58,21 +58,23 @@ public class ThresholderGlobal extends Thresholder {
 		return thresholdForHistogram(
 			histogramBuffer(inputBuffer, histogram, mask),
 			inputBuffer,
-			bvOut
+			bvOut,
+			mask
 		);
 	}
 	
 	private BinaryVoxelBox<ByteBuffer> thresholdForHistogram(
 		Histogram hist,
 		VoxelBoxWrapper inputBuffer,
-		BinaryValuesByte bvOut
+		BinaryValuesByte bvOut,
+		Optional<ObjMask> mask
 	) throws OperationFailedException {
-		// We use the histogram if there is one
+		
 		int thresholdVal = calculateLevel.calculateLevel(hist);
 		assert(thresholdVal>=0);
 		
 		try {
-			return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, false );
+			return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, mask, false);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}		

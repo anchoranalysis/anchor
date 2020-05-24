@@ -97,7 +97,7 @@ public class BufferedImageFactory {
 		
 	private static byte[] createCombinedByteArray( Extent e, ByteBuffer bbRed, ByteBuffer bbGreen, ByteBuffer bbBlue) {
 		
-		int size = e.getVolume();
+		int size = e.getVolumeAsInt();
 		byte[] arrComb = new byte[ size*3 ];
 		int cnt = 0;
 		for( int i=0; i<size; i++ ) {

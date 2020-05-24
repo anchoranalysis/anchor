@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -98,8 +99,20 @@ public final class Extent implements Serializable {
 		this.sxy = len.getX() * len.getY();
 	}
 
-	public int getVolume() {
-		return sxy * len.getZ();
+	public int getVolumeAsInt() {
+		long volume = getVolume();
+		if (volume>Integer.MAX_VALUE) {
+			throw new AnchorFriendlyRuntimeException("The volume cannot be expressed as an int, as it is higher than the maximum bound");
+		}
+		return (int) volume;
+	}
+	
+	public long getVolume() {
+		return ((long) sxy) * len.getZ();
+	}
+	
+	public boolean isEmpty() {
+		return (sxy==0) || (len.getZ()==0);
 	}
 	
 	public int getVolumeXY() {

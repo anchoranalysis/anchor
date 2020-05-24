@@ -45,23 +45,13 @@ public abstract class BinarySgmnOne extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask)
 			throws SgmnFailedException {
-		if (mask.isPresent()) {
-			return sgmnFromSgmn(voxelBox, params, mask.get(), sgmn);
-		} else {
-			return sgmnFromSgmn(voxelBox, params, sgmn);	
-		}
+		return sgmnFromSgmn(voxelBox, params, mask, sgmn);
 	}
 	
 	protected abstract BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		BinarySgmn sgmn
-	) throws SgmnFailedException;
-	
-	protected abstract BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
-		VoxelBoxWrapper voxelBox,
-		BinarySgmnParameters params,
-		ObjMask objMask,
+		Optional<ObjMask> objMask,
 		BinarySgmn sgmn
 	) throws SgmnFailedException;
 

@@ -31,4 +31,9 @@ final class ProcessVoxelSlide implements ProcessVoxel {
 		}
 		process.notifyChangeZ(z);
 	}
+
+	@Override
+	public void notifyChangeY(int y) {
+		process.notifyChangeY(y);
+	}
 }

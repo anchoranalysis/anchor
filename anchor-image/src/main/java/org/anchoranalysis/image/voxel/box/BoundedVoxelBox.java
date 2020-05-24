@@ -68,7 +68,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	public BoundedVoxelBox(BoundingBox bbox, VoxelBoxFactoryTypeBound<T> factory) {
 		super();
 		this.boundingBox = bbox;
-		assert(bbox.extnt().getVolume()>0);
+		assert(!bbox.extnt().isEmpty());
 		assert(bbox.extnt().getZ()>0);
 		this.voxelBox = factory.create( bbox.extnt() );
 		assert(sizesMatch());

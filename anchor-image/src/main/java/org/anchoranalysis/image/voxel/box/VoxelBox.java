@@ -44,18 +44,24 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-public abstract class VoxelBox<BufferType extends Buffer> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> buffer-type
+ */
+public abstract class VoxelBox<T extends Buffer> {
 
-	private final IPixelsForPlane<BufferType> planeAccess;
-	private final VoxelBoxFactoryTypeBound<BufferType> factory;
+	private final IPixelsForPlane<T> planeAccess;
+	private final VoxelBoxFactoryTypeBound<T> factory;
 	
-	public VoxelBox(IPixelsForPlane<BufferType> pixelsForPlane, VoxelBoxFactoryTypeBound<BufferType> factory) {
+	public VoxelBox(IPixelsForPlane<T> pixelsForPlane, VoxelBoxFactoryTypeBound<T> factory) {
 		super();
 		this.planeAccess = pixelsForPlane;
 		this.factory = factory;
 	}
 
-	public IPixelsForPlane<BufferType> getPlaneAccess() {
+	public IPixelsForPlane<T> getPlaneAccess() {
 		return planeAccess;
 	}
 	
@@ -63,7 +69,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		return factory.dataType();
 	}
 	
-	public VoxelBox<BufferType> createBufferAvoidNew(BoundingBox bbox ) {
+	public VoxelBox<T> createBufferAvoidNew(BoundingBox bbox ) {
 		
 		if (   bbox.equals(new BoundingBox(extnt()))
 			&& bbox.getCrnrMin().getX()==0
@@ -75,16 +81,16 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		return createBufferAlwaysNew(bbox);
 	}
 	
-	public VoxelBox<BufferType> createBufferAlwaysNew(BoundingBox bbox) {
+	public VoxelBox<T> createBufferAlwaysNew(BoundingBox bbox) {
 		
 		// Otherwise we create a new buffer
-		VoxelBox<BufferType> vbOut = factory.create(bbox.extnt());
+		VoxelBox<T> vbOut = factory.create(bbox.extnt());
 		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extnt()));
 		return vbOut;
 	}
 	
 	
-	public void replaceBy(VoxelBox<BufferType> vb) throws IncorrectImageSizeException {
+	public void replaceBy(VoxelBox<T> vb) throws IncorrectImageSizeException {
 		
 		if (!extnt().equals(vb.extnt())) {
 			throw new IncorrectImageSizeException("Sizes do not match");
@@ -101,7 +107,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	 * @param destVoxelBox 
 	 * @param destBox relative to destVoxelBox
 	 */
-	public void copyPixelsTo(BoundingBox sourceBox, VoxelBox<BufferType> destVoxelBox,
+	public void copyPixelsTo(BoundingBox sourceBox, VoxelBox<T> destVoxelBox,
 			BoundingBox destBox) {
 		
 		checkExtentMatch(sourceBox, destBox);
@@ -115,8 +121,8 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 			
 			assert( z< extnt().getZ() );
 			
-			BufferType srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
-			BufferType destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
+			T srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
 			
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
 				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
@@ -133,7 +139,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	
 	
 	// Only copies pixels if part of an ObjMask, otherwise we set a null pixel
-	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBox<BufferType> destVoxelBox,
+	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBox<T> destVoxelBox,
 			BoundingBox destBox, VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV ) {
 		
 		checkExtentMatch(sourceBox, destBox);
@@ -145,8 +151,8 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
 			
-			BufferType srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
-			BufferType destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
+			T srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
 
 			ByteBuffer maskBuffer = objMaskBuffer.getPixelsForPlane(z-srcStart.getZ()).buffer();
 			
@@ -284,7 +290,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
-			BufferType pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
 			
 			int ind = 0;
@@ -318,7 +324,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
-			BufferType pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
 			
 			int ind = 0;
@@ -358,7 +364,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
-			BufferType pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelMaskIn = maskIn.getVoxelBox().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelOut = maskOut.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
 			
@@ -391,7 +397,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
 			
-			BufferType buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			while( buffer.hasRemaining() ) {
 				
 				if ( isGreaterThan(buffer,operand) ) {
@@ -407,7 +413,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
 			
-			BufferType buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			while( buffer.hasRemaining() ) {
 				
 				if ( isGreaterThan(buffer,operand) ) {
@@ -424,7 +430,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
 			
-			BufferType buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			while( buffer.hasRemaining() ) {
 				
 				if ( isEqualTo(buffer,operand) ) {
@@ -443,7 +449,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		int count = 0;
 		
 		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
-			BufferType pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
 			while (pixels.hasRemaining()) {
 				if (isEqualTo(pixels, equalVal )) {
@@ -466,7 +472,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
 			
-			BufferType srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
+			T srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer maskBuffer = om.getVoxelBox().getPixelsForPlane(z-srcStart.getZ()).buffer();
 			
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
@@ -492,13 +498,13 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	
 	public abstract int ceilOfMaxPixel();
 	
-	public abstract void copyItem( BufferType srcBuffer, int srcIndex, BufferType destBuffer, int destIndex );
+	public abstract void copyItem( T srcBuffer, int srcIndex, T destBuffer, int destIndex );
 	
-	public abstract boolean isGreaterThan( BufferType buffer, int operand );
+	public abstract boolean isGreaterThan( T buffer, int operand );
 	
-	public abstract boolean isEqualTo( BufferType buffer, int operand );
+	public abstract boolean isEqualTo( T buffer, int operand );
 	
-	public abstract boolean isEqualTo( BufferType buffer1, BufferType buffer2 );
+	public abstract boolean isEqualTo( T buffer1, T buffer2 );
 	
 	public abstract void setAllPixelsTo( int val );
 	
@@ -506,11 +512,11 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	
 	public abstract void multiplyBy( double val );
 
-	public abstract VoxelBox<BufferType> maxIntensityProj();
+	public abstract VoxelBox<T> maxIntensityProj();
 	
-	public abstract VoxelBox<BufferType> meanIntensityProj();
+	public abstract VoxelBox<T> meanIntensityProj();
 	
-	public void transferPixelsForPlane(int z, VoxelBox<BufferType> src, int zSrc, boolean duplicate ) {
+	public void transferPixelsForPlane(int z, VoxelBox<T> src, int zSrc, boolean duplicate ) {
 		if (duplicate) {
 			setPixelsForPlane(z, src.getPixelsForPlane(zSrc));
 		} else {
@@ -518,11 +524,11 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		}
 	}
 	
-	public void setPixelsForPlane(int z, VoxelBuffer<BufferType> pixels) {
+	public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
 		planeAccess.setPixelsForPlane(z, pixels);
 	}
 
-	public VoxelBuffer<BufferType> getPixelsForPlane(int z) {
+	public VoxelBuffer<T> getPixelsForPlane(int z) {
 		return planeAccess.getPixelsForPlane(z);
 	}
 
@@ -542,7 +548,7 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	}
 	
 	public boolean isSliceNonZero( int z ) {
-		BufferType pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
+		T pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
 		
 		while (pixels.hasRemaining()) {
 			if (!isEqualTo(pixels, 0 )) {
@@ -558,12 +564,12 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	public abstract int getVoxel(int x, int y, int z);
 	
 	// Creates a new channel contain a duplication only of a particular slice
-	public VoxelBox<BufferType> extractSlice( int z ) {
+	public VoxelBox<T> extractSlice( int z ) {
 		
 		Extent e = new Extent( extnt());
 		e.setZ(1);
 		
-		VoxelBox<BufferType> bufferAccess = factory.create(e);
+		VoxelBox<T> bufferAccess = factory.create(e);
 		bufferAccess.getPlaneAccess().setPixelsForPlane(0, getPlaneAccess().getPixelsForPlane(z) );
 		return bufferAccess;
 	}
@@ -577,12 +583,12 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 	 * @param averageWhenDownsizing
 	 * @return
 	 */
-	public VoxelBox<BufferType> resizeXY( int x, int y, Interpolator interpolator ) {
+	public VoxelBox<T> resizeXY( int x, int y, Interpolator interpolator ) {
 		
 		Extent e = new Extent( extnt());
 		e.setXY(x, y);
 		
-		VoxelBox<BufferType> bufferTarget = factory.create(e);
+		VoxelBox<T> bufferTarget = factory.create(e);
 		
 		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==e.getVolumeXY());
 		
@@ -595,14 +601,14 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		return bufferTarget;
 	}
 	
-	public VoxelBox<BufferType> duplicate() {
+	public VoxelBox<T> duplicate() {
 		
 		assert( getPlaneAccess().extnt().getZ() > 0 );
 		
-		VoxelBox<BufferType> bufferAccess = factory.create( getPlaneAccess().extnt() );
+		VoxelBox<T> bufferAccess = factory.create( getPlaneAccess().extnt() );
 		
 		for( int z=0; z<extnt().getZ(); z++ ) {
-			VoxelBuffer<BufferType> buffer = getPixelsForPlane(z);
+			VoxelBuffer<T> buffer = getPixelsForPlane(z);
 			bufferAccess.setPixelsForPlane( z, buffer.duplicate() );
 		}
 		
@@ -628,8 +634,8 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		
 		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
 			
-			VoxelBuffer<BufferType> buffer1 = getPlaneAccess().getPixelsForPlane(z);
-			VoxelBuffer<BufferType> buffer2 = (VoxelBuffer<BufferType>) other.getPlaneAccess().getPixelsForPlane(z);
+			VoxelBuffer<T> buffer1 = getPlaneAccess().getPixelsForPlane(z);
+			VoxelBuffer<T> buffer2 = (VoxelBuffer<T>) other.getPlaneAccess().getPixelsForPlane(z);
 			
 			while( buffer1.buffer().hasRemaining() ) {
 				
@@ -645,9 +651,9 @@ public abstract class VoxelBox<BufferType extends Buffer> {
 		return true;
 	}
 	
-	public abstract void max( VoxelBox<BufferType> other ) throws OperationFailedException;
+	public abstract void max( VoxelBox<T> other ) throws OperationFailedException;
 
-	public VoxelBoxFactoryTypeBound<BufferType> getFactory() {
+	public VoxelBoxFactoryTypeBound<T> getFactory() {
 		return factory;
 	}
 	

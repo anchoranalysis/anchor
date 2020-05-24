@@ -100,7 +100,7 @@ public class IterateVoxelsTest {
 		);
 	}
 	
-	private void testCounter(String message, int expectedNumVoxels, Point3i expectedCenter, Consumer<AggregatePoints> func) {
+	private void testCounter(String message, long expectedNumVoxels, Point3i expectedCenter, Consumer<AggregatePoints> func) {
 		AggregatePoints counter = new AggregatePoints();
 		func.accept(counter);
 		assertEquals(message + " count", expectedNumVoxels, counter.count());

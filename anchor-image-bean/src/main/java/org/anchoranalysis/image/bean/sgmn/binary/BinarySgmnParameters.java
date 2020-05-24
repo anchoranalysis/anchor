@@ -46,11 +46,12 @@ public class BinarySgmnParameters {
 		this(res, Optional.empty());
 	}
 	
-	public BinarySgmnParameters(Optional<ImageRes> res) {
-		this.res = res;
-		this.histogram = Optional.empty();
-	}
-	
+	/**
+	 * Constructor
+	 * 
+	 * @param res image-resolution
+	 * @param histogram a histogram describing the intensity-values of the entire channel
+	 */
 	public BinarySgmnParameters(ImageRes res, Optional<Histogram> histogram) {
 		this.res = Optional.of(res);
 		this.histogram = histogram;

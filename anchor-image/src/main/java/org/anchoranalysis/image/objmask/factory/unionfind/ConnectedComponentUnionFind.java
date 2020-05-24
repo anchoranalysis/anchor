@@ -156,7 +156,7 @@ public class ConnectedComponentUnionFind {
 		boolean bigNghb
 	) throws OperationFailedException {
 		IterateVoxels.callEachPoint(
-			visited.extnt(),
+			visited.getVoxelBox(),
 			process
 		);
 		return process.getCount() - 1;

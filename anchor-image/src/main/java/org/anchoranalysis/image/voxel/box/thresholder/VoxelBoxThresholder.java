@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.voxel.box.thresholder;
 
+
+
 /*
  * #%L
  * anchor-image
@@ -28,15 +30,20 @@ package org.anchoranalysis.image.voxel.box.thresholder;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
 
 /**
@@ -44,6 +51,39 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
   */
 public class VoxelBoxThresholder {
 
+	private static final class PointProcessor implements ProcessVoxelSliceBuffer<ByteBuffer> {
+
+		private final int level;
+		private final VoxelBox<ByteBuffer> boxOut;
+		private final byte byteOn;
+		private final byte byteOff;
+		
+		private ByteBuffer bbOut;
+		
+		public PointProcessor(int level, VoxelBox<ByteBuffer> boxOut, BinaryValuesByte bvOut) {
+			super();
+			this.level = level;
+			this.boxOut = boxOut;
+			this.byteOn = bvOut.getOnByte();
+			this.byteOff = bvOut.getOffByte();
+		}
+		
+		@Override
+		public void notifyChangeZ(int z) {
+			bbOut = boxOut.getPixelsForPlane(z).buffer();
+		}
+		
+		@Override
+		public void process(Point3i pnt, ByteBuffer buffer, int offset) {
+			int val = ByteConverter.unsignedByteToInt( buffer.get(offset) );
+			
+			bbOut.put(
+				offset,
+				val>=level ? byteOn : byteOff
+			);
+		}
+	}
+	
 	public static void thresholdForLevel(
 		VoxelBox<ByteBuffer> inputBuffer,
 		int level,
@@ -54,6 +94,7 @@ public class VoxelBoxThresholder {
 			VoxelBoxWrapper.wrap(inputBuffer),
 			level,
 			bvOut,
+			Optional.empty(),
 			false
 		);
 	}
@@ -63,37 +104,21 @@ public class VoxelBoxThresholder {
 		VoxelBoxWrapper inputBuffer,
 		int level,
 		BinaryValuesByte bvOut,
+		Optional<ObjMask> mask,
 		boolean alwaysDuplicate
 	) throws CreateException {
 	
 		VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty( alwaysDuplicate );
 		
-		Extent e = inputBuffer.any().extnt();
-		for (int z=0; z<e.getZ(); z++) {
-			
-			VoxelBuffer<?> bb = inputBuffer.any().getPixelsForPlane(z);
-			VoxelBuffer<ByteBuffer> bbOut = boxOut.getPixelsForPlane(z);
+		if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 		
-			transferSlice(e, bb, bbOut, level, bvOut);
+			IterateVoxels.callEachPoint(
+				mask,
+				inputBuffer.asByte(),
+				new PointProcessor(level, boxOut, bvOut)
+			);
 		}
 		
 		return new BinaryVoxelBoxByte(boxOut, bvOut.createInt() );
-	}
-	
-	private static void transferSlice(Extent e, VoxelBuffer<?> bb, VoxelBuffer<ByteBuffer> bbOut, int level, BinaryValuesByte bvOut) {
-		for (int y=0; y<e.getY(); y++) {
-			for (int x=0; x<e.getX(); x++) {
-				
-				int offset = e.offset(x, y);
-
-				int val = bb.getInt(offset);
-				
-				bbOut.buffer().put(
-					offset,
-					val>=level ? bvOut.getOnByte() : bvOut.getOffByte()
-				);
-			}
-		}
-		
 	}
 }
