@@ -30,12 +30,10 @@ package org.anchoranalysis.io.generator.combined;
 import java.util.ArrayList;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -58,20 +56,14 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	}
 	
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager) throws OutputWriteFailedException {
-		delegate.write(outputNameStyle, filePathGnrtr, writeOperationRecorder, outputManager);
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
+		delegate.write(outputNameStyle, outputManager);
 	}
 
 	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			String index, BoundOutputManager outputManager)
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager)
 			throws OutputWriteFailedException {
-		return delegate.write(outputNameStyle, filePathGnrtr, writeOperationRecorder, index, outputManager);
+		return delegate.write(outputNameStyle, index, outputManager);
 	}
 
 	@Override

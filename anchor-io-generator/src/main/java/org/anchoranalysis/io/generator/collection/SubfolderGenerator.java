@@ -30,12 +30,10 @@ package org.anchoranalysis.io.generator.collection;
 import java.util.Collection;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -56,11 +54,7 @@ public class SubfolderGenerator<T,CollectionType extends Collection<T>> extends 
 	}
 
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager)
-			throws OutputWriteFailedException {
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
 		String filePhysicalName = outputNameStyle.getPhysicalName();
 		IterableGeneratorWriter.writeSubfolder(
@@ -74,11 +68,7 @@ public class SubfolderGenerator<T,CollectionType extends Collection<T>> extends 
 	}
 
 	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			String index, BoundOutputManager outputManager)
-			throws OutputWriteFailedException {
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager) throws OutputWriteFailedException {
 
 		String filePhysicalName = outputNameStyle.getPhysicalName(index);
 	

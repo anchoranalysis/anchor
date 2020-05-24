@@ -27,6 +27,7 @@ package org.anchoranalysis.io.output.writer;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -53,9 +54,9 @@ public class CheckIfAllowed extends Writer {
 	}
 
 	@Override
-	public BoundOutputManager bindAsSubFolder(String outputName,
+	public Optional<BoundOutputManager> bindAsSubFolder(String outputName,
 			ManifestFolderDescription manifestDescription,
-			FolderWriteWithPath folder) throws OutputWriteFailedException {
+			Optional<FolderWriteWithPath> folder) throws OutputWriteFailedException {
 		
 		if (!bom.isOutputAllowed(outputName)) return null;
 

@@ -30,9 +30,7 @@ package org.anchoranalysis.io.generator;
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -95,23 +93,15 @@ public class IterableGeneratorBridge<S,T> extends Generator implements IterableG
 	}
 
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager)
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
 			throws OutputWriteFailedException {
-		delegate.getGenerator().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, outputManager);
+		delegate.getGenerator().write(outputNameStyle, outputManager);
 	}
 
 	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			String index,
-			BoundOutputManager outputManager
-	)
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager)
 			throws OutputWriteFailedException {
-		return delegate.getGenerator().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, index, outputManager );
+		return delegate.getGenerator().write(outputNameStyle, index, outputManager );
 	}
 
 	@Override

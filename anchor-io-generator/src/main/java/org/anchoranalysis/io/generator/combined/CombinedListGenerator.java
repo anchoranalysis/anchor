@@ -31,11 +31,9 @@ import java.util.ArrayList;
 
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -63,10 +61,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 	}
 
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager) throws OutputWriteFailedException {
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
 		for( NameValue<Generator> ni : list) {
 
@@ -74,16 +69,13 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 				outputNameStyle.setOutputName( ni.getName() );
 			}
 			
-			ni.getValue().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, outputManager);
+			ni.getValue().write(outputNameStyle, outputManager);
 		}
 		
 	}
 
 	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			String index, BoundOutputManager outputManager)
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager)
 			throws OutputWriteFailedException {
 		
 		int maxWritten = -1;
@@ -94,7 +86,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 				outputNameStyle.setOutputName( ni.getName() );
 			}
 			
-			int numWritten = ni.getValue().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, index, outputManager);
+			int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
 			maxWritten = Math.max(maxWritten, numWritten);
 		}
 		

@@ -28,6 +28,7 @@ package org.anchoranalysis.io.output.writer;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -56,37 +57,35 @@ public class AlwaysAllowed extends Writer {
 	}
 	
 	@Override
-	public BoundOutputManager bindAsSubFolder( String outputName, ManifestFolderDescription manifestDescription, FolderWriteWithPath folder ) throws OutputWriteFailedException {
+	public Optional<BoundOutputManager> bindAsSubFolder(
+		String outputName,
+		ManifestFolderDescription manifestDescription,
+		Optional<FolderWriteWithPath> folder
+	) throws OutputWriteFailedException {
 		
 		preop.exec();
 		
-		assert bom.getWriteOperationRecorder()!=null;
-		
 		// We construct a sub-folder for the desired outputName
-		Path folderOut = bom.getBoundFilePathPrefix().outFilePath(outputName);
+		Path folderOut = bom.outFilePath(outputName);
 		
 		// We only change the writeOperationRecorder if we actually pass a folder
-		IWriteOperationRecorder recorderNew;
-		if (folder!=null) {
-			// Assume the folder are writing to has no path
-			assert(folder.calcPath()==null);
-			
-			Path relativePath = bom.getBoundFilePathPrefix().relativePath(folderOut);
-			
-			recorderNew = bom.getWriteOperationRecorder().writeFolder( relativePath, manifestDescription, folder);
-		} else {
-			recorderNew = bom.getWriteOperationRecorder();
-		}
+		IWriteOperationRecorder recorderNew = bom.writeFolderToOperationRecorder(
+			folderOut,
+			manifestDescription,
+			folder
+		);
 		
 		FilePathPrefix fpp = new FilePathPrefix( folderOut );
 		try {
-			return new BoundOutputManager(
-				bom.getOutputManager(),
-				fpp,
-				bom.getOutputWriteSettings(),
-				recorderNew,
-				bom.getLazyDirectoryFactory(),
-				preop
+			return Optional.of(
+				new BoundOutputManager(
+					bom.getOutputManager(),
+					fpp,
+					bom.getOutputWriteSettings(),
+					recorderNew,
+					bom.getLazyDirectoryFactory(),
+					preop
+				)
 			);
 		} catch (AnchorIOException e) {
 			throw new OutputWriteFailedException("Failed to create output-manager", e);
@@ -101,8 +100,6 @@ public class AlwaysAllowed extends Writer {
 
 		collectionGenerator.doOperation().write(
 			new IntegerSuffixOutputNameStyle(outputName,3),
-			bom.getBoundFilePathPrefix(),
-			bom.getWriteOperationRecorder(),
 			bom
 		);
 	}
@@ -111,7 +108,7 @@ public class AlwaysAllowed extends Writer {
 	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, String index ) throws OutputWriteFailedException {
 		
 		preop.exec();
-		return generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), index, bom);
+		return generator.doOperation().write( outputNameStyle, index, bom);
 	}
 	
 	// Write a file without checking if the outputName is allowed
@@ -119,7 +116,7 @@ public class AlwaysAllowed extends Writer {
 	public void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException {
 		
 		preop.exec();
-		generator.doOperation().write( outputNameStyle, bom.getBoundFilePathPrefix(), bom.getWriteOperationRecorder(), bom);
+		generator.doOperation().write(outputNameStyle, bom);
 	}
 		
 	
@@ -130,16 +127,16 @@ public class AlwaysAllowed extends Writer {
 		
 		preop.exec();
 		
-		String fileMain = outputNamePrefix + outputName + outputNameSuffix + "." + extension;
-		
-		Path outfile_path = bom.getBoundFilePathPrefix().outFilePath( fileMain );
-		bom.getWriteOperationRecorder().write(
-			outputName,
-			manifestDescription,
-			bom.getBoundFilePathPrefix().relativePath(outfile_path),
-			index
+		Path outfile_path = bom.outFilePath(
+			outputNamePrefix + outputName + outputNameSuffix + "." + extension
 		);
 		
+		bom.writeFileToOperationRecorder(
+			outputName,
+			outfile_path,
+			manifestDescription,
+			index
+		);
 		return outfile_path;
 	}
 	

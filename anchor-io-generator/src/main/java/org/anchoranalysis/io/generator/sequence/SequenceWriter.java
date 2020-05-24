@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.Generator;
@@ -16,6 +18,5 @@ public abstract class SequenceWriter {
 	
 	public abstract void write(Operation<Generator,OutputWriteFailedException> generator, String index) throws OutputWriteFailedException;
 	
-	// It can return null if there is no associated output manager
-	public abstract BoundOutputManager getOutputManagerForFiles();
+	public abstract Optional<BoundOutputManager> getOutputManagerForFiles();
 }

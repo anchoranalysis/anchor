@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -73,7 +75,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceI
 		return delegate.isOn();
 	}
 	
-	public BoundOutputManager getSubFolderOutputManager() {
+	public Optional<BoundOutputManager> getSubFolderOutputManager() {
 		return delegate.getSubFolderOutputManager();
 	}
 }

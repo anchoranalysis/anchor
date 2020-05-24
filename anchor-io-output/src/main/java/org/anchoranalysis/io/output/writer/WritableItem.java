@@ -26,8 +26,6 @@ package org.anchoranalysis.io.output.writer;
  * #L%
  */
 
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -42,7 +40,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public interface WritableItem {
 
-	public abstract void write( OutputNameStyle outputNameStyle, FilePathCreator filePathGnrtr, IWriteOperationRecorder writeOperationRecorder, BoundOutputManager outputManager ) throws OutputWriteFailedException;
+	public abstract void write(
+		OutputNameStyle outputNameStyle,
+		BoundOutputManager outputManager
+	) throws OutputWriteFailedException;
 	
-	public abstract int write( IndexableOutputNameStyle outputNameStyle, FilePathCreator filePathGnrtr, IWriteOperationRecorder writeOperationRecorder, String index, BoundOutputManager outputManager ) throws OutputWriteFailedException;
+	public abstract int write(
+		IndexableOutputNameStyle outputNameStyle,
+		String index,
+		BoundOutputManager outputManager
+	) throws OutputWriteFailedException;
 }

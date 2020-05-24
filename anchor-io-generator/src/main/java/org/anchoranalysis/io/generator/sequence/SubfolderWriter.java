@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.Generator;
@@ -19,7 +21,7 @@ public class SubfolderWriter extends SequenceWriter {
 	private IndexableOutputNameStyle outputNameStyle;
 	private ManifestDescription folderManifestDescription;
 	
-	private BoundOutputManager subFolderOutputManager = null;
+	private Optional<BoundOutputManager> subFolderOutputManager = Optional.empty();
 	private boolean checkIfAllowed;
 	private String subfolderName;
 	
@@ -36,12 +38,16 @@ public class SubfolderWriter extends SequenceWriter {
 		this.subfolderName = subfolderName;
 	}
 
-	private BoundOutputManager createSubfolder(boolean suppressSubfolder, ManifestFolderDescription folderDescription, 	FolderWriteIndexableOutputName subFolderWrite) throws OutputWriteFailedException {
+	private Optional<BoundOutputManager> createSubfolder(boolean suppressSubfolder, ManifestFolderDescription folderDescription, 	FolderWriteIndexableOutputName subFolderWrite) throws OutputWriteFailedException {
 		if (suppressSubfolder) {
-			return parentOutputManager;
+			return Optional.of(parentOutputManager);
 		} else {
 			Writer writer = checkIfAllowed ? parentOutputManager.getWriterCheckIfAllowed() : parentOutputManager.getWriterAlwaysAllowed();
-			return writer.bindAsSubFolder(subfolderName, folderDescription, subFolderWrite );
+			return writer.bindAsSubFolder(
+				subfolderName,
+				folderDescription,
+				Optional.of(subFolderWrite)
+			);
 		}
 	}
 	
@@ -76,7 +82,7 @@ public class SubfolderWriter extends SequenceWriter {
 
 	@Override
 	public boolean isOn() {
-		return (this.subFolderOutputManager!=null);
+		return subFolderOutputManager.isPresent();
 	}
 
 	@Override
@@ -87,9 +93,9 @@ public class SubfolderWriter extends SequenceWriter {
 		}
 		
 		if (checkIfAllowed) {
-			this.subFolderOutputManager.getWriterCheckIfAllowed().write(outputNameStyle, generator, index );
+			this.subFolderOutputManager.get().getWriterCheckIfAllowed().write(outputNameStyle, generator, index );
 		} else {
-			this.subFolderOutputManager.getWriterAlwaysAllowed().write( outputNameStyle, generator, index );
+			this.subFolderOutputManager.get().getWriterAlwaysAllowed().write( outputNameStyle, generator, index );
 		}
 	}
 	
@@ -146,7 +152,7 @@ public class SubfolderWriter extends SequenceWriter {
 	}
 
 	@Override
-	public BoundOutputManager getOutputManagerForFiles() {
+	public Optional<BoundOutputManager> getOutputManagerForFiles() {
 		return subFolderOutputManager;
 	}
 	

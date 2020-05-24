@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 /*
  * #%L
@@ -50,17 +51,19 @@ public class WriterRouterErrors {
 		this.errorReporter = errorReporter;
 	}
 
-	public BoundOutputManagerRouteErrors bindAsSubFolder(String outputName,
+	public Optional<BoundOutputManagerRouteErrors> bindAsSubFolder(String outputName,
 			ManifestFolderDescription manifestDescription,
-			FolderWriteWithPath folder) {
+			Optional<FolderWriteWithPath> folder) {
 		try {
-			return new BoundOutputManagerRouteErrors(
-				delegate.bindAsSubFolder(outputName, manifestDescription, folder),
-				errorReporter
+			return delegate.bindAsSubFolder(outputName, manifestDescription, folder).map( output ->
+				new BoundOutputManagerRouteErrors(
+					output,
+					errorReporter
+				)
 			);
 		} catch (OutputWriteFailedException e) {
 			errorReporter.recordError( BoundOutputManagerRouteErrors.class, e);
-			return null;
+			return Optional.empty();
 		}			
 	}
 
