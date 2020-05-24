@@ -85,7 +85,14 @@ public abstract class Writer {
 	 * @param index
 	 * @return the path to write to or null if the output is not allowed
 	 */
-	public abstract Path writeGenerateFilename( String outputName, String extension, ManifestDescription manifestDescription, String outputNamePrefix, String outputNameSuffix, String index );
+	public abstract Optional<Path> writeGenerateFilename(
+		String outputName,
+		String extension,
+		Optional<ManifestDescription> manifestDescription,
+		String outputNamePrefix,
+		String outputNameSuffix,
+		String index
+	);
 	
 	public abstract OutputWriteSettings getOutputWriteSettings();
 }

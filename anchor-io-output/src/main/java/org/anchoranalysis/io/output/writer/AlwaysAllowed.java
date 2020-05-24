@@ -123,7 +123,7 @@ public class AlwaysAllowed extends Writer {
 	// A non-generator way of creating outputs, that are still included in the manifest
 	// Returns null if output is not allowed
 	@Override
-	public Path writeGenerateFilename( String outputName, String extension, ManifestDescription manifestDescription, String outputNamePrefix, String outputNameSuffix, String index ) {
+	public Optional<Path> writeGenerateFilename( String outputName, String extension, Optional<ManifestDescription> manifestDescription, String outputNamePrefix, String outputNameSuffix, String index ) {
 		
 		preop.exec();
 		
@@ -131,13 +131,15 @@ public class AlwaysAllowed extends Writer {
 			outputNamePrefix + outputName + outputNameSuffix + "." + extension
 		);
 		
-		bom.writeFileToOperationRecorder(
-			outputName,
-			outfile_path,
-			manifestDescription,
-			index
+		manifestDescription.ifPresent( md->
+			bom.writeFileToOperationRecorder(
+				outputName,
+				outfile_path,
+				md,
+				index
+			)
 		);
-		return outfile_path;
+		return Optional.of(outfile_path);
 	}
 	
 	@Override

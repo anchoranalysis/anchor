@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -59,26 +60,28 @@ public class CSVWriter implements AutoCloseable {
 	 * @return the csv-write or null if it's not allowed
 	 * @throws IOException
 	 */
-	public static CSVWriter createFromOutputManager( String outputName, BoundOutputManager outputManager ) throws AnchorIOException {
+	public static Optional<CSVWriter> createFromOutputManager( String outputName, BoundOutputManager outputManager ) throws AnchorIOException {
 		
 		if (!outputManager.isOutputAllowed(outputName)) {
-			return null;
+			return Optional.empty();
 		}
 		
-		FileOutput output;
+		Optional<FileOutput> output;
 		try {
 			output = FileOutputFromManager.create("csv", null, outputManager, outputName);
 		} catch (OutputWriteFailedException e) {
 			throw new AnchorIOException("Cannot write csv output", e);
 		}
 		
-		if (output==null) {
-			return null;
+		if (!output.isPresent()) {
+			return Optional.empty();
 		}
 	
-		output.start();
+		output.get().start();
 		
-		return new CSVWriter(output);
+		return Optional.of(
+			new CSVWriter(output.get())
+		);
 	}
 	
 	/**

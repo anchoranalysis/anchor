@@ -112,11 +112,21 @@ public class WriterRouterErrors {
 		}						
 	}
 
-	public Path writeGenerateFilename(String outputName, String extension,
-			ManifestDescription manifestDescription, String outputNamePrefix,
-			String outputNameSuffix, String index) throws OutputWriteFailedException {
-		return delegate.writeGenerateFilename(outputName, extension,
-				manifestDescription, outputNamePrefix, outputNameSuffix, index);
+	public Optional<Path> writeGenerateFilename(
+		String outputName,
+		String extension,
+		Optional<ManifestDescription> manifestDescription,
+		String outputNamePrefix,
+		String outputNameSuffix,
+		String index
+	) throws OutputWriteFailedException {
+		return delegate.writeGenerateFilename(
+			outputName,
+			extension,
+			manifestDescription,
+			outputNamePrefix,
+			outputNameSuffix,
+			index
+		);
 	}
-	
 }

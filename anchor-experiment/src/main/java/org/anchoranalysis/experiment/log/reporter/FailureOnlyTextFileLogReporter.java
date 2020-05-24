@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.log.reporter;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-experiment
@@ -81,15 +83,15 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	private void writeStringToFile( String message ) {
 		
 		try {
-			FileOutput fileOutput = TextFileLogHelper.createOutput(bom, outputName);
+			Optional<FileOutput> fileOutput = TextFileLogHelper.createOutput(bom, outputName);
 			
-			if (fileOutput==null) {
+			if (!fileOutput.isPresent()) {
 				return;
 			}
 			
-			fileOutput.start();
-			fileOutput.getWriter().append( message );
-			fileOutput.end();
+			fileOutput.get().start();
+			fileOutput.get().getWriter().append( message );
+			fileOutput.get().end();
 			
 		} catch (AnchorIOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);

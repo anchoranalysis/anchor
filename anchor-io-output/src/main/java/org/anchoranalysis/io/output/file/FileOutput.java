@@ -30,7 +30,6 @@ package org.anchoranalysis.io.output.file;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -54,11 +53,6 @@ public class FileOutput extends AnchorBean<FileOutput> {
 	
 	// Files for writing out
 	private PrintWriter out;
-	
-	public FileOutput() {
-		
-	}
-	
 	
 	public FileOutput(String filePath, String extension, ManifestDescription manifestDescription ) {
 		super();

@@ -28,6 +28,7 @@ package org.anchoranalysis.experiment.log.reporter;
 
 
 import java.io.PrintWriter;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -42,7 +43,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	private BoundOutputManager bom;
 	private ErrorReporter errorReporter;
 	
-	private FileOutput fileOutput;
+	private Optional<FileOutput> fileOutput;
 	private PrintWriter printWriter;
 	
 	public TextFileLogReporter(String outputName, BoundOutputManager bom,
@@ -64,12 +65,12 @@ public class TextFileLogReporter implements StatefulLogReporter {
 		try {
 			fileOutput = TextFileLogHelper.createOutput(bom, outputName);
 			
-			if (fileOutput==null) {
+			if (!fileOutput.isPresent()) {
 				return;
 			}
 			
-			fileOutput.start();
-			printWriter = fileOutput.getWriter();
+			fileOutput.get().start();
+			printWriter = fileOutput.get().getWriter();
 		} catch (AnchorIOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}		
@@ -77,7 +78,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 
 	@Override
 	public void log( String message ) {
-		if (fileOutput==null) {
+		if (!fileOutput.isPresent()) {
 			return;
 		}
 		
@@ -93,11 +94,11 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	@Override
 	public void close(boolean successful) {
 		
-		if (fileOutput==null) {
+		if (!fileOutput.isPresent()) {
 			return;
 		}
 		
-		fileOutput.end();
+		fileOutput.get().end();
 	}
 
 

@@ -29,6 +29,7 @@ package org.anchoranalysis.io.output.file;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -49,32 +50,27 @@ public class FileOutputFromManager {
 	 * @param outputManager output-manager
 	 * @param outputName output-name
 	 * 
-	 * @return the FileOutput or null if it the output is not allowed 
+	 * @return the FileOutput or empty() if it the output is not allowed 
 	 */
-	public static FileOutput create(
+	public static Optional<FileOutput> create(
 		String extension,
 		ManifestDescription manifestDescription,
 		BoundOutputManager outputManager,
 		String outputName
 	) throws OutputWriteFailedException {
 
-		Path fileOutputPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
+		Optional<Path> fileOutputPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
 			outputName,
 			extension,
-			manifestDescription,
+			Optional.of(manifestDescription),
 			"",
 			"",
 			""
 		);
 		
-		if (fileOutputPath==null) {
-			return null;
-		}
-		
-		return new FileOutput(fileOutputPath.toString(), extension, manifestDescription);
+		return fileOutputPath.map( path->
+			new FileOutput(path.toString(), extension, manifestDescription)
+		);
 		
 	}
-
-
-	
 }

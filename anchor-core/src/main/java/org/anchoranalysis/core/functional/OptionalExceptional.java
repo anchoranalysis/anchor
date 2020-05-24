@@ -45,4 +45,23 @@ public class OptionalExceptional {
 			return Optional.empty();
 		}
 	}
+	
+	/**
+	 * Like {@link Optional::flatMap} but tolerates an exception in the mapping function, which is immediately thrown.
+	 * 
+	 * @param <S> incoming optional-type for map
+	 * @param <T> outgoing optional-type for map
+	 * @param <E> exception that may be thrown during mapping
+	 * @param opt incoming optional
+	 * @param mapFunc the function that does the mapping from incoming to outgoing
+	 * @return the outgoing "mapped" optional
+	 * @throws E an exception if the mapping function throws it
+	 */
+	public static <S, T,E extends Throwable> Optional<T> flatMap( Optional<S> opt, MapFunction<S,Optional<T>,E> mapFunc ) throws E {
+		if (opt.isPresent()) {
+			return mapFunc.apply( opt.get() );
+		} else {
+			return Optional.empty();
+		}
+	}
 }

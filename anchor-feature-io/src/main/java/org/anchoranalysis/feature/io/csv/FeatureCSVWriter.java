@@ -30,6 +30,7 @@ package org.anchoranalysis.feature.io.csv;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.core.text.TypedValue;
@@ -48,24 +49,22 @@ public class FeatureCSVWriter {
 		this.writer = writer;
 	}
 	
-	// Can return null
-	public static FeatureCSVWriter create( String outputName, BoundOutputManagerRouteErrors outputManager, String[] firstHeaderNames, FeatureNameList featureNames ) throws AnchorIOException {
+	public static Optional<FeatureCSVWriter> create( String outputName, BoundOutputManagerRouteErrors outputManager, String[] firstHeaderNames, FeatureNameList featureNames ) throws AnchorIOException {
 		
 		List<String> allHeaders = new ArrayList<String>( Arrays.asList(firstHeaderNames) );
 		allHeaders.addAll( featureNames.asList() );
 		
 		if (!outputManager.isOutputAllowed(outputName) || featureNames==null) {
-			return new FeatureCSVWriter(null);
+			return Optional.of(
+				new FeatureCSVWriter(null)
+			);
 		}
 				
-		CSVWriter writer = CSVWriter.createFromOutputManager(outputName, outputManager.getDelegate());
-		
-		if (writer==null) {
-			return null;
-		}
-		
-		writer.writeHeaders(allHeaders);
-		return new FeatureCSVWriter(writer);
+		Optional<CSVWriter> writer = CSVWriter.createFromOutputManager(outputName, outputManager.getDelegate());
+		return writer.map( w-> {
+			w.writeHeaders(allHeaders);
+			return new FeatureCSVWriter(w);
+		});
 	}
 	
 	public void addResultsVectorWithGroup( MultiName group, ResultsVector resultsFromFeatures, boolean includeID ) {

@@ -58,7 +58,9 @@ public class CheckIfAllowed extends Writer {
 			ManifestFolderDescription manifestDescription,
 			Optional<FolderWriteWithPath> folder) throws OutputWriteFailedException {
 		
-		if (!bom.isOutputAllowed(outputName)) return null;
+		if (!bom.isOutputAllowed(outputName)) {
+			return Optional.empty();
+		}
 
 		preop.exec();
 		
@@ -70,7 +72,9 @@ public class CheckIfAllowed extends Writer {
 			Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator)
 			throws OutputWriteFailedException {
 		
-		if (!bom.isOutputAllowed(outputName)) return;
+		if (!bom.isOutputAllowed(outputName)) {
+			return;
+		}
 
 		preop.exec();
 		
@@ -82,7 +86,9 @@ public class CheckIfAllowed extends Writer {
 			Operation<? extends WritableItem,OutputWriteFailedException> generator, String index)
 			throws OutputWriteFailedException {
 		
-		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return -1;
+		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) {
+			return -1;
+		}
 
 		preop.exec();
 		
@@ -101,11 +107,13 @@ public class CheckIfAllowed extends Writer {
 	}
 
 	@Override
-	public Path writeGenerateFilename(String outputName, String extension,
-			ManifestDescription manifestDescription, String outputNamePrefix,
+	public Optional<Path> writeGenerateFilename(String outputName, String extension,
+			Optional<ManifestDescription> manifestDescription, String outputNamePrefix,
 			String outputNameSuffix, String index) {
 		
-		if (!bom.isOutputAllowed(outputName)) return null;
+		if (!bom.isOutputAllowed(outputName)) {
+			return Optional.empty();
+		}
 		
 		preop.exec();
 		

@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.log.reporter;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-experiment
@@ -34,7 +36,7 @@ import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
 class TextFileLogHelper {
 
-	public static FileOutput createOutput( BoundOutputManager bom, String outputName ) throws OutputWriteFailedException {
+	public static Optional<FileOutput> createOutput( BoundOutputManager bom, String outputName ) throws OutputWriteFailedException {
 		
 		return FileOutputFromManager.create(
 			"txt",
