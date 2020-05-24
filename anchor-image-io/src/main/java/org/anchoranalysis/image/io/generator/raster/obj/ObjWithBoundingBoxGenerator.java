@@ -48,7 +48,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  */
 public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjMask> {
 	
-	public ObjWithBoundingBoxGenerator( ImageRes res ) {
+	public ObjWithBoundingBoxGenerator(ImageRes res ) {
 		this(
 			new ObjAsBinaryChnlGenerator(
 				BinaryValuesByte.getDefault().getOnByte(),
@@ -57,9 +57,9 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 		);
 	}
 	
-	private ObjWithBoundingBoxGenerator( IterableGenerator<ObjMask> generator) {
+	private ObjWithBoundingBoxGenerator(IterableGenerator<ObjMask> generator) {
 		
-		add( null, generator );
+		add(null, generator);
 		
 		// We create an iterable bridge from ObjMask to BoundingBox
 		IterableGeneratorBridge<ObjMask, BoundingBox> generatorBBox = new IterableGeneratorBridge<>(
@@ -67,6 +67,6 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 				sourceObject -> sourceObject.getBoundingBox() 
 		);
 		
-		add( null, generatorBBox );
+		add(null, generatorBBox);
 	}
 }

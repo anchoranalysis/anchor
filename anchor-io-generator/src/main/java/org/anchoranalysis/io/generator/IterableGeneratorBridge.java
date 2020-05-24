@@ -107,7 +107,9 @@ public class IterableGeneratorBridge<S,T> extends Generator implements IterableG
 	public int write(IndexableOutputNameStyle outputNameStyle,
 			FilePathCreator filePathGnrtr,
 			IWriteOperationRecorder writeOperationRecorder,
-			String index, BoundOutputManager outputManager)
+			String index,
+			BoundOutputManager outputManager
+	)
 			throws OutputWriteFailedException {
 		return delegate.getGenerator().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, index, outputManager );
 	}
