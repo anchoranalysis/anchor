@@ -79,8 +79,8 @@ public class BoundedVoxelBox<T extends Buffer> {
 		this.voxelBox = voxelBox;
 	}
 	
-	public BoundedVoxelBox(BoundingBox BoundingBox, VoxelBox<T> voxelBox ) {
-		this.boundingBox = BoundingBox;
+	public BoundedVoxelBox(BoundingBox boundingBox, VoxelBox<T> voxelBox ) {
+		this.boundingBox = boundingBox;
 		this.voxelBox = voxelBox;
 	}
 	
@@ -234,11 +234,11 @@ public class BoundedVoxelBox<T extends Buffer> {
 		// We calculate new sizes
 		Extent e = this.voxelBox.extnt();
 		
-		Extent eNew = new Extent();
-		eNew.setX( e.getX() + negClip.getX() + posClip.getX() );
-		eNew.setY( e.getY() + negClip.getY() + posClip.getY() );
-		eNew.setZ( e.getZ() + negClip.getZ() + posClip.getZ() );
-		
+		Extent eNew = new Extent(
+			e.getX() + negClip.getX() + posClip.getX(),
+			e.getY() + negClip.getY() + posClip.getY(),
+			e.getZ() + negClip.getZ() + posClip.getZ()
+		);
 		return new BoundingBox(negClip, eNew);
 	}
 	
@@ -379,8 +379,8 @@ public class BoundedVoxelBox<T extends Buffer> {
 		return boundingBox;
 	}
 
-	public void setBoundingBox(BoundingBox BoundingBox) {
-		this.boundingBox = BoundingBox;
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
 	}
 
 	public VoxelBox<T> getVoxelBox() {

@@ -52,7 +52,7 @@ public class Chnl {
 	
 	// Constructor
 	public Chnl( VoxelBox<? extends Buffer> bufferAccess, ImageRes res ) {
-		this.dim = new ImageDim(bufferAccess.extnt(), new ImageRes(res));
+		this.dim = new ImageDim(bufferAccess.extnt(), res);
 		delegate = new BoundedVoxelBox<>( new BoundingBox(bufferAccess.extnt()), bufferAccess);
 	}
 	
@@ -84,8 +84,7 @@ public class Chnl {
 		
 		assert( factory!=null );
 		
-		ImageDim sdNew = new ImageDim( getDimensions() );
-		sdNew.scaleXYTo(x,y);
+		ImageDim sdNew = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.getVoxelBox().resizeXY(x, y, interpolator);
 		assert(ba.extnt().getX()==x);

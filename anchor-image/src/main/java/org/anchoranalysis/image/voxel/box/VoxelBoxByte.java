@@ -323,6 +323,8 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		if (!extnt().equals(other.extnt())) {
 			throw new OperationFailedException("other must have same extnt");
 		}
+
+		int vol = getPlaneAccess().extnt().getVolumeXY();
 		
 		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
 			
@@ -330,8 +332,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 			ByteBuffer buffer2 = other.getPlaneAccess().getPixelsForPlane(z).buffer();
 			
 			int indx = 0;
-			int vol = getPlaneAccess().extnt().getVolumeXY();
-			while( indx<vol ) {
+			while(indx<vol) {
 				
 				int elem1 = ByteConverter.unsignedByteToInt( buffer1.get(indx) );
 				int elem2 = ByteConverter.unsignedByteToInt( buffer2.get(indx) );

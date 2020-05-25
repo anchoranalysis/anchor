@@ -112,10 +112,13 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		
 		bbox.clipTo(containingScene);
 		
-		bbox.extnt().setX( bbox.extnt().getX() + (2*paddingXY) );
-		bbox.extnt().setY( bbox.extnt().getY() + (2*paddingXY) );
-		bbox.extnt().setZ( bbox.extnt().getZ() + (2*paddingZ) );
-		
+		bbox.setExtnt(
+			new Extent(
+				bbox.extnt().getX() + (2*paddingXY),
+				bbox.extnt().getY() + (2*paddingXY),
+				bbox.extnt().getZ() + (2*paddingZ)
+			)	
+		);
 		bbox.clipTo(containingScene);
 	}
 	

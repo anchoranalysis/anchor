@@ -29,6 +29,7 @@ package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -82,10 +83,11 @@ public class BoundingBox implements Serializable {
 		
 		checkMaxMoreThanMin(min, max);
 		
-		this.extnt = new Extent();
-		this.extnt.setX( max.getX() - min.getX() + 1 );
-		this.extnt.setY( max.getY() - min.getY() + 1 );
-		this.extnt.setZ( max.getZ() - min.getZ() + 1 );
+		this.extnt = new Extent(
+			max.getX() - min.getX() + 1,
+			max.getY() - min.getY() + 1,
+			max.getZ() - min.getZ() + 1
+		);
 	}
 	
 	/** 
@@ -283,9 +285,11 @@ public class BoundingBox implements Serializable {
 		if (crnrMax.getY()>=e.getY()) crnrMax.setY(e.getY() - 1);
 		if (crnrMax.getZ()>=e.getZ()) crnrMax.setZ(e.getZ() - 1);
 		
-		extnt.setX( crnrMax.getX() - crnrMin.getX() + 1 );
-		extnt.setY( crnrMax.getY() - crnrMin.getY() + 1 );
-		extnt.setZ( crnrMax.getZ() - crnrMin.getZ() + 1 );
+		extnt = new Extent(
+			crnrMax.getX() - crnrMin.getX() + 1,
+			crnrMax.getY() - crnrMin.getY() + 1,
+			crnrMax.getZ() - crnrMin.getZ() + 1
+		);
 		
 		return new Point3i( crnrMin.getX()-xOld, crnrMin.getY()-yOld, crnrMin.getZ()-zOld );
 	}
@@ -345,63 +349,6 @@ public class BoundingBox implements Serializable {
 		this.extnt.setZ(1);
 	}
 	
-	// Helper classes for calculating the intersection along each axis
-	private static class MinExtentIntersector {
-		private int min;
-		private int extnt;
-		
-		public boolean calc( int min1, int min2, int max1, int max2 ) {
-			
-			int minNew = Math.max(min1, min2);
-			int maxNew = Math.min(max1, max2);
-			if (minNew <= maxNew) {
-				this.min = minNew;
-				this.extnt = maxNew - minNew + 1;
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public int getMin() {
-			return min;
-		}
-
-		public int getExtnt() {
-			return extnt;
-		}
-
-	}
-	
-	
-	// Helper classes for calculating the union along each axis
-	private static class MaxExtentIntersector {
-		private int min;
-		private int extnt;
-		
-		public void calc( int min1, int min2, int max1, int max2 ) {
-			
-			int minNew = Math.min(min1, min2);
-			int maxNew = Math.max(max1, max2);
-			if (minNew <= maxNew) {
-				this.min = minNew;
-				this.extnt = maxNew - minNew + 1;
-			} else {
-				assert false;
-			}
-		}
-
-		public int getMin() {
-			return min;
-		}
-
-		public int getExtnt() {
-			return extnt;
-		}
-
-	}
-	
-
 	public static Point3i relPosTo( Point3i relPoint, Point3i srcPoint ) {
 		Point3i p = new Point3i( relPoint );
 		p.sub( srcPoint );
@@ -453,34 +400,27 @@ public class BoundingBox implements Serializable {
 		
 		Point3i crnrMax = calcCrnrMax();
 		Point3i crnrMaxOthr = othr.calcCrnrMax();
+		
+		Optional<ExtentIntersector> meiX = ExtentIntersector.createMin(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getX() );
+		Optional<ExtentIntersector> meiY = ExtentIntersector.createMin(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getY() );
+		Optional<ExtentIntersector> meiZ = ExtentIntersector.createMin(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getZ() );
+		
+		if (!meiX.isPresent() || !meiY.isPresent() || !meiZ.isPresent()) {
+			return false;
+		}
+				
+		if (modifyState) {
+			crnrMin = new Point3i(
+				meiX.get().getMin(),
+				meiY.get().getMin(),
+				meiZ.get().getMin()
+			);
 			
-		MinExtentIntersector mei = new MinExtentIntersector();
-		
-		if (mei.calc( crnrMin.getX(), othr.crnrMin.getX(), crnrMax.getX(), crnrMaxOthr.getX() )) {
-			if (modifyState) {
-				crnrMin.setX( mei.getMin() );
-				extnt.setX( mei.getExtnt() );
-			}
-		} else {
-			return false;
-		}
-		
-		if (mei.calc( crnrMin.getY(), othr.crnrMin.getY(), crnrMax.getY(), crnrMaxOthr.getY() )) {
-			if (modifyState) {
-				crnrMin.setY( mei.getMin() );
-				extnt.setY( mei.getExtnt() );
-			}
-		} else {
-			return false;
-		}
-
-		if (mei.calc( crnrMin.getZ(), othr.crnrMin.getZ(), crnrMax.getZ(), crnrMaxOthr.getZ() )) {
-			if (modifyState) {
-				crnrMin.setZ( mei.getMin() );
-				extnt.setZ( mei.getExtnt() );
-			}
-		} else {
-			return false;
+			extnt = new Extent(
+				meiX.get().getExtnt(),
+				meiY.get().getExtnt(),
+				meiZ.get().getExtnt()
+			);
 		}
 		
 		return true;
@@ -502,20 +442,22 @@ public class BoundingBox implements Serializable {
 		
 		Point3i crnrMax = calcCrnrMax();
 		Point3i crnrMaxOthr = othr.calcCrnrMax();
-			
-		MaxExtentIntersector mei = new MaxExtentIntersector();
 		
-		mei.calc( crnrMin.getX(), othr.crnrMin.getX(), crnrMax.getX(), crnrMaxOthr.getX() );
-		crnrMin.setX( mei.getMin() );
-		extnt.setX( mei.getExtnt() );
-				
-		mei.calc( crnrMin.getY(), othr.crnrMin.getY(), crnrMax.getY(), crnrMaxOthr.getY() );
-		crnrMin.setY( mei.getMin() );
-		extnt.setY( mei.getExtnt() );
+		ExtentIntersector meiX = ExtentIntersector.createMax(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getX() );
+		ExtentIntersector meiY = ExtentIntersector.createMax(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getY() );
+		ExtentIntersector meiZ = ExtentIntersector.createMax(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getZ() );
 
-		mei.calc( crnrMin.getZ(), othr.crnrMin.getZ(), crnrMax.getZ(), crnrMaxOthr.getZ() );
-		crnrMin.setZ( mei.getMin() );
-		extnt.setZ( mei.getExtnt() );
+		crnrMin = new Point3i(
+			meiX.getMin(),
+			meiY.getMin(),
+			meiZ.getMin()
+		);
+		
+		extnt = new Extent(
+			meiX.getExtnt(),
+			meiY.getExtnt(),
+			meiZ.getExtnt()
+		);
 	}
 	
 	public void shrinkByQuantiles( double quantileLower, double quantileHigher ) {

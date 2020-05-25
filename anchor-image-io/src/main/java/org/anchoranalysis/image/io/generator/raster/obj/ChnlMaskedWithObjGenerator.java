@@ -33,6 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -116,10 +117,10 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		ImageDim newSd = new ImageDim( srcChnl.getDimensions() );
-		newSd.setX( bbox.extnt().getX() );
-		newSd.setY( bbox.extnt().getY() );
-		newSd.setZ( bbox.extnt().getZ() );
+		ImageDim newSd = new ImageDim(
+			new Extent(bbox.extnt()),
+			srcChnl.getDimensions().getRes()
+		);
 		
 		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
 		

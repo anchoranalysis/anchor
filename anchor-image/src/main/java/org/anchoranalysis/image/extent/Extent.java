@@ -151,50 +151,49 @@ public final class Extent implements Serializable {
 		return result;
 	}
 
-	public final int getX() {
+	public int getX() {
 		return len.getX();
 	}
-	
 
-	public final int getY() {
+	public int getY() {
 		return len.getY();
 	}
 
-	public final int getZ() {
+	public int getZ() {
 		return len.getZ();
 	}
 	
-	public final int getXEx() {
+	public int getXEx() {
 		return len.getX() + 1;
 	}
 	
-	public final int getYEx() {
+	public int getYEx() {
 		return len.getY() + 1;
 	}
 	
-	public final int getZEx() {
+	public int getZEx() {
 		return len.getZ() + 1;
 	}
 		
-	public final int getValueByDimension(int dimIndex) {
+	public int getValueByDimension(int dimIndex) {
 		return len.getValueByDimension(dimIndex);
 	}
 	
-	public final int getValueByDimension(AxisType axis) {
+	public int getValueByDimension(AxisType axis) {
 		return len.getValueByDimension(axis);
 	}
 
-	public final void setX(int x) {
+	public void setX(int x) {
 		len.setX(x);
 		updateSxy();
 	}
 
-	public final void setY(int y) {
+	public void setY(int y) {
 		len.setY(y);
 		updateSxy();
 	}
 
-	public final void setZ(int z) {
+	public void setZ(int z) {
 		len.setZ(z);
 	}
 		
@@ -251,11 +250,6 @@ public final class Extent implements Serializable {
 		return offset(pnt.getX(), pnt.getY(), 0);
 	}
 	
-	public void setXY( int x, int y ) {
-		setX(x);
-		setY(y);
-	}
-	
 	public Extent ex() {
 		return new Extent( getX()+1, getY()+1, getZ()+1 );
 	}
@@ -272,6 +266,14 @@ public final class Extent implements Serializable {
 		int[] extnts = createArray();
 		Arrays.sort( extnts );
 		return extnts;
+	}
+	
+	public Extent duplicateChangeZ(int z) {
+		return new Extent(
+			len.getX(),
+			len.getY(),
+			z
+		);
 	}
 
 	public boolean containsX( double x ) {
@@ -338,10 +340,13 @@ public final class Extent implements Serializable {
 	}
 	
 	public void scaleXYBy( ScaleFactor sf ) {
-		setXY(
-			ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX()),
+		len.setX(
+			ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX())
+		);
+		len.setY(
 			ScaleFactorUtilities.multiplyAsInt(sf.getY(), getY())
 		);
+		updateSxy();
 	}
 	
 	public void subtract( Extent e ) {

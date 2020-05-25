@@ -368,11 +368,11 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 	
 	// Merges all objects together, and then splits again into connected components
 	// BoundingBox is a bounding box that contains all objects, allowing us to avoid writing to a full buffer
-	public VoxelBox<ByteBuffer> merge( BoundingBox BoundingBox ) {
+	public VoxelBox<ByteBuffer> merge( BoundingBox bbox ) {
 		
-		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( BoundingBox.extnt() );
+		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( bbox.extnt() );
 		
-		Point3i crnrSub = new Point3i( BoundingBox.getCrnrMin() );
+		Point3i crnrSub = new Point3i( bbox.getCrnrMin() );
 		crnrSub.scale(-1);
 		
 		// We write each object to the buffer

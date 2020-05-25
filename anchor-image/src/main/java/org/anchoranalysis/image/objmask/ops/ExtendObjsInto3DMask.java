@@ -134,8 +134,10 @@ public class ExtendObjsInto3DMask {
 	}
 		
 	private static Extent copyExtentChangeZ( Extent in, int z ) {
-		Extent out = new Extent( in );
-		out.setZ( z );
-		return out;
+		return new Extent(
+			in.getX(),
+			in.getY(),
+			z
+		);
 	}
 }

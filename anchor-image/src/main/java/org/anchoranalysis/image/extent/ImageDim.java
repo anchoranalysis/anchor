@@ -36,7 +36,7 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 /**
  * The dimensions of an image (in voxels), together with the image resolution
  */
-public class ImageDim implements Serializable {
+public final class ImageDim implements Serializable {
 
 	/**
 	 * 
@@ -44,49 +44,49 @@ public class ImageDim implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private ImageRes res;
-	private Extent extent;
+	private final Extent extent;
 	
-	/** Construct with default extent (0 for each dimension) and resolution (1.0 for each dimension) */
-	public ImageDim() {
-		this.extent = new Extent();
-		this.res = new ImageRes();
+	/** Construct with an explicit extent and default resolution (1.0 for each dimension)*/
+	public ImageDim(Extent extent) {
+		this(extent, new ImageRes());
 	}
 
 	/** Construct with an explicit extent and resolution */
 	public ImageDim( Extent extent, ImageRes res ) {
 		this.extent = new Extent(extent);
-		this.res = new ImageRes( res );
-	}
-	
-	/** Calculates image-dimensions for x,y,z using default resolution (1.0 for each dimension) */
-	public ImageDim( int x, int y, int z ) {
-		this.extent = new Extent(x, y, z);
-		this.res = new ImageRes();
+		this.res = res;
 	}
 	
 	/** Copy constructor */
 	public ImageDim( ImageDim dim ) {
 		this.extent = new Extent( dim.extent );
-		this.res = new ImageRes( dim.res );
+		this.res = dim.res;
 	}
 	
-	public void scaleXYTo( int x, int y ) {
-		
-		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(
-			extent,
-			new Extent(x,y,0)
+	public ImageDim scaleXYTo( int x, int y ) {
+		Extent extentScaled = new Extent(
+			x,
+			y,
+			extent.getZ()
+		); 
+		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
+		return new ImageDim(
+			extentScaled,
+			res.scaleXY(sf)
 		);
-				
-		extent.setXY(x,y);
-		
-		res.scaleXY(sf);
 	}
 	
 	public void scaleXYBy( ScaleFactor sf ) {
-				
 		extent.scaleXYBy(sf);
-		
-		res.scaleXY(sf);
+		res = res.scaleXY(sf);
+	}
+	
+	
+	public ImageDim duplicateChangeZ(int z) {
+		return new ImageDim(
+			extent.duplicateChangeZ(z),
+			res
+		);
 	}
 	
 	public long getVolume() {
@@ -97,36 +97,24 @@ public class ImageDim implements Serializable {
 		return extent.getVolumeXY();
 	}
 
-	public final int getX() {
+	public int getX() {
 		return extent.getX();
 	}
 
-	public final int getY() {
+	public int getY() {
 		return extent.getY();
 	}
 
-	public final int getZ() {
+	public int getZ() {
 		return extent.getZ();
 	}
 
-	public final int offset(int x, int y) {
+	public int offset(int x, int y) {
 		return extent.offset(x, y);
 	}
 
-	public final int offset(int x, int y, int z) {
+	public int offset(int x, int y, int z) {
 		return extent.offset(x, y, z);
-	}
-
-	public final void setX(int arg0) {
-		extent.setX(arg0);
-	}
-
-	public final void setY(int arg0) {
-		extent.setY(arg0);
-	}
-
-	public final void setZ(int arg0) {
-		extent.setZ(arg0);
 	}
 
 	public Extent getExtnt() {
@@ -142,7 +130,7 @@ public class ImageDim implements Serializable {
 	}
 	
 	public boolean equals( ImageDim obj ) {
-		return extent.equals( obj.extent );
+		return extent.equals(obj.extent);
 	}
 
 	public final int offset(Point3i pnt) {

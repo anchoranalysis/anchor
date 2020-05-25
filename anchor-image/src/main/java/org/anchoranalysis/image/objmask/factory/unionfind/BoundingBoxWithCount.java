@@ -34,14 +34,14 @@ class BoundingBoxWithCount {
 
 	private static Extent extnt1 = new Extent(1,1,1);
 	
-	private BoundingBox BoundingBox;
+	private BoundingBox bbox;
 	private int cnt = 0;
 	
 	public void add( Point3i pnt ) {
-		if (BoundingBox==null) {
-			BoundingBox = new BoundingBox( pnt, extnt1 );
+		if (bbox==null) {
+			bbox = new BoundingBox( pnt, extnt1 );
 		} else {
-			BoundingBox.add(pnt);
+			bbox.add(pnt);
 		}
 		cnt++;
 	}
@@ -51,6 +51,6 @@ class BoundingBoxWithCount {
 	}
 
 	public BoundingBox getBoundingBox() {
-		return BoundingBox;
+		return bbox;
 	}
 }

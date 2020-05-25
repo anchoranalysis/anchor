@@ -131,8 +131,7 @@ public class StackProviderGenerateString extends StackProvider {
 	private Chnl createExpandedChnl( Chnl chnl, int zHeight ) throws CreateException {
 		assert (chnl.getDimensions().getZ()==1);
 		
-		ImageDim sdNew = new ImageDim( chnl.getDimensions() );
-		sdNew.setZ(zHeight);
+		ImageDim sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
 		
 		BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtnt());
 		

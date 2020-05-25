@@ -34,5 +34,5 @@ import org.anchoranalysis.image.stack.DisplayStack;
 // Extracts regions from a DisplayStack for presentation to the user
 public abstract class RegionExtracter {
 
-	public abstract DisplayStack extractRegionFrom( BoundingBox BoundingBox, double zoomFactor ) throws OperationFailedException;
+	public abstract DisplayStack extractRegionFrom( BoundingBox bbox, double zoomFactor ) throws OperationFailedException;
 }

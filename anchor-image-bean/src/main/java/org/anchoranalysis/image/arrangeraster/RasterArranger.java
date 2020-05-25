@@ -61,10 +61,9 @@ public class RasterArranger {
 			throw new InitException("rasterIterator has more items than can be accomodated");
 		}
 
-		dim = new ImageDim();
-		dim.setX( bboxSetOnPlane.getExtnt().getX() );
-		dim.setY( bboxSetOnPlane.getExtnt().getY() );
-		dim.setZ( bboxSetOnPlane.getExtnt().getZ() );
+		dim = new ImageDim(
+			new Extent(bboxSetOnPlane.getExtnt())
+		);
 	}
 	
 	public RGBStack createStack( List<RGBStack> list, ChnlFactorySingleType chnlfactory ) {

@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.bean.operator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
@@ -43,6 +44,21 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	private List<Feature<T>> list = new ArrayList<>();
 	// END BEAN PARAMETERS
 		
+	/**
+	 * A string description of all the items of the list concatenated together with a character in between
+	 * 
+	 * @param list
+	 * @param operatorDscr
+	 * @return
+	 */
+	protected String descriptionForList(String operatorDscr) {
+		List<String> featureDscrs = list.stream()
+				.map( Feature::getDscrLong)
+				.collect( Collectors.toList() );
+		
+		return String.join(operatorDscr, featureDscrs);
+	}
+	
 	public List<Feature<T>> getList() {
 		return list;
 	}

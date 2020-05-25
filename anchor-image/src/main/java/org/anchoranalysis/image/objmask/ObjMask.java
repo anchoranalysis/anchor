@@ -96,24 +96,24 @@ public class ObjMask {
 		this.bvb = new BinaryValuesByte( voxelBox.getBinaryValues() );
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
+	public ObjMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox ) {
+		delegate = new BoundedVoxelBox<>(bbox, voxelBox);
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox, BinaryValuesByte binaryValues ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
+	public ObjMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox, BinaryValuesByte binaryValues ) {
+		delegate = new BoundedVoxelBox<>(bbox, voxelBox);
 		this.bv = binaryValues.createInt();
 		this.bvb = new BinaryValuesByte( binaryValues );
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
+	public ObjMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues ) {
+		delegate = new BoundedVoxelBox<>(bbox, voxelBox);
 		this.bv = binaryValues.duplicate();
 		this.bvb = binaryValues.createByte();
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, BinaryVoxelBox<ByteBuffer> voxelBox ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox,voxelBox.getVoxelBox());
+	public ObjMask(BoundingBox bbox, BinaryVoxelBox<ByteBuffer> voxelBox ) {
+		delegate = new BoundedVoxelBox<>(bbox,voxelBox.getVoxelBox());
 		this.bv = new BinaryValues( voxelBox.getBinaryValues() );
 		this.bvb = new BinaryValuesByte( voxelBox.getBinaryValues() );
 	}
@@ -461,8 +461,8 @@ public class ObjMask {
 		return delegate.getBoundingBox();
 	}
 
-	public void setBoundingBox(BoundingBox BoundingBox) {
-		delegate.setBoundingBox(BoundingBox);
+	public void setBoundingBox(BoundingBox bbox) {
+		delegate.setBoundingBox(bbox);
 	}
 
 	public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
@@ -629,8 +629,7 @@ public class ObjMask {
 		return null;
 	}
 
-	public void setIntersectingPixels(ObjMask omCompare1, ObjMask omCompare2,
-			ImageDim dim, int setVal) {
+	public void setIntersectingPixels(ObjMask omCompare1, ObjMask omCompare2, ImageDim dim, int setVal) {
 		// Let's make new ObjMasks that are relative to delegate
 		
 		ObjMask rel1 = omCompare1.relMaskTo(delegate.getBoundingBox());
@@ -649,9 +648,10 @@ public class ObjMask {
 	public ObjMask relMaskTo( BoundingBox bbox ) {
 		Point3i pnt = delegate.getBoundingBox().relPosTo(bbox);
 		
-		BoundingBox bboxNew = new BoundingBox(pnt, delegate.extnt());
-		
-		return new ObjMask( bboxNew, delegate.getVoxelBox() );
+		return new ObjMask(
+			new BoundingBox(pnt, delegate.extnt()),
+			delegate.getVoxelBox()
+		);
 	}
 	
 	@Override

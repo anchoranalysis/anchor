@@ -32,14 +32,17 @@ import java.io.Serializable;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.Tuple3d;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 
 /**
  * The resolution of an image i.e. what a single voxel represents in physical units (meters) in x, y, z
+ * 
+ * <p>This class is IMMUTABLE</p>.
  *
  */
-public class ImageRes implements Serializable {
+public final class ImageRes implements Serializable {
 
 	/**
 	 * 
@@ -47,26 +50,29 @@ public class ImageRes implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	// Stores in Metres
-	private Point3d res;
+	private final Point3d res;
 	
 	public ImageRes() {
-		super();
-		this.res = new Point3d(1,1,1);
+		this(1.0, 1.0, 1.0);
+	}
+		
+	public ImageRes(double x, double y, double z) {
+		this(
+			new Point3d(x,y,z)
+		);
 	}
 	
-	public ImageRes( ImageRes src ) {
-		super();
-		this.res = new Point3d(src.res);
+	public ImageRes(Tuple3d res) {
+		// Copy to ensure it is independent of any changes outside
+		this.res = new Point3d(res);
 	}
 	
 	public ImageRes duplicateFlattenZ( int prevZSize ) {
-		ImageRes dup = duplicate();
-		dup.setZ( dup.getZ() *prevZSize );
-		return dup;
-	}
-	
-	public ImageRes duplicate() {
-		return new ImageRes(this);
+		return new ImageRes(
+			res.getX(),
+			res.getY(),
+			res.getZ() * prevZSize
+		);
 	}
 	
 	public double getX() {
@@ -89,35 +95,12 @@ public class ImageRes implements Serializable {
 		return getX() * getY();
 	}
 	
-	public void set( double[] res ) {
-		this.res.setX( res[0] );
-		this.res.setY( res[1] );
-		this.res.setZ( res[2] );
-	}
-	
-	public void setX( double val ) {
-		res.setX( val );
-	}
-	
-	public void setY( double val ) {
-		res.setY( val );
-	}
-	
-	public void setZ( double val ) {
-		res.setZ( val );
-	}
-	
-	public void scaleX( double ratio ) {
-		res.setX( res.getX() * ratio );
-	}
-	
-	public void scaleY( double ratio ) {
-		res.setY( res.getY() * ratio );
-	}
-	
-	public void scaleXY( ScaleFactor sf ) {
-		scaleX( sf.getX() );
-		scaleY( sf.getY() );
+	public ImageRes scaleXY(ScaleFactor sf) {
+		return new ImageRes(
+			res.getX() * sf.getX(),
+			res.getY() * sf.getY(),
+			res.getZ()
+		);
 	}
 	
 	private double max2D() {

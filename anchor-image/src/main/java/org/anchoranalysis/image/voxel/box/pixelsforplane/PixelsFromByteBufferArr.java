@@ -47,8 +47,9 @@ public class PixelsFromByteBufferArr implements IPixelsForPlane<ByteBuffer> {
 	}
 	
 	private void init() {
+		int volumeXY = extnt.getVolumeXY();
 		for (int z=0; z<extnt.getZ(); z++) {
-			buffer[z] = VoxelBufferByte.allocate( (int) extnt.getVolumeXY() );
+			buffer[z] = VoxelBufferByte.allocate(volumeXY);
 		}		
 	}
 	

@@ -71,9 +71,12 @@ public class IJWrap {
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
 	
-	public static Chnl chnlFromImageStackByte( ImageStack imageStack, ImageRes sr, ChnlFactorySingleType factory ) {
+	public static Chnl chnlFromImageStackByte( ImageStack imageStack, ImageRes res, ChnlFactorySingleType factory ) {
 		
-		ImageDim sd = new ImageDim( new Extent(imageStack.getWidth(), imageStack.getHeight(), imageStack.getSize()), sr.duplicate() );
+		ImageDim sd = new ImageDim(
+			new Extent(imageStack.getWidth(), imageStack.getHeight(), imageStack.getSize()),
+			res
+		);
 		
 		Chnl chnlOut = factory.createEmptyUninitialised( sd );
 		
@@ -82,7 +85,7 @@ public class IJWrap {
 		return chnlOut;
 	}
 
-	public static Chnl chnlFromImagePlus( ImagePlus imagePlus, ImageRes sr ) throws IncorrectVoxelDataTypeException {
+	public static Chnl chnlFromImagePlus( ImagePlus imagePlus, ImageRes res ) throws IncorrectVoxelDataTypeException {
 		
 		ChnlFactory factory = ChnlFactory.instance();
 		
@@ -92,7 +95,7 @@ public class IJWrap {
 				imagePlus.getHeight(),
 				imagePlus.getStackSize()
 			),
-			sr.duplicate()
+			res
 		);
 				
 		if (imagePlus.getType()==ImagePlus.GRAY8) {

@@ -123,12 +123,10 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		
 		if (overlayImg.getChnl(0).getDimensions().getX() > bboxSet.getExtnt().getX()) {
 			overlayE.setX(bboxSet.getExtnt().getX());
-			//throw new ArrangeRasterException("Width of overlay image is greater than source image");
 		}
 		
 		if (overlayImg.getChnl(0).getDimensions().getY() > bboxSet.getExtnt().getY()) {
 			overlayE.setY(bboxSet.getExtnt().getY());
-			//throw new ArrangeRasterException("Height of overlay image is greater than source image");
 		}
 
 			

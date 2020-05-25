@@ -585,19 +585,22 @@ public abstract class VoxelBox<T extends Buffer> {
 	 */
 	public VoxelBox<T> resizeXY( int x, int y, Interpolator interpolator ) {
 		
-		Extent e = new Extent( extnt());
-		e.setXY(x, y);
+		Extent extentResized = new Extent(
+			x,
+			y,
+			extnt().getZ()
+		);
 		
-		VoxelBox<T> bufferTarget = factory.create(e);
+		VoxelBox<T> bufferTarget = factory.create(extentResized);
 		
-		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==e.getVolumeXY());
+		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==extentResized.getVolumeXY());
 		
 		VoxelBoxWrapper srcWrapped = new VoxelBoxWrapper( this );
 		VoxelBoxWrapper trgtWrapped = new VoxelBoxWrapper( bufferTarget);
 		
 		InterpolateUtilities.transferSlicesResizeXY( srcWrapped, trgtWrapped, interpolator );
 			
-		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==e.getVolumeXY());
+		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==extentResized.getVolumeXY());
 		return bufferTarget;
 	}
 	

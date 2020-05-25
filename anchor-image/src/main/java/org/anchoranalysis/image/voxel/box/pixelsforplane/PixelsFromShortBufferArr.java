@@ -47,9 +47,10 @@ public class PixelsFromShortBufferArr implements IPixelsForPlane<ShortBuffer> {
 	}
 	
 	private void init() {
+		int volumeXY = extnt.getVolumeXY();
 		for (int z=0; z<extnt.getZ(); z++) {
-			buffer[z] = VoxelBufferShort.allocate( extnt.getVolumeXY() );
-			assert(buffer[z].buffer().array().length == extnt.getVolumeXY() );
+			buffer[z] = VoxelBufferShort.allocate(volumeXY);
+			assert(buffer[z].buffer().array().length == volumeXY);
 		}		
 	}
 	

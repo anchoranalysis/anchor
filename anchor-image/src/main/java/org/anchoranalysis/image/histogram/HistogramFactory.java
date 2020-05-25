@@ -205,8 +205,9 @@ public class HistogramFactory {
 		Histogram hist = new HistogramArray( (int) inputBox.dataType().maxValue() );
 		
 		Extent e = inputBox.extnt();
+		int volumeXY = e.getVolumeXY();
 		for (int z=0; z<e.getZ(); z++) {
-			addBufferToHistogram( hist, inputBox.getPixelsForPlane(z), (int) e.getVolumeXY() );
+			addBufferToHistogram( hist, inputBox.getPixelsForPlane(z), volumeXY);
 		}
 		return hist;
 	}
