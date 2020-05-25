@@ -1,4 +1,6 @@
-package org.anchoranalysis.core.name.value;
+package org.anchoranalysis.io.generator.combined;
+
+import java.util.Optional;
 
 /*-
  * #%L
@@ -34,35 +36,23 @@ package org.anchoranalysis.core.name.value;
  *
  * @param <V> value-type
  */
-public final class SimpleNameValue<V> implements NameValue<V> {
+public class OptionalNameValue<V> {
 
-	private String name;
+	private Optional<String> name;
 	
 	private V value;
 
-	public SimpleNameValue(String name, V value) {
+	public OptionalNameValue(Optional<String> name, V value) {
 		super();
 		this.name = name;
 		this.value = value;
 	}
 
-	@Override
-	public String getName() {
+	public Optional<String> getName() {
 		return name;
 	}
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
 	public V getValue() {
 		return value;
-	}
-
-	@Override
-	public void setValue(V value) {
-		this.value = value;
 	}
 }

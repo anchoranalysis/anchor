@@ -2,8 +2,6 @@ package org.anchoranalysis.io.manifest;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.bean.AnchorBean;
-
 /*
  * #%L
  * anchor-io
@@ -30,29 +28,16 @@ import org.anchoranalysis.bean.AnchorBean;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-
-public class ManifestDescription extends AnchorBean<ManifestDescription> implements Serializable {
+public class ManifestDescription implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String type;
-	
-	@BeanField
-	private String function;
-	// END BEAN PROPERTIES
+	private final String type;
+	private final String function;
 
-	/** Default bean constructor with unfilled properties.*/
-	public ManifestDescription() {
-		// DEFAULT BEAN CONSTRUCTOR
-	}
-	
 	public ManifestDescription(String type, String function) {
 		super();
 		this.type = type;
@@ -63,13 +48,8 @@ public class ManifestDescription extends AnchorBean<ManifestDescription> impleme
 	public String getFunction() {
 		return function;
 	}
-	public void setFunction(String function) {
-		this.function = function;
-	}
+
 	public String getType() {
 		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.optscheme.step;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -29,12 +31,13 @@ package org.anchoranalysis.mpp.sgmn.optscheme.step;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualState;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 
 /** Exposes data which is only needed by reporting tools */
 public class Reporting<S> {
 	
 	private int iter;
-	private DualState<S> state;
+	private final DualState<S> state;
 	private S proposed;
 	
 	/** An optional additional cfg-NRG that provides an additional explanation of proposed */
@@ -53,7 +56,6 @@ public class Reporting<S> {
 		boolean accptd,
 		boolean best
 	) {
-		super();
 		this.iter = iter;
 		this.state = state;
 		this.proposed = proposed;
@@ -91,12 +93,14 @@ public class Reporting<S> {
 		return proposedSecondary;
 	}
 	
-	public S getCfgNRGAfter() {
-		if (state.getCrnt()!=null) {
-			return state.getCrnt();
-		} else {
-			return null;
-		}
+	public Optional<S> getCfgNRGAfterOptional() {
+		return state.getCrnt();
+	}
+	
+	public S getCfgNRGAfter() throws ReporterException {
+		return state.getCrnt().orElseThrow( ()->
+			new ReporterException("No 'after' defined yet")
+		);
 	}
 	
 	public int getIter() {
@@ -107,7 +111,7 @@ public class Reporting<S> {
 		return dscrData.getKernelNoProposalDescription();
 	}
 	
-	public S getBest() {
+	public Optional<S> getBest() {
 		return state.getBest();
 	}
 	

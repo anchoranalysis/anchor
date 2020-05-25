@@ -37,9 +37,6 @@ public abstract class ReporterInterval<T> extends ReporterOptimizationStep<T> {
 	private double aggIntervalLog10 = -1;
 	// END
 	
-	public ReporterInterval() {
-	}
-	
 	@Override
 	public void reportItr( Reporting<T> reporting  ) {
 	}

@@ -37,9 +37,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class FileOutputFromManager {
 	
-	private FileOutputFromManager() {
-		
-	}
+	private FileOutputFromManager() {}
 
 	/**
 	 * 
@@ -54,7 +52,7 @@ public class FileOutputFromManager {
 	 */
 	public static Optional<FileOutput> create(
 		String extension,
-		ManifestDescription manifestDescription,
+		Optional<ManifestDescription> manifestDescription,
 		BoundOutputManager outputManager,
 		String outputName
 	) throws OutputWriteFailedException {
@@ -62,14 +60,13 @@ public class FileOutputFromManager {
 		Optional<Path> fileOutputPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
 			outputName,
 			extension,
-			Optional.of(manifestDescription),
+			manifestDescription,
 			"",
 			"",
 			""
 		);
-		
 		return fileOutputPath.map( path->
-			new FileOutput(path.toString(), extension, manifestDescription)
+			new FileOutput(path.toString())
 		);
 		
 	}

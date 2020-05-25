@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.collection.TreeMapCreate;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.functional.OptionalExceptional;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
@@ -145,7 +145,7 @@ public class GroupedResultsVectorCollection {
 			groupHeaderNames,
 			featureNamesNonAggregate
 		);
-		Optional<FeatureCSVWriter> csvWriterAggregate = OptionalExceptional.flatMap(
+		Optional<FeatureCSVWriter> csvWriterAggregate = OptionalUtilities.flatMap(
 			featuresAggregate,
 			fa -> FeatureCSVWriter.create(
 				"csvAgg",

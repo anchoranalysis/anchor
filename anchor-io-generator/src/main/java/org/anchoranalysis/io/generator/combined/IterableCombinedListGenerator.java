@@ -51,10 +51,16 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	private ArrayList<IterableGenerator<T>> list = new ArrayList<>();
 	
 	public IterableCombinedListGenerator() {
-	
-		super();
 		list = new ArrayList<>();
 	}
+	
+	@Override
+	public void start() throws OutputWriteFailedException {
+		for (IterableGenerator<T> generator : list) {
+			generator.start();
+		}
+	}
+
 	
 	@Override
 	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
@@ -95,18 +101,19 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 		return this;
 	}
 
-	public boolean add(String name, IterableGenerator<T> element) {
-		list.add(element);
-		return delegate.add(name, element.getGenerator());
+	public void add(IterableGenerator<T> element) {
+		add(
+			element,
+			Optional.empty()
+		);
 	}
 	
-	@Override
-	public void start() throws OutputWriteFailedException {
-		for (IterableGenerator<T> generator : list) {
-			generator.start();
-		}
+	public void add(String name, IterableGenerator<T> element) {
+		add(
+			element,
+			Optional.of(name)
+		);
 	}
-
 
 	@Override
 	public void end() throws OutputWriteFailedException {
@@ -115,5 +122,8 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 		}
 	}
 
-
+	private void add(IterableGenerator<T> element, Optional<String> name) {
+		list.add(element);
+		delegate.add(element.getGenerator(), name);
+	}
 }

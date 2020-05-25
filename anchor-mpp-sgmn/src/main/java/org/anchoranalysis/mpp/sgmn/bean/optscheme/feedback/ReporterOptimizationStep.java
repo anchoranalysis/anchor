@@ -41,7 +41,7 @@ public abstract class ReporterOptimizationStep<T> extends FeedbackReceiverBean<T
 	public abstract void reportItr( Reporting<T> reporting ) throws ReporterException;
 	
 	@Override
-	public abstract void reportNewBest( Reporting<T> reporting );
+	public abstract void reportNewBest( Reporting<T> reporting ) throws ReporterException;
 	
 	@Override
 	public abstract void reportEnd( OptimizationFeedbackEndParams<T> optStep ) throws ReporterException;

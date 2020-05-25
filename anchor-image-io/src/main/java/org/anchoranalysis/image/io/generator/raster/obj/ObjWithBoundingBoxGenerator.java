@@ -39,8 +39,6 @@ import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
-// Outputs a mask and a serialized Bounding Box for each ObjMask
-
 /**
  * 
  * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator} but also outputs a serialized bounding box.
@@ -61,16 +59,16 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 	
 	private ObjWithBoundingBoxGenerator(IterableGenerator<ObjMask> generator) {
 		
-		add(null, generator);
+		add(generator);
 		
 		// We create an iterable bridge from ObjMask to BoundingBox
 		IterableGeneratorBridge<ObjMask, BoundingBox> generatorBBox = new IterableGeneratorBridge<>(
-				new ObjectOutputStreamGenerator<>(
-					Optional.of("BoundingBox")
-				),
-				sourceObject -> sourceObject.getBoundingBox() 
+			new ObjectOutputStreamGenerator<>(
+				Optional.of("BoundingBox")
+			),
+			sourceObject -> sourceObject.getBoundingBox() 
 		);
 		
-		add(null, generatorBBox);
+		add(generatorBBox);
 	}
 }

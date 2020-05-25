@@ -8,9 +8,9 @@ import java.util.Optional;
  * @author Owen Feehan
  *
  */
-public class OptionalExceptional {
+public class OptionalUtilities {
 	
-	private OptionalExceptional() {}
+	private OptionalUtilities() {}
 
 	/**
 	 * Function used to map from one optional to another
@@ -24,6 +24,36 @@ public class OptionalExceptional {
 	@FunctionalInterface
 	public interface MapFunction<S, T, E extends Throwable> {
 		T apply(S in) throws E;
+	}
+	
+	/**
+	 * Consumes a value and throws an exception
+	 * 
+	 * @author Owen Feehan
+	 *
+	 * @param <S> source-type
+	 * @param <E> exception that can be thrown during apply
+	 */ 
+	@FunctionalInterface
+	public interface ConsumerWithException<S, E extends Throwable> {
+		void accept(S in) throws E;
+	}
+		
+	/**
+	 * Like {@link Optional::map} but tolerates an exception in the mapping function, which is immediately thrown.
+	 * 
+	 * @param <S> incoming optional-type for map
+	 * @param <T> outgoing optional-type for map
+	 * @param <E> exception that may be thrown during mapping
+	 * @param opt incoming optional
+	 * @param mapFunc the function that does the mapping from incoming to outgoing
+	 * @return the outgoing "mapped" optional
+	 * @throws E an exception if the mapping function throws it
+	 */
+	public static <S,E extends Throwable> void ifPresent( Optional<S> opt, ConsumerWithException<S,E> consumerFunc ) throws E {
+		if (opt.isPresent()) {
+			consumerFunc.accept( opt.get() );
+		}
 	}
 
 	/**

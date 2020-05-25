@@ -36,11 +36,14 @@ import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
 class TextFileLogHelper {
 
+	private TextFileLogHelper() {}
+	
 	public static Optional<FileOutput> createOutput( BoundOutputManager bom, String outputName ) throws OutputWriteFailedException {
-		
 		return FileOutputFromManager.create(
 			"txt",
-			new ManifestDescription("textlog","messageLog"),
+			Optional.of(
+				new ManifestDescription("textlog","messageLog")
+			),
 			bom,
 			outputName
 		);

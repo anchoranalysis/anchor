@@ -68,7 +68,12 @@ public class CSVWriter implements AutoCloseable {
 		
 		Optional<FileOutput> output;
 		try {
-			output = FileOutputFromManager.create("csv", null, outputManager, outputName);
+			output = FileOutputFromManager.create(
+				"csv",
+				Optional.empty(),
+				outputManager,
+				outputName
+			);
 		} catch (OutputWriteFailedException e) {
 			throw new AnchorIOException("Cannot write csv output", e);
 		}
@@ -92,7 +97,7 @@ public class CSVWriter implements AutoCloseable {
 	 * @throws IOException
 	 */
 	public static CSVWriter create( Path path ) throws AnchorIOException {
-		FileOutput output = new FileOutput(path.toString(), "csv", null);
+		FileOutput output = new FileOutput(path.toString());
 		output.start();
 		return new CSVWriter(output);
 	}

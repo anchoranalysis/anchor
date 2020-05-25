@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp
@@ -35,8 +37,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 
 // Proposes a mark
 @GroupingRoot
-public abstract class MarkProposer extends ProposerBean<MarkProposer> implements ICompatibleWith
-{
+public abstract class MarkProposer extends ProposerBean<MarkProposer> implements ICompatibleWith {
 
 	// The inputMark's attributes become changed in accordance to the internal rules of the proposer
 	public abstract boolean propose(
@@ -44,5 +45,5 @@ public abstract class MarkProposer extends ProposerBean<MarkProposer> implements
 		ProposerContext context
 	) throws ProposalAbnormalFailureException;
 	
-	public abstract ICreateProposalVisualization proposalVisualization(boolean detailed);
+	public abstract Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed);
 }

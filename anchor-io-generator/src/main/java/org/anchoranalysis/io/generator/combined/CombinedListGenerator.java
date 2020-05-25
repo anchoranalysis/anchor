@@ -30,8 +30,6 @@ package org.anchoranalysis.io.generator.combined;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.anchoranalysis.core.name.value.NameValue;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -44,14 +42,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // currently untested
 public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 
-	private ArrayList<NameValue<Generator>> list = new ArrayList<>();
+	private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
 	
 	@Override
 	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 
 		ArrayList<FileType> all = new ArrayList<>();
 		
-		for( NameValue<Generator> ni : list) {
+		for( OptionalNameValue<Generator> ni : list) {
 			Optional<FileType[]> arr = ni.getValue().getFileTypes(outputWriteSettings);
 			arr.ifPresent( a-> {
 				for (int i=0; i<a.length; i++) {
@@ -72,10 +70,10 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 	@Override
 	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
-		for( NameValue<Generator> ni : list) {
+		for( OptionalNameValue<Generator> ni : list) {
 
-			if (ni.getName()!=null) {
-				outputNameStyle.setOutputName( ni.getName() );
+			if (ni.getName().isPresent()) {
+				outputNameStyle.setOutputName( ni.getName().get() );
 			}
 			
 			ni.getValue().write(outputNameStyle, outputManager);
@@ -88,11 +86,11 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 			throws OutputWriteFailedException {
 		
 		int maxWritten = -1;
-		for( NameValue<Generator> ni : list) {
+		for( OptionalNameValue<Generator> ni : list) {
 			
-			if (ni.getName()!=null) {
+			if (ni.getName().isPresent()) {
 				outputNameStyle = outputNameStyle.duplicate();
-				outputNameStyle.setOutputName( ni.getName() );
+				outputNameStyle.setOutputName( ni.getName().get() );
 			}
 			
 			int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
@@ -102,9 +100,18 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 		return maxWritten;
 	}
 
-	// A null name is allowed, in which case, the iterableObjectGenerator is not changed
-	// Either everything should have a null name, or not.  Mixed is not a good idea!
-	public boolean add(String name, Generator generator) {
-		return list.add( new SimpleNameValue<>(name,generator) );
+
+	/**
+	 * Adds a generator with an optional-name.
+	 * 
+	 * <p>Note that everything should have a name, or nothing should. Please don't mix. This is not currently checked.</p>
+	 *
+	 * @param generator the generator to add
+	 * @param name optional-name, which if included, is set as the output-name for the generator
+	 */
+	public void add(Generator generator, Optional<String> name) {
+		list.add(
+			new OptionalNameValue<>(name,generator)
+		);
 	}
 }

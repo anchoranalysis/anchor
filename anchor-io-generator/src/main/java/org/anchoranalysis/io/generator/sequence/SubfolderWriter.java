@@ -145,10 +145,7 @@ public class SubfolderWriter extends SequenceWriter {
 			}
 		}
 		
-		ManifestDescription manifestDescription = new ManifestDescription(type, function);
-		manifestDescription.setFunction(function);
-		manifestDescription.setType(type);
-		return manifestDescription;
+		return new ManifestDescription(type, function);
 	}
 
 	@Override
