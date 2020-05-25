@@ -99,8 +99,6 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 			return(bboxSet.getExtnt().getZ() - dim.getZ()) / 2;
 		}
 	}
-
-
 	
 	@Override
 	public BBoxSetOnPlane createBBoxSetOnPlane(
@@ -119,31 +117,32 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 
 		RGBStack overlayImg = rasterIterator.next();
 		
-		Extent overlayE = new Extent( overlayImg.getChnl(0).getDimensions().getExtnt() );
-		
-		if (overlayImg.getChnl(0).getDimensions().getX() > bboxSet.getExtnt().getX()) {
-			overlayE.setX(bboxSet.getExtnt().getX());
-		}
-		
-		if (overlayImg.getChnl(0).getDimensions().getY() > bboxSet.getExtnt().getY()) {
-			overlayE.setY(bboxSet.getExtnt().getY());
-		}
-
-			
-		if (zAlign.equalsIgnoreCase("repeat") || overlayImg.getChnl(0).getDimensions().getZ() > bboxSet.getExtnt().getZ()) {
-			overlayE.setZ(bboxSet.getExtnt().getZ());
-		}
-		
+		Extent overlayE = deriveExtent(
+			overlayImg.getChnl(0).getDimensions().getExtnt(),
+			bboxSet.getExtnt()
+		);
+				
 		int hPos = calcHorizontalPos(bboxSet, overlayImg.getDimensions() );
 		int vPos = calcVerticalPos(bboxSet, overlayImg.getDimensions() );
 		int zPos = calcZPos(bboxSet, overlayImg.getDimensions() );
 		
-		BoundingBox bboxOverlay = new BoundingBox( new Point3i(hPos,vPos,zPos), overlayE );
-		
-		bboxSet.add(bboxOverlay);
+		bboxSet.add(
+			new BoundingBox(
+				new Point3i(hPos,vPos,zPos),
+				overlayE
+			)
+		);
 		return bboxSet;
 	}
 
+	private Extent deriveExtent( Extent overlay, Extent bbox ) {
+		return new Extent(
+			Math.min(overlay.getX(), bbox.getX()),
+			Math.min(overlay.getY(), bbox.getY()),
+			zAlign.equalsIgnoreCase("repeat") || (overlay.getZ() > bbox.getZ()) ? bbox.getZ() : overlay.getZ()	
+		);
+	}
+	
 	public String getHorizontalAlign() {
 		return horizontalAlign;
 	}
