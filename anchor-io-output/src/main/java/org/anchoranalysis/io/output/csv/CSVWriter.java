@@ -42,8 +42,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
-import edu.mines.jtk.util.ArgsParser.OptionException;
-
 // Can be called by different threads, so synchronization is important
 public class CSVWriter implements AutoCloseable {
 	
