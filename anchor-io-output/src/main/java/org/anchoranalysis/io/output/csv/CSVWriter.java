@@ -34,12 +34,15 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
+
+import edu.mines.jtk.util.ArgsParser.OptionException;
 
 // Can be called by different threads, so synchronization is important
 public class CSVWriter implements AutoCloseable {
@@ -78,14 +81,9 @@ public class CSVWriter implements AutoCloseable {
 			throw new AnchorIOException("Cannot write csv output", e);
 		}
 		
-		if (!output.isPresent()) {
-			return Optional.empty();
-		}
-	
-		output.get().start();
-		
-		return Optional.of(
-			new CSVWriter(output.get())
+		OptionalUtilities.ifPresent(output, FileOutput::start);
+		return output.map( fo->
+			new CSVWriter(fo)
 		);
 	}
 	
