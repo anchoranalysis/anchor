@@ -51,11 +51,8 @@ public class BBoxIntersection extends AddCriteriaPair {
 		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
 		
 		if (suppressZ) {
-			bbox1 = new BoundingBox(bbox1);
-			bbox2 = new BoundingBox(bbox2);
-			
-			bbox1.flattenZ();
-			bbox2.flattenZ();
+			bbox1 = bbox1.flattenZ();
+			bbox2 = bbox2.flattenZ();
 		}
 		
 		return bbox1.hasIntersection(bbox2);

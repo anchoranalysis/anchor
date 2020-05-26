@@ -128,4 +128,12 @@ public final class Point3i extends Tuple3i {
 		int sz = Math.abs(this.z - pnt.z);
 		return Math.max(sx, Math.max(sy, sz));
 	}
+	
+	public Point3i duplicateChangeZ( int zNew ) {
+		return new Point3i(
+			x,
+			y,
+			zNew
+		);
+	}
 }

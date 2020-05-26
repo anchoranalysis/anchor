@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.objmask.factory.unionfind;
 
+import org.anchoranalysis.core.error.OperationFailedException;
+
 /*-
  * #%L
  * anchor-image
@@ -28,29 +30,23 @@ package org.anchoranalysis.image.objmask.factory.unionfind;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.PointRange;
 
-class BoundingBoxWithCount {
-
-	private static Extent extnt1 = new Extent(1,1,1);
+class PointRangeWithCount {
 	
-	private BoundingBox bbox;
-	private int cnt = 0;
+	private PointRange pointRange = new PointRange();
+	private int count = 0;
 	
 	public void add( Point3i pnt ) {
-		if (bbox==null) {
-			bbox = new BoundingBox( pnt, extnt1 );
-		} else {
-			bbox.add(pnt);
-		}
-		cnt++;
+		pointRange.add(pnt);
+		count++;
 	}
 
-	public int getCnt() {
-		return cnt;
+	public int getCount() {
+		return count;
 	}
 
-	public BoundingBox getBoundingBox() {
-		return bbox;
+	public BoundingBox deriveBoundingBox() throws OperationFailedException {
+		return pointRange.deriveBoundingBox();
 	}
 }

@@ -129,9 +129,11 @@ public class BoundingBox implements Serializable {
 		return pnt;
 	}
 	
-	public void convertToMaxIntensityProj() {
-		this.crnrMin.setZ(0);
-		this.extnt.setZ( 1 );
+	public BoundingBox flattenZ() {
+		return new BoundingBox(
+			crnrMin.duplicateChangeZ(0),
+			extnt.duplicateChangeZ(1)
+		);
 	}
 	
 	public boolean atBorder( ImageDim sd ) {
@@ -172,24 +174,6 @@ public class BoundingBox implements Serializable {
 		if (crnrMax.getZ()==(sd.getZ()-1)) return true;
 		
 		return false;
-	}
-	
-	public void add( Point3i pnt ) {
-		add( pnt.getX(), pnt.getY(), pnt.getZ() );
-	}
-	
-	
-	public void add( int x, int y, int z ) {
-
-		Point3i crnrMax = calcCrnrMax();
-		
-		if (x < crnrMin.getX()) { crnrMin.setX(x); extnt.setX( crnrMax.getX() - x + 1); };
-		if (y < crnrMin.getY()) { crnrMin.setY(y); extnt.setY( crnrMax.getY() - y + 1); };
-		if (z < crnrMin.getZ()) { crnrMin.setZ(z); extnt.setZ( crnrMax.getZ() - z + 1); };
-		
-		if (x > crnrMax.getX()) { extnt.setX( x - crnrMin.getX() + 1 ); }
-		if (y > crnrMax.getY()) { extnt.setY( y - crnrMin.getY() + 1 ); }
-		if (z > crnrMax.getZ()) { extnt.setZ( z - crnrMin.getZ() + 1 ); }
 	}
 	
 	// An extent representing the number of pixels needed to represent the bounding box
@@ -342,12 +326,6 @@ public class BoundingBox implements Serializable {
 		pntOut.setZ( closestPntOnAxis(pntIn.getZ(), crnrMin.getZ(), crnrMax.getZ()) );
 		return pntOut;
 	}
-
-	
-	public void flattenZ() {
-		this.crnrMin.setZ(0);
-		this.extnt.setZ(1);
-	}
 	
 	public static Point3i relPosTo( Point3i relPoint, Point3i srcPoint ) {
 		Point3i p = new Point3i( relPoint );
@@ -469,7 +447,7 @@ public class BoundingBox implements Serializable {
 		int zSize = zHigh - zLow + 1;
 		
 		crnrMin.setZ( crnrMin.getZ() + zLow );
-		extnt.setZ( zSize );
+		extnt = extnt.duplicateChangeZ(zSize);
 	}
 
 	public Point3d calcRelToLowerEdge( Point3d pntIn ) {

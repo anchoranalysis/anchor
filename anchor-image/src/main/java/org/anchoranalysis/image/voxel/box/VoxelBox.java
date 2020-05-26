@@ -566,10 +566,9 @@ public abstract class VoxelBox<T extends Buffer> {
 	// Creates a new channel contain a duplication only of a particular slice
 	public VoxelBox<T> extractSlice( int z ) {
 		
-		Extent e = new Extent( extnt());
-		e.setZ(1);
-		
-		VoxelBox<T> bufferAccess = factory.create(e);
+		VoxelBox<T> bufferAccess = factory.create(
+			extnt().duplicateChangeZ(1)
+		);
 		bufferAccess.getPlaneAccess().setPixelsForPlane(0, getPlaneAccess().getPixelsForPlane(z) );
 		return bufferAccess;
 	}

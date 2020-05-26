@@ -139,7 +139,7 @@ public class MergePathGraphNghb {
 		
 	}
 	
-	private static List<RasterizedPath> createRasterized( List<ContiguousPixelPath> paths ) {
+	private static List<RasterizedPath> createRasterized( List<ContiguousPixelPath> paths ) throws CreateException {
 		
 		List<RasterizedPath> out = new ArrayList<RasterizedPath>();
 		

@@ -115,8 +115,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox<T> flattenZ() {
-		BoundingBox bboxNew = new BoundingBox(this.boundingBox);
-		bboxNew.flattenZ();
+		BoundingBox bboxNew = this.boundingBox.flattenZ();
 		return new BoundedVoxelBox<>( bboxNew, voxelBox.maxIntensityProj() );
 	}
 	
@@ -124,8 +123,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 		assert(this.boundingBox.extnt().getZ()==1);
 		assert(this.voxelBox.extnt().getZ()==1);
 		
-		BoundingBox bboxNew = new BoundingBox(this.boundingBox);
-		bboxNew.extnt().setZ(sz);
+		BoundingBox bboxNew = new BoundingBox(
+			boundingBox.getCrnrMin(),
+			boundingBox.extnt().duplicateChangeZ(sz)
+		);
 		
 		VoxelBox<T> buffer = factory.create(bboxNew.extnt());
 		
@@ -358,14 +359,13 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox<T> createMaxIntensityProjection() {
-		BoundingBox bboxNew = new BoundingBox(boundingBox);
-		bboxNew.convertToMaxIntensityProj();
+		BoundingBox bboxNew = boundingBox.flattenZ();
 		return new BoundedVoxelBox<>(bboxNew,voxelBox.maxIntensityProj());
 	}
 	
 	
 	public void convertToMaxIntensityProjection() {
-		boundingBox.convertToMaxIntensityProj();
+		boundingBox = boundingBox.flattenZ();
 		voxelBox = voxelBox.maxIntensityProj();
 	}
 	
@@ -429,19 +429,20 @@ public class BoundedVoxelBox<T extends Buffer> {
 	// Creates an ObjMask with a subrange of the slices. zMin inclusive, zMax inclusive
 	// Note, no new voxels are created
 	public BoundedVoxelBox<T> createVirtualSubrange(int zMin, int zMax, VoxelBoxFactoryTypeBound<T> factory) throws CreateException {
-		BoundingBox target = new BoundingBox(boundingBox);
-		
-		if( !target.containsZ(zMin)) {
+	
+		if( !boundingBox.containsZ(zMin)) {
 			throw new CreateException("zMin outside range");
 		}
-		if( !target.containsZ(zMax)) {
+		if( !boundingBox.containsZ(zMax)) {
 			throw new CreateException("zMax outside range");
 		}
 		
 		int relZ = zMin - boundingBox.getCrnrMin().getZ();
-		target.getCrnrMin().setZ(zMin);
-		target.extnt().setZ(zMax-zMin+1);
 		
+		BoundingBox target = new BoundingBox(
+			boundingBox.getCrnrMin().duplicateChangeZ(zMin),
+			boundingBox.extnt().duplicateChangeZ(zMax-zMin+1)
+		);
 		
 		SubrangePixelAccess<T> pixelAccess = new SubrangePixelAccess<T>(relZ,target.extnt(),this);
 		return new BoundedVoxelBox<T>( target, factory.create(pixelAccess) );
@@ -520,8 +521,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	// If keepZ is true the slice keeps its z coordinate, otherwise its set to 0
 	public BoundedVoxelBox<T> extractSlice(int z, boolean keepZ) {
 		
-		BoundingBox bboNew = new BoundingBox(boundingBox);
-		bboNew.flattenZ();
+		BoundingBox bboNew = boundingBox.flattenZ();
 		
 		if (keepZ) {
 			bboNew.getCrnrMin().setZ(z);

@@ -101,8 +101,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		ScaleFactor sf = new ScaleFactor(zoomFactor);
 		
 		// We calculate how big our outgoing voxelbox wil be 
-		ImageDim sd = new ImageDim( extractedSlice.getDimensions() );
-		sd.scaleXYBy(sf);
+		ImageDim sd = extractedSlice.getDimensions().scaleXYBy(sf);
 		
 		Extent extntTrgt = new Extent( bbox.extnt() );
 		extntTrgt.scaleXYBy(sf);

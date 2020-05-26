@@ -27,12 +27,11 @@ package org.anchoranalysis.image.points;
  */
 
 import java.util.List;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.PointRange;
 
 /**
  * Creates a bounding-box from one or more points
@@ -50,35 +49,15 @@ public class BoundingBoxFromPoints {
 	 * @throws OperationFailedException if there are zero points
 	 */
 	public static BoundingBox forList( List<Point3i> pnts ) throws OperationFailedException {
-		
 		if (pnts.size()==0) {
-			throw new OperationFailedException("There are 0 points. At least one is required");
+			throw new OperationFailedException("Points list must contain at least one item");
 		}
 		
-		return forListWithoutException(pnts);
-	}
-	
-	
-	/**
-	 * Creates for a list of points, but doesn't throw any exception if there are no points.
-	 * 
-	 * @param pnts the list of points
-	 * @return a bounding-box minimally spanning all points or NULL if there are zero points
-	 */
-	public static BoundingBox forListWithoutException( List<Point3i> pnts ) {
-	
-		if (pnts.size()==0) {
-			return null;
-		}
+		PointRange range = new PointRange();
+		pnts.forEach( pnt-> range.add(pnt) );
 		
-		// We create a bounding box for these points
-		BoundingBox bbox = new BoundingBox( pnts.get(0), new Extent(1,1,1) );
-		for( int i=1; i<pnts.size(); i++ ) {
-			bbox.add( pnts.get(i) );
-		}
-		return bbox;		
+		return range.deriveBoundingBox();
 	}
-	
 	
 	/**
 	 * Creates a bounding-box for two unordered points.

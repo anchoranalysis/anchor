@@ -41,7 +41,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -183,10 +182,10 @@ public class ConnectedComponentUnionFind {
 		return mapIDOrdered;
 	}
 		
-	private static BoundingBoxWithCount[] createBBoxArray( int size ) {
-		BoundingBoxWithCount[] bboxArr = new BoundingBoxWithCount[size];
+	private static PointRangeWithCount[] createBBoxArray( int size ) {
+		PointRangeWithCount[] bboxArr = new PointRangeWithCount[size];
 		for( int i=0; i<bboxArr.length; i++) {
-			bboxArr[i] = new BoundingBoxWithCount();
+			bboxArr[i] = new PointRangeWithCount();
 		}
 		return bboxArr;
 	}
@@ -195,7 +194,7 @@ public class ConnectedComponentUnionFind {
 		VoxelBox<IntBuffer> indexBuffer,
 		UnionFind<Integer> unionIndex,
 		Map<Integer,Integer> mapIDOrdered,
-		BoundingBoxWithCount[] bboxArr
+		PointRangeWithCount[] bboxArr
 	) {
 		
 		Point3i pnt = new Point3i();
@@ -214,7 +213,7 @@ public class ConnectedComponentUnionFind {
 						
 						Integer idSmall = mapIDOrdered.get( unionIndex.find(idBig) );
 						
-						BoundingBoxWithCount bbox = bboxArr[ idSmall-1 ];
+						PointRangeWithCount bbox = bboxArr[ idSmall-1 ];
 						bbox.add(pnt);
 						
 						bbIndex.put(offset, idSmall);
@@ -227,22 +226,26 @@ public class ConnectedComponentUnionFind {
 	}
 	
 	private static ObjMaskCollection extractMasksInto(
-		BoundingBoxWithCount[] bboxArr,
+		PointRangeWithCount[] bboxArr,
 		Map<Integer,Integer> mapIDOrdered,
 		VoxelBox<IntBuffer> indexBuffer,
 		UnionFind<Integer> unionIndex,
 		int minNumberVoxels,
 		ObjMaskCollection omc
-	) {
+	) throws OperationFailedException {
 		
 		for( Integer bigID : mapIDOrdered.keySet()) {
 			int smallID = mapIDOrdered.get(bigID);
 			
-			BoundingBoxWithCount bboxWithCnt = bboxArr[smallID-1];
+			PointRangeWithCount bboxWithCnt = bboxArr[smallID-1];
 			
-			if (bboxWithCnt.getCnt()>=minNumberVoxels) {
-				ObjMask om = indexBuffer.equalMask(bboxWithCnt.getBoundingBox(), smallID);
-				omc.add(om);
+			if (bboxWithCnt.getCount()>=minNumberVoxels) {
+				omc.add(
+					indexBuffer.equalMask(
+						bboxWithCnt.deriveBoundingBox(),
+						smallID
+					)
+				);
 			}
 		}
 		return omc;
@@ -254,12 +257,12 @@ public class ConnectedComponentUnionFind {
 		VoxelBox<IntBuffer> indexBuffer,
 		ObjMaskCollection omc,
 		int minNumberVoxels
-	) {
+	) throws OperationFailedException {
 		Set<Integer> primaryIDs = setFromUnionFind( maxBigIDAdded, unionIndex );
 		
 		Map<Integer,Integer> mapIDOrdered = mapValuesToContiguousSet( primaryIDs );
 		
-		BoundingBoxWithCount[] bboxArr = createBBoxArray( mapIDOrdered.size() );
+		PointRangeWithCount[] bboxArr = createBBoxArray( mapIDOrdered.size() );
 		
 		addPntsAndAssignNewIDs(
 			indexBuffer,

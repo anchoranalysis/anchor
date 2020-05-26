@@ -76,9 +76,11 @@ public final class ImageDim implements Serializable {
 		);
 	}
 	
-	public void scaleXYBy( ScaleFactor sf ) {
-		extent.scaleXYBy(sf);
-		res = res.scaleXY(sf);
+	public ImageDim scaleXYBy( ScaleFactor sf ) {
+		return new ImageDim(
+			extent.scaleXYBy(sf),
+			res.scaleXY(sf)
+		);
 	}
 	
 	

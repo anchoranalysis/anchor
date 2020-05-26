@@ -29,6 +29,7 @@ package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -40,7 +41,9 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
- * Width, height etc. of image in 2 or 3 dimensions  
+ * Width, height etc. of image in 2 or 3 dimensions
+ * 
+ * <p>This class is IMMUTABLE</p>
  */
 public final class Extent implements Serializable {
 
@@ -49,14 +52,13 @@ public final class Extent implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int sxy;
+	private final int sxy;
 	
 	// Lengths in each dimension
-	private Point3i len;
+	private final Point3i len;
 	
 	public Extent() {
-		this.sxy = 0;
-		this.len = new Point3i(0,0,0);
+		this( new Point3i(0,0,0) );
 	}
 	
 	public Extent( Extent src ) {
@@ -64,38 +66,12 @@ public final class Extent implements Serializable {
 		sxy = src.sxy;
 	}
 	
-	public Extent( Point3i len ) {
-		this.len = new Point3i(len);
-		updateSxy();
-	}
-	
 	public Extent(int x, int y, int z) {
-		this.len = new Point3i( x, y, z);
-		updateSxy();
+		this( new Point3i( x, y, z) );
 	}
-	
-	public void shrinkBy( int size ) {
-		len.sub(
-			new Point3i(size,size,size)
-		);
-		updateSxy();
-	}
-	
-	public void growBy( int size ) {
-		len.add(
-			new Point3i(size,size,size)
-		);
-		updateSxy();
-	}
-	
-	/** Collapses the Z dimension i.e. immutably returns a new extent with the same X- and Y- size but Z-size of 1 */
-	public Extent flatten() {
-		return new Extent(
-			new Point3i(len.getX(), len.getY(), 1)
-		);
-	}
-	
-	private void updateSxy() {
+		
+	private Extent( Point3i len ) {
+		this.len = len;
 		this.sxy = len.getX() * len.getY();
 	}
 
@@ -124,21 +100,6 @@ public final class Extent implements Serializable {
 	 **/
 	public int totalNumPixelPositions() {
 		return  (len.getX()+1) * (len.getY()+1) * (len.getZ()+1);
-	}
-	
-	public void setSize( int[] size ) {
-		len.setX( size[0] );
-		len.setY( size[1] );
-		len.setZ( size[2] );
-		updateSxy();
-	}
-	
-	public int[] getSize() {
-		int[] arr = new int[3];
-		arr[0] = len.getX();
-		arr[1] = len.getY();
-		arr[2] = len.getZ();
-		return arr;
 	}
 
 	@Override
@@ -182,21 +143,14 @@ public final class Extent implements Serializable {
 	public int getValueByDimension(AxisType axis) {
 		return len.getValueByDimension(axis);
 	}
-
-	public void setX(int x) {
-		len.setX(x);
-		updateSxy();
-	}
-
-	public void setY(int y) {
-		len.setY(y);
-		updateSxy();
-	}
-
-	public void setZ(int z) {
-		len.setZ(z);
-	}
 		
+	/**
+	 * Exposes the extent as a tuple.
+	 * 
+	 * <p>IMPORTANT! This class is designed to be IMMUTABLE, so this tuple should be treated as read-only, and never modified.</p>
+	 * 
+	 * @return the extent's width, height, depth as a tuple
+	 */
 	public Tuple3i asTuple() {
 		return len;
 	}
@@ -339,31 +293,51 @@ public final class Extent implements Serializable {
 		return contains( bbox.getCrnrMin() ) && contains( bbox.calcCrnrMax() );
 	}
 	
-	public void scaleXYBy( ScaleFactor sf ) {
-		len.setX(
-			ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX())
-		);
-		len.setY(
-			ScaleFactorUtilities.multiplyAsInt(sf.getY(), getY())
-		);
-		updateSxy();
+	public Extent scaleXYBy( ScaleFactor sf ) {
+		return createPointOperation( p-> {
+			p.setX(
+				ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX())
+			);
+			p.setY(
+				ScaleFactorUtilities.multiplyAsInt(sf.getY(), getY())
+			);			
+		});
 	}
 	
-	public void subtract( Extent e ) {
-		this.len.sub( e.asTuple() );
+	public Extent subtract( Extent e ) {
+		return createPointOperation( p->p.sub(e.asTuple()) );
 	}
 	
-	public void divide( int factor ) {
-		this.len.div( factor );
+	public Extent divide( int factor ) {
+		return createPointOperation( p->p.div(factor) );
 	}
 	
 	/**
-	 * Creates a new Extent with each dimension depcreated by one
+	 * Creates a new Extent with each dimension decreased by one
 	 * @return the new extent
 	 */
 	public Extent createMinusOne() {
+		return createPointOperation( p->p.sub(1) );
+	}
+	
+	public Extent growBy( int size ) {
+		return createPointOperation( p->
+			p.add(
+				new Point3i(size,size,size)
+			)
+		);
+	}
+	
+	/** Collapses the Z dimension i.e. returns a new extent with the same X- and Y- size but Z-size of 1 */
+	public Extent flattenZ() {
+		return new Extent(
+			new Point3i(len.getX(), len.getY(), 1)
+		);
+	}
+	
+	private Extent createPointOperation( Consumer<Point3i> func ) {
 		Point3i lenDup = new Point3i(len);
-		lenDup.sub(1);	
+		func.accept(lenDup);	
 		return new Extent(lenDup);
 	}
 }

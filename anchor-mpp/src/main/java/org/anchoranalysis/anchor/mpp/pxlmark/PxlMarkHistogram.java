@@ -80,8 +80,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		setObjMask( new ObjMask(bbox) );
 		
 		
-		BoundingBox bboxMIP = new BoundingBox(bbox);
-		bboxMIP.convertToMaxIntensityProj();
+		BoundingBox bboxMIP = bbox.flattenZ();
 		setObjMaskMIP( new ObjMask(bboxMIP) );
 		
 		Extent localExtnt = bbox.extnt();

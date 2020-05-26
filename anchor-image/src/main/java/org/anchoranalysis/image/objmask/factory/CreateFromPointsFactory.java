@@ -29,18 +29,22 @@ package org.anchoranalysis.image.objmask.factory;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
 public class CreateFromPointsFactory {
 	
-	public static ObjMask create( List<Point3i> pnts ) {
-		BoundingBox bbox = new BoundingBox( pnts.get(0), new Extent(0,0,0) );
+	public static ObjMask create( List<Point3i> pnts ) throws CreateException {
 		
-		for (Point3i p : pnts) {
-			bbox.add(p);
+		BoundingBox bbox;
+		try {
+			bbox = BoundingBoxFromPoints.forList(pnts);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
 		}
 		
 		ObjMask mask = new ObjMask(bbox);
