@@ -76,12 +76,18 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 	public Mark fitMarkToPointsFromCfg( Cfg cfg, ImageDim dim ) throws OperationFailedException {
 		
 		try {
-			Mark mark = markProvider.create();
+			Mark mark = markProvider.create().orElseThrow( ()->
+				new OperationFailedException("A mark is required for this operation")
+			);
 			
 			List<Point3f> pnts = extractPointsFromCfg(cfg);
 			
 			if (pnts.size()>=minNumPoints) {
-				return fitPoints(mark, pnts, dim);
+				return fitPoints(
+					mark,
+					pnts,
+					dim
+				);
 				
 			} else {
 				return maybeThrowInsufficientPointsException(pnts);
