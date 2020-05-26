@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.probmap;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 
 /*-
@@ -59,6 +61,50 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		}
 	}
 
+	@Override
+	public Optional<Point3d> sample(RandomNumberGenerator re) {
+		
+		if (probWeights.size()==0) {
+			return Optional.empty();
+		}
+		
+		// We want to pick an ObjMaskCollection sampling, by picking one of the obj masks
+		//   weighing by the number of on pixels
+		int index = probWeights.sample(re);
+		
+		assert(index>=0);
+		
+		ObjMask om = objMaskCollection.get(index);
+		return Optional.of(
+			sampleFromObjMask(om,re)
+		);
+	}
+
+	@Override
+	public ImageDim getDimensions() {
+		return dim;
+	}
+
+	@Override
+	public BinaryChnl visualization()
+			throws OptionalOperationUnsupportedException {
+		try {
+			return BinaryChnlFromObjs.createFromObjs(
+				objMaskCollection,
+				dim,
+				BinaryValues.getDefault()
+			);
+		} catch (CreateException e) {
+			assert false;
+			return null;
+		}
+	}
+
+	@Override
+	public UpdatableMarkSet updater() {
+		return null;
+	}
+
 	private Point3d sampleFromObjMask( ObjMask om, RandomNumberGenerator re ) {
 
 		// Now we keep picking a pixel at random from the object mask until we find one that is
@@ -91,47 +137,4 @@ public class ProbMapObjMaskCollection extends ProbMap {
 			}
 		}
 	}
-	
-	@Override
-	public Point3d sample(RandomNumberGenerator re) {
-		
-		if (probWeights.size()==0) {
-			return null;
-		}
-		
-		// We want to pick an ObjMaskCollection sampling, by picking one of the obj masks
-		//   weighing by the number of on pixels
-		int index = probWeights.sample(re);
-		
-		assert(index>=0);
-		
-		ObjMask om = objMaskCollection.get(index);
-		return sampleFromObjMask(om,re);
-	}
-
-	@Override
-	public ImageDim getDimensions() {
-		return dim;
-	}
-
-	@Override
-	public BinaryChnl visualization()
-			throws OptionalOperationUnsupportedException {
-		try {
-			return BinaryChnlFromObjs.createFromObjs(
-				objMaskCollection,
-				dim,
-				BinaryValues.getDefault()
-			);
-		} catch (CreateException e) {
-			assert false;
-			return null;
-		}
-	}
-
-	@Override
-	public UpdatableMarkSet updater() {
-		return null;
-	}
-
 }

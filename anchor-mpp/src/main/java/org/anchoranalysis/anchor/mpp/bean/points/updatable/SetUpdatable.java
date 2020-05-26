@@ -30,6 +30,7 @@ package org.anchoranalysis.anchor.mpp.bean.points.updatable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
@@ -83,10 +84,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	// Randomise location
     @Override
-	public Point3d sample( RandomNumberGenerator re ) {
+	public Optional<Point3d> sample( RandomNumberGenerator re ) {
 	
     	if (setPnts.size()==0) {
-    		return null;
+    		return Optional.empty();
     	}
     	
     	int randomIndex = (int) (re.nextDouble() * setPnts.size());
@@ -102,7 +103,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		// To hide our internal data from manipulation, even though this (presumably) adds
 		//  a bit of overhead
-    	return new Point3d(pnt);
+    	return Optional.of(
+    		new Point3d(pnt)
+    	);
     }
 
 	@Override
