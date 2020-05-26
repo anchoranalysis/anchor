@@ -480,7 +480,7 @@ public class BoundingBox implements Serializable {
 	
 	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
 		scaleXYPos(sf);
-		extnt.scaleXYBy(sf);
+		this.extnt = extnt.scaleXYBy(sf);
 	}
 	
 	private void checkMaxMoreThanMin( Point3i min, Point3i max ) {

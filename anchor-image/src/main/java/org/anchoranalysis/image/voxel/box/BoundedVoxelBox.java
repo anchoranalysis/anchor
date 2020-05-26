@@ -36,7 +36,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -276,46 +275,6 @@ public class BoundedVoxelBox<T extends Buffer> {
 		return new BoundedVoxelBox<>( bbo, bufferNew );
 	}
 
-
-	
-	public void setIntersectingPixels( ObjMask omCompare1, ObjMask omCompare2, ImageDim dim, int setVal, VoxelBoxFactoryTypeBound<ByteBuffer> factory ) {
-		
-		BoundingBox bboxIntersect = omCompare1.getBoundingBox().intersectCreateNew( omCompare2.getBoundingBox(), dim.getExtnt() );
-
-		// We calculate a bounding box, which we write into in the omDest
-		Point3i pntIntersectRelToSrc = bboxIntersect.relPosTo(boundingBox);
-		BoundingBox bboxAssgn = new BoundingBox(pntIntersectRelToSrc,bboxIntersect.extnt());
-		
-		// We clip this bounding box against the scene, as it can contain negative co-ordinates
-		//  clipped stores the shift that occurs
-		Point3i clipped = bboxAssgn.clipTo(boundingBox.extnt());
-		
-		// The corner we start from
-		Point3i maskRelCrnr = bboxIntersect.relPosTo(omCompare2.getBoundingBox());
-		maskRelCrnr.add( clipped );
-		
-		//BoundingBox bboMask = new BoundingBox(maskRelCrnr, bboxAssgn.extnt() );
-		
-		VoxelBox<ByteBuffer> vbMask = factory.create( bboxIntersect.extnt() );
-		ObjMask om1Rel = new ObjMask( new BoundingBox(omCompare1.getBoundingBox()), omCompare1.getVoxelBox() );
-		ObjMask om2Rel = new ObjMask( new BoundingBox(omCompare2.getBoundingBox()), omCompare2.getVoxelBox() );
-		om1Rel.getBoundingBox().getCrnrMin().sub(bboxIntersect.getCrnrMin());
-		om2Rel.getBoundingBox().getCrnrMin().sub(bboxIntersect.getCrnrMin());
-		
-		vbMask.setAllPixelsTo( omCompare2.getBinaryValues().getOnInt() );
-		vbMask.setPixelsCheckMask( om1Rel, omCompare2.getBinaryValues().getOffInt(), om1Rel.getBinaryValuesByte().getOffByte() );
-		vbMask.setPixelsCheckMask( om2Rel, omCompare2.getBinaryValues().getOffInt(), om2Rel.getBinaryValuesByte().getOffByte() );
-		
-		voxelBox.setPixelsCheckMask(
-			bboxAssgn,
-			vbMask,
-			new BoundingBox(bboxIntersect.extnt()),
-			setVal,
-			omCompare2.getBinaryValuesByte().getOnByte()
-		);
-	}
-	
-	
 	public BoundedVoxelBox<T> scaleNew( ScaleFactor sf, Interpolator interpolator ) {
 		
 		int resizedX = ScaleFactorUtilities.multiplyAsInt(sf.getX(), boundingBox.extnt().getX());

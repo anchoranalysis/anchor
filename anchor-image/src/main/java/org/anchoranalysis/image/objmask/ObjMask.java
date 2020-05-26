@@ -628,21 +628,6 @@ public class ObjMask {
 		
 		return null;
 	}
-
-	public void setIntersectingPixels(ObjMask omCompare1, ObjMask omCompare2, ImageDim dim, int setVal) {
-		// Let's make new ObjMasks that are relative to delegate
-		
-		ObjMask rel1 = omCompare1.relMaskTo(delegate.getBoundingBox());
-		ObjMask rel2 = omCompare2.relMaskTo(delegate.getBoundingBox());
-		
-		delegate.setIntersectingPixels(
-			rel1,
-			rel2,
-			dim,
-			setVal,
-			VoxelBoxFactory.instance().getByte()
-		);
-	}
 	
 	// Creates a new objMask that is relative to another bbox
 	public ObjMask relMaskTo( BoundingBox bbox ) {
@@ -658,6 +643,4 @@ public class ObjMask {
 	public String toString() {
 		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numPixels() );
 	}
-
-
 }
