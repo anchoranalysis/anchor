@@ -35,6 +35,8 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
  * The dimensions of an image (in voxels), together with the image resolution
+ * 
+ * <p>This class is IMMUTABLE</p>.
  */
 public final class ImageDim implements Serializable {
 
@@ -43,7 +45,7 @@ public final class ImageDim implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private ImageRes res;
+	private final ImageRes res;
 	private final Extent extent;
 	
 	/** Construct with an explicit extent and default resolution (1.0 for each dimension)*/
@@ -55,12 +57,6 @@ public final class ImageDim implements Serializable {
 	public ImageDim( Extent extent, ImageRes res ) {
 		this.extent = extent;
 		this.res = res;
-	}
-	
-	/** Copy constructor */
-	public ImageDim( ImageDim dim ) {
-		this.extent = dim.extent;
-		this.res = dim.res;
 	}
 	
 	public ImageDim scaleXYTo( int x, int y ) {
@@ -82,12 +78,18 @@ public final class ImageDim implements Serializable {
 			res.scaleXY(sf)
 		);
 	}
-	
-	
+		
 	public ImageDim duplicateChangeZ(int z) {
 		return new ImageDim(
 			extent.duplicateChangeZ(z),
 			res
+		);
+	}
+	
+	public ImageDim duplicateChangeRes(ImageRes resToAssign) {
+		return new ImageDim(
+			extent,
+			resToAssign
 		);
 	}
 	
@@ -141,10 +143,6 @@ public final class ImageDim implements Serializable {
 
 	public ImageRes getRes() {
 		return res;
-	}
-
-	public void setRes(ImageRes res) {
-		this.res = res;
 	}
 
 	public boolean contains(BoundingBox bbox) {

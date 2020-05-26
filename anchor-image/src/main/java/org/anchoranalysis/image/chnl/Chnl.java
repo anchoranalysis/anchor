@@ -132,6 +132,9 @@ public class Chnl {
 		return dim;
 	}
 
+	public void updateResolution(ImageRes res) {
+		dim = dim.duplicateChangeRes(res);
+	}
 
 	public VoxelDataType getVoxelDataType() {
 		return delegate.getVoxelBox().dataType();

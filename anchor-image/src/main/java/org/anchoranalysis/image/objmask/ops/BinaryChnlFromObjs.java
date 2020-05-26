@@ -70,15 +70,13 @@ public class BinaryChnlFromObjs {
 	// We look for the values that are NOT on the masks
 	private static BinaryChnl createChnlObjMaskCollectionHelper(
 		ObjMaskCollection masks,
-		ImageDim sd,
+		ImageDim dim,
 		BinaryValues outVal,
 		int initialState,
 		byte objState
 	) throws CreateException {
 		
-		ImageDim newSd = new ImageDim( sd );
-		
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, VoxelDataTypeUnsignedByte.instance);
+		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		
 		if (outVal.getOnInt()!=0) {
