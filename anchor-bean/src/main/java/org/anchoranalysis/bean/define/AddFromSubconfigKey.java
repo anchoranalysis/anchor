@@ -61,7 +61,10 @@ class AddFromSubconfigKey implements DefineAdder {
 		} catch (ConfigurationRuntimeException e) {
 			assert e.getCause()!=null;
 			// We rely on there being a cause when a configuration-runtime exception is thrown
-			throw new BeanXmlException( String.format("An error occurred when loading bean: %s",key), e.getCause() );
+			throw new BeanXmlException(
+				String.format("An error occurred when loading bean: %s",key),
+				e.getCause()
+			);
 		}
 		catch (Exception e) {
 			throw new BeanXmlException( String.format("An error occurred when loading bean: %s",key), e ); 
