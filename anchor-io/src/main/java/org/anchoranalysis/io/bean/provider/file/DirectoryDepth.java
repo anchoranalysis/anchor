@@ -103,7 +103,7 @@ public class DirectoryDepth extends FileProviderWithDirectoryString {
 
 		@Override
 		protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
-			
+			// NOTHING TO DO
 		}
 
 		protected boolean handleDirectory(File directory, int depth, Collection<File> results) {

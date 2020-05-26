@@ -37,6 +37,7 @@ import org.anchoranalysis.anchor.graph.index.BarChart;
 import org.anchoranalysis.anchor.mpp.graph.execution.ExecutionTimeItem;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeItem> {
 
@@ -67,10 +68,11 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
 		switch( seriesNum ) {
 		case 0:
 			return func.apply(item);
+		default:
+			throw new AnchorFriendlyRuntimeException(
+				String.format("seriesNum must be 0 but instead it is %d", seriesNum)
+			);	
 		}
-		
-		assert false;
-		return null;
 	}
 	
 	@Override

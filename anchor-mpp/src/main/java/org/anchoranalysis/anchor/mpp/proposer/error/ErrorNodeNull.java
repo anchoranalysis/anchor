@@ -84,8 +84,6 @@ public class ErrorNodeNull extends ErrorNode {
 
 	@Override
 	public void addErrorDescription(StringBuilder sb) {
-		
+		// NOTHING TO DO
 	}
-	
-
 }

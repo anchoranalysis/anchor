@@ -50,10 +50,6 @@ public class MarkPointList extends MarkAbstractPointList {
 	
 	private Set<Point3d> set;	// A set that makes it quick to check if a point is on the list
 	
-	public MarkPointList() {
-		
-	}
-	
 	@Override
 	public byte evalPntInside(Point3d pntIsInside) {
 		
