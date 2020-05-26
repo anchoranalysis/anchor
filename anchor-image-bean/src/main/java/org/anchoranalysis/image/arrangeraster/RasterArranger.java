@@ -62,7 +62,7 @@ public class RasterArranger {
 		}
 
 		dim = new ImageDim(
-			new Extent(bboxSetOnPlane.getExtnt())
+			bboxSetOnPlane.getExtnt()
 		);
 	}
 	

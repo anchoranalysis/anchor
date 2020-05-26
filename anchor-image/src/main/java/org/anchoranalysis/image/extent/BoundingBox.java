@@ -60,7 +60,7 @@ public class BoundingBox implements Serializable {
 	}
 	
 	public BoundingBox(Extent extnt) {
-		this( new Point3i(0,0,0), new Extent(extnt) );
+		this( new Point3i(0,0,0), extnt);
 	}
 	
 	
@@ -68,7 +68,7 @@ public class BoundingBox implements Serializable {
 	public BoundingBox(Point3i crnrMin, Extent extnt) {
 		super();
 		this.crnrMin = new Point3i(crnrMin);
-		this.extnt = new Extent(extnt);
+		this.extnt = extnt;
 	}
 	
 	public BoundingBox( Point3d min, Point3d max ) {
@@ -184,7 +184,7 @@ public class BoundingBox implements Serializable {
 	// Copy constructor
 	public BoundingBox( BoundingBox src ) {
 		this.crnrMin = new Point3i( src.crnrMin );
-		this.extnt = new Extent( src.extnt );
+		this.extnt = src.extnt;
 	}
 	
 

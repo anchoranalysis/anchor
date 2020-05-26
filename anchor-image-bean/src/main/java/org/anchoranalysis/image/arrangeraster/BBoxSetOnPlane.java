@@ -41,11 +41,11 @@ public class BBoxSetOnPlane implements Iterable<BoundingBox> {
 	
 	private List<BoundingBox> list = new ArrayList<>();
 	
-	public void add( BoundingBox obj ) {
+	public void add(BoundingBox obj) {
 		list.add(obj);
 	}
 	
-	public BoundingBox get( int index ) {
+	public BoundingBox get(int index) {
 		return list.get(index);
 	}
 

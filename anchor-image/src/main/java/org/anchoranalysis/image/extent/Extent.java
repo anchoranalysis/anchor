@@ -61,11 +61,6 @@ public final class Extent implements Serializable {
 		this( new Point3i(0,0,0) );
 	}
 	
-	public Extent( Extent src ) {
-		this.len = new Point3i(src.len);
-		sxy = src.sxy;
-	}
-	
 	public Extent(int x, int y, int z) {
 		this( new Point3i( x, y, z) );
 	}

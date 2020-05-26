@@ -56,7 +56,7 @@ public class SingleRaster extends ArrangeRasterBean {
 		BoundingBox bbox = new BoundingBox(crnrMin, extnt);
 		
 		BBoxSetOnPlane set = new BBoxSetOnPlane();
-		set.setExtnt( new Extent(extnt) );
+		set.setExtnt(extnt);
 		set.add(bbox);
 		return set;
 	}

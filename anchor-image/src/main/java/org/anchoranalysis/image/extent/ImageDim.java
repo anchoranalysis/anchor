@@ -53,13 +53,13 @@ public final class ImageDim implements Serializable {
 
 	/** Construct with an explicit extent and resolution */
 	public ImageDim( Extent extent, ImageRes res ) {
-		this.extent = new Extent(extent);
+		this.extent = extent;
 		this.res = res;
 	}
 	
 	/** Copy constructor */
 	public ImageDim( ImageDim dim ) {
-		this.extent = new Extent( dim.extent );
+		this.extent = dim.extent;
 		this.res = dim.res;
 	}
 	

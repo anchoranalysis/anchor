@@ -331,7 +331,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		
 		bboxNew.scaleXYPos(sf);
 		
-		bboxNew.setExtnt( new Extent(voxelBoxOut.extnt()) );
+		bboxNew.setExtnt(voxelBoxOut.extnt());
 		
 		return new BoundedVoxelBox<T>( bboxNew, voxelBoxOut );
 	}
@@ -346,7 +346,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			interpolator
 		);
 		
-		boundingBox.setExtnt( new Extent(voxelBoxOut.extnt()) );
+		boundingBox.setExtnt( voxelBoxOut.extnt() );
 		voxelBox = voxelBoxOut;
 	}
 	
