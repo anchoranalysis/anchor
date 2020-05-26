@@ -72,9 +72,9 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 		
 		for( OptionalNameValue<Generator> ni : list) {
 
-			if (ni.getName().isPresent()) {
-				outputNameStyle.setOutputName( ni.getName().get() );
-			}
+			ni.getName().ifPresent( outputName->
+				outputNameStyle.setOutputName(outputName)	
+			);
 			
 			ni.getValue().write(outputNameStyle, outputManager);
 		}

@@ -79,7 +79,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	@Override
 	public void log( String message ) {
 		printWriter.ifPresent( writer-> {
-			synchronized(printWriter) {
+			synchronized(writer) {
 				writer.print(message);
 				writer.println();
 				writer.flush();
