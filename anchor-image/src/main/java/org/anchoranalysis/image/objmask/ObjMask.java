@@ -480,10 +480,6 @@ public class ObjMask {
 	public BinaryValuesByte getBinaryValuesByte() {
 		return bvb;
 	}
-	
-	public void moveToOrigin() {
-		delegate.getBoundingBox().setCrnrMin( new Point3i() );
-	}
 
 	public void setBinaryValues(BinaryValues binaryValues) throws CreateException {
 		this.bv = binaryValues;

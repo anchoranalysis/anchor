@@ -210,11 +210,15 @@ public final class BoundingBox implements Serializable {
 			.toHashCode();
 	}
 	
+	/** 
+	 * 
+	 * The bottom-left corner of the bounding box.
+	 * 
+	 * <p>The return value should be treated read-only, as this class is designed to be IMMUTABLE</o>.
+	 * 
+	 * */
 	public Point3i getCrnrMin() {
 		return crnrMin;
-	}
-	public void setCrnrMin(Point3i crnrMin) {
-		this.crnrMin = crnrMin;
 	}
 
 	public void setExtent(Extent extnt) {
@@ -284,9 +288,22 @@ public final class BoundingBox implements Serializable {
 		return p; 
 	}
 	
-	// returns the relative position to another bounding box
+	// returns the relative position of the corner to another bounding box
 	public Point3i relPosTo( BoundingBox src ) {
 		return relPosTo( crnrMin, src.crnrMin );
+	}
+	
+	/** 
+	 * A new bounding-box using relative position coordinates to another box
+	 * 
+	 * @param other the other box, against whom we consider our co-ordinates relatively
+	 * @return a newly created bounding box with relative coordinates
+	 */
+	public BoundingBox relPosToBox( BoundingBox other ) {
+		return new BoundingBox(
+			relPosTo(other),
+			extent
+		);
 	}
 
 	/** For evaluating whether this bounding-box contains other points, boxes etc.? */

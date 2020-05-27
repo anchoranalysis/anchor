@@ -411,8 +411,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			throw new CreateException("Source box does not contain target box");
 		}
 		
-		BoundingBox target = new BoundingBox(bbox);
-		target.setCrnrMin( target.relPosTo( boundingBox) );
+		BoundingBox target = bbox.relPosToBox(boundingBox);
 		return new BoundedVoxelBox<>(
 			bbox,
 			voxelBox.createBufferAvoidNew(target)
@@ -433,8 +432,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			throw new CreateException("Source box does not contain target box");
 		}
 		
-		BoundingBox target = new BoundingBox(bbox);
-		target.setCrnrMin( target.relPosTo( boundingBox) );
+		BoundingBox target = bbox.relPosToBox(boundingBox);
 		return new BoundedVoxelBox<>(
 			bbox,
 			voxelBox.createBufferAlwaysNew(target)
