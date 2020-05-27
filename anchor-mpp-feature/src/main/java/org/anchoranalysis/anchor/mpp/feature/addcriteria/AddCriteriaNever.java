@@ -47,7 +47,7 @@ public class AddCriteriaNever<EdgeType> implements AddCriteria<EdgeType> {
 
 	@Override
 	public EdgeType generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2,
-			NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3d) throws CreateException {
+			NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws CreateException {
 		return null;
 	}
 

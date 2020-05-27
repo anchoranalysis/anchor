@@ -34,9 +34,9 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 public class SmallNghb extends Nghb {
 
 	@Override
-	public void processAllPointsInNghb(boolean do3d, ProcessVoxelNeighbour<?> testNghb) {
+	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> testNghb) {
 		
-		int numDims = do3d ? 3 : 2;
+		int numDims = do3D ? 3 : 2;
 		
 		boolean b = testNghb.notifyChangeZ(0);
 		assert(b==true);
