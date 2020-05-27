@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.extent;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 /**
  * Does a bounding box contain other objects? e.g. points, other bounding boxes etc.
@@ -11,7 +12,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 public final class BoundingBoxContains {
 
 	private final BoundingBox bbox;
-	private final Point3i crnrMax;
+	private final ReadableTuple3i crnrMax;
 	
 	public BoundingBoxContains(BoundingBox bbox) {
 		super();
@@ -35,7 +36,7 @@ public final class BoundingBoxContains {
 	}
 	
 	/** Is this point within the bounding-box? */
-	public boolean point( Point3i pnt ) {
+	public boolean point( ReadableTuple3i pnt ) {
 		return x( pnt.getX() ) && y( pnt.getY() ) && z( pnt.getZ() );
 	}
 

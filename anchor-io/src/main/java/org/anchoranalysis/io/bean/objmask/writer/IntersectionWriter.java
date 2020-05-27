@@ -29,6 +29,7 @@ package org.anchoranalysis.io.bean.objmask.writer;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -53,10 +54,10 @@ class IntersectionWriter {
 		);
 		
 		// Let's make the intersection relative to the stack
-		intersection.getCrnrMin().sub( stackBBox.getCrnrMin() );
-		mask.getBoundingBox().getCrnrMin().sub( stackBBox.getCrnrMin() );
+		intersection = intersection.shiftBackBy( stackBBox.getCrnrMin() );
+		mask.shiftBackBy(stackBBox.getCrnrMin() );
 		
-		Point3i maxGlobal = intersection.calcCrnrMax();
+		ReadableTuple3i maxGlobal = intersection.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
 		
 		assert(mask.sizesMatch());
@@ -67,6 +68,6 @@ class IntersectionWriter {
 			stack.writeRGBMaskToSlice( mask, intersection, color, pntGlobal, relZ, maxGlobal);
 		}
 		
-		mask.getBoundingBox().getCrnrMin().add( stackBBox.getCrnrMin() );
+		mask.shiftBy( stackBBox.getCrnrMin() );
 	}
 }

@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
@@ -42,7 +43,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * A 2D bounding-box should always have a z-extent of 1 pixel
  *
- * <p>THis is an IMMUTABLE class</p>.
+ * <p>This is an IMMUTABLE class</p>.
  */
 public final class BoundingBox implements Serializable {
 	
@@ -69,7 +70,7 @@ public final class BoundingBox implements Serializable {
 		);
 	}
 
-	public BoundingBox( Point3i min, Point3i max ) {
+	public BoundingBox(ReadableTuple3i min, ReadableTuple3i max ) {
 		this(
 			min,
 			new Extent(
@@ -82,7 +83,7 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	// Extnt is the number of pixels need to represent this bounding box
-	public BoundingBox(Point3i crnrMin, Extent extent) {
+	public BoundingBox(ReadableTuple3i crnrMin, Extent extent) {
 		this.crnrMin = new Point3i(crnrMin);
 		this.extent = extent;
 	}
@@ -126,13 +127,6 @@ public final class BoundingBox implements Serializable {
 		);
 	}
 	
-	public BoundingBox duplicateChangeCornerZ(int crnrZ) {
-		return new BoundingBox(
-			crnrMin.duplicateChangeZ(crnrZ),
-			extent
-		);
-	}
-	
 	public BoundingBox duplicateChangeZ(int crnrZ, int extentZ) {
 		return new BoundingBox(
 			crnrMin.duplicateChangeZ(crnrZ),
@@ -142,16 +136,20 @@ public final class BoundingBox implements Serializable {
 	
 	public boolean atBorder( ImageDim sd ) {
 
-		if (atBorderXY(sd)) return true;
+		if (atBorderXY(sd)) {
+			return true;
+		}
 		
-		if (atBorderZ(sd)) return true;
+		if (atBorderZ(sd)) {
+			return true;
+		}
 		
 		return false;
 	}
 	
 	public boolean atBorderXY( ImageDim sd ) {
 		
-		Point3i crnrMax = this.calcCrnrMax();
+		ReadableTuple3i crnrMax = this.calcCrnrMax();
 
 		if (crnrMin.getX()==0) {
 			return true;
@@ -172,10 +170,14 @@ public final class BoundingBox implements Serializable {
 	
 	public boolean atBorderZ( ImageDim sd ) {
 		
-		Point3i crnrMax = this.calcCrnrMax();
+		ReadableTuple3i crnrMax = this.calcCrnrMax();
 		
-		if (crnrMin.getZ()==0) return true;
-		if (crnrMax.getZ()==(sd.getZ()-1)) return true;
+		if (crnrMin.getZ()==0) {
+			return true;
+		}
+		if (crnrMax.getZ()==(sd.getZ()-1)) {
+			return true;
+		}
 		
 		return false;
 	}
@@ -218,7 +220,7 @@ public final class BoundingBox implements Serializable {
 	 * <p>The return value should be treated read-only, as this class is designed to be IMMUTABLE</o>.
 	 * 
 	 * */
-	public Point3i getCrnrMin() {
+	public ReadableTuple3i getCrnrMin() {
 		return crnrMin;
 	}
 	
@@ -244,18 +246,18 @@ public final class BoundingBox implements Serializable {
 	
 	// This is the last point INSIDE the box
 	// So iterators should be <= CalcCrnrMax
-	public Point3i calcCrnrMax() {
-		Point3i p = new Point3i();
-		p.setX(crnrMin.getX() + extent.getX() - 1);
-		p.setY(crnrMin.getY() + extent.getY() - 1);
-		p.setZ(crnrMin.getZ() + extent.getZ() - 1);
-		return p;
+	public ReadableTuple3i calcCrnrMax() {
+		Point3i out = new Point3i();
+		out.setX(crnrMin.getX() + extent.getX() - 1);
+		out.setY(crnrMin.getY() + extent.getY() - 1);
+		out.setZ(crnrMin.getZ() + extent.getZ() - 1);
+		return out;
 	}
 	
 	public BoundingBox clipTo( Extent e ) {
 		
 		Point3i min = new Point3i(crnrMin);
-		Point3i max = calcCrnrMax();
+		Point3i max = new Point3i(calcCrnrMax());
 		
 		if (min.getX()<0) {
 			min.setX(0);
@@ -284,7 +286,7 @@ public final class BoundingBox implements Serializable {
 	
 	public Point3i closestPntOnBorder( Point3d pntIn ) {
 		
-		Point3i crnrMax = calcCrnrMax();
+		ReadableTuple3i crnrMax = calcCrnrMax();
 		
 		Point3i pntOut = new Point3i();
 		pntOut.setX( closestPntOnAxis(pntIn.getX(), crnrMin.getX(), crnrMax.getX()) );
@@ -293,7 +295,7 @@ public final class BoundingBox implements Serializable {
 		return pntOut;
 	}
 	
-	public static Point3i relPosTo( Point3i relPoint, Point3i srcPoint ) {
+	public static Point3i relPosTo( Point3i relPoint, ReadableTuple3i srcPoint ) {
 		Point3i p = new Point3i( relPoint );
 		p.sub( srcPoint );
 		return p; 
@@ -338,12 +340,12 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	/** 
-	 * Shifts the bounding-box i.e. adds a vector to the corner position
+	 * Shifts the bounding-box by adding to it i.e. adds a vector to the corner position
 	 * 
 	 * @param shiftBy what to add to the corner position
 	 * @return newly created bounding-box with shifted corner position and identical extent 
 	 **/
-	public BoundingBox shift( Tuple3i shiftBy ) {
+	public BoundingBox shiftBy( ReadableTuple3i shiftBy ) {
 		Point3i crnrNew = new Point3i(crnrMin);
 		crnrNew.add(shiftBy);
 		return new BoundingBox(
@@ -352,6 +354,61 @@ public final class BoundingBox implements Serializable {
 		);
 	}
 	
+	/** 
+	 * Shifts the bounding-box by subtracting from i.e. subtracts a vector from the corner position
+	 * 
+	 * @param shiftBy what to add to the corner position
+	 * @return newly created bounding-box with shifted corner position and identical extent 
+	 **/
+	public BoundingBox shiftBackBy( ReadableTuple3i shiftBackwardsBy ) {
+		Point3i crnrNew = new Point3i(crnrMin);
+		crnrNew.sub(shiftBackwardsBy);
+		return new BoundingBox(
+			crnrNew,
+			extent
+		);
+	}
+	
+	/**
+	 * Assigns a new corner-location to the bounding-box
+	 * 
+	 * @param crnrMinNew the new corner
+	 * @return a bounding-box with a new corner and the same extent
+	 */
+	public BoundingBox shiftTo(Point3i crnrMinNew) {
+		return new BoundingBox(
+			crnrMinNew,
+			extent
+		);
+	}
+
+	/**
+	 * Assigns a new z-slice corner-location to the bounding-box
+	 * 
+	 * @param crnrZNew the new value in Z for the corner
+	 * @return a bounding-box with a new z-slice corner and the same extent
+	 */
+	public BoundingBox shiftToZ(int crnrZNew) {
+		return new BoundingBox(
+			crnrMin.duplicateChangeZ(crnrZNew),
+			extent
+		);
+	}
+	
+	/**
+	 * Reflects the bounding box through the origin (i.e. x,y,z -> -x, -y, -z)
+	 * 
+	 * @return a bounding-box reflected through the origin
+	 */
+	public BoundingBox reflectThroughOrigin() {
+		Point3i crnrNew = new Point3i(crnrMin);
+		crnrNew.scale(-1);;
+		return new BoundingBox(
+			crnrNew,
+			extent
+		);
+	}
+		
 	/**
 	 * Scales the bounding-box, both the corner-point and the extent
 	 * 
@@ -378,7 +435,7 @@ public final class BoundingBox implements Serializable {
 		);
 	}	
 	
-	private void checkMaxMoreThanMin( Point3i min, Point3i max ) {
+	private void checkMaxMoreThanMin( ReadableTuple3i min, ReadableTuple3i max ) {
 		if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {
 			throw new AnchorFriendlyRuntimeException(
 				String.format("To create a bounding-box, the max-point %s must always be >= the min-point %s in all dimensions.", max, min)

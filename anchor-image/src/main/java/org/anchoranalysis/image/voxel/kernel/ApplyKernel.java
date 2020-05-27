@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -131,7 +132,7 @@ public class ApplyKernel {
 		
 		kernel.init(vb);
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrZ()) {
@@ -176,7 +177,7 @@ public class ApplyKernel {
 		
 		kernel.init(vb);
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrZ()) {
@@ -240,8 +241,8 @@ public class ApplyKernel {
 		int cnt = 0;
 		
 		BoundingBox bbox = om.getBoundingBox();
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
 		Extent extnt = in.extent();
 		
@@ -252,7 +253,11 @@ public class ApplyKernel {
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrZ()) {
 
-			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
+			LocalSlices localSlices = new LocalSlices(
+				pnt.getZ(),
+				localSlicesSize,
+				in
+			);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
 			int ind = 0;

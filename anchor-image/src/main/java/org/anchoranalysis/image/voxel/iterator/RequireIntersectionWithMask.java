@@ -3,6 +3,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 
@@ -21,7 +22,7 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	private final ObjMask mask;
 	private final Extent extent;
 	private final byte byteOn;
-	private final Point3i crnrMin;
+	private final ReadableTuple3i crnrMin;
 	
 	private ByteBuffer bbMask;
 	

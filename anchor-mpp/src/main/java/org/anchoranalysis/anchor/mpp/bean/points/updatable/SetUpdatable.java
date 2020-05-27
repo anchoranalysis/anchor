@@ -44,6 +44,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -163,7 +164,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		rmvPntsInMark( newMark );
 	}
 	
-	private void rmvPnt( Point3i crntExtntPnt,  Point3i crnrPnt ) {
+	private void rmvPnt( ReadableTuple3i crntExtntPnt,  ReadableTuple3i crnrPnt ) {
 		int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
 		int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
 		int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
@@ -179,7 +180,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		// We add any points in our new mark to the set
 		PxlMark pxlMark = newMark.doOperation();
 		
-		Point3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCrnrMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCrnrMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
@@ -223,7 +224,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		PxlMark pxlMark = markToAdd.doOperation();
 		
-		Point3i crnrPnt = pxlMark.getBoundingBox(regionID).getCrnrMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).getCrnrMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();

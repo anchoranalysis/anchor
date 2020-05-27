@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.extent;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 
 /**
@@ -26,11 +27,11 @@ private final BoundingBox bbox;
 	 */
 	public BoundingBox with( BoundingBox other ) {
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMinOther = other.getCrnrMin();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMinOther = other.getCrnrMin();
 		
-		Point3i crnrMax = bbox.calcCrnrMax();
-		Point3i crnrMaxOthr = other.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMaxOthr = other.calcCrnrMax();
 		
 		ExtentBoundsComparer meiX = ExtentBoundsComparer.createMax(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getX() );
 		ExtentBoundsComparer meiY = ExtentBoundsComparer.createMax(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getY() );

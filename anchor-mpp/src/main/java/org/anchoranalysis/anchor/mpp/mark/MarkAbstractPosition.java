@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -160,7 +161,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	}
 	
 	/** Calculates a relative-point from pntGlobal to pntBase */
-	private static Point3i calcRelativePoint(Point3d pntGlobal, Point3i pntBase) {
+	private static Point3i calcRelativePoint(Point3d pntGlobal, ReadableTuple3i pntBase) {
 		Point3i pntOut = PointConverter.intFromDouble(pntGlobal);
 		pntOut.sub(pntBase);
 		return pntOut;

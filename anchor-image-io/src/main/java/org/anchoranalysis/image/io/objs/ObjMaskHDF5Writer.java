@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.objs;
 import java.nio.ByteBuffer;
 import java.util.function.Function;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -93,7 +93,7 @@ class ObjMaskHDF5Writer {
 		addAttr("z", p->p.getZ() );
 	}
 	
-	private void addAttr( String attrName, Function<Point3i,Integer> extrVal) {
+	private void addAttr( String attrName, Function<ReadableTuple3i,Integer> extrVal) {
 		
 		Integer crnrVal = extrVal.apply( om.getBoundingBox().getCrnrMin() );
 		writer.uint32().setAttr(

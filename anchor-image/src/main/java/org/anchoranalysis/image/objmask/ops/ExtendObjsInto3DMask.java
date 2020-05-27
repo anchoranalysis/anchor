@@ -29,6 +29,7 @@ package org.anchoranalysis.image.objmask.ops;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -84,7 +85,7 @@ public class ExtendObjsInto3DMask {
 			VoxelBoxFactory.instance().getByte()
 		);
 		
-		Point3i max = newBBox.calcCrnrMax();
+		ReadableTuple3i max = newBBox.calcCrnrMax();
 		Point3i pnt = new Point3i();
 
 		BinaryValuesByte bv = mask3D.getBinaryValues().createByte();
@@ -127,7 +128,7 @@ public class ExtendObjsInto3DMask {
 		return new BoundingBox( crnrMin, e );
 	}
 	
-	private static Point3i copyPointChangeZ( Point3i in, int z ) {
+	private static Point3i copyPointChangeZ( ReadableTuple3i in, int z ) {
 		Point3i out = new Point3i( in );
 		out.setZ(z);
 		return out;

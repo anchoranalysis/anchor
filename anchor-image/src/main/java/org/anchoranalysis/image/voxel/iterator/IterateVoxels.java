@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -116,7 +117,7 @@ public class IterateVoxels {
 
 		Extent extent = voxels.extent();
 		Extent extentMask = mask.getVoxelBox().extent();
-		Point3i crnrMin = mask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMin = mask.getBoundingBox().getCrnrMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
@@ -171,8 +172,8 @@ public class IterateVoxels {
 	 */
 	public static void callEachPoint( BoundingBox bbox, ProcessVoxel process ) {
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		

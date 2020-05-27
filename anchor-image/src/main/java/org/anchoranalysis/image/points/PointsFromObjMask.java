@@ -61,7 +61,11 @@ public class PointsFromObjMask {
 	 */
 	public static List<Point3d> pntsFromMaskDouble( ObjMask om ) throws CreateException {
 		List<Point3d> pts = new ArrayList<Point3d>();
-		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3DDouble( om.binaryVoxelBox(), om.getBoundingBox().getCrnrMin(), pts );
+		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3DDouble(
+			om.binaryVoxelBox(),
+			om.getBoundingBox().getCrnrMin(),
+			pts
+		);
 		return pts;
 	}
 	

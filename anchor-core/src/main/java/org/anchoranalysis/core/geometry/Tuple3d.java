@@ -56,10 +56,10 @@ public abstract class Tuple3d implements Serializable {
 		this.z += z;
 	}
 	
-	public final void add( Tuple3i pnt ) {
-		this.x += pnt.x;
-		this.y += pnt.y;
-		this.z += pnt.z;
+	public final void add( ReadableTuple3i pnt ) {
+		this.x += pnt.getX();
+		this.y += pnt.getY();
+		this.z += pnt.getZ();
 	}
 	
 	public final void sub( Tuple3d pnt ) {

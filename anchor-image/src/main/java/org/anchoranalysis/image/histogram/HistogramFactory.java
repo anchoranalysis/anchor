@@ -33,7 +33,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
@@ -156,8 +156,8 @@ public class HistogramFactory {
 		Extent e = inputBuffer.extent();
 		Extent eMask = objMask.getBoundingBox().extent();
 		
-		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
 		
 		byte maskOnVal = objMask.getBinaryValuesByte().getOnByte();
 		

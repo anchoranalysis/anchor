@@ -37,6 +37,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -257,10 +258,10 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		return toString(false,false);
 	}
 	
-	public void addToBBoxCrnrMin( Point3i pnt ) {
+	public void addToBBoxCrnrMin( ReadableTuple3i toAdd ) {
 		
 		for (ObjMask mask : this) {
-			mask.getBoundingBox().getCrnrMin().add(pnt);
+			mask.getBoundingBox().shiftBy(toAdd);
 		}
 	}
 	
@@ -378,7 +379,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		// We write each object to the buffer
 		for( ObjMask om : this) {
 			
-			BoundingBox bbNew = om.getBoundingBox().shift(crnrSub);
+			BoundingBox bbNew = om.getBoundingBox().shiftBy(crnrSub);
 			
 			ObjMask objMaskRel = new ObjMask( bbNew, om.getVoxelBox() );
 

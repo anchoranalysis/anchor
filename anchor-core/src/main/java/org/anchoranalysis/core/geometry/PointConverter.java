@@ -67,7 +67,7 @@ public class PointConverter {
 		return new Point3d( (double) p.getX(), (double) p.getY(), 0);
 	}
 	
-	public static Point3d doubleFromInt(Point3i p) {
+	public static Point3d doubleFromInt(ReadableTuple3i p) {
 		return new Point3d( (double) p.getX(), (double) p.getY(), (double) p.getZ() );
 	}
 	
@@ -80,7 +80,7 @@ public class PointConverter {
 	}
 
 	
-	public static Point3f floatFromInt(Point3i p) {
+	public static Point3f floatFromInt(ReadableTuple3i p) {
 		return new Point3f( (float) p.getX(), (float) p.getY(), (float) p.getZ());
 	}
 	

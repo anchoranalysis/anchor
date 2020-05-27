@@ -5,7 +5,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 // Helper classes for calculating the union/intersection along each axis
 class ExtentBoundsComparer {
@@ -14,11 +14,11 @@ class ExtentBoundsComparer {
 	private int extnt;
 	
 	public static ExtentBoundsComparer createMax(
-		Point3i min1,
-		Point3i min2,
-		Point3i max1,
-		Point3i max2,
-		Function<Point3i,Integer> extract
+		ReadableTuple3i min1,
+		ReadableTuple3i min2,
+		ReadableTuple3i max1,
+		ReadableTuple3i max2,
+		Function<ReadableTuple3i,Integer> extract
 	) {
 		return calc(
 			extract.apply(min1),
@@ -33,11 +33,11 @@ class ExtentBoundsComparer {
 	}
 	
 	public static Optional<ExtentBoundsComparer> createMin(
-		Point3i min1,
-		Point3i min2,
-		Point3i max1,
-		Point3i max2,
-		Function<Point3i,Integer> extract
+		ReadableTuple3i min1,
+		ReadableTuple3i min2,
+		ReadableTuple3i max1,
+		ReadableTuple3i max2,
+		Function<ReadableTuple3i,Integer> extract
 	) {
 		return calc(
 			extract.apply(min1),

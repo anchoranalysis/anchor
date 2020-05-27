@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -45,7 +46,11 @@ public class PointsFromBinaryVoxelBox {
 	
 
 	// Add: is added to each point before they are added to the list 
-	public static void addPointsFromVoxelBox( BinaryVoxelBox<ByteBuffer> voxelBox, Point3i add, List<Point2i> listOut  ) throws CreateException {
+	public static void addPointsFromVoxelBox(
+		BinaryVoxelBox<ByteBuffer> voxelBox,
+		ReadableTuple3i add,
+		List<Point2i> listOut
+	) throws CreateException {
 		
 		Extent e = voxelBox.extnt();
 
@@ -83,7 +88,7 @@ public class PointsFromBinaryVoxelBox {
 	
 
 	// Add: is added to each point before they are added to the list 
-	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, Point3i add, Collection<Point3i> out  ) throws CreateException {
+	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, ReadableTuple3i add, Collection<Point3i> out  ) throws CreateException {
 		
 		Extent e = voxelBox.extnt();
 
@@ -103,9 +108,9 @@ public class PointsFromBinaryVoxelBox {
 					if (bb.get()==bvb.getOnByte()) {
 						
 						int xAdj = add.getX() + x;
-						
-						
-						out.add( new Point3i(xAdj,yAdj,zAdj) );
+						out.add(
+							new Point3i(xAdj,yAdj,zAdj)
+						);
 					}
 					
 				}
@@ -114,7 +119,11 @@ public class PointsFromBinaryVoxelBox {
 	}
 	
 	// Add: is added to each point before they are added to the list 
-	public static void addPointsFromVoxelBox3DDouble( BinaryVoxelBox<ByteBuffer> voxelBox, Point3i add, Collection<Point3d> out  ) throws CreateException {
+	public static void addPointsFromVoxelBox3DDouble(
+		BinaryVoxelBox<ByteBuffer> voxelBox,
+		ReadableTuple3i add,
+		Collection<Point3d> out
+	) throws CreateException {
 		
 		Extent e = voxelBox.extnt();
 

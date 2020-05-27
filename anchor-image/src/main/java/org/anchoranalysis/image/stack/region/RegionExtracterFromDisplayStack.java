@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -142,8 +142,8 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extntSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extntSrc, Extent extntTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			
 			ByteBuffer bbIn = vbSrc.getPixelsForPlane(z).buffer();
@@ -174,8 +174,8 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extntSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extntSrc, Extent extntTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			
 			assert( vbSrc.getPixelsForPlane(z) != null );

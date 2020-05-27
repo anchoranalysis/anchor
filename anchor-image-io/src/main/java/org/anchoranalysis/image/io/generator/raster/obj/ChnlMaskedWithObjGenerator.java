@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -125,7 +126,7 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
-		Point3i maxGlobal = bbox.calcCrnrMax();
+		ReadableTuple3i maxGlobal = bbox.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
 		Point3i pntLocal = new Point3i();
 		

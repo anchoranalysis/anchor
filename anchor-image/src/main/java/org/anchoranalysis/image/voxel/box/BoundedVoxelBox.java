@@ -34,6 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -59,9 +60,6 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	private BoundingBox boundingBox;
 	private VoxelBox<T> voxelBox;
-	
-	public BoundedVoxelBox() {
-	}
 	
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
 	public BoundedVoxelBox(BoundingBox bbox, VoxelBoxFactoryTypeBound<T> factory) {
@@ -188,9 +186,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 */
 	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
-		relBox.getCrnrMin().scale(-1);
-		relBox.getCrnrMin().add( boundingBox.getCrnrMin() );
-		return relBox;
+		return relBox.reflectThroughOrigin().shiftBy( boundingBox.getCrnrMin() );
 	}
 
 	
@@ -210,7 +206,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		negClip.setY( clipNeg(boundingBox.getCrnrMin().getY(), neg.getY()));
 		negClip.setZ( clipNeg(boundingBox.getCrnrMin().getZ(), neg.getZ()));
 		
-		Point3i bboxMax = boundingBox.calcCrnrMax();
+		ReadableTuple3i bboxMax = boundingBox.calcCrnrMax();
 		
 		int maxPossibleX;
 		int maxPossibleY;
@@ -270,7 +266,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 		Point3i crnrMinNew = new Point3i( this.boundingBox.getCrnrMin() );
 		crnrMinNew.sub( grownBox.getCrnrMin() );
 		
-		BoundingBox bbo = new BoundingBox(crnrMinNew, grownBox.extent());
+		BoundingBox bbo = new BoundingBox(
+			crnrMinNew,
+			grownBox.extent()
+		);
 		
 		return new BoundedVoxelBox<>( bbo, bufferNew );
 	}
@@ -462,18 +461,38 @@ public class BoundedVoxelBox<T extends Buffer> {
 			bufNew
 		);
 	}
+	
+	public void shiftBy(ReadableTuple3i shiftBy) {
+		this.boundingBox = boundingBox.shiftBy(shiftBy);
+	}
+	
+	public void shiftBackBy(ReadableTuple3i shiftBackwardsBy) {
+		this.boundingBox = boundingBox.shiftBackBy(shiftBackwardsBy);
+	}
+	
+	public void shiftTo(Point3i crnrMinNew) {
+		this.boundingBox = boundingBox.shiftTo(crnrMinNew);
+	}
+
+	public void shiftToZ(int crnrZNew) {
+		this.boundingBox = boundingBox.shiftToZ(crnrZNew);
+	}
+	
+	public void reflectThroughOrigin() {
+		this.boundingBox = boundingBox.reflectThroughOrigin();
+	}
 
 	// If keepZ is true the slice keeps its z coordinate, otherwise its set to 0
 	public BoundedVoxelBox<T> extractSlice(int z, boolean keepZ) {
 		
-		BoundingBox bboNew = boundingBox.flattenZ();
+		BoundingBox bboxNew = boundingBox.flattenZ();
 		
 		if (keepZ) {
-			bboNew.getCrnrMin().setZ(z);
+			bboxNew = bboxNew.shiftToZ(z);
 		}
 		
 		return new BoundedVoxelBox<>(
-			bboNew,
+			bboxNew,
 			voxelBox.extractSlice(z)
 		);
 	}
@@ -488,6 +507,4 @@ public class BoundedVoxelBox<T extends Buffer> {
 		voxelBox.setPixelsCheckMask(bboxToBeAssigned, objMaskBuffer,
 				bboxMask, value, maskMatchValue);
 	}
-
-
 }

@@ -39,6 +39,7 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -198,7 +199,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		
 		byte maskOn = bv.getOnByte();
 		
-		Point3i maxPos = bbox.calcCrnrMax();
+		ReadableTuple3i maxPos = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrZ()) {
@@ -240,7 +241,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		
 		byte maskOn = bvOut.getOnByte();
 		
-		Point3i maxPos = bbox.calcCrnrMax();
+		ReadableTuple3i maxPos = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		Point3d pntScaled = new Point3d();

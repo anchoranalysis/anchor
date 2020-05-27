@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -100,7 +101,7 @@ public class BinaryChnlFromObjs {
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		Point3i maxGlobal = bbox.calcCrnrMax();
+		ReadableTuple3i maxGlobal = bbox.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
 		Point3i pntLocal = new Point3i();
 		
@@ -112,7 +113,16 @@ public class BinaryChnlFromObjs {
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			
 			ByteBuffer pixelsOut = voxelBoxOut.getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
-			writeToBufferMasked(maskIn, pixelsOut, voxelBoxOut.extent(), bbox.getCrnrMin(), pntGlobal, maxGlobal, maskOn, outValByte);
+			writeToBufferMasked(
+				maskIn,
+				pixelsOut,
+				voxelBoxOut.extent(),
+				bbox.getCrnrMin(),
+				pntGlobal,
+				maxGlobal,
+				maskOn,
+				outValByte
+			);
 		}
 	}
 	
@@ -120,9 +130,9 @@ public class BinaryChnlFromObjs {
 		ByteBuffer maskIn,
 		ByteBuffer pixelsOut,
 		Extent extntOut,
-		Point3i crnrMin,
+		ReadableTuple3i crnrMin,
 		Point3i pntGlobal,
-		Point3i maxGlobal,
+		ReadableTuple3i maxGlobal,
 		byte maskOn,
 		byte outValByte
 	) {

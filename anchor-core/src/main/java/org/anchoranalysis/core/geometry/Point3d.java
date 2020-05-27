@@ -55,10 +55,10 @@ public final class Point3d extends Tuple3d {
 		this.z = pnt.z;
 	}
 	
-	public Point3d( Tuple3i pnt) {
-		this.x = pnt.x;
-		this.y = pnt.y;
-		this.z = pnt.z;
+	public Point3d( ReadableTuple3i pnt) {
+		this.x = pnt.getX();
+		this.y = pnt.getY();
+		this.z = pnt.getZ();
 	}
 	
 	public Point3d(double x, double y, double z) {
@@ -106,11 +106,11 @@ public final class Point3d extends Tuple3d {
 	 * @param pnt the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3d min( Tuple3i pnt ) {
+	public Point3d min( ReadableTuple3i pnt ) {
 		return new Point3d(
-			Math.min(x, pnt.x),
-			Math.min(y, pnt.y),
-			Math.min(z, pnt.z)
+			Math.min(x, pnt.getX()),
+			Math.min(y, pnt.getY()),
+			Math.min(z, pnt.getZ())
 		);
 	}
 

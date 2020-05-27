@@ -36,6 +36,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
@@ -146,7 +147,7 @@ public final class Extent implements Serializable {
 	 * 
 	 * @return the extent's width, height, depth as a tuple
 	 */
-	public Tuple3i asTuple() {
+	public ReadableTuple3i asTuple() {
 		return len;
 	}
 
@@ -251,7 +252,7 @@ public final class Extent implements Serializable {
 		return containsX(pnt.getX()) && containsY(pnt.getY()) && containsZ(pnt.getZ());
 	}
 	
-	public boolean contains( Point3i pnt ) {
+	public boolean contains( ReadableTuple3i pnt ) {
 		return containsX(pnt.getX()) && containsY(pnt.getY()) && containsZ(pnt.getZ());
 	}
 	

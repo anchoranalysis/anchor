@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -37,8 +38,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 class PointsFromChnlHelper {
 	
 	private int skipAfterSuccessiveEmptySlices;
-	private Point3i crnrMin;
-	private Point3i crnrMax;
+	private ReadableTuple3i crnrMin;
+	private ReadableTuple3i crnrMax;
 	private VoxelBox<ByteBuffer> vb;
 	private BinaryValuesByte bvb;
 	private int startZ;
@@ -48,7 +49,7 @@ class PointsFromChnlHelper {
 	private int successiveEmptySlices = -1;
 	private Extent e = vb.extent();
 	
-	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, Point3i crnrMin, Point3i crnrMax,
+	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, ReadableTuple3i crnrMin, ReadableTuple3i crnrMax,
 			VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb, int startZ, List<Point3i> listOut) {
 		super();
 		this.skipAfterSuccessiveEmptySlices = skipAfterSuccessiveEmptySlices;

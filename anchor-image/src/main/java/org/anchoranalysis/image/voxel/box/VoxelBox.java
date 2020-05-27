@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -112,8 +113,8 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		checkExtentMatch(sourceBox, destBox);
 		
-		Point3i srcStart = sourceBox.getCrnrMin();
-		Point3i srcEnd = sourceBox.calcCrnrMax();
+		ReadableTuple3i srcStart = sourceBox.getCrnrMin();
+		ReadableTuple3i srcEnd = sourceBox.calcCrnrMax();
 		
 		Point3i relPos = destBox.relPosTo(sourceBox);
 		
@@ -144,8 +145,8 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		checkExtentMatch(sourceBox, destBox);
 		
-		Point3i srcStart = sourceBox.getCrnrMin();
-		Point3i srcEnd = sourceBox.calcCrnrMax();
+		ReadableTuple3i srcStart = sourceBox.getCrnrMin();
+		ReadableTuple3i srcEnd = sourceBox.calcCrnrMax();
 		
 		Point3i relPos = destBox.relPosTo(sourceBox);
 		
@@ -284,7 +285,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		ObjMask om = new ObjMask(bbox);
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte maskOut = om.getBinaryValuesByte().getOnByte();
 		
@@ -318,7 +319,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		ObjMask om = new ObjMask(bbox);
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte maskOut = om.getBinaryValuesByte().getOnByte();
 		
@@ -355,7 +356,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		);
 		
 		BoundingBox bbox = maskIn.getBoundingBox();
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte maskInVal = maskIn.getBinaryValuesByte().getOnByte();
 		byte maskOutVal = maskOut.getBinaryValuesByte().getOnByte();
@@ -461,8 +462,8 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public int countEqualMask( int equalVal, ObjMask om ) {
 		
-		Point3i srcStart = om.getBoundingBox().getCrnrMin();
-		Point3i srcEnd = om.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i srcStart = om.getBoundingBox().getCrnrMin();
+		ReadableTuple3i srcEnd = om.getBoundingBox().calcCrnrMax();
 
 		int count = 0;
 		

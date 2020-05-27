@@ -26,7 +26,7 @@ package org.anchoranalysis.image.extent;
  * #L%
  */
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 /**
  * Calculates distance between two bounding boxes
@@ -41,11 +41,11 @@ public class BoundingBoxDistance {
 			return 0;
 		}
 		
-		Point3i box1CrnrMin = box1.getCrnrMin();
-		Point3i box1CrnrMax = box1.calcCrnrMax();
+		ReadableTuple3i box1CrnrMin = box1.getCrnrMin();
+		ReadableTuple3i box1CrnrMax = box1.calcCrnrMax();
 		
-		Point3i box2CrnrMin = box2.getCrnrMin();
-		Point3i box2CrnrMax = box2.calcCrnrMax();
+		ReadableTuple3i box2CrnrMin = box2.getCrnrMin();
+		ReadableTuple3i box2CrnrMax = box2.calcCrnrMax();
 		
 		int xDist = minDist(
 			box1CrnrMin.getX(),

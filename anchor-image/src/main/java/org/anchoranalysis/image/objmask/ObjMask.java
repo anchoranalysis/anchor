@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -520,7 +521,7 @@ public class ObjMask {
 			this.bv.duplicate()
 		);
 	}
-	
+
 	public ObjMask clipToContainer(BoundingBox bboxContainer) throws OperationFailedException {
 		assert( bboxContainer.intersection().existsWith(this.getBoundingBox()));
 		if (bboxContainer.contains().box(getBoundingBox())) {
@@ -627,6 +628,28 @@ public class ObjMask {
 		return null;
 	}
 	
+	public void shiftBy(ReadableTuple3i shiftBy) {
+		delegate.shiftBy(shiftBy);
+	}
+	
+
+	public void shiftBackBy(ReadableTuple3i shiftBackwardsBy) {
+		delegate.shiftBackBy(shiftBackwardsBy);
+	}
+	
+	public void shiftTo(Point3i crnrMinNew) {
+		delegate.shiftTo(crnrMinNew);
+	}
+
+	public void shiftToZ(int crnrZNew) {
+		delegate.shiftToZ(crnrZNew);
+	}
+	
+	public void reflectThroughOrigin() {
+		delegate.reflectThroughOrigin();
+	}
+	
+	
 	// Creates a new objMask that is relative to another bbox
 	public ObjMask relMaskTo( BoundingBox bbox ) {
 		Point3i pnt = delegate.getBoundingBox().relPosTo(bbox);
@@ -641,4 +664,6 @@ public class ObjMask {
 	public String toString() {
 		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numPixels() );
 	}
+
+
 }

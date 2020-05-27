@@ -140,7 +140,7 @@ public class StackProviderGenerateString extends StackProvider {
 		for( int z=0; z<zHeight; z++) {
 			
 			// Adjust dfestination box
-			bboxDest = bboxDest.duplicateChangeCornerZ(z);
+			bboxDest = bboxDest.shiftToZ(z);
 			
 			chnl.getVoxelBox().copyPixelsTo(bboxSrc, chnlNew.getVoxelBox(), bboxDest);
 		}

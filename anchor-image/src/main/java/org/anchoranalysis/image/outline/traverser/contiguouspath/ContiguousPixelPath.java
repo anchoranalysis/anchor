@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
 
 /** A list of visited pixels which forms one contiguous path (each pixel neighbours each other) */
@@ -150,7 +151,7 @@ public class ContiguousPixelPath {
 	}
 
 	/** Adds a shift to each point (modifying the existing points in memory), and returns them as a list */
-	public List<Point3i> addShift( Point3i shift ) {
+	public List<Point3i> addShift( ReadableTuple3i shift ) {
 		for( Point3i relPnt : list) {
 			relPnt.add( shift );
 		}

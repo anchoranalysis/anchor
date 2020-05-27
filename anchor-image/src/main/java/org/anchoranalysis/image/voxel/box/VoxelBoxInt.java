@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -87,7 +87,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 		
 		ObjMask om = new ObjMask(bbox );
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
 		
@@ -131,8 +131,8 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public void setPixelsTo( BoundingBox bbox, int val ) {
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
@@ -206,7 +206,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 		
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 				
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			IntBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();

@@ -30,7 +30,7 @@ package org.anchoranalysis.image.voxel.box;
 import java.nio.FloatBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -108,8 +108,8 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 
 		float valFloat = (float) val;
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {

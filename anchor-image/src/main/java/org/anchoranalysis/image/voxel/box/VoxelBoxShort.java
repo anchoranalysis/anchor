@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -72,7 +72,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		ObjMask om = new ObjMask(bbox );
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
 		
@@ -119,8 +119,8 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 
 		short valShort = (short) val;
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
@@ -183,7 +183,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 				
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ShortBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();

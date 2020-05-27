@@ -44,10 +44,10 @@ public final class Point3i extends Tuple3i {
 		this.z = z;
 	}
 	
-	public Point3i( Tuple3i pnt) {
-		this.x = pnt.x;
-		this.y = pnt.y;
-		this.z = pnt.z;
+	public Point3i(ReadableTuple3i pnt) {
+		this.x = pnt.getX();
+		this.y = pnt.getY();
+		this.z = pnt.getZ();
 	}
 
 	public Point3i( Tuple3d pnt) {
@@ -73,11 +73,11 @@ public final class Point3i extends Tuple3i {
 	 * @param pnt the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3i min( Tuple3i pnt ) {
+	public Point3i min( ReadableTuple3i pnt ) {
 		return new Point3i(
-			Math.min(x, pnt.x),
-			Math.min(y, pnt.y),
-			Math.min(z, pnt.z)
+			Math.min(x, pnt.getX()),
+			Math.min(y, pnt.getY()),
+			Math.min(z, pnt.getZ())
 		);
 	}
 	
@@ -88,11 +88,11 @@ public final class Point3i extends Tuple3i {
 	 * @param pnt the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3i max( Tuple3i pnt ) {
+	public Point3i max( ReadableTuple3i pnt ) {
 		return new Point3i(
-			Math.max(x, pnt.x),
-			Math.max(y, pnt.y),
-			Math.max(z, pnt.z)
+			Math.max(x, pnt.getX()),
+			Math.max(y, pnt.getY()),
+			Math.max(z, pnt.getZ())
 		);
 	}
 	
@@ -129,6 +129,7 @@ public final class Point3i extends Tuple3i {
 		return Math.max(sx, Math.max(sy, sz));
 	}
 	
+	@Override
 	public Point3i duplicateChangeZ( int zNew ) {
 		return new Point3i(
 			x,

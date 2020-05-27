@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 /** 
  * Methods for checking intersection between a particular bounding-box and others
@@ -57,11 +58,11 @@ public final class BoundingBoxIntersection {
 	 */
 	private Optional<BoundingBox> with( BoundingBox other, boolean createIntersectionBox) {
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMinOther = other.getCrnrMin();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMinOther = other.getCrnrMin();
 		
-		Point3i crnrMax = bbox.calcCrnrMax();
-		Point3i crnrMaxOthr = other.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMaxOthr = other.calcCrnrMax();
 		
 		Optional<ExtentBoundsComparer> meiX = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getX() );
 		Optional<ExtentBoundsComparer> meiY = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getY() );

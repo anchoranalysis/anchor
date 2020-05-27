@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.kernel.count;
  */
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -41,14 +42,14 @@ import org.anchoranalysis.image.extent.Extent;
 public class CountKernelNghbIgnoreOutsideScene extends CountKernelNghbBase {
 
 	private Extent extntScene;
-	private Point3i addPnt;
+	private ReadableTuple3i addPnt;
 	
 	public CountKernelNghbIgnoreOutsideScene(
 		boolean useZ,
 		BinaryValuesByte bv,
 		boolean multipleMatchesPerVoxel,
 		Extent extntScene,		// The entire extnt of the scene
-		Point3i addPnt			// Added to a point before determining if it is inside or outside the scene.
+		ReadableTuple3i addPnt			// Added to a point before determining if it is inside or outside the scene.
 	) {
 		super(useZ, bv, multipleMatchesPerVoxel);
 		this.extntScene = extntScene;

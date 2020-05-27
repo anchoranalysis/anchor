@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -105,7 +106,7 @@ public class RasterArranger {
 		Extent extnt = stackIn.getDimensions().getExtnt();
 		Extent extntOut = stackIn.getDimensions().getExtnt();
 		
-		Point3i leftCrnr = bbox.getCrnrMin();
+		ReadableTuple3i leftCrnr = bbox.getCrnrMin();
 		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
 		int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
 		
