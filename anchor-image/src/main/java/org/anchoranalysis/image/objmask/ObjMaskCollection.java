@@ -79,7 +79,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		ObjMaskCollection out = new ObjMaskCollection();
 		for( ObjMask om : delegate ) {
 			
-			if (om.getBoundingBox().containsZ(z)) {
+			if (om.getBoundingBox().contains().z(z)) {
 				out.add( om.extractSlice(z, keepZ ) );
 			}
 		}

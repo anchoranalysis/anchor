@@ -115,7 +115,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	}
 	
 	public static void writeRelPoint( Point3i pnt, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
-		if (bboxContainer.contains(pnt)) {
+		if (bboxContainer.contains().point(pnt)) {
 			Point3i pntNew = new Point3i(pnt);
 			pntNew.sub(bboxContainer.getCrnrMin());
 			stack.writeRGBPoint( pnt, color);

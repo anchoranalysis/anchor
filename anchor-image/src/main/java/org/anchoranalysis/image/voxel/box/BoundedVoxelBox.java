@@ -387,10 +387,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 	// Note, no new voxels are created
 	public BoundedVoxelBox<T> createVirtualSubrange(int zMin, int zMax, VoxelBoxFactoryTypeBound<T> factory) throws CreateException {
 	
-		if( !boundingBox.containsZ(zMin)) {
+		if( !boundingBox.contains().z(zMin)) {
 			throw new CreateException("zMin outside range");
 		}
-		if( !boundingBox.containsZ(zMax)) {
+		if( !boundingBox.contains().z(zMax)) {
 			throw new CreateException("zMax outside range");
 		}
 		
@@ -407,7 +407,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 
 	public BoundedVoxelBox<T> createBufferAvoidNew(BoundingBox bbox) throws CreateException {
 		
-		if (!boundingBox.contains(bbox)) {
+		if (!boundingBox.contains().box(bbox)) {
 			throw new CreateException("Source box does not contain target box");
 		}
 		
@@ -429,7 +429,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 */
 	public BoundedVoxelBox<T> createBufferAlwaysNew(BoundingBox bbox) throws CreateException {
 
-		if (!boundingBox.contains(bbox)) {
+		if (!boundingBox.contains().box(bbox)) {
 			throw new CreateException("Source box does not contain target box");
 		}
 		

@@ -57,7 +57,7 @@ public class ObjMaskMerger {
 			om2 = BinaryChnlInverter.invertObjMaskDuplicate(om2);
 		}
 		
-		BoundingBox bbox = om1.getBoundingBox().union(om2.getBoundingBox() );
+		BoundingBox bbox = om1.getBoundingBox().union().with(om2.getBoundingBox() );
 		
 		ObjMask omOut = new ObjMask(
 			bbox,
@@ -85,7 +85,7 @@ public class ObjMaskMerger {
 			if (bbox==null) {
 				bbox = new BoundingBox( om.getBoundingBox() );
 			} else {
-				bbox = bbox.union(om.getBoundingBox());
+				bbox = bbox.union().with(om.getBoundingBox());
 			}
 		}
 		

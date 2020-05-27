@@ -423,7 +423,7 @@ public class ObjMask {
 	
 	public boolean contains( Point3i pnt ) {
 		
-		if (!delegate.getBoundingBox().contains(pnt)) {
+		if (!delegate.getBoundingBox().contains().point(pnt)) {
 			return false;
 		}
 		
@@ -437,7 +437,7 @@ public class ObjMask {
 	
 	public boolean containsIgnoreZ( Point3i pnt ) {
 		
-		if (!delegate.getBoundingBox().containsIgnoreZ(pnt)) {
+		if (!delegate.getBoundingBox().contains().pointIgnoreZ(pnt)) {
 			return false;
 		}
 		
@@ -527,7 +527,7 @@ public class ObjMask {
 	
 	public ObjMask clipToContainer(BoundingBox bboxContainer) throws OperationFailedException {
 		assert( bboxContainer.intersection().existsWith(this.getBoundingBox()));
-		if (bboxContainer.contains(getBoundingBox())) {
+		if (bboxContainer.contains().box(getBoundingBox())) {
 			// Nothing to do
 			return this;
 		} else {
@@ -541,12 +541,12 @@ public class ObjMask {
 				// This is much less work than always processing all pixels, just for the sake of Z-slices
 				ObjMask omSubslices = createVirtualSubrange(bboxIntersection.getCrnrMin().getZ(), bboxIntersection.calcCrnrMax().getZ() );
 				
-				if (bboxContainer.contains(omSubslices.getBoundingBox())) {
+				if (bboxContainer.contains().box(omSubslices.getBoundingBox())) {
 					return omSubslices;
 				}
 				
 				ObjMask om = createSubmaskAvoidNew(bboxIntersection);
-				assert( bboxContainer.contains(om.getBoundingBox()) );
+				assert( bboxContainer.contains().box(om.getBoundingBox()) );
 				return om;
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);

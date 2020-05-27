@@ -265,29 +265,7 @@ public final class BoundingBox implements Serializable {
 		);
 	}
 	
-	public boolean containsX( int x ) {
-		return (x>= crnrMin.getX()) && (x< (crnrMin.getX() + extent.getX()) ); 
-	}
-	
-	public boolean containsY( int y ) {
-		return (y>= crnrMin.getY()) && (y< (crnrMin.getY() + extent.getY()) ); 
-	}
-	
-	public boolean containsZ( int z ) {
-		return (z>= crnrMin.getZ()) && (z< (crnrMin.getZ() + extent.getZ()) ); 
-	}
-	
-	public boolean containsIgnoreZ( Point3i pnt )  {
-		return containsX( pnt.getX() ) && containsY( pnt.getY() );
-	}
-	
-	public boolean contains( Point3i pnt ) {
-		return containsX( pnt.getX() ) && containsY( pnt.getY() ) && containsZ( pnt.getZ() );
-	}
-	
-	public boolean contains( BoundingBox box ) {
-		return contains( box.getCrnrMin() ) && contains( box.calcCrnrMax() );
-	}
+
 	
 	public Point3i closestPntOnBorder( Point3d pntIn ) {
 		
@@ -311,34 +289,21 @@ public final class BoundingBox implements Serializable {
 		return relPosTo( crnrMin, src.crnrMin );
 	}
 
+	/** For evaluating whether this bounding-box contains other points, boxes etc.? */
+	public BoundingBoxContains contains() {
+		return new BoundingBoxContains(this); 
+	}
+	
 	/** For evaluating the intersection between this bounding-box and others */
 	public BoundingBoxIntersection intersection() {
 		return new BoundingBoxIntersection(this);
 	}
 	
-	public BoundingBox union( BoundingBox othr ) {
-		
-		Point3i crnrMax = calcCrnrMax();
-		Point3i crnrMaxOthr = othr.calcCrnrMax();
-		
-		ExtentBoundsComparer meiX = ExtentBoundsComparer.createMax(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getX() );
-		ExtentBoundsComparer meiY = ExtentBoundsComparer.createMax(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getY() );
-		ExtentBoundsComparer meiZ = ExtentBoundsComparer.createMax(crnrMin, othr.crnrMin, crnrMax, crnrMaxOthr, p->p.getZ() );
-
-		return new BoundingBox(
-			new Point3i(
-				meiX.getMin(),
-				meiY.getMin(),
-				meiZ.getMin()
-			),
-			new Extent(
-				meiX.getExtnt(),
-				meiY.getExtnt(),
-				meiZ.getExtnt()
-			)
-		);
+	/** For performing a union between this bounding-box and another */
+	public BoundingBoxUnion union() {
+		return new BoundingBoxUnion(this);
 	}
-
+	
 	@Override
 	public String toString() {
 		return crnrMin.toString() + "+" + extent.toString() + "=" + calcCrnrMax().toString();
