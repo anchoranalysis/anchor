@@ -44,12 +44,6 @@ public abstract class NamedChnlsInputPart extends NamedChnlsInput {
 	
 	public abstract boolean hasChnl( String chnlName ) throws RasterIOException;
 	
-	@Override
-	public abstract String descriptiveName();
-
-	@Override
-	public abstract Path pathForBinding();
-	
 	public abstract List<Path> pathForBindingForAllChannels() throws GetOperationFailedException;
 	
 	public abstract File getFile();

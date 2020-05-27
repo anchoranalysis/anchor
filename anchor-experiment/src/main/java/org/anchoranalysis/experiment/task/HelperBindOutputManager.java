@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-experiment
@@ -30,6 +32,7 @@ package org.anchoranalysis.experiment.task;
 import java.util.Optional;
 
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -39,6 +42,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 class HelperBindOutputManager {
 	
+	private HelperBindOutputManager() {}
+	
 	// If pathForBinding is null, we bind to the root folder instead
 	public static BoundOutputManager createOutputManagerForTask(
 		InputFromManager input,
@@ -46,8 +51,13 @@ class HelperBindOutputManager {
 		ParametersExperiment params
 	) throws JobExecutionException {
 		try {
-			if (input.pathForBinding()!=null) {
-				return createWithBindingPath(input, manifestTask, params);
+			Optional<Path> pathForBinding = input.pathForBinding();
+			if (pathForBinding.isPresent()) {
+				return createWithBindingPath(
+					derivePathWithDescription(input),
+					manifestTask,
+					params
+				);
 			} else {
 				return createWithoutBindingPath(manifestTask, params.getOutputManager() );
 			}
@@ -64,8 +74,16 @@ class HelperBindOutputManager {
 		}
 	}
 
+	private static PathWithDescription derivePathWithDescription(InputFromManager input) {
+		assert(input.pathForBinding().isPresent());
+		return new PathWithDescription(
+			input.pathForBinding().get(),
+			input.descriptiveName()
+		);
+	}
+	
 	private static BoundOutputManager createWithBindingPath(
-		InputFromManager input,
+		PathWithDescription input,
 		Optional<ManifestRecorder> manifestTask,
 		ParametersExperiment params
 	) throws AnchorIOException, JobExecutionException {
@@ -80,7 +98,7 @@ class HelperBindOutputManager {
 			ManifestClashChecker.throwExceptionIfClashes(
 				params.getExperimentalManifest().get(),
 				boundOutput,
-				input.pathForBinding()
+				input.getPath()
 			);
 		}
 		return boundOutput;
@@ -95,14 +113,12 @@ class HelperBindOutputManager {
 	}
 
 	private static String describeInputForBinding( InputFromManager input ) {
-		if (input.pathForBinding()!=null) {
-			return quoteString(input.pathForBinding().toString());
-		} else {
-			return "null";
-		}
+		return input.pathForBinding().map(
+			HelperBindOutputManager::quoteString
+		).orElse("<no binding path>");
 	}
 	
-	private static String quoteString( String input ) {
-		return String.format("'%s'", input);
+	private static String quoteString( Path path ) {
+		return String.format("'%s'", path.toString());
 	}
 }

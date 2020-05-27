@@ -1,7 +1,6 @@
 package org.anchoranalysis.core.functional;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 /**
  * Additional utility functions for {@link Optional} and exceptions.
@@ -25,6 +24,20 @@ public class OptionalUtilities {
 	@FunctionalInterface
 	public interface MapFunction<S, T, E extends Throwable> {
 		T apply(S in) throws E;
+	}
+	
+	/**
+	 * Function used to map from two optionals to another single optional
+	 * 
+	 * @author Owen Feehan
+	 *
+	 * @param <S> source-type
+	 * @param <T> target-type
+	 * @param <E> exception that can be thrown during mapping
+	 */ 
+	@FunctionalInterface
+	public interface MapFunctionTwo<T, U, V, E extends Throwable> {
+		T apply(U in1, V in2) throws E;
 	}
 	
 	/**
@@ -99,14 +112,15 @@ public class OptionalUtilities {
 	/**
 	 * Mapping only occurs if both Optionals are non-empty (equivalent to a logical AND on the optionals)
 	 * 
-	 * @param <S> incoming optional-type for map
 	 * @param <T> outgoing optional-type for map
+	 * @param <U> first incoming optional-type for map
+	 * @param <V> second incoming optional-type for map
 	 * @param optional1 first incoming optional
 	 * @param optional2 second incoming optional
-	 * @param mapFunc the function that does the mapping from both incoming obhects to outgoing
+	 * @param mapFunc the function that does the mapping from both incoming objects to outgoing
 	 * @return the outgoing "mapped" optional (empty() if either incoming optional is empty)
 	 */
-	public static <S,T> Optional<T> mapBoth( Optional<S> optional1, Optional<S> optional2, BiFunction<S, S, T> mapFunc) {
+	public static <T,U,V,E extends Throwable> Optional<T> mapBoth( Optional<U> optional1, Optional<V> optional2, MapFunctionTwo<T, U, V, E> mapFunc) throws E {
 		if (optional1.isPresent() && optional2.isPresent()) {
 			return Optional.of(
 				mapFunc.apply(optional1.get(), optional2.get())	

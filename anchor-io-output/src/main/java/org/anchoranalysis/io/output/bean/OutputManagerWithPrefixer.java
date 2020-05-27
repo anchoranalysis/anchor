@@ -31,11 +31,11 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
@@ -63,7 +63,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	// Binds the output to be connected to a particular file and experiment
 	@Override
 	public FilePathPrefix prefixForFile(
-		InputFromManager input,
+		PathWithDescription input,
 		String expIdentifier,
 		Optional<ManifestRecorder> manifestRecorder,
 		Optional<ManifestRecorder> experimentalManifestRecorder,

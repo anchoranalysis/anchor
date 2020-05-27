@@ -65,8 +65,8 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 		this.annotationPath = annotationStrategy.annotationPathFor(input);
 	}
 	
-	public File associatedFile() {
-		return input.pathForBinding().toFile();
+	public Optional<File> associatedFile() {
+		return input.pathForBinding().map(Path::toFile);
 	}
 
 	public T getStrategy() {
@@ -89,7 +89,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return input.pathForBinding();
 	}
 		

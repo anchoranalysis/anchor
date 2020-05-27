@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManagerPermissive;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
@@ -102,7 +102,7 @@ public class OutputManagerFixture {
 		}
 
 		@Override
-		public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier,
+		public FilePathPrefix outFilePrefix(PathWithDescription input, String experimentIdentifier,
 				FilePathPrefixerParams context) throws AnchorIOException {
 			return prefix;
 		}

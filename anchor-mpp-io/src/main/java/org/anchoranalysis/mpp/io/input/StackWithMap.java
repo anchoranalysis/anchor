@@ -27,6 +27,7 @@ package org.anchoranalysis.mpp.io.input;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -88,7 +89,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
 		return mainInputObject.descriptiveName();
 	}
 
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return mainInputObject.pathForBinding();
 	}
 	

@@ -33,10 +33,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -122,7 +122,7 @@ public class BoundOutputManager {
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
-	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
+	public BoundOutputManager bindFile( PathWithDescription input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
 		FilePathPrefix fpp = outputManager.prefixForFile(
 			input,
 			expIdentifier,
