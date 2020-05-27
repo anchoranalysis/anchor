@@ -26,12 +26,12 @@ public final class BoundingBoxContains {
 
 	/** Is this value in the y-dimension within the bounding box range? */
 	public boolean y( int y ) {
-		return (y>= bbox.getCrnrMin().getY()) && (y<crnrMax.getY()); 
+		return (y>= bbox.getCrnrMin().getY()) && (y<=crnrMax.getY()); 
 	}
 	
 	/** Is this value in the z-dimension within the bounding box range? */
 	public boolean z( int z ) {
-		return (z>= bbox.getCrnrMin().getZ()) && (z<crnrMax.getZ()); 
+		return (z>= bbox.getCrnrMin().getZ()) && (z<=crnrMax.getZ()); 
 	}
 	
 	/** Is this point within the bounding-box? */
