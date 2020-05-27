@@ -1,7 +1,8 @@
-package org.anchoranalysis.image.extent;
+package org.anchoranalysis.image.points;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.extent.BoundingBox;
 
 /** 
  * Keeps track of the range experienced by points in the x, y and z dimensions

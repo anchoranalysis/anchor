@@ -64,7 +64,7 @@ public final class BoundingBox implements Serializable {
 	public BoundingBox( Point3d min, Point3d max ) {
 		this(
 			PointConverter.intFromDouble(min),
-			PointConverter.intFromDoubleCeil(min)
+			PointConverter.intFromDoubleCeil(max)
 		);
 	}
 

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.PointRange;
+import org.anchoranalysis.image.points.PointRange;
 
 class PointRangeWithCount {
 	

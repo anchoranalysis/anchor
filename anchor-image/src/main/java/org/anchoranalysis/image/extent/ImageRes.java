@@ -41,6 +41,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
  * 
  * <p>This class is IMMUTABLE</p>.
  *
+ * @author owen
  */
 public final class ImageRes implements Serializable {
 
