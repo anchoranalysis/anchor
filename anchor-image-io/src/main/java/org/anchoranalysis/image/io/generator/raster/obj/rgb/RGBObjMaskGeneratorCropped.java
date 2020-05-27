@@ -81,7 +81,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 			// Get a bounding box that contains all the objects
 			this.bbox = ObjMaskMerger.mergeBBoxFromObjs(objs);
 			
-			growBBBox(bbox, getBackground().getDimensions().getExtnt() );
+			bbox = growBBBox(bbox, getBackground().getDimensions().getExtnt() );
 			
 			// Extract the relevant piece of background
 			return ConvertDisplayStackToRGB.convertCropped(
@@ -99,15 +99,15 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		return relTo( getIterableElement().collectionObjMask(), bbox );
 	}
 
-	private void growBBBox(BoundingBox bbox, Extent containingExtent ) {
+	private BoundingBox growBBBox(BoundingBox bbox, Extent containingExtent ) {
 		assert(paddingXY>=0);
 		assert(paddingZ>=0);
 		
 		if (paddingXY==0 && paddingZ==0) {
-			return;
+			return bbox;
 		}
 		
-		bbox.growBy(
+		return bbox.growBy(
 			new Point3i(paddingXY, paddingXY, paddingZ),
 			containingExtent
 		);

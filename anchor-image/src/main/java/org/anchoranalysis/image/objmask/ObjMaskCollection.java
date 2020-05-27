@@ -378,8 +378,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		// We write each object to the buffer
 		for( ObjMask om : this) {
 			
-			BoundingBox bbNew = new BoundingBox( om.getBoundingBox() );
-			bbNew.getCrnrMin().add(crnrSub);
+			BoundingBox bbNew = om.getBoundingBox().shift(crnrSub);
 			
 			ObjMask objMaskRel = new ObjMask( bbNew, om.getVoxelBox() );
 

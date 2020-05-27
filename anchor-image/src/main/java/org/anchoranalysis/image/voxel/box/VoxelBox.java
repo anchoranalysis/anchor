@@ -282,7 +282,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask( new BoundingBox(bbox) );
+		ObjMask om = new ObjMask(bbox);
 		
 		Point3i pntMax = bbox.calcCrnrMax();
 		
@@ -316,7 +316,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public ObjMask greaterThanMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask( new BoundingBox(bbox) );
+		ObjMask om = new ObjMask(bbox);
 		
 		Point3i pntMax = bbox.calcCrnrMax();
 		
@@ -351,9 +351,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	public ObjMask greaterThanMask( ObjMask maskIn, int equalVal ) {
 		
 		ObjMask maskOut = new ObjMask(
-			new BoundingBox(
-				maskIn.getBoundingBox()
-			)
+			maskIn.getBoundingBox()
 		);
 		
 		BoundingBox bbox = maskIn.getBoundingBox();

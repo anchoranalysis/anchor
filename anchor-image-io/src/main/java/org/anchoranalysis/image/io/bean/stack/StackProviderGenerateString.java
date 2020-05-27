@@ -134,14 +134,13 @@ public class StackProviderGenerateString extends StackProvider {
 		ImageDim sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
 		
 		BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtnt());
-		
-		BoundingBox bboxDest = new BoundingBox(bboxSrc);
+		BoundingBox bboxDest = bboxSrc;
 		
 		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(sdNew, chnl.getVoxelDataType());
 		for( int z=0; z<zHeight; z++) {
 			
 			// Adjust dfestination box
-			bboxDest.getCrnrMin().setZ(z);
+			bboxDest = bboxDest.duplicateChangeCornerZ(z);
 			
 			chnl.getVoxelBox().copyPixelsTo(bboxSrc, chnlNew.getVoxelBox(), bboxDest);
 		}

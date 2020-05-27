@@ -43,10 +43,9 @@ public final class BoundingBoxIntersection {
 	
 	/** Find the intersection and clip to a a containing extent */
 	public Optional<BoundingBox> withInside( BoundingBox othr, Extent containingExtent) {
-		return with(othr).map( bbox-> {
-			bbox.clipTo(containingExtent);
-			return bbox;
-		});
+		return with(othr).map( bbox ->
+			bbox.clipTo(containingExtent)
+		);
 	}
 	
 	/**

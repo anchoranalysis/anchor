@@ -86,7 +86,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	// Copy constructor
 	public BoundedVoxelBox(BoundedVoxelBox<T> src) {
 		super();
-		this.boundingBox = new BoundingBox(src.getBoundingBox());
+		this.boundingBox = src.getBoundingBox();
 		assert( src.voxelBox.extent().getZ() > 0 );
 		this.voxelBox = src.voxelBox.duplicate();
 		assert( this.voxelBox.extent().equals( src.voxelBox.extent() ));

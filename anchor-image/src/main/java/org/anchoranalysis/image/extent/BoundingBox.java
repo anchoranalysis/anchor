@@ -42,6 +42,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * A 2D bounding-box should always have a z-extent of 1 pixel
  *
+ * <p>THis is an IMMUTABLE class</p>.
  */
 public final class BoundingBox implements Serializable {
 	
@@ -50,8 +51,8 @@ public final class BoundingBox implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Point3i crnrMin;
-	private Extent extent;
+	private final Point3i crnrMin;
+	private final Extent extent;
 	
 	public BoundingBox() {
 		this( new Extent() );
@@ -61,7 +62,7 @@ public final class BoundingBox implements Serializable {
 		this( new Point3i(0,0,0), extnt);
 	}
 
-	public BoundingBox( Point3d min, Point3d max ) {
+	public BoundingBox(Point3d min, Point3d max) {
 		this(
 			PointConverter.intFromDouble(min),
 			PointConverter.intFromDoubleCeil(max)
@@ -183,13 +184,6 @@ public final class BoundingBox implements Serializable {
 	public Extent extent() {
 		return this.extent;
 	}
-	
-	// Copy constructor
-	public BoundingBox( BoundingBox src ) {
-		this.crnrMin = new Point3i( src.crnrMin );
-		this.extent = src.extent;
-	}
-	
 
 	@Override
 	public boolean equals( Object obj ) {
@@ -228,19 +222,24 @@ public final class BoundingBox implements Serializable {
 		return crnrMin;
 	}
 	
-	public void growBy(Tuple3i toAdd, Extent containingExtent) {
+	// TODO make this an IMMUTABLE method
+	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
 		
-		Point3i grow = new Point3i(toAdd);
+		Point3i min = new Point3i(crnrMin);
 		
 		// Subtract the padding from the corner
-		crnrMin.sub(grow);
-
+		min.sub(toAdd);
+		
 		// Double the padding in each dimension, and add it to the extent
-		grow.scale(2);
-		extent = extent.growBy(grow);
+		BoundingBox grown = new BoundingBox(
+			min,
+			extent.growBy(
+				multiplyByTwo(toAdd)
+			)
+		);
 		
 		// Clip to make sure we remain within bounds
-		clipTo(containingExtent);
+		return grown.clipTo(containingExtent);
 	}
 	
 	// This is the last point INSIDE the box
@@ -253,23 +252,32 @@ public final class BoundingBox implements Serializable {
 		return p;
 	}
 	
-	public void clipTo( Extent e ) {
+	public BoundingBox clipTo( Extent e ) {
 		
-		Point3i crnrMax = calcCrnrMax();
+		Point3i min = new Point3i(crnrMin);
+		Point3i max = calcCrnrMax();
 		
-		if (crnrMin.getX()<0) crnrMin.setX(0);
-		if (crnrMin.getY()<0) crnrMin.setY(0);
-		if (crnrMin.getZ()<0) crnrMin.setZ(0);
+		if (min.getX()<0) {
+			min.setX(0);
+		}
+		if (min.getY()<0) {
+			min.setY(0);
+		}
+		if (min.getZ()<0) {
+			min.setZ(0);
+		}
 		
-		if (crnrMax.getX()>=e.getX()) crnrMax.setX(e.getX() - 1);
-		if (crnrMax.getY()>=e.getY()) crnrMax.setY(e.getY() - 1);
-		if (crnrMax.getZ()>=e.getZ()) crnrMax.setZ(e.getZ() - 1);
+		if (max.getX()>=e.getX()) {
+			max.setX(e.getX() - 1);
+		}
+		if (max.getY()>=e.getY()) {
+			max.setY(e.getY() - 1);
+		}
+		if (max.getZ()>=e.getZ()) {
+			max.setZ(e.getZ() - 1);
+		}
 		
-		extent = new Extent(
-			crnrMax.getX() - crnrMin.getX() + 1,
-			crnrMax.getY() - crnrMin.getY() + 1,
-			crnrMax.getZ() - crnrMin.getZ() + 1
-		);
+		return new BoundingBox(min, max);
 	}
 	
 
@@ -327,6 +335,21 @@ public final class BoundingBox implements Serializable {
 	@Override
 	public String toString() {
 		return crnrMin.toString() + "+" + extent.toString() + "=" + calcCrnrMax().toString();
+	}
+	
+	/** 
+	 * Shifts the bounding-box i.e. adds a vector to the corner position
+	 * 
+	 * @param shiftBy what to add to the corner position
+	 * @return newly created bounding-box with shifted corner position and identical extent 
+	 **/
+	public BoundingBox shift( Tuple3i shiftBy ) {
+		Point3i crnrNew = new Point3i(crnrMin);
+		crnrNew.add(shiftBy);
+		return new BoundingBox(
+			crnrNew,
+			extent
+		);
 	}
 	
 	/**
@@ -388,5 +411,11 @@ public final class BoundingBox implements Serializable {
 		}
 		
 		return (int) val;
+	}
+	
+	private static Point3i multiplyByTwo(Tuple3i pnt) {
+		Point3i out = new Point3i(pnt);
+		out.scale(2);
+		return out;
 	}
 }

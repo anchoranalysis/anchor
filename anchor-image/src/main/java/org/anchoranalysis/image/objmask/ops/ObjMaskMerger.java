@@ -83,7 +83,7 @@ public class ObjMaskMerger {
 		
 		for( ObjMask om : objs ) {
 			if (bbox==null) {
-				bbox = new BoundingBox( om.getBoundingBox() );
+				bbox = om.getBoundingBox();
 			} else {
 				bbox = bbox.union().with(om.getBoundingBox());
 			}
