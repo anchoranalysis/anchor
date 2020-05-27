@@ -129,21 +129,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	// Calculates a value for some parameters
 	protected abstract double calc(SessionInput<T> input) throws FeatureCalcException;
 
-	/**
-	 * Optionally transforms the parameters passed into this feature, before
-	 * they are passed to a dependent feature
-	 * 
-	 * @param input
-	 *            params passed to this feature
-	 * @param dependentFeature
-	 *            a dependent-feature
-	 */
-	@SuppressWarnings("unchecked")
-	public SessionInput<FeatureInput> transformInput(SessionInput<T> input,
-			Feature<FeatureInput> dependentFeature) throws FeatureCalcException {
-		return (SessionInput<FeatureInput>) input;
-	}
-
 	protected void duplicateHelper(Feature<FeatureInput> out) {
 		out.customName = new String(customName);
 	}
