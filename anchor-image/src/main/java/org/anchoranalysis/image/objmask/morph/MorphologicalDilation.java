@@ -51,18 +51,18 @@ public class MorphologicalDilation {
 	/**
 	 * 
 	 * @param om
-	 * @param extnt if non-NULL ensures the object stays within certain bounds
+	 * @param extent if non-NULL ensures the object stays within certain bounds
 	 * @param do3D
 	 * @param iterations
 	 * @return
 	 * @throws CreateException
 	 */
-	public static ObjMask createDilatedObjMask( ObjMask om, Optional<Extent> extnt, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
+	public static ObjMask createDilatedObjMask( ObjMask om, Optional<Extent> extent, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
 		
 		Point3i grow = do3D ? new Point3i(iterations,iterations,iterations) : new Point3i(iterations,iterations,0);
 		
 		try {
-			ObjMask omGrown = om.growBuffer(grow, grow, extnt );
+			ObjMask omGrown = om.growBuffer(grow, grow, extent );
 			omGrown.setVoxelBox(
 				dilate(omGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNghb).getVoxelBox()
 			);

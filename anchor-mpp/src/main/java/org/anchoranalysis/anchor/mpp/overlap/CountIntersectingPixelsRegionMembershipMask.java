@@ -142,7 +142,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		IntersectionBBox bbox,
 		int xGlobalRel,
 		int yGlobalRel,
-		Extent extntGlobal,
+		Extent extentGlobal,
 		byte onMaskGlobal
 	) {
 		
@@ -155,7 +155,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 				int x_other = x + bbox.x().rel();
 				int x_global = x + xGlobalRel;
 				
-				byte globalMask = bufferMaskGlobal.get( extntGlobal.offset(x_global, y_global) );
+				byte globalMask = bufferMaskGlobal.get( extentGlobal.offset(x_global, y_global) );
 				if (globalMask==onMaskGlobal) {
 				
 					byte posCheck = buffer1.get( bbox.e1().offset(x, y) );

@@ -47,7 +47,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
 		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -71,7 +71,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return false;
 			}
@@ -99,7 +99,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return false;
 			}

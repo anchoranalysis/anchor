@@ -45,7 +45,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 
 	private final ProcessChangedPointAbsoluteMasked<T> delegate;
 	private final ObjMask om;
-	private final Extent extnt;
+	private final Extent extent;
 	private final ReadableTuple3i crnrMin;
 	
 	private Point3i pnt;
@@ -62,7 +62,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		this.delegate = process;
 		this.om = om;
 		this.maskOffVal = om.getBinaryValuesByte().getOffByte();
-		this.extnt = om.getVoxelBox().extent();
+		this.extent = om.getVoxelBox().extent();
 		this.crnrMin = om.getBoundingBox().getCrnrMin();
 	}
 	
@@ -71,7 +71,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		this.pnt = pnt;
 		
 		updateRel(pnt);
-		maskOffsetXYAtPnt = extnt.offsetSlice(relativeToCrnr);
+		maskOffsetXYAtPnt = extent.offsetSlice(relativeToCrnr);
 		
 		delegate.initSource(sourceVal, sourceOffsetXY);
 	}
@@ -82,7 +82,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		
 		int relZ1 = relativeToCrnr.getZ() + zChange;
 		
-		if (relZ1<0 || relZ1>=extnt.getZ()) {
+		if (relZ1<0 || relZ1>=extent.getZ()) {
 			this.bbOM = null;
 			return false;
 		}
@@ -107,7 +107,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 			return false;
 		}
 		
-		if (relX1>=extnt.getX()) {
+		if (relX1>=extent.getX()) {
 			return false;
 		}
 
@@ -115,11 +115,11 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 			return false;
 		}
 		
-		if (relY1>=extnt.getY()) {
+		if (relY1>=extent.getY()) {
 			return false;
 		}
 
-		int offset = maskOffsetXYAtPnt + xChange + (yChange*extnt.getX());
+		int offset = maskOffsetXYAtPnt + xChange + (yChange*extent.getX());
 		
 		if (bbOM.get(offset)==maskOffVal) {
 			return false;

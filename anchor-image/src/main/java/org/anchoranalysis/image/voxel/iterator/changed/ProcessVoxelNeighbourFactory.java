@@ -13,15 +13,15 @@ public class ProcessVoxelNeighbourFactory {
 	 * Within either a mask or an extent (as a fallback)
 	 * 
 	 * @param containingMask if defined, the process is restricted to only process points within this mask
-	 * @param extntFallback if {@link containingMask} is not defined, then as a fallback, the process is restricted to only process points in this extent
+	 * @param extentFallback if {@link containingMask} is not defined, then as a fallback, the process is restricted to only process points in this extent
 	 * @param process a process which will be wrapped inside a restriction
 	 * @return a new process with a restriction on the existing process
 	 */
-	public static<T> ProcessVoxelNeighbour<T> within(Optional<ObjMask> containingMask, Extent extntFallback, ProcessVoxelNeighbourAbsolute<T> process) {
+	public static<T> ProcessVoxelNeighbour<T> within(Optional<ObjMask> containingMask, Extent extentFallback, ProcessVoxelNeighbourAbsolute<T> process) {
 		return containingMask.map( mask->
 			withinMask(mask, process)
 		).orElseGet( ()->
-			withinExtent(extntFallback, process)
+			withinExtent(extentFallback, process)
 		);
 	}
 		
@@ -43,7 +43,7 @@ public class ProcessVoxelNeighbourFactory {
 		);
 	}
 		
-	private static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extnt, ProcessVoxelNeighbourAbsolute<T> process) {
-		return new WithinExtent<>(extnt, process);
+	private static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extent, ProcessVoxelNeighbourAbsolute<T> process) {
+		return new WithinExtent<>(extent, process);
 	}
 }

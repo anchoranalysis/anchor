@@ -103,15 +103,15 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		// We calculate how big our outgoing voxelbox wil be 
 		ImageDim sd = extractedSlice.getDimensions().scaleXYBy(sf);
 		
-		Extent extntTrgt = bbox.extent().scaleXYBy(sf);
+		Extent extentTrgt = bbox.extent().scaleXYBy(sf);
 
-		VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.instance().getByte().create(extntTrgt);
+		VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.instance().getByte().create(extentTrgt);
 
 		MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 		
 		if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			VoxelBox<ByteBuffer> vb = extractedSlice.getVoxelBox().asByte(); 
-			interpolateRegionFromByte( vb,bufferSc,extractedSlice.getDimensions().getExtnt(),extntTrgt,bbox,zoomFactor,interpolator );
+			interpolateRegionFromByte( vb,bufferSc,extractedSlice.getDimensions().getExtnt(),extentTrgt,bbox,zoomFactor,interpolator );
 			
 			if (chnlConverter!=null) {
 				chnlConverter.getVoxelBoxConverter().convertFromByte(bufferSc, bufferSc);
@@ -121,8 +121,8 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 			
 			VoxelBox<ShortBuffer> vb = extractedSlice.getVoxelBox().asShort();
 			
-			VoxelBox<ShortBuffer> bufferIntermediate = VoxelBoxFactory.instance().getShort().create(extntTrgt);
-			interpolateRegionFromShort( vb,bufferIntermediate,extractedSlice.getDimensions().getExtnt(),extntTrgt,bbox,zoomFactor,interpolator );
+			VoxelBox<ShortBuffer> bufferIntermediate = VoxelBoxFactory.instance().getShort().create(extentTrgt);
+			interpolateRegionFromShort( vb,bufferIntermediate,extractedSlice.getDimensions().getExtnt(),extentTrgt,bbox,zoomFactor,interpolator );
 			
 			// We now convert the ShortBuffer into bytes
 			chnlConverter.getVoxelBoxConverter().convertFromShort(bufferIntermediate,bufferSc);
@@ -138,9 +138,9 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		
 	}
 	
-	// extntTrgt is the target-size (where we write this region)
-	// extntSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
-	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extntSrc, Extent extntTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
+	// extentTrgt is the target-size (where we write this region)
+	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
+	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
 		ReadableTuple3i crnrMin = bbox.getCrnrMin();
 		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
@@ -151,17 +151,17 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 			
 			// We go through every pixel in the new width, and height, and sample from the original image
 			int indOut = 0;
-			for( int y=0; y<extntTrgt.getY(); y++) {
+			for( int y=0; y<extentTrgt.getY(); y++) {
 				
 				int yOrig = ((int) (y/zoomFactor)) + crnrMin.getY();
-				for( int x=0; x<extntTrgt.getX(); x++) {
+				for( int x=0; x<extentTrgt.getX(); x++) {
 					
 					int xOrig = ((int) (x/zoomFactor)) + crnrMin.getX();
 					
 					// We get the byte to write
 					byte b = (interpolator!=null) ?
-						interpolator.getInterpolatedPixelByte(xOrig, yOrig, bbIn, extntSrc)
-						: bbIn.get( extntSrc.offset(xOrig, yOrig) );
+						interpolator.getInterpolatedPixelByte(xOrig, yOrig, bbIn, extentSrc)
+						: bbIn.get( extentSrc.offset(xOrig, yOrig) );
 					
 					bbOut.put(indOut++,b); 
 				}
@@ -170,9 +170,9 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	}
 	
 	
-	// extntTrgt is the target-size (where we write this region)
-	// extntSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
-	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extntSrc, Extent extntTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
+	// extentTrgt is the target-size (where we write this region)
+	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
+	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
 		ReadableTuple3i crnrMin = bbox.getCrnrMin();
 		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
@@ -186,17 +186,17 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 			
 			// We go through every pixel in the new width, and height, and sample from the original image
 			int indOut = 0;
-			for( int y=0; y<extntTrgt.getY(); y++) {
+			for( int y=0; y<extentTrgt.getY(); y++) {
 				
 				int yOrig = ((int) (y/zoomFactor)) + crnrMin.getY();
-				for( int x=0; x<extntTrgt.getX(); x++) {
+				for( int x=0; x<extentTrgt.getX(); x++) {
 					
 					int xOrig = ((int) (x/zoomFactor)) + crnrMin.getX();
 					
 					// We get the byte to write
 					short s = (interpolator!=null) ?
-						interpolator.getInterpolatedPixelShort(xOrig, yOrig, bbIn, extntSrc)
-						: bbIn.get( extntSrc.offset(xOrig, yOrig) );
+						interpolator.getInterpolatedPixelShort(xOrig, yOrig, bbIn, extentSrc)
+						: bbIn.get( extentSrc.offset(xOrig, yOrig) );
 					
 					bbOut.put(indOut++,s); 
 				}

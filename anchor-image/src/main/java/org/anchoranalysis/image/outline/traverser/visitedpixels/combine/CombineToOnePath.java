@@ -37,7 +37,7 @@ public class CombineToOnePath {
 	
 	/** Combines all the contiguous paths to a single-path 
 	 * @throws OperationFailedException */
-	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths, Extent extnt ) throws OperationFailedException {
+	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths, Extent extent ) throws OperationFailedException {
 		
 		System.out.printf("START Paths in %s (sum=%d)%n", paths, CombineWithTarget.cnt(paths) );
 		
@@ -59,14 +59,14 @@ public class CombineToOnePath {
 		
 		/*try {
 			// Build graph of possible merges
-			MergePathGraphConnPoint graph = new MergePathGraphConnPoint( paths, extnt );
+			MergePathGraphConnPoint graph = new MergePathGraphConnPoint( paths, extent );
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 		
 		try {
 			// Build graph of possible merges
-			MergePathGraphNghb graph = new MergePathGraphNghb( paths, extnt );
+			MergePathGraphNghb graph = new MergePathGraphNghb( paths, extent );
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}*/

@@ -11,7 +11,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 class ExtentBoundsComparer {
 
 	private int min;
-	private int extnt;
+	private int extent;
 	
 	public static ExtentBoundsComparer createMax(
 		ReadableTuple3i min1,
@@ -71,10 +71,10 @@ class ExtentBoundsComparer {
 		}
 	}
 
-	private ExtentBoundsComparer(int min, int extnt) {
+	private ExtentBoundsComparer(int min, int extent) {
 		super();
 		this.min = min;
-		this.extnt = extnt;
+		this.extent = extent;
 	}
 	
 	public int getMin() {
@@ -82,7 +82,7 @@ class ExtentBoundsComparer {
 	}
 
 	public int getExtnt() {
-		return extnt;
+		return extent;
 	}
 
 }

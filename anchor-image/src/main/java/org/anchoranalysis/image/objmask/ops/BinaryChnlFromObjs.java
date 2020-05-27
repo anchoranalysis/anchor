@@ -129,7 +129,7 @@ public class BinaryChnlFromObjs {
 	private static void writeToBufferMasked(
 		ByteBuffer maskIn,
 		ByteBuffer pixelsOut,
-		Extent extntOut,
+		Extent extentOut,
 		ReadableTuple3i crnrMin,
 		Point3i pntGlobal,
 		ReadableTuple3i maxGlobal,
@@ -145,7 +145,7 @@ public class BinaryChnlFromObjs {
 					continue;
 				}
 				
-				int indexGlobal = extntOut.offset(pntGlobal.getX(), pntGlobal.getY());
+				int indexGlobal = extentOut.offset(pntGlobal.getX(), pntGlobal.getY());
 				pixelsOut.put(indexGlobal,outValByte);
 			}
 		}

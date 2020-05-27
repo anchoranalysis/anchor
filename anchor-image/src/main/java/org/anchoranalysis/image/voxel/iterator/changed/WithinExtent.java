@@ -42,13 +42,13 @@ import org.anchoranalysis.image.extent.Extent;
  */
 final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 
-	private final Extent extnt;
+	private final Extent extent;
 	private final ProcessVoxelNeighbourAbsolute<T> delegate;
 	
 	private Point3i pnt;
 	
-	public WithinExtent( Extent extnt, ProcessVoxelNeighbourAbsolute<T> processAbsolutePoint ) {
-		this.extnt = extnt;
+	public WithinExtent( Extent extent, ProcessVoxelNeighbourAbsolute<T> processAbsolutePoint ) {
+		this.extent = extent;
 		this.delegate = processAbsolutePoint;
 	}
 
@@ -64,7 +64,7 @@ final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 		int x1 = pnt.getX() + xChange;
 		int y1 = pnt.getY() + yChange;
 		
-		if (x1 < 0 || x1 >=extnt.getX() || y1 < 0 || y1 >= extnt.getY()) {
+		if (x1 < 0 || x1 >=extent.getX() || y1 < 0 || y1 >= extent.getY()) {
 			return false;
 		}
 		
@@ -75,7 +75,7 @@ final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 	public boolean notifyChangeZ(int zChange) {
 		int z1 = pnt.getZ() + zChange;
 		
-		if (!extnt.containsZ(z1)) {
+		if (!extent.containsZ(z1)) {
 			return false;
 		}
 		

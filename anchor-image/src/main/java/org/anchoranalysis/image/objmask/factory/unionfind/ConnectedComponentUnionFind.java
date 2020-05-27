@@ -198,15 +198,15 @@ public class ConnectedComponentUnionFind {
 	) {
 		
 		Point3i pnt = new Point3i();
-		Extent extnt = indexBuffer.extent();
-		for (pnt.setZ(0); pnt.getZ()<extnt.getZ(); pnt.incrZ()) {
+		Extent extent = indexBuffer.extent();
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
 			
 			IntBuffer bbIndex = indexBuffer.getPixelsForPlane(pnt.getZ()).buffer();
 			
 			int offset = 0;
 			
-			for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
 					
 					int idBig = bbIndex.get(offset); 
 					if (idBig!=0) {

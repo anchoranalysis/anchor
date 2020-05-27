@@ -168,7 +168,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 *  
 	 * @param do3D 3-dimensions (true) or 2-dimensions (false)
 	 * @param clipRegion a region to clip to, which we can't grow beyond
-	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extnt is absolute
+	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extent is absolute
 	 */
 	public BoundingBox dilate( boolean do3D, Optional<Extent> clipRegion ) {
 		Point3i allOnes = do3D ? allOnes3D : allOnes2D;
@@ -182,7 +182,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @param neg how much to grow in the negative direction
 	 * @param pos how much to grow in the negative direction
 	 * @param clipRegion a region to clip to, which we can't grow beyond
-	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extnt is absolute
+	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extent is absolute
 	 */
 	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
@@ -197,7 +197,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @param neg how much to grow in the negative direction
 	 * @param pos how much to grow in the negative direction
 	 * @param a region to clip to, which we can't grow beyond
-	 * @return a bounding box: the crnr is the relative-position to the current bounding box (multipled by -1), the extnt is absolute
+	 * @return a bounding box: the crnr is the relative-position to the current bounding box (multipled by -1), the extent is absolute
 	 */
 	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		
@@ -344,14 +344,14 @@ public class BoundedVoxelBox<T extends Buffer> {
 	public static class SubrangePixelAccess<BufferType extends Buffer> implements IPixelsForPlane<BufferType> {
 
 		private int zRel;
-		private Extent extnt;
+		private Extent extent;
 		private BoundedVoxelBox<BufferType> src;
 		
-		public SubrangePixelAccess(int zRel, Extent extnt,
+		public SubrangePixelAccess(int zRel, Extent extent,
 				BoundedVoxelBox<BufferType> src) {
 			super();
 			this.zRel = zRel;
-			this.extnt = extnt;
+			this.extent = extent;
 			this.src = src;
 		}
 
@@ -367,7 +367,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 
 		@Override
 		public Extent extent() {
-			return extnt;
+			return extent;
 		}
 	};
 	

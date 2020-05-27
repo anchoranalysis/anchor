@@ -36,33 +36,33 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 public class PixelsFromShortBufferArr implements IPixelsForPlane<ShortBuffer> {
 
 	private final VoxelBuffer<ShortBuffer>[] buffer;
-	private final Extent extnt;
+	private final Extent extent;
 	
-	private PixelsFromShortBufferArr( Extent extnt ) {
-		assert( extnt.getZ() > 0 );
+	private PixelsFromShortBufferArr( Extent extent ) {
+		assert( extent.getZ() > 0 );
 		
-		this.extnt = extnt;
+		this.extent = extent;
 		
-		buffer = new VoxelBufferShort[extnt.getZ()];
+		buffer = new VoxelBufferShort[extent.getZ()];
 	}
 	
 	private void init() {
-		int volumeXY = extnt.getVolumeXY();
-		for (int z=0; z<extnt.getZ(); z++) {
+		int volumeXY = extent.getVolumeXY();
+		for (int z=0; z<extent.getZ(); z++) {
 			buffer[z] = VoxelBufferShort.allocate(volumeXY);
 			assert(buffer[z].buffer().array().length == volumeXY);
 		}		
 	}
 	
 	// START FACTORY METHODS
-	public static PixelsFromShortBufferArr createInitialised(Extent extnt) {
-		PixelsFromShortBufferArr p = new PixelsFromShortBufferArr(extnt);
+	public static PixelsFromShortBufferArr createInitialised(Extent extent) {
+		PixelsFromShortBufferArr p = new PixelsFromShortBufferArr(extent);
 		p.init();
 		return p;
 	}
 	
-	public static PixelsFromShortBufferArr createEmpty(Extent extnt) {
-		return new PixelsFromShortBufferArr(extnt);
+	public static PixelsFromShortBufferArr createEmpty(Extent extent) {
+		return new PixelsFromShortBufferArr(extent);
 	}
 	// END FACTORY METHODS	
 	
@@ -70,7 +70,7 @@ public class PixelsFromShortBufferArr implements IPixelsForPlane<ShortBuffer> {
 	public void setPixelsForPlane(int z, VoxelBuffer<ShortBuffer> pixels) {
 		pixels.buffer().clear();
 		buffer[z] = pixels;
-		assert(pixels.buffer().array().length == extnt.getVolumeXY() );
+		assert(pixels.buffer().array().length == extent.getVolumeXY() );
 	}
 
 	@Override
@@ -82,6 +82,6 @@ public class PixelsFromShortBufferArr implements IPixelsForPlane<ShortBuffer> {
 
 	@Override
 	public Extent extent() {
-		return extnt;
+		return extent;
 	}
 }

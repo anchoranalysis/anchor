@@ -173,29 +173,29 @@ public final class Extent implements Serializable {
 		return String.format("[%d,%d,%d]",getX(),getY(),getZ());
 	}
 
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	public final int offset( int x, int y ) {
 		return (y*len.getX()) + x;
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	//  we should cal
 	public final int offset( int x, int y, int z ) {
 		return (z *sxy) + (y*getX()) + x;
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	//  we should cal
 	public final int offset( Point3i pnt ) {
 		return offset(pnt.getX(), pnt.getY(), pnt.getZ());
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	public final int offset( Point2i pnt ) {
 		return offset(pnt.getX(), pnt.getY(), 0);
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	public final int offsetSlice( Point3i pnt ) {
 		return offset(pnt.getX(), pnt.getY(), 0);
 	}
@@ -213,9 +213,9 @@ public final class Extent implements Serializable {
 	}
 	
 	public int[] createOrderedArray() {
-		int[] extnts = createArray();
-		Arrays.sort( extnts );
-		return extnts;
+		int[] extents = createArray();
+		Arrays.sort( extents );
+		return extents;
 	}
 	
 	public Extent duplicateChangeZ(int z) {

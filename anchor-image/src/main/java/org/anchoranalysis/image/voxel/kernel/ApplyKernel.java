@@ -62,12 +62,12 @@ public class ApplyKernel {
 		
 		int localSlicesSize = 3;
 		 
-		Extent extnt = in.extent();
+		Extent extent = in.extent();
 		
 		kernel.init(in);
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extnt.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
 			ByteBuffer outArr = out.getPixelsForPlane(pnt.getZ()).buffer();
@@ -76,8 +76,8 @@ public class ApplyKernel {
 			
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
 					
 					if( kernel.accptPos(ind, pnt) ) {
 						outArr.put(ind,outBinary.getOnByte());
@@ -120,7 +120,7 @@ public class ApplyKernel {
 		
 		if( !vb.extent().contains(bbox)) {
 			throw new OperationFailedException(
-				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extent() )
+				String.format("BBox (%s) must be contained within extent (%s)", bbox, vb.extent() )
 			);
 		}
 		
@@ -128,7 +128,7 @@ public class ApplyKernel {
 		 
 		int cnt = 0;
 		
-		Extent extnt = vb.extent();
+		Extent extent = vb.extent();
 		
 		kernel.init(vb);
 		
@@ -143,7 +143,7 @@ public class ApplyKernel {
 			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrY()) {
 				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrX()) {
 					
-					int ind = extnt.offset(pnt.getX(), pnt.getY());
+					int ind = extent.offset(pnt.getX(), pnt.getY());
 					cnt += kernel.countAtPos(ind, pnt);
 				}
 			}
@@ -167,13 +167,13 @@ public class ApplyKernel {
 		
 		if( !vb.extent().contains(bbox)) {
 			throw new OperationFailedException(
-				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extent() )
+				String.format("BBox (%s) must be contained within extent (%s)", bbox, vb.extent() )
 			);
 		}
 		
 		int localSlicesSize = 3;
 		 
-		Extent extnt = vb.extent();
+		Extent extent = vb.extent();
 		
 		kernel.init(vb);
 		
@@ -188,7 +188,7 @@ public class ApplyKernel {
 			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrY()) {
 				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrX()) {
 					
-					int ind = extnt.offsetSlice(pnt);
+					int ind = extent.offsetSlice(pnt);
 					if (kernel.countAtPos(ind, pnt)>0) {
 						return true;
 					}
@@ -206,20 +206,20 @@ public class ApplyKernel {
 		 
 		int cnt = 0;
 		
-		Extent extnt = in.extent();
+		Extent extent = in.extent();
 		
 		kernel.init(in);
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extnt.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
 			int ind = 0;
 			
-			for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
 					
 					if( kernel.accptPos(ind, pnt) ) {
 						cnt++;
@@ -244,7 +244,7 @@ public class ApplyKernel {
 		ReadableTuple3i crnrMin = bbox.getCrnrMin();
 		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
-		Extent extnt = in.extent();
+		Extent extent = in.extent();
 		
 		kernel.init(in);
 		
@@ -267,7 +267,7 @@ public class ApplyKernel {
 			for (pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrY()) {
 				for (pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrX()) {
 					
-					int indKernel = extnt.offset(pnt.getX(), pnt.getY());
+					int indKernel = extent.offset(pnt.getX(), pnt.getY());
 
 					if(bufMask.get(ind)==bvb.getOnByte() && kernel.accptPos(indKernel, pnt) ) {
 						cnt++;

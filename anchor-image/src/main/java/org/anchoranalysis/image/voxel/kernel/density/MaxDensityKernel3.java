@@ -48,7 +48,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 	
 	private LocalSlices inSlices;
 	
-	private Extent extnt;
+	private Extent extent;
 	
 	// Constructor
 	public MaxDensityKernel3(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ, int maxCnt) {
@@ -61,7 +61,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 	
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extent();
+		this.extent = in.extent();
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
 		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -102,7 +102,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOn(inArr_Z.get(ind))) {
 				cnt++;
 			}
@@ -130,7 +130,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOn(inArr_Z.get(ind))) {
 				cnt++;
 			}

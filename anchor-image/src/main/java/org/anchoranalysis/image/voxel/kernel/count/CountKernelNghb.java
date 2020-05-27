@@ -50,7 +50,7 @@ public class CountKernelNghb extends CountKernelNghbBase {
 
 	@Override
 	protected boolean isNghbVoxelAccepted(Point3i pnt, int xShift, int yShift,
-			int zShift, Extent extnt) {
+			int zShift, Extent extent) {
 		return true;
 	}
 

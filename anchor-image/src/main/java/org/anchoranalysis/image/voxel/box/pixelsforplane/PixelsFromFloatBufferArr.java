@@ -36,32 +36,32 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 public class PixelsFromFloatBufferArr implements IPixelsForPlane<FloatBuffer> {
 
 	private final VoxelBuffer<FloatBuffer>[] buffer;
-	private final Extent extnt;
+	private final Extent extent;
 	
-	private PixelsFromFloatBufferArr( Extent extnt ) {
-		assert( extnt.getZ() > 0 );
+	private PixelsFromFloatBufferArr( Extent extent ) {
+		assert( extent.getZ() > 0 );
 		
-		this.extnt = extnt;
+		this.extent = extent;
 		
-		buffer = new VoxelBufferFloat[extnt.getZ()];
+		buffer = new VoxelBufferFloat[extent.getZ()];
 	}
 	
 	private void init() {
-		int volumeXY = extnt.getVolumeXY();
-		for (int z=0; z<extnt.getZ(); z++) {
+		int volumeXY = extent.getVolumeXY();
+		for (int z=0; z<extent.getZ(); z++) {
 			buffer[z] = VoxelBufferFloat.allocate(volumeXY);
 		}		
 	}
 	
 	// START FACTORY METHODS
-	public static PixelsFromFloatBufferArr createInitialised(Extent extnt) {
-		PixelsFromFloatBufferArr p = new PixelsFromFloatBufferArr(extnt);
+	public static PixelsFromFloatBufferArr createInitialised(Extent extent) {
+		PixelsFromFloatBufferArr p = new PixelsFromFloatBufferArr(extent);
 		p.init();
 		return p;
 	}
 	
-	public static PixelsFromFloatBufferArr createEmpty(Extent extnt) {
-		return new PixelsFromFloatBufferArr(extnt);
+	public static PixelsFromFloatBufferArr createEmpty(Extent extent) {
+		return new PixelsFromFloatBufferArr(extent);
 	}
 	// END FACTORY METHODS	
 	
@@ -80,6 +80,6 @@ public class PixelsFromFloatBufferArr implements IPixelsForPlane<FloatBuffer> {
 
 	@Override
 	public Extent extent() {
-		return extnt;
+		return extent;
 	}
 }

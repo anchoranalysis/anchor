@@ -103,8 +103,8 @@ public class RasterArranger {
 		
 		assert(stackIn.getNumChnl()==stackOut.getNumChnl());
 		
-		Extent extnt = stackIn.getDimensions().getExtnt();
-		Extent extntOut = stackIn.getDimensions().getExtnt();
+		Extent extent = stackIn.getDimensions().getExtnt();
+		Extent extentOut = stackIn.getDimensions().getExtnt();
 		
 		ReadableTuple3i leftCrnr = bbox.getCrnrMin();
 		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
@@ -114,11 +114,11 @@ public class RasterArranger {
 		VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC]; 
 		VoxelBuffer<?>[] vbOut = new VoxelBuffer<?>[numC];
 		
-		for (int z=0; z<extnt.getZ(); z++) {
+		for (int z=0; z<extent.getZ(); z++) {
 			
 			int outZ = leftCrnr.getZ() + z + zShift;
 			
-			if (outZ>=extntOut.getZ()) {
+			if (outZ>=extentOut.getZ()) {
 				return;
 			}
 

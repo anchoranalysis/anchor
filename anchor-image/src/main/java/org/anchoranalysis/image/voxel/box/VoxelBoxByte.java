@@ -321,7 +321,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	public void max( VoxelBox<ByteBuffer> other ) throws OperationFailedException {
 		
 		if (!extent().equals(other.extent())) {
-			throw new OperationFailedException("other must have same extnt");
+			throw new OperationFailedException("other must have same extent");
 		}
 
 		int vol = getPlaneAccess().extent().getVolumeXY();

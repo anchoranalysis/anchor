@@ -36,32 +36,32 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
 public class PixelsFromIntBufferArr implements IPixelsForPlane<IntBuffer> {
 
 	private final VoxelBuffer<IntBuffer>[] buffer;
-	private final Extent extnt;
+	private final Extent extent;
 	
-	private PixelsFromIntBufferArr( Extent extnt ) {
-		assert( extnt.getZ() > 0 );
+	private PixelsFromIntBufferArr( Extent extent ) {
+		assert( extent.getZ() > 0 );
 		
-		this.extnt = extnt;
+		this.extent = extent;
 		
-		buffer = new VoxelBufferInt[extnt.getZ()];
+		buffer = new VoxelBufferInt[extent.getZ()];
 	}
 	
 	private void init() {
-		int volumeXY = extnt.getVolumeXY();
-		for (int z=0; z<extnt.getZ(); z++) {
+		int volumeXY = extent.getVolumeXY();
+		for (int z=0; z<extent.getZ(); z++) {
 			buffer[z] = VoxelBufferInt.allocate(volumeXY);
 		}		
 	}
 	
 	// START FACTORY METHODS
-	public static PixelsFromIntBufferArr createInitialised(Extent extnt) {
-		PixelsFromIntBufferArr p = new PixelsFromIntBufferArr(extnt);
+	public static PixelsFromIntBufferArr createInitialised(Extent extent) {
+		PixelsFromIntBufferArr p = new PixelsFromIntBufferArr(extent);
 		p.init();
 		return p;
 	}
 	
-	public static PixelsFromIntBufferArr createEmpty(Extent extnt) {
-		return new PixelsFromIntBufferArr(extnt);
+	public static PixelsFromIntBufferArr createEmpty(Extent extent) {
+		return new PixelsFromIntBufferArr(extent);
 	}
 	// END FACTORY METHODS	
 	
@@ -80,6 +80,6 @@ public class PixelsFromIntBufferArr implements IPixelsForPlane<IntBuffer> {
 
 	@Override
 	public Extent extent() {
-		return extnt;
+		return extent;
 	}
 }

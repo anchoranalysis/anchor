@@ -95,7 +95,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -119,7 +119,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return checkIfRequireHighIsTrue(inArr_R,pnt,+1,0);
 			}
@@ -147,7 +147,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return checkIfRequireHighIsTrue(inArr_R,pnt,0,+1);
 			}

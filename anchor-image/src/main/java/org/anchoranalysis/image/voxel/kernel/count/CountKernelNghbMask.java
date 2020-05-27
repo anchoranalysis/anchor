@@ -68,7 +68,7 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	}
 	
 	@Override
-	protected boolean isNghbVoxelAccepted( Point3i pnt, int xShift, int yShift, int zShift, Extent extnt ) {
+	protected boolean isNghbVoxelAccepted( Point3i pnt, int xShift, int yShift, int zShift, Extent extent ) {
 		
 		ByteBuffer inArr = localSlicesRequireHigh.getLocal(zShift);
 		

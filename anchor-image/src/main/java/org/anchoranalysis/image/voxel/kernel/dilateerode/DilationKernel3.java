@@ -57,7 +57,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
 		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -82,7 +82,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOn(inArr_Z.get(ind))) {
 				return true;
 			}
@@ -110,7 +110,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOn(inArr_Z.get(ind))) {
 				return true;
 			}
@@ -147,7 +147,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 			
 			y += 2;
 			ind += (2*xLength);
-			if (x>=0 && y<(extnt.getY())) {
+			if (x>=0 && y<(extent.getY())) {
 				if (bv.isOn(inArr_Z.get(ind))) {
 					return true;
 				}
@@ -170,7 +170,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 			
 			// x +1, y-1
 			
-			if (x<extnt.getX() && y>=0) {
+			if (x<extent.getX() && y>=0) {
 				if (bv.isOn(inArr_Z.get(ind))) {
 					return true;
 				}
@@ -184,7 +184,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 			
 			y += 2;
 			ind += (2*xLength);
-			if (x<extnt.getX() && y<(extnt.getY())) {
+			if (x<extent.getX() && y<(extent.getY())) {
 				if (bv.isOn(inArr_Z.get(ind))) {
 					return true;
 				}
