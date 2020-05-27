@@ -44,7 +44,7 @@ public class BBoxIntersection extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D) throws IncludeMarksFailureException {
 	
 		
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);

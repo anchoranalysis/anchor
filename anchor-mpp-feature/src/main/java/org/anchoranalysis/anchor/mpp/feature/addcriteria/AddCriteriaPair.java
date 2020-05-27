@@ -41,10 +41,10 @@ import org.anchoranalysis.image.extent.ImageDim;
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implements AddCriteria<Pair<Mark>> {
 
 	@Override
-	public Pair<Mark> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws CreateException {
+	public Pair<Mark> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D) throws CreateException {
 
 		try {
-			if ( includeMarks(mark1, mark2, nrgStack.getDimensions(), session, use3D) ) {
+			if ( includeMarks(mark1, mark2, nrgStack.getDimensions(), session, do3D) ) {
 				return new Pair<Mark>( mark1.getMark(), mark2.getMark() );
 			}
 		} catch (IncludeMarksFailureException e) {
@@ -54,7 +54,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implem
 		return null;
 	}
 
-	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D ) throws IncludeMarksFailureException;
+	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D ) throws IncludeMarksFailureException;
 	
 	@Override
 	public String getBeanDscr() {

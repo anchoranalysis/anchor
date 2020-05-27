@@ -53,9 +53,9 @@ public class IterateVoxelsTest {
 		);
 	}
 	
-	private void testTwoMasks( boolean use3D, int expectedSingleNumVoxels, int expectedIntersectionNumVoxels, Point3i expectedIntersectionCenter ) {
+	private void testTwoMasks( boolean do3D, int expectedSingleNumVoxels, int expectedIntersectionNumVoxels, Point3i expectedIntersectionCenter ) {
 		
-		ObjMaskFixture objsFixture = new ObjMaskFixture(use3D);
+		ObjMaskFixture objsFixture = new ObjMaskFixture(do3D);
 		
 		ObjMask mask1 = objsFixture.filledMask(20, Y_MASK_1);
 		ObjMask mask2 = objsFixture.filledMask(20, Y_MASK_2);	// Overlaps with mask1 but not entirely

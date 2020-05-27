@@ -36,7 +36,7 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-// Measures either area or volume (depending if the use3D flag is employed)
+// Measures either area or volume (depending if the do3D flag is employed)
 public class UnitValueVolumePhysical extends UnitValueVolume {
 
 	// START VALUE
