@@ -61,14 +61,9 @@ public class DetermineWhetherIntersectingPixelsBinary {
 		
 		// Find the common bounding box
 		Optional<BoundingBox> bboxIntersect = src.getBoundingBox().intersection().with( other.getBoundingBox() );
-		
-		if (!bboxIntersect.isPresent()) {
-			// If the bounding boxes don't intersect then we can
-			//   go home early
-			return Optional.empty();
-		}
-		
-		return hasIntersectingPixelsFromBBox( src, other, bboxIntersect.get() );
+		return bboxIntersect.flatMap( bbox->
+			hasIntersectingPixelsFromBBox( src, other, bbox )
+		);
 	}
 	
 	/**
@@ -78,7 +73,7 @@ public class DetermineWhetherIntersectingPixelsBinary {
 	 * @param bboxIntersect
 	 * @param onMask1
 	 * @param onMask2
-	 * @return Point3i NULL if no intersection exists, otherwise first point of intersection found (newly-created)
+	 * @return Point3i if intersection exists, then the first point of intersection found (newly-created), or else empty if no intersection exists
 	 */
 	private Optional<Point3i> hasIntersectingPixelsFromBBox( BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other, BoundingBox bboxIntersect ) {
 		
