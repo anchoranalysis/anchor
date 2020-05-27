@@ -36,5 +36,5 @@ public interface IPixelsForPlane<BufferType extends Buffer> {
 
 	public void setPixelsForPlane( int z, VoxelBuffer<BufferType> pixels );
 	public VoxelBuffer<BufferType> getPixelsForPlane( int z );
-	public Extent extnt();
+	public Extent extent();
 }

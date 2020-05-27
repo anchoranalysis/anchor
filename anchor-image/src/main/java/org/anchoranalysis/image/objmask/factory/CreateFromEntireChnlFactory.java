@@ -44,7 +44,7 @@ public class CreateFromEntireChnlFactory {
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte(); 
 		
 		return new ObjMask(
-			new BoundingBox( vb.extnt() ),
+			new BoundingBox( vb.extent() ),
 			vb,
 			binaryImgChnl.getBinaryValues()
 		);

@@ -54,7 +54,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 		int max = 0;
 		boolean first = true;
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			IntBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -100,7 +100,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					int chnlVal = pixelIn.get(index);
 					
 					if ( chnlVal==equalVal ) {
@@ -118,7 +118,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public void setAllPixelsTo( int val ) {
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			IntBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -133,7 +133,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 		
 		Point3i crnrMin = bbox.getCrnrMin();
 		Point3i crnrMax = bbox.calcCrnrMax();
-		Extent e = extnt();
+		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
@@ -157,9 +157,9 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public VoxelBox<IntBuffer> maxIntensityProj() {
 		
-		MaxIntensityBufferInt mi = new MaxIntensityBufferInt( extnt() ); 
+		MaxIntensityBufferInt mi = new MaxIntensityBufferInt( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 	
@@ -173,7 +173,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 			return;
 		}
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			IntBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -188,13 +188,13 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public void setVoxel(int x, int y, int z, int val) {
 		IntBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        buffer.put( getPlaneAccess().extnt().offset(x, y), val );
+        buffer.put( getPlaneAccess().extent().offset(x, y), val );
 	}
 
 	@Override
 	public int getVoxel(int x, int y, int z) {
 		IntBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        return buffer.get( getPlaneAccess().extnt().offset(x, y) );
+        return buffer.get( getPlaneAccess().extent().offset(x, y) );
 	}
 	
 	// TODO when values are too small or too large
@@ -215,9 +215,9 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int indexMask = getPlaneAccess().extnt().offset(x, y);
+					int indexMask = getPlaneAccess().extent().offset(x, y);
 					if (pixelsMask.get(indexMask)==maskOnByte) {
-						int index = getPlaneAccess().extnt().offset(x, y);
+						int index = getPlaneAccess().extent().offset(x, y);
 						
 						int intVal = pixels.get(index) + value;
 						pixels.put(index, intVal );
@@ -242,7 +242,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public void subtractFrom(int val) {
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			IntBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			

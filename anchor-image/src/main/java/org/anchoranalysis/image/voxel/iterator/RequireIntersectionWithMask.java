@@ -35,7 +35,7 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 		super();
 		this.process = process;
 		this.mask = mask;
-		this.extent = mask.getVoxelBox().extnt();
+		this.extent = mask.getVoxelBox().extent();
 		this.byteOn = mask.getBinaryValuesByte().getOnByte();
 		this.crnrMin = mask.getBoundingBox().getCrnrMin();
 	}		

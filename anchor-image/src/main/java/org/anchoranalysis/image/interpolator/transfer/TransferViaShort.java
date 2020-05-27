@@ -68,7 +68,7 @@ public class TransferViaShort extends Transfer {
 	public void transferTo( int z, Interpolator interpolator ) {
 		
 		VoxelBuffer<ShortBuffer> bufIn = trgt.getPixelsForPlane(z);
-		VoxelBuffer<ShortBuffer> bufOut = interpolator.interpolateShort(buffer, bufIn, src.extnt(), trgt.extnt() ) ;
+		VoxelBuffer<ShortBuffer> bufOut = interpolator.interpolateShort(buffer, bufIn, src.extent(), trgt.extent() ) ;
 		if (!bufOut.equals(bufIn)) {
 			trgt.setPixelsForPlane(z, bufOut);
 		}

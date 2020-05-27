@@ -1,5 +1,6 @@
 package org.anchoranalysis.image.scale;
 
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 
 /*-
@@ -42,30 +43,44 @@ public class ScaleFactorUtilities {
 	 */
 	public static ScaleFactor calcRelativeScale( Extent source, Extent target ) {
 		return new ScaleFactor(
-			divideAsDouble( target.getX(), source.getX() ),
-			divideAsDouble( target.getY(), source.getY() )
+			deriveScalingFactor( target.getX(), source.getX() ),
+			deriveScalingFactor( target.getY(), source.getY() )
 		);
 	}
 		
+	
+	/** Scales a point in XY (immutably) */
+	public static Point3i scale( ScaleFactor scalingFactor, Point3i point ) {
+		return new Point3i(
+			ScaleFactorUtilities.scaleQuantity(scalingFactor.getX(), point.getX()),
+			ScaleFactorUtilities.scaleQuantity(scalingFactor.getY(), point.getY()),
+			point.getZ()
+		);
+	}
+	
 	/**
-	 * Multiplies a double by an integer, returning it as an integer
+	 * Multiplies a quantity (integer) by a scaling-factor, returning it as an integer
 	 * 
-	 * @param first the double
-	 * @param second the int
-	 * @return the multiple floored to an integer
+	 * <p>Refuses to return 0 or any negative value, making 1 the minimum return value.</p>
+	 * 
+	 * @param scalingFactor the scaling-factor
+	 * @param quantity the quantity
+	 * @return the scaled-quantity, floored to an integer
 	 */
-	public static int multiplyAsInt( double first, int second ) {
-		return (int) (first * second); 
+	public static int scaleQuantity( double scalingFactor, int quantity ) {
+		int val = (int) (scalingFactor * quantity);
+		return Math.max(val,  1);
 	}
 	
 	
 	/**
-	 * Divides two integers as a double
+	 * Calculates a scaling-factor (for one dimension) by doing a floating point division of two integers
+	 * 
 	 * @param numerator to divide by
 	 * @param denominator  divider
 	 * @return floating-point result of division
 	 */
-	private static double divideAsDouble( int numerator, int denominator ) {
+	private static double deriveScalingFactor( int numerator, int denominator ) {
 		return ((double) numerator) / denominator;
 	}
 }

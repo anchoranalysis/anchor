@@ -52,8 +52,8 @@ public class Chnl {
 	
 	// Constructor
 	public Chnl( VoxelBox<? extends Buffer> bufferAccess, ImageRes res ) {
-		this.dim = new ImageDim(bufferAccess.extnt(), res);
-		delegate = new BoundedVoxelBox<>( new BoundingBox(bufferAccess.extnt()), bufferAccess);
+		this.dim = new ImageDim(bufferAccess.extent(), res);
+		delegate = new BoundedVoxelBox<>( new BoundingBox(bufferAccess.extent()), bufferAccess);
 	}
 	
 	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
@@ -87,20 +87,20 @@ public class Chnl {
 		ImageDim sdNew = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.getVoxelBox().resizeXY(x, y, interpolator);
-		assert(ba.extnt().getX()==x);
-		assert(ba.extnt().getY()==y);
-		assert(ba.extnt().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
+		assert(ba.extent().getX()==x);
+		assert(ba.extent().getY()==y);
+		assert(ba.extent().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
 		return factory.create( ba, sdNew.getRes() );
 	}
 	
 	public Chnl maxIntensityProj() {
 		assert( factory!=null );
-		int prevZSize = delegate.getVoxelBox().extnt().getZ();
+		int prevZSize = delegate.getVoxelBox().extent().getZ();
 		return factory.create( delegate.getVoxelBox().maxIntensityProj(), getDimensions().getRes().duplicateFlattenZ(prevZSize) );
 	}
 	
 	public Chnl meanIntensityProj() {
-		int prevZSize = delegate.getVoxelBox().extnt().getZ();
+		int prevZSize = delegate.getVoxelBox().extent().getZ();
 		return factory.create( delegate.getVoxelBox().meanIntensityProj(), getDimensions().getRes().duplicateFlattenZ(prevZSize) );
 	}
 
@@ -108,7 +108,7 @@ public class Chnl {
 	// Duplicates the current channel
 	public Chnl duplicate() {
 		Chnl dup = factory.create( delegate.getVoxelBox().duplicate(), getDimensions().getRes() );
-		assert( dup.delegate.getVoxelBox().extnt().equals( delegate.getVoxelBox().extnt() ));
+		assert( dup.delegate.getVoxelBox().extent().equals( delegate.getVoxelBox().extent() ));
 		return dup;
 	}
 

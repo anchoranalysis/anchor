@@ -132,6 +132,13 @@ public final class BoundingBox implements Serializable {
 		);
 	}
 	
+	public BoundingBox duplicateChangeZ(int crnrZ, int extentZ) {
+		return new BoundingBox(
+			crnrMin.duplicateChangeZ(crnrZ),
+			extent.duplicateChangeZ(extentZ)
+		);
+	}
+	
 	public boolean atBorder( ImageDim sd ) {
 
 		if (atBorderXY(sd)) return true;
@@ -219,10 +226,6 @@ public final class BoundingBox implements Serializable {
 	 * */
 	public Point3i getCrnrMin() {
 		return crnrMin;
-	}
-
-	public void setExtent(Extent extnt) {
-		this.extent = extnt;
 	}
 	
 	public void growBy(Tuple3i toAdd, Extent containingExtent) {
@@ -326,15 +329,31 @@ public final class BoundingBox implements Serializable {
 		return crnrMin.toString() + "+" + extent.toString() + "=" + calcCrnrMax().toString();
 	}
 	
-	public void scaleXYPos( ScaleFactor sf ) {
-		crnrMin.setX( ScaleFactorUtilities.multiplyAsInt(sf.getX(), crnrMin.getX()) );
-		crnrMin.setY( ScaleFactorUtilities.multiplyAsInt(sf.getY(), crnrMin.getY()) );
+	/**
+	 * Scales the bounding-box, both the corner-point and the extent
+	 * 
+	 * @param scaleFactor scaling-factor
+	 * @return a new bounding-box with scaled corner-point and extent
+	 */
+	public BoundingBox scale( ScaleFactor scaleFactor ) {
+		return scale(
+			scaleFactor,
+			extent.scaleXYBy(scaleFactor)	
+		);
 	}
 	
-	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
-		scaleXYPos(sf);
-		this.extent = extent.scaleXYBy(sf);
-	}
+	/**
+	 * Scales the bounding-box corner-point, and assigns a new extent
+	 * 
+	 * @param scaleFactor scaling-factor
+	 * @return a new bounding-box with scaled corner-point and the specified extent
+	 */
+	public BoundingBox scale( ScaleFactor scaleFactor, Extent extentToAssign ) {
+		return new BoundingBox(
+			ScaleFactorUtilities.scale(scaleFactor, crnrMin),
+			extentToAssign
+		);
+	}	
 	
 	private void checkMaxMoreThanMin( Point3i min, Point3i max ) {
 		if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {

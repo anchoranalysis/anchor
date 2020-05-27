@@ -142,7 +142,7 @@ public class ConnectedComponentUnionFind {
 		return new MergeWithNghbs(
 			indexBuffer,
 			unionIndex,
-			indexBuffer.extnt().getZ() > 1,
+			indexBuffer.extent().getZ() > 1,
 			bigNghb
 		);
 	}
@@ -198,7 +198,7 @@ public class ConnectedComponentUnionFind {
 	) {
 		
 		Point3i pnt = new Point3i();
-		Extent extnt = indexBuffer.extnt();
+		Extent extnt = indexBuffer.extent();
 		for (pnt.setZ(0); pnt.getZ()<extnt.getZ(); pnt.incrZ()) {
 			
 			IntBuffer bbIndex = indexBuffer.getPixelsForPlane(pnt.getZ()).buffer();

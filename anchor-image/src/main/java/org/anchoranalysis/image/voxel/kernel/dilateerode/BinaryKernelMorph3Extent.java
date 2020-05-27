@@ -44,6 +44,6 @@ public abstract class BinaryKernelMorph3Extent extends BinaryKernelMorph3 {
 		
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
+		this.extnt = in.extent();
 	}
 }

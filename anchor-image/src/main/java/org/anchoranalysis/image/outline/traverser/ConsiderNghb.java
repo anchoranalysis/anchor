@@ -116,12 +116,12 @@ class ConsiderNghb {
 		VoxelBox<ByteBuffer> vb = omOutline.getVoxelBox();
 		BinaryValuesByte bvb = omOutline.getBinaryValuesByte();
 		
-		if ( !vb.extnt().contains(pnt) ) {
+		if ( !vb.extent().contains(pnt) ) {
 			return false;
 		}
 
 		ByteBuffer bb = vb.getPixelsForPlane( pnt.getZ() ).buffer();
-		int offset = vb.extnt().offset( pnt.getX(), pnt.getY() );
+		int offset = vb.extent().offset( pnt.getX(), pnt.getY() );
 		
 		// Check if the buffer allows us to read the pixel
 		if (bb.get(offset)==bvb.getOffByte()) {

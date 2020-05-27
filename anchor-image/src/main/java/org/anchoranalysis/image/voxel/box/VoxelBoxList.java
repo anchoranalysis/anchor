@@ -53,7 +53,7 @@ public class VoxelBoxList implements Iterable<VoxelBoxWrapper>{
 	}
 
 	public Extent getFirstExtnt() {
-		return list.get(0).any().extnt();
+		return list.get(0).any().extent();
 	}
 
 	public List<VoxelBuffer<?>> bufferListForSlice(int sliceNum) {

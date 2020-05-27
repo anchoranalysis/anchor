@@ -74,7 +74,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox(VoxelBox<T> voxelBox ) {
-		this.boundingBox = new BoundingBox( voxelBox.extnt() );
+		this.boundingBox = new BoundingBox( voxelBox.extent() );
 		this.voxelBox = voxelBox;
 	}
 	
@@ -87,9 +87,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 	public BoundedVoxelBox(BoundedVoxelBox<T> src) {
 		super();
 		this.boundingBox = new BoundingBox(src.getBoundingBox());
-		assert( src.voxelBox.extnt().getZ() > 0 );
+		assert( src.voxelBox.extent().getZ() > 0 );
 		this.voxelBox = src.voxelBox.duplicate();
-		assert( this.voxelBox.extnt().equals( src.voxelBox.extnt() ));
+		assert( this.voxelBox.extent().equals( src.voxelBox.extent() ));
 	}
 	
 	public boolean equalsDeep( BoundedVoxelBox<?> other) {
@@ -120,7 +120,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	public BoundedVoxelBox<T> growToZ( int sz, VoxelBoxFactoryTypeBound<T> factory ) {
 		assert(this.boundingBox.extent().getZ()==1);
-		assert(this.voxelBox.extnt().getZ()==1);
+		assert(this.voxelBox.extent().getZ()==1);
 		
 		BoundingBox bboxNew = new BoundingBox(
 			boundingBox.getCrnrMin(),
@@ -133,7 +133,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		BoundingBox bboxSrc = new BoundingBox(e);
 		
 		// we copy in one by one
-		for (int z=0;z<buffer.extnt().getZ();z++) {
+		for (int z=0;z<buffer.extent().getZ();z++) {
 			this.voxelBox.copyPixelsTo(bboxSrc, buffer, new BoundingBox(new Point3i(0,0,z),e) );
 		}
 		
@@ -232,7 +232,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		
 		
 		// We calculate new sizes
-		Extent e = this.voxelBox.extnt();
+		Extent e = this.voxelBox.extent();
 		
 		Extent eNew = new Extent(
 			e.getX() + negClip.getX() + posClip.getX(),
@@ -258,7 +258,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			throw new OperationFailedException("Cannot grow the bounding-box of the object-mask, as it is already outside the clipping region.");
 		}
 		
-		Extent e = this.voxelBox.extnt();
+		Extent e = this.voxelBox.extent();
 				
 		BoundingBox grownBox = createGrownBoxRelative( neg, pos, clipRegion );
 				
@@ -275,43 +275,33 @@ public class BoundedVoxelBox<T extends Buffer> {
 		return new BoundedVoxelBox<>( bbo, bufferNew );
 	}
 
-	public BoundedVoxelBox<T> scaleNew( ScaleFactor sf, Interpolator interpolator ) {
+	/**
+	 * Creates a scaled-version (in XY dimensions only) of the current bounding-box
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param scaleFactor what to scale X and Y dimensions by?
+	 * @param interpolator means of interpolating between pixels
+	 * @return a new bounded-voxels box of specified size containing scaled contents of the existing
+	 */
+	public BoundedVoxelBox<T> scale( ScaleFactor scaleFactor, Interpolator interpolator ) {
 		
-		int resizedX = ScaleFactorUtilities.multiplyAsInt(sf.getX(), boundingBox.extent().getX());
-		int resizedY = ScaleFactorUtilities.multiplyAsInt(sf.getY(), boundingBox.extent().getY());
-
-		resizedX = Math.max(resizedX, 1);
-		resizedY = Math.max(resizedY, 1);
-		
-		// Assumes that the extent associated with the BoundingBox is the same as the extent associated with the voxelBox..... is this always true?
-		VoxelBox<T> voxelBoxOut = voxelBox.resizeXY( resizedX, resizedY, interpolator );
-		
-		BoundingBox bboxNew = new BoundingBox(boundingBox);
-		bboxNew.scaleXYPos(sf);
-		bboxNew.setExtent(voxelBoxOut.extnt());
-		
-		return new BoundedVoxelBox<T>( bboxNew, voxelBoxOut );
-	}
-	
-
-	public void scale( ScaleFactor sf, Interpolator interpolator ) {
-		boundingBox.scaleXYPos(sf);
-		// Assumes that the extent associated with the BoundingBox is the same as the extent associated with the voxelBox..... is this always true?
 		VoxelBox<T> voxelBoxOut = voxelBox.resizeXY(
-			ScaleFactorUtilities.multiplyAsInt(sf.getX(), boundingBox.extent().getX()),
-			ScaleFactorUtilities.multiplyAsInt(sf.getY(), boundingBox.extent().getY()),
+			ScaleFactorUtilities.scaleQuantity(scaleFactor.getX(), boundingBox.extent().getX()),
+			ScaleFactorUtilities.scaleQuantity(scaleFactor.getY(), boundingBox.extent().getY()),
 			interpolator
 		);
 		
-		boundingBox.setExtent( voxelBoxOut.extnt() );
-		voxelBox = voxelBoxOut;
+		return new BoundedVoxelBox<T>(
+			boundingBox.scale(scaleFactor, voxelBoxOut.extent()),
+			voxelBoxOut
+		);
 	}
 	
-	
 	public boolean sizesMatch() {
-		boolean xCrct = ((this.getBoundingBox().extent().getX())==getVoxelBox().extnt().getX());
-		boolean yCrct = ((this.getBoundingBox().extent().getY())==getVoxelBox().extnt().getY());
-		boolean zCrct = ((this.getBoundingBox().extent().getZ())==getVoxelBox().extnt().getZ());
+		boolean xCrct = ((this.getBoundingBox().extent().getX())==getVoxelBox().extent().getX());
+		boolean yCrct = ((this.getBoundingBox().extent().getY())==getVoxelBox().extent().getY());
+		boolean zCrct = ((this.getBoundingBox().extent().getZ())==getVoxelBox().extent().getZ());
 		return xCrct && yCrct && zCrct;
 	}
 	
@@ -349,7 +339,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 
 	public Extent extnt() {
-		return voxelBox.extnt();
+		return voxelBox.extent();
 	}
 	
 	public static class SubrangePixelAccess<BufferType extends Buffer> implements IPixelsForPlane<BufferType> {
@@ -377,7 +367,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		}
 
 		@Override
-		public Extent extnt() {
+		public Extent extent() {
 			return extnt;
 		}
 	};

@@ -81,7 +81,7 @@ public class PixelsFromShortBufferArr implements IPixelsForPlane<ShortBuffer> {
 	}
 
 	@Override
-	public Extent extnt() {
+	public Extent extent() {
 		return extnt;
 	}
 }

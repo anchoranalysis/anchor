@@ -61,7 +61,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 	
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
+		this.extnt = in.extent();
 	}
 
 	@Override

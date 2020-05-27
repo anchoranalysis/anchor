@@ -114,8 +114,8 @@ public class IterateVoxels {
 		//  {@link RequireIntersectionWithMask} was not inling using default JVM settings
 		// Based on unit-tests, it seems to perform better emperically, even with the new Point3i() adding to the heap.
 
-		Extent extent = voxels.extnt();
-		Extent extentMask = mask.getVoxelBox().extnt();
+		Extent extent = voxels.extent();
+		Extent extentMask = mask.getVoxelBox().extent();
 		Point3i crnrMin = mask.getBoundingBox().getCrnrMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
@@ -200,7 +200,7 @@ public class IterateVoxels {
 	 * @param <T> buffer-type in voxel-box
 	 */
 	public static <T extends Buffer> void callEachPoint(VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process ) {
-		Extent extent = voxels.extnt(); 
+		Extent extent = voxels.extent(); 
 		callEachPoint(
 			extent,
 			new RetrieveBufferForSlice<>(voxels, process)
@@ -263,7 +263,7 @@ public class IterateVoxels {
 	 * <p>This is similar behaviour to {@link callEachPoint} but adds a buffer for each slice.</p>
 	 */
 	public static <T extends Buffer> void callEachPoint( Optional<ObjMask> mask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
-		Extent extent = voxels.extnt();
+		Extent extent = voxels.extent();
 		
 		// Note the offsets must be added before any additional restriction like a mask, to make sure they are calculate for EVERY process.
 		// Therefore we {@link AddOffsets} must be interested as the top-most level in the processing chain

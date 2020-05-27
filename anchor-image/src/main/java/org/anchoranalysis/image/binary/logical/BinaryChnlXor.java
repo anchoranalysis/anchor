@@ -52,7 +52,7 @@ public class BinaryChnlXor {
 		BinaryValuesByte bvbReceiver
 	) throws CreateException {
 		
-		Extent e = voxelBoxCrnt.extnt();
+		Extent e = voxelBoxCrnt.extent();
 		
 		// All the on voxels in the receive, are put onto crnt
 		for( int z=0; z<e.getZ(); z++ ) {

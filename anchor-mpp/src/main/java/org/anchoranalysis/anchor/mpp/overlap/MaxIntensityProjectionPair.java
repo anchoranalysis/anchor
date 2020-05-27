@@ -79,18 +79,18 @@ public class MaxIntensityProjectionPair {
 		RegionMembershipWithFlags rmFlags
 	) {
 		
-		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(vb.extnt());
+		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(vb.extent());
 		
 		BinaryValuesByte bvb = BinaryValuesByte.getDefault().duplicate();
 		
-		for( int z=0; z<vb.extnt().getZ(); z++) {
+		for( int z=0; z<vb.extent().getZ(); z++) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 			
 			int offset = 0;
-			for( int y=0; y<vb.extnt().getY(); y++) {
-				for( int x=0; x<vb.extnt().getX(); x++) {
+			for( int y=0; y<vb.extent().getY(); y++) {
+				for( int x=0; x<vb.extent().getX(); x++) {
 					
 					byte b = bb.get(offset);
 					if ( rmFlags.isMemberFlag(b)) {

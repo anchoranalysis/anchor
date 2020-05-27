@@ -89,7 +89,7 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 		}
 		
 		// We create a version that is relative to the extracted section
-		ObjMask omLocal = new ObjMask( new BoundingBox(om.getVoxelBox().extnt()), om.binaryVoxelBox() );
+		ObjMask omLocal = new ObjMask( new BoundingBox(om.getVoxelBox().extent()), om.binaryVoxelBox() );
 		
 		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
 		objs.add( new ObjMaskWithProperties( omLocal ));

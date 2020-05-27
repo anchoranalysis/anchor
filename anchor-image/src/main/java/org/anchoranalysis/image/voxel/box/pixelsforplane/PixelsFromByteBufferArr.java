@@ -80,7 +80,7 @@ public class PixelsFromByteBufferArr implements IPixelsForPlane<ByteBuffer> {
 	}
 
 	@Override
-	public Extent extnt() {
+	public Extent extent() {
 		return extnt;
 	}
 }

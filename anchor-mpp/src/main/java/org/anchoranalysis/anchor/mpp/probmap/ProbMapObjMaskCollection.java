@@ -111,9 +111,9 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		//  on.  Could be very inefficient for low-density bounding boxes? So we should make sure
 		//  bounding boxes are tight
 		
-		long vol = om.getVoxelBox().extnt().getVolume();
-		int volXY = om.getVoxelBox().extnt().getVolumeXY();
-		int exY = om.getVoxelBox().extnt().getX();
+		long vol = om.getVoxelBox().extent().getVolume();
+		int volXY = om.getVoxelBox().extent().getVolumeXY();
+		int exY = om.getVoxelBox().extent().getX();
 		
 		while(true) {
 			

@@ -95,7 +95,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		VoxelBox<ByteBuffer> maskGlobal,
 		byte onMaskGlobal
 	) {
-		Extent eGlobalMask = maskGlobal.extnt();
+		Extent eGlobalMask = maskGlobal.extent();
 		
 		IntersectionBBox bbox = IntersectionBBox.create(
 			src.getBoundingBox(),

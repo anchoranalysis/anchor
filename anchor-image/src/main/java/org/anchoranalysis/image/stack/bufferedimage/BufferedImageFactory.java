@@ -38,7 +38,7 @@ public class BufferedImageFactory {
 	
 	public static BufferedImage createGrayscale( VoxelBox<ByteBuffer> vb ) throws CreateException {
 		
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		checkExtentZ(e);
 		
 		return createBufferedImageFromGrayscaleBuffer(
@@ -74,7 +74,7 @@ public class BufferedImageFactory {
 	
 	private static ByteBuffer firstBuffer( VoxelBox<ByteBuffer> vb, Extent e, String dscr ) throws CreateException {
 		
-		if (!vb.extnt().equals(e)) {
+		if (!vb.extent().equals(e)) {
 			throw new CreateException(dscr + " channel extent does not match");
 		}
 		

@@ -153,7 +153,7 @@ public class HistogramFactory {
 		
 		Histogram hist = new HistogramArray( (int) inputBuffer.dataType().maxValue() );
 		
-		Extent e = inputBuffer.extnt();
+		Extent e = inputBuffer.extent();
 		Extent eMask = objMask.getBoundingBox().extent();
 		
 		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();
@@ -204,7 +204,7 @@ public class HistogramFactory {
 		
 		Histogram hist = new HistogramArray( (int) inputBox.dataType().maxValue() );
 		
-		Extent e = inputBox.extnt();
+		Extent e = inputBox.extent();
 		int volumeXY = e.getVolumeXY();
 		for (int z=0; z<e.getZ(); z++) {
 			addBufferToHistogram( hist, inputBox.getPixelsForPlane(z), volumeXY);

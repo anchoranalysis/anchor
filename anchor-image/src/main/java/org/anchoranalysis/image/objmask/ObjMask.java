@@ -200,7 +200,7 @@ public class ObjMask {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
 			
-			BoundedVoxelBox<ByteBuffer> boxNew = delegate.scaleNew(sf, interpolator);
+			BoundedVoxelBox<ByteBuffer> boxNew = delegate.scale(sf, interpolator);
 			
 			// We should do a thresholding afterwards to make sure our values correspond to the two binary values
 			if (interpolator!=null && interpolator.isNewValuesPossible()) {
@@ -227,7 +227,7 @@ public class ObjMask {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
 			
-			delegate.scale(sf, interpolator );
+			delegate = delegate.scale(sf, interpolator );
 			
 			// We should do a thresholding afterwards to make sure our values correspond to the two binry values
 			if (interpolator.isNewValuesPossible()) {
@@ -290,7 +290,7 @@ public class ObjMask {
 	
 	public boolean numPixelsLessThan( int num ) {
 		
-		Extent e = delegate.getVoxelBox().extnt();
+		Extent e = delegate.getVoxelBox().extent();
 		
 		int cnt = 0;
 		
@@ -315,7 +315,7 @@ public class ObjMask {
 	
 	public boolean hasPixelsGreaterThan( int num ) {
 		
-		Extent e = delegate.getVoxelBox().extnt();
+		Extent e = delegate.getVoxelBox().extent();
 		
 		int cnt = 0;
 		
@@ -415,7 +415,7 @@ public class ObjMask {
 		byte maskMatchValue1,
 		byte maskMatchValue2
 	) {
-		BoundingBox allOut = new BoundingBox( vbMaskOut.extnt() );
+		BoundingBox allOut = new BoundingBox( vbMaskOut.extent() );
 		int cntSetFirst = vbMaskOut.setPixelsCheckMask(allOut, voxelBox1, bboxSrcMask, value, maskMatchValue1 );
 		int cntSetSecond = vbMaskOut.setPixelsCheckMask(allOut, voxelBox2, bboxOthrMask, value, maskMatchValue2 );
 		return cntSetFirst+cntSetSecond;

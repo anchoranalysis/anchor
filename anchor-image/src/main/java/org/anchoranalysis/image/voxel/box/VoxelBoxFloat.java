@@ -53,7 +53,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 		float max = 0;
 		boolean first = true;
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			FloatBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -91,7 +91,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 		
 		float valFloat = (float) val;
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -110,7 +110,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 		
 		Point3i crnrMin = bbox.getCrnrMin();
 		Point3i crnrMax = bbox.calcCrnrMax();
-		Extent e = extnt();
+		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
@@ -132,7 +132,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 			return;
 		}
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -146,9 +146,9 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 
 	@Override
 	public VoxelBox<FloatBuffer> maxIntensityProj() {
-		MaxIntensityBufferFloat mi = new MaxIntensityBufferFloat( extnt() ); 
+		MaxIntensityBufferFloat mi = new MaxIntensityBufferFloat( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 	
@@ -158,7 +158,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	@Override
 	public void setVoxel(int x, int y, int z, int val) {
 		FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        buffer.put( getPlaneAccess().extnt().offset(x, y), (float) val );
+        buffer.put( getPlaneAccess().extent().offset(x, y), (float) val );
 	}
 
 	/**
@@ -167,7 +167,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	@Override
 	public int getVoxel(int x, int y, int z) {
 		FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        return (int) buffer.get( getPlaneAccess().extnt().offset(x, y) );
+        return (int) buffer.get( getPlaneAccess().extent().offset(x, y) );
 	}
 	
 	@Override
@@ -189,7 +189,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	@Override
 	public void subtractFrom(int val) {
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			FloatBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			

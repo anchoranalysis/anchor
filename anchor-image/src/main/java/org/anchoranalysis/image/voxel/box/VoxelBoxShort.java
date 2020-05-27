@@ -85,7 +85,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					short chnlVal = pixelIn.get(index);
 					
 					if ( chnlVal==equalVal ) {
@@ -103,7 +103,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public void setAllPixelsTo( int val ) {
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -121,7 +121,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		Point3i crnrMin = bbox.getCrnrMin();
 		Point3i crnrMax = bbox.calcCrnrMax();
-		Extent e = extnt();
+		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
@@ -149,7 +149,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			return;
 		}
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -165,13 +165,13 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public void setVoxel(int x, int y, int z, int val) {
 		ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        buffer.put( getPlaneAccess().extnt().offset(x, y), (short) val );
+        buffer.put( getPlaneAccess().extent().offset(x, y), (short) val );
 	}
 
 	@Override
 	public int getVoxel(int x, int y, int z) {
 		ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        return ByteConverter.unsignedShortToInt( buffer.get( getPlaneAccess().extnt().offset(x, y) ) );
+        return ByteConverter.unsignedShortToInt( buffer.get( getPlaneAccess().extent().offset(x, y) ) );
 	}
 	
 	// TODO when values are too small or too large
@@ -192,9 +192,9 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int indexMask = getPlaneAccess().extnt().offset(x, y);
+					int indexMask = getPlaneAccess().extent().offset(x, y);
 					if (pixelsMask.get(indexMask)==maskOnByte) {
-						int index = getPlaneAccess().extnt().offset(x, y);
+						int index = getPlaneAccess().extent().offset(x, y);
 						
 						short shortVal = (short) (pixels.get(index) + value);
 						pixels.put(index, shortVal );
@@ -222,7 +222,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public void subtractFrom(int val) {
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -244,9 +244,9 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public VoxelBox<ShortBuffer> maxIntensityProj() {
 		
-		MaxIntensityBufferShort mi = new MaxIntensityBufferShort( extnt() ); 
+		MaxIntensityBufferShort mi = new MaxIntensityBufferShort( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 	
@@ -255,9 +255,9 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
 	@Override
 	public VoxelBox<ShortBuffer> meanIntensityProj() {
-		MeanIntensityShortBuffer mi = new MeanIntensityShortBuffer( extnt() ); 
+		MeanIntensityShortBuffer mi = new MeanIntensityShortBuffer( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 		

@@ -79,7 +79,7 @@ public class PixelsFromFloatBufferArr implements IPixelsForPlane<FloatBuffer> {
 	}
 
 	@Override
-	public Extent extnt() {
+	public Extent extent() {
 		return extnt;
 	}
 }

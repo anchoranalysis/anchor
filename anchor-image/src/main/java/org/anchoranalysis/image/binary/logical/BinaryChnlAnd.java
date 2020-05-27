@@ -52,7 +52,7 @@ public class BinaryChnlAnd {
 		BinaryValuesByte bvbReceiver
 	) throws CreateException {
 		
-		Extent e = voxelBoxCrnt.extnt();
+		Extent e = voxelBoxCrnt.extent();
 		
 		byte receiveOn = bvbReceiver.getOnByte();
 		

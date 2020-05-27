@@ -130,7 +130,7 @@ public class VoxelBoxWrapper {
 		if(!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			boxOut = asByte();
 		} else {
-			boxOut = VoxelBoxFactory.instance().getByte().create( any().extnt() );
+			boxOut = VoxelBoxFactory.instance().getByte().create( any().extent() );
 		}
 		
 		return boxOut;

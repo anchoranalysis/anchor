@@ -71,7 +71,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public VoxelBox<T> createBufferAvoidNew(BoundingBox bbox ) {
 		
-		if (   bbox.equals(new BoundingBox(extnt()))
+		if (   bbox.equals(new BoundingBox(extent()))
 			&& bbox.getCrnrMin().getX()==0
 			&& bbox.getCrnrMin().getY()==0
 			&& bbox.getCrnrMin().getZ()==0
@@ -92,11 +92,11 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public void replaceBy(VoxelBox<T> vb) throws IncorrectImageSizeException {
 		
-		if (!extnt().equals(vb.extnt())) {
+		if (!extent().equals(vb.extent())) {
 			throw new IncorrectImageSizeException("Sizes do not match");
 		}
 		
-		BoundingBox bbo = new BoundingBox(vb.extnt());
+		BoundingBox bbo = new BoundingBox(vb.extent());
 		vb.copyPixelsTo(bbo, this, bbo);
 	}
 
@@ -119,7 +119,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
 			
-			assert( z< extnt().getZ() );
+			assert( z< extent().getZ() );
 			
 			T srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
 			T destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
@@ -127,8 +127,8 @@ public abstract class VoxelBox<T extends Buffer> {
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
 				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
 				
-					int srcIndex = getPlaneAccess().extnt().offset(x, y);
-					int destIndex = destVoxelBox.extnt().offset(x + relPos.getX(), y+relPos.getY());
+					int srcIndex = getPlaneAccess().extent().offset(x, y);
+					int destIndex = destVoxelBox.extent().offset(x + relPos.getX(), y+relPos.getY());
 					
 					copyItem( srcArr, srcIndex, destArr, destIndex );
 					//destArr.put( destIndex, srcArr.get(srcIndex) );
@@ -159,8 +159,8 @@ public abstract class VoxelBox<T extends Buffer> {
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
 				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
 				
-					int srcIndex = getPlaneAccess().extnt().offset(x, y);
-					int destIndex = destVoxelBox.extnt().offset(x + relPos.getX(), y+relPos.getY());
+					int srcIndex = getPlaneAccess().extent().offset(x, y);
+					int destIndex = destVoxelBox.extent().offset(x + relPos.getX(), y+relPos.getY());
 					
 					if(maskBuffer.get()==maskBV.getOnByte()) {
 						copyItem( srcArr, srcIndex, destArr, destIndex );
@@ -242,8 +242,8 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		Extent eIntersectingBox = bboxMask.extent();
 		
-		Extent eAssignBuffer = this.extnt();
-		Extent eMaskBuffer = objMaskBuffer.extnt();
+		Extent eAssignBuffer = this.extent();
+		Extent eMaskBuffer = objMaskBuffer.extent();
 		
 		int cnt = 0;
 		
@@ -297,7 +297,7 @@ public abstract class VoxelBox<T extends Buffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					
 					pixelIn.position(index);
 					
@@ -331,7 +331,7 @@ public abstract class VoxelBox<T extends Buffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					
 					pixelIn.position(index);
 					
@@ -372,7 +372,7 @@ public abstract class VoxelBox<T extends Buffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					
 					pixelIn.position(index);
 					
@@ -395,7 +395,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		int cnt = 0;
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			T buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			while( buffer.hasRemaining() ) {
@@ -411,7 +411,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public boolean hasGreaterThan( int operand ) {
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			T buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			while( buffer.hasRemaining() ) {
@@ -428,7 +428,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public boolean hasEqualTo( int operand ) {
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			T buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			while( buffer.hasRemaining() ) {
@@ -448,7 +448,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		int count = 0;
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			T pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
 			while (pixels.hasRemaining()) {
@@ -478,11 +478,11 @@ public abstract class VoxelBox<T extends Buffer> {
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
 				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
 
-					int maskIndex = om.getVoxelBox().extnt().offset(x-srcStart.getX(), y-srcStart.getY());
+					int maskIndex = om.getVoxelBox().extent().offset(x-srcStart.getX(), y-srcStart.getY());
 					
 					if (maskBuffer.get(maskIndex)==maskOnVal) {
 					
-						int srcIndex = getPlaneAccess().extnt().offset(x, y);
+						int srcIndex = getPlaneAccess().extent().offset(x, y);
 						srcArr.position(srcIndex);
 						
 						if (isEqualTo(srcArr, equalVal )) {
@@ -532,13 +532,13 @@ public abstract class VoxelBox<T extends Buffer> {
 		return planeAccess.getPixelsForPlane(z);
 	}
 
-	public Extent extnt() {
-		return planeAccess.extnt();
+	public Extent extent() {
+		return planeAccess.extent();
 	}
 
 	public int minSliceNonZero() {
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			if(isSliceNonZero(z)) {
 				return z;
 			}
@@ -567,27 +567,28 @@ public abstract class VoxelBox<T extends Buffer> {
 	public VoxelBox<T> extractSlice( int z ) {
 		
 		VoxelBox<T> bufferAccess = factory.create(
-			extnt().duplicateChangeZ(1)
+			extent().duplicateChangeZ(1)
 		);
 		bufferAccess.getPlaneAccess().setPixelsForPlane(0, getPlaneAccess().getPixelsForPlane(z) );
 		return bufferAccess;
 	}
 	
 	/**
-	 * Resizes the current voxelbox.  
+	 * Creates a new voxel-box that is a resized version of the current voxel-box, interpolating as needed.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param interpolator	If non-null, this is used to interpolate pixels as they are resized.
-	 * @param averageWhenDownsizing
-	 * @return
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param sizeX new size in X dimension
+	 * @param sizeY new size in Y dimension
+	 * @param interpolator means  to interpolate pixels as they are resized.
+	 * @return a newly created voxel-box of specified size containing interpolated pixels from the current voxel-box.
 	 */
-	public VoxelBox<T> resizeXY( int x, int y, Interpolator interpolator ) {
+	public VoxelBox<T> resizeXY( int sizeX, int sizeY, Interpolator interpolator ) {
 		
 		Extent extentResized = new Extent(
-			x,
-			y,
-			extnt().getZ()
+			sizeX,
+			sizeY,
+			extent().getZ()
 		);
 		
 		VoxelBox<T> bufferTarget = factory.create(extentResized);
@@ -605,11 +606,11 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public VoxelBox<T> duplicate() {
 		
-		assert( getPlaneAccess().extnt().getZ() > 0 );
+		assert( getPlaneAccess().extent().getZ() > 0 );
 		
-		VoxelBox<T> bufferAccess = factory.create( getPlaneAccess().extnt() );
+		VoxelBox<T> bufferAccess = factory.create( getPlaneAccess().extent() );
 		
-		for( int z=0; z<extnt().getZ(); z++ ) {
+		for( int z=0; z<extent().getZ(); z++ ) {
 			VoxelBuffer<T> buffer = getPixelsForPlane(z);
 			bufferAccess.setPixelsForPlane( z, buffer.duplicate() );
 		}
@@ -630,11 +631,11 @@ public abstract class VoxelBox<T extends Buffer> {
 			return false;
 		}
 		
-		if (!extnt().equals(other.extnt())) {
+		if (!extent().equals(other.extent())) {
 			return false;
 		}
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			VoxelBuffer<T> buffer1 = getPlaneAccess().getPixelsForPlane(z);
 			VoxelBuffer<T> buffer2 = (VoxelBuffer<T>) other.getPlaneAccess().getPixelsForPlane(z);

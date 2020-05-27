@@ -176,7 +176,7 @@ public class ImgLib2Wrap {
 		Function<U,T> transform,
 		Function<AbstractNativeImg<S,T>,S> createType
 	) {
-		Extent e = box.extnt();
+		Extent e = box.extent();
 		
 		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
 		
@@ -189,7 +189,7 @@ public class ImgLib2Wrap {
 	}
 	
 	private static <T,U extends Buffer> List<T> slicesFor( VoxelBox<U> box, Function<U,T> transformSlice ) {
-		return IntStream.range(0, box.extnt().getZ()).mapToObj( z->
+		return IntStream.range(0, box.extent().getZ()).mapToObj( z->
 			transformSlice.apply(
 				box.getPixelsForPlane(z).buffer()
 			)

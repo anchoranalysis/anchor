@@ -80,7 +80,7 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
 	
 	/** How many pixels in an XY slice */
 	protected int volumeXY() {
-		return flatVoxelBox.extnt().getVolumeXY();
+		return flatVoxelBox.extent().getVolumeXY();
 	}
 	
 	public VoxelBox<T> getFlatBuffer() {

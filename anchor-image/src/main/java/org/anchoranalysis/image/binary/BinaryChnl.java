@@ -103,7 +103,7 @@ public class BinaryChnl {
 		
 		ByteBuffer bb = getVoxelBox().getPixelsForPlane(pnt.getZ()).buffer();
 		
-		int offset = getVoxelBox().extnt().offset( pnt.getX(), pnt.getY() );
+		int offset = getVoxelBox().extent().offset( pnt.getX(), pnt.getY() );
 		return bb.get(offset)==bvb.getOnByte();
 	}
 	

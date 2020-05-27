@@ -46,7 +46,7 @@ class PointsFromChnlHelper {
 	
 	// Stays as -1 until we reach a non-empty slice
 	private int successiveEmptySlices = -1;
-	private Extent e = vb.extnt();
+	private Extent e = vb.extent();
 	
 	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, Point3i crnrMin, Point3i crnrMax,
 			VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb, int startZ, List<Point3i> listOut) {

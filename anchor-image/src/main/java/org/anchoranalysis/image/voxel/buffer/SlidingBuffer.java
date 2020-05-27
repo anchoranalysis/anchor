@@ -72,7 +72,7 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 			minusOne = null;
 		}
 		
-		if ((sliceNum+1) < vb.extnt().getZ()) {
+		if ((sliceNum+1) < vb.extent().getZ()) {
 			plusOne = vb.getPixelsForPlane(sliceNum+1);
 		} else {
 			plusOne = null;
@@ -86,7 +86,7 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 		
 		sliceNum++;
 		
-		if ((sliceNum+1)<vb.extnt().getZ()) {
+		if ((sliceNum+1)<vb.extent().getZ()) {
 			plusOne = vb.getPixelsForPlane(sliceNum+1);
 		} else {
 			plusOne = null;
@@ -111,7 +111,7 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 	}
 	
 	public Extent extnt() {
-		return vb.extnt();
+		return vb.extent();
 	}
 	
 	public VoxelBuffer<BufferType> getCentre() {

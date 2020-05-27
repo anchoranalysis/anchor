@@ -79,7 +79,7 @@ public class FindOutline {
 	
 	/** Outline using multiple erosions to create a deeper outline */
 	public static ObjMask outline(ObjMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
-		assert( mask.getVoxelBox().extnt().getZ() > 0 );
+		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
 		ObjMask maskIn = mask.duplicate();
 				

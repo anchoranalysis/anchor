@@ -71,7 +71,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 	
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
+		this.extnt = in.extent();
 	}
 
 	@Override

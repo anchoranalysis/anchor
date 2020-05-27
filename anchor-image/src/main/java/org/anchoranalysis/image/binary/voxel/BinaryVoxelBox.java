@@ -58,7 +58,7 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowS
 	}
 
 	public Extent extnt() {
-		return voxelBox.extnt();
+		return voxelBox.extent();
 	}
 
 	public VoxelBox<T> getVoxelBox() {

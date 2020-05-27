@@ -291,10 +291,10 @@ public final class Extent implements Serializable {
 	public Extent scaleXYBy( ScaleFactor sf ) {
 		return createPointOperation( p-> {
 			p.setX(
-				ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX())
+				ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
 			);
 			p.setY(
-				ScaleFactorUtilities.multiplyAsInt(sf.getY(), getY())
+				ScaleFactorUtilities.scaleQuantity(sf.getY(), getY())
 			);			
 		});
 	}

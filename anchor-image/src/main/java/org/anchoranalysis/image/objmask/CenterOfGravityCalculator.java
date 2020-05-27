@@ -52,13 +52,13 @@ final class CenterOfGravityCalculator {
 		Point3d sum = new Point3d();
 		byte onByte = om.getBinaryValuesByte().getOnByte();
 		
-		for( int z=0; z<vb.extnt().getZ(); z++ ) {
+		for( int z=0; z<vb.extent().getZ(); z++ ) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
 			int offset = 0;
-			for( int y=0; y<vb.extnt().getY(); y++ ) {
-				for( int x=0; x<vb.extnt().getX(); x++ ) {
+			for( int y=0; y<vb.extent().getY(); y++ ) {
+				for( int x=0; x<vb.extent().getX(); x++ ) {
 					
 					if (bb.get(offset)==onByte) {
 						sum.add(x,y,z);
@@ -95,13 +95,13 @@ final class CenterOfGravityCalculator {
 		double sum = 0.0;
 		byte onByte = om.getBinaryValuesByte().getOnByte();
 		
-		for( int z=0; z<vb.extnt().getZ(); z++ ) {
+		for( int z=0; z<vb.extent().getZ(); z++ ) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
 			int offset = 0;
-			for( int y=0; y<vb.extnt().getY(); y++ ) {
-				for( int x=0; x<vb.extnt().getX(); x++ ) {
+			for( int y=0; y<vb.extent().getY(); y++ ) {
+				for( int x=0; x<vb.extent().getX(); x++ ) {
 					
 					if (bb.get(offset)==onByte) {
 						sum += AxisTypeConverter.valueFor(axisType, x, y, z);

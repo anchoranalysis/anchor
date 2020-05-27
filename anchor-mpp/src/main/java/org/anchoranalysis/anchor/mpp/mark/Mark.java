@@ -194,7 +194,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		// We make a new mask and populate it from out iterator
 		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);
 
-		assert( mask.getVoxelBox().extnt().getZ() > 0 );
+		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
 		byte maskOn = bv.getOnByte();
 		
@@ -221,7 +221,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 			}
 		}
 		
-		assert( mask.getVoxelBox().extnt().getZ() > 0 );
+		assert( mask.getVoxelBox().extent().getZ() > 0 );
 			
 		return mask;
 	}
@@ -230,13 +230,13 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	// Calculates the mask of an object
 	public ObjMaskWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
 			
-		BoundingBox bbox = this.bbox( bndScene, rm.getRegionID() );
-		bbox.scaleXYPosAndExtnt( new ScaleFactor(scaleFactor) );
+		 BoundingBox bbox = bbox( bndScene, rm.getRegionID() )
+				 .scale( new ScaleFactor(scaleFactor) );
 		
 		// We make a new mask and populate it from out iterator
 		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);
 
-		assert( mask.getVoxelBox().extnt().getZ() > 0 );
+		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
 		byte maskOn = bvOut.getOnByte();
 		
@@ -271,7 +271,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		}
 		
 		//assert( mask.getMask().hasPixelsGreaterThan(0) );
-		assert( mask.getVoxelBox().extnt().getZ() > 0 );
+		assert( mask.getVoxelBox().extent().getZ() > 0 );
 			
 		return mask;
 	}

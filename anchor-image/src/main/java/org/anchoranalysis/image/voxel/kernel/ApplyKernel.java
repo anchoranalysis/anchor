@@ -57,11 +57,11 @@ public class ApplyKernel {
 	// 3 pixel diameter kernel
 	public static VoxelBox<ByteBuffer> apply( BinaryKernel kernel, VoxelBox<ByteBuffer> in, BinaryValuesByte outBinary ) {
 		
-		VoxelBox<ByteBuffer> out = factory.create( in.extnt() );
+		VoxelBox<ByteBuffer> out = factory.create( in.extent() );
 		
 		int localSlicesSize = 3;
 		 
-		Extent extnt = in.extnt();
+		Extent extnt = in.extent();
 		
 		kernel.init(in);
 		
@@ -102,7 +102,7 @@ public class ApplyKernel {
 	 * @throws OperationFailedException 
 	 */
 	public static int applyForCount( CountKernel kernel, VoxelBox<ByteBuffer> vb ) throws OperationFailedException {
-		return applyForCount(kernel, vb, new BoundingBox(vb.extnt()) );
+		return applyForCount(kernel, vb, new BoundingBox(vb.extent()) );
 	}
 	
 	
@@ -117,9 +117,9 @@ public class ApplyKernel {
 	 */
 	public static int applyForCount( CountKernel kernel, VoxelBox<ByteBuffer> vb, BoundingBox bbox ) throws OperationFailedException {
 		
-		if( !vb.extnt().contains(bbox)) {
+		if( !vb.extent().contains(bbox)) {
 			throw new OperationFailedException(
-				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extnt() )
+				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extent() )
 			);
 		}
 		
@@ -127,7 +127,7 @@ public class ApplyKernel {
 		 
 		int cnt = 0;
 		
-		Extent extnt = vb.extnt();
+		Extent extnt = vb.extent();
 		
 		kernel.init(vb);
 		
@@ -164,15 +164,15 @@ public class ApplyKernel {
 	 */
 	public static boolean applyUntilPositive( CountKernel kernel, VoxelBox<ByteBuffer> vb, BoundingBox bbox ) throws OperationFailedException {
 		
-		if( !vb.extnt().contains(bbox)) {
+		if( !vb.extent().contains(bbox)) {
 			throw new OperationFailedException(
-				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extnt() )
+				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extent() )
 			);
 		}
 		
 		int localSlicesSize = 3;
 		 
-		Extent extnt = vb.extnt();
+		Extent extnt = vb.extent();
 		
 		kernel.init(vb);
 		
@@ -205,7 +205,7 @@ public class ApplyKernel {
 		 
 		int cnt = 0;
 		
-		Extent extnt = in.extnt();
+		Extent extnt = in.extent();
 		
 		kernel.init(in);
 		
@@ -243,7 +243,7 @@ public class ApplyKernel {
 		Point3i crnrMin = bbox.getCrnrMin();
 		Point3i crnrMax = bbox.calcCrnrMax();
 		
-		Extent extnt = in.extnt();
+		Extent extnt = in.extent();
 		
 		kernel.init(in);
 		

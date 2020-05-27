@@ -112,7 +112,7 @@ public class BinaryChnlFromObjs {
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			
 			ByteBuffer pixelsOut = voxelBoxOut.getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
-			writeToBufferMasked(maskIn, pixelsOut, voxelBoxOut.extnt(), bbox.getCrnrMin(), pntGlobal, maxGlobal, maskOn, outValByte);
+			writeToBufferMasked(maskIn, pixelsOut, voxelBoxOut.extent(), bbox.getCrnrMin(), pntGlobal, maxGlobal, maskOn, outValByte);
 		}
 	}
 	

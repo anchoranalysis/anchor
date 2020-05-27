@@ -49,7 +49,7 @@ class ObjMaskHDF5Reader {
 		
 		VoxelBox<ByteBuffer> vb = createVoxelBox(mdb);
 		
-		BoundingBox bbox = new BoundingBox(crnrPnt, vb.extnt() );
+		BoundingBox bbox = new BoundingBox(crnrPnt, vb.extent() );
 		
 		return new ObjMask(bbox, vb);
 	}

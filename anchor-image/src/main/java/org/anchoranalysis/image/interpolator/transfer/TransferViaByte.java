@@ -53,8 +53,8 @@ public class TransferViaByte extends Transfer {
 			this.src = src.asByte();
 			this.trgt = trgt.asByte();
 			
-			int trgtX = trgt.any().extnt().getX();
-			int trgtY = trgt.any().extnt().getY();
+			int trgtX = trgt.any().extent().getX();
+			int trgtY = trgt.any().extent().getY();
 			
 			//bi = new BufferedImage( trgtX, trgtY, BufferedImage.TYPE_BYTE_GRAY );
 			assert( trgtX > 0 );
@@ -84,7 +84,7 @@ public class TransferViaByte extends Transfer {
 //			trgt.setPixelsForPlane(z, VoxelBufferByte.wrap(rescaledImageData) );
 			
 			VoxelBuffer<ByteBuffer> bufIn = trgt.getPixelsForPlane(z);
-			VoxelBuffer<ByteBuffer> bufOut = interpolator.interpolateByte(buffer, bufIn, src.extnt(), trgt.extnt() ) ;
+			VoxelBuffer<ByteBuffer> bufOut = interpolator.interpolateByte(buffer, bufIn, src.extent(), trgt.extent() ) ;
 			if (!bufOut.equals(bufIn)) {
 				trgt.setPixelsForPlane(z, bufOut);
 			}

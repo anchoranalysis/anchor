@@ -84,10 +84,10 @@ public class DensityKernel extends BinaryKernel {
 		Density density = new Density();
 		
 		int yMin = getYMin(pnt);
-		int yMax = getYMax(pnt, in.extnt());
+		int yMax = getYMax(pnt, in.extent());
 		
 		int xMin = getXMin(pnt);
-		int xMax = getXMax(pnt, in.extnt());
+		int xMax = getXMax(pnt, in.extent());
 		
 		for (int z=(-1*getSizeHalf()); z<=getSizeHalf(); z++) {
 			
@@ -99,7 +99,7 @@ public class DensityKernel extends BinaryKernel {
 
 			for (int y=yMin; y<=yMax; y++) {
 				
-				int indLocal = in.extnt().offset(xMin, y);
+				int indLocal = in.extent().offset(xMin, y);
 				int indLocalMax = indLocal + xMax - xMin;
 				
 				while (indLocal<=indLocalMax) {
