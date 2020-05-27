@@ -84,8 +84,8 @@ public abstract class VoxelBox<T extends Buffer> {
 	public VoxelBox<T> createBufferAlwaysNew(BoundingBox bbox) {
 		
 		// Otherwise we create a new buffer
-		VoxelBox<T> vbOut = factory.create(bbox.extnt());
-		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extnt()));
+		VoxelBox<T> vbOut = factory.create(bbox.extent());
+		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extent()));
 		return vbOut;
 	}
 	
@@ -188,7 +188,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		return setPixelsCheckMask(
 			om.getBoundingBox(),
 			om.getVoxelBox(),
-			new BoundingBox(om.getBoundingBox().extnt()),
+			new BoundingBox(om.getBoundingBox().extent()),
 			value,
 			om.getBinaryValuesByte().getOnByte()
 		);
@@ -212,7 +212,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		return setPixelsCheckMask(
 			om.getBoundingBox(),
 			om.getVoxelBox(),
-			new BoundingBox(om.getBoundingBox().extnt()),
+			new BoundingBox(om.getBoundingBox().extent()),
 			value,
 			maskMatchValue
 		);
@@ -240,7 +240,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	) {
 		checkExtentMatch(bboxMask, bboxToBeAssigned);
 		
-		Extent eIntersectingBox = bboxMask.extnt();
+		Extent eIntersectingBox = bboxMask.extent();
 		
 		Extent eAssignBuffer = this.extnt();
 		Extent eMaskBuffer = objMaskBuffer.extnt();
@@ -660,8 +660,8 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	private static void checkExtentMatch(BoundingBox bbox1, BoundingBox bbox2) {
-		Extent extent1 = bbox1.extnt();
-		Extent extent2 = bbox2.extnt();
+		Extent extent1 = bbox1.extent();
+		Extent extent2 = bbox2.extent();
 		if (!extent1.equals(extent2)) {
 			throw new IllegalArgumentException(
 				String.format(

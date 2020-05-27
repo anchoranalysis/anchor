@@ -83,7 +83,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		BoundingBox bboxMIP = bbox.flattenZ();
 		setObjMaskMIP( new ObjMask(bboxMIP) );
 		
-		Extent localExtnt = bbox.extnt();
+		Extent localExtnt = bbox.extent();
 		partitionList.init( factoryHistogram, stack.getNumChnl(), regionMap.numRegions(), localExtnt.getZ() );
 		
 		ByteBuffer bufferMIP = getObjMaskMIP().getVoxelBox().getPixelsForPlane(0).buffer();

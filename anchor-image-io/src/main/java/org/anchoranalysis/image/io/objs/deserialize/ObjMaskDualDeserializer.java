@@ -77,7 +77,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
 			
 			Chnl chnl = stack.getChnl(0);
 			
-			if (!chnl.getDimensions().getExtnt().equals(bbox.extnt())) {
+			if (!chnl.getDimensions().getExtnt().equals(bbox.extent())) {
 				throw new DeserializationFailedException(
 					errorMessageMismatchingDims(bbox, chnl.getDimensions(), filePath)
 				);
@@ -93,7 +93,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
 	private static String errorMessageMismatchingDims(BoundingBox bbox, ImageDim sd, Path filePath) {
 		return String.format(
 			"Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
-			bbox.extnt(),
+			bbox.extent(),
 			sd.getExtnt(),
 			filePath
 		);

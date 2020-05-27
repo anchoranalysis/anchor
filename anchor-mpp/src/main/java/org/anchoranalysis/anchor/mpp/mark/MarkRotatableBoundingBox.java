@@ -142,7 +142,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 			);
 			
 			box.clipTo(bndScene.getExtnt());
-			assert(box.extnt().getZ()>0);
+			assert(box.extent().getZ()>0);
 			return box;
 		} catch (OperationFailedException e) {
 			assert(false);

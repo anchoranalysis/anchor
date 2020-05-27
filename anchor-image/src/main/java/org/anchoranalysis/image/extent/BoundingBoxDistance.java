@@ -31,11 +31,13 @@ import org.anchoranalysis.core.geometry.Point3i;
 /**
  * Calculates distance between two bounding boxes
  */
-public class BoundingBoxDist {
+public class BoundingBoxDistance {
 
-	public double dist( BoundingBox box1, BoundingBox box2, boolean includeZ ) {
+	private BoundingBoxDistance() {}
+	
+	public static double distance( BoundingBox box1, BoundingBox box2, boolean includeZ ) {
 		
-		if (box1.hasIntersection(box2)) {
+		if (box1.intersection().existsWith(box2)) {
 			return 0;
 		}
 		

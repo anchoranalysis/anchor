@@ -116,7 +116,7 @@ public class OverlapUtilities {
 		BoundingBox bbox1 = mark1.getBoundingBox(regionID).flattenZ();
 		BoundingBox bbox2 = mark2.getBoundingBox(regionID).flattenZ();
 		
-		if (!bbox1.hasIntersection(bbox2)) {
+		if (!bbox1.intersection().existsWith(bbox2)) {
 			return null;
 		}
 		

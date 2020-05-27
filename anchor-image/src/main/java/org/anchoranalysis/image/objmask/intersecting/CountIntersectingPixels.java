@@ -27,6 +27,7 @@ package org.anchoranalysis.image.objmask.intersecting;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
@@ -47,15 +48,17 @@ public abstract class CountIntersectingPixels {
 		BoundedVoxelBox<ByteBuffer> other
 	) {
 		// Find the common bounding box
-		BoundingBox bboxIntersect = new BoundingBox( src.getBoundingBox() );
+		Optional<BoundingBox> bboxIntersect = src.getBoundingBox().intersection().with(
+			other.getBoundingBox()
+		);
 		
-		if (!bboxIntersect.intersect( other.getBoundingBox(), true )) {
+		if (!bboxIntersect.isPresent()) {
 			// If the bounding boxes don't intersect then we can
 			//   go home early
 			return 0;
 		}
 		
-		return countIntersectingPixelsFromBBox( src, other, bboxIntersect );
+		return countIntersectingPixelsFromBBox( src, other, bboxIntersect.get() );
 	}
 	
 	// count intersecting pixels

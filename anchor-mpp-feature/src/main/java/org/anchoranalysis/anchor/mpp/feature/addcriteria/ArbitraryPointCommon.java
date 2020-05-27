@@ -55,7 +55,7 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
 		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
 		
 		// If their bounding boxes don't intersect, they cannot possibly have an overlapping point
-		if (!bbox1.hasIntersection(bbox2)) {
+		if (!bbox1.intersection().existsWith(bbox2)) {
 			return false;
 		}
 

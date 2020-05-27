@@ -143,7 +143,7 @@ public class RGBStack {
 		ByteBuffer greenOut = chnls.getChnl(1).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
 		ByteBuffer blueOut = chnls.getChnl(2).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
 		
-		Extent eMask = mask.getBoundingBox().extnt();
+		Extent eMask = mask.getBoundingBox().extent();
 		
  		for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
 		

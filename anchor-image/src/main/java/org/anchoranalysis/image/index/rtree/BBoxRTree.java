@@ -62,9 +62,9 @@ public class BBoxRTree {
 	
 	private static float[] extnt( BoundingBox bbox ) {
 		return new float[] {
-			bbox.extnt().getX(),
-			bbox.extnt().getY(),
-			bbox.extnt().getZ()
+			bbox.extent().getX(),
+			bbox.extent().getY(),
+			bbox.extent().getZ()
 		};
 	}
 	

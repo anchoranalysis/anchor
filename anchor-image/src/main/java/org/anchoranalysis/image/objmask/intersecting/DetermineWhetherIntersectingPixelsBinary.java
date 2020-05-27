@@ -27,6 +27,7 @@ package org.anchoranalysis.image.objmask.intersecting;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -53,21 +54,23 @@ public class DetermineWhetherIntersectingPixelsBinary {
 	}
 	
 	public boolean hasIntersectingPixels(BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other ) {
-		return pointOfFirstIntersectingPixel(src, other)!=null;
+		return pointOfFirstIntersectingPixel(src, other).isPresent();
 	}
 	
-	private Point3i pointOfFirstIntersectingPixel(BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other ) {
+	private Optional<Point3i> pointOfFirstIntersectingPixel(BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other ) {
 		
 		// Find the common bounding box
-		BoundingBox bboxIntersect = new BoundingBox( src.getBoundingBox() );
+		Optional<BoundingBox> bboxIntersect = src.getBoundingBox().intersection().with( other.getBoundingBox() );
 		
-		if (!bboxIntersect.intersect( other.getBoundingBox(), true )) {
+		if (!bboxIntersect.isPresent()) {
 			// If the bounding boxes don't intersect then we can
 			//   go home early
-			return null;
+			return Optional.empty();
 		}
 		
-		return hasIntersectingPixelsFromBBox( src, other, bboxIntersect );
+		return Optional.of(
+			hasIntersectingPixelsFromBBox( src, other, bboxIntersect.get() )
+		);
 	}
 	
 	/**

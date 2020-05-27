@@ -96,7 +96,7 @@ public class OutlineTraverser {
 	
 		processQueue( queue, visitedPixels );
 				
-		return visitedPixels.combineToOnePath( omOutline.getBoundingBox().extnt() );
+		return visitedPixels.combineToOnePath( omOutline.getBoundingBox().extent() );
 	
 	}
 	

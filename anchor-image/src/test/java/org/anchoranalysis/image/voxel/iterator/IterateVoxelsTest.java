@@ -94,7 +94,7 @@ public class IterateVoxelsTest {
 	private void testBoundingBox(String message, BoundingBox box ) {
 		testCounter(
 			message,
-			box.extnt().getVolume(),
+			box.extent().getVolume(),
 			box.centerOfGravity(),
 			counter -> IterateVoxels.callEachPoint(box, counter)
 		);

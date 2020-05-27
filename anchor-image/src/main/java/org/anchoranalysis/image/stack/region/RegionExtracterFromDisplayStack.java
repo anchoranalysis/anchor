@@ -103,7 +103,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		// We calculate how big our outgoing voxelbox wil be 
 		ImageDim sd = extractedSlice.getDimensions().scaleXYBy(sf);
 		
-		Extent extntTrgt = bbox.extnt().scaleXYBy(sf);
+		Extent extntTrgt = bbox.extent().scaleXYBy(sf);
 
 		VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.instance().getByte().create(extntTrgt);
 

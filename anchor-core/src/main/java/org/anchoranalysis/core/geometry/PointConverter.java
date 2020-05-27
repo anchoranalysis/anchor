@@ -43,6 +43,14 @@ public class PointConverter {
 		return new Point3i(p);
 	}
 	
+	public static Point3i intFromDoubleCeil(Point3d p) {
+		return new Point3i(
+			(int) Math.ceil(p.getX()),
+			(int) Math.ceil(p.getY()),
+			(int) Math.ceil(p.getZ())
+		);
+	}
+	
 	public static Point3i convertTo3d(Point2i p) {
 		return new Point3i(p.getX(), p.getY(), 0);
 	}

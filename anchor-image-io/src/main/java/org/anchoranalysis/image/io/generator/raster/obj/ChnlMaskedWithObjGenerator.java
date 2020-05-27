@@ -117,7 +117,7 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		BoundingBox bbox = mask.getBoundingBox();
 		
 		ImageDim newSd = new ImageDim(
-			bbox.extnt(),
+			bbox.extent(),
 			srcChnl.getDimensions().getRes()
 		);
 		

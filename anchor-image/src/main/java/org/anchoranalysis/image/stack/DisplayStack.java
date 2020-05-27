@@ -249,17 +249,17 @@ public class DisplayStack {
 		
 		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(index);
 		
-		Chnl out = ChnlFactory.instance().createEmptyInitialised( new ImageDim(bbox.extnt(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
+		Chnl out = ChnlFactory.instance().createEmptyInitialised( new ImageDim(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
 		
 		if (converter!=null) {
-			copyPixelsTo(index, bbox, out.getVoxelBox().asByte(), new BoundingBox(bbox.extnt()) );
+			copyPixelsTo(index, bbox, out.getVoxelBox().asByte(), new BoundingBox(bbox.extent()) );
 		} else {
 			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 				// Datatype is not supported
 				assert false;
 			}
 			
-			delegate.getChnl(index).getVoxelBox().copyPixelsTo(bbox, out.getVoxelBox(), new BoundingBox(bbox.extnt()) );
+			delegate.getChnl(index).getVoxelBox().copyPixelsTo(bbox, out.getVoxelBox(), new BoundingBox(bbox.extent()) );
 		}
 		return out;
 	}
@@ -297,12 +297,12 @@ public class DisplayStack {
 		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(chnlIndex);
 		
 		if (converter!=null) {
-			BoundingBox allLocalBox = new BoundingBox(destBox.extnt());
+			BoundingBox allLocalBox = new BoundingBox(destBox.extent());
 			
-			VoxelBoxWrapper destBoxNonByte = VoxelBoxFactory.instance().create( destBox.extnt(), chnl.getVoxelDataType() );
+			VoxelBoxWrapper destBoxNonByte = VoxelBoxFactory.instance().create( destBox.extent(), chnl.getVoxelDataType() );
 			chnl.getVoxelBox().copyPixelsTo(sourceBox, destBoxNonByte, allLocalBox );
 			
-			VoxelBox<ByteBuffer> destBoxByte = VoxelBoxFactory.instance().getByte().create( destBox.extnt());
+			VoxelBox<ByteBuffer> destBoxByte = VoxelBoxFactory.instance().getByte().create( destBox.extent());
 			converter.getVoxelBoxConverter().convertFrom(destBoxNonByte, destBoxByte);
 			
 			destBoxByte.copyPixelsTo(allLocalBox, destVoxelBox, destBox);
@@ -362,7 +362,7 @@ public class DisplayStack {
 	
 	public BufferedImage createBufferedImageBBox( BoundingBox bbox ) throws CreateException {
 		
-		if (bbox.extnt().getZ()!=1) {
+		if (bbox.extent().getZ()!=1) {
 			throw new CreateException("BBox must have a single pixel z-height");
 		}
 		
@@ -371,7 +371,7 @@ public class DisplayStack {
 				bufferForChnlBBox(0,bbox),
 				bufferForChnlBBox(1,bbox),
 				bufferForChnlBBox(2,bbox),
-				bbox.extnt()
+				bbox.extent()
 			);
 		}
 		return BufferedImageFactory.createGrayscale(bufferForChnlBBox(0,bbox));

@@ -56,7 +56,7 @@ public class ObjMaskFixture {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = mask.binaryVoxelBox();
 		
-		Extent e = mask.getBoundingBox().extnt();
+		Extent e = mask.getBoundingBox().extent();
 		int widthMinusOne = e.getX() - 1;
 		int heightMinusOne = e.getY() - 1;
 		

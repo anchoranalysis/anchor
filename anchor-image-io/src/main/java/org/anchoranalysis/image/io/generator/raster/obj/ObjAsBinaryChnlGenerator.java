@@ -114,7 +114,7 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 		BoundingBox bbox = mask.getBoundingBox();
 		
 		ImageDim newSd = new ImageDim(
-			bbox.extnt(),
+			bbox.extent(),
 			res
 		);
 				

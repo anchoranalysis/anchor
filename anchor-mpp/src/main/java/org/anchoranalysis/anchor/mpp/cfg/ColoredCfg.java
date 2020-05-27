@@ -164,7 +164,7 @@ public class ColoredCfg implements Iterable<Mark> {
 		for (int i=0; i<getCfg().size(); i++) {
 			Mark mark = getCfg().get(i);
 			
-			if (mark.bbox(bndScene,regionID).intersect(intersectList)) {
+			if (mark.bbox(bndScene,regionID).intersection().existsWithAny(intersectList)) {
 				intersectCfg.add(mark.duplicate(), getColorList().get(i));
 			}
 		}

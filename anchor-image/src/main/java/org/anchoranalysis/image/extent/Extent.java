@@ -315,11 +315,15 @@ public final class Extent implements Serializable {
 		return createPointOperation( p->p.sub(1) );
 	}
 	
-	public Extent growBy( int size ) {
+	public Extent growBy(int toAdd) {
+		return growBy(
+			new Point3i(toAdd,toAdd,toAdd)
+		);
+	}
+	
+	public Extent growBy(Tuple3i toAdd) {
 		return createPointOperation( p->
-			p.add(
-				new Point3i(size,size,size)
-			)
+			p.add(toAdd)
 		);
 	}
 	

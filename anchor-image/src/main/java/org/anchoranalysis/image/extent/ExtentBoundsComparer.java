@@ -7,13 +7,13 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
 
-// Helper classes for calculating the union along each axis
-class ExtentIntersector {
+// Helper classes for calculating the union/intersection along each axis
+class ExtentBoundsComparer {
 
 	private int min;
 	private int extnt;
 	
-	public static ExtentIntersector createMax(
+	public static ExtentBoundsComparer createMax(
 		Point3i min1,
 		Point3i min2,
 		Point3i max1,
@@ -32,7 +32,7 @@ class ExtentIntersector {
 		);
 	}
 	
-	public static Optional<ExtentIntersector> createMin(
+	public static Optional<ExtentBoundsComparer> createMin(
 		Point3i min1,
 		Point3i min2,
 		Point3i max1,
@@ -49,7 +49,7 @@ class ExtentIntersector {
 		);
 	}
 	
-	private static Optional<ExtentIntersector> calc(
+	private static Optional<ExtentBoundsComparer> calc(
 		int min1,
 		int min2,
 		int max1,
@@ -61,7 +61,7 @@ class ExtentIntersector {
 		int maxNew = maxOp.apply(max1, max2);
 		if (minNew <= maxNew) {
 			return Optional.of(
-				new ExtentIntersector(
+				new ExtentBoundsComparer(
 					minNew,
 					maxNew - minNew + 1
 				)
@@ -71,7 +71,7 @@ class ExtentIntersector {
 		}
 	}
 
-	private ExtentIntersector(int min, int extnt) {
+	private ExtentBoundsComparer(int min, int extnt) {
 		super();
 		this.min = min;
 		this.extnt = extnt;

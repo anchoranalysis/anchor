@@ -82,7 +82,7 @@ public class RasterArranger {
 			// NOTE
 			// For a special case where our projection z-extent is different to our actual z-extent, that means
 			//   we should repeat
-			if (bbox.extnt().getZ()!=img.getDimensions().getZ()) {
+			if (bbox.extent().getZ()!=img.getDimensions().getZ()) {
 				
 				int zShift = 0;
 				do {
@@ -106,8 +106,8 @@ public class RasterArranger {
 		Extent extntOut = stackIn.getDimensions().getExtnt();
 		
 		Point3i leftCrnr = bbox.getCrnrMin();
-		int xEnd = leftCrnr.getX() + bbox.extnt().getX() - 1;
-		int yEnd = leftCrnr.getY() + bbox.extnt().getY() - 1;
+		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
+		int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
 		
 		int numC = stackIn.getNumChnl();
 		VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC]; 

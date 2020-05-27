@@ -33,6 +33,8 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -118,7 +120,10 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	public ObjMaskWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut ) {
 		
 		ObjMaskWithProperties mask = super.calcMask(bndScene, rm, bvOut);
-		mask.setProperty("midpointInt", mask.getBoundingBox().calcRelToLowerEdgeInt( pos ) );
+		mask.setProperty(
+			"midpointInt",
+			calcRelativePoint(pos, mask.getBoundingBox().getCrnrMin())
+		);
 		return mask;
 	}
 	
@@ -152,5 +157,12 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 		
 		// As the cacheID might be cleared by previous sets
 		super.assignFrom( srcMark );
+	}
+	
+	/** Calculates a relative-point from pntGlobal to pntBase */
+	private static Point3i calcRelativePoint(Point3d pntGlobal, Point3i pntBase) {
+		Point3i pntOut = PointConverter.intFromDouble(pntGlobal);
+		pntOut.sub(pntBase);
+		return pntOut;
 	}
 }

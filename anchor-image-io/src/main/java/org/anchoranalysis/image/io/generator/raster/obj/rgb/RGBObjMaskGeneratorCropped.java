@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -98,7 +99,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		return relTo( getIterableElement().collectionObjMask(), bbox );
 	}
 
-	private void growBBBox(BoundingBox bbox, Extent containingScene ) {
+	private void growBBBox(BoundingBox bbox, Extent containingExtent ) {
 		assert(paddingXY>=0);
 		assert(paddingZ>=0);
 		
@@ -106,20 +107,10 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 			return;
 		}
 		
-		bbox.getCrnrMin().setX( bbox.getCrnrMin().getX() - paddingXY );
-		bbox.getCrnrMin().setY( bbox.getCrnrMin().getY() - paddingXY );
-		bbox.getCrnrMin().setZ( bbox.getCrnrMin().getZ() - paddingZ );
-		
-		bbox.clipTo(containingScene);
-		
-		bbox.setExtnt(
-			new Extent(
-				bbox.extnt().getX() + (2*paddingXY),
-				bbox.extnt().getY() + (2*paddingXY),
-				bbox.extnt().getZ() + (2*paddingZ)
-			)	
+		bbox.growBy(
+			new Point3i(paddingXY, paddingXY, paddingZ),
+			containingExtent
 		);
-		bbox.clipTo(containingScene);
 	}
 	
 	private static ObjMaskWithPropertiesCollection relTo(ObjMaskCollection in, BoundingBox src ) throws CreateException {
@@ -127,7 +118,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		ObjMaskWithPropertiesCollection out = new ObjMaskWithPropertiesCollection();
 		
 		for( ObjMask om : in ) {
-			BoundingBox bboxNew = new BoundingBox( om.getBoundingBox().relPosTo(src), om.getBoundingBox().extnt() );
+			BoundingBox bboxNew = new BoundingBox( om.getBoundingBox().relPosTo(src), om.getBoundingBox().extent() );
 			ObjMask omNew = new ObjMask(bboxNew, om.binaryVoxelBox().getVoxelBox(), om.getBinaryValues() );
 			out.add( new ObjMaskWithProperties(omNew) );
 		}

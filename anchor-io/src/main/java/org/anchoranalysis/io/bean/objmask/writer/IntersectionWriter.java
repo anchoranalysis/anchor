@@ -38,7 +38,7 @@ class IntersectionWriter {
 	// Writes only to the intersection of mask and stack (positioned at stackBBox)
 	public static void writeRGBMaskIntersection( ObjMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox ) throws OperationFailedException {
 
-		if( !stackBBox.hasIntersection( mask.getBoundingBox() )) {
+		if( !stackBBox.intersection().existsWith( mask.getBoundingBox() )) {
 			throw new OperationFailedException(
 				String.format(
 					"The bounding-box of the mask (%s) does not intersect with the stack (%s)",
@@ -48,7 +48,9 @@ class IntersectionWriter {
 			);
 		}
 		// Intersection of the mask and stackBBox
-		BoundingBox intersection = mask.getBoundingBox().intersectCreateNewNoClip(stackBBox);
+		BoundingBox intersection = mask.getBoundingBox().intersection().with(stackBBox).orElseThrow( ()->
+			new OperationFailedException("Bounding boxes of mask and stack do not intersect")
+		);
 		
 		// Let's make the intersection relative to the stack
 		intersection.getCrnrMin().sub( stackBBox.getCrnrMin() );

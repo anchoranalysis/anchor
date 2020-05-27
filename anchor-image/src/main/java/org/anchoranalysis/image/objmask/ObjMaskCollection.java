@@ -370,7 +370,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 	// BoundingBox is a bounding box that contains all objects, allowing us to avoid writing to a full buffer
 	public VoxelBox<ByteBuffer> merge( BoundingBox bbox ) {
 		
-		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( bbox.extnt() );
+		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( bbox.extent() );
 		
 		Point3i crnrSub = new Point3i( bbox.getCrnrMin() );
 		crnrSub.scale(-1);
@@ -404,7 +404,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 	public ObjMaskCollection findObjsWithIntersectingBBox( ObjMask om ) {
 		ObjMaskCollection omc = new ObjMaskCollection();
 		for (ObjMask omItr : this) {
-			if (omItr.getBoundingBox().hasIntersection(om.getBoundingBox())) {
+			if (omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())) {
 				omc.add(omItr);
 			}
 		}

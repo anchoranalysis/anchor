@@ -35,10 +35,12 @@ public class IterateVoxels {
 	 **/
 	public static void overMasks( ObjMask firstMask, Optional<ObjMask> secondMask, ProcessVoxel process ) {
 		if (secondMask.isPresent()) {
-			BoundingBox boxIntersection = firstMask.getBoundingBox().intersectCreateNewNoClip(secondMask.get().getBoundingBox());
-			callEachPoint(
-				boxIntersection,	// Intersection between the two bounding boxes
-				requireIntersectionTwice(process, firstMask, secondMask.get())
+			Optional<BoundingBox> intersection = firstMask.getBoundingBox().intersection().with(secondMask.get().getBoundingBox());
+			intersection.ifPresent( bbox->
+				callEachPoint(
+					bbox,
+					requireIntersectionTwice(process, firstMask, secondMask.get())
+				)
 			);
 		} else {
 			callEachPoint( firstMask, process );

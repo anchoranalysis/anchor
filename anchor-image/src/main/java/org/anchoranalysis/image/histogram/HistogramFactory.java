@@ -154,7 +154,7 @@ public class HistogramFactory {
 		Histogram hist = new HistogramArray( (int) inputBuffer.dataType().maxValue() );
 		
 		Extent e = inputBuffer.extnt();
-		Extent eMask = objMask.getBoundingBox().extnt();
+		Extent eMask = objMask.getBoundingBox().extent();
 		
 		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();
 		Point3i crnrMax = objMask.getBoundingBox().calcCrnrMax();

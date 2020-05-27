@@ -122,7 +122,7 @@ public class ExtendObjsInto3DMask {
 	
 	private static BoundingBox createBoundingBoxForAllZ( BoundingBox exst, int z ) {
 		Point3i crnrMin = copyPointChangeZ( exst.getCrnrMin(), 0 );
-		Extent e = copyExtentChangeZ( exst.extnt(), z );
+		Extent e = copyExtentChangeZ( exst.extent(), z );
 
 		return new BoundingBox( crnrMin, e );
 	}

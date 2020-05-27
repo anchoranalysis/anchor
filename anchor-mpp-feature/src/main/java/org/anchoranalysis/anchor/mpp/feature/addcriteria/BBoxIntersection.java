@@ -55,7 +55,7 @@ public class BBoxIntersection extends AddCriteriaPair {
 			bbox2 = bbox2.flattenZ();
 		}
 		
-		return bbox1.hasIntersection(bbox2);
+		return bbox1.intersection().existsWith(bbox2);
 	}
 
 	@Override

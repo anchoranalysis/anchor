@@ -27,6 +27,7 @@ package org.anchoranalysis.anchor.mpp.overlap;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -68,9 +69,9 @@ class CountIntersectingPixelsRegionMembershipMask {
 	) {
 		
 		// Find the common bounding box
-		BoundingBox bboxIntersect = new BoundingBox( srcBox );
+		Optional<BoundingBox> bboxIntersect = srcBox.intersection().with(otherBox);
 		
-		if (!bboxIntersect.intersect( otherBox, true )) {
+		if (!bboxIntersect.isPresent()) {
 			// If the bounding boxes don't intersect then we can
 			//   go home early
 			return 0;
@@ -79,7 +80,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		return countIntersectingPixelsFromBBoxMaskGlobal(
 			src,
 			other,
-			bboxIntersect,
+			bboxIntersect.get(),
 			maskGlobal,
 			onMaskGlobal
 		);

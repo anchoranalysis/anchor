@@ -136,7 +136,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 			
 			Overlay overlay = get(i);
 			
-			if (overlay.bbox(maskWriter, bndScene).intersect(intersectList)) {
+			if (overlay.bbox(maskWriter, bndScene).intersection().existsWithAny(intersectList)) {
 				out.add(overlay, getColor(i));
 			}
 		}

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.objmask;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -103,7 +104,7 @@ final class CenterOfGravityCalculator {
 				for( int x=0; x<vb.extnt().getX(); x++ ) {
 					
 					if (bb.get(offset)==onByte) {
-						sum += valueForAxis(axisType, x, y, z);
+						sum += AxisTypeConverter.valueFor(axisType, x, y, z);
 						cnt++;
 					}
 					offset++;
@@ -116,20 +117,7 @@ final class CenterOfGravityCalculator {
 			return Double.NaN;
 		}
 		
-		return (sum / cnt) + om.getBoundingBox().getCrnrMinForAxis(axisType);
-	}
-	
-	private static int valueForAxis( AxisType axisType, int x, int y, int z) {
-		switch(axisType) {
-		case X:
-			return x;
-		case Y:
-			return y;
-		case Z:
-			return z;
-		default:
-			throw new UnsupportedOperationException();
-		}
+		return (sum / cnt) + om.getBoundingBox().getCrnrMin().getValueByDimension(axisType);
 	}
 		
 	private static Point3d emptyPoint() {
