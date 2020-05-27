@@ -27,6 +27,7 @@ package org.anchoranalysis.annotation.io.wholeimage.findable;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 
@@ -62,7 +63,7 @@ public class NotFound<T> extends Findable<T> {
 	}
 
 	@Override
-	public boolean logIfFailure(String name, LogErrorReporter logErrorReporter) {
+	public Optional<T> getFoundOrLog(String name, LogErrorReporter logErrorReporter) {
 
 		logErrorReporter.getLogReporter().logFormatted(
 			"Cannot find %s: %s at %s",
@@ -71,13 +72,6 @@ public class NotFound<T> extends Findable<T> {
 			path
 		);
 		
-		return false;
+		return Optional.empty();
 	}
-
-	@Override
-	public T getOrNull() {
-		return null;
-	}
-	
-	
 }

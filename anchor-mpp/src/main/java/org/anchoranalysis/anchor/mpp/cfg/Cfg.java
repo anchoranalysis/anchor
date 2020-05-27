@@ -232,7 +232,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 				i
 			);
 			maskCollection.add( mask );
-			//assert( mask.getBoundingBox().getExtnt().getZ() >= 1 );
 		}
 		
 		return maskCollection;

@@ -31,10 +31,12 @@ package org.anchoranalysis.annotation.io.mark;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -43,6 +45,8 @@ import org.anchoranalysis.mpp.io.cfg.CfgDeserializer;
 public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 
 	private boolean acceptUnfinished;
+	
+	private static final CfgDeserializer DESERIALIZER = new CfgDeserializer();
 	
 	public MarkAnnotationReader(boolean acceptUnfinished) {
 		super();
@@ -54,56 +58,47 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 	}
 	
 	@Override
-	public MarkAnnotation read( Path path ) throws AnchorIOException {
+	public Optional<MarkAnnotation> read( Path path ) throws AnchorIOException {
 		
-		Path pathMaybeChanged = fileNameToRead(path);
-		
-		if (pathMaybeChanged==null) {
-			return null;
-		}
-		
+		Optional<Path> pathMaybeChanged = fileNameToRead(path);
 		try {
-			return readAnnotationFromPath(pathMaybeChanged);
+			return OptionalUtilities.map(
+				pathMaybeChanged,
+				MarkAnnotationReader::readAnnotationFromPath
+			);
 		} catch (DeserializationFailedException e) {
 			throw new AnchorIOException("Cannot deserialize annotation", e);
 		}
 	}
 		
 	// Reads an annotation if it can, returns NULL otherwise
-	public Cfg readDefaultCfg( Path path ) throws DeserializationFailedException {
-		
-		if (path==null) {
-			return null;
-		}
-		
-		CfgDeserializer deserialized = new CfgDeserializer();
-		return deserialized.deserialize(path);
+	public Cfg readDefaultCfg(Path path) throws DeserializationFailedException {
+		return DESERIALIZER.deserialize(path);
 	}
 
-	private Path fileNameToRead( Path annotationPath ) {
+	private Optional<Path> fileNameToRead( Path annotationPath ) {
 		
 		if (Files.exists(annotationPath)) {
-			return annotationPath;
+			return Optional.of(annotationPath);
 		}
 		
 		if (!acceptUnfinished) {
-			return null;
+			return Optional.empty();
 		}
 		
 		Path pathUnfinished = TempPathCreator.deriveTempPath(annotationPath);
 		
 		if (Files.exists(pathUnfinished)) {
-			return pathUnfinished;
+			return Optional.of(pathUnfinished);
 		}
 
 		// No path to read
-		return null;
+		return Optional.empty();
 	}
 
 	
-	private MarkAnnotation readAnnotationFromPath( Path annotationPath ) throws DeserializationFailedException {
+	private static MarkAnnotation readAnnotationFromPath( Path annotationPath ) throws DeserializationFailedException {
 		XStreamDeserializer<MarkAnnotation> deserialized = new XStreamDeserializer<>();
 		return deserialized.deserialize(annotationPath);
 	}
-
 }

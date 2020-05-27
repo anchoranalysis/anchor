@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.CreateException;
@@ -78,7 +79,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 	
 	/** A label to be used when aggregrating this annotation with others, or NULL if this makes no sense 
 	 * @throws IOException */
-	public String labelForAggregation() throws AnchorIOException {
+	public Optional<String> labelForAggregation() throws AnchorIOException {
 		return annotationStrategy.annotationLabelFor(input);
 	}
 	

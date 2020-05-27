@@ -3,6 +3,7 @@ package org.anchoranalysis.annotation.io.bean.strategy;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.bean.background.AnnotationBackgroundDefinition;
 
@@ -52,9 +53,9 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 	
 	public abstract Path annotationPathFor( ProvidesStackInput item ) throws AnchorIOException;
 	
-	/** Returns a label describing the annotation, or NULL if this makes no sense 
+	/** Returns a label describing the annotation, or empty() if this makes no sense 
 	 * @throws AnchorIOException TODO*/
-	public abstract String annotationLabelFor( ProvidesStackInput item ) throws AnchorIOException;
+	public abstract Optional<String> annotationLabelFor( ProvidesStackInput item ) throws AnchorIOException;
 	
 	public abstract int weightWidthDescription();
 	

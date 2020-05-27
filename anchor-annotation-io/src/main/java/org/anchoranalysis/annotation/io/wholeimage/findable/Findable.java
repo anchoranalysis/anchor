@@ -1,5 +1,7 @@
 package org.anchoranalysis.annotation.io.wholeimage.findable;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-annotation-io
@@ -37,19 +39,15 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 public abstract class Findable<T> {
 
 	/**
-	 * Logs a message describing what went wrong if a file was not found
+	 * Returns the found object (or empty() if it's not found..... and in this case logs a message describing what went wrong)
 	 * 
 	 * @param name
 	 * @param logErrorReporter
 	 * 
 	 * @return true if sucessful, false if not-found
 	 */
-	public abstract boolean logIfFailure(
+	public abstract Optional<T> getFoundOrLog(
 		String name,
 		LogErrorReporter logErrorReporter		
 	);
-	
-	
-	/** Returns the object if found, otherwise null */
-	public abstract T getOrNull();
 }

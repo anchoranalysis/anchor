@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.AnnotationWithCfg;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
@@ -103,12 +104,20 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 			
 			Findable<ObjMaskCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
 			
-			if (!compareObjs.logIfFailure(ni.getName(), logErrorReporter)) {
+			Optional<ObjMaskCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logErrorReporter);
+			
+			if (!foundObjs.isPresent()) {
 				continue;
 			}
 			
 			out.add(
-				compare(annotationObjs, compareObjs.getOrNull(), background, ni.getName(), colorSetGenerator)
+				compare(
+					annotationObjs,
+					foundObjs.get(),
+					background,
+					ni.getName(),
+					colorSetGenerator
+				)
 			);
 		}
 		
