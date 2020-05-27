@@ -76,17 +76,17 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 			);
 
 		// Binary Img Collection bridge
-		NamedProviderBridge<BinaryChnl,Stack> namedBinaryImgChnlCollectionAsStackBridge =
+		NamedProviderBridge<BinaryChnl,Stack> namedBinaryChnlCollectionAsStackBridge =
 			new NamedProviderBridge<>(
 				namedBinaryImageCollection,
-				new BinaryImgChnlToStackBridge(),
+				new BinaryChnlToStackBridge(),
 				false
 			);
 		
 		NamedProviderCombine<Stack> combined = new NamedProviderCombine<>(); 
 		combined.add( stackCollection );
 		combined.add( namedChnlCollectionAsStackBridge );
-		combined.add( namedBinaryImgChnlCollectionAsStackBridge );
+		combined.add( namedBinaryChnlCollectionAsStackBridge );
 		return combined;
 	}
 
@@ -121,7 +121,7 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 		}
 	}
 	
-	private static class BinaryImgChnlToStackBridge implements IObjectBridge<BinaryChnl,Stack,AnchorNeverOccursException> {
+	private static class BinaryChnlToStackBridge implements IObjectBridge<BinaryChnl,Stack,AnchorNeverOccursException> {
 		
 		private ChnlFactorySingleType factory = new ChnlFactoryByte();
 		

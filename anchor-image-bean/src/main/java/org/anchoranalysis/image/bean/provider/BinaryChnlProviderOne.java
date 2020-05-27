@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public abstract class BinaryImgChnlProviderOne extends BinaryChnlProvider {
+public abstract class BinaryChnlProviderOne extends BinaryChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
