@@ -78,17 +78,17 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 		
 		int x1 = pnt.getX() + omRequireHigh.getBoundingBox().getCrnrMin().getX() + xShift;
 		
-		if (!vbRequireHigh.extnt().containsX(x1)) {
+		if (!vbRequireHigh.extent().containsX(x1)) {
 			return false;
 		}
 		
 		int y1 = pnt.getY() + omRequireHigh.getBoundingBox().getCrnrMin().getY() + yShift; 
 
-		if (!vbRequireHigh.extnt().containsY(y1)) {
+		if (!vbRequireHigh.extent().containsY(y1)) {
 			return false;
 		}
 		
-		int indexGlobal = vbRequireHigh.extnt().offset(
+		int indexGlobal = vbRequireHigh.extent().offset(
 			x1,
 			y1
 		);

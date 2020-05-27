@@ -46,9 +46,6 @@ public class TransferViaShort extends Transfer {
 	public TransferViaShort( VoxelBoxWrapper src, VoxelBoxWrapper trgt  ) {
 		this.src = src.asShort();
 		this.trgt = trgt.asShort();
-		
-		//bi = new BufferedImage( src.any().extnt().getX(), src.any().extnt().getY(), BufferedImage.TYPE_USHORT_GRAY );
-		
 	}
 	
 	@Override

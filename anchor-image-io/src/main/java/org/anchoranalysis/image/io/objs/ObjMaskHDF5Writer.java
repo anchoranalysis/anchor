@@ -105,7 +105,7 @@ class ObjMaskHDF5Writer {
 		
 	private static MDByteArray byteArray( BinaryVoxelBox<ByteBuffer> bvb ) {
 
-		Extent e = bvb.extnt();
+		Extent e = bvb.extent();
 		
 		MDByteArray md = new MDByteArray( dimsFromExtnt(e) );
 		

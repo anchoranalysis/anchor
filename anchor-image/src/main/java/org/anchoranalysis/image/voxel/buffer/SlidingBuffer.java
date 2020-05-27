@@ -110,7 +110,7 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 		return vb;
 	}
 	
-	public Extent extnt() {
+	public Extent extent() {
 		return vb.extent();
 	}
 	

@@ -253,10 +253,6 @@ public class IJWrap {
 		VoxelBox<ByteBuffer> vbRed = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbGreen = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbBlue = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
-		
-		//ImageStack red = createStackForVoxelBox( sd.extnt(), vbRed );
-		//ImageStack green = createStackForVoxelBox( sd.extnt(), vbGreen );
-		//ImageStack blue = createStackForVoxelBox( sd.extnt(), vbBlue );
 
 		for (int z=0; z<sd.getZ(); z++) {
 			ColorProcessor cp = new ColorProcessor( sd.getX(), sd.getY() );
@@ -264,10 +260,7 @@ public class IJWrap {
 			byte[] redPixels = vbRed.getPlaneAccess().getPixelsForPlane(z).buffer().array();
 			byte[] greenPixels = vbGreen.getPlaneAccess().getPixelsForPlane(z).buffer().array();
 			byte[] bluePixels = vbBlue.getPlaneAccess().getPixelsForPlane(z).buffer().array();
-			
-			//byte[] redPixels = (byte[]) red.getPixels(z+1);
-			//byte[] greenPixels = (byte[]) green.getPixels(z+1);
-			//byte[] bluePixels = (byte[]) blue.getPixels(z+1);
+
 			cp.setRGB(redPixels, greenPixels, bluePixels);
 			stackNew.addSlice( String.valueOf(z), cp );	
 		}
@@ -275,19 +268,12 @@ public class IJWrap {
 		return stackNew;
 	}
 	
-	
-	
-	
-	
-	
-	
 	private static Chnl chnlFromImagePlusByte( ImagePlus imagePlus, ImageDim sd, ChnlFactorySingleType factory ) {
 		
 		Chnl chnlOut = factory.createEmptyUninitialised( sd );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getZ(); z++) {
-			//chnlOut.getVoxelBox().setImageProcessorAsPlane(z, imagePlus.getImageStack().getProcessor(z+1).convertToByte(false));
 			
 			ImageProcessor ip = imagePlus.getImageStack().getProcessor(z+1);
 			byte[] arr = (byte[]) ip.getPixels();
@@ -377,10 +363,6 @@ public class IJWrap {
 		for (int z=0; z<e.getZ(); z++) {
 			
 			ImageProcessor ip = imageProcessor(voxelBox, z);
-			
-			// Let's uncomment this, hopefully no major slowdowns
-			//ip = ip.convertToByte(true);
-			
 			stackNew.addSlice( String.valueOf(z), ip );	
 		}
 		return stackNew;

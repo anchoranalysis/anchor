@@ -194,17 +194,17 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		int x1 = pnt.getX() + om.getBoundingBox().getCrnrMin().getX() + xShift;
 		
-		if (!vbRequireHigh.extnt().containsX(x1)) {
+		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
 		int y1 = pnt.getY() + om.getBoundingBox().getCrnrMin().getY() + yShift; 
 
-		if (!vbRequireHigh.extnt().containsY(y1)) {
+		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;
 		}
 		
-		int intGlobal = vbRequireHigh.extnt().offset(
+		int intGlobal = vbRequireHigh.extent().offset(
 			x1,
 			y1
 		);

@@ -66,7 +66,7 @@ public class IterateVoxels {
 		
 		callEachPoint(
 			mask,
-			buffer.extnt(),
+			buffer.extent(),
 			new ProcessVoxelSlide(buffer, process)
 		);
 	}

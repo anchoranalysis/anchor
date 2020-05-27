@@ -125,7 +125,7 @@ public class FindOutline {
 	private static BinaryVoxelBox<ByteBuffer> outlineByKernel( BinaryVoxelBox<ByteBuffer> voxelBox, boolean erodeEdges, boolean do3D ) throws CreateException {
 		
 		// if our solid is too small, we don't apply the kernel, as it fails on anything less than 3x3, and instead we simply return the solid as it is
-		if (isTooSmall(voxelBox.extnt(), do3D)) {
+		if (isTooSmall(voxelBox.extent(), do3D)) {
 			return voxelBox.duplicate();
 		}
 		

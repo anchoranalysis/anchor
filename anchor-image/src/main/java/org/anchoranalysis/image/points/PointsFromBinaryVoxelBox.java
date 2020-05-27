@@ -52,7 +52,7 @@ public class PointsFromBinaryVoxelBox {
 		List<Point2i> listOut
 	) throws CreateException {
 		
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 
 		BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
 		
@@ -77,7 +77,7 @@ public class PointsFromBinaryVoxelBox {
 		
 		List<Point2i> listOut = new ArrayList<>();
 				
-		if (bvb.extnt().getZ()>1) {
+		if (bvb.extent().getZ()>1) {
 			throw new CreateException("Only works in 2D. No z-stack alllowed");
 		}
 		
@@ -90,7 +90,7 @@ public class PointsFromBinaryVoxelBox {
 	// Add: is added to each point before they are added to the list 
 	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, ReadableTuple3i add, Collection<Point3i> out  ) throws CreateException {
 		
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 
 		BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
 		
@@ -125,7 +125,7 @@ public class PointsFromBinaryVoxelBox {
 		Collection<Point3d> out
 	) throws CreateException {
 		
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 
 		BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
 		

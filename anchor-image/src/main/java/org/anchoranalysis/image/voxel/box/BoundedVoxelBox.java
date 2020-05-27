@@ -337,7 +337,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		return voxelBox.getPixelsForPlane(z).buffer();
 	}
 
-	public Extent extnt() {
+	public Extent extent() {
 		return voxelBox.extent();
 	}
 	

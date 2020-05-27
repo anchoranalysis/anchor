@@ -78,7 +78,7 @@ public class ExtendObjsInto3DMask {
 		BinaryVoxelBox<ByteBuffer> mask3D
 	) {
 
-		BoundingBox newBBox = createBoundingBoxForAllZ( obj2D.getBoundingBox(), mask3D.extnt().getZ() );
+		BoundingBox newBBox = createBoundingBoxForAllZ( obj2D.getBoundingBox(), mask3D.extent().getZ() );
 		
 		BoundedVoxelBox<ByteBuffer> newMask = new BoundedVoxelBox<>(
 			newBBox,
@@ -107,7 +107,7 @@ public class ExtendObjsInto3DMask {
 						continue;
 					}
 						
-					int indexGlobal = mask3D.extnt().offset( pnt.getX(), pnt.getY());
+					int indexGlobal = mask3D.extent().offset( pnt.getX(), pnt.getY());
 					bufferOut3D.put(
 						ind,
 						bufferMask3D.get(indexGlobal)==bv.getOnByte() ? bv.getOnByte() : bv.getOffByte()

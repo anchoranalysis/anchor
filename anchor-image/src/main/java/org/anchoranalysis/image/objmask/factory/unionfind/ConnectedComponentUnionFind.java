@@ -112,7 +112,7 @@ public class ConnectedComponentUnionFind {
 	) throws OperationFailedException {
 		
 		UnionFind<Integer> unionIndex = new UnionFind<>( new HashSet<Integer>() );
-		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extnt() );
+		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extent() );
 
 		PopulateIndexProcessor<T> process = new PopulateIndexProcessor<>(
 			visited,

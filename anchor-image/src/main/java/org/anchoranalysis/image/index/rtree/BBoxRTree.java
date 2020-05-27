@@ -60,7 +60,7 @@ public class BBoxRTree {
 		};
 	}
 	
-	private static float[] extnt( BoundingBox bbox ) {
+	private static float[] extent( BoundingBox bbox ) {
 		return new float[] {
 			bbox.extent().getX(),
 			bbox.extent().getY(),
@@ -98,14 +98,14 @@ public class BBoxRTree {
 	public List<Integer> intersectsWith( BoundingBox bbox ) {
 		
 		float[] coords = minPnt(bbox);
-		float[] dimensions = extnt( bbox );
+		float[] dimensions = extent( bbox );
 		
 		return rTree.search(coords, dimensions);
 	}
 	
 	public void add( int i, BoundingBox bbox ) {
 		float[] coords = minPnt( bbox );
-		float[] dimensions = extnt( bbox );
+		float[] dimensions = extent( bbox );
 		
 		rTree.insert(coords, dimensions, i );
 	}

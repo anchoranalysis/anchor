@@ -655,7 +655,7 @@ public class ObjMask {
 		Point3i pnt = delegate.getBoundingBox().relPosTo(bbox);
 		
 		return new ObjMask(
-			new BoundingBox(pnt, delegate.extnt()),
+			new BoundingBox(pnt, delegate.extent()),
 			delegate.getVoxelBox()
 		);
 	}

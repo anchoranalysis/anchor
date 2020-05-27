@@ -186,7 +186,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		byte flags = rm.flags();
 		
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 		
 		Point3i crntExtntPnt = new Point3i();
 		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrZ()) {
@@ -230,7 +230,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		byte flags = rm.flags();
 		
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 		
 		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 		

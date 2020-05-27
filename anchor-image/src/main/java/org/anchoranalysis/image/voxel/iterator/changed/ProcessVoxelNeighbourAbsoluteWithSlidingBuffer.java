@@ -22,7 +22,7 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> implemen
 		
 	protected ProcessVoxelNeighbourAbsoluteWithSlidingBuffer(SlidingBuffer<?> rbb) {
 		this.rbb = rbb;
-		this.extent = rbb.extnt();
+		this.extent = rbb.extent();
 	}
 
 	@Override
