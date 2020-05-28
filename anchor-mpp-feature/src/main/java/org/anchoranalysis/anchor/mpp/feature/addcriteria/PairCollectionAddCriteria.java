@@ -195,10 +195,6 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	// START DELEGATES
-	public T getPair( Mark mark1, Mark mark2) {
-		return graph.getEdge( mark1, mark2 );
-	}
-	
 	// Each edge can appear many times
 	public Collection<EdgeTypeWithVertices<Mark,T>> getPairsWithPossibleDuplicates() {
 		return graph.edgeSetWithPossibleDuplicates();
@@ -327,9 +323,6 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				if (pair!=null) {
 					assert containsMark( otherMark.getMark() );
 					assert containsMark( newMark.getMark() );
-					
-					assert graph.getEdge(otherMark.getMark(), newMark.getMark())==null; 
-					assert graph.getEdge(newMark.getMark(), otherMark.getMark())==null;
 
 					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair );
 				}

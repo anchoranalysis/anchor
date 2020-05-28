@@ -46,7 +46,9 @@ class HelperDuplication {
 		 ArrayList<Object> collectionNew = new ArrayList<>();
 		 
 		 for( Object o : collection ) {
-			 collectionNew.add( duplicatePropertyValue(o, propertyName, false, parentBean) );
+			 collectionNew.add(
+				duplicatePropertyValue(o, propertyName, false, parentBean)
+			);
 		 }
 		 
 		 return collectionNew;

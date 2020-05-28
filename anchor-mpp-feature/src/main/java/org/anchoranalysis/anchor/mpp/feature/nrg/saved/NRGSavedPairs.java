@@ -43,7 +43,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.nrg.NRGTotal;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 
@@ -94,13 +93,6 @@ public class NRGSavedPairs implements Serializable, UpdatableMarkSet {
 		this.pairCollection.initUpdatableMarkSet( pxlMarkMemoList, stack, logger, sharedFeatures );
 		calcTotalFresh();		
 	}
-	
-	
-	// START DELEGATES
-	public NRGTotal get( Mark mark1, Mark mark2) {
-		return pairCollection.getPair(mark1, mark2).getNRG();
-	}
-	// END DELEGATES
 	
 	// Calculates energy for all pairwise interactions freshly
 	private void calcTotalFresh() {
