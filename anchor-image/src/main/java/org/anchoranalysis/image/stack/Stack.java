@@ -166,9 +166,6 @@ public class Stack implements Iterable<Chnl> {
 	}
 
 	public ImageDim getDimensions() {
-		if (getNumChnl()==0) {
-			return null;
-		}
 		return delegate.getChnl(0).getDimensions();
 	}
 	

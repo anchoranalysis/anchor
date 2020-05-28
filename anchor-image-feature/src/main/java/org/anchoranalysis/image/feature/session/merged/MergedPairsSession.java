@@ -151,8 +151,10 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 			);
 		} catch (FeatureCalcException e) {
 			errorReporter.recordError(MergedPairsSession.class, e);
-			assert(false);
-			return null;
+			
+			ResultsVector rv = new ResultsVector( sizeFeatures() );
+			rv.setErrorAll(e);
+			return rv;
 		}
 	}
 	

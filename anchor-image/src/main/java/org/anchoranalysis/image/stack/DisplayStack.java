@@ -31,6 +31,7 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -117,17 +118,6 @@ public class DisplayStack {
 				setConverterFor(c,new ChnlConverterChnlUpperLowerQuantileIntensity(0.0001,0.9999) );
 			}
 		}
-	}
-	
-	
-	// The data type associated wit h the input to the displayStack, before any conversion occurs
-	//   null if mixed
-	public VoxelDataType dataTypeBeforeConversion() {
-		VoxelDataType dataType = delegate.getChnl(0).getVoxelDataType();
-		if (!delegate.allChnlsHaveType(dataType)) {
-			return null;
-		}
-		return dataType;
 	}
 	
 	public int numNonNullConverters() {
@@ -317,13 +307,13 @@ public class DisplayStack {
 		}
 	}
 	
-	public VoxelDataType unconvertedDataType() {
+	public Optional<VoxelDataType> unconvertedDataType() {
 		VoxelDataType dataType = delegate.getChnl(0).getVoxelDataType();
 		// If they don't all have the same dataType we return null
 		if (!delegate.allChnlsHaveType(dataType)) {
-			return null;
+			return Optional.empty();
 		}
-		return dataType;
+		return Optional.of(dataType);
 	}
 	
 	public int getUnconvertedVoxelAt( int c, int x, int y, int z) {

@@ -261,7 +261,6 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	
 	@Override
 	public VoxelBox<IntBuffer> meanIntensityProj() {
-		assert false;
-		return null;
+		throw new UnsupportedOperationException();
 	}
 }

@@ -69,7 +69,6 @@ public class ResultsVector {
 	}
 	
 	public void set( int i, double val ) {
-		//assert( !Double.isNaN(val) );
 		arr[i] = val;
 	}
 	

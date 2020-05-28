@@ -208,7 +208,6 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 
 	@Override
 	public VoxelBox<FloatBuffer> meanIntensityProj() {
-		assert false;
-		return null;
+		throw new UnsupportedOperationException();
 	}
 }

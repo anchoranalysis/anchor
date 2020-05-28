@@ -32,8 +32,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class ColoredCfgWithDisplayStack {
 
@@ -63,8 +61,5 @@ public class ColoredCfgWithDisplayStack {
 	}
 	public void setStack(DisplayStack stack) {
 		this.stack = stack;
-		
-		assert(stack==null || stack.dataTypeBeforeConversion().equals(VoxelDataTypeUnsignedByte.instance)
-				|| (stack.dataTypeBeforeConversion().equals(VoxelDataTypeUnsignedShort.instance)&&stack.numNonNullConverters()>0) );		
 	}
 }

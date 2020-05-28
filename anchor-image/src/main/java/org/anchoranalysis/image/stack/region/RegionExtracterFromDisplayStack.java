@@ -89,8 +89,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		try {
 			return DisplayStack.create(out);
 		} catch (CreateException e) {
-			assert false;
-			return null;
+			throw new OperationFailedException(e);
 		}
 	}
 	
