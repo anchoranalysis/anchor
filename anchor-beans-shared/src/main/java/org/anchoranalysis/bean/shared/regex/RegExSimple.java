@@ -50,7 +50,7 @@ public class RegExSimple extends RegEx {
 	}
 
 	@Override
-	public Optional<String[]> matchStr( String str ) {
+	public Optional<String[]> match( String str ) {
 		
 		Pattern p = Pattern.compile(matchString);
 		

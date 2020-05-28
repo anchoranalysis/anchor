@@ -61,7 +61,7 @@ public class FilePathGeneratorRegExBean extends FilePathGenerator {
 		
 		String pathInStr = FilePathNormalizer.normalizeFilePath(pathIn.toString());
 		
-		String[] components = regEx.matchStr(pathInStr).orElseThrow( ()->
+		String[] components = regEx.match(pathInStr).orElseThrow( ()->
 			new AnchorIOException( String.format("RegEx string '%s' does not match '%s'", regEx, pathInStr ))
 		);
 		

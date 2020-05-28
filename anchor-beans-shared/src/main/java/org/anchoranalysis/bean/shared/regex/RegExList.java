@@ -41,10 +41,10 @@ public class RegExList extends RegEx {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Optional<String[]> matchStr(String str) {
+	public Optional<String[]> match(String str) {
 
 		for( RegEx re : list ) {
-			Optional<String[]> matches = re.matchStr(str);
+			Optional<String[]> matches = re.match(str);
 			if (matches.isPresent()) {
 				return matches;
 			}
