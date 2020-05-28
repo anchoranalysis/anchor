@@ -107,8 +107,7 @@ public class ConvertToFactory {
 		} else if (targetDataType.equals(VoxelDataTypeUnsignedInt.instance)) {
 			return toInt( bitsPerPixel, littleEndian, floatingPoint, signed );
 		} else {
-			assert(false);
-			return null;
+			throw new CreateException("Unsupported voxel data-type");
 		}	
 	}
 		
