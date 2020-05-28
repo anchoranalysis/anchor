@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.graph.bean;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GraphInstance;
@@ -57,7 +58,7 @@ public class GraphDefinitionBarNRGBreakdown extends GraphDefinition<NRGGraphItem
 	}
 
 	@Override
-	public GraphInstance create( Iterator<NRGGraphItem> itr, AxisLimits domainLimits, AxisLimits rangeLimits ) throws CreateException {
+	public GraphInstance create( Iterator<NRGGraphItem> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException {
 		return delegate.create( itr, domainLimits, rangeLimits );
 	}
 

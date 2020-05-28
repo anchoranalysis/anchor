@@ -30,6 +30,7 @@ package org.anchoranalysis.anchor.graph.index;
 import hep.aida.bin.DynamicBin1D;
 
 import java.awt.Paint;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GetForSeries;
@@ -122,7 +123,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T,DefaultCategoryData
      * Creates a chart
      */
     @Override
-    protected JFreeChart createChart(DefaultCategoryDataset dataset, String title, AxisLimits rangeLimits) {
+    protected JFreeChart createChart(DefaultCategoryDataset dataset, String title, Optional<AxisLimits> rangeLimits) {
     	
     	GraphColorScheme graphColorScheme = getGraphColorScheme();
     	
@@ -159,9 +160,9 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T,DefaultCategoryData
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         
         // -0.5 to 1.0
-        if (rangeLimits!=null) {
-        	rangeAxis.setLowerBound( rangeLimits.getAxisMin() );
-        	rangeAxis.setUpperBound( rangeLimits.getAxisMax() );
+        if (rangeLimits.isPresent()) {
+        	rangeAxis.setLowerBound( rangeLimits.get().getAxisMin() );
+        	rangeAxis.setUpperBound( rangeLimits.get().getAxisMax() );
         }
         graphColorScheme.colorAxis(rangeAxis);
         
@@ -169,7 +170,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T,DefaultCategoryData
     }
 
 	@Override
-	protected AxisLimits rangeLimitsIfNull(DefaultCategoryDataset dataset) {
+	protected Optional<AxisLimits> rangeLimitsIfEmpty(DefaultCategoryDataset dataset) {
 		DynamicBin1D d = new DynamicBin1D();
 		
 		for (int x=0; x<dataset.getColumnCount(); x++) {
@@ -181,7 +182,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T,DefaultCategoryData
 		AxisLimits limitsOut = new AxisLimits();
 		limitsOut.setAxisMin( d.min() );
 		limitsOut.setAxisMax( d.max() );
-		return limitsOut;
+		return Optional.of(limitsOut);
 	}
 
 	public boolean isShowDomainAxis() {

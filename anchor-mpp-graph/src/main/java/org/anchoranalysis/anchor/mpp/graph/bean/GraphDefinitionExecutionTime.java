@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.graph.bean;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
@@ -77,7 +78,7 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
 	
 	@Override
 	public GraphInstance create(Iterator<ExecutionTimeItem> items,
-			AxisLimits domainLimits, AxisLimits rangeLimits) throws CreateException {
+			Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits) throws CreateException {
 		return delegate.create(items, domainLimits, rangeLimits);
 	}
 

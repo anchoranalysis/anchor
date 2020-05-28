@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.graph.index;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GraphInstance;
@@ -109,7 +110,7 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
      * Creates a chart
      */
     @Override
-    protected JFreeChart createChart(XYDataset dataset, String title, AxisLimits rangeLimits) {
+    protected JFreeChart createChart(XYDataset dataset, String title, Optional<AxisLimits> rangeLimits) {
         
     	assert( getGraphColorScheme() != null);
     	
@@ -166,14 +167,18 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
     }
 
     @Override
-	public GraphInstance create( Iterator<T> itr, AxisLimits domainLimits, AxisLimits rangeLimits ) throws CreateException {
+	public GraphInstance create( Iterator<T> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException {
 
 		// Let's setup our limits before we do the creation
-		this.domainAxisLimits  = (domainLimits!=null) ? domainLimits.duplicate() : new AxisLimits();
-		this.rangeAxisLimits  = (rangeLimits!=null) ? rangeLimits.duplicate() : new AxisLimits();
+		this.domainAxisLimits = duplicateOrCreate(domainLimits);
+		this.rangeAxisLimits  = duplicateOrCreate(rangeLimits);
 		
 		return super.create(itr, domainLimits, rangeLimits);
 	}
+    
+    private static AxisLimits duplicateOrCreate( Optional<AxisLimits> limits ) {
+    	 return limits.map(AxisLimits::duplicate).orElse( new AxisLimits() );
+    }
 	
 	public int getNumPoints() {
 		return numPoints;
@@ -247,12 +252,7 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
 	}
 
 	@Override
-	protected AxisLimits domainLimits(AxisLimits proposedAxisLimits) {
-		return proposedAxisLimits;
-	}
-
-	@Override
-	protected AxisLimits rangeLimitsIfNull(XYDataset dataset) {
-		return null;
+	protected Optional<AxisLimits> rangeLimitsIfEmpty(XYDataset dataset) {
+		return Optional.empty();
 	}
 }
