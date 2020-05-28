@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.bean.identifier;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-experiment
@@ -28,12 +30,11 @@ package org.anchoranalysis.experiment.bean.identifier;
 
 class IdentifierUtilities {
 
-	public static String identifierFromNameVersion( String name, String version ) {
+	public static String identifierFromNameVersion( String name, Optional<String> version ) {
 		StringBuilder sb = new StringBuilder(name);
-		if (version!=null) {
-			sb.append("_");
-			sb.append(version);
-		}
+		version.ifPresent( v->
+			sb.append("_" + v)
+		);
 		return sb.toString();
 	}
 }

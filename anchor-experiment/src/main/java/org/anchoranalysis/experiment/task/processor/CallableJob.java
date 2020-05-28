@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task.processor;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-experiment
@@ -44,7 +46,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @param <T> input-object type
  * @param <S> shared-object bean
  */
-public class CallableJob<T extends InputFromManager,S> implements Callable<JobExecutionException> {
+public class CallableJob<T extends InputFromManager,S> implements Callable<Optional<JobExecutionException>> {
 	
 	private Task<T,S> task;
 	private ParametersUnbound<T,S> paramsUnbound; 
@@ -60,7 +62,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 	 * @param taskState
 	 * @param taskDescription
 	 * @param monitor
-	 * @param logReporterMonitor the logReporter used for the monitor (or NULL if none is applied)
+	 * @param logReporterMonitor the logReporter used for the monitor
 	 */
 	public CallableJob(
 		Task<T,S> task,
@@ -68,7 +70,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 		JobState taskState,
 		JobDescription taskDescription,
 		ConcurrentJobMonitor monitor,
-		LogReporter logReporterMonitor,
+		Optional<LogReporter> logReporterMonitor,
 		int showOngoingJobsLessThan
 	) {
 		super();
@@ -86,7 +88,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 	}
 	
 	@Override
-	public JobExecutionException call() {
+	public Optional<JobExecutionException> call() {
 		
 		try {
 			Task<T,S> taskDup = task.duplicateBean();
@@ -99,7 +101,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 				
 			jobState.markAsCompleted(success);
 			logger.logEnd(jobDescription, jobState, success);
-			return null;
+			return Optional.empty();
 			
 		} catch (Throwable e) {
 			// If executeTask is called with supressException==TRUE then Exceptions shouldn't occur here as a rule from specific-tasks,
@@ -114,7 +116,9 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<JobEx
 			jobState.markAsCompleted(false);
 			logger.logEnd(jobDescription, jobState, false);
 			
-			return new JobExecutionException(e);
+			return Optional.of(
+				new JobExecutionException(e)
+			);
 		} 
 	}
 }

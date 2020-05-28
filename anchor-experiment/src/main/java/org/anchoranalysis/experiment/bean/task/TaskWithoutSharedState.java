@@ -1,6 +1,7 @@
 package org.anchoranalysis.experiment.bean.task;
 
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 
@@ -50,20 +51,19 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  *
  * @param <T> input-object type
  */
-public abstract class TaskWithoutSharedState<T extends InputFromManager> extends Task<T,Object> {
+public abstract class TaskWithoutSharedState<T extends InputFromManager> extends Task<T,NoSharedState> {
 
+	private static final NoSharedState SINGLETON_RETURN_VALUE = new NoSharedState();
+	
 	@Override
-	public final Object beforeAnyJobIsExecuted(
+	public final NoSharedState beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
-		return null;
+		return SINGLETON_RETURN_VALUE;
 	}
-	
 
 	@Override
-	public final void afterAllJobsAreExecuted(
-			Object sharedState, BoundIOContext context)
-			throws ExperimentExecutionException {
+	public final void afterAllJobsAreExecuted(NoSharedState sharedState, BoundIOContext context) throws ExperimentExecutionException {
 	
 	}
 }

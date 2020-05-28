@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.bean.identifier;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-experiment
@@ -57,8 +59,11 @@ public class ExperimentIdentifierConstant extends ExperimentIdentifier {
 	}
 	
 	@Override
-	public String identifier(String taskName) {
-		return IdentifierUtilities.identifierFromNameVersion(name, version);
+	public String identifier(Optional<String> taskName) {
+		return IdentifierUtilities.identifierFromNameVersion(
+			name,
+			Optional.of(version)
+		);
 	}
 	
 	public void setName(String name) {

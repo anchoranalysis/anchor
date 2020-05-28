@@ -3,6 +3,7 @@ package org.anchoranalysis.experiment;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -80,9 +81,9 @@ public class ExperimentExecutionArguments {
 	
 	
 	/**
-	 * If non-null, a name to describe the ongoing task
+	 * A name to describe the ongoing task
 	 */
-	private String taskName;
+	private Optional<String> taskName = Optional.empty();
 
 
 	/** Creates an input-context, reusing parameters from the experiment-execution 
@@ -188,11 +189,11 @@ public class ExperimentExecutionArguments {
 		this.inputPaths = inputPaths;
 	}
 	
-	public String getTaskName() {
+	public Optional<String> getTaskName() {
 		return taskName;
 	}
 
-	public void setTaskName(String taskName) {
+	public void setTaskName(Optional<String> taskName) {
 		this.taskName = taskName;
 	}
 

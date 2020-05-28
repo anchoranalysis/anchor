@@ -30,6 +30,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -56,7 +57,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 	}
 
 	@Override
-	public void doJobOnInputObject( InputBound<NamedChnlsInput,Object> params ) throws JobExecutionException {
+	public void doJobOnInputObject( InputBound<NamedChnlsInput,NoSharedState> params ) throws JobExecutionException {
 
 		NamedChnlsInput inputObject = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();

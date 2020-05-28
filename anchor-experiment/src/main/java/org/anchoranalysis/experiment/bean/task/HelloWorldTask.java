@@ -3,6 +3,7 @@ package org.anchoranalysis.experiment.bean.task;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 
 /*
@@ -57,7 +58,7 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
 	
 	
 	@Override
-	public void doJobOnInputObject(InputBound<S,Object> params) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<S,NoSharedState> params) throws JobExecutionException {
 		printMessage( params.getLogger().getLogReporter() );
 		
 	}
