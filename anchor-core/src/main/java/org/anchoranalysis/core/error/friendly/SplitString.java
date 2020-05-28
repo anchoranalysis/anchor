@@ -95,7 +95,12 @@ class SplitString {
 	 * @param wrapLengthPrefixPlusLine If length of prefix+line is < wrapLengthPrefixPlusLine, white space is appended.  If length is greater, word-wrapping occurs. -1 disables
 	 * @throws IOException if an I/O error occurs
 	 */
-	public void appendNicelyWrappedLines( Writer writer, String prefix, String suffix, int wrapLengthPrefixPlusLine ) throws IOException {
+	public void appendNicelyWrappedLines(
+		Writer writer,
+		String prefix,
+		String suffix,
+		int wrapLengthPrefixPlusLine
+	) throws IOException {
 		
 		boolean doWrapping = wrapLengthPrefixPlusLine!=-1;
 		

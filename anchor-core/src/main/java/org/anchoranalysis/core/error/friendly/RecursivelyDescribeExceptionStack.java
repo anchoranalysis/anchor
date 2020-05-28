@@ -51,7 +51,7 @@ public class RecursivelyDescribeExceptionStack {
 	public static void apply( Throwable excDescribe, Writer writer, String prefix, int wordWrapLimit, boolean showExceptionType ) throws IOException {
 		
 		// Calculate the maximum length of a message
-		int maxLength = calculateMaximumLengthMessage( excDescribe, prefix );
+		int maxLength = calculateMaximumLengthMessage( excDescribe, prefix, !showExceptionType );
 		
 		// If it's greater than our word-wrap limit, then we reduce it to our word wrap limit
 		if (wordWrapLimit!=-1 && maxLength > wordWrapLimit) {
@@ -74,7 +74,7 @@ public class RecursivelyDescribeExceptionStack {
 			
 			// Extract a message from the exception, and append it to the writer
 			// with maybe prefix and suffix
-			splitFromExc( e ).appendNicelyWrappedLines(
+			splitFromExc(e,!showExceptionType).appendNicelyWrappedLines(
 				writer,
 				prefixCurrent,
 				suffixFor(showExceptionType, e),
@@ -102,7 +102,7 @@ public class RecursivelyDescribeExceptionStack {
 	 * @param prefix incrementally prepended to each message (first message is skipped) 
 	 * @return the maximum-length of the message associated with an exception including its prepended string
 	 */
-	private static int calculateMaximumLengthMessage( Throwable excDescribe, String prefix  ) {
+	private static int calculateMaximumLengthMessage( Throwable excDescribe, String prefix, boolean showExceptionTypeIfUnfriendly  ) {
 		assert(excDescribe!=null);
 		
 		int maxLength = Integer.MIN_VALUE;
@@ -112,7 +112,7 @@ public class RecursivelyDescribeExceptionStack {
 		ExceptionToPrintIterator itr = new ExceptionToPrintIterator(excDescribe);
 		Throwable e = itr.getCurrent();
 		do {
-			SplitString splitMessage = splitFromExc(e);
+			SplitString splitMessage = splitFromExc(e, showExceptionTypeIfUnfriendly);
 			
 			// Size of message we are considering
 			int msgLength = splitMessage.maxLength() + prefixCurrentLength;
@@ -135,18 +135,41 @@ public class RecursivelyDescribeExceptionStack {
 	}
 	
 	/** Extracts a message, and splits it by newline */
-	private static SplitString splitFromExc( Throwable exc ) {
+	private static SplitString splitFromExc( Throwable exc, boolean showExceptionTypeIfUnfriendly ) {
 		return new SplitString(
-			messageFromExc(exc)
+			messageFromExc(exc, showExceptionTypeIfUnfriendly)
 		);
 	}
 	
 	
-	/** If there's a message it's used, otherwise the SimpleName of the exception */
-	private static String messageFromExc( Throwable exc ) {
+	/** 
+	 * If there's a message it's used, otherwise the SimpleName of the exception
+	 * 
+	 * @param exc exception to extract a descripive "message" from
+	 * @param showExceptionTypeIfUnfriendly iff TRUE the exception-class is included in the message for "unfriendly" exceptions
+	 *  
+	 */
+	private static String messageFromExc( Throwable exc, boolean showExceptionTypeIfUnfriendly ) {
+		
+		// If there's no message, use the class
 		if (ExceptionTypes.hasEmptyMessage(exc)) {
 			return exc.getClass().getSimpleName();
+		}
+
+		// If it's a "friendly' exception rely on the message to be meaningful without the exception type
+		if (exc instanceof AnchorFriendlyCheckedException || exc instanceof AnchorFriendlyRuntimeException) {
+			return exc.getMessage();
+		}
+		
+		// Otherwise include both the exception type and the message, if its allowed
+		if (showExceptionTypeIfUnfriendly) {
+			return String.format(
+				"%s: %s",
+				exc.getClass().getSimpleName(),
+				exc.getMessage()
+			);
 		} else {
+			// There's no poitn showing the class-type as it will be done anyway in the suffix
 			return exc.getMessage();
 		}
 	}

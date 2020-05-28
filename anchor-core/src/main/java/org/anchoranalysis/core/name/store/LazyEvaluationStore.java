@@ -76,7 +76,7 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 				ret -> ret.doOperation()
 			);
 		} catch (Throwable e) {
-			throw NamedProviderGetException.wrap(key, storeDisplayName, e);
+			throw NamedProviderGetException.wrap(key, e);
 		}
 	}
 

@@ -58,14 +58,7 @@ public class NamedProviderGetException extends AnchorCombinableException {
 	
 	public static NamedProviderGetException wrap( String key, Throwable cause ) {
 		return new NamedProviderGetException(
-			String.format("Am error occurred getting key %s", key),
-			cause
-		);
-	}
-	
-	public static NamedProviderGetException wrap( String key, String storeName, Throwable cause ) {
-		return new NamedProviderGetException(
-			String.format("Am error occurred getting key %s in %s", key, storeName),
+			key,
 			cause
 		);
 	}
