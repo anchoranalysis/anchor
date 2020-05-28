@@ -129,4 +129,32 @@ public class OptionalUtilities {
 			return Optional.empty();
 		}
 	}
+	
+	/**
+	 * The first optional if it's present, or failing that the second optional
+	 * 
+	 * @param <T> type of optionals
+	 * @return a new optional that is optional1 OR optional2
+	 */
+	public static<T> Optional<T> orFlat( Optional<T> optional1, Optional<T> optional2 ) {
+		if (optional1.isPresent()) {
+			return optional1;
+		} else {
+			return optional2;
+		}
+	}
+	
+	/**
+	 * Creates an Optional from a string that might be empty or null
+	 * 
+	 * @param possiblyEmptyString a string that might be empty or null
+	 * @return the string, or empty() if the string is empty or null
+	 */
+	public static Optional<String> create( String possiblyEmptyString ) {
+		if (possiblyEmptyString==null || possiblyEmptyString.isEmpty()) {
+			return Optional.empty();
+		} else {
+			return Optional.of(possiblyEmptyString);
+		}
+	}
 }

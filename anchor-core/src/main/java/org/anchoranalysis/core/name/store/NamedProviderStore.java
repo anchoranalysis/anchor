@@ -2,7 +2,7 @@ package org.anchoranalysis.core.name.store;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 
 /**
  * A provider, in which items can also be added.
@@ -14,7 +14,7 @@ import org.anchoranalysis.core.name.provider.INamedProvider;
  *
  * @param <T> item-type in the store
  */
-public abstract class NamedProviderStore<T> implements INamedProvider<T> {
+public abstract class NamedProviderStore<T> implements NamedProvider<T> {
 
 	public abstract void add( String name, Operation<T,OperationFailedException> getter ) throws OperationFailedException;
 }

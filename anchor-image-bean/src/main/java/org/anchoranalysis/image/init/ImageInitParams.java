@@ -12,7 +12,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
@@ -126,7 +126,7 @@ public class ImageInitParams extends BeanInitParams {
 		BeanStoreAdder.add(identifier, stackProvider, getStackCollection(), stackProviderBridge);
 	}
 	
-	public void copyStackCollectionFrom( INamedProvider<Stack> stackCollectionSource ) throws OperationFailedException {
+	public void copyStackCollectionFrom( NamedProvider<Stack> stackCollectionSource ) throws OperationFailedException {
 
 		try {
 			for (String id : stackCollectionSource.keys()) {
@@ -140,7 +140,7 @@ public class ImageInitParams extends BeanInitParams {
 		}
 	}
 	
-	public void copyObjMaskCollectionFrom( INamedProvider<ObjMaskCollection> collectionSource ) throws OperationFailedException {
+	public void copyObjMaskCollectionFrom( NamedProvider<ObjMaskCollection> collectionSource ) throws OperationFailedException {
 
 		try {
 			for (String id : collectionSource.keys()) {

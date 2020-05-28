@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name.store;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-bean
@@ -32,7 +34,6 @@ import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 
 /**
@@ -45,15 +46,6 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
 public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 
 	private NameValueSet<T> delegate = new NameValueSet<>();
-	
-	@Override
-	public T getException(String key) throws NamedProviderGetException {
-		T obj = delegate.getException(key);
-		if (obj==null) {
-			throw NamedProviderGetException.nonExistingItem(key);
-		}
-		return obj;
-	}
 
 	@Override
 	public Set<String> keys() {
@@ -72,7 +64,7 @@ public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 	}
 
 	@Override
-	public T getNull(String key) throws NamedProviderGetException {
-		return delegate.getException(key);
+	public Optional<T> getOptional(String key) {
+		return delegate.getOptional(key);
 	}
 }

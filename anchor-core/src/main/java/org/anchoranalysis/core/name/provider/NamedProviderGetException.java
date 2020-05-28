@@ -36,7 +36,7 @@ public class NamedProviderGetException extends AnchorCombinableException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NamedProviderGetException(String key, Throwable cause) {
+	private NamedProviderGetException(String key, Throwable cause) {
 		super( key, cause );
 	}
 	
@@ -44,6 +44,29 @@ public class NamedProviderGetException extends AnchorCombinableException {
 		return new NamedProviderGetException(
 			key,
 			new GetOperationFailedException("This item doesn't exist!")
+		);
+	}
+	
+	public static NamedProviderGetException nonExistingItem(String key, String storeName) {
+		return new NamedProviderGetException(
+			key,
+			new GetOperationFailedException(
+				String.format("This item doesn't exist in %s!", storeName)
+			)
+		);
+	}
+	
+	public static NamedProviderGetException wrap( String key, Throwable cause ) {
+		return new NamedProviderGetException(
+			String.format("Am error occurred getting key %s", key),
+			cause
+		);
+	}
+	
+	public static NamedProviderGetException wrap( String key, String storeName, Throwable cause ) {
+		return new NamedProviderGetException(
+			String.format("Am error occurred getting key %s in %s", key, storeName),
+			cause
 		);
 	}
 

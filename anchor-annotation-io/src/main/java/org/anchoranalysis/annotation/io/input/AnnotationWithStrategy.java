@@ -36,7 +36,7 @@ import java.util.Optional;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
@@ -102,7 +102,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 		input.close(errorReporter);
 	}
 
-	public OperationWithProgressReporter<INamedProvider<Stack>,CreateException> stacks() {
+	public OperationWithProgressReporter<NamedProvider<Stack>,CreateException> stacks() {
 		return new OperationCreateStackCollection(input);
 	}
 	

@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image
@@ -30,6 +32,7 @@ package org.anchoranalysis.core.name.provider;
 import java.util.Set;
 
 import org.anchoranalysis.core.bridge.IObjectBridge;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
  * 
@@ -38,22 +41,20 @@ import org.anchoranalysis.core.bridge.IObjectBridge;
  * @param <S> src-type
  * @param <T> destination-type
  */
-public class NamedProviderBridge<S,T> implements INamedProvider<T> {
+public class NamedProviderBridge<S,T> implements NamedProvider<T> {
 
-	private INamedProvider<S> srcProvider;
+	private NamedProvider<S> srcProvider;
 	private IObjectBridge<S,T,? extends Exception> bridge;
 	private boolean bridgeNulls = true;
 	
-	public NamedProviderBridge(INamedProvider<S> srcProvider,
-			IObjectBridge<S, T, ? extends Exception> bridge) {
+	public NamedProviderBridge(NamedProvider<S> srcProvider, IObjectBridge<S,T,? extends Exception> bridge) {
 		super();
 		assert(srcProvider!=null);
 		this.srcProvider = srcProvider;
 		this.bridge = bridge;
 	}
 	
-	public NamedProviderBridge(INamedProvider<S> srcProvider,
-			IObjectBridge<S, T, ? extends Exception> bridge, boolean bridgeNulls ) {
+	public NamedProviderBridge(NamedProvider<S> srcProvider, IObjectBridge<S,T,? extends Exception> bridge, boolean bridgeNulls ) {
 		super();
 		assert(srcProvider!=null);
 		this.srcProvider = srcProvider;
@@ -62,32 +63,26 @@ public class NamedProviderBridge<S,T> implements INamedProvider<T> {
 	}
 
 	@Override
-	public T getException(String key) throws NamedProviderGetException {
+	public Optional<T> getOptional(String key) throws NamedProviderGetException {
+		Optional<S> srcVal = srcProvider.getOptional(key);
+		
+		if (!bridgeNulls && !srcVal.isPresent()) {
+			// Early exit if doNotBridgeNulls is witched on
+			return Optional.empty();
+		}
+		
 		try {
-			return bridge.bridgeElement( srcProvider.getNull(key) );
+			return OptionalUtilities.map(
+				srcVal,
+				element -> bridge.bridgeElement(element)
+			);
 		} catch (Exception e) {
-			throw new NamedProviderGetException(key, e);
+			throw NamedProviderGetException.wrap(key, e);
 		}
 	}
 
 	@Override
 	public Set<String> keys() {
 		return srcProvider.keys();
-	}
-
-	@Override
-	public T getNull(String key) throws NamedProviderGetException {
-		S srcVal = srcProvider.getNull(key);
-		
-		if (!bridgeNulls && srcVal==null) {
-			// Early exit if doNotBridgeNulls is witched on
-			return null;
-		}
-		
-		try {
-			return bridge.bridgeElement( srcVal );
-		} catch (Exception e) {
-			throw new NamedProviderGetException(key, e);
-		}
 	}
 }

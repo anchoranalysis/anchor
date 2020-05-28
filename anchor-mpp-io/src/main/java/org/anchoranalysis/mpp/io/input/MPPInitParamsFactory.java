@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -84,8 +84,8 @@ public class MPPInitParamsFactory {
 	public static MPPInitParams createFromExistingCollections(
 		BoundIOContext context,
 		Optional<Define> define,
-		Optional<INamedProvider<Stack>> stacks,
-		Optional<INamedProvider<ObjMaskCollection>> objs,
+		Optional<NamedProvider<Stack>> stacks,
+		Optional<NamedProvider<ObjMaskCollection>> objs,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		

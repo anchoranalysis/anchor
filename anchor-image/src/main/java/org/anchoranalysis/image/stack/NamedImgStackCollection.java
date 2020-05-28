@@ -29,13 +29,15 @@ package org.anchoranalysis.image.stack;
 
 import java.nio.Buffer;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.IdentityOperationWithProgressReporter;
@@ -53,43 +55,22 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 		map = new HashMap<>();
 	}
 	
-	public OperationWithProgressReporter<Stack,OperationFailedException> getAsOperation( String identifier ) throws IllegalArgumentException {
-		return map.get(identifier);
-	}
-	
-	public Stack getException( String identifier ) throws NamedProviderGetException {
-		OperationWithProgressReporter<Stack,OperationFailedException> ret = getAsOperation(identifier);
-
-		if (ret==null) {
-			throw new IllegalArgumentException("Cannot find image: '" + identifier + "'" );
-		}
-		try {
-			return ret.doOperation( ProgressReporterNull.get() );
-		} catch (OperationFailedException e) {
-			throw new NamedProviderGetException(identifier, e);
-		}
+	public Optional<OperationWithProgressReporter<Stack,OperationFailedException>> getAsOperation( String identifier ) throws IllegalArgumentException {
+		return Optional.ofNullable(
+			map.get(identifier)
+		);
 	}
 	
 	@Override
-	public Stack getNull(String identifier)	throws NamedProviderGetException {
-		OperationWithProgressReporter<Stack,OperationFailedException> ret = getAsOperation(identifier);
-
-		if (ret==null) {
-			return null;
-		}
+	public Optional<Stack> getOptional(String identifier) throws NamedProviderGetException {
+		Optional<OperationWithProgressReporter<Stack,OperationFailedException>> ret = getAsOperation(identifier);
 		try {
-			return ret.doOperation( ProgressReporterNull.get() );
+			return OptionalUtilities.map(
+				ret,
+				op -> op.doOperation( ProgressReporterNull.get() )
+			);	
 		} catch (OperationFailedException e) {
-			throw new NamedProviderGetException(identifier, e);
-		}
-	}
-	
-	public Stack getImageNoException( String identifier ) {
-		try {
-			return map.get(identifier).doOperation( ProgressReporterNull.get() );
-		} catch (OperationFailedException e) {
-			assert false;
-			return null;
+			throw NamedProviderGetException.wrap(identifier, e);
 		}
 	}
 	
@@ -99,37 +80,19 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 	}
 
 	public void addImageStack(String identifier, Stack inputImage) {
-				
-		//if (!inputImage.isUniformSized()) {
-		//	throw new IncorrectImageSizeException("stack is not uniform sized");
-		//}
-		
 		map.put(identifier, new IdentityOperationWithProgressReporter<>(inputImage));
 	}
 	
 	public void addImageStack(String identifier, OperationWithProgressReporter<Stack,OperationFailedException> inputImage) {
-		
-		//if (!inputImage.isUniformSized()) {
-		//	throw new IncorrectImageSizeException("stack is not uniform sized");
-		//}
-		
 		map.put(identifier, inputImage);
 	}
 	
 	@Override
-	public void add(String name, final Operation<Stack,OperationFailedException> getter) throws OperationFailedException {
-		
-		OperationWithProgressReporter<Stack,OperationFailedException> operationWithout
-		= new OperationWithProgressReporter<Stack,OperationFailedException>() {
-
-			@Override
-			public Stack doOperation(ProgressReporter progressReporter)	throws OperationFailedException {
-				return getter.doOperation();
-			}
-			
-		};
-		
-		map.put(name, operationWithout);
+	public void add(String name, Operation<Stack,OperationFailedException> getter) throws OperationFailedException {
+		map.put(
+			name,
+			progressReporter -> getter.doOperation()
+		);
 	}
 	
 	public NamedImgStackCollection maxIntensityProj() {
@@ -184,14 +147,14 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 		
 	}
 		
-	public void addFrom( INamedProvider<Stack> src ) {
+	public void addFrom( NamedProvider<Stack> src ) {
 		
 		for( String name : src.keys() ) {
 			addImageStack(name, new OperationStack<>(src,name) );
 		}
 	}
 	
-	public void addFromWithPrefix( final INamedProvider<Stack> src, String prefix ) {
+	public void addFromWithPrefix( final NamedProvider<Stack> src, String prefix ) {
 		
 		for( final String name : src.keys() ) {
 			addImageStack( prefix+name, new OperationStack<>(src,name) );
@@ -200,10 +163,10 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 	
 	private static class OperationStack<BufferType extends Buffer> implements OperationWithProgressReporter<Stack, OperationFailedException> {
 		
-		private INamedProvider<Stack> src;
+		private NamedProvider<Stack> src;
 		private String name;
 		
-		public OperationStack(INamedProvider<Stack> src,
+		public OperationStack(NamedProvider<Stack> src,
 				String name) {
 			super();
 			this.src = src;

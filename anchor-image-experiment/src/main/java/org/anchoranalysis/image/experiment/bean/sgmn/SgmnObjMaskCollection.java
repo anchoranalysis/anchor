@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -50,5 +50,5 @@ public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCo
 	 * @return
 	 * @throws SgmnFailedException
 	 */
-	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, INamedProvider<ObjMaskCollection> objMaskCollection, Optional<SeedCollection> seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
+	public abstract ObjMaskCollection sgmn( NamedImgStackCollection stackCollection, NamedProvider<ObjMaskCollection> objMaskCollection, Optional<SeedCollection> seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
 }

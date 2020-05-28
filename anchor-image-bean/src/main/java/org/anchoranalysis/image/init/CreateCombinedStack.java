@@ -26,12 +26,12 @@ package org.anchoranalysis.image.init;
  * #L%
  */
 
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.image.stack.Stack;
 
 public class CreateCombinedStack {
 	
-	public static INamedProvider<Stack> apply( ImageInitParams so ) {
+	public static NamedProvider<Stack> apply( ImageInitParams so ) {
 		return new CombineDiverseProvidersAsStacks(
 			so.getStackCollection(),
 			so.getChnlCollection(),

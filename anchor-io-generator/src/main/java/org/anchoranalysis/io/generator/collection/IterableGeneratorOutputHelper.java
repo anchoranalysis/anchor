@@ -32,7 +32,7 @@ import java.util.Set;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.IFriendlyException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class IterableGeneratorOutputHelper {
 
 	// TODO remove padding for nrgStack and switch to single channel outputs
-	public static <T> void output( INamedProvider<T> providers, IterableGenerator<T> generator, BoundOutputManager outputManager, String outputName, String prefix, ErrorReporter errorReporter, boolean suppressSubfoldersIn ) {
+	public static <T> void output( NamedProvider<T> providers, IterableGenerator<T> generator, BoundOutputManager outputManager, String outputName, String prefix, ErrorReporter errorReporter, boolean suppressSubfoldersIn ) {
 
 		StringSuffixOutputNameStyle outputNameStyle = new StringSuffixOutputNameStyle( prefix, prefix + "%s");
 		outputNameStyle.setOutputName(outputName);
@@ -72,8 +72,10 @@ public class IterableGeneratorOutputHelper {
 		for ( String name : keys ) {
 			
 			try {
-				T item = providers.getNull(name);
-				writer.add( item, name );
+				writer.add(
+					providers.getException(name),
+					name
+				);
 			} catch (NamedProviderGetException e) {
 				errorReporter.recordError(IterableGeneratorOutputHelper.class, e.summarize());
 			}
@@ -85,7 +87,7 @@ public class IterableGeneratorOutputHelper {
 	
 	
 	
-	public static <T> void outputWithException( INamedProvider<T> providers, IterableGenerator<T> generator, BoundOutputManager outputManager, String outputName, String suffix, boolean suppressSubfoldersIn ) throws OutputWriteFailedException {
+	public static <T> void outputWithException( NamedProvider<T> providers, IterableGenerator<T> generator, BoundOutputManager outputManager, String outputName, String suffix, boolean suppressSubfoldersIn ) throws OutputWriteFailedException {
 
 		StringSuffixOutputNameStyle outputNameStyle = new StringSuffixOutputNameStyle( suffix, suffix + "%s");
 		outputNameStyle.setOutputName(outputName);
@@ -134,7 +136,7 @@ public class IterableGeneratorOutputHelper {
 		throw new OutputWriteFailedException(errorMsg + ":" + e);		
 	}
 	
-	public static <T> INamedProvider<T> subset( INamedProvider<T> providers, OutputAllowed oa, ErrorReporter errorReporter ) {
+	public static <T> NamedProvider<T> subset( NamedProvider<T> providers, OutputAllowed oa, ErrorReporter errorReporter ) {
 		
 		NameValueSet<T> out = new NameValueSet<>();
 		
@@ -153,7 +155,7 @@ public class IterableGeneratorOutputHelper {
 	}
 	
 	
-	public static <T> INamedProvider<T> subsetWithException( INamedProvider<T> providers, OutputAllowed oa ) throws OutputWriteFailedException {
+	public static <T> NamedProvider<T> subsetWithException( NamedProvider<T> providers, OutputAllowed oa ) throws OutputWriteFailedException {
 		
 		NameValueSet<T> out = new NameValueSet<>();
 		

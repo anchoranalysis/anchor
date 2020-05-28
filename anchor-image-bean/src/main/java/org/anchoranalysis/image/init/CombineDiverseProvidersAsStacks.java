@@ -28,11 +28,10 @@ package org.anchoranalysis.image.init;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 import java.util.Set;
 
-import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -46,17 +45,19 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.Stack;
 
-class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
+class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
-	private INamedProvider<Stack> stackCollection;
-	private INamedProvider<Chnl> namedChnlCollection;
-	private INamedProvider<BinaryChnl> namedBinaryImageCollection;
-	private INamedProvider<Stack> combinedStackProvider;
+	private static ChnlFactorySingleType FACTORY = new ChnlFactoryByte();
+	
+	private NamedProvider<Stack> stackCollection;
+	private NamedProvider<Chnl> namedChnlCollection;
+	private NamedProvider<BinaryChnl> namedBinaryImageCollection;
+	private NamedProvider<Stack> combinedStackProvider;
 	
 	public CombineDiverseProvidersAsStacks(
-		INamedProvider<Stack> stackCollection,
-		INamedProvider<Chnl> namedChnlCollection,
-		INamedProvider<BinaryChnl> namedBinaryImageCollection
+		NamedProvider<Stack> stackCollection,
+		NamedProvider<Chnl> namedChnlCollection,
+		NamedProvider<BinaryChnl> namedBinaryImageCollection
 	) {
 		this.stackCollection = stackCollection;
 		this.namedChnlCollection = namedChnlCollection;
@@ -65,13 +66,28 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 		combinedStackProvider = createCombinedStackProvider();
 	}
 
-	private INamedProvider<Stack> createCombinedStackProvider() {
+	@Override
+	public Optional<Stack> getOptional(String key) throws NamedProviderGetException {
+		return combinedStackProvider.getOptional(key);
+	}
+	
+
+	public NamedProvider<Stack> getCombinedStackProvider() {
+		return combinedStackProvider;
+	}
+
+	@Override
+	public Set<String> keys() {
+		return combinedStackProvider.keys();
+	}
+
+	private NamedProvider<Stack> createCombinedStackProvider() {
 		
 		// Channel collection bridge
 		NamedProviderBridge<Chnl,Stack> namedChnlCollectionAsStackBridge =
 			new NamedProviderBridge<>(
 				namedChnlCollection,
-				new ChnlToStackBridge(),
+				chnl -> new Stack(chnl),
 				false
 			);
 
@@ -79,7 +95,7 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 		NamedProviderBridge<BinaryChnl,Stack> namedBinaryChnlCollectionAsStackBridge =
 			new NamedProviderBridge<>(
 				namedBinaryImageCollection,
-				new BinaryChnlToStackBridge(),
+				CombineDiverseProvidersAsStacks::stackFromBinary,
 				false
 			);
 		
@@ -90,62 +106,22 @@ class CombineDiverseProvidersAsStacks implements INamedProvider<Stack> {
 		return combined;
 	}
 
-	public INamedProvider<Stack> getCombinedStackProvider() {
-		return combinedStackProvider;
-	}
-	
-	@Override
-	public Stack getException(String key)
-			throws NamedProviderGetException {
-		return combinedStackProvider.getNull(key);
-	}
-
-	@Override
-	public Stack getNull(String key)
-			throws NamedProviderGetException {
-		return combinedStackProvider.getException(key);
-	}
-
-	@Override
-	public Set<String> keys() {
-		return combinedStackProvider.keys();
-	}
-
-	// Note we expect that sourceObject is never NULL
-	
-	private static class ChnlToStackBridge implements IObjectBridge<Chnl,Stack,AnchorNeverOccursException> {
+	private static Stack stackFromBinary( BinaryChnl sourceObject ) {
 		
-		@Override
-		public Stack bridgeElement(Chnl sourceObject) {
-			return new Stack( sourceObject ); 
+		Chnl chnlNew = FACTORY.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
+		
+		BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxelBox();
+		
+		// For each region we get a mask for what equals the binary mask
+		ObjMask om = bvb.getVoxelBox().equalMask(
+			new BoundingBox(bvb.getVoxelBox().extent()),
+			bvb.getBinaryValues().getOnInt()
+		);
+		try {
+			chnlNew.getVoxelBox().asByte().replaceBy(om.getVoxelBox());
+		} catch (IncorrectImageSizeException e) {
+			assert false;
 		}
+		return new Stack( chnlNew ); 
 	}
-	
-	private static class BinaryChnlToStackBridge implements IObjectBridge<BinaryChnl,Stack,AnchorNeverOccursException> {
-		
-		private ChnlFactorySingleType factory = new ChnlFactoryByte();
-		
-		@Override
-		public Stack bridgeElement(	BinaryChnl sourceObject ) {
-			
-			Chnl chnlNew = factory.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
-				
-			BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxelBox();
-			
-			// For each region we get a mask for what equals the binary mask
-			ObjMask om = bvb.getVoxelBox().equalMask(
-				new BoundingBox(bvb.getVoxelBox().extent()),
-				bvb.getBinaryValues().getOnInt()
-			);
-			try {
-				chnlNew.getVoxelBox().asByte().replaceBy(om.getVoxelBox());
-			} catch (IncorrectImageSizeException e) {
-				assert false;
-			}
-			
-			
-			return new Stack( chnlNew ); 
-		}
-	}
-
 }

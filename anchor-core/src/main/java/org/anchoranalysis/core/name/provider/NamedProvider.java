@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-core
@@ -29,18 +31,22 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.Set;
 
-public interface INamedProvider<T> {
+public interface NamedProvider<T> {
 
 	/**
 	 * Retrieves the item if it exists, or throws an exception if it doesn't exist.
 	 */
-	T getException(String key) throws NamedProviderGetException;
+	default T getException(String key) throws NamedProviderGetException {
+		return getOptional(key).orElseThrow( ()->
+			NamedProviderGetException.nonExistingItem(key)
+		);
+	}
 	
 	/** 
-	 * Retrieves the item if it exists, or returns null if it doesn't exist.
-	 *  <p>Note that a 'key' might still throw an exception for another reason</p>
+	 * Retrieves the item if it exists, or returns empty() if it doesn't exist.
+	 *  <p>Note that a 'key' might still throw an exception for another reason (but never because a particular key is absent)</p>
 	 */
-	T getNull( String key ) throws NamedProviderGetException;
+	Optional<T> getOptional( String key ) throws NamedProviderGetException;
 	
 	/** 
 	 * Returns a set of keys associated with the provider.
