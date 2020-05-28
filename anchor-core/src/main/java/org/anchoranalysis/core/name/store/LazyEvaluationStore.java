@@ -69,7 +69,6 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 	
 	@Override
 	public Optional<T> getOptional(String key) throws NamedProviderGetException {
-		
 		try {
 			return OptionalUtilities.map(
 				Optional.ofNullable( map.get(key) ),

@@ -43,7 +43,9 @@ public class NamedProviderGetException extends AnchorCombinableException {
 	public static NamedProviderGetException nonExistingItem(String key) {
 		return new NamedProviderGetException(
 			key,
-			new GetOperationFailedException("This item doesn't exist!")
+			new GetOperationFailedException(
+				String.format("The item '%s' doesn't exist!", key)
+			)
 		);
 	}
 	
@@ -51,7 +53,7 @@ public class NamedProviderGetException extends AnchorCombinableException {
 		return new NamedProviderGetException(
 			key,
 			new GetOperationFailedException(
-				String.format("This item doesn't exist in %s!", storeName)
+				String.format("The item '%s' doesn't exist in %s!", key, storeName)
 			)
 		);
 	}
