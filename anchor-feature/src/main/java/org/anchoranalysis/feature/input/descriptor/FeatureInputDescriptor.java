@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.input.descriptor;
 
+import java.util.Optional;
+
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
@@ -70,15 +72,15 @@ public abstract class FeatureInputDescriptor {
 	 * @return the favoured descriptor of the two, or NULL if there is no favourite
 	 */
 	// TODO remove
-	public FeatureInputDescriptor preferTo( FeatureInputDescriptor dscr ) {
-		return null;
+	public Optional<FeatureInputDescriptor> preferTo( FeatureInputDescriptor dscr ) {
+		return Optional.empty();
 	}
 	
 	// TODO remove
-	public FeatureInputDescriptor preferToBidirectional( FeatureInputDescriptor dscr ) {
-		// If the first try returns NULL, we try to get a preference in the other direction
-		FeatureInputDescriptor first = preferTo(dscr);
-		if(first!=null) {
+	public Optional<FeatureInputDescriptor> preferToBidirectional( FeatureInputDescriptor dscr ) {
+		// If the first try returns empty(), we try to get a preference in the other direction
+		Optional<FeatureInputDescriptor> first = preferTo(dscr);
+		if(first.isPresent()) {
 			return first;
 		}
 		return dscr.preferTo(this);

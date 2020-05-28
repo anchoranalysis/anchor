@@ -116,15 +116,6 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		}
 	}
 	
-	public Feature<T> find( String customName ) {
-		for( Feature<T> f : list ) {
-			if (f.getCustomName().equals(customName)) {
-				return f;
-			}
-		}
-		return null;
-	}
-	
 	public int findIndex( String customName ) {
 		for( int i=0; i<list.size(); i++ ) {
 			Feature<T> f = list.get(i);

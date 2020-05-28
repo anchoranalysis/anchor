@@ -75,8 +75,7 @@ public class CacheCreatorSimple implements CacheCreator {
 			);
 		} catch (CreateException e) {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
-			assert(false);
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 	}

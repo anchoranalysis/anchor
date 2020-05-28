@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.session.merged;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -96,10 +98,10 @@ class InverseChecker {
 		
 		for( int i=0; i<rv1.length(); i++) {
 			
-			Double val1 = rv1.getDoubleOrNull(i);
-			Double val2 = rv2.getDoubleOrNull(i);
+			Optional<Double> val1 = rv1.getDoubleOrNull(i);
+			Optional<Double> val2 = rv2.getDoubleOrNull(i);
 			
-			if (!areDoubleOrNullEquals(val1,val2)) {
+			if (!val1.equals(val2)) {
 				
 				// Lazy creation, as we only need if an error occurs
 				if (allEqual==true) {
@@ -116,18 +118,6 @@ class InverseChecker {
 		
 		return allEqual;
 	}
-	
-	
-	private static boolean areDoubleOrNullEquals( Double val1, Double val2 ) {
-		if (val1==null) {
-			return (val2==null);
-		}
-		if (val2==null) {
-			return (val1==null);
-		}
-		return val1.equals(val2);
-	}
-	
 
 	/**
 	 * Create a ResultsVector where the values for first and second are switched

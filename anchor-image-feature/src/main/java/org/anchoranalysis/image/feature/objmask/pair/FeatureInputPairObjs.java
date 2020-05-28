@@ -104,15 +104,9 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		}
 		return merged.get();
 	}
-
-	@Override
-	public FeatureInputPairObjs createInverse() {
-		return new FeatureInputPairObjs(
-			second,
-			first,
-			getNrgStackOptional(),
-			merged
-		);
+	
+	public Optional<ObjMask> getMergedOptional() {
+		return merged;
 	}
 
 	@Override
