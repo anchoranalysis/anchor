@@ -1,5 +1,7 @@
 package org.anchoranalysis.bean.shared.regex;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-beans-shared
@@ -36,5 +38,5 @@ public abstract class RegEx extends AnchorBean<RegEx> {
 	 * @param str string to match against the regular-expression
 	 * @return
 	 */
-	public abstract String[] matchStr( String str ); 
+	public abstract Optional<String[]> matchStr( String str ); 
 }

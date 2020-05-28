@@ -1,5 +1,7 @@
 package org.anchoranalysis.bean.shared.regex;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-beans-shared
@@ -48,17 +50,19 @@ public class RegExSimple extends RegEx {
 	}
 
 	@Override
-	public String[] matchStr( String str ) {
+	public Optional<String[]> matchStr( String str ) {
 		
 		Pattern p = Pattern.compile(matchString);
 		
-		Matcher m = p.matcher( str );
+		Matcher matcher = p.matcher( str );
 		
-		if (!m.matches()) {
+		if (!matcher.matches()) {
 			//throw new IOException( String.format("RegEx string '%s' does not match '%s'", regEx, ff.getRemainderCombined() ));
-			return null;
+			return Optional.empty();
 		}
-		return arrayFromMatcher(m);
+		return Optional.of(
+			arrayFromMatcher(matcher)
+		);
 	}
 	
 	private String[] arrayFromMatcher( Matcher matcher ) {
