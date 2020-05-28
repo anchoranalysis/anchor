@@ -17,13 +17,6 @@ public class SharedFeatureSet<T extends FeatureInput> {
 		super();
 		this.set = set;
 	}
-	
-	// Uses names of features
-	/*public void addDuplicate( FeatureList<T> features ) {
-		for( Feature<T> f : features ) {
-			set.add( f.getFriendlyName(), f.duplicateBean() );
-		}
-	}*/
 
 	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logger ) throws InitException {
 		for( NameValue<Feature<T>> nv : set ) {

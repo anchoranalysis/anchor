@@ -27,6 +27,7 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergest
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
@@ -43,11 +44,11 @@ class PathWithClosest {
 		closest = indexClosest(path,mergePnt);
 	}
 	
-	public LoopablePoints removeLeft() {
+	public Optional<LoopablePoints> removeLeft() {
 		return path.removeLeft(closest);
 	}
 	
-	public LoopablePoints removeRight() {
+	public Optional<LoopablePoints> removeRight() {
 		return path.removeRight(size()-closest-1);
 	}
 	

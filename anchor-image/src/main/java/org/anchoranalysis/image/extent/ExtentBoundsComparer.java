@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
 // Helper classes for calculating the union/intersection along each axis
@@ -28,7 +28,7 @@ class ExtentBoundsComparer {
 			Math::min,
 			Math::max
 		).orElseThrow( ()->
-			new AnchorFriendlyRuntimeException("ExtentIntersector encountered an invalid order. This should never occur.")
+			new AnchorImpossibleSituationException()
 		);
 	}
 	

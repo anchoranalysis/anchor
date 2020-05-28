@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -142,8 +142,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 			);
 			return box.clipTo(bndScene.getExtnt());
 		} catch (OperationFailedException e) {
-			assert(false);
-			throw new AnchorFriendlyRuntimeException("This situation should never occur occur, as there is always at least one point");
+			throw new AnchorImpossibleSituationException();
 		}
 	}
 	

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.outline.traverser.contiguouspath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -97,28 +98,30 @@ public class ContiguousPixelPath {
 	}
 	
 	/** Removes the first numToRemove pixels from the left
-	 *  @return Returns the pixels removed (or NULL if numToRemove==0)
+	 *  @return Returns the pixels removed (or empty() if numToRemove==0)
 	 **/
-	public LoopablePoints removeLeft( int numToRemove ) {
+	public Optional<LoopablePoints> removeLeft( int numToRemove ) {
 		
 		if (numToRemove==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		List<Point3i> toRemove = copySubList(list, 0, numToRemove); 
 		
 		list = list.subList( numToRemove, list.size() );
 		
-		return new LoopablePoints(toRemove, list.get(0) );
+		return Optional.of(
+			new LoopablePoints(toRemove, list.get(0) )
+		);
 	}
 	
 	/** Removes the last numToRemove pixels from the right
-	 *  @return Returns the pixels removed (or NULL if numToRemove==0)
+	 *  @return Returns the pixels removed (or empty() if numToRemove==0)
 	 * */
-	public LoopablePoints removeRight( int numToRemove ) {
+	public Optional<LoopablePoints> removeRight( int numToRemove ) {
 		
 		if (numToRemove==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		int finalIndex = list.size()-numToRemove;
@@ -126,9 +129,11 @@ public class ContiguousPixelPath {
 				
 		list = list.subList( 0, finalIndex );
 		
-		return new LoopablePoints(
-			toRemove,	// Looped
-			list.get( list.size() - 1 )
+		return Optional.of(
+			new LoopablePoints(
+				toRemove,	// Looped
+				list.get( list.size() - 1 )
+			)
 		);
 	}
 	

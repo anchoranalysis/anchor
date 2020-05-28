@@ -44,7 +44,6 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -143,36 +142,6 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		return true;
 	}
 	
-	/**
-	 * Similar to {@link equalsDeep} but ignores any differences in the ordering of the collectiosn.
-	 * 
-	 * @param othr to compare to
-	 * @return true if both obj mask collections are identical (except for order), false otherwise
-	 */
-	public boolean equalsIgnoreOrder(ObjMaskCollection othr) {
-		if (size()!=othr.size()) {
-			return false;
-		}
-		
-		ObjMaskCollectionRTree index = new ObjMaskCollectionRTree(othr);
-		
-		for( int i=0; i<size(); i++) {
-			
-			ObjMask curObj = get(i);
-			ObjMaskCollection othersWithPoints = index.contains( curObj.findAnyPntOnMask() );
-			
-			if (othersWithPoints.size()!=1) {
-				return false;
-			}
-			
-			ObjMask curOther = othersWithPoints.get(0);
-			if (!curObj.equalsDeep(curOther)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	public ObjMask get(int index) {
 		return delegate.get(index);
 	}

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+
 /*-
  * #%L
  * anchor-image
@@ -142,8 +144,7 @@ class EnsureContiguousPathLoops {
 			if (minCostIndexes.left()==-1) {
 				// We failed to find any neighbouring points to cut with
 				// This should never happen, as long as there are at least two neighbouring points
-				assert(false);
-				return null;
+				throw new AnchorImpossibleSituationException();
 			}
 			
 			return minCostIndexes;

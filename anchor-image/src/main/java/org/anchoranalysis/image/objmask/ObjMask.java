@@ -596,17 +596,17 @@ public class ObjMask {
 		);
 	}
 	
-	public Point3i findAnyPntOnMask() {
+	public Optional<Point3i> findAnyPntOnMask() {
 		
 		// First we try the mid-point
 		Point3i pnt = getBoundingBox().centerOfGravity();
 		if (contains(pnt)) {
-			return new Point3i(pnt);
+			return Optional.of(pnt);
 		}
 		
 		BinaryValuesByte bvb = getBinaryValuesByte();
 		
-		// Otherwise we iterate until we find ap oint
+		// Otherwise we iterate until we find a point
 		for( int z=0; z<getBoundingBox().extent().getZ(); z++) {
 			
 			ByteBuffer bbMask = getVoxelBox().getPixelsForPlane(z).buffer();
@@ -615,17 +615,19 @@ public class ObjMask {
 				for( int x=0; x<getBoundingBox().extent().getX(); x++) {
 					if (bbMask.get()==bvb.getOnByte()) {
 						
-						return new Point3i(
-							x+getBoundingBox().getCrnrMin().getX(),
-							y+getBoundingBox().getCrnrMin().getY(),
-							z+getBoundingBox().getCrnrMin().getZ()
+						return Optional.of(
+							new Point3i(
+								x+getBoundingBox().getCrnrMin().getX(),
+								y+getBoundingBox().getCrnrMin().getY(),
+								z+getBoundingBox().getCrnrMin().getZ()
+							)
 						);
 					}
 				}
 			}
 		}
 		
-		return null;
+		return Optional.empty();
 	}
 	
 	public void shiftBy(ReadableTuple3i shiftBy) {

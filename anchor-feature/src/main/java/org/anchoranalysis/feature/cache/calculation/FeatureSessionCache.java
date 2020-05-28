@@ -2,7 +2,7 @@ package org.anchoranalysis.feature.cache.calculation;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.error.InitException;
+
 
 
 /*
@@ -63,7 +63,7 @@ public abstract class FeatureSessionCache<T extends FeatureInput> {
 	 * @param featureInitParams TODO
 	 * @param logger TODO
 	 */
-	public abstract void init(FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException;
+	public abstract void init(FeatureInitParams featureInitParams, LogErrorReporter logger);
 	
 	/**
 	 * Invalidates existing caches so all calculations occur freshly
