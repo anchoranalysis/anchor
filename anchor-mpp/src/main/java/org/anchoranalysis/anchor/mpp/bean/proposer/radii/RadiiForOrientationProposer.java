@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -50,6 +52,140 @@ public class RadiiForOrientationProposer extends RadiiProposerWithBoundProposer 
 		Y,
 		Z
 	}
+			
+	// When we have no bounds, we should create bounds from the boundCalculator
+	@Override
+	public Optional<Point3d> propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re, ImageDim bndScene, Orientation orientation, ErrorNode proposerFailureDescription) {
+		
+		proposerFailureDescription = proposerFailureDescription.add("RadiiForOrientationProposer");
+		
+		RslvdBound markBoundInRslv = markBounds.calcMinMax( bndScene.getRes(), bndScene.getZ()>1 );
+		
+		if (markBoundInRslv==null) {
+			//proposerFailureDescription.add( "no intersection between markBound for yAxis and the x radius" );
+			proposerFailureDescription.add("markBoundInRslv cannot be resolved");
+			return Optional.empty();
+		}
+		
+		RotationMatrix orientationX = orientation.createRotationMatrix();
+		
+		Optional<RslvdBound> boundGenX = rslvBidirectional( pos, markBoundInRslv, markBoundInRslv, bndScene, orientationX, proposerFailureDescription, "xAxis");
+		if (!boundGenX.isPresent()) {
+			return Optional.empty();
+		}
+		
+		
+		// THIS IS THE FIRST POINT AFTER WHICH WE USE THE RANDOM GENERATOR
+		//
+		//  Any failures before now, should not cause any repeats, as they are deterministic
+		//  Failures after this, are not deterministic, so trying again might give a better result
+		//
+
+		Point3d radiiProp = new Point3d();
+		
+		// We pick our X radius
+		radiiProp.setX( boundGenX.get().randOpen(re) );
+
+		{
+			Optional<RslvdBound> boundGenY = createRslvdBound( "y", Axes.X, markBoundInRslv, pos, orientationX, bndScene, markBoundInRslv, proposerFailureDescription );
+			if (!boundGenY.isPresent()) {
+				return Optional.empty();
+			}
+			
+			// We pick our Y radius
+			radiiProp.setY( boundGenY.get().randOpen(re) );
+		}
+		
+		if (orientationX.getNumDim()>=3) {
+			
+			Optional<RslvdBound> boundGenZ = createRslvdBound( "z", Axes.Y, markBoundInRslv, pos, orientationX, bndScene, markBoundInRslv, proposerFailureDescription );
+			if (!boundGenZ.isPresent()) {
+				return Optional.empty();
+			}
+			
+			// We pick our Y radius
+			radiiProp.setZ( boundGenZ.get().randOpen(re) );
+			
+		} else {
+			radiiProp.setZ( 0 );
+		}
+        
+		assert( radiiProp.getX() < bndScene.getX() );
+		assert( radiiProp.getY() < bndScene.getY() );
+		assert( radiiProp.getZ() < bndScene.getZ() );
+		
+		return Optional.of(
+			new Point3d( radiiProp.getX(), radiiProp.getY(), radiiProp.getZ() )
+		);
+	}
+
+	@SuppressWarnings("unused")
+	private static double ratioBounds( ImageDim sd, BidirectionalBound bi ) {
+		
+		if (bi.getForward()==null || bi.getReverse()==null) {
+			return -1;
+		}
+		
+		double fwd = bi.getForward().getMax();
+		double rvrs = bi.getReverse().getMax();
+		
+		double maxBoth, minBoth;
+		if (fwd >= rvrs) {
+			maxBoth = fwd;
+			minBoth = rvrs;
+		} else {
+			maxBoth = rvrs;
+			minBoth = fwd;
+		}
+		
+		return maxBoth / minBoth;
+	}
+	
+	private Optional<RslvdBound> rslvBidirectional( Point3d pos, RslvdBound minMaxBound, RslvdBound markBound, ImageDim bndScene, RotationMatrix orientation, ErrorNode proposerFailureDescription, String axisName ) {
+
+		RslvdBound singleBound;
+
+		// This calculates bounded limits along a line through the centre with orientation the same as the ellipse (we call this the x-axis bound) 
+		Optional<BidirectionalBound> biBound = getBoundProposer().propose(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
+		
+		if (!biBound.isPresent()) {
+			proposerFailureDescription.addFormatted("Cannot calculate %s bi-directional bounds", axisName);
+			return Optional.empty();
+		}
+		
+		proposerFailureDescription.addFormatted("%s=%s", axisName, biBound.toString());			
+		
+		// LET's always take the minimum bound
+		singleBound = biBound.get().calcMinimum();
+		
+		if (singleBound==null) {
+			proposerFailureDescription.addFormatted( "no minima on %s bounds",axisName );
+			return Optional.empty();
+		}
+		
+		// places a maximum
+		singleBound = markBound.intersect( singleBound);
+		
+		if (singleBound==null) {
+			proposerFailureDescription.addFormatted( "cannot resolve %s single bounds with the mark bound", axisName);
+			return Optional.empty();
+		}
+		
+		return Optional.of(singleBound);
+	}
+	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkEllipse;
+	}
+
+	public double getBoundsRatioThreshold() {
+		return boundsRatioThreshold;
+	}
+
+	public void setBoundsRatioThreshold(double boundsRatioThreshold) {
+		this.boundsRatioThreshold = boundsRatioThreshold;
+	}
 	
 	private RotationMatrix rotate90Degrees( RotationMatrix inMatrix, Axes axisRotate ) {
 
@@ -80,7 +216,7 @@ public class RadiiForOrientationProposer extends RadiiProposerWithBoundProposer 
 		return inMatrix.mult(rotate90Degrees);
 	}
 	
-	private RslvdBound createRslvdBound( String axisName, Axes axisRotate, RslvdBound boundIn, Point3d pos, RotationMatrix orientationIn, ImageDim bndScene, RslvdBound radiiBounds, ErrorNode proposerFailureDescription ) {
+	private Optional<RslvdBound> createRslvdBound( String axisName, Axes axisRotate, RslvdBound boundIn, Point3d pos, RotationMatrix orientationIn, ImageDim bndScene, RslvdBound radiiBounds, ErrorNode proposerFailureDescription ) {
 		
 		// We require that our x-axis in the orientation direction is always larger than the y-axis
 		//   so that it is orientated "in the direction of" our orientation
@@ -89,140 +225,6 @@ public class RadiiForOrientationProposer extends RadiiProposerWithBoundProposer 
 		
 		RotationMatrix orientationY = rotate90Degrees(orientationIn, axisRotate);
 		
-		return rslvBidirectional( pos, radiiBounds, boundIn, bndScene, orientationY, proposerFailureDescription, axisName);
-	}
-	
-	@Override
-	// When we have no bounds, we should create bounds from the boundCalculator
-	public Point3d propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re, ImageDim bndScene, Orientation orientation, ErrorNode proposerFailureDescription) {
-		
-		proposerFailureDescription = proposerFailureDescription.add("RadiiForOrientationProposer");
-		
-		RslvdBound markBoundInRslv = markBounds.calcMinMax( bndScene.getRes(), bndScene.getZ()>1 );
-		
-		if (markBoundInRslv==null) {
-			//proposerFailureDescription.add( "no intersection between markBound for yAxis and the x radius" );
-			proposerFailureDescription.add("markBoundInRslv cannot be resolved");
-			return null;
-		}
-		
-		RotationMatrix orientationX = orientation.createRotationMatrix();
-		
-		RslvdBound boundGenX = rslvBidirectional( pos, markBoundInRslv, markBoundInRslv, bndScene, orientationX, proposerFailureDescription, "xAxis");
-		if (boundGenX==null) {
-			return null;
-		}
-		
-		
-		// THIS IS THE FIRST POINT AFTER WHICH WE USE THE RANDOM GENERATOR
-		//
-		//  Any failures before now, should not cause any repeats, as they are deterministic
-		//  Failures after this, are not deterministic, so trying again might give a better result
-		//
-
-		Point3d radiiProp = new Point3d();
-		
-		// We pick our X radius
-		radiiProp.setX( boundGenX.randOpen(re) );
-
-		{
-			RslvdBound boundGenY = createRslvdBound( "y", Axes.X, markBoundInRslv, pos, orientationX, bndScene, markBoundInRslv, proposerFailureDescription );
-			if (boundGenY==null) {
-				return null;
-			}
-			
-			// We pick our Y radius
-			radiiProp.setY( boundGenY.randOpen(re) );
-		}
-		
-		if (orientationX.getNumDim()>=3) {
-			
-			RslvdBound boundGenZ = createRslvdBound( "z", Axes.Y, markBoundInRslv, pos, orientationX, bndScene, markBoundInRslv, proposerFailureDescription );
-			if (boundGenZ==null) {
-				return null;
-			}
-			
-			// We pick our Y radius
-			radiiProp.setZ( boundGenZ.randOpen(re) );
-			
-		} else {
-			radiiProp.setZ( 0 );
-		}
-        
-		assert( radiiProp.getX() < bndScene.getX() );
-		assert( radiiProp.getY() < bndScene.getY() );
-		assert( radiiProp.getZ() < bndScene.getZ() );
-		
-		return new Point3d( radiiProp.getX(), radiiProp.getY(), radiiProp.getZ() );
-	}
-
-	@SuppressWarnings("unused")
-	private static double ratioBounds( ImageDim sd, BidirectionalBound bi ) {
-		
-		if (bi.getForward()==null || bi.getReverse()==null) {
-			return -1;
-		}
-		
-		double fwd = bi.getForward().getMax();
-		double rvrs = bi.getReverse().getMax();
-		
-		double maxBoth, minBoth;
-		if (fwd >= rvrs) {
-			maxBoth = fwd;
-			minBoth = rvrs;
-		} else {
-			maxBoth = rvrs;
-			minBoth = fwd;
-		}
-		
-		return maxBoth / minBoth;
-	}
-	
-	
-	
-	private RslvdBound rslvBidirectional( Point3d pos, RslvdBound minMaxBound, RslvdBound markBound, ImageDim bndScene, RotationMatrix orientation, ErrorNode proposerFailureDescription, String axisName ) {
-
-		RslvdBound singleBound;
-
-		// This calculates bounded limits along a line through the centre with orientation the same as the ellipse (we call this the x-axis bound) 
-		BidirectionalBound biBound = getBoundProposer().propose(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
-		
-		if (biBound==null) {
-			proposerFailureDescription.addFormatted("Cannot calculate %s bi-directional bounds", axisName);
-			return null;
-		}
-		
-		proposerFailureDescription.addFormatted("%s=%s", axisName, biBound.toString());			
-		
-		// LET's always take the minimum bound
-		singleBound = biBound.calcMinimum();
-		
-		if (singleBound==null) {
-			proposerFailureDescription.addFormatted( "no minima on %s bounds",axisName );
-			return null;
-		}
-		
-		// places a maximum
-		singleBound = markBound.intersect( singleBound);
-		
-		if (singleBound==null) {
-			proposerFailureDescription.addFormatted( "cannot resolve %s single bounds with the mark bound", axisName);
-			return null;
-		}
-		
-		return singleBound;
-	}
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipse;
-	}
-
-	public double getBoundsRatioThreshold() {
-		return boundsRatioThreshold;
-	}
-
-	public void setBoundsRatioThreshold(double boundsRatioThreshold) {
-		this.boundsRatioThreshold = boundsRatioThreshold;
+		return rslvBidirectional(pos, radiiBounds, boundIn, bndScene, orientationY, proposerFailureDescription, axisName);
 	}
 }

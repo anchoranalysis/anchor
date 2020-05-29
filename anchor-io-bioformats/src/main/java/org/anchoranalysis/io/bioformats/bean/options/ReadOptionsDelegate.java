@@ -27,6 +27,7 @@ package org.anchoranalysis.io.bioformats.bean.options;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
@@ -48,7 +49,7 @@ public abstract class ReadOptionsDelegate extends ReadOptions {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<String> determineChannelNames(IFormatReader reader) {
+	public Optional<List<String>> determineChannelNames(IFormatReader reader) {
 		return options.determineChannelNames(reader);
 	}
 		

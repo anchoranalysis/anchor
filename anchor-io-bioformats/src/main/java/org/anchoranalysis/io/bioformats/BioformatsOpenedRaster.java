@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -70,7 +71,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	
 	private static Log log = LogFactory.getLog(BioformatsOpenedRaster.class);
 	
-	private List<String> channelNames;
+	private Optional<List<String>> channelNames;
 	
 	/**
 	 * 
@@ -125,7 +126,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	}
 
 	/** Returns a list of channel-names or NULL if they are not available */
-	public List<String> channelNames() {
+	public Optional<List<String>> channelNames() {
 		return channelNames;
 	}
 	

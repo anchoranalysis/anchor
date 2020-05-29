@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -45,7 +47,7 @@ public class EllipseBoundsProposer extends RadiiProposer {
 	}
 
 	@Override
-	public Point3d propose(Point3d pos, MarkBounds markBounds,
+	public Optional<Point3d> propose(Point3d pos, MarkBounds markBounds,
 			RandomNumberGenerator re, ImageDim bndScene, Orientation orientation,
 			ErrorNode proposerFailureDescription) {
 	
@@ -55,7 +57,7 @@ public class EllipseBoundsProposer extends RadiiProposer {
 		radii.setX( eb.getRadius().rslv( bndScene.getRes(), false ).randOpen( re ) );
 		radii.setY( eb.getRadius().rslv( bndScene.getRes(), false ).randOpen( re ) );
 		radii.setZ(0);
-		return radii;
+		return Optional.of(radii);
 	}
 
 }

@@ -27,6 +27,7 @@ package org.anchoranalysis.io.bioformats.bean.options;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import loci.formats.IFormatReader;
 
@@ -34,9 +35,9 @@ import loci.formats.IFormatReader;
 public class SwitchChnlTime extends ReadOptionsDelegate {
 
 	@Override
-	public List<String> determineChannelNames(IFormatReader reader) {
+	public Optional<List<String>> determineChannelNames(IFormatReader reader) {
 		// Always return null, as we use the time-series instead
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override

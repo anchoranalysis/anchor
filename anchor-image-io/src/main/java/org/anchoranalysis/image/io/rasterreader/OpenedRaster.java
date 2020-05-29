@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.rasterreader;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -55,7 +56,7 @@ public abstract class OpenedRaster implements AutoCloseable {
 	public abstract int numSeries();
 	
 	// Can be null if no channel names exist
-	public abstract List<String> channelNames();
+	public abstract Optional<List<String>> channelNames();
 	
 	public abstract int numChnl() throws RasterIOException;
 	
