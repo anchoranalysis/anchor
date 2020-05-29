@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
@@ -60,12 +61,12 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	
 	@Override
 	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
-		
+				
 		for( NamedChnlCollectionForSeries item : list ) {
 			
-			Chnl c = item.getChnlOrNull(chnlName, t,progressReporter);
-			if (c!=null) {
-				return c;
+			Optional<Chnl> c = item.getChnlOrNull(chnlName, t,progressReporter);
+			if (c.isPresent()) {
+				return c.get();
 			}
 		}
 
@@ -73,18 +74,18 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 
 	@Override
-	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
+	public Optional<Chnl> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
 			throws GetOperationFailedException {
 
 		for( NamedChnlCollectionForSeries item : list ) {
 			
-			Chnl c = item.getChnlOrNull(chnlName, t, progressReporter);
-			if (c!=null) {
+			Optional<Chnl> c = item.getChnlOrNull(chnlName, t, progressReporter);
+			if (c.isPresent()) {
 				return c;
 			}
 		}
 
-		return null;
+		return Optional.empty();
 	}
 	
 

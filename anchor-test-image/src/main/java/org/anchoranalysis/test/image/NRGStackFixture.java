@@ -1,5 +1,7 @@
 package org.anchoranalysis.test.image;
 
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+
 /*-
  * #%L
  * anchor-test-feature-plugins
@@ -49,8 +51,7 @@ public class NRGStackFixture {
 			return new NRGStackWithParams(nrgStack);
 			
 		} catch (IncorrectImageSizeException e) {
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
 	}
 	

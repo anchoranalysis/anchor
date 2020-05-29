@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.input.series;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-io
@@ -46,7 +48,7 @@ public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
 	
 	public abstract Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
-	public abstract Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+	public abstract Optional<Chnl> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
 	public abstract Set<String> chnlNames();
 	

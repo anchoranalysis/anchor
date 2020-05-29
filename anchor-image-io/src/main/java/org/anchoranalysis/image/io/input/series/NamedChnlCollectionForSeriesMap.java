@@ -2,6 +2,8 @@ package org.anchoranalysis.image.io.input.series;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-io
@@ -93,20 +95,22 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	
 	// The outputManager is in case we want to do any debugging
 	@Override
-	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
+	public Optional<Chnl> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 
 		int index = chnlMap.get(chnlName);
 		if (index==-1) {
-			return null;
+			return Optional.empty();
 		}
 		
 		Stack stack = createTs( progressReporter ).get(t); 
 
 		if (index>=stack.getNumChnl()) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return stack.getChnl( index );
+		return Optional.of(
+			stack.getChnl(index)
+		);
 	}
 	
 	@Override
