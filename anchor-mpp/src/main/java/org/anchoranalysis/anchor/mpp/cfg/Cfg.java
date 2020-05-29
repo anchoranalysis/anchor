@@ -305,7 +305,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	public Cfg createMerged( Cfg toMerge ) {
 		
 		Cfg mergedNew = shallowCopy();
-		//HashMap<Integer,Mark> mergedHash = cfg1.createIdHashMap();
 		
 		Set<Mark> set = mergedNew.createSet();
 		
