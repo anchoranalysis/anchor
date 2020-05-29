@@ -31,11 +31,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GeneratorSequenceIncrementalRerouteErrors<T> {
 
-	private IGeneratorSequenceIncremental<T> delegate;
+	private GeneratorSequenceIncremental<T> delegate;
 	private ErrorReporter errorReporter;
 	
 	public GeneratorSequenceIncrementalRerouteErrors(
-			IGeneratorSequenceIncremental<T> delegate, ErrorReporter errorReporter) {
+			GeneratorSequenceIncremental<T> delegate, ErrorReporter errorReporter) {
 		super();
 		this.delegate = delegate;
 		this.errorReporter = errorReporter;

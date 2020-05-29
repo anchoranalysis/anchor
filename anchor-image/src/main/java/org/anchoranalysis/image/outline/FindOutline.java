@@ -79,7 +79,7 @@ public class FindOutline {
 	
 	/** Outline using multiple erosions to create a deeper outline */
 	public static ObjMask outline(ObjMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
-		assert( mask.getVoxelBox().extnt().getZ() > 0 );
+		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
 		ObjMask maskIn = mask.duplicate();
 				
@@ -125,7 +125,7 @@ public class FindOutline {
 	private static BinaryVoxelBox<ByteBuffer> outlineByKernel( BinaryVoxelBox<ByteBuffer> voxelBox, boolean erodeEdges, boolean do3D ) throws CreateException {
 		
 		// if our solid is too small, we don't apply the kernel, as it fails on anything less than 3x3, and instead we simply return the solid as it is
-		if (isTooSmall(voxelBox.extnt(), do3D)) {
+		if (isTooSmall(voxelBox.extent(), do3D)) {
 			return voxelBox.duplicate();
 		}
 		

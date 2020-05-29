@@ -33,6 +33,8 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+
 public class ByteConverter {
     
     public static int unsignedByteToInt( byte b ) {
@@ -52,13 +54,11 @@ public class ByteConverter {
 	}
     
     public static long unsignedIntToLong( int v ) {
-    	assert false;
-    	return 0;
+    	return (long) v;
     }
     
     public static int unsignedIntToInt( int v ) {
-    	assert false;
-    	return 0;
+    	return v;
     }
     
         
@@ -74,8 +74,7 @@ public class ByteConverter {
     	} else if (b instanceof IntBuffer) {
     		return (T) copy( (IntBuffer) b );    		
     	} else {
-    		assert false;
-    		return null;
+    		throw new AnchorImpossibleSituationException();
     	}
     }
 

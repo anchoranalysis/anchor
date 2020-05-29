@@ -29,12 +29,13 @@ package org.anchoranalysis.core.name.provider;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 
-public class NameValueSet<T> implements Iterable<NameValue<T>>, INamedProvider<T> {
+public class NameValueSet<T> implements Iterable<NameValue<T>>, NamedProvider<T> {
 
 	private HashMap<String,NameValue<T>> map = new HashMap<>();
 
@@ -54,21 +55,11 @@ public class NameValueSet<T> implements Iterable<NameValue<T>>, INamedProvider<T
 	public Set<String> keys() {
 		return map.keySet();
 	}
-	
-	@Override
-	public T getException( String name ) throws NamedProviderGetException {
-		NameValue<T> item= map.get(name);
-		if (item==null) {
-			throw NamedProviderGetException.nonExistingItem(name);
-		}
-		return item.getValue();
-	}
-
 
 	@Override
-	public T getNull(String key) {
+	public Optional<T> getOptional(String key) {
 		NameValue<T> item = map.get(key); 
-		return item!=null ? item.getValue() : null;
+		return Optional.ofNullable(item).map( NameValue::getValue );
 	}
 	
 	@Override

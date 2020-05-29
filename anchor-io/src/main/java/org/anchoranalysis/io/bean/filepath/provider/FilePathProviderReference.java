@@ -30,8 +30,7 @@ import java.nio.file.Path;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class FilePathProviderReference extends FilePathProvider {
@@ -41,22 +40,20 @@ public class FilePathProviderReference extends FilePathProvider {
 	private String id = "";
 	// END BEAN PROPERTIES
 	
-	private Path filePath;
+	private Path filePath = null;
 	
 	@Override
-	public void onInit(KeyValueParamsInitParams so)
-			throws InitException {
-		super.onInit(so);
-		try {
-			filePath = so.getNamedFilePathCollection().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		}
-	}
-
-	@Override
-	public Path create() {
+	public Path create() throws CreateException {
 		assert( isHasBeenInit() );
+				
+		if (filePath==null) {
+			try {
+				filePath = getSharedObjects().getNamedFilePathCollection().getException(id);
+			} catch (NamedProviderGetException e) {
+				throw new CreateException(e);
+			}
+		}
+		
 		return filePath;
 	}
 

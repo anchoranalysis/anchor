@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task.processor;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-experiment
@@ -40,34 +42,32 @@ import org.apache.commons.lang3.StringUtils;
 public class JobStartStopLogger {
 	
 	// Assume terminal has at least 80 characters in width
-	private static String HASH_SEPERATOR = StringUtils.repeat('#', 80);
+	private static final String HASH_SEPERATOR = StringUtils.repeat('#', 80);
 	
-	private String jobDscrText;
-	private LogReporter logReporter;
-	private ConcurrentJobMonitor monitor;
-	private boolean showHashSeperators;
-	private boolean disableLogMessages = false;
-	private int showOngoingJobsLessThan;
+	private final String jobDscrText;
+	private final Optional<LogReporter> logger;
+	private final ConcurrentJobMonitor monitor;
+	private final boolean showHashSeperators;
+	private final boolean disableLogMessages;
+	private final int showOngoingJobsLessThan;
 	
 	/**
 	 * 
 	 * @param jobDscrText A noun describing the job that appears in the log e.g. "Job"
-	 * @param logReporter if non-NULL, write messages to logger. If null, no messages are written
+	 * @param logger if non-NULL, write messages to logger. If null, no messages are written
 	 * @param showHashSeperators indicates if lines of hashes should be placed before and after each log message (adds emphasis)
 	 * @param showOngoingJobsLess When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. 
 	 * @param monitor
 	 */
-	public JobStartStopLogger(String jobDscrText, LogReporter logReporter, ConcurrentJobMonitor monitor, boolean showHashSeperators, int showOngoingJobsLessThan ) {
+	public JobStartStopLogger(String jobDscrText, Optional<LogReporter> logger, ConcurrentJobMonitor monitor, boolean showHashSeperators, int showOngoingJobsLessThan ) {
 		super();
 		this.jobDscrText = jobDscrText;
-		this.logReporter = logReporter;
+		this.logger = logger;
 		this.monitor = monitor;
 		this.showHashSeperators = showHashSeperators;
 		this.showOngoingJobsLessThan = showOngoingJobsLessThan;
 
-		if (monitor.getTotalNumTasks()<=1 || logReporter==null) {
-			this.disableLogMessages = true;
-		}
+		this.disableLogMessages = monitor.getTotalNumTasks()<=1 || !logger.isPresent();
 	}
 
 	public synchronized void logStart(JobDescription job) {
@@ -84,18 +84,21 @@ public class JobStartStopLogger {
 			return;
 		}
 		
-		logWithDecoration( () -> {
-			logEvent(
-				success ? "end  " : "ERROR",
-				job,
-				timeStr(jobState)
-			);
-		});
+		logEvent(
+			success ? "end  " : "ERROR",
+			job,
+			timeStr(jobState)
+		);
 	}
 	
 	private void logEvent( String eventWord, JobDescription job, String timeStr ) {
+		
+		if (!logger.isPresent()) {
+			return;
+		}
+		
 		logWithDecoration( () -> {
-			logReporter.logFormatted(
+			logger.get().logFormatted(
 				"%s %4d:\t%s\t[%s]\t%s\t%s  %s",
 				jobDscrText,
 				job.getJobNumber(),
@@ -106,10 +109,6 @@ public class JobStartStopLogger {
 				ongoingJobStr()
 			);
 		});
-	}
-	
-	private String timeStr( JobState jobState ) {
-		return String.format("(%ds)", jobState.getTime()/1000);
 	}
 	
 	private String ongoingJobStr() {
@@ -124,7 +123,11 @@ public class JobStartStopLogger {
 	
 	private void logMaybeHashSeperator() {
 		if (showHashSeperators) {
-			logReporter.log(HASH_SEPERATOR);
+			logger.get().log(HASH_SEPERATOR);
 		}
+	}
+		
+	private static String timeStr( JobState jobState ) {
+		return String.format("(%ds)", jobState.getTime()/1000);
 	}
 }

@@ -41,6 +41,7 @@ import org.anchoranalysis.image.arrangeraster.IArrangeRaster;
 import org.anchoranalysis.image.arrangeraster.TableItemArrangement;
 import org.anchoranalysis.image.arrangeraster.TableItemException;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ArrangeRasterTile extends ArrangeRasterBean {
@@ -108,14 +109,15 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 
 		// We now loop through each item in the cell, and add to our output set with
 		//   the correct offset
-		for (BoundingBox BoundingBox : src) {
+		for (BoundingBox bbox : src) {
 
-			Point3i crnrMin = new Point3i( BoundingBox.getCrnrMin() );
+			Point3i crnrMin = new Point3i( bbox.getCrnrMin() );
 			crnrMin.incrX(shiftX);
 			crnrMin.incrY(shiftY);
-			
-			BoundingBox BoundingBoxNew = new BoundingBox(crnrMin, BoundingBox.extnt());
-			dest.add( BoundingBoxNew );
+
+			dest.add(
+				new BoundingBox(crnrMin, bbox.extent())
+			);
 		}
 
 	}
@@ -146,10 +148,14 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 				addShifted( bboxSet, set, x, y );
 			}
 		}
-			
-		set.getExtnt().setX( maxWidthHeight.getTotalWidth()  );
-		set.getExtnt().setY( maxWidthHeight.getTotalHeight() );
-		set.getExtnt().setZ( maxWidthHeight.getMaxZ() );
+		
+		set.setExtnt(
+			new Extent(
+				maxWidthHeight.getTotalWidth(),
+				maxWidthHeight.getTotalHeight(),
+				maxWidthHeight.getMaxZ()
+			)	
+		);
 		
 		return set;
 	}

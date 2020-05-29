@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.glob;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io
@@ -38,10 +40,10 @@ public class GlobExtractor {
 
 	public static class GlobWithDirectory {
 		
-		private String directory;	// Nullable if there is no directory
+		private Optional<String> directory;
 		private String glob;
 		
-		public GlobWithDirectory(String directory, String glob) {
+		public GlobWithDirectory(Optional<String> directory, String glob) {
 			super();
 			this.directory = directory;
 			this.glob = glob;
@@ -52,7 +54,7 @@ public class GlobExtractor {
 		}
 
 		/** The directory part of the string, or null if it doesn't exist */
-		public String getDirectory() {
+		public Optional<String> getDirectory() {
 			return directory;
 		}
 	}
@@ -71,10 +73,15 @@ public class GlobExtractor {
 		int finalSlash = positionFinalSlashBeforeWildcard(str);
 		
 		if (finalSlash==-1) {
-			return new GlobWithDirectory(null,str);
+			return new GlobWithDirectory(
+				Optional.empty(),
+				str
+			);
 		} else {
 			return new GlobWithDirectory(
-				str.substring(0, finalSlash+1 ),
+				Optional.of(
+					str.substring(0, finalSlash+1 )
+				),
 				str.substring(finalSlash+1)
 			);
 		}

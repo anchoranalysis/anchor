@@ -29,6 +29,7 @@ package org.anchoranalysis.io.generator.text;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -68,8 +69,10 @@ public class StringGenerator extends SingleFileTypeGenerator {
 	
 	
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("text", "string");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("text", "string")
+		);
 	}
 
 	public String getElement() {

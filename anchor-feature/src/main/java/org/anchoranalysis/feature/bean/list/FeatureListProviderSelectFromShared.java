@@ -53,7 +53,7 @@ public class FeatureListProviderSelectFromShared<T extends FeatureInput> extends
 		FeatureList<T> out = new FeatureList<>();
 		
 		for( String key : getSharedObjects().getFeatureListSet().keys() ) {
-			if( match==null || match.matchStr(key)!=null ) {
+			if( match==null || match.hasMatch(key) ) {
 				try {
 					out.add(
 						getSharedObjects().getSharedFeatureSet().getException(key).downcast()

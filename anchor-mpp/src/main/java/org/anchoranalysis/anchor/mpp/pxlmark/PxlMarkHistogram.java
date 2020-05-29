@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -75,16 +75,15 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		ImageDim sd = stack.getDimensions();
 		BoundingBox bbox = mark.bboxAllRegions( sd );
 		
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
 		setObjMask( new ObjMask(bbox) );
 		
 		
-		BoundingBox bboxMIP = new BoundingBox(bbox);
-		bboxMIP.convertToMaxIntensityProj();
+		BoundingBox bboxMIP = bbox.flattenZ();
 		setObjMaskMIP( new ObjMask(bboxMIP) );
 		
-		Extent localExtnt = bbox.extnt();
+		Extent localExtnt = bbox.extent();
 		partitionList.init( factoryHistogram, stack.getNumChnl(), regionMap.numRegions(), localExtnt.getZ() );
 		
 		ByteBuffer bufferMIP = getObjMaskMIP().getVoxelBox().getPixelsForPlane(0).buffer();
@@ -112,7 +111,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		int z,
 		Mark mark,
 		BoundingBox bbox,
-		Point3i crnrMax,
+		ReadableTuple3i crnrMax,
 		Extent localExtnt,
 		ImageDim sd,
 		NRGStack stack,

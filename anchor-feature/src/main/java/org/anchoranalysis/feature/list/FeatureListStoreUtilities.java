@@ -26,7 +26,7 @@ package org.anchoranalysis.feature.list;
  * #L%
  */
 
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public class FeatureListStoreUtilities {
 	
-	public static void addFeatureListToStoreNoDuplicateDirectly( INamedProvider<FeatureList<FeatureInput>> featureListProvider, SharedFeatureMulti out ) {
+	public static void addFeatureListToStoreNoDuplicateDirectly( NamedProvider<FeatureList<FeatureInput>> featureListProvider, SharedFeatureMulti out ) {
 		
 		for( String key : featureListProvider.keys()) {
 			try {

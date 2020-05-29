@@ -37,6 +37,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -65,6 +66,10 @@ public class BinaryChnl {
 		}
 		
 		this.binaryValues = binaryValuesIn.duplicate();
+	}
+	
+	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
+		this(vb, new ImageRes(), ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance) );
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageRes res, ChnlFactorySingleType factory ) {
@@ -98,7 +103,7 @@ public class BinaryChnl {
 		
 		ByteBuffer bb = getVoxelBox().getPixelsForPlane(pnt.getZ()).buffer();
 		
-		int offset = getVoxelBox().extnt().offset( pnt.getX(), pnt.getY() );
+		int offset = getVoxelBox().extent().offset( pnt.getX(), pnt.getY() );
 		return bb.get(offset)==bvb.getOnByte();
 	}
 	

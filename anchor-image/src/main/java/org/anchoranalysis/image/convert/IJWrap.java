@@ -71,9 +71,12 @@ public class IJWrap {
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
 	
-	public static Chnl chnlFromImageStackByte( ImageStack imageStack, ImageRes sr, ChnlFactorySingleType factory ) {
+	public static Chnl chnlFromImageStackByte( ImageStack imageStack, ImageRes res, ChnlFactorySingleType factory ) {
 		
-		ImageDim sd = new ImageDim( new Extent(imageStack.getWidth(), imageStack.getHeight(), imageStack.getSize()), sr.duplicate() );
+		ImageDim sd = new ImageDim(
+			new Extent(imageStack.getWidth(), imageStack.getHeight(), imageStack.getSize()),
+			res
+		);
 		
 		Chnl chnlOut = factory.createEmptyUninitialised( sd );
 		
@@ -82,7 +85,7 @@ public class IJWrap {
 		return chnlOut;
 	}
 
-	public static Chnl chnlFromImagePlus( ImagePlus imagePlus, ImageRes sr ) throws IncorrectVoxelDataTypeException {
+	public static Chnl chnlFromImagePlus( ImagePlus imagePlus, ImageRes res ) throws IncorrectVoxelDataTypeException {
 		
 		ChnlFactory factory = ChnlFactory.instance();
 		
@@ -92,7 +95,7 @@ public class IJWrap {
 				imagePlus.getHeight(),
 				imagePlus.getStackSize()
 			),
-			sr.duplicate()
+			res
 		);
 				
 		if (imagePlus.getType()==ImagePlus.GRAY8) {
@@ -139,7 +142,7 @@ public class IJWrap {
 	
 	public static ImageProcessor imageProcessor( VoxelBoxWrapper vb, int z ) {
 		
-		assert( vb.any().extnt().getVolumeXY()==vb.any().getPixelsForPlane(z).buffer().capacity() );
+		assert( vb.any().extent().getVolumeXY()==vb.any().getPixelsForPlane(z).buffer().capacity() );
 		
 		if (vb.getVoxelDataType().equals(dataTypeByte)) {
 			return imageProcessorByte( vb.asByte().getPlaneAccess(), z);
@@ -152,12 +155,12 @@ public class IJWrap {
 	
 
 	public static ImageProcessor imageProcessorByte( IPixelsForPlane<ByteBuffer> planeAccess, int z ) {
-		Extent e = planeAccess.extnt();
+		Extent e = planeAccess.extent();
 		return new ByteProcessor( e.getX(), e.getY(), planeAccess.getPixelsForPlane(z).buffer().array(), null);
 	}
 	
 	public static ImageProcessor imageProcessorShort( IPixelsForPlane<ShortBuffer> planeAccess, int z ) {
-		Extent e = planeAccess.extnt();
+		Extent e = planeAccess.extent();
 		assert( e.getVolumeXY()==planeAccess.getPixelsForPlane(z).buffer().array().length );
 		return new ShortProcessor( e.getX(), e.getY(), planeAccess.getPixelsForPlane(z).buffer().array(), null);
 	}
@@ -175,7 +178,7 @@ public class IJWrap {
 	public static ImagePlus createImagePlus( VoxelBoxWrapper voxelBox ) {
 	
 		ImageStack stackNew = createStackForVoxelBox( voxelBox );
-		return createImagePlus( stackNew, new ImageDim( voxelBox.any().extnt(), new ImageRes() ), 1, 1, false );
+		return createImagePlus( stackNew, new ImageDim( voxelBox.any().extent(), new ImageRes() ), 1, 1, false );
 	}
 	
 	public static ImagePlus createImagePlus( Chnl chnl ) throws CreateException {
@@ -250,10 +253,6 @@ public class IJWrap {
 		VoxelBox<ByteBuffer> vbRed = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbGreen = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbBlue = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
-		
-		//ImageStack red = createStackForVoxelBox( sd.extnt(), vbRed );
-		//ImageStack green = createStackForVoxelBox( sd.extnt(), vbGreen );
-		//ImageStack blue = createStackForVoxelBox( sd.extnt(), vbBlue );
 
 		for (int z=0; z<sd.getZ(); z++) {
 			ColorProcessor cp = new ColorProcessor( sd.getX(), sd.getY() );
@@ -261,10 +260,7 @@ public class IJWrap {
 			byte[] redPixels = vbRed.getPlaneAccess().getPixelsForPlane(z).buffer().array();
 			byte[] greenPixels = vbGreen.getPlaneAccess().getPixelsForPlane(z).buffer().array();
 			byte[] bluePixels = vbBlue.getPlaneAccess().getPixelsForPlane(z).buffer().array();
-			
-			//byte[] redPixels = (byte[]) red.getPixels(z+1);
-			//byte[] greenPixels = (byte[]) green.getPixels(z+1);
-			//byte[] bluePixels = (byte[]) blue.getPixels(z+1);
+
 			cp.setRGB(redPixels, greenPixels, bluePixels);
 			stackNew.addSlice( String.valueOf(z), cp );	
 		}
@@ -272,19 +268,12 @@ public class IJWrap {
 		return stackNew;
 	}
 	
-	
-	
-	
-	
-	
-	
 	private static Chnl chnlFromImagePlusByte( ImagePlus imagePlus, ImageDim sd, ChnlFactorySingleType factory ) {
 		
 		Chnl chnlOut = factory.createEmptyUninitialised( sd );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getZ(); z++) {
-			//chnlOut.getVoxelBox().setImageProcessorAsPlane(z, imagePlus.getImageStack().getProcessor(z+1).convertToByte(false));
 			
 			ImageProcessor ip = imagePlus.getImageStack().getProcessor(z+1);
 			byte[] arr = (byte[]) ip.getPixels();
@@ -341,14 +330,14 @@ public class IJWrap {
 	
 	
 	private static void copyImageStackIntoVoxelBoxByte( ImageStack stack, VoxelBox<ByteBuffer> vbOut ) {
-		for( int z=0; z<vbOut.extnt().getZ(); z++) {
+		for( int z=0; z<vbOut.extent().getZ(); z++) {
 			ImageProcessor ip = stack.getProcessor(z+1);
 			vbOut.setPixelsForPlane(z, voxelBufferFromImageProcessorByte(ip) );
 		}
 	}
 	
 	private static void copyImageStackIntoVoxelBoxShort( ImageStack stack, VoxelBox<ShortBuffer> vbOut ) {
-		for( int z=0; z<vbOut.extnt().getZ(); z++) {
+		for( int z=0; z<vbOut.extent().getZ(); z++) {
 			ImageProcessor ip = stack.getProcessor(z+1);
 			vbOut.setPixelsForPlane(z, voxelBufferFromImageProcessorShort(ip) );
 		}
@@ -369,15 +358,11 @@ public class IJWrap {
 	// Create a stack composed entirely of a single channel
 	private static ImageStack createStackForVoxelBox( VoxelBoxWrapper voxelBox ) {
 		
-		Extent e = voxelBox.any().extnt();
+		Extent e = voxelBox.any().extent();
 		ImageStack stackNew = new ImageStack( e.getX(), e.getY() );
 		for (int z=0; z<e.getZ(); z++) {
 			
 			ImageProcessor ip = imageProcessor(voxelBox, z);
-			
-			// Let's uncomment this, hopefully no major slowdowns
-			//ip = ip.convertToByte(true);
-			
 			stackNew.addSlice( String.valueOf(z), ip );	
 		}
 		return stackNew;

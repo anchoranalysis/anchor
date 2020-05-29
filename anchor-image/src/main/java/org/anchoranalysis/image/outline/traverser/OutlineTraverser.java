@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
@@ -63,11 +65,15 @@ public class OutlineTraverser {
 	
 	/**
 	 * Root point is arbitrarily chosen from object
+	 * 
 	 * @param listOut
 	 * @throws TraverseOutlineException
 	 */
 	public void applyGlobal( List<Point3i> listOut ) throws OperationFailedException {
-		applyGlobal( omOutline.findAnyPntOnMask(), listOut );
+		OptionalUtilities.ifPresent(
+			omOutline.findAnyPntOnMask(),
+			rootPoint->	applyGlobal( rootPoint, listOut )
+		);
 	}
 	
 	/**
@@ -78,7 +84,7 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( Point3i root, List<Point3i> listOut ) throws OperationFailedException {
 
-		Point3i crnrMin = omOutline.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMin = omOutline.getBoundingBox().getCrnrMin();
 		Point3i rootRel = BoundingBox.relPosTo(root, crnrMin);
 
 		ContiguousPixelPath listOutRel = applyLocal(rootRel);
@@ -96,7 +102,7 @@ public class OutlineTraverser {
 	
 		processQueue( queue, visitedPixels );
 				
-		return visitedPixels.combineToOnePath( omOutline.getBoundingBox().extnt() );
+		return visitedPixels.combineToOnePath( omOutline.getBoundingBox().extent() );
 	
 	}
 	

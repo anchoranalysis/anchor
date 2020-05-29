@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.bean.identifier;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-experiment
@@ -34,9 +36,9 @@ public abstract class ExperimentIdentifier extends AnchorBean<ExperimentIdentifi
 	/**
 	 * Creates an identifier for the experiment
 	 * 
-	 * @param taskName if non-null, a name describing the current task.
+	 * @param taskName a name describing the current task if it xists
 	 * @return a string to identify the current experiment
 	 */
-	public abstract String identifier(String taskName);
+	public abstract String identifier(Optional<String> taskName);
 
 }

@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
@@ -64,7 +65,7 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	private static String FORMAT_TIME_SECOND = "ss";
 	
 	@Override
-	public String identifier(String taskName) {
+	public String identifier(Optional<String> taskName) {
 		return IdentifierUtilities.identifierFromNameVersion(
 			determineExperimentName(taskName),
 			determineVersion()
@@ -77,14 +78,12 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	 * @param taskName if non-null a string describing the current task, or null if none exists
 	 * @return the experiment-name
 	 */
-	private String determineExperimentName(String taskName) {
-		if (taskName!=null) {
-			return removeSpecialChars(
-				finalPartOfTaskName(taskName)
-			);
-		} else {
-			return fallbackName;
-		}
+	private String determineExperimentName(Optional<String> taskName) {
+		return taskName.map( name->
+			removeSpecialChars(
+				finalPartOfTaskName(name)
+			)
+		).orElse(fallbackName);
 	}
 	
 	/**
@@ -92,40 +91,29 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	 * 
 	 * @return a string describing the version or null if version should be omitted
 	 */
-	private String determineVersion() {
-		DateTimeFormatter dtf = createFormatter();
-		if (dtf!=null) {
-			return dtf.format( LocalDateTime.now() );
-		} else {
-			return null;
-		}
+	private Optional<String> determineVersion() {
+		return createFormatterPatternStr()
+			.map(DateTimeFormatter::ofPattern)
+			.map( formatter->
+				formatter.format( LocalDateTime.now() )
+			);
 	}
 	
-	/**
-	 * Creates a date-time formatter
-	 * 
-	 * @return the formatter or null if neither the day or time should be included
-	 */
-	private DateTimeFormatter createFormatter() {
-		String formatterStr = createFormatterPatternStr();
-		if (formatterStr!=null) {
-			return DateTimeFormatter.ofPattern(formatterStr);
-		} else {
-			return null;
-		}
-	}
-	
-	private String createFormatterPatternStr() {
+	private Optional<String> createFormatterPatternStr() {
 		if (day) {
 			if (time) {
-				return FORMAT_DAY + "." + createPatternStrTime();
+				return Optional.of(
+					FORMAT_DAY + "." + createPatternStrTime()
+				);
 			} else {
-				return FORMAT_DAY;
+				return Optional.of(FORMAT_DAY);
 			}
 		} else if (time) {
-			return createPatternStrTime();
+			return Optional.of(
+				createPatternStrTime()
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
@@ -177,6 +165,4 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	public void setSecond(boolean second) {
 		this.second = second;
 	}
-
-
 }

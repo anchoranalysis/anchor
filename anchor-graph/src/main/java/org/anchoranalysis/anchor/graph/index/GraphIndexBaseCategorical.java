@@ -30,7 +30,6 @@ import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GetForSeries;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -107,12 +106,4 @@ public abstract class GraphIndexBaseCategorical<T,S extends CategoryDataset> ext
 	protected ArrayList<Paint> getSeriesColors() {
 		return seriesColors;
 	}
-
-	@Override
-	protected AxisLimits domainLimits(AxisLimits proposedAxisLimits) {
-		// Always NULL as we don't have a numerical domain, rather it's categorical
-		return null;
-	}
-
-	
 }

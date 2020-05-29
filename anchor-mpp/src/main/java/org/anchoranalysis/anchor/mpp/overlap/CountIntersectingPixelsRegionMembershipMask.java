@@ -27,6 +27,7 @@ package org.anchoranalysis.anchor.mpp.overlap;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -68,9 +69,9 @@ class CountIntersectingPixelsRegionMembershipMask {
 	) {
 		
 		// Find the common bounding box
-		BoundingBox bboxIntersect = new BoundingBox( srcBox );
+		Optional<BoundingBox> bboxIntersect = srcBox.intersection().with(otherBox);
 		
-		if (!bboxIntersect.intersect( otherBox, true )) {
+		if (!bboxIntersect.isPresent()) {
 			// If the bounding boxes don't intersect then we can
 			//   go home early
 			return 0;
@@ -79,7 +80,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		return countIntersectingPixelsFromBBoxMaskGlobal(
 			src,
 			other,
-			bboxIntersect,
+			bboxIntersect.get(),
 			maskGlobal,
 			onMaskGlobal
 		);
@@ -94,7 +95,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		VoxelBox<ByteBuffer> maskGlobal,
 		byte onMaskGlobal
 	) {
-		Extent eGlobalMask = maskGlobal.extnt();
+		Extent eGlobalMask = maskGlobal.extent();
 		
 		IntersectionBBox bbox = IntersectionBBox.create(
 			src.getBoundingBox(),
@@ -141,7 +142,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		IntersectionBBox bbox,
 		int xGlobalRel,
 		int yGlobalRel,
-		Extent extntGlobal,
+		Extent extentGlobal,
 		byte onMaskGlobal
 	) {
 		
@@ -154,7 +155,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 				int x_other = x + bbox.x().rel();
 				int x_global = x + xGlobalRel;
 				
-				byte globalMask = bufferMaskGlobal.get( extntGlobal.offset(x_global, y_global) );
+				byte globalMask = bufferMaskGlobal.get( extentGlobal.offset(x_global, y_global) );
 				if (globalMask==onMaskGlobal) {
 				
 					byte posCheck = buffer1.get( bbox.e1().offset(x, y) );

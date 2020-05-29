@@ -37,13 +37,13 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -79,7 +79,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		ObjMaskCollection out = new ObjMaskCollection();
 		for( ObjMask om : delegate ) {
 			
-			if (om.getBoundingBox().containsZ(z)) {
+			if (om.getBoundingBox().contains().z(z)) {
 				out.add( om.extractSlice(z, keepZ ) );
 			}
 		}
@@ -110,11 +110,25 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		return delegate.containsAll(arg0);
 	}
 
+	/** 
+	 * Checks if two collections are equal in a shallow way
+	 * 
+	 * <p>Specifically, objects are tested to be equal using their object references (i.e. they are equal iff they have the same reference)</p>
+	 * <p>This is a cheaper equality check than with {@link equalsDeep}</p>
+	 * <p>Both collections must have identical ordering.</p> 
+	 */
 	@Override
 	public boolean equals(Object arg0) {
 		return delegate.equals(arg0);
 	}
-	
+		
+	/** 
+	 * Checks if two collections are equal in a deeper way
+	 * 
+	 * <p>Specifically, objects are tested to be equal using a deep byte-by-byte comparison using {@link ObjMask.equalsDeep}. Their objects do not need to be equal.
+	 * <p>This is more expensive equality check than with {@link equalsDeep}, but is useful for comparing objects that were instantiated in different places.</p>
+	 * <p>Both collections must have identical ordering.</p>
+	 */	
 	public boolean equalsDeep(ObjMaskCollection othr) {
 		if (size()!=othr.size()) {
 			return false;
@@ -125,40 +139,9 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 	
-	/**
-	 * Does a deep comparison of both objects, but ignores their order
-	 * @param othr to compare to
-	 * @return true if both obj mask collections are identical (except for order), false otherwise
-	 */
-	public boolean equalsIgnoreOrder(ObjMaskCollection othr) {
-		if (size()!=othr.size()) {
-			return false;
-		}
-		
-		ObjMaskCollectionRTree index = new ObjMaskCollectionRTree(othr);
-		
-		for( int i=0; i<size(); i++) {
-			
-			ObjMask curObj = get(i);
-			ObjMaskCollection othersWithPoints = index.contains( curObj.findAnyPntOnMask() );
-			
-			if (othersWithPoints.size()!=1) {
-				return false;
-			}
-			
-			ObjMask curOther = othersWithPoints.get(0);
-			if (!curObj.equalsDeep(curOther)) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
 	public ObjMask get(int index) {
 		return delegate.get(index);
 	}
@@ -244,10 +227,10 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 		return toString(false,false);
 	}
 	
-	public void addToBBoxCrnrMin( Point3i pnt ) {
+	public void addToBBoxCrnrMin( ReadableTuple3i toAdd ) {
 		
 		for (ObjMask mask : this) {
-			mask.getBoundingBox().getCrnrMin().add(pnt);
+			mask.getBoundingBox().shiftBy(toAdd);
 		}
 	}
 	
@@ -355,18 +338,17 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 	
 	// Merges all objects together, and then splits again into connected components
 	// BoundingBox is a bounding box that contains all objects, allowing us to avoid writing to a full buffer
-	public VoxelBox<ByteBuffer> merge( BoundingBox BoundingBox ) {
+	public VoxelBox<ByteBuffer> merge( BoundingBox bbox ) {
 		
-		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( BoundingBox.extnt() );
+		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( bbox.extent() );
 		
-		Point3i crnrSub = new Point3i( BoundingBox.getCrnrMin() );
+		Point3i crnrSub = new Point3i( bbox.getCrnrMin() );
 		crnrSub.scale(-1);
 		
 		// We write each object to the buffer
 		for( ObjMask om : this) {
 			
-			BoundingBox bbNew = new BoundingBox( om.getBoundingBox() );
-			bbNew.getCrnrMin().add(crnrSub);
+			BoundingBox bbNew = om.getBoundingBox().shiftBy(crnrSub);
 			
 			ObjMask objMaskRel = new ObjMask( bbNew, om.getVoxelBox() );
 
@@ -391,7 +373,7 @@ public class ObjMaskCollection implements Iterable<ObjMask> {
 	public ObjMaskCollection findObjsWithIntersectingBBox( ObjMask om ) {
 		ObjMaskCollection omc = new ObjMaskCollection();
 		for (ObjMask omItr : this) {
-			if (omItr.getBoundingBox().hasIntersection(om.getBoundingBox())) {
+			if (omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())) {
 				omc.add(omItr);
 			}
 		}

@@ -33,12 +33,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
+import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
@@ -119,7 +122,7 @@ public class BoundOutputManager {
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
-	public BoundOutputManager bindFile( InputFromManager input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
+	public BoundOutputManager bindFile( PathWithDescription input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
 		FilePathPrefix fpp = outputManager.prefixForFile(
 			input,
 			expIdentifier,
@@ -135,6 +138,43 @@ public class BoundOutputManager {
 			lazyDirectoryFactory,
 			initIfNeeded
 		);
+	}
+	
+	/**
+	 * Writes a file-entry to the operation recorder
+	 * 
+	 * @param outputName output-name
+	 * @param path path of the file
+	 * @param manifestDescription the manifest description
+	 * @param index an index associated with this item (there may be other items with the same name, but not the same index)
+	 */
+	public void writeFileToOperationRecorder(String outputName, Path path, ManifestDescription manifestDescription, String index) {
+		writeOperationRecorder.write(
+			outputName,
+			manifestDescription,
+			boundFilePathPrefix.relativePath(path),
+			index
+		);
+	}
+	
+	/**
+	 * Writes a folder-entry to the operation-recorder (if it exists)
+	 * 
+	 * @param path path of the folder that is to be written
+	 * @param manifestDescription the manifest-description
+	 * @param manifestFolder the associated folder in the manifest
+	 * @return a write recorder for the sub folder (if it exists) or otherwise the write recorder associated with the output manager
+	 */
+	public IWriteOperationRecorder writeFolderToOperationRecorder( Path path, ManifestFolderDescription manifestDescription, Optional<FolderWriteWithPath> manifestFolder ) {
+		if (manifestFolder.isPresent()) {
+			// Assume the folder are writing to has no path
+			assert(manifestFolder.get().calcPath()==null);
+			Path relativePath = boundFilePathPrefix.relativePath(path);
+			
+			return writeOperationRecorder.writeFolder( relativePath, manifestDescription, manifestFolder.get());
+		} else {
+			return writeOperationRecorder;
+		}
 	}
 	
 	private static IWriteOperationRecorder writeRecorder( Optional<ManifestRecorder> manifestRecorder ) {
@@ -168,11 +208,11 @@ public class BoundOutputManager {
 	public Writer getWriterCheckIfAllowed() {
 		return writerCheckIfAllowed;
 	}
-
-	public IWriteOperationRecorder getWriteOperationRecorder() {
-		return writeOperationRecorder;
+	
+	public Path outFilePath(String filePathRelative) {
+		return boundFilePathPrefix.outFilePath(filePathRelative);
 	}
-
+	
 	public OutputManager getOutputManager() {
 		return outputManager;
 	}
@@ -184,4 +224,6 @@ public class BoundOutputManager {
 	public LazyDirectoryFactory getLazyDirectoryFactory() {
 		return lazyDirectoryFactory;
 	}
+
+	
 }

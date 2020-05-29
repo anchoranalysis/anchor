@@ -33,7 +33,7 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-public abstract class Tuple3i implements Serializable {
+public abstract class Tuple3i implements ReadableTuple3i, Serializable {
 
 	/**
 	 * 
@@ -44,10 +44,10 @@ public abstract class Tuple3i implements Serializable {
 	protected int y = 0;
 	protected int z = 0;
 	
-	public final void add( Tuple3i pnt ) {
-		this.x = this.x + pnt.x;
-		this.y = this.y + pnt.y;
-		this.z = this.z + pnt.z;
+	public final void add( ReadableTuple3i pnt ) {
+		this.x = this.x + pnt.getX();
+		this.y = this.y + pnt.getY();
+		this.z = this.z + pnt.getZ();
 	}
 	
 	public final void sub( int val ) {
@@ -56,10 +56,10 @@ public abstract class Tuple3i implements Serializable {
 		this.z = this.z - val;
 	}
 	
-	public final void sub( Tuple3i pnt ) {
-		this.x = this.x - pnt.x;
-		this.y = this.y - pnt.y;
-		this.z = this.z - pnt.z;
+	public final void sub( ReadableTuple3i pnt ) {
+		this.x = this.x - pnt.getX();
+		this.y = this.y - pnt.getY();
+		this.z = this.z - pnt.getZ();
 	}
 	
 	public final void scale( int factor ) {
@@ -79,6 +79,7 @@ public abstract class Tuple3i implements Serializable {
 		this.y = (int) (factor * this.y);
 	}
 
+	@Override
 	public final int getX() {
 		return x;
 	}
@@ -87,6 +88,7 @@ public abstract class Tuple3i implements Serializable {
 		this.x = x;
 	}
 
+	@Override
 	public final int getY() {
 		return y;
 	}
@@ -95,6 +97,7 @@ public abstract class Tuple3i implements Serializable {
 		this.y = y;
 	}
 
+	@Override
 	public final int getZ() {
 		return z;
 	}
@@ -115,6 +118,7 @@ public abstract class Tuple3i implements Serializable {
 		}
 	}
 	
+	@Override
 	public final int getValueByDimension( AxisType axisType ) {
 		switch( axisType ) {
 		case X:

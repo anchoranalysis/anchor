@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -70,15 +71,13 @@ public class BinaryChnlFromObjs {
 	// We look for the values that are NOT on the masks
 	private static BinaryChnl createChnlObjMaskCollectionHelper(
 		ObjMaskCollection masks,
-		ImageDim sd,
+		ImageDim dim,
 		BinaryValues outVal,
 		int initialState,
 		byte objState
 	) throws CreateException {
 		
-		ImageDim newSd = new ImageDim( sd );
-		
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, VoxelDataTypeUnsignedByte.instance);
+		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		
 		if (outVal.getOnInt()!=0) {
@@ -102,7 +101,7 @@ public class BinaryChnlFromObjs {
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		Point3i maxGlobal = bbox.calcCrnrMax();
+		ReadableTuple3i maxGlobal = bbox.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
 		Point3i pntLocal = new Point3i();
 		
@@ -114,17 +113,26 @@ public class BinaryChnlFromObjs {
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			
 			ByteBuffer pixelsOut = voxelBoxOut.getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
-			writeToBufferMasked(maskIn, pixelsOut, voxelBoxOut.extnt(), bbox.getCrnrMin(), pntGlobal, maxGlobal, maskOn, outValByte);
+			writeToBufferMasked(
+				maskIn,
+				pixelsOut,
+				voxelBoxOut.extent(),
+				bbox.getCrnrMin(),
+				pntGlobal,
+				maxGlobal,
+				maskOn,
+				outValByte
+			);
 		}
 	}
 	
 	private static void writeToBufferMasked(
 		ByteBuffer maskIn,
 		ByteBuffer pixelsOut,
-		Extent extntOut,
-		Point3i crnrMin,
+		Extent extentOut,
+		ReadableTuple3i crnrMin,
 		Point3i pntGlobal,
-		Point3i maxGlobal,
+		ReadableTuple3i maxGlobal,
 		byte maskOn,
 		byte outValByte
 	) {
@@ -137,7 +145,7 @@ public class BinaryChnlFromObjs {
 					continue;
 				}
 				
-				int indexGlobal = extntOut.offset(pntGlobal.getX(), pntGlobal.getY());
+				int indexGlobal = extentOut.offset(pntGlobal.getX(), pntGlobal.getY());
 				pixelsOut.put(indexGlobal,outValByte);
 			}
 		}

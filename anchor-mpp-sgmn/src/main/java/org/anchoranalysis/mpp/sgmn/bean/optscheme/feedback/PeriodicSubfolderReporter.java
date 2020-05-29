@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*
@@ -99,7 +101,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 					generateIterableElement(reporting),
 					String.valueOf( reporting.getIter() )
 				);
-			} catch (OutputWriteFailedException e) {
+			} catch (OutputWriteFailedException | ReporterException e) {
 				throw new PeriodReceiverException(e);
 			}
 		}
@@ -123,7 +125,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 		optInit.getPeriodTriggerBank().obtain(getAggInterval(), new PeriodReceiver() );
 	}
 
-	protected abstract T generateIterableElement( Reporting<CfgNRGPixelized> reporting );
+	protected abstract T generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
 
 	public String getOutputName() {
 		return outputName;
@@ -137,7 +139,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 		return this.getParentOutputManager().getOutputWriteSettings();
 	}
 	
-	protected BoundOutputManager getSubFolderOutputManager() {
+	protected Optional<BoundOutputManager> getSubFolderOutputManager() {
 		return sequenceWriter.getSubFolderOutputManager();
 	}
 	

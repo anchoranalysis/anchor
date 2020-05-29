@@ -41,6 +41,7 @@ import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
@@ -54,6 +55,18 @@ public class TestLoaderImageIO {
 		
 		TestReaderWriterUtilities.ensureRasterReader();
 		rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
+	}
+	
+	public Chnl openChnlFromTestPath( String testPath ) throws TestDataLoadException {
+		return extractChnl(
+			openStackFromTestPath(testPath)
+		);
+	}
+	
+	public Chnl openChnlFromFilePath( Path filePath ) throws TestDataLoadException {
+		return extractChnl(
+			openStackFromFilePath(filePath)
+		);
 	}
 	
 	public Stack openStackFromTestPath( String testPath ) throws TestDataLoadException {
@@ -183,5 +196,12 @@ public class TestLoaderImageIO {
 		}
 		
 		return true;
+	}
+	
+	private static Chnl extractChnl( Stack stack ) {
+		if (stack.getNumChnl()!=1) {
+			throw new TestDataLoadException("Loading a stack which contains more than one channel, when only one channel is intended");
+		}
+		return stack.getChnl(0);
 	}
 }

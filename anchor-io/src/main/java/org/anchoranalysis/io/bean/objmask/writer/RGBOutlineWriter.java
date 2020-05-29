@@ -89,7 +89,7 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 				
-				assert( om.getVoxelBox().extnt().getZ() > 0 );
+				assert( om.getVoxelBox().extent().getZ() > 0 );
 				assert( colorIDGetter!=null );
 				assert( colorIndex!=null );
 				

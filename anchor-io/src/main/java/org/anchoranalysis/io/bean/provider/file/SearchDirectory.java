@@ -103,11 +103,9 @@ public class SearchDirectory extends FileProviderWithDirectoryString {
 		MatchGlob matcherGlob = new MatchGlob();
 		matcherGlob.setGlob( gwd.getGlob() );
 		
-		if (gwd.getDirectory()!=null) {
-			setDirectory( gwd.getDirectory() );
-		} else {
-			setDirectory("");	
-		}
+		setDirectory(
+			gwd.getDirectory().orElse("")
+		);
 		
 		this.matcher = matcherGlob;
 	}

@@ -52,11 +52,9 @@ public class ChnlConverterMulti {
 		} else if (outputType.equals(VoxelDataTypeFloat.instance)) {
 			return new ChnlConverterToFloat().convert(chnlIn, conversionPolicy);
 		} else if (outputType.equals(VoxelDataTypeUnsignedInt.instance)) {
-			assert false;
-			return null;
+			throw new UnsupportedOperationException("UnsignedInt is not yet supported for this operation");
 		} else { 
-			assert false;
-			return null;
+			throw new UnsupportedOperationException();
 		}
 	}
 }

@@ -51,7 +51,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
 		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
 		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -75,7 +75,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return true;
 			}
@@ -103,7 +103,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return true;
 			}

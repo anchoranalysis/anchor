@@ -2,6 +2,7 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
 
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.IPeriodReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodReceiverException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
@@ -88,7 +89,7 @@ class AggregateTrigger<S,T extends IAggregateReceiver<S>>  {
 	
 	
 		
-	public void record( Reporting<S> reporting ) {
+	public void record( Reporting<S> reporting ) throws ReporterException {
 		
 		// If accepted we increase the total for this kernel
 		if (reporting.isAccptd()) {

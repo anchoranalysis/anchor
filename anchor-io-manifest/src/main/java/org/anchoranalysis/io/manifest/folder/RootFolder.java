@@ -47,10 +47,6 @@ public class RootFolder extends FolderWrite implements Serializable {
 	// We don't want to serialize this, as its temporary state (and an error will be thrown as WindowsPath is not serializable)
 	private transient Path rootPath;
 	
-	public RootFolder() {
-		
-	}
-	
 	// This must be always called before it can used, as the state is kept transient
 	public void initRootPath( Path rootFolderPath ) {
 		if (delegate==null) {

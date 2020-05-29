@@ -28,11 +28,10 @@ package org.anchoranalysis.feature.bean.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
@@ -47,33 +46,27 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 	private Feature<FeatureInput> feature;
 	
 	@Override
-	public void onInit(SharedFeaturesInitParams so) throws InitException {
-		
-		super.onInit(so);
-		
-		if (getSharedObjects().getSharedFeatureSet()==null) {
-			throw new InitException("sharedFeatureSet is null");
-		}
-		
-		if (featureListRef!=null && !featureListRef.isEmpty()) {
-			// We request this to make sure it's evaluated and added to the pso.getSharedFeatureSet()
-			try {
-				getSharedObjects().getFeatureListSet().getException(featureListRef);
-			} catch (NamedProviderGetException e) {
-				throw new InitException(e.summarize());
+	public Feature<FeatureInput> create() throws CreateException {
+		if (feature==null) {
+			if (getSharedObjects().getSharedFeatureSet()==null) {
+				throw new CreateException("sharedFeatureSet is null");
 			}
+			
+			if (featureListRef!=null && !featureListRef.isEmpty()) {
+				// We request this to make sure it's evaluated and added to the pso.getSharedFeatureSet()
+				try {
+					getSharedObjects().getFeatureListSet().getException(featureListRef);
+				} catch (NamedProviderGetException e) {
+					throw new CreateException(e.summarize());
+				}
+			}
+			
+			try {
+				this.feature = getSharedObjects().getSharedFeatureSet().getException(id);
+			} catch (NamedProviderGetException e) {
+				throw new CreateException(e.summarize());
+			}		
 		}
-		
-		try {
-			this.feature = getSharedObjects().getSharedFeatureSet().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		}		
-	}
-
-	@Override
-	public Feature<FeatureInput> create() {
-		assert(feature!=null);
 		return feature;
 	}
 

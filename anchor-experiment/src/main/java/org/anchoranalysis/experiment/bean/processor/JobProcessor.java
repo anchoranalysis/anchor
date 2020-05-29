@@ -27,10 +27,12 @@ package org.anchoranalysis.experiment.bean.processor;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.io.IReplaceTask;
@@ -104,12 +106,11 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 		ParametersExperiment paramsExperiment
 	) throws ExperimentExecutionException;
 		
-	protected LogReporter logReporterForMonitor(ParametersExperiment paramsExperiment) {
-		if (paramsExperiment.isDetailedLogging()) {
-			return paramsExperiment.getLogReporterExperiment();
-		} else {
-			return null;
-		}
+	protected Optional<LogReporter> logReporterForMonitor(ParametersExperiment paramsExperiment) {
+		return OptionalUtilities.createFromFlag(
+			paramsExperiment.isDetailedLogging(),
+			() -> paramsExperiment.getLogReporterExperiment()
+		);
 	}
 		
 	private static void logStats( TaskStatistics stats, ParametersExperiment paramsExperiment ) {

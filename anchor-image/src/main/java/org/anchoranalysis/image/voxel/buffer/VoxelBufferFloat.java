@@ -33,9 +33,9 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
-public class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
+public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
-	private FloatBuffer delegate;
+	private final FloatBuffer delegate;
 
 	private VoxelBufferFloat(FloatBuffer delegate) {
 		super();

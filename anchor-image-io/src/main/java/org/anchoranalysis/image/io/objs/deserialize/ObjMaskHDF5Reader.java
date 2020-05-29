@@ -49,9 +49,13 @@ class ObjMaskHDF5Reader {
 		
 		VoxelBox<ByteBuffer> vb = createVoxelBox(mdb);
 		
-		BoundingBox bbox = new BoundingBox(crnrPnt, vb.extnt() );
+		BoundingBox bbox = new BoundingBox(crnrPnt, vb.extent() );
 		
 		return new ObjMask(bbox, vb);
+	}
+	
+	public static int extractIntAttr( IHDF5IntReader reader, String path, String attr) {
+		return reader.getAttr(path, attr);
 	}
 	
 	private static Extent extractExtnt( MDByteArray mdb ) {
@@ -99,9 +103,5 @@ class ObjMaskHDF5Reader {
 			extractIntAttr( reader, path, "y"),
 			extractIntAttr( reader, path, "z")
 		);
-	}
-	
-	private static int extractIntAttr( IHDF5IntReader reader, String path, String attr) {
-		return reader.getAttr(path, attr);
 	}
 }

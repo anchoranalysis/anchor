@@ -54,7 +54,7 @@ public class LocalSlices {
 			
 			int rel = z + i - shift;
 			
-			if (rel >= 0 && rel < bufferAccess.extnt().getZ()) {
+			if (rel >= 0 && rel < bufferAccess.extent().getZ()) {
 				arr[i] = bufferAccess.getPixelsForPlane(rel).buffer().array();
 			}
 			

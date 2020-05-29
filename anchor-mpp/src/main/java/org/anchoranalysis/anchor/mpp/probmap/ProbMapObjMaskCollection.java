@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.probmap;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 
 /*-
@@ -59,44 +61,11 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		}
 	}
 
-	private Point3d sampleFromObjMask( ObjMask om, RandomNumberGenerator re ) {
-
-		// Now we keep picking a pixel at random from the object mask until we find one that is
-		//  on.  Could be very inefficient for low-density bounding boxes? So we should make sure
-		//  bounding boxes are tight
-		
-		int vol = om.getVoxelBox().extnt().getVolume();
-		int volXY = om.getVoxelBox().extnt().getVolumeXY();
-		int exY = om.getVoxelBox().extnt().getX();
-		
-		while(true) {
-			
-			int index3D = (int) (re.nextDouble() * vol);
-			
-			int slice = index3D / volXY;
-			int index2D = index3D % volXY;
-			
-			byte b = om.getVoxelBox().getPixelsForPlane(slice).buffer().get(index2D);
-			if (b==om.getBinaryValuesByte().getOnByte()) {
-				
-				int xRel = index2D%exY;
-				int yRel = index2D/exY;
-				int zRel = slice;
-				
-				int x = xRel + om.getBoundingBox().getCrnrMin().getX();
-				int y = yRel + om.getBoundingBox().getCrnrMin().getY();
-				int z = zRel + om.getBoundingBox().getCrnrMin().getZ();
-				
-				return new Point3d( x, y, z );
-			}
-		}
-	}
-	
 	@Override
-	public Point3d sample(RandomNumberGenerator re) {
+	public Optional<Point3d> sample(RandomNumberGenerator re) {
 		
 		if (probWeights.size()==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		// We want to pick an ObjMaskCollection sampling, by picking one of the obj masks
@@ -106,7 +75,9 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		assert(index>=0);
 		
 		ObjMask om = objMaskCollection.get(index);
-		return sampleFromObjMask(om,re);
+		return Optional.of(
+			sampleFromObjMask(om,re)
+		);
 	}
 
 	@Override
@@ -134,4 +105,36 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		return null;
 	}
 
+	private Point3d sampleFromObjMask( ObjMask om, RandomNumberGenerator re ) {
+
+		// Now we keep picking a pixel at random from the object mask until we find one that is
+		//  on.  Could be very inefficient for low-density bounding boxes? So we should make sure
+		//  bounding boxes are tight
+		
+		long vol = om.getVoxelBox().extent().getVolume();
+		int volXY = om.getVoxelBox().extent().getVolumeXY();
+		int exY = om.getVoxelBox().extent().getX();
+		
+		while(true) {
+			
+			int index3D = (int) (re.nextDouble() * vol);
+			
+			int slice = index3D / volXY;
+			int index2D = index3D % volXY;
+			
+			byte b = om.getVoxelBox().getPixelsForPlane(slice).buffer().get(index2D);
+			if (b==om.getBinaryValuesByte().getOnByte()) {
+				
+				int xRel = index2D%exY;
+				int yRel = index2D/exY;
+				int zRel = slice;
+				
+				int x = xRel + om.getBoundingBox().getCrnrMin().getX();
+				int y = yRel + om.getBoundingBox().getCrnrMin().getY();
+				int z = zRel + om.getBoundingBox().getCrnrMin().getZ();
+				
+				return new Point3d( x, y, z );
+			}
+		}
+	}
 }

@@ -89,7 +89,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
 		FeatureCalculatorMulti<FeatureInputPairMemo> session,
-		boolean use3D
+		boolean do3D
 	) throws CreateException {
 		
 		
@@ -102,7 +102,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		//  necessary calculations from the addCriteria calculations to be used later
 		boolean calc = false;
 		try {
-			if (pairAddCriteria.includeMarks(mark1, mark2, nrgStack.getDimensions(), session, use3D)) {
+			if (pairAddCriteria.includeMarks(mark1, mark2, nrgStack.getDimensions(), session, do3D)) {
 				calc = true;
 			}
 		} catch (IncludeMarksFailureException e) {

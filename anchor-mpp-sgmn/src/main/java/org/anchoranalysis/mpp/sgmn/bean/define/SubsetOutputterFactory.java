@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.bean.define;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -68,7 +70,9 @@ class SubsetOutputterFactory {
 	public SubsetOutputter<Cfg> cfg() {
 		return create(
 			soMPP.getCfgCollection(),
-			new XStreamGenerator<Cfg>("cfg"),
+			new XStreamGenerator<Cfg>(
+				Optional.of("cfg")
+			),
 			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.CFG),
 			"cfgCollection"
 		);

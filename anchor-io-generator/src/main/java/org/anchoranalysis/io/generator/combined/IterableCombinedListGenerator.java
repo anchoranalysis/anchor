@@ -28,14 +28,13 @@ package org.anchoranalysis.io.generator.combined;
 
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -52,30 +51,30 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	private ArrayList<IterableGenerator<T>> list = new ArrayList<>();
 	
 	public IterableCombinedListGenerator() {
-	
-		super();
 		list = new ArrayList<>();
 	}
 	
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager) throws OutputWriteFailedException {
-		delegate.write(outputNameStyle, filePathGnrtr, writeOperationRecorder, outputManager);
+	public void start() throws OutputWriteFailedException {
+		for (IterableGenerator<T> generator : list) {
+			generator.start();
+		}
+	}
+
+	
+	@Override
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
+		delegate.write(outputNameStyle, outputManager);
 	}
 
 	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			String index, BoundOutputManager outputManager)
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager)
 			throws OutputWriteFailedException {
-		return delegate.write(outputNameStyle, filePathGnrtr, writeOperationRecorder, index, outputManager);
+		return delegate.write(outputNameStyle, index, outputManager);
 	}
 
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 		return delegate.getFileTypes(outputWriteSettings);
 	}
 
@@ -102,18 +101,19 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 		return this;
 	}
 
-	public boolean add(String name, IterableGenerator<T> element) {
-		list.add(element);
-		return delegate.add(name, element.getGenerator());
+	public void add(IterableGenerator<T> element) {
+		add(
+			element,
+			Optional.empty()
+		);
 	}
 	
-	@Override
-	public void start() throws OutputWriteFailedException {
-		for (IterableGenerator<T> generator : list) {
-			generator.start();
-		}
+	public void add(String name, IterableGenerator<T> element) {
+		add(
+			element,
+			Optional.of(name)
+		);
 	}
-
 
 	@Override
 	public void end() throws OutputWriteFailedException {
@@ -122,5 +122,8 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 		}
 	}
 
-
+	private void add(IterableGenerator<T> element, Optional<String> name) {
+		list.add(element);
+		delegate.add(element.getGenerator(), name);
+	}
 }

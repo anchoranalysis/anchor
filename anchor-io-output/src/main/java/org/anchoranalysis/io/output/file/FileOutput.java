@@ -30,50 +30,21 @@ package org.anchoranalysis.io.output.file;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 
-public class FileOutput extends AnchorBean<FileOutput> {
+public class FileOutput {
 
-	// START BEAN PROPERTIES
-	
-	// If set we output CSV to this path
-	@BeanField
-	private String filePath = null;
-	
-	@BeanField
-	private String extension;
-	
-	@BeanField
-	private ManifestDescription manifestDescription;
-	
-	// END BEAN PROPERTIES
+	private final String filePath;
 	
 	// Files for writing out
 	private PrintWriter out;
 	
-	public FileOutput() {
-		
-	}
-	
-	
-	public FileOutput(String filePath, String extension, ManifestDescription manifestDescription ) {
+	public FileOutput(String filePath) {
 		super();
 		this.filePath = filePath;
-		this.extension = extension;
-		this.manifestDescription = manifestDescription;
 	}
-	
-	public PrintWriter getWriter() {
-		return this.out;
-	}
-	
-	
-	public void start() throws AnchorIOException {
 		
+	public void start() throws AnchorIOException {
 		try {
 			FileWriter fileWriter = new FileWriter( filePath );
 			
@@ -86,38 +57,15 @@ public class FileOutput extends AnchorBean<FileOutput> {
 	public boolean isEnabled() {
 		return (out!=null);
 	}
+	
+	public PrintWriter getWriter() {
+		return this.out;
+	}
+	
 		
 	public void end() {
 		if (out!=null) {
 			out.close();
 		}
 	}
-	
-	
-	public String getFilePath() {
-		return filePath;
-	}
-
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public String getExtension() {
-		return extension;
-	}
-
-	public void setExtension(String extension) {
-		this.extension = extension;
-	}
-
-	public ManifestDescription getManifestDescription() {
-		return manifestDescription;
-	}
-
-	public void setManifestDescription(ManifestDescription manifestDescription) {
-		this.manifestDescription = manifestDescription;
-	}
-
-
 }

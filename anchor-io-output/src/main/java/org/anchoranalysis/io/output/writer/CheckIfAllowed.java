@@ -27,8 +27,9 @@ package org.anchoranalysis.io.output.writer;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -53,11 +54,13 @@ public class CheckIfAllowed extends Writer {
 	}
 
 	@Override
-	public BoundOutputManager bindAsSubFolder(String outputName,
+	public Optional<BoundOutputManager> bindAsSubFolder(String outputName,
 			ManifestFolderDescription manifestDescription,
-			FolderWriteWithPath folder) throws OutputWriteFailedException {
+			Optional<FolderWriteWithPath> folder) throws OutputWriteFailedException {
 		
-		if (!bom.isOutputAllowed(outputName)) return null;
+		if (!bom.isOutputAllowed(outputName)) {
+			return Optional.empty();
+		}
 
 		preop.exec();
 		
@@ -69,7 +72,9 @@ public class CheckIfAllowed extends Writer {
 			Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator)
 			throws OutputWriteFailedException {
 		
-		if (!bom.isOutputAllowed(outputName)) return;
+		if (!bom.isOutputAllowed(outputName)) {
+			return;
+		}
 
 		preop.exec();
 		
@@ -81,7 +86,9 @@ public class CheckIfAllowed extends Writer {
 			Operation<? extends WritableItem,OutputWriteFailedException> generator, String index)
 			throws OutputWriteFailedException {
 		
-		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return -1;
+		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) {
+			return -1;
+		}
 
 		preop.exec();
 		
@@ -100,11 +107,13 @@ public class CheckIfAllowed extends Writer {
 	}
 
 	@Override
-	public Path writeGenerateFilename(String outputName, String extension,
-			ManifestDescription manifestDescription, String outputNamePrefix,
+	public Optional<Path> writeGenerateFilename(String outputName, String extension,
+			Optional<ManifestDescription> manifestDescription, String outputNamePrefix,
 			String outputNameSuffix, String index) {
 		
-		if (!bom.isOutputAllowed(outputName)) return null;
+		if (!bom.isOutputAllowed(outputName)) {
+			return Optional.empty();
+		}
 		
 		preop.exec();
 		

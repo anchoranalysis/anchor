@@ -26,8 +26,6 @@ package org.anchoranalysis.image.orientation;
  * #L%
  */
 
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -89,14 +87,6 @@ public class OrientationRotationMatrix extends Orientation {
 		return new OrientationRotationMatrix(mat);
 	}
 
-	@Override
-	public void addProperties(NameValueSet<String> nvc) {
-	}
-
-	@Override
-	public void addPropertiesToMask(ObjMaskWithProperties mask) {
-	}
-
 	public RotationMatrix getRotationMatrix() {
 		return rotationMatrix;
 	}
@@ -109,6 +99,4 @@ public class OrientationRotationMatrix extends Orientation {
 	public int getNumDims() {
 		return rotationMatrix.getNumDim();
 	}
-
-
 }

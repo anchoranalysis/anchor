@@ -27,6 +27,7 @@ package org.anchoranalysis.experiment.bean.processor;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -85,7 +86,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		S sharedState,
 		ParametersExperiment paramsExperiment,
 		int totalNumJobs,
-		LogReporter logReporterMonitor
+		Optional<LogReporter> logReporterMonitor
 	) throws ExperimentExecutionException {
 		
 		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<T>(

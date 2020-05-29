@@ -31,11 +31,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
@@ -64,8 +65,8 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 		this.annotationPath = annotationStrategy.annotationPathFor(input);
 	}
 	
-	public File associatedFile() {
-		return input.pathForBinding().toFile();
+	public Optional<File> associatedFile() {
+		return input.pathForBinding().map(Path::toFile);
 	}
 
 	public T getStrategy() {
@@ -78,7 +79,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 	
 	/** A label to be used when aggregrating this annotation with others, or NULL if this makes no sense 
 	 * @throws IOException */
-	public String labelForAggregation() throws AnchorIOException {
+	public Optional<String> labelForAggregation() throws AnchorIOException {
 		return annotationStrategy.annotationLabelFor(input);
 	}
 	
@@ -88,7 +89,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return input.pathForBinding();
 	}
 		
@@ -101,7 +102,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 		input.close(errorReporter);
 	}
 
-	public OperationWithProgressReporter<INamedProvider<Stack>,CreateException> stacks() {
+	public OperationWithProgressReporter<NamedProvider<Stack>,CreateException> stacks() {
 		return new OperationCreateStackCollection(input);
 	}
 	

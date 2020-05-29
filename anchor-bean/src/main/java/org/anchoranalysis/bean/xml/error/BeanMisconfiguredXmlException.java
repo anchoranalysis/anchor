@@ -85,7 +85,7 @@ public class BeanMisconfiguredXmlException extends AnchorCombinableException {
 	
 	@Override
 	protected boolean canExceptionBeSkipped(Throwable exc) {
-		return exc instanceof ConfigurationRuntimeException;
+		return exc instanceof ConfigurationRuntimeException || exc instanceof BeanXmlException;
 	}
 	
 	

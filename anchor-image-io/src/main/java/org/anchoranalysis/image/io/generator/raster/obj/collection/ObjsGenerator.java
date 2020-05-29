@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.obj.collection;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-io
@@ -56,8 +58,10 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "maskCollection");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "maskCollection")
+		);
 	}
 
 	@Override

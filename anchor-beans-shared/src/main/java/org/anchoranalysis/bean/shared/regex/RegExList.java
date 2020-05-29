@@ -29,6 +29,8 @@ package org.anchoranalysis.bean.shared.regex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class RegExList extends RegEx {
@@ -39,15 +41,15 @@ public class RegExList extends RegEx {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String[] matchStr(String str) {
+	public Optional<String[]> match(String str) {
 
 		for( RegEx re : list ) {
-			String[] m = re.matchStr(str);
-			if (m!=null) {
-				return m;
+			Optional<String[]> matches = re.match(str);
+			if (matches.isPresent()) {
+				return matches;
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	public List<RegEx> getList() {

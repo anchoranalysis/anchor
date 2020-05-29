@@ -50,13 +50,13 @@ public class BinaryChnlInverter {
 	}
 		
 	public static void invertVoxelBox( VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb ) {
-		for (int z=0; z<vb.extnt().getZ(); z++) {
+		for (int z=0; z<vb.extent().getZ(); z++) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
 			int offset = 0;
-			for (int y=0; y<vb.extnt().getY(); y++) {
-				for (int x=0; x<vb.extnt().getX(); x++) {
+			for (int y=0; y<vb.extent().getY(); y++) {
+				for (int x=0; x<vb.extent().getX(); x++) {
 					
 					byte val = bb.get(offset);
 					

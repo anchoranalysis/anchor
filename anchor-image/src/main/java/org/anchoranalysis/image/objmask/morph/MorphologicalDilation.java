@@ -28,19 +28,17 @@ package org.anchoranalysis.image.objmask.morph;
 
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objmask.morph.accept.AcceptIterationConditon;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
@@ -53,18 +51,18 @@ public class MorphologicalDilation {
 	/**
 	 * 
 	 * @param om
-	 * @param extnt if non-NULL ensures the object stays within certain bounds
+	 * @param extent if non-NULL ensures the object stays within certain bounds
 	 * @param do3D
 	 * @param iterations
 	 * @return
 	 * @throws CreateException
 	 */
-	public static ObjMask createDilatedObjMask( ObjMask om, Optional<Extent> extnt, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
+	public static ObjMask createDilatedObjMask( ObjMask om, Optional<Extent> extent, boolean do3D, int iterations, boolean bigNghb ) throws CreateException {
 		
 		Point3i grow = do3D ? new Point3i(iterations,iterations,iterations) : new Point3i(iterations,iterations,0);
 		
 		try {
-			ObjMask omGrown = om.growBuffer(grow, grow, extnt );
+			ObjMask omGrown = om.growBuffer(grow, grow, extent );
 			omGrown.setVoxelBox(
 				dilate(omGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNghb).getVoxelBox()
 			);
@@ -74,35 +72,7 @@ public class MorphologicalDilation {
 			throw new CreateException("Cannot grow object-mask", e);
 		}
 	}
-	
 
-	private static BinaryKernel createDilationKernel( BinaryValuesByte bv, boolean do3D, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean zOnly, boolean outsideAtThreshold, boolean bigNghb ) throws CreateException {
-
-		BinaryKernel kernelDilation;
-		
-		if (zOnly) {
-			
-			if (bigNghb) {
-				throw new CreateException("BigNghb not supported for zOnly");
-			}
-			
-			kernelDilation = new DilationKernel3ZOnly( bv, outsideAtThreshold);
-		} else {
-			kernelDilation = new DilationKernel3( bv, outsideAtThreshold, do3D, bigNghb);
-		}
-		
-		// TODO HACK FIX , how we handle the different regions
-		
-		if(minIntensityValue>0 && backgroundVb.isPresent()) {
-			return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb.get() );
-		} else {
-			return kernelDilation;
-		}
-	}
-	
-	
-
-	
 	public static BinaryVoxelBox<ByteBuffer> dilate( BinaryVoxelBox<ByteBuffer> bvb, boolean do3D, int iterations, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean bigNghb ) throws CreateException {
 		return dilate(
 			bvb,
@@ -141,7 +111,7 @@ public class MorphologicalDilation {
 		int minIntensityValue,
 		boolean zOnly,
 		boolean outsideAtThreshold,
-		Optional<IAcceptIteration> acceptConditions,
+		Optional<AcceptIterationConditon> acceptConditions,
 		boolean bigNghb
 	) throws CreateException {
 
@@ -175,60 +145,28 @@ public class MorphologicalDilation {
 		}
 		return new BinaryVoxelBoxByte(buf, bvb.getBinaryValues() );
 	}
-	
-	public static interface IAcceptIteration {
-		/**
-		 * 
-		 * @param buffer
-		 * @param bvb
-		 * @return TRUE if the particular iteration should be accepted, FALSE otherwise
-		 */
-		boolean acceptIteration(  VoxelBox<ByteBuffer> buffer, BinaryValues bvb ) throws OperationFailedException;
-	}
-	
-	public static class AcceptIterationList implements IAcceptIteration {
-		private List<IAcceptIteration> list = new ArrayList<>();
+		
+	private static BinaryKernel createDilationKernel( BinaryValuesByte bv, boolean do3D, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean zOnly, boolean outsideAtThreshold, boolean bigNghb ) throws CreateException {
 
-		@Override
-		public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb) throws OperationFailedException {
-			for (IAcceptIteration ai : list) {
-				if (!ai.acceptIteration(buffer, bvb)) {
-					return false;
-				}
+		BinaryKernel kernelDilation;
+		
+		if (zOnly) {
+			
+			if (bigNghb) {
+				throw new CreateException("BigNghb not supported for zOnly");
 			}
-			return true;
-		}
-
-		public boolean add(IAcceptIteration e) {
-			return list.add(e);
-		}
-		
-		
-	}
-	
-	public static class RejectIterationIfAllHigh implements IAcceptIteration {
-
-		@Override
-		public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb) {
-			// We exit early if there's no off-pixel
-			BinaryVoxelBoxByte nextBinary = new BinaryVoxelBoxByte(buffer, bvb );
-			return nextBinary.hasOffVoxel();
-		}
-		
-	}
-	
-	public static class RejectIterationIfLowDisconnected implements IAcceptIteration {
-
-		@Override
-		public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb) throws OperationFailedException {
-			BinaryVoxelBoxByte nextBinary = new BinaryVoxelBoxByte(buffer, bvb.createInverted() );
 			
-			ObjMask omMask = new ObjMask(nextBinary);
-			return omMask.checkIfConnected();
-			
-			
+			kernelDilation = new DilationKernel3ZOnly( bv, outsideAtThreshold);
+		} else {
+			kernelDilation = new DilationKernel3( bv, outsideAtThreshold, do3D, bigNghb);
 		}
 		
+		// TODO HACK FIX , how we handle the different regions
+		
+		if(minIntensityValue>0 && backgroundVb.isPresent()) {
+			return new ConditionalKernel(kernelDilation, minIntensityValue, backgroundVb.get() );
+		} else {
+			return kernelDilation;
+		}
 	}
-
 }

@@ -2,8 +2,7 @@ package org.anchoranalysis.io.generator.xml;
 
 import java.io.IOException;
 import java.nio.file.Path;
-
-
+import java.util.Optional;
 
 /*
  * #%L
@@ -64,7 +63,9 @@ public class XMLConfigurationWrapperGenerator extends XMLGenerator {
 	
 	
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("xml", "xmlConfigurationWrapper");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("xml", "xmlConfigurationWrapper")
+		);
 	}
 }

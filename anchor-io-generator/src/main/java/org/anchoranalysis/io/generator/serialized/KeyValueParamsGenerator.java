@@ -29,6 +29,7 @@ package org.anchoranalysis.io.generator.serialized;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -63,8 +64,10 @@ public class KeyValueParamsGenerator extends SerializedGenerator {
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("keyvalueparams",manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("keyvalueparams",manifestFunction)
+		);
 	}
 
 }

@@ -45,8 +45,8 @@ public class ObjMaskWithProperties {
 	private Map<String,Object> properties = new HashMap<>();
 	private ObjMask mask;
 	
-	public ObjMaskWithProperties(BoundingBox BoundingBox ) {
-		mask = new ObjMask(BoundingBox);
+	public ObjMaskWithProperties(BoundingBox bbox ) {
+		mask = new ObjMask(bbox);
 	}
 	
 	public ObjMaskWithProperties( ObjMask objMask ) {
@@ -109,8 +109,8 @@ public class ObjMaskWithProperties {
 		return mask.hashCode();
 	}
 
-	public void setBoundingBox(BoundingBox BoundingBox) {
-		mask.setBoundingBox(BoundingBox);
+	public void setBoundingBox(BoundingBox bbox) {
+		mask.setBoundingBox(bbox);
 	}
 
 	public boolean sizesMatch() {

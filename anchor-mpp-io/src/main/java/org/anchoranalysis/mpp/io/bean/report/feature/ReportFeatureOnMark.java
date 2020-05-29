@@ -68,13 +68,16 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 		}
 		
 		
-		Mark mark;
+		Optional<Mark> mark;
 		try {
 			mark = markProvider.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 		
+		if (!mark.isPresent()) {
+			return "no mark returned";
+		}
 					
 		try {
 			FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
@@ -83,7 +86,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 			
 			double val = session.calc(
 				new FeatureInputMark(
-					mark,
+					mark.get(),
 					Optional.of(dim)
 				)
 			);

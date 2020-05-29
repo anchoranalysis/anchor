@@ -41,7 +41,7 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
 
 	/** Simple constructor since no preprocessing is necessary. */
 	public MeanIntensityBuffer( VoxelBoxFactoryTypeBound<T> flatType, Extent srcExtnt ) {
-		Extent flattened = srcExtnt.flatten();
+		Extent flattened = srcExtnt.flattenZ();
 		flatVoxelBox = flatType.create(flattened);
 		sumVoxelBox = VoxelBoxFactory.instance().getFloat().create(flattened);
 	}
@@ -80,7 +80,7 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
 	
 	/** How many pixels in an XY slice */
 	protected int volumeXY() {
-		return flatVoxelBox.extnt().getVolumeXY();
+		return flatVoxelBox.extent().getVolumeXY();
 	}
 	
 	public VoxelBox<T> getFlatBuffer() {

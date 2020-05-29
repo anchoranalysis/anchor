@@ -39,9 +39,9 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  *
  * @param <BufferType> buffer-type
  */
-public class SlidingBuffer<BufferType extends Buffer> {
+public final class SlidingBuffer<BufferType extends Buffer> {
 
-	private VoxelBox<BufferType> vb;
+	private final VoxelBox<BufferType> vb;
 	
 	private VoxelBuffer<BufferType> centre;
 	private VoxelBuffer<BufferType> plusOne;
@@ -52,7 +52,68 @@ public class SlidingBuffer<BufferType extends Buffer> {
 	public SlidingBuffer(VoxelBox<BufferType> vb) {
 		super();
 		this.vb = vb;
+		seek(0);	// We start off on slice 0 always
 	}
+	
+	/** Seeks a particular slice */
+	public void seek(int sliceIndexToSeek) {
+		
+		if (sliceIndexToSeek==sliceNum) {
+			return;
+		}
+		
+		sliceNum = sliceIndexToSeek;
+		minusOne = null;
+		centre = vb.getPixelsForPlane(sliceNum);
+		
+		if ((sliceNum-1) >= 0) {
+			minusOne = vb.getPixelsForPlane(sliceNum-1);
+		} else {
+			minusOne = null;
+		}
+		
+		if ((sliceNum+1) < vb.extent().getZ()) {
+			plusOne = vb.getPixelsForPlane(sliceNum+1);
+		} else {
+			plusOne = null;
+		}
+	}
+	
+	/** Increments the slice number by one */
+	public void shift() {
+		minusOne = centre;
+		centre = plusOne;
+		
+		sliceNum++;
+		
+		if ((sliceNum+1)<vb.extent().getZ()) {
+			plusOne = vb.getPixelsForPlane(sliceNum+1);
+		} else {
+			plusOne = null;
+		}
+	}
+
+	public VoxelBuffer<BufferType> bufferRel( int rel ) {
+		switch( rel ) {
+		case 1:
+			return plusOne;
+		case 0:
+			return centre;
+		case -1:
+			return minusOne;
+		default:
+			return vb.getPixelsForPlane(sliceNum+rel);
+		}
+	}
+	
+	public VoxelBox<BufferType> getVoxelBox() {
+		return vb;
+	}
+	
+	public Extent extent() {
+		return vb.extent();
+	}
+	
 	public VoxelBuffer<BufferType> getCentre() {
 		return centre;
 	}
@@ -72,63 +133,4 @@ public class SlidingBuffer<BufferType extends Buffer> {
 		this.minusOne = minusOne;
 	}
 	
-	public VoxelBuffer<BufferType> bufferRel( int rel ) {
-		switch( rel ) {
-		case 1:
-			return plusOne;
-		case 0:
-			return centre;
-		case -1:
-			return minusOne;
-		default:
-			return vb.getPixelsForPlane(sliceNum+rel);
-		}
-	}
-	
-	public void init(int sliceNumInit) {
-		
-		if (sliceNumInit==sliceNum) {
-			return;
-		}
-		
-		sliceNum = sliceNumInit;
-		minusOne = null;
-		centre = vb.getPixelsForPlane(sliceNum);
-		
-		if ((sliceNum-1) >= 0) {
-			minusOne = vb.getPixelsForPlane(sliceNum-1);
-		} else {
-			minusOne = null;
-		}
-		
-		if ((sliceNum+1) < vb.extnt().getZ()) {
-			plusOne = vb.getPixelsForPlane(sliceNum+1);
-		} else {
-			plusOne = null;
-		}
-	}
-	
-	public void init() {
-		init(0);
-	}
-	
-	public void shift() {
-		minusOne = centre;
-		centre = plusOne;
-		
-		sliceNum++;
-		
-		if ((sliceNum+1)<vb.extnt().getZ()) {
-			plusOne = vb.getPixelsForPlane(sliceNum+1);
-		} else {
-			plusOne = null;
-		}
-	}
-	public VoxelBox<BufferType> getVoxelBox() {
-		return vb;
-	}
-	
-	public Extent extnt() {
-		return vb.extnt();
-	}
 }

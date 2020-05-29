@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.stack.wrap;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image
@@ -28,8 +30,8 @@ package org.anchoranalysis.image.stack.wrap;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.stack.Stack;
@@ -50,13 +52,10 @@ public class WrapStackAsTimeSequenceStore extends NamedProviderStore<TimeSequenc
 	}
 
 	@Override
-	public TimeSequence getException(String key) throws NamedProviderGetException {
-		return new TimeSequence( namedProvider.getException(key) );
-	}
-
-	@Override
-	public TimeSequence getNull(String key) throws NamedProviderGetException {
-		return new TimeSequence( namedProvider.getException(key) );
+	public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {
+		return namedProvider.getOptional(key).map( stack->
+			new TimeSequence(stack)
+		);
 	}
 
 	@Override
@@ -66,6 +65,9 @@ public class WrapStackAsTimeSequenceStore extends NamedProviderStore<TimeSequenc
 
 	@Override
 	public void add(String name, Operation<TimeSequence,OperationFailedException> getter) throws OperationFailedException {
-		namedProvider.add(name, () -> getter.doOperation().get(t) );
+		namedProvider.add(
+			name,
+			() -> getter.doOperation().get(t)
+		);
 	}
 }

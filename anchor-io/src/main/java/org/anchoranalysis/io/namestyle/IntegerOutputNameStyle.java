@@ -28,6 +28,11 @@ package org.anchoranalysis.io.namestyle;
 
 public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private int numDigits;
 	
 	protected IntegerOutputNameStyle() {
@@ -42,20 +47,11 @@ public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
 		super(outputName);
 		this.numDigits = numDigits;
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	@Override
 	protected String nameFromOutputFormatString(String outputFormatString, String index) {
 		int indexInt = Integer.parseInt(index);
 		return String.format( outputFormatString, indexInt );
-	}
-	
-	private static String integerFormatSpecifier(int numDigits ) {
-		return "%0" + Integer.toString(numDigits) + "d";
 	}
 
 	@Override
@@ -67,4 +63,10 @@ public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
 	}
 
 	protected abstract String combineIntegerAndOutputName( String outputName, String integerFormatString );
+	
+	
+	private static String integerFormatSpecifier(int numDigits ) {
+		return "%0" + Integer.toString(numDigits) + "d";
+	}
+
 }

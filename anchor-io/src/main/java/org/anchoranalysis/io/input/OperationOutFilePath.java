@@ -28,6 +28,7 @@ package org.anchoranalysis.io.input;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.anchoranalysis.bean.NamedBean;
@@ -38,12 +39,12 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class OperationOutFilePath extends CachedOperation<Path,AnchorIOException> {
 
 	private NamedBean<FilePathGenerator> ni;
-	private Supplier<Path> path;
+	private Supplier<Optional<Path>> path;
 	private boolean debugMode;
 			
 	public OperationOutFilePath(
 		NamedBean<FilePathGenerator> ni,
-		Supplier<Path> path,
+		Supplier<Optional<Path>> path,
 		boolean debugMode
 	) {
 		super();
@@ -54,6 +55,11 @@ public class OperationOutFilePath extends CachedOperation<Path,AnchorIOException
 
 	@Override
 	protected Path execute() throws AnchorIOException {
-		return ni.getValue().outFilePath( path.get(), debugMode );
+		return ni.getValue().outFilePath(
+			path.get().orElseThrow( ()->
+				new AnchorIOException("A binding-path must be associated with the input for this operation")
+			),
+			debugMode
+		);
 	}
 }

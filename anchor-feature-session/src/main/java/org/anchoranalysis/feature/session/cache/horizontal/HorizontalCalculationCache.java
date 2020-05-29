@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.anchoranalysis.core.error.InitException;
+
 
 
 /*
@@ -69,7 +69,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	
 	// Set up the cache
 	@Override
-	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger) throws InitException {
+	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger) {
 		assert(logger!=null);
 		calculator.init(logger);
 	}

@@ -156,21 +156,6 @@ public class DualComparer {
 		return objs1.equalsDeep(objs2);
 	}
 	
-	
-	/**
-	 * Compare two obj-mask-collections
-	 * 
-	 * @param path path to compare
-	 * @throws IOException if something goes wrong with I/O
-	 */
-	public boolean compareTwoObjsIgnoreOrder( String path ) throws IOException {
-		ObjMaskCollection objs1 = loaderImg1.openObjsFromTestPath(path);
-		ObjMaskCollection objs2 = loaderImg2.openObjsFromTestPath(path);
-		return objs1.equalsIgnoreOrder(objs2);
-	}
-	
-	
-	
 	public TestLoader getLoader1() {
 		return loader1;
 	}

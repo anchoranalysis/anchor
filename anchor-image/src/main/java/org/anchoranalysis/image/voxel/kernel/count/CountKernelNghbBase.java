@@ -51,7 +51,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 	
 	private LocalSlices inSlices;
 	
-	private Extent extnt;
+	private Extent extent;
 		
 	private boolean outsideAtThreshold = false;
 	private boolean ignoreAtThreshold = false;
@@ -71,7 +71,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 	
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
+		this.extent = in.extent();
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		this.inSlices = inSlices;
 	}
 
-	protected abstract boolean isNghbVoxelAccepted( Point3i pnt, int xShift, int yShift, int zShift, Extent extnt );
+	protected abstract boolean isNghbVoxelAccepted( Point3i pnt, int xShift, int yShift, int zShift, Extent extent );
 		
 	@Override
 	public int countAtPos(int ind, Point3i pnt) {
@@ -89,7 +89,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
 		
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -105,14 +105,14 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		ind--;
 		if (x>=0) {
 			if (bv.isOff(inArr_Z.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,-1,0,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,-1,0,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,-1,0,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,-1,0,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
@@ -121,16 +121,16 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOff(inArr_Z.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,+1,0,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,+1,0,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,+1,0,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,+1,0,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
@@ -145,14 +145,14 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		ind -= xLength;
 		if (y>=0) {
 			if (bv.isOff(inArr_Z.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,0,-1,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,0,-1,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,0,-1,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,0,-1,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
@@ -161,16 +161,16 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOff(inArr_Z.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,0,+1,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,0,+1,0, extnt)) {
+				if (isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; };
 					cnt++;
 				}
@@ -184,14 +184,14 @@ public abstract class CountKernelNghbBase extends CountKernel {
 			
 			if (inArr_ZLess1!=null) {
 				if (bv.isOff(inArr_ZLess1.get(ind))) {
-					if (isNghbVoxelAccepted(pnt,0,0,-1, extnt)) {
+					if (isNghbVoxelAccepted(pnt,0,0,-1, extent)) {
 						if (!multipleMatchesPerVoxel) { return 1; };
 						cnt++;
 					}
 				}
 			} else {
 				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					if (isNghbVoxelAccepted(pnt,0,0,-1, extnt)) {
+					if (isNghbVoxelAccepted(pnt,0,0,-1, extent)) {
 						if (!multipleMatchesPerVoxel) { return 1; };
 						cnt++;
 					}
@@ -200,14 +200,14 @@ public abstract class CountKernelNghbBase extends CountKernel {
 			
 			if (inArr_ZPlus1!=null) {
 				if (bv.isOff(inArr_ZPlus1.get(ind))) {
-					if (isNghbVoxelAccepted(pnt,0,0,+1, extnt)) {
+					if (isNghbVoxelAccepted(pnt,0,0,+1, extent)) {
 						if (!multipleMatchesPerVoxel) { return 1; };
 						cnt++;
 					}
 				}
 			} else {
 				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					if (isNghbVoxelAccepted(pnt,0,0,+1, extnt)) {
+					if (isNghbVoxelAccepted(pnt,0,0,+1, extent)) {
 						if (!multipleMatchesPerVoxel) { return 1; };
 						cnt++;
 					}

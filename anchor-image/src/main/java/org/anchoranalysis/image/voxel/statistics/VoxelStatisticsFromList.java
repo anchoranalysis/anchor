@@ -101,15 +101,12 @@ public class VoxelStatisticsFromList extends VoxelStatistics {
 	@Override
 	public double quantile(double quantile) {
 		// TODO Currently unsupported, we need to worry about sorted lists
-		assert false;
-		return -1;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Histogram histogram() {
-		// Currently unsupported
-		assert false;
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	

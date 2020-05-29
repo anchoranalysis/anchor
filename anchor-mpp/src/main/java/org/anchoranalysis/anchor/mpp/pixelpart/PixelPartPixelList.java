@@ -68,6 +68,7 @@ public class PixelPartPixelList extends PixelPart<VoxelIntensityList> {
 
 	@Override
 	public void cleanUp(PixelPartFactory<VoxelIntensityList> factory) {
+		// NOTHING TO DO
 	}
 
 	@Override

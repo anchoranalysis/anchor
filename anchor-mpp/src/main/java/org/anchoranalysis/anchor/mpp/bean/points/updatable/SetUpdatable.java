@@ -30,6 +30,7 @@ package org.anchoranalysis.anchor.mpp.bean.points.updatable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
@@ -43,6 +44,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -83,10 +85,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	// Randomise location
     @Override
-	public Point3d sample( RandomNumberGenerator re ) {
+	public Optional<Point3d> sample( RandomNumberGenerator re ) {
 	
     	if (setPnts.size()==0) {
-    		return null;
+    		return Optional.empty();
     	}
     	
     	int randomIndex = (int) (re.nextDouble() * setPnts.size());
@@ -102,17 +104,16 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		// To hide our internal data from manipulation, even though this (presumably) adds
 		//  a bit of overhead
-    	return new Point3d(pnt);
+    	return Optional.of(
+    		new Point3d(pnt)
+    	);
     }
 
 	@Override
 	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures) throws InitException {
-		
-		
-
+		// NOTHING TO DO
 	}
-	
-	
+		
 	private void addEntireScene( BinaryValuesByte bvb ) {
 		
 		Extent e = binaryImageChnl.getDimensions().getExtnt();
@@ -163,7 +164,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		rmvPntsInMark( newMark );
 	}
 	
-	private void rmvPnt( Point3i crntExtntPnt,  Point3i crnrPnt ) {
+	private void rmvPnt( ReadableTuple3i crntExtntPnt,  ReadableTuple3i crnrPnt ) {
 		int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
 		int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
 		int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
@@ -179,13 +180,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		// We add any points in our new mark to the set
 		PxlMark pxlMark = newMark.doOperation();
 		
-		Point3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCrnrMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCrnrMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
 		
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 		
 		Point3i crntExtntPnt = new Point3i();
 		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrZ()) {
@@ -223,13 +224,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		PxlMark pxlMark = markToAdd.doOperation();
 		
-		Point3i crnrPnt = pxlMark.getBoundingBox(regionID).getCrnrMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).getCrnrMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
 		
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
-		Extent e = voxelBox.extnt();
+		Extent e = voxelBox.extent();
 		
 		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 		

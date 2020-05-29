@@ -64,14 +64,6 @@ public class GraphWithEdgeTypes<V,E> {
 		return out;
 	}
 	
-	public E getEdge( V node1, V node2 ) {
-		EdgeTypeWithVertices<V, E> edgeTypeWithVertices = tableEdge.get(node1, node2);
-		if(edgeTypeWithVertices==null) {
-			return null;
-		}
-		return edgeTypeWithVertices.getEdge();
-	}
-	
 	// Edges may contain duplicates
 	public Collection<EdgeTypeWithVertices<V,E>> edgeSetWithPossibleDuplicates() {
 		return tableEdge.values();

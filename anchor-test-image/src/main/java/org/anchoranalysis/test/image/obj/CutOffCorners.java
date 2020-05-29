@@ -37,14 +37,14 @@ public class CutOffCorners extends VoxelPattern {
 	// The right-most pixels border, before we start chopping off the triangle
 	private Extent rightBorder;
 	
-	public CutOffCorners( int edgeXY, int edgeZ, Extent extnt ) {
+	public CutOffCorners( int edgeXY, int edgeZ, Extent extent ) {
 		this.edgeXY = edgeXY;
 		this.edgeZ = edgeZ;
 		
 		this.rightBorder = new Extent(
-			extnt.getX() - edgeXY - 1,
-			extnt.getY() - edgeXY - 1,
-			extnt.getZ() - edgeZ - 1
+			extent.getX() - edgeXY - 1,
+			extent.getY() - edgeXY - 1,
+			extent.getZ() - edgeZ - 1
 		);
 	}
 

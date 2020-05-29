@@ -28,8 +28,10 @@ package org.anchoranalysis.experiment.log.reporter;
 
 
 import java.io.PrintWriter;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -42,8 +44,8 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	private BoundOutputManager bom;
 	private ErrorReporter errorReporter;
 	
-	private FileOutput fileOutput;
-	private PrintWriter printWriter;
+	private Optional<FileOutput> fileOutput;
+	private Optional<PrintWriter> printWriter;
 	
 	public TextFileLogReporter(String outputName, BoundOutputManager bom,
 			ErrorReporter errorReporter) {
@@ -60,16 +62,15 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	
 	@Override
 	public void start() {
-	
 		try {
 			fileOutput = TextFileLogHelper.createOutput(bom, outputName);
-			
-			if (fileOutput==null) {
-				return;
-			}
-			
-			fileOutput.start();
-			printWriter = fileOutput.getWriter();
+			printWriter = OptionalUtilities.map(
+				fileOutput,
+				output -> {
+					output.start();
+					return output.getWriter();
+				}
+			);
 		} catch (AnchorIOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}		
@@ -77,28 +78,17 @@ public class TextFileLogReporter implements StatefulLogReporter {
 
 	@Override
 	public void log( String message ) {
-		if (fileOutput==null) {
-			return;
-		}
-		
-		if (printWriter!=null) {
-			synchronized(printWriter) {
-				printWriter.print(message);
-				printWriter.println();
-				printWriter.flush();
+		printWriter.ifPresent( writer-> {
+			synchronized(writer) {
+				writer.print(message);
+				writer.println();
+				writer.flush();
 			}
-		}
+		});
 	}
 	
 	@Override
 	public void close(boolean successful) {
-		
-		if (fileOutput==null) {
-			return;
-		}
-		
-		fileOutput.end();
+		fileOutput.ifPresent( FileOutput::end );
 	}
-
-
 }

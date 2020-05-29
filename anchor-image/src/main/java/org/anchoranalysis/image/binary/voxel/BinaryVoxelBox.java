@@ -39,23 +39,29 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public abstract class BinaryVoxelBox<BufferType extends Buffer> implements BinaryHighLowSetter {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> buffer-type
+ */
+public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowSetter {
 
-	private VoxelBox<BufferType> voxelBox;
+	private VoxelBox<T> voxelBox;
 	
 	private BinaryValues binaryValues;
 	
-	public BinaryVoxelBox(VoxelBox<BufferType> voxelBox, BinaryValues bv) {
+	public BinaryVoxelBox(VoxelBox<T> voxelBox, BinaryValues bv) {
 		super();
 		this.voxelBox = voxelBox;
 		this.binaryValues = bv;
 	}
 
-	public Extent extnt() {
-		return voxelBox.extnt();
+	public Extent extent() {
+		return voxelBox.extent();
 	}
 
-	public VoxelBox<BufferType> getVoxelBox() {
+	public VoxelBox<T> getVoxelBox() {
 		return voxelBox;
 	}
 	
@@ -67,7 +73,7 @@ public abstract class BinaryVoxelBox<BufferType extends Buffer> implements Binar
 		return binaryValues;
 	}
 
-	public VoxelBuffer<BufferType> getPixelsForPlane(int z) {
+	public VoxelBuffer<T> getPixelsForPlane(int z) {
 		return voxelBox.getPixelsForPlane(z);
 	}
 	
@@ -80,12 +86,12 @@ public abstract class BinaryVoxelBox<BufferType extends Buffer> implements Binar
 	}
 
 	public void copyPixelsTo(BoundingBox sourceBox,
-			VoxelBox<BufferType> destVoxelBox, BoundingBox destBox) {
+			VoxelBox<T> destVoxelBox, BoundingBox destBox) {
 		voxelBox.copyPixelsTo(sourceBox, destVoxelBox, destBox);
 	}
 
 	public void copyPixelsToCheckMask(BoundingBox sourceBox,
-			VoxelBox<BufferType> destVoxelBox, BoundingBox destBox,
+			VoxelBox<T> destVoxelBox, BoundingBox destBox,
 			VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV) {
 		voxelBox.copyPixelsToCheckMask(sourceBox, destVoxelBox, destBox,
 				objMaskBuffer, maskBV);
@@ -99,9 +105,9 @@ public abstract class BinaryVoxelBox<BufferType extends Buffer> implements Binar
 		voxelBox.setPixelsCheckMask(om, binaryValues.getOffInt() );
 	}
 	
-	public abstract BinaryVoxelBox<BufferType> duplicate();
+	public abstract BinaryVoxelBox<T> duplicate();
 	
-	public abstract BinaryVoxelBox<BufferType> extractSlice(int z) throws CreateException;
+	public abstract BinaryVoxelBox<T> extractSlice(int z) throws CreateException;
 
 	public void setPixelsCheckMask(ObjMask om, int value, byte maskMatchValue) {
 		voxelBox.setPixelsCheckMask(om, value, maskMatchValue);
@@ -118,7 +124,7 @@ public abstract class BinaryVoxelBox<BufferType extends Buffer> implements Binar
 		voxelBox.addPixelsCheckMask(mask, value);
 	}
 
-	public void setPixelsForPlane(int z, VoxelBuffer<BufferType> pixels) {
+	public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
 		voxelBox.setPixelsForPlane(z, pixels);
 	}
 
@@ -138,7 +144,7 @@ public abstract class BinaryVoxelBox<BufferType extends Buffer> implements Binar
 		voxelBox.setPixelsTo(bbox, binaryValues.getOffInt());
 	}
 
-	public void setVoxelBox(VoxelBox<BufferType> voxelBox) {
+	public void setVoxelBox(VoxelBox<T> voxelBox) {
 		this.voxelBox = voxelBox;
 	}
 

@@ -33,9 +33,9 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
+public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 
-	private ShortBuffer delegate;
+	private final ShortBuffer delegate;
 	
 	public VoxelBufferShort(ShortBuffer delegate) {
 		super();

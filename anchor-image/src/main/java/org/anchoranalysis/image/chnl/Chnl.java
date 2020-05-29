@@ -34,7 +34,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
@@ -52,8 +52,8 @@ public class Chnl {
 	
 	// Constructor
 	public Chnl( VoxelBox<? extends Buffer> bufferAccess, ImageRes res ) {
-		this.dim = new ImageDim(bufferAccess.extnt(), new ImageRes(res));
-		delegate = new BoundedVoxelBox<>( new BoundingBox(bufferAccess.extnt()), bufferAccess);
+		this.dim = new ImageDim(bufferAccess.extent(), res);
+		delegate = new BoundedVoxelBox<>( new BoundingBox(bufferAccess.extent()), bufferAccess);
 	}
 	
 	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
@@ -84,24 +84,23 @@ public class Chnl {
 		
 		assert( factory!=null );
 		
-		ImageDim sdNew = new ImageDim( getDimensions() );
-		sdNew.scaleXYTo(x,y);
+		ImageDim sdNew = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.getVoxelBox().resizeXY(x, y, interpolator);
-		assert(ba.extnt().getX()==x);
-		assert(ba.extnt().getY()==y);
-		assert(ba.extnt().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
+		assert(ba.extent().getX()==x);
+		assert(ba.extent().getY()==y);
+		assert(ba.extent().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
 		return factory.create( ba, sdNew.getRes() );
 	}
 	
 	public Chnl maxIntensityProj() {
 		assert( factory!=null );
-		int prevZSize = delegate.getVoxelBox().extnt().getZ();
+		int prevZSize = delegate.getVoxelBox().extent().getZ();
 		return factory.create( delegate.getVoxelBox().maxIntensityProj(), getDimensions().getRes().duplicateFlattenZ(prevZSize) );
 	}
 	
 	public Chnl meanIntensityProj() {
-		int prevZSize = delegate.getVoxelBox().extnt().getZ();
+		int prevZSize = delegate.getVoxelBox().extent().getZ();
 		return factory.create( delegate.getVoxelBox().meanIntensityProj(), getDimensions().getRes().duplicateFlattenZ(prevZSize) );
 	}
 
@@ -109,7 +108,7 @@ public class Chnl {
 	// Duplicates the current channel
 	public Chnl duplicate() {
 		Chnl dup = factory.create( delegate.getVoxelBox().duplicate(), getDimensions().getRes() );
-		assert( dup.delegate.getVoxelBox().extnt().equals( delegate.getVoxelBox().extnt() ));
+		assert( dup.delegate.getVoxelBox().extent().equals( delegate.getVoxelBox().extent() ));
 		return dup;
 	}
 
@@ -133,6 +132,9 @@ public class Chnl {
 		return dim;
 	}
 
+	public void updateResolution(ImageRes res) {
+		dim = dim.duplicateChangeRes(res);
+	}
 
 	public VoxelDataType getVoxelDataType() {
 		return delegate.getVoxelBox().dataType();
@@ -142,7 +144,7 @@ public class Chnl {
 	public String toString() {
 		Histogram h;
 		try {
-			h = HistogramFactoryUtilities.create(this);
+			h = HistogramFactory.create(this);
 		} catch (CreateException e) {
 			return String.format("Error: %s",e);
 		}

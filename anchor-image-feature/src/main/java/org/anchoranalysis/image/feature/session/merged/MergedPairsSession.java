@@ -151,8 +151,10 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 			);
 		} catch (FeatureCalcException e) {
 			errorReporter.recordError(MergedPairsSession.class, e);
-			assert(false);
-			return null;
+			
+			ResultsVector rv = new ResultsVector( sizeFeatures() );
+			rv.setErrorAll(e);
+			return rv;
 		}
 	}
 	
@@ -212,7 +214,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		if (checkInverse) {
 			
 			ResultsVector rvInverse = calculator.calcForInput(
-				input.createInverse(),
+				createInverse(input),
 				errorReporter
 			);
 			
@@ -227,5 +229,15 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		}
 		
 		return rv;
+	}
+	
+
+	private static FeatureInputPairObjs createInverse( FeatureInputPairObjs input ) {
+		return new FeatureInputPairObjs(
+			input.getSecond(),
+			input.getFirst(),
+			input.getNrgStackOptional(),
+			input.getMergedOptional()
+		);
 	}
 }

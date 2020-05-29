@@ -62,7 +62,7 @@ class Log4JFileAppender implements Appender, OptionHandler {
 		
 		if (outputManager!=null) {
 			
-			Path filePath = outputManager.getBoundFilePathPrefix().outFilePath( outputName + "." + "txt" );
+			Path filePath = outputManager.outFilePath( outputName + "." + "txt" );
 			delegate.setFile( filePath.toString() );
 			
 		} else {

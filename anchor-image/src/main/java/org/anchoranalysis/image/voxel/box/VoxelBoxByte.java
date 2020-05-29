@@ -30,7 +30,7 @@ package org.anchoranalysis.image.voxel.box;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityByteBuffer;
 
-public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
+public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
 	public VoxelBoxByte(IPixelsForPlane<ByteBuffer> pixelsForPlane) {
 		super(
@@ -55,8 +55,8 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		int max = 0;
 		boolean first = true;
 		
-		int sizeXY = planeAccess.extnt().getVolumeXY();
-		for (int z=0; z<planeAccess.extnt().getZ(); z++) {
+		int sizeXY = planeAccess.extent().getVolumeXY();
+		for (int z=0; z<planeAccess.extent().getZ(); z++) {
 			
 			VoxelBuffer<?> pixels = planeAccess.getPixelsForPlane(z);
 			
@@ -95,7 +95,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		
 		ObjMask om = new ObjMask(bbox );
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte equalValByte = (byte) equalVal;
 		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
@@ -109,7 +109,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					byte chnlVal = pixelIn.get(index);
 					
 					if ( chnlVal==equalValByte ) {
@@ -129,7 +129,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
 		byte valByte = (byte) val;
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -144,9 +144,9 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
 		byte valByte = (byte) val;
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
-		Extent e = extnt();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
@@ -171,9 +171,9 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	@Override
 	public VoxelBox<ByteBuffer> maxIntensityProj() {
 		
-		MaxIntensityBufferByte mi = new MaxIntensityBufferByte( extnt() ); 
+		MaxIntensityBufferByte mi = new MaxIntensityBufferByte( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 	
@@ -182,9 +182,9 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	
 	@Override
 	public VoxelBox<ByteBuffer> meanIntensityProj() {
-		MeanIntensityByteBuffer mi = new MeanIntensityByteBuffer( extnt() ); 
+		MeanIntensityByteBuffer mi = new MeanIntensityByteBuffer( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 		
@@ -200,7 +200,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 			return;
 		}
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -215,13 +215,13 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	@Override
 	public void setVoxel(int x, int y, int z, int val) {
 		ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        buffer.put( getPlaneAccess().extnt().offset(x, y), (byte) val );
+        buffer.put( getPlaneAccess().extent().offset(x, y), (byte) val );
 	}
 
 	@Override
 	public int getVoxel(int x, int y, int z) {
 		ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        return ByteConverter.unsignedByteToInt( buffer.get( getPlaneAccess().extnt().offset(x, y) ) );
+        return ByteConverter.unsignedByteToInt( buffer.get( getPlaneAccess().extent().offset(x, y) ) );
 	}
 	
 
@@ -238,7 +238,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ByteBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
@@ -248,18 +248,14 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 										
 					if (pixelsMask.get()==maskOnByte) {
-						int index = getPlaneAccess().extnt().offset(x, y);
+						int index = getPlaneAccess().extent().offset(x, y);
 						
-						byte b = pixels.get(index);
-						
-						int intVal = (int) Math.round(value * ByteConverter.unsignedByteToInt(b));
-						if (intVal<0) {
-							intVal = 0;
-						}
-						if (intVal>255) {
-							intVal = 255;
-						}
-						
+						int intVal = scaleClipped(
+							value,
+							ByteConverter.unsignedByteToInt(
+								pixels.get(index)
+							)
+						);
 						pixels.put(index, (byte) intVal );
 					}
 				}
@@ -276,7 +272,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ByteBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
@@ -286,20 +282,14 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 										
 					if (pixelsMask.get()==maskOnByte) {
-						int index = getPlaneAccess().extnt().offset(x, y);
+						int index = getPlaneAccess().extent().offset(x, y);
 						
-						byte b = pixels.get(index);
-						
-						int intVal = ByteConverter.unsignedByteToInt(b) + value;
-						
-						if (intVal<0) {
-							intVal = 0;
-						}
-						if (intVal>255) {
-							intVal = 255;
-						}
-
-						
+						int intVal = addClipped(
+							value,
+							ByteConverter.unsignedByteToInt(
+								pixels.get(index)
+							)
+						);
 						pixels.put(index, (byte) intVal );
 					}
 				}
@@ -307,7 +297,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		}
 		
 	}
-
+	
 	@Override
 	public boolean isEqualTo(ByteBuffer buffer1, ByteBuffer buffer2) {
 		return buffer1.get()==buffer2.get();
@@ -316,7 +306,7 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	@Override
 	public void subtractFrom(int val) {
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ByteBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -330,18 +320,19 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	@Override
 	public void max( VoxelBox<ByteBuffer> other ) throws OperationFailedException {
 		
-		if (!extnt().equals(other.extnt())) {
-			throw new OperationFailedException("other must have same extnt");
+		if (!extent().equals(other.extent())) {
+			throw new OperationFailedException("other must have same extent");
 		}
+
+		int vol = getPlaneAccess().extent().getVolumeXY();
 		
-		for (int z=0; z<getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<getPlaneAccess().extent().getZ(); z++) {
 			
 			ByteBuffer buffer1 = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer buffer2 = other.getPlaneAccess().getPixelsForPlane(z).buffer();
 			
 			int indx = 0;
-			int vol = getPlaneAccess().extnt().getVolumeXY();
-			while( indx<vol ) {
+			while(indx<vol) {
 				
 				int elem1 = ByteConverter.unsignedByteToInt( buffer1.get(indx) );
 				int elem2 = ByteConverter.unsignedByteToInt( buffer2.get(indx) );
@@ -355,9 +346,25 @@ public class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 		}
 	}
 		
-
+	private static int scaleClipped(double value, int pixelValue) {
+		int intVal = (int) Math.round(value * pixelValue);
+		if (intVal<0) {
+			return 0;
+		}
+		if (intVal>255) {
+			return 255;
+		}
+		return intVal;
+	}
 	
-	
-
-
+	private static int addClipped(int value, int pixelValue) {
+		int intVal = pixelValue + value;
+		if (intVal<0) {
+			return 0;
+		}
+		if (intVal>255) {
+			return 255;
+		}
+		return intVal;
+	}
 }

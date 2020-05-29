@@ -29,6 +29,7 @@ package org.anchoranalysis.feature.input.descriptor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -54,12 +55,12 @@ public class FeatureInputDescriptorUtilities {
 			return c1;
 		}
 		
-		FeatureInputDescriptor preferred = c1.preferToBidirectional(c2);
-		if (preferred==null) {
+		Optional<FeatureInputDescriptor> preferred = c1.preferToBidirectional(c2);
+		if (!preferred.isPresent()) {
 			throw new AnchorFriendlyRuntimeException("item1 and item2 must accept the same paramType, or be compatible.");
 		}
 		
-		return preferred;	
+		return preferred.get();	
 	}
 	
 	
@@ -104,12 +105,12 @@ public class FeatureInputDescriptorUtilities {
 			} else {
 				if (!chosenParamType.equals(paramType)) {
 					
-					FeatureInputDescriptor preferred = paramType.preferToBidirectional(chosenParamType);
-					if (preferred==null) {
+					Optional<FeatureInputDescriptor> preferred = paramType.preferToBidirectional(chosenParamType);
+					if (!preferred.isPresent()) {
 						// We don't know which parameter to prefer
 						throw new AnchorFriendlyRuntimeException("All features in the list must have the same paramType, or a simple type, or a preference between conflicting type");
 					}
-					chosenParamType = preferred;
+					chosenParamType = preferred.get();
 				}
 			}
 		}

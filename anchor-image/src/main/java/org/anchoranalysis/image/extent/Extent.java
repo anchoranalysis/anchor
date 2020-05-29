@@ -29,17 +29,22 @@ package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
- * Width, height etc. of image in 2 or 3 dimensions  
+ * Width, height etc. of image in 2 or 3 dimensions
+ * 
+ * <p>This class is IMMUTABLE</p>
  */
 public final class Extent implements Serializable {
 
@@ -48,58 +53,38 @@ public final class Extent implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int sxy;
+	private final int sxy;
 	
 	// Lengths in each dimension
-	private Point3i len;
+	private final Point3i len;
 	
 	public Extent() {
-		this.sxy = 0;
-		this.len = new Point3i(0,0,0);
-	}
-	
-	public Extent( Extent src ) {
-		this.len = new Point3i(src.len);
-		sxy = src.sxy;
-	}
-	
-	public Extent( Point3i len ) {
-		this.len = new Point3i(len);
-		updateSxy();
+		this( new Point3i(0,0,0) );
 	}
 	
 	public Extent(int x, int y, int z) {
-		this.len = new Point3i( x, y, z);
-		updateSxy();
+		this( new Point3i( x, y, z) );
 	}
-	
-	public void shrinkBy( int size ) {
-		len.sub(
-			new Point3i(size,size,size)
-		);
-		updateSxy();
-	}
-	
-	public void growBy( int size ) {
-		len.add(
-			new Point3i(size,size,size)
-		);
-		updateSxy();
-	}
-	
-	/** Collapses the Z dimension i.e. immutably returns a new extent with the same X- and Y- size but Z-size of 1 */
-	public Extent flatten() {
-		return new Extent(
-			new Point3i(len.getX(), len.getY(), 1)
-		);
-	}
-	
-	private void updateSxy() {
+		
+	private Extent( Point3i len ) {
+		this.len = len;
 		this.sxy = len.getX() * len.getY();
 	}
 
-	public int getVolume() {
-		return sxy * len.getZ();
+	public int getVolumeAsInt() {
+		long volume = getVolume();
+		if (volume>Integer.MAX_VALUE) {
+			throw new AnchorFriendlyRuntimeException("The volume cannot be expressed as an int, as it is higher than the maximum bound");
+		}
+		return (int) volume;
+	}
+	
+	public long getVolume() {
+		return ((long) sxy) * len.getZ();
+	}
+	
+	public boolean isEmpty() {
+		return (sxy==0) || (len.getZ()==0);
 	}
 	
 	public int getVolumeXY() {
@@ -112,21 +97,6 @@ public final class Extent implements Serializable {
 	public int totalNumPixelPositions() {
 		return  (len.getX()+1) * (len.getY()+1) * (len.getZ()+1);
 	}
-	
-	public void setSize( int[] size ) {
-		len.setX( size[0] );
-		len.setY( size[1] );
-		len.setZ( size[2] );
-		updateSxy();
-	}
-	
-	public int[] getSize() {
-		int[] arr = new int[3];
-		arr[0] = len.getX();
-		arr[1] = len.getY();
-		arr[2] = len.getZ();
-		return arr;
-	}
 
 	@Override
 	public int hashCode() {
@@ -138,54 +108,46 @@ public final class Extent implements Serializable {
 		return result;
 	}
 
-	public final int getX() {
+	public int getX() {
 		return len.getX();
 	}
-	
 
-	public final int getY() {
+	public int getY() {
 		return len.getY();
 	}
 
-	public final int getZ() {
+	public int getZ() {
 		return len.getZ();
 	}
 	
-	public final int getXEx() {
+	public int getXEx() {
 		return len.getX() + 1;
 	}
 	
-	public final int getYEx() {
+	public int getYEx() {
 		return len.getY() + 1;
 	}
 	
-	public final int getZEx() {
+	public int getZEx() {
 		return len.getZ() + 1;
 	}
 		
-	public final int getValueByDimension(int dimIndex) {
+	public int getValueByDimension(int dimIndex) {
 		return len.getValueByDimension(dimIndex);
 	}
 	
-	public final int getValueByDimension(AxisType axis) {
+	public int getValueByDimension(AxisType axis) {
 		return len.getValueByDimension(axis);
 	}
-
-	public final void setX(int x) {
-		len.setX(x);
-		updateSxy();
-	}
-
-	public final void setY(int y) {
-		len.setY(y);
-		updateSxy();
-	}
-
-	public final void setZ(int z) {
-		len.setZ(z);
-	}
 		
-	public Tuple3i asTuple() {
+	/**
+	 * Exposes the extent as a tuple.
+	 * 
+	 * <p>IMPORTANT! This class is designed to be IMMUTABLE, so this tuple should be treated as read-only, and never modified.</p>
+	 * 
+	 * @return the extent's width, height, depth as a tuple
+	 */
+	public ReadableTuple3i asTuple() {
 		return len;
 	}
 
@@ -211,36 +173,31 @@ public final class Extent implements Serializable {
 		return String.format("[%d,%d,%d]",getX(),getY(),getZ());
 	}
 
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	public final int offset( int x, int y ) {
 		return (y*len.getX()) + x;
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	//  we should cal
 	public final int offset( int x, int y, int z ) {
 		return (z *sxy) + (y*getX()) + x;
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	//  we should cal
 	public final int offset( Point3i pnt ) {
 		return offset(pnt.getX(), pnt.getY(), pnt.getZ());
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	public final int offset( Point2i pnt ) {
 		return offset(pnt.getX(), pnt.getY(), 0);
 	}
 	
-	// Calculates an offset of an x and y point in terms of this extnt
+	// Calculates an offset of an x and y point in terms of this extent
 	public final int offsetSlice( Point3i pnt ) {
 		return offset(pnt.getX(), pnt.getY(), 0);
-	}
-	
-	public void setXY( int x, int y ) {
-		setX(x);
-		setY(y);
 	}
 	
 	public Extent ex() {
@@ -256,9 +213,17 @@ public final class Extent implements Serializable {
 	}
 	
 	public int[] createOrderedArray() {
-		int[] extnts = createArray();
-		Arrays.sort( extnts );
-		return extnts;
+		int[] extents = createArray();
+		Arrays.sort( extents );
+		return extents;
+	}
+	
+	public Extent duplicateChangeZ(int z) {
+		return new Extent(
+			len.getX(),
+			len.getY(),
+			z
+		);
 	}
 
 	public boolean containsX( double x ) {
@@ -287,7 +252,7 @@ public final class Extent implements Serializable {
 		return containsX(pnt.getX()) && containsY(pnt.getY()) && containsZ(pnt.getZ());
 	}
 	
-	public boolean contains( Point3i pnt ) {
+	public boolean contains( ReadableTuple3i pnt ) {
 		return containsX(pnt.getX()) && containsY(pnt.getY()) && containsZ(pnt.getZ());
 	}
 	
@@ -324,28 +289,55 @@ public final class Extent implements Serializable {
 		return contains( bbox.getCrnrMin() ) && contains( bbox.calcCrnrMax() );
 	}
 	
-	public void scaleXYBy( ScaleFactor sf ) {
-		setXY(
-			ScaleFactorUtilities.multiplyAsInt(sf.getX(), getX()),
-			ScaleFactorUtilities.multiplyAsInt(sf.getY(), getY())
-		);
+	public Extent scaleXYBy( ScaleFactor sf ) {
+		return createPointOperation( p-> {
+			p.setX(
+				ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
+			);
+			p.setY(
+				ScaleFactorUtilities.scaleQuantity(sf.getY(), getY())
+			);			
+		});
 	}
 	
-	public void subtract( Extent e ) {
-		this.len.sub( e.asTuple() );
+	public Extent subtract( Extent e ) {
+		return createPointOperation( p->p.sub(e.asTuple()) );
 	}
 	
-	public void divide( int factor ) {
-		this.len.div( factor );
+	public Extent divide( int factor ) {
+		return createPointOperation( p->p.div(factor) );
 	}
 	
 	/**
-	 * Creates a new Extent with each dimension depcreated by one
+	 * Creates a new Extent with each dimension decreased by one
 	 * @return the new extent
 	 */
 	public Extent createMinusOne() {
+		return createPointOperation( p->p.sub(1) );
+	}
+	
+	public Extent growBy(int toAdd) {
+		return growBy(
+			new Point3i(toAdd,toAdd,toAdd)
+		);
+	}
+	
+	public Extent growBy(Tuple3i toAdd) {
+		return createPointOperation( p->
+			p.add(toAdd)
+		);
+	}
+	
+	/** Collapses the Z dimension i.e. returns a new extent with the same X- and Y- size but Z-size of 1 */
+	public Extent flattenZ() {
+		return new Extent(
+			new Point3i(len.getX(), len.getY(), 1)
+		);
+	}
+	
+	private Extent createPointOperation( Consumer<Point3i> func ) {
 		Point3i lenDup = new Point3i(len);
-		lenDup.sub(1);	
+		func.accept(lenDup);	
 		return new Extent(lenDup);
 	}
 }

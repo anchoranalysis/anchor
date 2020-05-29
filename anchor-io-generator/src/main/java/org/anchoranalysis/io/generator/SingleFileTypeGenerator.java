@@ -27,11 +27,10 @@ package org.anchoranalysis.io.generator;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -42,41 +41,28 @@ public abstract class SingleFileTypeGenerator extends Generator {
 
 	// We delegate to a much simpler method, for single file generators
 	@Override	
-	public void write( OutputNameStyle outputNameStyle, FilePathCreator filePathCreator, IWriteOperationRecorder writeOperationRecorder, BoundOutputManager outputManager ) throws OutputWriteFailedException {
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
 		assert( outputManager.getOutputWriteSettings()!=null );
 		
-		String filePhysicalName = outputNameStyle.getPhysicalName() + "." + getFileExtension(outputManager.getOutputWriteSettings());
-		
-		Path outFilePath = filePathCreator.outFilePath( filePhysicalName ) ;
-		
-		writeToFile(outputManager.getOutputWriteSettings(), outFilePath );	
-
-		writeOperationRecorder.write(
+		writeInternal(
+			outputNameStyle.getPhysicalName(),
 			outputNameStyle.getOutputName(),
-			createManifestDescription(),
-			filePathCreator.relativePath(outFilePath),
-			""
+			"",
+			outputManager
 		);
 	}
 	
 	
 	// We delegate to a much simpler method, for single file generators
 	@Override
-	public int write( IndexableOutputNameStyle outputNameStyle, FilePathCreator filePathCreator, IWriteOperationRecorder writeOperationRecorder, String index, BoundOutputManager outputManager ) throws OutputWriteFailedException {
+	public int write( IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager ) throws OutputWriteFailedException {
 		
-		String filePhysicalName;
-		filePhysicalName = outputNameStyle.getPhysicalName(index) + "." + getFileExtension(outputManager.getOutputWriteSettings());
-		
-		Path outFilePath = filePathCreator.outFilePath( filePhysicalName ) ;
-		
-		writeToFile(outputManager.getOutputWriteSettings(), outFilePath );	
-
-		writeOperationRecorder.write(
+		writeInternal(
+			outputNameStyle.getPhysicalName(index),
 			outputNameStyle.getOutputName(),
-			createManifestDescription(),
-			filePathCreator.relativePath(outFilePath),
-			index
+			index,
+			outputManager
 		);
 		
 		return 1;
@@ -84,15 +70,40 @@ public abstract class SingleFileTypeGenerator extends Generator {
 
 	// We create a single file type
 	@Override
-	public FileType[] getFileTypes( OutputWriteSettings outputWriteSettings ) {
-		return new FileType[] {
-				new FileType( createManifestDescription(), getFileExtension(outputWriteSettings) )		
-		};
+	public Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings ) {
+		Optional<ManifestDescription> manifestDescription = createManifestDescription();
+		return manifestDescription.map( md ->
+			new FileType[] {
+				new FileType(md, getFileExtension(outputWriteSettings) )		
+			}
+		);
 	}
 	
 	public abstract void writeToFile( OutputWriteSettings outputWriteSettings, Path filePath ) throws OutputWriteFailedException;
 	
 	public abstract String getFileExtension( OutputWriteSettings outputWriteSettings );
 	
-	public abstract ManifestDescription createManifestDescription();
+	public abstract Optional<ManifestDescription> createManifestDescription();
+	
+	private void writeInternal(String filePhysicalNameWithoutExtension, String outputName, String index, BoundOutputManager outputManager) throws OutputWriteFailedException {
+		
+		assert( outputManager.getOutputWriteSettings()!=null );
+		
+		Path outFilePath = outputManager.outFilePath(
+			filePhysicalNameWithoutExtension + "." + getFileExtension(outputManager.getOutputWriteSettings())
+		);
+		
+		// First write to the file system, and then write to the operation-recorder. Thi
+		writeToFile(outputManager.getOutputWriteSettings(), outFilePath );
+		
+		Optional<ManifestDescription> manifestDescription = createManifestDescription();
+		manifestDescription.ifPresent( md->
+			outputManager.writeFileToOperationRecorder(
+				outputName,
+				outFilePath,
+				md,
+				index
+			)
+		);
+	}
 }

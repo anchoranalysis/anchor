@@ -31,11 +31,11 @@ import java.util.HashSet;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.bean.Feature;
@@ -50,7 +50,7 @@ import org.apache.commons.collections.map.MultiValueMap;
  * 
  * @author owen
  */
-public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>, Iterable<NameValue<Feature<FeatureInput>>> {
+public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>, Iterable<NameValue<Feature<FeatureInput>>> {
 	
 	/** For searching by key */
 	private NameValueSet<Feature<FeatureInput>> mapByKey;
@@ -138,13 +138,8 @@ public class SharedFeatureMulti implements INamedProvider<Feature<FeatureInput>>
 	}
 
 	@Override
-	public Feature<FeatureInput> getException(String key) throws NamedProviderGetException {
-		return mapByKey.getException(key);
-	}
-
-	@Override
-	public Feature<FeatureInput> getNull(String key) {
-		return mapByKey.getNull(key);
+	public Optional<Feature<FeatureInput>> getOptional(String key) {
+		return mapByKey.getOptional(key);
 	}
 
 	@Override

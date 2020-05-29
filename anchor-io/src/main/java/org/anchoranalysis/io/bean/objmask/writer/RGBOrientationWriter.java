@@ -122,16 +122,16 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 		
 		double xIncr = Math.cos( orientationRadians ) * xDiv;
 		double yIncr = Math.sin( orientationRadians ) * xDiv;
-			
+		
 		while( true ) {
 			int xI = (int) x;
 			int yI = (int) y;
 
-			if (!bbox.containsX(xI)) {
+			if (!bbox.contains().x(xI)) {
 				break;
 			}
 
-			if (!bbox.containsY(yI)) {
+			if (!bbox.contains().y(yI)) {
 				break;
 			}
 			
@@ -144,8 +144,6 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 			x += xIncr;
 			y += yIncr;
 		}
-		
-		
 	}
 	
 	public double getxDiv() {

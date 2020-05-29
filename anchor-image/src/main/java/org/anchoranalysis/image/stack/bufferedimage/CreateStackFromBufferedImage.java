@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
@@ -48,10 +49,13 @@ public class CreateStackFromBufferedImage {
 		
 		Stack stackOut = new Stack();
 		
-		ImageDim sd = new ImageDim();
-		sd.setX( bufferedImage.getWidth() );
-		sd.setY( bufferedImage.getHeight() );
-		sd.setZ( 1 );
+		ImageDim sd = new ImageDim(
+			new Extent(
+				bufferedImage.getWidth(),
+				bufferedImage.getHeight(),
+				1
+			)	
+		);
 		
 		byte[][] arr = bytesFromBufferedImage(bufferedImage);
 		

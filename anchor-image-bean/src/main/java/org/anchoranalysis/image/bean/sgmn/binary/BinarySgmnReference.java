@@ -28,6 +28,8 @@ package org.anchoranalysis.image.bean.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -57,14 +59,12 @@ public class BinarySgmnReference extends BinarySgmn {
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
-		return proxy.sgmn(voxelBox, params);
-	}
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
-		return proxy.sgmn(voxelBox, params, objMask);
+	public BinaryVoxelBox<ByteBuffer> sgmn(
+		VoxelBoxWrapper voxelBox,
+		BinarySgmnParameters params,
+		Optional<ObjMask> mask
+	) throws SgmnFailedException {
+		return proxy.sgmn(voxelBox, params, mask);
 	}
 
 	public String getId() {

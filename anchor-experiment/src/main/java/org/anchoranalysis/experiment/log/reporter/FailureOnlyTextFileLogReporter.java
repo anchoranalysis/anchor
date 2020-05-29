@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.log.reporter;
 
+
+
 /*-
  * #%L
  * anchor-experiment
@@ -27,11 +29,11 @@ package org.anchoranalysis.experiment.log.reporter;
  */
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
 
 /** Writes text to a file, but only if close is called with a successful=true
  * 
@@ -81,16 +83,15 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 	private void writeStringToFile( String message ) {
 		
 		try {
-			FileOutput fileOutput = TextFileLogHelper.createOutput(bom, outputName);
-			
-			if (fileOutput==null) {
-				return;
-			}
-			
-			fileOutput.start();
-			fileOutput.getWriter().append( message );
-			fileOutput.end();
-			
+			OptionalUtilities.ifPresent(
+				TextFileLogHelper.createOutput(bom, outputName),
+				output -> {
+					output.start();
+					output.getWriter().append( message );
+					output.end();
+				}
+			);
+				
 		} catch (AnchorIOException | OutputWriteFailedException e) {
 			errorReporter.recordError(LogReporter.class, e);
 		}

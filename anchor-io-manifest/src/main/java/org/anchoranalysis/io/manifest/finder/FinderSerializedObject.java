@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.KeyValueParamsDeserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;

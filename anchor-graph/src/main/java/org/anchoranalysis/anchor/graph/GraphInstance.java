@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.graph;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-graph
@@ -34,13 +36,11 @@ public class GraphInstance {
 	private JFreeChart chart;
 	private boolean showVerticalAxisLines = true;
 	
-	private AxisLimits domainAxisLimits;
-	private AxisLimits rangeAxisLimits; 
+	private Optional<AxisLimits> rangeAxisLimits; 
 	
-	public GraphInstance(JFreeChart chart, AxisLimits domainAxisLimits, AxisLimits rangeAxisLimits ) {
+	public GraphInstance(JFreeChart chart,  Optional<AxisLimits> rangeAxisLimits ) {
 		super();
 		this.chart = chart;
-		this.domainAxisLimits = domainAxisLimits;
 		this.rangeAxisLimits = rangeAxisLimits;
 	}
 
@@ -60,19 +60,11 @@ public class GraphInstance {
 		this.showVerticalAxisLines = showVerticalAxisLines;
 	}
 
-	public AxisLimits getDomainAxisLimits() {
-		return domainAxisLimits;
-	}
-
-	public void setDomainAxisLimits(AxisLimits domainAxisLimits) {
-		this.domainAxisLimits = domainAxisLimits;
-	}
-
-	public AxisLimits getRangeAxisLimits() {
+	public Optional<AxisLimits> getRangeAxisLimits() {
 		return rangeAxisLimits;
 	}
 
-	public void setRangeAxisLimits(AxisLimits rangeAxisLimits) {
+	public void setRangeAxisLimits(Optional<AxisLimits> rangeAxisLimits) {
 		this.rangeAxisLimits = rangeAxisLimits;
 	}
 	

@@ -37,6 +37,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -165,9 +166,6 @@ public class Stack implements Iterable<Chnl> {
 	}
 
 	public ImageDim getDimensions() {
-		if (getNumChnl()==0) {
-			return null;
-		}
 		return delegate.getChnl(0).getDimensions();
 	}
 	
@@ -248,6 +246,12 @@ public class Stack implements Iterable<Chnl> {
 		}
 		
 		return builder.toHashCode();
+	}
+	
+	public void updateResolution(ImageRes res) {
+		for( int i=0; i<getNumChnl(); i++) {
+			getChnl(i).updateResolution(res);
+		}
 	}
 	
 }

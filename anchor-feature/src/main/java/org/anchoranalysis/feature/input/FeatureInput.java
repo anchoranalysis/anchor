@@ -43,10 +43,6 @@ public abstract class FeatureInput {
 		super();
 	}
 	
-	public FeatureInput createInverse() {
-		return null;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		return true;
@@ -56,6 +52,4 @@ public abstract class FeatureInput {
 	public int hashCode() {
 		return new HashCodeBuilder().toHashCode();
 	}
-	
-	
 }

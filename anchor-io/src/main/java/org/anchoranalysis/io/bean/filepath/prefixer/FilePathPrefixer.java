@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 
 public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
 
@@ -49,7 +48,7 @@ public abstract class FilePathPrefixer extends AnchorBean<FilePathPrefixer> {
 	 * @return a prefixer
 	 * @throws AnchorIOException TODO
 	 */
-	public abstract FilePathPrefix outFilePrefix( InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context ) throws AnchorIOException;
+	public abstract FilePathPrefix outFilePrefix( PathWithDescription input, String experimentIdentifier, FilePathPrefixerParams context ) throws AnchorIOException;
 	
 	/**
 	 * Provides a prefix that becomes the root-folder. The prefix should be an absolute path.

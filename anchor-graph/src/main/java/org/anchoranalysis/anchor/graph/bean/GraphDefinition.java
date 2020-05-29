@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.graph.bean;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GraphInstance;
@@ -42,11 +43,11 @@ public abstract class GraphDefinition<ItemType> extends AnchorBean<GraphDefiniti
 	 * 
 	 * @param items the items which determine the graph contents
 	 * @param domainLimits limits on X axis
-	 * @param rangeLimits limits on Y axis or NULL (and then they are guessed automatically) 
+	 * @param rangeLimits limits on Y axis or (empty() and then they are guessed automatically) 
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract GraphInstance create( Iterator<ItemType> items, AxisLimits domainLimits, AxisLimits rangeLimits ) throws CreateException;
+	public abstract GraphInstance create( Iterator<ItemType> items, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException;
 	
 	public abstract boolean isItemAccepted( ItemType item );
 	

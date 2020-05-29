@@ -51,39 +51,39 @@ public class ObjMaskFixture {
 	}
 	
 	public ObjMask create1() {
-		Extent extnt = new Extent(20,34,11);
-		CutOffCorners pattern = new CutOffCorners(3, 2, extnt);
-		return createAt(new Point3i(10,15,3), extnt, pattern);
+		Extent extent = new Extent(20,34,11);
+		CutOffCorners pattern = new CutOffCorners(3, 2, extent);
+		return createAt(new Point3i(10,15,3), extent, pattern);
 	}
 	
 	public ObjMask create2() {
-		Extent extnt = new Extent(19,14,5);
-		CutOffCorners pattern = new CutOffCorners(5, 1, extnt);
-		return createAt(new Point3i(3,1,7), extnt, pattern);
+		Extent extent = new Extent(19,14,5);
+		CutOffCorners pattern = new CutOffCorners(5, 1, extent);
+		return createAt(new Point3i(3,1,7), extent, pattern);
 	}
 	
 	public ObjMask create3() {
-		Extent extnt = new Extent(19,14,13);
-		CutOffCorners pattern = new CutOffCorners(1, 5, extnt);
-		return createAt(new Point3i(17,15,2), extnt, pattern);
+		Extent extent = new Extent(19,14,13);
+		CutOffCorners pattern = new CutOffCorners(1, 5, extent);
+		return createAt(new Point3i(17,15,2), extent, pattern);
 	}
 	
-	private ObjMask createAt( Point3i crnrMin, Extent extnt, VoxelPattern pattern ) {
-		BoundingBox bbox = new BoundingBox(crnrMin, extnt);
+	private ObjMask createAt( Point3i crnrMin, Extent extent, VoxelPattern pattern ) {
+		BoundingBox bbox = new BoundingBox(crnrMin, extent);
 		
 		assertTrue( dim.contains(bbox) );
 		
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create(extnt);
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create(extent);
 		BinaryValues bv =  BinaryValues.getDefault();
 		BinaryValuesByte bvb = bv.createByte();
 
 		boolean atLeastOneHigh = false;
 		
-		for( int z=0; z<extnt.getZ(); z++) {
+		for( int z=0; z<extent.getZ(); z++) {
 			VoxelBuffer<ByteBuffer> slice = vb.getPixelsForPlane(z);
 		
-			for( int y=0; y<extnt.getY(); y++) {
-				for( int x=0; x<extnt.getX(); x++) {
+			for( int y=0; y<extent.getY(); y++) {
+				for( int x=0; x<extent.getX(); x++) {
 					byte toPut;
 					if (pattern.isPixelOn(x, y, z)) {
 						toPut = bvb.getOnByte();
@@ -91,7 +91,7 @@ public class ObjMaskFixture {
 					} else {
 						toPut = bvb.getOffByte();
 					}
-					slice.putByte( extnt.offset(x, y), toPut);
+					slice.putByte( extent.offset(x, y), toPut);
 				}
 			}
 		}

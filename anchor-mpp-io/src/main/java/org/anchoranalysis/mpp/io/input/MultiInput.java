@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.input;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -106,7 +107,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return stackWithMap.pathForBinding();
 	}
 

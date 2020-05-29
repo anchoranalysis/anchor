@@ -36,7 +36,8 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetterList;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterUtilities;
 
 /**
- * Base classes for PermuteProperty that requier a path
+ * Base classes for PermuteProperty that require a path
+ * 
  * @author FEEHANO
  *
  */

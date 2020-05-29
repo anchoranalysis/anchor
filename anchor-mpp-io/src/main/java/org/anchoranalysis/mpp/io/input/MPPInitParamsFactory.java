@@ -34,10 +34,9 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -47,34 +46,21 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 public class MPPInitParamsFactory {
 
 	private MPPInitParamsFactory() {}
-	
-	public static ImageInitParams createFromInputAsImage( InputBound<? extends InputForMPPBean,?> params, Optional<Define> define ) throws CreateException {
-		return createFromInput(params, define).getImage();
-	}
-	
-	public static MPPInitParams createFromInput( InputBound<? extends InputForMPPBean,?> params, Optional<Define> define ) throws CreateException {
-		return createFromInput(params.getInputObject(), params.context(), define);
-	}
-	
-	public static MPPInitParams createFromInput( InputForMPPBean inputObject,
-			BoundIOContext context, Optional<Define> define ) throws CreateException {
 		
-		try {
-			MPPInitParams soMPP = create(context,define);
-			inputObject.addToSharedObjects( soMPP, soMPP.getImage() );
-			return soMPP;
-			
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	public static MPPInitParams create(	BoundIOContext context, Optional<Define> define ) throws CreateException {
+	public static MPPInitParams create(	BoundIOContext context, Optional<Define> define, Optional<? extends InputForMPPBean> input ) throws CreateException {
 		
 		SharedObjects so = new SharedObjects( context.getLogger() );
 		
 		ImageInitParams soImage = ImageInitParamsFactory.create( so, context.getModelDirectory() );
 		MPPInitParams soMPP = new MPPInitParams(soImage, so);
+		
+		if (input.isPresent()) {
+			try {
+				input.get().addToSharedObjects(soMPP, soImage);
+			} catch (OperationFailedException e) {
+				throw new CreateException(e);
+			}
+		}
 		
 		if (define.isPresent()) {
 			try {
@@ -96,15 +82,19 @@ public class MPPInitParamsFactory {
 	}
 	
 	public static MPPInitParams createFromExistingCollections(
-		BoundIOContext params,
+		BoundIOContext context,
 		Optional<Define> define,
-		Optional<INamedProvider<Stack>> stacks,
-		Optional<INamedProvider<ObjMaskCollection>> objs,
+		Optional<NamedProvider<Stack>> stacks,
+		Optional<NamedProvider<ObjMaskCollection>> objs,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		
 		try {
-			MPPInitParams soMPP = create(params, define);
+			MPPInitParams soMPP = create(
+				context,
+				define,
+				Optional.empty()
+			);
 			
 			ImageInitParams soImage = soMPP.getImage();
 			

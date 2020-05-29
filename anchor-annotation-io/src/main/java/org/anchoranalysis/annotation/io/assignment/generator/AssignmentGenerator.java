@@ -29,6 +29,7 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
@@ -206,8 +207,10 @@ public class AssignmentGenerator extends RasterGenerator {
 	
 	
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "assignment");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "assignment")
+		);
 	}
 
 	public int getOutlineWidth() {

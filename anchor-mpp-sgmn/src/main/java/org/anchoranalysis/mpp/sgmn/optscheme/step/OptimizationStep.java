@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.optscheme.step;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -105,7 +107,7 @@ public class OptimizationStep<S,T> {
 		dscrData.setExecutionTime(executionTime);
 	}
 
-	public T releaseKeepBest() {
+	public T releaseKeepBest() throws OperationFailedException {
 		T ret = state.releaseKeepBest();
 		releaseProposal();
 		return ret;
@@ -126,13 +128,19 @@ public class OptimizationStep<S,T> {
 	}
 	
 	private void maybeAssignAsBest( Function<T,Double> funcScore ) {
-		if( state.isBestUndefined()
-				// Is the score from crnt, greater than the score from best?
-			|| funcScore.apply( state.getCrnt() ) > funcScore.apply( state.getBest() )
-		) {
+		// Is the score from crnt, greater than the score from best?
+		if( !state.getBest().isPresent() || scoreCurrentBetterThanBest(funcScore) ) {
 			state.assignBestFromCrnt();
 			best = true;
 		}
+	}
+	
+	private boolean scoreCurrentBetterThanBest(Function<T,Double> funcScore) {
+		if (!state.getCrnt().isPresent()) {
+			return false;
+		}
+		return funcScore.apply( state.getCrnt().get() ) 
+				> funcScore.apply( state.getBest().get() );
 	}
 	
 	private void markChanged( KernelWithID<S> kid ) {
@@ -152,16 +160,12 @@ public class OptimizationStep<S,T> {
 		return dscrData.getKernel();
 	}
 
-	public T getCrnt() {
+	public Optional<T> getCrnt() {
 		return state.getCrnt();
 	}
 	
-	public T getBest() {
+	public Optional<T> getBest() {
 		return state.getBest();
-	}
-	
-	public boolean isBestUndefined() {
-		return state.isBestUndefined();
 	}
 	
 	public boolean hasProposal() {

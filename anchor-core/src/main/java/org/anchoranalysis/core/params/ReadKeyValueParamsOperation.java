@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.functional.Operation;
 
 public class ReadKeyValueParamsOperation extends CachedOperation<KeyValueParams,IOException> {
 

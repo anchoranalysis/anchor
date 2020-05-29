@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -33,7 +35,7 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class GeneratorSequenceIncrementalWriter<T> implements IGeneratorSequenceIncremental<T> {
+public class GeneratorSequenceIncrementalWriter<T> implements GeneratorSequenceIncremental<T> {
 
 	private GeneratorSequenceNonIncrementalWriter<T> delegate;
 	
@@ -73,7 +75,7 @@ public class GeneratorSequenceIncrementalWriter<T> implements IGeneratorSequence
 		return delegate.isOn();
 	}
 	
-	public BoundOutputManager getSubFolderOutputManager() {
+	public Optional<BoundOutputManager> getSubFolderOutputManager() {
 		return delegate.getSubFolderOutputManager();
 	}
 }

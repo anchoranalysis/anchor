@@ -59,8 +59,8 @@ public class InterpolateUtilities {
 	
 	public static void transferSlicesResizeXY(VoxelBoxWrapper src, VoxelBoxWrapper trgt, Interpolator interpolator ) {
 		
-		Extent eSrc = src.any().extnt();
-		Extent eTrgt = trgt.any().extnt();
+		Extent eSrc = src.any().extent();
+		Extent eTrgt = trgt.any().extent();
 		
 		Transfer biWrapper = createTransfer(src,trgt);
 

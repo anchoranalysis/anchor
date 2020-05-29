@@ -54,12 +54,12 @@ public class DefineMPPTest {
 	
 	@Test
 	public void testStatic() throws BeanXmlException {
-		checkPath("namedDefinitionsStatic.xml");
+		checkPath("defineStatic.xml");
 	}
 	
 	@Test
 	public void testDynamic() throws BeanXmlException {
-		checkPath("namedDefinitionsDynamic.xml");
+		checkPath("defineDynamic.xml");
 	}
 	
 	private void checkPath( String fileName ) throws BeanXmlException {

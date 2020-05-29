@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
 
 
-public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
+public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
 	public VoxelBoxShort(IPixelsForPlane<ShortBuffer> pixelsForPlane) {
 		super(
@@ -72,7 +72,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		ObjMask om = new ObjMask(bbox );
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
 		
@@ -85,7 +85,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int index = getPlaneAccess().extnt().offset(x, y);
+					int index = getPlaneAccess().extent().offset(x, y);
 					short chnlVal = pixelIn.get(index);
 					
 					if ( chnlVal==equalVal ) {
@@ -103,7 +103,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public void setAllPixelsTo( int val ) {
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -119,9 +119,9 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 
 		short valShort = (short) val;
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
-		Extent e = extnt();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
@@ -149,7 +149,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			return;
 		}
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -165,13 +165,13 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public void setVoxel(int x, int y, int z, int val) {
 		ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        buffer.put( getPlaneAccess().extnt().offset(x, y), (short) val );
+        buffer.put( getPlaneAccess().extent().offset(x, y), (short) val );
 	}
 
 	@Override
 	public int getVoxel(int x, int y, int z) {
 		ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
-        return ByteConverter.unsignedShortToInt( buffer.get( getPlaneAccess().extnt().offset(x, y) ) );
+        return ByteConverter.unsignedShortToInt( buffer.get( getPlaneAccess().extent().offset(x, y) ) );
 	}
 	
 	// TODO when values are too small or too large
@@ -183,7 +183,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 				
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ShortBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
@@ -192,9 +192,9 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
 					
-					int indexMask = getPlaneAccess().extnt().offset(x, y);
+					int indexMask = getPlaneAccess().extent().offset(x, y);
 					if (pixelsMask.get(indexMask)==maskOnByte) {
-						int index = getPlaneAccess().extnt().offset(x, y);
+						int index = getPlaneAccess().extent().offset(x, y);
 						
 						short shortVal = (short) (pixels.get(index) + value);
 						pixels.put(index, shortVal );
@@ -222,7 +222,7 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public void subtractFrom(int val) {
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
@@ -244,9 +244,9 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public VoxelBox<ShortBuffer> maxIntensityProj() {
 		
-		MaxIntensityBufferShort mi = new MaxIntensityBufferShort( extnt() ); 
+		MaxIntensityBufferShort mi = new MaxIntensityBufferShort( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 	
@@ -255,9 +255,9 @@ public class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
 	@Override
 	public VoxelBox<ShortBuffer> meanIntensityProj() {
-		MeanIntensityShortBuffer mi = new MeanIntensityShortBuffer( extnt() ); 
+		MeanIntensityShortBuffer mi = new MeanIntensityShortBuffer( extent() ); 
 
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			mi.projectSlice( getPlaneAccess().getPixelsForPlane(z).buffer() );
 		}
 		

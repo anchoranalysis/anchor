@@ -29,12 +29,13 @@ package org.anchoranalysis.core.name.store;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
@@ -61,19 +62,20 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 
 	@Override
 	public T getException(String key) throws NamedProviderGetException {
-		
+		return getOptional(key).orElseThrow( ()->
+			NamedProviderGetException.nonExistingItem(key, storeDisplayName)
+		);
+	}
+	
+	@Override
+	public Optional<T> getOptional(String key) throws NamedProviderGetException {
 		try {
-			WrapOperationAsCached<T,OperationFailedException> cachedGetter = map.get(key);
-			
-			if (cachedGetter==null) {
-				throw new GetOperationFailedException(
-					String.format("NamedItem '%s' does not exist in %s", key, storeDisplayName)
-				);
-			}
-			
-			return cachedGetter.doOperation();
+			return OptionalUtilities.map(
+				Optional.ofNullable( map.get(key) ),
+				ret -> ret.doOperation()
+			);
 		} catch (Throwable e) {
-			throw createExceptionForKey(key, e);
+			throw NamedProviderGetException.wrap(key, e);
 		}
 	}
 
@@ -101,33 +103,5 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 			new ProfiledCachedGetter<>(getter,name,storeDisplayName,logErrorReporter)
 		);
 		
-	}
-
-	@Override
-	public T getNull(String key) throws NamedProviderGetException {
-		
-		
-		try {
-			WrapOperationAsCached<T,OperationFailedException> cachedGetter = map.get(key);
-			
-			if (cachedGetter==null) {
-				return null;
-			}
-			
-			return cachedGetter.doOperation();
-		} catch (Throwable e) {
-			throw createExceptionForKey(key, e);
-		}
-	}
-	
-	private NamedProviderGetException createExceptionForKey( String key, Throwable cause ) {
-		return new NamedProviderGetException(
-			decorateKey(key),
-			cause
-		);
-	}
-	
-	private String decorateKey( String key ) {
-		return String.format("%s: %s", storeDisplayName, key);
 	}
 }

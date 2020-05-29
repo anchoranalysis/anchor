@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.factory.unionfind.ConnectedComponentUnionFind;
 
@@ -59,50 +58,26 @@ public class CreateFromConnectedComponentsFactory {
 		unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNghb);
 	}
 	
-	public ObjMaskCollection createConnectedComponents( BinaryChnl bi ) throws CreateException {
-		
-		ObjMaskCollection omc = new ObjMaskCollection();
-		try {
-			visitImage( bi, omc );
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-		return omc;
+	public ObjMaskCollection createConnectedComponents( BinaryChnl chnl ) throws CreateException {
+		return createConnectedComponents( chnl.binaryVoxelBox() );
 	}
 	
 	// This consumes the voxel buffer 'vb'
 	public ObjMaskCollection createConnectedComponents( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
-		
-		ObjMaskCollection omc = new ObjMaskCollection();
 		try {
-			unionFind.visitRegionByte( vb, omc );
-			//visitRegion( vb, omc, factoryByte );
+			return unionFind.deriveConnectedByte(vb);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		return omc;
 	}
 	
 	// This consumes the voxel buffer 'vb'
 	public ObjMaskCollection create( BinaryVoxelBox<IntBuffer> vb ) throws CreateException {
-		
-		ObjMaskCollection omc = new ObjMaskCollection();
 		try {
-			unionFind.visitRegionInt( vb, omc);
-			//visitRegion( vb, omc, factory );
+			return unionFind.deriveConnectedInt(vb);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		return omc;
 	}
 
-	// Uses 6-conn neighbours in 3d
-	private void visitImage( BinaryChnl chnlAll, ObjMaskCollection omc  ) throws OperationFailedException {
-		unionFind.visitRegionByte(
-			new BinaryVoxelBoxByte(
-				chnlAll.getVoxelBox().duplicate(),
-				chnlAll.getBinaryValues()),
-				omc
-			);
-	}
 }

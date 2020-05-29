@@ -28,8 +28,8 @@ package org.anchoranalysis.io.generator.serialized;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalWriter;
@@ -37,7 +37,6 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -61,7 +60,9 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 		
 		ManifestDescription manifestDescription = new ManifestDescription("serializedBundle", manifestDescriptionFunction);
 		
-		outputGenerator = new ObjectOutputStreamGenerator<>( manifestDescriptionFunction );
+		outputGenerator = new ObjectOutputStreamGenerator<>(
+			Optional.of(manifestDescriptionFunction)
+		);
 		
 		generatorSequence = new GeneratorSequenceIncrementalWriter<>(
 				parentOutputManager,
@@ -84,15 +85,12 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 	
 
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager) throws OutputWriteFailedException {
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		throw new OutputWriteFailedException("this generator does not support writes without indexes");
 	}
 	
 	@Override
-	public int write( IndexableOutputNameStyle outputNameStyle, FilePathCreator filePathGnrtr, IWriteOperationRecorder writeOperationRecorder, String index, BoundOutputManager outputManager ) throws OutputWriteFailedException {
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		bundle.add(index, element);
 		
 		// If we have reached our full capacity, then we serialize the bundle, and clear it for the next set of items
@@ -110,8 +108,16 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 		
 		if (generatorSequence.isOn()) {
 		
-			Generator bundleParametersGenerator = new ObjectOutputStreamGenerator<>( bundleParameters,  "bundleParameters" );
-			generatorSequence.getSubFolderOutputManager().getWriterAlwaysAllowed().write(
+			Generator bundleParametersGenerator = new ObjectOutputStreamGenerator<>(
+				bundleParameters,
+				Optional.of("bundleParameters")
+			);
+			
+			BoundOutputManager subfolderOutputManager = generatorSequence.getSubFolderOutputManager().orElseThrow( ()->
+				new OutputWriteFailedException("No subfolder output-manager exists")
+			);
+			
+			subfolderOutputManager.getWriterAlwaysAllowed().write(
 				"bundleParameters",
 				() -> bundleParametersGenerator
 			);
@@ -121,10 +127,13 @@ public class BundledObjectOutputStreamGenerator<T extends Serializable> extends 
 	}
 	
 	@Override
-	public FileType[] getFileTypes( OutputWriteSettings outputWriteSettings ) {
-		return new FileType[] {
-			new FileType( outputGenerator.createManifestDescription(), outputGenerator.getFileExtension(outputWriteSettings) )
-		};
+	public Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings ) {
+		Optional<ManifestDescription> manifestDescription = outputGenerator.createManifestDescription(); 
+		return manifestDescription.map(md ->
+			new FileType[] {
+					new FileType(md, outputGenerator.getFileExtension(outputWriteSettings) )
+			}
+		);
 	}
 	
 	@Override

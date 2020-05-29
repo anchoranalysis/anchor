@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.input;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
-class OperationCreateStackCollection extends CachedOperationWithProgressReporter<INamedProvider<Stack>,CreateException> {
+class OperationCreateStackCollection extends CachedOperationWithProgressReporter<NamedProvider<Stack>,CreateException> {
 
 	private ProvidesStackInput inputObject;
 	private int seriesNum;

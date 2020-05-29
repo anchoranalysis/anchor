@@ -61,11 +61,11 @@ public class ChnlFixture {
 	
 	// START: image size examples
 	public static final Extent SMALL_3D = new Extent(8,11,4);
-	public static final Extent SMALL_2D = SMALL_3D.flatten();
+	public static final Extent SMALL_2D = SMALL_3D.flattenZ();
 	public static final Extent MEDIUM_3D = new Extent(69,61,7);
-	public static final Extent MEDIUM_2D = MEDIUM_3D.flatten();
+	public static final Extent MEDIUM_2D = MEDIUM_3D.flattenZ();
 	public static final Extent LARGE_3D = new Extent(1031,2701,19);
-	public static final Extent LARGE_2D = LARGE_3D.flatten();
+	public static final Extent LARGE_2D = LARGE_3D.flattenZ();
 	// END: image size examples
 		
 	public static Chnl createChnl( Extent e, IntensityFunction createIntensity ) {

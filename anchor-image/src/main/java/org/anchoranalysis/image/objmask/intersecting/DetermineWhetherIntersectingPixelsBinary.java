@@ -27,6 +27,7 @@ package org.anchoranalysis.image.objmask.intersecting;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -53,21 +54,16 @@ public class DetermineWhetherIntersectingPixelsBinary {
 	}
 	
 	public boolean hasIntersectingPixels(BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other ) {
-		return pointOfFirstIntersectingPixel(src, other)!=null;
+		return pointOfFirstIntersectingPixel(src, other).isPresent();
 	}
 	
-	private Point3i pointOfFirstIntersectingPixel(BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other ) {
+	private Optional<Point3i> pointOfFirstIntersectingPixel(BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other ) {
 		
 		// Find the common bounding box
-		BoundingBox bboxIntersect = new BoundingBox( src.getBoundingBox() );
-		
-		if (!bboxIntersect.intersect( other.getBoundingBox(), true )) {
-			// If the bounding boxes don't intersect then we can
-			//   go home early
-			return null;
-		}
-		
-		return hasIntersectingPixelsFromBBox( src, other, bboxIntersect );
+		Optional<BoundingBox> bboxIntersect = src.getBoundingBox().intersection().with( other.getBoundingBox() );
+		return bboxIntersect.flatMap( bbox->
+			hasIntersectingPixelsFromBBox( src, other, bbox )
+		);
 	}
 	
 	/**
@@ -77,9 +73,9 @@ public class DetermineWhetherIntersectingPixelsBinary {
 	 * @param bboxIntersect
 	 * @param onMask1
 	 * @param onMask2
-	 * @return Point3i NULL if no intersection exists, otherwise first point of intersection found (newly-created)
+	 * @return Point3i if intersection exists, then the first point of intersection found (newly-created), or else empty if no intersection exists
 	 */
-	private Point3i hasIntersectingPixelsFromBBox( BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other, BoundingBox bboxIntersect ) {
+	private Optional<Point3i> hasIntersectingPixelsFromBBox( BoundedVoxelBox<ByteBuffer> src, BoundedVoxelBox<ByteBuffer> other, BoundingBox bboxIntersect ) {
 		
 		IntersectionBBox bbox = IntersectionBBox.create(
 			src.getBoundingBox(),
@@ -99,19 +95,19 @@ public class DetermineWhetherIntersectingPixelsBinary {
 			buffer.clear();
 			bufferOther.clear();
 			
-			Point3i intersectingPoint = hasIntersectingPixels(
+			Optional<Point3i> intersectingPoint = hasIntersectingPixels(
 				buffer,
 				bufferOther,
 				bbox
 			);
-			if (intersectingPoint!=null) {
-				intersectingPoint.setZ(z);
+			if (intersectingPoint.isPresent()) {
+				intersectingPoint.get().setZ(z);
 				return intersectingPoint;
 			}
 			
 		}
 			
-		return null;		
+		return Optional.empty();		
 	}
 
 	
@@ -119,7 +115,7 @@ public class DetermineWhetherIntersectingPixelsBinary {
 	 * 
 	 * @return Point3i NULL if no intersection exists, otherwise first point of intersection found (newly-created)
 	 */
-	private Point3i hasIntersectingPixels( ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox bbox ) {
+	private Optional<Point3i> hasIntersectingPixels( ByteBuffer buffer1, ByteBuffer buffer2, IntersectionBBox bbox ) {
 		
 		for (int y=bbox.y().min(); y<bbox.y().max(); y++) {
 			int y_other = y + bbox.y().rel();
@@ -131,11 +127,13 @@ public class DetermineWhetherIntersectingPixelsBinary {
 				byte posCheckOther = buffer2.get( bbox.e2().offset(x_other, y_other) );
 				
 				if ( posCheck==byteOn1 && posCheckOther==byteOn2 ) {
-					return new Point3i(x,y,0);
+					return Optional.of(
+						new Point3i(x,y,0)
+					);
 				}
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 }

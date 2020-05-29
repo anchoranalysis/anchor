@@ -57,12 +57,12 @@ public class ObjMaskMerger {
 			om2 = BinaryChnlInverter.invertObjMaskDuplicate(om2);
 		}
 		
-		BoundingBox bbox = BoundingBox.union( om1.getBoundingBox(), om2.getBoundingBox() );
+		BoundingBox bbox = om1.getBoundingBox().union().with(om2.getBoundingBox() );
 		
 		ObjMask omOut = new ObjMask(
 			bbox,
 			VoxelBoxFactory.instance().getByte().create(
-				bbox.extnt()
+				bbox.extent()
 			)
 		);
 		
@@ -83,9 +83,9 @@ public class ObjMaskMerger {
 		
 		for( ObjMask om : objs ) {
 			if (bbox==null) {
-				bbox = new BoundingBox( om.getBoundingBox() );
+				bbox = om.getBoundingBox();
 			} else {
-				bbox.union(om.getBoundingBox());
+				bbox = bbox.union().with(om.getBoundingBox());
 			}
 		}
 		
@@ -104,7 +104,7 @@ public class ObjMaskMerger {
 		
 		BoundingBox bbox = mergeBBoxFromObjs(objs);
 		
-		ObjMask omOut = new ObjMask( bbox, VoxelBoxFactory.instance().getByte().create(bbox.extnt()) );
+		ObjMask omOut = new ObjMask( bbox, VoxelBoxFactory.instance().getByte().create(bbox.extent()) );
 		
 		BinaryValues bv = null;
 		for( ObjMask om : objs ) {
@@ -127,7 +127,7 @@ public class ObjMaskMerger {
 	private static void copyPixelsCheckMask( ObjMask omSrc, ObjMask omDest, BoundingBox bbox ) {
 		
 		Point3i pntDest = omSrc.getBoundingBox().relPosTo( bbox );
-		Extent e = omSrc.getBoundingBox().extnt();
+		Extent e = omSrc.getBoundingBox().extent();
 		
 		omSrc.getVoxelBox().copyPixelsToCheckMask(
 			new BoundingBox(e),

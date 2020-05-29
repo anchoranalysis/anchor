@@ -28,6 +28,7 @@ package org.anchoranalysis.feature.calc.results;
 
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -68,7 +69,6 @@ public class ResultsVector {
 	}
 	
 	public void set( int i, double val ) {
-		//assert( !Double.isNaN(val) );
 		arr[i] = val;
 	}
 	
@@ -101,15 +101,17 @@ public class ResultsVector {
 	}
 	
 	// Returns a double, or NULL if the object is an exception
-	public Double getDoubleOrNull( int i ) {
+	public Optional<Double> getDoubleOrNull( int i ) {
 		
 		Object obj = arr[i];
 		
 		if (obj instanceof Exception) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return (Double) obj;
+		return Optional.of(
+			(Double) obj
+		);
 	}
 
 	

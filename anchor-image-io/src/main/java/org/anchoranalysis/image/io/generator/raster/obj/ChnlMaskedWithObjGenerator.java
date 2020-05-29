@@ -27,8 +27,10 @@ package org.anchoranalysis.image.io.generator.raster.obj;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -91,8 +93,10 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "maskChnl");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "maskChnl")
+		);
 	}
 
 	@Override
@@ -113,16 +117,16 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		ImageDim newSd = new ImageDim( srcChnl.getDimensions() );
-		newSd.setX( bbox.extnt().getX() );
-		newSd.setY( bbox.extnt().getY() );
-		newSd.setZ( bbox.extnt().getZ() );
+		ImageDim newSd = new ImageDim(
+			bbox.extent(),
+			srcChnl.getDimensions().getRes()
+		);
 		
 		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
-		Point3i maxGlobal = bbox.calcCrnrMax();
+		ReadableTuple3i maxGlobal = bbox.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
 		Point3i pntLocal = new Point3i();
 		

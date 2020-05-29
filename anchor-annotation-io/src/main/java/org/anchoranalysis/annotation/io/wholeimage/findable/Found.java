@@ -1,5 +1,7 @@
 package org.anchoranalysis.annotation.io.wholeimage.findable;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-annotation-io
@@ -54,12 +56,7 @@ public class Found<T> extends Findable<T> {
 	}
 
 	@Override
-	public boolean logIfFailure(String name, LogErrorReporter logErrorReporter) {
-		return true;
-	}
-
-	@Override
-	public T getOrNull() {
-		return obj;
+	public Optional<T> getFoundOrLog(String name, LogErrorReporter logErrorReporter) {
+		return Optional.of(obj);
 	}
 }

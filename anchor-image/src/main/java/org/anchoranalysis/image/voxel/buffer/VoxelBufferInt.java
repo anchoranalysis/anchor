@@ -33,9 +33,9 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
-public class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
+public final class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
 
-	private IntBuffer delegate;
+	private final IntBuffer delegate;
 
 	public VoxelBufferInt(IntBuffer delegate) {
 		super();

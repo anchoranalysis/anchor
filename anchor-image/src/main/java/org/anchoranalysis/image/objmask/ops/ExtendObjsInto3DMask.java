@@ -29,6 +29,7 @@ package org.anchoranalysis.image.objmask.ops;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -47,9 +48,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
  */
 public class ExtendObjsInto3DMask {
 	
-	private ExtendObjsInto3DMask() {
-		
-	}
+	private ExtendObjsInto3DMask() {}
 	
 	public static ObjMaskCollection extendObjs( ObjMaskCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
 		
@@ -79,14 +78,14 @@ public class ExtendObjsInto3DMask {
 		BinaryVoxelBox<ByteBuffer> mask3D
 	) {
 
-		BoundingBox newBBox = createBoundingBoxForAllZ( obj2D.getBoundingBox(), mask3D.extnt().getZ() );
+		BoundingBox newBBox = createBoundingBoxForAllZ( obj2D.getBoundingBox(), mask3D.extent().getZ() );
 		
 		BoundedVoxelBox<ByteBuffer> newMask = new BoundedVoxelBox<>(
 			newBBox,
 			VoxelBoxFactory.instance().getByte()
 		);
 		
-		Point3i max = newBBox.calcCrnrMax();
+		ReadableTuple3i max = newBBox.calcCrnrMax();
 		Point3i pnt = new Point3i();
 
 		BinaryValuesByte bv = mask3D.getBinaryValues().createByte();
@@ -108,7 +107,7 @@ public class ExtendObjsInto3DMask {
 						continue;
 					}
 						
-					int indexGlobal = mask3D.extnt().offset( pnt.getX(), pnt.getY());
+					int indexGlobal = mask3D.extent().offset( pnt.getX(), pnt.getY());
 					bufferOut3D.put(
 						ind,
 						bufferMask3D.get(indexGlobal)==bv.getOnByte() ? bv.getOnByte() : bv.getOffByte()
@@ -124,20 +123,22 @@ public class ExtendObjsInto3DMask {
 	
 	private static BoundingBox createBoundingBoxForAllZ( BoundingBox exst, int z ) {
 		Point3i crnrMin = copyPointChangeZ( exst.getCrnrMin(), 0 );
-		Extent e = copyExtentChangeZ( exst.extnt(), z );
+		Extent e = copyExtentChangeZ( exst.extent(), z );
 
 		return new BoundingBox( crnrMin, e );
 	}
 	
-	private static Point3i copyPointChangeZ( Point3i in, int z ) {
+	private static Point3i copyPointChangeZ( ReadableTuple3i in, int z ) {
 		Point3i out = new Point3i( in );
 		out.setZ(z);
 		return out;
 	}
 		
 	private static Extent copyExtentChangeZ( Extent in, int z ) {
-		Extent out = new Extent( in );
-		out.setZ( z );
-		return out;
+		return new Extent(
+			in.getX(),
+			in.getY(),
+			z
+		);
 	}
 }

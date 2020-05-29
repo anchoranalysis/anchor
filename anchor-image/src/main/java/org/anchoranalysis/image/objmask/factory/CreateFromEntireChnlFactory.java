@@ -28,7 +28,6 @@ package org.anchoranalysis.image.objmask.factory;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -37,13 +36,15 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class CreateFromEntireChnlFactory {
 
-	public static ObjMask createObjMask( BinaryChnl binaryImgChnl ) throws CreateException {
+	private CreateFromEntireChnlFactory() {}
+			
+	public static ObjMask createObjMask( BinaryChnl binaryImgChnl ) {
 		Chnl chnl = binaryImgChnl.getChnl();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte(); 
 		
 		return new ObjMask(
-			new BoundingBox( vb.extnt() ),
+			new BoundingBox( vb.extent() ),
 			vb,
 			binaryImgChnl.getBinaryValues()
 		);

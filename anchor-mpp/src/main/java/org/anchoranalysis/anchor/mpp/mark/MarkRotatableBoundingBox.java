@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -134,13 +136,14 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 			cornerPoint(true, true)
 		};
 		
-		BoundingBox box = BoundingBoxFromPoints.forListWithoutException(
-			rotateAddPos(points)
-		);
-		
-		box.clipTo(bndScene.getExtnt());
-		assert(box.extnt().getZ()>0);
-		return box;
+		try {
+			BoundingBox box = BoundingBoxFromPoints.forList(
+				rotateAddPos(points)
+			);
+			return box.clipTo(bndScene.getExtnt());
+		} catch (OperationFailedException e) {
+			throw new AnchorImpossibleSituationException();
+		}
 	}
 	
 	@Override

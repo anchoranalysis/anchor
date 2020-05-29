@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.graph.bean;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
@@ -37,6 +38,7 @@ import org.anchoranalysis.anchor.graph.index.BarChart;
 import org.anchoranalysis.anchor.mpp.graph.execution.ExecutionTimeItem;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeItem> {
 
@@ -67,15 +69,16 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
 		switch( seriesNum ) {
 		case 0:
 			return func.apply(item);
+		default:
+			throw new AnchorFriendlyRuntimeException(
+				String.format("seriesNum must be 0 but instead it is %d", seriesNum)
+			);	
 		}
-		
-		assert false;
-		return null;
 	}
 	
 	@Override
 	public GraphInstance create(Iterator<ExecutionTimeItem> items,
-			AxisLimits domainLimits, AxisLimits rangeLimits) throws CreateException {
+			Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits) throws CreateException {
 		return delegate.create(items, domainLimits, rangeLimits);
 	}
 

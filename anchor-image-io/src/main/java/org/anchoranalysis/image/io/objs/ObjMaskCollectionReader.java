@@ -32,10 +32,10 @@ import static org.anchoranalysis.image.io.objs.deserialize.ObjMaskCollectionDese
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 

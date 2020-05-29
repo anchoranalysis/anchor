@@ -72,4 +72,18 @@ public class AxisTypeConverter {
 			throw new AnchorFriendlyRuntimeException(UNKNOWN_AXIS_TYPE);
 		}
 	}
+	
+	/** Multiplexes the correct value for the given dimension */
+	public static int valueFor( AxisType axisType, int x, int y, int z) {
+		switch(axisType) {
+		case X:
+			return x;
+		case Y:
+			return y;
+		case Z:
+			return z;
+		default:
+			throw new AnchorFriendlyRuntimeException(UNKNOWN_AXIS_TYPE);
+		}
+	}
 }

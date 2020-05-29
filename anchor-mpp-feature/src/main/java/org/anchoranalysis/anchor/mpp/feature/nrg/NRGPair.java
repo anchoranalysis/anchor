@@ -27,18 +27,11 @@ package org.anchoranalysis.anchor.mpp.feature.nrg;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 
-public class NRGPair implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3634901902423738195L;
+public class NRGPair {
 
 	private final Pair<Mark> pair;
 	

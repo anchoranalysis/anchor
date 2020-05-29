@@ -2,6 +2,7 @@ package org.anchoranalysis.image.io.stack;
 
 import java.nio.file.Path;
 
+
 /*
  * #%L
  * anchor-image-io
@@ -35,7 +36,7 @@ import org.anchoranalysis.core.cache.WrapOperationWithProgressReporterAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -60,7 +61,7 @@ public class StackCollectionOutputter {
 	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
 	 * @throws OutputWriteFailedException */
 	public static void outputSubset(
-		INamedProvider<Stack> stacks,
+		NamedProvider<Stack> stacks,
 		String secondLevelOutputKey,
 		boolean suppressSubfolders,
 		BoundIOContext context
@@ -81,7 +82,7 @@ public class StackCollectionOutputter {
 	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
 	 * @throws OutputWriteFailedException */
 	public static void outputSubsetWithException(
-		INamedProvider<Stack> stacks,
+		NamedProvider<Stack> stacks,
 		BoundOutputManagerRouteErrors outputManager,
 		String secondLevelOutputKey,
 		boolean suppressSubfolders
@@ -106,7 +107,7 @@ public class StackCollectionOutputter {
 		IterableGeneratorOutputHelper.outputWithException( namedCollection, generator, outputManager, outputName, suffix, suppressSubfoldersIn);
 	}
 	
-	public static NamedImgStackCollection subset( INamedProvider<Stack> stackCollection, OutputAllowed oa ) {
+	public static NamedImgStackCollection subset( NamedProvider<Stack> stackCollection, OutputAllowed oa ) {
 		
 		NamedImgStackCollection out = new NamedImgStackCollection();
 		
@@ -134,7 +135,7 @@ public class StackCollectionOutputter {
 		
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, keys.size()) ) {
 			for (String id : keys) {
-				if (target.getImageNoException(id)==null) {
+				if (!target.keys().contains((id))) {
 					target.addImageStack(
 						id,
 						new Stack(
@@ -149,7 +150,7 @@ public class StackCollectionOutputter {
 		}
 	}
 
-	private static OperationWithProgressReporter<Stack,OperationFailedException> extractStackCached(INamedProvider<Stack> stackCollection, String name) {
+	private static OperationWithProgressReporter<Stack,OperationFailedException> extractStackCached(NamedProvider<Stack> stackCollection, String name) {
 		return new WrapOperationWithProgressReporterAsCached<>(
 			() -> {
 				try {
@@ -169,7 +170,7 @@ public class StackCollectionOutputter {
 		);
 	}
 	
-	private static NamedImgStackCollection stackSubset( INamedProvider<Stack> stacks, String secondLevelOutputKey, BoundOutputManagerRouteErrors outputManager ) {
+	private static NamedImgStackCollection stackSubset( NamedProvider<Stack> stacks, String secondLevelOutputKey, BoundOutputManagerRouteErrors outputManager ) {
 		return StackCollectionOutputter.subset(
 			stacks,
 			outputManager.outputAllowedSecondLevel(secondLevelOutputKey)

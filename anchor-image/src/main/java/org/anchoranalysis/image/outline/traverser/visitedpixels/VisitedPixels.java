@@ -67,8 +67,8 @@ public class VisitedPixels {
 		
 	/** Combines all the contiguous paths to a single-path 
 	 * @throws OperationFailedException */
-	public ContiguousPixelPath combineToOnePath( Extent extnt ) throws OperationFailedException {
-		return CombineToOnePath.combineToOnePath(paths, extnt );
+	public ContiguousPixelPath combineToOnePath( Extent extent ) throws OperationFailedException {
+		return CombineToOnePath.combineToOnePath(paths, extent );
 	}
 
 	@Override

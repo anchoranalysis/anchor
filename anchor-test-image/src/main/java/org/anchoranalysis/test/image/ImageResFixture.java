@@ -33,10 +33,10 @@ public class ImageResFixture {
 	public static final ImageRes instance = create();
 	
 	private static ImageRes create() {
-		ImageRes sr = new ImageRes();
-		sr.setX(0.01);
-		sr.setY(0.01);
-		sr.setZ(0.025);
-		return sr;
+		return new ImageRes(
+			0.01,
+			0.01,
+			0.025
+		);
 	}
 }

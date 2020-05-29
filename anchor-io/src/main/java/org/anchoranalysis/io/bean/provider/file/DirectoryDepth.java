@@ -29,20 +29,16 @@ package org.anchoranalysis.io.bean.provider.file;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.apache.commons.io.DirectoryWalker;
-import org.apache.commons.io.filefilter.IOFileFilter;
 
 /** Lists all directories to a certain depth */
 public class DirectoryDepth extends FileProviderWithDirectoryString {
-
+	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int exactDepth = 0;
@@ -69,57 +65,6 @@ public class DirectoryDepth extends FileProviderWithDirectoryString {
 			throw new AnchorIOException("A failure occurred searching for directories", e);
 		}
 	}
-
-	private static class RejectAllFiles implements IOFileFilter {
-
-		@Override
-		public boolean accept(File file) {
-			return true;
-		}
-
-		@Override
-		public boolean accept(File dir, String name) {
-			return true;
-		}
-		
-	}
-	
-	private static class WalkToDepth extends DirectoryWalker<File> {
-		
-		private int exactDepth;
-		private ProgressReporterMultiple prm;
-		
-		public WalkToDepth( int exactDepth, ProgressReporterMultiple prm ) {
-			super( null, new RejectAllFiles(), exactDepth);
-			this.exactDepth = exactDepth;
-			this.prm = prm;
-		}
-
-		public List<File> findDirs(File root) throws IOException {
-			List<File> results = new ArrayList<File>();
-			walk(root, results);
-			return results;
-		}
-
-		@Override
-		protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
-			
-		}
-
-		protected boolean handleDirectory(File directory, int depth, Collection<File> results) {
-			
-			if (depth==1) {
-				prm.incrWorker();
-			}
-			
-			if (depth==exactDepth) {
-				results.add( directory );
-			}
-			
-			return depth <= exactDepth;
-		}
-	}
-
 
 	public int getExactDepth() {
 		return exactDepth;

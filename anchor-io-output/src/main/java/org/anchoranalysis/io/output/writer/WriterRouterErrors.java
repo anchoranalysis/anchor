@@ -1,8 +1,7 @@
 package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
-
-import org.anchoranalysis.core.cache.Operation;
+import java.util.Optional;
 
 /*
  * #%L
@@ -32,6 +31,7 @@ import org.anchoranalysis.core.cache.Operation;
 
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -51,20 +51,22 @@ public class WriterRouterErrors {
 		this.errorReporter = errorReporter;
 	}
 
-	public BoundOutputManagerRouteErrors bindAsSubFolder(String outputName,
+	public Optional<BoundOutputManagerRouteErrors> bindAsSubFolder(String outputName,
 			ManifestFolderDescription manifestDescription,
-			FolderWriteWithPath folder) {
+			Optional<FolderWriteWithPath> folder) {
 		try {
-			return new BoundOutputManagerRouteErrors(
-				delegate.bindAsSubFolder(outputName, manifestDescription, folder),
-				errorReporter
+			return delegate.bindAsSubFolder(outputName, manifestDescription, folder).map( output ->
+				new BoundOutputManagerRouteErrors(
+					output,
+					errorReporter
+				)
 			);
 		} catch (OutputWriteFailedException e) {
 			errorReporter.recordError( BoundOutputManagerRouteErrors.class, e);
-			return null;
+			return Optional.empty();
 		}			
 	}
-
+	
 	public <T> void writeSubfolder(String outputName,
 			Operation<WritableItem,OutputWriteFailedException> collectionGenerator)	{
 		try {
@@ -101,7 +103,7 @@ public class WriterRouterErrors {
 			errorReporter.recordError( BoundOutputManagerRouteErrors.class, e);
 		}						
 	}
-
+	
 	public void write(String outputName, Operation<WritableItem,OutputWriteFailedException> generator) {
 		try {
 			delegate.write(outputName, generator);
@@ -110,11 +112,21 @@ public class WriterRouterErrors {
 		}						
 	}
 
-	public Path writeGenerateFilename(String outputName, String extension,
-			ManifestDescription manifestDescription, String outputNamePrefix,
-			String outputNameSuffix, String index) throws OutputWriteFailedException {
-		return delegate.writeGenerateFilename(outputName, extension,
-				manifestDescription, outputNamePrefix, outputNameSuffix, index);
+	public Optional<Path> writeGenerateFilename(
+		String outputName,
+		String extension,
+		Optional<ManifestDescription> manifestDescription,
+		String outputNamePrefix,
+		String outputNameSuffix,
+		String index
+	) throws OutputWriteFailedException {
+		return delegate.writeGenerateFilename(
+			outputName,
+			extension,
+			manifestDescription,
+			outputNamePrefix,
+			outputNameSuffix,
+			index
+		);
 	}
-	
 }

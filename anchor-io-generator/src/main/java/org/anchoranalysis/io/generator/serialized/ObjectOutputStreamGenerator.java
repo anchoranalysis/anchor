@@ -32,17 +32,18 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedIterableGenerator<T> {
 	
-	public ObjectOutputStreamGenerator( String manifestFunction ) {
+	public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
 		super(manifestFunction);
 	}
 	
-	public ObjectOutputStreamGenerator(T rootObject, String manifestFunction ) {
+	public ObjectOutputStreamGenerator(T rootObject, Optional<String> manifestFunction ) {
 		super(rootObject, manifestFunction);
 	}
 	

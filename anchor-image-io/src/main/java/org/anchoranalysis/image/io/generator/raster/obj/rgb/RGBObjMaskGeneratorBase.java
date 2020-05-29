@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 
 /*-
@@ -109,8 +111,10 @@ public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements
 	
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "rgbObjMask");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "rgbObjMask")
+		);
 	}
 	
 	protected abstract RGBStack generateBackground() throws CreateException;

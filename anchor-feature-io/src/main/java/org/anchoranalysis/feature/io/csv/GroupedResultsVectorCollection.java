@@ -29,10 +29,12 @@ package org.anchoranalysis.feature.io.csv;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.collection.TreeMapCreate;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
@@ -133,22 +135,25 @@ public class GroupedResultsVectorCollection {
 	 */
 	public void writeResultsForAllGroups(
 		FeatureNameList featureNamesNonAggregate,			
-		NamedFeatureStore<FeatureInputResults> featuresAggregate,
+		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
 		BoundIOContext context
 	) throws AnchorIOException {
 		
-		FeatureCSVWriter csvWriterAll = FeatureCSVWriter.create(
+		Optional<FeatureCSVWriter> csvWriterAll = FeatureCSVWriter.create(
 			"csvAll",
 			context.getOutputManager(),
 			groupHeaderNames,
 			featureNamesNonAggregate
 		);
-		FeatureCSVWriter csvWriterAggregate = featuresAggregate!=null ? FeatureCSVWriter.create(
-			"csvAgg",
-			context.getOutputManager(),
-			groupHeaderNamesAggregate,
-			featuresAggregate.createFeatureNames()
-		) : null;
+		Optional<FeatureCSVWriter> csvWriterAggregate = OptionalUtilities.flatMap(
+			featuresAggregate,
+			fa -> FeatureCSVWriter.create(
+				"csvAgg",
+				context.getOutputManager(),
+				groupHeaderNamesAggregate,
+				fa.createFeatureNames()
+			)
+		);
 		
 		try {
 			for( MultiName group : groupMap.keySet() ) {
@@ -170,12 +175,8 @@ public class GroupedResultsVectorCollection {
 				);
 			}
 		} finally {
-			if (csvWriterAggregate!=null) {
-				csvWriterAggregate.close();
-			}
-			if (csvWriterAll!=null) {
-				csvWriterAll.close();
-			}
+			csvWriterAggregate.ifPresent( FeatureCSVWriter::close );
+			csvWriterAll.ifPresent( FeatureCSVWriter::close );
 		}			
 	}
 	
@@ -184,9 +185,9 @@ public class GroupedResultsVectorCollection {
 		MultiName group,
 		ResultsVectorCollection resultsVectorCollection,
 		FeatureNameList featureNames,
-		NamedFeatureStore<FeatureInputResults> featuresAggregate,	// If null, we don't do any feature aggregation
-		FeatureCSVWriter csvWriterAll,			// If null, disabled
-		FeatureCSVWriter csvWriterAggregate,	// If null, disabled
+		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
+		Optional<FeatureCSVWriter> csvWriterAll,
+		Optional<FeatureCSVWriter> csvWriterAggregate,
 		BoundIOContext context
 	) throws AnchorIOException {
 		
@@ -210,26 +211,26 @@ public class GroupedResultsVectorCollection {
 		//writeCSVResultsVector( featureNames, resultsVectorCollection, outputManagerGroup);
 		
 		// If we write ALL single-feature-results to a single CSV file
-		if (csvWriterAll!=null) {
-			csvWriterAll.addResultsVectorWithGroup(group, resultsVectorCollection, includeID);
+		if (csvWriterAll.isPresent()) {
+			csvWriterAll.get().addResultsVectorWithGroup(group, resultsVectorCollection, includeID);
 		}
 
-		if (featuresAggregate!=null) {
+		if (featuresAggregate.isPresent()) {
 			ResultsVector rv = createAggregateResultsVector(
-				featuresAggregate,
+				featuresAggregate.get(),
 				featureNames,
 				resultsVectorCollection,
 				context.getLogger()
 			);
 			
 			// Write aggregate-feature-results to a KeyValueparams file
-			writeKeyValueParams( featuresAggregate, rv, outputManagerGroup, context.getLogger() );
+			writeKeyValueParams( featuresAggregate.get(), rv, outputManagerGroup, context.getLogger() );
 
-			if (csvWriterAggregate!=null) {
+			if (csvWriterAggregate.isPresent()) {
 				assert(rv!=null);
 				
 				// If we write aggregate-feature-results to a single CSV file
-				csvWriterAggregate.addResultsVectorWithGroup(group, rv, false);
+				csvWriterAggregate.get().addResultsVectorWithGroup(group, rv, false);
 			}
 		}
 	}
@@ -280,9 +281,18 @@ public class GroupedResultsVectorCollection {
 		}
 		
 		try {
-			Path fileOutPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename("paramsGroupAgg", "xml", new ManifestDescription("paramsXML", "aggregateObjMask"), "", "", "");
-			if( fileOutPath!=null ) {
-				paramsOut.writeToFile(fileOutPath);
+			Optional<Path> fileOutPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
+				"paramsGroupAgg",
+				"xml",
+				Optional.of(
+					new ManifestDescription("paramsXML", "aggregateObjMask")
+				),
+				"",
+				"",
+				""
+			);
+			if(fileOutPath.isPresent()) {
+				paramsOut.writeToFile(fileOutPath.get());
 			}
 		} catch (IOException | OutputWriteFailedException e) {
 			logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e);

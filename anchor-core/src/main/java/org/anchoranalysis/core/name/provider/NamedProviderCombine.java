@@ -30,33 +30,25 @@ package org.anchoranalysis.core.name.provider;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-public class NamedProviderCombine<T> implements INamedProvider<T> {
+public class NamedProviderCombine<T> implements NamedProvider<T> {
 
-	private List<INamedProvider<T>> list = new ArrayList<>();
-
-	@Override
-	public T getException(String key) throws NamedProviderGetException {
-		T item = getNull(key);
-		if (item==null) {
-			throw NamedProviderGetException.nonExistingItem(key);
-		}
-		return item;
-	}
+	private List<NamedProvider<T>> list = new ArrayList<>();
 	
 	@Override
-	public T getNull(String key) throws NamedProviderGetException {
+	public Optional<T> getOptional(String key) throws NamedProviderGetException {
 		
-		for (INamedProvider<T> item : list) {
+		for (NamedProvider<T> item : list) {
 			
-			T ret = item.getNull(key);
+			Optional<T> ret = item.getOptional(key);
 			
-			if (ret!=null) {
+			if (ret.isPresent()) {
 				return ret;
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
@@ -64,14 +56,14 @@ public class NamedProviderCombine<T> implements INamedProvider<T> {
 
 		HashSet<String> combinedList = new HashSet<>();
 		
-		for (INamedProvider<T> item : list) {
+		for (NamedProvider<T> item : list) {
 			combinedList.addAll( item.keys() );
 		}
 		
 		return combinedList;
 	}
 	
-	public void add( INamedProvider<T> key ) {
+	public void add( NamedProvider<T> key ) {
 		assert( key != null );
 		list.add(key);
 	}

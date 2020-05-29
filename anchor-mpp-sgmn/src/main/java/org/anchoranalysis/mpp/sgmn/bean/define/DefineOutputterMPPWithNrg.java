@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -73,8 +73,8 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 		
 	public <S> S processInput(
 		BoundIOContext context,
-		Optional<INamedProvider<Stack>> stacks,
-		Optional<INamedProvider<ObjMaskCollection>> objs,
+		Optional<NamedProvider<Stack>> stacks,
+		Optional<NamedProvider<ObjMaskCollection>> objs,
 		Optional<KeyValueParams> keyValueParams,
 		OperationWithNRGStack<MPPInitParams,S> operation
 	) throws OperationFailedException {

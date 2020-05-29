@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -51,7 +52,7 @@ public class MonitoredSequentialExecutor<T> {
 	
 	private Predicate<T> execFunc;
 	private Function<T,String> dscrFunc;	
-	private LogReporter logReporter;
+	private Optional<LogReporter> logger;
 	private boolean showHashSeperators;
 		
 	/**
@@ -59,14 +60,14 @@ public class MonitoredSequentialExecutor<T> {
 	 * 
 	 * @param execFunc executes a particular input (String)
 	 * @param dscrFunc extracts a string-description from an input
-	 * @param logReporter reports before and after an input on the current status (disabled if NULL)
+	 * @param logger reports before and after an input on the current status (disabled if empty())
 	 * @param showHashSeperators indicates if lines of hashes should be placed before and after each log message (adds emphasis)
 	 */
-	public MonitoredSequentialExecutor(Predicate<T> execFunc, Function<T,String> dscrFunc, LogReporter logReporter, boolean showHashSeperators ) {
+	public MonitoredSequentialExecutor(Predicate<T> execFunc, Function<T,String> dscrFunc, Optional<LogReporter> logger, boolean showHashSeperators ) {
 		super();
 		this.execFunc = execFunc;
 		this.dscrFunc = dscrFunc;
-		this.logReporter = logReporter;
+		this.logger = logger;
 		this.showHashSeperators = showHashSeperators;
 	}
 
@@ -83,7 +84,7 @@ public class MonitoredSequentialExecutor<T> {
 		// So we can report on where a job in its total context
 		JobStartStopLogger jobLogger = new JobStartStopLogger(
 			logPrefix,
-			logReporter,
+			logger,
 			monitor,
 			showHashSeperators,
 			0

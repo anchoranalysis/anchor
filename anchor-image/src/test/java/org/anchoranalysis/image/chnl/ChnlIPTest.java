@@ -33,6 +33,7 @@ import java.nio.FloatBuffer;
 
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryFloat;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
@@ -45,10 +46,9 @@ public class ChnlIPTest {
 		
 		ChnlFactorySingleType imgChnlFloatFactory = new ChnlFactoryFloat();
 		
-		ImageDim sd = new ImageDim();
-		sd.setX(2);
-		sd.setY(2);
-		sd.setZ(1);
+		ImageDim sd = new ImageDim(
+			new Extent(2,2,1)
+		);
 		
 		Chnl ic = imgChnlFloatFactory.createEmptyInitialised( sd );
 		

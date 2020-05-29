@@ -113,12 +113,10 @@ public class OverlapUtilities {
 		PxlMark mark1 = pmm1.doOperation(); 
 		PxlMark mark2 = pmm2.doOperation();
 		
-		BoundingBox bbox1 = new BoundingBox( mark1.getBoundingBox(regionID) );
-		BoundingBox bbox2 = new BoundingBox( mark2.getBoundingBox(regionID) );
-		bbox1.convertToMaxIntensityProj();
-		bbox2.convertToMaxIntensityProj();
+		BoundingBox bbox1 = mark1.getBoundingBox(regionID).flattenZ();
+		BoundingBox bbox2 = mark2.getBoundingBox(regionID).flattenZ();
 		
-		if (!bbox1.hasIntersection(bbox2)) {
+		if (!bbox1.intersection().existsWith(bbox2)) {
 			return null;
 		}
 		

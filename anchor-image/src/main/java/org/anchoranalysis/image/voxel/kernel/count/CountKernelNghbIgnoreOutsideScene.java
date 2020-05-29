@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.kernel.count;
  */
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -40,30 +41,30 @@ import org.anchoranalysis.image.extent.Extent;
  */
 public class CountKernelNghbIgnoreOutsideScene extends CountKernelNghbBase {
 
-	private Extent extntScene;
-	private Point3i addPnt;
+	private Extent extentScene;
+	private ReadableTuple3i addPnt;
 	
 	public CountKernelNghbIgnoreOutsideScene(
 		boolean useZ,
 		BinaryValuesByte bv,
 		boolean multipleMatchesPerVoxel,
-		Extent extntScene,		// The entire extnt of the scene
-		Point3i addPnt			// Added to a point before determining if it is inside or outside the scene.
+		Extent extentScene,		// The entire extent of the scene
+		ReadableTuple3i addPnt			// Added to a point before determining if it is inside or outside the scene.
 	) {
 		super(useZ, bv, multipleMatchesPerVoxel);
-		this.extntScene = extntScene;
+		this.extentScene = extentScene;
 		this.addPnt = addPnt;
 	}
 
 	@Override
 	protected boolean isNghbVoxelAccepted(Point3i pnt, int xShift, int yShift,
-			int zShift, Extent extnt) {
+			int zShift, Extent extent) {
 		
 		int xNew = pnt.getX()+xShift+addPnt.getX();
 		int yNew = pnt.getY()+yShift+addPnt.getY();
 		int zNew = pnt.getZ()+zShift+addPnt.getZ();
 		
-		return extntScene.contains(xNew,yNew,zNew);
+		return extentScene.contains(xNew,yNew,zNew);
 	}
 
 }

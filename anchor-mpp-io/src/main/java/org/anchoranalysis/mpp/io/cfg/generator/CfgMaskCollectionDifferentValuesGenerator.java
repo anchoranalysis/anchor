@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.io.cfg.generator;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
@@ -81,7 +83,7 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator i
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
+	public Optional<ManifestDescription> createManifestDescription() {
 		return delegate.createManifestDescription();
 	}
 

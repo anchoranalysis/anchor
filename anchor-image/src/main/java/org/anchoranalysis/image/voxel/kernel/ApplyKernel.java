@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -57,16 +58,16 @@ public class ApplyKernel {
 	// 3 pixel diameter kernel
 	public static VoxelBox<ByteBuffer> apply( BinaryKernel kernel, VoxelBox<ByteBuffer> in, BinaryValuesByte outBinary ) {
 		
-		VoxelBox<ByteBuffer> out = factory.create( in.extnt() );
+		VoxelBox<ByteBuffer> out = factory.create( in.extent() );
 		
 		int localSlicesSize = 3;
 		 
-		Extent extnt = in.extnt();
+		Extent extent = in.extent();
 		
 		kernel.init(in);
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extnt.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
 			ByteBuffer outArr = out.getPixelsForPlane(pnt.getZ()).buffer();
@@ -75,8 +76,8 @@ public class ApplyKernel {
 			
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
 					
 					if( kernel.accptPos(ind, pnt) ) {
 						outArr.put(ind,outBinary.getOnByte());
@@ -102,7 +103,7 @@ public class ApplyKernel {
 	 * @throws OperationFailedException 
 	 */
 	public static int applyForCount( CountKernel kernel, VoxelBox<ByteBuffer> vb ) throws OperationFailedException {
-		return applyForCount(kernel, vb, new BoundingBox(vb.extnt()) );
+		return applyForCount(kernel, vb, new BoundingBox(vb.extent()) );
 	}
 	
 	
@@ -117,9 +118,9 @@ public class ApplyKernel {
 	 */
 	public static int applyForCount( CountKernel kernel, VoxelBox<ByteBuffer> vb, BoundingBox bbox ) throws OperationFailedException {
 		
-		if( !vb.extnt().contains(bbox)) {
+		if( !vb.extent().contains(bbox)) {
 			throw new OperationFailedException(
-				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extnt() )
+				String.format("BBox (%s) must be contained within extent (%s)", bbox, vb.extent() )
 			);
 		}
 		
@@ -127,11 +128,11 @@ public class ApplyKernel {
 		 
 		int cnt = 0;
 		
-		Extent extnt = vb.extnt();
+		Extent extent = vb.extent();
 		
 		kernel.init(vb);
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrZ()) {
@@ -142,7 +143,7 @@ public class ApplyKernel {
 			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrY()) {
 				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrX()) {
 					
-					int ind = extnt.offset(pnt.getX(), pnt.getY());
+					int ind = extent.offset(pnt.getX(), pnt.getY());
 					cnt += kernel.countAtPos(ind, pnt);
 				}
 			}
@@ -164,19 +165,19 @@ public class ApplyKernel {
 	 */
 	public static boolean applyUntilPositive( CountKernel kernel, VoxelBox<ByteBuffer> vb, BoundingBox bbox ) throws OperationFailedException {
 		
-		if( !vb.extnt().contains(bbox)) {
+		if( !vb.extent().contains(bbox)) {
 			throw new OperationFailedException(
-				String.format("BBox (%s) must be contained within extnt (%s)", bbox, vb.extnt() )
+				String.format("BBox (%s) must be contained within extent (%s)", bbox, vb.extent() )
 			);
 		}
 		
 		int localSlicesSize = 3;
 		 
-		Extent extnt = vb.extnt();
+		Extent extent = vb.extent();
 		
 		kernel.init(vb);
 		
-		Point3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrZ()) {
@@ -187,7 +188,7 @@ public class ApplyKernel {
 			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrY()) {
 				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrX()) {
 					
-					int ind = extnt.offsetSlice(pnt);
+					int ind = extent.offsetSlice(pnt);
 					if (kernel.countAtPos(ind, pnt)>0) {
 						return true;
 					}
@@ -205,20 +206,20 @@ public class ApplyKernel {
 		 
 		int cnt = 0;
 		
-		Extent extnt = in.extnt();
+		Extent extent = in.extent();
 		
 		kernel.init(in);
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extnt.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
 			int ind = 0;
 			
-			for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
 					
 					if( kernel.accptPos(ind, pnt) ) {
 						cnt++;
@@ -240,10 +241,10 @@ public class ApplyKernel {
 		int cnt = 0;
 		
 		BoundingBox bbox = om.getBoundingBox();
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
-		Extent extnt = in.extnt();
+		Extent extent = in.extent();
 		
 		kernel.init(in);
 		
@@ -252,7 +253,11 @@ public class ApplyKernel {
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrZ()) {
 
-			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
+			LocalSlices localSlices = new LocalSlices(
+				pnt.getZ(),
+				localSlicesSize,
+				in
+			);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
 			int ind = 0;
@@ -262,7 +267,7 @@ public class ApplyKernel {
 			for (pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrY()) {
 				for (pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrX()) {
 					
-					int indKernel = extnt.offset(pnt.getX(), pnt.getY());
+					int indKernel = extent.offset(pnt.getX(), pnt.getY());
 
 					if(bufMask.get(ind)==bvb.getOnByte() && kernel.accptPos(indKernel, pnt) ) {
 						cnt++;

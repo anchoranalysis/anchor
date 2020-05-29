@@ -87,14 +87,14 @@ public class IntersectionBBox {
 		relPosTrgtToSrc.sub( bboxOther.getCrnrMin() );
 		
 		Point3i relPosSrcMax = new Point3i( relPosSrc );
-		relPosSrcMax.add( bboxIntersect.extnt().asTuple() );
+		relPosSrcMax.add( bboxIntersect.extent().asTuple() );
 		
 		return new IntersectionBBox(
 			relPosSrc,
 			relPosSrcMax,
 			relPosTrgtToSrc,
-			bboxSrc.extnt(),
-			bboxOther.extnt()
+			bboxSrc.extent(),
+			bboxOther.extent()
 		);
 	}
 	

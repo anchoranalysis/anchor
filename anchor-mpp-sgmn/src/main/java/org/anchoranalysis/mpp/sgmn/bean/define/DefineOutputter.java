@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -61,25 +61,26 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 		InputForMPPBean input,
 		BoundIOContext context
 	) throws CreateException {
-		return MPPInitParamsFactory.createFromInput(
-			input,
+		return MPPInitParamsFactory.create(
 			context,
-			Optional.ofNullable(define)
+			Optional.ofNullable(define),
+			Optional.of(input)
 		);
 	}
 	
 	protected MPPInitParams createInitParams(BoundIOContext context) throws CreateException {
 		return MPPInitParamsFactory.create(
 			context,
-			Optional.ofNullable(define)
+			Optional.ofNullable(define),
+			Optional.empty()
 		);
 	}
 	
 
 	protected MPPInitParams createInitParams(
 		BoundIOContext context,
-		Optional<INamedProvider<Stack>> stacks,
-		Optional<INamedProvider<ObjMaskCollection>> objs,
+		Optional<NamedProvider<Stack>> stacks,
+		Optional<NamedProvider<ObjMaskCollection>> objs,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		return MPPInitParamsFactory.createFromExistingCollections(

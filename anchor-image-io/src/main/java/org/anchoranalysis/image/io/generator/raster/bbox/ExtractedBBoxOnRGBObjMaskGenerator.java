@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.generator.raster.bbox;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-io
@@ -87,7 +89,7 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 		}
 		
 		// We create a version that is relative to the extracted section
-		ObjMask omLocal = new ObjMask( new BoundingBox(om.getVoxelBox().extnt()), om.binaryVoxelBox() );
+		ObjMask omLocal = new ObjMask( new BoundingBox(om.getVoxelBox().extent()), om.binaryVoxelBox() );
 		
 		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
 		objs.add( new ObjMaskWithProperties( omLocal ));
@@ -115,8 +117,10 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", manifestFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", manifestFunction)
+		);
 	}
 
 	@Override

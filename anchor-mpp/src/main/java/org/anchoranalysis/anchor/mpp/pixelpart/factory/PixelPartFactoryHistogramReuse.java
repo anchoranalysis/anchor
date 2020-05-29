@@ -34,14 +34,14 @@ import org.anchoranalysis.anchor.mpp.pixelpart.PixelPart;
 import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramCreator;
 
 public class PixelPartFactoryHistogramReuse extends PixelPartFactory<Histogram> {
 
 	private int maxSize = 100;
 	private List<Histogram> listUnused = new ArrayList<>();
 	
-	private HistogramFactory factoryUnused = new HistogramFactory() {
+	private HistogramCreator factoryUnused = new HistogramCreator() {
 		
 		@Override
 		public Histogram create() {

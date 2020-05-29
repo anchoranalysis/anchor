@@ -27,9 +27,18 @@ package org.anchoranalysis.image.scale;
  */
 
 
-public class ScaleFactor {
-	private double x;
-	private double y;
+/**
+ * What to scale x and y dimensions by 
+ * 
+ * <p>This class is IMMUTABLE.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public final class ScaleFactor {
+	
+	private final double x;
+	private final double y;
 	
 	public ScaleFactor(double factor) {
 		this(factor, factor);
@@ -45,16 +54,8 @@ public class ScaleFactor {
 		return x;
 	}
 
-	public void setX(double x) {
-		this.x = x;
-	}
-
 	public double getY() {
 		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
 	}
 	
 	public ScaleFactor invert() {
@@ -63,14 +64,6 @@ public class ScaleFactor {
 	
 	public boolean hasIdenticalXY() {
 		return Math.abs(x-y) < 1e-3;
-	}
-	
-	public void setBothToMin() {
-		if (x<y) {
-			y = x;
-		} else {
-			x = y;
-		}
 	}
 
 	@Override

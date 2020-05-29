@@ -79,6 +79,31 @@ public class FeatureSession {
 			logger
 		);
 	}
+	
+	
+	/**
+	 * Starts a feature-session for a single feature
+	 * 
+	 * @param <T> type of parameters
+	 * @param feature the feature
+	 * @param sharedFeatures
+	 * @param logger a logger
+	 * @return a calculator that will calculate just this feature for each parameter.
+	 * @throws FeatureCalcException
+	 */
+	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
+		Feature<T> feature,
+		SharedFeatureMulti sharedFeatures,
+		LogErrorReporter logger
+	) throws FeatureCalcException {
+		return with(
+			feature,
+			new FeatureInitParams(),
+			sharedFeatures,
+			logger
+		);
+	}
+	
 
 	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
 		Feature<T> feature,

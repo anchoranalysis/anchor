@@ -27,6 +27,7 @@ package org.anchoranalysis.annotation.io;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -40,5 +41,5 @@ public interface AnnotationReader<T extends Annotation> {
 	 * @return the annotation or NULL if it doesn't exist in a suitable state
 	 * @throws AnchorIOException TODO
 	 */
-	T read( Path path ) throws AnchorIOException;
+	Optional<T> read( Path path ) throws AnchorIOException;
 }

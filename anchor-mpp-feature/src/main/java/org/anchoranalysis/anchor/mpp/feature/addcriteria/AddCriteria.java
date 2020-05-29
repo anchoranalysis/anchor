@@ -42,5 +42,5 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<FeatureInputPairMemo> {
 
 	// Returns NULL to reject an edge
-	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D ) throws CreateException;
+	T generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D ) throws CreateException;
 }

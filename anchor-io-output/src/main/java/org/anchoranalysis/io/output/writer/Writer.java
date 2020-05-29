@@ -27,8 +27,9 @@ package org.anchoranalysis.io.output.writer;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
@@ -52,7 +53,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public abstract class Writer {
 
-	public abstract BoundOutputManager bindAsSubFolder( String outputName, ManifestFolderDescription manifestDescription, FolderWriteWithPath folder ) throws OutputWriteFailedException;
+	public abstract Optional<BoundOutputManager> bindAsSubFolder(
+		String outputName,
+		ManifestFolderDescription manifestDescription,
+		Optional<FolderWriteWithPath> folder
+	) throws OutputWriteFailedException;
 	
 	public abstract void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException;
 	
@@ -80,7 +85,14 @@ public abstract class Writer {
 	 * @param index
 	 * @return the path to write to or null if the output is not allowed
 	 */
-	public abstract Path writeGenerateFilename( String outputName, String extension, ManifestDescription manifestDescription, String outputNamePrefix, String outputNameSuffix, String index );
+	public abstract Optional<Path> writeGenerateFilename(
+		String outputName,
+		String extension,
+		Optional<ManifestDescription> manifestDescription,
+		String outputNamePrefix,
+		String outputNameSuffix,
+		String index
+	);
 	
 	public abstract OutputWriteSettings getOutputWriteSettings();
 }

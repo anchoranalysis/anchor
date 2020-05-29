@@ -43,6 +43,14 @@ public class PointConverter {
 		return new Point3i(p);
 	}
 	
+	public static Point3i intFromDoubleCeil(Point3d p) {
+		return new Point3i(
+			(int) Math.ceil(p.getX()),
+			(int) Math.ceil(p.getY()),
+			(int) Math.ceil(p.getZ())
+		);
+	}
+	
 	public static Point3i convertTo3d(Point2i p) {
 		return new Point3i(p.getX(), p.getY(), 0);
 	}
@@ -59,7 +67,7 @@ public class PointConverter {
 		return new Point3d( (double) p.getX(), (double) p.getY(), 0);
 	}
 	
-	public static Point3d doubleFromInt(Point3i p) {
+	public static Point3d doubleFromInt(ReadableTuple3i p) {
 		return new Point3d( (double) p.getX(), (double) p.getY(), (double) p.getZ() );
 	}
 	
@@ -72,7 +80,7 @@ public class PointConverter {
 	}
 
 	
-	public static Point3f floatFromInt(Point3i p) {
+	public static Point3f floatFromInt(ReadableTuple3i p) {
 		return new Point3f( (float) p.getX(), (float) p.getY(), (float) p.getZ());
 	}
 	

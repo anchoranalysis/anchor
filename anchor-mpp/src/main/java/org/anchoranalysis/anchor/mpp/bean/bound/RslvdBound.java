@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.bound;
 
+import java.io.Serializable;
+
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -32,8 +34,13 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 
-// A bound resolved into pixel units
-public class RslvdBound extends AnchorBean<RslvdBound> {
+/** A bound resolved into pixel units */
+public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField

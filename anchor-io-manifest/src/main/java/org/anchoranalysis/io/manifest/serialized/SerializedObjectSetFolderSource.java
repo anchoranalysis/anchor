@@ -46,7 +46,7 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.params.InputContextParams;
 
-public class SerializedObjectSetFolderSource extends SequencedFolder {
+public class SerializedObjectSetFolderSource implements SequencedFolder {
 
 	private HashMap<String,FileWrite> mapFileWrite = new HashMap<>();
 	private IncrementalSequenceType incrSequenceType;

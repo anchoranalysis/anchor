@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -80,7 +81,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 			// Get a bounding box that contains all the objects
 			this.bbox = ObjMaskMerger.mergeBBoxFromObjs(objs);
 			
-			growBBBox(bbox, getBackground().getDimensions().getExtnt() );
+			bbox = growBBBox(bbox, getBackground().getDimensions().getExtnt() );
 			
 			// Extract the relevant piece of background
 			return ConvertDisplayStackToRGB.convertCropped(
@@ -98,25 +99,18 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		return relTo( getIterableElement().collectionObjMask(), bbox );
 	}
 
-	private void growBBBox(BoundingBox bbox, Extent containingScene ) {
+	private BoundingBox growBBBox(BoundingBox bbox, Extent containingExtent ) {
 		assert(paddingXY>=0);
 		assert(paddingZ>=0);
 		
 		if (paddingXY==0 && paddingZ==0) {
-			return;
+			return bbox;
 		}
 		
-		bbox.getCrnrMin().setX( bbox.getCrnrMin().getX() - paddingXY );
-		bbox.getCrnrMin().setY( bbox.getCrnrMin().getY() - paddingXY );
-		bbox.getCrnrMin().setZ( bbox.getCrnrMin().getZ() - paddingZ );
-		
-		bbox.clipTo(containingScene);
-		
-		bbox.extnt().setX( bbox.extnt().getX() + (2*paddingXY) );
-		bbox.extnt().setY( bbox.extnt().getY() + (2*paddingXY) );
-		bbox.extnt().setZ( bbox.extnt().getZ() + (2*paddingZ) );
-		
-		bbox.clipTo(containingScene);
+		return bbox.growBy(
+			new Point3i(paddingXY, paddingXY, paddingZ),
+			containingExtent
+		);
 	}
 	
 	private static ObjMaskWithPropertiesCollection relTo(ObjMaskCollection in, BoundingBox src ) throws CreateException {
@@ -124,7 +118,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		ObjMaskWithPropertiesCollection out = new ObjMaskWithPropertiesCollection();
 		
 		for( ObjMask om : in ) {
-			BoundingBox bboxNew = new BoundingBox( om.getBoundingBox().relPosTo(src), om.getBoundingBox().extnt() );
+			BoundingBox bboxNew = new BoundingBox( om.getBoundingBox().relPosTo(src), om.getBoundingBox().extent() );
 			ObjMask omNew = new ObjMask(bboxNew, om.binaryVoxelBox().getVoxelBox(), om.getBinaryValues() );
 			out.add( new ObjMaskWithProperties(omNew) );
 		}

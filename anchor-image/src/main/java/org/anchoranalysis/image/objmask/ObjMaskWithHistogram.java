@@ -29,7 +29,7 @@ package org.anchoranalysis.image.objmask;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 
 public class ObjMaskWithHistogram {
 	private ObjMask objMask;
@@ -38,7 +38,7 @@ public class ObjMaskWithHistogram {
 	public ObjMaskWithHistogram(ObjMask objMask, Chnl chnl) throws CreateException {
 		super();
 		this.objMask = objMask;
-		this.histogram = HistogramFactoryUtilities.create( chnl, objMask );
+		this.histogram = HistogramFactory.create( chnl, objMask );
 		
 	}
 

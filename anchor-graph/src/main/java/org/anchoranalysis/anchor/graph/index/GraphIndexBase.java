@@ -27,6 +27,7 @@ package org.anchoranalysis.anchor.graph.index;
  */
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GraphInstance;
@@ -77,8 +78,8 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
 	
 	public GraphInstance create(
 		Iterator<T> itr,
-		AxisLimits proposedDomainLimits,
-		AxisLimits proposedRangeLimits
+		Optional<AxisLimits> proposedDomainLimits,
+		Optional<AxisLimits> proposedRangeLimits
 	) throws CreateException {
 
     	try {
@@ -90,9 +91,8 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
     		S dataset = createDataset( itr );
 	        
 	        // We populate our outgoing limits from the plot
-	        if (proposedRangeLimits==null) {
-	        	proposedRangeLimits = rangeLimitsIfNull( dataset );
-	        	
+	        if (!proposedRangeLimits.isPresent()) {
+	        	proposedRangeLimits = rangeLimitsIfEmpty( dataset );
 	        }
 	        
 	        // based on the dataset we create the chart
@@ -101,7 +101,6 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
 	        // For now we don't set any limits for bar graphs
 	        GraphInstance graphInstance = new GraphInstance(
 	        	chart,
-	        	domainLimits(proposedDomainLimits),
 	        	proposedRangeLimits
 	        );
 			return graphInstance;
@@ -126,13 +125,10 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
 	protected int getNumSeries() {
 		return numSeries;
 	}
-
 	
-	protected abstract AxisLimits domainLimits( AxisLimits proposedAxisLimits );
+	protected abstract Optional<AxisLimits> rangeLimitsIfEmpty( S dataset );
 	
-	protected abstract AxisLimits rangeLimitsIfNull( S dataset );
-	
-	protected abstract JFreeChart createChart(S dataset, String title, AxisLimits rangeLimits);
+	protected abstract JFreeChart createChart(S dataset, String title, Optional<AxisLimits> rangeLimits);
 	
 	protected abstract S createDataset( Iterator<T> itr ) throws GetOperationFailedException;
 	   

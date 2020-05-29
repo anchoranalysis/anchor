@@ -30,6 +30,7 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -114,7 +115,11 @@ public abstract class RegionMembership extends AnchorBean<RegionMembership> {
 			break;
 		case 7:
 			bit7 = true;
-			break;			
+			break;
+		default:
+			throw new AnchorFriendlyRuntimeException(
+				String.format("Index %d is not supported", index)
+			);
 		}
 	}
 	

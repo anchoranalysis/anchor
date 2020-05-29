@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -37,8 +38,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 class PointsFromChnlHelper {
 	
 	private int skipAfterSuccessiveEmptySlices;
-	private Point3i crnrMin;
-	private Point3i crnrMax;
+	private ReadableTuple3i crnrMin;
+	private ReadableTuple3i crnrMax;
 	private VoxelBox<ByteBuffer> vb;
 	private BinaryValuesByte bvb;
 	private int startZ;
@@ -46,9 +47,9 @@ class PointsFromChnlHelper {
 	
 	// Stays as -1 until we reach a non-empty slice
 	private int successiveEmptySlices = -1;
-	private Extent e = vb.extnt();
+	private Extent e = vb.extent();
 	
-	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, Point3i crnrMin, Point3i crnrMax,
+	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, ReadableTuple3i crnrMin, ReadableTuple3i crnrMax,
 			VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb, int startZ, List<Point3i> listOut) {
 		super();
 		this.skipAfterSuccessiveEmptySlices = skipAfterSuccessiveEmptySlices;
@@ -65,20 +66,7 @@ class PointsFromChnlHelper {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
-			boolean addedToSlice = false;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-					
-					int offset = e.offset(x, y);
-					if (bb.get(offset)==bvb.getOnByte()) {
-						addedToSlice = true;
-						listOut.add( new Point3i(x,y,z) );
-					}
-					
-				}
-			}
-			
-			if (!addedToSlice) {
+			if (!addPointsFromSlice(bb, z)) {
 				successiveEmptySlices = 0;
 				
 			// We don't increase the counter until we've been inside a non-empty slice
@@ -92,27 +80,12 @@ class PointsFromChnlHelper {
 		}
 	}
 	
-	
 	public void secondHalf() {
-					
 		for( int z=(startZ-1); z>=crnrMin.getZ(); z--) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
-			boolean addedToSlice = false;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-					
-					int offset = e.offset(x, y);
-					if (bb.get(offset)==bvb.getOnByte()) {
-						addedToSlice = true;
-						listOut.add( new Point3i(x,y,z) );
-					}
-					
-				}
-			}
-			
-			if (!addedToSlice) {
+			if (!addPointsFromSlice(bb,z)) {
 				successiveEmptySlices = 0;
 				
 			// We don't increase the counter until we've been inside a non-empty slice
@@ -124,5 +97,21 @@ class PointsFromChnlHelper {
 				
 			}
 		}
+	}
+	
+	private boolean addPointsFromSlice(ByteBuffer bb, int z) {
+		boolean addedToSlice = false;
+		for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
+			for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+				
+				int offset = e.offset(x, y);
+				if (bb.get(offset)==bvb.getOnByte()) {
+					addedToSlice = true;
+					listOut.add( new Point3i(x,y,z) );
+				}
+				
+			}
+		}
+		return addedToSlice;
 	}
 }

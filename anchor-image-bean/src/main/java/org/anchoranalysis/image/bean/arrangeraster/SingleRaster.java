@@ -52,13 +52,11 @@ public class SingleRaster extends ArrangeRasterBean {
 		ImageDim sd = stack.getChnl(0).getDimensions();
 		
 		Point3i crnrMin = new Point3i( 0, 0, 0 );
-		Extent extnt = new Extent( sd.getX(), sd.getY(), sd.getZ() );
-		BoundingBox bbox = new BoundingBox(crnrMin, extnt);
+		Extent extent = new Extent( sd.getX(), sd.getY(), sd.getZ() );
+		BoundingBox bbox = new BoundingBox(crnrMin, extent);
 		
 		BBoxSetOnPlane set = new BBoxSetOnPlane();
-		set.getExtnt().setX( sd.getX() );
-		set.getExtnt().setY( sd.getY() );
-		set.getExtnt().setZ( sd.getZ() );
+		set.setExtnt(extent);
 		set.add(bbox);
 		return set;
 	}

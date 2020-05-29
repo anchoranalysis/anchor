@@ -39,7 +39,7 @@ public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Seria
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4472996183076774456L;
+	private static final long serialVersionUID = 0;
 	
 	public abstract double getMinRslvd( ImageRes sr, boolean do3D );
 	

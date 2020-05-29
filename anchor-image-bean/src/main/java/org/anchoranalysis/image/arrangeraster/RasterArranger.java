@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -61,10 +62,9 @@ public class RasterArranger {
 			throw new InitException("rasterIterator has more items than can be accomodated");
 		}
 
-		dim = new ImageDim();
-		dim.setX( bboxSetOnPlane.getExtnt().getX() );
-		dim.setY( bboxSetOnPlane.getExtnt().getY() );
-		dim.setZ( bboxSetOnPlane.getExtnt().getZ() );
+		dim = new ImageDim(
+			bboxSetOnPlane.getExtnt()
+		);
 	}
 	
 	public RGBStack createStack( List<RGBStack> list, ChnlFactorySingleType chnlfactory ) {
@@ -83,7 +83,7 @@ public class RasterArranger {
 			// NOTE
 			// For a special case where our projection z-extent is different to our actual z-extent, that means
 			//   we should repeat
-			if (bbox.extnt().getZ()!=img.getDimensions().getZ()) {
+			if (bbox.extent().getZ()!=img.getDimensions().getZ()) {
 				
 				int zShift = 0;
 				do {
@@ -103,22 +103,22 @@ public class RasterArranger {
 		
 		assert(stackIn.getNumChnl()==stackOut.getNumChnl());
 		
-		Extent extnt = stackIn.getDimensions().getExtnt();
-		Extent extntOut = stackIn.getDimensions().getExtnt();
+		Extent extent = stackIn.getDimensions().getExtnt();
+		Extent extentOut = stackIn.getDimensions().getExtnt();
 		
-		Point3i leftCrnr = bbox.getCrnrMin();
-		int xEnd = leftCrnr.getX() + bbox.extnt().getX() - 1;
-		int yEnd = leftCrnr.getY() + bbox.extnt().getY() - 1;
+		ReadableTuple3i leftCrnr = bbox.getCrnrMin();
+		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
+		int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
 		
 		int numC = stackIn.getNumChnl();
 		VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC]; 
 		VoxelBuffer<?>[] vbOut = new VoxelBuffer<?>[numC];
 		
-		for (int z=0; z<extnt.getZ(); z++) {
+		for (int z=0; z<extent.getZ(); z++) {
 			
 			int outZ = leftCrnr.getZ() + z + zShift;
 			
-			if (outZ>=extntOut.getZ()) {
+			if (outZ>=extentOut.getZ()) {
 				return;
 			}
 

@@ -33,10 +33,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
@@ -112,10 +111,6 @@ public class BoundOutputManagerRouteErrors {
 		}
 	}
 
-	public FilePathPrefix getBoundFilePathPrefix() {
-		return delegate.getBoundFilePathPrefix();
-	}
-
 	public ErrorReporter getErrorReporter() {
 		return errorReporter;
 	}
@@ -125,12 +120,16 @@ public class BoundOutputManagerRouteErrors {
 	}
 
 	public BoundOutputManager bindFile(
-		InputFromManager input,
+		PathWithDescription input,
 		String expIdentifier,
 		Optional<ManifestRecorder> manifestRecorder,
 		Optional<ManifestRecorder> experimentalManifestRecorder,
 		FilePathPrefixerParams context
 	) throws AnchorIOException {
 		return delegate.bindFile(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
+	}
+
+	public Path outFilePath(String filePathRelative) {
+		return delegate.outFilePath(filePathRelative);
 	}
 }

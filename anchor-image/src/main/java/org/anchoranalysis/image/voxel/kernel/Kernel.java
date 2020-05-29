@@ -61,16 +61,16 @@ public abstract class Kernel {
 		return Math.max( pnt.getY() - getSizeHalf(), 0 );
 	}
 	
-	public int getYMax( Point3i pnt, Extent extnt ) {
-		return Math.min( pnt.getY() + getSizeHalf(), extnt.getY() - 1 );
+	public int getYMax( Point3i pnt, Extent extent ) {
+		return Math.min( pnt.getY() + getSizeHalf(), extent.getY() - 1 );
 	}
 
 	public int getXMin( Point3i pnt ) {
 		return Math.max( pnt.getX() - getSizeHalf(), 0 );
 	}
 	
-	public int getXMax( Point3i pnt, Extent extnt ) {
-		return Math.min( pnt.getX() + getSizeHalf(), extnt.getX() - 1 );
+	public int getXMax( Point3i pnt, Extent extent ) {
+		return Math.min( pnt.getX() + getSizeHalf(), extent.getX() - 1 );
 	}
 	
 	public abstract void init( VoxelBox<ByteBuffer> in );

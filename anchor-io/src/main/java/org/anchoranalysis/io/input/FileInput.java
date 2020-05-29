@@ -29,6 +29,7 @@ package org.anchoranalysis.io.input;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
@@ -50,8 +51,10 @@ public class FileInput implements InputFromManager {
 	}
 
 	@Override
-	public Path pathForBinding() {
-		return file.toPath();
+	public Optional<Path> pathForBinding() {
+		return Optional.of(
+			file.toPath()
+		);
 	}
 	
 	@Override

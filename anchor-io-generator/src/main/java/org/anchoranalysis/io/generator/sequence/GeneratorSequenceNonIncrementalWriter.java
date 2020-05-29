@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-generator
@@ -38,7 +40,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
-public class GeneratorSequenceNonIncrementalWriter<T> implements IGeneratorSequenceNonIncremental<T> {
+public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequenceNonIncremental<T> {
 
 	private BoundOutputManager parentOutputManager = null;
 	
@@ -75,7 +77,12 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements IGeneratorSeque
 	private void initOnFirstAdd() throws InitException {
 		
 		// For now we only take the first FileType from the generator, we will have to modify this in future
-		FileType[] fileTypes = iterableGenerator.getGenerator().getFileTypes( this.parentOutputManager.getOutputWriteSettings() );
+		FileType[] fileTypes = iterableGenerator
+				.getGenerator()
+				.getFileTypes( this.parentOutputManager.getOutputWriteSettings() )
+				.orElseThrow( ()->
+					new InitException("This operation requires file-types to be defined by the generator")
+				);
 				
 		this.sequenceWriter.init(fileTypes, this.sequenceType, this.suppressSubfolder );
 	}
@@ -123,7 +130,7 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements IGeneratorSeque
 		iterableGenerator.end();
 	}
 	
-	public BoundOutputManager getSubFolderOutputManager() {
+	public Optional<BoundOutputManager> getSubFolderOutputManager() {
 		return sequenceWriter.getOutputManagerForFiles();
 	}
 		

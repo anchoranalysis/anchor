@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public abstract class BinaryKernelMorph3Extent extends BinaryKernelMorph3 {
 
 	protected final boolean useZ;
-	protected Extent extnt;
+	protected Extent extent;
 	
 	public BinaryKernelMorph3Extent(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
 		super(bv, outsideAtThreshold);
@@ -44,6 +44,6 @@ public abstract class BinaryKernelMorph3Extent extends BinaryKernelMorph3 {
 		
 	@Override
 	public void init(VoxelBox<ByteBuffer> in) {
-		this.extnt = in.extnt();
+		this.extent = in.extent();
 	}
 }

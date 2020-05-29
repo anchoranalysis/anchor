@@ -53,7 +53,7 @@ public class ConditionalKernel extends BinaryKernel {
 	public boolean accptPos( int ind, Point3i pnt ) {
 
 		byte valByte = vbIntensity.getPixelsForPlane(pnt.getZ()).buffer().get(
-			vbIntensity.extnt().offsetSlice(pnt)
+			vbIntensity.extent().offsetSlice(pnt)
 		);
 		int val = ByteConverter.unsignedByteToInt(valByte);
 		

@@ -30,7 +30,7 @@ package org.anchoranalysis.image.voxel.buffer;
 import java.nio.Buffer;
 
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public abstract class VoxelBuffer<BufferType extends Buffer> {
@@ -62,7 +62,7 @@ public abstract class VoxelBuffer<BufferType extends Buffer> {
 	
 	@Override
 	public String toString() {
-		Histogram h = HistogramFactoryUtilities.create(this);
+		Histogram h = HistogramFactory.create(this);
 		return h.toString();
 	}
 	

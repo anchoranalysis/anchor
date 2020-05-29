@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.stack.wrap;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image
@@ -28,30 +30,27 @@ package org.anchoranalysis.image.stack.wrap;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 // Always takes t=0 from the time-sequence
-public class WrapTimeSequenceAsStack implements INamedProvider<Stack> {
+public class WrapTimeSequenceAsStack implements NamedProvider<Stack> {
 	
 	private final int TIME_INDEX = 0;
 	
-	private INamedProvider<TimeSequence> namedProvider;
+	private NamedProvider<TimeSequence> namedProvider;
 		 
-	public WrapTimeSequenceAsStack( INamedProvider<TimeSequence> namedProvider ) {
+	public WrapTimeSequenceAsStack( NamedProvider<TimeSequence> namedProvider ) {
 		this.namedProvider = namedProvider;
 	}
 
 	@Override
-	public Stack getException(String key) throws NamedProviderGetException {
-		return namedProvider.getException(key).get(TIME_INDEX);
-	}
-
-	@Override
-	public Stack getNull(String key) throws NamedProviderGetException {
-		return namedProvider.getNull(key).get(TIME_INDEX);
+	public Optional<Stack> getOptional(String key) throws NamedProviderGetException {
+		return namedProvider.getOptional(key).map( prov ->
+			prov.get(TIME_INDEX)
+		);
 	}
 
 	@Override

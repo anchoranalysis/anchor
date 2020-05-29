@@ -69,10 +69,8 @@ class MultiplexDataTypes {
 			return new ChnlFactoryFloat();
 		} else if (voxelDataType.equals(VoxelDataTypeUnsignedInt.instance)) {
 			return new ChnlFactoryInt();
-		
 		} else {
-			assert(false);
-			return null;
+			throw new UnsupportedOperationException();
 		}
 	}
 }

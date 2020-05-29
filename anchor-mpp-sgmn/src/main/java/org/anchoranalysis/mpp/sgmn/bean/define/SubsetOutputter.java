@@ -27,7 +27,7 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  */
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -35,7 +35,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class SubsetOutputter<T> {
-	private INamedProvider<T> providers;
+	private NamedProvider<T> providers;
 	private OutputAllowed oa;
 	private IterableGenerator<T> generator;
 	private BoundOutputManager outputManager;
@@ -43,7 +43,7 @@ class SubsetOutputter<T> {
 	private String suffix;
 	private boolean suppressSubfoldersIn;
 	
-	public SubsetOutputter(INamedProvider<T> providers, OutputAllowed oa, IterableGenerator<T> generator,
+	public SubsetOutputter(NamedProvider<T> providers, OutputAllowed oa, IterableGenerator<T> generator,
 			BoundOutputManager outputManager, String outputName, String suffix, boolean suppressSubfoldersIn) {
 		super();
 		this.providers = providers;

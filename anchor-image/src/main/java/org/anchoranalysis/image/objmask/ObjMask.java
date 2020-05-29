@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -97,24 +97,24 @@ public class ObjMask {
 		this.bvb = new BinaryValuesByte( voxelBox.getBinaryValues() );
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
+	public ObjMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox ) {
+		delegate = new BoundedVoxelBox<>(bbox, voxelBox);
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox, BinaryValuesByte binaryValues ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
+	public ObjMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox, BinaryValuesByte binaryValues ) {
+		delegate = new BoundedVoxelBox<>(bbox, voxelBox);
 		this.bv = binaryValues.createInt();
 		this.bvb = new BinaryValuesByte( binaryValues );
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, VoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues ) throws CreateException {
-		delegate = new BoundedVoxelBox<>(BoundingBox, voxelBox);
+	public ObjMask(BoundingBox bbox, VoxelBox<ByteBuffer> voxelBox, BinaryValues binaryValues ) {
+		delegate = new BoundedVoxelBox<>(bbox, voxelBox);
 		this.bv = binaryValues.duplicate();
 		this.bvb = binaryValues.createByte();
 	}
 	
-	public ObjMask(BoundingBox BoundingBox, BinaryVoxelBox<ByteBuffer> voxelBox ) {
-		delegate = new BoundedVoxelBox<>(BoundingBox,voxelBox.getVoxelBox());
+	public ObjMask(BoundingBox bbox, BinaryVoxelBox<ByteBuffer> voxelBox ) {
+		delegate = new BoundedVoxelBox<>(bbox,voxelBox.getVoxelBox());
 		this.bv = new BinaryValues( voxelBox.getBinaryValues() );
 		this.bvb = new BinaryValuesByte( voxelBox.getBinaryValues() );
 	}
@@ -201,7 +201,7 @@ public class ObjMask {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
 			
-			BoundedVoxelBox<ByteBuffer> boxNew = delegate.scaleNew(sf, interpolator);
+			BoundedVoxelBox<ByteBuffer> boxNew = delegate.scale(sf, interpolator);
 			
 			// We should do a thresholding afterwards to make sure our values correspond to the two binary values
 			if (interpolator!=null && interpolator.isNewValuesPossible()) {
@@ -228,7 +228,7 @@ public class ObjMask {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
 			
-			delegate.scale(sf, interpolator );
+			delegate = delegate.scale(sf, interpolator );
 			
 			// We should do a thresholding afterwards to make sure our values correspond to the two binry values
 			if (interpolator.isNewValuesPossible()) {
@@ -291,7 +291,7 @@ public class ObjMask {
 	
 	public boolean numPixelsLessThan( int num ) {
 		
-		Extent e = delegate.getVoxelBox().extnt();
+		Extent e = delegate.getVoxelBox().extent();
 		
 		int cnt = 0;
 		
@@ -316,7 +316,7 @@ public class ObjMask {
 	
 	public boolean hasPixelsGreaterThan( int num ) {
 		
-		Extent e = delegate.getVoxelBox().extnt();
+		Extent e = delegate.getVoxelBox().extent();
 		
 		int cnt = 0;
 		
@@ -349,21 +349,21 @@ public class ObjMask {
 	public Optional<ObjMask> intersect( ObjMask other, ImageDim dim ) {
 		
 		// we combine the two masks
-		BoundingBox bboxIntersect = getBoundingBox().intersectCreateNew( other.getBoundingBox(), dim.getExtnt() );
+		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dim.getExtnt() );
 		
-		if (bboxIntersect==null) {
+		if (!bboxIntersect.isPresent()) {
 			return Optional.empty();
 		}
 		
 		// We calculate a bounding box, which we write into in the omDest
-		Point3i pntIntersectRelToSrc = bboxIntersect.relPosTo( getBoundingBox() );
-		Point3i pntIntersectRelToOthr = bboxIntersect.relPosTo( other.getBoundingBox() );
+		Point3i pntIntersectRelToSrc = bboxIntersect.get().relPosTo( getBoundingBox() );
+		Point3i pntIntersectRelToOthr = bboxIntersect.get().relPosTo( other.getBoundingBox() );
 				
 		BinaryValues bvOut = BinaryValues.getDefault();
 
 		// We initially set all pixels to ON
 		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.instance().getByte().create(
-			bboxIntersect.extnt()
+			bboxIntersect.get().extent()
 		);
 		vbMaskOut.setAllPixelsTo( bvOut.getOnInt() );
 		
@@ -372,15 +372,15 @@ public class ObjMask {
 			vbMaskOut,
 			getVoxelBox(),
 			other.getVoxelBox(),
-			new BoundingBox(pntIntersectRelToSrc, bboxIntersect.extnt() ),
-			new BoundingBox(pntIntersectRelToOthr, bboxIntersect.extnt() ),
+			new BoundingBox(pntIntersectRelToSrc, bboxIntersect.get().extent() ),
+			new BoundingBox(pntIntersectRelToOthr, bboxIntersect.get().extent() ),
 			bvOut.getOffInt(),
 			this.getBinaryValuesByte().getOffByte(),
 			other.getBinaryValuesByte().getOffByte()
 		);
 		
 		ObjMask om = new ObjMask(
-			bboxIntersect,
+			bboxIntersect.get(),
 			new BinaryVoxelBoxByte(vbMaskOut, bvOut)
 		);
 		
@@ -416,7 +416,7 @@ public class ObjMask {
 		byte maskMatchValue1,
 		byte maskMatchValue2
 	) {
-		BoundingBox allOut = new BoundingBox( vbMaskOut.extnt() );
+		BoundingBox allOut = new BoundingBox( vbMaskOut.extent() );
 		int cntSetFirst = vbMaskOut.setPixelsCheckMask(allOut, voxelBox1, bboxSrcMask, value, maskMatchValue1 );
 		int cntSetSecond = vbMaskOut.setPixelsCheckMask(allOut, voxelBox2, bboxOthrMask, value, maskMatchValue2 );
 		return cntSetFirst+cntSetSecond;
@@ -424,7 +424,7 @@ public class ObjMask {
 	
 	public boolean contains( Point3i pnt ) {
 		
-		if (!delegate.getBoundingBox().contains(pnt)) {
+		if (!delegate.getBoundingBox().contains().point(pnt)) {
 			return false;
 		}
 		
@@ -438,14 +438,14 @@ public class ObjMask {
 	
 	public boolean containsIgnoreZ( Point3i pnt ) {
 		
-		if (!delegate.getBoundingBox().containsIgnoreZ(pnt)) {
+		if (!delegate.getBoundingBox().contains().pointIgnoreZ(pnt)) {
 			return false;
 		}
 		
 		int xRel = pnt.getX() - delegate.getBoundingBox().getCrnrMin().getX();
 		int yRel = pnt.getY() - delegate.getBoundingBox().getCrnrMin().getY();
 		
-		Extent e = delegate.getBoundingBox().extnt();
+		Extent e = delegate.getBoundingBox().extent();
 		for( int z=0; z<e.getZ(); z++) {
 			if (delegate.getVoxelBox().getVoxel(xRel, yRel, z)==bv.getOnInt()) {
 				return true;
@@ -462,8 +462,8 @@ public class ObjMask {
 		return delegate.getBoundingBox();
 	}
 
-	public void setBoundingBox(BoundingBox BoundingBox) {
-		delegate.setBoundingBox(BoundingBox);
+	public void setBoundingBox(BoundingBox bbox) {
+		delegate.setBoundingBox(bbox);
 	}
 
 	public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
@@ -480,10 +480,6 @@ public class ObjMask {
 	
 	public BinaryValuesByte getBinaryValuesByte() {
 		return bvb;
-	}
-	
-	public void moveToOrigin() {
-		delegate.getBoundingBox().setCrnrMin( new Point3i() );
 	}
 
 	public void setBinaryValues(BinaryValues binaryValues) throws CreateException {
@@ -504,16 +500,18 @@ public class ObjMask {
 	public void invertContainedMask( ObjMask omContained ) throws OperationFailedException {
 		
 		Point3i pntRel = omContained.getBoundingBox().relPosTo(getBoundingBox());
-		BoundingBox bboxRel = new BoundingBox(pntRel, omContained.getBoundingBox().extnt());
+		BoundingBox bboxRel = new BoundingBox(
+			pntRel,
+			omContained.getBoundingBox().extent()
+		);
 		
-		try {
-			ObjMask omContainedRel = new ObjMask( bboxRel, omContained.getVoxelBox(), omContained.getBinaryValues() );
+		ObjMask omContainedRel = new ObjMask(
+			bboxRel,
+			omContained.getVoxelBox(),
+			omContained.getBinaryValues()
+		);
 			
-			getVoxelBox().setPixelsCheckMask(omContainedRel, getBinaryValuesByte().getOffByte());
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		getVoxelBox().setPixelsCheckMask(omContainedRel, getBinaryValuesByte().getOffByte());
 	}
 
 	// If keepZ is true the slice keeps its z coordinate, otherwise its set to 0
@@ -523,27 +521,29 @@ public class ObjMask {
 			this.bv.duplicate()
 		);
 	}
-	
+
 	public ObjMask clipToContainer(BoundingBox bboxContainer) throws OperationFailedException {
-		assert( bboxContainer.hasIntersection(this.getBoundingBox()));
-		if (bboxContainer.contains(getBoundingBox())) {
+		assert( bboxContainer.intersection().existsWith(this.getBoundingBox()));
+		if (bboxContainer.contains().box(getBoundingBox())) {
 			// Nothing to do
 			return this;
 		} else {
 			
 			try {
-				BoundingBox bboxIntersection = BoundingBox.intersect(getBoundingBox(), bboxContainer);
+				BoundingBox bboxIntersection = getBoundingBox().intersection().with(bboxContainer).orElseThrow( ()->
+					new OperationFailedException("Bounding boxes do not intersect")
+				);
 				
 				// First we try to chop of the Zs, and see if it fits.
 				// This is much less work than always processing all pixels, just for the sake of Z-slices
 				ObjMask omSubslices = createVirtualSubrange(bboxIntersection.getCrnrMin().getZ(), bboxIntersection.calcCrnrMax().getZ() );
 				
-				if (bboxContainer.contains(omSubslices.getBoundingBox())) {
+				if (bboxContainer.contains().box(omSubslices.getBoundingBox())) {
 					return omSubslices;
 				}
 				
 				ObjMask om = createSubmaskAvoidNew(bboxIntersection);
-				assert( bboxContainer.contains(om.getBoundingBox()) );
+				assert( bboxContainer.contains().box(om.getBoundingBox()) );
 				return om;
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);
@@ -572,8 +572,7 @@ public class ObjMask {
 		);
 	}
 
-	public ObjMask createSubmaskAlwaysNew(BoundingBox bbox)
-			throws CreateException {
+	public ObjMask createSubmaskAlwaysNew(BoundingBox bbox) throws CreateException {
 		return new ObjMask(
 			delegate.createBufferAlwaysNew(bbox),
 			this.bv.duplicate()
@@ -597,62 +596,70 @@ public class ObjMask {
 		);
 	}
 	
-	public Point3i findAnyPntOnMask() {
+	public Optional<Point3i> findAnyPntOnMask() {
 		
 		// First we try the mid-point
-		Point3d pntD = getBoundingBox().midpoint();
-		Point3i pnt = PointConverter.intFromDouble(pntD);
+		Point3i pnt = getBoundingBox().centerOfGravity();
 		if (contains(pnt)) {
-			return new Point3i(pnt);
+			return Optional.of(pnt);
 		}
 		
 		BinaryValuesByte bvb = getBinaryValuesByte();
 		
-		// Otherwise we iterate until we find ap oint
-		for( int z=0; z<getBoundingBox().extnt().getZ(); z++) {
+		// Otherwise we iterate until we find a point
+		for( int z=0; z<getBoundingBox().extent().getZ(); z++) {
 			
 			ByteBuffer bbMask = getVoxelBox().getPixelsForPlane(z).buffer();
 			
-			for( int y=0; y<getBoundingBox().extnt().getY(); y++) {
-				for( int x=0; x<getBoundingBox().extnt().getX(); x++) {
+			for( int y=0; y<getBoundingBox().extent().getY(); y++) {
+				for( int x=0; x<getBoundingBox().extent().getX(); x++) {
 					if (bbMask.get()==bvb.getOnByte()) {
 						
-						return new Point3i(
-							x+getBoundingBox().getCrnrMin().getX(),
-							y+getBoundingBox().getCrnrMin().getY(),
-							z+getBoundingBox().getCrnrMin().getZ()
+						return Optional.of(
+							new Point3i(
+								x+getBoundingBox().getCrnrMin().getX(),
+								y+getBoundingBox().getCrnrMin().getY(),
+								z+getBoundingBox().getCrnrMin().getZ()
+							)
 						);
 					}
 				}
 			}
 		}
 		
-		return null;
+		return Optional.empty();
+	}
+	
+	public void shiftBy(ReadableTuple3i shiftBy) {
+		delegate.shiftBy(shiftBy);
+	}
+	
+
+	public void shiftBackBy(ReadableTuple3i shiftBackwardsBy) {
+		delegate.shiftBackBy(shiftBackwardsBy);
+	}
+	
+	public void shiftTo(Point3i crnrMinNew) {
+		delegate.shiftTo(crnrMinNew);
 	}
 
-	public void setIntersectingPixels(ObjMask omCompare1, ObjMask omCompare2,
-			ImageDim dim, int setVal) {
-		// Let's make new ObjMasks that are relative to delegate
-		
-		ObjMask rel1 = omCompare1.relMaskTo(delegate.getBoundingBox());
-		ObjMask rel2 = omCompare2.relMaskTo(delegate.getBoundingBox());
-		
-		delegate.setIntersectingPixels(
-			rel1,
-			rel2,
-			dim,
-			setVal,
-			VoxelBoxFactory.instance().getByte()
-		);
+	public void shiftToZ(int crnrZNew) {
+		delegate.shiftToZ(crnrZNew);
 	}
+	
+	public void reflectThroughOrigin() {
+		delegate.reflectThroughOrigin();
+	}
+	
 	
 	// Creates a new objMask that is relative to another bbox
 	public ObjMask relMaskTo( BoundingBox bbox ) {
 		Point3i pnt = delegate.getBoundingBox().relPosTo(bbox);
 		
-		BoundingBox bboxNew = new BoundingBox(pnt, delegate.extnt());
-		
-		return new ObjMask( bboxNew, delegate.getVoxelBox() );
+		return new ObjMask(
+			new BoundingBox(pnt, delegate.extent()),
+			delegate.getVoxelBox()
+		);
 	}
 	
 	@Override

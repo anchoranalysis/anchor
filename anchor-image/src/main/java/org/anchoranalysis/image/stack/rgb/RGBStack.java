@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -128,7 +129,7 @@ public class RGBStack {
 	}
 	
 	// Only supports 8-bit
-	public void writeRGBMaskToSlice( ObjMask mask, BoundingBox bbox, RGBColor c, Point3i pntGlobal, int zLocal, Point3i maxGlobal) {
+	public void writeRGBMaskToSlice( ObjMask mask, BoundingBox bbox, RGBColor c, Point3i pntGlobal, int zLocal, ReadableTuple3i maxGlobal) {
 		
 		assert( pntGlobal.getZ()>= 0);
 		
@@ -143,7 +144,7 @@ public class RGBStack {
 		ByteBuffer greenOut = chnls.getChnl(1).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
 		ByteBuffer blueOut = chnls.getChnl(2).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
 		
-		Extent eMask = mask.getBoundingBox().extnt();
+		Extent eMask = mask.getBoundingBox().extent();
 		
  		for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
 		

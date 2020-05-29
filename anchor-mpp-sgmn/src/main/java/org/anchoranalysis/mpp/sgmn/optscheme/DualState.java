@@ -1,6 +1,9 @@
 package org.anchoranalysis.mpp.sgmn.optscheme;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
@@ -39,38 +42,36 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
  */
 public class DualState<T> {
 	
-	private T crnt;
-	private T best;
+	private Optional<T> crnt;
+	private Optional<T> best;
 	
 	public DualState() {
-		
+		this.crnt = Optional.empty();
+		this.best = Optional.empty();
 	}
 	
-	public DualState(T crnt, T best) {
+	private DualState(Optional<T> crnt, Optional<T> best) {
 		super();
 		this.crnt = crnt;
 		this.best = best;
 	}
 	
-	public T releaseKeepBest() {
-		T cfgNRG = this.best;
-		this.crnt = null;
+	public T releaseKeepBest() throws OperationFailedException {
+		T cfgNRG = this.best.orElseThrow(DualState::noBestDefined);
+		this.crnt = Optional.empty();
 		clearBest();
 		return cfgNRG;
 	}
 
-	public T getCrnt() {
+	public Optional<T> getCrnt() {
 		return crnt;
 	}
 	
 	public void assignCrnt(T cfgNRG) {
-	
-		assert(cfgNRG!=null);
-		
-		this.crnt = cfgNRG;
+		this.crnt = Optional.of(cfgNRG);
 	}
 
-	public T getBest() {
+	public Optional<T> getBest() {
 		return best;
 	}
 
@@ -79,17 +80,24 @@ public class DualState<T> {
 	}
 
 	public void clearBest() {
-		this.best = null;
-	}
-	
-	public boolean isBestUndefined() {
-		return this.best==null;
+		this.best = Optional.empty();
 	}
 	
 	public <S> DualState<S> transform( StateTransformer<T,S> func, TransformationContext context ) throws OperationFailedException {
 		return new DualState<S>(
-			func.transform(crnt, context),
-			func.transform(best, context)
+			transformOptional(crnt, func, context),
+			transformOptional(best, func, context)
 		);
+	}
+	
+	private static <T,S> Optional<S> transformOptional( Optional<T> optional, StateTransformer<T,S> func, TransformationContext context ) throws OperationFailedException {
+		return OptionalUtilities.map(
+			optional,
+			a -> func.transform(a, context)
+		);
+	}
+	
+	private static OperationFailedException noBestDefined() {
+		return new OperationFailedException("No `best` is currently defined");
 	}
 }

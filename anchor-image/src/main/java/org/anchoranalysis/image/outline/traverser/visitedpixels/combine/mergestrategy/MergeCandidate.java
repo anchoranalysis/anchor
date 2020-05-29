@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image
@@ -101,19 +103,19 @@ public class MergeCandidate {
 	
 	private static void replaceWithLoop(PathWithClosest path, boolean left) {
 		if (left) {
-			LoopablePoints lp = path.removeLeft();
-			if (lp!=null) {
-				path.insertBefore( lp.loopPointsLeft() );
-			}
+			Optional<LoopablePoints> lp = path.removeLeft();
+			lp.ifPresent( points->
+				path.insertBefore( points.loopPointsLeft() )
+			);
 		} else {
-			LoopablePoints lp = path.removeRight();
-			if (lp!=null) {
-				path.getPath().insertAfter( lp.loopPointsRight() );
-			}
+			Optional<LoopablePoints> lp = path.removeRight();
+			lp.ifPresent( points->
+				path.getPath().insertAfter( points.loopPointsRight() )
+			);
 		}
 	}
 	
-	private static LoopablePoints remove(PathWithClosest path, boolean left) {
+	private static Optional<LoopablePoints> remove(PathWithClosest path, boolean left) {
 		if (left) {
 			return path.removeLeft();
 		} else {

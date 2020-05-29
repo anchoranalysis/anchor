@@ -28,12 +28,12 @@ package org.anchoranalysis.image.extent;
 
 
 import java.io.Serializable;
-import java.util.List;
-
-import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -43,82 +43,113 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * A 2D bounding-box should always have a z-extent of 1 pixel
  *
+ * <p>This is an IMMUTABLE class</p>.
  */
-public class BoundingBox implements Serializable {
+public final class BoundingBox implements Serializable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Point3i crnrMin;
-	private Extent extnt;
+	private final Point3i crnrMin;
+	private final Extent extent;
 	
 	public BoundingBox() {
 		this( new Extent() );
 	}
 	
-	public BoundingBox(Extent extnt) {
-		this( new Point3i(0,0,0), new Extent(extnt) );
+	public BoundingBox(Extent extent) {
+		this( new Point3i(0,0,0), extent);
 	}
-	
+
+	public BoundingBox(Point3d min, Point3d max) {
+		this(
+			PointConverter.intFromDouble(min),
+			PointConverter.intFromDoubleCeil(max)
+		);
+	}
+
+	public BoundingBox(ReadableTuple3i min, ReadableTuple3i max ) {
+		this(
+			min,
+			new Extent(
+				max.getX() - min.getX() + 1,
+				max.getY() - min.getY() + 1,
+				max.getZ() - min.getZ() + 1
+			)
+		);
+		checkMaxMoreThanMin(min, max);
+	}
 	
 	// Extnt is the number of pixels need to represent this bounding box
-	public BoundingBox(Point3i crnrMin, Extent extnt) {
-		super();
+	public BoundingBox(ReadableTuple3i crnrMin, Extent extent) {
 		this.crnrMin = new Point3i(crnrMin);
-		this.extnt = new Extent(extnt);
+		this.extent = extent;
 	}
 	
-	public BoundingBox( Point3d min, Point3d max ) {
-		this(
-			new Point3i( (int) Math.floor(min.getX()), (int) Math.floor(min.getY()), (int) Math.floor(min.getZ()) ),
-			new Point3i( (int) Math.ceil(max.getX()), (int) Math.ceil(max.getY()), (int) Math.ceil(max.getZ()) )
+	
+	/** 
+	 * A mid-point in the bounding box, in the exact half way point between (crnr+extent)/2.
+	 *  
+	 * <p>It may not be integral, and could end with .5</p>
+	 *  
+	 * @return
+	 */
+	public Point3d midpoint() {
+		return meanOfExtent(0);
+	}
+
+	/** 
+	 * Similar to {@link midpoint} but not always identical. It is the mean of all the points in the box, and guaranteed to be integral.
+	 * 
+	 * <p>It should be the same in each dimension as (crnr+extent-1)/2</p>
+	 *  
+	 * @return
+	 */
+	public Point3i centerOfGravity() {
+		return new Point3i(
+			meanOfExtent(1)
+		);
+	}
+		
+	public BoundingBox flattenZ() {
+		return new BoundingBox(
+			crnrMin.duplicateChangeZ(0),
+			extent.duplicateChangeZ(1)
 		);
 	}
 	
-	public BoundingBox( Point3i min, Point3i max ) {
-		this.crnrMin = new Point3i(min);
-		
-		checkMaxMoreThanMin(min, max);
-		
-		this.extnt = new Extent();
-		this.extnt.setX( max.getX() - min.getX() + 1 );
-		this.extnt.setY( max.getY() - min.getY() + 1 );
-		this.extnt.setZ( max.getZ() - min.getZ() + 1 );
+	public BoundingBox duplicateChangeExtentZ(int extentZ) {
+		return new BoundingBox(
+			crnrMin,
+			extent.duplicateChangeZ(extentZ)
+		);
 	}
 	
-	public Point3d midpoint() {
-		Point3d pnt = new Point3d();
-		
-		double e_x = ((double) this.extnt.getX())/2;
-		double e_y = ((double) this.extnt.getY())/2;
-		double e_z = ((double) this.extnt.getZ())/2;
-		
-		pnt.setX( e_x + this.crnrMin.getX() ); 
-		pnt.setY( e_y + this.crnrMin.getY() );
-		pnt.setZ( e_z + this.crnrMin.getZ() );
-		
-		return pnt;
-	}
-	
-	public void convertToMaxIntensityProj() {
-		this.crnrMin.setZ(0);
-		this.extnt.setZ( 1 );
+	public BoundingBox duplicateChangeZ(int crnrZ, int extentZ) {
+		return new BoundingBox(
+			crnrMin.duplicateChangeZ(crnrZ),
+			extent.duplicateChangeZ(extentZ)
+		);
 	}
 	
 	public boolean atBorder( ImageDim sd ) {
 
-		if (atBorderXY(sd)) return true;
+		if (atBorderXY(sd)) {
+			return true;
+		}
 		
-		if (atBorderZ(sd)) return true;
+		if (atBorderZ(sd)) {
+			return true;
+		}
 		
 		return false;
 	}
 	
 	public boolean atBorderXY( ImageDim sd ) {
 		
-		Point3i crnrMax = this.calcCrnrMax();
+		ReadableTuple3i crnrMax = this.calcCrnrMax();
 
 		if (crnrMin.getX()==0) {
 			return true;
@@ -139,43 +170,22 @@ public class BoundingBox implements Serializable {
 	
 	public boolean atBorderZ( ImageDim sd ) {
 		
-		Point3i crnrMax = this.calcCrnrMax();
+		ReadableTuple3i crnrMax = this.calcCrnrMax();
 		
-		if (crnrMin.getZ()==0) return true;
-		if (crnrMax.getZ()==(sd.getZ()-1)) return true;
+		if (crnrMin.getZ()==0) {
+			return true;
+		}
+		if (crnrMax.getZ()==(sd.getZ()-1)) {
+			return true;
+		}
 		
 		return false;
 	}
 	
-	public void add( Point3i pnt ) {
-		add( pnt.getX(), pnt.getY(), pnt.getZ() );
-	}
-	
-	
-	public void add( int x, int y, int z ) {
-
-		Point3i crnrMax = calcCrnrMax();
-		
-		if (x < crnrMin.getX()) { crnrMin.setX(x); extnt.setX( crnrMax.getX() - x + 1); };
-		if (y < crnrMin.getY()) { crnrMin.setY(y); extnt.setY( crnrMax.getY() - y + 1); };
-		if (z < crnrMin.getZ()) { crnrMin.setZ(z); extnt.setZ( crnrMax.getZ() - z + 1); };
-		
-		if (x > crnrMax.getX()) { extnt.setX( x - crnrMin.getX() + 1 ); }
-		if (y > crnrMax.getY()) { extnt.setY( y - crnrMin.getY() + 1 ); }
-		if (z > crnrMax.getZ()) { extnt.setZ( z - crnrMin.getZ() + 1 ); }
-	}
-	
 	// An extent representing the number of pixels needed to represent the bounding box
-	public Extent extnt() {
-		return this.extnt;
+	public Extent extent() {
+		return this.extent;
 	}
-	
-	// Copy constructor
-	public BoundingBox( BoundingBox src ) {
-		this.crnrMin = new Point3i( src.crnrMin );
-		this.extnt = new Extent( src.extnt );
-	}
-	
 
 	@Override
 	public boolean equals( Object obj ) {
@@ -188,7 +198,7 @@ public class BoundingBox implements Serializable {
 	    if (!objCast.getCrnrMin().equals(getCrnrMin())) {
 	    	return false;
 	    }
-	    if (!objCast.extnt().equals(extnt())) {
+	    if (!objCast.extent().equals(extent())) {
 	    	return false;
 	    }
 	    
@@ -199,96 +209,253 @@ public class BoundingBox implements Serializable {
 	public int hashCode() {
 		return new HashCodeBuilder()
 			.append( getCrnrMin() )
-			.append( extnt() )
+			.append( extent() )
 			.toHashCode();
 	}
 	
-	public Point3i getCrnrMin() {
+	/** 
+	 * 
+	 * The bottom-left corner of the bounding box.
+	 * 
+	 * <p>The return value should be treated read-only, as this class is designed to be IMMUTABLE</o>.
+	 * 
+	 * */
+	public ReadableTuple3i getCrnrMin() {
 		return crnrMin;
 	}
-	public void setCrnrMin(Point3i crnrMin) {
-		this.crnrMin = crnrMin;
-	}
-
-	public void setExtnt(Extent extnt) {
-		this.extnt = extnt;
-	}
 	
-	public int getCrnrMinForAxis(AxisType axisType) {
-		switch(axisType) {
-		case X: {
-			return crnrMin.getX();
-		}
-		case Y: {
-			return crnrMin.getY();
-		}
-		case Z: {
-			return crnrMin.getZ();
-		}
-		default:
-			assert false;
-			return 0;
-		}
+	// TODO make this an IMMUTABLE method
+	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
+		
+		Point3i min = new Point3i(crnrMin);
+		
+		// Subtract the padding from the corner
+		min.sub(toAdd);
+		
+		// Double the padding in each dimension, and add it to the extent
+		BoundingBox grown = new BoundingBox(
+			min,
+			extent.growBy(
+				multiplyByTwo(toAdd)
+			)
+		);
+		
+		// Clip to make sure we remain within bounds
+		return grown.clipTo(containingExtent);
 	}
 	
 	// This is the last point INSIDE the box
 	// So iterators should be <= CalcCrnrMax
-	public Point3i calcCrnrMax() {
-		Point3i p = new Point3i();
-		p.setX(crnrMin.getX() + extnt.getX() - 1);
-		p.setY(crnrMin.getY() + extnt.getY() - 1);
-		p.setZ(crnrMin.getZ() + extnt.getZ() - 1);
-		return p;
+	public ReadableTuple3i calcCrnrMax() {
+		Point3i out = new Point3i();
+		out.setX(crnrMin.getX() + extent.getX() - 1);
+		out.setY(crnrMin.getY() + extent.getY() - 1);
+		out.setZ(crnrMin.getZ() + extent.getZ() - 1);
+		return out;
 	}
 	
-	// Returns the shift that occurs from the x-side
-	public Point3i clipTo( Extent e ) {
+	public BoundingBox clipTo( Extent e ) {
 		
-		int xOld = crnrMin.getX();
-		int yOld = crnrMin.getY();
-		int zOld = crnrMin.getZ();
+		Point3i min = new Point3i(crnrMin);
+		Point3i max = new Point3i(calcCrnrMax());
 		
-		Point3i crnrMax = calcCrnrMax();
+		if (min.getX()<0) {
+			min.setX(0);
+		}
+		if (min.getY()<0) {
+			min.setY(0);
+		}
+		if (min.getZ()<0) {
+			min.setZ(0);
+		}
 		
-		if (crnrMin.getX()<0) crnrMin.setX(0);
-		if (crnrMin.getY()<0) crnrMin.setY(0);
-		if (crnrMin.getZ()<0) crnrMin.setZ(0);
+		if (max.getX()>=e.getX()) {
+			max.setX(e.getX() - 1);
+		}
+		if (max.getY()>=e.getY()) {
+			max.setY(e.getY() - 1);
+		}
+		if (max.getZ()>=e.getZ()) {
+			max.setZ(e.getZ() - 1);
+		}
 		
-		if (crnrMax.getX()>=e.getX()) crnrMax.setX(e.getX() - 1);
-		if (crnrMax.getY()>=e.getY()) crnrMax.setY(e.getY() - 1);
-		if (crnrMax.getZ()>=e.getZ()) crnrMax.setZ(e.getZ() - 1);
+		return new BoundingBox(min, max);
+	}
+	
+
+	
+	public Point3i closestPntOnBorder( Point3d pntIn ) {
 		
-		extnt.setX( crnrMax.getX() - crnrMin.getX() + 1 );
-		extnt.setY( crnrMax.getY() - crnrMin.getY() + 1 );
-		extnt.setZ( crnrMax.getZ() - crnrMin.getZ() + 1 );
+		ReadableTuple3i crnrMax = calcCrnrMax();
 		
-		return new Point3i( crnrMin.getX()-xOld, crnrMin.getY()-yOld, crnrMin.getZ()-zOld );
+		Point3i pntOut = new Point3i();
+		pntOut.setX( closestPntOnAxis(pntIn.getX(), crnrMin.getX(), crnrMax.getX()) );
+		pntOut.setY( closestPntOnAxis(pntIn.getY(), crnrMin.getY(), crnrMax.getY()) );
+		pntOut.setZ( closestPntOnAxis(pntIn.getZ(), crnrMin.getZ(), crnrMax.getZ()) );
+		return pntOut;
 	}
 	
-	public boolean containsX( int x ) {
-		return (x>= crnrMin.getX()) && (x< (crnrMin.getX() + extnt.getX()) ); 
+	public static Point3i relPosTo( Point3i relPoint, ReadableTuple3i srcPoint ) {
+		Point3i p = new Point3i( relPoint );
+		p.sub( srcPoint );
+		return p; 
 	}
 	
-	public boolean containsY( int y ) {
-		return (y>= crnrMin.getY()) && (y< (crnrMin.getY() + extnt.getY()) ); 
+	// returns the relative position of the corner to another bounding box
+	public Point3i relPosTo( BoundingBox src ) {
+		return relPosTo( crnrMin, src.crnrMin );
 	}
 	
-	public boolean containsZ( int z ) {
-		return (z>= crnrMin.getZ()) && (z< (crnrMin.getZ() + extnt.getZ()) ); 
+	/** 
+	 * A new bounding-box using relative position coordinates to another box
+	 * 
+	 * @param other the other box, against whom we consider our co-ordinates relatively
+	 * @return a newly created bounding box with relative coordinates
+	 */
+	public BoundingBox relPosToBox( BoundingBox other ) {
+		return new BoundingBox(
+			relPosTo(other),
+			extent
+		);
+	}
+
+	/** For evaluating whether this bounding-box contains other points, boxes etc.? */
+	public BoundingBoxContains contains() {
+		return new BoundingBoxContains(this); 
 	}
 	
-	public boolean containsIgnoreZ( Point3i pnt )  {
-		return containsX( pnt.getX() ) && containsY( pnt.getY() );
+	/** For evaluating the intersection between this bounding-box and others */
+	public BoundingBoxIntersection intersection() {
+		return new BoundingBoxIntersection(this);
 	}
 	
-	public boolean contains( Point3i pnt ) {
-		return containsX( pnt.getX() ) && containsY( pnt.getY() ) && containsZ( pnt.getZ() );
+	/** For performing a union between this bounding-box and another */
+	public BoundingBoxUnion union() {
+		return new BoundingBoxUnion(this);
 	}
 	
-	public boolean contains( BoundingBox box ) {
-		return contains( box.getCrnrMin() ) && contains( box.calcCrnrMax() );
+	@Override
+	public String toString() {
+		return crnrMin.toString() + "+" + extent.toString() + "=" + calcCrnrMax().toString();
 	}
 	
+	/** 
+	 * Shifts the bounding-box by adding to it i.e. adds a vector to the corner position
+	 * 
+	 * @param shiftBy what to add to the corner position
+	 * @return newly created bounding-box with shifted corner position and identical extent 
+	 **/
+	public BoundingBox shiftBy( ReadableTuple3i shiftBy ) {
+		Point3i crnrNew = new Point3i(crnrMin);
+		crnrNew.add(shiftBy);
+		return new BoundingBox(
+			crnrNew,
+			extent
+		);
+	}
+	
+	/** 
+	 * Shifts the bounding-box by subtracting from i.e. subtracts a vector from the corner position
+	 * 
+	 * @param shiftBy what to add to the corner position
+	 * @return newly created bounding-box with shifted corner position and identical extent 
+	 **/
+	public BoundingBox shiftBackBy( ReadableTuple3i shiftBackwardsBy ) {
+		Point3i crnrNew = new Point3i(crnrMin);
+		crnrNew.sub(shiftBackwardsBy);
+		return new BoundingBox(
+			crnrNew,
+			extent
+		);
+	}
+	
+	/**
+	 * Assigns a new corner-location to the bounding-box
+	 * 
+	 * @param crnrMinNew the new corner
+	 * @return a bounding-box with a new corner and the same extent
+	 */
+	public BoundingBox shiftTo(Point3i crnrMinNew) {
+		return new BoundingBox(
+			crnrMinNew,
+			extent
+		);
+	}
+
+	/**
+	 * Assigns a new z-slice corner-location to the bounding-box
+	 * 
+	 * @param crnrZNew the new value in Z for the corner
+	 * @return a bounding-box with a new z-slice corner and the same extent
+	 */
+	public BoundingBox shiftToZ(int crnrZNew) {
+		return new BoundingBox(
+			crnrMin.duplicateChangeZ(crnrZNew),
+			extent
+		);
+	}
+	
+	/**
+	 * Reflects the bounding box through the origin (i.e. x,y,z -> -x, -y, -z)
+	 * 
+	 * @return a bounding-box reflected through the origin
+	 */
+	public BoundingBox reflectThroughOrigin() {
+		Point3i crnrNew = new Point3i(crnrMin);
+		crnrNew.scale(-1);;
+		return new BoundingBox(
+			crnrNew,
+			extent
+		);
+	}
+		
+	/**
+	 * Scales the bounding-box, both the corner-point and the extent
+	 * 
+	 * @param scaleFactor scaling-factor
+	 * @return a new bounding-box with scaled corner-point and extent
+	 */
+	public BoundingBox scale( ScaleFactor scaleFactor ) {
+		return scale(
+			scaleFactor,
+			extent.scaleXYBy(scaleFactor)	
+		);
+	}
+	
+	/**
+	 * Scales the bounding-box corner-point, and assigns a new extent
+	 * 
+	 * @param scaleFactor scaling-factor
+	 * @return a new bounding-box with scaled corner-point and the specified extent
+	 */
+	public BoundingBox scale( ScaleFactor scaleFactor, Extent extentToAssign ) {
+		return new BoundingBox(
+			ScaleFactorUtilities.scale(scaleFactor, crnrMin),
+			extentToAssign
+		);
+	}	
+	
+	private void checkMaxMoreThanMin( ReadableTuple3i min, ReadableTuple3i max ) {
+		if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {
+			throw new AnchorFriendlyRuntimeException(
+				String.format("To create a bounding-box, the max-point %s must always be >= the min-point %s in all dimensions.", max, min)
+			);
+		}
+	}
+	
+	private Point3d meanOfExtent( int subtractFromEachDimension ) {
+		Point3d pnt = new Point3d();
+		
+		double e_x = ((double) this.extent.getX() - subtractFromEachDimension)/2;
+		double e_y = ((double) this.extent.getY() - subtractFromEachDimension)/2;
+		double e_z = ((double) this.extent.getZ() - subtractFromEachDimension)/2;
+		
+		pnt.setX( e_x + this.crnrMin.getX() ); 
+		pnt.setY( e_y + this.crnrMin.getY() );
+		pnt.setZ( e_z + this.crnrMin.getZ() );
+		
+		return pnt;
+	}
 	
 	private static int closestPntOnAxis( double val, int axisMin, int axisMax) {
 		
@@ -303,246 +470,9 @@ public class BoundingBox implements Serializable {
 		return (int) val;
 	}
 	
-	public Point3i closestPntOnBorder( Point3d pntIn ) {
-		
-		Point3i crnrMax = calcCrnrMax();
-		
-		Point3i pntOut = new Point3i();
-		pntOut.setX( closestPntOnAxis(pntIn.getX(), crnrMin.getX(), crnrMax.getX()) );
-		pntOut.setY( closestPntOnAxis(pntIn.getY(), crnrMin.getY(), crnrMax.getY()) );
-		pntOut.setZ( closestPntOnAxis(pntIn.getZ(), crnrMin.getZ(), crnrMax.getZ()) );
-		return pntOut;
-	}
-
-	
-	public void flattenZ() {
-		this.crnrMin.setZ(0);
-		this.extnt.setZ(1);
-	}
-	
-	// Helper classes for calculating the intersection along each axis
-	private static class MinExtentIntersector {
-		private int min;
-		private int extnt;
-		
-		public boolean calc( int min1, int min2, int max1, int max2 ) {
-			
-			int minNew = Math.max(min1, min2);
-			int maxNew = Math.min(max1, max2);
-			if (minNew <= maxNew) {
-				this.min = minNew;
-				this.extnt = maxNew - minNew + 1;
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public int getMin() {
-			return min;
-		}
-
-		public int getExtnt() {
-			return extnt;
-		}
-
-	}
-	
-	
-	// Helper classes for calculating the union along each axis
-	private static class MaxExtentIntersector {
-		private int min;
-		private int extnt;
-		
-		public void calc( int min1, int min2, int max1, int max2 ) {
-			
-			int minNew = Math.min(min1, min2);
-			int maxNew = Math.max(max1, max2);
-			if (minNew <= maxNew) {
-				this.min = minNew;
-				this.extnt = maxNew - minNew + 1;
-			} else {
-				assert false;
-			}
-		}
-
-		public int getMin() {
-			return min;
-		}
-
-		public int getExtnt() {
-			return extnt;
-		}
-
-	}
-	
-
-	public static Point3i relPosTo( Point3i relPoint, Point3i srcPoint ) {
-		Point3i p = new Point3i( relPoint );
-		p.sub( srcPoint );
-		return p; 
-	}
-	
-	// returns the relative position to another bounding box
-	public Point3i relPosTo( BoundingBox src ) {
-		return relPosTo( crnrMin, src.crnrMin );
-	}
-	
-	public BoundingBox intersectCreateNewNoClip( BoundingBox bbox ) {
-		BoundingBox bboxIntersect = new BoundingBox( this );
-		if (!bboxIntersect.intersect(bbox,true)) {
-			return null;
-		}
-		return bboxIntersect;
-	}
-	
-	public BoundingBox intersectCreateNew( BoundingBox bbox, Extent e ) {
-		BoundingBox bboxIntersect = new BoundingBox( this );
-		if (!bboxIntersect.intersect(bbox,true)) {
-			return null;
-		}
-		bboxIntersect.clipTo( e );
-		return bboxIntersect;
-	}
-	
-	// Does not modify state
-	public boolean intersect( List<BoundingBox> othrList ) {
-		
-		for (BoundingBox othr : othrList) {
-			
-			if (hasIntersection(othr)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	// Does not modify state
-	public boolean hasIntersection( BoundingBox othr ) {
-		return intersect(othr, false);
-	}
-	
-	
-	public boolean intersect( BoundingBox othr, boolean modifyState ) {
-		
-		Point3i crnrMax = calcCrnrMax();
-		Point3i crnrMaxOthr = othr.calcCrnrMax();
-			
-		MinExtentIntersector mei = new MinExtentIntersector();
-		
-		if (mei.calc( crnrMin.getX(), othr.crnrMin.getX(), crnrMax.getX(), crnrMaxOthr.getX() )) {
-			if (modifyState) {
-				crnrMin.setX( mei.getMin() );
-				extnt.setX( mei.getExtnt() );
-			}
-		} else {
-			return false;
-		}
-		
-		if (mei.calc( crnrMin.getY(), othr.crnrMin.getY(), crnrMax.getY(), crnrMaxOthr.getY() )) {
-			if (modifyState) {
-				crnrMin.setY( mei.getMin() );
-				extnt.setY( mei.getExtnt() );
-			}
-		} else {
-			return false;
-		}
-
-		if (mei.calc( crnrMin.getZ(), othr.crnrMin.getZ(), crnrMax.getZ(), crnrMaxOthr.getZ() )) {
-			if (modifyState) {
-				crnrMin.setZ( mei.getMin() );
-				extnt.setZ( mei.getExtnt() );
-			}
-		} else {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public static BoundingBox intersect( BoundingBox bbox1, BoundingBox bbox2 ) {
-		BoundingBox b = new BoundingBox(bbox1);
-		b.intersect(bbox2,true);
-		return b;
-	}
-	
-	public static BoundingBox union( BoundingBox bbox1, BoundingBox bbox2 ) {
-		BoundingBox b = new BoundingBox(bbox1);
-		b.union(bbox2);
-		return b;
-	}
-	
-	public void union( BoundingBox othr ) {
-		
-		Point3i crnrMax = calcCrnrMax();
-		Point3i crnrMaxOthr = othr.calcCrnrMax();
-			
-		MaxExtentIntersector mei = new MaxExtentIntersector();
-		
-		mei.calc( crnrMin.getX(), othr.crnrMin.getX(), crnrMax.getX(), crnrMaxOthr.getX() );
-		crnrMin.setX( mei.getMin() );
-		extnt.setX( mei.getExtnt() );
-				
-		mei.calc( crnrMin.getY(), othr.crnrMin.getY(), crnrMax.getY(), crnrMaxOthr.getY() );
-		crnrMin.setY( mei.getMin() );
-		extnt.setY( mei.getExtnt() );
-
-		mei.calc( crnrMin.getZ(), othr.crnrMin.getZ(), crnrMax.getZ(), crnrMaxOthr.getZ() );
-		crnrMin.setZ( mei.getMin() );
-		extnt.setZ( mei.getExtnt() );
-	}
-	
-	public void shrinkByQuantiles( double quantileLower, double quantileHigher ) {
-		
-		// Shrink each bbox to a quantile
-		int zLow = (int) Math.floor( quantileLower * extnt().getZ() );
-		int zHigh = (int) Math.ceil( quantileHigher * extnt().getZ() );
-		
-		int zSize = zHigh - zLow + 1;
-		
-		crnrMin.setZ( crnrMin.getZ() + zLow );
-		extnt.setZ( zSize );
-	}
-
-	public Point3d calcRelToLowerEdge( Point3d pntIn ) {
-		
-		Point3d pntOut = new Point3d(pntIn);
-		pntOut.sub( new Point3d(this.crnrMin.getX(), this.crnrMin.getY(), this.crnrMin.getZ() ) );
-		return pntOut;
-	}
-	
-	public Point3i calcRelToLowerEdgeInt( Point3d pntIn ) {
-		
-		Point3d relPntDbl = calcRelToLowerEdge(pntIn);
-		
-		Point3i relPntInt = new Point3i();
-		relPntInt.setX((int) relPntDbl.getX() );
-		relPntInt.setY((int) relPntDbl.getY() );
-		relPntInt.setZ((int) relPntDbl.getZ() );
-		return relPntInt;
-	}
-
-	@Override
-	public String toString() {
-		return crnrMin.toString() + "+" + extnt.toString() + "=" + calcCrnrMax().toString();
-	}
-	
-	public void scaleXYPos( ScaleFactor sf ) {
-		crnrMin.setX( ScaleFactorUtilities.multiplyAsInt(sf.getX(), crnrMin.getX()) );
-		crnrMin.setY( ScaleFactorUtilities.multiplyAsInt(sf.getY(), crnrMin.getY()) );
-	}
-	
-	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
-		scaleXYPos(sf);
-		extnt.scaleXYBy(sf);
-	}
-	
-	private void checkMaxMoreThanMin( Point3i min, Point3i max ) {
-		if ((max.getX() < min.getX()) || (max.getY() < min.getY()) || (max.getZ() < min.getZ())) {
-			throw new AnchorFriendlyRuntimeException(
-				String.format("To create a bounding-box, the max-point %s must always be >= the min-point %s in all dimensions.", max, min)
-			);
-		}
+	private static Point3i multiplyByTwo(Tuple3i pnt) {
+		Point3i out = new Point3i(pnt);
+		out.scale(2);
+		return out;
 	}
 }

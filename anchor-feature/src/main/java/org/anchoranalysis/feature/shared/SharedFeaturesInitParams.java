@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -87,7 +88,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		return storeFeatureList;
 	}
 	
-	public void addAll(
+	public void populate(
 		List<NamedBean<FeatureListProvider<FeatureInput>>> namedFeatureListCreator,
 		LogErrorReporter logger
 	) throws OperationFailedException {
@@ -103,8 +104,13 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 			new FeatureBridge<>(getSharedFeatureSet(), this, logger )
 		);*/
 		
-		for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
-			addFeatureList(namedBean, logger);
+		try {
+			for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
+				namedBean.getItem().initRecursive(this, logger);
+				addFeatureList(namedBean, logger);
+			}
+		} catch (InitException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 	

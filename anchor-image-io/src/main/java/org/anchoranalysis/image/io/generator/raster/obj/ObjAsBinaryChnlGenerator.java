@@ -27,6 +27,7 @@ package org.anchoranalysis.image.io.generator.raster.obj;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -97,8 +98,10 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", "mask");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", "mask")
+		);
 	}
 
 	@Override
@@ -110,12 +113,10 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		ImageDim newSd = new ImageDim();
-		newSd.setRes( res );
-		newSd.setX( bbox.extnt().getX() );
-		newSd.setY( bbox.extnt().getY() );
-		newSd.setZ( bbox.extnt().getZ() );
-		
+		ImageDim newSd = new ImageDim(
+			bbox.extent(),
+			res
+		);
 				
 		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.instance );
 		

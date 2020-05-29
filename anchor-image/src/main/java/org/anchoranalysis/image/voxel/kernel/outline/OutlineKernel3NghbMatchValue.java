@@ -95,7 +95,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		
 		
-		int xLength = extnt.getX();
+		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
@@ -119,7 +119,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		x += 2;
 		ind += 2;
-		if (x<extnt.getX()) {
+		if (x<extent.getX()) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return checkIfRequireHighIsTrue(inArr_R,pnt,+1,0);
 			}
@@ -147,7 +147,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		y += 2;
 		ind += (2*xLength);
-		if (y<(extnt.getY())) {
+		if (y<(extent.getY())) {
 			if (bv.isOff(inArr_Z.get(ind))) {
 				return checkIfRequireHighIsTrue(inArr_R,pnt,0,+1);
 			}
@@ -194,17 +194,17 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		
 		int x1 = pnt.getX() + om.getBoundingBox().getCrnrMin().getX() + xShift;
 		
-		if (!vbRequireHigh.extnt().containsX(x1)) {
+		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
 		int y1 = pnt.getY() + om.getBoundingBox().getCrnrMin().getY() + yShift; 
 
-		if (!vbRequireHigh.extnt().containsY(y1)) {
+		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;
 		}
 		
-		int intGlobal = vbRequireHigh.extnt().offset(
+		int intGlobal = vbRequireHigh.extent().offset(
 			x1,
 			y1
 		);

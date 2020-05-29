@@ -29,10 +29,10 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
@@ -53,7 +53,7 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
 	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws AnchorIOException;
 	
 	public abstract FilePathPrefix prefixForFile(
-		InputFromManager input,
+		PathWithDescription input,
 		String expIdentifier,
 		Optional<ManifestRecorder> manifestRecorder,
 		Optional<ManifestRecorder> experimentalManifestRecorder,

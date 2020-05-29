@@ -1,33 +1,9 @@
 package org.anchoranalysis.io.generator.sequence;
 
-/*-
- * #%L
- * anchor-io-generator
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
+import java.util.Optional;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -45,7 +21,7 @@ public class SubfolderWriter extends SequenceWriter {
 	private IndexableOutputNameStyle outputNameStyle;
 	private ManifestDescription folderManifestDescription;
 	
-	private BoundOutputManager subFolderOutputManager = null;
+	private Optional<BoundOutputManager> subFolderOutputManager = Optional.empty();
 	private boolean checkIfAllowed;
 	private String subfolderName;
 	
@@ -62,12 +38,16 @@ public class SubfolderWriter extends SequenceWriter {
 		this.subfolderName = subfolderName;
 	}
 
-	private BoundOutputManager createSubfolder(boolean suppressSubfolder, ManifestFolderDescription folderDescription, 	FolderWriteIndexableOutputName subFolderWrite) throws OutputWriteFailedException {
+	private Optional<BoundOutputManager> createSubfolder(boolean suppressSubfolder, ManifestFolderDescription folderDescription, 	FolderWriteIndexableOutputName subFolderWrite) throws OutputWriteFailedException {
 		if (suppressSubfolder) {
-			return parentOutputManager;
+			return Optional.of(parentOutputManager);
 		} else {
 			Writer writer = checkIfAllowed ? parentOutputManager.getWriterCheckIfAllowed() : parentOutputManager.getWriterAlwaysAllowed();
-			return writer.bindAsSubFolder(subfolderName, folderDescription, subFolderWrite );
+			return writer.bindAsSubFolder(
+				subfolderName,
+				folderDescription,
+				Optional.of(subFolderWrite)
+			);
 		}
 	}
 	
@@ -102,7 +82,7 @@ public class SubfolderWriter extends SequenceWriter {
 
 	@Override
 	public boolean isOn() {
-		return (this.subFolderOutputManager!=null);
+		return subFolderOutputManager.isPresent();
 	}
 
 	@Override
@@ -113,9 +93,9 @@ public class SubfolderWriter extends SequenceWriter {
 		}
 		
 		if (checkIfAllowed) {
-			this.subFolderOutputManager.getWriterCheckIfAllowed().write(outputNameStyle, generator, index );
+			this.subFolderOutputManager.get().getWriterCheckIfAllowed().write(outputNameStyle, generator, index);
 		} else {
-			this.subFolderOutputManager.getWriterAlwaysAllowed().write( outputNameStyle, generator, index );
+			this.subFolderOutputManager.get().getWriterAlwaysAllowed().write( outputNameStyle, generator, index);
 		}
 	}
 	
@@ -165,14 +145,11 @@ public class SubfolderWriter extends SequenceWriter {
 			}
 		}
 		
-		ManifestDescription manifestDescription = new ManifestDescription(type, function);
-		manifestDescription.setFunction(function);
-		manifestDescription.setType(type);
-		return manifestDescription;
+		return new ManifestDescription(type, function);
 	}
 
 	@Override
-	public BoundOutputManager getOutputManagerForFiles() {
+	public Optional<BoundOutputManager> getOutputManagerForFiles() {
 		return subFolderOutputManager;
 	}
 	

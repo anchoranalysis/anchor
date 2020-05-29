@@ -34,7 +34,7 @@ package org.anchoranalysis.core.name.value;
  *
  * @param <V> value-type
  */
-public class SimpleNameValue<V> implements NameValue<V> {
+public final class SimpleNameValue<V> implements NameValue<V> {
 
 	private String name;
 	

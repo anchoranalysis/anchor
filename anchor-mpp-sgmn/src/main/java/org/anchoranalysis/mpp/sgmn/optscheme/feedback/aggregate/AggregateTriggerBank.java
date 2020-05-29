@@ -32,6 +32,7 @@ import java.util.HashMap;
 
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
@@ -68,7 +69,7 @@ public class AggregateTriggerBank<T> {
 		}
 	}
 	
-	public void record( Reporting<T> reporting ) {
+	public void record( Reporting<T> reporting ) throws ReporterException {
 		
 		for( AggregateTrigger<T,AggregateReceiverList<T>> item : list) {
 			item.record(reporting);

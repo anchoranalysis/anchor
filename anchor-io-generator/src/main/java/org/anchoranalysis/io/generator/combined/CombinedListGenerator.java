@@ -28,14 +28,11 @@ package org.anchoranalysis.io.generator.combined;
 
 
 import java.util.ArrayList;
+import java.util.Optional;
 
-import org.anchoranalysis.core.name.value.NameValue;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.io.filepath.prefixer.FilePathCreator;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -45,69 +42,76 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 // currently untested
 public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 
-	private ArrayList<NameValue<Generator>> list = new ArrayList<>();
-	
-	public CombinedListGenerator() {
-		
-	}
+	private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
 	
 	@Override
-	public FileType[] getFileTypes(OutputWriteSettings outputWriteSettings) {
+	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
 
 		ArrayList<FileType> all = new ArrayList<>();
 		
-		for( NameValue<Generator> ni : list) {
-			FileType[] arr = ni.getValue().getFileTypes(outputWriteSettings);
-			for (int i=0; i<arr.length; i++) {
-				all.add( arr[i] );
-			}
+		for( OptionalNameValue<Generator> ni : list) {
+			Optional<FileType[]> arr = ni.getValue().getFileTypes(outputWriteSettings);
+			arr.ifPresent( a-> {
+				for (int i=0; i<a.length; i++) {
+					all.add( a[i] );
+				}
+			});
 		}
 		
-		return all.toArray( new FileType[]{} );
+		if (all.size()>0) {
+			return Optional.of(
+				all.toArray( new FileType[]{} )
+			);
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	@Override
-	public void write(OutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			BoundOutputManager outputManager) throws OutputWriteFailedException {
+	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
-		for( NameValue<Generator> ni : list) {
+		for( OptionalNameValue<Generator> ni : list) {
 
-			if (ni.getName()!=null) {
-				outputNameStyle.setOutputName( ni.getName() );
-			}
+			ni.getName().ifPresent( outputName->
+				outputNameStyle.setOutputName(outputName)	
+			);
 			
-			ni.getValue().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, outputManager);
+			ni.getValue().write(outputNameStyle, outputManager);
 		}
 		
 	}
 
 	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle,
-			FilePathCreator filePathGnrtr,
-			IWriteOperationRecorder writeOperationRecorder,
-			String index, BoundOutputManager outputManager)
+	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager)
 			throws OutputWriteFailedException {
 		
 		int maxWritten = -1;
-		for( NameValue<Generator> ni : list) {
+		for( OptionalNameValue<Generator> ni : list) {
 			
-			if (ni.getName()!=null) {
+			if (ni.getName().isPresent()) {
 				outputNameStyle = outputNameStyle.duplicate();
-				outputNameStyle.setOutputName( ni.getName() );
+				outputNameStyle.setOutputName( ni.getName().get() );
 			}
 			
-			int numWritten = ni.getValue().write(outputNameStyle, filePathGnrtr, writeOperationRecorder, index, outputManager);
+			int numWritten = ni.getValue().write(outputNameStyle, index, outputManager);
 			maxWritten = Math.max(maxWritten, numWritten);
 		}
 		
 		return maxWritten;
 	}
 
-	// A null name is allowed, in which case, the iterableObjectGenerator is not changed
-	// Either everything should have a null name, or not.  Mixed is not a good idea!
-	public boolean add(String name, Generator generator) {
-		return list.add( new SimpleNameValue<>(name,generator) );
+
+	/**
+	 * Adds a generator with an optional-name.
+	 * 
+	 * <p>Note that everything should have a name, or nothing should. Please don't mix. This is not currently checked.</p>
+	 *
+	 * @param generator the generator to add
+	 * @param name optional-name, which if included, is set as the output-name for the generator
+	 */
+	public void add(Generator generator, Optional<String> name) {
+		list.add(
+			new OptionalNameValue<>(name,generator)
+		);
 	}
 }

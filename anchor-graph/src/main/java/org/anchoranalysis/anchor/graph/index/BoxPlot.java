@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.graph.index;
 
 
 import java.awt.Paint;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GetForSeries;
@@ -91,22 +92,22 @@ public class BoxPlot<T> extends GraphIndexBaseCategorical<T,DefaultBoxAndWhisker
     
 
     @Override
-    protected JFreeChart createChart(DefaultBoxAndWhiskerCategoryDataset dataset, String title, AxisLimits rangeLimits) {
+    protected JFreeChart createChart(DefaultBoxAndWhiskerCategoryDataset dataset, String title, Optional<AxisLimits> rangeLimits) {
 	
-	    final JFreeChart chart = createInitialChartObject(dataset, title);
+	   final JFreeChart chart = createInitialChartObject(dataset, title);
 	
-	    getGraphColorScheme().colorChart( chart );
+	   getGraphColorScheme().colorChart( chart );
 	   
-	    // get a reference to the plot for further customisation...
-	    final CategoryPlot plot = chart.getCategoryPlot();
+	   // get a reference to the plot for further customisation...
+	   final CategoryPlot plot = chart.getCategoryPlot();
 	   
 	   // change the auto tick unit selection to integer units only...
 	   final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 	   
 	   // -0.5 to 1.0
-	   if (rangeLimits!=null) {
-		    rangeAxis.setLowerBound( rangeLimits.getAxisMin() );
-	   		rangeAxis.setUpperBound( rangeLimits.getAxisMax() );
+	   if (rangeLimits.isPresent()) {
+		    rangeAxis.setLowerBound( rangeLimits.get().getAxisMin() );
+	   		rangeAxis.setUpperBound( rangeLimits.get().getAxisMax() );
 	   }
 	   getGraphColorScheme().colorAxis(rangeAxis);
 	   
@@ -114,8 +115,8 @@ public class BoxPlot<T> extends GraphIndexBaseCategorical<T,DefaultBoxAndWhisker
    }
 
 	@Override
-	protected AxisLimits rangeLimitsIfNull(DefaultBoxAndWhiskerCategoryDataset dataset) {
-		return null;
+	protected Optional<AxisLimits> rangeLimitsIfEmpty(DefaultBoxAndWhiskerCategoryDataset dataset) {
+		return Optional.empty();
 	}
 
 	@Override

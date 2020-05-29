@@ -49,13 +49,13 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D) throws IncludeMarksFailureException {
 			
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
 		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
 		
 		// If their bounding boxes don't intersect, they cannot possibly have an overlapping point
-		if (!bbox1.hasIntersection(bbox2)) {
+		if (!bbox1.intersection().existsWith(bbox2)) {
 			return false;
 		}
 

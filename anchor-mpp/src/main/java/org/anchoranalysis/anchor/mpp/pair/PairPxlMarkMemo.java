@@ -27,16 +27,10 @@ package org.anchoranalysis.anchor.mpp.pair;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
-public class PairPxlMarkMemo implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7867852145124991678L;
+public class PairPxlMarkMemo {
+
 	private final PxlMarkMemo source;
 	private final PxlMarkMemo destination;
 	

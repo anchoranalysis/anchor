@@ -29,6 +29,8 @@ package org.anchoranalysis.io.bioformats;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
@@ -48,34 +50,34 @@ public class DimensionsCreator {
 	}
 			
 	public ImageDim apply( IFormatReader reader, ReadOptions readOptions, int seriesIndex ) {
-		
-		ImageDim sd = new ImageDim();
-		sd.setX( reader.getSizeX() );
-		sd.setY( reader.getSizeY() );
-		sd.setZ( readOptions.sizeZ(reader) );
 			
-		assert( sd != null );
-		assert( sd.getRes() != null );
 		assert( lociMetadata != null );
 		
-		ImageRes sr = sd.getRes();
+		Point3d res = new Point3d();
 		
 		metadataDim(
 			metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex),
-			len -> sr.setX(len)
+			len -> res.setX(len)
 		);
 		
 		metadataDim(
 			metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex),
-			len -> sr.setY(len)
+			len -> res.setY(len)
 		);
 		
 		metadataDim(
 			metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex),
-			len -> sr.setZ(len)
+			len -> res.setZ(len)
 		);
 		
-		return sd;
+		return new ImageDim(
+			new Extent(
+				reader.getSizeX(),
+				reader.getSizeY(),
+				readOptions.sizeZ(reader)
+			),
+			new ImageRes(res)
+		);
 	}
 	
 	private void metadataDim( Function<IMetadata,Length> funcDimRes, Consumer<Double> setter ) {
