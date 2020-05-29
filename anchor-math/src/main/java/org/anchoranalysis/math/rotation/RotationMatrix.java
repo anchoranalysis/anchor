@@ -29,6 +29,7 @@ package org.anchoranalysis.math.rotation;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 
 import cern.colt.matrix.DoubleFactory2D;
@@ -71,8 +72,7 @@ public class RotationMatrix implements Serializable {
 			double[] rot = calcRotatedPoint(dIn);
 			return new Point3d( rot[0], rot[1], 0);			
 		} else {
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
 	}
 	

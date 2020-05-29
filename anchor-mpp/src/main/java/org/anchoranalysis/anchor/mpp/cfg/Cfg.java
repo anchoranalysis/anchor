@@ -60,8 +60,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	
 	private ArrayList<Mark> marks;
 
-	//private static Log log = LogFactory.getLog(Cfg.class);
-	
 	public Cfg() {
 		super();
 		marks = new ArrayList<>();
@@ -168,15 +166,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	public Mark get(int index) {
 		return marks.get(index);
 	}
-	
-	public Mark find( int id ) {
-		for (Mark m : marks) {
-			if (m.getId()==id) {
-				return m;
-			}
-		}
-		return null;
-	}
 
 	public final Mark randomMark( RandomNumberGenerator re ) {
 		return marks.get( randomIndex(re) );
@@ -190,22 +179,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	public int indexOf( Mark m ) {
 		return marks.indexOf(m);
 	}
-	
-	private static ObjMaskWithProperties calcMaskWithColor(
-		Mark mark,
-		ImageDim bndScene,
-		RegionMembershipWithFlags rm,
-		BinaryValuesByte bvOut,
-		IDGetter<Mark> colorIDGetter,
-		int iter
-	) {
-		ObjMaskWithProperties mask = mark.calcMask(bndScene, rm, bvOut );
-		if (colorIDGetter!=null) {
-			mask.setProperty("colorID", colorIDGetter.getID(mark, iter));
-		}
-		return mask;
-	}
-	
 	
 	public ObjMaskWithPropertiesCollection calcMask(
 		ImageDim bndScene,
@@ -257,9 +230,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 			
 			byte membership = m.evalPntInside(pnt);
 			if (rm.isMemberFlag(membership,flags)) {
-				
 				cfgOut.add( m );
-				//s++;
 			}
 		}
 		
@@ -281,14 +252,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 			}
 		}
 		return true;
-	}
-
-	public ArrayList<Mark> getMarks() {
-		return marks;
-	}
-
-	public void setMarks(ArrayList<Mark> marks) {
-		this.marks = marks;
 	}
 
 	// A hashmap of all the marks, using the Id as an index
@@ -355,11 +318,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		return mergedNew;
 	}
 
-	
-
-		
-		
-	
 	public List<BoundingBox> bboxList( ImageDim bndScene, int regionID ) {
 		
 		ArrayList<BoundingBox> list = new ArrayList<>(); 
@@ -369,8 +327,32 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		return list;
 	}
 
-
 	public Mark set(int index, Mark element) {
 		return marks.set(index, element);
+	}
+
+
+	public ArrayList<Mark> getMarks() {
+		return marks;
+	}
+
+	public void setMarks(ArrayList<Mark> marks) {
+		this.marks = marks;
+	}
+
+	
+	private static ObjMaskWithProperties calcMaskWithColor(
+		Mark mark,
+		ImageDim bndScene,
+		RegionMembershipWithFlags rm,
+		BinaryValuesByte bvOut,
+		IDGetter<Mark> colorIDGetter,
+		int iter
+	) {
+		ObjMaskWithProperties mask = mark.calcMask(bndScene, rm, bvOut );
+		if (colorIDGetter!=null) {
+			mask.setProperty("colorID", colorIDGetter.getID(mark, iter));
+		}
+		return mask;
 	}
 }
