@@ -132,17 +132,19 @@ public class OptionalUtilities {
 	}
 	
 	/**
-	 * The first optional if it's present, or failing that the second optional
+	 * The first optional if it's present, or the second, or the third etc. using an array
 	 * 
 	 * @param <T> type of optionals
-	 * @return a new optional that is optional1 OR optional2
+	 * @return a new optional that is optionals[0] OR optionals[1] OR optionals[2] etc.
 	 */
-	public static<T> Optional<T> orFlat( Optional<T> optional1, Optional<T> optional2 ) {
-		if (optional1.isPresent()) {
-			return optional1;
-		} else {
-			return optional2;
+	@SafeVarargs
+	public static<T> Optional<T> orFlat(Optional<T> ...optionals) {
+		for( Optional<T> item : optionals) {
+			if (item.isPresent()) {
+				return item;
+			}
 		}
+		return Optional.empty();
 	}
 	
 	/**
