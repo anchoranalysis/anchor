@@ -28,19 +28,21 @@ package org.anchoranalysis.test.image.io;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManagerPermissive;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.LoggingFixture;
@@ -53,7 +55,7 @@ public class OutputManagerFixture {
 		TestReaderWriterUtilities.ensureRasterWriter();		
 	}
 	
-	public static BoundOutputManagerRouteErrors outputManagerForRouterErrors( Path pathTempFolder ) throws AnchorIOException {
+	public static BoundOutputManagerRouteErrors outputManagerForRouterErrors( Path pathTempFolder ) throws BindFailedException {
 		
 		ErrorReporter errorReporter = LoggingFixture.simpleLogErrorReporter().getErrorReporter();
 
@@ -63,14 +65,14 @@ public class OutputManagerFixture {
 		);
 	}
 	
-	public static BoundOutputManager outputManagerFor( Path pathTempFolder ) throws AnchorIOException {
+	public static BoundOutputManager outputManagerFor( Path pathTempFolder ) throws BindFailedException {
 		return createBoundOutputManagerFor(
 			pathTempFolder,
 			LoggingFixture.simpleLogErrorReporter().getErrorReporter()
 		);
 	}
 	
-	private static BoundOutputManager createBoundOutputManagerFor( Path pathTempFolder, ErrorReporter errorReporter ) throws AnchorIOException {
+	private static BoundOutputManager createBoundOutputManagerFor( Path pathTempFolder, ErrorReporter errorReporter ) throws BindFailedException {
 		
 		globalSetup();
 				
@@ -90,7 +92,15 @@ public class OutputManagerFixture {
 			new FilePathPrefixerConstantPath(pathTempFolder)
 		);
 		
-		return outputManager.bindRootFolder( "debug", new ManifestRecorder(), new FilePathPrefixerParams(false, null) );
+		try {
+			return outputManager.bindRootFolder(
+				"debug",
+				new ManifestRecorder(),
+				new FilePathPrefixerParams(false, Optional.empty())
+			);
+		} catch (FilePathPrefixerException e) {
+			throw new BindFailedException(e);
+		}
 	}
 
 	private static class FilePathPrefixerConstantPath extends FilePathPrefixer {
@@ -102,14 +112,12 @@ public class OutputManagerFixture {
 		}
 
 		@Override
-		public FilePathPrefix outFilePrefix(PathWithDescription input, String experimentIdentifier,
-				FilePathPrefixerParams context) throws AnchorIOException {
+		public FilePathPrefix outFilePrefix(PathWithDescription input, String experimentIdentifier,	FilePathPrefixerParams context) {
 			return prefix;
 		}
 
 		@Override
-		public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context)
-				throws AnchorIOException {
+		public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) {
 			return prefix;
 		}
 	}

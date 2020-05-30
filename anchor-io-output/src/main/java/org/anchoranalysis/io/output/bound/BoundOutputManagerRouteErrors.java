@@ -34,7 +34,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
@@ -125,7 +124,7 @@ public class BoundOutputManagerRouteErrors {
 		Optional<ManifestRecorder> manifestRecorder,
 		Optional<ManifestRecorder> experimentalManifestRecorder,
 		FilePathPrefixerParams context
-	) throws AnchorIOException {
+	) throws BindFailedException {
 		return delegate.bindFile(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
 	}
 

@@ -35,7 +35,6 @@ import java.util.Collections;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class SingleFile extends FileProviderWithDirectory {
@@ -57,7 +56,7 @@ public class SingleFile extends FileProviderWithDirectory {
 	}
 	
 	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) {
 		
 		File file = new File(path);
 		

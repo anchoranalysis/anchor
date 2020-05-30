@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
@@ -40,6 +41,7 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
 import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
 
@@ -68,17 +70,22 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		Optional<ManifestRecorder> manifestRecorder,
 		Optional<ManifestRecorder> experimentalManifestRecorder,
 		FilePathPrefixerParams context
-	) throws AnchorIOException {
+	) throws FilePathPrefixerException {
 		
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( input, expIdentifier, context );
 		
 		FilePathDifferenceFromFolderPath fpd = new FilePathDifferenceFromFolderPath();
-		fpd.init(
-			this.filePathPrefixer.rootFolderPrefix(expIdentifier, context).getCombinedPrefix(),
-			fpp.getCombinedPrefix()
-		);
 		
+		try {
+			fpd.init(
+				this.filePathPrefixer.rootFolderPrefix(expIdentifier, context).getCombinedPrefix(),
+				fpp.getCombinedPrefix()
+			);
+		} catch (AnchorIOException e) {
+			throw new FilePathPrefixerException(e);
+		}
+			
 		experimentalManifestRecorder.ifPresent(
 			mr -> writeManifestExperimentFolder(mr, fpd.getRemainderCombined())
 		);
@@ -99,15 +106,19 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	}
 	
 	@Override
-	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
+	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws BindFailedException {
 
-		FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
-		
-		if (writeOperationRecorder!=null) {
-			writeOperationRecorder.init(prefix.getFolderPath());
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), lazyDirectoryFactory(), null );
-		} else {
-			return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), lazyDirectoryFactory(), null );
+		try {
+			FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
+			
+			if (writeOperationRecorder!=null) {
+				writeOperationRecorder.init(prefix.getFolderPath());
+				return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), lazyDirectoryFactory(), null );
+			} else {
+				return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), lazyDirectoryFactory(), null );
+			}
+		} catch (FilePathPrefixerException e) {
+			throw new BindFailedException(e);
 		}
 	}
 	

@@ -35,7 +35,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public abstract class FilterFileProvider extends FileProvider {
 
@@ -45,10 +45,9 @@ public abstract class FilterFileProvider extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params)
-			throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(params);
+		Collection<File> filesIn = fileProvider.create(params);
 		
 		List<File> filesOut = new ArrayList<>();
 		
@@ -62,7 +61,7 @@ public abstract class FilterFileProvider extends FileProvider {
 		return filesOut;
 	}
 	
-	protected abstract boolean isFileAccepted( File file, boolean debugMode ) throws AnchorIOException;
+	protected abstract boolean isFileAccepted( File file, boolean debugMode ) throws FileProviderException;
 	
 
 	public FileProvider getFileProvider() {

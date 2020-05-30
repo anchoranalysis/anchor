@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**
@@ -77,7 +77,7 @@ public class SpecificPathList extends FileProvider {
 	}
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
 		List<String> selectedPaths = selectListPaths(params.getInputContext());
 		
@@ -88,9 +88,9 @@ public class SpecificPathList extends FileProvider {
 			);
 			
 		} else if (fallback!=null) {
-			return fallback.matchingFiles(params);
+			return fallback.create(params);
 		} else {
-			throw new AnchorIOException("No input-paths are specified, nor a fallback");
+			throw new FileProviderException("No input-paths are specified, nor a fallback");
 		}
 	}
 	

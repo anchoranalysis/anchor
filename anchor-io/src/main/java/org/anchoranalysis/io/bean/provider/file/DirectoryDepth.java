@@ -34,7 +34,7 @@ import java.util.Collection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 /** Lists all directories to a certain depth */
 public class DirectoryDepth extends FileProviderWithDirectoryString {
@@ -45,13 +45,12 @@ public class DirectoryDepth extends FileProviderWithDirectoryString {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
-			throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) throws FileProviderException {
 		
 		String[] filesDir = directory.toFile().list();
 		
 		if (filesDir==null) {
-			throw new AnchorIOException(
+			throw new FileProviderException(
 				String.format("Path %s is not valid. Cannot enumerate directory.", directory)
 			);
 		}
@@ -62,7 +61,7 @@ public class DirectoryDepth extends FileProviderWithDirectoryString {
 			WalkToDepth walkTo = new WalkToDepth(exactDepth, prm);
 			return walkTo.findDirs( directory.toFile() );
 		} catch (IOException e) {
-			throw new AnchorIOException("A failure occurred searching for directories", e);
+			throw new FileProviderException(e);
 		}
 	}
 

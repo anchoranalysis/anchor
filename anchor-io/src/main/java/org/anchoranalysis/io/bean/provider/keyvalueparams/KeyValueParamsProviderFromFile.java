@@ -39,7 +39,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
@@ -52,7 +52,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 	@Override
 	public KeyValueParams create() throws CreateException {
 		try {
-			Collection<File> files = fileProvider.matchingFiles(
+			Collection<File> files = fileProvider.create(
 				new InputManagerParams(
 					new InputContextParams(),						
 					ProgressReporterNull.get(),
@@ -73,7 +73,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 				
 		} catch (IOException e) {
 			throw new CreateException(e);
-		} catch (AnchorIOException e) {
+		} catch (FileProviderException e) {
 			throw new CreateException("Cannot find files", e);
 		}
 	}

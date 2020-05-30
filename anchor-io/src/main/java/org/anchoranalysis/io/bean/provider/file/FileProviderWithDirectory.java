@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /*
@@ -46,7 +46,7 @@ public abstract class FileProviderWithDirectory extends FileProvider {
 	public abstract Path getDirectoryAsPath(InputContextParams inputContext);
 	
 	@Override
-	public final Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public final Collection<File> create(InputManagerParams params) throws FileProviderException {
 		return matchingFilesForDirectory(
 			getDirectoryAsPath(params.getInputContext()),
 			params
@@ -56,7 +56,7 @@ public abstract class FileProviderWithDirectory extends FileProvider {
 	public abstract Collection<File> matchingFilesForDirectory(
 		Path directory,
 		InputManagerParams params
-	) throws AnchorIOException;
+	) throws FileProviderException;
 		
 	/**
 	 * If path is absolute, it's returned as-is

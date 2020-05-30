@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -57,7 +57,7 @@ public class ExperimentExecutionArguments {
 	/**
 	 * A directory indicating where inputs can be located
 	 */
-	private Path outputDirectory;
+	private Optional<Path> outputDirectory = Optional.empty();
 	
 	
 	/**
@@ -102,7 +102,7 @@ public class ExperimentExecutionArguments {
 		return out;
 	}
 	
-	public FilePathPrefixerParams createParamsContext() throws AnchorIOException {
+	public FilePathPrefixerParams createParamsContext() throws FilePathPrefixerException {
 		return new FilePathPrefixerParams(
 			isDebugModeActivated(),
 			outputDirectory
@@ -149,19 +149,15 @@ public class ExperimentExecutionArguments {
 		return debugModeParams!=null;
 	}
 		
-	public Path getOutputDirectory() {
+	public Optional<Path> getOutputDirectory() {
 		return outputDirectory;
-	}
-	
-	public boolean hasOutputDirectory() {
-		return outputDirectory!=null;
 	}
 	
 	public boolean hasInputFilterExtensions() {
 		return inputFilterExtensions!=null;
 	}
 
-	public void setOutputDirectory(Path outputDirectory) {
+	public void setOutputDirectory(Optional<Path> outputDirectory) {
 		this.outputDirectory = outputDirectory;
 	}
 

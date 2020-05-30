@@ -110,11 +110,7 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequen
 				() -> iterableGenerator.getGenerator(),
 				String.valueOf(index)
 			);
-		} catch (InitException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (SequenceTypeException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (SetOperationFailedException e) {
+		} catch (InitException | SequenceTypeException | SetOperationFailedException e) {
 			throw new OutputWriteFailedException(e);
 		}
 	}

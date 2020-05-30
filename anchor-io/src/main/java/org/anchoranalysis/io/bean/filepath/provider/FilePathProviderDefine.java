@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class FilePathProviderDefine extends FilePathProvider {
@@ -51,14 +51,14 @@ public class FilePathProviderDefine extends FilePathProvider {
 		
 		Collection<File> files;
 		try {
-			files = fileProvider.matchingFiles(
+			files = fileProvider.create(
 				new InputManagerParams(
 					new InputContextParams(),						
 					ProgressReporterNull.get(),
 					getLogger()
 				)
 			);
-		} catch (AnchorIOException e) {
+		} catch (FileProviderException e) {
 			throw new CreateException("Cannot find files", e);
 		}
 		
