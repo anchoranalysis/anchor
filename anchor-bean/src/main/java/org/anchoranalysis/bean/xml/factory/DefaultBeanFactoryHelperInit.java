@@ -115,8 +115,13 @@ class DefaultBeanFactoryHelperInit {
 			for (Map.Entry<String, Object> e : nestedBeans.entrySet()) {
 	            String propName = e.getKey();
 	            Class<?> defaultClass = getDefaultClass(bean, propName);
-	            initProperty(bean, propName, BeanHelper.createBean(
-	                (BeanDeclaration) e.getValue(), defaultClass, parameter));
+	            
+	            if (e.getValue() instanceof BeanDeclaration) {
+	            	initProperty(bean, propName, BeanHelper.createBean(
+	    	                (BeanDeclaration) e.getValue(), defaultClass, parameter));	
+	            } else {
+	            	// TODO what kind of error should be thrown here if there's a non-bean parameter?
+	            }
 	        }
 		}
 	}

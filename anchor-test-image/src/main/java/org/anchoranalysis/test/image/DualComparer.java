@@ -34,6 +34,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.w3c.dom.Document;
@@ -100,7 +101,7 @@ public class DualComparer {
 	 * @return TRUE if the csv-files are identical, FALSE otherwise
 	 * @throws IOException if something goes wrong with csv I/O
 	 */
-	public boolean compareTwoCsvFiles( String path, String regExSeperator, boolean firstLineHeaders, boolean rejectZeroRows, PrintStream messageStream ) throws IOException {
+	public boolean compareTwoCsvFiles( String path, String regExSeperator, boolean firstLineHeaders, boolean rejectZeroRows, PrintStream messageStream ) throws CSVReaderException {
 		return compareTwoCsvFiles(path, regExSeperator, firstLineHeaders, 0, false, rejectZeroRows, messageStream );
 	}
 	
@@ -128,7 +129,7 @@ public class DualComparer {
 		boolean sortLines,
 		boolean rejectZeroRows,
 		PrintStream messageStream
-	) throws IOException {
+	) throws CSVReaderException {
 		
 		Path csvPath1 = loaderImg1.getTestLoader().resolveTestPath(path);
 		Path csvPath2 = loaderImg2.getTestLoader().resolveTestPath(path);

@@ -224,7 +224,7 @@ class AppendHelper {
 				outPath.doOperation()
 			);
 		} catch (Exception e) {
-			throw new OperationFailedException("An error occured reading objects", e);
+			throw new OperationFailedException("An error occured appending to the multi-input", e);
 		}
 	}
 		

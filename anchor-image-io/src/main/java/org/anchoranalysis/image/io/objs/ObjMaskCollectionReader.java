@@ -68,10 +68,14 @@ public class ObjMaskCollectionReader {
 	 * @throws DeserializationFailedException 
 	 */
 	public static ObjMaskCollection createFromPath( Path path ) throws DeserializationFailedException {
-
+		
 		// 1. First check if has a file extension HDF5
 		if (hasHdf5Extension(path)) {
-			return hdf5.deserialize(path);
+			if (path.toFile().exists()) {
+				return hdf5.deserialize(path);
+			} else {
+				throw new DeserializationFailedException("File not found at " + path);
+			}
 		}
 		
 		// 2. Suffix a .h5 and see if the file exists
@@ -81,7 +85,11 @@ public class ObjMaskCollectionReader {
 		}
 		
 		// 3. Treat as a folder of TIFFs
-		return tiffCorrectMissing.deserialize(path);
+		if (path.toFile().exists()) {
+			return tiffCorrectMissing.deserialize(path);
+		} else {
+			throw new DeserializationFailedException("Directory of object TIFFs not found at " + path);
+		}
 	}
 	
 	public static Operation<ObjMaskCollection,OperationFailedException> createFromPathCached( Operation<Path,OperationFailedException> path ) {

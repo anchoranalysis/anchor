@@ -89,10 +89,14 @@ public class CSVReader {
 		}
 
 		@Override
-		public void close() throws IOException {
-			if (fileReader!=null) {
-				fileReader.close();
-				fileReader = null;
+		public void close() throws CSVReaderException {
+			try {
+				if (fileReader!=null) {
+					fileReader.close();
+					fileReader = null;
+				}
+			} catch (IOException e) {
+				throw new CSVReaderException(e);
 			}
 			
 		}
@@ -117,25 +121,35 @@ public class CSVReader {
 	 * @return the opened-file (that must eventually be closed)
 	 * @throws IOException
 	 */
-	public OpenedCSVFile read( Path filePath ) throws IOException {
-		fileReader = new FileReader(filePath.toFile());
+	public OpenedCSVFile read( Path filePath ) throws CSVReaderException {
 		
-		this.bufferedReader = new BufferedReader( fileReader );
-
-		OpenedCSVFile fileOut = new OpenedCSVFile();
-		
-		if (firstLineHeaders) {
-			String line = bufferedReader.readLine();
-			
-			if (line==null) {
-				throw new IOException("No header line found");
-			}
-			
-			headers = line.split(regExSeperator);
-			fileOut.setNumCols( headers.length );
+		if (!filePath.toFile().exists() ) {
+			throw new CSVReaderException("Failed to read CSV file as no file exists at " + filePath);
 		}
 		
-		return fileOut;
+		try {
+			fileReader = new FileReader(filePath.toFile());
+			
+			this.bufferedReader = new BufferedReader( fileReader );
+	
+			OpenedCSVFile fileOut = new OpenedCSVFile();
+			
+			if (firstLineHeaders) {
+				String line = bufferedReader.readLine();
+				
+				if (line==null) {
+					throw new CSVReaderException("No header line found");
+				}
+				
+				headers = line.split(regExSeperator);
+				fileOut.setNumCols( headers.length );
+			}
+			
+			return fileOut;
+			
+		} catch (IOException e) {
+			throw new CSVReaderException(e);
+		}
 	}
 	
 	private void maybeRemoveQuotes( String[] arr ) {
