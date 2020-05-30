@@ -28,7 +28,6 @@ package org.anchoranalysis.bean.define.adder;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
@@ -59,5 +58,4 @@ public class Concatenate extends DefineAdderBean {
 	public void setList(List<DefineAdderBean> list) {
 		this.list = list;
 	}
-
 }

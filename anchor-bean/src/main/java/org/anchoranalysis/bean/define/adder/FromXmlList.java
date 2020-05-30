@@ -28,12 +28,12 @@ package org.anchoranalysis.bean.define.adder;
 
 import java.nio.file.Path;
 import java.util.List;
-
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.error.LocalisedBeanException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 
 /**
@@ -57,20 +57,29 @@ public class FromXmlList extends DefineAdderBean {
 	@BeanField
 	private boolean prefix = false;
 	// END BEAN PROPERTIES
-
+	
 	@Override
 	public void addTo(Define define) throws BeanXmlException {
-		
-		List<NamedBean<?>> beans = loadList();
-		
-		if (prefix) {
-			addPrefix( beans, name + "." );
-		}
-		
-		DefineAdderUtilities.addBeansFromList(
-			define,
-			beans
-		);
+		try {
+			List<NamedBean<?>> beans = loadList();
+			
+			if (prefix) {
+				addPrefix( beans, name + "." );
+			}
+			
+			DefineAdderUtilities.addBeansFromList(
+				define,
+				beans
+			);
+		} catch (BeanXmlException e) {
+			// We embed any XML exception in the file-name from where it originated
+			throw new BeanXmlException(
+				new LocalisedBeanException(
+					resolvedPath().toString(),
+					e
+				)
+			);
+		}			
 	}
 	
 	private static void addPrefix( List<NamedBean<?>> beans, String prefix  ) {
@@ -78,10 +87,16 @@ public class FromXmlList extends DefineAdderBean {
 			nb.setName( prefix + nb.getName() );
 		}
 	}
+	
+	private Path resolvedPath() {
+		return BeanPathUtilities.pathRelativeToBean(
+			this,
+			nameWithExtension()
+		);
+	}
 		
 	private List<NamedBean<?>> loadList() throws BeanXmlException {
-		Path resolvedPath = BeanPathUtilities.pathRelativeToBean(this, name + ".xml");
-		return BeanXmlLoader.loadBean(resolvedPath);
+		return BeanXmlLoader.loadBean(resolvedPath());
 	}
 	
 	public String getName() {
@@ -99,5 +114,8 @@ public class FromXmlList extends DefineAdderBean {
 	public void setPrefix(boolean prefix) {
 		this.prefix = prefix;
 	}
-
+	
+	private String nameWithExtension() {
+		return name + ".xml";
+	}
 }

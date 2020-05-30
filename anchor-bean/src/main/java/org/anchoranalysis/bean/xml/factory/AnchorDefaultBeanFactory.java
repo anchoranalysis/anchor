@@ -63,9 +63,7 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
 	}
 
 	@Override
-    public Object createBean(Class<?> beanClass, BeanDeclaration data,
-            Object parameter) throws Exception
-    {
+    public Object createBean(Class<?> beanClass, BeanDeclaration data, Object parameter) throws Exception {
     	try {
 	        Object result = createBeanInstance(beanClass, data);
 	        initBeanInstance(result, data, parameter);
@@ -84,24 +82,10 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
     		// We suppress these exceptions as they are ugly to read, and instead
     		//   focus on where in the XML file the error is occurring
     		if (data instanceof XMLBeanDeclaration) {
-    			XMLBeanDeclaration dataCast = (XMLBeanDeclaration) data;
-    			
-    			String description = HelperDescribeXmlNode.describeXMLNode(dataCast.getNode());
-    			
-    			// We can read the ClassType from beanClass.getName() but we don't report this to
-    			//  the user, as we assume it is presented later as part of the trace of the XML
-    			//  element by DescribeXMLNodeUtilities.describeXMLNode
-    			
-    			String msg = String.format(
-    				"A misconfigured bean exists%n%s",
-    				description
+    			throw createMisconfiguredBeanException(
+    				e,
+    				(XMLBeanDeclaration) data
     			);
-    			
-    			throw new BeanMisconfiguredXmlException(
-    				msg,
-    				HelperFriendlyExceptions.maybeCreateUserFriendlyException( e ) 
-    			);
-    				
     		}
     		
     		String msg = String.format("A misconfigured bean (%s) exists at unknown location", beanClass.getName() );
@@ -109,10 +93,43 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
     	}
     }
 	
-
+	private static BeanMisconfiguredXmlException createMisconfiguredBeanException(ConfigurationRuntimeException exc, XMLBeanDeclaration dataCast) {
+		
+		// We can read the ClassType from beanClass.getName() but we don't report this to
+		//  the user, as we assume it is presented later as part of the trace of the XML
+		//  element by DescribeXMLNodeUtilities.describeXMLNode
+		
+		String msg = String.format(
+			"A misconfigured bean exists%n%s",
+			HelperDescribeXmlNode.describeXMLNode(dataCast.getNode())
+		);
+		return new BeanMisconfiguredXmlException(
+			msg,
+			maybeRepaceException( exc )
+		);
+	}
+	
+	/** 
+	 * In certain cases we display a more simplified or alternative exception as the cause
+	 * 
+	 * @param exc exception to consider replacing
+	 * @return either the same exception passed in or a meaingful replacement
+	 */
+	private static Throwable maybeRepaceException(ConfigurationRuntimeException exc) {
+		
+		if (isListMissingFactory(exc.getCause())) {
+			return new BeanXmlException("A list declaration in BeanXML is missing its factory. Please add config-factory=\"list\"");
+		}
+		
+		return HelperFriendlyExceptions.maybeCreateUserFriendlyException( exc ); 
+	}
+	
+	private static boolean isListMissingFactory(Throwable exc) {
+		return (exc instanceof NoSuchMethodException && exc.getMessage().equals("java.util.List.<init>()"));
+	}
+	
 	@Override
-    public Class<?> getDefaultBeanClass()
-    {
+    public Class<?> getDefaultBeanClass() {
         return null;
     }
 
