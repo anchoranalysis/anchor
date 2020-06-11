@@ -51,11 +51,11 @@ public abstract class NullParamsBean<BeanType> extends InitializableBeanSimple<B
 	 * 
 	 */
 	public void onInit() throws InitException {
-		
+		// NOTHING TO DO. This method exists so it can be overrided as needed in sub-classes.
 	}
 
 	public void initRecursive(LogErrorReporter logger)
 			throws InitException {
-		super.initRecursive(null, logger);
+		super.initRecursive(NullInitParams.instance(), logger);
 	}
 }

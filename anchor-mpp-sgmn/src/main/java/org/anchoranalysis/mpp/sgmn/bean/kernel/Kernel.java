@@ -73,7 +73,7 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Serializab
 	 * @throws KernelCalcNRGException
 	 */
 	public abstract Optional<T> makeProposal(
-		T exst,
+		Optional<T> exst,
 		KernelCalcContext context
 	) throws KernelCalcNRGException;
 	

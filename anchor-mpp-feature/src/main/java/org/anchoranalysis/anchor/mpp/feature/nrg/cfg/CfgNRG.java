@@ -57,11 +57,11 @@ public class CfgNRG implements Serializable {
     private NRGSavedInd calcMarkInd;
     
     // We store every combination of interactions between marks
-    private NRGSavedPairs calcMarkPair;
+    private transient NRGSavedPairs calcMarkPair;
     
     // Certain features are stored for every object, so that we can reference
     //  them in our calculations for the 'all' component
-    private NRGSavedAll calcMarkAll;
+    private transient NRGSavedAll calcMarkAll;
     
 	
 	public CfgNRG( CfgWithNrgTotal delegate ) {

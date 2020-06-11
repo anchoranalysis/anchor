@@ -35,6 +35,13 @@ public class DualStack {
 	private NRGStackWithParams nrgStack;
 	private DisplayStack bgStack;
 	
+	public DualStack(NRGStackWithParams stackBoth) throws CreateException {
+		this(
+			stackBoth,
+			DisplayStack.create(stackBoth.getNrgStack().asStack())
+		);
+	}
+	
 	public DualStack(NRGStackWithParams nrgStack, DisplayStack bgStack) throws CreateException {
 		super();
 		this.nrgStack = nrgStack;

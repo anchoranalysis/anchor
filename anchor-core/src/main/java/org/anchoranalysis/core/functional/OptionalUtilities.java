@@ -130,7 +130,7 @@ public class OptionalUtilities {
 			return Optional.empty();
 		}
 	}
-	
+
 	/**
 	 * The first optional if it's present, or the second, or the third etc. using an array
 	 * 
