@@ -62,8 +62,8 @@ public class Stack implements Iterable<Chnl> {
 		super();
 		delegate = new StackNotUniformSized();
 		addChnl(chnl0);
-		addChnl( chnl1 );
-		addChnl( chnl2 );
+		addChnl(chnl1);
+		addChnl(chnl2);
 	}
 	
 	public Stack( StackNotUniformSized stack ) throws IncorrectImageSizeException, CreateException {
@@ -121,7 +121,7 @@ public class Stack implements Iterable<Chnl> {
 		out.delegate = delegate.maxIntensityProj();
 		return out;
 	}
-
+	
 	public void addBlankChnl()
 			throws OperationFailedException {
 			

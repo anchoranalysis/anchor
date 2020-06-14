@@ -36,14 +36,15 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public class FeatureInputStack extends FeatureInputNRGStack {
 	
-	private Optional<ImageInitParams> so;
+	private final Optional<ImageInitParams> so;
 
 	
 	/**
 	 * Should only be used if it's guaranteed the NRG stack will be added later, as this this required.
 	 */
 	public FeatureInputStack() {
-		this(null);
+		this.so = Optional.empty();
+		this.setNrgStack( Optional.empty() );
 	}
 	
 	/**
@@ -63,7 +64,6 @@ public class FeatureInputStack extends FeatureInputNRGStack {
 	 * @param so
 	 */
 	public FeatureInputStack(NRGStack nrgStack, ImageInitParams so) {
-		super();
 		this.so = Optional.of(so);
 		this.setNrgStack( new NRGStackWithParams(nrgStack) );
 	}
