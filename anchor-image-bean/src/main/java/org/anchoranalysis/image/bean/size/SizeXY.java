@@ -2,6 +2,7 @@ package org.anchoranalysis.image.bean.size;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.extent.Extent;
 
 public class SizeXY extends AnchorBean<SizeXY>{
 
@@ -16,12 +17,26 @@ public class SizeXY extends AnchorBean<SizeXY>{
 	public SizeXY() {
 		// STANDARD BEAN CONSTRUCTOR
 	}
+
+	/**
+	 * Constructor
+	 * 
+	 * <p>Note the z-dimension in extent is ignored.</p>
+	 * 
+	 * @param extent extent
+	 */
+	public SizeXY(Extent extent) {
+		this( extent.getX(), extent.getY() );
+	}
 	
 	public SizeXY(int width, int height) {
-		super();
 		this.width = width;
 		this.height = height;
-	}	
+	}
+	
+	public Extent asExtent() {
+		return new Extent(width,height,1);
+	}
 	
 	public int getWidth() {
 		return width;
