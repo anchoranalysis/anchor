@@ -51,8 +51,6 @@ public class OptimizationStep<S,T> {
 	// The important state needed for the current algorithm step
 	private DualState<T> state;
 	
-	// Everything else is additional historical information we use for
-	
 	private boolean accptd;
 	private boolean best;
 	
@@ -71,7 +69,6 @@ public class OptimizationStep<S,T> {
 	}
 	
 	public void assignProposal(Optional<T> proposalNew, KernelWithID<S> kid) {
-		assert(proposalNew!=null);
 		
 		dscrData.setKernel(kid);
 		
@@ -116,10 +113,11 @@ public class OptimizationStep<S,T> {
 	}
 
 	private void releaseProposal() {
-		proposal = null;
+		proposal = Optional.empty();
 	}
 
 	private void assgnCrntFromProposal( Function<T,Double> funcScore ) {
+		// We can rely that a proposal exists, as it has been accepted
 		state.assignCrnt( proposal.get() );
 		maybeAssignAsBest( funcScore );
 	}
@@ -205,6 +203,4 @@ public class OptimizationStep<S,T> {
 			best
 		);
 	}
-
-
 }
