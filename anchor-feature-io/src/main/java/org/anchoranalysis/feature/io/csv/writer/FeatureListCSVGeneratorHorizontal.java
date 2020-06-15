@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.writer;
 
 /*
  * #%L
@@ -45,9 +45,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public class FeatureListCSVGeneratorHorizontal extends TableCSVGenerator<ResultsVectorCollection> {
 
-	public FeatureListCSVGeneratorHorizontal(String manifestFunction,
-			FeatureNameList featureNames) {
+	public FeatureListCSVGeneratorHorizontal(String manifestFunction, FeatureNameList featureNames) {
 		super(manifestFunction, featureNames.asList());
+	}
+	
+	public FeatureListCSVGeneratorHorizontal(String manifestFunction, FeatureNameList featureNames, ResultsVectorCollection results) {
+		this(manifestFunction, featureNames);
+		setIterableElement(results);
 	}
 
 	@Override

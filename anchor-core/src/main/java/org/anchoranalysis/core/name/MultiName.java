@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-core
@@ -38,7 +40,11 @@ public interface MultiName extends Comparable<MultiName> {
 	
 	String getPart( int index );
 	
-	String getAggregateKeyName();
+	/** If higher-level is desired, then a key is returned for grouping on this aggregate level */
+	Optional<String> deriveAggregationKey();
+	
+	/** A name that excludes the aggregation-key (if it exists) and is otherwise unique */
+	String nameWithoutAggregationKey();
 
 	String toString();
 	

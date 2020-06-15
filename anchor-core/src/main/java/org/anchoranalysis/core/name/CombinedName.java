@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-core
@@ -98,9 +100,14 @@ public class CombinedName implements MultiName {
 	}
 
 	@Override
-	public String getAggregateKeyName() {
-		// There is no higher level of aggregation
-		return together;
+	public Optional<String> deriveAggregationKey() {
+		// The primary name is used for aggregation
+		return Optional.of(primaryName);
+	}
+	
+	@Override
+	public String nameWithoutAggregationKey() {
+		return secondaryName;
 	}
 	
 	@Override
@@ -122,4 +129,6 @@ public class CombinedName implements MultiName {
 		
 		return 0;
 	}
+
+
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /**
@@ -31,14 +33,31 @@ public class SimpleName implements MultiName {
 	}
 
 	@Override
-	public String getAggregateKeyName() {
-		// There is no higher level of aggregation
+	public Optional<String> deriveAggregationKey() {
+		return Optional.empty();
+	}
+	
+	@Override
+	public String nameWithoutAggregationKey() {
 		return name;
 	}
 	
 	@Override
 	public int compareTo(MultiName other) {
 		return name.compareTo(other.getPart(0));
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
 	@Override
@@ -56,10 +75,5 @@ public class SimpleName implements MultiName {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return name;
 	}
 }

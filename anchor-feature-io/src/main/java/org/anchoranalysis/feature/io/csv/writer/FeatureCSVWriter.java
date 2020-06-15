@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.writer;
 
 /*
  * #%L
@@ -67,7 +67,7 @@ public class FeatureCSVWriter {
 		});
 	}
 	
-	public void addResultsVector( MultiName name, ResultsVector resultsFromFeatures, boolean includeID ) {
+	public void addResultsVector( Optional<MultiName> name, ResultsVector resultsFromFeatures, boolean includeID ) {
 
 		
 		assert(resultsFromFeatures!=null);
@@ -91,7 +91,7 @@ public class FeatureCSVWriter {
 		writer.writeRow(values);
 	}
 	
-	public void addResultsVector( MultiName name, ResultsVectorCollection resultsCollectionFromFeatures, boolean includeID ) {
+	public void addResultsVector( Optional<MultiName> name, ResultsVectorCollection resultsCollectionFromFeatures, boolean includeID ) {
 		
 		if (writer==null) {
 			return;
@@ -117,23 +117,26 @@ public class FeatureCSVWriter {
 		writer.close();
 	}
 	
+	private static void addName( MultiName name, List<TypedValue> csvRow ) {
+		for( int i=0; i<name.numParts(); i++ ) {
+			csvRow.add( new TypedValue(name.getPart(i)) );
+		}
+	}
+	
 	// group is ignored if null
-	private static List<TypedValue> buildCsvRow( MultiName name, ResultsVector resultsFromFeatures, boolean includeID ) {
-		
-		assert( resultsFromFeatures!=null );
+	private static List<TypedValue> buildCsvRow( Optional<MultiName> name, ResultsVector resultsFromFeatures, boolean includeID ) {
 		
 		List<TypedValue> csvRow = new ArrayList<>();
 		
 		if (includeID) {
-			assert(resultsFromFeatures.getIdentifier()!=null);
 			csvRow.add(
 				new TypedValue(resultsFromFeatures.getIdentifier(), false)
 			);
 		}
 		
-		for( int i=0; i<name.numParts(); i++ ) {
-			csvRow.add( new TypedValue(name.getPart(i)) );
-		}
+		name.ifPresent( n->
+			addName(n, csvRow)
+		);
 		
 		resultsFromFeatures.addToTypeValueCollection(csvRow, 10);
 		return csvRow;

@@ -1,4 +1,4 @@
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.writer;
 
 /*
  * #%L

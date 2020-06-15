@@ -2,6 +2,8 @@ package org.anchoranalysis.core.collection;
 
 
 
+import java.util.Comparator;
+
 /*
  * #%L
  * anchor-core
@@ -34,6 +36,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.functional.Operation;
 
 /**
@@ -43,20 +46,25 @@ import org.anchoranalysis.core.functional.Operation;
  *
  * @param <K> key-type
  * @param <V> value-type
- * @param <E> exception thrown when creating a new item in the map
  */
-public class TreeMapCreate<K,V,E extends Throwable> {
+public class MapCreate<K,V> {
 	
-	// We use a tree-map to retain a deterministic order in the keys
-	private Map<K,V> map = new TreeMap<>();
-	private Operation<V,E> opCreateNew;
+	// We use a tree-map to retain a deterministic order in the keys, as outputting in alphabetic order is nice
+	private Map<K,V> map;
+	private Operation<V,AnchorNeverOccursException> opCreateNew;
 	
-	public TreeMapCreate(Operation<V,E> opCreateNew) {
-		super();
+	public MapCreate(Operation<V,AnchorNeverOccursException> opCreateNew) {
+		this.map = new TreeMap<>();
 		this.opCreateNew = opCreateNew;
 	}
 	
-	public synchronized V getOrCreateNew( K key ) throws E {
+	public MapCreate(Operation<V,AnchorNeverOccursException> opCreateNew, Comparator<K> comparator ) {
+		super();
+		this.map = new TreeMap<>(comparator);
+		this.opCreateNew = opCreateNew;
+	}
+	
+	public synchronized V getOrCreateNew( K key ) {
 		
 		V val = map.get(key);
 		if (val==null) {
