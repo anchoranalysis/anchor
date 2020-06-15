@@ -98,13 +98,14 @@ public class CombinedName implements MultiName {
 	}
 
 	@Override
-	public String getUniqueName() {
+	public String getAggregateKeyName() {
+		// There is no higher level of aggregation
 		return together;
 	}
 	
 	@Override
 	public String toString() {
-		return getUniqueName();
+		return together;
 	}
 
 	@Override

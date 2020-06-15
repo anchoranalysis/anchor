@@ -38,7 +38,7 @@ public interface MultiName extends Comparable<MultiName> {
 	
 	String getPart( int index );
 	
-	String getUniqueName();
+	String getAggregateKeyName();
 
 	String toString();
 	

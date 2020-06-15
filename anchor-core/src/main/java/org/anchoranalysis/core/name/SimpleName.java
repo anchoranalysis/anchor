@@ -31,7 +31,8 @@ public class SimpleName implements MultiName {
 	}
 
 	@Override
-	public String getUniqueName() {
+	public String getAggregateKeyName() {
+		// There is no higher level of aggregation
 		return name;
 	}
 	

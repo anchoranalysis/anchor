@@ -36,9 +36,9 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.collection.TreeMapCreate;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
+import org.anchoranalysis.core.name.SimpleName;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -74,11 +74,20 @@ public class GroupedResultsVectorCollection {
 	private String idName;
 	
 	/**
-	 * A map between the name of groups, to a collection of results for each-group
+	 * A map which stores all entries and a corresponding results-vector collection
 	 */
-	private TreeMapCreate<MultiName,ResultsVectorCollection,AnchorNeverOccursException> groupMap = new TreeMapCreate<>(
+	private TreeMapCreate<MultiName,ResultsVectorCollection,AnchorNeverOccursException> allMap = new TreeMapCreate<>(
 		() -> new ResultsVectorCollection()
 	);
+	
+	/**
+	 * A map which stores a higher-level of grouping aggregation corresponding results-vector collection
+	 */
+	private TreeMapCreate<String,ResultsVectorCollection,AnchorNeverOccursException> aggregationMap = new TreeMapCreate<>(
+		() -> new ResultsVectorCollection()
+	);
+
+	
 	
 	/**
 	 * This constructor will include two group names in the outputting CSV file, but NO id column
@@ -109,11 +118,11 @@ public class GroupedResultsVectorCollection {
 		includeID = true;
 	}
 	
-	public ResultsVectorCollection getOrCreateNew(MultiName groupID)
-			throws GetOperationFailedException {
-		return groupMap.getOrCreateNew(groupID);
-	}
 	
+	public void addResultsFor(MultiName identifier, ResultsVector rv) {
+		allMap.getOrCreateNew(identifier).add(rv);
+		aggregationMap.getOrCreateNew( identifier.getAggregateKeyName() ).add(rv);
+	}
 	
 	/**
 	 * Writes the stored-results to CSV files.
@@ -147,18 +156,39 @@ public class GroupedResultsVectorCollection {
 			featureNamesNonAggregate
 		);
 		
+		
+		try {
+			for( Entry<MultiName,ResultsVectorCollection> entry : allMap.entrySet() ) {
+				
+				ResultsVectorCollection resultsVectorCollection = entry.getValue();
+				
+				if( resultsVectorCollection.size()==0) {
+					continue;
+				}
+				
+				writeResultsForSingleItem(
+					entry.getKey(),
+					resultsVectorCollection,
+					csvWriterAll
+				);
+			}
+		} finally {
+			csvWriterAll.ifPresent( FeatureCSVWriter::close );
+		}
+		
+		
 		Optional<FeatureCSVWriter> csvWriterAggregate = OptionalUtilities.flatMap(
 			featuresAggregate,
 			fa -> FeatureCSVWriter.create(
 				"csvAgg",
 				context.getOutputManager(),
-				headerNames(false, includeGroups),
+				new String[]{"groupAggregation"},	// TODO replace with more reliable group identifier
 				fa.createFeatureNames()
 			)
 		);
 		
 		try {
-			for( Entry<MultiName,ResultsVectorCollection> entry : groupMap.entrySet() ) {
+			for( Entry<String,ResultsVectorCollection> entry : aggregationMap.entrySet() ) {
 				
 				ResultsVectorCollection resultsVectorCollection = entry.getValue();
 				
@@ -171,55 +201,51 @@ public class GroupedResultsVectorCollection {
 					resultsVectorCollection,
 					featureNamesNonAggregate,
 					featuresAggregate,
-					csvWriterAll,
 					csvWriterAggregate,
 					context
 				);
 			}
 		} finally {
 			csvWriterAggregate.ifPresent( FeatureCSVWriter::close );
-			csvWriterAll.ifPresent( FeatureCSVWriter::close );
 		}			
 	}
 	
-	
+	private <T extends FeatureInput> void writeResultsForSingleItem(
+		MultiName name,
+		ResultsVectorCollection resultsVectorCollection,
+		Optional<FeatureCSVWriter> csvWriterAll
+	) {
+		// If we write ALL single-feature-results to a single CSV file
+		if (csvWriterAll.isPresent()) {
+			csvWriterAll.get().addResultsVector(name, resultsVectorCollection, includeID);
+		}
+	}
+		
 	private <T extends FeatureInput> void writeResultsForSingleGroup(
-		MultiName group,
+		String groupName,
 		ResultsVectorCollection resultsVectorCollection,
 		FeatureNameList featureNames,
 		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
-		Optional<FeatureCSVWriter> csvWriterAll,
 		Optional<FeatureCSVWriter> csvWriterAggregate,
 		BoundIOContext context
 	) throws AnchorIOException {
 		
-		assert(group!=null);
-		
-		BoundOutputManagerRouteErrors outputManagerGroup = context.getOutputManager().resolveFolder(
-			group.getUniqueName()
-		);
-		assert(resultsVectorCollection!=null);
-				
-		outputManagerGroup.getWriterCheckIfAllowed().write(
-			"csvGroup",
-			() -> {
-				FeatureListCSVGeneratorHorizontal generator = new FeatureListCSVGeneratorHorizontal( "groupedFeatureResults", featureNames );
-				generator.setIterableElement(resultsVectorCollection);
-				return generator;
-			}
-		);
-		
-		// If we write single-feature-results to a CSV file in each group
-		//writeCSVResultsVector( featureNames, resultsVectorCollection, outputManagerGroup);
-		
-		// If we write ALL single-feature-results to a single CSV file
-		if (csvWriterAll.isPresent()) {
-			csvWriterAll.get().addResultsVectorWithGroup(group, resultsVectorCollection, includeID);
-		}
-
 		if (featuresAggregate.isPresent()) {
+			
+			BoundOutputManagerRouteErrors outputManagerGroup = context.getOutputManager().resolveFolder(groupName);
+			assert(resultsVectorCollection!=null);
+					
+			outputManagerGroup.getWriterCheckIfAllowed().write(
+				"csvGroup",
+				() -> {
+					FeatureListCSVGeneratorHorizontal generator = new FeatureListCSVGeneratorHorizontal( "groupedFeatureResults", featureNames );
+					generator.setIterableElement(resultsVectorCollection);
+					return generator;
+				}
+			);
+
 			writeAggregateResultsForSingleGroup(
-				group,
+				groupName,
 				resultsVectorCollection,
 				featureNames,
 				featuresAggregate.get(),
@@ -231,7 +257,7 @@ public class GroupedResultsVectorCollection {
 	}
 	
 	private void writeAggregateResultsForSingleGroup(
-		MultiName group,
+		String groupName,
 		ResultsVectorCollection resultsVectorCollection,			
 		FeatureNameList featureNames,
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
@@ -253,7 +279,11 @@ public class GroupedResultsVectorCollection {
 			assert(rv!=null);
 			
 			// If we write aggregate-feature-results to a single CSV file
-			csvWriterAggregate.get().addResultsVectorWithGroup(group, rv, false);
+			csvWriterAggregate.get().addResultsVector(
+				new SimpleName(groupName),
+				rv,
+				false
+			);
 		}
 	}
 	
