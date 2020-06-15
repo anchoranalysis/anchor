@@ -68,7 +68,7 @@ public class StackNotUniformSized implements Iterable<Chnl> {
 		StackNotUniformSized stackOut = new StackNotUniformSized();
 		for( int c=0; c<chnls.size(); c++) {
 			// TODO make more efficient than duplicateByte()
-			stackOut.addChnl( chnls.get(c).duplicate().maxIntensityProj() );
+			stackOut.addChnl( chnls.get(c).duplicate().maxIntensityProjection() );
 		}
 		return stackOut;
 	}

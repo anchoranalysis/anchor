@@ -136,7 +136,7 @@ public class BinaryChnl {
 	}
 
 	public BinaryChnl maxIntensityProj() {
-		return new BinaryChnl( chnl.maxIntensityProj(), binaryValues.duplicate() );
+		return new BinaryChnl( chnl.maxIntensityProjection(), binaryValues.duplicate() );
 	}
 	
 	public boolean hasHighValues() {

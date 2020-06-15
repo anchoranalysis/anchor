@@ -28,6 +28,8 @@ package org.anchoranalysis.image.chnl;
 
 
 import java.nio.Buffer;
+import java.util.function.Function;
+
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -36,24 +38,50 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-
+/**
+ * A channel from an image
+ * 
+ * <p>This is one of the key image-processing classes in Anchor. An image may have one channel (grayscale) or several.
+ * Channels of identical size can be bundled together to form a {@link Stack}</p>
+ * 
+ * <p>The channel has an underlying 
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class Chnl {
 
+	private static final Interpolator DEFAULT_INTERPOLATOR = new InterpolatorImgLib2Lanczos();
+	
 	private ImageDim dim;
 	private BoundedVoxelBox<? extends Buffer> delegate;
 	
 	private static ChnlFactory factory = ChnlFactory.instance();
 	
-	// Constructor
-	public Chnl( VoxelBox<? extends Buffer> bufferAccess, ImageRes res ) {
-		this.dim = new ImageDim(bufferAccess.extent(), res);
-		delegate = new BoundedVoxelBox<>( new BoundingBox(bufferAccess.extent()), bufferAccess);
+	/**
+	 * Constructor
+	 * 
+	 * @param voxelBox
+	 * @param res
+	 */
+	public Chnl( VoxelBox<? extends Buffer> voxelBox, ImageRes res ) {
+		this.dim = new ImageDim(
+			voxelBox.extent(),
+			res
+		);
+		delegate = new BoundedVoxelBox<>(
+			new BoundingBox(
+				voxelBox.extent()
+			),
+			voxelBox
+		);
 	}
 	
 	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
@@ -73,11 +101,19 @@ public class Chnl {
 		return ChnlFactory.instance().create( delegate.getVoxelBox().extractSlice(z), getDimensions().getRes() );
 	}
 	
+	public Chnl scaleXY( double ratioX, double ratioY) {
+		return scaleXY(ratioX, ratioY, DEFAULT_INTERPOLATOR);
+	}
+	
 	public Chnl scaleXY( double ratioX, double ratioY, Interpolator interpolator ) {
 		// We round as sometimes we get values which, for example, are 7.999999, intended to be 8, due to how we use our ScaleFactors
 		int newSizeX = (int) Math.round(ratioX * getDimensions().getX());
 		int newSizeY = (int) Math.round(ratioY * getDimensions().getY());
 		return resizeXY( newSizeX, newSizeY, interpolator ); 
+	}
+	
+	public Chnl resizeXY( int x, int y) {
+		return resizeXY(x, y, DEFAULT_INTERPOLATOR);
 	}
 	
 	public Chnl resizeXY( int x, int y, Interpolator interpolator ) {
@@ -93,17 +129,19 @@ public class Chnl {
 		return factory.create( ba, sdNew.getRes() );
 	}
 	
-	public Chnl maxIntensityProj() {
-		assert( factory!=null );
-		int prevZSize = delegate.getVoxelBox().extent().getZ();
-		return factory.create( delegate.getVoxelBox().maxIntensityProj(), getDimensions().getRes().duplicateFlattenZ(prevZSize) );
+	public Chnl maxIntensityProjection() {
+		return flattenZProjection(
+			delegate.getVoxelBox(),
+			VoxelBox::maxIntensityProj
+		);
 	}
 	
-	public Chnl meanIntensityProj() {
-		int prevZSize = delegate.getVoxelBox().extent().getZ();
-		return factory.create( delegate.getVoxelBox().meanIntensityProj(), getDimensions().getRes().duplicateFlattenZ(prevZSize) );
+	public Chnl meanIntensityProjection() {
+		return flattenZProjection(
+			delegate.getVoxelBox(),
+			VoxelBox::meanIntensityProj
+		);
 	}
-
 
 	// Duplicates the current channel
 	public Chnl duplicate() {
@@ -153,5 +191,20 @@ public class Chnl {
 	
 	public boolean equalsDeep( Chnl other) {
 		return dim.equals(other.dim) && delegate.equalsDeep( other.delegate );
+	}
+	
+	/** 
+	 * Flattens the voxel-box in the z direction
+	 * 
+	 * @param voxelBox voxel-box to be flattened (i.e. 3D)
+	 * @param flattenFunc function to perform the flattening
+	 * @return flattened box (i.e. 2D)
+	 */
+	private Chnl flattenZProjection( VoxelBox<? extends Buffer> voxelBox, Function<VoxelBox<? extends Buffer>,VoxelBox<? extends Buffer>> flattenFunc ) {
+		int prevZSize = delegate.getVoxelBox().extent().getZ();
+		return factory.create(
+			flattenFunc.apply(delegate.getVoxelBox()),
+			getDimensions().getRes().duplicateFlattenZ(prevZSize)
+		);
 	}
 }
