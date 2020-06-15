@@ -34,7 +34,7 @@ package org.anchoranalysis.core.name;
  * @author Owen
  *
  */
-public class CombinedName implements MultiName, Comparable<CombinedName> {
+public class CombinedName implements MultiName {
 	
 	private String primaryName;
 	private String secondaryName;
@@ -108,12 +108,17 @@ public class CombinedName implements MultiName, Comparable<CombinedName> {
 	}
 
 	@Override
-	public int compareTo(CombinedName o) {
-		int cmp = primaryName.compareTo(o.primaryName);
+	public int compareTo(MultiName o) {
+		int cmp = primaryName.compareTo(o.getPart(0));
 		
 		if (cmp!=0) {
 			return cmp;
 		}
-		return secondaryName.compareTo(o.secondaryName);
+		
+		if (o.numParts()>1) {
+			return secondaryName.compareTo(o.getPart(1));
+		}
+		
+		return 0;
 	}
 }

@@ -123,12 +123,9 @@ public class BeanXmlLoader {
 		}
 		
 		try {
-			
-						
 			return createFromXMLConfigurationLocalised( includeXML, xmlPath, path );
 		} catch (IllegalArgumentException e) {
-			processIllegalArgumentException(e, xmlPath);
-			throw new AssertionError("Should be impossible to arrive here, as above statement always throw an exception");
+			throw convertIllegalArgumentException(e, xmlPath);
 		}	
 	}
 	
@@ -184,18 +181,16 @@ public class BeanXmlLoader {
 			
 
 		} catch (IllegalArgumentException e) {
-			processIllegalArgumentException(e, xmlPath);
-			throw new AssertionError("Should be impossible to arrive here, as above statement always throw an exception");
-
+			throw convertIllegalArgumentException(e, xmlPath);
 		}
 	}
 
 	
-	private static void processIllegalArgumentException( IllegalArgumentException e, String xmlPath ) throws IllegalArgumentException, BeanXmlException {
+	private static BeanXmlException convertIllegalArgumentException( IllegalArgumentException e, String xmlPath ) {
 		// We catch a particular message when the xpath fails
 		if (e.getMessage().contains("Passed in key must select exactly one node")) {
 			// We give a shorted error message, and suppress the original exception
-			throw new BeanXmlException(
+			return new BeanXmlException(
 				String.format(
 					"An expected XML node could not be found: <%s/> or <%s></%s>",
 					xmlPath,
@@ -204,7 +199,7 @@ public class BeanXmlLoader {
 				)
 			);
 		} else {
-			throw e;
+			return new BeanXmlException(e);
 		}
 	}
 
@@ -240,8 +235,17 @@ public class BeanXmlLoader {
     		logger.log(Level.FINE, "XML Configuration error when loading BeanXML", e);
     		
 			throw new LocalisedBeanException(currentFilePathAbsolute.toString(), cause);
+			
+    	} catch (IllegalArgumentException e) {
+    		throw new LocalisedBeanException(
+    			currentFilePathAbsolute.toString(),
+    			convertIllegalArgumentException(e, xmlPath)
+    		);
 		} catch (Exception e) {
-			throw new LocalisedBeanException(currentFilePathAbsolute.toString(), e);
+			throw new LocalisedBeanException(
+				currentFilePathAbsolute.toString(),
+				e
+			);
 		}
 	}
 		

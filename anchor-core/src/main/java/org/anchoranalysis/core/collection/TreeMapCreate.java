@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.collection;
 
+
+
 /*
  * #%L
  * anchor-core
@@ -28,6 +30,7 @@ package org.anchoranalysis.core.collection;
 
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -38,38 +41,32 @@ import org.anchoranalysis.core.functional.Operation;
  * 
  * @author Owen Feehan
  *
- * @param <K> key
- * @param <V> value
+ * @param <K> key-type
+ * @param <V> value-type
  * @param <E> exception thrown when creating a new item in the map
  */
 public class TreeMapCreate<K,V,E extends Throwable> {
 	
 	// We use a tree-map to retain a deterministic order in the keys
-	private Map<K,V> groupMap = new TreeMap<>();
+	private Map<K,V> map = new TreeMap<>();
 	private Operation<V,E> opCreateNew;
 	
 	public TreeMapCreate(Operation<V,E> opCreateNew) {
 		super();
 		this.opCreateNew = opCreateNew;
 	}
-
-	public V get( K key ) {
-		return groupMap.get(key);
-	}
 	
-	public synchronized V getOrCreateNew( K groupID ) throws E {
+	public synchronized V getOrCreateNew( K key ) throws E {
 		
-		V groupObjs = groupMap.get(groupID);
-		if (groupObjs==null) {
-			groupObjs = opCreateNew.doOperation();
-			groupMap.put(groupID, groupObjs);
+		V val = map.get(key);
+		if (val==null) {
+			val = opCreateNew.doOperation();
+			map.put(key, val);
 		}
-		return groupObjs;
+		return val;
 	}
 
-	public Set<K> keySet() {
-		return groupMap.keySet();
+	public Set<Entry<K, V>> entrySet() {
+		return map.entrySet();
 	}
-
-
 }

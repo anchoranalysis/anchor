@@ -32,11 +32,15 @@ package org.anchoranalysis.core.name;
  * @author Owen
  *
  */
-public interface MultiName {
+public interface MultiName extends Comparable<MultiName> {
 
 	int numParts();
 	
 	String getPart( int index );
 	
 	String getUniqueName();
+
+	String toString();
+	
+	boolean equals(Object obj);
 }
