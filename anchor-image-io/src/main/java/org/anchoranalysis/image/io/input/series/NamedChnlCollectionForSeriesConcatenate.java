@@ -43,7 +43,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -60,11 +60,11 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 	
 	@Override
-	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
+	public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 				
 		for( NamedChnlCollectionForSeries item : list ) {
 			
-			Optional<Chnl> c = item.getChnlOrNull(chnlName, t,progressReporter);
+			Optional<Channel> c = item.getChnlOrNull(chnlName, t,progressReporter);
 			if (c.isPresent()) {
 				return c.get();
 			}
@@ -74,12 +74,12 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 
 	@Override
-	public Optional<Chnl> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
+	public Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
 			throws GetOperationFailedException {
 
 		for( NamedChnlCollectionForSeries item : list ) {
 			
-			Optional<Chnl> c = item.getChnlOrNull(chnlName, t, progressReporter);
+			Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
 			if (c.isPresent()) {
 				return c;
 			}
@@ -179,7 +179,7 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 	
 	private static void addAllChnlsFrom( Stack src, Stack dest ) throws IncorrectImageSizeException {
-		for( Chnl c : src ) {
+		for( Channel c : src ) {
 			dest.addChnl(c);
 		}
 	}

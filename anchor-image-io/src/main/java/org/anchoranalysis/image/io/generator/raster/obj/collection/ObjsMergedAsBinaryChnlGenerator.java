@@ -31,8 +31,8 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -49,7 +49,7 @@ public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
 		super(dim);
 	}
 
-	public ObjsMergedAsBinaryChnlGenerator(ObjMaskCollection masks, ImageDim dim) {
+	public ObjsMergedAsBinaryChnlGenerator(ObjectMaskCollection masks, ImageDim dim) {
 		super(masks, dim);
 	}
 

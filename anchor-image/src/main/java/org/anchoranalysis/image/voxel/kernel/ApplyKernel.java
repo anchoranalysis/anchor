@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
@@ -67,7 +67,7 @@ public class ApplyKernel {
 		kernel.init(in);
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
 			ByteBuffer outArr = out.getPixelsForPlane(pnt.getZ()).buffer();
@@ -76,8 +76,8 @@ public class ApplyKernel {
 			
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrementY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrementX()) {
 					
 					if( kernel.accptPos(ind, pnt) ) {
 						outArr.put(ind,outBinary.getOnByte());
@@ -135,13 +135,13 @@ public class ApplyKernel {
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrY()) {
-				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrX()) {
+			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
 					
 					int ind = extent.offset(pnt.getX(), pnt.getY());
 					cnt += kernel.countAtPos(ind, pnt);
@@ -180,13 +180,13 @@ public class ApplyKernel {
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrY()) {
-				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrX()) {
+			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
 					
 					int ind = extent.offsetSlice(pnt);
 					if (kernel.countAtPos(ind, pnt)>0) {
@@ -211,15 +211,15 @@ public class ApplyKernel {
 		kernel.init(in);
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
 			int ind = 0;
 			
-			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
-				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
+			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrementY()) {
+				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrementX()) {
 					
 					if( kernel.accptPos(ind, pnt) ) {
 						cnt++;
@@ -234,7 +234,7 @@ public class ApplyKernel {
 	}
 	
 	
-	public static int applyForCountOnMask( BinaryKernel kernel, VoxelBox<ByteBuffer> in, ObjMask om ) {
+	public static int applyForCountOnMask( BinaryKernel kernel, VoxelBox<ByteBuffer> in, ObjectMask om ) {
 		
 		int localSlicesSize = 3;
 		 
@@ -251,7 +251,7 @@ public class ApplyKernel {
 		BinaryValuesByte bvb = om.getBinaryValues().createByte();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(
 				pnt.getZ(),
@@ -264,8 +264,8 @@ public class ApplyKernel {
 			
 			ByteBuffer bufMask = om.getVoxelBox().getPixelsForPlane(pnt.getZ() - crnrMin.getZ()).buffer();
 			
-			for (pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrY()) {
-				for (pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrX()) {
+			for (pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrementX()) {
 					
 					int indKernel = extent.offset(pnt.getX(), pnt.getY());
 

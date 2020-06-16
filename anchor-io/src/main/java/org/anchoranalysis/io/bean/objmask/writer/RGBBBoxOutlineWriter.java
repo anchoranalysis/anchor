@@ -38,8 +38,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -60,9 +60,9 @@ public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 	}
 
 
-	private ObjMask createBBoxMask( ObjMask mask ) {
+	private ObjectMask createBBoxMask( ObjectMask mask ) {
 
-		ObjMask bbox = mask.duplicate();
+		ObjectMask bbox = mask.duplicate();
 		bbox.getVoxelBox().setAllPixelsTo(1);
 		return bbox;
 	}
@@ -70,7 +70,7 @@ public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 	@Override
 	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
 			throws CreateException {
-		ObjMask outline = FindOutline.outline(
+		ObjectMask outline = FindOutline.outline(
 			createBBoxMask(mask.getMask()),
 			outlineWidth,
 			true,

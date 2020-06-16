@@ -29,19 +29,19 @@ package org.anchoranalysis.image.feature.objmask;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class FeatureInputSingleObjTest {
 
-	private ObjMask obj;
+	private ObjectMask obj;
 	
 	@Before
 	public void setup() {
 		// An arbitrary object
-		obj = Mockito.mock(ObjMask.class);
+		obj = Mockito.mock(ObjectMask.class);
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class FeatureInputSingleObjTest {
 	
 	private FeatureInputSingleObj createInputWithNewObj( NRGStackWithParams nrgStack ) {
 		return new FeatureInputSingleObj(
-			Mockito.mock(ObjMask.class),
+			Mockito.mock(ObjectMask.class),
 			nrgStack
 		);
 	}

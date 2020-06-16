@@ -28,9 +28,9 @@ package org.anchoranalysis.test.image;
 
 import java.nio.Buffer;
 
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -68,12 +68,12 @@ public class ChnlFixture {
 	public static final Extent LARGE_2D = LARGE_3D.flattenZ();
 	// END: image size examples
 		
-	public static Chnl createChnl( Extent e, IntensityFunction createIntensity ) {
+	public static Channel createChnl( Extent e, IntensityFunction createIntensity ) {
 		
 		ImageDim sd = new ImageDim( e, ImageResFixture.instance );
 		
-		ChnlFactorySingleType factory = new ChnlFactoryByte();
-		Chnl chnl = factory.createEmptyInitialised(sd);
+		ChannelFactorySingleType factory = new ChannelFactoryByte();
+		Channel chnl = factory.createEmptyInitialised(sd);
 		
 		// Populate the channel with values
 		for( int z=0; z<e.getZ(); z++) {

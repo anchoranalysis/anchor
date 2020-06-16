@@ -30,7 +30,7 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached;
 import java.nio.Buffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
@@ -46,7 +46,7 @@ public abstract class ChnlConverterAttached<S,T extends Buffer> {
 
 	public abstract void attachObject( S obj ) throws OperationFailedException;
 
-	public abstract Chnl convert(Chnl chnl, ConversionPolicy changeExisting);
+	public abstract Channel convert(Channel chnl, ConversionPolicy changeExisting);
 	
 	public abstract VoxelBoxConverter<T> getVoxelBoxConverter();
 }

@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.sgmn.SgmnBean;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -41,5 +41,5 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public abstract class BinarySgmn extends SgmnBean<BinarySgmn> {
 		
 	// Returns a BinaryVoxelBox associated with the input buffer or perhaps an newly created buffer of identical size
-	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask ) throws SgmnFailedException;
+	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjectMask> mask ) throws SgmnFailedException;
 }

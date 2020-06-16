@@ -31,20 +31,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 
 public class AssignmentMaskIntersection implements Assignment {
 
-	private ObjMask omLeft;
-	private ObjMask omRight;
+	private ObjectMask omLeft;
+	private ObjectMask omRight;
 	
 	private int numIntersectingPixels;
 	private int numUnionPixels;
 	private int sizeLeft;
 	private int sizeRight;
 	
-	public AssignmentMaskIntersection(ObjMask omLeft, ObjMask omRight) {
+	public AssignmentMaskIntersection(ObjectMask omLeft, ObjectMask omRight) {
 		super();
 		this.omLeft = omLeft;
 		this.omRight = omRight;
@@ -67,8 +67,8 @@ public class AssignmentMaskIntersection implements Assignment {
 	}
 
 	@Override
-	public List<ObjMask> getListPaired(boolean left) {
-		List<ObjMask> out = new ArrayList<>();
+	public List<ObjectMask> getListPaired(boolean left) {
+		List<ObjectMask> out = new ArrayList<>();
 		if (isIntersectionPresent()) {
 			addObjToList(out, left);
 		}
@@ -76,8 +76,8 @@ public class AssignmentMaskIntersection implements Assignment {
 	}
 
 	@Override
-	public List<ObjMask> getListUnassigned(boolean left) {
-		List<ObjMask> out = new ArrayList<>();
+	public List<ObjectMask> getListUnassigned(boolean left) {
+		List<ObjectMask> out = new ArrayList<>();
 		if (!isIntersectionPresent()) {
 			addObjToList(out, left);
 		}
@@ -110,7 +110,7 @@ public class AssignmentMaskIntersection implements Assignment {
 		list.add( new TypedValue( val) );
 	}
 		
-	private void addObjToList( List<ObjMask> out, boolean left ) {
+	private void addObjToList( List<ObjectMask> out, boolean left ) {
 		if (left) {
 			out.add(omLeft);
 		} else {

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBOrientationWriter extends ObjMaskWriter {

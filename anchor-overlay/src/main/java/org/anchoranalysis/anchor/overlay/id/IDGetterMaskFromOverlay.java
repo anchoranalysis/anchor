@@ -29,7 +29,7 @@ package org.anchoranalysis.anchor.overlay.id;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 
 public class IDGetterMaskFromOverlay extends IDGetter<ObjMaskWithProperties> {
 

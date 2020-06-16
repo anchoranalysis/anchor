@@ -37,7 +37,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -50,25 +50,25 @@ public class ObjMaskFixture {
 		this.dim = dim;
 	}
 	
-	public ObjMask create1() {
+	public ObjectMask create1() {
 		Extent extent = new Extent(20,34,11);
 		CutOffCorners pattern = new CutOffCorners(3, 2, extent);
 		return createAt(new Point3i(10,15,3), extent, pattern);
 	}
 	
-	public ObjMask create2() {
+	public ObjectMask create2() {
 		Extent extent = new Extent(19,14,5);
 		CutOffCorners pattern = new CutOffCorners(5, 1, extent);
 		return createAt(new Point3i(3,1,7), extent, pattern);
 	}
 	
-	public ObjMask create3() {
+	public ObjectMask create3() {
 		Extent extent = new Extent(19,14,13);
 		CutOffCorners pattern = new CutOffCorners(1, 5, extent);
 		return createAt(new Point3i(17,15,2), extent, pattern);
 	}
 	
-	private ObjMask createAt( Point3i crnrMin, Extent extent, VoxelPattern pattern ) {
+	private ObjectMask createAt( Point3i crnrMin, Extent extent, VoxelPattern pattern ) {
 		BoundingBox bbox = new BoundingBox(crnrMin, extent);
 		
 		assertTrue( dim.contains(bbox) );
@@ -98,6 +98,6 @@ public class ObjMaskFixture {
 		
 		assertTrue(atLeastOneHigh);
 		
-		return new ObjMask(bbox, new BinaryVoxelBoxByte(vb, bv) );
+		return new ObjectMask(bbox, new BinaryVoxelBoxByte(vb, bv) );
 	}
 }

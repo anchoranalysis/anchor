@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -43,7 +43,7 @@ public abstract class BinarySgmnOne extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask)
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjectMask> mask)
 			throws SgmnFailedException {
 		return sgmnFromSgmn(voxelBox, params, mask, sgmn);
 	}
@@ -51,7 +51,7 @@ public abstract class BinarySgmnOne extends BinarySgmn {
 	protected abstract BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		Optional<ObjMask> objMask,
+		Optional<ObjectMask> objMask,
 		BinarySgmn sgmn
 	) throws SgmnFailedException;
 

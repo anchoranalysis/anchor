@@ -50,13 +50,13 @@ public abstract class Tuple3i implements ReadableTuple3i, Serializable {
 		this.z = this.z + pnt.getZ();
 	}
 	
-	public final void sub( int val ) {
+	public final void subtract( int val ) {
 		this.x = this.x - val;
 		this.y = this.y - val;
 		this.z = this.z - val;
 	}
 	
-	public final void sub( ReadableTuple3i pnt ) {
+	public final void subtract( ReadableTuple3i pnt ) {
 		this.x = this.x - pnt.getX();
 		this.y = this.y - pnt.getY();
 		this.z = this.z - pnt.getZ();
@@ -68,7 +68,7 @@ public abstract class Tuple3i implements ReadableTuple3i, Serializable {
 		this.z = this.z * factor;
 	}
 	
-	public final void div( int factor ) {
+	public final void divideBy( int factor ) {
 		this.x = this.x / factor;
 		this.y = this.y / factor;
 		this.z = this.z / factor;
@@ -132,27 +132,27 @@ public abstract class Tuple3i implements ReadableTuple3i, Serializable {
 		}
 	}
 	
-	public final void incrX() {
+	public final void incrementX() {
 		this.x++;
 	}
 	
-	public final void incrY() {
+	public final void incrementY() {
 		this.y++;
 	}
 	
-	public final void incrZ() {
+	public final void incrementZ() {
 		this.z++;
 	}
 	
-	public final void incrX(int val) {
+	public final void incrementX(int val) {
 		this.x += val;
 	}
 	
-	public final void incrY(int val) {
+	public final void incrementY(int val) {
 		this.y += val;
 	}
 	
-	public final void incrZ(int val) {
+	public final void incrementZ(int val) {
 		this.z += val;
 	}
 	

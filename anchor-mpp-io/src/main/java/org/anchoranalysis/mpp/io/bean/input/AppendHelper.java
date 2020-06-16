@@ -38,7 +38,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
-import org.anchoranalysis.image.io.objs.ObjMaskCollectionReader;
+import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -171,7 +171,7 @@ class AppendHelper {
 			inputObject,
 			listAppendCfg,
 			MultiInput::objs,
-			outPath -> ObjMaskCollectionReader.createFromPath(outPath),
+			outPath -> ObjectMaskCollectionReader.createFromPath(outPath),
 			debugMode
 		);
 	}

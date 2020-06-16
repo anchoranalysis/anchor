@@ -28,11 +28,11 @@ package org.anchoranalysis.image.io.chnl;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public interface ChnlGetter {
 
 	boolean hasChnl( String chnlName );
 	
-	Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+	Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 }

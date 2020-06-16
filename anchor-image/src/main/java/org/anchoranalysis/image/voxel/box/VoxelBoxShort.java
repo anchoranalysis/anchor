@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
@@ -68,9 +68,9 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	}
 	
 	@Override
-	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
+	public ObjectMask equalMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask(bbox );
+		ObjectMask om = new ObjectMask(bbox );
 		
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
@@ -176,7 +176,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
 	// TODO when values are too small or too large
 	@Override
-	public void addPixelsCheckMask(ObjMask mask, int value) {
+	public void addPixelsCheckMask(ObjectMask mask, int value) {
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		VoxelBox<ByteBuffer> objMaskBuffer = mask.getVoxelBox();
@@ -208,7 +208,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
 	
 	@Override
-	public void scalePixelsCheckMask(ObjMask mask, double value) {
+	public void scalePixelsCheckMask(ObjectMask mask, double value) {
 		throw new IllegalArgumentException("Currently unsupported method");
 	}
 	

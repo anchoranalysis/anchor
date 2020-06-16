@@ -31,34 +31,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-// A z-stack of images that all have the same XY dimension, and has a variable number of channels
-public class Stack implements Iterable<Chnl> {
+/**
+ * One ore more single-channel images that all have the same dimensions.
+ * 
+ * <p>This is one of the fundamental image data structures in Anchor.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Stack implements Iterable<Channel> {
 
-	private StackNotUniformSized delegate;
+	private final StackNotUniformSized delegate;
 	
-	public Stack( ImageDim sd, ChnlFactorySingleType factory, int numChnls ) {
+	public Stack() {
+		delegate = new StackNotUniformSized();
+	}
+	
+	public Stack( ImageDim sd, ChannelFactorySingleType factory, int numChnls ) {
 		delegate = new StackNotUniformSized();
 		for( int i=0; i<numChnls; i++) {
 			delegate.addChnl( factory.createEmptyInitialised(sd) );
 		}
 	}
 	
-	public Stack( Chnl chnl ) {
+	public Stack( Channel chnl ) {
 		delegate = new StackNotUniformSized( chnl );
 	}
 	
-	public Stack( Chnl chnl0, Chnl chnl1,  Chnl chnl2 ) throws IncorrectImageSizeException {
+	public Stack( Channel chnl0, Channel chnl1,  Channel chnl2 ) throws IncorrectImageSizeException {
 		super();
 		delegate = new StackNotUniformSized();
 		addChnl(chnl0);
@@ -66,26 +76,15 @@ public class Stack implements Iterable<Chnl> {
 		addChnl(chnl2);
 	}
 	
-	public Stack( StackNotUniformSized stack ) throws IncorrectImageSizeException, CreateException {
-		
-		if (stack.getNumChnl()==0) {
-			throw new CreateException("At least one channel is required");
-		}
-		delegate = new StackNotUniformSized( stack.getChnl(0) );
-		
-		for( int i=1; i<stack.getNumChnl(); i++) {
-			addChnl( stack.getChnl(i) );
-		}
+	private Stack(StackNotUniformSized stack) {
+		delegate = stack;
 	}
-	
+		
+	/** Copy constructor */
 	private Stack(Stack src) {
 		delegate = src.delegate.duplicate();
 	}
 	
-	public Stack() {
-		delegate = new StackNotUniformSized();
-	}
-
 	/** Produces a new stack with a particular operation applied to each channel.
 	 * 
 	 *  <p>The function applied to the channel should ensure it produces uniform sizes</p>
@@ -94,9 +93,9 @@ public class Stack implements Iterable<Chnl> {
 	 * @return a new stack containing mapFunc(chnl) preserving the channel order
 	 * @throws IncorrectImageSizeException if the channels produced have non-uniform sizes
 	 * */ 
-	public Stack mapChnl( ChnlMapOperation mapFunc ) throws OperationFailedException {
+	public Stack mapChnl( ChannelMapOperation mapFunc ) throws OperationFailedException {
 		Stack out = new Stack();
-		for( Chnl c : this ) {
+		for( Channel c : this ) {
 			try {
 				out.addChnl(
 					mapFunc.apply(c)
@@ -110,16 +109,16 @@ public class Stack implements Iterable<Chnl> {
 	
 	public Stack extractSlice(int z) {
 		// We know the sizes will be correct
-		Stack out = new Stack();
-		out.delegate = delegate.extractSlice(z) ;
-		return out;
+		return new Stack(
+			delegate.extractSlice(z)
+		);
 	}
 
 	public Stack maxIntensityProj() {
 		// We know the sizes will be correct
-		Stack out = new Stack();
-		out.delegate = delegate.maxIntensityProj();
-		return out;
+		return new Stack(
+			delegate.maxIntensityProj()
+		);
 	}
 	
 	public void addBlankChnl()
@@ -137,9 +136,9 @@ public class Stack implements Iterable<Chnl> {
 			throw new OperationFailedException("Other channels do not have the same type.");
 		}
 		
-		Chnl first = getChnl(0);
+		Channel first = getChnl(0);
 		delegate.addChnl(
-			ChnlFactory.instance().createEmptyInitialised(
+			ChannelFactory.instance().createEmptyInitialised(
 				first.getDimensions(),
 				first.getVoxelDataType()
 			)
@@ -147,7 +146,7 @@ public class Stack implements Iterable<Chnl> {
 		
 	}
 
-	public final void addChnl(Chnl chnl) throws IncorrectImageSizeException {
+	public final void addChnl(Channel chnl) throws IncorrectImageSizeException {
 		
 		// We ensure that this channel has the same size as the first
 		if (delegate.getNumChnl()>=1 && !chnl.getDimensions().equals(delegate.getChnl(0).getDimensions())) {
@@ -157,7 +156,7 @@ public class Stack implements Iterable<Chnl> {
 		delegate.addChnl(chnl);
 	}
 
-	public final Chnl getChnl(int index) {
+	public final Channel getChnl(int index) {
 		return delegate.getChnl(index);
 	}
 
@@ -188,12 +187,12 @@ public class Stack implements Iterable<Chnl> {
 	}
 
 	@Override
-	public Iterator<Chnl> iterator() {
+	public Iterator<Channel> iterator() {
 		return delegate.iterator();
 	}
 	
-	public List<Chnl> asListChnls() {
-		ArrayList<Chnl> list = new ArrayList<>();
+	public List<Channel> asListChnls() {
+		ArrayList<Channel> list = new ArrayList<>();
 		for(int i=0; i<delegate.getNumChnl(); i++) {
 			list.add( delegate.getChnl(i) );
 		}
@@ -203,7 +202,7 @@ public class Stack implements Iterable<Chnl> {
 	// Returns true if the data type of all channels is equal to
 	public boolean allChnlsHaveType( VoxelDataType chnlDataType ) {
 		
-		for (Chnl chnl : this) {
+		for (Channel chnl : this) {
 			if (!chnl.getVoxelDataType().equals(chnlDataType)) {
 				return false;
 			}

@@ -47,8 +47,8 @@ import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -62,11 +62,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @param <T> feature calculation params
  */
-class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjMaskCollection> {
+class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectMaskCollection> {
 
 	private TableCSVGenerator<ResultsVectorCollection> delegate;
 	
-	private ObjMaskCollection objs;
+	private ObjectMaskCollection objs;
 	
 	private FeatureList<FeatureInputSingleObj> features;
 	
@@ -105,7 +105,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			rvc = new ResultsVectorCollection();
-			for( ObjMask om : objs ) {
+			for( ObjectMask om : objs ) {
 				rvc.add( 
 					session.calcSuppressErrors(
 						createParams(om, nrgStack),
@@ -122,12 +122,12 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 
 	@Override
-	public ObjMaskCollection getIterableElement() {
+	public ObjectMaskCollection getIterableElement() {
 		return objs;
 	}
 
 	@Override
-	public void setIterableElement(ObjMaskCollection element) {
+	public void setIterableElement(ObjectMaskCollection element) {
 		this.objs = element;
 	}
 
@@ -189,7 +189,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	private static FeatureInputSingleObj createParams(ObjMask om, NRGStackWithParams nrgStack) {
+	private static FeatureInputSingleObj createParams(ObjectMask om, NRGStackWithParams nrgStack) {
 		return new FeatureInputSingleObj(om, nrgStack);
 	}
 }

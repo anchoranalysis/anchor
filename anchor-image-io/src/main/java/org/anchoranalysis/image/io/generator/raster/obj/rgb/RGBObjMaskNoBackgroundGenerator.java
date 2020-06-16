@@ -33,18 +33,18 @@ import org.anchoranalysis.core.error.CreateException;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBObjMaskNoBackgroundGenerator extends RGBObjMaskGeneratorBase {
 	
-	private ChnlFactorySingleType factory = new ChnlFactoryByte();
+	private ChannelFactorySingleType factory = new ChannelFactoryByte();
 	private ImageDim backgroundDim;
 	
 	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ImageDim background, ColorIndex colorIndex) {

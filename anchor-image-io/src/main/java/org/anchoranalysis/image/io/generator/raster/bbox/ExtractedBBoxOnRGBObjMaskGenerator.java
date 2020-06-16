@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -42,12 +42,12 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implements IterableObjectGenerator<ObjMask,Stack> {
+public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectMask,Stack> {
 
 	private ExtractedBBoxGenerator chnlGenerator;
 	private RGBObjMaskGenerator rgbObjMaskGenerator;
 	
-	private ObjMask element;
+	private ObjectMask element;
 	private String manifestFunction;
 	private boolean mip;
 	
@@ -82,14 +82,14 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 			throw new OutputWriteFailedException(e);
 		}
 
-		ObjMask om = this.getIterableElement();
+		ObjectMask om = this.getIterableElement();
 		
 		if (mip) {
 			om = om.flattenZ();
 		}
 		
 		// We create a version that is relative to the extracted section
-		ObjMask omLocal = new ObjMask( new BoundingBox(om.getVoxelBox().extent()), om.binaryVoxelBox() );
+		ObjectMask omLocal = new ObjectMask( new BoundingBox(om.getVoxelBox().extent()), om.binaryVoxelBox() );
 		
 		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
 		objs.add( new ObjMaskWithProperties( omLocal ));
@@ -102,12 +102,12 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 	}
 
 	@Override
-	public ObjMask getIterableElement() {
+	public ObjectMask getIterableElement() {
 		return element;
 	}
 
 	@Override
-	public void setIterableElement(ObjMask element) {
+	public void setIterableElement(ObjectMask element) {
 		this.element = element;
 	}
 

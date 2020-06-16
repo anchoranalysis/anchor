@@ -33,8 +33,8 @@ import java.util.List;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -67,7 +67,7 @@ public class RasterArranger {
 		);
 	}
 	
-	public RGBStack createStack( List<RGBStack> list, ChnlFactorySingleType chnlfactory ) {
+	public RGBStack createStack( List<RGBStack> list, ChannelFactorySingleType chnlfactory ) {
 		RGBStack stackOut =  new RGBStack( dim, chnlfactory );
 		ppltStack( list, stackOut.asStack() );
 		return stackOut;

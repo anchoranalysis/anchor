@@ -2,6 +2,7 @@ package org.anchoranalysis.image.voxel.iterator;
 
 import org.anchoranalysis.core.arithmetic.RunningSumPoint;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 
 /**
  * Aggregates points as they are successively processed
@@ -24,6 +25,6 @@ class AggregatePoints implements ProcessVoxel {
 
 	/** The center-of-gravity of all points-processed (discretized) */
 	public Point3i center() {
-		return new Point3i( runningSum.mean() );
+		return PointConverter.intFromDouble( runningSum.mean() );
 	}
 }

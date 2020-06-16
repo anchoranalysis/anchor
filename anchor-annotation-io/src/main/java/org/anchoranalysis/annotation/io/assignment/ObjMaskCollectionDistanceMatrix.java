@@ -1,46 +1,19 @@
 package org.anchoranalysis.annotation.io.assignment;
 
 import org.anchoranalysis.core.error.CreateException;
-
-/*-
- * #%L
- * anchor-annotation-io
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class ObjMaskCollectionDistanceMatrix {
 
 	// A two-dimensional array mapping objs1 to objs2
 	private double[][] distanceArr;
 	
-	private ObjMaskCollection objs1;
+	private ObjectMaskCollection objs1;
 	
-	private ObjMaskCollection objs2;
+	private ObjectMaskCollection objs2;
 
-	public ObjMaskCollectionDistanceMatrix(ObjMaskCollection objs1,
-			ObjMaskCollection objs2, double[][] distanceArr) throws CreateException {
+	public ObjMaskCollectionDistanceMatrix(ObjectMaskCollection objs1,
+			ObjectMaskCollection objs2, double[][] distanceArr) throws CreateException {
 		super();
 		this.objs1 = objs1;
 		this.objs2 = objs2;
@@ -67,11 +40,11 @@ public class ObjMaskCollectionDistanceMatrix {
 		return distanceArr;
 	}
 
-	public ObjMaskCollection getObjs1() {
+	public ObjectMaskCollection getObjs1() {
 		return objs1;
 	}
 
-	public ObjMaskCollection getObjs2() {
+	public ObjectMaskCollection getObjs2() {
 		return objs2;
 	}
 

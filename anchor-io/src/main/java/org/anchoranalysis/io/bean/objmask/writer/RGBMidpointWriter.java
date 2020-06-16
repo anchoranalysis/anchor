@@ -36,10 +36,11 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBMidpointWriter extends ObjMaskWriter {
@@ -69,11 +70,12 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	
 	private static Point3i calcMidpoint3D(ObjMaskWithProperties mask) {
 		if (mask.hasProperty(PROPERTY_MIDPOINT)) {
-			Point3i midpoint = new Point3i( (Point3i) mask.getProperty(PROPERTY_MIDPOINT) );
-			midpoint.add( mask.getBoundingBox().getCrnrMin() );
-			return midpoint;
+			return Point3i.immutableAdd(
+				(Point3i) mask.getProperty(PROPERTY_MIDPOINT),
+				mask.getBoundingBox().getCrnrMin()
+			);
 		} else {
-			return new Point3i( mask.getMask().centerOfGravity() );
+			return PointConverter.intFromDouble( mask.getMask().centerOfGravity() );
 		}
 	}
 	
@@ -116,9 +118,10 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	
 	public static void writeRelPoint( Point3i pnt, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
 		if (bboxContainer.contains().point(pnt)) {
-			Point3i pntNew = new Point3i(pnt);
-			pntNew.sub(bboxContainer.getCrnrMin());
-			stack.writeRGBPoint( pnt, color);
+			stack.writeRGBPoint(
+				Point3i.immutableSubtract(pnt, bboxContainer.getCrnrMin()),
+				color
+			);
 		}
 	}
 
@@ -135,10 +138,10 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 			midpoint.decrX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.incrX(extraLength);
+		midpoint.incrementX(extraLength);
 		
 		for (int i=0; i<extraLength; i++) {
-			midpoint.incrX();
+			midpoint.incrementX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
 		midpoint.decrX(extraLength);
@@ -149,7 +152,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 			midpoint.decrY();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.incrY(extraLength);
+		midpoint.incrementY(extraLength);
 		
 		for (int i=0; i<extraLength; i++) {
 			midpoint.decrY();

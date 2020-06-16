@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -104,7 +104,7 @@ public class VoxelBoxThresholder {
 		VoxelBoxWrapper inputBuffer,
 		int level,
 		BinaryValuesByte bvOut,
-		Optional<ObjMask> mask,
+		Optional<ObjectMask> mask,
 		boolean alwaysDuplicate
 	) throws CreateException {
 	

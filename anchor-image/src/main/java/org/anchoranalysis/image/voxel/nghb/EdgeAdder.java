@@ -32,8 +32,8 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph.IVertexToObjMask;
 
 /**
@@ -92,13 +92,13 @@ class EdgeAdder<V> {
 	
 	public void addEdgesFor(
 		int ignoreIndex,
-		ObjMask om,
+		ObjectMask om,
 		V vertexWith,
 		Extent sceneExtnt,
 		boolean do3D
 	) throws CreateException {
 		
-		ObjMask omDilated = MorphologicalDilation.createDilatedObjMask(
+		ObjectMask omDilated = MorphologicalDilation.createDilatedObjMask(
 			om,
 			Optional.of(sceneExtnt),
 			do3D && sceneExtnt.getZ()>1,
@@ -111,9 +111,9 @@ class EdgeAdder<V> {
 	
 	private void addWithDilatedMask(
 		int ignoreIndex,
-		ObjMask om,
+		ObjectMask om,
 		V vertexWith,
-		ObjMask omDilated
+		ObjectMask omDilated
 	) {
 		
 		List<Integer> indicesIntersects = rTree.intersectsWithAsIndices( omDilated.getBoundingBox() );
@@ -144,9 +144,9 @@ class EdgeAdder<V> {
 	}
 	
 	private void maybeAddEdge(
-		ObjMask om,
-		ObjMask omDilated,
-		ObjMask omOther,
+		ObjectMask om,
+		ObjectMask omDilated,
+		ObjectMask omOther,
 		V vertexWith,
 		V vertexOther
 	) {
@@ -164,7 +164,7 @@ class EdgeAdder<V> {
 		}
 	}
 	
-	private static int numBorderPixels( ObjMask om1Dilated, ObjMask om2 ) {
+	private static int numBorderPixels( ObjectMask om1Dilated, ObjectMask om2 ) {
 		return om1Dilated.countIntersectingPixels(om2);
 	}
 }

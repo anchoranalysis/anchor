@@ -43,7 +43,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
@@ -77,11 +77,11 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		
 		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
-		setObjMask( new ObjMask(bbox) );
+		setObjMask( new ObjectMask(bbox) );
 		
 		
 		BoundingBox bboxMIP = bbox.flattenZ();
-		setObjMaskMIP( new ObjMask(bboxMIP) );
+		setObjMaskMIP( new ObjectMask(bboxMIP) );
 		
 		Extent localExtnt = bbox.extent();
 		partitionList.init( factoryHistogram, stack.getNumChnl(), regionMap.numRegions(), localExtnt.getZ() );

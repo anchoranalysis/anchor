@@ -33,13 +33,13 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -49,7 +49,7 @@ public class RGBStack {
 
 	private Stack chnls;
 	
-	public RGBStack( ImageDim sd, ChnlFactorySingleType factory ) {
+	public RGBStack( ImageDim sd, ChannelFactorySingleType factory ) {
 		chnls = new Stack(sd, factory, 3);
 	}
 	
@@ -65,25 +65,25 @@ public class RGBStack {
 		chnls = src.chnls.duplicate();
 	}
 	
-	public RGBStack( Chnl red, Chnl green, Chnl blue) throws CreateException, IncorrectImageSizeException {
+	public RGBStack( Channel red, Channel green, Channel blue) throws CreateException, IncorrectImageSizeException {
 		chnls = new Stack();
 		chnls.addChnl( red );
 		chnls.addChnl( green );
 		chnls.addChnl( blue );
 	}
 	
-	public Chnl getRed() {
+	public Channel getRed() {
 		return chnls.getChnl(0);
 	}
 
-	public Chnl getGreen() {
+	public Channel getGreen() {
 		return chnls.getChnl(1);
 	}
-	public Chnl getBlue() {
+	public Channel getBlue() {
 		return chnls.getChnl(2);
 	}
 	
-	public Chnl getChnl( int index ) {
+	public Channel getChnl( int index ) {
 		return chnls.getChnl(index);
 	}
 	
@@ -114,7 +114,7 @@ public class RGBStack {
 	}
 	
 	
-	private static void writePoint( Point3i point, Chnl chnl, byte toWrite ) {
+	private static void writePoint( Point3i point, Channel chnl, byte toWrite ) {
 		int index = chnl.getDimensions().getExtnt().offset(point.getX(), point.getY());
 		chnl.getVoxelBox().asByte().getPixelsForPlane( point.getZ() ).buffer().put( index, toWrite );
 	}
@@ -129,7 +129,7 @@ public class RGBStack {
 	}
 	
 	// Only supports 8-bit
-	public void writeRGBMaskToSlice( ObjMask mask, BoundingBox bbox, RGBColor c, Point3i pntGlobal, int zLocal, ReadableTuple3i maxGlobal) {
+	public void writeRGBMaskToSlice( ObjectMask mask, BoundingBox bbox, RGBColor c, Point3i pntGlobal, int zLocal, ReadableTuple3i maxGlobal) {
 		
 		assert( pntGlobal.getZ()>= 0);
 		
@@ -146,9 +146,9 @@ public class RGBStack {
 		
 		Extent eMask = mask.getBoundingBox().extent();
 		
- 		for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
+ 		for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 		
-			for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrX() ) {	
+			for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 				
 				int maskOffset = eMask.offset(
 					pntGlobal.getX() - mask.getBoundingBox().getCrnrMin().getX(),

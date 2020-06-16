@@ -36,8 +36,8 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -63,14 +63,14 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class DisplayStack {
 	
 	private Stack delegate;
-	private List<ChnlConverterAttached<Chnl,ByteBuffer>> listConverters = new ArrayList<>(); 
+	private List<ChnlConverterAttached<Channel,ByteBuffer>> listConverters = new ArrayList<>(); 
 
 	
 	// START: factory methods
 	
 	// We don't allow
 	
-	public static DisplayStack create( Chnl chnl ) throws CreateException {
+	public static DisplayStack create( Channel chnl ) throws CreateException {
 		DisplayStack ds = new DisplayStack();
 		ds.delegate = new Stack( chnl );
 		try {
@@ -122,7 +122,7 @@ public class DisplayStack {
 	
 	public int numNonNullConverters() {
 		int a = 0;
-		for( ChnlConverterAttached<Chnl,ByteBuffer> c : listConverters ) {
+		for( ChnlConverterAttached<Channel,ByteBuffer> c : listConverters ) {
 			if (c!=null) {
 				a++;
 			}
@@ -132,12 +132,12 @@ public class DisplayStack {
 	
 	// We don't need to worry about channel numbers
 	// TODO let's switch this back to private	
-	private DisplayStack( Stack stack, List<ChnlConverterAttached<Chnl,ByteBuffer>> listConverters ) throws CreateException {
+	private DisplayStack( Stack stack, List<ChnlConverterAttached<Channel,ByteBuffer>> listConverters ) throws CreateException {
 		delegate = stack;
 		this.listConverters = listConverters;
 		
 		for( int c=0; c<stack.getNumChnl(); c++) {
-			ChnlConverterAttached<Chnl,ByteBuffer> cca = listConverters.get(c);
+			ChnlConverterAttached<Channel,ByteBuffer> cca = listConverters.get(c);
 			if (cca!=null) {
 				try {
 					cca.attachObject( stack.getChnl(c) );
@@ -171,7 +171,7 @@ public class DisplayStack {
 		}
 	}
 	
-	private void setConverterFor( int chnlNum, ChnlConverterAttached<Chnl,ByteBuffer> converter ) throws SetOperationFailedException {
+	private void setConverterFor( int chnlNum, ChnlConverterAttached<Channel,ByteBuffer> converter ) throws SetOperationFailedException {
 		try {
 			converter.attachObject( delegate.getChnl(chnlNum) );
 		} catch (OperationFailedException e) {
@@ -191,11 +191,11 @@ public class DisplayStack {
 	}
 
 	// Only creates a new channel if needs be, otherwise reuses existing channel
-	public Chnl createChnl(int index, boolean alwaysNew) {
+	public Channel createChnl(int index, boolean alwaysNew) {
 		
-		Chnl chnl = delegate.getChnl(index);
+		Channel chnl = delegate.getChnl(index);
 		
-		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(index);
+		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(index);
 		
 		if (converter!=null) {
 			ConversionPolicy policy = alwaysNew ? ConversionPolicy.ALWAYS_NEW : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
@@ -214,11 +214,11 @@ public class DisplayStack {
 	
 	
 	// Always creates a new channel
-	public Chnl createChnlDuplicate(int index) {
+	public Channel createChnlDuplicate(int index) {
 		
-		Chnl chnl = delegate.getChnl(index);
+		Channel chnl = delegate.getChnl(index);
 		
-		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(index);
+		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(index);
 		
 		if (converter!=null) {
 			return converter.convert(chnl, ConversionPolicy.ALWAYS_NEW );
@@ -233,13 +233,13 @@ public class DisplayStack {
 	}
 	
 	// Always creates a new channel, but just capturing a portion of the channel
-	public Chnl createChnlDuplicateForBBox(int index, BoundingBox bbox) {
+	public Channel createChnlDuplicateForBBox(int index, BoundingBox bbox) {
 			
-		Chnl chnl = delegate.getChnl(index);
+		Channel chnl = delegate.getChnl(index);
 		
-		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(index);
+		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(index);
 		
-		Chnl out = ChnlFactory.instance().createEmptyInitialised( new ImageDim(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
+		Channel out = ChannelFactory.instance().createEmptyInitialised( new ImageDim(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
 		
 		if (converter!=null) {
 			copyPixelsTo(index, bbox, out.getVoxelBox().asByte(), new BoundingBox(bbox.extent()) );
@@ -282,9 +282,9 @@ public class DisplayStack {
 	// Copies pixels on a particular channel to an output buffer
 	public void copyPixelsTo(int chnlIndex, BoundingBox sourceBox, VoxelBox<ByteBuffer> destVoxelBox, BoundingBox destBox) {
 		
-		Chnl chnl = delegate.getChnl(chnlIndex);
+		Channel chnl = delegate.getChnl(chnlIndex);
 		
-		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(chnlIndex);
+		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(chnlIndex);
 		
 		if (converter!=null) {
 			BoundingBox allLocalBox = new BoundingBox(destBox.extent());
@@ -317,7 +317,7 @@ public class DisplayStack {
 	}
 	
 	public int getUnconvertedVoxelAt( int c, int x, int y, int z) {
-		Chnl chnl = delegate.getChnl(c);
+		Channel chnl = delegate.getChnl(c);
 		return chnl.getVoxelBox().any().getVoxel(x, y, z);
 	}
 	
@@ -370,9 +370,9 @@ public class DisplayStack {
 	
 	private VoxelBox<ByteBuffer> bufferForChnl( int chnlNum ) {
 		
-		Chnl chnl = delegate.getChnl(chnlNum);
+		Channel chnl = delegate.getChnl(chnlNum);
 		
-		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(chnlNum);
+		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(chnlNum);
 		
 		if (converter!=null) {
 			return converter.getVoxelBoxConverter().convertFrom(
@@ -391,9 +391,9 @@ public class DisplayStack {
 	@SuppressWarnings("unchecked")
 	private VoxelBox<ByteBuffer> bufferForChnlBBox( int chnlNum, BoundingBox bbox ) {
 		
-		Chnl chnl = delegate.getChnl(chnlNum);
+		Channel chnl = delegate.getChnl(chnlNum);
 		
-		ChnlConverterAttached<Chnl,ByteBuffer> converter = listConverters.get(chnlNum);
+		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(chnlNum);
 		
 		VoxelBox<?> vbUnconverted = chnl.getVoxelBox().any().createBufferAvoidNew(bbox);
 		

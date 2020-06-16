@@ -36,11 +36,11 @@ import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -64,7 +64,7 @@ public class FindOutline {
 	
 	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) throws CreateException {
 		// We create a new image for output
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.instance );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.instance );
 		BinaryChnl chnlOutBinary = new BinaryChnl(chnlOut, chnl.getBinaryValues());
 		
 		// Gets outline
@@ -78,17 +78,17 @@ public class FindOutline {
 	}
 	
 	/** Outline using multiple erosions to create a deeper outline */
-	public static ObjMask outline(ObjMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
+	public static ObjectMask outline(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
 		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
-		ObjMask maskIn = mask.duplicate();
+		ObjectMask maskIn = mask.duplicate();
 				
 		if (numberErosions<1) {
 			assert false;
 		}
 				
 		BinaryVoxelBox<ByteBuffer> bufferOut = outlineMultiplex( maskIn.binaryVoxelBox(), numberErosions, erodeEdges, do3D );
-		return new ObjMask( maskIn.getBoundingBox(), bufferOut.getVoxelBox(), bufferOut.getBinaryValues() );
+		return new ObjectMask( maskIn.getBoundingBox(), bufferOut.getVoxelBox(), bufferOut.getBinaryValues() );
 
 	}
 

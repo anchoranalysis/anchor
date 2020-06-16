@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Keeps any on pixel that touches an off pixel where the off pixel has a corresponding HIGH value in vbRequireHigh
@@ -41,12 +41,12 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
 	private LocalSlices localSlicesRequireHigh;
 	private BinaryValuesByte bvRequireHigh;
-	private ObjMask om;
+	private ObjectMask om;
 	
 	public OutlineKernel3NghbMatchValue(
 		boolean outsideAtThreshold,
 		boolean useZ,
-		ObjMask om,
+		ObjectMask om,
 		BinaryVoxelBox<ByteBuffer> vbRequireHigh,
 		boolean ignoreAtThreshold
 	) {
@@ -65,7 +65,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		BinaryValuesByte bv,
 		boolean outsideAtThreshold,
 		boolean useZ,
-		ObjMask om,
+		ObjectMask om,
 		BinaryVoxelBox<ByteBuffer> vbRequireHigh,
 		boolean ignoreAtThreshold
 	) {

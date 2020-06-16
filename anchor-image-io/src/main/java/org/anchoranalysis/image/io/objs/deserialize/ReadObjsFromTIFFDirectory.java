@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolder;
@@ -42,20 +42,20 @@ import org.anchoranalysis.io.manifest.deserializer.folder.LoadContainer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.manifest.serialized.SerializedObjectSetFolderSource;
 
-class ReadObjsFromTIFFDirectory extends Deserializer<ObjMaskCollection> {
+class ReadObjsFromTIFFDirectory extends Deserializer<ObjectMaskCollection> {
 	
 	@Override
-	public ObjMaskCollection deserialize(Path folderPath) throws DeserializationFailedException {
+	public ObjectMaskCollection deserialize(Path folderPath) throws DeserializationFailedException {
 		RasterReader rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
 		return readWithRaster(folderPath, rasterReader);
 	}
 	
-	private ObjMaskCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
+	private ObjectMaskCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
 		
 		try {
 			SerializedObjectSetFolderSource folderSource = new SerializedObjectSetFolderSource(folderPath,"*.ser");
 			
-			DeserializeFromFolder<ObjMask> deserializeFolder = new DeserializeFromFolderSimple<ObjMask>(
+			DeserializeFromFolder<ObjectMask> deserializeFolder = new DeserializeFromFolderSimple<ObjectMask>(
 				new ObjMaskDualDeserializer(rasterReader),
 				folderSource
 			);
@@ -67,8 +67,8 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjMaskCollection> {
 		}
 	}
 	
-	private static ObjMaskCollection createFromLoadContainer( LoadContainer<ObjMask> lc ) throws CreateException {
-		ObjMaskCollection omc = new ObjMaskCollection();
+	private static ObjectMaskCollection createFromLoadContainer( LoadContainer<ObjectMask> lc ) throws CreateException {
+		ObjectMaskCollection omc = new ObjectMaskCollection();
 		try {
 			for( int i=lc.getCntr().getMinimumIndex(); i<=lc.getCntr().getMaximumIndex(); i++ ) {
 				omc.add( lc.getCntr().get(i) );

@@ -34,8 +34,8 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.io.objs.ObjMaskCollectionWriter;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.io.objs.ObjectMaskCollectionWriter;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
@@ -87,10 +87,10 @@ class SubsetOutputterFactory {
 		);
 	}
 	
-	public SubsetOutputter<ObjMaskCollection> objMask() {
+	public SubsetOutputter<ObjectMaskCollection> objMask() {
 		return create(
 			soMPP.getImage().getObjMaskCollection(),
-			ObjMaskCollectionWriter.generator(),
+			ObjectMaskCollectionWriter.generator(),
 			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.OBJS),
 			"objMaskCollection"
 		);

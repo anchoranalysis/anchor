@@ -38,8 +38,8 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
 public class AssignmentObjMaskFactory {
@@ -61,8 +61,8 @@ public class AssignmentObjMaskFactory {
 	}
 
 	public AssignmentObjMask createAssignment(
-		ObjMaskCollection leftObjs,
-		ObjMaskCollection rightObjs,
+		ObjectMaskCollection leftObjs,
+		ObjectMaskCollection rightObjs,
 		double maxAcceptedCost,
 		ImageDim dim
 	) throws FeatureCalcException {
@@ -83,10 +83,10 @@ public class AssignmentObjMaskFactory {
 		}
 		
 		if (useMIP) {
-			ObjMaskCollection annotationObjs2D = leftObjs.duplicate();
+			ObjectMaskCollection annotationObjs2D = leftObjs.duplicate();
 			annotationObjs2D.convertToMaxIntensityProjection();
 			
-			ObjMaskCollection resultObjs2D = rightObjs.duplicate();
+			ObjectMaskCollection resultObjs2D = rightObjs.duplicate();
 			resultObjs2D.convertToMaxIntensityProjection();
 			cost = createCostMatrix(annotationObjs2D, resultObjs2D, dim );
 		} else {
@@ -106,7 +106,7 @@ public class AssignmentObjMaskFactory {
 		
 	}
 		
-	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjMaskCollection annotation, ObjMaskCollection result, ImageDim dim) throws FeatureCalcException {
+	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjectMaskCollection annotation, ObjectMaskCollection result, ImageDim dim) throws FeatureCalcException {
 
 		FeatureCalculatorSingle<FeatureInputPairObjs> session;
 		try {
@@ -120,10 +120,10 @@ public class AssignmentObjMaskFactory {
 		double[][] outArr = new double[annotation.size()][result.size()];
 		
 		for( int i=0; i<annotation.size(); i++) {
-			ObjMask objA = annotation.get(i);
+			ObjectMask objA = annotation.get(i);
 			for( int j=0; j<result.size(); j++) {
 				
-				ObjMask objR = result.get(j);
+				ObjectMask objR = result.get(j);
 	
 				double costObjs = session.calc(
 					paramsFor(objA, objR, nrgStack)
@@ -143,7 +143,7 @@ public class AssignmentObjMaskFactory {
 		}
 	}
 	
-	private static FeatureInputPairObjs paramsFor( ObjMask objMask1, ObjMask objMask2, NRGStackWithParams nrgStack) {
+	private static FeatureInputPairObjs paramsFor( ObjectMask objMask1, ObjectMask objMask2, NRGStackWithParams nrgStack) {
 		return new FeatureInputPairObjs(
 			objMask1,
 			objMask2,
@@ -155,8 +155,8 @@ public class AssignmentObjMaskFactory {
 		
 		AssignmentObjMask assignment = new AssignmentObjMask();
 		
-		ObjMaskCollection leftObjs = costMatrix.getObjs1();
-		ObjMaskCollection rightObjs = costMatrix.getObjs2();
+		ObjectMaskCollection leftObjs = costMatrix.getObjs1();
+		ObjectMaskCollection rightObjs = costMatrix.getObjs2();
 		
 		Set<Integer> setAnnotationObjs = new HashSet<>();
 		for( int i=0; i<leftObjs.size(); i++) {

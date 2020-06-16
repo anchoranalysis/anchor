@@ -34,8 +34,8 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class FromMask extends ScaledMaskCreator {
@@ -52,7 +52,7 @@ public class FromMask extends ScaledMaskCreator {
 		try {
 			// Then we have to create the scaled-object fresh
 			// We store it for next-time
-			ObjMask omScaled = omUnscaled.getMask().scaleNew(
+			ObjectMask omScaled = omUnscaled.getMask().scaleNew(
 				new ScaleFactor(scaleFactor),
 				interpolator
 			);

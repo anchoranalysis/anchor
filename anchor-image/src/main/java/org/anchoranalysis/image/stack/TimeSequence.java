@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class TimeSequence implements Iterable<Stack> {
 
-	private List<Stack> list = new ArrayList<>();
+	private final List<Stack> list = new ArrayList<>();
 
 	public TimeSequence() {
 	}

@@ -38,11 +38,11 @@ import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -72,7 +72,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 	@Override
 	protected RGBStack generateBackground() throws CreateException {
 		try {
-			ObjMaskCollection objs = getIterableElement().collectionObjMask();
+			ObjectMaskCollection objs = getIterableElement().collectionObjMask();
 			
 			if (objs.isEmpty()) {
 				throw new CreateException("This generator expects at least one mask to be present");
@@ -113,13 +113,13 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		);
 	}
 	
-	private static ObjMaskWithPropertiesCollection relTo(ObjMaskCollection in, BoundingBox src ) throws CreateException {
+	private static ObjMaskWithPropertiesCollection relTo(ObjectMaskCollection in, BoundingBox src ) throws CreateException {
 		
 		ObjMaskWithPropertiesCollection out = new ObjMaskWithPropertiesCollection();
 		
-		for( ObjMask om : in ) {
+		for( ObjectMask om : in ) {
 			BoundingBox bboxNew = new BoundingBox( om.getBoundingBox().relPosTo(src), om.getBoundingBox().extent() );
-			ObjMask omNew = new ObjMask(bboxNew, om.binaryVoxelBox().getVoxelBox(), om.getBinaryValues() );
+			ObjectMask omNew = new ObjectMask(bboxNew, om.binaryVoxelBox().getVoxelBox(), om.getBinaryValues() );
 			out.add( new ObjMaskWithProperties(omNew) );
 		}
 		

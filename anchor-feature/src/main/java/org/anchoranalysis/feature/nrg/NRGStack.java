@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.nrg;
  */
 
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -47,7 +47,7 @@ public class NRGStack {
 		this.dim = dim;
 	}
 	
-	public NRGStack( Chnl chnl ) {
+	public NRGStack( Channel chnl ) {
 		super();
 		delegate = new Stack(chnl);
 	}
@@ -78,7 +78,7 @@ public class NRGStack {
 		);
 	}
 
-	public final Chnl getChnl(int index) {
+	public final Channel getChnl(int index) {
 		
 		if (delegate==null) {
 			throwInvalidIndexException( 0, index );

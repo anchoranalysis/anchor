@@ -37,26 +37,26 @@ import org.anchoranalysis.core.name.provider.NamedProviderCombine;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 
 class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
-	private static ChnlFactorySingleType FACTORY = new ChnlFactoryByte();
+	private static ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
 	
 	private NamedProvider<Stack> stackCollection;
-	private NamedProvider<Chnl> namedChnlCollection;
+	private NamedProvider<Channel> namedChnlCollection;
 	private NamedProvider<BinaryChnl> namedBinaryImageCollection;
 	private NamedProvider<Stack> combinedStackProvider;
 	
 	public CombineDiverseProvidersAsStacks(
 		NamedProvider<Stack> stackCollection,
-		NamedProvider<Chnl> namedChnlCollection,
+		NamedProvider<Channel> namedChnlCollection,
 		NamedProvider<BinaryChnl> namedBinaryImageCollection
 	) {
 		this.stackCollection = stackCollection;
@@ -84,7 +84,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 	private NamedProvider<Stack> createCombinedStackProvider() {
 		
 		// Channel collection bridge
-		NamedProviderBridge<Chnl,Stack> namedChnlCollectionAsStackBridge =
+		NamedProviderBridge<Channel,Stack> namedChnlCollectionAsStackBridge =
 			new NamedProviderBridge<>(
 				namedChnlCollection,
 				chnl -> new Stack(chnl),
@@ -108,12 +108,12 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
 	private static Stack stackFromBinary( BinaryChnl sourceObject ) {
 		
-		Chnl chnlNew = FACTORY.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
+		Channel chnlNew = FACTORY.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
 		
 		BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxelBox();
 		
 		// For each region we get a mask for what equals the binary mask
-		ObjMask om = bvb.getVoxelBox().equalMask(
+		ObjectMask om = bvb.getVoxelBox().equalMask(
 			new BoundingBox(bvb.getVoxelBox().extent()),
 			bvb.getBinaryValues().getOnInt()
 		);

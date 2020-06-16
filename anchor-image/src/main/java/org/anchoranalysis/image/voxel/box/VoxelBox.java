@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.InterpolateUtilities;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -182,7 +182,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * @param value value to be set in matched pixels
 	 * @return the number of pixels successfully "set"
 	 */
-	public int setPixelsCheckMask( ObjMask om, int value ) {
+	public int setPixelsCheckMask( ObjectMask om, int value ) {
 		assert( om!= null );
 		assert( om.getBoundingBox()!=null );
 		assert( om.getVoxelBox()!=null );
@@ -206,7 +206,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * @param maskMatchValue what's an "On" value for the mask to match against?
 	 * @return the number of pixels successfully "set"
 	 */
-	public int setPixelsCheckMask( ObjMask om, int value, byte maskMatchValue ) {
+	public int setPixelsCheckMask( ObjectMask om, int value, byte maskMatchValue ) {
 		assert( om!= null );
 		assert( om.getBoundingBox()!= null );
 		assert( om.getVoxelBox()!= null );
@@ -274,16 +274,16 @@ public abstract class VoxelBox<T extends Buffer> {
 		return cnt;
 	}
 	
-	public abstract void addPixelsCheckMask( ObjMask mask, int value );
+	public abstract void addPixelsCheckMask( ObjectMask mask, int value );
 	
-	public abstract void scalePixelsCheckMask( ObjMask mask, double value );
+	public abstract void scalePixelsCheckMask( ObjectMask mask, double value );
 	
 	public abstract void subtractFrom( int val );
 	
 	
-	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
+	public ObjectMask equalMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask(bbox);
+		ObjectMask om = new ObjectMask(bbox);
 		
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
@@ -315,9 +315,9 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public ObjMask greaterThanMask( BoundingBox bbox, int equalVal ) {
+	public ObjectMask greaterThanMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask(bbox);
+		ObjectMask om = new ObjectMask(bbox);
 		
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
@@ -349,9 +349,9 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public ObjMask greaterThanMask( ObjMask maskIn, int equalVal ) {
+	public ObjectMask greaterThanMask( ObjectMask maskIn, int equalVal ) {
 		
-		ObjMask maskOut = new ObjMask(
+		ObjectMask maskOut = new ObjectMask(
 			maskIn.getBoundingBox()
 		);
 		
@@ -460,7 +460,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public int countEqualMask( int equalVal, ObjMask om ) {
+	public int countEqualMask( int equalVal, ObjectMask om ) {
 		
 		ReadableTuple3i srcStart = om.getBoundingBox().getCrnrMin();
 		ReadableTuple3i srcEnd = om.getBoundingBox().calcCrnrMax();
@@ -561,6 +561,10 @@ public abstract class VoxelBox<T extends Buffer> {
 
 	// Very slow access, use sparingly.  Instead process slice by slice.
 	public abstract int getVoxel(int x, int y, int z);
+	
+	public int getVoxel(ReadableTuple3i pnt) {
+		return getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+	}
 	
 	// Creates a new channel contain a duplication only of a particular slice
 	public VoxelBox<T> extractSlice( int z ) {

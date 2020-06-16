@@ -37,18 +37,18 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 
 public class ProbMapObjMaskCollection extends ProbMap {
 
-	private ObjMaskCollection objMaskCollection;
+	private ObjectMaskCollection objMaskCollection;
 	private ImageDim dim;
 	
 	private ProbWeights probWeights;
 	
-	public ProbMapObjMaskCollection(ObjMaskCollection objMaskCollection,
+	public ProbMapObjMaskCollection(ObjectMaskCollection objMaskCollection,
 			ImageDim dim) throws CreateException {
 		super();
 		this.objMaskCollection = objMaskCollection;
@@ -56,7 +56,7 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		
 		
 		probWeights = new ProbWeights();
-		for( ObjMask om : objMaskCollection ) {
+		for( ObjectMask om : objMaskCollection ) {
 			probWeights.add( (double) om.binaryVoxelBox().countOn() );
 		}
 	}
@@ -74,7 +74,7 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		
 		assert(index>=0);
 		
-		ObjMask om = objMaskCollection.get(index);
+		ObjectMask om = objMaskCollection.get(index);
 		return Optional.of(
 			sampleFromObjMask(om,re)
 		);
@@ -105,7 +105,7 @@ public class ProbMapObjMaskCollection extends ProbMap {
 		return null;
 	}
 
-	private Point3d sampleFromObjMask( ObjMask om, RandomNumberGenerator re ) {
+	private Point3d sampleFromObjMask( ObjectMask om, RandomNumberGenerator re ) {
 
 		// Now we keep picking a pixel at random from the object mask until we find one that is
 		//  on.  Could be very inefficient for low-density bounding boxes? So we should make sure

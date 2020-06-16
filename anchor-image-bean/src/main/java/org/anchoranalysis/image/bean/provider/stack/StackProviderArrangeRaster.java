@@ -33,11 +33,11 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.arrangeraster.RasterArranger;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryShort;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -94,7 +94,7 @@ public class StackProviderArrangeRaster extends StackProvider {
 			throw new CreateException(e);
 		}
 		
-		ChnlFactorySingleType factory = createShort ? new ChnlFactoryShort() : new ChnlFactoryByte();
+		ChannelFactorySingleType factory = createShort ? new ChannelFactoryShort() : new ChannelFactoryByte();
 
 		return rasterArranger.createStack(rasterList,factory).asStack();
 	}

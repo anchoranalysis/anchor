@@ -32,13 +32,13 @@ import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class AssignmentObjMask implements Assignment {
 
-	private List<ObjMask> listUnassignedLeft = new ArrayList<>();
-	private List<ObjMask> listUnassignedRight = new ArrayList<>();
+	private List<ObjectMask> listUnassignedLeft = new ArrayList<>();
+	private List<ObjectMask> listUnassignedRight = new ArrayList<>();
 	private List<PairObjMask> listPairs = new ArrayList<>();
 	
 	/** The headers needed to create statistics */
@@ -106,8 +106,8 @@ public class AssignmentObjMask implements Assignment {
 	}
 	
 	@Override
-	public List<ObjMask> getListPaired( boolean left ) {
-		List<ObjMask> out = new ArrayList<>();
+	public List<ObjectMask> getListPaired( boolean left ) {
+		List<ObjectMask> out = new ArrayList<>();
 		for( PairObjMask om : listPairs) {
 			out.add( om.getMultiplex( left ) );
 		}
@@ -115,7 +115,7 @@ public class AssignmentObjMask implements Assignment {
 	}
 
 	@Override
-	public List<ObjMask> getListUnassigned( boolean left ) {
+	public List<ObjectMask> getListUnassigned( boolean left ) {
 		if (left) {
 			return getListUnassignedLeft();
 		} else {
@@ -155,31 +155,31 @@ public class AssignmentObjMask implements Assignment {
 		return max;
 	}
 	
-	public List<ObjMask> getListUnassignedLeft() {
+	public List<ObjectMask> getListUnassignedLeft() {
 		return listUnassignedLeft;
 	}
 
-	public List<ObjMask> getListUnassignedRight() {
+	public List<ObjectMask> getListUnassignedRight() {
 		return listUnassignedRight;
 	}
 
-	public void addLeftObj( ObjMask om ) {
+	public void addLeftObj( ObjectMask om ) {
 		listUnassignedLeft.add(om);
 	}
 
-	public void addLeftObjs( ObjMaskCollection om ) {
+	public void addLeftObjs( ObjectMaskCollection om ) {
 		listUnassignedLeft.addAll(om.asList());
 	}
 	
-	public void addRightObj( ObjMask om ) {
+	public void addRightObj( ObjectMask om ) {
 		listUnassignedRight.add(om);
 	}
 	
-	public void addRightObjs( ObjMaskCollection om ) {
+	public void addRightObjs( ObjectMaskCollection om ) {
 		listUnassignedRight.addAll(om.asList());
 	}
 	
-	public void addPair( ObjMask om1, ObjMask om2, double overlapRatio ) {
+	public void addPair( ObjectMask om1, ObjectMask om2, double overlapRatio ) {
 		listPairs.add( new PairObjMask(om1, om2, overlapRatio) );
 	}
 	
@@ -230,10 +230,10 @@ public class AssignmentObjMask implements Assignment {
 		return listPairs.size() + listUnassignedRight.size();
 	}
 		
-	private static void removeTouchingBorderXYObjMask( ImageDim sd, List<ObjMask> list ) {
-		Iterator<ObjMask> itr = list.iterator();
+	private static void removeTouchingBorderXYObjMask( ImageDim sd, List<ObjectMask> list ) {
+		Iterator<ObjectMask> itr = list.iterator();
 		while( itr.hasNext() ) {
-			ObjMask om = itr.next();
+			ObjectMask om = itr.next();
 			if (om.getBoundingBox().atBorderXY(sd)) {
 				itr.remove();
 			}

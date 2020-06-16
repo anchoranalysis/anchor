@@ -31,13 +31,13 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BinaryChnlInverter {
 	
-	public static ObjMask invertObjMaskDuplicate( ObjMask om ) {
-		ObjMask omDup = om.duplicate();
+	public static ObjectMask invertObjMaskDuplicate( ObjectMask om ) {
+		ObjectMask omDup = om.duplicate();
 		BinaryChnlInverter.invertObjMask(omDup);
 		return omDup;
 	}
@@ -72,7 +72,7 @@ public class BinaryChnlInverter {
 		}
 	}
 		
-	private static void invertObjMask( ObjMask om ) {
+	private static void invertObjMask( ObjectMask om ) {
 		invertVoxelBox( om.getVoxelBox(), om.getBinaryValuesByte() );
 		try {
 			om.setBinaryValues( om.getBinaryValues().createInverted() );

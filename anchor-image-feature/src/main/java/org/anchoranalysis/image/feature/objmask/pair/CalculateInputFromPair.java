@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.objmask.pair;
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -77,7 +77,7 @@ public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingl
 		return paramsNew;
 	}
 	
-	private ObjMask extractObj(FeatureInputPairObjs input) {
+	private ObjectMask extractObj(FeatureInputPairObjs input) {
 		
 		if (extract==Extract.MERGED) {
 			return input.getMerged();

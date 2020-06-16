@@ -32,7 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
@@ -64,7 +64,7 @@ public class CopyConvert {
 	 */
 	public static void copyAllFrames(
 		IFormatReader reader,
-		List<Chnl> dest,
+		List<Channel> dest,
 		ProgressReporter progressReporter,
 		ImageDim dim,
 		int numChnl,

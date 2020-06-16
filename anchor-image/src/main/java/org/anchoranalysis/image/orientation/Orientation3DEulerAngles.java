@@ -28,7 +28,7 @@ package org.anchoranalysis.image.orientation;
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
 import org.apache.commons.lang.builder.HashCodeBuilder;

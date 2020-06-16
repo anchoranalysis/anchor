@@ -27,14 +27,14 @@ package org.anchoranalysis.annotation.io.assignment;
  */
 
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 class PairObjMask {
-	private ObjMask left;
-	private ObjMask right;
+	private ObjectMask left;
+	private ObjectMask right;
 	private double overlapRatio;
 
-	public PairObjMask(ObjMask left, ObjMask right, double overlapRatio) {
+	public PairObjMask(ObjectMask left, ObjectMask right, double overlapRatio) {
 		super();
 		this.left = left;
 		this.right = right;
@@ -45,7 +45,7 @@ class PairObjMask {
 		return left.getBoundingBox().atBorderXY(sd) || right.getBoundingBox().atBorderXY(sd); 
 	}
 	
-	public ObjMask getMultiplex( boolean left ) {
+	public ObjectMask getMultiplex( boolean left ) {
 		if (left) {
 			return getLeft();
 		} else {
@@ -53,11 +53,11 @@ class PairObjMask {
 		}
 	}
 	
-	public ObjMask getLeft() {
+	public ObjectMask getLeft() {
 		return left;
 	}
 
-	public ObjMask getRight() {
+	public ObjectMask getRight() {
 		return right;
 	}
 	

@@ -33,15 +33,15 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 // A voxelated mark, localised at certain position
 public abstract class PxlMark {
 
-	private ObjMask objMask;
-	private ObjMask objMaskMIP;		// null until we ned it
+	private ObjectMask objMask;
+	private ObjectMask objMaskMIP;		// null until we ned it
 	
 	public abstract void initForMark( Mark mark, NRGStack stack, RegionMap regionMap );
 	
@@ -57,19 +57,19 @@ public abstract class PxlMark {
 		return objMaskMIP.getBoundingBox();
 	}
 
-	public ObjMask getObjMask() {
+	public ObjectMask getObjMask() {
 		return objMask;
 	}
 	
-	public ObjMask getObjMaskMIP() {
+	public ObjectMask getObjMaskMIP() {
 		return objMaskMIP;
 	}
 
-	protected void setObjMask(ObjMask objMask) {
+	protected void setObjMask(ObjectMask objMask) {
 		this.objMask = objMask;
 	}
 	
-	protected void setObjMaskMIP(ObjMask objMask) {
+	protected void setObjMaskMIP(ObjectMask objMask) {
 		this.objMaskMIP = objMask;
 	}
 

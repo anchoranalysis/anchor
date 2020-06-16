@@ -31,18 +31,18 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 class ConsiderNghb {
 
-	private ObjMask omOutline;
+	private ObjectMask omOutline;
 	private int dist;
 	private List<Point3iWithDist> localQueue;
 	private IConsiderVisit icv;
 	private Point3i pnt;
 	
-	public ConsiderNghb(ObjMask omOutline, int dist, List<Point3iWithDist> localQueue, IConsiderVisit icv,
+	public ConsiderNghb(ObjectMask omOutline, int dist, List<Point3iWithDist> localQueue, IConsiderVisit icv,
 			Point3i pnt) {
 		super();
 		this.omOutline = omOutline;
@@ -111,7 +111,7 @@ class ConsiderNghb {
 		return false;
 	}
 	
-	public static boolean considerVisitMarkRaster( IConsiderVisit considerVisit, Point3i pnt, int dist, ObjMask omOutline ) {
+	public static boolean considerVisitMarkRaster( IConsiderVisit considerVisit, Point3i pnt, int dist, ObjectMask omOutline ) {
 		
 		VoxelBox<ByteBuffer> vb = omOutline.getVoxelBox();
 		BinaryValuesByte bvb = omOutline.getBinaryValuesByte();

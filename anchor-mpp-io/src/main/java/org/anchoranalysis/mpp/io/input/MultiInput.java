@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
@@ -51,7 +51,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 	private StackWithMap stackWithMap;
 	
 	private OperationMap<Cfg> mapCfg = new OperationMap<>();
-	private OperationMap<ObjMaskCollection> mapObjMaskCollection = new OperationMap<>();
+	private OperationMap<ObjectMaskCollection> mapObjMaskCollection = new OperationMap<>();
 	private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
 	private OperationMap<Histogram> mapHistogram = new OperationMap<>();
 	private OperationMap<Path> mapFilePath = new OperationMap<>();
@@ -129,7 +129,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 		return mapCfg;
 	}
 
-	public MultiInputSubMap<ObjMaskCollection> objs() {
+	public MultiInputSubMap<ObjectMaskCollection> objs() {
 		return mapObjMaskCollection;
 	}
 

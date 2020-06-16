@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /**
  * Only processes a point if it lines on the region of an Object-Mask
@@ -19,7 +19,7 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 
 	private final ProcessVoxel process;
 	
-	private final ObjMask mask;
+	private final ObjectMask mask;
 	private final Extent extent;
 	private final byte byteOn;
 	private final ReadableTuple3i crnrMin;
@@ -32,7 +32,7 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	 * @param process the processor to call on the region of the mask
 	 * @param mask the mask that defines the "on" region which is processed only.
 	 */
-	public RequireIntersectionWithMask(ProcessVoxel process, ObjMask mask) {
+	public RequireIntersectionWithMask(ProcessVoxel process, ObjectMask mask) {
 		super();
 		this.process = process;
 		this.mask = mask;

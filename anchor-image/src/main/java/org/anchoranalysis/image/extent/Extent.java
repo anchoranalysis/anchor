@@ -301,11 +301,11 @@ public final class Extent implements Serializable {
 	}
 	
 	public Extent subtract( Extent e ) {
-		return createPointOperation( p->p.sub(e.asTuple()) );
+		return createPointOperation( p->p.subtract(e.asTuple()) );
 	}
 	
 	public Extent divide( int factor ) {
-		return createPointOperation( p->p.div(factor) );
+		return createPointOperation( p->p.divideBy(factor) );
 	}
 	
 	/**
@@ -313,7 +313,7 @@ public final class Extent implements Serializable {
 	 * @return the new extent
 	 */
 	public Extent createMinusOne() {
-		return createPointOperation( p->p.sub(1) );
+		return createPointOperation( p->p.subtract(1) );
 	}
 	
 	public Extent growBy(int toAdd) {

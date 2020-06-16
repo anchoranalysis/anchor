@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public abstract class AnnotationWithCfg extends Annotation {
 	
@@ -41,8 +41,8 @@ public abstract class AnnotationWithCfg extends Annotation {
 	
 	protected abstract int getRegionID();
 	
-	public ObjMaskCollection convertToObjs( ImageDim dim ) {
-		ObjMaskCollection annotationObjs = getCfg().calcMask(
+	public ObjectMaskCollection convertToObjs( ImageDim dim ) {
+		ObjectMaskCollection annotationObjs = getCfg().calcMask(
 			dim,
 			getRegionMap().membershipWithFlagsForIndex(getRegionID()),
 			BinaryValuesByte.getDefault(),

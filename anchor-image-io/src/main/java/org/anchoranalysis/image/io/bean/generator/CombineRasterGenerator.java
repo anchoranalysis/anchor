@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.arrangeraster.RasterArranger;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -83,7 +83,7 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 			//
 			// We assume iterable generators always produce images of the same size
 			//   and base our measurements on the first call to generate
-			return rasterArranger.createStack(generated,new ChnlFactoryByte()).asStack();
+			return rasterArranger.createStack(generated,new ChannelFactoryByte()).asStack();
 		}
 
 		@Override

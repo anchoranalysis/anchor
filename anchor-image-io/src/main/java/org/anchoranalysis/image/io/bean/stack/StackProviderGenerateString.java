@@ -32,15 +32,15 @@ import java.nio.ShortBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedShort;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -74,7 +74,7 @@ public class StackProviderGenerateString extends StackProvider {
 			int zHeight = repeatZ.getDimensions().getZ();
 			
 			Stack out = new Stack();
-			for( Chnl chnl : label2D ) {
+			for( Channel chnl : label2D ) {
 				try {
 					out.addChnl( createExpandedChnl(chnl, zHeight) );
 				} catch (IncorrectImageSizeException e) {
@@ -90,7 +90,7 @@ public class StackProviderGenerateString extends StackProvider {
 	
 	private static int maxValueFromStack( Stack stack ) {
 		int max = 0;
-		for( Chnl chnl : stack ) {
+		for( Channel chnl : stack ) {
 			int chnlVal = chnl.getVoxelBox().any().ceilOfMaxPixel();
 			if (chnlVal>max) {
 				max = chnlVal;
@@ -104,7 +104,7 @@ public class StackProviderGenerateString extends StackProvider {
 			Stack stack = stringRasterGenerator.generateStack();
 			
 			if (createShort) {
-				ChnlConverter<ShortBuffer> cc = new ChnlConverterToUnsignedShort( new VoxelBoxConverterToShortScaleByType() );
+				ChannelConverter<ShortBuffer> cc = new ChannelConverterToUnsignedShort( new VoxelBoxConverterToShortScaleByType() );
 					
 				stack = cc.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL );
 			}
@@ -117,7 +117,7 @@ public class StackProviderGenerateString extends StackProvider {
 				double maxValue = maxValueFromStack(stackIntensity);
 				double mult = (double) maxValue / maxTypeValue; 
 				
-				for( Chnl c : stack) {
+				for( Channel c : stack) {
 					c.getVoxelBox().any().multiplyBy(mult);
 				}
 			}
@@ -128,7 +128,7 @@ public class StackProviderGenerateString extends StackProvider {
 		}
 	}
 	
-	private Chnl createExpandedChnl( Chnl chnl, int zHeight ) throws CreateException {
+	private Channel createExpandedChnl( Channel chnl, int zHeight ) throws CreateException {
 		assert (chnl.getDimensions().getZ()==1);
 		
 		ImageDim sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
@@ -136,7 +136,7 @@ public class StackProviderGenerateString extends StackProvider {
 		BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtnt());
 		BoundingBox bboxDest = bboxSrc;
 		
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(sdNew, chnl.getVoxelDataType());
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(sdNew, chnl.getVoxelDataType());
 		for( int z=0; z<zHeight; z++) {
 			
 			// Adjust dfestination box

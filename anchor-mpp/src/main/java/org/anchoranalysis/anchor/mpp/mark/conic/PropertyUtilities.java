@@ -27,7 +27,7 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 
 class PropertyUtilities {
 	

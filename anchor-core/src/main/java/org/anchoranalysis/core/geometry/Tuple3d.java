@@ -62,7 +62,7 @@ public abstract class Tuple3d implements Serializable {
 		this.z += pnt.getZ();
 	}
 	
-	public final void sub( Tuple3d pnt ) {
+	public final void subtract( Tuple3d pnt ) {
 		this.x -= pnt.x;
 		this.y -= pnt.y;
 		this.z -= pnt.z;
@@ -95,6 +95,24 @@ public abstract class Tuple3d implements Serializable {
 		this.x = Math.abs(this.x);
 		this.y = Math.abs(this.y);
 		this.z = Math.abs(this.z);
+	}
+	
+	public final void increment(Tuple3d incrBy) {
+		incrementX(incrBy.x);
+		incrementY(incrBy.y);
+		incrementZ(incrBy.z);
+	}
+	
+	public final void incrementX(double val) {
+		this.x += val;
+	}
+	
+	public final void incrementY(double val) {
+		this.y += val;
+	}
+	
+	public final void incrementZ(double val) {
+		this.z += val;
 	}
 		
 	public final double getX() {

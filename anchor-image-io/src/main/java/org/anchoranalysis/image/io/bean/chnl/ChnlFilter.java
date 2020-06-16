@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
@@ -66,7 +66,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 	}
 	
 	@Override
-	public Chnl getChnl(
+	public Channel getChnl(
 		String name,
 		int t,
 		ProgressReporter progressReporter
@@ -79,7 +79,7 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 			
 			ChnlProvider chnlProviderDup = chnl.duplicateBean();
 			
-			Chnl chnlIn = chnlCollection.getChnl(name, t, progressReporter);
+			Channel chnlIn = chnlCollection.getChnl(name, t, progressReporter);
 			
 			ImageInitParams soImage = ImageInitParamsFactory.create(context);
 			soImage.addToStackCollection("input_chnl", new Stack(chnlIn) );

@@ -46,7 +46,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
@@ -77,7 +77,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		}
 		
 		try {
-			ObjMaskCollection objsCollection = objs.create();
+			ObjectMaskCollection objsCollection = objs.create();
 			
 			FeatureList<FeatureInputSingleObj> features = createFeatureList();
 			
@@ -109,7 +109,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private ObjMaskFeatureListCSVGenerator createGenerator(
 		FeatureInitParamsSharedObjs paramsInit,
 		NRGStackWithParams nrgStack,
-		ObjMaskCollection objsCollection,
+		ObjectMaskCollection objsCollection,
 		FeatureList<FeatureInputSingleObj> features,
 		LogErrorReporter logErrorReporter
 	) {

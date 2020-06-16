@@ -40,7 +40,11 @@ public class PointConverter {
 	}
 	
 	public static Point3i intFromDouble(Point3d p) {
-		return new Point3i(p);
+		return new Point3i(
+			(int) p.getX(),
+			(int) p.getY(),
+			(int) p.getZ()
+		);
 	}
 	
 	public static Point3i intFromDoubleCeil(Point3d p) {

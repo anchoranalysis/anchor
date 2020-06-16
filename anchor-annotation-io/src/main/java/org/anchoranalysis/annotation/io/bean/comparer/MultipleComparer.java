@@ -53,8 +53,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -98,13 +98,13 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		
 		for( NamedBean<Comparer> ni : listComparers ) {
 			
-			ObjMaskCollection annotationObjs = annotation.convertToObjs(
+			ObjectMaskCollection annotationObjs = annotation.convertToObjs(
 				background.getDimensions()
 			);
 			
-			Findable<ObjMaskCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
+			Findable<ObjectMaskCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
 			
-			Optional<ObjMaskCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logErrorReporter);
+			Optional<ObjectMaskCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logErrorReporter);
 			
 			if (!foundObjs.isPresent()) {
 				continue;
@@ -125,8 +125,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 	}
 	
 	private SimpleNameValue<Stack> compare(
-		ObjMaskCollection annotationObjs,
-		ObjMaskCollection compareObjs,
+		ObjectMaskCollection annotationObjs,
+		ObjectMaskCollection compareObjs,
 		DisplayStack background,
 		String rightName,
 		ColorSetGenerator colorSetGenerator
@@ -171,12 +171,12 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		}		
 	}
 	
-	private static void removeObjsWithNoPixels( ObjMaskCollection objs ) {
+	private static void removeObjsWithNoPixels( ObjectMaskCollection objs ) {
 		
-		Iterator<ObjMask> itr = objs.iterator();
+		Iterator<ObjectMask> itr = objs.iterator();
 		while( itr.hasNext() ) {
 			
-			ObjMask om = itr.next();
+			ObjectMask om = itr.next();
 			
 			if (om.numPixels()==0) {
 				itr.remove();

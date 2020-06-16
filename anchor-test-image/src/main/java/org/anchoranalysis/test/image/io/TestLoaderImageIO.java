@@ -33,15 +33,15 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.objs.ObjMaskCollectionReader;
+import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
@@ -57,13 +57,13 @@ public class TestLoaderImageIO {
 		rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
 	}
 	
-	public Chnl openChnlFromTestPath( String testPath ) throws TestDataLoadException {
+	public Channel openChnlFromTestPath( String testPath ) throws TestDataLoadException {
 		return extractChnl(
 			openStackFromTestPath(testPath)
 		);
 	}
 	
-	public Chnl openChnlFromFilePath( Path filePath ) throws TestDataLoadException {
+	public Channel openChnlFromFilePath( Path filePath ) throws TestDataLoadException {
 		return extractChnl(
 			openStackFromFilePath(filePath)
 		);
@@ -141,7 +141,7 @@ public class TestLoaderImageIO {
 	}
 
 	
-	public ObjMaskCollection openObjsFromTestPath( String testFolderPath ) throws TestDataLoadException {
+	public ObjectMaskCollection openObjsFromTestPath( String testFolderPath ) throws TestDataLoadException {
 		Path filePath = delegate.resolveTestPath( testFolderPath);
 		return openObjsFromFilePath(filePath);
 	}
@@ -153,13 +153,13 @@ public class TestLoaderImageIO {
 	 * @return an object mask collection
 	 * @throws TestDataLoadException if data cannot be loaded
 	 */
-	public ObjMaskCollection openObjsFromFilePath( Path folderPath ) throws TestDataLoadException {
+	public ObjectMaskCollection openObjsFromFilePath( Path folderPath ) throws TestDataLoadException {
 
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		TestReaderWriterUtilities.ensureRasterReader();
 		
 		try {
-			return ObjMaskCollectionReader.createFromPath(folderPath);
+			return ObjectMaskCollectionReader.createFromPath(folderPath);
 		} catch (DeserializationFailedException e) {
 			throw new TestDataLoadException(e);
 		}
@@ -187,9 +187,9 @@ public class TestLoaderImageIO {
 			);
 		}
 		
-		ObjMaskCollection objsWritten = openObjsFromTestPath(path1);
+		ObjectMaskCollection objsWritten = openObjsFromTestPath(path1);
 		
-		ObjMaskCollection objsSaved = openObjsFromTestPath(path2);
+		ObjectMaskCollection objsSaved = openObjsFromTestPath(path2);
 		
 		if ( !objsWritten.equalsDeep(objsSaved) ) {
 			return false;
@@ -198,7 +198,7 @@ public class TestLoaderImageIO {
 		return true;
 	}
 	
-	private static Chnl extractChnl( Stack stack ) {
+	private static Channel extractChnl( Stack stack ) {
 		if (stack.getNumChnl()!=1) {
 			throw new TestDataLoadException("Loading a stack which contains more than one channel, when only one channel is intended");
 		}

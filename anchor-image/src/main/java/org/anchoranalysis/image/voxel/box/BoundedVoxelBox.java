@@ -38,7 +38,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
@@ -263,11 +263,8 @@ public class BoundedVoxelBox<T extends Buffer> {
 		this.voxelBox.copyPixelsTo(new BoundingBox(e), bufferNew, new BoundingBox(grownBox.getCrnrMin(),e)  );
 		
 		// We create a new bounding box
-		Point3i crnrMinNew = new Point3i( this.boundingBox.getCrnrMin() );
-		crnrMinNew.sub( grownBox.getCrnrMin() );
-		
 		BoundingBox bbo = new BoundingBox(
-			crnrMinNew,
+			Point3i.immutableSubtract( this.boundingBox.getCrnrMin(), grownBox.getCrnrMin() ),
 			grownBox.extent()
 		);
 		
@@ -497,7 +494,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		);
 	}
 
-	public void setPixelsCheckMask(ObjMask om, int value) {
+	public void setPixelsCheckMask(ObjectMask om, int value) {
 		voxelBox.setPixelsCheckMask(om, value);
 	}
 

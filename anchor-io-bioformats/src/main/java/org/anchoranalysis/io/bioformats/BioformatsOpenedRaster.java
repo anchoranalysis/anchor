@@ -37,8 +37,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -182,7 +182,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			ImageDim sd = dim( seriesIndex );
 			
 			// Assumes order of time first, and then channels
-			List<Chnl> listAllChnls = createUninitialisedChnls(
+			List<Channel> listAllChnls = createUninitialisedChnls(
 				sd,
 				ts,
 				multiplexVoxelDataType(dataType)
@@ -215,16 +215,16 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	}
 	
 
-	private <BufferType extends Buffer> List<Chnl> createUninitialisedChnls( ImageDim dim, TimeSequence ts, ChnlFactorySingleType factory ) throws IncorrectImageSizeException {
+	private <BufferType extends Buffer> List<Channel> createUninitialisedChnls( ImageDim dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
 		
 		/** A list of all channels i.e. aggregating the channels associated with each stack */
-		List<Chnl> listAllChnls = new ArrayList<>();
+		List<Channel> listAllChnls = new ArrayList<>();
 		
 		for( int t=0; t<sizeT; t++) {
 			Stack stack = new Stack();
 			for (int c=0; c<numChnl; c++) {
 				
-				Chnl chnl = factory.createEmptyUninitialised(dim);
+				Channel chnl = factory.createEmptyUninitialised(dim);
 				
 				stack.addChnl(chnl);
 				listAllChnls.add(chnl);
@@ -236,7 +236,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	}
 		
 	private void copyBytesIntoChnls(
-		List<Chnl> listChnls,
+		List<Channel> listChnls,
 		ImageDim dim,
 		ProgressReporter progressReporter,
 		VoxelDataType dataType,

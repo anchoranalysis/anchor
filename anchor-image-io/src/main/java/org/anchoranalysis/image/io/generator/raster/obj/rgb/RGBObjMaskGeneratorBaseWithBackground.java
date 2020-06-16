@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 
 public abstract class RGBObjMaskGeneratorBaseWithBackground extends RGBObjMaskGeneratorBase {

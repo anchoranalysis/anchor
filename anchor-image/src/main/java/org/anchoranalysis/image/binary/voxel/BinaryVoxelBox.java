@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -97,11 +97,11 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowS
 				objMaskBuffer, maskBV);
 	}
 
-	public void setPixelsCheckMaskOn(ObjMask om) {
+	public void setPixelsCheckMaskOn(ObjectMask om) {
 		voxelBox.setPixelsCheckMask(om, binaryValues.getOnInt() );
 	}
 	
-	public void setPixelsCheckMaskOff(ObjMask om) {
+	public void setPixelsCheckMaskOff(ObjectMask om) {
 		voxelBox.setPixelsCheckMask(om, binaryValues.getOffInt() );
 	}
 	
@@ -109,7 +109,7 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowS
 	
 	public abstract BinaryVoxelBox<T> extractSlice(int z) throws CreateException;
 
-	public void setPixelsCheckMask(ObjMask om, int value, byte maskMatchValue) {
+	public void setPixelsCheckMask(ObjectMask om, int value, byte maskMatchValue) {
 		voxelBox.setPixelsCheckMask(om, value, maskMatchValue);
 	}
 
@@ -120,7 +120,7 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowS
 				bboxMask, value, maskMatchValue);
 	}
 
-	public void addPixelsCheckMask(ObjMask mask, int value) {
+	public void addPixelsCheckMask(ObjectMask mask, int value) {
 		voxelBox.addPixelsCheckMask(mask, value);
 	}
 

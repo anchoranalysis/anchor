@@ -32,9 +32,9 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 public class CreateStackFromBufferedImage {
 
-	private static ChnlFactorySingleType factory = new ChnlFactoryByte();
+	private static ChannelFactorySingleType factory = new ChannelFactoryByte();
 	
 	public static Stack create( BufferedImage bufferedImage ) throws OperationFailedException {
 		
@@ -62,7 +62,7 @@ public class CreateStackFromBufferedImage {
 		try {
 			int numChnl = 3;
 			for (int c =0; c<numChnl; c++) {
-				Chnl chnl = factory.createEmptyUninitialised(sd);
+				Channel chnl = factory.createEmptyUninitialised(sd);
 				chnl.getVoxelBox().asByte().getPlaneAccess().setPixelsForPlane(0, VoxelBufferByte.wrap(arr[c]) );
 				stackOut.addChnl(chnl);
 			}

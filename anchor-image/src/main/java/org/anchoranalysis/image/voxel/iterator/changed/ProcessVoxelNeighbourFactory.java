@@ -3,7 +3,7 @@ package org.anchoranalysis.image.voxel.iterator.changed;
 import java.util.Optional;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class ProcessVoxelNeighbourFactory {
 
@@ -17,7 +17,7 @@ public class ProcessVoxelNeighbourFactory {
 	 * @param process a process which will be wrapped inside a restriction
 	 * @return a new process with a restriction on the existing process
 	 */
-	public static<T> ProcessVoxelNeighbour<T> within(Optional<ObjMask> containingMask, Extent extentFallback, ProcessVoxelNeighbourAbsolute<T> process) {
+	public static<T> ProcessVoxelNeighbour<T> within(Optional<ObjectMask> containingMask, Extent extentFallback, ProcessVoxelNeighbourAbsolute<T> process) {
 		return containingMask.map( mask->
 			withinMask(mask, process)
 		).orElseGet( ()->
@@ -32,11 +32,11 @@ public class ProcessVoxelNeighbourFactory {
 		);
 	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjMask om, ProcessChangedPointAbsoluteMasked<T> process) {
+	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask om, ProcessChangedPointAbsoluteMasked<T> process) {
 		return new WithinMask<>(process, om);
 	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjMask om, ProcessVoxelNeighbourAbsolute<T> process) {
+	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask om, ProcessVoxelNeighbourAbsolute<T> process) {
 		return new WithinMask<>(
 			new WrapAbsoluteAsMasked<>(process),
 			om

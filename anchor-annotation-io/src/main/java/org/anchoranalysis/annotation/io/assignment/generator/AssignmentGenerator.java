@@ -42,10 +42,10 @@ import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -146,9 +146,9 @@ public class AssignmentGenerator extends RasterGenerator {
 		}
 	}
 	
-	private Stack createRGBOutlineStack( DisplayStack background, List<ObjMask> matchedObjs, ColorPool colorPool, final List<ObjMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
+	private Stack createRGBOutlineStack( DisplayStack background, List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
 		
-		ObjMaskCollection omc = new ObjMaskCollection();
+		ObjectMaskCollection omc = new ObjectMaskCollection();
 		omc.addAll(matchedObjs);
 		omc.addAll(otherObjs);
 
@@ -160,7 +160,7 @@ public class AssignmentGenerator extends RasterGenerator {
 	}
 
 	
-	private RGBObjMaskGenerator createGenerator( List<ObjMask> otherObjs, ColorList cols, ObjMaskCollection omc ) {
+	private RGBObjMaskGenerator createGenerator( List<ObjectMask> otherObjs, ColorList cols, ObjectMaskCollection omc ) {
 		
 		ObjMaskWriter outlineWriter = createOutlineWriter();
 		
@@ -175,7 +175,7 @@ public class AssignmentGenerator extends RasterGenerator {
 		}
 	}
 	
-	private RGBObjMaskGenerator createGenerator( ObjMaskWriter objMaskWriter, ColorList cols, ObjMaskCollection omc ) {
+	private RGBObjMaskGenerator createGenerator( ObjMaskWriter objMaskWriter, ColorList cols, ObjectMaskCollection omc ) {
 		return new RGBObjMaskGenerator(
 			objMaskWriter,
 			new ObjMaskWithPropertiesCollection(omc),
@@ -185,7 +185,7 @@ public class AssignmentGenerator extends RasterGenerator {
 	}
 	
 	
-	private ObjMaskWriter createConditionalWriter( List<ObjMask> otherObjs, ObjMaskWriter writer ) {
+	private ObjMaskWriter createConditionalWriter( List<ObjectMask> otherObjs, ObjMaskWriter writer ) {
 		
 		IfElseWriter.Condition condition = new IfElseWriter.Condition() {
 

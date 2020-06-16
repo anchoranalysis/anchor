@@ -29,17 +29,17 @@ package org.anchoranalysis.image.io.objs.deserialize;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-class ReadObjsFromTIFFDirectoryCorrectMissing extends Deserializer<ObjMaskCollection> {
+class ReadObjsFromTIFFDirectoryCorrectMissing extends Deserializer<ObjectMaskCollection> {
 
 	@Override
-	public ObjMaskCollection deserialize(Path path) throws DeserializationFailedException {
+	public ObjectMaskCollection deserialize(Path path) throws DeserializationFailedException {
 		// Work around to tell the difference between a deliberately abandoned objMaskCollection and an empty set
 		if (isMissingButLooksLikeCollection(path) ) {
-			return new ObjMaskCollection();
+			return new ObjectMaskCollection();
 		} else {
 			return new ReadObjsFromTIFFDirectory().deserialize(path);
 		}

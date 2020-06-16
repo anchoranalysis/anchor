@@ -3,7 +3,7 @@ package org.anchoranalysis.annotation.io.assignment;
 import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /*
  * #%L
@@ -40,9 +40,9 @@ public interface Assignment {
 	
 	int numUnassigned( boolean left );
 	
-	List<ObjMask> getListPaired( boolean left );
+	List<ObjectMask> getListPaired( boolean left );
 	
-	List<ObjMask> getListUnassigned( boolean left );
+	List<ObjectMask> getListUnassigned( boolean left );
 	
 	List<String> createStatisticsHeaderNames();
 	

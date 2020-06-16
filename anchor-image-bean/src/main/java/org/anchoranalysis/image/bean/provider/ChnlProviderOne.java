@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public abstract class ChnlProviderOne extends ChnlProvider {
 
@@ -38,13 +38,13 @@ public abstract class ChnlProviderOne extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		return createFromChnl(
 			chnl.create()	
 		);
 	}
 	
-	protected abstract Chnl createFromChnl(Chnl chnl) throws CreateException;
+	protected abstract Channel createFromChnl(Channel chnl) throws CreateException;
 
 	public ChnlProvider getChnl() {
 		return chnl;

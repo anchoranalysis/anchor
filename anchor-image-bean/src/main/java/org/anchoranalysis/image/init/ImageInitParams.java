@@ -26,9 +26,9 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 
 // A wrapper around SharedObjects which types certain Image entities
@@ -42,8 +42,8 @@ public class ImageInitParams extends BeanInitParams {
 	// START: Stores
 	private NamedProviderStore<Stack> storeStack;
 	private NamedProviderStore<Histogram> storeHistogram;
-	private NamedProviderStore<ObjMaskCollection> storeObjMaskCollection;
-	private NamedProviderStore<Chnl> storeChnl;
+	private NamedProviderStore<ObjectMaskCollection> storeObjMaskCollection;
+	private NamedProviderStore<Channel> storeChnl;
 	private NamedProviderStore<BinaryChnl> storeBinaryChnl;
 	private NamedProviderStore<BinarySgmn> storeBinarySgmn;
 	// END: Stores
@@ -61,8 +61,8 @@ public class ImageInitParams extends BeanInitParams {
 		
 		storeStack = so.getOrCreate(Stack.class);
 		storeHistogram = so.getOrCreate(Histogram.class);
-		storeObjMaskCollection = so.getOrCreate(ObjMaskCollection.class);
-		storeChnl = so.getOrCreate(Chnl.class);
+		storeObjMaskCollection = so.getOrCreate(ObjectMaskCollection.class);
+		storeChnl = so.getOrCreate(Channel.class);
 		storeBinaryChnl = so.getOrCreate(BinaryChnl.class);
 		storeBinarySgmn = so.getOrCreate(BinarySgmn.class);
 		this.modelDir = modelDir;
@@ -76,11 +76,11 @@ public class ImageInitParams extends BeanInitParams {
 		return storeHistogram;
 	}
 	
-	public NamedProviderStore<ObjMaskCollection> getObjMaskCollection() {
+	public NamedProviderStore<ObjectMaskCollection> getObjMaskCollection() {
 		return storeObjMaskCollection;
 	}
 	
-	public NamedProviderStore<Chnl> getChnlCollection() {
+	public NamedProviderStore<Channel> getChnlCollection() {
 		return storeChnl;
 	}
 	
@@ -140,11 +140,11 @@ public class ImageInitParams extends BeanInitParams {
 		}
 	}
 	
-	public void copyObjMaskCollectionFrom( NamedProvider<ObjMaskCollection> collectionSource ) throws OperationFailedException {
+	public void copyObjMaskCollectionFrom( NamedProvider<ObjectMaskCollection> collectionSource ) throws OperationFailedException {
 
 		try {
 			for (String id : collectionSource.keys()) {
-				ObjMaskCollection objs = collectionSource.getException(id);
+				ObjectMaskCollection objs = collectionSource.getException(id);
 				if (objs!=null) {
 					addToObjMaskCollection(id, new IdentityOperation<>(objs) );
 				}
@@ -154,7 +154,7 @@ public class ImageInitParams extends BeanInitParams {
 		}
 	}
 	
-	public void addToObjMaskCollection(String identifier, Operation<ObjMaskCollection,OperationFailedException> opObjMaskCollection) throws OperationFailedException {
+	public void addToObjMaskCollection(String identifier, Operation<ObjectMaskCollection,OperationFailedException> opObjMaskCollection) throws OperationFailedException {
 		getObjMaskCollection().add(identifier, opObjMaskCollection);
 	}
 	

@@ -34,8 +34,8 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -53,14 +53,14 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	
 	// Used to convert our source buffer to bytes, not called if it's already bytes
-	private List<ChnlConverterAttached<Chnl,ByteBuffer>> listChnlConverter;
+	private List<ChnlConverterAttached<Channel,ByteBuffer>> listChnlConverter;
 	
 	// Current displayStacl
 	private Stack stack;
 	
 	public RegionExtracterFromDisplayStack(
 		Stack stack,
-		List<ChnlConverterAttached<Chnl,ByteBuffer>> listChnlConverter
+		List<ChnlConverterAttached<Channel,ByteBuffer>> listChnlConverter
 	) {
 		super();
 		this.stack = stack;
@@ -73,7 +73,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		Stack out = null;
 		for( int c=0; c<stack.getNumChnl(); c++) {
 
-			Chnl chnl = extractRegionFrom( stack.getChnl(c), bbox, zoomFactor, listChnlConverter.get(c));
+			Channel chnl = extractRegionFrom( stack.getChnl(c), bbox, zoomFactor, listChnlConverter.get(c));
 
 			if (c==0) {
 				out = new Stack( chnl );
@@ -95,7 +95,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	
 	
 	// TODO put in some form of interpolation when zoomFactor<1
-	private Chnl extractRegionFrom( Chnl extractedSlice, BoundingBox bbox, double zoomFactor, ChnlConverterAttached<Chnl,ByteBuffer> chnlConverter ) throws OperationFailedException {
+	private Channel extractRegionFrom( Channel extractedSlice, BoundingBox bbox, double zoomFactor, ChnlConverterAttached<Channel,ByteBuffer> chnlConverter ) throws OperationFailedException {
 		
 		ScaleFactor sf = new ScaleFactor(zoomFactor);
 		
@@ -130,7 +130,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 			throw new IncorrectVoxelDataTypeException( String.format("dataType %s is unsupported without chnlConverter", extractedSlice.getVoxelDataType()) );
 		}
 		
-		return ChnlFactory
+		return ChannelFactory
 				.instance()
 				.get(VoxelDataTypeUnsignedByte.instance)
 				.create(bufferSc, sd.getRes());
