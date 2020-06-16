@@ -35,8 +35,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -44,17 +44,17 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements IterableObjectGenerator<ObjMaskWithPropertiesCollection,Stack> {
+public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements IterableObjectGenerator<ObjectCollectionWithProperties,Stack> {
 
 	// Iterable element
-	private ObjMaskWithPropertiesCollection masks;
+	private ObjectCollectionWithProperties masks;
 	
 	private ObjMaskWriter objMaskWriter;
 	private ColorIndex colorIndex;
-	private IDGetter<ObjMaskWithProperties> idGetter;
-	private IDGetter<ObjMaskWithProperties> colorIDGetter;
+	private IDGetter<ObjectWithProperties> idGetter;
+	private IDGetter<ObjectWithProperties> colorIDGetter;
 	
-	protected RGBObjMaskGeneratorBase(ObjMaskWriter objMaskWriter, ColorIndex colorIndex, IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter) {
+	protected RGBObjMaskGeneratorBase(ObjMaskWriter objMaskWriter, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
 		super();
 		this.objMaskWriter = objMaskWriter;
 		this.colorIndex = colorIndex;
@@ -81,12 +81,12 @@ public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements
 	}
 	
 	@Override
-	public ObjMaskWithPropertiesCollection getIterableElement() {
+	public ObjectCollectionWithProperties getIterableElement() {
 		return masks;
 	}
 
 	@Override
-	public void setIterableElement(ObjMaskWithPropertiesCollection element) {
+	public void setIterableElement(ObjectCollectionWithProperties element) {
 		this.masks = element;
 	}
 
@@ -119,5 +119,5 @@ public abstract class RGBObjMaskGeneratorBase extends RasterGenerator implements
 	
 	protected abstract RGBStack generateBackground() throws CreateException;
 	
-	protected abstract ObjMaskWithPropertiesCollection generateMasks() throws CreateException;
+	protected abstract ObjectCollectionWithProperties generateMasks() throws CreateException;
 }

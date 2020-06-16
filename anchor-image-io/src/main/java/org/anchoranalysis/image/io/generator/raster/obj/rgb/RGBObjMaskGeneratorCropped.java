@@ -41,8 +41,8 @@ import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -62,17 +62,17 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 	private BoundingBox bbox;
 
 	public RGBObjMaskGeneratorCropped(ObjMaskWriter objMaskWriter,	DisplayStack background, ColorIndex colorIndex) {
-		this(objMaskWriter, background, colorIndex, new IDGetterIter<ObjMaskWithProperties>(), new IDGetterIter<ObjMaskWithProperties>() );
+		this(objMaskWriter, background, colorIndex, new IDGetterIter<ObjectWithProperties>(), new IDGetterIter<ObjectWithProperties>() );
 	}
 
-	private RGBObjMaskGeneratorCropped(ObjMaskWriter objMaskWriter, DisplayStack background, ColorIndex colorIndex, IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter) {
+	private RGBObjMaskGeneratorCropped(ObjMaskWriter objMaskWriter, DisplayStack background, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
 		super(objMaskWriter, colorIndex, idGetter, colorIDGetter, background);
 	}
 
 	@Override
 	protected RGBStack generateBackground() throws CreateException {
 		try {
-			ObjectCollection objs = getIterableElement().collectionObjMask();
+			ObjectCollection objs = getIterableElement().withoutProperties();
 			
 			if (objs.isEmpty()) {
 				throw new CreateException("This generator expects at least one mask to be present");
@@ -94,9 +94,9 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 	}
 
 	@Override
-	protected ObjMaskWithPropertiesCollection generateMasks() throws CreateException {
+	protected ObjectCollectionWithProperties generateMasks() throws CreateException {
 		// Create a new set of object masks, relative to the bbox position
-		return relTo( getIterableElement().collectionObjMask(), bbox );
+		return relTo( getIterableElement().withoutProperties(), bbox );
 	}
 
 	private BoundingBox growBBBox(BoundingBox bbox, Extent containingExtent ) {
@@ -113,14 +113,14 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		);
 	}
 	
-	private static ObjMaskWithPropertiesCollection relTo(ObjectCollection in, BoundingBox src ) throws CreateException {
+	private static ObjectCollectionWithProperties relTo(ObjectCollection in, BoundingBox src ) throws CreateException {
 		
-		ObjMaskWithPropertiesCollection out = new ObjMaskWithPropertiesCollection();
+		ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
 		
 		for( ObjectMask om : in ) {
 			BoundingBox bboxNew = new BoundingBox( om.getBoundingBox().relPosTo(src), om.getBoundingBox().extent() );
 			ObjectMask omNew = new ObjectMask(bboxNew, om.binaryVoxelBox().getVoxelBox(), om.getBinaryValues() );
-			out.add( new ObjMaskWithProperties(omNew) );
+			out.add( new ObjectWithProperties(omNew) );
 		}
 		
 		return out;

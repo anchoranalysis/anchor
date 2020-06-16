@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 
 class FromMark extends ScaledMaskCreator {
 
@@ -46,9 +46,9 @@ class FromMark extends ScaledMaskCreator {
 	}
 
 	@Override
-	public ObjMaskWithProperties createScaledMask(
+	public ObjectWithProperties createScaledMask(
 		OverlayWriter overlayWriter,
-		ObjMaskWithProperties omUnscaled,
+		ObjectWithProperties omUnscaled,
 		double scaleFactor,
 		Object originalObject,
 		ImageDim sdScaled,
@@ -57,10 +57,10 @@ class FromMark extends ScaledMaskCreator {
 
 		Mark originalMark = (Mark) originalObject;
 		
-		ObjMaskWithProperties omScaled = originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor );
+		ObjectWithProperties omScaled = originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor );
 		
 		// We keep the properties the same
-		return new ObjMaskWithProperties(omScaled.getMask(), omUnscaled.getProperties());
+		return new ObjectWithProperties(omScaled.getMask(), omUnscaled.getProperties());
 	}
 
 }

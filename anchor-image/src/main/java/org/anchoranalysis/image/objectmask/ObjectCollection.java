@@ -27,27 +27,23 @@ package org.anchoranalysis.image.objectmask;
  */
 
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 /**
  * A collection of {@link ObjectMask}
@@ -59,36 +55,114 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
 	private final List<ObjectMask> delegate;
 
+	/**
+	 * Constructor - create with no objects
+	 */
 	public ObjectCollection() {
 		 delegate = new ArrayList<>();
 	}
 	
-	public ObjectCollection( List<ObjectMask> list ) {
-		delegate = list;
-	}
-		
-	public ObjectCollection( ObjectMask om ) {
+	/**
+	 * Constructor - create with a single object
+	 * 
+	 * @param obj object-mask to add to collection
+	 */
+	public ObjectCollection( ObjectMask obj ) {
 		this();
-		add(om);
+		add(obj);
 	}
 	
-	public ObjectCollection flattenZ() {
-		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : delegate ) {
-			out.add( om.flattenZ() );
-		}
-		return out;
+	/**
+	 * Constructor - creates a new collection with elements from a stream
+	 * 
+	 * @param stream objects
+	 */
+	public ObjectCollection( Stream<ObjectMask> stream ) {
+		delegate = stream.collect( Collectors.toList() );
 	}
 	
-	public ObjectCollection extractSlice( int z, boolean keepZ ) throws OperationFailedException {
-		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : delegate ) {
-			
-			if (om.getBoundingBox().contains().z(z)) {
-				out.add( om.extractSlice(z, keepZ ) );
-			}
+	/**
+	 * Constructor - creates a new collection with elements copied from existing collections
+	 * 
+	 * @param objs existing collections to copy from
+	 */
+	@SafeVarargs
+	public ObjectCollection( ObjectCollection ...objs) {
+		this();
+		for( ObjectCollection collection : objs) {
+			addAll(collection);	
 		}
-		return out;
+	}
+	
+	/**
+	 * Constructor - creates a new collection with elements copied from existing collections
+	 * 
+	 * @param list1 first existing list to copy from
+	 * @param list2 second existing list to copy from
+	 */
+	public ObjectCollection( List<ObjectMask> list1, List<ObjectMask> list2) {
+		this();
+		delegate.addAll(list1);	
+		delegate.addAll(list2);
+	}
+	
+	/**
+	 * Creates a new {@link ObjectCollection} after mapping each item to another
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param mapFunc performs mapping
+	 * @return a newly created object-collection
+	 */
+	public ObjectCollection map(Function<ObjectMask,ObjectMask> mapFunc) {
+		return new ObjectCollection(
+			delegate.stream().map(mapFunc)
+		);
+	}
+	
+	/**
+	 * Creates a new {@link ObjectCollection} after mapping each item to several others
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param mapFunc performs flat-mapping
+	 * @return a newly created object-collection
+	 */
+	public ObjectCollection flatMap(Function<ObjectMask,ObjectCollection> mapFunc) {
+		return new ObjectCollection(
+			stream().flatMap( element -> 
+				mapFunc.apply(element).stream()
+			)
+		);
+	}
+	
+	/**
+	 * Filters a {@link ObjectCollection} to include certain items based on a predicate
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param mapFunc performs mapping
+	 * @return a newly created object-collection, a filtered version of all objects
+	 */
+	public ObjectCollection filter(Predicate<ObjectMask> predicate) {
+		return new ObjectCollection(
+			stream().filter(predicate)
+		);
+	}
+	
+	/**
+	 * Like {@link filter} but only operates on certain indices of the collection.
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param mapFunc performs mapping
+	 * @param indices which indices of the collection to consider
+	 * @return a newly created object-collection, a filtered version of particular elements
+	 */
+	public ObjectCollection filterSubset(Predicate<ObjectMask> predicate, List<Integer> indices) {
+		return new ObjectCollection(
+			streamIndices(indices).filter(predicate)
+		);
 	}
 	
 	public boolean add(ObjectMask e) {
@@ -105,14 +179,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
 	public void clear() {
 		delegate.clear();
-	}
-
-	public boolean contains(Object o) {
-		return delegate.contains(o);
-	}
-
-	public boolean containsAll(Collection<?> arg0) {
-		return delegate.containsAll(arg0);
 	}
 
 	/** 
@@ -169,18 +235,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate.iterator();
 	}
 
-	public int lastIndexOf(Object o) {
-		return delegate.lastIndexOf(o);
-	}
-
-	public ListIterator<ObjectMask> listIterator() {
-		return delegate.listIterator();
-	}
-
-	public ListIterator<ObjectMask> listIterator(int arg0) {
-		return delegate.listIterator(arg0);
-	}
-
 	public ObjectMask remove(int index) {
 		return delegate.remove(index);
 	}
@@ -189,20 +243,8 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate.remove(o);
 	}
 
-	public boolean removeAll(Collection<?> arg0) {
-		return delegate.removeAll(arg0);
-	}
-
-	public ObjectMask set(int index, ObjectMask element) {
-		return delegate.set(index, element);
-	}
-
 	public int size() {
 		return delegate.size();
-	}
-
-	public List<ObjectMask> subList(int arg0, int arg1) {
-		return delegate.subList(arg0, arg1);
 	}
 
 	public String toString( boolean newlines, boolean indexes ) {
@@ -232,59 +274,9 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return toString(false,false);
 	}
 	
-	public void addToBBoxCrnrMin( ReadableTuple3i toAdd ) {
-		
-		for (ObjectMask mask : this) {
-			mask.getBoundingBox().shiftBy(toAdd);
-		}
-	}
-	
 	public void scale( ScaleFactor sf, Interpolator interpolator ) throws OperationFailedException {
 		for (ObjectMask mask : this) {
 			mask.scale(sf, interpolator);
-		}
-	}
-	
-	public boolean contains( Point3i pnt ) {
-		
-		for (ObjectMask mask : this) {
-			if (mask.contains(pnt)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public int containsIndex( Point3i pnt ) {
-		
-		for (int i=0; i<size(); i++) {
-			
-			ObjectMask mask = get(i);
-			if (mask.contains(pnt)) {
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	// objsRemoved is optional
-	public void rmvBorderMasks2D( ImageDim sd, ObjectCollection objsRemoved ) {
-
-		Iterator<ObjectMask> itr = iterator();
-		while ( itr.hasNext() ) {
-			
-			ObjectMask mask = itr.next();
-			
-			if ( mask.getBoundingBox().atBorderXY(sd) ) {
-				
-				if (objsRemoved!=null) {
-					objsRemoved.add( mask );
-				}
-				
-				itr.remove();
-			}
 		}
 	}
 	
@@ -304,64 +296,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 				itr.remove();
 			}
 		}
-	}
-	
-	
-	private static boolean doesOverlap( ObjectMask mask, List<ObjectMask> listMasks, int index ) {
-		
-		for (int i=index+1; i<listMasks.size(); i++) {
-			
-			ObjectMask maskOther = listMasks.get(i);
-			
-			if (mask.countIntersectingPixels(maskOther)>0) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public void rmvOverlappingMasks() {
-		
-		ArrayList<Integer> toDelete = new ArrayList<>();
-		
-		for (int i=0; i<delegate.size(); i++) {
-			
-			ObjectMask mask = delegate.get(i);
-			
-			if (doesOverlap(mask, delegate, i)) {
-				// We add the index to the front of the list, so we delete in descending order
-				toDelete.add(0,i);
-			}
-		}
-		
-		for (Integer index : toDelete) {
-			// We need to get the intValue() otherwise the wrong version of remove is called (with object, rather than index)
-			delegate.remove( index.intValue() );
-		}
-	}
-	
-	/**
-	 * Merges all objects together, and then splits again into connected components
-	 * 
-	 * @param bbox a bounding box that contains all objects, allowing us to avoid writing to a full buffer
-	 * @return
-	 */
-	public VoxelBox<ByteBuffer> merge( BoundingBox bbox ) {
-		
-		VoxelBox<ByteBuffer> out = VoxelBoxFactory.getByte().create( bbox.extent() );
-		
-		Point3i crnrSub = Point3i.immutableScale(bbox.getCrnrMin(), -1);
-		
-		// We write each object to the buffer
-		for( ObjectMask om : this) {
-			
-			BoundingBox bbNew = om.getBoundingBox().shiftBy(crnrSub);
-			
-			ObjectMask objMaskRel = new ObjectMask( bbNew, om.getVoxelBox() );
-
-			out.setPixelsCheckMask(objMaskRel, -1);
-		}
-		return out;
 	}
 	
 	public int countIntersectingPixels( ObjectMask om ) {
@@ -390,26 +324,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		}
 	}
 	
-	public ObjectCollection growBuffer( Point3i neg, Point3i pos, Extent clipRegion ) throws OperationFailedException {
-		ObjectCollection omc = new ObjectCollection();
-		for (ObjectMask om : this) {
-			omc.add(
-				om.growBuffer(
-					neg,
-					pos,
-					Optional.of(clipRegion)
-				)
-			);
-		}
-		return omc;
-	}
-	
-	public void convertToMaxIntensityProjection() {
-		for (ObjectMask om : this) {
-			om.convertToMaxIntensityProjection();
-		}
-	}
-	
 	public BinaryValuesByte getFirstBinaryValuesByte() {
 		return get(0).getBinaryValuesByte();
 	}
@@ -420,31 +334,45 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	
 	/** Deep copy, including duplicating ObjMasks */
 	public ObjectCollection duplicate() {
-		ObjectCollection out = new ObjectCollection();
-		for (ObjectMask om : this) {
-			out.add( om.duplicate() );
-		}
-		return out;
+		return map(ObjectMask::duplicate);
 	}
 	
 	/** Shallow copy of ObjMasks */
 	public ObjectCollection duplicateShallow() {
-		ObjectCollection out = new ObjectCollection();
-		for (ObjectMask om : this) {
-			out.add(om);
-		}
-		return out;
+		return new ObjectCollection(stream());
 	}
 	
+	/**
+	 * A subset of the collection identified by particular indices.
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param indices index of each element to keep in new collection.
+	 * @return newly-created collection with only the indexed elements.
+	 */
 	public ObjectCollection createSubset( List<Integer> indices ) {
-		ObjectCollection out = new ObjectCollection();
-		for( int i : indices ) {
-			out.add( get(i) );
-		}
-		return out;
+		return new ObjectCollection(
+			streamIndices(indices)
+		);
 	}
 
+	/** 
+	 * Exposes the underlying objects as a list
+	 * 
+	 * <p>Be CAREFUL when manipulating this list, as it is the same list used internally in the object.</p>
+	 * 
+	 * @return a list with the object-masks in this collection
+	 */
 	public List<ObjectMask> asList() {
 		return delegate;
+	}
+	
+	public Stream<ObjectMask> stream() {
+		return delegate.stream();
+	}
+	
+	/** Streams only objects at specific indices */
+	private Stream<ObjectMask> streamIndices(List<Integer> indices) {
+		return indices.stream().map(this::get);
 	}
 }

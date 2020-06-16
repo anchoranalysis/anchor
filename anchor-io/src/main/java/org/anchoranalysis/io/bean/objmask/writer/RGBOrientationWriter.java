@@ -40,7 +40,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBOrientationWriter extends ObjMaskWriter {
@@ -53,7 +53,7 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	private boolean drawReverseLine = false;
 	// END BEAN PROPERTIES
 	
-	public static Point3d calcPoint(ObjMaskWithProperties mask, String propertyName) {
+	public static Point3d calcPoint(ObjectWithProperties mask, String propertyName) {
 		
 		if (!mask.hasProperty(propertyName)) {
 			return null;
@@ -62,7 +62,7 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 		return new Point3d( (Point3d) mask.getProperty(propertyName) );
 	}
 
-	public static Double calcOrientation(ObjMaskWithProperties mask) {
+	public static Double calcOrientation(ObjectWithProperties mask) {
 		
 		if (!mask.hasProperty("orientationRadians")) {
 			return null;
@@ -73,13 +73,13 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	
 	
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjectWithProperties mask,
 			ImageDim dim) throws CreateException {
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 
 				Point3i midpoint = RGBMidpointWriter.calcMidpoint( mask, false );

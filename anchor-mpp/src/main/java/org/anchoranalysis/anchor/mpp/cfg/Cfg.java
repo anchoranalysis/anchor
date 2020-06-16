@@ -47,8 +47,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 
 /// A particular configuration of marks
 public final class Cfg implements Iterable<Mark>, Serializable {
@@ -180,14 +180,14 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		return marks.indexOf(m);
 	}
 	
-	public ObjMaskWithPropertiesCollection calcMask(
+	public ObjectCollectionWithProperties calcMask(
 		ImageDim bndScene,
 		RegionMembershipWithFlags rm,
 		BinaryValuesByte bvOut,
 		IDGetter<Mark> colorIDGetter
 	) {
 		
-		ObjMaskWithPropertiesCollection maskCollection = new ObjMaskWithPropertiesCollection();
+		ObjectCollectionWithProperties maskCollection = new ObjectCollectionWithProperties();
 		
 		for (int i=0; i<marks.size(); i++) {
 			Mark mark = marks.get(i);
@@ -196,7 +196,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 				continue;
 			}
 			
-			ObjMaskWithProperties mask = Cfg.calcMaskWithColor(
+			ObjectWithProperties mask = Cfg.calcMaskWithColor(
 				mark,
 				bndScene,
 				rm,
@@ -340,7 +340,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	}
 
 	
-	private static ObjMaskWithProperties calcMaskWithColor(
+	private static ObjectWithProperties calcMaskWithColor(
 		Mark mark,
 		ImageDim bndScene,
 		RegionMembershipWithFlags rm,
@@ -348,7 +348,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		IDGetter<Mark> colorIDGetter,
 		int iter
 	) {
-		ObjMaskWithProperties mask = mark.calcMask(bndScene, rm, bvOut );
+		ObjectWithProperties mask = mark.calcMask(bndScene, rm, bvOut );
 		if (colorIDGetter!=null) {
 			mask.setProperty("colorID", colorIDGetter.getID(mark, iter));
 		}

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.objectmask.properties;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
 
-public class IDGetterObjMaskWithProperties extends IDGetter<ObjMaskWithProperties> {
+public class IDGetterObjMaskWithProperties extends IDGetter<ObjectWithProperties> {
 
 	private String propertyName;
 	
@@ -38,7 +38,7 @@ public class IDGetterObjMaskWithProperties extends IDGetter<ObjMaskWithPropertie
 	}
 
 	@Override
-	public int getID(ObjMaskWithProperties m, int iter) {
+	public int getID(ObjectWithProperties m, int iter) {
 		return (Integer) m.getProperty(propertyName);
 	}
 }

@@ -7,8 +7,8 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -52,7 +52,7 @@ public class ImageInitParams extends BeanInitParams {
 	private Path modelDir;
 	// END: Single Items
 	
-	private IObjectBridge<StackProvider,Stack,OperationFailedException> stackProviderBridge;
+	private FunctionWithException<StackProvider,Stack,OperationFailedException> stackProviderBridge;
 
 	public ImageInitParams(SharedObjects so, Path modelDir) {
 		super();

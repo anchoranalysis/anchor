@@ -33,8 +33,8 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -58,24 +58,24 @@ public class RGBObjMaskGenerator extends RGBObjMaskGeneratorBaseWithBackground {
 			null,
 			background,
 			colorIndex,
-			new IDGetterIter<ObjMaskWithProperties>(),
-			new IDGetterIter<ObjMaskWithProperties>()
+			new IDGetterIter<ObjectWithProperties>(),
+			new IDGetterIter<ObjectWithProperties>()
 		);
 	}
 
-	public RGBObjMaskGenerator(ObjMaskWriter objMaskWriter,	ObjMaskWithPropertiesCollection masks, DisplayStack background, ColorIndex colorIndex) {
+	public RGBObjMaskGenerator(ObjMaskWriter objMaskWriter,	ObjectCollectionWithProperties masks, DisplayStack background, ColorIndex colorIndex) {
 		this(
 			objMaskWriter,
 			masks,
 			background,
 			colorIndex,
-			new IDGetterIter<ObjMaskWithProperties>(),
-			new IDGetterIter<ObjMaskWithProperties>()
+			new IDGetterIter<ObjectWithProperties>(),
+			new IDGetterIter<ObjectWithProperties>()
 		);
 	}
 	
 	public RGBObjMaskGenerator(ObjMaskWriter objMaskWriter,
-			ObjMaskWithPropertiesCollection masks, DisplayStack background, ColorIndex colorIndex, IDGetter<ObjMaskWithProperties> idGetter, IDGetter<ObjMaskWithProperties> colorIDGetter) {
+			ObjectCollectionWithProperties masks, DisplayStack background, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
 		super(objMaskWriter, colorIndex, idGetter, colorIDGetter, background);
 		this.setIterableElement(masks);
 	}
@@ -87,7 +87,7 @@ public class RGBObjMaskGenerator extends RGBObjMaskGeneratorBaseWithBackground {
 		);
 	}
 	@Override
-	protected ObjMaskWithPropertiesCollection generateMasks() {
+	protected ObjectCollectionWithProperties generateMasks() {
 		return getIterableElement();
 	}
 }

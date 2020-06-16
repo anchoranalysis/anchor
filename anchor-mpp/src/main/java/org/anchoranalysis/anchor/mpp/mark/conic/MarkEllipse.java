@@ -43,7 +43,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -395,9 +395,9 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 	
 	 
 	@Override
-	public ObjMaskWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
+	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 		
-		ObjMaskWithProperties mask = super.calcMask(bndScene, rm, bvOut );
+		ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut );
 		orientation.addPropertiesToMask(mask);
 		
 		// Axis orientation
@@ -452,7 +452,7 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
 	}
 
-	private void addAxisOrientationProperties(ObjMaskWithProperties mask, RegionMembershipWithFlags rm) {
+	private void addAxisOrientationProperties(ObjectWithProperties mask, RegionMembershipWithFlags rm) {
 		
 		// NOTE can we do this more smartly?
 		double radiiFactor = rm.getRegionID()==0 ? 1.0 : 1.0+shellRad;

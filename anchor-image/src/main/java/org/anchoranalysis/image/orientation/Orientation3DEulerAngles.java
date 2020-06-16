@@ -28,7 +28,7 @@ package org.anchoranalysis.image.orientation;
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -162,7 +162,7 @@ public class Orientation3DEulerAngles extends Orientation {
 	}
 
 	@Override
-	public void addPropertiesToMask(ObjMaskWithProperties mask) {
+	public void addPropertiesToMask(ObjectWithProperties mask) {
 		// NOTHING TO ADD
 	}
 

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBMidpointWriter extends ObjMaskWriter {
@@ -60,7 +60,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		this.extraLength = extraLength;
 	}
 
-	public static Point3i calcMidpoint(ObjMaskWithProperties mask, boolean suppressZ) {
+	public static Point3i calcMidpoint(ObjectWithProperties mask, boolean suppressZ) {
 
 		return maybeSuppressZ(
 			calcMidpoint3D(mask),
@@ -68,7 +68,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		);
 	}
 	
-	private static Point3i calcMidpoint3D(ObjMaskWithProperties mask) {
+	private static Point3i calcMidpoint3D(ObjectWithProperties mask) {
 		if (mask.hasProperty(PROPERTY_MIDPOINT)) {
 			return Point3i.immutableAdd(
 				(Point3i) mask.getProperty(PROPERTY_MIDPOINT),
@@ -87,7 +87,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjectWithProperties mask,
 			ImageDim dim) throws CreateException {
 		
 		// We ignore the z-dimension so it's projectable onto a 2D slice
@@ -96,8 +96,8 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 
 				if (midPoint==null) {

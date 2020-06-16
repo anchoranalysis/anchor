@@ -4,7 +4,7 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
@@ -15,21 +15,21 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
  */
 public abstract class PrecalcOverlay {
 
-	private ObjMaskWithProperties first;		// Result of the Mark->ObjMaskWithProperties 	
+	private ObjectWithProperties first;		// Result of the Mark->ObjMaskWithProperties 	
 	
-	public PrecalcOverlay(ObjMaskWithProperties first) {
+	public PrecalcOverlay(ObjectWithProperties first) {
 		super();
 		this.first = first;
 	}
 
-	public ObjMaskWithProperties getFirst() {
+	public ObjectWithProperties getFirst() {
 		return first;
 	}
 
 	public abstract void writePrecalculatedMask(
 		RGBStack stack,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter,
+		IDGetter<ObjectWithProperties> idGetter,
+		IDGetter<ObjectWithProperties> colorIDGetter,
 		int iter,
 		ColorIndex colorIndex,
 		BoundingBox bboxContainer

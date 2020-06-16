@@ -33,8 +33,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -91,8 +91,8 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 		// We create a version that is relative to the extracted section
 		ObjectMask omLocal = new ObjectMask( new BoundingBox(om.getVoxelBox().extent()), om.binaryVoxelBox() );
 		
-		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
-		objs.add( new ObjMaskWithProperties( omLocal ));
+		ObjectCollectionWithProperties objs = new ObjectCollectionWithProperties();
+		objs.add( new ObjectWithProperties( omLocal ));
 		
 		rgbObjMaskGenerator.setIterableElement( objs );
 		

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.bridge.IObjectBridge;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
@@ -41,9 +41,9 @@ public class IndirectlyFromListBeanFactory<
 	S
 > extends AnchorBeanFactory {
     
-	private IObjectBridge<List<T>,S,? extends Exception> bridge;
+	private FunctionWithException<List<T>,S,? extends Exception> bridge;
 	
-	public IndirectlyFromListBeanFactory( IObjectBridge<List<T>,S,? extends Exception> bridge ) {
+	public IndirectlyFromListBeanFactory( FunctionWithException<List<T>,S,? extends Exception> bridge ) {
 		this.bridge = bridge;
 	}
 	
@@ -58,6 +58,6 @@ public class IndirectlyFromListBeanFactory<
     	
     	List<T> list = new ArrayList<>(); 
     	HelperListUtilities.addListOfBeansToCollection("mapEntryList.mapEntry", subConfig, list, param);
-	    return bridge.bridgeElement(list);
+	    return bridge.apply(list);
     }
 }

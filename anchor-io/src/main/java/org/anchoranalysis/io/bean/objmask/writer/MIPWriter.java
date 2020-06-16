@@ -38,7 +38,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Note doesn't cache the underlying maskWriter
@@ -59,20 +60,19 @@ public class MIPWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDim dim)
 			throws CreateException {
 		
-		ObjMaskWithProperties maskMIP = createMIPMask(mask);
+		ObjectWithProperties maskMIP = mask.map(ObjectMask::maxIntensityProjection);
 		
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
-				maskWriter.writeSingle( (ObjMaskWithProperties) maskMIP, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
+				maskWriter.writeSingle( (ObjectWithProperties) maskMIP, stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
 			}
-			
 		};
 	}
 	
@@ -83,12 +83,4 @@ public class MIPWriter extends ObjMaskWriter {
 	public void setMaskWriter(ObjMaskWriter maskWriter) {
 		this.maskWriter = maskWriter;
 	}
-
-	private ObjMaskWithProperties createMIPMask( ObjMaskWithProperties mask ) {
-
-		// Now we manipulate the mask
-		ObjMaskWithProperties copyMask = mask.duplicate();
-		copyMask.convertToMaxIntensityProjection();
-		return copyMask;
-	}	
 }

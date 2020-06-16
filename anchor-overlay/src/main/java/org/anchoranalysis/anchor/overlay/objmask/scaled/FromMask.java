@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class FromMask extends ScaledMaskCreator {
@@ -43,8 +43,8 @@ public class FromMask extends ScaledMaskCreator {
 	private static Interpolator interpolator = InterpolatorFactory.getInstance().binaryResizing();
 	
 	@Override
-	public ObjMaskWithProperties createScaledMask(
-			OverlayWriter overlayWriter, ObjMaskWithProperties omUnscaled,
+	public ObjectWithProperties createScaledMask(
+			OverlayWriter overlayWriter, ObjectWithProperties omUnscaled,
 			double scaleFactor, Object originalObject, ImageDim sdScaled,
 			BinaryValuesByte bvOut)
 			throws CreateException {
@@ -62,7 +62,7 @@ public class FromMask extends ScaledMaskCreator {
 			assert( omScaled.hasPixelsGreaterThan(0) );
 			
 			// We keep the properties the same
-			return new ObjMaskWithProperties(omScaled, omUnscaled.getProperties());
+			return new ObjectWithProperties(omScaled, omUnscaled.getProperties());
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

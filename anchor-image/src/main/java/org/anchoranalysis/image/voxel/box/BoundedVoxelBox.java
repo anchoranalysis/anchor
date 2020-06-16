@@ -290,10 +290,18 @@ public class BoundedVoxelBox<T extends Buffer> {
 		return new BoundedVoxelBox<>(bboxNew,voxelBox.maxIntensityProj());
 	}
 	
-	
-	public void convertToMaxIntensityProjection() {
-		boundingBox = boundingBox.flattenZ();
-		voxelBox = voxelBox.maxIntensityProj();
+	/**
+	 * A maximum-intensity projection (flattens in z dimension)
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @return a new bounded-voxel-box flattened in Z dimension.
+	 */
+	public BoundedVoxelBox<T> maxIntensityProjection() {
+		return new BoundedVoxelBox<>(
+			boundingBox.flattenZ(),
+			voxelBox.maxIntensityProj()
+		);
 	}
 	
 	public BoundedVoxelBox<T> duplicate() {

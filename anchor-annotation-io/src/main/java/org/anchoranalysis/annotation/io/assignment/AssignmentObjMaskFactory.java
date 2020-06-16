@@ -82,16 +82,11 @@ public class AssignmentObjMaskFactory {
 			return out;
 		}
 		
-		if (useMIP) {
-			ObjectCollection annotationObjs2D = leftObjs.duplicate();
-			annotationObjs2D.convertToMaxIntensityProjection();
-			
-			ObjectCollection resultObjs2D = rightObjs.duplicate();
-			resultObjs2D.convertToMaxIntensityProjection();
-			cost = createCostMatrix(annotationObjs2D, resultObjs2D, dim );
-		} else {
-			cost = createCostMatrix(leftObjs, rightObjs, dim);
-		}
+		cost = createCostMatrix(
+			maybeProject(leftObjs),
+			maybeProject(rightObjs),
+			dim
+		);
 		
 		// Non empty both
 		
@@ -104,6 +99,14 @@ public class AssignmentObjMaskFactory {
 		}
 		return ass;
 		
+	}
+	
+	private ObjectCollection maybeProject(ObjectCollection objs) {
+		if (useMIP) {
+			return objs.map(ObjectMask::maxIntensityProjection);
+		} else {
+			return objs;
+		}
 	}
 		
 	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjectCollection annotation, ObjectCollection result, ImageDim dim) throws FeatureCalcException {

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -70,7 +70,7 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 
 	
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDim dim)
 			throws CreateException {
 		
 		ObjectMask om = FindOutline.outline(
@@ -80,13 +80,13 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 			(dim.getZ() > 1) && !force2D
 		);
 		
-		ObjMaskWithProperties omMask = new ObjMaskWithProperties(om, mask.getProperties());
+		ObjectWithProperties omMask = new ObjectWithProperties(om, mask.getProperties());
 		
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 				
 				assert( om.getVoxelBox().extent().getZ() > 0 );

@@ -30,30 +30,34 @@ package org.anchoranalysis.image.objectmask.properties;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.function.Function;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ObjMaskWithProperties {
+/**
+ * An {@link ObjectMask} with associated key-value properties.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjectWithProperties {
 
-	private Map<String,Object> properties = new HashMap<>();
-	private ObjectMask mask;
+	private final Map<String,Object> properties;
+	private final ObjectMask mask;
 	
-	public ObjMaskWithProperties(BoundingBox bbox ) {
-		mask = new ObjectMask(bbox);
+	public ObjectWithProperties(BoundingBox bbox ) {
+		this(new ObjectMask(bbox));
 	}
 	
-	public ObjMaskWithProperties( ObjectMask objMask ) {
+	public ObjectWithProperties( ObjectMask objMask ) {
 		mask = objMask;
+		properties = new HashMap<>();
 	}
-	
-	public ObjMaskWithProperties( ObjectMask objMask, Map<String,Object> properties ) {
+			
+	public ObjectWithProperties( ObjectMask objMask, Map<String,Object> properties ) {
 		mask = objMask;
 		this.properties = properties;
 	}
@@ -70,23 +74,25 @@ public class ObjMaskWithProperties {
 		return properties.containsKey(name);
 	}
 
-	public void convertToMaxIntensityProjection() {
-		mask.convertToMaxIntensityProjection();
-	}
-
-	public ObjMaskWithProperties growBuffer(Point3i neg, Point3i pos, Extent clipRegion) throws OperationFailedException {
-		return new ObjMaskWithProperties(
-			mask.growBuffer(
-				neg,
-				pos,
-				Optional.of(clipRegion)
-			),
+	/**
+	 * Maps the underlying object-mask to another object-mask, reusing the same properties object.
+	 * 
+	 * <p>Note the properties are not duplicated, and the new object will reference the same properties</p>.
+	 * 
+	 * <p>This is an IMMUTABLE operation</p>
+	 * 
+	 * @param funcMap
+	 * @return the mapped object (with identical properties) to previously.
+	 */
+	public ObjectWithProperties map(Function<ObjectMask,ObjectMask> funcMap) {
+		return new ObjectWithProperties(
+			funcMap.apply(mask),
 			properties
 		);
 	}
 	
-	public ObjMaskWithProperties duplicate() {
-		ObjMaskWithProperties out = new ObjMaskWithProperties( mask.duplicate() );
+	public ObjectWithProperties duplicate() {
+		ObjectWithProperties out = new ObjectWithProperties( mask.duplicate() );
 		for( String key : properties.keySet()) {
 			out.properties.put( new String(key), properties.get(key) );
 		}
@@ -107,10 +113,6 @@ public class ObjMaskWithProperties {
 
 	public int hashCode() {
 		return mask.hashCode();
-	}
-
-	public void setBoundingBox(BoundingBox bbox) {
-		mask.setBoundingBox(bbox);
 	}
 
 	public boolean sizesMatch() {

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.properties.IDGetterObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
@@ -99,7 +99,7 @@ public abstract class OverlayWriter {
 	}
 		
 	// dim should be for the ENTIRE cfg, not just the bit in bboxContainer
-	public abstract void writePrecalculatedOverlays( List<PrecalcOverlay> precalculatedMasks, ColoredOverlayCollection overlays, ImageDim dim, RGBStack background, IDGetter<Overlay> idGetter, IDGetter<ObjMaskWithProperties> idGetterColor, BoundingBox bboxContainer ) throws OperationFailedException;
+	public abstract void writePrecalculatedOverlays( List<PrecalcOverlay> precalculatedMasks, ColoredOverlayCollection overlays, ImageDim dim, RGBStack background, IDGetter<Overlay> idGetter, IDGetter<ObjectWithProperties> idGetterColor, BoundingBox bboxContainer ) throws OperationFailedException;
 	
 	public abstract void writeOverlaysIfIntersects( ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter, List<BoundingBox> intersectList ) throws OperationFailedException;
 		
@@ -114,7 +114,7 @@ public abstract class OverlayWriter {
 		for( int i=0; i< coc.size(); i++ ) {
 			
 			Overlay ol = coc.get(i);
-			ObjMaskWithProperties om = ol.createObjMask(maskWriter, dim, bvOut);
+			ObjectWithProperties om = ol.createObjMask(maskWriter, dim, bvOut);
 			
 			om.setProperty("colorID", colorIDGetter.getID(ol, i));
  
@@ -127,7 +127,7 @@ public abstract class OverlayWriter {
 	}
 	
 	
-	public static PrecalcOverlay createPrecalc( OverlayWriter maskWriter, ObjMaskWithProperties om, ImageDim dim ) throws CreateException {
+	public static PrecalcOverlay createPrecalc( OverlayWriter maskWriter, ObjectWithProperties om, ImageDim dim ) throws CreateException {
 		return maskWriter.getObjMaskWriter().precalculate(om, dim);
 	}
 }

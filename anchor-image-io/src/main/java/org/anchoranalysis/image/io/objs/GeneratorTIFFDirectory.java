@@ -51,7 +51,7 @@ public class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjectCollec
 				new ObjWithBoundingBoxGenerator( new ImageRes() ),		// We don't specify a sceneres as we don't know what images they belong to
 				"obj"
 			),
-			a -> a.asList()
+			ObjectCollection::asList
 		);
 	}
 }

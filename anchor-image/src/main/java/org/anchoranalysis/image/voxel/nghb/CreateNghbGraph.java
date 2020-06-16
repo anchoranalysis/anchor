@@ -28,8 +28,6 @@ package org.anchoranalysis.image.voxel.nghb;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Extent;
@@ -198,11 +196,9 @@ public class CreateNghbGraph<V> {
 	}
 	
 	private ObjectCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
-		
-		List<ObjectMask> list = vertices.stream().map( v -> 
-			vertexToObjMask.objMaskFromVertex(v)
-		).collect( Collectors.toList() );
-		return new ObjectCollection(list);
+		return new ObjectCollection(
+			vertices.stream().map(vertexToObjMask::objMaskFromVertex)	
+		);
 	}
 	
 }

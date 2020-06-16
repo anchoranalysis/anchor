@@ -31,8 +31,8 @@ import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
 public class BeanStoreAdder {
@@ -57,7 +57,7 @@ public class BeanStoreAdder {
 		String name,
 		S item,
 		NamedProviderStore<D> cntr,
-		IObjectBridge<S,D,OperationFailedException> bridge
+		FunctionWithException<S,D,OperationFailedException> bridge
 	) throws OperationFailedException {
 		cntr.add(
 			name,
@@ -83,7 +83,7 @@ public class BeanStoreAdder {
 	public static <S extends AnchorBean<?>, D> void addPreserveName(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
-		IObjectBridge<S,D,OperationFailedException> bridge
+		FunctionWithException<S,D,OperationFailedException> bridge
 	) throws OperationFailedException {
 		
 		for ( NamedBean<S> ni : listItem) {
@@ -111,7 +111,7 @@ public class BeanStoreAdder {
 	public static <S extends AnchorBean<?>, D, E extends Throwable> void addPreserveNameEmbedded(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
-		IObjectBridge<NamedBean<S>, D, OperationFailedException> bridge
+		FunctionWithException<NamedBean<S>, D, OperationFailedException> bridge
 	) throws OperationFailedException {
 		
 		for ( NamedBean<S> ni : listItem) {

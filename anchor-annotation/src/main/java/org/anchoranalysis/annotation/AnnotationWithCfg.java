@@ -47,7 +47,7 @@ public abstract class AnnotationWithCfg extends Annotation {
 			getRegionMap().membershipWithFlagsForIndex(getRegionID()),
 			BinaryValuesByte.getDefault(),
 			null
-		).collectionObjMask();
+		).withoutProperties();
 		return annotationObjs;
 	}
 }

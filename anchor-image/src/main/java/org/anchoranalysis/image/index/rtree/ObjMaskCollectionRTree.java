@@ -45,10 +45,6 @@ public class ObjMaskCollectionRTree {
 	private BBoxRTree delegate;
 	private ObjectCollection objs;
 	
-	public ObjMaskCollectionRTree( List<ObjectMask> list ) {
-		this( new ObjectCollection(list) );
-	}
-	
 	public ObjMaskCollectionRTree( ObjectCollection objs ) {
 		this.objs = objs;
 		delegate = new BBoxRTree( objs.size() );
@@ -62,40 +58,27 @@ public class ObjMaskCollectionRTree {
 	}
 	
 	public ObjectCollection contains( Point3i pnt ) {
-		List<Integer> indices = delegate.contains( pnt );
-		
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		ObjectCollection out = new ObjectCollection();
-		
-		for( int i : indices) {
-			ObjectMask om = objs.get(i);
-			if (om.contains(pnt)) {
-				out.add(om);
-			}
-		}
-		return out;
+		return objs.filterSubset(
+			om->om.contains(pnt),
+			delegate.contains(pnt)
+		);
 	}
-	
-	public ObjectCollection intersectsWith( ObjectMask om ) {
-		List<Integer> indices = delegate.intersectsWith( om.getBoundingBox() );
 		
+	public ObjectCollection intersectsWith( ObjectMask om ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		ObjectCollection out = new ObjectCollection();
-		
-		for( int i : indices) {
-			ObjectMask omInd = objs.get(i);
-			if (omInd.hasIntersectingPixels(om)) {
-				out.add(omInd);
-			}
-		}
-		return out;
+		return objs.filterSubset(
+			omInd->omInd.hasIntersectingPixels(om),
+			delegate.intersectsWith( om.getBoundingBox() )
+		);
 	}
 	
 	public ObjectCollection intersectsWith( BoundingBox bbox ) {
-		List<Integer> indices = delegate.intersectsWith(bbox);
-		return objs.createSubset(indices);
+		return objs.createSubset(
+			delegate.intersectsWith(bbox)
+		);
 	}
 	
 	public List<Integer> intersectsWithAsIndices( BoundingBox bbox ) {

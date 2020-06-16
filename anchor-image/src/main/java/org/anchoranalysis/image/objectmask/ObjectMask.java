@@ -257,8 +257,9 @@ public class ObjectMask {
 
 	/**
 	 * Calculates center-of-gravity for one specific axis only
+	 * 
 	 * @param axis the axis
-	 * @return the center of gravity
+	 * @return a point on the specific axis that is the center-of-gravity.
 	 */
 	public double centerOfGravity(AxisType axis) {
 		return CenterOfGravityCalculator.calcCenterOfGravityForAxis(this, axis);
@@ -453,8 +454,17 @@ public class ObjectMask {
 		return false;
 	}
 
-	public void convertToMaxIntensityProjection() {
-		delegate.convertToMaxIntensityProjection();
+	/**
+	 * A maximum-intensity projection (flattens in z dimension)
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @return a new object-mask flattened in Z dimension.
+	 */
+	public ObjectMask maxIntensityProjection() {
+		return new ObjectMask(
+			delegate.maxIntensityProjection()
+		);
 	}
 
 	public BoundingBox getBoundingBox() {

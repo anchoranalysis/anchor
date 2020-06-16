@@ -42,7 +42,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 
 public class OverlayMark extends Overlay {
 
@@ -78,12 +78,12 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public ObjMaskWithProperties createScaledMask(
+	public ObjectWithProperties createScaledMask(
 			OverlayWriter overlayWriter, double zoomFactorNew,
-			ObjMaskWithProperties om, Overlay ol, ImageDim sdUnscaled,
+			ObjectWithProperties om, Overlay ol, ImageDim sdUnscaled,
 			ImageDim sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
-		ObjMaskWithProperties omScaled = scaledMaskCreator.createScaledMask(
+		ObjectWithProperties omScaled = scaledMaskCreator.createScaledMask(
 			overlayWriter,
 			om,
 			zoomFactorNew,
@@ -97,7 +97,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public ObjMaskWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
+	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
 			BinaryValuesByte bvOut) throws CreateException {
 		return mark.calcMask(
 			dimEntireImage,

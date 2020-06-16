@@ -44,8 +44,8 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -148,9 +148,7 @@ public class AssignmentGenerator extends RasterGenerator {
 	
 	private Stack createRGBOutlineStack( DisplayStack background, List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
 		
-		ObjectCollection omc = new ObjectCollection();
-		omc.addAll(matchedObjs);
-		omc.addAll(otherObjs);
+		ObjectCollection omc = new ObjectCollection(matchedObjs, otherObjs);
 
 		return createGenerator(
 			otherObjs,
@@ -178,7 +176,7 @@ public class AssignmentGenerator extends RasterGenerator {
 	private RGBObjMaskGenerator createGenerator( ObjMaskWriter objMaskWriter, ColorList cols, ObjectCollection omc ) {
 		return new RGBObjMaskGenerator(
 			objMaskWriter,
-			new ObjMaskWithPropertiesCollection(omc),
+			new ObjectCollectionWithProperties(omc),
 			background,
 			cols
 		);
@@ -190,7 +188,7 @@ public class AssignmentGenerator extends RasterGenerator {
 		IfElseWriter.Condition condition = new IfElseWriter.Condition() {
 
 			@Override
-			public boolean isTrue(ObjMaskWithProperties mask,
+			public boolean isTrue(ObjectWithProperties mask,
 					RGBStack stack, int id) {
 				return otherObjs.contains(mask.getMask());
 			}

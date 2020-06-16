@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.bridge;
+package org.anchoranalysis.core.functional;
 
 /*-
  * #%L
@@ -27,28 +27,23 @@ package org.anchoranalysis.core.bridge;
  */
 
 /**
- * Glues two object bridges together so that a bridge A->B and a bridge B->C becomes bridge A->C
+ * Like {@java.util.Function} but can also thrown an exception.
  * 
- * @param <A> source-type
- * @param <B> intermediate-type
- * @param <C> destination-type
- * @param <E> exception throw if something goes wrong
+ * @author Owen Feehan
+ *
+ * @param <S> source-type
+ * @param <D> destination-type
+ * @param <E> exception-type if bridging fails
  */
-public class ObjectBridgeGlue<A,B,C,E extends Throwable> implements IObjectBridge<A,C,E> {
+@FunctionalInterface
+public interface FunctionWithException<S, D, E extends Throwable> {
 
-	private IObjectBridge<A,B,E> bridge1;
-	private IObjectBridge<B,C,E> bridge2;
-	
-	public ObjectBridgeGlue(IObjectBridge<A,B,E> bridge1, IObjectBridge<B,C,E> bridge2) {
-		super();
-		this.bridge1 = bridge1;
-		this.bridge2 = bridge2;
-	}
-
-	@Override
-	public C bridgeElement(A sourceObject) throws E {
-		B objTemp = bridge1.bridgeElement(sourceObject);
-		return bridge2.bridgeElement(objTemp);
-	}
-
+	/**
+	 * Bridges an element to another element.
+	 * 
+	 * @param source object to be bridged
+	 * @return whatever object the source is mapped to.
+	 * @throws E an exception that may be thrown
+	 */
+	D apply( S source ) throws E;
 }

@@ -47,8 +47,7 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 	
 	public static double calc(ObjectMask om, boolean mip) {
 		if (mip==true) {
-			om = om.duplicate();
-			om.convertToMaxIntensityProjection();
+			om = om.maxIntensityProjection();
 		}
 		return om.numPixels();		
 	}

@@ -28,7 +28,7 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
+import org.anchoranalysis.core.bridge.BridgeElementWithIndex;
 
 /**
  * 
@@ -38,14 +38,14 @@ import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
  * @param <H> hidden-type
  * @param <E> exception thrown if soemthing goes wrong
  */
-public class ITypedGetFromIndexBridge<S,H> implements ITypedGetFromIndex<S> {
+public class TypedGetFromIndexBridge<S,H> implements ITypedGetFromIndex<S> {
 
 	private ITypedGetFromIndex<H> delegate;
 
-	private IObjectBridgeIndex<H,S,? extends Throwable> bridge;
+	private BridgeElementWithIndex<H,S,? extends Throwable> bridge;
 	
-	public ITypedGetFromIndexBridge(ITypedGetFromIndex<H> delegate,
-			IObjectBridgeIndex<H,S,? extends Throwable> bridge) {
+	public TypedGetFromIndexBridge(ITypedGetFromIndex<H> delegate,
+			BridgeElementWithIndex<H,S,? extends Throwable> bridge) {
 		super();
 		this.delegate = delegate;
 		this.bridge = bridge;

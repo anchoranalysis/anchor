@@ -45,7 +45,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
@@ -188,12 +188,12 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	}
 	
 	// Calculates the mask of an object
-	public ObjMaskWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv ) {
+	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv ) {
 		
 		BoundingBox bbox = this.bbox( bndScene, rm.getRegionID() );
 		
 		// We make a new mask and populate it from out iterator
-		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);
+		ObjectWithProperties mask = new ObjectWithProperties(bbox);
 
 		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
@@ -229,13 +229,13 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	
 	
 	// Calculates the mask of an object
-	public ObjMaskWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
+	public ObjectWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
 			
 		 BoundingBox bbox = bbox( bndScene, rm.getRegionID() )
 				 .scale( new ScaleFactor(scaleFactor) );
 		
 		// We make a new mask and populate it from out iterator
-		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);
+		ObjectWithProperties mask = new ObjectWithProperties(bbox);
 
 		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
