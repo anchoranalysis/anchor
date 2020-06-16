@@ -1,20 +1,23 @@
 package org.anchoranalysis.annotation.io.assignment;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskCollectionDistanceMatrix {
 
 	// A two-dimensional array mapping objs1 to objs2
 	private double[][] distanceArr;
 	
-	private ObjectMaskCollection objs1;
-	
-	private ObjectMaskCollection objs2;
+	private ObjectCollection objs1;
+	private ObjectCollection objs2;
 
-	public ObjMaskCollectionDistanceMatrix(ObjectMaskCollection objs1,
-			ObjectMaskCollection objs2, double[][] distanceArr) throws CreateException {
+	public ObjMaskCollectionDistanceMatrix(
+		ObjectCollection objs1,
+		ObjectCollection objs2,
+		double[][] distanceArr
+	) throws CreateException {
 		super();
+		
 		this.objs1 = objs1;
 		this.objs2 = objs2;
 		this.distanceArr = distanceArr;
@@ -40,11 +43,11 @@ public class ObjMaskCollectionDistanceMatrix {
 		return distanceArr;
 	}
 
-	public ObjectMaskCollection getObjs1() {
+	public ObjectCollection getObjs1() {
 		return objs1;
 	}
 
-	public ObjectMaskCollection getObjs2() {
+	public ObjectCollection getObjs2() {
 		return objs2;
 	}
 

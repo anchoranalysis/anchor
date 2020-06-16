@@ -36,12 +36,12 @@ import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 
 /**
- * Reads an {@link ObjectMaskCollection} from the filesystem
+ * Reads an {@link ObjectCollection} from the filesystem
  * 
  * @author FEEHANO
  *
@@ -67,7 +67,7 @@ public class ObjectMaskCollectionReader {
 	 * @throws CreateException if something goes wrong
 	 * @throws DeserializationFailedException 
 	 */
-	public static ObjectMaskCollection createFromPath( Path path ) throws DeserializationFailedException {
+	public static ObjectCollection createFromPath( Path path ) throws DeserializationFailedException {
 		
 		// 1. First check if has a file extension HDF5
 		if (hasHdf5Extension(path)) {
@@ -92,7 +92,7 @@ public class ObjectMaskCollectionReader {
 		}
 	}
 	
-	public static Operation<ObjectMaskCollection,OperationFailedException> createFromPathCached( Operation<Path,OperationFailedException> path ) {
+	public static Operation<ObjectCollection,OperationFailedException> createFromPathCached( Operation<Path,OperationFailedException> path ) {
 		return new WrapOperationAsCached<>(
 			() -> {
 				try {

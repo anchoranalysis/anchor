@@ -1,12 +1,12 @@
 package org.anchoranalysis.image.objmask.match;
 
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjWithMatches {
 	
 	private ObjectMask objMask;
-	private ObjectMaskCollection matches = new ObjectMaskCollection();
+	private ObjectCollection matches = new ObjectCollection();
 	
 	public ObjWithMatches(ObjectMask objMask) {
 		super();
@@ -25,7 +25,7 @@ public class ObjWithMatches {
 		return objMask;
 	}
 
-	public ObjectMaskCollection getMatches() {
+	public ObjectCollection getMatches() {
 		return matches;
 	}
 }

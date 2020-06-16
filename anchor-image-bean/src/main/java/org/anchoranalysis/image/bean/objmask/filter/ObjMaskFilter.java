@@ -32,9 +32,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public abstract class ObjMaskFilter extends ImageBean<ObjMaskFilter> {
 
-	public abstract void filter( ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected ) throws OperationFailedException;
+	public abstract void filter( ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected ) throws OperationFailedException;
 }

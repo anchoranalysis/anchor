@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.objmask.OverlayObjMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Two-way factory.
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
  */
 public class OverlayCollectionObjMaskFactory {
 	
-	public static OverlayCollection createWithoutColor( ObjectMaskCollection objs, IDGetter<ObjectMask> idGetter ) {
+	public static OverlayCollection createWithoutColor( ObjectCollection objs, IDGetter<ObjectMask> idGetter ) {
 		OverlayCollection out = new OverlayCollection();
 		
 		for(int i=0; i<objs.size(); i++) {
@@ -58,8 +58,8 @@ public class OverlayCollectionObjMaskFactory {
 	}
 	
 	// Creates objs from whatever Overlays are found in the collection
-	public static ObjectMaskCollection objsFromOverlays( OverlayCollection overlays ) {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public static ObjectCollection objsFromOverlays( OverlayCollection overlays ) {
+		ObjectCollection out = new ObjectCollection();
 		
 		for(int i=0; i<overlays.size(); i++) {
 			Overlay overlay = overlays.get(i);

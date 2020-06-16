@@ -41,7 +41,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
@@ -72,8 +72,8 @@ public class ConnectedComponentUnionFind {
 	 * @return the connected-components derived from the voxel-box
 	 * @throws OperationFailedException
 	 */
-	public ObjectMaskCollection deriveConnectedByte(BinaryVoxelBox<ByteBuffer> voxels) throws OperationFailedException {
-		ObjectMaskCollection omc = new ObjectMaskCollection();
+	public ObjectCollection deriveConnectedByte(BinaryVoxelBox<ByteBuffer> voxels) throws OperationFailedException {
+		ObjectCollection omc = new ObjectCollection();
 		visitRegion(
 			voxels,
 			omc,
@@ -91,8 +91,8 @@ public class ConnectedComponentUnionFind {
 	 * @return the connected-components derived from the voxel-box
 	 * @throws OperationFailedException
 	 */
-	public ObjectMaskCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels) throws OperationFailedException {
-		ObjectMaskCollection omc = new ObjectMaskCollection();
+	public ObjectCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels) throws OperationFailedException {
+		ObjectCollection omc = new ObjectCollection();
 		visitRegion(
 			voxels,
 			omc,
@@ -105,14 +105,14 @@ public class ConnectedComponentUnionFind {
 	
 	private <T extends Buffer> void visitRegion(
 		BinaryVoxelBox<T> visited,
-		ObjectMaskCollection omc,
+		ObjectCollection omc,
 		int minNumberVoxels,
 		boolean bigNghb,
 		BufferReadWrite<T> bufferReaderWriter
 	) throws OperationFailedException {
 		
 		UnionFind<Integer> unionIndex = new UnionFind<>( new HashSet<Integer>() );
-		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.instance().getInt().create( visited.extent() );
+		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.getInt().create( visited.extent() );
 
 		PopulateIndexProcessor<T> process = new PopulateIndexProcessor<>(
 			visited,
@@ -225,13 +225,13 @@ public class ConnectedComponentUnionFind {
 		}
 	}
 	
-	private static ObjectMaskCollection extractMasksInto(
+	private static ObjectCollection extractMasksInto(
 		PointRangeWithCount[] bboxArr,
 		Map<Integer,Integer> mapIDOrdered,
 		VoxelBox<IntBuffer> indexBuffer,
 		UnionFind<Integer> unionIndex,
 		int minNumberVoxels,
-		ObjectMaskCollection omc
+		ObjectCollection omc
 	) throws OperationFailedException {
 		
 		for( Integer bigID : mapIDOrdered.keySet()) {
@@ -255,7 +255,7 @@ public class ConnectedComponentUnionFind {
 		int maxBigIDAdded,
 		UnionFind<Integer> unionIndex,
 		VoxelBox<IntBuffer> indexBuffer,
-		ObjectMaskCollection omc,
+		ObjectCollection omc,
 		int minNumberVoxels
 	) throws OperationFailedException {
 		Set<Integer> primaryIDs = setFromUnionFind( maxBigIDAdded, unionIndex );

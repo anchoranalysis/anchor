@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
 public class AssignmentObjMaskFactory {
@@ -60,9 +60,9 @@ public class AssignmentObjMaskFactory {
 		return cost;
 	}
 
-	public AssignmentObjMask createAssignment(
-		ObjectMaskCollection leftObjs,
-		ObjectMaskCollection rightObjs,
+	public AssignmentOverlapFromPairs createAssignment(
+		ObjectCollection leftObjs,
+		ObjectCollection rightObjs,
 		double maxAcceptedCost,
 		ImageDim dim
 	) throws FeatureCalcException {
@@ -70,23 +70,23 @@ public class AssignmentObjMaskFactory {
 		// Empty annotations
 		if (leftObjs.size()==0) {
 			// N.B. Also sensibly handles the case where annotationObjs and resultObjs are both empty
-			AssignmentObjMask out = new AssignmentObjMask();
+			AssignmentOverlapFromPairs out = new AssignmentOverlapFromPairs();
 			out.addRightObjs(rightObjs);
 			return out;
 		}
 		
 		// Empty result objects
 		if (rightObjs.size()==0) {
-			AssignmentObjMask out = new AssignmentObjMask();
+			AssignmentOverlapFromPairs out = new AssignmentOverlapFromPairs();
 			out.addLeftObjs(leftObjs);
 			return out;
 		}
 		
 		if (useMIP) {
-			ObjectMaskCollection annotationObjs2D = leftObjs.duplicate();
+			ObjectCollection annotationObjs2D = leftObjs.duplicate();
 			annotationObjs2D.convertToMaxIntensityProjection();
 			
-			ObjectMaskCollection resultObjs2D = rightObjs.duplicate();
+			ObjectCollection resultObjs2D = rightObjs.duplicate();
 			resultObjs2D.convertToMaxIntensityProjection();
 			cost = createCostMatrix(annotationObjs2D, resultObjs2D, dim );
 		} else {
@@ -98,7 +98,7 @@ public class AssignmentObjMaskFactory {
 		HungarianAlgorithm ha = new HungarianAlgorithm(cost.getDistanceArr());
 		int[] assign = ha.execute();
 		
-		AssignmentObjMask ass = createAssignment(cost, assign, maxAcceptedCost);
+		AssignmentOverlapFromPairs ass = createAssignment(cost, assign, maxAcceptedCost);
 		if (ass.rightSize()!=rightObjs.size()) {
 			throw new FeatureCalcException("assignment.rightSize() does not equal the number of the right objects. This should never happen!");
 		}
@@ -106,7 +106,7 @@ public class AssignmentObjMaskFactory {
 		
 	}
 		
-	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjectMaskCollection annotation, ObjectMaskCollection result, ImageDim dim) throws FeatureCalcException {
+	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjectCollection annotation, ObjectCollection result, ImageDim dim) throws FeatureCalcException {
 
 		FeatureCalculatorSingle<FeatureInputPairObjs> session;
 		try {
@@ -151,12 +151,12 @@ public class AssignmentObjMaskFactory {
 		);
 	}
 	
-	private static AssignmentObjMask createAssignment( ObjMaskCollectionDistanceMatrix costMatrix, int[] assign, double maxAcceptedCost) {
+	private static AssignmentOverlapFromPairs createAssignment( ObjMaskCollectionDistanceMatrix costMatrix, int[] assign, double maxAcceptedCost) {
 		
-		AssignmentObjMask assignment = new AssignmentObjMask();
+		AssignmentOverlapFromPairs assignment = new AssignmentOverlapFromPairs();
 		
-		ObjectMaskCollection leftObjs = costMatrix.getObjs1();
-		ObjectMaskCollection rightObjs = costMatrix.getObjs2();
+		ObjectCollection leftObjs = costMatrix.getObjs1();
+		ObjectCollection rightObjs = costMatrix.getObjs2();
 		
 		Set<Integer> setAnnotationObjs = new HashSet<>();
 		for( int i=0; i<leftObjs.size(); i++) {

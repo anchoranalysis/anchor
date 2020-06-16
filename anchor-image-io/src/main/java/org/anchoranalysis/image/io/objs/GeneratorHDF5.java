@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
@@ -47,15 +47,15 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  * @author FEEHANO
  *
  */
-public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjectMaskCollection> {
+public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjectCollection> {
 
 	// Name of the attribute in the root of the HDF5 that stores the number of objects
 	public final static String NUM_OBJS_ATTR_NAME = "numberObjects";
 	
-	private ObjectMaskCollection item;
+	private ObjectCollection item;
 	private boolean compressed;
 
-	public static void writeObjsToFile( ObjectMaskCollection objs, Path filePath) throws OutputWriteFailedException {
+	public static void writeObjsToFile( ObjectCollection objs, Path filePath) throws OutputWriteFailedException {
 		GeneratorHDF5 generator = new GeneratorHDF5(true);
 		generator.setIterableElement(objs);
 		generator.writeToFile( new OutputWriteSettings(), filePath);
@@ -83,7 +83,7 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 		}
 	}
 	
-	private void writeObjMaskCollection( ObjectMaskCollection objs, Path filePath ) throws OperationFailedException {
+	private void writeObjMaskCollection( ObjectCollection objs, Path filePath ) throws OperationFailedException {
 
 		IHDF5Writer writer = HDF5Factory.open( filePath.toString() );
 		
@@ -110,7 +110,7 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	
 	// Adds an attribute with the total number of objects, so it can be quickly queried
 	//  from the HDF5 without parsing all the datasets
-	private void addObjsSizeAttr(IHDF5Writer writer, ObjectMaskCollection objs) {
+	private void addObjsSizeAttr(IHDF5Writer writer, ObjectCollection objs) {
 		writer.uint32().setAttr("/", NUM_OBJS_ATTR_NAME, objs.size() );		
 	}
 
@@ -127,12 +127,12 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	}
 	
 	@Override
-	public ObjectMaskCollection getIterableElement() {
+	public ObjectCollection getIterableElement() {
 		return item;
 	}
 
 	@Override
-	public void setIterableElement(ObjectMaskCollection element) {
+	public void setIterableElement(ObjectCollection element) {
 		this.item = element;
 	}
 }

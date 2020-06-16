@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 
@@ -61,7 +61,7 @@ public class ObjMaskMerger {
 		
 		ObjectMask omOut = new ObjectMask(
 			bbox,
-			VoxelBoxFactory.instance().getByte().create(
+			VoxelBoxFactory.getByte().create(
 				bbox.extent()
 			)
 		);
@@ -73,7 +73,7 @@ public class ObjMaskMerger {
 		
 	}
 		
-	public static BoundingBox mergeBBoxFromObjs( ObjectMaskCollection objs ) throws OperationFailedException {
+	public static BoundingBox mergeBBoxFromObjs( ObjectCollection objs ) throws OperationFailedException {
 		
 		if (objs.isEmpty()) {
 			throw new OperationFailedException("At least one object must exist in the collection");
@@ -92,7 +92,7 @@ public class ObjMaskMerger {
 		return bbox;
 	}
 	
-	public static ObjectMask merge( ObjectMaskCollection objs ) throws OperationFailedException {
+	public static ObjectMask merge( ObjectCollection objs ) throws OperationFailedException {
 		
 		if (objs.size()==0) {
 			throw new OperationFailedException("There must be at least one object");
@@ -104,7 +104,7 @@ public class ObjMaskMerger {
 		
 		BoundingBox bbox = mergeBBoxFromObjs(objs);
 		
-		ObjectMask omOut = new ObjectMask( bbox, VoxelBoxFactory.instance().getByte().create(bbox.extent()) );
+		ObjectMask omOut = new ObjectMask( bbox, VoxelBoxFactory.getByte().create(bbox.extent()) );
 		
 		BinaryValues bv = null;
 		for( ObjectMask om : objs ) {

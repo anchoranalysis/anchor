@@ -35,7 +35,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.annotation.AnnotationWithCfg;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
+import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -98,13 +98,13 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		
 		for( NamedBean<Comparer> ni : listComparers ) {
 			
-			ObjectMaskCollection annotationObjs = annotation.convertToObjs(
+			ObjectCollection annotationObjs = annotation.convertToObjs(
 				background.getDimensions()
 			);
 			
-			Findable<ObjectMaskCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
+			Findable<ObjectCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
 			
-			Optional<ObjectMaskCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logErrorReporter);
+			Optional<ObjectCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logErrorReporter);
 			
 			if (!foundObjs.isPresent()) {
 				continue;
@@ -125,8 +125,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 	}
 	
 	private SimpleNameValue<Stack> compare(
-		ObjectMaskCollection annotationObjs,
-		ObjectMaskCollection compareObjs,
+		ObjectCollection annotationObjs,
+		ObjectCollection compareObjs,
 		DisplayStack background,
 		String rightName,
 		ColorSetGenerator colorSetGenerator
@@ -137,7 +137,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		removeObjsWithNoPixels( compareObjs );
 				
 		
-		AssignmentObjMask assignment;
+		AssignmentOverlapFromPairs assignment;
 		try {
 			assignment = new AssignmentObjMaskFactory(featureEvaluator,useMIP).createAssignment(
 				annotationObjs,
@@ -171,7 +171,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		}		
 	}
 	
-	private static void removeObjsWithNoPixels( ObjectMaskCollection objs ) {
+	private static void removeObjsWithNoPixels( ObjectCollection objs ) {
 		
 		Iterator<ObjectMask> itr = objs.iterator();
 		while( itr.hasNext() ) {

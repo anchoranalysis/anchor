@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 public class MaxIntensityBufferByte extends MaxIntensityBuffer<ByteBuffer> {
 
 	public MaxIntensityBufferByte(Extent srcExtnt) {
-		super( srcExtnt, VoxelBoxFactory.instance().getByte() );
+		super( srcExtnt, VoxelBoxFactory.getByte() );
 	}
 
 	@Override

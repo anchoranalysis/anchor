@@ -156,7 +156,7 @@ public class IterateVoxels {
 	 * @param mask mask
 	 * @return the first point found
 	 */
-	public static Optional<Point3i> callUntilFirstPointOnMask( ObjectMask mask ) {
+	public static Optional<Point3i> findFirstPointOnMask( ObjectMask mask ) {
 		
 		Extent extentMask = mask.getVoxelBox().extent();
 		ReadableTuple3i crnrMin = mask.getBoundingBox().getCrnrMin();

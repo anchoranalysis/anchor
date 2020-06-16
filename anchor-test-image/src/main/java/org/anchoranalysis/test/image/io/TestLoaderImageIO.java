@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -141,7 +141,7 @@ public class TestLoaderImageIO {
 	}
 
 	
-	public ObjectMaskCollection openObjsFromTestPath( String testFolderPath ) throws TestDataLoadException {
+	public ObjectCollection openObjsFromTestPath( String testFolderPath ) throws TestDataLoadException {
 		Path filePath = delegate.resolveTestPath( testFolderPath);
 		return openObjsFromFilePath(filePath);
 	}
@@ -153,7 +153,7 @@ public class TestLoaderImageIO {
 	 * @return an object mask collection
 	 * @throws TestDataLoadException if data cannot be loaded
 	 */
-	public ObjectMaskCollection openObjsFromFilePath( Path folderPath ) throws TestDataLoadException {
+	public ObjectCollection openObjsFromFilePath( Path folderPath ) throws TestDataLoadException {
 
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		TestReaderWriterUtilities.ensureRasterReader();
@@ -187,9 +187,9 @@ public class TestLoaderImageIO {
 			);
 		}
 		
-		ObjectMaskCollection objsWritten = openObjsFromTestPath(path1);
+		ObjectCollection objsWritten = openObjsFromTestPath(path1);
 		
-		ObjectMaskCollection objsSaved = openObjsFromTestPath(path2);
+		ObjectCollection objsSaved = openObjsFromTestPath(path2);
 		
 		if ( !objsWritten.equalsDeep(objsSaved) ) {
 			return false;

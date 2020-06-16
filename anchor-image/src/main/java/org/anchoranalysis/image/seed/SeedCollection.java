@@ -33,7 +33,7 @@ import java.util.Iterator;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
 public class SeedCollection implements Iterable<Seed> {
@@ -58,9 +58,9 @@ public class SeedCollection implements Iterable<Seed> {
 		
 	}
 	
-	public ObjectMaskCollection createMasks() {
+	public ObjectCollection createMasks() {
 		
-		ObjectMaskCollection objMasks = new ObjectMaskCollection();
+		ObjectCollection objMasks = new ObjectCollection();
 		
 		for( Seed seed : this ) {
 			objMasks.add( seed.createMask() );

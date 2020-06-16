@@ -45,7 +45,7 @@ public class ChannelConverterToUnsignedShort extends ChannelConverter<ShortBuffe
 		super(
 			VoxelDataTypeUnsignedShort.instance,
 			voxelBoxConverter,
-			VoxelBoxFactory.instance().getShort()
+			VoxelBoxFactory.getShort()
 		);
 	}
 

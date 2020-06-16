@@ -39,14 +39,14 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlFromObjs {
 
 	/** We look for space IN objects, and create channel to display it */
-	public static BinaryChnl createFromObjs( ObjectMaskCollection masks, ImageDim sd, BinaryValues outVal ) throws CreateException {
+	public static BinaryChnl createFromObjs( ObjectCollection masks, ImageDim sd, BinaryValues outVal ) throws CreateException {
 		return createChnlObjMaskCollectionHelper(
 			masks,
 			sd,
@@ -58,7 +58,7 @@ public class BinaryChnlFromObjs {
 	
 
 	/** We look for space NOT in the objects, and create channel to display it */
-	public static BinaryChnl createFromNotObjs( ObjectMaskCollection objs, ImageDim sd, BinaryValues outVal ) throws CreateException {
+	public static BinaryChnl createFromNotObjs( ObjectCollection objs, ImageDim sd, BinaryValues outVal ) throws CreateException {
 		return createChnlObjMaskCollectionHelper(
 			objs,
 			sd,
@@ -70,7 +70,7 @@ public class BinaryChnlFromObjs {
 	
 	// We look for the values that are NOT on the masks
 	private static BinaryChnl createChnlObjMaskCollectionHelper(
-		ObjectMaskCollection masks,
+		ObjectCollection masks,
 		ImageDim dim,
 		BinaryValues outVal,
 		int initialState,
@@ -90,7 +90,7 @@ public class BinaryChnlFromObjs {
 	}
 		
 	// nullVal is assumed to be 0
-	private static void writeChnlObjMaskCollection( VoxelBox<ByteBuffer> vb, ObjectMaskCollection masks, byte outVal ) {
+	private static void writeChnlObjMaskCollection( VoxelBox<ByteBuffer> vb, ObjectCollection masks, byte outVal ) {
 		
 		for (ObjectMask objMask : masks) {
 			writeObjMaskToVoxelBox(objMask, vb, outVal);

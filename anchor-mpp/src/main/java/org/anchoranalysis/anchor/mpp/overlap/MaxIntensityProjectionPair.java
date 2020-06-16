@@ -79,7 +79,7 @@ public class MaxIntensityProjectionPair {
 		RegionMembershipWithFlags rmFlags
 	) {
 		
-		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(vb.extent());
+		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(vb.extent());
 		
 		BinaryValuesByte bvb = BinaryValuesByte.getDefault().duplicate();
 		

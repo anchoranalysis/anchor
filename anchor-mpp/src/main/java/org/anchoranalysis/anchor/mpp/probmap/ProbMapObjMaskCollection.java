@@ -38,17 +38,17 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 
 public class ProbMapObjMaskCollection extends ProbMap {
 
-	private ObjectMaskCollection objMaskCollection;
+	private ObjectCollection objMaskCollection;
 	private ImageDim dim;
 	
 	private ProbWeights probWeights;
 	
-	public ProbMapObjMaskCollection(ObjectMaskCollection objMaskCollection,
+	public ProbMapObjMaskCollection(ObjectCollection objMaskCollection,
 			ImageDim dim) throws CreateException {
 		super();
 		this.objMaskCollection = objMaskCollection;

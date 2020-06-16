@@ -128,13 +128,13 @@ public class IJWrap {
 	
 	
 	public static VoxelBox<ByteBuffer> voxelBoxFromImagePlusByte( ImagePlus imagePlus ) {
-		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
+		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
 		copyImageStackIntoVoxelBoxByte( imagePlus.getImageStack(), vbOut );
 		return vbOut;
 	}
 	
 	public static VoxelBox<ShortBuffer> voxelBoxFromImagePlusShort( ImagePlus imagePlus ) {
-		VoxelBox<ShortBuffer> vbOut = VoxelBoxFactory.instance().getShort().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
+		VoxelBox<ShortBuffer> vbOut = VoxelBoxFactory.getShort().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
 		copyImageStackIntoVoxelBoxShort( imagePlus.getImageStack(), vbOut );
 		return vbOut;
 	}

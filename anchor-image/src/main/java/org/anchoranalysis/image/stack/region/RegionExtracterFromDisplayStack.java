@@ -104,7 +104,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		
 		Extent extentTrgt = bbox.extent().scaleXYBy(sf);
 
-		VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.instance().getByte().create(extentTrgt);
+		VoxelBox<ByteBuffer> bufferSc = VoxelBoxFactory.getByte().create(extentTrgt);
 
 		MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 		
@@ -120,7 +120,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 			
 			VoxelBox<ShortBuffer> vb = extractedSlice.getVoxelBox().asShort();
 			
-			VoxelBox<ShortBuffer> bufferIntermediate = VoxelBoxFactory.instance().getShort().create(extentTrgt);
+			VoxelBox<ShortBuffer> bufferIntermediate = VoxelBoxFactory.getShort().create(extentTrgt);
 			interpolateRegionFromShort( vb,bufferIntermediate,extractedSlice.getDimensions().getExtnt(),extentTrgt,bbox,zoomFactor,interpolator );
 			
 			// We now convert the ShortBuffer into bytes

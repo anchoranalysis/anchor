@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -80,7 +80,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 	protected MPPInitParams createInitParams(
 		BoundIOContext context,
 		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectMaskCollection>> objs,
+		Optional<NamedProvider<ObjectCollection>> objs,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		return MPPInitParamsFactory.createFromExistingCollections(

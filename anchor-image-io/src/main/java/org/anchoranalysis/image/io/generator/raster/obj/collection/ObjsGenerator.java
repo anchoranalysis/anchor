@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -43,16 +43,16 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  * @author owen
  *
  */
-public abstract class ObjsGenerator extends RasterGenerator implements IterableGenerator<ObjectMaskCollection> {
+public abstract class ObjsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {
 	
-	private ObjectMaskCollection objs;
+	private ObjectCollection objs;
 	private ImageDim dim;
 	
 	public ObjsGenerator(ImageDim dim) {
 		this.dim = dim;
 	}
 	
-	public ObjsGenerator(ObjectMaskCollection objs, ImageDim dim) {
+	public ObjsGenerator(ObjectCollection objs, ImageDim dim) {
 		this(dim);
 		this.objs = objs;
 	}
@@ -70,12 +70,12 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 	}
 
 	@Override
-	public ObjectMaskCollection getIterableElement() {
+	public ObjectCollection getIterableElement() {
 		return objs;
 	}
 
 	@Override
-	public void setIterableElement(ObjectMaskCollection element)
+	public void setIterableElement(ObjectCollection element)
 			throws SetOperationFailedException {
 		this.objs = element;
 	}
@@ -89,7 +89,7 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 		return dim;
 	}
 
-	protected ObjectMaskCollection getObjs() {
+	protected ObjectCollection getObjs() {
 		return objs;
 	}
 }

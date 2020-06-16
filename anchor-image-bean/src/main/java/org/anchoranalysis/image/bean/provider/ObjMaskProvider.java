@@ -30,11 +30,11 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 @GroupingRoot
-public abstract class ObjMaskProvider extends ImageBean<ObjMaskProvider> implements Provider<ObjectMaskCollection> {
+public abstract class ObjMaskProvider extends ImageBean<ObjMaskProvider> implements Provider<ObjectCollection> {
 
 	@Override
-	public abstract ObjectMaskCollection create() throws CreateException;
+	public abstract ObjectCollection create() throws CreateException;
 }

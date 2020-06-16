@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * An R-Tree of bounding boxes. The index of the item in a list, determines an integer ID, associated with the item in the R-Tree.
@@ -43,13 +43,13 @@ import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 public class ObjMaskCollectionRTree {
 
 	private BBoxRTree delegate;
-	private ObjectMaskCollection objs;
+	private ObjectCollection objs;
 	
 	public ObjMaskCollectionRTree( List<ObjectMask> list ) {
-		this( new ObjectMaskCollection(list) );
+		this( new ObjectCollection(list) );
 	}
 	
-	public ObjMaskCollectionRTree( ObjectMaskCollection objs ) {
+	public ObjMaskCollectionRTree( ObjectCollection objs ) {
 		this.objs = objs;
 		delegate = new BBoxRTree( objs.size() );
 		
@@ -61,12 +61,12 @@ public class ObjMaskCollectionRTree {
 		}
 	}
 	
-	public ObjectMaskCollection contains( Point3i pnt ) {
+	public ObjectCollection contains( Point3i pnt ) {
 		List<Integer> indices = delegate.contains( pnt );
 		
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( int i : indices) {
 			ObjectMask om = objs.get(i);
@@ -77,12 +77,12 @@ public class ObjMaskCollectionRTree {
 		return out;
 	}
 	
-	public ObjectMaskCollection intersectsWith( ObjectMask om ) {
+	public ObjectCollection intersectsWith( ObjectMask om ) {
 		List<Integer> indices = delegate.intersectsWith( om.getBoundingBox() );
 		
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( int i : indices) {
 			ObjectMask omInd = objs.get(i);
@@ -93,7 +93,7 @@ public class ObjMaskCollectionRTree {
 		return out;
 	}
 	
-	public ObjectMaskCollection intersectsWith( BoundingBox bbox ) {
+	public ObjectCollection intersectsWith( BoundingBox bbox ) {
 		List<Integer> indices = delegate.intersectsWith(bbox);
 		return objs.createSubset(indices);
 	}

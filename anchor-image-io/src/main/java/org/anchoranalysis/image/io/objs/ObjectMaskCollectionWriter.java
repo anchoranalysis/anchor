@@ -1,13 +1,13 @@
 package org.anchoranalysis.image.io.objs;
 
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 
 public class ObjectMaskCollectionWriter {
 	
 	private ObjectMaskCollectionWriter() {}
 	
-	public static IterableGenerator<ObjectMaskCollection> generator() {
+	public static IterableGenerator<ObjectCollection> generator() {
 		return new GeneratorHDF5(true);
 	}
 }

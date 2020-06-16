@@ -94,7 +94,7 @@ public class ThresholderGlobalTest {
 		
 		Extent extentHalf = new Extent(SCENE_WIDTH/2, SCENE_HEIGHT, SCENE_DEPTH);
 		
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create(SCENE_EXTENT);
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(SCENE_EXTENT);
 		
 		BoundingBox left = new BoundingBox( new Point3i(0,0,0), extentHalf );
 		BoundingBox right = new BoundingBox( new Point3i(SCENE_WIDTH/2,0,0), extentHalf );

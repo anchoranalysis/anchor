@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -50,5 +50,5 @@ public abstract class SgmnObjMaskCollection extends NullParamsBean<SgmnObjMaskCo
 	 * @return
 	 * @throws SgmnFailedException
 	 */
-	public abstract ObjectMaskCollection sgmn( NamedImgStackCollection stackCollection, NamedProvider<ObjectMaskCollection> objMaskCollection, Optional<SeedCollection> seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
+	public abstract ObjectCollection sgmn( NamedImgStackCollection stackCollection, NamedProvider<ObjectCollection> objMaskCollection, Optional<SeedCollection> seeds, RandomNumberGenerator re, BoundIOContext context ) throws SgmnFailedException;
 }

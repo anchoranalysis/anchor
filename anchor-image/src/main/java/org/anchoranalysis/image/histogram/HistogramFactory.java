@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -114,10 +114,10 @@ public class HistogramFactory {
 
 	
 	public static Histogram create( Channel chnl, ObjectMask obj ) {
-		return create(chnl, new ObjectMaskCollection(obj) );
+		return create(chnl, new ObjectCollection(obj) );
 	}
 	
-	public static Histogram create( Channel chnl, ObjectMaskCollection objs ) {
+	public static Histogram create( Channel chnl, ObjectCollection objs ) {
 		return createWithMasks( chnl.getVoxelBox(), objs );
 	}
 	
@@ -185,7 +185,7 @@ public class HistogramFactory {
 	}
 	
 	
-	private static Histogram createWithMasks( VoxelBoxWrapper vb, ObjectMaskCollection objs ) {
+	private static Histogram createWithMasks( VoxelBoxWrapper vb, ObjectCollection objs ) {
 		
 		Histogram total = new HistogramArray( (int) vb.getVoxelDataType().maxValue() );
 		

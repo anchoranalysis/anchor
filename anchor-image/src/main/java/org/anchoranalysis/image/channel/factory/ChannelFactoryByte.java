@@ -43,14 +43,14 @@ import org.apache.commons.logging.LogFactory;
 public class ChannelFactoryByte extends ChannelFactorySingleType {
 
 	private static Log log = LogFactory.getLog(ChannelFactoryByte.class);
-	private static VoxelDataTypeUnsignedByte dataType = VoxelDataTypeUnsignedByte.instance;
+	private static final VoxelDataTypeUnsignedByte DATA_TYPE = VoxelDataTypeUnsignedByte.instance;
 	
-	private static VoxelBoxFactoryTypeBound<ByteBuffer> factoryVoxelBox = VoxelBoxFactory.instance().getByte();
+	private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY = VoxelBoxFactory.getByte();
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDim dim) {
 		assert(dim!=null);
-		VoxelBox<ByteBuffer> vb = factoryVoxelBox.create( dim.getExtnt() );
+		VoxelBox<ByteBuffer> vb = FACTORY.create( dim.getExtnt() );
 		
 		log.debug( String.format("Creating empty initialised: %s", dim.getExtnt().toString()) );
 		
@@ -61,17 +61,17 @@ public class ChannelFactoryByte extends ChannelFactorySingleType {
 	public Channel createEmptyUninitialised(ImageDim dim) {
 		PixelsFromByteBufferArr pixels = PixelsFromByteBufferArr.createEmpty( dim.getExtnt() );
 
-		VoxelBox<ByteBuffer> vb = factoryVoxelBox.create(pixels);
+		VoxelBox<ByteBuffer> vb = FACTORY.create(pixels);
 		return create(vb, dim.getRes() );
 	}
 
 	@Override
 	public VoxelDataType dataType() {
-		return dataType;
+		return DATA_TYPE;
 	}
 
 	public static VoxelDataType staticDataType() {
-		return dataType;
+		return DATA_TYPE;
 	}
 
 }

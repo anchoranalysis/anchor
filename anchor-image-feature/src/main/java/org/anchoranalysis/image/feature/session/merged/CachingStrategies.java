@@ -45,15 +45,11 @@ class CachingStrategies {
 	
 	/** Cache and re-use inputs */
 	public static BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cacheAndReuse() {
-		return new BoundReplaceStrategy<>(
-			cacheCreator -> new CacheAndReuseStrategy<>(cacheCreator)
-		);
+		return new BoundReplaceStrategy<>(CacheAndReuseStrategy::new);
 	}
 	
 	/* Don't cache inputs */
 	public static BoundReplaceStrategy<FeatureInputStack,? extends ReplaceStrategy<FeatureInputStack>> noCache() {
-		return new BoundReplaceStrategy<>(
-			cacheCreator -> new ReuseSingletonStrategy<>(cacheCreator)
-		);
+		return new BoundReplaceStrategy<>(ReuseSingletonStrategy::new);
 	}
 }

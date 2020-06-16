@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolder;
@@ -42,15 +42,15 @@ import org.anchoranalysis.io.manifest.deserializer.folder.LoadContainer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.manifest.serialized.SerializedObjectSetFolderSource;
 
-class ReadObjsFromTIFFDirectory extends Deserializer<ObjectMaskCollection> {
+class ReadObjsFromTIFFDirectory extends Deserializer<ObjectCollection> {
 	
 	@Override
-	public ObjectMaskCollection deserialize(Path folderPath) throws DeserializationFailedException {
+	public ObjectCollection deserialize(Path folderPath) throws DeserializationFailedException {
 		RasterReader rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
 		return readWithRaster(folderPath, rasterReader);
 	}
 	
-	private ObjectMaskCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
+	private ObjectCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
 		
 		try {
 			SerializedObjectSetFolderSource folderSource = new SerializedObjectSetFolderSource(folderPath,"*.ser");
@@ -67,8 +67,8 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjectMaskCollection> {
 		}
 	}
 	
-	private static ObjectMaskCollection createFromLoadContainer( LoadContainer<ObjectMask> lc ) throws CreateException {
-		ObjectMaskCollection omc = new ObjectMaskCollection();
+	private static ObjectCollection createFromLoadContainer( LoadContainer<ObjectMask> lc ) throws CreateException {
+		ObjectCollection omc = new ObjectCollection();
 		try {
 			for( int i=lc.getCntr().getMinimumIndex(); i<=lc.getCntr().getMaximumIndex(); i++ ) {
 				omc.add( lc.getCntr().get(i) );

@@ -27,15 +27,26 @@ package org.anchoranalysis.annotation.io.assignment;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public class AssignmentObjMask implements Assignment {
+/**
+ * Pairs objects in left with objects in right
+ * 
+ * <p>Several statistics based upon overlap, the number of pairs, the number of unassigned objects are derived.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class AssignmentOverlapFromPairs implements Assignment {
 
 	private List<ObjectMask> listUnassignedLeft = new ArrayList<>();
 	private List<ObjectMask> listUnassignedRight = new ArrayList<>();
@@ -44,61 +55,49 @@ public class AssignmentObjMask implements Assignment {
 	/** The headers needed to create statistics */
 	@Override
 	public List<String> createStatisticsHeaderNames() {
+		return Arrays.asList(
+			"percentMatchesInAnnotation",
+			"percentMatchesInResult",
 		
-		List<String> headerNames = new ArrayList<>();
-		headerNames.add("percentMatchesInAnnotation");
-		headerNames.add("percentMatchesInResult");
+			"matches",
+			"unmatchedAnnotation",
+			"numItemsInAnnotation",
 		
-		headerNames.add("matches");
-		headerNames.add("unmatchedAnnotation");
-		headerNames.add("numItemsInAnnotation");
+			"unmatchedResult",
+			"numItemsInResult",
 		
-
-		headerNames.add("unmatchedResult");
-		headerNames.add("numItemsInResult");
-		
-		headerNames.add("meanOverlapFromPaired");
-		headerNames.add("minOverlapFromPaired");
-		headerNames.add("maxOverlapFromPaired");
-		return headerNames;
+			"meanOverlapFromPaired",
+			"minOverlapFromPaired",
+			"maxOverlapFromPaired"
+		);
 	}
 	
 	@Override
 	public List<TypedValue> createStatistics() {
-		Elements rowElements = new Elements();
-		rowElements.add( percentLeftMatched() );
-		rowElements.add( percentRightMatched() );
+		WrappedTypeValueList elements = new WrappedTypeValueList(2);
 		
-		rowElements.add( numPaired() );
+		elements.add(
+			percentLeftMatched(),
+			percentRightMatched()
+		);
 		
+		elements.add(
+			numPaired(),
+			numUnassignedLeft(),
+			leftSize(),
+			numUnassignedRight(),
+			rightSize()
+		);
 		
-		rowElements.add( numUnassignedLeft() );
-		rowElements.add( leftSize() );
+		elements.add(
+			meanOverlapFromPaired(),
+			minOverlapFromPaired(),
+			maxOverlapFromPaired()
+		);
 		
-		
-		rowElements.add( numUnassignedRight() );
-		rowElements.add( rightSize() );
-		
-		rowElements.add( meanOverlapFromPaired() );
-		rowElements.add( minOverlapFromPaired() );
-		rowElements.add( maxOverlapFromPaired() );
-		
-		return rowElements.getList();	
+		return elements.asList();	
 	}
 	
-
-	private static class Elements {
-		private List<TypedValue> delegate = new ArrayList<>();
-		
-		public void add( double val ) {
-			delegate.add( new TypedValue( val, 2 ));
-		}
-
-		public List<TypedValue> getList() {
-			return delegate;
-		}
-	}
-
 	public void removeTouchingBorderXY( ImageDim sd ) {
 		removeTouchingBorderXYObjMask( sd, listUnassignedLeft );
 		removeTouchingBorderXYObjMask( sd, listUnassignedRight );
@@ -107,11 +106,9 @@ public class AssignmentObjMask implements Assignment {
 	
 	@Override
 	public List<ObjectMask> getListPaired( boolean left ) {
-		List<ObjectMask> out = new ArrayList<>();
-		for( PairObjMask om : listPairs) {
-			out.add( om.getMultiplex( left ) );
-		}
-		return out;
+		return listPairs.stream().map( om->
+			om.getMultiplex( left )
+		).collect( Collectors.toList() );
 	}
 
 	@Override
@@ -136,23 +133,17 @@ public class AssignmentObjMask implements Assignment {
 	}
 
 	public double minOverlapFromPaired() {
-		double min = Double.NaN;
-		for( PairObjMask om : listPairs) {
-			if (Double.isNaN(min) || om.getOverlapRatio()<min) {
-				min = om.getOverlapRatio();
-			}
-		}
-		return min;
+		return pairsOverlapStream().min().orElse(Double.NaN);
 	}
 
 	public double maxOverlapFromPaired() {
-		double max = Double.NaN;
-		for( PairObjMask om : listPairs) {
-			if (Double.isNaN(max) || om.getOverlapRatio()>max) {
-				max = om.getOverlapRatio();
-			}
-		}
-		return max;
+		return pairsOverlapStream().max().orElse(Double.NaN);
+	}
+	
+	private DoubleStream pairsOverlapStream() {
+		return listPairs.stream().mapToDouble(
+			PairObjMask::getOverlapRatio
+		);
 	}
 	
 	public List<ObjectMask> getListUnassignedLeft() {
@@ -167,7 +158,7 @@ public class AssignmentObjMask implements Assignment {
 		listUnassignedLeft.add(om);
 	}
 
-	public void addLeftObjs( ObjectMaskCollection om ) {
+	public void addLeftObjs( ObjectCollection om ) {
 		listUnassignedLeft.addAll(om.asList());
 	}
 	
@@ -175,7 +166,7 @@ public class AssignmentObjMask implements Assignment {
 		listUnassignedRight.add(om);
 	}
 	
-	public void addRightObjs( ObjectMaskCollection om ) {
+	public void addRightObjs( ObjectCollection om ) {
 		listUnassignedRight.addAll(om.asList());
 	}
 	
@@ -249,5 +240,4 @@ public class AssignmentObjMask implements Assignment {
 			}
 		}
 	}
-
 }

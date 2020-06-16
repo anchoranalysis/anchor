@@ -73,7 +73,7 @@ public class ObjectMask {
 	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
 	public ObjectMask(BoundingBox bbox) {
 		super();
-		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.instance().getByte() );
+		delegate = new BoundedVoxelBox<>(bbox, VoxelBoxFactory.getByte() );
 	}
 	
 	public ObjectMask(BoundedVoxelBox<ByteBuffer> voxelBox) {
@@ -129,8 +129,7 @@ public class ObjectMask {
 	}
 
 	public ObjectMask duplicate() {
-		ObjectMask newMask = new ObjectMask(this);
-		return newMask;
+		return new ObjectMask(this);
 	}
 
 	public int numPixels() {
@@ -149,7 +148,7 @@ public class ObjectMask {
 		return new ObjectMask(
 			delegate.growToZ(
 				sz,
-				VoxelBoxFactory.instance().getByte()
+				VoxelBoxFactory.getByte()
 			)
 		);
 	}
@@ -160,7 +159,7 @@ public class ObjectMask {
 				neg,
 				pos,
 				clipRegion,
-				VoxelBoxFactory.instance().getByte()
+				VoxelBoxFactory.getByte()
 			)
 		);
 	}
@@ -280,7 +279,7 @@ public class ObjectMask {
 	public boolean checkIfConnected() throws OperationFailedException {
 		
 		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory(true);
-		ObjectMaskCollection objs;
+		ObjectCollection objs;
 		try {
 			objs = creator.createConnectedComponents(this.binaryVoxelBox().duplicate());
 		} catch (CreateException e) {
@@ -362,7 +361,7 @@ public class ObjectMask {
 		BinaryValues bvOut = BinaryValues.getDefault();
 
 		// We initially set all pixels to ON
-		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.instance().getByte().create(
+		VoxelBox<ByteBuffer> vbMaskOut = VoxelBoxFactory.getByte().create(
 			bboxIntersect.get().extent()
 		);
 		vbMaskOut.setAllPixelsTo( bvOut.getOnInt() );
@@ -557,7 +556,7 @@ public class ObjectMask {
 			delegate.createVirtualSubrange(
 				zMin,
 				zMax,
-				VoxelBoxFactory.instance().getByte()
+				VoxelBoxFactory.getByte()
 			),
 			this.bv
 		);
@@ -603,7 +602,7 @@ public class ObjectMask {
 		if (contains(pnt)) {
 			return Optional.of(pnt);
 		}
-		return IterateVoxels.callUntilFirstPointOnMask(this);
+		return IterateVoxels.findFirstPointOnMask(this);
 	}
 	
 	public void shiftBy(ReadableTuple3i shiftBy) {

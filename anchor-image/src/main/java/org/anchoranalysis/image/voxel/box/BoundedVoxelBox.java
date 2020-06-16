@@ -28,7 +28,6 @@ package org.anchoranalysis.image.voxel.box;
 
 
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -38,12 +37,9 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
  * A a voxel buffer representing an object
@@ -103,12 +99,6 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	public void setVoxelBox(VoxelBox<T> voxelBox) {
 		this.voxelBox = voxelBox;
-	}
-	
-	// To enable compiling, as otherwise there as a type collision
-	@SuppressWarnings("unchecked")
-	public void setVoxelBoxSkipType(VoxelBox<? extends Buffer> voxelBox) {
-		this.voxelBox = (VoxelBox<T>) voxelBox;
 	}
 	
 	public BoundedVoxelBox<T> flattenZ() {
@@ -221,21 +211,15 @@ public class BoundedVoxelBox<T extends Buffer> {
 			maxPossibleZ = Integer.MAX_VALUE;
 		}
 		
-		Point3i posClip = new Point3i(pos);
-		posClip.setX( clipPos(bboxMax.getX(), pos.getX(), maxPossibleX));
-		posClip.setY( clipPos(bboxMax.getY(), pos.getY(), maxPossibleY));
-		posClip.setZ( clipPos(bboxMax.getZ(), pos.getZ(), maxPossibleZ));
-		
-		
-		// We calculate new sizes
-		Extent e = this.voxelBox.extent();
-		
-		Extent eNew = new Extent(
-			e.getX() + negClip.getX() + posClip.getX(),
-			e.getY() + negClip.getY() + posClip.getY(),
-			e.getZ() + negClip.getZ() + posClip.getZ()
+		Point3i growBy = new Point3i(
+			clipPos(bboxMax.getX(), pos.getX(), maxPossibleX) + negClip.getX(),
+			clipPos(bboxMax.getY(), pos.getY(), maxPossibleY) + negClip.getY(),
+			clipPos(bboxMax.getZ(), pos.getZ(), maxPossibleZ) + negClip.getZ()
 		);
-		return new BoundingBox(negClip, eNew);
+		return new BoundingBox(
+			negClip,
+			this.voxelBox.extent().growBy(growBy)
+		);
 	}
 	
 	
@@ -338,37 +322,6 @@ public class BoundedVoxelBox<T extends Buffer> {
 		return voxelBox.extent();
 	}
 	
-	public static class SubrangePixelAccess<BufferType extends Buffer> implements IPixelsForPlane<BufferType> {
-
-		private int zRel;
-		private Extent extent;
-		private BoundedVoxelBox<BufferType> src;
-		
-		public SubrangePixelAccess(int zRel, Extent extent,
-				BoundedVoxelBox<BufferType> src) {
-			super();
-			this.zRel = zRel;
-			this.extent = extent;
-			this.src = src;
-		}
-
-		@Override
-		public void setPixelsForPlane(int z, VoxelBuffer<BufferType> pixels) {
-			src.getVoxelBox().setPixelsForPlane(z+zRel, pixels);
-		}
-
-		@Override
-		public VoxelBuffer<BufferType> getPixelsForPlane(int z) {
-			return src.getVoxelBox().getPixelsForPlane(z+zRel);
-		}
-
-		@Override
-		public Extent extent() {
-			return extent;
-		}
-	};
-	
-	
 	// Creates an ObjMask with a subrange of the slices. zMin inclusive, zMax inclusive
 	// Note, no new voxels are created
 	public BoundedVoxelBox<T> createVirtualSubrange(int zMin, int zMax, VoxelBoxFactoryTypeBound<T> factory) throws CreateException {
@@ -387,8 +340,8 @@ public class BoundedVoxelBox<T extends Buffer> {
 			boundingBox.extent().duplicateChangeZ(zMax-zMin+1)
 		);
 		
-		SubrangePixelAccess<T> pixelAccess = new SubrangePixelAccess<T>(relZ,target.extent(),this);
-		return new BoundedVoxelBox<T>( target, factory.create(pixelAccess) );
+		SubrangeVoxelAccess<T> voxelAccess = new SubrangeVoxelAccess<T>(relZ,target.extent(),this);
+		return new BoundedVoxelBox<T>( target, factory.create(voxelAccess) );
 	}
 
 	public BoundedVoxelBox<T> createBufferAvoidNew(BoundingBox bbox) throws CreateException {
@@ -447,11 +400,12 @@ public class BoundedVoxelBox<T extends Buffer> {
 		Point3i relPosToSrc = bboxIntersect.get().relPosTo( this.boundingBox );
 		Point3i relPosToDest = bboxIntersect.get().relPosTo( bbox );
 		
-		BoundingBox bboxRelSrc = new BoundingBox( relPosToSrc, bboxIntersect.get().extent() );
-		BoundingBox bboxRelDest = new BoundingBox( relPosToDest, bboxIntersect.get().extent() );
-		
 		VoxelBox<T> bufNew = voxelBox.getFactory().create( bbox.extent() );
-		voxelBox.copyPixelsTo( bboxRelSrc, bufNew, bboxRelDest);
+		voxelBox.copyPixelsTo(
+			new BoundingBox( relPosToSrc, bboxIntersect.get().extent() ),
+			bufNew,
+			new BoundingBox( relPosToDest, bboxIntersect.get().extent() )
+		);
 
 		return new BoundedVoxelBox<>(
 			bbox,
@@ -492,16 +446,5 @@ public class BoundedVoxelBox<T extends Buffer> {
 			bboxNew,
 			voxelBox.extractSlice(z)
 		);
-	}
-
-	public void setPixelsCheckMask(ObjectMask om, int value) {
-		voxelBox.setPixelsCheckMask(om, value);
-	}
-
-	public void setPixelsCheckMask(BoundingBox bboxToBeAssigned,
-			VoxelBox<ByteBuffer> objMaskBuffer, BoundingBox bboxMask, int value,
-			byte maskMatchValue) {
-		voxelBox.setPixelsCheckMask(bboxToBeAssigned, objMaskBuffer,
-				bboxMask, value, maskMatchValue);
 	}
 }

@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
@@ -72,7 +72,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 	@Override
 	protected RGBStack generateBackground() throws CreateException {
 		try {
-			ObjectMaskCollection objs = getIterableElement().collectionObjMask();
+			ObjectCollection objs = getIterableElement().collectionObjMask();
 			
 			if (objs.isEmpty()) {
 				throw new CreateException("This generator expects at least one mask to be present");
@@ -113,7 +113,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		);
 	}
 	
-	private static ObjMaskWithPropertiesCollection relTo(ObjectMaskCollection in, BoundingBox src ) throws CreateException {
+	private static ObjMaskWithPropertiesCollection relTo(ObjectCollection in, BoundingBox src ) throws CreateException {
 		
 		ObjMaskWithPropertiesCollection out = new ObjMaskWithPropertiesCollection();
 		

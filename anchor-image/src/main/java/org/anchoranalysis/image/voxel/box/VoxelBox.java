@@ -46,6 +46,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
+ * A box (3-dimensions) of voxels
+ * 
+ * <p>This class is IMMUTABLE</p>.
  * 
  * @author Owen Feehan
  *
@@ -132,7 +135,6 @@ public abstract class VoxelBox<T extends Buffer> {
 					int destIndex = destVoxelBox.extent().offset(x + relPos.getX(), y+relPos.getY());
 					
 					copyItem( srcArr, srcIndex, destArr, destIndex );
-					//destArr.put( destIndex, srcArr.get(srcIndex) );
 				}
 			}
 		}
@@ -166,7 +168,6 @@ public abstract class VoxelBox<T extends Buffer> {
 					if(maskBuffer.get()==maskBV.getOnByte()) {
 						copyItem( srcArr, srcIndex, destArr, destIndex );
 					}
-					//destArr.put( destIndex, srcArr.get(srcIndex) );
 				}
 			}
 		}
@@ -488,7 +489,6 @@ public abstract class VoxelBox<T extends Buffer> {
 							count++;
 						}
 					}
-					//destArr.put( destIndex, srcArr.get(srcIndex) );
 				}
 			}
 		}
@@ -598,10 +598,11 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==extentResized.getVolumeXY());
 		
-		VoxelBoxWrapper srcWrapped = new VoxelBoxWrapper( this );
-		VoxelBoxWrapper trgtWrapped = new VoxelBoxWrapper( bufferTarget);
-		
-		InterpolateUtilities.transferSlicesResizeXY( srcWrapped, trgtWrapped, interpolator );
+		InterpolateUtilities.transferSlicesResizeXY(
+			new VoxelBoxWrapper(this),
+			new VoxelBoxWrapper(bufferTarget),
+			interpolator
+		);
 			
 		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==extentResized.getVolumeXY());
 		return bufferTarget;

@@ -117,10 +117,6 @@ public class ObjMaskWithProperties {
 		return mask.sizesMatch();
 	}
 
-	public void setVoxelBox(VoxelBox<ByteBuffer> voxelBox) {
-		mask.setVoxelBox(voxelBox);
-	}
-
 	public String toString() {
 		return mask.toString();
 	}

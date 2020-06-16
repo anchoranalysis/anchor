@@ -45,12 +45,8 @@ class PairObjMask {
 		return left.getBoundingBox().atBorderXY(sd) || right.getBoundingBox().atBorderXY(sd); 
 	}
 	
-	public ObjectMask getMultiplex( boolean left ) {
-		if (left) {
-			return getLeft();
-		} else {
-			return getRight();
-		}
+	public ObjectMask getMultiplex( boolean leftFlag ) {
+		return leftFlag ? left : right;
 	}
 	
 	public ObjectMask getLeft() {
@@ -64,5 +60,4 @@ class PairObjMask {
 	public double getOverlapRatio() {
 		return overlapRatio;
 	}
-
 }

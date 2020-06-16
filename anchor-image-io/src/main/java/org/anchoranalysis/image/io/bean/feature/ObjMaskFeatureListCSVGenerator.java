@@ -48,7 +48,7 @@ import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -62,11 +62,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @param <T> feature calculation params
  */
-class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectMaskCollection> {
+class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectCollection> {
 
 	private TableCSVGenerator<ResultsVectorCollection> delegate;
 	
-	private ObjectMaskCollection objs;
+	private ObjectCollection objs;
 	
 	private FeatureList<FeatureInputSingleObj> features;
 	
@@ -122,12 +122,12 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 
 	@Override
-	public ObjectMaskCollection getIterableElement() {
+	public ObjectCollection getIterableElement() {
 		return objs;
 	}
 
 	@Override
-	public void setIterableElement(ObjectMaskCollection element) {
+	public void setIterableElement(ObjectCollection element) {
 		this.objs = element;
 	}
 

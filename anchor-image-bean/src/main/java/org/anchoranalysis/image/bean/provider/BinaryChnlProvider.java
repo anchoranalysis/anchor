@@ -32,7 +32,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -48,12 +48,12 @@ public abstract class BinaryChnlProvider extends BeanImgStackProvider<BinaryChnl
 	}
 
 	private static Channel createChnlFromBinary( BinaryChnl binaryImgChnl, BinaryValues bvOut ) throws CreateException {
-		ObjectMaskCollection omc = expressAsObj(binaryImgChnl);
+		ObjectCollection omc = expressAsObj(binaryImgChnl);
 		return BinaryChnlFromObjs.createFromObjs( omc, binaryImgChnl.getDimensions(), bvOut ).getChnl();
 	}
 		
-	private static ObjectMaskCollection expressAsObj( BinaryChnl binaryImgChnl ) throws CreateException {
+	private static ObjectCollection expressAsObj( BinaryChnl binaryImgChnl ) throws CreateException {
 		ObjectMask om = new ObjectMask( binaryImgChnl.binaryVoxelBox() ); 
-		return new ObjectMaskCollection(om);
+		return new ObjectCollection(om);
 	}
 }

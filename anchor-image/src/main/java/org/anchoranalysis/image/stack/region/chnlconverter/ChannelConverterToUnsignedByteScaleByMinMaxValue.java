@@ -41,7 +41,7 @@ public class ChannelConverterToUnsignedByteScaleByMinMaxValue extends ChannelCon
 		super(
 			VoxelDataTypeUnsignedByte.instance,
 			new VoxelBoxConverterToByteScaleByMinMaxValue(min,max),
-			VoxelBoxFactory.instance().getByte()
+			VoxelBoxFactory.getByte()
 		);
 	}
 

@@ -46,7 +46,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	public VoxelBoxByte(IPixelsForPlane<ByteBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
-			VoxelBoxFactory.instance().getByte()
+			VoxelBoxFactory.getByte()
 		);
 	}
 	

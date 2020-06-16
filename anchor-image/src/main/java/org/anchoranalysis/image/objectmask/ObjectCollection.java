@@ -49,34 +49,39 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
-public class ObjectMaskCollection implements Iterable<ObjectMask> {
+/**
+ * A collection of {@link ObjectMask}
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjectCollection implements Iterable<ObjectMask> {
 
-	private List<ObjectMask> delegate;
+	private final List<ObjectMask> delegate;
 
-	public ObjectMaskCollection() {
+	public ObjectCollection() {
 		 delegate = new ArrayList<>();
 	}
 	
-	public ObjectMaskCollection( List<ObjectMask> list ) {
+	public ObjectCollection( List<ObjectMask> list ) {
 		delegate = list;
 	}
-	
-	
-	public ObjectMaskCollection( ObjectMask om ) {
+		
+	public ObjectCollection( ObjectMask om ) {
 		this();
 		add(om);
 	}
 	
-	public ObjectMaskCollection flattenZ() {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection flattenZ() {
+		ObjectCollection out = new ObjectCollection();
 		for( ObjectMask om : delegate ) {
 			out.add( om.flattenZ() );
 		}
 		return out;
 	}
 	
-	public ObjectMaskCollection extractSlice( int z, boolean keepZ ) throws OperationFailedException {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection extractSlice( int z, boolean keepZ ) throws OperationFailedException {
+		ObjectCollection out = new ObjectCollection();
 		for( ObjectMask om : delegate ) {
 			
 			if (om.getBoundingBox().contains().z(z)) {
@@ -90,7 +95,7 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 		return delegate.add(e);
 	}
 
-	public boolean addAll(ObjectMaskCollection objs) {
+	public boolean addAll(ObjectCollection objs) {
 		return addAll(objs.delegate);
 	}
 	
@@ -129,7 +134,7 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 	 * <p>This is more expensive equality check than with {@link equalsDeep}, but is useful for comparing objects that were instantiated in different places.</p>
 	 * <p>Both collections must have identical ordering.</p>
 	 */	
-	public boolean equalsDeep(ObjectMaskCollection othr) {
+	public boolean equalsDeep(ObjectCollection othr) {
 		if (size()!=othr.size()) {
 			return false;
 		}
@@ -265,7 +270,7 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 	}
 	
 	// objsRemoved is optional
-	public void rmvBorderMasks2D( ImageDim sd, ObjectMaskCollection objsRemoved ) {
+	public void rmvBorderMasks2D( ImageDim sd, ObjectCollection objsRemoved ) {
 
 		Iterator<ObjectMask> itr = iterator();
 		while ( itr.hasNext() ) {
@@ -283,7 +288,7 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 		}
 	}
 	
-	public void rmvNumPixelsLessThan( int numPixels, Optional<ObjectMaskCollection> objsRemoved ) {
+	public void rmvNumPixelsLessThan( int numPixels, Optional<ObjectCollection> objsRemoved ) {
 
 		Iterator<ObjectMask> itr = iterator();
 		while ( itr.hasNext() ) {
@@ -343,7 +348,7 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 	 */
 	public VoxelBox<ByteBuffer> merge( BoundingBox bbox ) {
 		
-		VoxelBox<ByteBuffer> out = VoxelBoxFactory.instance().getByte().create( bbox.extent() );
+		VoxelBox<ByteBuffer> out = VoxelBoxFactory.getByte().create( bbox.extent() );
 		
 		Point3i crnrSub = Point3i.immutableScale(bbox.getCrnrMin(), -1);
 		
@@ -368,8 +373,8 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 		return cnt;
 	}
 	
-	public ObjectMaskCollection findObjsWithIntersectingBBox( ObjectMask om ) {
-		ObjectMaskCollection omc = new ObjectMaskCollection();
+	public ObjectCollection findObjsWithIntersectingBBox( ObjectMask om ) {
+		ObjectCollection omc = new ObjectCollection();
 		for (ObjectMask omItr : this) {
 			if (omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())) {
 				omc.add(omItr);
@@ -385,8 +390,8 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 		}
 	}
 	
-	public ObjectMaskCollection growBuffer( Point3i neg, Point3i pos, Extent clipRegion ) throws OperationFailedException {
-		ObjectMaskCollection omc = new ObjectMaskCollection();
+	public ObjectCollection growBuffer( Point3i neg, Point3i pos, Extent clipRegion ) throws OperationFailedException {
+		ObjectCollection omc = new ObjectCollection();
 		for (ObjectMask om : this) {
 			omc.add(
 				om.growBuffer(
@@ -414,8 +419,8 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 	}
 	
 	/** Deep copy, including duplicating ObjMasks */
-	public ObjectMaskCollection duplicate() {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection duplicate() {
+		ObjectCollection out = new ObjectCollection();
 		for (ObjectMask om : this) {
 			out.add( om.duplicate() );
 		}
@@ -423,16 +428,16 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 	}
 	
 	/** Shallow copy of ObjMasks */
-	public ObjectMaskCollection duplicateShallow() {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection duplicateShallow() {
+		ObjectCollection out = new ObjectCollection();
 		for (ObjectMask om : this) {
 			out.add(om);
 		}
 		return out;
 	}
 	
-	public ObjectMaskCollection createSubset( List<Integer> indices ) {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection createSubset( List<Integer> indices ) {
+		ObjectCollection out = new ObjectCollection();
 		for( int i : indices ) {
 			out.add( get(i) );
 		}
@@ -442,5 +447,4 @@ public class ObjectMaskCollection implements Iterable<ObjectMask> {
 	public List<ObjectMask> asList() {
 		return delegate;
 	}
-
 }

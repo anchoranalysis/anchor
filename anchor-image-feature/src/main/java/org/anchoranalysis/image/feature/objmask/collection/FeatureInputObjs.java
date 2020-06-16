@@ -1,21 +1,21 @@
 package org.anchoranalysis.image.feature.objmask.collection;
 
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class FeatureInputObjs extends FeatureInputNRGStack {
 
-	private ObjectMaskCollection objMaskCollection;
+	private ObjectCollection objMaskCollection;
 	
-	public FeatureInputObjs(ObjectMaskCollection objMaskCollection) {
+	public FeatureInputObjs(ObjectCollection objMaskCollection) {
 		this.objMaskCollection = objMaskCollection;
 	}
 
-	public ObjectMaskCollection getObjMaskCollection() {
+	public ObjectCollection getObjMaskCollection() {
 		return objMaskCollection;
 	}
 
-	public void setObjMaskCollection(ObjectMaskCollection objMaskCollection) {
+	public void setObjMaskCollection(ObjectCollection objMaskCollection) {
 		this.objMaskCollection = objMaskCollection;
 	}
 }

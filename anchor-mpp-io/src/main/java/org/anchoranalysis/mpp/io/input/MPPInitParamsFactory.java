@@ -39,7 +39,7 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
@@ -85,7 +85,7 @@ public class MPPInitParamsFactory {
 		BoundIOContext context,
 		Optional<Define> define,
 		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectMaskCollection>> objs,
+		Optional<NamedProvider<ObjectCollection>> objs,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		

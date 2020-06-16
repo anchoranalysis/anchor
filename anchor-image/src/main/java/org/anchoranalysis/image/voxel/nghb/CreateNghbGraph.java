@@ -35,7 +35,7 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
 
 /**
@@ -145,7 +145,7 @@ public class CreateNghbGraph<V> {
 		// Graph of neighbouring objects, with the number of common pixels as an edge
 		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<V,E>(undirected);
 		
-		ObjectMaskCollection objs = objsFromVertices(vertices, vertexToObjMask);
+		ObjectCollection objs = objsFromVertices(vertices, vertexToObjMask);
 		checkObjsInScene(objs, sceneExtnt);
 		ObjMaskCollectionRTree rTree = new ObjMaskCollectionRTree(objs);
 				
@@ -172,7 +172,7 @@ public class CreateNghbGraph<V> {
 		return graph;
 	}
 	
-	private static void checkObjsInScene( ObjectMaskCollection objs, Extent sceneExtnt ) throws CreateException {
+	private static void checkObjsInScene( ObjectCollection objs, Extent sceneExtnt ) throws CreateException {
 		for( ObjectMask om : objs ) {
 			if (!sceneExtnt.contains(om.getBoundingBox())) {
 				throw new CreateException(
@@ -197,12 +197,12 @@ public class CreateNghbGraph<V> {
 		);
 	}
 	
-	private ObjectMaskCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
+	private ObjectCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
 		
 		List<ObjectMask> list = vertices.stream().map( v -> 
 			vertexToObjMask.objMaskFromVertex(v)
 		).collect( Collectors.toList() );
-		return new ObjectMaskCollection(list);
+		return new ObjectCollection(list);
 	}
 	
 }

@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
  * @author FEEHANO
  *
  */
-public class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjectMaskCollection,List<ObjectMask>> {
+public class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjectCollection,List<ObjectMask>> {
 
 	public GeneratorTIFFDirectory() {
 		super(

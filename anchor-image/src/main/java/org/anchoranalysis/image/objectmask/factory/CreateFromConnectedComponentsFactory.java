@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.unionfind.ConnectedComponentUnionFind;
 
 
@@ -58,12 +58,12 @@ public class CreateFromConnectedComponentsFactory {
 		unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNghb);
 	}
 	
-	public ObjectMaskCollection createConnectedComponents( BinaryChnl chnl ) throws CreateException {
+	public ObjectCollection createConnectedComponents( BinaryChnl chnl ) throws CreateException {
 		return createConnectedComponents( chnl.binaryVoxelBox() );
 	}
 	
 	// This consumes the voxel buffer 'vb'
-	public ObjectMaskCollection createConnectedComponents( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
+	public ObjectCollection createConnectedComponents( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
 		try {
 			return unionFind.deriveConnectedByte(vb);
 		} catch (OperationFailedException e) {
@@ -72,7 +72,7 @@ public class CreateFromConnectedComponentsFactory {
 	}
 	
 	// This consumes the voxel buffer 'vb'
-	public ObjectMaskCollection create( BinaryVoxelBox<IntBuffer> vb ) throws CreateException {
+	public ObjectCollection create( BinaryVoxelBox<IntBuffer> vb ) throws CreateException {
 		try {
 			return unionFind.deriveConnectedInt(vb);
 		} catch (OperationFailedException e) {

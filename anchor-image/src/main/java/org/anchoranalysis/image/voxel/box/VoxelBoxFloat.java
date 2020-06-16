@@ -43,7 +43,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	public VoxelBoxFloat(IPixelsForPlane<FloatBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
-			VoxelBoxFactory.instance().getFloat()
+			VoxelBoxFactory.getFloat()
 		);
 	}
 	

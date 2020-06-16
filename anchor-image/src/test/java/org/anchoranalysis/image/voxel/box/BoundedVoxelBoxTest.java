@@ -48,7 +48,7 @@ public class BoundedVoxelBoxTest {
 		
 		BoundedVoxelBox<ByteBuffer> box = new BoundedVoxelBox<ByteBuffer>(
 			new BoundingBox( new Point3i(10, 10, 10), new Extent(15, 15, 15) ),
-			VoxelBoxFactory.instance().getByte()
+			VoxelBoxFactory.getByte()
 		);
 		
 		Point3i grow = new Point3i(1,1,1);
@@ -56,7 +56,7 @@ public class BoundedVoxelBoxTest {
 			grow,
 			grow,
 			Optional.of(extent),
-			VoxelBoxFactory.instance().getByte()
+			VoxelBoxFactory.getByte()
 		);
 	}
 }

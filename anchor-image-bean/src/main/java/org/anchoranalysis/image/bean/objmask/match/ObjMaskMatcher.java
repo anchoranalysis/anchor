@@ -31,12 +31,12 @@ import java.util.List;
 
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public abstract class ObjMaskMatcher extends NullParamsBean<ObjMaskMatcher> {
 
 	// order of List<ObjWithMatches> must be the same as order of the sourceObjs
-	public abstract List<ObjWithMatches> findMatch( ObjectMaskCollection sourceObjs ) throws OperationFailedException;
+	public abstract List<ObjWithMatches> findMatch( ObjectCollection sourceObjs ) throws OperationFailedException;
 
 }

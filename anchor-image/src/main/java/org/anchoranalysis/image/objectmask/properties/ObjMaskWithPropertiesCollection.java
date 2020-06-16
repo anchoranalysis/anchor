@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskWithPropertiesCollection implements Iterable<ObjMaskWithProperties>, List<ObjMaskWithProperties> {
 
@@ -50,10 +50,10 @@ public class ObjMaskWithPropertiesCollection implements Iterable<ObjMaskWithProp
 	}
 
 	public ObjMaskWithPropertiesCollection( ObjectMask om ) {
-		this( new ObjectMaskCollection(om) );
+		this( new ObjectCollection(om) );
 	}
 	
-	public ObjMaskWithPropertiesCollection( ObjectMaskCollection omc ) {
+	public ObjMaskWithPropertiesCollection( ObjectCollection omc ) {
 		for (ObjectMask mask : omc) {
 			delegate.add( new ObjMaskWithProperties(mask) );
 		}
@@ -184,8 +184,8 @@ public class ObjMaskWithPropertiesCollection implements Iterable<ObjMaskWithProp
 		return delegate.toString();
 	}
 	
-	public ObjectMaskCollection collectionObjMask() {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection collectionObjMask() {
+		ObjectCollection out = new ObjectCollection();
 		for (ObjMaskWithProperties mask : this) {
 			out.add(mask.getMask());
 		}

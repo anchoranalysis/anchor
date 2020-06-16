@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -50,9 +50,9 @@ public class ExtendObjsInto3DMask {
 	
 	private ExtendObjsInto3DMask() {}
 	
-	public static ObjectMaskCollection extendObjs( ObjectMaskCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
+	public static ObjectCollection extendObjs( ObjectCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for (ObjectMask obj : objs2D) {
 			out.add(
@@ -82,7 +82,7 @@ public class ExtendObjsInto3DMask {
 		
 		BoundedVoxelBox<ByteBuffer> newMask = new BoundedVoxelBox<>(
 			newBBox,
-			VoxelBoxFactory.instance().getByte()
+			VoxelBoxFactory.getByte()
 		);
 		
 		ReadableTuple3i max = newBBox.calcCrnrMax();

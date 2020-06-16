@@ -31,12 +31,12 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureInputSingleObj> {
 
 	@Override
-	protected double calcFeatureOn(ObjectMaskCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> session)
+	protected double calcFeatureOn(ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> session)
 			throws FeatureCalcException {
 		return session.calc(
 			new FeatureInputSingleObj(
@@ -45,7 +45,7 @@ public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureIn
 		);
 	}
 	
-	private ObjectMask extractObjFromCollection( ObjectMaskCollection objs ) throws FeatureCalcException {
+	private ObjectMask extractObjFromCollection( ObjectCollection objs ) throws FeatureCalcException {
 		if (objs.size()==0) {
 			throw new FeatureCalcException("No object found");
 		}

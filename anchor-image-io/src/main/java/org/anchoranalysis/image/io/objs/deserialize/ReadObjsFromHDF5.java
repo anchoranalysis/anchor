@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.image.io.objs.GeneratorHDF5;
 import org.anchoranalysis.image.io.objs.PathUtilities;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -40,12 +40,12 @@ import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 
-class ReadObjsFromHDF5 extends Deserializer<ObjectMaskCollection> {
+class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 
 	private ObjMaskHDF5Reader objReader = new ObjMaskHDF5Reader();
 	
 	@Override
-	public ObjectMaskCollection deserialize(Path path) throws DeserializationFailedException {
+	public ObjectCollection deserialize(Path path) throws DeserializationFailedException {
 
 		try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
 
@@ -76,11 +76,11 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectMaskCollection> {
 	 * @throws DeserializationFailedException 
 	 * @throws AnchorIOException 
 	 */
-	private ObjectMaskCollection readObjs(IHDF5Reader reader, String rootPath) throws DeserializationFailedException {
+	private ObjectCollection readObjs(IHDF5Reader reader, String rootPath) throws DeserializationFailedException {
 
 		assert( rootPath.endsWith("/") );
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		// First check the number of objects expected
 		// if the the rootPath exists in the HDF5, if not, it's an indication that there's no
@@ -105,7 +105,7 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectMaskCollection> {
 		return out;
 	}
 	
-	private void populateObjsInto(IHDF5Reader reader, String rootPath, ObjectMaskCollection out) {
+	private void populateObjsInto(IHDF5Reader reader, String rootPath, ObjectCollection out) {
 		// Iterate through all the objects
 		List<String> groups = reader.object().getAllGroupMembers( rootPath );
 		for( String s : groups ) {

@@ -9,7 +9,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
 public class ChannelFactoryInt extends ChannelFactorySingleType {
 
-	private static VoxelDataType dataType = VoxelDataTypeUnsignedInt.instance;
+	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedInt.instance;
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDim dim) {
@@ -29,6 +29,6 @@ public class ChannelFactoryInt extends ChannelFactorySingleType {
 
 	@Override
 	public VoxelDataType dataType() {
-		return dataType;
+		return DATA_TYPE;
 	}
 }

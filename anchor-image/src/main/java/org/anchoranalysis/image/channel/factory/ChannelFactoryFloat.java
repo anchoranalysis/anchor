@@ -9,7 +9,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
 public class ChannelFactoryFloat extends ChannelFactorySingleType {
 
-	private static VoxelDataTypeFloat dataType = VoxelDataTypeFloat.instance;
+	private static final VoxelDataTypeFloat DATA_TYPE = VoxelDataTypeFloat.instance;
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDim dim) {
@@ -28,6 +28,6 @@ public class ChannelFactoryFloat extends ChannelFactorySingleType {
 
 	@Override
 	public VoxelDataType dataType() {
-		return dataType;
+		return DATA_TYPE;
 	}
 }

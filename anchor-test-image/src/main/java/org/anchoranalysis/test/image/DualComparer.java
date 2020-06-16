@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
@@ -152,8 +152,8 @@ public class DualComparer {
 	 * @throws IOException if something goes wrong with I/O
 	 */
 	public boolean compareTwoObjs( String path ) throws IOException {
-		ObjectMaskCollection objs1 = loaderImg1.openObjsFromTestPath(path);
-		ObjectMaskCollection objs2 = loaderImg2.openObjsFromTestPath(path);
+		ObjectCollection objs1 = loaderImg1.openObjsFromTestPath(path);
+		ObjectCollection objs2 = loaderImg2.openObjsFromTestPath(path);
 		return objs1.equalsDeep(objs2);
 	}
 	

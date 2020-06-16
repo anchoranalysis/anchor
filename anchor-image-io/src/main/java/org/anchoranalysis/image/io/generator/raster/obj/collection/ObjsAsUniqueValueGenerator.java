@@ -5,7 +5,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -26,7 +26,7 @@ public class ObjsAsUniqueValueGenerator extends ObjsGenerator {
 		super(dim);
 	}
 
-	public ObjsAsUniqueValueGenerator(ObjectMaskCollection masks, ImageDim dim) {
+	public ObjsAsUniqueValueGenerator(ObjectCollection masks, ImageDim dim) {
 		super(masks, dim);
 	}
 	

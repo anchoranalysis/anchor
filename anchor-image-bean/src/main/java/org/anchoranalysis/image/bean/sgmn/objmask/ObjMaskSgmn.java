@@ -31,11 +31,11 @@ import java.util.Optional;
 import org.anchoranalysis.image.bean.sgmn.SgmnBean;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public abstract class ObjMaskSgmn extends SgmnBean<ObjMaskSgmn> {
 
-	public abstract ObjectMaskCollection sgmn( Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds ) throws SgmnFailedException;
+	public abstract ObjectCollection sgmn( Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds ) throws SgmnFailedException;
 }

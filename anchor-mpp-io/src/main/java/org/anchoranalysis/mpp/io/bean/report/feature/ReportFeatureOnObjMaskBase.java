@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
 	
@@ -57,7 +57,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends
 		}
 		
 		try {
-			ObjectMaskCollection objsCollection = objs.create();
+			ObjectCollection objsCollection = objs.create();
 						
 			FeatureCalculatorSingle<T> session = super.createAndStartSession();
 			double val = calcFeatureOn( objsCollection, session );
@@ -68,7 +68,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends
 		}
 	}
 	
-	protected abstract double calcFeatureOn( ObjectMaskCollection objs, FeatureCalculatorSingle<T> session ) throws FeatureCalcException;
+	protected abstract double calcFeatureOn( ObjectCollection objs, FeatureCalculatorSingle<T> session ) throws FeatureCalcException;
 	
 	@Override
 	public boolean isNumeric() {

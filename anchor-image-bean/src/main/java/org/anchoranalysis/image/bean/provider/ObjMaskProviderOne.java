@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public abstract class ObjMaskProviderOne extends ObjMaskProvider {
 
@@ -38,13 +38,13 @@ public abstract class ObjMaskProviderOne extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 		return createFromObjs(
 			objs.create()
 		);
 	}
 	
-	protected abstract ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection ) throws CreateException;
+	protected abstract ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException;
 	
 	public ObjMaskProvider getObjs() {
 		return objs;

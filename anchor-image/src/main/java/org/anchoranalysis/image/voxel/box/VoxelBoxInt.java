@@ -44,7 +44,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	public VoxelBoxInt(IPixelsForPlane<IntBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
-			VoxelBoxFactory.instance().getInt()
+			VoxelBoxFactory.getInt()
 		);
 	}
 	
