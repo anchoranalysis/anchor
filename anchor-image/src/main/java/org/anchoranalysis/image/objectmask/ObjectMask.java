@@ -386,10 +386,10 @@ public class ObjectMask {
 		
 		
 		// If there no pixels left that haven't been set, then the intersection mask is zero
-		if (!om.hasPixelsGreaterThan(0)) {
-			return Optional.empty();
+		if (om.hasPixelsGreaterThan(0)) {
+			return Optional.of(om);
 		} else {
-			return Optional.of(om);	
+			return Optional.empty();
 		}
 	}
 	
