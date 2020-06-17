@@ -304,12 +304,29 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate.iterator();
 	}
 
+	public <E extends Throwable> void remove(
+		PredicateWithException<ObjectMask,E> predicate,
+		Optional<ObjectCollection> objsRemoved
+	) throws E {
+
+		Iterator<ObjectMask> itr = iterator();
+		while ( itr.hasNext() ) {
+			
+			ObjectMask current = itr.next();
+			
+			if (predicate.test(current)) {
+				
+				if (objsRemoved.isPresent()) {
+					objsRemoved.get().add(current);
+				}
+				
+				itr.remove();
+			}
+		}
+	}
+	
 	public ObjectMask remove(int index) {
 		return delegate.remove(index);
-	}
-
-	public boolean remove(Object o) {
-		return delegate.remove(o);
 	}
 
 	public int size() {
@@ -363,24 +380,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return map( om->
 			om.scale(factor, interpolator)
 		);
-	}
-	
-	public <E extends Throwable> void remove( PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRemoved ) throws E {
-
-		Iterator<ObjectMask> itr = iterator();
-		while ( itr.hasNext() ) {
-			
-			ObjectMask mask = itr.next();
-			
-			if (predicate.test(mask)) {
-				
-				if (objsRemoved.isPresent()) {
-					objsRemoved.get().add( mask );
-				}
-				
-				itr.remove();
-			}
-		}
 	}
 	
 	public int countIntersectingPixels( ObjectMask om ) {
