@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.functional.PredicateWithException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -174,6 +175,26 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	}
 	
 	/**
+	 * Like {@link flatMap} but accepts a mapping function that throws a checked exception.
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param <E> exception-type that can be thrown by <code>mapFunc</code>
+	 * @param mapFunc performs flat-mapping
+	 * @return a newly created object-collection
+	 * @throws E if its thrown by <code>mapFunc</code>
+	 */
+	public <E extends Throwable> ObjectCollection flatMapWithException(Class<?> throwableClass, FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc) throws E {
+		return new ObjectCollection(
+			FunctionalUtilities.flatMapWithException(
+				stream(),
+				throwableClass,
+				element -> mapFunc.apply(element).asList()
+			)
+		);
+	}
+	
+	/**
 	 * Filters a {@link ObjectCollection} to include certain items based on a predicate
 	 * 
 	 * <p>This is an IMMUTABLE operation.</p>
@@ -186,6 +207,35 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 			stream().filter(predicate)
 		);
 	}
+	
+	/**
+	 * Filters a {@link ObjectCollection} to include certain items based on a predicate - and optionally store rejected objects.
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param <E> exception-type that can be thrown by the predicate
+	 * @param predicate iff true object is included, otherwise excluded
+	 * @param objsRejected iff true, any object rejected by the filter is added to this collection
+	 * @return a newly created object-collection, a filtered version of all objects
+	 * @throws E if thrown by the predicate
+	 */
+	public <E extends Throwable> ObjectCollection filter(PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRejected) throws E {
+		
+		ObjectCollection out = new ObjectCollection();
+		
+		for(ObjectMask current : this) {
+			
+			if (predicate.test(current)) {
+				out.add(current);
+			} else {
+
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add(current);
+				}
+			}
+		}
+		return out;
+	}	
 	
 	
 	/**
@@ -291,10 +341,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate.hashCode();
 	}
 
-	public int indexOf(Object o) {
-		return delegate.indexOf(o);
-	}
-
 	public boolean isEmpty() {
 		return delegate.isEmpty();
 	}
@@ -303,30 +349,9 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	public Iterator<ObjectMask> iterator() {
 		return delegate.iterator();
 	}
-
-	public <E extends Throwable> void remove(
-		PredicateWithException<ObjectMask,E> predicate,
-		Optional<ObjectCollection> objsRemoved
-	) throws E {
-
-		Iterator<ObjectMask> itr = iterator();
-		while ( itr.hasNext() ) {
-			
-			ObjectMask current = itr.next();
-			
-			if (predicate.test(current)) {
-				
-				if (objsRemoved.isPresent()) {
-					objsRemoved.get().add(current);
-				}
-				
-				itr.remove();
-			}
-		}
-	}
 	
-	public ObjectMask remove(int index) {
-		return delegate.remove(index);
+	public void remove(int index) {
+		delegate.remove(index);
 	}
 
 	public int size() {
