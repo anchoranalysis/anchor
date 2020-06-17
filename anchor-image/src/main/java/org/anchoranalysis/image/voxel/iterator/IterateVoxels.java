@@ -151,7 +151,7 @@ public class IterateVoxels {
 	}
 	
 	/**
-	 * Calls each voxel in a mask until a point is found whose mask-voxel is ON
+	 * Calls each voxel in a mask until a point is found
 	 * 
 	 * @param mask mask
 	 * @return the first point found

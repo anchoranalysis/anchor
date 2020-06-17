@@ -34,7 +34,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public abstract class ObjMaskFilter extends ImageBean<ObjMaskFilter> {
+public abstract class ObjectFilter extends ImageBean<ObjectFilter> {
 
 	public abstract void filter( ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected ) throws OperationFailedException;
 }

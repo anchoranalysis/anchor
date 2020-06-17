@@ -38,10 +38,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.PredicateWithException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -316,28 +316,35 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate.size();
 	}
 
-	public String toString( boolean newlines, boolean indexes ) {
+	/**
+	 * A string representation of all objects in the collection using their center of gravities (and optionally indices)
+	 * 
+	 * @param newlines if TRUE a newline separates each item, otherwise a whitespace
+	 * @param includeIndices whether to additionally show the index of each item beside its center of gravity
+	 * @return a descriptive string of the collection (begining and ending with parantheses)
+	 */
+	public String toString( boolean newlines, boolean includeIndices ) {
 		
 		String sep = newlines ? "\n" : " ";
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("(  ");
-		for( int i=0; i<delegate.size(); i++) {
-			
-			 ObjectMask om = delegate.get(i);
-			 
-			if (indexes) {
-				sb.append(i);
-				sb.append(" ");
-			}
-			
-			sb.append( om.centerOfGravity() );
+		sb.append("( ");
+		for( int index=0; index<delegate.size(); index++) {
+
+			sb.append(
+				objectToString(
+					delegate.get(index),
+					index,
+					includeIndices
+				)
+			);
 			sb.append( sep );
 		}
-		sb.append("  )");
+		sb.append(")");
 		return sb.toString();		
 	}
 
+	/** Default string representation of the collection, one line with each object described by its center-of-gravity */
 	@Override
 	public String toString() {
 		return toString(false,false);
@@ -358,14 +365,14 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		);
 	}
 	
-	public void rmvNumPixelsLessThan( int numPixels, Optional<ObjectCollection> objsRemoved ) {
+	public <E extends Throwable> void remove( PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRemoved ) throws E {
 
 		Iterator<ObjectMask> itr = iterator();
 		while ( itr.hasNext() ) {
 			
 			ObjectMask mask = itr.next();
 			
-			if ( mask.getVoxelBox().countEqual( ByteConverter.unsignedByteToInt( mask.getBinaryValuesByte().getOnByte()) ) < numPixels ) {
+			if (predicate.test(mask)) {
 				
 				if (objsRemoved.isPresent()) {
 					objsRemoved.get().add( mask );
@@ -441,6 +448,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate;
 	}
 	
+	/**
+	 * A stream of object-masks as per Java's standard collections interface
+	 * 
+	 * @return the stream
+	 */
 	public Stream<ObjectMask> stream() {
 		return delegate.stream();
 	}
@@ -448,5 +460,15 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	/** Streams only objects at specific indices */
 	private Stream<ObjectMask> streamIndices(List<Integer> indices) {
 		return indices.stream().map(this::get);
+	}
+	
+	/** Descriptive string representation of an object-mask */
+	private static String objectToString( ObjectMask obj, int index, boolean includeIndex ) {
+		String cog = obj.centerOfGravity().toString();
+		if (includeIndex) {
+			return index + " " + cog;
+		} else {
+			return cog;
+		}
 	}
 }
