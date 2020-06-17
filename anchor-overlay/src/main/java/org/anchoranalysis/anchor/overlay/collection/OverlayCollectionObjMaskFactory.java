@@ -26,7 +26,6 @@ package org.anchoranalysis.anchor.overlay.collection;
  * #L%
  */
 
-import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.objmask.OverlayObjMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.objectmask.ObjectMask;
@@ -51,24 +50,24 @@ public class OverlayCollectionObjMaskFactory {
 			
 			int id = idGetter.getID(om, i);
 			
-			out.add( new OverlayObjMask(om, id) );
+			out.add(
+				new OverlayObjMask(om, id)
+			);
 		}
 		
 		return out;
 	}
 	
-	// Creates objs from whatever Overlays are found in the collection
+	/** Creates objects from whatever Overlays are found in the collection **/
 	public static ObjectCollection objsFromOverlays( OverlayCollection overlays ) {
-		ObjectCollection out = new ObjectCollection();
-		
-		for(int i=0; i<overlays.size(); i++) {
-			Overlay overlay = overlays.get(i);
-			
-			if (overlay instanceof OverlayObjMask) {
-				OverlayObjMask overlayCast = (OverlayObjMask) overlay;
-				out.add( overlayCast.getObjMask().getMask() );
-			}
-		}
-		return out;
+
+		// Extract mask from any overlays that are OverlayObjMask
+		return new ObjectCollection(
+			overlays.stream()
+				.filter( overlay->overlay instanceof OverlayObjMask )
+				.map( overlay->
+					((OverlayObjMask) overlay).getObjMask().getMask()
+				)
+		);
 	}
 }

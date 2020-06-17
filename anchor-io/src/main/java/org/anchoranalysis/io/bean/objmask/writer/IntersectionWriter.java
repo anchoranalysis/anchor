@@ -54,20 +54,24 @@ class IntersectionWriter {
 		);
 		
 		// Let's make the intersection relative to the stack
-		intersection = intersection.shiftBackBy( stackBBox.getCrnrMin() );
-		mask.shiftBackBy(stackBBox.getCrnrMin() );
-		
+		writeOnEachSlice(
+			stack,
+			color,
+			intersection.shiftBackBy( stackBBox.getCrnrMin() ),
+			mask.mapBoundingBox( bbox ->
+				bbox.shiftBackBy(stackBBox.getCrnrMin())
+			)
+		);
+	}
+	
+	private static void writeOnEachSlice(RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask mask) {
+
 		ReadableTuple3i maxGlobal = intersection.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
-		
-		assert(mask.sizesMatch());
-		
-		
+				
 		for (pntGlobal.setZ(intersection.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
 			int relZ = pntGlobal.getZ() - mask.getBoundingBox().getCrnrMin().getZ();
 			stack.writeRGBMaskToSlice( mask, intersection, color, pntGlobal, relZ, maxGlobal);
 		}
-		
-		mask.shiftBy( stackBBox.getCrnrMin() );
 	}
 }

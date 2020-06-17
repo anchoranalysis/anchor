@@ -62,12 +62,10 @@ public class MorphologicalDilation {
 		Point3i grow = do3D ? new Point3i(iterations,iterations,iterations) : new Point3i(iterations,iterations,0);
 		
 		try {
-			ObjectMask omGrown = om.growBuffer(grow, grow, extent );
-			omGrown.setVoxelBox(
+			ObjectMask omGrown = om.growBuffer(grow, grow, extent);
+			return omGrown.replaceVoxels(
 				dilate(omGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNghb).getVoxelBox()
 			);
-	
-			return omGrown;	
 		} catch (OperationFailedException e) {
 			throw new CreateException("Cannot grow object-mask", e);
 		}

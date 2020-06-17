@@ -41,39 +41,59 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 
 /** 
- * Merges one or more ObjMasks into a single mask
+ * Merges one or more {@link ObjectMask}s into a single mask
  **/
-public class ObjMaskMerger {
+public class ObjectMaskMerger {
 	
-	private ObjMaskMerger() {
-	}
+	private ObjectMaskMerger() {}
 	
-	public static ObjectMask merge( ObjectMask om1, ObjectMask om2 ) {
+	/**
+	 * Merges two objects together
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * <p>The merged box has a minimal bounding-box to fit both objects.</p>
+	 * 
+	 * <p>Even if the two existing object-masks do not intersect or touch,
+	 * a single merged mask is nevertheless created.</p>
+	 * 
+	 * <p>It assumes that the binary-values of the merges are always 255 and 0, or 0 and 255</p>.
+	 * 
+	 * @param first first-object to merge
+	 * @param second second-object to merge
+	 * @return first and second merged together
+	 */
+	public static ObjectMask merge( ObjectMask first, ObjectMask second ) {
 
 		// If we don't have identical binary values, we invert the second one
-		if (!om2.getBinaryValues().equals(om1.getBinaryValues())) {
+		if (!second.getBinaryValues().equals(first.getBinaryValues())) {
 			// We assume it's always 255/0 or 0/255
-			assert (om2.getBinaryValues().createInverted().equals(om1.getBinaryValues()));
-			om2 = BinaryChnlInverter.invertObjMaskDuplicate(om2);
+			assert (second.getBinaryValues().createInverted().equals(first.getBinaryValues()));
+			second = BinaryChnlInverter.invertObjMaskDuplicate(second);
 		}
 		
-		BoundingBox bbox = om1.getBoundingBox().union().with(om2.getBoundingBox() );
+		BoundingBox bbox = first.getBoundingBox().union().with(second.getBoundingBox() );
 		
-		ObjectMask omOut = new ObjectMask(
+		ObjectMask out = new ObjectMask(
 			bbox,
 			VoxelBoxFactory.getByte().create(
 				bbox.extent()
 			)
 		);
-		
-		copyPixelsCheckMask(om1, omOut, bbox);
-		copyPixelsCheckMask(om2, omOut, bbox);
-		
-		return omOut;
-		
+		copyPixelsCheckMask(first, out, bbox);
+		copyPixelsCheckMask(second, out, bbox);
+		return out;
 	}
 		
-	public static BoundingBox mergeBBoxFromObjs( ObjectCollection objs ) throws OperationFailedException {
+	
+	/**
+	 * Merges all the bounding boxes of a collection of objects.
+	 * 
+	 * @param objs objects whose bounding-boxes are merged
+	 * @return a bounding-box just large enough to include all the bounding-boxes of the objects
+	 * @throws OperationFailedException if the {@code objs} parameter is empty
+	 */
+	public static BoundingBox mergeBoundingBoxes( ObjectCollection objs ) throws OperationFailedException {
 		
 		if (objs.isEmpty()) {
 			throw new OperationFailedException("At least one object must exist in the collection");
@@ -92,6 +112,13 @@ public class ObjMaskMerger {
 		return bbox;
 	}
 	
+	/**
+	 * Merges all the objects together that are found in a collection
+	 * 
+	 * @param objs objects to be merged
+	 * @return a newly created merged version of all the objects, with a bounding-box just big enough to include all the existing mask bounding-boxes
+	 * @throws OperationFailedException if any two objects with different binary-values are merged.
+	 */
 	public static ObjectMask merge( ObjectCollection objs ) throws OperationFailedException {
 		
 		if (objs.size()==0) {
@@ -102,7 +129,7 @@ public class ObjMaskMerger {
 			return objs.get(0).duplicate();	// So we are always guaranteed to have a new object
 		}
 		
-		BoundingBox bbox = mergeBBoxFromObjs(objs);
+		BoundingBox bbox = mergeBoundingBoxes(objs);
 		
 		ObjectMask omOut = new ObjectMask( bbox, VoxelBoxFactory.getByte().create(bbox.extent()) );
 		

@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
@@ -116,7 +117,6 @@ public class OverlayCollection implements Iterable<Overlay> {
 	public OverlayCollection createMerged( OverlayCollection toMerge ) {
 		
 		OverlayCollection mergedNew = shallowCopy();
-		//HashMap<Integer,Mark> mergedHash = cfg1.createIdHashMap();
 		
 		Set<Overlay> set = mergedNew.createSet();
 		
@@ -142,5 +142,9 @@ public class OverlayCollection implements Iterable<Overlay> {
 		}
 		
 		return out;
+	}
+
+	public Stream<Overlay> stream() {
+		return delegate.stream();
 	}
 }

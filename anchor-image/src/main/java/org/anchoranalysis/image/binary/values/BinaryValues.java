@@ -32,21 +32,26 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * Two values representing {@link int} binary states in an unsigned-byte buffer e.g. 0 for OFF and 1 for ON
+ * 
+ * <p>This class is IMMUTABLE</p>
+ * 
+ * <p>See {@link BinaryValueBytes} for an equivalent class that stores these states as {@link byte}</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class BinaryValues {
 
 	private final int offInt;
 	private final int onInt;
 	
-	private static final BinaryValues defaultBB = new BinaryValues( 0, 255 );
+	private static final BinaryValues defaultBB = new BinaryValues(0, 255);
 	
 	public BinaryValues(int off, int on) {
 		this.offInt = off;
 		this.onInt = on;
-	}
-	
-	public BinaryValues(BinaryValues bv) {
-		this.offInt = bv.offInt;
-		this.onInt = bv.onInt;
 	}
 	
 	public int getOffInt() {
@@ -74,10 +79,6 @@ public final class BinaryValues {
 	public BinaryValues createInverted() {
 		return new BinaryValues(onInt, offInt);
 	}
-	
-	public BinaryValues duplicate() {
-		return new BinaryValues(this);
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -100,5 +101,4 @@ public final class BinaryValues {
 			.append(onInt)
 			.toHashCode();
 	}
-	
 }

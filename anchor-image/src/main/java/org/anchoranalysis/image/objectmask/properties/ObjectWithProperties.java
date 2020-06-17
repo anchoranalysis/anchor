@@ -115,10 +115,6 @@ public class ObjectWithProperties {
 		return mask.hashCode();
 	}
 
-	public boolean sizesMatch() {
-		return mask.sizesMatch();
-	}
-
 	public String toString() {
 		return mask.toString();
 	}

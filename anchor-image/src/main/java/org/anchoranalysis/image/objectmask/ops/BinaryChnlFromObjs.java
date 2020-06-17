@@ -45,6 +45,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlFromObjs {
 
+	private BinaryChnlFromObjs() {}
+	
 	/** We look for space IN objects, and create channel to display it */
 	public static BinaryChnl createFromObjs( ObjectCollection masks, ImageDim sd, BinaryValues outVal ) throws CreateException {
 		return createChnlObjMaskCollectionHelper(

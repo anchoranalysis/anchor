@@ -32,7 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
 /**
  * Calculates statistics (DICE, Jaccard etc.) based upon corresponding two object-masks
@@ -56,10 +56,10 @@ public class AssignmentMaskIntersection implements Assignment {
 		this.omRight = omRight;
 		
 		numIntersectingPixels = omLeft.countIntersectingPixels(omRight);
-		numUnionPixels = ObjMaskMerger.merge(omLeft, omRight).numPixels();
+		numUnionPixels = ObjectMaskMerger.merge(omLeft, omRight).numVoxelsOn();
 		
-		sizeLeft = omLeft.numPixels();
-		sizeRight = omRight.numPixels();
+		sizeLeft = omLeft.numVoxelsOn();
+		sizeRight = omRight.numVoxelsOn();
 	}
 	
 	@Override

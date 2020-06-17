@@ -3,10 +3,10 @@ package org.anchoranalysis.image.objmask.match;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public class ObjWithMatches {
+public final class ObjWithMatches {
 	
-	private ObjectMask objMask;
-	private ObjectCollection matches = new ObjectCollection();
+	private final ObjectMask objMask;
+	private final ObjectCollection matches = new ObjectCollection();
 	
 	public ObjWithMatches(ObjectMask objMask) {
 		super();

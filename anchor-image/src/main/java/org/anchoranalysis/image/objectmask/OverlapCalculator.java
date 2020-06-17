@@ -43,7 +43,7 @@ public class OverlapCalculator {
 			return 0;
 		}
 		
-		int vol = objMerged.numPixels();
+		int vol = objMerged.numVoxelsOn();
 		
 		return ((double) intersectingPixels) / vol;
 	}

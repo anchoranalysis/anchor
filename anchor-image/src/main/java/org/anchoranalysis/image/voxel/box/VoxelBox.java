@@ -73,27 +73,30 @@ public abstract class VoxelBox<T extends Buffer> {
 		return factory.dataType();
 	}
 	
-	public VoxelBox<T> createBufferAvoidNew(BoundingBox bbox ) {
-		
-		if (   bbox.equals(new BoundingBox(extent()))
-			&& bbox.getCrnrMin().getX()==0
-			&& bbox.getCrnrMin().getY()==0
-			&& bbox.getCrnrMin().getZ()==0
-		) {
-			return this;
+	/**
+	 * A (sub-)region of the voxels.
+	 * 
+	 * <p>The region may some smaller portion of the voxel-box, or the voxel-box as a whole.</p>
+	 * 
+	 * <p>It should <b>never</b> be larger than the voxel-box.</p>
+	 * 
+	 * <p>Depending on policy, an the existing box will be reused if possible
+	 * (if the region requested is equal to the box as a whole), useful to avoid unnecessary new memory allocation.</p>
+	 * 
+	 * <p>If {@link reuseIfPossible} is FALSE, it is guaranteed that a new voxel-box will always be created.</p>
+	 * 
+	 * @param bbox a bounding-box indicating the regions desired (not be larger than the extent)
+	 * @param reuseIfPossible if TRUE the existing box will be reused if possible,, otherwise a new box is always created.
+	 * @return a voxel-box corresponding to the requested region, either newly-created or reused
+	 */
+	public VoxelBox<T> region(BoundingBox bbox, boolean reuseIfPossible) {
+		if (reuseIfPossible) {
+			return regionAvoidNewIfPossible(bbox);
+		} else {
+			return regionAlwaysNew(bbox);
 		}
-		return createBufferAlwaysNew(bbox);
 	}
-	
-	public VoxelBox<T> createBufferAlwaysNew(BoundingBox bbox) {
 		
-		// Otherwise we create a new buffer
-		VoxelBox<T> vbOut = factory.create(bbox.extent());
-		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extent()));
-		return vbOut;
-	}
-	
-	
 	public void replaceBy(VoxelBox<T> vb) throws IncorrectImageSizeException {
 		
 		if (!extent().equals(vb.extent())) {
@@ -663,6 +666,26 @@ public abstract class VoxelBox<T extends Buffer> {
 	public VoxelBoxFactoryTypeBound<T> getFactory() {
 		return factory;
 	}
+		
+	private VoxelBox<T> regionAvoidNewIfPossible(BoundingBox bbox) {
+		
+		if (   bbox.equals(new BoundingBox(extent()))
+			&& bbox.getCrnrMin().getX()==0
+			&& bbox.getCrnrMin().getY()==0
+			&& bbox.getCrnrMin().getZ()==0
+		) {
+			return this;
+		}
+		return regionAlwaysNew(bbox);
+	}
+	
+	private VoxelBox<T> regionAlwaysNew(BoundingBox bbox) {
+		
+		// Otherwise we create a new buffer
+		VoxelBox<T> vbOut = factory.create(bbox.extent());
+		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extent()));
+		return vbOut;
+	}
 	
 	private static void checkExtentMatch(BoundingBox bbox1, BoundingBox bbox2) {
 		Extent extent1 = bbox1.extent();
@@ -677,4 +700,6 @@ public abstract class VoxelBox<T extends Buffer> {
 			);
 		}
 	}
+	
+	
 }

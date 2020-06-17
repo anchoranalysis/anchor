@@ -37,10 +37,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -67,9 +69,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * 
 	 * @param obj object-mask to add to collection
 	 */
-	public ObjectCollection( ObjectMask obj ) {
+	public ObjectCollection( ObjectMask ...obj ) {
 		this();
-		add(obj);
+		for( ObjectMask om : obj ) {
+			add(om);
+		}
 	}
 	
 	/**
@@ -111,13 +115,46 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * 
 	 * <p>This is an IMMUTABLE operation.</p>
 	 * 
+	 * @param <E> exception-type that can occur during mapping
 	 * @param mapFunc performs mapping
 	 * @return a newly created object-collection
+	 * @throws E if an exception is thrown by the mapping function.
 	 */
-	public ObjectCollection map(Function<ObjectMask,ObjectMask> mapFunc) {
-		return new ObjectCollection(
-			delegate.stream().map(mapFunc)
+	public <E extends Throwable> ObjectCollection map(FunctionWithException<ObjectMask,ObjectMask,E> mapFunc) throws E {
+		ObjectCollection out = new ObjectCollection();
+		for( ObjectMask om : this) {
+			out.add(
+				mapFunc.apply(om)
+			);
+		}
+		return out;
+	}
+		
+	/**
+	 * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param mapFunc maps the bounding-box to a new bounding-box
+	 * @return a newly created object-collection
+	 */
+	public ObjectCollection mapBoundingBox(Function<BoundingBox,BoundingBox> mapFunc) {
+		return map( om->
+			om.mapBoundingBox(mapFunc)
 		);
+	}
+	
+	/**
+	 * Creates a new {@link List} after mapping each item to another type
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 *
+	 * @param <T> destination type for the mapping
+	 * @param mapFunc performs mapping
+	 * @return a newly created list contained the mapped objects
+	 */
+	public <T> List<T> mapAsList(Function<ObjectMask,T> mapFunc) {
+		return delegate.stream().map(mapFunc).collect( Collectors.toList() );
 	}
 	
 	/**
@@ -141,7 +178,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * 
 	 * <p>This is an IMMUTABLE operation.</p>
 	 * 
-	 * @param mapFunc performs mapping
+	 * @param predicate iff true object is included, otherwise excluded
 	 * @return a newly created object-collection, a filtered version of all objects
 	 */
 	public ObjectCollection filter(Predicate<ObjectMask> predicate) {
@@ -150,18 +187,50 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		);
 	}
 	
+	
+	/**
+	 * Performs a {@link filter} and then a {@link map}
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param mapFunc performs mapping
+	 * @param predicate iff true object is included, otherwise excluded
+	 * @return a newly created object-collection, a filtered version of all objects
+	 */
+	public ObjectCollection filterAndMap(Predicate<ObjectMask> predicate, Function<ObjectMask,ObjectMask> mapFunc) {
+		return new ObjectCollection(
+			stream().filter(predicate).map(mapFunc)
+		);
+	}
+	
+	
 	/**
 	 * Like {@link filter} but only operates on certain indices of the collection.
 	 * 
 	 * <p>This is an IMMUTABLE operation.</p>
 	 * 
-	 * @param mapFunc performs mapping
+	 * @param predicate iff true object is included, otherwise excluded
 	 * @param indices which indices of the collection to consider
 	 * @return a newly created object-collection, a filtered version of particular elements
 	 */
 	public ObjectCollection filterSubset(Predicate<ObjectMask> predicate, List<Integer> indices) {
 		return new ObjectCollection(
 			streamIndices(indices).filter(predicate)
+		);
+	}
+	
+	
+	/** 
+	 * Shifts the bounding-box of each object by adding to it i.e. adds a vector to the corner position
+	 * 
+	 * <p>This is an IMMUTABLE operation.<p>
+	 * 
+	 * @param shiftBy what to add to the corner position
+	 * @return newly created object-collection with shifted corner position and identical extent 
+	 **/
+	public ObjectCollection shiftBy(ReadableTuple3i shiftBy) {
+		return mapBoundingBox( bbox->
+			bbox.shiftBy(shiftBy)
 		);
 	}
 	
@@ -274,10 +343,19 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return toString(false,false);
 	}
 	
-	public void scale( ScaleFactor sf, Interpolator interpolator ) throws OperationFailedException {
-		for (ObjectMask mask : this) {
-			mask.scale(sf, interpolator);
-		}
+	/**
+	 * Scales every object-mask
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 * 
+	 * @param factor scaling-factor
+	 * @param interpolator interpolator
+	 * @return a new collection with scaled-masks
+	 */
+	public ObjectCollection scale(ScaleFactor factor, Interpolator interpolator) {
+		return map( om->
+			om.scale(factor, interpolator)
+		);
 	}
 	
 	public void rmvNumPixelsLessThan( int numPixels, Optional<ObjectCollection> objsRemoved ) {
@@ -308,13 +386,9 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	}
 	
 	public ObjectCollection findObjsWithIntersectingBBox( ObjectMask om ) {
-		ObjectCollection omc = new ObjectCollection();
-		for (ObjectMask omItr : this) {
-			if (omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())) {
-				omc.add(omItr);
-			}
-		}
-		return omc;
+		return filter( omItr->
+			omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())
+		);
 	}
 	
 	public void assertObjMasksAreInside( Extent e ) {

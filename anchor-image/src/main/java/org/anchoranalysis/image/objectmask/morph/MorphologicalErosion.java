@@ -59,7 +59,7 @@ public class MorphologicalErosion {
 			//  we put an extra 1-pixel border around the object-mask, so that there's always
 			//  whitespace around the object-mask, so long as it exists in the image scene
 			BoundingBox bbox = om.getVoxelBoxBounded().dilate(do3D,extent);
-			omOut = om.createIntersectingMaskAlwaysNew(bbox);
+			omOut = om.regionIntersecting(bbox);
 			
 		} else {
 			omOut = om.duplicate();
@@ -74,8 +74,7 @@ public class MorphologicalErosion {
 			outsideAtThreshold,
 			acceptConditionsDilation
 		);
-		omOut.setVoxelBox(eroded.getVoxelBox());
-		return omOut;
+		return omOut.replaceVoxels(eroded.getVoxelBox());
 	}
 	
 	/**

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -79,7 +79,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 			}
 			
 			// Get a bounding box that contains all the objects
-			this.bbox = ObjMaskMerger.mergeBBoxFromObjs(objs);
+			this.bbox = ObjectMaskMerger.mergeBoundingBoxes(objs);
 			
 			bbox = growBBBox(bbox, getBackground().getDimensions().getExtnt() );
 			

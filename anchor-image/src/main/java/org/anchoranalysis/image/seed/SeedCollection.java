@@ -30,6 +30,8 @@ package org.anchoranalysis.image.seed;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
@@ -38,7 +40,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
 public class SeedCollection implements Iterable<Seed> {
 
-	private ArrayList<Seed> delegate = new ArrayList<>();
+	private List<Seed> delegate = new ArrayList<>();
 	
 	public SeedCollection duplicate() {
 		
@@ -51,22 +53,15 @@ public class SeedCollection implements Iterable<Seed> {
 	}
 
 	public void scaleXY( double scale) throws OperationFailedException {
-		
 		for( Seed seed : this ) {
 			seed.scaleXY(scale);
 		}
-		
 	}
 	
 	public ObjectCollection createMasks() {
-		
-		ObjectCollection objMasks = new ObjectCollection();
-		
-		for( Seed seed : this ) {
-			objMasks.add( seed.createMask() );
-		}
-		
-		return objMasks;
+		return new ObjectCollection(
+			delegate.stream().map(Seed::createMask)
+		);
 	}
 	
 	public void flattenZ() {

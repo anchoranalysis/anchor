@@ -65,7 +65,7 @@ public class BinaryChnl {
 			throw new IncorrectVoxelDataTypeException("Only unsigned 8-bit data type is supported for BinaryChnl");
 		}
 		
-		this.binaryValues = binaryValuesIn.duplicate();
+		this.binaryValues = binaryValuesIn;
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
@@ -90,7 +90,7 @@ public class BinaryChnl {
 	}
 	
 	public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
-		return new BinaryVoxelBoxByte( getVoxelBox(), new BinaryValues(binaryValues) );
+		return new BinaryVoxelBoxByte( getVoxelBox(), binaryValues);
 	}
 
 	
@@ -112,7 +112,7 @@ public class BinaryChnl {
 	}
 
 	public BinaryChnl duplicate() {
-		return new BinaryChnl( chnl.duplicate(), binaryValues.duplicate() );
+		return new BinaryChnl( chnl.duplicate(), binaryValues );
 	}
 
 	public Channel getChnl() {
@@ -123,20 +123,14 @@ public class BinaryChnl {
 		this.chnl = chnl;
 	}
 	
-	// Creates a mask from the binaryChnl, avoiding creating a new buffer if possible
-	public ObjectMask createMaskAvoidNew( BoundingBox bbox ) throws CreateException {
+	// Creates a mask from the binaryChnl
+	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) throws CreateException {
 		assert( chnl.getDimensions().contains(bbox) );
-		return new ObjectMask( bbox, chnl.getVoxelBox().asByte().createBufferAvoidNew(bbox ), binaryValues);
-	}
-	
-	// Creates a mask from the binaryChnl, avoiding creating a new buffer if possible
-	public ObjectMask createMaskAlwaysNew( BoundingBox bbox ) throws CreateException {
-		assert( chnl.getDimensions().contains(bbox) );
-		return new ObjectMask( bbox, chnl.getVoxelBox().asByte().createBufferAlwaysNew(bbox ), binaryValues);
+		return new ObjectMask( bbox, chnl.getVoxelBox().asByte().region(bbox, reuseIfPossible), binaryValues);
 	}
 
 	public BinaryChnl maxIntensityProj() {
-		return new BinaryChnl( chnl.maxIntensityProjection(), binaryValues.duplicate() );
+		return new BinaryChnl(chnl.maxIntensityProjection(), binaryValues);
 	}
 	
 	public boolean hasHighValues() {
@@ -156,10 +150,7 @@ public class BinaryChnl {
 		
 		Channel scaled = this.chnl.scaleXY(ratioX, ratioY, interpolator);
 		
-		BinaryChnl binaryChnl = new BinaryChnl(
-			scaled,
-			binaryValues.duplicate()
-		);
+		BinaryChnl binaryChnl = new BinaryChnl(scaled, binaryValues);
 		
 		// We threshold to make sure it's still binary
 		{

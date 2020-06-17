@@ -51,15 +51,9 @@ public class ExtendObjsInto3DMask {
 	private ExtendObjsInto3DMask() {}
 	
 	public static ObjectCollection extendObjs( ObjectCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for (ObjectMask obj : objs2D) {
-			out.add(
-				extendObj( obj, mask3D )
-			);
-		}
-		return out;
+		return objs2D.map( om->
+			extendObj( om, mask3D )
+		);
 	}
 	
 	private static ObjectMask extendObj( ObjectMask obj2D, BinaryVoxelBox<ByteBuffer> voxelBox3D ) {
@@ -115,9 +109,6 @@ public class ExtendObjsInto3DMask {
 				}
 			}
 		}
-		
-		assert(newMask.sizesMatch());
-		
 		return newMask;
 	}
 	

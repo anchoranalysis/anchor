@@ -42,7 +42,7 @@ public class SeedObjMask extends Seed {
 
 	@Override
 	public void scaleXY(double scale) throws OperationFailedException {
-		om.scale(
+		om = om.scale(
 			new ScaleFactor(scale),
 			InterpolatorFactory.getInstance().noInterpolation()
 		);

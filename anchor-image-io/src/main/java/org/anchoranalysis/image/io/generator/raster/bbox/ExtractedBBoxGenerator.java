@@ -70,7 +70,7 @@ public class ExtractedBBoxGenerator extends RasterGenerator implements IterableO
 			
 			VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
 			
-			VoxelBox<?> vbExtracted = vbIn.createBufferAlwaysNew(bbox);
+			VoxelBox<?> vbExtracted = vbIn.region(bbox,false);
 			
 			Channel chnlExtracted = ChannelFactory.instance().create( vbExtracted, stackIn.getDimensions().getRes() );
 			try {

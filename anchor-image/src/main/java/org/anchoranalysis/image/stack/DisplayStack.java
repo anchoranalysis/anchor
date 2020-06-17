@@ -398,7 +398,7 @@ public class DisplayStack {
 		
 		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(chnlNum);
 		
-		VoxelBox<?> vbUnconverted = chnl.getVoxelBox().any().createBufferAvoidNew(bbox);
+		VoxelBox<?> vbUnconverted = chnl.getVoxelBox().any().region(bbox,true);
 		
 		if (converter!=null) {
 			return converter.getVoxelBoxConverter().convertFrom(

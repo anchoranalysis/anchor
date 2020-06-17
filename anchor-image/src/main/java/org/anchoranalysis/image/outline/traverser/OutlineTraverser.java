@@ -71,7 +71,7 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( List<Point3i> listOut ) throws OperationFailedException {
 		OptionalUtilities.ifPresent(
-			omOutline.findAnyPntOnMask(),
+			omOutline.findArbitraryOnVoxel(),
 			rootPoint->	applyGlobal( rootPoint, listOut )
 		);
 	}

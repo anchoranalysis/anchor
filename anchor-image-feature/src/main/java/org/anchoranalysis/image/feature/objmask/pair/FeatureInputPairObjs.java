@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
@@ -70,7 +70,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 	public ObjectMask getMerged() {
 		if (!merged.isPresent()) {
 			merged = Optional.of(
-				ObjMaskMerger.merge(first, second)
+				ObjectMaskMerger.merge(first, second)
 			);
 		}
 		return merged.get();
