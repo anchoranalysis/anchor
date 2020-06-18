@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -35,18 +36,20 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 class OrderedFeatureListCombine {
 	
-	public static <T extends FeatureInput> FeatureList<T> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
+	private OrderedFeatureListCombine() {}
+	
+	public static <T extends FeatureInput> Optional<FeatureList<T>> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
 		
 		FeatureList<T> out = new FeatureList<>();
 		
 		for( OrderedFeatureList<T> item : list) {
-			FeatureList<T> features = item.orderedListOfFeatures();
-			if (features==null) {
-				features = new FeatureList<>();
-			}
-			
-			out.addAll(features);
+			item.orderedListOfFeatures().ifPresent(out::addAll);
 		}
-		return out;		
+		
+		if (!out.isEmpty()) {
+			return Optional.of(out);
+		} else {
+			return Optional.empty();
+		}
 	}
 }

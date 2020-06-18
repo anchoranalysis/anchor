@@ -3,8 +3,9 @@ package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+
 
 /*-
  * #%L
@@ -32,15 +33,13 @@ import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
-// This IParamsEquals interface is redundant, can be removed
 public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements ICompatibleWith {
 	
 	// When we have no bounds, we should create bounds from the boundCalculator
-	public abstract Optional<Point3d> propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re, ImageDim bndScene, Orientation orientation, ErrorNode proposerFailureDescription);
+	public abstract Optional<Point3d> propose(Point3d pos, RandomNumberGenerator randomNumberGenerator, ImageDim dim, Orientation orientation) throws ProposalAbnormalFailureException;
 }

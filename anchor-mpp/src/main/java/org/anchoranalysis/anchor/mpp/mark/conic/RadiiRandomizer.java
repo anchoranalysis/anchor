@@ -1,6 +1,7 @@
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
-import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipsoidBounds;
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
+
 
 /*-
  * #%L
@@ -31,31 +32,31 @@ import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipsoidBounds;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
-public class EllipsoidRandomizer {
+/**
+ * Utility functions for generating random radii for {@link MarkConic}
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class RadiiRandomizer {
 
-	public static Orientation3DEulerAngles randomizeRot(EllipsoidBounds bounds, RandomNumberGenerator re, ImageRes sr) {
-		Orientation3DEulerAngles orientation3DEuler = new Orientation3DEulerAngles();
-		orientation3DEuler.setRotXRadians(  randomizeRot(bounds, re, sr, 0) );
-		orientation3DEuler.setRotYRadians(  randomizeRot(bounds, re, sr, 1) );
-		orientation3DEuler.setRotYRadians(  randomizeRot(bounds, re, sr, 2) );
-		return orientation3DEuler;
+	private RadiiRandomizer() {}
+	
+	public static Point3d randomizeRadii(
+		Bound bound,
+		RandomNumberGenerator re,
+		ImageRes sr,
+		boolean do3D
+	) {
+		return new Point3d(
+			randomizeRadius(bound,re,sr),
+			randomizeRadius(bound,re,sr),
+			do3D ? randomizeRadius(bound,re,sr) : 0
+		);
 	}
 	
-	public static Point3d randomizeRadii(EllipsoidBounds bounds, RandomNumberGenerator re, ImageRes sr) {
-		Point3d radii = new Point3d();
-		radii.setX( randomizeRadius(bounds, re,sr) );
-		radii.setY( randomizeRadius(bounds, re,sr) );
-		radii.setZ( randomizeRadius(bounds, re,sr) );
-		return radii;
-	}
-	
-	private static double randomizeRadius(EllipsoidBounds bounds, RandomNumberGenerator re, ImageRes sr ) {
-		return bounds.getRadius().rslv(sr, true).randOpen( re );
-	}
-	
-	private static double randomizeRot( EllipsoidBounds bounds, RandomNumberGenerator re, ImageRes sr, int dim) {
-		return bounds.getRotation(dim).rslv(sr, true).randOpen( re );
+	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator re, ImageRes sr ) {
+		return radiusBound.rslv(sr, true).randOpen( re );
 	}
 }

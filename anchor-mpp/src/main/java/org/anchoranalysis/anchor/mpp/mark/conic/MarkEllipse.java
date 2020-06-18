@@ -32,9 +32,8 @@ import java.util.function.BiFunction;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point2d;
@@ -57,7 +56,7 @@ import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.*;
 import static org.anchoranalysis.anchor.mpp.mark.conic.PropertyUtilities.*;
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
-public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISetMarksExplicit  {
+public class MarkEllipse extends MarkConic implements Serializable {
 
 	/**
 	 * 

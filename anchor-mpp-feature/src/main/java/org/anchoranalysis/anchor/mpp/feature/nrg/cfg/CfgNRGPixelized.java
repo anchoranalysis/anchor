@@ -60,7 +60,7 @@ public final class CfgNRGPixelized  {
     private LogErrorReporter logger;
     
     public CfgNRGPixelized( CfgNRG cfgNRG, LogErrorReporter logger ) {
-    	
+    	assert(logger!=null);
     	this.cfgNrg = cfgNRG;
     	this.memoMarks = null;
     	this.logger = logger;

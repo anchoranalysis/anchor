@@ -41,6 +41,10 @@ public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 	public ReporterAgg() {
 		super();
 	}
+	
+	public ReporterAgg(double aggIntervalLog10) {
+		super(aggIntervalLog10);
+	}
 		
 	@Override
 	public void reportBegin( OptimizationFeedbackInitParams<T> initParams ) throws ReporterException {

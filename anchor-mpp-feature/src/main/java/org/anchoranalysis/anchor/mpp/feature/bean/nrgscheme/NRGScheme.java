@@ -64,13 +64,13 @@ public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private FeatureList<FeatureInputPairMemo> elemPair = null;
+	private FeatureList<FeatureInputPairMemo> elemPair;
 	
 	@BeanField @OptionalBean
-	private FeatureList<FeatureInputSingleMemo> elemInd = null;
+	private FeatureList<FeatureInputSingleMemo> elemInd;
 	
 	@BeanField @OptionalBean
-	private FeatureList<FeatureInputAllMemo> elemAll = null;
+	private FeatureList<FeatureInputAllMemo> elemAll;
 	
 	@BeanField
 	private RegionMap regionMap;

@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -42,6 +43,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -134,16 +136,16 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				graph.addVertex( marks.getMemoForIndex(i).getMark() );
 			}
 			
-			FeatureList<FeatureInputPairMemo> features = addCriteria.orderedListOfFeatures();
-			if (features==null) {
-				features = new FeatureList<>();
-			}
+			Optional<FeatureList<FeatureInputPairMemo>> features = addCriteria.orderedListOfFeatures();
 			
-			FeatureCalculatorMulti<FeatureInputPairMemo> session = FeatureSession.with(
+			Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session = OptionalUtilities.map( 
 				features,
-				new FeatureInitParams(stack.getParams()),
-				sharedFeatures,
-				logger
+				f-> FeatureSession.with(
+					f,
+					new FeatureInitParams(stack.getParams()),
+					sharedFeatures,
+					logger
+				)
 			);
 			
 			initGraph( marks, stack, session );
@@ -279,7 +281,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		this.pairTypeClass = pairTypeClass;
 	}
 	
-	private void initGraph( MemoForIndex marks, NRGStackWithParams stack, FeatureCalculatorMulti<FeatureInputPairMemo> session ) throws CreateException {
+	private void initGraph( MemoForIndex marks, NRGStackWithParams stack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session ) throws CreateException {
 		// Some nrg components need to be calculated individually
 		for( int i=0; i< marks.size(); i++ ) {
 			
@@ -301,13 +303,17 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		assert sharedFeatures!=null;
 		assert logger!=null;
 		
-		FeatureCalculatorMulti<FeatureInputPairMemo> session;
+		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session;
+		
 		try {
-			session = FeatureSession.with(
+			session = OptionalUtilities.map(
 				addCriteria.orderedListOfFeatures(),
-				new FeatureInitParams(nrgStack.getParams()),
-				sharedFeatures,
-				logger
+				f-> FeatureSession.with(
+					f,
+					new FeatureInitParams(nrgStack.getParams()),
+					sharedFeatures,
+					logger
+				)
 			);
 		} catch (FeatureCalcException e) {
 			throw new CreateException(e);

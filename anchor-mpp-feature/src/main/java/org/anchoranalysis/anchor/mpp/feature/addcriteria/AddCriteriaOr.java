@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -46,7 +47,7 @@ public class AddCriteriaOr extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 	
 		for( int i=0; i<list.size(); i++) {
 	
@@ -91,7 +92,7 @@ public class AddCriteriaOr extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() throws CreateException {
+	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() throws CreateException {
 		return OrderedFeatureListCombine.combine(list);
 	}
 	

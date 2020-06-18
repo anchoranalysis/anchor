@@ -2,7 +2,8 @@ package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
-import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
+
+
 
 /*
  * #%L
@@ -35,68 +36,47 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
-public class EllipsoidBounds extends EllipseBoundsWithoutRotation {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2134174080057660104L;
+/**
+ * Creates a randomly-generated orientation in 3D based upon Euler Angles
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class RotationBounds3D extends RotationBounds {
+	
+	private static final Bound DEFAULT_BOUND = new BoundUnitless(0, 2 * Math.PI);
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Bound rotationX;
+	private Bound rotationX = DEFAULT_BOUND;
 	
 	@BeanField
-	private Bound rotationY;
+	private Bound rotationY = DEFAULT_BOUND;
 	
 	@BeanField
-	private Bound rotationZ;
+	private Bound rotationZ = DEFAULT_BOUND;
 	// END BEAN PROPERTIES
-	
-	public EllipsoidBounds() {
-		super();
-		rotationX = null;
-		rotationY = null;
-		rotationZ = null;
-	}
 
-	// Constructor
-	public EllipsoidBounds(Bound radiusBnd) {
-		super(radiusBnd);
-		rotationX = new BoundUnitless(0, 2 * Math.PI  );
-		rotationY = new BoundUnitless(0, 2 * Math.PI );
-		rotationZ = new BoundUnitless(0, 2 * Math.PI );
-	}
-	
-	// Copy Constructor
-	public EllipsoidBounds( EllipsoidBounds src ) {
-		super(src);
-		rotationX = src.rotationX.duplicate();
-		rotationY = src.rotationY.duplicate();
-		rotationZ = src.rotationZ.duplicate();
-	}
-	
-
-	public Bound getRotation(int dimNum) {
-		switch (dimNum) {
-		case 0:
-			return getRotationX();
-		case 1:
-			return getRotationY();
-		case 2:
-			return getRotationZ();
-		default:
-			assert false;
-			return null;
-		}
+	@Override
+	public Orientation randomOrientation(RandomNumberGenerator re, ImageRes res) {
+		return new Orientation3DEulerAngles(
+			randomizeRot(rotationX, re, res),
+			randomizeRot(rotationY, re, res),
+			randomizeRot(rotationZ, re, res)
+		);
 	}
 	
 	@Override
 	public String getBeanDscr() {
-		return String.format("%s, radius=(%s), rotation=(%f,%f,%f)", getBeanName(), getRadius().toString(), getRotationX(), getRotationY(), rotationZ );
+		return String.format("%s, rotation=(%f,%f,%f)", getBeanName(), getRotationX(), getRotationY(), rotationZ );
 	}
-
+	
+	private static double randomizeRot(Bound bound, RandomNumberGenerator re, ImageRes res) {
+		return bound.rslv(res, true).randOpen(re);
+	}
+	
 	public Bound getRotationX() {
 		return rotationX;
 	}
@@ -120,11 +100,4 @@ public class EllipsoidBounds extends EllipseBoundsWithoutRotation {
 	public void setRotationZ(Bound rotationZ) {
 		this.rotationZ = rotationZ;
 	}
-
-	@Override
-	public Orientation randomOrientation(RandomNumberGenerator re, ImageRes res) {
-		return EllipsoidRandomizer.randomizeRot(this, re, res);
-	}
-	
-	
 }

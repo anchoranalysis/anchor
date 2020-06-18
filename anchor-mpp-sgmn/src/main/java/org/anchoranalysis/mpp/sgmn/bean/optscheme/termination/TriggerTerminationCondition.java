@@ -29,25 +29,17 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
 import org.anchoranalysis.core.log.LogReporter;
 
 public class TriggerTerminationCondition extends TerminationCondition {
-
-	// We don't bother with synchronize
-	
-	
-	
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
 	
 	private boolean triggered = false; 
-	
+
+	// We don't bother with synchronize
+
 	@Override
 	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter) {
-		return (triggered==false);
+		return !triggered;
 	}
 	
 	public void trigger() {
 		triggered=true;
 	}
-
-
 }

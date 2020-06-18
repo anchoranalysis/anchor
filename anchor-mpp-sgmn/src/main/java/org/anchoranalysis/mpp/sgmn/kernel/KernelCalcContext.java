@@ -67,7 +67,7 @@ public class KernelCalcContext {
 			cfgGenContext,
 			proposerContext.getNrgStack(),
 			nrgScheme,
-			proposerContext.getRe(),
+			proposerContext.getRandomNumberGenerator(),
 			errorNode
 		);
 	}

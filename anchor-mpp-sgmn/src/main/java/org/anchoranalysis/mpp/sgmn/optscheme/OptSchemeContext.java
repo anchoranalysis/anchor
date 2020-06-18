@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTermination
 import org.anchoranalysis.mpp.sgmn.kernel.CfgGenContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
-public class OptSchemeInitContext {
+public class OptSchemeContext {
 
 	private String experimentDescription;
 	private NRGSchemeWithSharedFeatures nrgScheme;
@@ -48,7 +48,7 @@ public class OptSchemeInitContext {
 	private RandomNumberGenerator re;
 	private CfgGen cfgGen;
 	
-	public OptSchemeInitContext(
+	public OptSchemeContext(
 		String experimentDescription,
 		NRGSchemeWithSharedFeatures nrgScheme,
 		DualStack dualStack,

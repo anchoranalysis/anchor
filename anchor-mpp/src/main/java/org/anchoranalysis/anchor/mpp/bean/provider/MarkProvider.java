@@ -35,6 +35,4 @@ import org.anchoranalysis.core.error.CreateException;
 public abstract class MarkProvider extends MPPProvider<MarkProvider,Optional<Mark>>  {
 
 	public abstract Optional<Mark> create() throws CreateException;
-
-	
 }

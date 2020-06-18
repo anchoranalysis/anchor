@@ -33,9 +33,23 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 public abstract class ReporterInterval<T> extends ReporterOptimizationStep<T> {
 
 	// START BEAN Parameters
+	/** 
+	 * How many iterations before printing a new report? Encoded in log10.
+	 * 
+	 * <p>e.g. 0 implies every iteration, 1 implies every 10, 2 implies every 100 etc.
+	 * 
+	 */
 	@BeanField
-	private double aggIntervalLog10 = -1;
+	private double aggIntervalLog10 = 0;
 	// END
+	
+	public ReporterInterval() {
+		// Standard bean constructor
+	}
+	
+	public ReporterInterval(double aggIntervalLog10) {
+		this.aggIntervalLog10 = aggIntervalLog10;
+	}
 	
 	@Override
 	public void reportItr( Reporting<T> reporting  ) {

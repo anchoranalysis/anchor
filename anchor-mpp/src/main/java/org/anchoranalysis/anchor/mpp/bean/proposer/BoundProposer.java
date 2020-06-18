@@ -31,11 +31,11 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class BoundProposer extends ProposerBean<BoundProposer> implements ICompatibleWith {
-	public abstract Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription );
+	public abstract Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException;
 }

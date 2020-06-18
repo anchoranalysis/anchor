@@ -1,6 +1,4 @@
-package org.anchoranalysis.anchor.mpp.bean.proposer.radii;
-
-import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
+package org.anchoranalysis.anchor.mpp.mark;
 
 /*
  * #%L
@@ -29,22 +27,46 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.util.Arrays;
 
-public abstract class RadiiProposerWithBoundProposer extends RadiiProposer {
+import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.orientation.Orientation;
 
+public abstract class MarkConic extends MarkAbstractPosition {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private BoundProposer boundProposer = null;
-	// END BEAN PROPERTIES
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1680124471263339009L;
+
+	public MarkConic() {
+		super();
+	}
+
+	public MarkConic(MarkAbstractPosition src) {
+		super(src);
+	}
+
+	public abstract double[] createRadiiArrayRslvd( ImageRes sr );
 	
-	public BoundProposer getBoundProposer() {
-		return boundProposer;
+	public abstract double[] createRadiiArray();
+	
+	public abstract void setMarksExplicit( Point3d pos, Orientation orientation, Point3d radii );
+	
+	public abstract void setMarksExplicit( Point3d pos, Orientation orientation );
+	
+	public abstract void setMarksExplicit( Point3d pos );
+	
+	public double[] radiiOrderedRslvd( ImageRes sr ) {
+		double[] radii = createRadiiArrayRslvd( sr );
+		Arrays.sort( radii );
+		return radii;
 	}
-
-	public void setBoundProposer(BoundProposer boundProposer) {
-		this.boundProposer = boundProposer;
+	
+	public double[] radiiOrdered() {
+		double[] radii = createRadiiArray( );
+		Arrays.sort( radii );
+		return radii;
 	}
-
 }

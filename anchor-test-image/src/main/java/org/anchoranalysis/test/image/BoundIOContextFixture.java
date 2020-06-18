@@ -8,13 +8,17 @@ import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
 
-public class BoundContextFixture {
+public class BoundIOContextFixture {
 
-	private BoundContextFixture() {}
+	private BoundIOContextFixture() {}
 	
-	public static BoundIOContext withSimpleLogger() {
-		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
-		
+	public static BoundIOContext withSuppressedLogger() {
+		return withLogger(
+			LoggingFixture.suppressedLogErrorReporter()
+		);
+	}
+	
+	public static BoundIOContext withLogger(LogErrorReporter logger) {
 		BoundIOContext out = mock(BoundIOContext.class);
 		when(out.getLogger()).thenReturn(logger);
 		when(out.getLogReporter()).thenReturn(logger.getLogReporter());
@@ -22,8 +26,8 @@ public class BoundContextFixture {
 		return out;
 	}
 	
-	public static BoundIOContext withSimpleLogger( Path modelDir ) {
-		BoundIOContext out = withSimpleLogger();
+	public static BoundIOContext withSuppressedLogger( Path modelDir ) {
+		BoundIOContext out = withSuppressedLogger();
 		when(out.getModelDirectory()).thenReturn(modelDir);
 		return out;
 	}
