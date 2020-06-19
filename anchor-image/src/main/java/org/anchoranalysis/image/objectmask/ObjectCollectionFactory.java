@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -161,6 +162,20 @@ public class ObjectCollectionFactory {
 		return new ObjectCollection( set.stream() );
 	}
 	
+	/**
+	 * Creates a new {@link ObjectCollection} by repeatedly calling a function to create a single {@link ObjectMask}
+	 * 
+	 * @param repeats the number of objects created
+	 * @param createObjectMask creates a new object-mask
+	 * @return a newly created ObjectCollection
+	 */
+	public static ObjectCollection fromRepeated(int repeats, Supplier<ObjectMask> createObjectMask ) {
+		return mapFromRange(
+			0,
+			repeats,
+			index->createObjectMask.get()
+		);
+	}
 	
 	/**
 	 * Creates a new ObjectCollection by mapping integers (from a range) each to a {@link ObjectMask}
@@ -186,7 +201,10 @@ public class ObjectCollectionFactory {
 	 */
 	public static ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, IntFunction<ObjectCollection> mapFunc ) {
 		return new ObjectCollection(
-			IntStream.range(startInclusive, endExclusive).mapToObj(mapFunc).flatMap(ObjectCollection::streamStandardJava)
+			IntStream
+				.range(startInclusive, endExclusive)
+				.mapToObj(mapFunc)
+				.flatMap(ObjectCollection::streamStandardJava)
 		);
 	}
 	

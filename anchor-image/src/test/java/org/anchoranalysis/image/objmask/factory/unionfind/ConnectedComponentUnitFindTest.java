@@ -119,10 +119,9 @@ public class ConnectedComponentUnitFindTest {
 	}
 
 	private static ObjectCollection generateObjectsAndIncrementRunning(int numObjs, int shift, Point3i running, ObjMaskFixture fixture) {
-		return ObjectCollectionFactory.mapFromRange(
-			0,
+		return ObjectCollectionFactory.fromRepeated(
 			numObjs,
-			index -> {
+			() -> {
 				ObjectMask mask = fixture.filledMask(running.getX(), running.getY()); 
 				running.incrementX(WIDTH + shift);
 				running.incrementY(HEIGHT + shift);
