@@ -60,7 +60,7 @@ public class ObjMaskCollectionRTree {
 	public ObjectCollection contains( Point3i pnt ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		return objs.filterSubset(
+		return objs.stream().filterSubset(
 			om->om.contains(pnt),
 			delegate.contains(pnt)
 		);
@@ -69,7 +69,7 @@ public class ObjMaskCollectionRTree {
 	public ObjectCollection intersectsWith( ObjectMask om ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		return objs.filterSubset(
+		return objs.stream().filterSubset(
 			omInd->omInd.hasIntersectingPixels(om),
 			delegate.intersectsWith( om.getBoundingBox() )
 		);

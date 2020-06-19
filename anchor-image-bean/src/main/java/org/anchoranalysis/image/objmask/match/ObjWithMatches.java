@@ -13,11 +13,12 @@ import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 public final class ObjWithMatches {
 	
 	private final ObjectMask delegate;
-	private final ObjectCollection matches = ObjectCollectionFactory.empty();
+	private final ObjectCollection matches;
 	
 	public ObjWithMatches(ObjectMask obj) {
 		super();
 		this.delegate = obj;
+		this.matches = ObjectCollectionFactory.empty();
 	}
 	
 	public void addSeed( ObjectMask seed ) {

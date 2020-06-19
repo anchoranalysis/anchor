@@ -186,7 +186,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, IntFunction<ObjectCollection> mapFunc ) {
 		return new ObjectCollection(
-			IntStream.range(startInclusive, endExclusive).mapToObj(mapFunc).flatMap(ObjectCollection::stream)
+			IntStream.range(startInclusive, endExclusive).mapToObj(mapFunc).flatMap(ObjectCollection::streamStandardJava)
 		);
 	}
 	
@@ -254,7 +254,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <T> ObjectCollection flatMapFrom( Collection<T> collection, Function<T,ObjectCollection> mapFunc ) {
 		return new ObjectCollection(
-			collection.stream().flatMap(t->mapFunc.apply(t).stream() )
+			collection.stream().flatMap(t->mapFunc.apply(t).streamStandardJava() )
 		);
 	}
 	

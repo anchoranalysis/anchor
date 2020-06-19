@@ -29,23 +29,14 @@ package org.anchoranalysis.image.objectmask;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
-import org.anchoranalysis.core.functional.PredicateWithException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -75,185 +66,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	ObjectCollection( Stream<ObjectMask> stream ) {
 		delegate = stream.collect( Collectors.toList() );
 	}
-		
-	/**
-	 * Creates a new {@link ObjectCollection} after mapping each item to another
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param <E> exception-type that can occur during mapping
-	 * @param mapFunc performs mapping
-	 * @return a newly created object-collection
-	 * @throws E if an exception is thrown by the mapping function.
-	 */
-	public <E extends Throwable> ObjectCollection map(FunctionWithException<ObjectMask,ObjectMask,E> mapFunc) throws E {
-		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : this) {
-			out.add(
-				mapFunc.apply(om)
-			);
-		}
-		return out;
-	}
-		
-	/**
-	 * Creates a new {@link ObjectCollection} after mapping the bounding-box on each object
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param mapFunc maps the bounding-box to a new bounding-box
-	 * @return a newly created object-collection
-	 */
-	public ObjectCollection mapBoundingBox(Function<BoundingBox,BoundingBox> mapFunc) {
-		return map( om->
-			om.mapBoundingBox(mapFunc)
-		);
-	}
-	
-	/**
-	 * Creates a new {@link List} after mapping each item to another type
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 *
-	 * @param <T> destination type for the mapping
-	 * @param mapFunc performs mapping
-	 * @return a newly created list contained the mapped objects
-	 */
-	public <T> List<T> mapAsList(Function<ObjectMask,T> mapFunc) {
-		return delegate.stream().map(mapFunc).collect( Collectors.toList() );
-	}
-	
-	/**
-	 * Creates a new {@link ObjectCollection} after mapping each item to several others
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param mapFunc performs flat-mapping
-	 * @return a newly created object-collection
-	 */
-	public ObjectCollection flatMap(Function<ObjectMask,ObjectCollection> mapFunc) {
-		return new ObjectCollection(
-			stream().flatMap( element -> 
-				mapFunc.apply(element).stream()
-			)
-		);
-	}
-	
-	/**
-	 * Like {@link flatMap} but accepts a mapping function that throws a checked exception.
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param <E> exception-type that can be thrown by <code>mapFunc</code>
-	 * @param mapFunc performs flat-mapping
-	 * @return a newly created object-collection
-	 * @throws E if its thrown by <code>mapFunc</code>
-	 */
-	public <E extends Throwable> ObjectCollection flatMapWithException(
-		Class<?> throwableClass,
-		FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc
-	) throws E {
-		return new ObjectCollection(
-			FunctionalUtilities.flatMapWithException(
-				stream(),
-				throwableClass,
-				element -> mapFunc.apply(element).asList()
-			)
-		);
-	}
-	
-	/**
-	 * Filters a {@link ObjectCollection} to include certain items based on a predicate
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param predicate iff true object is included, otherwise excluded
-	 * @return a newly created object-collection, a filtered version of all objects
-	 */
-	public ObjectCollection filter(Predicate<ObjectMask> predicate) {
-		return new ObjectCollection(
-			stream().filter(predicate)
-		);
-	}
-	
-	/**
-	 * Filters a {@link ObjectCollection} to include certain items based on a predicate - and optionally store rejected objects.
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param <E> exception-type that can be thrown by the predicate
-	 * @param predicate iff true object is included, otherwise excluded
-	 * @param objsRejected iff true, any object rejected by the filter is added to this collection
-	 * @return a newly created object-collection, a filtered version of all objects
-	 * @throws E if thrown by the predicate
-	 */
-	public <E extends Throwable> ObjectCollection filter(PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRejected) throws E {
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for(ObjectMask current : this) {
-			
-			if (predicate.test(current)) {
-				out.add(current);
-			} else {
-
-				if (objsRejected.isPresent()) {
-					objsRejected.get().add(current);
-				}
-			}
-		}
-		return out;
-	}	
-	
-	
-	/**
-	 * Performs a {@link filter} and then a {@link map}
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param mapFunc performs mapping
-	 * @param predicate iff true object is included, otherwise excluded
-	 * @return a newly created object-collection, a filtered version of all objects
-	 */
-	public ObjectCollection filterAndMap(Predicate<ObjectMask> predicate, Function<ObjectMask,ObjectMask> mapFunc) {
-		return new ObjectCollection(
-			stream().filter(predicate).map(mapFunc)
-		);
-	}
-	
-	
-	/**
-	 * Like {@link filter} but only operates on certain indices of the collection.
-	 * 
-	 * <p>This is an IMMUTABLE operation.</p>
-	 * 
-	 * @param predicate iff true object is included, otherwise excluded
-	 * @param indices which indices of the collection to consider
-	 * @return a newly created object-collection, a filtered version of particular elements
-	 */
-	public ObjectCollection filterSubset(Predicate<ObjectMask> predicate, List<Integer> indices) {
-		return new ObjectCollection(
-			streamIndices(indices).filter(predicate)
-		);
-	}
-	
-	
-	/**
-	 * Does the predicate evaluate to true on any object in the collection?
-	 * 
-	 * @param predicate evaluates to true or false for a particular object
-	 * @return true if the predicate returns true on ANY one of the contained objects
-	 */
-	public boolean anyMatch(Predicate<ObjectMask> predicate) {
-		return stream().anyMatch(predicate);
-	}
-	
-	/** Converts to a {@link HashSet} (newly-created) */
-	public Set<ObjectMask> toSet() {
-		return stream().collect(
-			Collectors.toCollection(HashSet::new)
-		);
-	}
 	
 	/** 
 	 * Shifts the bounding-box of each object by adding to it i.e. adds a vector to the corner position
@@ -264,7 +76,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * @return newly created object-collection with shifted corner position and identical extent 
 	 **/
 	public ObjectCollection shiftBy(ReadableTuple3i shiftBy) {
-		return mapBoundingBox( bbox->
+		return stream().mapBoundingBox( bbox->
 			bbox.shiftBy(shiftBy)
 		);
 	}
@@ -387,7 +199,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * @return a new collection with scaled-masks
 	 */
 	public ObjectCollection scale(ScaleFactor factor, Interpolator interpolator) {
-		return map( om->
+		return stream().map( om->
 			om.scale(factor, interpolator)
 		);
 	}
@@ -402,7 +214,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	}
 	
 	public ObjectCollection findObjsWithIntersectingBBox( ObjectMask om ) {
-		return filter( omItr->
+		return stream().filter( omItr->
 			omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())
 		);
 	}
@@ -424,12 +236,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	
 	/** Deep copy, including duplicating ObjMasks */
 	public ObjectCollection duplicate() {
-		return map(ObjectMask::duplicate);
+		return stream().map(ObjectMask::duplicate);
 	}
 	
 	/** Shallow copy of ObjMasks */
 	public ObjectCollection duplicateShallow() {
-		return new ObjectCollection(stream());
+		return new ObjectCollection(streamStandardJava());
 	}
 	
 	/**
@@ -457,17 +269,26 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return delegate;
 	}
 	
+	/***
+	 * Provides various functional-programming operations on the object-collection
+	 * 
+	 * @return a stream-like interface of operations
+	 */
+	public ObjectMaskStream stream() {
+		return new ObjectMaskStream(this);
+	}
+	
 	/**
 	 * A stream of object-masks as per Java's standard collections interface
 	 * 
 	 * @return the stream
 	 */
-	Stream<ObjectMask> stream() {
+	Stream<ObjectMask> streamStandardJava() {
 		return delegate.stream();
 	}
 	
 	/** Streams only objects at specific indices */
-	private Stream<ObjectMask> streamIndices(List<Integer> indices) {
+	Stream<ObjectMask> streamIndices(List<Integer> indices) {
 		return indices.stream().map(this::get);
 	}
 	

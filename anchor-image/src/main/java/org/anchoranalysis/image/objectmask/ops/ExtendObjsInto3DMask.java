@@ -51,7 +51,7 @@ public class ExtendObjsInto3DMask {
 	private ExtendObjsInto3DMask() {}
 	
 	public static ObjectCollection extendObjs( ObjectCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
-		return objs2D.map( om->
+		return objs2D.stream().map( om->
 			extendObj( om, mask3D )
 		);
 	}

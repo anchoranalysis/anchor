@@ -103,7 +103,7 @@ public class AssignmentObjMaskFactory {
 	
 	private ObjectCollection maybeProject(ObjectCollection objs) {
 		if (useMIP) {
-			return objs.map(ObjectMask::maxIntensityProjection);
+			return objs.stream().map(ObjectMask::maxIntensityProjection);
 		} else {
 			return objs;
 		}
