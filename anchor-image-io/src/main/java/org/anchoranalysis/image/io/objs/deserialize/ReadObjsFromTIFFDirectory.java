@@ -77,6 +77,6 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjectCollection> {
 			throw new CreateException(e);
 		}
 		
-		return omc;	
+		return omc;
 	}
 }

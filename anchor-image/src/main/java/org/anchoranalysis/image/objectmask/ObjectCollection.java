@@ -29,9 +29,11 @@ package org.anchoranalysis.image.objectmask;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -64,53 +66,16 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	public ObjectCollection() {
 		 delegate = new ArrayList<>();
 	}
-	
-	/**
-	 * Constructor - create with a single object
-	 * 
-	 * @param obj object-mask to add to collection
-	 */
-	public ObjectCollection( ObjectMask ...obj ) {
-		this();
-		for( ObjectMask om : obj ) {
-			add(om);
-		}
-	}
-	
+
 	/**
 	 * Constructor - creates a new collection with elements from a stream
 	 * 
 	 * @param stream objects
 	 */
-	public ObjectCollection( Stream<ObjectMask> stream ) {
+	ObjectCollection( Stream<ObjectMask> stream ) {
 		delegate = stream.collect( Collectors.toList() );
 	}
-	
-	/**
-	 * Constructor - creates a new collection with elements copied from existing collections
-	 * 
-	 * @param objs existing collections to copy from
-	 */
-	@SafeVarargs
-	public ObjectCollection( ObjectCollection ...objs) {
-		this();
-		for( ObjectCollection collection : objs) {
-			addAll(collection);	
-		}
-	}
-	
-	/**
-	 * Constructor - creates a new collection with elements copied from existing collections
-	 * 
-	 * @param list1 first existing list to copy from
-	 * @param list2 second existing list to copy from
-	 */
-	public ObjectCollection( List<ObjectMask> list1, List<ObjectMask> list2) {
-		this();
-		delegate.addAll(list1);	
-		delegate.addAll(list2);
-	}
-	
+		
 	/**
 	 * Creates a new {@link ObjectCollection} after mapping each item to another
 	 * 
@@ -272,6 +237,23 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		);
 	}
 	
+	
+	/**
+	 * Does the predicate evaluate to true on any object in the collection?
+	 * 
+	 * @param predicate evaluates to true or false for a particular object
+	 * @return true if the predicate returns true on ANY one of the contained objects
+	 */
+	public boolean anyMatch(Predicate<ObjectMask> predicate) {
+		return stream().anyMatch(predicate);
+	}
+	
+	/** Converts to a {@link HashSet} (newly-created) */
+	public Set<ObjectMask> toSet() {
+		return stream().collect(
+			Collectors.toCollection(HashSet::new)
+		);
+	}
 	
 	/** 
 	 * Shifts the bounding-box of each object by adding to it i.e. adds a vector to the corner position
@@ -480,7 +462,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * 
 	 * @return the stream
 	 */
-	public Stream<ObjectMask> stream() {
+	Stream<ObjectMask> stream() {
 		return delegate.stream();
 	}
 	

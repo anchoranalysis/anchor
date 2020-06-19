@@ -36,6 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
 public class SeedCollection implements Iterable<Seed> {
@@ -59,9 +60,7 @@ public class SeedCollection implements Iterable<Seed> {
 	}
 	
 	public ObjectCollection createMasks() {
-		return new ObjectCollection(
-			delegate.stream().map(Seed::createMask)
-		);
+		return ObjectCollectionFactory.mapFrom(delegate, Seed::createMask);
 	}
 	
 	public void flattenZ() {

@@ -34,6 +34,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
 
 /**
@@ -196,9 +197,10 @@ public class CreateNghbGraph<V> {
 	}
 	
 	private ObjectCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
-		return new ObjectCollection(
-			vertices.stream().map(vertexToObjMask::objMaskFromVertex)	
-		);
+		return ObjectCollectionFactory.mapFrom(
+			vertices,
+			vertexToObjMask::objMaskFromVertex
+		);	
 	}
 	
 }

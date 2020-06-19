@@ -39,6 +39,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -114,7 +115,10 @@ public class HistogramFactory {
 
 	
 	public static Histogram create( Channel chnl, ObjectMask obj ) {
-		return create(chnl, new ObjectCollection(obj) );
+		return create(
+			chnl,
+			ObjectCollectionFactory.from(obj)
+		);
 	}
 	
 	public static Histogram create( Channel chnl, ObjectCollection objs ) {

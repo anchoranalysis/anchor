@@ -30,6 +30,7 @@ import org.anchoranalysis.anchor.overlay.objmask.OverlayObjMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 /**
  * Two-way factory.
@@ -62,12 +63,10 @@ public class OverlayCollectionObjMaskFactory {
 	public static ObjectCollection objsFromOverlays( OverlayCollection overlays ) {
 
 		// Extract mask from any overlays that are OverlayObjMask
-		return new ObjectCollection(
-			overlays.stream()
-				.filter( overlay->overlay instanceof OverlayObjMask )
-				.map( overlay->
-					((OverlayObjMask) overlay).getObjMask().getMask()
-				)
+		return ObjectCollectionFactory.filterAndMapFrom(
+			overlays.asList(),
+			overlay->overlay instanceof OverlayObjMask,
+			overlay-> ((OverlayObjMask) overlay).getObjMask().getMask()
 		);
 	}
 }

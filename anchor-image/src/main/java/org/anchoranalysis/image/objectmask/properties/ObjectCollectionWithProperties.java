@@ -30,10 +30,9 @@ package org.anchoranalysis.image.objectmask.properties;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 /**
  * Like an {@ObjectCollection} but each object has associated properties.
@@ -50,13 +49,11 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
 	}
 
 	public ObjectCollectionWithProperties( ObjectMask om ) {
-		this( new ObjectCollection(om) );
+		this( ObjectCollectionFactory.from(om) );
 	}
 	
 	public ObjectCollectionWithProperties( ObjectCollection omc ) {
-		delegate = omc.stream()
-				.map( ObjectWithProperties::new )
-				.collect( Collectors.toList() );
+		delegate = omc.mapAsList( ObjectWithProperties::new );
 	}
 	
 	public boolean add(ObjectWithProperties e) {
@@ -83,8 +80,9 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
 	 * <p>This is an IMMUTABLE operation.</p>
 	 **/
 	public ObjectCollection withoutProperties() {
-		return new ObjectCollection(
-			delegate.stream().map( ObjectWithProperties::getMask )
+		return ObjectCollectionFactory.mapFrom(
+			delegate,
+			ObjectWithProperties::getMask
 		);
 	}
 }

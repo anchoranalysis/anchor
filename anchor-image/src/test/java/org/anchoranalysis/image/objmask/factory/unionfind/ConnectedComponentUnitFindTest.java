@@ -10,6 +10,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.factory.unionfind.ConnectedComponentUnionFind;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -110,21 +111,23 @@ public class ConnectedComponentUnitFindTest {
 	}
 	
 	private ObjectCollection createObjs(ObjMaskFixture fixture) {
-		ObjectCollection objs = new ObjectCollection();
 		Point3i running = new Point3i();
-		addNumObjs(NUM_NON_OVERLAPPING_OBJS, DISTANCE_BETWEEN, running, objs, fixture);
-		addNumObjs(NUM_OVERLAPPING_OBJS, -DISTANCE_BETWEEN, running, objs, fixture);
-		return objs;
+		return ObjectCollectionFactory.from(
+			generateObjectsAndIncrementRunning(NUM_NON_OVERLAPPING_OBJS, DISTANCE_BETWEEN, running, fixture),
+			generateObjectsAndIncrementRunning(NUM_OVERLAPPING_OBJS, -DISTANCE_BETWEEN, running, fixture)		
+		);
 	}
 
-	private static void addNumObjs(int numObjs, int shift, Point3i running, ObjectCollection addTo, ObjMaskFixture fixture) {
-		for( int i=0; i<numObjs; i++) {
-			addTo.add(
-				fixture.filledMask(running.getX(), running.getY())
-			);
-			running.incrementX( WIDTH + shift);
-			running.incrementY( HEIGHT + shift);
-		}
+	private static ObjectCollection generateObjectsAndIncrementRunning(int numObjs, int shift, Point3i running, ObjMaskFixture fixture) {
+		return ObjectCollectionFactory.mapFromRange(
+			0,
+			numObjs,
+			index -> {
+				running.incrementX(WIDTH + shift);
+				running.incrementY(HEIGHT + shift);
+				return fixture.filledMask(running.getX(), running.getY());
+			}
+		);
 	}
 	
 	/** 

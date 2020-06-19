@@ -44,6 +44,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -148,7 +149,7 @@ public class AssignmentGenerator extends RasterGenerator {
 	
 	private Stack createRGBOutlineStack( DisplayStack background, List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
 		
-		ObjectCollection omc = new ObjectCollection(matchedObjs, otherObjs);
+		ObjectCollection omc = ObjectCollectionFactory.from(matchedObjs, otherObjs);
 
 		return createGenerator(
 			otherObjs,

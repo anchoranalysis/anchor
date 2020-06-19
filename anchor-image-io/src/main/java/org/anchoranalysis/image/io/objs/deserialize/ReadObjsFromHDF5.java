@@ -32,6 +32,7 @@ import java.util.List;
 import org.anchoranalysis.image.io.objs.GeneratorHDF5;
 import org.anchoranalysis.image.io.objs.PathUtilities;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -85,7 +86,7 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 		// objects present
 		int numObjs = ObjMaskHDF5Reader.extractIntAttr(reader.uint32(), "/", GeneratorHDF5.NUM_OBJS_ATTR_NAME);
 		if (numObjs==0) {
-			return new ObjectCollection();
+			return ObjectCollectionFactory.empty();
 		}
 		
 		ObjectCollection out = readObjsNoCheck(reader, rootPath);
@@ -106,10 +107,9 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 	private ObjectCollection readObjsNoCheck(IHDF5Reader reader, String rootPath) {
 
 		List<String> groups = reader.object().getAllGroupMembers( rootPath );
-		return new ObjectCollection(
-			groups.stream().map( groupName->
-				objReader.apply(reader, rootPath + groupName )
-			)	
+		return ObjectCollectionFactory.mapFrom(
+			groups,
+			groupName->	objReader.apply(reader, rootPath + groupName)
 		);
 	}
 }

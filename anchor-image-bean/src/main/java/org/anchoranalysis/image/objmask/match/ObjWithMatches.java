@@ -2,6 +2,7 @@ package org.anchoranalysis.image.objmask.match;
 
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 /**
  * An object with associated matches.
@@ -12,7 +13,7 @@ import org.anchoranalysis.image.objectmask.ObjectCollection;
 public final class ObjWithMatches {
 	
 	private final ObjectMask delegate;
-	private final ObjectCollection matches = new ObjectCollection();
+	private final ObjectCollection matches = ObjectCollectionFactory.empty();
 	
 	public ObjWithMatches(ObjectMask obj) {
 		super();

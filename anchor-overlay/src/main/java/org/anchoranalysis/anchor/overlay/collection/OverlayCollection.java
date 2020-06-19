@@ -32,8 +32,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
-
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.index.IndicesSelection;
@@ -143,8 +141,8 @@ public class OverlayCollection implements Iterable<Overlay> {
 		
 		return out;
 	}
-
-	public Stream<Overlay> stream() {
-		return delegate.stream();
+	
+	public List<Overlay> asList() {
+		return delegate;
 	}
 }
