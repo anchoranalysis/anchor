@@ -123,9 +123,10 @@ public class ConnectedComponentUnitFindTest {
 			0,
 			numObjs,
 			index -> {
+				ObjectMask mask = fixture.filledMask(running.getX(), running.getY()); 
 				running.incrementX(WIDTH + shift);
 				running.incrementY(HEIGHT + shift);
-				return fixture.filledMask(running.getX(), running.getY());
+				return mask;
 			}
 		);
 	}
