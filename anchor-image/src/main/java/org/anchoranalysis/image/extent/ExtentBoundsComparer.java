@@ -27,9 +27,7 @@ class ExtentBoundsComparer {
 			extract.apply(max2),
 			Math::min,
 			Math::max
-		).orElseThrow( ()->
-			new AnchorImpossibleSituationException()
-		);
+		).orElseThrow(AnchorImpossibleSituationException::new);
 	}
 	
 	public static Optional<ExtentBoundsComparer> createMin(
