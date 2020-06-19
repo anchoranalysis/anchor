@@ -42,6 +42,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
@@ -92,7 +93,7 @@ public class ConnectedComponentUnionFind {
 	 * @throws OperationFailedException
 	 */
 	public ObjectCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels) throws OperationFailedException {
-		ObjectCollection omc = new ObjectCollection();
+		ObjectCollection omc = ObjectCollectionFactory.empty();
 		visitRegion(
 			voxels,
 			omc,

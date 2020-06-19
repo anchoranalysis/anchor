@@ -31,19 +31,19 @@ package org.anchoranalysis.core.functional;
  * 
  * @author Owen Feehan
  *
- * @param <S> source-type
- * @param <D> destination-type
- * @param <E> exception-type if bridging fails
+ * @param <S> parameter-type
+ * @param <V> return-type
+ * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface FunctionWithException<S, D, E extends Throwable> {
+public interface FunctionWithException<S, V, E extends Throwable> {
 
 	/**
-	 * Bridges an element to another element.
+	 * Calls the function
 	 * 
-	 * @param source object to be bridged
-	 * @return whatever object the source is mapped to.
+	 * @param parameter parameter object
+	 * @return return-value
 	 * @throws E an exception that may be thrown
 	 */
-	D apply( S source ) throws E;
+	V apply(S parameter) throws E;
 }

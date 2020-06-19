@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.anchoranalysis.core.functional.BiFunctionWithException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -113,6 +113,26 @@ public class ObjectCollectionFactory {
 		return out;
 	}
 	
+	/**
+	 * Creates a new ObjectCollection by mapping an {@link Iterable} to {@link Optional<ObjectMask>}
+	 * 
+	 * <p>The object is only included in the outgoing collection if Optional.isPresent()<p/>
+	 * 
+	 * @param <T> type that will be mapped to {@link ObjectCollection}
+	 * @param <E> exception-type that can be thrown during mapping
+	 * @param collection incoming collection to be mapped
+	 * @param mapFunc function for mapping
+	 * @return a newly created ObjectCollection
+	 * @throws E exception if it occurs during mapping
+	 */
+	public static <T,E extends Throwable> ObjectCollection mapFromOptional( Iterable<T> iterable, FunctionWithException<T,Optional<ObjectMask>,E> mapFunc ) throws E {
+		ObjectCollection out = new ObjectCollection();
+		for( T item : iterable ) {
+			mapFunc.apply(item).ifPresent(out::add);
+		}
+		return out;
+	}
+	
 	
 	/**
 	 * Creates a new collection with elements from the parameter-list of {@link BinaryChnl} converting each channel to an object-mask
@@ -172,28 +192,42 @@ public class ObjectCollectionFactory {
 	
 	
 	/**
-	 * Creates a new ObjectCollection by filtering and a collection and then mapping it to {@link ObjectMask}
+	 * Creates a new ObjectCollection by filtering an iterable and then mapping it to {@link ObjectMask}
 	 * 
 	 * @param <T> type that will be mapped to {@link ObjectCollection}
-	 * @param collection incoming collection to be mapped
+	 * @param <E> exception-type that may be thrown during mapping
+	 * @param iterable incoming collection to be mapped
 	 * @param mapFunc function for mapping
 	 * @return a newly created ObjectCollection
+	 * @throws E if thrown by <code>mapFunc</code>
 	 */
-	public static <T> ObjectCollection filterAndMapFrom( Collection<T> collection, Predicate<T> predicate, Function<T,ObjectMask> mapFunc ) {
-		return new ObjectCollection(
-			collection.stream().filter(predicate).map(mapFunc)
-		);
+	public static <T,E extends Throwable> ObjectCollection filterAndMapFrom( Iterable<T> iterable, Predicate<T> predicate, FunctionWithException<T,ObjectMask,E> mapFunc ) throws E {
+		ObjectCollection out = new ObjectCollection();
+		for( T item : iterable) {
+			
+			if (!predicate.test(item)) {
+				continue;
+			}
+			
+			out.add(
+				mapFunc.apply(item)	
+			);
+		}
+		return out;
 	}
 	
 	/**
 	 * Creates a new ObjectCollection by filtering and a list and then mapping it to {@link ObjectMask}
 	 * 
 	 * @param <T> type that will be mapped to {@link ObjectCollection}
+	 * @param <E> exception that be thrown during mapping
 	 * @param list incoming list to be mapped
 	 * @param mapFuncWithIndex function for mapping, also including an index (the original position in the bounding-box)
 	 * @return a newly created ObjectCollection
+	 * @throws E 
+	 * @throw E if an exception is thrown during mapping
 	 */
-	public static <T> ObjectCollection filterAndMapFrom( List<T> list, Predicate<T> predicate, BiFunction<T,Integer,ObjectMask> mapFuncWithIndex ) {
+	public static <T,E extends Throwable> ObjectCollection filterAndMapWithIndexFrom( List<T> list, Predicate<T> predicate, BiFunctionWithException<T,Integer,ObjectMask,E> mapFuncWithIndex ) throws E {
 		ObjectCollection out = new ObjectCollection();
 		for( int i=0; i<list.size(); i++) {
 			
