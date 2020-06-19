@@ -56,10 +56,8 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
-// PairType is how we store the pair information
-
 /**
- * An implementation of a PairCollection that uses IAddCriteria to determine
+ * An implementation of a PairCollection that uses {@link AddCriteria} to determine
  *   how pairs are formed.
  *   
  *   Note: this is not a valid-bean on its own, as there is no default public constructor

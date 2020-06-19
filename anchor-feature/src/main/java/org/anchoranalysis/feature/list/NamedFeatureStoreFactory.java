@@ -41,13 +41,20 @@ public class NamedFeatureStoreFactory {
 	/** iff TRUE, only describe the parameters of the features, but not the name. Otherwise both are described. */
 	private boolean paramsOnlyInDescription = false;
 	
-	public NamedFeatureStoreFactory() {}
+	private NamedFeatureStoreFactory() {}
 	
 	public static NamedFeatureStoreFactory factoryParamsOnly() {
 		NamedFeatureStoreFactory out = new NamedFeatureStoreFactory();
 		out.paramsOnlyInDescription = true;
 		return out;
 	}
+	
+	public static NamedFeatureStoreFactory bothNameAndParams() {
+		NamedFeatureStoreFactory out = new NamedFeatureStoreFactory();
+		out.paramsOnlyInDescription = false;
+		return out;
+	}
+	
 	
 	/**
 	 * Create a list of na

@@ -121,6 +121,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 		
 		@Override
 		public void periodEnd( Reporting<CfgNRGPixelized> reporting ) {
+			// NOTHING TO DO
 		}
 	}
 

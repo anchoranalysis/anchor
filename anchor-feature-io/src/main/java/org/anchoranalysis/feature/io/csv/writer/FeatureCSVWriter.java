@@ -98,7 +98,6 @@ public class FeatureCSVWriter {
 		}
 		
 		for( ResultsVector rv : resultsCollectionFromFeatures ) {
-			assert(name!=null);
 			assert(rv!=null);
 			addResultsVector(
 				name,

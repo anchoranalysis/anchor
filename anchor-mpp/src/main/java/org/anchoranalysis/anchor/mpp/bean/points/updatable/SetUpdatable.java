@@ -237,6 +237,24 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
+		/*IterateVoxels.callEachPoint(
+			voxelBox,
+			binaryImageChnl.getVoxelBox(),
+			(Point3i pnt, T buffer, int offset) -> {
+				int globOffset = e.offsetXY(pnt);
+				byte posCheck = buffer.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
+				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
+					
+					Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
+					
+					// Now we check to make sure the point isn't contained in any of its neighbours
+					if (!isPointInList(neighbours, pntGlobal)) {
+						setPnts.add(pntGlobal);	
+					}
+				}
+			}
+		);*/
+		
 		Point3i crntExtntPnt = new Point3i();
 		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
 			
@@ -268,8 +286,6 @@ public class SetUpdatable extends UpdatablePointsContainer {
 			}
 		}
 	}
-	
-	
 
 	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) {
 		

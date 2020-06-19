@@ -18,7 +18,7 @@ public interface ProcessVoxelSliceBuffer<T extends Buffer> {
 	default void notifyChangeZ(int z) {}
 	
 	/**
-	 * Processes a voxel location in ab uffer
+	 * Processes a voxel location in a buffer
 	 * 
 	 * @param pnt a point with global (absolute coordinates)
 	 * @param buffer a buffer for the current slice for which {@link offsetSlice} refers to a particular location

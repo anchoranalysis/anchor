@@ -27,13 +27,11 @@ package org.anchoranalysis.core.geometry;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-public abstract class Tuple3i implements ReadableTuple3i, Serializable {
+public abstract class Tuple3i implements ReadableTuple3i {
 
 	/**
 	 * 
