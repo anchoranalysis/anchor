@@ -60,12 +60,12 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 /** 
  * An object expressed in voxels, bounded within overall space
  * 
- * A bounding-box defines a box within the overall space, and a raster-mask defines which voxels inside
- *  the bounding-box belong to the object.
+ * <p>A bounding-box defines a box within the overall space, and a raster-mask defines which voxels inside
+ *  the bounding-box belong to the object.</p>
  * 
- * Each voxel in the raster-mask must be one of two states, an ON value and an OFF value
+ * <p>Each voxel in the raster-mask must be one of two states, an ON value and an OFF value</p>
  * 
- * These voxels are MUTABLE.
+ * <p>These voxels are MUTABLE.</p>
  */
 public class ObjectMask {
 	

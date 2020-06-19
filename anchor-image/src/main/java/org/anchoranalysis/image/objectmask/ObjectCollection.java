@@ -184,7 +184,10 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * @return a newly created object-collection
 	 * @throws E if its thrown by <code>mapFunc</code>
 	 */
-	public <E extends Throwable> ObjectCollection flatMapWithException(Class<?> throwableClass, FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc) throws E {
+	public <E extends Throwable> ObjectCollection flatMapWithException(
+		Class<?> throwableClass,
+		FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc
+	) throws E {
 		return new ObjectCollection(
 			FunctionalUtilities.flatMapWithException(
 				stream(),
