@@ -1,5 +1,7 @@
-package org.anchoranalysis.core.name;
+package org.anchoranalysis.feature.io.csv.name;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Optional;
 
 /*
@@ -38,97 +40,85 @@ import java.util.Optional;
  */
 public class CombinedName implements MultiName {
 	
-	private String primaryName;
-	private String secondaryName;
+	private static final String SEPARATOR = "/";
 	
 	/**
-	 * Both names combined together in a single string with a forward slash as seperator.
+	 * The key used for aggregating
+	 */
+	private String directoryPart;
+	
+	/**
+	 * All the names not used in aggregating joined togther
+	 */
+	private String filePart;
+	
+	/**
+	 * All names combined together in a single string with a forward slash as seperator.
+	 * 
+	 * <p>The primaryName is used for aggregating. The rest are not.</p>
 	 * 
 	 * primaryName/secondaryName
 	 */
-	private String together;
+	private String allTogether;
 	
-	public CombinedName( String primaryName, String secondaryName ) {
-		this.primaryName = primaryName;
-		this.secondaryName = secondaryName;
-		this.together =  primaryName + "/" + secondaryName;
+	public CombinedName( String directoryPart, String filePart ) {
+		this.directoryPart = directoryPart;
+		this.filePart = filePart;
+		this.allTogether =  String.join(SEPARATOR, directoryPart, filePart);
 	}
-
-	public String getPrimaryName() {
-		return primaryName;
-	}
-
-	public String getSecondaryName() {
-		return secondaryName;
-	}
-
-	public String getCombinedName() {
-		return together;
-	}
-
+	
 	@Override
 	public int hashCode() {
-		return together.hashCode();
+		return allTogether.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof CombinedName) {
 			CombinedName objCast = (CombinedName) obj;
-			return together.equals(objCast.together);
+			return allTogether.equals(objCast.allTogether);
 		} else {
 			return false;
 		}
 	}
 
 	@Override
-	public int numParts() {
-		return 2;
-	}
-
-	@Override
-	public String getPart(int index) {
-		switch(index) {
-		case 0:
-			return primaryName;
-		case 1:
-			return secondaryName;
-		default:
-			assert false;
-			return "";
-		}
-	}
-
-	@Override
-	public Optional<String> deriveAggregationKey() {
+	public Optional<String> directoryPart() {
 		// The primary name is used for aggregation
-		return Optional.of(primaryName);
+		return Optional.of(directoryPart);
+	}
+
+	@Override
+	public Iterator<String> iterator() {
+		return Arrays.asList(directoryPart, filePart).iterator();
 	}
 	
 	@Override
-	public String nameWithoutAggregationKey() {
-		return secondaryName;
+	public String filePart() {
+		return filePart;
 	}
 	
 	@Override
 	public String toString() {
-		return together;
+		return allTogether;
 	}
 
 	@Override
-	public int compareTo(MultiName o) {
-		int cmp = primaryName.compareTo(o.getPart(0));
+	public int compareTo(MultiName other) {
 		
-		if (cmp!=0) {
-			return cmp;
+		if (other instanceof CombinedName) {
+		
+			CombinedName otherCast = (CombinedName) other;
+			
+			int cmp = directoryPart.compareTo(otherCast.directoryPart);
+			
+			if (cmp!=0) {
+				return cmp;
+			}
+			
+			return filePart.compareTo(otherCast.filePart);
+		} else {
+			return 1;
 		}
-		
-		if (o.numParts()>1) {
-			return secondaryName.compareTo(o.getPart(1));
-		}
-		
-		return 0;
 	}
-
-
 }

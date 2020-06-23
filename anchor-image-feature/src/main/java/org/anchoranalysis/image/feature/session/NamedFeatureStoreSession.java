@@ -34,21 +34,21 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTableSession<T> {
+public class NamedFeatureStoreSession extends FeatureTableSession<FeatureInputSingleObj> {
 
-	private FeatureCalculatorMulti<T> session;
+	private FeatureCalculatorMulti<FeatureInputSingleObj> session;
 
-	private NamedFeatureStore<T> namedFeatureStore;
+	private NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore;
 	
-	public NamedFeatureStoreSession(NamedFeatureStore<T> namedFeatureStore) {
+	public NamedFeatureStoreSession(NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore) {
 		this.namedFeatureStore = namedFeatureStore;
 	}
 
@@ -72,22 +72,22 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 	}
 	
 	@Override
-	public FeatureTableSession<T> duplicateForNewThread() {
-		return new NamedFeatureStoreSession<T>(namedFeatureStore.deepCopy());
+	public FeatureTableSession<FeatureInputSingleObj> duplicateForNewThread() {
+		return new NamedFeatureStoreSession(namedFeatureStore.deepCopy());
 	}
 
 	@Override
-	public ResultsVector calc(T input) throws FeatureCalcException {
+	public ResultsVector calc(FeatureInputSingleObj input) throws FeatureCalcException {
 		return session.calc(input);
 	}
 
 	@Override
-	public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws FeatureCalcException {
+	public ResultsVector calc(FeatureInputSingleObj input, FeatureList<FeatureInputSingleObj> featuresSubset) throws FeatureCalcException {
 		return session.calc(input, featuresSubset);
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
+	public ResultsVector calcSuppressErrors(FeatureInputSingleObj input, ErrorReporter errorReporter) {
 		return session.calcSuppressErrors( input, errorReporter );
 	}
 
@@ -99,5 +99,10 @@ public class NamedFeatureStoreSession<T extends FeatureInput> extends FeatureTab
 	@Override
 	public FeatureNameList createFeatureNames() {
 		return namedFeatureStore.createFeatureNames();
+	}
+
+	@Override
+	public String uniqueIdentifierFor(FeatureInputSingleObj input) {
+		return UniqueIdentifierUtilities.forObject(input.getObjMask());
 	}
 }

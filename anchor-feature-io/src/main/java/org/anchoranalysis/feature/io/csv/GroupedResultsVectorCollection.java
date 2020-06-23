@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.io.csv;
 
+import java.io.Closeable;
+
 /*
  * #%L
  * anchor-feature-io
@@ -28,82 +30,69 @@ package org.anchoranalysis.feature.io.csv;
 
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.anchoranalysis.core.name.MultiName;
+import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.name.MultiName;
+import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
-import org.apache.commons.math3.util.Pair;
+
+import com.google.common.collect.Comparators;
 
 
-public class GroupedResultsVectorCollection {
+public class GroupedResultsVectorCollection implements Closeable {
 
 	private final static String OUTPUT_NAME_FEATURES = "features";
 	private final static String OUTPUT_NAME_FEATURES_AGGREGATED = "featuresAggregated";
 	
-	/**
-	 * Headers describing the first few non-feature columns outputted in the CSV (2-3 columns with group and ID information)
-	 */
-	private String groupHeader;
-	private String identifierHeader;
+	private final MetadataHeaders metadata;
+	private final FeatureNameList featureNamesNonAggregate;
 	
-	
-	
-	/**
-	 * Include IDs
-	 */
-	private boolean includeID = false;
-	private String idName;
+	private Optional<FeatureCSVWriter> writer;
 	
 	/**
 	 * A map which stores an aggregate structure for all entries (based on their unique names) and also on an aggregation-key extracted from the name
 	 */
-	private AggregateMap<MultiName,ResultsVectorCollection> map = new AggregateMap<>(
-		() -> new ResultsVectorCollection()
+	private MapCreate<Optional<MultiName>,ResultsVectorCollection> map = new MapCreate<>(
+		() -> new ResultsVectorCollection(),
+		Comparators.emptiesFirst(Comparator.naturalOrder())
 	);
 	
-	/**
-	 * This constructor will include two group names in the outputting CSV file, but NO id column
-	 * 
-	 * @param idName
-	 * @param groupHeader
-	 * @param identifierHeader
-	 */
-	public GroupedResultsVectorCollection( String groupHeader, String identifierHeader ) {
-		super();
-		this.groupHeader = groupHeader;
-		this.identifierHeader = identifierHeader;
-	}
-	
-	/**
-	 * This constructor will include an ID column in the outputting CSV files, as well as two group names
-	 * However, for the aggregate report, no ID is included, as it makes no sense as an aggregate.
-	 * 
-	 * @param idName
-	 * @param groupHeader
-	 * @param identifierHeader
-	 */
-	public GroupedResultsVectorCollection( String idName, String groupHeader, String identifierHeader ) {
-		super();
-		this.groupHeader = groupHeader;
-		this.identifierHeader = identifierHeader;
-		this.idName = idName;
-		includeID = true;
-	}
-	
-	
-	public void addResultsFor(MultiName identifier, ResultsVector rv) {
+	public GroupedResultsVectorCollection(
+		MetadataHeaders metadata,
+		FeatureNameList featureNamesNonAggregate,
+		BoundIOContext context
+	) throws AnchorIOException {
+		this.metadata = metadata;
+		this.featureNamesNonAggregate = featureNamesNonAggregate;
 		
-		Pair<ResultsVectorCollection,ResultsVectorCollection> pair = map.getOrCreate(identifier);
-		pair.getFirst().add(rv);
-		pair.getSecond().add(rv);
+		// Open file for writing features to
+		writer = FeatureCSVWriter.create(
+			OUTPUT_NAME_FEATURES,
+			context.getOutputManager(),
+			metadata.allHeaders(),
+			featureNamesNonAggregate
+		);
+	}
+		
+	public void addResultsFor(StringLabelsForCsvRow identifier, ResultsVector rv) {
+
+		// Place into the aggregate structure
+		map.getOrCreateNew(identifier.getGroup()).add(rv);
+
+		// Write feature-value directly into CSV
+		if (writer.isPresent()) {
+			writer.get().addResultsVector(identifier,rv);
+		}
 	}
 	
 	/**
@@ -127,61 +116,35 @@ public class GroupedResultsVectorCollection {
 	 * @throws IOException
 	 */
 	public void writeResultsForAllGroups(
-		FeatureNameList featureNamesNonAggregate,			
 		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
 		boolean includeGroups,
 		BoundIOContext context
 	) throws AnchorIOException {
-				
-		writeByName(featureNamesNonAggregate, includeGroups, context);
 		
 		CacheSubdirectoryContext contextGroups = new CacheSubdirectoryContext(
 			context.subdirectory("grouped")
 		);
 		
 		if (includeGroups) {
-			writeAllGroups(featureNamesNonAggregate, contextGroups);
+			writeAllGroups(contextGroups);
 		}
 		
 		if (featuresAggregate.isPresent()) {
 			writeAggregated(
 				featuresAggregate.get(),
-				featureNamesNonAggregate,
 				includeGroups,
 				context,
 				contextGroups
 			);
 		}
 	}
-	
-	private void writeByName(
-		FeatureNameList featureNames,
-		boolean includeGroups,
-		BoundIOContext context
-	) throws AnchorIOException {
-			
-		ResultsVectorWriter.writeResultsCsv(
-			OUTPUT_NAME_FEATURES,
-			map.byEntireName(),
-			headerNames(includeID, includeGroups),
-			featureNames,
-			context,
-			(name, results, csvWriter) -> csvWriter.ifPresent( writer->
-				writer.addResultsVector(
-					Optional.of(name),
-					results,
-					includeID
-				)
-			)
-		);
-	}
-	
-	private void writeAllGroups( FeatureNameList featureNames, CacheSubdirectoryContext context ) {
-		for( Entry<Optional<String>,ResultsVectorCollection> entry : map.byAggregationKeys() ) {
+		
+	private void writeAllGroups(CacheSubdirectoryContext context ) {
+		for( Entry<Optional<MultiName>,ResultsVectorCollection> entry : map.entrySet() ) {
 			WriteGroupResults.writeResultsForSingleGroup(
 				entry.getKey(),
 				entry.getValue(),
-				featureNames,
+				featureNamesNonAggregate,
 				context
 			);
 		}
@@ -189,7 +152,6 @@ public class GroupedResultsVectorCollection {
 	
 	private void writeAggregated(
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
-		FeatureNameList featureNamesNonAggregate,
 		boolean includeGroups,
 		BoundIOContext context,
 		CacheSubdirectoryContext contextGroups
@@ -197,8 +159,8 @@ public class GroupedResultsVectorCollection {
 			
 		ResultsVectorWriter.writeResultsCsv(
 			OUTPUT_NAME_FEATURES_AGGREGATED,
-			map.byAggregationKeys(),
-			includeGroups ? new String[]{groupHeader} : new String[]{},
+			map.entrySet(),
+			metadata.groupHeaders(),
 			featuresAggregate.createFeatureNames(),
 			context,
 			(name, results, writer) -> WriteGroupResults.maybeWriteAggregatedResultsForSingleGroup(
@@ -207,24 +169,15 @@ public class GroupedResultsVectorCollection {
 				featureNamesNonAggregate,
 				featuresAggregate,
 				writer,
-				contextGroups.get(name)
+				contextGroups.get(
+					name.map(MultiName::toString)
+				)
 			)
 		);
 	}
-		
-	private String[] headerNames(boolean withIdColumn, boolean includeGroups) {
-		if (withIdColumn) {
-			if (includeGroups) {
-				return new String[]{idName, groupHeader,identifierHeader};
-			} else {
-				return new String[]{idName, identifierHeader};
-			}
-		} else {
-			if (includeGroups) {
-				return new String[]{groupHeader,identifierHeader};
-			} else {
-				return new String[]{identifierHeader};
-			}
-		}
+
+	@Override
+	public void close() throws IOException {
+		writer.ifPresent(FeatureCSVWriter::close);
 	}
 }

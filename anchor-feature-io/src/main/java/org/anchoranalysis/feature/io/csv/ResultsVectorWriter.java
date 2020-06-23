@@ -33,7 +33,7 @@ class ResultsVectorWriter {
 			return;
 		}
 		
-		Optional<FeatureCSVWriter> csvWriterAll = FeatureCSVWriter.create(
+		Optional<FeatureCSVWriter> writer = FeatureCSVWriter.create(
 			outputName,
 			context.getOutputManager(),
 			headers,
@@ -52,11 +52,11 @@ class ResultsVectorWriter {
 				processEntry.process(
 					entry.getKey(),
 					resultsVectorCollection,
-					csvWriterAll
+					writer
 				);
 			}
 		} finally {
-			csvWriterAll.ifPresent( FeatureCSVWriter::close );
+			writer.ifPresent( FeatureCSVWriter::close );
 		}
 	}
 }

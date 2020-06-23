@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.name;
+package org.anchoranalysis.feature.io.csv.name;
 
 import java.util.Optional;
 
@@ -29,22 +29,18 @@ import java.util.Optional;
  */
 
 /**
- * A name with multiple parts, and one unique name
+ * A name that that uniquely represents something, and can be split into two parts (a directory part, and a file part)
  * 
  * @author Owen
  *
  */
-public interface MultiName extends Comparable<MultiName> {
-
-	int numParts();
+public interface MultiName extends Iterable<String>, Comparable<MultiName> {
 	
-	String getPart( int index );
+	/** The part of the name which is exposed as a directory */
+	Optional<String> directoryPart();
 	
-	/** If higher-level is desired, then a key is returned for grouping on this aggregate level */
-	Optional<String> deriveAggregationKey();
-	
-	/** A name that excludes the aggregation-key (if it exists) and is otherwise unique */
-	String nameWithoutAggregationKey();
+	/** The part of the name which is exposed as a file (inside the directory-part) */
+	String filePart();
 
 	String toString();
 	

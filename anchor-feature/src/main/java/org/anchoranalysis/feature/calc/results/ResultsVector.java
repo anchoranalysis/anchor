@@ -46,8 +46,6 @@ public class ResultsVector {
 	
 	// Each object is either a Double or an Exception
 	private Object[] arr;
-	
-	private String identifier;
 		
 	private static ArrayComparer defaultComparer = new ArrayComparer();
 	
@@ -57,7 +55,6 @@ public class ResultsVector {
 	
 	public ResultsVector( int size, String identifier ) {
 		this(size);
-		this.identifier = identifier;
 	}
 	
 	public double total() {
@@ -158,14 +155,6 @@ public class ResultsVector {
 	
 	public int length() {
 		return arr.length;
-	}
-
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
 	}
 	
 	public boolean hasNoNulls() {

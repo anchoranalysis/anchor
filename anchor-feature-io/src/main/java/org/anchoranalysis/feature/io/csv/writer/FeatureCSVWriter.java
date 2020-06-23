@@ -32,10 +32,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -49,7 +49,12 @@ public class FeatureCSVWriter {
 		this.writer = writer;
 	}
 	
-	public static Optional<FeatureCSVWriter> create( String outputName, BoundOutputManagerRouteErrors outputManager, String[] firstHeaderNames, FeatureNameList featureNames ) throws AnchorIOException {
+	public static Optional<FeatureCSVWriter> create(
+		String outputName,
+		BoundOutputManagerRouteErrors outputManager,
+		String[] firstHeaderNames,
+		FeatureNameList featureNames
+	) throws AnchorIOException {
 		
 		List<String> allHeaders = new ArrayList<String>( Arrays.asList(firstHeaderNames) );
 		allHeaders.addAll( featureNames.asList() );
@@ -67,7 +72,7 @@ public class FeatureCSVWriter {
 		});
 	}
 	
-	public void addResultsVector( Optional<MultiName> name, ResultsVector resultsFromFeatures, boolean includeID ) {
+	public void addResultsVector( StringLabelsForCsvRow identifier, ResultsVector resultsFromFeatures) {
 
 		
 		assert(resultsFromFeatures!=null);
@@ -77,7 +82,7 @@ public class FeatureCSVWriter {
 		}
 		
 		addRow(
-			buildCsvRow(name, resultsFromFeatures, includeID)
+			buildCsvRow(identifier, resultsFromFeatures)
 		);
 	}
 	
@@ -91,7 +96,7 @@ public class FeatureCSVWriter {
 		writer.writeRow(values);
 	}
 	
-	public void addResultsVector( Optional<MultiName> name, ResultsVectorCollection resultsCollectionFromFeatures, boolean includeID ) {
+	public void addResultsVector( StringLabelsForCsvRow identifier, ResultsVectorCollection resultsCollectionFromFeatures) {
 		
 		if (writer==null) {
 			return;
@@ -99,11 +104,7 @@ public class FeatureCSVWriter {
 		
 		for( ResultsVector rv : resultsCollectionFromFeatures ) {
 			assert(rv!=null);
-			addResultsVector(
-				name,
-				rv,
-				includeID
-			);
+			addResultsVector(identifier, rv);
 		}
 	}
 
@@ -115,28 +116,18 @@ public class FeatureCSVWriter {
 		
 		writer.close();
 	}
-	
-	private static void addName( MultiName name, List<TypedValue> csvRow ) {
-		for( int i=0; i<name.numParts(); i++ ) {
-			csvRow.add( new TypedValue(name.getPart(i)) );
-		}
-	}
-	
-	// group is ignored if null
-	private static List<TypedValue> buildCsvRow( Optional<MultiName> name, ResultsVector resultsFromFeatures, boolean includeID ) {
+
+	/**
+	 * Build a row for the CSV output
+	 * 
+	 * @param identifier unique identifier for the row and/or the group it belongs to
+	 * @param resultsFromFeatures results to incluide in row
+	 * @return
+	 */
+	private static List<TypedValue> buildCsvRow( StringLabelsForCsvRow identifier, ResultsVector resultsFromFeatures ) {
 		
 		List<TypedValue> csvRow = new ArrayList<>();
-		
-		if (includeID) {
-			csvRow.add(
-				new TypedValue(resultsFromFeatures.getIdentifier(), false)
-			);
-		}
-		
-		name.ifPresent( n->
-			addName(n, csvRow)
-		);
-		
+		identifier.addToRow(csvRow);
 		resultsFromFeatures.addToTypeValueCollection(csvRow, 10);
 		return csvRow;
 	}

@@ -1,8 +1,9 @@
-package org.anchoranalysis.core.name;
+package org.anchoranalysis.feature.io.csv.name;
 
+import java.util.Iterator;
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.apache.commons.collections.iterators.SingletonIterator;
 
 /**
  * A name with only one part, and is always unique
@@ -18,33 +19,33 @@ public class SimpleName implements MultiName {
 		super();
 		this.name = name;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Iterator<String> iterator() {
+		return new SingletonIterator(name);
+	}
 	
 	@Override
-	public int numParts() {
-		return 1;
-	}
-
-	@Override
-	public String getPart(int index) {
-		if (index!=0) {
-			throw new AnchorFriendlyRuntimeException("An index other than 0 was passed");
-		}
-		return name;
-	}
-
-	@Override
-	public Optional<String> deriveAggregationKey() {
+	public Optional<String> directoryPart() {
 		return Optional.empty();
 	}
 	
 	@Override
-	public String nameWithoutAggregationKey() {
+	public String filePart() {
 		return name;
 	}
 	
 	@Override
 	public int compareTo(MultiName other) {
-		return name.compareTo(other.getPart(0));
+		
+		if (other instanceof SimpleName) {
+			return name.compareTo(
+				((SimpleName) other).name
+			);
+		} else {
+			return -1;
+		}
 	}
 
 	@Override

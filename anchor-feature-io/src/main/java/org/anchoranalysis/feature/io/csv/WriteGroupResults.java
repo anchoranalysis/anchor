@@ -6,13 +6,13 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.SimpleName;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
 import org.anchoranalysis.feature.io.csv.writer.FeatureListCSVGeneratorHorizontal;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -48,14 +48,16 @@ class WriteGroupResults {
 	private WriteGroupResults() {}
 	
 	public static <T extends FeatureInput> void writeResultsForSingleGroup(
-		Optional<String> groupName,
+		Optional<MultiName> groupName,
 		ResultsVectorCollection results,
 		FeatureNameList featureNames,
 		CacheSubdirectoryContext context
 	) {
 		if (groupName.isPresent()) {
 			writeGroupFeatures(
-				context.get(groupName).getOutputManager(),
+				context.get(
+					groupName.map(MultiName::toString)
+				).getOutputManager(),
 				results,
 				featureNames
 			);
@@ -63,7 +65,7 @@ class WriteGroupResults {
 	}
 		
 	public static <T extends FeatureInput> void maybeWriteAggregatedResultsForSingleGroup(
-		Optional<String> groupName,
+		Optional<MultiName> groupName,
 		ResultsVectorCollection results,
 		FeatureNameList featureNames,
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
@@ -102,7 +104,7 @@ class WriteGroupResults {
 	}
 	
 	private static void writeAggregateResultsForSingleGroup(
-		Optional<String> groupName,
+		Optional<MultiName> groupName,
 		ResultsVectorCollection resultsVectorCollection,			
 		FeatureNameList featureNames,
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
@@ -128,11 +130,11 @@ class WriteGroupResults {
 			
 			// If we write aggregate-feature-results to a single CSV file
 			csvWriterAggregate.get().addResultsVector(
-				groupName.map(
-					name-> new SimpleName(name)
+				new StringLabelsForCsvRow(
+					Optional.empty(),
+					groupName
 				),
-				rv,
-				false
+				rv
 			);
 		}
 	}
