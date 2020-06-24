@@ -115,6 +115,14 @@ public class WriterRouterErrors {
 	public Optional<Path> writeGenerateFilename(
 		String outputName,
 		String extension,
+		Optional<ManifestDescription> manifestDescription
+	) throws OutputWriteFailedException {
+		return writeGenerateFilename(outputName, extension, manifestDescription, "", "", "");
+	}
+	
+	public Optional<Path> writeGenerateFilename(
+		String outputName,
+		String extension,
 		Optional<ManifestDescription> manifestDescription,
 		String outputNamePrefix,
 		String outputNameSuffix,

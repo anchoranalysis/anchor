@@ -40,6 +40,8 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 
 public class FeatureListProviderDefineNamedItemList<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
+	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
+	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
 	private List<NamedBean<FeatureListProvider<T>>> list;
@@ -50,7 +52,7 @@ public class FeatureListProviderDefineNamedItemList<T extends FeatureInput> exte
 		
 		FeatureList<T> out = new FeatureList<>();
 
-		NamedFeatureStore<T> featuresRenamed = NamedFeatureStoreFactory.createNamedFeatureList(list);
+		NamedFeatureStore<T> featuresRenamed = STORE_FACTORY.createNamedFeatureList(list);
 		
 		if (featuresRenamed.size()==0) {
 			return new FeatureList<T>();

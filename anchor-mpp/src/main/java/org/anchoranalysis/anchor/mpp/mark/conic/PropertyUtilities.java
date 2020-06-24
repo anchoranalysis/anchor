@@ -27,13 +27,13 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 
 class PropertyUtilities {
 	
 	private PropertyUtilities() {}
 	
-	public static void addPoint2dProperty( ObjMaskWithProperties mask, String propertyName, double x, double y ) {
+	public static void addPoint2dProperty( ObjectWithProperties mask, String propertyName, double x, double y ) {
 		mask.setProperty(
 			propertyName,
 			new Point3d(x,y,0)

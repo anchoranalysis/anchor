@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.junit.Test;
 
 public class IterateVoxelsTest {
@@ -57,8 +57,8 @@ public class IterateVoxelsTest {
 		
 		ObjMaskFixture objsFixture = new ObjMaskFixture(do3D);
 		
-		ObjMask mask1 = objsFixture.filledMask(20, Y_MASK_1);
-		ObjMask mask2 = objsFixture.filledMask(20, Y_MASK_2);	// Overlaps with mask1 but not entirely
+		ObjectMask mask1 = objsFixture.filledMask(20, Y_MASK_1);
+		ObjectMask mask2 = objsFixture.filledMask(20, Y_MASK_2);	// Overlaps with mask1 but not entirely
 		
 		testSingleMask("mask1", expectedSingleNumVoxels, mask1);
 		testSingleMask("mask2", expectedSingleNumVoxels, mask2);
@@ -73,7 +73,7 @@ public class IterateVoxelsTest {
 		testBoundingBox("bbox2", mask2.getBoundingBox());
 	}
 	
-	private void testSingleMask(String message, int expectedNumVoxels, ObjMask mask) {
+	private void testSingleMask(String message, int expectedNumVoxels, ObjectMask mask) {
 		testCounter(
 			message,
 			expectedNumVoxels,
@@ -82,7 +82,7 @@ public class IterateVoxelsTest {
 		);
 	}
 	
-	private void testIntersectionMasks(String message, int expectedNumVoxels, Point3i expectedCenter, ObjMask mask1, ObjMask mask2) {
+	private void testIntersectionMasks(String message, int expectedNumVoxels, Point3i expectedCenter, ObjectMask mask1, ObjectMask mask2) {
 		testCounter(
 			message,
 			expectedNumVoxels,

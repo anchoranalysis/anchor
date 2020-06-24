@@ -29,6 +29,7 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -61,9 +62,6 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Serializab
 	private String name = "";
 	// END BEAN PROPERTIES
 	
-	public Kernel() {
-	}
-	
 	// Call ONCE before calculating anything
 	public abstract void initBeforeCalc(KernelCalcContext context) throws InitException;
 		
@@ -71,11 +69,11 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Serializab
 	 * Calculates the NRG for a proposal
 	 * @param exst the existing NRG
 	 * @param context
-	 * @return a proposal, or NULL if there is no proposal to make
+	 * @return a proposal, or empty() if there is no proposal to make
 	 * @throws KernelCalcNRGException
 	 */
-	public abstract T makeProposal(
-		T exst,
+	public abstract Optional<T> makeProposal(
+		Optional<T> exst,
 		KernelCalcContext context
 	) throws KernelCalcNRGException;
 	

@@ -35,10 +35,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -80,7 +81,7 @@ public class HistogramFactory {
 		return out;
 	}
 	
-	public static Histogram create( Chnl chnl ) throws CreateException {
+	public static Histogram create( Channel chnl ) throws CreateException {
 		
 		try {
 			return create( chnl.getVoxelBox() );
@@ -90,7 +91,7 @@ public class HistogramFactory {
 	}
 	
 	
-	public static Histogram create( Chnl chnl, BinaryChnl mask ) throws CreateException {
+	public static Histogram create( Channel chnl, BinaryChnl mask ) throws CreateException {
 		
 		if (!chnl.getDimensions().getExtnt().equals(mask.getDimensions().getExtnt())) {
 			throw new CreateException("Size of chnl and mask do not match");
@@ -100,7 +101,7 @@ public class HistogramFactory {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMask om = new ObjMask( mask.binaryVoxelBox() );
+		ObjectMask om = new ObjectMask( mask.binaryVoxelBox() );
 		
 		Histogram h = createWithMask(vb, om);
 		try {
@@ -113,11 +114,14 @@ public class HistogramFactory {
 	}
 
 	
-	public static Histogram create( Chnl chnl, ObjMask obj ) {
-		return create(chnl, new ObjMaskCollection(obj) );
+	public static Histogram create( Channel chnl, ObjectMask obj ) {
+		return create(
+			chnl,
+			ObjectCollectionFactory.from(obj)
+		);
 	}
 	
-	public static Histogram create( Chnl chnl, ObjMaskCollection objs ) {
+	public static Histogram create( Channel chnl, ObjectCollection objs ) {
 		return createWithMasks( chnl.getVoxelBox(), objs );
 	}
 	
@@ -132,7 +136,7 @@ public class HistogramFactory {
 		return create(inputBuffer, Optional.empty());
 	}
 	
-	public static Histogram create( VoxelBoxWrapper inputBuffer, Optional<ObjMask> mask ) {
+	public static Histogram create( VoxelBoxWrapper inputBuffer, Optional<ObjectMask> mask ) {
 		
 		if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
 			throw new IncorrectVoxelDataTypeException( String.format("Data type %s is not supported", inputBuffer.getVoxelDataType()) );
@@ -149,7 +153,7 @@ public class HistogramFactory {
 		return dataType.equals(VoxelDataTypeUnsignedByte.instance) || dataType.equals(VoxelDataTypeUnsignedShort.instance); 
 	}
 	
-	private static Histogram createWithMask( VoxelBox<?> inputBuffer, ObjMask objMask ) {
+	private static Histogram createWithMask( VoxelBox<?> inputBuffer, ObjectMask objMask ) {
 		
 		Histogram hist = new HistogramArray( (int) inputBuffer.dataType().maxValue() );
 		
@@ -185,11 +189,11 @@ public class HistogramFactory {
 	}
 	
 	
-	private static Histogram createWithMasks( VoxelBoxWrapper vb, ObjMaskCollection objs ) {
+	private static Histogram createWithMasks( VoxelBoxWrapper vb, ObjectCollection objs ) {
 		
 		Histogram total = new HistogramArray( (int) vb.getVoxelDataType().maxValue() );
 		
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			Histogram h = createWithMask( vb.any(), om);
 			try {
 				total.addHistogram(h);
@@ -220,7 +224,7 @@ public class HistogramFactory {
 	}
 	
 	
-	public static Histogram createHistogramIgnoreZero( Chnl chnl, ObjMask objMask, boolean ignoreZero ) {
+	public static Histogram createHistogramIgnoreZero( Channel chnl, ObjectMask objMask, boolean ignoreZero ) {
 		Histogram hist = create(chnl, objMask);
 		if (ignoreZero) {
 			hist.zeroVal(0);

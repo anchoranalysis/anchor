@@ -36,6 +36,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public class FilterForExistingFiles extends FilterFileProvider {
 
@@ -45,16 +46,21 @@ public class FilterForExistingFiles extends FilterFileProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected boolean isFileAccepted( File file, boolean debugMode ) throws AnchorIOException {
+	protected boolean isFileAccepted( File file, boolean debugMode ) throws FileProviderException {
 		
-		for( FilePathGenerator fpg : listFilePathGenerator ) {
-			Path annotationPath = fpg.outFilePath( file.toPath(), debugMode );
-			
-			if (!Files.exists( annotationPath )) {
-				return false;
+		try {
+			for( FilePathGenerator fpg : listFilePathGenerator ) {
+				Path annotationPath = fpg.outFilePath( file.toPath(), debugMode );
+				
+				if (!Files.exists( annotationPath )) {
+					return false;
+				}
 			}
+			return true;
+			
+		} catch (AnchorIOException e) {
+			throw new FileProviderException(e);
 		}
-		return true;
 	}
 
 

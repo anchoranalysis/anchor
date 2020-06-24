@@ -43,7 +43,7 @@ public class FeatureSessionTest {
 	public void testCalculateSimpleListOfFeatures() throws InitException, FeatureCalcException {
 		
 		SequentialSession<FeatureInput> session = new SequentialSession<>(ConstantsInListFixture.create());
-		session.start( new FeatureInitParams(), new SharedFeatureMulti(), LoggingFixture.simpleLogErrorReporter() );
+		session.start( new FeatureInitParams(), new SharedFeatureMulti(), LoggingFixture.suppressedLogErrorReporter() );
 		
 		ResultsVector rv1 = session.calc( FeatureInputNull.instance() );
 		ConstantsInListFixture.checkResultVector(rv1);

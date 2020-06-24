@@ -50,7 +50,6 @@ class PeriodTrigger<S,T extends IPeriodReceiver<S>> {
 	}
 
 	public void reset() {
-		
 		this.counter = 0;
 		nextStart = true;
 	}
@@ -64,10 +63,11 @@ class PeriodTrigger<S,T extends IPeriodReceiver<S>> {
 				nextStart = false;
 			}
 			
-			if (++counter==aggInterval) {
+			counter++;
+			
+			if (counter==aggInterval) {
 				periodReceiver.periodEnd( reporting );
-				counter = 0;
-				nextStart = true;
+				reset();
 			}
 		} catch (PeriodReceiverException e) {
 			throw new OperationFailedException(e);

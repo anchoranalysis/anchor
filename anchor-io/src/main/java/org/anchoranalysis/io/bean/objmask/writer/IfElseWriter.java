@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class IfElseWriter extends ObjMaskWriter {
@@ -53,7 +53,7 @@ public class IfElseWriter extends ObjMaskWriter {
 	private Condition condition;
 	
 	public static abstract class Condition {
-		public abstract boolean isTrue(ObjMaskWithProperties mask, RGBStack stack, int id);
+		public abstract boolean isTrue(ObjectWithProperties mask, RGBStack stack, int id);
 	}
 	
 	public IfElseWriter() {
@@ -85,7 +85,7 @@ public class IfElseWriter extends ObjMaskWriter {
 	}
 
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjectWithProperties mask,
 			ImageDim dim) throws CreateException {
 		
 		// We calculate both the TRUE and FALSE precalculations
@@ -95,8 +95,8 @@ public class IfElseWriter extends ObjMaskWriter {
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 				if ( condition.isTrue(mask, stack, idGetter.getID(mask, iter))) {
 					precalcTrue.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);

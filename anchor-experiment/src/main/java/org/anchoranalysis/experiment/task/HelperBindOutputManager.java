@@ -33,9 +33,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -61,13 +62,12 @@ class HelperBindOutputManager {
 			} else {
 				return createWithoutBindingPath(manifestTask, params.getOutputManager() );
 			}
-		} catch (AnchorIOException e) {
+		} catch (BindFailedException e) {
 			throw new JobExecutionException(
 				String.format(
-					"Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'%n%s",
+					"Cannot bind the outputManager to the specific task with pathForBinding=%s and experimentIdentifier='%s'",
 					describeInputForBinding(input),
-					params.getExperimentIdentifier(),
-					e.toString()
+					params.getExperimentIdentifier()
 				),
 				e
 			);
@@ -86,22 +86,26 @@ class HelperBindOutputManager {
 		PathWithDescription input,
 		Optional<ManifestRecorder> manifestTask,
 		ParametersExperiment params
-	) throws AnchorIOException, JobExecutionException {
-		BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
-			input,
-			params.getExperimentIdentifier(),
-			manifestTask,
-			params.getExperimentalManifest(),
-			params.getExperimentArguments().createParamsContext()
-		);
-		if (params.getExperimentalManifest().isPresent()) {
-			ManifestClashChecker.throwExceptionIfClashes(
-				params.getExperimentalManifest().get(),
-				boundOutput,
-				input.getPath()
+	) throws BindFailedException, JobExecutionException {
+		try {
+			BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
+				input,
+				params.getExperimentIdentifier(),
+				manifestTask,
+				params.getExperimentalManifest(),
+				params.getExperimentArguments().createParamsContext()
 			);
+			if (params.getExperimentalManifest().isPresent()) {
+				ManifestClashChecker.throwExceptionIfClashes(
+					params.getExperimentalManifest().get(),
+					boundOutput,
+					input.getPath()
+				);
+			}
+			return boundOutput;
+		} catch (FilePathPrefixerException e) {
+			throw new BindFailedException(e);
 		}
-		return boundOutput;
 	}
 			
 	private static BoundOutputManager createWithoutBindingPath( Optional<ManifestRecorder> manifestTask, BoundOutputManagerRouteErrors outputManager ) {

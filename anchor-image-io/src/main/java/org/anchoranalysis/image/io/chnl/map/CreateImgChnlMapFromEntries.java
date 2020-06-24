@@ -28,18 +28,18 @@ package org.anchoranalysis.image.io.chnl.map;
 
 import java.util.List;
 
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 
-public class CreateImgChnlMapFromEntries implements IObjectBridge<
+public class CreateImgChnlMapFromEntries implements FunctionWithException<
 	List<ImgChnlMapEntry>,
 	ImgChnlMap,
 	AnchorNeverOccursException
 > {
 
 	@Override
-	public ImgChnlMap bridgeElement(List<ImgChnlMapEntry> list) {
+	public ImgChnlMap apply(List<ImgChnlMapEntry> list) {
 		
 		ImgChnlMap beanOut = new ImgChnlMap();
     	

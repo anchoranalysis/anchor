@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromShortBufferAr
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-class VoxelBoxFactoryShort extends VoxelBoxFactoryTypeBound<ShortBuffer> {
+final class VoxelBoxFactoryShort extends VoxelBoxFactoryTypeBound<ShortBuffer> {
 
-	private static VoxelDataType dataType = VoxelDataTypeUnsignedShort.instance;
+	private static final VoxelDataType dataType = VoxelDataTypeUnsignedShort.instance;
 	
 	public VoxelBoxFactoryShort() {
 		// Prevent creation outside this package
@@ -60,5 +60,4 @@ class VoxelBoxFactoryShort extends VoxelBoxFactoryTypeBound<ShortBuffer> {
 	public VoxelDataType dataType() {
 		return dataType;
 	}
-
 }

@@ -33,7 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -47,7 +47,7 @@ public class ImgStackSeries<BufferType extends Buffer> implements Iterable<Stack
 		Stack stackOut = new Stack();
 	
 		for( Stack stack : delegate ) {
-			for( Chnl chnl : stack ) {
+			for( Channel chnl : stack ) {
 				stackOut.addChnl(chnl);
 			}
 		}

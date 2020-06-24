@@ -29,9 +29,9 @@ package org.anchoranalysis.anchor.overlay.id;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 
-public class IDGetterMaskFromOverlay extends IDGetter<ObjMaskWithProperties> {
+public class IDGetterMaskFromOverlay extends IDGetter<ObjectWithProperties> {
 
 	private IDGetter<Overlay> delegate;
 
@@ -57,7 +57,7 @@ public class IDGetterMaskFromOverlay extends IDGetter<ObjMaskWithProperties> {
 	}
 
 	@Override
-	public int getID(ObjMaskWithProperties m, int iter) {
+	public int getID(ObjectWithProperties m, int iter) {
 		
 		if (modIter) {
 			iter = iter % oc.size();

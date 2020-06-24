@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.geometry;
 
+import java.io.Serializable;
+
 import org.anchoranalysis.core.axis.AxisType;
 
 /**
@@ -8,7 +10,7 @@ import org.anchoranalysis.core.axis.AxisType;
  * @author Owen Feehan
  *
  */
-public interface ReadableTuple3i {
+public interface ReadableTuple3i extends Serializable {
 
 	int getX();
 	

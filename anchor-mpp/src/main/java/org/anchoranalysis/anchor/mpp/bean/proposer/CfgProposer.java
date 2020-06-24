@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp
@@ -37,5 +39,5 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 @GroupingRoot
 public abstract class CfgProposer extends ProposerBean<CfgProposer> implements ICompatibleWith {
 
-	public abstract Cfg propose( CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException;
+	public abstract Optional<Cfg> propose( CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException;
 }

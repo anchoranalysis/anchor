@@ -28,21 +28,21 @@ package org.anchoranalysis.image.seed;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class SeedObjMask extends Seed {
 	
-	private ObjMask om;
+	private ObjectMask om;
 	
-	public SeedObjMask(ObjMask om) {
+	public SeedObjMask(ObjectMask om) {
 		super();
 		this.om = om;
 	}
 
 	@Override
 	public void scaleXY(double scale) throws OperationFailedException {
-		om.scale(
+		om = om.scale(
 			new ScaleFactor(scale),
 			InterpolatorFactory.getInstance().noInterpolation()
 		);
@@ -64,7 +64,7 @@ public class SeedObjMask extends Seed {
 	}
 
 	@Override
-	public ObjMask createMask() {
+	public ObjectMask createMask() {
 		return om;
 	}
 	

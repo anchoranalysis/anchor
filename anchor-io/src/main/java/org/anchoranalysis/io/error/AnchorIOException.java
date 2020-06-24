@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.error;
 
+import org.anchoranalysis.core.error.AnchorCheckedException;
+
 /*-
  * #%L
  * anchor-io
@@ -26,9 +28,7 @@ package org.anchoranalysis.io.error;
  * #L%
  */
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
-
-public class AnchorIOException extends AnchorFriendlyCheckedException {
+public class AnchorIOException extends AnchorCheckedException {
 
 	/**
 	 * 

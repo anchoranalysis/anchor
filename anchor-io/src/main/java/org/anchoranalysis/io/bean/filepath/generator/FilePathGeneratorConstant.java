@@ -32,21 +32,23 @@ import java.nio.file.Paths;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-/** Always generates a constant string no matter what the input */
+/** 
+ * Always generates a constant path irrespective of the the input
+ **/
 public class FilePathGeneratorConstant extends FilePathGenerator {
-
-	public FilePathGeneratorConstant() {
-		
-	}
-	
-	public FilePathGeneratorConstant( String value ) {
-		this.value = value;
-	}
 	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String value;
 	// END BEAN PROPERTIES
+
+	public FilePathGeneratorConstant() {
+		// Standard Bean Constructor
+	}
+	
+	public FilePathGeneratorConstant( String value ) {
+		this.value = value;
+	}
 	
 	@Override
 	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
@@ -60,5 +62,4 @@ public class FilePathGeneratorConstant extends FilePathGenerator {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
 }

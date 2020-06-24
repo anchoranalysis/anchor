@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromFloatBufferAr
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
-class VoxelBoxFactoryFloat extends VoxelBoxFactoryTypeBound<FloatBuffer> {
+final class VoxelBoxFactoryFloat extends VoxelBoxFactoryTypeBound<FloatBuffer> {
 
-	private static VoxelDataType dataType = VoxelDataTypeFloat.instance;
+	private static final VoxelDataType dataType = VoxelDataTypeFloat.instance;
 	
 	public VoxelBoxFactoryFloat() {
 		// Prevent creation outside this package

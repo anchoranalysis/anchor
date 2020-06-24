@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.bridge.IObjectBridge;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
@@ -44,17 +44,17 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 public class NamedProviderBridge<S,T> implements NamedProvider<T> {
 
 	private NamedProvider<S> srcProvider;
-	private IObjectBridge<S,T,? extends Exception> bridge;
+	private FunctionWithException<S,T,? extends Exception> bridge;
 	private boolean bridgeNulls = true;
 	
-	public NamedProviderBridge(NamedProvider<S> srcProvider, IObjectBridge<S,T,? extends Exception> bridge) {
+	public NamedProviderBridge(NamedProvider<S> srcProvider, FunctionWithException<S,T,? extends Exception> bridge) {
 		super();
 		assert(srcProvider!=null);
 		this.srcProvider = srcProvider;
 		this.bridge = bridge;
 	}
 	
-	public NamedProviderBridge(NamedProvider<S> srcProvider, IObjectBridge<S,T,? extends Exception> bridge, boolean bridgeNulls ) {
+	public NamedProviderBridge(NamedProvider<S> srcProvider, FunctionWithException<S,T,? extends Exception> bridge, boolean bridgeNulls ) {
 		super();
 		assert(srcProvider!=null);
 		this.srcProvider = srcProvider;
@@ -74,7 +74,7 @@ public class NamedProviderBridge<S,T> implements NamedProvider<T> {
 		try {
 			return OptionalUtilities.map(
 				srcVal,
-				element -> bridge.bridgeElement(element)
+				element -> bridge.apply(element)
 			);
 		} catch (Exception e) {
 			throw NamedProviderGetException.wrap(key, e);

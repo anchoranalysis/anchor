@@ -28,7 +28,7 @@ package org.anchoranalysis.core.index.container.bridge;
  * #L%
  */
 
-import org.anchoranalysis.core.bridge.IObjectBridgeIndex;
+import org.anchoranalysis.core.bridge.BridgeElementWithIndex;
 import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
 
 /**
@@ -43,9 +43,9 @@ import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
  */
 public class BoundedIndexContainerBridgeWithIndex<H,S> extends BoundedIndexContainerBridge<H, S> {
 	
-	private IObjectBridgeIndex<H, S, ? extends Exception> bridge;
+	private BridgeElementWithIndex<H, S, ? extends Exception> bridge;
 	
-	public BoundedIndexContainerBridgeWithIndex(IBoundedIndexContainer<H> source, IObjectBridgeIndex<H, S, ? extends Exception> bridge) {
+	public BoundedIndexContainerBridgeWithIndex(IBoundedIndexContainer<H> source, BridgeElementWithIndex<H, S, ? extends Exception> bridge) {
 		super(source);
 		this.bridge = bridge;
 	}

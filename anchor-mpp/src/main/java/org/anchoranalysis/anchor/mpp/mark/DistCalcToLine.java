@@ -44,7 +44,7 @@ class DistCalcToLine {
 		
 		// Direction vector
 		this.directionVector = new Point3d( this.endPoint );
-		this.directionVector.sub( startPoint );
+		this.directionVector.subtract( startPoint );
 	}
 
 	public double distToLine( Point3d pt ) {

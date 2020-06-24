@@ -1,7 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
 
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateTriggerBank;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
 
@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
 
 public class OptimizationFeedbackInitParams<T> {
 
-	private OptSchemeInitContext initContext;
+	private OptSchemeContext initContext;
 	
 	private WeightedKernelList<?> kernelFactoryList;
 	private PeriodTriggerBank<T> periodTriggerBank;
@@ -58,10 +58,10 @@ public class OptimizationFeedbackInitParams<T> {
 		this.aggregateTriggerBank = aggregateTriggerBank;
 	}
 
-	public OptSchemeInitContext getInitContext() {
+	public OptSchemeContext getInitContext() {
 		return initContext;
 	}
-	public void setInitContext(OptSchemeInitContext initContext) {
+	public void setInitContext(OptSchemeContext initContext) {
 		this.initContext = initContext;
 	}
 }

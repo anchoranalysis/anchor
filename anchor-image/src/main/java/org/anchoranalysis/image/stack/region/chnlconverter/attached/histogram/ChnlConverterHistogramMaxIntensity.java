@@ -30,9 +30,9 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
@@ -42,13 +42,13 @@ public class ChnlConverterHistogramMaxIntensity extends ChnlConverterAttached<Hi
 
 	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
 	
-	private ChnlConverterToUnsignedByte delegate;
+	private ChannelConverterToUnsignedByte delegate;
 	
 	public ChnlConverterHistogramMaxIntensity() {
 		// Initialise with a dummy value;
 		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMaxValue(1);
 		
-		delegate = new ChnlConverterToUnsignedByte(voxelBoxConverter);
+		delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class ChnlConverterHistogramMaxIntensity extends ChnlConverterAttached<Hi
 	}
 
 	@Override
-	public Chnl convert(Chnl chnl, ConversionPolicy changeExisting) {
+	public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
 		return delegate.convert(chnl, changeExisting);
 	}
 

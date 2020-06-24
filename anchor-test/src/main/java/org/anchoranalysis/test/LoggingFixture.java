@@ -32,19 +32,24 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
 
 /**
- * Fixtures
+ * Fixtures to create loggers that don't output anything
+ * 
  * @author owen
  *
  */
 public class LoggingFixture {
+	
+	private LoggingFixture() {}
 
-	public static LogReporter simpleLogReporter() {
+	/** A {@link LogReporter} that doesn't output anything */
+	public static LogReporter suppressedLogReporter() {
 		return mock(LogReporter.class);
 	}
-	
-	public static LogErrorReporter simpleLogErrorReporter() {
+
+	/** A {@link LogErrorReporter} that doesn't output anything */
+	public static LogErrorReporter suppressedLogErrorReporter() {
 		return new LogErrorReporter(
-			simpleLogReporter()
+			suppressedLogReporter()
 		);
 	}
 }

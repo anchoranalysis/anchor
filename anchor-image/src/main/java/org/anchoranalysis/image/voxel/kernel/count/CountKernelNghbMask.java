@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 /**
@@ -48,11 +48,11 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	
 	private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
 	private BinaryValuesByte bvRequireHigh;
-	private ObjMask omRequireHigh;
+	private ObjectMask omRequireHigh;
 
 	private LocalSlices localSlicesRequireHigh;
 	
-	public CountKernelNghbMask(boolean useZ, BinaryValuesByte bv, ObjMask omRequireHigh, boolean multipleMatchesPerVoxel) {
+	public CountKernelNghbMask(boolean useZ, BinaryValuesByte bv, ObjectMask omRequireHigh, boolean multipleMatchesPerVoxel) {
 		super(useZ, bv, multipleMatchesPerVoxel);
 		this.omRequireHigh = omRequireHigh;
 		

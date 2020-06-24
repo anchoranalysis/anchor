@@ -8,8 +8,10 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxFactory;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.objectmask.factory.unionfind.ConnectedComponentUnionFind;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
@@ -71,19 +73,19 @@ public class ConnectedComponentUnitFindTest {
 		);
 	}
 	
-	private ObjMaskCollection deriveInt(boolean do3D) throws OperationFailedException, CreateException {
+	private ObjectCollection deriveInt(boolean do3D) throws OperationFailedException, CreateException {
 		return cc.deriveConnectedInt(
 			createBufferWithObjs(VoxelDataTypeUnsignedInt.instance, do3D)	
 		);
 	}
 	
-	private ObjMaskCollection deriveByte(boolean do3D) throws OperationFailedException, CreateException {
+	private ObjectCollection deriveByte(boolean do3D) throws OperationFailedException, CreateException {
 		return cc.deriveConnectedByte(
 			createBufferWithObjs(VoxelDataTypeUnsignedByte.instance, do3D)	
 		);
 	}
 	
-	private void testObjs(ObjMaskCollection objs, int expectedSingleObjSize ) throws CreateException, OperationFailedException {
+	private void testObjs(ObjectCollection objs, int expectedSingleObjSize ) throws CreateException, OperationFailedException {
 		assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJS+1, objs.size() );
 		assertTrue("size of all objects except one", allSizesEqualExceptOne(objs, expectedSingleObjSize) );
 	}
@@ -101,29 +103,31 @@ public class ConnectedComponentUnitFindTest {
 		@SuppressWarnings("unchecked")
 		BinaryVoxelBox<T> bvb = (BinaryVoxelBox<T>) BinaryVoxelBoxFactory.instance().create(extent, bufferDataType, BinaryValues.getDefault());
 		
-		ObjMaskCollection objs = createObjs(fixture);
-		for(ObjMask om : objs) {
+		ObjectCollection objs = createObjs(fixture);
+		for(ObjectMask om : objs) {
 			bvb.setPixelsCheckMaskOn(om);
 		}
 		return bvb;
 	}
 	
-	private ObjMaskCollection createObjs(ObjMaskFixture fixture) {
-		ObjMaskCollection objs = new ObjMaskCollection();
+	private ObjectCollection createObjs(ObjMaskFixture fixture) {
 		Point3i running = new Point3i();
-		addNumObjs(NUM_NON_OVERLAPPING_OBJS, DISTANCE_BETWEEN, running, objs, fixture);
-		addNumObjs(NUM_OVERLAPPING_OBJS, -DISTANCE_BETWEEN, running, objs, fixture);
-		return objs;
+		return ObjectCollectionFactory.from(
+			generateObjectsAndIncrementRunning(NUM_NON_OVERLAPPING_OBJS, DISTANCE_BETWEEN, running, fixture),
+			generateObjectsAndIncrementRunning(NUM_OVERLAPPING_OBJS, -DISTANCE_BETWEEN, running, fixture)		
+		);
 	}
 
-	private static void addNumObjs(int numObjs, int shift, Point3i running, ObjMaskCollection addTo, ObjMaskFixture fixture) {
-		for( int i=0; i<numObjs; i++) {
-			addTo.add(
-				fixture.filledMask(running.getX(), running.getY())
-			);
-			running.incrX( WIDTH + shift);
-			running.incrY( HEIGHT + shift);
-		}
+	private static ObjectCollection generateObjectsAndIncrementRunning(int numObjs, int shift, Point3i running, ObjMaskFixture fixture) {
+		return ObjectCollectionFactory.fromRepeated(
+			numObjs,
+			() -> {
+				ObjectMask mask = fixture.filledMask(running.getX(), running.getY()); 
+				running.incrementX(WIDTH + shift);
+				running.incrementY(HEIGHT + shift);
+				return mask;
+			}
+		);
 	}
 	
 	/** 
@@ -132,12 +136,12 @@ public class ConnectedComponentUnitFindTest {
 	 * @param objs objects to check
 	 * @parma target size that all objects apart from one should be equal to
 	 * */
-	private static boolean allSizesEqualExceptOne( ObjMaskCollection objs, int target ) {
+	private static boolean allSizesEqualExceptOne( ObjectCollection objs, int target ) {
 		
 		boolean encounteredAlreadyTheException = false;
 		
-		for( ObjMask obj : objs ) {
-			int numVoxels = obj.numPixels();
+		for( ObjectMask obj : objs ) {
+			int numVoxels = obj.numVoxelsOn();
 			if (numVoxels==target) {
 				continue;
 			} else {

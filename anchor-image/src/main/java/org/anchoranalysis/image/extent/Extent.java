@@ -37,7 +37,6 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
@@ -56,7 +55,7 @@ public final class Extent implements Serializable {
 	private final int sxy;
 	
 	// Lengths in each dimension
-	private final Point3i len;
+	private final ReadableTuple3i len;
 	
 	public Extent() {
 		this( new Point3i(0,0,0) );
@@ -65,8 +64,15 @@ public final class Extent implements Serializable {
 	public Extent(int x, int y, int z) {
 		this( new Point3i( x, y, z) );
 	}
-		
-	private Extent( Point3i len ) {
+	
+	/**
+	 * Constructor
+	 * 
+	 * <p>The point will be taken ownership by the extent, and should not be modified thereafter.</p>
+	 * 
+	 * @param len the length of each axis
+	 */
+	private Extent(ReadableTuple3i len) {
 		this.len = len;
 		this.sxy = len.getX() * len.getY();
 	}
@@ -290,7 +296,7 @@ public final class Extent implements Serializable {
 	}
 	
 	public Extent scaleXYBy( ScaleFactor sf ) {
-		return createPointOperation( p-> {
+		return immutablePointOperation( p-> {
 			p.setX(
 				ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
 			);
@@ -300,12 +306,14 @@ public final class Extent implements Serializable {
 		});
 	}
 	
-	public Extent subtract( Extent e ) {
-		return createPointOperation( p->p.sub(e.asTuple()) );
+	public Extent subtract(ReadableTuple3i toSubtract) {
+		return new Extent(
+			Point3i.immutableSubtract(len, toSubtract)
+		);
 	}
 	
 	public Extent divide( int factor ) {
-		return createPointOperation( p->p.div(factor) );
+		return immutablePointOperation( p->p.divideBy(factor) );
 	}
 	
 	/**
@@ -313,7 +321,7 @@ public final class Extent implements Serializable {
 	 * @return the new extent
 	 */
 	public Extent createMinusOne() {
-		return createPointOperation( p->p.sub(1) );
+		return immutablePointOperation( p->p.subtract(1) );
 	}
 	
 	public Extent growBy(int toAdd) {
@@ -322,9 +330,9 @@ public final class Extent implements Serializable {
 		);
 	}
 	
-	public Extent growBy(Tuple3i toAdd) {
-		return createPointOperation( p->
-			p.add(toAdd)
+	public Extent growBy(ReadableTuple3i toAdd) {
+		return new Extent(
+			Point3i.immutableAdd(len, toAdd)
 		);
 	}
 	
@@ -335,9 +343,9 @@ public final class Extent implements Serializable {
 		);
 	}
 	
-	private Extent createPointOperation( Consumer<Point3i> func ) {
+	private Extent immutablePointOperation( Consumer<Point3i> pointOperation ) {
 		Point3i lenDup = new Point3i(len);
-		func.accept(lenDup);	
+		pointOperation.accept(lenDup);	
 		return new Extent(lenDup);
 	}
 }

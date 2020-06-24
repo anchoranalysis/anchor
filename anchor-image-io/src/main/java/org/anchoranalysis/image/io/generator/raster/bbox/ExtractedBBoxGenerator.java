@@ -29,8 +29,8 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
@@ -66,13 +66,13 @@ public class ExtractedBBoxGenerator extends RasterGenerator implements IterableO
 	private Stack createExtract( Stack stackIn ) throws CreateException {
 		Stack stackOut = new Stack();
 		
-		for( Chnl chnlIn : stackIn ) {
+		for( Channel chnlIn : stackIn ) {
 			
 			VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
 			
-			VoxelBox<?> vbExtracted = vbIn.createBufferAlwaysNew(bbox);
+			VoxelBox<?> vbExtracted = vbIn.region(bbox,false);
 			
-			Chnl chnlExtracted = ChnlFactory.instance().create( vbExtracted, stackIn.getDimensions().getRes() );
+			Channel chnlExtracted = ChannelFactory.instance().create( vbExtracted, stackIn.getDimensions().getRes() );
 			try {
 				stackOut.addChnl(chnlExtracted);
 			} catch (IncorrectImageSizeException e) {

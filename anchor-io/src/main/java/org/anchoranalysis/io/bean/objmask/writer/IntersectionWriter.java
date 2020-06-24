@@ -31,13 +31,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 class IntersectionWriter {
 
 	// Writes only to the intersection of mask and stack (positioned at stackBBox)
-	public static void writeRGBMaskIntersection( ObjMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox ) throws OperationFailedException {
+	public static void writeRGBMaskIntersection( ObjectMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox ) throws OperationFailedException {
 
 		if( !stackBBox.intersection().existsWith( mask.getBoundingBox() )) {
 			throw new OperationFailedException(
@@ -54,20 +54,24 @@ class IntersectionWriter {
 		);
 		
 		// Let's make the intersection relative to the stack
-		intersection = intersection.shiftBackBy( stackBBox.getCrnrMin() );
-		mask.shiftBackBy(stackBBox.getCrnrMin() );
-		
+		writeOnEachSlice(
+			stack,
+			color,
+			intersection.shiftBackBy( stackBBox.getCrnrMin() ),
+			mask.mapBoundingBox( bbox ->
+				bbox.shiftBackBy(stackBBox.getCrnrMin())
+			)
+		);
+	}
+	
+	private static void writeOnEachSlice(RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask mask) {
+
 		ReadableTuple3i maxGlobal = intersection.calcCrnrMax();
 		Point3i pntGlobal = new Point3i();
-		
-		assert(mask.sizesMatch());
-		
-		
-		for (pntGlobal.setZ(intersection.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrZ()) {
+				
+		for (pntGlobal.setZ(intersection.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
 			int relZ = pntGlobal.getZ() - mask.getBoundingBox().getCrnrMin().getZ();
 			stack.writeRGBMaskToSlice( mask, intersection, color, pntGlobal, relZ, maxGlobal);
 		}
-		
-		mask.shiftBy( stackBBox.getCrnrMin() );
 	}
 }

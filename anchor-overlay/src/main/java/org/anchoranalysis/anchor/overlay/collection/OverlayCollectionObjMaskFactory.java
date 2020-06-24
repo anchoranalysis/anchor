@@ -26,11 +26,11 @@ package org.anchoranalysis.anchor.overlay.collection;
  * #L%
  */
 
-import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.objmask.OverlayObjMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 /**
  * Two-way factory.
@@ -43,32 +43,30 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  */
 public class OverlayCollectionObjMaskFactory {
 	
-	public static OverlayCollection createWithoutColor( ObjMaskCollection objs, IDGetter<ObjMask> idGetter ) {
+	public static OverlayCollection createWithoutColor( ObjectCollection objs, IDGetter<ObjectMask> idGetter ) {
 		OverlayCollection out = new OverlayCollection();
 		
 		for(int i=0; i<objs.size(); i++) {
-			ObjMask om = objs.get(i);
+			ObjectMask om = objs.get(i);
 			
 			int id = idGetter.getID(om, i);
 			
-			out.add( new OverlayObjMask(om, id) );
+			out.add(
+				new OverlayObjMask(om, id)
+			);
 		}
 		
 		return out;
 	}
 	
-	// Creates objs from whatever Overlays are found in the collection
-	public static ObjMaskCollection objsFromOverlays( OverlayCollection overlays ) {
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for(int i=0; i<overlays.size(); i++) {
-			Overlay overlay = overlays.get(i);
-			
-			if (overlay instanceof OverlayObjMask) {
-				OverlayObjMask overlayCast = (OverlayObjMask) overlay;
-				out.add( overlayCast.getObjMask().getMask() );
-			}
-		}
-		return out;
+	/** Creates objects from whatever Overlays are found in the collection **/
+	public static ObjectCollection objsFromOverlays( OverlayCollection overlays ) {
+
+		// Extract mask from any overlays that are OverlayObjMask
+		return ObjectCollectionFactory.filterAndMapFrom(
+			overlays.asList(),
+			overlay->overlay instanceof OverlayObjMask,
+			overlay-> ((OverlayObjMask) overlay).getObjMask().getMask()
+		);
 	}
 }

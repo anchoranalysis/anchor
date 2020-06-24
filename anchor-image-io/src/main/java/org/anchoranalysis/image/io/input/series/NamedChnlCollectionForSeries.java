@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.io.input.series;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-io
@@ -34,7 +36,7 @@ import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
@@ -44,9 +46,9 @@ import org.anchoranalysis.image.stack.TimeSequence;
 
 public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
 	
-	public abstract Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+	public abstract Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
-	public abstract Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+	public abstract Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
 	public abstract Set<String> chnlNames();
 	

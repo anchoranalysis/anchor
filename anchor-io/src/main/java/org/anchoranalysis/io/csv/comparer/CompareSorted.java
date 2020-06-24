@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 /**
  * Compares csv files after sorting their rows in a deterministic order
@@ -75,7 +76,7 @@ class CompareSorted {
 	 * @return true if they are identical (subject to the conditions above), false otherwise
 	 * @throws IOException if something goes wrong accessing the csv files
 	 */
-	public boolean compare( OpenedCSVFile file1, OpenedCSVFile file2, PrintStream messageStream ) throws IOException {
+	public boolean compare( OpenedCSVFile file1, OpenedCSVFile file2, PrintStream messageStream ) throws CSVReaderException {
 
 		sortedLines1.clear();
 		sortedLines2.clear();
@@ -97,25 +98,28 @@ class CompareSorted {
 	 * @return true if both files have equal numbers of lines, false otherwise
 	 * @throws IOException 
 	 */
-	private boolean loadFromFiles( OpenedCSVFile file1, OpenedCSVFile file2 ) throws IOException {
-		
-		boolean first = true;
-		
-		while( true ) {
-			String[] lines1 = file1.readLine();
-			String[] lines2 = file2.readLine();
+	private boolean loadFromFiles( OpenedCSVFile file1, OpenedCSVFile file2 ) throws CSVReaderException {
+		try {
+			boolean first = true;
 			
-			if (first) {
-				CompareUtilities.checkZeroRows(rejectZeroRows, lines1, lines2);
-				first = false;
+			while( true ) {
+				String[] lines1 = file1.readLine();
+				String[] lines2 = file2.readLine();
+				
+				if (first) {
+					CompareUtilities.checkZeroRows(rejectZeroRows, lines1, lines2);
+					first = false;
+				}
+				
+				if (lines1==null || lines2==null) {
+					return lines1==null && lines2==null;
+				}
+				
+				sortedLines1.add( lines1 );
+				sortedLines2.add( lines2 );
 			}
-			
-			if (lines1==null || lines2==null) {
-				return lines1==null && lines2==null;
-			}
-			
-			sortedLines1.add( lines1 );
-			sortedLines2.add( lines2 );
+		} catch (IOException e) {
+			throw new CSVReaderException(e);
 		}
 	}
 	

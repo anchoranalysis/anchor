@@ -34,13 +34,13 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.VisitedPixels;
 
 public class OutlineTraverser {
 
-	private ObjMask omOutline;
+	private ObjectMask omOutline;
 	private IConsiderVisit visitCondition;
 	private boolean useZ;
 	private boolean nghb8;
@@ -54,7 +54,7 @@ public class OutlineTraverser {
 	 * @param useZ whether to traverse in Z?
 	 * @param nghb8 whether to use bigger neighbourhoods (8 instead of 4, 12 instead of 6 etc.)
 	 */
-	public OutlineTraverser(ObjMask omOutline, IConsiderVisit visitCondition, boolean useZ, boolean nghb8) {
+	public OutlineTraverser(ObjectMask omOutline, IConsiderVisit visitCondition, boolean useZ, boolean nghb8) {
 		super();
 		this.omOutline = omOutline;
 		this.visitCondition = visitCondition;
@@ -71,7 +71,7 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( List<Point3i> listOut ) throws OperationFailedException {
 		OptionalUtilities.ifPresent(
-			omOutline.findAnyPntOnMask(),
+			omOutline.findArbitraryOnVoxel(),
 			rootPoint->	applyGlobal( rootPoint, listOut )
 		);
 	}

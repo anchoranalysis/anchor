@@ -56,7 +56,7 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
 	// Constructor
 	public EllipseBounds(Bound radiusBnd) {
 		super(radiusBnd);
-		rotationAngle = new BoundUnitless(0, 2 * Math.PI  );
+		rotationAngle = new BoundUnitless(0, 2 * Math.PI);
 	}
 	
 	// Copy Constructor

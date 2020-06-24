@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.objmask;
 
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -45,12 +45,11 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 		this.mip = mip;
 	}
 	
-	public static double calc(ObjMask om, boolean mip) {
+	public static double calc(ObjectMask om, boolean mip) {
 		if (mip==true) {
-			om = om.duplicate();
-			om.convertToMaxIntensityProjection();
+			om = om.maxIntensityProjection();
 		}
-		return om.numPixels();		
+		return om.numVoxelsOn();		
 	}
 	
 

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
@@ -42,7 +43,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -59,13 +60,13 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 	
 	@Override
-	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
-		
+	public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
+				
 		for( NamedChnlCollectionForSeries item : list ) {
 			
-			Chnl c = item.getChnlOrNull(chnlName, t,progressReporter);
-			if (c!=null) {
-				return c;
+			Optional<Channel> c = item.getChnlOrNull(chnlName, t,progressReporter);
+			if (c.isPresent()) {
+				return c.get();
 			}
 		}
 
@@ -73,18 +74,18 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 
 	@Override
-	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
+	public Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
 			throws GetOperationFailedException {
 
 		for( NamedChnlCollectionForSeries item : list ) {
 			
-			Chnl c = item.getChnlOrNull(chnlName, t, progressReporter);
-			if (c!=null) {
+			Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
+			if (c.isPresent()) {
 				return c;
 			}
 		}
 
-		return null;
+		return Optional.empty();
 	}
 	
 
@@ -178,7 +179,7 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 	}
 	
 	private static void addAllChnlsFrom( Stack src, Stack dest ) throws IncorrectImageSizeException {
-		for( Chnl c : src ) {
+		for( Channel c : src ) {
 			dest.addChnl(c);
 		}
 	}

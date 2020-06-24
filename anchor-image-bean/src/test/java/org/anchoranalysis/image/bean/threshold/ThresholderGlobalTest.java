@@ -15,7 +15,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -54,7 +54,7 @@ public class ThresholderGlobalTest {
 	public void testMask() throws OperationFailedException {
 		
 		// A mask in the left half
-		ObjMask mask = new ObjMask(
+		ObjectMask mask = new ObjectMask(
 			new BoundingBox(MASK_CORNER_MIN,MASK_EXTENT)
 		);
 		mask.binaryVoxelBox().setAllPixelsToOn();
@@ -66,7 +66,7 @@ public class ThresholderGlobalTest {
 		);
 	}
 	
-	private void testThreshold( Optional<ObjMask> mask, long expectedCountOn, long expectedCountOff ) throws OperationFailedException {
+	private void testThreshold( Optional<ObjectMask> mask, long expectedCountOn, long expectedCountOff ) throws OperationFailedException {
 		Thresholder thresholder = createThresholder();
 
 		BinaryVoxelBox<ByteBuffer> out = thresholder.threshold(voxelBox, BinaryValuesByte.getDefault(), Optional.empty(), mask);
@@ -94,7 +94,7 @@ public class ThresholderGlobalTest {
 		
 		Extent extentHalf = new Extent(SCENE_WIDTH/2, SCENE_HEIGHT, SCENE_DEPTH);
 		
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create(SCENE_EXTENT);
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(SCENE_EXTENT);
 		
 		BoundingBox left = new BoundingBox( new Point3i(0,0,0), extentHalf );
 		BoundingBox right = new BoundingBox( new Point3i(SCENE_WIDTH/2,0,0), extentHalf );

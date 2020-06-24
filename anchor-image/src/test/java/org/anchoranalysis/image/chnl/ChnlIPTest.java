@@ -31,8 +31,9 @@ import static org.junit.Assert.*;
 
 import java.nio.FloatBuffer;
 
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryFloat;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryFloat;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -44,13 +45,13 @@ public class ChnlIPTest {
 	@Test
 	public void testSetPixelsForPlane() {
 		
-		ChnlFactorySingleType imgChnlFloatFactory = new ChnlFactoryFloat();
+		ChannelFactorySingleType imgChnlFloatFactory = new ChannelFactoryFloat();
 		
 		ImageDim sd = new ImageDim(
 			new Extent(2,2,1)
 		);
 		
-		Chnl ic = imgChnlFloatFactory.createEmptyInitialised( sd );
+		Channel ic = imgChnlFloatFactory.createEmptyInitialised( sd );
 		
 		float[] arr = new float[]{ 1, 2, 3, 4 };
 		

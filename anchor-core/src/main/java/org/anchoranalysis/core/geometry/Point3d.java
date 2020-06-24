@@ -55,12 +55,6 @@ public final class Point3d extends Tuple3d {
 		this.z = pnt.z;
 	}
 	
-	public Point3d( ReadableTuple3i pnt) {
-		this.x = pnt.getX();
-		this.y = pnt.getY();
-		this.z = pnt.getZ();
-	}
-	
 	public Point3d(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
@@ -76,6 +70,13 @@ public final class Point3d extends Tuple3d {
 	}
 	
 	public double distanceSquared( Point3d pnt ) {
+		double sx = this.x - pnt.x;
+		double sy = this.y - pnt.y;
+		double sz = this.z - pnt.z;
+		return (sx*sx) + (sy*sy) + (sz*sz);
+	}
+	
+	public double distanceSquared( Point3i pnt ) {
 		double sx = this.x - pnt.x;
 		double sy = this.y - pnt.y;
 		double sz = this.z - pnt.z;
@@ -145,14 +146,6 @@ public final class Point3d extends Tuple3d {
 	public double l2norm() {
 		return Math.sqrt( (x*x) + (y*y) + (z*z) );
 	}
-	
-	public Point3f toFloat() {
-		return new Point3f(
-			(float) this.x,
-			(float) this.y,
-			(float) this.z
-		);
-	}
 
 	@Override
 	public boolean equals(Object obj) { // NOSONAR
@@ -167,5 +160,4 @@ public final class Point3d extends Tuple3d {
 			return false;
 		}
 	}
-
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -48,7 +50,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	// List of criteria for adding pairs
 	private AddCriteriaPair pairAddCriteria;
 
-	private FeatureList<FeatureInputPairMemo> featuresAddCriteria;
+	private Optional<FeatureList<FeatureInputPairMemo>> featuresAddCriteria;
 	
 	public AddCriteriaNRGElemPair( FeatureList<FeatureInputPairMemo> nrgElemPairList, AddCriteriaPair pairAddCriteria) throws InitException {
 		super();
@@ -69,17 +71,17 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	 * 
 	 */
 	@Override
-	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() throws CreateException {
+	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() throws CreateException {
 
 		FeatureList<FeatureInputPairMemo> out = new FeatureList<>();
 		
 		// Now we add all the features we need from the nrgElemPairList
-		out.addAll( nrgElemPairList );
+		out.addAll(nrgElemPairList);
 		
 		// We put our features from the AddCriteriaPair first
-		out.addAll( featuresAddCriteria );
+		featuresAddCriteria.ifPresent(out::addAll);
 				
-		return out;
+		return Optional.of(out);
 	}
 
 	// Returns NULL if to reject an edge
@@ -88,7 +90,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
-		FeatureCalculatorMulti<FeatureInputPairMemo> session,
+		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
 		boolean do3D
 	) throws CreateException {
 		
@@ -116,7 +118,9 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 					mark2,
 					nrgStack
 				);
-				ResultsVector rv = session.calc(params, nrgElemPairList);
+				ResultsVector rv = session.orElseThrow( ()->
+					new FeatureCalcException("No feature-evaluator exists")
+				).calc(params, nrgElemPairList);
 
 				Pair<Mark> pair = new Pair<>( mark1.getMark(), mark2.getMark() );
 				return new NRGPair(pair, new NRGTotal(rv.total()) );

@@ -34,7 +34,7 @@ import java.util.Set;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 
 public class PointsFromObjMask {
@@ -46,7 +46,7 @@ public class PointsFromObjMask {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static List<Point3i> pntsFromMask( ObjMask om ) throws CreateException {
+	public static List<Point3i> pntsFromMask( ObjectMask om ) throws CreateException {
 		List<Point3i> pts = new ArrayList<Point3i>();
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( om.binaryVoxelBox(), om.getBoundingBox().getCrnrMin(), pts );
 		return pts;
@@ -59,7 +59,7 @@ public class PointsFromObjMask {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static List<Point3d> pntsFromMaskDouble( ObjMask om ) throws CreateException {
+	public static List<Point3d> pntsFromMaskDouble( ObjectMask om ) throws CreateException {
 		List<Point3d> pts = new ArrayList<Point3d>();
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3DDouble(
 			om.binaryVoxelBox(),
@@ -76,18 +76,18 @@ public class PointsFromObjMask {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static List<Point3i> pntsFromMaskOutline( ObjMask om ) throws CreateException {
+	public static List<Point3i> pntsFromMaskOutline( ObjectMask om ) throws CreateException {
 		List<Point3i> pts = new ArrayList<Point3i>();
-		ObjMask outline = FindOutline.outline(om, 1, false, true);
+		ObjectMask outline = FindOutline.outline(om, 1, false, true);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( outline.binaryVoxelBox(), outline.getBoundingBox().getCrnrMin(), pts );
 		return pts;
 	}
 		
-	public static Set<Point3i> pntsFromMaskOutlineSet( ObjMask om ) throws CreateException {
+	public static Set<Point3i> pntsFromMaskOutlineSet( ObjectMask om ) throws CreateException {
 
 		Set<Point3i> pts = new HashSet<Point3i>();
 		
-		ObjMask outline = FindOutline.outline(om, 1, false, false);
+		ObjectMask outline = FindOutline.outline(om, 1, false, false);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( outline.binaryVoxelBox(), outline.getBoundingBox().getCrnrMin(), pts );
 		// Now get all the points on the outline
 		

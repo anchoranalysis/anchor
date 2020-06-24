@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.binary.voxel;
 
+import org.anchoranalysis.core.geometry.Point3i;
+
 /*
  * #%L
  * anchor-image
@@ -36,4 +38,20 @@ public interface BinaryHighLowSetter {
 	void setHigh( int x, int y, int z );
 	
 	void setLow( int x, int y, int z );
+	
+	default void setHigh(Point3i point) {
+		setHigh( point.getX(), point.getY(), point.getZ() );
+	}
+	
+	default void setLow(Point3i point) {
+		setLow( point.getX(), point.getY(), point.getZ() );
+	}
+	
+	default boolean isHigh(Point3i point) {
+		return isHigh( point.getX(), point.getY(), point.getZ() );
+	}
+	
+	default boolean isLow(Point3i point) {
+		return isLow( point.getX(), point.getY(), point.getZ() );
+	}
 }

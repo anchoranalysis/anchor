@@ -28,6 +28,7 @@ package org.anchoranalysis.io.bioformats.bean.options;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import loci.formats.IFormatReader;
 
@@ -75,14 +76,14 @@ public class Default extends ReadOptions {
 	}
 
 	@Override
-	public List<String> determineChannelNames(IFormatReader reader) {
+	public Optional<List<String>> determineChannelNames(IFormatReader reader) {
 		
 		String formatName = reader.getFormat();
 		if (formatName.equals("Zeiss CZI")) {
-			List<String> names = determineChannelNamesWithPrefix(reader, "Metadata DisplaySetting Channels Channel ShortName ");
+			Optional<List<String>> names = determineChannelNamesWithPrefix(reader, "Metadata DisplaySetting Channels Channel ShortName ");
 			
 			// We try again
-			if (names==null) {
+			if (!names.isPresent()) {
 				names = determineChannelNamesWithPrefix(reader, "Metadata Experiment ExperimentBlocks AcquisitionBlock MultiTrackSetup Track Channels Channel FluorescenceDye ShortName ");
 			}
 			
@@ -90,11 +91,11 @@ public class Default extends ReadOptions {
 		} else if (formatName.equals("Zeiss Vision Image (ZVI)")) {
 			return determineChannelNamesWithPrefix(reader, "Channel Name ");
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 
-	private static List<String> determineChannelNamesWithPrefix( IFormatReader reader, String prefixString ) {
+	private static Optional<List<String>> determineChannelNamesWithPrefix( IFormatReader reader, String prefixString ) {
 		
 		int numChnl = reader.getSizeC();
 		
@@ -102,14 +103,14 @@ public class Default extends ReadOptions {
 		for( int i=0; i<numChnl; i++ ) {
 			Object o = reader.getMetadataValue(prefixString + i);
 			if (o==null) {
-				return null;
+				return Optional.empty();
 			}
 			if (!(o instanceof String)) {
-				return null;
+				return Optional.empty();
 			}
 			names.add( (String) o );
 		}
-		return names;
+		return Optional.of(names);
 	}
 
 }

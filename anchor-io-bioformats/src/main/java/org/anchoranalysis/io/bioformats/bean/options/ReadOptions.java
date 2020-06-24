@@ -27,6 +27,7 @@ package org.anchoranalysis.io.bioformats.bean.options;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 
@@ -48,5 +49,5 @@ public abstract class ReadOptions extends AnchorBean<ReadOptions> {
 	public abstract boolean isRGB(IFormatReader reader);
 	
 	/** Returns a list of channel-names or NULL if they are unavailable */
-	public abstract List<String> determineChannelNames( IFormatReader reader );
+	public abstract Optional<List<String>> determineChannelNames( IFormatReader reader );
 }

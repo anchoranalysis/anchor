@@ -31,12 +31,12 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -51,17 +51,17 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author owen
  *
  */
-public class ChnlMaskedWithObjGenerator extends RasterGenerator implements IterableGenerator<ObjMask> {
+public class ChnlMaskedWithObjGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
 
-	private Chnl srcChnl;
-	private ObjMask mask = null;
+	private Channel srcChnl;
+	private ObjectMask mask = null;
 	
-	public ChnlMaskedWithObjGenerator(Chnl srcChnl ) {
+	public ChnlMaskedWithObjGenerator(Channel srcChnl ) {
 		super();
 		this.srcChnl = srcChnl;
 	}
 	
-	public ChnlMaskedWithObjGenerator(ObjMask mask, Chnl srcChnl) {
+	public ChnlMaskedWithObjGenerator(ObjectMask mask, Channel srcChnl) {
 		this.mask = mask;
 		this.srcChnl = srcChnl;
 	}
@@ -73,17 +73,17 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 			throw new OutputWriteFailedException("no mutable element set");
 		}
 		
-		Chnl outChnl = createMaskedChnl( getIterableElement(), (Chnl) srcChnl);
+		Channel outChnl = createMaskedChnl( getIterableElement(), (Channel) srcChnl);
 		return new Stack( outChnl );
 	}
 
 	@Override
-	public ObjMask getIterableElement() {
+	public ObjectMask getIterableElement() {
 		return mask;
 	}
 
 	@Override
-	public void setIterableElement(ObjMask element) {
+	public void setIterableElement(ObjectMask element) {
 		mask = element;
 	}
 
@@ -113,7 +113,7 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 	 * @param srcChnl the channel to copy
 	 * @return the masked channel
 	 */
-	private static Chnl createMaskedChnl( ObjMask mask, Chnl srcChnl) {
+	private static Channel createMaskedChnl( ObjectMask mask, Channel srcChnl) {
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
@@ -122,7 +122,7 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 			srcChnl.getDimensions().getRes()
 		);
 		
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
@@ -134,15 +134,15 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
 		
 		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrZ(), pntLocal.incrZ()) {
+		for (pntGlobal.setZ(bbox.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
 			
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pntGlobal.getZ());
 			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pntLocal.getZ());
 			
-			for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrY() ) {
+			for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 			
-				for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrX() ) {	
+				for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 
 					if (maskIn.get()!=maskOn) {
 						continue;

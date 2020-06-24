@@ -64,7 +64,14 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 	 * @return a collection of files matching the conditions
 	 * @throws IOException if an error occurrs reading/writing or interacting with the filesystem
 	 */
-	public Collection<File> matchingFiles(Path dir, boolean recursive, boolean ignoreHidden, boolean acceptDirectoryErrors, int maxDirDepth, InputManagerParams params) throws AnchorIOException {
+	public Collection<File> matchingFiles(
+		Path dir,
+		boolean recursive,
+		boolean ignoreHidden,
+		boolean acceptDirectoryErrors,
+		int maxDirDepth,
+		InputManagerParams params
+	) throws AnchorIOException {
 		
 		if (!Files.exists(dir) || !Files.isDirectory(dir)) {
 			throw new AnchorIOException( String.format("Directory '%s' does not exist", dir) );

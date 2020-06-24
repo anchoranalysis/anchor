@@ -73,6 +73,7 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	 * @throws InitException if the initialization fails
 	 */
 	public void initRecursive( P params, LogErrorReporter logger ) throws InitException {
+		assert(params!=null);
 		propertyInitializer.setParam(params);
 		HelperInit.initRecursive( this, propertyInitializer, logger );
 	}

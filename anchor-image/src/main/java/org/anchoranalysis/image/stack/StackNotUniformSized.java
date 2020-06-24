@@ -30,17 +30,18 @@ package org.anchoranalysis.image.stack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 
 
-public class StackNotUniformSized implements Iterable<Chnl> {
+public class StackNotUniformSized implements Iterable<Channel> {
 
 	// We store our values in an arraylist of channels
-	private ArrayList<Chnl> chnls;
+	private final List<Channel> chnls;
 	
 	// Image stack
 	public StackNotUniformSized() {
@@ -48,8 +49,8 @@ public class StackNotUniformSized implements Iterable<Chnl> {
 	}
 	
 	// Create a stack from a channel
-	public StackNotUniformSized( Chnl chnl ) {
-		chnls = new ArrayList<>();
+	public StackNotUniformSized( Channel chnl ) {
+		this();
 		addChnl( chnl );
 	}
 	
@@ -68,7 +69,7 @@ public class StackNotUniformSized implements Iterable<Chnl> {
 		StackNotUniformSized stackOut = new StackNotUniformSized();
 		for( int c=0; c<chnls.size(); c++) {
 			// TODO make more efficient than duplicateByte()
-			stackOut.addChnl( chnls.get(c).duplicate().maxIntensityProj() );
+			stackOut.addChnl( chnls.get(c).duplicate().maxIntensityProjection() );
 		}
 		return stackOut;
 	}
@@ -78,18 +79,17 @@ public class StackNotUniformSized implements Iterable<Chnl> {
 		chnls.clear();
 	}
 	
-	public final void addChnl( Chnl chnl ) {
+	public final void addChnl( Channel chnl ) {
 		chnls.add( chnl );
 	}
 	
-	public final Chnl getChnl( int index ) {
+	public final Channel getChnl( int index ) {
 		return chnls.get(index);
 	}
 	
 	public final int getNumChnl() {
 		return chnls.size();
 	}
-	// 
 	
 	public ImageDim getFirstDimensions() {
 		assert( getNumChnl() > 0 );
@@ -133,13 +133,13 @@ public class StackNotUniformSized implements Iterable<Chnl> {
 	}
 	
 	@Override
-	public Iterator<Chnl> iterator() {
+	public Iterator<Channel> iterator() {
 		return chnls.iterator();
 	}
 	
 	public StackNotUniformSized duplicate() {
 		StackNotUniformSized out = new StackNotUniformSized();
-		for( Chnl chnl : this) {
+		for( Channel chnl : this) {
 			out.addChnl( chnl.duplicate() );
 		}
 		return out;

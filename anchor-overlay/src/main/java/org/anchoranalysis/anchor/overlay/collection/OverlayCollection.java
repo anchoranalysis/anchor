@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.index.IndicesSelection;
@@ -116,7 +115,6 @@ public class OverlayCollection implements Iterable<Overlay> {
 	public OverlayCollection createMerged( OverlayCollection toMerge ) {
 		
 		OverlayCollection mergedNew = shallowCopy();
-		//HashMap<Integer,Mark> mergedHash = cfg1.createIdHashMap();
 		
 		Set<Overlay> set = mergedNew.createSet();
 		
@@ -142,5 +140,9 @@ public class OverlayCollection implements Iterable<Overlay> {
 		}
 		
 		return out;
+	}
+	
+	public List<Overlay> asList() {
+		return delegate;
 	}
 }

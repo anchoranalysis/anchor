@@ -44,6 +44,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -51,7 +52,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
@@ -68,7 +69,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	private ImageDim dim;
 	private BinaryChnl binaryImage;
-	private Chnl binaryImageChnl;
+	private Channel binaryImageChnl;
 	
 	@Override
 	public void init(BinaryChnl binaryImage) throws InitException {
@@ -124,12 +125,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		Point3i pos = new Point3i();
 		
 		ImageDim sd = getDimensions();
-    	for( pos.setZ(0); pos.getZ()<sd.getZ(); pos.incrZ()) {
+    	for( pos.setZ(0); pos.getZ()<sd.getZ(); pos.incrementZ()) {
     		
     		ByteBuffer bbBinaryImage = vbBinary.getPixelsForPlane(pos.getZ()).buffer();
     		
-	    	for( pos.setY(0); pos.getY()<sd.getY(); pos.incrY()) {
-		    	for( pos.setX(0); pos.getX()<sd.getX(); pos.incrX()) {
+	    	for( pos.setY(0); pos.getY()<sd.getY(); pos.incrementY()) {
+		    	for( pos.setX(0); pos.getX()<sd.getX(); pos.incrementX()) {
 		    		
 		    		if( bbBinaryImage.get(e.offsetSlice(pos))==bvb.getOnByte()) {
 		    			
@@ -141,7 +142,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		    			assert( pos.getY() < getDimensions().getY() );
 		    			assert( pos.getZ() < getDimensions().getZ() );
 		    			setPnts.add(
-		    				new Point3d(pos)
+		    				PointConverter.doubleFromInt(pos)
 		    			);
 		    		}
 		    	}
@@ -189,12 +190,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		Extent e = voxelBox.extent();
 		
 		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrZ()) {
+		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
 			
 			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtntPnt.getZ());
 			
-			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrY()) {
-				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrX()) {
+			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
+				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
 
 					byte membership = fb.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
 					
@@ -236,18 +237,36 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
+		/*IterateVoxels.callEachPoint(
+			voxelBox,
+			binaryImageChnl.getVoxelBox(),
+			(Point3i pnt, T buffer, int offset) -> {
+				int globOffset = e.offsetXY(pnt);
+				byte posCheck = buffer.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
+				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
+					
+					Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
+					
+					// Now we check to make sure the point isn't contained in any of its neighbours
+					if (!isPointInList(neighbours, pntGlobal)) {
+						setPnts.add(pntGlobal);	
+					}
+				}
+			}
+		);*/
+		
 		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrZ()) {
+		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
 			
 			int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
 			
 			ByteBuffer buffer = voxelBox.getPixelsForPlane(crntExtntPnt.getZ());
 			ByteBuffer bbBinaryImage = vbBinary.getPixelsForPlane(zGlobal).buffer();
 			
-			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrY()) {
+			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
 				int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
 				
-				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrX()) {
+				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
 					
 					int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
 			
@@ -267,8 +286,6 @@ public class SetUpdatable extends UpdatablePointsContainer {
 			}
 		}
 	}
-	
-	
 
 	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) {
 		

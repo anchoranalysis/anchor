@@ -32,12 +32,15 @@ import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
 
 /**
+ * An optimization-scheme that uses kernels to make changes to state
+ * 
+ * TODO replace updatableMarkSetCollection with a more generic type.
  * 
  * @author FEEHANO
  *
@@ -46,11 +49,20 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
  */
 public abstract class OptScheme<S,U> extends AnchorBean<OptScheme<S,U>> {
 	
-	// Find optimum configuration
+	/**
+	 * Finds an optimal state
+	 * 
+	 * @param kernelProposer proposes kernels to change current state
+	 * @param updatableMarkSetCollection
+	 * @param feedbackReceiver gives feedback on ongoing state and changed as the optimziation occurs
+	 * @param context the context in which the scheme runs
+	 * @return
+	 * @throws OptTerminatedEarlyException
+	 */
 	public abstract S findOpt(
 		KernelProposer<U> kernelProposer,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		FeedbackReceiver<S> feedbackReceiver,
-		OptSchemeInitContext initContext
+		OptSchemeContext context
 	) throws OptTerminatedEarlyException;
 }

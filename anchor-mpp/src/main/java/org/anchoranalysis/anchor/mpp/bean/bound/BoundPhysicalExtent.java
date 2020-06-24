@@ -38,7 +38,6 @@ public class BoundPhysicalExtent extends BoundMinMax {
 	 * 
 	 */
 	private static final long serialVersionUID = -5440824428055546445L;
-	//private static Log log = LogFactory.getLog(BoundPhysicalExtent.class);
 	
 	public BoundPhysicalExtent() {
 		super();
@@ -54,9 +53,7 @@ public class BoundPhysicalExtent extends BoundMinMax {
 	
 	@Override
 	public double getMinRslvd( ImageRes sr, boolean do3D ) {
-		double rslvd = getMin() / sr.min(do3D);
-		//log.debug( String.format("min-rslvd %e to %f", getMin(), rslvd));
-		return rslvd;
+		return getMin() / sr.min(do3D);
 	}
 	
 	@Override

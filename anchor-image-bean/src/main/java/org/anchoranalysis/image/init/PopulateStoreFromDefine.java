@@ -36,9 +36,8 @@ import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
-import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.bridge.IdentityBridge;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
@@ -85,7 +84,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 		BeanStoreAdder.addPreserveName(
 			listItem,
 			destination,
-			new IdentityBridge<>()
+			name->name	// Named unchanged
 		);
 	}
 	
@@ -128,7 +127,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 	 * @return the provider-bridge created for the initialization
 	 * @throws OperationFailedException
 	 */
-	public <S extends InitializableBean<?,V> & Provider<T>,T> IObjectBridge<S,T,OperationFailedException> copyProvider(
+	public <S extends InitializableBean<?,V> & Provider<T>,T> FunctionWithException<S,T,OperationFailedException> copyProvider(
 		Class<?> defineClss,
 		NamedProviderStore<T> destination
 	) throws OperationFailedException {

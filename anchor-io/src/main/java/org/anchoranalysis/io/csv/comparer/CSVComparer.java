@@ -32,6 +32,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.io.csv.reader.CSVReader;
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 
 public class CSVComparer {
@@ -56,7 +57,7 @@ public class CSVComparer {
 		boolean sortLines,
 		boolean rejectZeroRows,
 		PrintStream messageStream
-	) throws IOException {
+	) throws CSVReaderException {
 		
 		OpenedCSVFile file1 = openCsvFromFilePath(path1, regExSeperator, firstLineHeaders);
 		OpenedCSVFile file2 = openCsvFromFilePath(path2, regExSeperator, firstLineHeaders);
@@ -94,9 +95,9 @@ public class CSVComparer {
 	 * @param regExSeperator the seperator for the csv file (a regular expression for split function)
 	 * @param firstLineHeaders are their headers?
 	 * @return a CSVFile object, but without any rows having been read
-	 * @throws TestDataLoadException
+	 * @throws CSVReaderException 
 	 */
-	private static OpenedCSVFile openCsvFromFilePath( Path filePath, String regExSeperator, boolean firstLineHeaders ) throws IOException {
+	private static OpenedCSVFile openCsvFromFilePath( Path filePath, String regExSeperator, boolean firstLineHeaders ) throws CSVReaderException {
 	
 		CSVReader csvReader = new CSVReader(regExSeperator, firstLineHeaders);
 		return csvReader.read(filePath);

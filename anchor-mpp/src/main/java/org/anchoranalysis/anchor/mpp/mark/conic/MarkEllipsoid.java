@@ -30,9 +30,8 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import java.io.Serializable;
 
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -56,7 +55,7 @@ import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 //  Sub-Mark 0:  Centre Ellipsoid
 //  Sub-Mark 1:  Ellipsoid with shell
 //
-public class MarkEllipsoid extends MarkAbstractRadii implements Serializable, ISetMarksExplicit {
+public class MarkEllipsoid extends MarkConic implements Serializable {
 	
 
 

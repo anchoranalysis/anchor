@@ -38,7 +38,7 @@ public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
 
 	/** Simple constructor since no preprocessing is necessary. */
 	public MeanIntensityShortBuffer( Extent srcExtnt ) {
-		super( VoxelBoxFactory.instance().getShort(), srcExtnt );
+		super( VoxelBoxFactory.getShort(), srcExtnt );
 	}
 	
 	@Override

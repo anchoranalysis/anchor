@@ -92,7 +92,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
 		// See if after rotating a point back, it lies with on our box
 		Point3d pnt = new Point3d(pt);
-		pnt.sub( getPos() );
+		pnt.subtract( getPos() );
 		
 		Point3d pntRot = rotMatrixInv.calcRotatedPoint(pnt);
 		

@@ -6,7 +6,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /**
  * Creates object-masks of a certain shape
@@ -31,12 +31,12 @@ public class ObjMaskFixture {
 		this.do3D = do3D;
 	}
 
-	public ObjMask filledMask( int crnrX, int crnrY) {
+	public ObjectMask filledMask( int crnrX, int crnrY) {
 		return filledMask(crnrX, crnrY, WIDTH, HEIGHT);
 	}
 	
 	/** A rectangular mask with single-pixel corners removed */
-	public ObjMask filledMask( int crnrX, int crnrY, int width, int height ) {
+	public ObjectMask filledMask( int crnrX, int crnrY, int width, int height ) {
 		Point3i crnr = new Point3i(crnrX, crnrY, 0);
 		Extent extent = new Extent(
 			width,
@@ -44,7 +44,7 @@ public class ObjMaskFixture {
 			do3D ? DEPTH : 1
 		);
 		
-		ObjMask om = new ObjMask(
+		ObjectMask om = new ObjectMask(
 			new BoundingBox(crnr, extent)
 		);
 		om.binaryVoxelBox().setAllPixelsToOn();
@@ -52,7 +52,7 @@ public class ObjMaskFixture {
 		return om;
 	}
 	
-	private void removeEachCorner( ObjMask mask ) {
+	private void removeEachCorner( ObjectMask mask ) {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = mask.binaryVoxelBox();
 		

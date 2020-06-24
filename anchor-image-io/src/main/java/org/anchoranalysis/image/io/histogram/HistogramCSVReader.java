@@ -27,7 +27,6 @@ package org.anchoranalysis.image.io.histogram;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +37,11 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 public class HistogramCSVReader {
 
-	public static Histogram readHistogramFromFile( Path filePath ) throws IOException {
+	public static Histogram readHistogramFromFile( Path filePath ) throws CSVReaderException {
 				
 		Map<Integer,Integer> map = new HashMap<>();
 		

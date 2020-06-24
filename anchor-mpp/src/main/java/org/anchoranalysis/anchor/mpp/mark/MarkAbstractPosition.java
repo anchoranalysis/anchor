@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 
 
 public abstract class MarkAbstractPosition extends Mark implements Serializable {
@@ -118,9 +118,9 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	}
 	
 	@Override
-	public ObjMaskWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut ) {
+	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut ) {
 		
-		ObjMaskWithProperties mask = super.calcMask(bndScene, rm, bvOut);
+		ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut);
 		mask.setProperty(
 			"midpointInt",
 			calcRelativePoint(pos, mask.getBoundingBox().getCrnrMin())
@@ -163,7 +163,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	/** Calculates a relative-point from pntGlobal to pntBase */
 	private static Point3i calcRelativePoint(Point3d pntGlobal, ReadableTuple3i pntBase) {
 		Point3i pntOut = PointConverter.intFromDouble(pntGlobal);
-		pntOut.sub(pntBase);
+		pntOut.subtract(pntBase);
 		return pntOut;
 	}
 }

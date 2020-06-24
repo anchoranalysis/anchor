@@ -43,6 +43,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.feature.session.UniqueIdentifierUtilities;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 
@@ -231,7 +232,6 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		return rv;
 	}
 	
-
 	private static FeatureInputPairObjs createInverse( FeatureInputPairObjs input ) {
 		return new FeatureInputPairObjs(
 			input.getSecond(),
@@ -239,5 +239,14 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 			input.getNrgStackOptional(),
 			input.getMergedOptional()
 		);
+	}
+
+	@Override
+	public String uniqueIdentifierFor(FeatureInputPairObjs input) {
+		StringBuilder sb = new StringBuilder();
+		sb.append( UniqueIdentifierUtilities.forObject(input.getFirst()) );
+		sb.append("_and_");
+		sb.append( UniqueIdentifierUtilities.forObject(input.getSecond()) );
+		return sb.toString();
 	}
 }

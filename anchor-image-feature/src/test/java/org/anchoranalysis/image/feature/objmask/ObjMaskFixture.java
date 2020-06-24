@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.objmask;
 
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /** 
  * Creates some basic objects for tests.
@@ -37,8 +37,8 @@ import org.anchoranalysis.image.objmask.ObjMask;
  * */
 public class ObjMaskFixture {
 	
-	public static ObjMask createSmallCornerObj() {
-		return new ObjMask(
+	public static ObjectMask createSmallCornerObj() {
+		return new ObjectMask(
 			new BoundingBox( new Extent(2,3,1) )
 		);
 	}

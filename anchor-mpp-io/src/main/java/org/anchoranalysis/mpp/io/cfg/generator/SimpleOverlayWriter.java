@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Converts a configuration to a set of object masks, using a simple ObjMaskWriter for
@@ -60,7 +60,7 @@ public class SimpleOverlayWriter extends OverlayWriter {
 		ImageDim dim,
 		RGBStack background,
 		IDGetter<Overlay> idGetter,
-		IDGetter<ObjMaskWithProperties> idGetterColor,
+		IDGetter<ObjectWithProperties> idGetterColor,
 		BoundingBox bboxContainer
 	) throws OperationFailedException {
 		
@@ -101,7 +101,7 @@ public class SimpleOverlayWriter extends OverlayWriter {
 		return objMaskWriter;
 	}
 	
-	private static IDGetter<ObjMaskWithProperties> createMaskIDGetter( ColoredOverlayCollection oc, IDGetter<Overlay> idGetter) {
+	private static IDGetter<ObjectWithProperties> createMaskIDGetter( ColoredOverlayCollection oc, IDGetter<Overlay> idGetter) {
 		return new IDGetterMaskFromOverlay( idGetter, oc, true );
 	}
 

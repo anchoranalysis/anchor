@@ -32,8 +32,8 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.factory.CreateFromPointsFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
 
@@ -54,9 +54,9 @@ public class MergePathGraphNghb {
 		
 		private int id;	// Unique useful for tracking
 		private ContiguousPixelPath path;
-		private ObjMask rasterized;
+		private ObjectMask rasterized;
 		
-		public RasterizedPath(int id, ContiguousPixelPath path, ObjMask rasterized) {
+		public RasterizedPath(int id, ContiguousPixelPath path, ObjectMask rasterized) {
 			super();
 			this.id = id;
 			this.path = path;
@@ -67,7 +67,7 @@ public class MergePathGraphNghb {
 			return id;
 		}
 
-		public ObjMask getRasterized() {
+		public ObjectMask getRasterized() {
 			return rasterized;
 		}
 
@@ -145,7 +145,7 @@ public class MergePathGraphNghb {
 		
 		for( int i=0; i<paths.size(); i++ ) {
 			ContiguousPixelPath path = paths.get(i);
-			ObjMask rasterized = CreateFromPointsFactory.create( path.points() );
+			ObjectMask rasterized = CreateFromPointsFactory.create( path.points() );
 			
 			out.add(
 				new RasterizedPath(i, path, rasterized)	

@@ -54,7 +54,7 @@ public class CSVReaderByLine {
 		 * 
 		 * @return a string or NULL if the headers don't exist
 		 */
-		String[] headers() throws IOException;
+		String[] headers() throws CSVReaderException;
 		
 		/**
 		 * Reads a CSV-file iterating through each row and passing it to lineProcessor
@@ -65,14 +65,14 @@ public class CSVReaderByLine {
 		 * @return the number of lines read
 		 * @throws IOException
 		 */
-		int read( ProcessCSVLine lineProcessor ) throws IOException;
+		int read( ProcessCSVLine lineProcessor ) throws CSVReaderException;
 		
 		/**
 		 * Closes any opened-files
 		 * 
 		 * @throws IOException
 		 */
-		void close() throws IOException;
+		void close() throws CSVReaderException;
 	}
 	
 	private static class ReadByLineImpl implements ReadByLine {
@@ -89,13 +89,13 @@ public class CSVReaderByLine {
 		}
 
 		@Override
-		public String[] headers() throws IOException {
+		public String[] headers() throws CSVReaderException {
 			openIfNecessary();
 			return openedFile.getHeaders();
 		}
 		
 		@Override
-		public int read( ProcessCSVLine lineProcessor ) throws IOException {
+		public int read( ProcessCSVLine lineProcessor ) throws CSVReaderException {
 
 			try {
 				openIfNecessary();
@@ -114,23 +114,22 @@ public class CSVReaderByLine {
 				return cnt;
 				
 			} catch (IOException | OperationFailedException e) {
-				throw new IOException(e);
+				throw new CSVReaderException(e);
 			} finally {
 				close();
 			}
-		
 		}
 		
-		
-		private void openIfNecessary() throws IOException {
+		private void openIfNecessary() throws CSVReaderException {
 			if (openedFile==null) {
 				openedFile = csvReader.read( filePath );
 			}
 		}
 
-		/** Closes any opened-files */
+		/** Closes any opened-files 
+		 * @throws CSVReaderException */
 		@Override
-		public void close() throws IOException {
+		public void close() throws CSVReaderException {
 			if (openedFile!=null) {
 				openedFile.close();
 				openedFile = null;

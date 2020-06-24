@@ -37,8 +37,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
@@ -62,10 +62,10 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	 * @param bboxContainer a restriction on which part of stack we write out to (considered in terms of the possibly-zoomed pixel cooridinates)
 	 */
 	public final void writeSingle(
-		ObjMaskWithProperties mask,
+		ObjectWithProperties mask,
 		RGBStack stack,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter,
+		IDGetter<ObjectWithProperties> idGetter,
+		IDGetter<ObjectWithProperties> colorIDGetter,
 		int iter,
 		ColorIndex colorIndex,
 		BoundingBox bboxContainer
@@ -88,14 +88,14 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	}
 	
 	// Does computational preprocessing (so it can be cached). Outputs a collection of ObjMasks that are later re used
-	public abstract PrecalcOverlay precalculate( ObjMaskWithProperties mask, ImageDim dim ) throws CreateException;
+	public abstract PrecalcOverlay precalculate( ObjectWithProperties mask, ImageDim dim ) throws CreateException;
 		
 	public void write(
-		ObjMaskWithPropertiesCollection masks,
+		ObjectCollectionWithProperties masks,
 		RGBStack background,
 		ColorIndex colorIndex,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter
+		IDGetter<ObjectWithProperties> idGetter,
+		IDGetter<ObjectWithProperties> colorIDGetter
 	) throws OperationFailedException {
 		write(
 			masks,
@@ -120,11 +120,11 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	 * @throws OperationFailedException
 	 */
 	public void write(
-		ObjMaskWithPropertiesCollection masks,
+		ObjectCollectionWithProperties masks,
 		RGBStack stack,
 		ColorIndex colorIndex,
-		IDGetter<ObjMaskWithProperties> idGetter,
-		IDGetter<ObjMaskWithProperties> colorIDGetter,
+		IDGetter<ObjectWithProperties> idGetter,
+		IDGetter<ObjectWithProperties> colorIDGetter,
 		BoundingBox bboxContainer
 	) throws OperationFailedException {
 
@@ -133,7 +133,7 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 
 		// We iterate through every mark
 		int i = 0;
-		for ( ObjMaskWithProperties mask : masks ) {
+		for ( ObjectWithProperties mask : masks ) {
 			writeSingle(mask, stack, idGetter, colorIDGetter, i++, colorIndex, bboxContainer);
 		}
 	}

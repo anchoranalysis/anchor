@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 class ResultsVectorBuilder {
 
@@ -64,7 +64,7 @@ class ResultsVectorBuilder {
 	 */
 	public void calcAndInsert(
 		FeatureInputPairObjs inputPair,
-		Function<FeatureInputPairObjs,ObjMask> extractObj,
+		Function<FeatureInputPairObjs,ObjectMask> extractObj,
 		FeatureCalculatorMulti<FeatureInputSingleObj> calc
 	) throws FeatureCalcException {
 		FeatureInputSingleObj inputSingle = new FeatureInputSingleObj(

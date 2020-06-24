@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -49,7 +51,7 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 			
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
 		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
@@ -78,8 +80,7 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
 
 
 	@Override
-	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() {
-		// No features involved
-		return null;
+	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
+		return Optional.empty();
 	}
 }

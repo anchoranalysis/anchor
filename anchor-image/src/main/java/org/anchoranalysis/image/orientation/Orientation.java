@@ -30,7 +30,7 @@ package org.anchoranalysis.image.orientation;
 import java.io.Serializable;
 
 import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class Orientation implements Serializable {
@@ -54,5 +54,5 @@ public abstract class Orientation implements Serializable {
 	
 	public void addProperties( NameValueSet<String> nvc ) {}
 	
-	public void addPropertiesToMask( ObjMaskWithProperties mask ) {}
+	public void addPropertiesToMask( ObjectWithProperties mask ) {}
 }

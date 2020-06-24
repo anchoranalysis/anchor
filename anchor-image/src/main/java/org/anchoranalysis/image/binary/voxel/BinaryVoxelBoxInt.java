@@ -66,11 +66,11 @@ public class BinaryVoxelBoxInt extends BinaryVoxelBox<IntBuffer> {
 
 	@Override
 	public BinaryVoxelBox<IntBuffer> duplicate() {
-		return new BinaryVoxelBoxInt( getVoxelBox().duplicate(), getBinaryValues().duplicate() );
+		return new BinaryVoxelBoxInt( getVoxelBox().duplicate(), getBinaryValues() );
 	}
 	
 	public BinaryVoxelBox<IntBuffer> extractSlice(int z) {
-		return new BinaryVoxelBoxInt( getVoxelBox().extractSlice(z), getBinaryValues().duplicate() );
+		return new BinaryVoxelBoxInt( getVoxelBox().extractSlice(z), getBinaryValues() );
 	}
 
 }

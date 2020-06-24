@@ -29,8 +29,8 @@ package org.anchoranalysis.anchor.mpp.overlap;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-import org.anchoranalysis.image.objmask.intersecting.CountIntersectingPixels;
-import org.anchoranalysis.image.objmask.intersecting.IntersectionBBox;
+import org.anchoranalysis.image.objectmask.intersecting.CountIntersectingPixels;
+import org.anchoranalysis.image.objectmask.intersecting.IntersectionBBox;
 
 /**
  * Counts the number of intersecting pixels where each buffer is encoded as region-membership

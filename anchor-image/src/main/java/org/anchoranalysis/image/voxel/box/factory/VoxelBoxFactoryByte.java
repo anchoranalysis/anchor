@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromByteBufferArr
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-class VoxelBoxFactoryByte extends VoxelBoxFactoryTypeBound<ByteBuffer> {
+final class VoxelBoxFactoryByte extends VoxelBoxFactoryTypeBound<ByteBuffer> {
 
-	private static VoxelDataType dataType = VoxelDataTypeUnsignedByte.instance;
+	private static final VoxelDataType dataType = VoxelDataTypeUnsignedByte.instance;
 	
 	public VoxelBoxFactoryByte() {
 		// Prevent creation outside this package

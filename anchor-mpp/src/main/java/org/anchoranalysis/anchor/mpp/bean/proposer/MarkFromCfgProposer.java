@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bean.proposer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 /*-
@@ -35,6 +37,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 public abstract class MarkFromCfgProposer extends ProposerBean<MarkFromCfgProposer> implements ICompatibleWith  {
 
-	public abstract Mark markFromCfg( Cfg cfg, ProposerContext context ) throws ProposalAbnormalFailureException;
+	public abstract Optional<Mark> markFromCfg( Cfg cfg, ProposerContext context ) throws ProposalAbnormalFailureException;
 
 }

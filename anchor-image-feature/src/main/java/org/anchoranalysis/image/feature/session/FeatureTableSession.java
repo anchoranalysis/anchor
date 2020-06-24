@@ -65,5 +65,8 @@ public abstract class FeatureTableSession<T extends FeatureInput> implements Fea
 	
 	/** A list of names for each feature (columns ofthe table) */
 	public abstract FeatureNameList createFeatureNames();
+	
+	/** Generates a unique identifier for a particular input */
+	public abstract String uniqueIdentifierFor(T input);
 
 }

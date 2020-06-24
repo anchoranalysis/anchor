@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferFloat;
@@ -43,7 +43,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	public VoxelBoxFloat(IPixelsForPlane<FloatBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
-			VoxelBoxFactory.instance().getFloat()
+			VoxelBoxFactory.getFloat()
 		);
 	}
 	
@@ -171,12 +171,12 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	}
 	
 	@Override
-	public void addPixelsCheckMask(ObjMask mask, int value) {
+	public void addPixelsCheckMask(ObjectMask mask, int value) {
 		throw new IllegalArgumentException("Currently unsupported method");
 	}
 	
 	@Override
-	public void scalePixelsCheckMask(ObjMask mask, double value) {
+	public void scalePixelsCheckMask(ObjectMask mask, double value) {
 		throw new IllegalArgumentException("Currently unsupported method");
 	}
 

@@ -32,9 +32,8 @@ import java.util.function.BiFunction;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point2d;
@@ -43,7 +42,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -57,7 +56,7 @@ import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.*;
 import static org.anchoranalysis.anchor.mpp.mark.conic.PropertyUtilities.*;
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 
-public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISetMarksExplicit  {
+public class MarkEllipse extends MarkConic implements Serializable {
 
 	/**
 	 * 
@@ -395,9 +394,9 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 	
 	 
 	@Override
-	public ObjMaskWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
+	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
 		
-		ObjMaskWithProperties mask = super.calcMask(bndScene, rm, bvOut );
+		ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut );
 		orientation.addPropertiesToMask(mask);
 		
 		// Axis orientation
@@ -452,7 +451,7 @@ public class MarkEllipse extends MarkAbstractRadii implements Serializable, ISet
 		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
 	}
 
-	private void addAxisOrientationProperties(ObjMaskWithProperties mask, RegionMembershipWithFlags rm) {
+	private void addAxisOrientationProperties(ObjectWithProperties mask, RegionMembershipWithFlags rm) {
 		
 		// NOTE can we do this more smartly?
 		double radiiFactor = rm.getRegionID()==0 ? 1.0 : 1.0+shellRad;

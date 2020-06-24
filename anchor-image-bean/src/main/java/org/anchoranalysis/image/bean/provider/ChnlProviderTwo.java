@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 /**
  * A chnl-provider based-on two input chnl-providers that must be of the same dimensionality
@@ -48,10 +48,10 @@ public abstract class ChnlProviderTwo extends ChnlProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		
-		Chnl chnlFirst = chnl1.create();
-		Chnl chnlSecond = chnl2.create();
+		Channel chnlFirst = chnl1.create();
+		Channel chnlSecond = chnl2.create();
 				
 		if (!chnlFirst.getDimensions().equals(chnlSecond.getDimensions())) {
 			throw new CreateException("Dimensions of channels do not match");
@@ -60,7 +60,7 @@ public abstract class ChnlProviderTwo extends ChnlProvider {
 		return process( chnlFirst, chnlSecond );
 	}
 	
-	protected abstract Chnl process( Chnl chnl1, Chnl chnl2 ) throws CreateException;
+	protected abstract Channel process( Channel chnl1, Channel chnl2 ) throws CreateException;
 
 	public ChnlProvider getChnl1() {
 		return chnl1;

@@ -46,12 +46,6 @@ public class NRGSavedInd implements Serializable, Iterable<NRGTotal> {
     private double nrgTotal;
     
     private ArrayList<NRGTotal> ind;
-
-    
-	public NRGSavedInd() {
-		
-	}
-	
 	
 	public NRGSavedInd shallowCopy() {
 		

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -62,7 +62,7 @@ public class BinarySgmnReference extends BinarySgmn {
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) throws SgmnFailedException {
 		return proxy.sgmn(voxelBox, params, mask);
 	}

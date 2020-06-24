@@ -31,8 +31,8 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * An R-Tree of bounding boxes. The index of the item in a list, determines an integer ID, associated with the item in the R-Tree.
@@ -43,59 +43,42 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public class ObjMaskCollectionRTree {
 
 	private BBoxRTree delegate;
-	private ObjMaskCollection objs;
+	private ObjectCollection objs;
 	
-	public ObjMaskCollectionRTree( List<ObjMask> list ) {
-		this( new ObjMaskCollection(list) );
-	}
-	
-	public ObjMaskCollectionRTree( ObjMaskCollection objs ) {
+	public ObjMaskCollectionRTree( ObjectCollection objs ) {
 		this.objs = objs;
 		delegate = new BBoxRTree( objs.size() );
 		
 		for( int i=0; i<objs.size(); i++ ) {
 			
-			ObjMask om = objs.get(i);
+			ObjectMask om = objs.get(i);
 			
 			delegate.add(i, om.getBoundingBox());
 		}
 	}
 	
-	public ObjMaskCollection contains( Point3i pnt ) {
-		List<Integer> indices = delegate.contains( pnt );
-		
+	public ObjectCollection contains( Point3i pnt ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( int i : indices) {
-			ObjMask om = objs.get(i);
-			if (om.contains(pnt)) {
-				out.add(om);
-			}
-		}
-		return out;
+		return objs.stream().filterSubset(
+			om->om.contains(pnt),
+			delegate.contains(pnt)
+		);
 	}
-	
-	public ObjMaskCollection intersectsWith( ObjMask om ) {
-		List<Integer> indices = delegate.intersectsWith( om.getBoundingBox() );
 		
+	public ObjectCollection intersectsWith( ObjectMask om ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( int i : indices) {
-			ObjMask omInd = objs.get(i);
-			if (omInd.hasIntersectingPixels(om)) {
-				out.add(omInd);
-			}
-		}
-		return out;
+		return objs.stream().filterSubset(
+			omInd->omInd.hasIntersectingPixels(om),
+			delegate.intersectsWith( om.getBoundingBox() )
+		);
 	}
 	
-	public ObjMaskCollection intersectsWith( BoundingBox bbox ) {
-		List<Integer> indices = delegate.intersectsWith(bbox);
-		return objs.createSubset(indices);
+	public ObjectCollection intersectsWith( BoundingBox bbox ) {
+		return objs.createSubset(
+			delegate.intersectsWith(bbox)
+		);
 	}
 	
 	public List<Integer> intersectsWithAsIndices( BoundingBox bbox ) {

@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 /* Contains a particular energy configuration */
 
 // A CfgNRG together with the cached voxelization calculations
-public final class CfgNRGPixelized {
+public final class CfgNRGPixelized  {
 
 	/**
 	 * 
@@ -53,14 +53,14 @@ public final class CfgNRGPixelized {
 	
 	// A cached version of the calculations for
 	//   each energy component in the associated NRGScheme
-    private MemoCollection memoMarks;
+    private transient MemoCollection memoMarks;
     
     private CfgNRG cfgNrg;
     
     private LogErrorReporter logger;
     
     public CfgNRGPixelized( CfgNRG cfgNRG, LogErrorReporter logger ) {
-    	
+    	assert(logger!=null);
     	this.cfgNrg = cfgNRG;
     	this.memoMarks = null;
     	this.logger = logger;

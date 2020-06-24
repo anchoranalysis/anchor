@@ -50,12 +50,6 @@ public final class Point3i extends Tuple3i {
 		this.z = pnt.getZ();
 	}
 
-	public Point3i( Tuple3d pnt) {
-		this.x = (int) pnt.x;
-		this.y = (int) pnt.y;
-		this.z = (int) pnt.z;
-	}
-
 	@Override
 	public boolean equals( Object obj ) { // NOSONAR
 		if (this == obj) {
@@ -136,5 +130,26 @@ public final class Point3i extends Tuple3i {
 			y,
 			zNew
 		);
+	}
+	
+	/** Performs an addition without changing any values in an existing point */
+	public static Point3i immutableAdd(ReadableTuple3i point, ReadableTuple3i toAdd) {
+		Point3i pntDup = new Point3i(point);
+		pntDup.add(toAdd);
+		return pntDup;
+	}
+	
+	/** Performs a subtraction without changing any values in an existing point */
+	public static Point3i immutableSubtract(ReadableTuple3i point, ReadableTuple3i toSubtract) {
+		Point3i pntDup = new Point3i(point);
+		pntDup.subtract(toSubtract);
+		return pntDup;
+	}
+	
+	/** Performs a scale without changing any values in an existing point */
+	public static Point3i immutableScale(ReadableTuple3i pnt, int factor) {
+		Point3i pntDup = new Point3i(pnt);
+		pntDup.scale(factor);
+		return pntDup;
 	}
 }

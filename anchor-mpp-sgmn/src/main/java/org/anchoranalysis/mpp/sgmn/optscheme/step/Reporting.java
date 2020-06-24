@@ -38,10 +38,10 @@ public class Reporting<S> {
 	
 	private int iter;
 	private final DualState<S> state;
-	private S proposed;
+	private Optional<S> proposed;
 	
 	/** An optional additional cfg-NRG that provides an additional explanation of proposed */
-	private S proposedSecondary;
+	private Optional<S> proposedSecondary;
 	
 	private DscrData<?> dscrData;
 	private boolean accptd;
@@ -50,8 +50,8 @@ public class Reporting<S> {
 	Reporting(
 		int iter,
 		DualState<S> state,
-		S proposed,
-		S proposedSecondary,
+		Optional<S> proposed,
+		Optional<S> proposedSecondary,
 		DscrData<?> dscrData,
 		boolean accptd,
 		boolean best
@@ -63,14 +63,6 @@ public class Reporting<S> {
 		this.dscrData = dscrData;
 		this.accptd = accptd;
 		this.best = best;
-	}
-	
-	public boolean hasProposal() {
-		return proposed!=null;
-	}
-	
-	public boolean hasProposalSecondary() {
-		return proposedSecondary!=null;
 	}
 	
 	public double getTemperature() {
@@ -85,11 +77,11 @@ public class Reporting<S> {
 		return best;
 	}
 	
-	public S getProposal() {
+	public Optional<S> getProposal() {
 		return proposed;
 	}
 	
-	public S getProposalSecondary() {
+	public Optional<S> getProposalSecondary() {
 		return proposedSecondary;
 	}
 	

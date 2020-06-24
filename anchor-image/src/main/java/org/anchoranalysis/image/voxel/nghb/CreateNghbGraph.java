@@ -28,14 +28,13 @@ package org.anchoranalysis.image.voxel.nghb;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
 
 /**
@@ -80,7 +79,7 @@ public class CreateNghbGraph<V> {
 	 */
 	@FunctionalInterface
 	public interface IVertexToObjMask<VertexType> {
-		ObjMask objMaskFromVertex( VertexType vt );
+		ObjectMask objMaskFromVertex( VertexType vt );
 	}
 	
 	/**
@@ -145,7 +144,7 @@ public class CreateNghbGraph<V> {
 		// Graph of neighbouring objects, with the number of common pixels as an edge
 		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<V,E>(undirected);
 		
-		ObjMaskCollection objs = objsFromVertices(vertices, vertexToObjMask);
+		ObjectCollection objs = objsFromVertices(vertices, vertexToObjMask);
 		checkObjsInScene(objs, sceneExtnt);
 		ObjMaskCollectionRTree rTree = new ObjMaskCollectionRTree(objs);
 				
@@ -161,7 +160,7 @@ public class CreateNghbGraph<V> {
 		
 		for( int i=0; i<objs.size(); i++) {
 			
-			ObjMask om = objs.get(i);
+			ObjectMask om = objs.get(i);
 			
 			V vertexWith = vertices.get(i);
 			graph.addVertex( vertexWith );
@@ -172,8 +171,8 @@ public class CreateNghbGraph<V> {
 		return graph;
 	}
 	
-	private static void checkObjsInScene( ObjMaskCollection objs, Extent sceneExtnt ) throws CreateException {
-		for( ObjMask om : objs ) {
+	private static void checkObjsInScene( ObjectCollection objs, Extent sceneExtnt ) throws CreateException {
+		for( ObjectMask om : objs ) {
 			if (!sceneExtnt.contains(om.getBoundingBox())) {
 				throw new CreateException(
 					String.format(
@@ -197,12 +196,11 @@ public class CreateNghbGraph<V> {
 		);
 	}
 	
-	private ObjMaskCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
-		
-		List<ObjMask> list = vertices.stream().map( v -> 
-			vertexToObjMask.objMaskFromVertex(v)
-		).collect( Collectors.toList() );
-		return new ObjMaskCollection(list);
+	private ObjectCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
+		return ObjectCollectionFactory.mapFrom(
+			vertices,
+			vertexToObjMask::objMaskFromVertex
+		);	
 	}
 	
 }

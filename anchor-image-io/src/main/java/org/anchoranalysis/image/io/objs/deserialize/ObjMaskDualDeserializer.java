@@ -31,13 +31,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
@@ -51,7 +51,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
  *   2. A raster mask somename.tif
  *
  */
-class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
+class ObjMaskDualDeserializer extends Deserializer<ObjectMask> {
 
 	private ObjectInputStreamDeserializer<BoundingBox> bboxDeserializer = new ObjectInputStreamDeserializer<>();
 	private RasterReader rasterReader;
@@ -62,7 +62,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
 	}
 
 	@Override
-	public ObjMask deserialize(Path filePath) throws DeserializationFailedException {
+	public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
 		
 		Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
 		
@@ -75,7 +75,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
 				throw new DeserializationFailedException("Raster file must have 1 channel exactly");
 			}
 			
-			Chnl chnl = stack.getChnl(0);
+			Channel chnl = stack.getChnl(0);
 			
 			if (!chnl.getDimensions().getExtnt().equals(bbox.extent())) {
 				throw new DeserializationFailedException(
@@ -83,7 +83,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjMask> {
 				);
 			}
 			
-			return new ObjMask( bbox, chnl.getVoxelBox().asByte() );
+			return new ObjectMask( bbox, chnl.getVoxelBox().asByte() );
 			
 		} catch (RasterIOException e) {
 			throw new DeserializationFailedException(e);

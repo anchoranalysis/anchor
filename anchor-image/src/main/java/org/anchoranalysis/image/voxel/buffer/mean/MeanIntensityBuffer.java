@@ -43,7 +43,7 @@ public abstract class MeanIntensityBuffer<T extends Buffer> {
 	public MeanIntensityBuffer( VoxelBoxFactoryTypeBound<T> flatType, Extent srcExtnt ) {
 		Extent flattened = srcExtnt.flattenZ();
 		flatVoxelBox = flatType.create(flattened);
-		sumVoxelBox = VoxelBoxFactory.instance().getFloat().create(flattened);
+		sumVoxelBox = VoxelBoxFactory.getFloat().create(flattened);
 	}
 		
 	public void projectSlice(T pixels) {

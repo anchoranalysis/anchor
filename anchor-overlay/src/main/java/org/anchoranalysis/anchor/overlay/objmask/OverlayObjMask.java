@@ -38,19 +38,19 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 
 public class OverlayObjMask extends Overlay {
 
 	private static ScaledMaskCreator scaledMaskCreator = new FromMask();
 	
-	private ObjMaskWithProperties om;
+	private ObjectWithProperties om;
 	private int id;		// We cache the ID to make quick to laod
 	
-	public OverlayObjMask( ObjMask om, int id ) {
+	public OverlayObjMask( ObjectMask om, int id ) {
 		super();
-		this.om = new ObjMaskWithProperties( om );
+		this.om = new ObjectWithProperties( om );
 		this.om.getProperties().put("id", id);
 		this.id = id;
 	}
@@ -63,9 +63,9 @@ public class OverlayObjMask extends Overlay {
 	}
 
 	@Override
-	public ObjMaskWithProperties createScaledMask(
+	public ObjectWithProperties createScaledMask(
 			OverlayWriter overlayWriter, double zoomFactorNew,
-			ObjMaskWithProperties om, Overlay ol, ImageDim sdUnscaled,
+			ObjectWithProperties om, Overlay ol, ImageDim sdUnscaled,
 			ImageDim sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
 		return scaledMaskCreator.createScaledMask(
@@ -80,7 +80,7 @@ public class OverlayObjMask extends Overlay {
 
 	// TODO do we need to duplicate here?
 	@Override
-	public ObjMaskWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
+	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
 			BinaryValuesByte bvOut) throws CreateException {
 		return om;
 	}
@@ -120,7 +120,7 @@ public class OverlayObjMask extends Overlay {
 		return out;
 	}
 
-	public ObjMaskWithProperties getObjMask() {
+	public ObjectWithProperties getObjMask() {
 		return om;
 	}
 }

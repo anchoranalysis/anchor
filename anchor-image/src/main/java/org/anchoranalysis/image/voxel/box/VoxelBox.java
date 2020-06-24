@@ -39,13 +39,16 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.InterpolateUtilities;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
+ * A box (3-dimensions) of voxels
+ * 
+ * <p>This class is IMMUTABLE</p>.
  * 
  * @author Owen Feehan
  *
@@ -70,27 +73,30 @@ public abstract class VoxelBox<T extends Buffer> {
 		return factory.dataType();
 	}
 	
-	public VoxelBox<T> createBufferAvoidNew(BoundingBox bbox ) {
-		
-		if (   bbox.equals(new BoundingBox(extent()))
-			&& bbox.getCrnrMin().getX()==0
-			&& bbox.getCrnrMin().getY()==0
-			&& bbox.getCrnrMin().getZ()==0
-		) {
-			return this;
+	/**
+	 * A (sub-)region of the voxels.
+	 * 
+	 * <p>The region may some smaller portion of the voxel-box, or the voxel-box as a whole.</p>
+	 * 
+	 * <p>It should <b>never</b> be larger than the voxel-box.</p>
+	 * 
+	 * <p>Depending on policy, an the existing box will be reused if possible
+	 * (if the region requested is equal to the box as a whole), useful to avoid unnecessary new memory allocation.</p>
+	 * 
+	 * <p>If {@link reuseIfPossible} is FALSE, it is guaranteed that a new voxel-box will always be created.</p>
+	 * 
+	 * @param bbox a bounding-box indicating the regions desired (not be larger than the extent)
+	 * @param reuseIfPossible if TRUE the existing box will be reused if possible,, otherwise a new box is always created.
+	 * @return a voxel-box corresponding to the requested region, either newly-created or reused
+	 */
+	public VoxelBox<T> region(BoundingBox bbox, boolean reuseIfPossible) {
+		if (reuseIfPossible) {
+			return regionAvoidNewIfPossible(bbox);
+		} else {
+			return regionAlwaysNew(bbox);
 		}
-		return createBufferAlwaysNew(bbox);
 	}
-	
-	public VoxelBox<T> createBufferAlwaysNew(BoundingBox bbox) {
 		
-		// Otherwise we create a new buffer
-		VoxelBox<T> vbOut = factory.create(bbox.extent());
-		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extent()));
-		return vbOut;
-	}
-	
-	
 	public void replaceBy(VoxelBox<T> vb) throws IncorrectImageSizeException {
 		
 		if (!extent().equals(vb.extent())) {
@@ -132,7 +138,6 @@ public abstract class VoxelBox<T extends Buffer> {
 					int destIndex = destVoxelBox.extent().offset(x + relPos.getX(), y+relPos.getY());
 					
 					copyItem( srcArr, srcIndex, destArr, destIndex );
-					//destArr.put( destIndex, srcArr.get(srcIndex) );
 				}
 			}
 		}
@@ -166,7 +171,6 @@ public abstract class VoxelBox<T extends Buffer> {
 					if(maskBuffer.get()==maskBV.getOnByte()) {
 						copyItem( srcArr, srcIndex, destArr, destIndex );
 					}
-					//destArr.put( destIndex, srcArr.get(srcIndex) );
 				}
 			}
 		}
@@ -182,7 +186,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * @param value value to be set in matched pixels
 	 * @return the number of pixels successfully "set"
 	 */
-	public int setPixelsCheckMask( ObjMask om, int value ) {
+	public int setPixelsCheckMask( ObjectMask om, int value ) {
 		assert( om!= null );
 		assert( om.getBoundingBox()!=null );
 		assert( om.getVoxelBox()!=null );
@@ -206,7 +210,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * @param maskMatchValue what's an "On" value for the mask to match against?
 	 * @return the number of pixels successfully "set"
 	 */
-	public int setPixelsCheckMask( ObjMask om, int value, byte maskMatchValue ) {
+	public int setPixelsCheckMask( ObjectMask om, int value, byte maskMatchValue ) {
 		assert( om!= null );
 		assert( om.getBoundingBox()!= null );
 		assert( om.getVoxelBox()!= null );
@@ -274,16 +278,16 @@ public abstract class VoxelBox<T extends Buffer> {
 		return cnt;
 	}
 	
-	public abstract void addPixelsCheckMask( ObjMask mask, int value );
+	public abstract void addPixelsCheckMask( ObjectMask mask, int value );
 	
-	public abstract void scalePixelsCheckMask( ObjMask mask, double value );
+	public abstract void scalePixelsCheckMask( ObjectMask mask, double value );
 	
 	public abstract void subtractFrom( int val );
 	
 	
-	public ObjMask equalMask( BoundingBox bbox, int equalVal ) {
+	public ObjectMask equalMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask(bbox);
+		ObjectMask om = new ObjectMask(bbox);
 		
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
@@ -315,9 +319,9 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public ObjMask greaterThanMask( BoundingBox bbox, int equalVal ) {
+	public ObjectMask greaterThanMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjMask om = new ObjMask(bbox);
+		ObjectMask om = new ObjectMask(bbox);
 		
 		ReadableTuple3i pntMax = bbox.calcCrnrMax();
 		
@@ -349,9 +353,9 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public ObjMask greaterThanMask( ObjMask maskIn, int equalVal ) {
+	public ObjectMask greaterThanMask( ObjectMask maskIn, int equalVal ) {
 		
-		ObjMask maskOut = new ObjMask(
+		ObjectMask maskOut = new ObjectMask(
 			maskIn.getBoundingBox()
 		);
 		
@@ -460,7 +464,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public int countEqualMask( int equalVal, ObjMask om ) {
+	public int countEqualMask( int equalVal, ObjectMask om ) {
 		
 		ReadableTuple3i srcStart = om.getBoundingBox().getCrnrMin();
 		ReadableTuple3i srcEnd = om.getBoundingBox().calcCrnrMax();
@@ -488,7 +492,6 @@ public abstract class VoxelBox<T extends Buffer> {
 							count++;
 						}
 					}
-					//destArr.put( destIndex, srcArr.get(srcIndex) );
 				}
 			}
 		}
@@ -562,6 +565,10 @@ public abstract class VoxelBox<T extends Buffer> {
 	// Very slow access, use sparingly.  Instead process slice by slice.
 	public abstract int getVoxel(int x, int y, int z);
 	
+	public int getVoxel(ReadableTuple3i pnt) {
+		return getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+	}
+	
 	// Creates a new channel contain a duplication only of a particular slice
 	public VoxelBox<T> extractSlice( int z ) {
 		
@@ -594,10 +601,11 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==extentResized.getVolumeXY());
 		
-		VoxelBoxWrapper srcWrapped = new VoxelBoxWrapper( this );
-		VoxelBoxWrapper trgtWrapped = new VoxelBoxWrapper( bufferTarget);
-		
-		InterpolateUtilities.transferSlicesResizeXY( srcWrapped, trgtWrapped, interpolator );
+		InterpolateUtilities.transferSlicesResizeXY(
+			new VoxelBoxWrapper(this),
+			new VoxelBoxWrapper(bufferTarget),
+			interpolator
+		);
 			
 		assert(bufferTarget.getPixelsForPlane(0).buffer().capacity()==extentResized.getVolumeXY());
 		return bufferTarget;
@@ -658,6 +666,26 @@ public abstract class VoxelBox<T extends Buffer> {
 	public VoxelBoxFactoryTypeBound<T> getFactory() {
 		return factory;
 	}
+		
+	private VoxelBox<T> regionAvoidNewIfPossible(BoundingBox bbox) {
+		
+		if (   bbox.equals(new BoundingBox(extent()))
+			&& bbox.getCrnrMin().getX()==0
+			&& bbox.getCrnrMin().getY()==0
+			&& bbox.getCrnrMin().getZ()==0
+		) {
+			return this;
+		}
+		return regionAlwaysNew(bbox);
+	}
+	
+	private VoxelBox<T> regionAlwaysNew(BoundingBox bbox) {
+		
+		// Otherwise we create a new buffer
+		VoxelBox<T> vbOut = factory.create(bbox.extent());
+		copyPixelsTo(bbox, vbOut, new BoundingBox(bbox.extent()));
+		return vbOut;
+	}
 	
 	private static void checkExtentMatch(BoundingBox bbox1, BoundingBox bbox2) {
 		Extent extent1 = bbox1.extent();
@@ -672,4 +700,6 @@ public abstract class VoxelBox<T extends Buffer> {
 			);
 		}
 	}
+	
+	
 }

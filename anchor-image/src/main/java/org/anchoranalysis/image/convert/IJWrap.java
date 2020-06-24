@@ -31,9 +31,9 @@ import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -71,23 +71,23 @@ public class IJWrap {
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
 	
-	public static Chnl chnlFromImageStackByte( ImageStack imageStack, ImageRes res, ChnlFactorySingleType factory ) {
+	public static Channel chnlFromImageStackByte( ImageStack imageStack, ImageRes res, ChannelFactorySingleType factory ) {
 		
 		ImageDim sd = new ImageDim(
 			new Extent(imageStack.getWidth(), imageStack.getHeight(), imageStack.getSize()),
 			res
 		);
 		
-		Chnl chnlOut = factory.createEmptyUninitialised( sd );
+		Channel chnlOut = factory.createEmptyUninitialised( sd );
 		
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		copyImageStackIntoVoxelBoxByte( imageStack, vbOut );
 		return chnlOut;
 	}
 
-	public static Chnl chnlFromImagePlus( ImagePlus imagePlus, ImageRes res ) throws IncorrectVoxelDataTypeException {
+	public static Channel chnlFromImagePlus( ImagePlus imagePlus, ImageRes res ) throws IncorrectVoxelDataTypeException {
 		
-		ChnlFactory factory = ChnlFactory.instance();
+		ChannelFactory factory = ChannelFactory.instance();
 		
 		ImageDim sd = new ImageDim(
 			new Extent(
@@ -128,13 +128,13 @@ public class IJWrap {
 	
 	
 	public static VoxelBox<ByteBuffer> voxelBoxFromImagePlusByte( ImagePlus imagePlus ) {
-		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
+		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
 		copyImageStackIntoVoxelBoxByte( imagePlus.getImageStack(), vbOut );
 		return vbOut;
 	}
 	
 	public static VoxelBox<ShortBuffer> voxelBoxFromImagePlusShort( ImagePlus imagePlus ) {
-		VoxelBox<ShortBuffer> vbOut = VoxelBoxFactory.instance().getShort().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
+		VoxelBox<ShortBuffer> vbOut = VoxelBoxFactory.getShort().create( new Extent(imagePlus.getWidth(), imagePlus.getHeight(), imagePlus.getZ() ) );
 		copyImageStackIntoVoxelBoxShort( imagePlus.getImageStack(), vbOut );
 		return vbOut;
 	}
@@ -181,7 +181,7 @@ public class IJWrap {
 		return createImagePlus( stackNew, new ImageDim( voxelBox.any().extent(), new ImageRes() ), 1, 1, false );
 	}
 	
-	public static ImagePlus createImagePlus( Chnl chnl ) throws CreateException {
+	public static ImagePlus createImagePlus( Channel chnl ) throws CreateException {
 		Stack stack = new Stack( chnl );
 		return createImagePlus(stack,false);
 	}
@@ -268,9 +268,9 @@ public class IJWrap {
 		return stackNew;
 	}
 	
-	private static Chnl chnlFromImagePlusByte( ImagePlus imagePlus, ImageDim sd, ChnlFactorySingleType factory ) {
+	private static Channel chnlFromImagePlusByte( ImagePlus imagePlus, ImageDim sd, ChannelFactorySingleType factory ) {
 		
-		Chnl chnlOut = factory.createEmptyUninitialised( sd );
+		Channel chnlOut = factory.createEmptyUninitialised( sd );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getZ(); z++) {
@@ -282,9 +282,9 @@ public class IJWrap {
 		return chnlOut;
 	}
 	
-	private static Chnl chnlFromImagePlusShort( ImagePlus imagePlus, ImageDim sd, ChnlFactorySingleType factory ) {
+	private static Channel chnlFromImagePlusShort( ImagePlus imagePlus, ImageDim sd, ChannelFactorySingleType factory ) {
 		
-		Chnl chnlOut = factory.createEmptyUninitialised( sd );
+		Channel chnlOut = factory.createEmptyUninitialised( sd );
 		
 		VoxelBox<ShortBuffer> vbOut = chnlOut.getVoxelBox().asShort();
 		
@@ -317,7 +317,7 @@ public class IJWrap {
 		for (int z=0; z<e.getZ(); z++) {
 			
 			for (int c=0; c<stack.getNumChnl(); c++) {	
-				Chnl chnl = stack.getChnl(c);
+				Channel chnl = stack.getChnl(c);
 				VoxelBoxWrapper vb = chnl.getVoxelBox();
 				
 				ImageProcessor ip = IJWrap.imageProcessor(vb,z);

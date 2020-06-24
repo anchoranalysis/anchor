@@ -26,11 +26,11 @@ package org.anchoranalysis.io.output.error;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.error.friendly.IFriendlyException;
 
-public class OutputWriteFailedException extends AnchorCheckedException {
+public class OutputWriteFailedException extends AnchorFriendlyCheckedException {
 
 	/**
 	 * 

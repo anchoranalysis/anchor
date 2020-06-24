@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 
@@ -63,6 +63,6 @@ public abstract class Thresholder extends NullParamsBean<VoxelBoxThresholder> {
 		VoxelBoxWrapper voxelBox,
 		BinaryValuesByte binaryValues,
 		Optional<Histogram> histogram,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) throws OperationFailedException;
 }

@@ -112,8 +112,8 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 		for (BoundingBox bbox : src) {
 
 			Point3i crnrMin = new Point3i( bbox.getCrnrMin() );
-			crnrMin.incrX(shiftX);
-			crnrMin.incrY(shiftY);
+			crnrMin.incrementX(shiftX);
+			crnrMin.incrementY(shiftY);
 
 			dest.add(
 				new BoundingBox(crnrMin, bbox.extent())

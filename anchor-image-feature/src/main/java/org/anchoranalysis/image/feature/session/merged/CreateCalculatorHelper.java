@@ -152,7 +152,7 @@ class CreateCalculatorHelper {
 	) {
 		return new FeatureCalculatorMultiChangeInput<T>(
 			calculator,
-			params->params.setNrgStack(nrgStack)
+			input->input.setNrgStack(nrgStack)
 		);
 	}
 	

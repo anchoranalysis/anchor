@@ -51,16 +51,12 @@ public class CfgGen extends NullParamsBean<CfgGen> {
 	
 	// Configuration generation
 	public CfgGen() {
-		super();
+		// Standard bean constructor
 	}
 	
 	// Constructor
-	public CfgGen(double referencePoissonIntensity, MarkFactory markTmpl ) {
-		super();
-		this.referencePoissonIntensity = referencePoissonIntensity;
-		this.templateMark = markTmpl;
-		
-		
+	public CfgGen(MarkFactory templateMark ) {
+		this.templateMark = templateMark;
 	}
 	
 	@Override
@@ -76,6 +72,7 @@ public class CfgGen extends NullParamsBean<CfgGen> {
 	}
 
 	public Mark newTemplateMark() {
+		assert(templateMark!=null);
 		Mark mark = this.templateMark.create();
 		mark.setId( idAndIncrement() );
 	    return mark;

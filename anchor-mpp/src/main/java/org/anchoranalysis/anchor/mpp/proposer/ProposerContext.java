@@ -39,15 +39,19 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class ProposerContext {
 
-	private RandomNumberGenerator re;
+	private RandomNumberGenerator randomNumberGenerator;
 	private NRGStackWithParams nrgStack;
 	private RegionMap regionMap;
 	private ErrorNode errorNode;
 	
-	public ProposerContext(RandomNumberGenerator re, NRGStackWithParams nrgStack, RegionMap regionMap,
-			ErrorNode errorNode) {
+	public ProposerContext(
+		RandomNumberGenerator randomNumberGenerator,
+		NRGStackWithParams nrgStack,
+		RegionMap regionMap,
+		ErrorNode errorNode
+	) {
 		super();
-		this.re = re;
+		this.randomNumberGenerator = randomNumberGenerator;
 		this.nrgStack = nrgStack;
 		this.regionMap = regionMap;
 		this.errorNode = errorNode;
@@ -57,7 +61,7 @@ public class ProposerContext {
 	public ProposerContext replaceError( ErrorNode errorNode ) {
 		assert( errorNode!=null );
 		return new ProposerContext(
-			re,
+			randomNumberGenerator,
 			nrgStack,
 			regionMap,
 			errorNode
@@ -66,7 +70,7 @@ public class ProposerContext {
 	
 	public ProposerContext addErrorLevel( String errorMessage ) {
 		return new ProposerContext(
-			re,
+			randomNumberGenerator,
 			nrgStack,
 			regionMap,
 			errorNode.add(errorMessage)
@@ -75,7 +79,7 @@ public class ProposerContext {
 	
 	public ProposerContext addErrorLevel( String errorMessage, AnchorBean<?> bean ) {
 		return new ProposerContext(
-			re,
+			randomNumberGenerator,
 			nrgStack,
 			regionMap,
 			errorNode.addBean(errorMessage, bean)
@@ -84,11 +88,11 @@ public class ProposerContext {
 	
 	/** Samples an integer uniformally between [0..maxVal) */
 	public int sampleInteger(int maxValExclusive) {
-		return (int) (re.nextDouble() * maxValExclusive);
+		return (int) (randomNumberGenerator.nextDouble() * maxValExclusive);
 	}
 	
-	public RandomNumberGenerator getRe() {
-		return re;
+	public RandomNumberGenerator getRandomNumberGenerator() {
+		return randomNumberGenerator;
 	}
 
 	public ImageDim getDimensions() {

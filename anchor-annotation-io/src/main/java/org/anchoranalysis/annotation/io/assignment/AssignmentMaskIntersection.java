@@ -26,34 +26,40 @@ package org.anchoranalysis.annotation.io.assignment;
  * #L%
  */
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
+/**
+ * Calculates statistics (DICE, Jaccard etc.) based upon corresponding two object-masks
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class AssignmentMaskIntersection implements Assignment {
 
-	private ObjMask omLeft;
-	private ObjMask omRight;
+	private ObjectMask omLeft;
+	private ObjectMask omRight;
 	
 	private int numIntersectingPixels;
 	private int numUnionPixels;
 	private int sizeLeft;
 	private int sizeRight;
 	
-	public AssignmentMaskIntersection(ObjMask omLeft, ObjMask omRight) {
+	public AssignmentMaskIntersection(ObjectMask omLeft, ObjectMask omRight) {
 		super();
 		this.omLeft = omLeft;
 		this.omRight = omRight;
 		
 		numIntersectingPixels = omLeft.countIntersectingPixels(omRight);
-		numUnionPixels = ObjMaskMerger.merge(omLeft, omRight).numPixels();
+		numUnionPixels = ObjectMaskMerger.merge(omLeft, omRight).numVoxelsOn();
 		
-		sizeLeft = omLeft.numPixels();
-		sizeRight = omRight.numPixels();
+		sizeLeft = omLeft.numVoxelsOn();
+		sizeRight = omRight.numVoxelsOn();
 	}
 	
 	@Override
@@ -67,21 +73,19 @@ public class AssignmentMaskIntersection implements Assignment {
 	}
 
 	@Override
-	public List<ObjMask> getListPaired(boolean left) {
-		List<ObjMask> out = new ArrayList<>();
-		if (isIntersectionPresent()) {
-			addObjToList(out, left);
-		}
-		return out;
+	public List<ObjectMask> getListPaired(boolean left) {
+		return multiplexObjIf(
+			isIntersectionPresent(),
+			left
+		);
 	}
 
 	@Override
-	public List<ObjMask> getListUnassigned(boolean left) {
-		List<ObjMask> out = new ArrayList<>();
-		if (!isIntersectionPresent()) {
-			addObjToList(out, left);
-		}
-		return out;
+	public List<ObjectMask> getListUnassigned(boolean left) {
+		return multiplexObjIf(
+			!isIntersectionPresent(),
+			left
+		);
 	}
 
 	@Override
@@ -91,31 +95,24 @@ public class AssignmentMaskIntersection implements Assignment {
 
 	@Override
 	public List<TypedValue> createStatistics() {
-		List<TypedValue> out = new ArrayList<>();
-		addDouble( out, calcDice() );
-		addDouble( out, calcJaccard() );
-
-		addInt( out, numIntersectingPixels );
-		addInt( out, numUnionPixels );
-		addInt( out, sizeLeft );
-		addInt( out, sizeRight );
-		return out;
+		WrappedTypeValueList out = new WrappedTypeValueList(4);
+		out.add( calcDice(), calcJaccard() );
+		out.add( numIntersectingPixels, numUnionPixels, sizeLeft, sizeRight );
+		return out.asList();
 	}
 	
-	private static void addDouble( List<TypedValue> list, double val ) {
-		list.add( new TypedValue( val , 4) );
-	}
-	
-	private static void addInt( List<TypedValue> list, int val ) {
-		list.add( new TypedValue( val) );
-	}
-		
-	private void addObjToList( List<ObjMask> out, boolean left ) {
-		if (left) {
-			out.add(omLeft);
+	private List<ObjectMask> multiplexObjIf( boolean cond, boolean left ) {
+		if (cond) {
+			return multiplexObj(left);
 		} else {
-			out.add(omRight);
+			return Collections.emptyList();
 		}
+	}
+	
+	private List<ObjectMask> multiplexObj( boolean left ) {
+		return Arrays.asList(
+			left ? omLeft : omRight
+		);
 	}
 	
 	private boolean isIntersectionPresent() {
@@ -129,7 +126,6 @@ public class AssignmentMaskIntersection implements Assignment {
 	}
 	
 	private double calcJaccard() {
-		return (double) numIntersectingPixels / numUnionPixels;
+		return ((double) numIntersectingPixels) / numUnionPixels;
 	}
-
 }

@@ -38,7 +38,35 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class NamedFeatureStoreFactory {
 
-	public static <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList( List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider ) throws CreateException {
+	/** iff TRUE, only describe the parameters of the features, but not the name. Otherwise both are described. */
+	private boolean paramsOnlyInDescription = false;
+	
+	private NamedFeatureStoreFactory() {}
+	
+	public static NamedFeatureStoreFactory factoryParamsOnly() {
+		NamedFeatureStoreFactory out = new NamedFeatureStoreFactory();
+		out.paramsOnlyInDescription = true;
+		return out;
+	}
+	
+	public static NamedFeatureStoreFactory bothNameAndParams() {
+		NamedFeatureStoreFactory out = new NamedFeatureStoreFactory();
+		out.paramsOnlyInDescription = false;
+		return out;
+	}
+	
+	
+	/**
+	 * Create a list of na
+	 * 
+	 * @param <T>
+	 * @param listFeatureListProvider
+	 * @return
+	 * @throws CreateException
+	 */
+	public <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList(
+		List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider
+	) throws CreateException {
 				
 		NamedFeatureStore<T> out = new NamedFeatureStore<>();
 		for( NamedBean<FeatureListProvider<T>> ni : listFeatureListProvider ) {
@@ -52,7 +80,12 @@ public class NamedFeatureStoreFactory {
 					continue;
 				}
 				
-				FeatureListStoreUtilities.addFeatureListToStore( featureList, ni.getName(), out );
+				FeatureListStoreUtilities.addFeatureListToStore(
+					featureList,
+					ni.getName(),
+					paramsOnlyInDescription,
+					out
+				);
 			
 			} catch (BeanDuplicateException | CreateException e) {
 				throw new CreateException(

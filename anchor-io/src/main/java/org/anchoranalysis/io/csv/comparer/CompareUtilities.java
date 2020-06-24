@@ -27,22 +27,22 @@ package org.anchoranalysis.io.csv.comparer;
  */
 
 
-import java.io.IOException;
 import java.io.PrintStream;
 
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 class CompareUtilities {
 
 
-	public static void checkZeroRows( boolean rejectZeroRows, String[] lines1, String[] lines2 ) throws IOException {
+	public static void checkZeroRows( boolean rejectZeroRows, String[] lines1, String[] lines2 ) throws CSVReaderException {
 		if (!rejectZeroRows) {
 			return;
 		}
 		
 		if (lines1==null || lines2==null) {
-			throw new IOException("At least one input csv file has zero rows");
+			throw new CSVReaderException("At least one input csv file has zero rows");
 		}
 	}
 	

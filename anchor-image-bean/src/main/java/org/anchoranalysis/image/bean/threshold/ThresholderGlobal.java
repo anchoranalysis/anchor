@@ -37,7 +37,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 
@@ -53,7 +53,7 @@ public class ThresholderGlobal extends Thresholder {
 		VoxelBoxWrapper inputBuffer,
 		BinaryValuesByte bvOut,
 		Optional<Histogram> histogram,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) throws OperationFailedException {
 		return thresholdForHistogram(
 			histogramBuffer(inputBuffer, histogram, mask),
@@ -67,7 +67,7 @@ public class ThresholderGlobal extends Thresholder {
 		Histogram hist,
 		VoxelBoxWrapper inputBuffer,
 		BinaryValuesByte bvOut,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) throws OperationFailedException {
 		
 		int thresholdVal = calculateLevel.calculateLevel(hist);
@@ -80,7 +80,7 @@ public class ThresholderGlobal extends Thresholder {
 		}		
 	}
 
-	private Histogram histogramBuffer(VoxelBoxWrapper inputBuffer, Optional<Histogram> histogram, Optional<ObjMask> mask) {
+	private Histogram histogramBuffer(VoxelBoxWrapper inputBuffer, Optional<Histogram> histogram, Optional<ObjectMask> mask) {
 		return histogram.orElseGet( ()->
 			HistogramFactory.create(inputBuffer, mask)
 		);

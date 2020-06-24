@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -76,20 +75,16 @@ public class AlwaysAllowed extends Writer {
 		);
 		
 		FilePathPrefix fpp = new FilePathPrefix( folderOut );
-		try {
-			return Optional.of(
-				new BoundOutputManager(
-					bom.getOutputManager(),
-					fpp,
-					bom.getOutputWriteSettings(),
-					recorderNew,
-					bom.getLazyDirectoryFactory(),
-					preop
-				)
-			);
-		} catch (AnchorIOException e) {
-			throw new OutputWriteFailedException("Failed to create output-manager", e);
-		}
+		return Optional.of(
+			new BoundOutputManager(
+				bom.getOutputManager(),
+				fpp,
+				bom.getOutputWriteSettings(),
+				recorderNew,
+				bom.getLazyDirectoryFactory(),
+				preop
+			)
+		);
 	}
 	
 	

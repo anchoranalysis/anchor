@@ -38,19 +38,19 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBSolidWriter extends ObjMaskWriter {
 
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjectWithProperties mask,
 			ImageDim dim) throws CreateException {
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 
 				RGBColor c = colorIndex.get( colorIDGetter.getID(mask, iter) );

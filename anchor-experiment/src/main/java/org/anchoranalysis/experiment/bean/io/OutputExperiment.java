@@ -42,10 +42,12 @@ import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.generator.xml.XMLConfigurationWrapperGenerator;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.apache.commons.lang.time.StopWatch;
@@ -144,25 +146,31 @@ public abstract class OutputExperiment extends Experiment {
 		
 		String experimentId = experimentIdentifier.identifier( expArgs.getTaskName() );
 		
-		BoundOutputManager rootOutputManager = 
-			getOutput().bindRootFolder( experimentId, experimentalManifest, expArgs.createParamsContext() );
-		
-		assert( rootOutputManager.getOutputWriteSettings().hasBeenInit() );
-		
-		StatefulLogReporter logReporter = createExperimentLog(rootOutputManager, expArgs, useDetailedLogging());
-
-		// Important we bind to a root folder before any log messages go out, as certain log
-		//  appenders require the OutputManager to be set before outputting to the correct location
-		//  and this only occurs after the call to bindRootFolder()
-		return new ParametersExperiment(
-			expArgs,
-			experimentId,
-			Optional.of(experimentalManifest),
-			rootOutputManager,
-			logReporter,
-			new ErrorReporterIntoLog(logReporter),
-			useDetailedLogging()
-		);
+		try {
+			BoundOutputManager rootOutputManager = 
+				getOutput().bindRootFolder( experimentId, experimentalManifest, expArgs.createParamsContext() );
+			
+			assert( rootOutputManager.getOutputWriteSettings().hasBeenInit() );
+			
+			StatefulLogReporter logReporter = createExperimentLog(rootOutputManager, expArgs, useDetailedLogging());
+	
+			// Important we bind to a root folder before any log messages go out, as certain log
+			//  appenders require the OutputManager to be set before outputting to the correct location
+			//  and this only occurs after the call to bindRootFolder()
+			return new ParametersExperiment(
+				expArgs,
+				experimentId,
+				Optional.of(experimentalManifest),
+				rootOutputManager,
+				logReporter,
+				new ErrorReporterIntoLog(logReporter),
+				useDetailedLogging()
+			);
+		} catch (FilePathPrefixerException e) {
+			throw new AnchorIOException("Cannot create params-context", e);
+		} catch (BindFailedException e) {
+			throw new AnchorIOException("Bind failed", e);
+		}
 	}
 	
 	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) {

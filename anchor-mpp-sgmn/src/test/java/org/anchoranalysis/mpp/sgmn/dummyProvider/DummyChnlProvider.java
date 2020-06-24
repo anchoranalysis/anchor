@@ -28,12 +28,12 @@ package org.anchoranalysis.mpp.sgmn.dummyProvider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public class DummyChnlProvider extends ChnlProvider {
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		return null;
 	}
 

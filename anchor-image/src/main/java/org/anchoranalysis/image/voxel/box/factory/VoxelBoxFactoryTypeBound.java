@@ -37,6 +37,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 /**
  * A factory for creating VoxelBoxes with a particular buffer-type
  * 
+ * <p>This class (and all its sub-classes) are IMMUTABLE</p>.
+ * 
  * @author Owen Feehan
  *
  * @param <T> buffer-type

@@ -35,7 +35,12 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public class FeatureListStoreUtilities {
 	
-	public static void addFeatureListToStoreNoDuplicateDirectly( NamedProvider<FeatureList<FeatureInput>> featureListProvider, SharedFeatureMulti out ) {
+	private FeatureListStoreUtilities() {}
+	
+	public static void addFeatureListToStoreNoDuplicateDirectly(
+		NamedProvider<FeatureList<FeatureInput>> featureListProvider,
+		SharedFeatureMulti out
+	) {
 		
 		for( String key : featureListProvider.keys()) {
 			try {
@@ -49,33 +54,64 @@ public class FeatureListStoreUtilities {
 		
 	}
 	
-	public static <T extends FeatureInput> void addFeatureListToStore( FeatureList<T> featureList, String name, NamedFeatureStore<T> out ) {
+	/**
+	 * Adds a feature-list to the store
+	 * 
+	 * @param <T> feature-type
+	 * @param featureList feature-list
+	 * @param nameParent the parent-name of the list
+	 * @param paramsOnlyInDescription iff TRUE, only describe the parameters of the features, but not the name. Otherwise both are described.
+	 * @param store store features are added to
+	 */
+	public static <T extends FeatureInput> void addFeatureListToStore(
+		FeatureList<T> featureList,
+		String nameParent,
+		boolean paramsOnlyInDescription,
+		NamedFeatureStore<T> store
+	) {
 		
 		// We loop over all features in the ni, and call them all the same thing with a number
-		for( Feature<T> f : featureList) {
+		for( Feature<T> features : featureList) {
 			
-			String chosenName = determineFeatureName(f,name, featureList.size()==1);
+			String chosenName = determineFeatureName(
+				features,
+				nameParent,
+				featureList.size()==1,
+				paramsOnlyInDescription
+			);
 			
 			// We duplicate so that when run in parallel each thread has its own local state for each feature
 			//  and uses seperate cached calculation lists
-			out.add(chosenName, f.duplicateBean() );
+			store.add(chosenName, features.duplicateBean() );
 		}
 	}
 
-
 	/**
-	 * Names in the store take the form   nameParent.nameFeature
+	 * Names in the store take the form   nameParent.featureDescription
 	 * unless useOnlyParentName is TRUE, in which case they are called simply nameParent
-	 * 
-	 * @param feature
-	 * @param nameParent
-	 * @param useOnlyParentName
 	 */
-	private static <T extends FeatureInput> String determineFeatureName( Feature<T> feature, String nameParent, boolean useOnlyParentName ) {
+	private static <T extends FeatureInput> String determineFeatureName(
+		Feature<T> feature,
+		String nameParent,
+		boolean useOnlyParentName,
+		boolean paramsOnlyInDescription
+	) {
 		if (useOnlyParentName) {
 			return nameParent;
 		} else {
-			return String.format("%s.%s", nameParent, feature.getFriendlyName() );
+			return String.format(
+				"%s.%s",
+				nameParent,
+				featureDescription(feature, paramsOnlyInDescription)
+			);
+		}
+	}
+	
+	private static String featureDescription( Feature<?> feature, boolean paramsOnlyInDescription ) {
+		if (paramsOnlyInDescription) {
+			return feature.getParamDscr();
+		} else {
+			return feature.getFriendlyName();
 		}
 	}
 }

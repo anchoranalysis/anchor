@@ -4,6 +4,7 @@ import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 
+
 /*-
  * #%L
  * anchor-mpp
@@ -30,12 +31,12 @@ import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class BoundCalculator extends MPPBean<BoundCalculator> implements IParamsEquals {
 
 	// angle is in radians
-	public abstract BidirectionalBound calcBound( Point3d point, RotationMatrix rotMatrix, ErrorNode errorNode );
+	public abstract BidirectionalBound calcBound( Point3d point, RotationMatrix rotMatrix) throws OperationFailedException;
 }

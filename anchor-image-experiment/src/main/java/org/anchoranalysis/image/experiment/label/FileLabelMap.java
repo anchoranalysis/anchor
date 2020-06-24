@@ -26,7 +26,6 @@ package org.anchoranalysis.image.experiment.label;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +35,7 @@ import java.util.Set;
 
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 /**
  * 
@@ -59,7 +59,7 @@ public class FileLabelMap<T> {
 		return new HashSet<>( map.values() );
 	}
 		
-	public static FileLabelMap<String> readFromCSV( Path csvPath, boolean quotedStrings ) throws IOException {
+	public static FileLabelMap<String> readFromCSV( Path csvPath, boolean quotedStrings ) throws CSVReaderException {
 		FileLabelMap<String> map = new FileLabelMap<>();
 		
 		try (ReadByLine reader = CSVReaderByLine.open(csvPath, ",", true, quotedStrings )) {

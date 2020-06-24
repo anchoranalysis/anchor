@@ -28,7 +28,7 @@ package org.anchoranalysis.image.io.stack;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -63,7 +63,7 @@ public class ConvertDisplayStackToRGB {
 		
 		try {
 			if (background.getNumChnl()==1) {
-				Chnl chnl = background.createChnlDuplicateForBBox(0,bbox); 
+				Channel chnl = background.createChnlDuplicateForBBox(0,bbox); 
 				return new RGBStack(
 					chnl,
 					chnl.duplicate(),

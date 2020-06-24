@@ -32,9 +32,9 @@ import java.util.Collection;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public abstract class FileProvider extends AnchorBean<FileProvider> {
 
-	public abstract Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException;
+	public abstract Collection<File> create(InputManagerParams params) throws FileProviderException;
 }

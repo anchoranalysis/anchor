@@ -2,6 +2,8 @@ package org.anchoranalysis.image.io.input.series;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-image-io
@@ -40,7 +42,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -75,7 +77,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 			
 	// The outputManager is in case we want to do any debugging
 	@Override
-	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
+	public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 
 		int index = chnlMap.get(chnlName);
 		if (index==-1) {
@@ -93,20 +95,22 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	
 	// The outputManager is in case we want to do any debugging
 	@Override
-	public Chnl getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
+	public Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 
 		int index = chnlMap.get(chnlName);
 		if (index==-1) {
-			return null;
+			return Optional.empty();
 		}
 		
 		Stack stack = createTs( progressReporter ).get(t); 
 
 		if (index>=stack.getNumChnl()) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return stack.getChnl( index );
+		return Optional.of(
+			stack.getChnl(index)
+		);
 	}
 	
 	@Override
@@ -136,7 +140,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 		
 				// Populate our stack from all the channels
 				for (String chnlName : chnlMap.keySet() ) {
-					Chnl image = getChnl(chnlName,  t, new ProgressReporterOneOfMany(prm) );
+					Channel image = getChnl(chnlName,  t, new ProgressReporterOneOfMany(prm) );
 					stackCollection.addImageStack( chnlName, new Stack(image) );
 					prm.incrWorker();
 				}
@@ -201,7 +205,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	
 	private TimeSequence extractChnlAsTimeSequence( String chnlName, int t ) throws OperationFailedException {
 		try {
-			Chnl image = getChnl(chnlName, t, ProgressReporterNull.get());
+			Channel image = getChnl(chnlName, t, ProgressReporterNull.get());
 			return new TimeSequence( new Stack(image) );
 		} catch (GetOperationFailedException e) {
 			throw new OperationFailedException(e);

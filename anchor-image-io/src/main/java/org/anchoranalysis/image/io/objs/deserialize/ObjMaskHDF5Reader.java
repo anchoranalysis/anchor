@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -41,7 +41,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Reader;
 
 class ObjMaskHDF5Reader {
 	
-	public ObjMask apply( IHDF5Reader reader, String datasetPath ) {
+	public ObjectMask apply( IHDF5Reader reader, String datasetPath ) {
 		
 		MDByteArray mdb = reader.uint8().readMDArray(datasetPath);
 		
@@ -51,7 +51,7 @@ class ObjMaskHDF5Reader {
 		
 		BoundingBox bbox = new BoundingBox(crnrPnt, vb.extent() );
 		
-		return new ObjMask(bbox, vb);
+		return new ObjectMask(bbox, vb);
 	}
 	
 	public static int extractIntAttr( IHDF5IntReader reader, String path, String attr) {
@@ -78,7 +78,7 @@ class ObjMaskHDF5Reader {
 	 */
 	private VoxelBox<ByteBuffer> createVoxelBox( MDByteArray mdb ) {
 		Extent e = extractExtnt(mdb);
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create( e );
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
 		
 		for( int z=0; z<e.getZ(); z++) {
 			

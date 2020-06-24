@@ -36,10 +36,11 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBMidpointWriter extends ObjMaskWriter {
@@ -59,7 +60,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		this.extraLength = extraLength;
 	}
 
-	public static Point3i calcMidpoint(ObjMaskWithProperties mask, boolean suppressZ) {
+	public static Point3i calcMidpoint(ObjectWithProperties mask, boolean suppressZ) {
 
 		return maybeSuppressZ(
 			calcMidpoint3D(mask),
@@ -67,13 +68,14 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		);
 	}
 	
-	private static Point3i calcMidpoint3D(ObjMaskWithProperties mask) {
+	private static Point3i calcMidpoint3D(ObjectWithProperties mask) {
 		if (mask.hasProperty(PROPERTY_MIDPOINT)) {
-			Point3i midpoint = new Point3i( (Point3i) mask.getProperty(PROPERTY_MIDPOINT) );
-			midpoint.add( mask.getBoundingBox().getCrnrMin() );
-			return midpoint;
+			return Point3i.immutableAdd(
+				(Point3i) mask.getProperty(PROPERTY_MIDPOINT),
+				mask.getBoundingBox().getCrnrMin()
+			);
 		} else {
-			return new Point3i( mask.getMask().centerOfGravity() );
+			return PointConverter.intFromDouble( mask.getMask().centerOfGravity() );
 		}
 	}
 	
@@ -85,7 +87,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public PrecalcOverlay precalculate(ObjMaskWithProperties mask,
+	public PrecalcOverlay precalculate(ObjectWithProperties mask,
 			ImageDim dim) throws CreateException {
 		
 		// We ignore the z-dimension so it's projectable onto a 2D slice
@@ -94,8 +96,8 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		return new PrecalcOverlay(mask) {
 
 			@Override
-			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjMaskWithProperties> idGetter,
-					IDGetter<ObjMaskWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
+			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
+					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
 
 				if (midPoint==null) {
@@ -116,9 +118,10 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	
 	public static void writeRelPoint( Point3i pnt, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
 		if (bboxContainer.contains().point(pnt)) {
-			Point3i pntNew = new Point3i(pnt);
-			pntNew.sub(bboxContainer.getCrnrMin());
-			stack.writeRGBPoint( pnt, color);
+			stack.writeRGBPoint(
+				Point3i.immutableSubtract(pnt, bboxContainer.getCrnrMin()),
+				color
+			);
 		}
 	}
 
@@ -135,10 +138,10 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 			midpoint.decrX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.incrX(extraLength);
+		midpoint.incrementX(extraLength);
 		
 		for (int i=0; i<extraLength; i++) {
-			midpoint.incrX();
+			midpoint.incrementX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
 		midpoint.decrX(extraLength);
@@ -149,7 +152,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 			midpoint.decrY();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.incrY(extraLength);
+		midpoint.incrementY(extraLength);
 		
 		for (int i=0; i<extraLength; i++) {
 			midpoint.decrY();

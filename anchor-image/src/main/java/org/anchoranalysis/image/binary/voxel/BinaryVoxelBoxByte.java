@@ -38,9 +38,8 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 	
 	private BinaryValuesByte bvb;
 	
-	public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxelBox,
-			BinaryValues bv) {
-		super(voxelBox, new BinaryValues(bv) );
+	public BinaryVoxelBoxByte(VoxelBox<ByteBuffer> voxelBox, BinaryValues bv) {
+		super(voxelBox, bv);
 		this.bvb = getBinaryValues().createByte();
 	}
 	
@@ -73,10 +72,10 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 	
 	@Override
 	public BinaryVoxelBoxByte duplicate() {
-		return new BinaryVoxelBoxByte( getVoxelBox().duplicate(), getBinaryValues().duplicate() );
+		return new BinaryVoxelBoxByte( getVoxelBox().duplicate(), getBinaryValues() );
 	}
 	
 	public BinaryVoxelBox<ByteBuffer> extractSlice(int z) throws CreateException {
-		return new BinaryVoxelBoxByte( getVoxelBox().extractSlice(z), getBinaryValues().duplicate() );
+		return new BinaryVoxelBoxByte( getVoxelBox().extractSlice(z), getBinaryValues() );
 	}
 }

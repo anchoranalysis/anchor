@@ -30,15 +30,18 @@ package org.anchoranalysis.image.seed;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
 public class SeedCollection implements Iterable<Seed> {
 
-	private ArrayList<Seed> delegate = new ArrayList<>();
+	private List<Seed> delegate = new ArrayList<>();
 	
 	public SeedCollection duplicate() {
 		
@@ -51,22 +54,13 @@ public class SeedCollection implements Iterable<Seed> {
 	}
 
 	public void scaleXY( double scale) throws OperationFailedException {
-		
 		for( Seed seed : this ) {
 			seed.scaleXY(scale);
 		}
-		
 	}
 	
-	public ObjMaskCollection createMasks() {
-		
-		ObjMaskCollection objMasks = new ObjMaskCollection();
-		
-		for( Seed seed : this ) {
-			objMasks.add( seed.createMask() );
-		}
-		
-		return objMasks;
+	public ObjectCollection createMasks() {
+		return ObjectCollectionFactory.mapFrom(delegate, Seed::createMask);
 	}
 	
 	public void flattenZ() {
@@ -109,12 +103,12 @@ public class SeedCollection implements Iterable<Seed> {
 		return delegate.size();
 	}
 	
-	public boolean doSeedsIntersectWithContainingMask( ObjMask omContaining, VoxelBoxFactoryTypeBound<ByteBuffer> factory ) {
+	public boolean doSeedsIntersectWithContainingMask( ObjectMask omContaining, VoxelBoxFactoryTypeBound<ByteBuffer> factory ) {
 		
 		for( int i=0; i<delegate.size(); i++) {
 			
 			Seed s = delegate.get(i);
-			ObjMask omS = s.createMask();
+			ObjectMask omS = s.createMask();
 				
 			if (!omS.hasIntersectingPixels(omContaining)) {
 				return false;
@@ -130,13 +124,13 @@ public class SeedCollection implements Iterable<Seed> {
 			
 			Seed s = delegate.get(i);
 			
-			ObjMask omS = s.createMask();
+			ObjectMask omS = s.createMask();
 			
 			for( int j=0; j<i; j++) {
 				
 				Seed t = delegate.get(j);
 				
-				ObjMask omT = t.createMask();
+				ObjectMask omT = t.createMask();
 				
 				if (omS.hasIntersectingPixels(omT)) {
 					return true;
@@ -150,7 +144,7 @@ public class SeedCollection implements Iterable<Seed> {
 	public boolean verifySeedsAreInside( Extent e ) {
 		for (Seed seed : this) {
 			
-			ObjMask om = seed.createMask();
+			ObjectMask om = seed.createMask();
 			
 			if (!e.contains(om.getBoundingBox())) {
 				return false;

@@ -45,7 +45,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
@@ -188,12 +188,12 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	}
 	
 	// Calculates the mask of an object
-	public ObjMaskWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv ) {
+	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv ) {
 		
 		BoundingBox bbox = this.bbox( bndScene, rm.getRegionID() );
 		
 		// We make a new mask and populate it from out iterator
-		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);
+		ObjectWithProperties mask = new ObjectWithProperties(bbox);
 
 		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
@@ -202,14 +202,14 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		ReadableTuple3i maxPos = bbox.calcCrnrMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
 			int z_local = pnt.getZ() - bbox.getCrnrMin().getZ();
 			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
 
 			int cnt = 0;
-			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrY()) {
-				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrX()) {
+			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
 					
 					byte membership = evalPntInside(pnt);
 					
@@ -229,13 +229,13 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	
 	
 	// Calculates the mask of an object
-	public ObjMaskWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
+	public ObjectWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
 			
 		 BoundingBox bbox = bbox( bndScene, rm.getRegionID() )
 				 .scale( new ScaleFactor(scaleFactor) );
 		
 		// We make a new mask and populate it from out iterator
-		ObjMaskWithProperties mask = new ObjMaskWithProperties(bbox);
+		ObjectWithProperties mask = new ObjectWithProperties(bbox);
 
 		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
@@ -245,7 +245,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		
 		Point3i pnt = new Point3i();
 		Point3d pntScaled = new Point3d();
-		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrZ()) {
+		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
 			int z_local = pnt.getZ() - bbox.getCrnrMin().getZ();
 			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
@@ -254,8 +254,8 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 			pntScaled.setZ( pnt.getZ() );
 			
 			int cnt = 0;
-			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrY()) {
-				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrX()) {
+			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
 					
 					pntScaled.setX( ((double) pnt.getX()) / scaleFactor );
 					pntScaled.setY( ((double) pnt.getY()) / scaleFactor );

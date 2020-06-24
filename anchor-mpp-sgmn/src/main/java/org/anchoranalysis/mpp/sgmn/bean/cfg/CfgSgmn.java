@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -52,7 +52,7 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 	
 	public abstract Cfg sgmn(
 		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjMaskCollection> objMaskCollection,
+		NamedProvider<ObjectCollection> objMaskCollection,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException;

@@ -44,8 +44,4 @@ public class BridgeElementException extends AnchorFriendlyCheckedException {
 	public BridgeElementException(Throwable exc) {
 		super("", exc);
 	}
-
-	public BridgeElementException(String message) {
-		super(message);
-	}
 }

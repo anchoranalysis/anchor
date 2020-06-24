@@ -48,6 +48,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
@@ -77,14 +78,14 @@ public class MultipleInputOutputExperiment<T extends InputFromManager, S> extend
 			
 		Collection<File> files;
 		try {
-			files = inputManagerBeanPathProvider.matchingFiles(
+			files = inputManagerBeanPathProvider.create(
 				new InputManagerParams(
 					expArgs.createInputContext(),
 					ProgressReporterNull.get(),
 					new LogErrorReporter( new ConsoleLogReporter() )
 				)
 			);
-		} catch (AnchorIOException e) {
+		} catch (FileProviderException e) {
 			throw new ExperimentExecutionException("Cannot find input manager files", e);
 		} catch (IOException e) {
 			throw new ExperimentExecutionException("Cannot create input context", e);

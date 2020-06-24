@@ -93,14 +93,27 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 	// Inner class to handle period receiver updates
 	private class PeriodReceiver implements IPeriodReceiver<CfgNRGPixelized> {
 		
+		private Optional<T> runningElement;
+		
 		@Override
 		public void periodStart( Reporting<CfgNRGPixelized> reporting ) throws PeriodReceiverException {
 			
 			try {
+				Optional<T> element = generateIterableElement(reporting);
+				
+				if (element.isPresent()) {
+					runningElement = element;
+				} else {
+					if (!runningElement.isPresent()) {
+						throw new PeriodReceiverException("The first iterable item must be non-empty, but it is empty");
+					}
+				}
+				
 				sequenceWriter.add(
-					generateIterableElement(reporting),
+					runningElement.get(),
 					String.valueOf( reporting.getIter() )
 				);
+
 			} catch (OutputWriteFailedException | ReporterException e) {
 				throw new PeriodReceiverException(e);
 			}
@@ -108,6 +121,7 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 		
 		@Override
 		public void periodEnd( Reporting<CfgNRGPixelized> reporting ) {
+			// NOTHING TO DO
 		}
 	}
 
@@ -122,10 +136,13 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 			return;
 		}
 		
-		optInit.getPeriodTriggerBank().obtain(getAggInterval(), new PeriodReceiver() );
+		optInit.getPeriodTriggerBank().obtain(
+			getAggInterval(),
+			new PeriodReceiver()
+		);
 	}
 
-	protected abstract T generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
+	protected abstract Optional<T> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
 
 	public String getOutputName() {
 		return outputName;

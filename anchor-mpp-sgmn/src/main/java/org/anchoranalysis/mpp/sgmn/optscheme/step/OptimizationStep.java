@@ -32,6 +32,7 @@ import java.util.function.Function;
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualState;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
@@ -50,12 +51,10 @@ public class OptimizationStep<S,T> {
 	// The important state needed for the current algorithm step
 	private DualState<T> state;
 	
-	// Everything else is additional historical information we use for
-	
 	private boolean accptd;
 	private boolean best;
 	
-	private T proposal;
+	private Optional<T> proposal = Optional.empty();
 	
 	private DscrData<S> dscrData = new DscrData<>();
 		
@@ -69,11 +68,11 @@ public class OptimizationStep<S,T> {
 		dscrData.setTemperature(temperature);
 	}
 	
-	public void assignProposal(T proposalNew, KernelWithID<S> kid) {
+	public void assignProposal(Optional<T> proposalNew, KernelWithID<S> kid) {
 		
 		dscrData.setKernel(kid);
 		
-		if (this.proposal==proposalNew) {
+		if (this.proposal.equals(proposalNew)) {
 			return;
 		}
 		
@@ -95,7 +94,7 @@ public class OptimizationStep<S,T> {
 	}
 	
 	public void markNoProposal( ProposerFailureDescription proposerFailureDescription ) {
-		proposal = null;
+		proposal = Optional.empty();
 		
 		setKernelNoProposalDescription( proposerFailureDescription );
 		setChangedMarkIDs( new int[]{} );
@@ -114,11 +113,12 @@ public class OptimizationStep<S,T> {
 	}
 
 	private void releaseProposal() {
-		proposal = null;
+		proposal = Optional.empty();
 	}
 
 	private void assgnCrntFromProposal( Function<T,Double> funcScore ) {
-		state.assignCrnt( proposal );
+		// We can rely that a proposal exists, as it has been accepted
+		state.assignCrnt( proposal.get() );
 		maybeAssignAsBest( funcScore );
 	}
 	
@@ -168,11 +168,7 @@ public class OptimizationStep<S,T> {
 		return state.getBest();
 	}
 	
-	public boolean hasProposal() {
-		return proposal != null;
-	}
-
-	public T getProposal() {
+	public Optional<T> getProposal() {
 		return proposal;
 	}
 	
@@ -193,13 +189,18 @@ public class OptimizationStep<S,T> {
 		return new Reporting<U>(
 			iter,
 			state.transform( stateReporter.primaryReport(), context),
-			proposal != null ? stateReporter.primaryReport().transform(proposal, context) : null,
-			stateReporter.secondaryReport() != null && proposal != null ? stateReporter.secondaryReport().transform(proposal, context) : null,
+			OptionalUtilities.map(
+				proposal,
+				p->stateReporter.primaryReport().transform(p, context)
+			),
+			OptionalUtilities.mapBoth(
+				stateReporter.secondaryReport(),
+				proposal,
+				(secondaryReport, prop) -> secondaryReport.transform(prop, context)
+			),
 			dscrData,
 			accptd,
 			best
 		);
 	}
-
-
 }

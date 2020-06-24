@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -47,13 +49,13 @@ public class AddCriteriaNever<EdgeType> implements AddCriteria<EdgeType> {
 
 	@Override
 	public EdgeType generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2,
-			NRGStackWithParams nrgStack, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean do3D) throws CreateException {
+			NRGStackWithParams nrgStack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws CreateException {
 		return null;
 	}
 
 	@Override
-	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() {
+	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
 		// No features involved
-		return null;
+		return Optional.empty();
 	}
 }

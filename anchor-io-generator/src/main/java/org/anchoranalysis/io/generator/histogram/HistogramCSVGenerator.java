@@ -29,7 +29,6 @@ package org.anchoranalysis.io.generator.histogram;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
@@ -53,8 +52,7 @@ public class HistogramCSVGenerator extends CSVGenerator implements IterableGener
 	}
 
 	@Override
-	public void setIterableElement(Histogram element)
-			throws SetOperationFailedException {
+	public void setIterableElement(Histogram element) {
 		this.histogram = element;
 	}
 

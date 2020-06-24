@@ -108,7 +108,7 @@ public final class BoundingBox implements Serializable {
 	 * @return
 	 */
 	public Point3i centerOfGravity() {
-		return new Point3i(
+		return PointConverter.intFromDouble(
 			meanOfExtent(1)
 		);
 	}
@@ -226,22 +226,17 @@ public final class BoundingBox implements Serializable {
 	
 	// TODO make this an IMMUTABLE method
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
-		
-		Point3i min = new Point3i(crnrMin);
-		
+
 		// Subtract the padding from the corner
-		min.sub(toAdd);
+		Point3i crnrMinShifted = Point3i.immutableSubtract(crnrMin, toAdd);
 		
-		// Double the padding in each dimension, and add it to the extent
-		BoundingBox grown = new BoundingBox(
-			min,
-			extent.growBy(
-				multiplyByTwo(toAdd)
-			)
-		);
+		// Add double-padding in each dimension to the extent
+		Extent extentGrown = extent.growBy(
+			multiplyByTwo(toAdd)
+		); 
 		
 		// Clip to make sure we remain within bounds
-		return grown.clipTo(containingExtent);
+		return new BoundingBox(crnrMinShifted, extentGrown).clipTo(containingExtent);
 	}
 	
 	// This is the last point INSIDE the box
@@ -296,9 +291,7 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	public static Point3i relPosTo( Point3i relPoint, ReadableTuple3i srcPoint ) {
-		Point3i p = new Point3i( relPoint );
-		p.sub( srcPoint );
-		return p; 
+		return Point3i.immutableSubtract(relPoint, srcPoint);
 	}
 	
 	// returns the relative position of the corner to another bounding box
@@ -346,10 +339,8 @@ public final class BoundingBox implements Serializable {
 	 * @return newly created bounding-box with shifted corner position and identical extent 
 	 **/
 	public BoundingBox shiftBy( ReadableTuple3i shiftBy ) {
-		Point3i crnrNew = new Point3i(crnrMin);
-		crnrNew.add(shiftBy);
 		return new BoundingBox(
-			crnrNew,
+			Point3i.immutableAdd(crnrMin, shiftBy),
 			extent
 		);
 	}
@@ -361,10 +352,8 @@ public final class BoundingBox implements Serializable {
 	 * @return newly created bounding-box with shifted corner position and identical extent 
 	 **/
 	public BoundingBox shiftBackBy( ReadableTuple3i shiftBackwardsBy ) {
-		Point3i crnrNew = new Point3i(crnrMin);
-		crnrNew.sub(shiftBackwardsBy);
 		return new BoundingBox(
-			crnrNew,
+			Point3i.immutableSubtract(crnrMin, shiftBackwardsBy),
 			extent
 		);
 	}
@@ -401,10 +390,8 @@ public final class BoundingBox implements Serializable {
 	 * @return a bounding-box reflected through the origin
 	 */
 	public BoundingBox reflectThroughOrigin() {
-		Point3i crnrNew = new Point3i(crnrMin);
-		crnrNew.scale(-1);;
 		return new BoundingBox(
-			crnrNew,
+			Point3i.immutableScale(crnrMin, -1),
 			extent
 		);
 	}
@@ -471,8 +458,6 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	private static Point3i multiplyByTwo(Tuple3i pnt) {
-		Point3i out = new Point3i(pnt);
-		out.scale(2);
-		return out;
+		return Point3i.immutableScale(pnt,2);
 	}
 }

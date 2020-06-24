@@ -27,8 +27,9 @@ package org.anchoranalysis.io.filepath.prefixer;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 
 public class FilePathPrefixerParams {
 
@@ -37,27 +38,27 @@ public class FilePathPrefixerParams {
 	/**
 	 * A directory indicating where inputs can be located
 	 */
-	private Path outputDirectory;
+	private final Optional<Path> outputDirectory;
 
-	public FilePathPrefixerParams(boolean debugMode, Path outputDirectory) throws AnchorIOException {
+	public FilePathPrefixerParams(boolean debugMode, Optional<Path> outputDirectory) throws FilePathPrefixerException {
 		super();
 		this.debugMode = debugMode;
 		this.outputDirectory = outputDirectory;
-		checkAbsolutePath(outputDirectory);
+		checkAbsolutePath();
 	}
 
 	public boolean isDebugMode() {
 		return debugMode;
 	}
 
-	public Path getOutputDirectory() {
+	public Optional<Path> getOutputDirectory() {
 		return outputDirectory;
 	}
 		
-	private static void checkAbsolutePath(Path outputDirectory) throws AnchorIOException {
-		if (outputDirectory!=null && !outputDirectory.isAbsolute()) {
-			throw new AnchorIOException(
-				String.format("An non-absolute path was passed to FilePathPrefixerParams of %s", outputDirectory)
+	private void checkAbsolutePath() throws FilePathPrefixerException {
+		if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
+			throw new FilePathPrefixerException(
+				String.format("An non-absolute path was passed to FilePathPrefixerParams of %s", outputDirectory.get())
 			);
 		}
 	}

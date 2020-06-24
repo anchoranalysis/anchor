@@ -34,7 +34,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -87,7 +87,7 @@ public class BoundOutputManager {
 		IWriteOperationRecorder writeOperationRecorder,
 		LazyDirectoryFactory lazyDirectoryFactory,
 		WriterExecuteBeforeEveryOperation parentInit
-	) throws AnchorIOException {
+	) {
 		
 		this.boundFilePathPrefix = boundFilePathPrefix;
 		this.outputManager = outputManager;
@@ -111,33 +111,33 @@ public class BoundOutputManager {
 		
 		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(folderPath);
 		
-		try {
-			FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
-			fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
-			
-			return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, lazyDirectoryFactory, initIfNeeded);
-		} catch (AnchorIOException e) {
-			throw new OutputWriteFailedException(e);
-		}
+		FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
+		fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
+		
+		return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, lazyDirectoryFactory, initIfNeeded);
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
-	public BoundOutputManager bindFile( PathWithDescription input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws AnchorIOException {
-		FilePathPrefix fpp = outputManager.prefixForFile(
-			input,
-			expIdentifier,
-			manifestRecorder,
-			experimentalManifestRecorder,
-			context
-		);
-		return new BoundOutputManager(
-			outputManager,
-			fpp,
-			outputWriteSettings,
-			writeRecorder(manifestRecorder),
-			lazyDirectoryFactory,
-			initIfNeeded
-		);
+	public BoundOutputManager bindFile( PathWithDescription input, String expIdentifier, Optional<ManifestRecorder> manifestRecorder, Optional<ManifestRecorder> experimentalManifestRecorder, FilePathPrefixerParams context ) throws BindFailedException {
+		try {
+			FilePathPrefix fpp = outputManager.prefixForFile(
+				input,
+				expIdentifier,
+				manifestRecorder,
+				experimentalManifestRecorder,
+				context
+			);
+			return new BoundOutputManager(
+				outputManager,
+				fpp,
+				outputWriteSettings,
+				writeRecorder(manifestRecorder),
+				lazyDirectoryFactory,
+				initIfNeeded
+			);
+		} catch (FilePathPrefixerException e) {
+			throw new BindFailedException(e);
+		}
 	}
 	
 	/**

@@ -7,8 +7,8 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -26,9 +26,9 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 
 // A wrapper around SharedObjects which types certain Image entities
@@ -42,8 +42,8 @@ public class ImageInitParams extends BeanInitParams {
 	// START: Stores
 	private NamedProviderStore<Stack> storeStack;
 	private NamedProviderStore<Histogram> storeHistogram;
-	private NamedProviderStore<ObjMaskCollection> storeObjMaskCollection;
-	private NamedProviderStore<Chnl> storeChnl;
+	private NamedProviderStore<ObjectCollection> storeObjMaskCollection;
+	private NamedProviderStore<Channel> storeChnl;
 	private NamedProviderStore<BinaryChnl> storeBinaryChnl;
 	private NamedProviderStore<BinarySgmn> storeBinarySgmn;
 	// END: Stores
@@ -52,7 +52,7 @@ public class ImageInitParams extends BeanInitParams {
 	private Path modelDir;
 	// END: Single Items
 	
-	private IObjectBridge<StackProvider,Stack,OperationFailedException> stackProviderBridge;
+	private FunctionWithException<StackProvider,Stack,OperationFailedException> stackProviderBridge;
 
 	public ImageInitParams(SharedObjects so, Path modelDir) {
 		super();
@@ -61,8 +61,8 @@ public class ImageInitParams extends BeanInitParams {
 		
 		storeStack = so.getOrCreate(Stack.class);
 		storeHistogram = so.getOrCreate(Histogram.class);
-		storeObjMaskCollection = so.getOrCreate(ObjMaskCollection.class);
-		storeChnl = so.getOrCreate(Chnl.class);
+		storeObjMaskCollection = so.getOrCreate(ObjectCollection.class);
+		storeChnl = so.getOrCreate(Channel.class);
 		storeBinaryChnl = so.getOrCreate(BinaryChnl.class);
 		storeBinarySgmn = so.getOrCreate(BinarySgmn.class);
 		this.modelDir = modelDir;
@@ -76,11 +76,11 @@ public class ImageInitParams extends BeanInitParams {
 		return storeHistogram;
 	}
 	
-	public NamedProviderStore<ObjMaskCollection> getObjMaskCollection() {
+	public NamedProviderStore<ObjectCollection> getObjMaskCollection() {
 		return storeObjMaskCollection;
 	}
 	
-	public NamedProviderStore<Chnl> getChnlCollection() {
+	public NamedProviderStore<Channel> getChnlCollection() {
 		return storeChnl;
 	}
 	
@@ -140,11 +140,11 @@ public class ImageInitParams extends BeanInitParams {
 		}
 	}
 	
-	public void copyObjMaskCollectionFrom( NamedProvider<ObjMaskCollection> collectionSource ) throws OperationFailedException {
+	public void copyObjMaskCollectionFrom( NamedProvider<ObjectCollection> collectionSource ) throws OperationFailedException {
 
 		try {
 			for (String id : collectionSource.keys()) {
-				ObjMaskCollection objs = collectionSource.getException(id);
+				ObjectCollection objs = collectionSource.getException(id);
 				if (objs!=null) {
 					addToObjMaskCollection(id, new IdentityOperation<>(objs) );
 				}
@@ -154,7 +154,7 @@ public class ImageInitParams extends BeanInitParams {
 		}
 	}
 	
-	public void addToObjMaskCollection(String identifier, Operation<ObjMaskCollection,OperationFailedException> opObjMaskCollection) throws OperationFailedException {
+	public void addToObjMaskCollection(String identifier, Operation<ObjectCollection,OperationFailedException> opObjMaskCollection) throws OperationFailedException {
 		getObjMaskCollection().add(identifier, opObjMaskCollection);
 	}
 	

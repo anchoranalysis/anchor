@@ -56,7 +56,7 @@ public class PointTest {
 		Point3f pnt3f = new Point3f(-3.1f,4.2f,6.3f);
 		assertTrue( pnt3f.equals( new Point3f(-3.1f,4.2f,6.3f) ) );
 		
-		assertTrue( pnt3f.equals( pnt3d.toFloat()) );
+		assertTrue( pnt3f.equals( PointConverter.floatFromDouble(pnt3d)) );
 		
 		Point3i pnt3i = new Point3i(-3,4,6);
 		assertTrue( pnt3i.equals( new Point3i(-3,4,6) ) );

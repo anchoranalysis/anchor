@@ -30,11 +30,12 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 /*
@@ -50,7 +51,7 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
 	/** A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key */ 
 	public abstract OutputAllowed outputAllowedSecondLevel( String key );
 	
-	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws AnchorIOException;
+	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws BindFailedException;
 	
 	public abstract FilePathPrefix prefixForFile(
 		PathWithDescription input,
@@ -58,5 +59,5 @@ public abstract class OutputManager extends AnchorBean<OutputManager> {
 		Optional<ManifestRecorder> manifestRecorder,
 		Optional<ManifestRecorder> experimentalManifestRecorder,
 		FilePathPrefixerParams context
-	) throws AnchorIOException;
+	) throws FilePathPrefixerException;
 }

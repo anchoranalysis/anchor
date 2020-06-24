@@ -1,6 +1,8 @@
 package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp
@@ -39,5 +41,5 @@ public interface OrderedFeatureList<T extends FeatureInput> {
 	 * 
 	 * @return
 	 */
-	FeatureList<T> orderedListOfFeatures() throws CreateException;
+	Optional<FeatureList<T>> orderedListOfFeatures() throws CreateException;
 }

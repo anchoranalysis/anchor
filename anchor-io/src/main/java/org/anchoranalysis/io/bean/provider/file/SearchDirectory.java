@@ -43,6 +43,7 @@ import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.glob.GlobExtractor;
 import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -81,10 +82,14 @@ public class SearchDirectory extends FileProviderWithDirectoryString {
 	
 	// Matching files
 	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws FileProviderException {
 
 		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
-		return matcher.matchingFiles(directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
+		try {
+			return matcher.matchingFiles(directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
+		} catch (AnchorIOException e) {
+			throw new FileProviderException(e);
+		}
 	}
 	
 	

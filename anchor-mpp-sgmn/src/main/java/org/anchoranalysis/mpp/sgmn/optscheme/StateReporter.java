@@ -1,5 +1,7 @@
 package org.anchoranalysis.mpp.sgmn.optscheme;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -38,10 +40,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 public abstract class StateReporter<T,S> extends AnchorBean<StateReporter<T,S>> {
 
 	public abstract StateTransformer<T, S> primaryReport();
-
-	/** Is there a secondary report available? */
-	public abstract boolean hasSecondaryReport();
 	
-	public abstract StateTransformer<T, S> secondaryReport();
+	public abstract Optional<StateTransformer<T, S>> secondaryReport();
 	
 }

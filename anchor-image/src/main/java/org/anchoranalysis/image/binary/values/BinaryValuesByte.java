@@ -35,6 +35,16 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
+/**
+ * Two values representing {@link byte} binary states in an unsigned-byte buffer e.g. 0 for OFF and -1 for ON
+ * 
+ * <p>This class is IMMUTABLE</p>
+ * 
+ * <p>See {@link BinaryValueBytes} for an equivalent class that stores these states as {@link int}</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class BinaryValuesByte implements Serializable {
 
 	/**
@@ -42,33 +52,25 @@ public final class BinaryValuesByte implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final byte offByte;
-	private final byte onByte;
-	
 	private static final BinaryValuesByte defaultBB = new BinaryValuesByte( (byte) 0, (byte) -1 );
 	
-	public static BinaryValuesByte getDefault() {
-		return defaultBB;
-	}
-	
-	public BinaryValuesByte( BinaryValuesByte src ) {
-		offByte = src.offByte;
-		onByte = src.onByte;
-	}
-	
+	private final byte offByte;
+	private final byte onByte;
+		
 	public BinaryValuesByte(byte off, byte on) {
 		this.offByte = off;
 		this.onByte = on;
 	}
 	
 	public BinaryValuesByte(int off, int on) {
-		this.offByte = (byte) off;
-		this.onByte = (byte) on;
+		this( 
+			(byte) off,
+			(byte) on
+		);
 	}
 	
-	public BinaryValuesByte( BinaryValues bv ) {
-		this.offByte = (byte) bv.getOffInt();
-		this.onByte = (byte) bv.getOnInt();
+	public static BinaryValuesByte getDefault() {
+		return defaultBB;
 	}
 	
 	public byte getOffByte() {
@@ -85,10 +87,6 @@ public final class BinaryValuesByte implements Serializable {
 	
 	public boolean isOff( byte val ) {
 		return !isOn(val);
-	}
-	
-	public BinaryValuesByte duplicate() {
-		return new BinaryValuesByte(this);
 	}
 	
 	public BinaryValuesByte invert() {

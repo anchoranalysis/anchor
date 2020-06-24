@@ -29,10 +29,10 @@ package org.anchoranalysis.image.init;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
 /**
@@ -48,11 +48,11 @@ class InitBridge<
 	S extends InitializableBean<?,V>,
 	T,
 	V extends BeanInitParams
-> implements IObjectBridge<S,T,OperationFailedException> {
+> implements FunctionWithException<S,T,OperationFailedException> {
 
 	private PropertyInitializer<?> pi;
 	private LogErrorReporter logger;
-	private IObjectBridge<S, T, CreateException> beanBridge;
+	private FunctionWithException<S, T, CreateException> beanBridge;
 	
 	/**
 	 * Constructor
@@ -64,7 +64,7 @@ class InitBridge<
 	public InitBridge(
 		PropertyInitializer<?> pi,
 		LogErrorReporter logger,
-		IObjectBridge<S, T, CreateException> beanBridge
+		FunctionWithException<S, T, CreateException> beanBridge
 	) {
 		super();
 		this.pi = pi;
@@ -73,14 +73,14 @@ class InitBridge<
 	}
 	
 	@Override
-	public T bridgeElement(S sourceObject) throws OperationFailedException {
+	public T apply(S sourceObject) throws OperationFailedException {
 		assert logger!=null;
 		try {
 			// Initialize
 			sourceObject.initRecursiveWithInitializer(pi, logger);
 			
 			// Bridge the source to the destination
-			return beanBridge.bridgeElement(sourceObject);
+			return beanBridge.apply(sourceObject);
 		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);
 		}

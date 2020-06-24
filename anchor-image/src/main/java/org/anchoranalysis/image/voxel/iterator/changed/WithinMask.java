@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /**
  * Processes only neighbouring voxels that lie on a mask.
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 
 	private final ProcessChangedPointAbsoluteMasked<T> delegate;
-	private final ObjMask om;
+	private final ObjectMask om;
 	private final Extent extent;
 	private final ReadableTuple3i crnrMin;
 	
@@ -58,7 +58,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 	
 	private int maskOffsetXYAtPnt;
 	
-	public WithinMask(ProcessChangedPointAbsoluteMasked<T> process,	ObjMask om) {
+	public WithinMask(ProcessChangedPointAbsoluteMasked<T> process,	ObjectMask om) {
 		this.delegate = process;
 		this.om = om;
 		this.maskOffVal = om.getBinaryValuesByte().getOffByte();
@@ -134,7 +134,6 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 	}
 	
 	private void updateRel(Point3i pnt) {
-		relativeToCrnr = new Point3i(pnt);
-		relativeToCrnr.sub(crnrMin);
+		relativeToCrnr = Point3i.immutableSubtract(pnt, crnrMin);
 	}
 }

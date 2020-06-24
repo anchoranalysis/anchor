@@ -46,17 +46,17 @@ public class VoxelBoxFactory extends VoxelDataTypeFactoryMultiplexer<VoxelBoxFac
 	// Singleton
 	private static VoxelBoxFactory instance;
 	
-	private static VoxelBoxFactoryTypeBound<ByteBuffer> factoryByte = new VoxelBoxFactoryByte();
-	private static VoxelBoxFactoryTypeBound<ShortBuffer> factoryShort = new VoxelBoxFactoryShort();
-	private static VoxelBoxFactoryTypeBound<IntBuffer> factoryInt = new VoxelBoxFactoryInt();
-	private static VoxelBoxFactoryTypeBound<FloatBuffer> factoryFloat = new VoxelBoxFactoryFloat();
+	private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY_BYTE = new VoxelBoxFactoryByte();
+	private static final VoxelBoxFactoryTypeBound<ShortBuffer> FACTORY_SHORT = new VoxelBoxFactoryShort();
+	private static final VoxelBoxFactoryTypeBound<IntBuffer> FACTORY_INT = new VoxelBoxFactoryInt();
+	private static final VoxelBoxFactoryTypeBound<FloatBuffer> FACTORY_FLOAT = new VoxelBoxFactoryFloat();
 	
 	private VoxelBoxFactory() {
 		super(
-			factoryByte,
-			factoryShort,
-			factoryInt,
-			factoryFloat
+			FACTORY_BYTE,
+			FACTORY_SHORT,
+			FACTORY_INT,
+			FACTORY_FLOAT
 		);
 	}
 	
@@ -82,19 +82,19 @@ public class VoxelBoxFactory extends VoxelDataTypeFactoryMultiplexer<VoxelBoxFac
 	}
 
 
-	public VoxelBoxFactoryTypeBound<ByteBuffer> getByte() {
-		return factoryByte;
+	public static VoxelBoxFactoryTypeBound<ByteBuffer> getByte() {
+		return FACTORY_BYTE;
 	}
 
-	public VoxelBoxFactoryTypeBound<ShortBuffer> getShort() {
-		return factoryShort;
+	public static VoxelBoxFactoryTypeBound<ShortBuffer> getShort() {
+		return FACTORY_SHORT;
 	}
 
-	public VoxelBoxFactoryTypeBound<IntBuffer> getInt() {
-		return factoryInt;
+	public static VoxelBoxFactoryTypeBound<IntBuffer> getInt() {
+		return FACTORY_INT;
 	}
 
-	public VoxelBoxFactoryTypeBound<FloatBuffer> getFloat() {
-		return factoryFloat;
+	public static VoxelBoxFactoryTypeBound<FloatBuffer> getFloat() {
+		return FACTORY_FLOAT;
 	}
 }

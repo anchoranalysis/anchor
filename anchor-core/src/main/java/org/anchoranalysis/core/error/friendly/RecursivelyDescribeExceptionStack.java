@@ -29,6 +29,8 @@ package org.anchoranalysis.core.error.friendly;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
+
 /**
  * Generates a nice string representation of an Exception and its causes according to certain rules.
  * 
@@ -156,8 +158,8 @@ public class RecursivelyDescribeExceptionStack {
 			return exc.getClass().getSimpleName();
 		}
 
-		// If it's a "friendly' exception rely on the message to be meaningful without the exception type
-		if (exc instanceof AnchorFriendlyCheckedException || exc instanceof AnchorFriendlyRuntimeException) {
+		// If it's a "friendly' or 'combinable' exception rely on the message to be meaningful without the exception type
+		if (exc instanceof AnchorFriendlyCheckedException || exc instanceof AnchorFriendlyRuntimeException || exc instanceof AnchorCombinableException) {
 			return exc.getMessage();
 		}
 		

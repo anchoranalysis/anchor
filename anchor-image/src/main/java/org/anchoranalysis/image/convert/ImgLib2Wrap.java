@@ -112,7 +112,7 @@ public class ImgLib2Wrap {
 		return wrapBox(
 			box,
 			b -> new ByteArray(b.array()),
-			img -> new UnsignedByteType(img)
+			UnsignedByteType::new
 		);
 	}
 
@@ -120,7 +120,7 @@ public class ImgLib2Wrap {
 		return wrapBox(
 			box,
 			b -> new ShortArray(b.array()),
-			img -> new UnsignedShortType(img)
+			UnsignedShortType::new
 		);
 	}
 	
@@ -128,7 +128,7 @@ public class ImgLib2Wrap {
 		return wrapBox(
 			box,
 			b -> new FloatArray(b.array()),
-			img -> new FloatType(img)
+			FloatType::new
 		);
 	}
 	

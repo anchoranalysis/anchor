@@ -31,14 +31,14 @@ import java.nio.Buffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
-public class ChnlConverterDelegateToHistogram<T extends Buffer> extends ChnlConverterAttached<Chnl, T> {
+public class ChnlConverterDelegateToHistogram<T extends Buffer> extends ChnlConverterAttached<Channel, T> {
 
 	private ChnlConverterAttached<Histogram, T> delegate;
 	
@@ -47,7 +47,7 @@ public class ChnlConverterDelegateToHistogram<T extends Buffer> extends ChnlConv
 	}
 	
 	@Override
-	public void attachObject(Chnl obj) throws OperationFailedException {
+	public void attachObject(Channel obj) throws OperationFailedException {
 
 		try {
 			Histogram hist = HistogramFactory.create(obj);
@@ -59,7 +59,7 @@ public class ChnlConverterDelegateToHistogram<T extends Buffer> extends ChnlConv
 	}
 
 	@Override
-	public Chnl convert(Chnl chnl, ConversionPolicy changeExisting) {
+	public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
 		return delegate.convert(chnl, changeExisting);
 	}
 

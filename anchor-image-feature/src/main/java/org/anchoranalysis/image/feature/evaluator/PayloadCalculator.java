@@ -27,10 +27,10 @@ package org.anchoranalysis.image.feature.evaluator;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 @FunctionalInterface
 public interface PayloadCalculator {
 
-	double calc( ObjMask om ) throws FeatureCalcException;
+	double calc( ObjectMask om ) throws FeatureCalcException;
 }

@@ -50,28 +50,38 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 	
 	private LRUCache<T,ResultsVector> cacheResults;
 
-	private static int CACHE_SIZE = 1000;
+	private static int DEFAULT_CACHE_SIZE = 1000;
 	
 	private boolean suppressErrors = false;
 	
 	// We update this every time so it matches whatever is passed to calcSuppressErrors
 	private ErrorReporter errorReporter = null;
 	
+
+	/**
+	 * Creates a feature-calculator with a new cache
+	 * 
+	 * @param source the underlying feature-calculator to use for calculating unknown results
+	 * @param suppressErrors
+	 */
+	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors) {
+		this(source, suppressErrors, DEFAULT_CACHE_SIZE);
+	}
 	
 	/**
 	 * Creates a feature-calculator with a new cache
 	 * 
 	 * @param source the underlying feature-calculator to use for calculating unknown results
-	 * 
 	 * @param suppressErrors
+	 * @param cacheSize size of cache to use
 	 */
-	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors) {
+	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors, int cacheSize) {
 		super();
 		this.source = source;
 		this.suppressErrors = suppressErrors;
 		
 		this.cacheResults = new LRUCache<T,ResultsVector>(
-			CACHE_SIZE,
+			cacheSize,
 			new GetterImpl()
 		);
 		

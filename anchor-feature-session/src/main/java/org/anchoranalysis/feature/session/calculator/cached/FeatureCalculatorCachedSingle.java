@@ -41,20 +41,34 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
  */
 public class FeatureCalculatorCachedSingle<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
-	private FeatureCalculatorCachedMulti<T> delegate;
+	private final FeatureCalculatorCachedMulti<T> delegate;
+
+	/**
+	 * Creates a feature-calculator with a new cache
+	 * 
+	 * @param source the underlying feature-calculator to use for calculating unknown results
+	 * @param suppressErrors
+	 * @param cacheSize size of cache
+	 */
+	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors) {
+		delegate = new FeatureCalculatorCachedMulti<>(
+			new FeatureCalculatorMultiFromSingle<>(source),
+			suppressErrors
+		);
+	}
 	
 	/**
 	 * Creates a feature-calculator with a new cache
 	 * 
 	 * @param source the underlying feature-calculator to use for calculating unknown results
-	 * 
 	 * @param suppressErrors
+	 * @param cacheSize size of cache
 	 */
-	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors) {
-		super();
-		this.delegate = new FeatureCalculatorCachedMulti<>(
+	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors, int cacheSize) {
+		delegate = new FeatureCalculatorCachedMulti<>(
 			new FeatureCalculatorMultiFromSingle<>(source),
-			suppressErrors
+			suppressErrors,
+			cacheSize
 		);
 	}
 	

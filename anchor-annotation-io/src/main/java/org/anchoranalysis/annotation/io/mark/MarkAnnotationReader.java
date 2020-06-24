@@ -54,7 +54,7 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 	}
 
 	public boolean annotationExistsCorrespondTo( Path annotationPath ) {
-		return fileNameToRead(annotationPath)!=null;
+		return fileNameToRead(annotationPath).isPresent();
 	}
 	
 	@Override
