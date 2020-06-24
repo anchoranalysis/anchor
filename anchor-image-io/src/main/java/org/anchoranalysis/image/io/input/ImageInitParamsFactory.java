@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.input;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class ImageInitParamsFactory {

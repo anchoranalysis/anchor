@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.unitvalue;
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 /*
  * #%L
- * anchor-image-bean
+ * anchor-image-io
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,20 +26,44 @@ package org.anchoranalysis.image.unitvalue;
  * #L%
  */
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public class UnitValueException extends AnchorCheckedException {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 
-	public UnitValueException(String string) {
-		super(string);
+// Describes a set of bounding boxes on top of a plane
+public class BBoxSetOnPlane implements Iterable<BoundingBox> {
+	
+	private Extent extent = new Extent();
+	
+	private List<BoundingBox> list = new ArrayList<>();
+	
+	public void add(BoundingBox obj) {
+		list.add(obj);
+	}
+	
+	public BoundingBox get(int index) {
+		return list.get(index);
 	}
 
-	public UnitValueException( Exception exc ) {
-		super( exc );
+	public Iterator<BoundingBox> bboxIterator() {
+		return list.iterator();
 	}
+
+	@Override
+	public Iterator<BoundingBox> iterator() {
+		return bboxIterator();
+	}
+
+	public Extent getExtnt() {
+		return extent;
+	}
+
+	public void setExtnt(Extent extent) {
+		this.extent = extent;
+	}
+	
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.io.input;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 /** The input can be used to initialize an MPP Bean */
 public interface InputForMPPBean {

@@ -2,6 +2,8 @@ package org.anchoranalysis.image.bean.sgmn.objmask;
 
 import java.util.Optional;
 
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -33,7 +35,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public abstract class ObjMaskSgmn extends SgmnBean<ObjMaskSgmn> {
 

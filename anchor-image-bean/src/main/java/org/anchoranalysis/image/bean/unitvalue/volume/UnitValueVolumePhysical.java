@@ -32,9 +32,9 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 // Measures either area or volume (depending if the do3D flag is employed)
 public class UnitValueVolumePhysical extends UnitValueVolume {

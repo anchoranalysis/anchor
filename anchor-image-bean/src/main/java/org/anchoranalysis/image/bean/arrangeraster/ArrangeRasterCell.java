@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.AnchorBean;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.image.arrangeraster.IArrangeRaster;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.IArrangeRaster;
 
 public class ArrangeRasterCell extends AnchorBean<ArrangeRasterCell> {
 

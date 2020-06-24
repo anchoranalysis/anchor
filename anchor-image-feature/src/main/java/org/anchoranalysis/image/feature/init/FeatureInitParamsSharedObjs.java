@@ -27,7 +27,7 @@ package org.anchoranalysis.image.feature.init;
  */
 
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 /**
  * Extension of typical feature initialization, that also sets shared objects

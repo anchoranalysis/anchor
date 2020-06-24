@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.arrangeraster;
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 /*
  * #%L
@@ -31,19 +31,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-@SuppressWarnings("unused")
 public class RasterArranger {
 	
 	private BBoxSetOnPlane bboxSetOnPlane;

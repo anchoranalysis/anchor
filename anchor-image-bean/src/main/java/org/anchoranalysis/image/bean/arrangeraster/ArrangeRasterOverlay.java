@@ -31,8 +31,8 @@ import java.util.Iterator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.arrangeraster.ArrangeRasterException;
-import org.anchoranalysis.image.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;

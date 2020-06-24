@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.arrangeraster;
+package org.anchoranalysis.image.bean.nonbean.error;
 
 /*
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,12 +26,20 @@ package org.anchoranalysis.image.arrangeraster;
  * #L%
  */
 
+import org.anchoranalysis.core.error.AnchorCheckedException;
 
-import java.util.Iterator;
+public class UnitValueException extends AnchorCheckedException {
 
-import org.anchoranalysis.image.stack.rgb.RGBStack;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-public interface IArrangeRaster {
+	public UnitValueException(String string) {
+		super(string);
+	}
 
-	BBoxSetOnPlane createBBoxSetOnPlane( Iterator<RGBStack> rasterIterator ) throws ArrangeRasterException;
+	public UnitValueException( Exception exc ) {
+		super( exc );
+	}
 }

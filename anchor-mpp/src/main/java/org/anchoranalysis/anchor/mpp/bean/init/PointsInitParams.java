@@ -36,8 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.init.PopulateStoreFromDefine;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 
 public class PointsInitParams extends BeanInitParams {
 	

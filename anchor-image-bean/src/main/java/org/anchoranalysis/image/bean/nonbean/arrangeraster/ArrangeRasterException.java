@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.arrangeraster;
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 /*
  * #%L
@@ -28,18 +28,18 @@ package org.anchoranalysis.image.arrangeraster;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public class TableItemException extends AnchorCheckedException {
+public class ArrangeRasterException extends AnchorCheckedException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -872733425317309830L;
+	private static final long serialVersionUID = -6247544738100419019L;
 
-	public TableItemException(String string) {
+	public ArrangeRasterException(String string) {
 		super(string);
 	}
 
-	public TableItemException( Exception exc ) {
+	public ArrangeRasterException( Exception exc ) {
 		super( exc );
 	}
 }

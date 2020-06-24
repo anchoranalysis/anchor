@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.init;
+package org.anchoranalysis.image.bean.nonbean.init;
 
 /*
  * #%L

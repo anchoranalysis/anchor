@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.arrangeraster;
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 /*
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,44 +26,20 @@ package org.anchoranalysis.image.arrangeraster;
  * #L%
  */
 
+import org.anchoranalysis.core.error.AnchorCheckedException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+public class TableItemException extends AnchorCheckedException {
 
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -872733425317309830L;
 
-// Describes a set of bounding boxes on top of a plane
-public class BBoxSetOnPlane implements Iterable<BoundingBox> {
-	
-	private Extent extent = new Extent();
-	
-	private List<BoundingBox> list = new ArrayList<>();
-	
-	public void add(BoundingBox obj) {
-		list.add(obj);
-	}
-	
-	public BoundingBox get(int index) {
-		return list.get(index);
+	public TableItemException(String string) {
+		super(string);
 	}
 
-	public Iterator<BoundingBox> bboxIterator() {
-		return list.iterator();
+	public TableItemException( Exception exc ) {
+		super( exc );
 	}
-
-	@Override
-	public Iterator<BoundingBox> iterator() {
-		return bboxIterator();
-	}
-
-	public Extent getExtnt() {
-		return extent;
-	}
-
-	public void setExtnt(Extent extent) {
-		this.extent = extent;
-	}
-	
 }

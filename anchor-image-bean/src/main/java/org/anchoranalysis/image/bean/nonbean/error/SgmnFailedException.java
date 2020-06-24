@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.sgmn;
+package org.anchoranalysis.image.bean.nonbean.error;
 
 /*
  * #%L

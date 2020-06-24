@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 public class FeatureInputStack extends FeatureInputNRGStack {
 	

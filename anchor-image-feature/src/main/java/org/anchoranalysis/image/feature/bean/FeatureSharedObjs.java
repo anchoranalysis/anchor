@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.feature.bean.FeatureCastInitParams;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.init.ImageInitParams;
 
 
 /**

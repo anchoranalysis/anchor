@@ -29,8 +29,8 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
 

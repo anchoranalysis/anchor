@@ -46,9 +46,9 @@ import org.anchoranalysis.feature.session.strategy.child.CheckCacheForSpecificCh
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.InitParamsHelper;
-import org.anchoranalysis.image.init.ImageInitParams;
 
 class CreateCalculatorHelper {
 

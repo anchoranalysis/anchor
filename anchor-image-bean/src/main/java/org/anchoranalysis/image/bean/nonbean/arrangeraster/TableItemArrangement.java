@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.arrangeraster;
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 /*
  * #%L

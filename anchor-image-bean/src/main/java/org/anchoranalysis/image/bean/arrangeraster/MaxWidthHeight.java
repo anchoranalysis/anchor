@@ -29,8 +29,8 @@ package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.List;
 
-import org.anchoranalysis.image.arrangeraster.BBoxSetOnPlane;
-import org.anchoranalysis.image.arrangeraster.TableItemArrangement;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 
 class MaxWidthHeight {
 	
