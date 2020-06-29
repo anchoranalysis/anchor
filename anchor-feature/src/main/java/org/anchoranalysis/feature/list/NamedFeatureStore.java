@@ -120,8 +120,9 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
 		FeatureList<T> out = new FeatureList<>();
 		int end = start + size;
 		for( int i=start; i<end; i++ ) {
-			NamedBean<Feature<T>> ni = list.get(i);
-			out.add( ni.getValue() );
+			out.add(
+				list.get(i).getValue()
+			);
 		}
 		return out;
 	}

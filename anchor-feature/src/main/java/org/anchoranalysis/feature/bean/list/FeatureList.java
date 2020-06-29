@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -168,10 +167,6 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 
 	public boolean addAll(FeatureList<T> other) {
 		return list.addAll( other.asList() );
-	}
-	
-	public boolean addAll(Collection<? extends Feature<T>> c) {
-		return list.addAll(c);
 	}
 
 	public void clear() {

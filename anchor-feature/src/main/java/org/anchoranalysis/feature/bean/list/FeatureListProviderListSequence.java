@@ -119,20 +119,19 @@ public class FeatureListProviderListSequence<T extends FeatureInput> extends Fea
 		return out;
 	}
 	
-	
-	
 	@Override
 	public FeatureList<T> create() throws CreateException {
-		
-		FeatureList<T> out = new FeatureList<>();
-		
+		return new FeatureList<>(
+			featureFromSequence()		
+		);
+	}
+	
+	private Feature<T> featureFromSequence() {
 		if (sequenceAdditional!=null) {
-			out.add(createDoubleSequence());
+			return createDoubleSequence();
 		} else {
-			out.add(createSingleSequence());
+			return createSingleSequence();
 		}
-				
-		return out;
 	}
 
 	public String getPrependString() {
