@@ -14,40 +14,45 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
-class MergedPairsCalculator {
+/**
+ * Calculates a result for merged-pairs based upon combining the calculations from several calculators
+ * @author Owen Feehan
+ *
+ */
+class CombinedCalculator {
 
 	private MergedPairsFeatures features;
 	private CreateCalculatorHelper cc;
 	private boolean suppressErrors;
 	private MergedPairsInclude include;
 	
-	private FeatureCalculatorMulti<FeatureInputStack> sessionImage;
+	private FeatureCalculatorMulti<FeatureInputStack> calculatorImage;
 	
 	/**
-	 * Session for calculating first and second single objects
+	 * For calculating first and second single objects
 	 * 
 	 * We avoid using separate sessions for First and Second, as we want them
 	 *  to share the same Vertical-Cache for object calculation.
 	 * 
 	 * <p>Can be null, if neither the first or second features are included</p>
 	 */
-	private FeatureCalculatorMulti<FeatureInputSingleObj> sessionFirstSecond;
+	private FeatureCalculatorMulti<FeatureInputSingleObj> calculatorFirstSecond;
 
 	/**
-	 * Session for calculating merged objects
+	 * For calculating merged objects
 	 * 
 	 * <p>Can be null, if neither the merged are not included</p>
 	 */
-	private FeatureCalculatorMulti<FeatureInputSingleObj> sessionMerged;
+	private FeatureCalculatorMulti<FeatureInputSingleObj> calculatorMerged;
 		
 	/**
-	 * Session for calculating pair objects
+	 * For calculating pair objects
 	 * 
 	 * <p>Can be null, if neither the pair are not included</p>
 	 */
-	private FeatureCalculatorMulti<FeatureInputPairObjs> sessionPair;
+	private FeatureCalculatorMulti<FeatureInputPairObjs> calculatorPair;
 	
-	public MergedPairsCalculator(MergedPairsFeatures features, CreateCalculatorHelper cc, MergedPairsInclude include, ImageInitParams soImage, boolean suppressErrors) throws InitException {
+	public CombinedCalculator(MergedPairsFeatures features, CreateCalculatorHelper cc, MergedPairsInclude include, ImageInitParams soImage, boolean suppressErrors) throws InitException {
 		super();
 		this.cc = cc;
 		this.features = features;
@@ -73,25 +78,25 @@ class MergedPairsCalculator {
 		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
 		
 		// TODO these are identical and do not need to be repeatedly calculated
-		helper.calcAndInsert(new FeatureInputStack(), sessionImage );
+		helper.calcAndInsert(new FeatureInputStack(), calculatorImage );
 		
 		// First features
 		if (include.includeFirst()) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getFirst, sessionFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjs::getFirst, calculatorFirstSecond );
 		}
 		
 		// Second features
 		if (include.includeSecond()) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, sessionFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, calculatorFirstSecond );
 		}
 		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
 		if (include.includeMerged()) {
-			helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
+			helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, calculatorMerged );
 		}
 
 		// Pair features
-		helper.calcAndInsert(input, sessionPair );
+		helper.calcAndInsert(input, calculatorPair );
 		
 		assert(helper.getResultsVector().hasNoNulls());
 		return helper.getResultsVector();
@@ -115,7 +120,7 @@ class MergedPairsCalculator {
 	}
 	
 	private void createImage(ImageInitParams soImage) throws InitException {
-		sessionImage = features.createImageSession(cc, soImage, CachingStrategies.noCache(), suppressErrors);
+		calculatorImage = features.createImageSession(cc, soImage, CachingStrategies.noCache(), suppressErrors);
 	}
 	
 	private void createFirstAndSecond(
@@ -123,7 +128,7 @@ class MergedPairsCalculator {
 		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond		
 	) throws InitException {
 		if (include.includeFirstOrSecond()) {
-			sessionFirstSecond = features.createSingleSession(cc, soImage, cachingStrategyFirstSecond, suppressErrors);
+			calculatorFirstSecond = features.createSingle(cc, soImage, cachingStrategyFirstSecond, suppressErrors);
 		}		
 	}
 	
@@ -135,10 +140,10 @@ class MergedPairsCalculator {
 			= CachingStrategies.cacheAndReuse();
 	
 		if (include.includeMerged()) {
-			sessionMerged = features.createSingleSession(cc, soImage, cachingStrategyMerged, suppressErrors);
+			calculatorMerged = features.createSingle(cc, soImage, cachingStrategyMerged, suppressErrors);
 		}
 				
-		sessionPair = features.createPairSession(
+		calculatorPair = features.createPair(
 			cc,
 			soImage,
 			TransferSourceHelper.createTransferSource(

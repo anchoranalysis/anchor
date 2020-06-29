@@ -1,5 +1,6 @@
 package org.anchoranalysis.image.objectmask;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -66,13 +67,21 @@ public final class ObjectMaskStream {
 	 * <p>This is an IMMUTABLE operation.</p>
 	 *
 	 * @param <T> destination type for the mapping
+	 * @param <E> exception that can be thrown during mapping
 	 * @param mapFunc performs mapping
 	 * @return a newly created list contained the mapped objects
+	 * @throws E if an exception occurs during mapping
 	 */
-	public <T> List<T> mapAsList(Function<ObjectMask,T> mapFunc) {
-		return delegate.streamStandardJava().map(mapFunc).collect( Collectors.toList() );
+	public <T,E extends Throwable> List<T> mapToList(FunctionWithException<ObjectMask,T,E> mapFunc) throws E {
+		List<T> out = new ArrayList<T>();
+		for( ObjectMask obj : delegate) {
+			out.add(
+				mapFunc.apply(obj)
+			);
+		}
+		return out;
 	}
-	
+		
 	
 	/**
 	 * Creates a new {@link ObjectCollection} after mapping each item to several others

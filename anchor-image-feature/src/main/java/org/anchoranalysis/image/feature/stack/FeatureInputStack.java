@@ -56,6 +56,18 @@ public class FeatureInputStack extends FeatureInputNRGStack {
 		this.so = Optional.empty();
 		this.setNrgStack( new NRGStackWithParams(nrgStack) );
 	}
+	
+	/**
+	 * Params without any ImageInitParams
+	 * 
+	 * @param nrgStack
+	 */
+	public FeatureInputStack(Optional<NRGStack> nrgStack) {
+		this.so = Optional.empty();
+		if (nrgStack.isPresent()) {
+			this.setNrgStack( new NRGStackWithParams(nrgStack.get()) );
+		}
+	}
 
 	/**
 	 * Params with any ImageInitParams

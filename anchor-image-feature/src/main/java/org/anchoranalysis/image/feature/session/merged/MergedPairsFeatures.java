@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
- * The list of features that can be used in a {@link MergedPairsSession}
+ * The list of features that can be used in a {@link FeatureCalculatorMergedPairs}
  * 
  * @author Owen Feehan
  *
@@ -127,7 +127,7 @@ public class MergedPairsFeatures {
 		);
 	}
 	
-	public FeatureCalculatorMulti<FeatureInputSingleObj> createSingleSession(
+	public FeatureCalculatorMulti<FeatureInputSingleObj> createSingle(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
 		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategy,
@@ -141,7 +141,7 @@ public class MergedPairsFeatures {
 		);
 	}
 	
-	public FeatureCalculatorMulti<FeatureInputPairObjs> createPairSession(
+	public FeatureCalculatorMulti<FeatureInputPairObjs> createPair(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
 		CacheTransferSourceCollection cacheTransferSource

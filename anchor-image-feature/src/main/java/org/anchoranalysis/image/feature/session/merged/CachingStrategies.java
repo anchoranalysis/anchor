@@ -34,7 +34,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
- * Strategies for caching used in {@link MergedPairsSession}
+ * Strategies for caching used in {@link FeatureCalculatorMergedPairs}
  * 
  * @author Owen Feehan
  *

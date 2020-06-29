@@ -43,8 +43,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.feature.session.FeatureTableSession;
-import org.anchoranalysis.image.feature.session.UniqueIdentifierUtilities;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 
 
 /**
@@ -73,40 +72,36 @@ import org.anchoranalysis.image.feature.session.UniqueIdentifierUtilities;
  * @author Owen Feehan
  *
  */
-public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs> {
+public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjs> {
 		
-	private MergedPairsCalculator calculator;
+	private CombinedCalculator calculator;
 
 	// The lists we need
 	private MergedPairsFeatures features;
 	private MergedPairsInclude include;
-	private boolean checkInverse = false;
 	
 	// Prefixes that are ignored
 	private Collection<String> ignoreFeaturePrefixes;
 	
 	private boolean suppressErrors;
 	
-	public MergedPairsSession(MergedPairsFeatures features) {
+	public FeatureCalculatorMergedPairs(MergedPairsFeatures features) {
 		this(
 			features,
 			new MergedPairsInclude(),
 			Collections.emptySet(),
-			false,
 			true
 		);
 	}
 		
-	public MergedPairsSession(
+	public FeatureCalculatorMergedPairs(
 		MergedPairsFeatures features,
 		MergedPairsInclude include,
 		Collection<String> ignoreFeaturePrefixes,
-		boolean checkInverse,
 		boolean suppressErrors
 	) {
 		this.include = include;
 		this.features = features;
-		this.checkInverse = checkInverse;
 		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
 		this.suppressErrors = suppressErrors;
 	}
@@ -118,7 +113,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 		LogErrorReporter logErrorReporter
 	) throws InitException {
 		
-		calculator = new MergedPairsCalculator(
+		calculator = new CombinedCalculator(
 			features,
 			new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter),
 			include,			
@@ -129,8 +124,7 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	
 	@Override
 	public ResultsVector calc(FeatureInputPairObjs input) throws FeatureCalcException {
-
-		return calcForInputAndMaybeInverse(
+		return calculator.calcForInput(
 			input,
 			Optional.empty()
 		);
@@ -146,12 +140,12 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	public ResultsVector calcSuppressErrors(FeatureInputPairObjs input, ErrorReporter errorReporter) {
 		
 		try {
-			return calcForInputAndMaybeInverse(
+			return calculator.calcForInput(
 				input,
 				Optional.of(errorReporter)
 			);
 		} catch (FeatureCalcException e) {
-			errorReporter.recordError(MergedPairsSession.class, e);
+			errorReporter.recordError(FeatureCalculatorMergedPairs.class, e);
 			
 			ResultsVector rv = new ResultsVector( sizeFeatures() );
 			rv.setErrorAll(e);
@@ -197,56 +191,12 @@ public class MergedPairsSession extends FeatureTableSession<FeatureInputPairObjs
 	}
 	
 	@Override
-	public FeatureTableSession<FeatureInputPairObjs> duplicateForNewThread() {
-		return new MergedPairsSession(
+	public FeatureTableCalculator<FeatureInputPairObjs> duplicateForNewThread() {
+		return new FeatureCalculatorMergedPairs(
 			features.duplicate(),
 			include,
 			ignoreFeaturePrefixes,	// NOT DUPLICATED
-			checkInverse,
 			suppressErrors
 		);
-	}
-
-	
-	private ResultsVector calcForInputAndMaybeInverse(FeatureInputPairObjs input, Optional<ErrorReporter> errorReporter) throws FeatureCalcException {
-		
-		ResultsVector rv = calculator.calcForInput(input, errorReporter);
-		
-		if (checkInverse) {
-			
-			ResultsVector rvInverse = calculator.calcForInput(
-				createInverse(input),
-				errorReporter
-			);
-			
-			InverseChecker checker = new InverseChecker(
-				include.includeFirst(),
-				include.includeSecond(),
-				features.numImageFeatures(),
-				features.numSingleFeatures(),
-				() -> createFeatureNames()
-			);
-			checker.checkInverseEqual(rv, rvInverse, input);
-		}
-		
-		return rv;
-	}
-	
-	private static FeatureInputPairObjs createInverse( FeatureInputPairObjs input ) {
-		return new FeatureInputPairObjs(
-			input.getSecond(),
-			input.getFirst(),
-			input.getNrgStackOptional(),
-			input.getMergedOptional()
-		);
-	}
-
-	@Override
-	public String uniqueIdentifierFor(FeatureInputPairObjs input) {
-		StringBuilder sb = new StringBuilder();
-		sb.append( UniqueIdentifierUtilities.forObject(input.getFirst()) );
-		sb.append("_and_");
-		sb.append( UniqueIdentifierUtilities.forObject(input.getSecond()) );
-		return sb.toString();
 	}
 }

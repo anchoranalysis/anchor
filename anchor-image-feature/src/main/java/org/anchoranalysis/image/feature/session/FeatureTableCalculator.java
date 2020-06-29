@@ -37,36 +37,31 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 /**
- * A session for calculating features that will ultimately be displayed in a tabular-format with column-names
+ * A feature-calculator with additional functions for encoding the output in in a tabular-format with column-names
  * 
  * @author Owen Feehan
  *
  * @param <T>
  */
-public abstract class FeatureTableSession<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
+public abstract class FeatureTableCalculator<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 	
 	/**
 	 * Initializes a feature store that has the same structure as that previously created by createFeatures() from the same object
-	 * @param soImage
-	 * @param soFeature TODO
-	 * @param nrgStack TODO
-	 * @param logErrorReporter TODO
-	 * @param inputFeatureSize TODO
+	 * 
+	 * @param initParams
+	 * @param nrgStack
+	 * @param logger
 	 * @param features
 	 */
-	public abstract void start( ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, LogErrorReporter logErrorReporter ) throws InitException;
+	public abstract void start( ImageInitParams initParams, Optional<NRGStackWithParams> nrgStack, LogErrorReporter logger ) throws InitException;
 	
 	/**
 	 * Makes a copy of the feature-store for a new thread. Deep-copies the features. Shallow-copies everything else.
 	 * 
 	 * @return
 	 */
-	public abstract FeatureTableSession<T> duplicateForNewThread();
+	public abstract FeatureTableCalculator<T> duplicateForNewThread();
 	
 	/** A list of names for each feature (columns ofthe table) */
 	public abstract FeatureNameList createFeatureNames();
-	
-	/** Generates a unique identifier for a particular input */
-	public abstract String uniqueIdentifierFor(T input);
-
 }

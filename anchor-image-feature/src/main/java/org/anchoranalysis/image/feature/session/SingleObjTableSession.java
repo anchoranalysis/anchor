@@ -42,13 +42,13 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public class NamedFeatureStoreSession extends FeatureTableSession<FeatureInputSingleObj> {
+public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSingleObj> {
 
 	private FeatureCalculatorMulti<FeatureInputSingleObj> session;
 
 	private NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore;
 	
-	public NamedFeatureStoreSession(NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore) {
+	public SingleObjTableSession(NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore) {
 		this.namedFeatureStore = namedFeatureStore;
 	}
 
@@ -72,8 +72,8 @@ public class NamedFeatureStoreSession extends FeatureTableSession<FeatureInputSi
 	}
 	
 	@Override
-	public FeatureTableSession<FeatureInputSingleObj> duplicateForNewThread() {
-		return new NamedFeatureStoreSession(namedFeatureStore.deepCopy());
+	public FeatureTableCalculator<FeatureInputSingleObj> duplicateForNewThread() {
+		return new SingleObjTableSession(namedFeatureStore.deepCopy());
 	}
 
 	@Override
@@ -99,10 +99,5 @@ public class NamedFeatureStoreSession extends FeatureTableSession<FeatureInputSi
 	@Override
 	public FeatureNameList createFeatureNames() {
 		return namedFeatureStore.createFeatureNames();
-	}
-
-	@Override
-	public String uniqueIdentifierFor(FeatureInputSingleObj input) {
-		return UniqueIdentifierUtilities.forObject(input.getObjMask());
 	}
 }
