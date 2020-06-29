@@ -28,13 +28,13 @@ package org.anchoranalysis.image.voxel.nghb;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
-import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph.IVertexToObjMask;
 
 /**
  * Adds edges if objects neighbour each other
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph.IVertexToObjMask;
 class EdgeAdder<V> {
 	
 	private List<V> verticesAsList;
-	private IVertexToObjMask<V> vertexToObjMask;
+	private Function<V,ObjectMask> vertexToObjMask;
 	private ObjMaskCollectionRTree rTree;
 	private AddEdge<V> addEdge;
 	private boolean preventObjIntersection;
@@ -73,7 +73,7 @@ class EdgeAdder<V> {
 	 */
 	public EdgeAdder(
 		List<V> verticesAsList,
-		IVertexToObjMask<V> vertexToObjMask,
+		Function<V,ObjectMask> vertexToObjMask,
 		ObjMaskCollectionRTree rTree,
 		AddEdge<V> addEdge,
 		boolean preventObjIntersection,
@@ -136,7 +136,7 @@ class EdgeAdder<V> {
 			maybeAddEdge(
 				om,
 				omDilated,
-				vertexToObjMask.objMaskFromVertex(vertexOther),
+				vertexToObjMask.apply(vertexOther),
 				vertexWith,
 				verticesAsList.get(j)
 			);

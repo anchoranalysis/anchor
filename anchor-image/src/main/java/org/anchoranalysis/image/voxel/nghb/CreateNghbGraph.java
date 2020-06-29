@@ -28,6 +28,8 @@ package org.anchoranalysis.image.voxel.nghb;
 
 
 import java.util.List;
+import java.util.function.Function;
+
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Extent;
@@ -69,19 +71,6 @@ public class CreateNghbGraph<V> {
 		E createEdge( V v1, V v2, int numNghbPixels );
 	}
 	
-	
-	/**
-	 * Gets an ObjMask from a vertex
-	 * 
-	 * @author Owen Feehan
-	 *
-	 * @param <VertexType>
-	 */
-	@FunctionalInterface
-	public interface IVertexToObjMask<VertexType> {
-		ObjectMask objMaskFromVertex( VertexType vt );
-	}
-	
 	/**
 	 * Creates a graph with numPixels as the edge type
 	 * 
@@ -98,7 +87,7 @@ public class CreateNghbGraph<V> {
 	 */
 	public GraphWithEdgeTypes<V,Integer> createGraphWithNumPixels(
 			List<V> vertices,
-			IVertexToObjMask<V> vertexToObjMask,
+			Function<V,ObjectMask> vertexToObjMask,
 			Extent sceneExtnt,
 			boolean do3D
 		) throws CreateException {
@@ -132,7 +121,7 @@ public class CreateNghbGraph<V> {
 	 */
 	public <E> GraphWithEdgeTypes<V,E> createGraph(
 		List<V> vertices,
-		IVertexToObjMask<V> vertexToObjMask,
+		Function<V,ObjectMask> vertexToObjMask,
 		IEdgeFromVertices<V,E> edgeFromVertices,
 		Extent sceneExtnt,
 		boolean do3D,
@@ -196,10 +185,10 @@ public class CreateNghbGraph<V> {
 		);
 	}
 	
-	private ObjectCollection objsFromVertices( List<V> vertices, IVertexToObjMask<V> vertexToObjMask ) {
+	private ObjectCollection objsFromVertices( List<V> vertices, Function<V,ObjectMask> vertexToObjMask ) {
 		return ObjectCollectionFactory.mapFrom(
 			vertices,
-			vertexToObjMask::objMaskFromVertex
+			vertexToObjMask::apply
 		);	
 	}
 	
