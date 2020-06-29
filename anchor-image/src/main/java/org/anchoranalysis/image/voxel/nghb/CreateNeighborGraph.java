@@ -47,13 +47,13 @@ import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
  *
  * @param <V> vertex-type
  */
-public class CreateNghbGraph<V> {
+public class CreateNeighborGraph<V> {
 
 	// If we have a partition of objects, we don't need to check if objects-intersect as it's not possible by definition (a partition)
 	// However, if we have objects that can potentially overlap, we define them 'neighbours' only if objects are adjacent, but don't overlap. In this case, we need to checl
 	private boolean preventObjIntersection;
 		
-	public CreateNghbGraph(boolean preventObjIntersection) {
+	public CreateNeighborGraph(boolean preventObjIntersection) {
 		super();
 		this.preventObjIntersection = preventObjIntersection;
 	}
@@ -63,11 +63,11 @@ public class CreateNghbGraph<V> {
 	 * 
 	 * @author Owen Feehan
 	 *
-	 * @param <V> vertice-type
+	 * @param <V> vertex-type
 	 * @param <E> edge-type
 	 */
 	@FunctionalInterface
-	public interface IEdgeFromVertices<V,E> {
+	public interface EdgeFromVertices<V,E> {
 		E createEdge( V v1, V v2, int numNghbPixels );
 	}
 	
@@ -122,7 +122,7 @@ public class CreateNghbGraph<V> {
 	public <E> GraphWithEdgeTypes<V,E> createGraph(
 		List<V> vertices,
 		Function<V,ObjectMask> vertexToObjMask,
-		IEdgeFromVertices<V,E> edgeFromVertices,
+		EdgeFromVertices<V,E> edgeFromVertices,
 		Extent sceneExtnt,
 		boolean do3D,
 		boolean bigNghb,
@@ -131,16 +131,16 @@ public class CreateNghbGraph<V> {
 	) throws CreateException {
 		
 		// Graph of neighbouring objects, with the number of common pixels as an edge
-		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<V,E>(undirected);
+		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<>(undirected);
 		
-		ObjectCollection objs = objsFromVertices(vertices, vertexToObjMask);
+		// Objects from each vertex
+		ObjectCollection objs = ObjectCollectionFactory.mapFrom(vertices, vertexToObjMask::apply);
 		checkObjsInScene(objs, sceneExtnt);
-		ObjMaskCollectionRTree rTree = new ObjMaskCollectionRTree(objs);
 				
 		EdgeAdder<V> edgeAdder = new EdgeAdder<V>(
 			vertices,
 			vertexToObjMask,
-			rTree,
+			new ObjMaskCollectionRTree(objs),
 			createAndAddEdge(graph, edgeFromVertices),
 			preventObjIntersection,
 			bigNghb,
@@ -149,12 +149,16 @@ public class CreateNghbGraph<V> {
 		
 		for( int i=0; i<objs.size(); i++) {
 			
-			ObjectMask om = objs.get(i);
-			
 			V vertexWith = vertices.get(i);
 			graph.addVertex( vertexWith );
 			
-			edgeAdder.addEdgesFor( i, om, vertexWith, sceneExtnt, do3D );
+			edgeAdder.addEdgesFor(
+				i,
+				objs.get(i),
+				vertexWith,
+				sceneExtnt,
+				do3D
+			);
 		}
 		
 		return graph;
@@ -176,7 +180,7 @@ public class CreateNghbGraph<V> {
 	
 	private static <V,E> AddEdge<V> createAndAddEdge(
 		GraphWithEdgeTypes<V,E> graph,
-		IEdgeFromVertices<V,E> edgeFromVertices
+		EdgeFromVertices<V,E> edgeFromVertices
 	) {
 		return (v1, v2, numPixels) -> graph.addEdge(
 			v1,
@@ -184,12 +188,4 @@ public class CreateNghbGraph<V> {
 			edgeFromVertices.createEdge(v1, v2, numPixels)
 		);
 	}
-	
-	private ObjectCollection objsFromVertices( List<V> vertices, Function<V,ObjectMask> vertexToObjMask ) {
-		return ObjectCollectionFactory.mapFrom(
-			vertices,
-			vertexToObjMask::apply
-		);	
-	}
-	
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
-import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
+import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
 
 /**
  * A graph with all possible merges of ContiguousPixelPath
@@ -123,7 +123,7 @@ public class MergePathGraphNghb {
 		// This allows us to test for intersection
 		List<RasterizedPath> rasterized = createRasterized(vertices);
 		
-		CreateNghbGraph<RasterizedPath> creator = new CreateNghbGraph<>(true);
+		CreateNeighborGraph<RasterizedPath> creator = new CreateNeighborGraph<>(true);
 		nghbs = creator.createGraph(
 			rasterized,
 			a->a.getRasterized(),
