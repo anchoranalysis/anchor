@@ -146,7 +146,7 @@ public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 
 	
 	public List<Feature<FeatureInputPairMemo>> getElemPair() {
-		return elemPair;
+		return elemPair.asList();
 	}
 
 	public void setElemPair(List<Feature<FeatureInputPairMemo>> elemPair) {
@@ -188,21 +188,17 @@ public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 	}	
 	
 	public List<Feature<FeatureInputSingleMemo>> getElemInd() {
-		return elemInd;
+		return elemInd.asList();
 	}
-	
-
 
 	public List<Feature<FeatureInputAllMemo>> getElemAll() {
-		return elemAll;
+		return elemAll.asList();
 	}
 	
 	public void setElemAll(List<Feature<FeatureInputAllMemo>> elemAll) {
 		this.elemAll = new FeatureList<>(elemAll);
 	}
 	
-
-
 	// We put our normal setters and getters as List<Feature> so that the bean xml can use the normal factories for Lists
 	public void setElemInd(List<Feature<FeatureInputSingleMemo>> elemInd) {
 		this.elemInd = new FeatureList<>(elemInd);

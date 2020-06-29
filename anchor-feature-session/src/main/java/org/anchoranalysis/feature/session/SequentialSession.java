@@ -159,7 +159,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	
 		return replaceSession.createOrReuse(
 			params
-		).calc(featuresSubset);
+		).calc(featuresSubset.asList());
 	}
 	
 	/**
@@ -188,7 +188,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	}
 
 	public List<Feature<T>> getFeatureList() {
-		return listFeatures.getList();
+		return listFeatures.asList();
 	}
 	
 	@Override

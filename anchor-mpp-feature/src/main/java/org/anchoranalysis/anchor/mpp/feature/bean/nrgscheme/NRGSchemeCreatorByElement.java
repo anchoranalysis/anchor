@@ -86,13 +86,13 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 			out.setKeyValueParamsProvider(keyValueParamsProvider);
 		}
 		
-		out.setElemInd( elemIndCreator.create() );
-		out.setElemPair( elemPairCreator.create() );
+		out.setElemInd( elemIndCreator.create().asList() );
+		out.setElemPair( elemPairCreator.create().asList() );
 		out.setPairAddCriteria(pairAddCriteria);
 		out.setRegionMap(regionMap);
 	
 		if (elemAllCreator!=null) {
-			out.setElemAll( elemAllCreator.create() );
+			out.setElemAll( elemAllCreator.create().asList() );
 		}
 		
 		addImageFeatures( out.getListImageFeatures() );
@@ -109,7 +109,7 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	
 	private void addImageFeature( FeatureList<FeatureInputStack> fl, String name, List<NamedBean<Feature<FeatureInputStack>>> imageFeatures ) {
 		Sum<FeatureInputStack> feature = new Sum<>();
-		feature.setList( fl );
+		feature.setList( fl.asList() );
 		
 		imageFeatures.add(
 			new NamedBean<Feature<FeatureInputStack>>(

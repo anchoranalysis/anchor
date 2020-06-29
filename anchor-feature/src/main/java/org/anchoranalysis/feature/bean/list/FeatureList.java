@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -51,7 +50,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
  *
  * @param <T> input type of features contained in the list
  */
-public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>> {
+public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>> {
 	
 	// START BEAN PARAMETERS
 	@BeanField
@@ -127,8 +126,6 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	}
 	
 	// Delegate Methods
-	
-	@Override
 	public boolean add(Feature<T> f) {
 		assert(f!=null);
 		return list.add(f);
@@ -139,12 +136,6 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		add(f);
 	}
 
-	@Override
-	public Feature<T> get(int index) {
-		return list.get(index);
-	}
-
-	@Override
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
@@ -154,136 +145,12 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		return list.iterator();
 	}
 
-	@Override
 	public int size() {
 		return list.size();
 	}
 
-	@Override
-	public ListIterator<Feature<T>> listIterator() {
-		return list.listIterator();
-	}
-
-
-	@Override
-	public void add(int arg0, Feature<T> f) {
-		assert(f!=null);
-		list.add(arg0, f);
-	}
-
-
-	@Override
-	public boolean addAll(Collection<? extends Feature<T>> arg0) {
-		return list.addAll(arg0);
-	}
-
-
-	@Override
-	public boolean addAll(int arg0, Collection<? extends Feature<T>> arg1) {
-		return list.addAll(arg0, arg1);
-	}
-
-
-	@Override
-	public void clear() {
-		list.clear();
-	}
-
-
-	@Override
-	public boolean contains(Object arg0) {
-		return list.contains(arg0);
-	}
-
-
-	@Override
-	public boolean containsAll(Collection<?> arg0) {
-		return list.containsAll(arg0);
-	}
-
-	@Override
-	public boolean equals(Object arg0) {
-		return list.equals(arg0);
-	}
-
-
-	@Override
-	public int hashCode() {
-		return list.hashCode();
-	}
-
-
-	@Override
-	public int indexOf(Object arg0) {
-		return list.indexOf(arg0);
-	}
-
-
-	@Override
-	public int lastIndexOf(Object arg0) {
-		return list.lastIndexOf(arg0);
-	}
-
-
-	@Override
-	public ListIterator<Feature<T>> listIterator(int arg0) {
-		return list.listIterator(arg0);
-	}
-
-
-	@Override
-	public Feature<T> remove(int arg0) {
-		return list.remove(arg0);
-	}
-
-
-	@Override
-	public boolean remove(Object arg0) {
-		return list.remove(arg0);
-	}
-
-
-	@Override
-	public boolean removeAll(Collection<?> arg0) {
-		return list.removeAll(arg0);
-	}
-
-
-	@Override
-	public boolean retainAll(Collection<?> arg0) {
-		return list.retainAll(arg0);
-	}
-
-
-	@Override
-	public Feature<T> set(int arg0, Feature<T> arg1) {
-		return list.set(arg0, arg1);
-	}
-
-
-	@Override
-	public List<Feature<T>> subList(int arg0, int arg1) {
-		return list.subList(arg0, arg1);
-	}
-
-
-	@Override
-	public Object[] toArray() {
-		return list.toArray();
-	}
-
-
-	@Override
-	public <U> U[] toArray(U[] arg0) {
-		return list.toArray(arg0);
-	}
-
-	public List<Feature<T>> getList() {
+	public List<Feature<T>> asList() {
 		return list;
-	}
-
-	public void setList(List<Feature<T>> list) {
-		this.list = list;
 	}
 
 	@Override
@@ -295,5 +162,19 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		);
 	}
 
+	public Feature<T> get(int arg0) {
+		return list.get(arg0);
+	}
+
+	public boolean addAll(FeatureList<T> other) {
+		return list.addAll( other.asList() );
+	}
 	
+	public boolean addAll(Collection<? extends Feature<T>> c) {
+		return list.addAll(c);
+	}
+
+	public void clear() {
+		list.clear();
+	}
 }

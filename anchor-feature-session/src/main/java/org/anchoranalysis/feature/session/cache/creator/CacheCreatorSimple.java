@@ -74,7 +74,7 @@ public class CacheCreatorSimple implements CacheCreator {
 	@SuppressWarnings("unchecked")
 	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
 		
-		List<Feature<T>> list = namedFeatures.getList().stream()
+		List<Feature<T>> list = namedFeatures.asList().stream()
 			.filter( f -> f.inputDescriptor().isCompatibleWith(paramsType) )
 			.map( f -> (Feature<T>) f )
 			.collect( Collectors.toList() );
