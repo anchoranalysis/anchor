@@ -173,7 +173,7 @@ public final class ObjectMaskStream {
 	 * 
 	 * @param mapFunc performs mapping
 	 * @param predicate iff true object is included, otherwise excluded
-	 * @return a newly created object-collection, a filtered version of all objects
+	 * @return a newly created object-collection, a filtered version of all objects, then mapped
 	 */
 	public ObjectCollection filterAndMap(Predicate<ObjectMask> predicate, Function<ObjectMask,ObjectMask> mapFunc) {
 		return new ObjectCollection(

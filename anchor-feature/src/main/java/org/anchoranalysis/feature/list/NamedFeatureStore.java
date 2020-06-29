@@ -39,6 +39,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
@@ -101,18 +102,16 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
 	public NamedFeatureStore<T> deepCopy() {
 		NamedFeatureStore<T> out = new NamedFeatureStore<>();
 		for( NamedBean<Feature<T>> ni : list ) {
-			NamedBean<Feature<T>> niDup = ni.duplicateBean();
-			out.add( niDup.getName(), niDup.getValue() );
+			out.add(
+				ni.getName(),
+				ni.getValue().duplicateBean()
+			);
 		}
 		return out;
 	}
 	
 	public FeatureList<T> listFeatures() {
-		FeatureList<T> out = new FeatureList<>();
-		for( NamedBean<Feature<T>> ni : list ) {
-			out.add( ni.getValue() );
-		}
-		return out;
+		return FeatureListFactory.mapFrom(list, NamedBean::getValue);
 	}
 
 	

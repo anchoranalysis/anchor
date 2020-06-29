@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session;
 
 
 import java.util.Collection;
-import java.util.List;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -83,7 +83,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param feature the feature that will be calculated in the session
 	 */
 	public SequentialSession(Feature<T> feature) {
-		this( new FeatureList<>(feature) );
+		this( FeatureListFactory.from(feature) );
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 */
 	SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes, BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory) {
 		this.replacePolicyFactory = replacePolicyFactory;
-		this.listFeatures = new FeatureList<>(iterFeatures);
+		this.listFeatures = FeatureListFactory.fromIterable(iterFeatures);
 		assert(listFeatures!=null);
 	}
 	
@@ -159,7 +159,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	
 		return replaceSession.createOrReuse(
 			params
-		).calc(featuresSubset.asList());
+		).calc(featuresSubset);
 	}
 	
 	/**
@@ -185,10 +185,6 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	
 	public boolean hasSingleFeature() {
 		return listFeatures.size()==1;
-	}
-
-	public List<Feature<T>> getFeatureList() {
-		return listFeatures.asList();
 	}
 	
 	@Override

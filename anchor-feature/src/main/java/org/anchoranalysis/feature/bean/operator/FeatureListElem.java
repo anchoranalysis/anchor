@@ -81,6 +81,10 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	public void setList(List<Feature<T>> list) {
 		this.list = list;
 	}
+	
+	public void setList(FeatureList<T> list) {
+		this.list = list.asList();
+	}
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {

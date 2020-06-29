@@ -46,7 +46,7 @@ public class FeatureListProviderDefineSingle<T extends FeatureInput> extends Fea
 
 	@Override
 	public FeatureList<T> create() throws CreateException {
-		return new FeatureList<>(item);
+		return FeatureListFactory.from(item);
 	}
 
 	public Feature<T> getItem() {

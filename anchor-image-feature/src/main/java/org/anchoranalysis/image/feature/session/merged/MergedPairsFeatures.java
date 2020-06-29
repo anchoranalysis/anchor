@@ -30,6 +30,7 @@ import org.anchoranalysis.core.error.InitException;
  */
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
@@ -60,8 +61,8 @@ public class MergedPairsFeatures {
 	 */
 	public MergedPairsFeatures(FeatureList<FeatureInputPairObjs> listPair) {
 		this(
-			new FeatureList<>(),
-			new FeatureList<>(),
+			FeatureListFactory.empty(),
+			FeatureListFactory.empty(),
 			listPair
 		);
 	}	

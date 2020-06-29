@@ -2,6 +2,8 @@ package org.anchoranalysis.image.io.bean.feature;
 
 import java.nio.file.Path;
 
+import org.anchoranalysis.core.axis.AxisType;
+
 
 /*
  * #%L
@@ -29,7 +31,6 @@ import java.nio.file.Path;
  * #L%
  */
 
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
@@ -37,6 +38,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.writer.FeatureListCSVGeneratorVertical;
 import org.anchoranalysis.feature.io.csv.writer.TableCSVGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -130,46 +132,53 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	public void setIterableElement(ObjectCollection element) {
 		this.objs = element;
 	}
-
-	private void addFeature( Feature<FeatureInputSingleObj> feature, String prefix, FeatureList<FeatureInputSingleObj> featureList ) throws BeanMisconfiguredException {
-		featureList.addWithCustomName( feature.duplicateBean(), prefix + feature.getFriendlyName() );
-	}
 	
 	// Puts in some extra descriptive features at the start
 	private FeatureList<FeatureInputSingleObj> createFullFeatureList( FeatureList<FeatureInputSingleObj> features, LogErrorReporter logger ) {
 		
 		FeatureList<FeatureInputSingleObj> featuresAll = new FeatureList<>();
 		
-		Feature<FeatureInputSingleObj> cogX = new CenterOfGravity("x");
-		Feature<FeatureInputSingleObj> cogY = new CenterOfGravity("y");
-		Feature<FeatureInputSingleObj> cogZ = new CenterOfGravity("z");
-		
-		featuresAll.addWithCustomName( cogX, "x" );
-		featuresAll.addWithCustomName( cogY, "y" );
-		featuresAll.addWithCustomName( cogZ, "z" );
-		
-		addConvertedFeature( featuresAll, cogX, new DirectionVector(1, 0, 0), "x_p" );
-		addConvertedFeature( featuresAll, cogY, new DirectionVector(0, 1, 0), "y_p" );
-		addConvertedFeature( featuresAll, cogZ, new DirectionVector(0, 0, 1), "z_p" );
-
-		featuresAll.addWithCustomName( new NumVoxels(), "numVoxels" );
+		addFeaturesForAxis(AxisType.X, featuresAll);
+		addFeaturesForAxis(AxisType.Y, featuresAll);
+		addFeaturesForAxis(AxisType.Z, featuresAll);
+			
+		featuresAll.addWithCustomName(new NumVoxels(), "numVoxels");
 		
 		for (Feature<FeatureInputSingleObj> f : features) {
-			try {
-				addFeature(f, "", featuresAll);
-			} catch (BeanMisconfiguredException e) {
-				logger.getErrorReporter().recordError(this.getClass(), e);
-			}
+			featuresAll.add(
+				duplicateSetCustomNameIfMissing(f)
+			);
 		}
 		
 		return featuresAll;
 	}
-	
-	private static void addConvertedFeature( FeatureList<FeatureInputSingleObj> featuresAll, Feature<FeatureInputSingleObj> feature, DirectionVector dir, String name ) {
-		featuresAll.addWithCustomName( convert(feature, dir), name );
+
+	/** If there's no custom-name set, this sets in using the long description */
+	private static <T extends FeatureInput> Feature<T> duplicateSetCustomNameIfMissing(Feature<T> feature) {
+		if (feature.getCustomName()==null || feature.getCustomName().isEmpty()) {
+			return feature.duplicateChangeName(
+				feature.getFriendlyName()
+			);
+		} else {
+			return feature.duplicateBean();
+		}
+	}
+		
+	private static void addFeaturesForAxis(AxisType axis, FeatureList<FeatureInputSingleObj> featuresAll) {
+		
+		// Using non-physical distances, and physical distances respectively
+		Feature<FeatureInputSingleObj> feature = new CenterOfGravity(axis);
+		Feature<FeatureInputSingleObj> featurePhysical = convertToPhysical(
+			feature,
+			new DirectionVector(axis)
+		);
+		
+		String axisLabel = axis.toString().toLowerCase();
+		featuresAll.addWithCustomName(feature, axisLabel);
+		featuresAll.addWithCustomName(featurePhysical, axisLabel + "_p");
 	}
 	
-	private static Feature<FeatureInputSingleObj> convert( Feature<FeatureInputSingleObj> feature, DirectionVector dir ) {
+	private static Feature<FeatureInputSingleObj> convertToPhysical( Feature<FeatureInputSingleObj> feature, DirectionVector dir ) {
 		return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
 	}
 	

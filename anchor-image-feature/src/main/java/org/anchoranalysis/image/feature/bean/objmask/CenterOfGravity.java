@@ -46,8 +46,8 @@ public class CenterOfGravity extends FeatureObjMask {
 
 	}
 	
-	public CenterOfGravity( String axis ) {
-		this.axis = axis;
+	public CenterOfGravity( AxisType axis ) {
+		this.axis = axis.toString().toLowerCase();
 	}
 	
 	@Override

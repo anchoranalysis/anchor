@@ -121,7 +121,7 @@ public class FeatureListProviderListSequence<T extends FeatureInput> extends Fea
 	
 	@Override
 	public FeatureList<T> create() throws CreateException {
-		return new FeatureList<>(
+		return FeatureListFactory.from(
 			featureFromSequence()		
 		);
 	}

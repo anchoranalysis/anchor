@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 
 public class FeatureListProviderDefineNamedItemList<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
@@ -50,22 +49,13 @@ public class FeatureListProviderDefineNamedItemList<T extends FeatureInput> exte
 	@Override
 	public FeatureList<T> create() throws CreateException {
 		
-		FeatureList<T> out = new FeatureList<>();
-
-		NamedFeatureStore<T> featuresRenamed = STORE_FACTORY.createNamedFeatureList(list);
-		
-		if (featuresRenamed.size()==0) {
-			return new FeatureList<T>();
-		}
-		
-		// It ignores the names on the feature-provider
-		for( NamedBean<Feature<T>> ni : featuresRenamed ) {
-			
-			Feature<T> wrapped = renameFeature( ni.getName(), ni.getValue() );
-			out.add( wrapped );
-		}
-		
-		return out;
+		return FeatureListFactory.mapFrom(
+			STORE_FACTORY.createNamedFeatureList(list),
+			ni -> renameFeature(
+				ni.getName(),
+				ni.getValue()
+			)
+		);
 	}
 
 	public List<NamedBean<FeatureListProvider<T>>> getList() {

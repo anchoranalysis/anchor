@@ -39,6 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
@@ -79,7 +80,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		try {
 			ObjectCollection objsCollection = objs.create();
 			
-			FeatureList<FeatureInputSingleObj> features = createFeatureList();
+			FeatureList<FeatureInputSingleObj> features = FeatureListFactory.fromProviders(listFeatureProvider);
 			
 			if (features.size()==0) {
 				throw new IOException("No features are set");
@@ -122,14 +123,6 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet() );
 		generator.setIterableElement(objsCollection);
 		return generator;
-	}
-
-	private FeatureList<FeatureInputSingleObj> createFeatureList() throws CreateException {
-		FeatureList<FeatureInputSingleObj> out = new FeatureList<>();
-		for( FeatureProvider<FeatureInputSingleObj> fp : listFeatureProvider) {
-			out.add( fp.create() );
-		}
-		return out;
 	}
 	
 	private KeyValueParams createKeyValueParams() throws CreateException {

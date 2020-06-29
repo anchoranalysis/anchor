@@ -46,6 +46,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -98,7 +99,7 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 		if (elemAllCreator != null) {
 			return elemAllCreator.create();
 		} else {
-			return new FeatureList<>();
+			return FeatureListFactory.empty();
 		}
 	}
 	

@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.convert;
 
+import org.anchoranalysis.core.axis.AxisType;
+
 /*-
  * #%L
  * anchor-image
@@ -63,7 +65,7 @@ public class ImageUnitConverter {
 	}
 	
 	public static double convertFromMeters( double unitMeters, ImageRes res ) {
-		DirectionVector unitX = new DirectionVector(1,0,0);
+		DirectionVector unitX = new DirectionVector(AxisType.X);
 		return ImageUnitConverter.convertFromPhysicalDistance(unitMeters, res, unitX);
 	}
 	

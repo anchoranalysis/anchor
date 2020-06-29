@@ -27,9 +27,8 @@ package org.anchoranalysis.feature.cache.calculation;
  */
 
 
-import java.util.List;
-
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -63,7 +62,7 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
 	 * @throws FeatureCalcException 
 	 */
-	public ResultsVector calc( List<Feature<T>> features, SessionInput<T> input ) throws FeatureCalcException {
+	public ResultsVector calc( FeatureList<T> features, SessionInput<T> input ) throws FeatureCalcException {
 		ResultsVector out = new ResultsVector(features.size());
 		for( int i=0; i<features.size(); i++ ) {
 			

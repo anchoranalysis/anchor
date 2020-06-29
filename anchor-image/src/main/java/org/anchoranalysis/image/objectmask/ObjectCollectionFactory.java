@@ -99,7 +99,7 @@ public class ObjectCollectionFactory {
 	 * 
 	 * @param <T> type that will be mapped to {@link ObjectCollection}
 	 * @param <E> exception-type that can be thrown during mapping
-	 * @param collection incoming collection to be mapped
+	 * @param iterable source of entities to be mapped
 	 * @param mapFunc function for mapping
 	 * @return a newly created ObjectCollection
 	 * @throws E exception if it occurs during mapping

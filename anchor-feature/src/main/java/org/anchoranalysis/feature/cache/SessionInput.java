@@ -26,8 +26,8 @@ package org.anchoranalysis.feature.cache;
  * #L%
  */
 
-import java.util.List;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -67,7 +67,7 @@ public interface SessionInput<T extends FeatureInput> {
 	 * @return the results of each feature's calculation respectively
 	 * @throws FeatureCalcException
 	 */
-	ResultsVector calc(List<Feature<T>> features) throws FeatureCalcException;
+	ResultsVector calc(FeatureList<T> features) throws FeatureCalcException;
 		
 	/**
 	 * Calculates a feature-calculation after resolving it against the main cache
