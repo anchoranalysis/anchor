@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
 
+import java.util.ArrayList;
+
 /*
  * #%L
  * anchor-mpp
@@ -27,25 +29,19 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
-import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -60,97 +56,72 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  * @author Owen Feehan
  *
  */
-public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
+public class NRGScheme {
 
-	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
-	private FeatureList<FeatureInputPairMemo> elemPair;
+	private final FeatureList<FeatureInputSingleMemo> elemInd;
+	private final FeatureList<FeatureInputPairMemo> elemPair;
+	private final FeatureList<FeatureInputAllMemo> elemAll;
 	
-	@BeanField @OptionalBean
-	private FeatureList<FeatureInputSingleMemo> elemInd;
-	
-	@BeanField @OptionalBean
-	private FeatureList<FeatureInputAllMemo> elemAll;
-	
-	@BeanField
-	private RegionMap regionMap;
+	private final RegionMap regionMap;
 	
 	/** A list of features of the image that are calculated first, and exposed to the other features as parameters */
-	@BeanField
-	private List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures;
+	private final List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures;
 	
-	@BeanField
-	private AddCriteriaPair pairAddCriteria = null;
+	private final AddCriteriaPair pairAddCriteria;
 	
-	@BeanField @OptionalBean
-	private KeyValueParamsProvider keyValueParamsProvider;
-	// END BEAN PROPERTIES
+	private final Optional<KeyValueParamsProvider> keyValueParamsProvider;
 	
-	public NRGScheme() {
-		elemPair = new FeatureList<>();
-		elemInd = new FeatureList<>();
-		elemAll = new FeatureList<>();
-		listImageFeatures = new ArrayList<NamedBean<Feature<FeatureInputStack>>>();
-		regionMap = RegionMapSingleton.instance(); 
+	public NRGScheme(
+		FeatureList<FeatureInputSingleMemo> elemInd,
+		FeatureList<FeatureInputPairMemo> elemPair,
+		FeatureList<FeatureInputAllMemo> elemAll,
+		RegionMap regionMap,
+		AddCriteriaPair pairAddCriteria
+	) throws CreateException {
+		this(
+			elemInd,
+			elemPair,
+			elemAll,
+			regionMap,
+			pairAddCriteria,
+			Optional.empty(),
+			new ArrayList<>()
+		);
 	}
 	
-	public NRGScheme( FeatureList<FeatureInputSingleMemo> elemInd, FeatureList<FeatureInputPairMemo> elemPair, RegionMap regionMap ) {
-		this.elemPair = elemPair;
+	public NRGScheme(
+		FeatureList<FeatureInputSingleMemo> elemInd,
+		FeatureList<FeatureInputPairMemo> elemPair,
+		FeatureList<FeatureInputAllMemo> elemAll,
+		RegionMap regionMap,
+		AddCriteriaPair pairAddCriteria,
+		Optional<KeyValueParamsProvider> keyValueParamsProvider,
+		List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures
+	) throws CreateException {
 		this.elemInd = elemInd;
-		this.elemAll = new FeatureList<>();
+		this.elemPair = elemPair;
+		this.elemAll = elemAll;
 		this.regionMap = regionMap;
-	}
-	
-	public void add( NRGScheme src ) {
-		elemPair.addAll( src.elemPair );
-		elemInd.addAll( src.elemInd );
-		elemAll.addAll( src.elemAll );
-		listImageFeatures.addAll( src.listImageFeatures );
+		this.pairAddCriteria = pairAddCriteria;
+		this.keyValueParamsProvider = keyValueParamsProvider;
+		this.listImageFeatures = listImageFeatures;
+		checkAtLeastOneNRGElement();
 	}
 
 	/*** returns the associated KeyValueParams or an empty set, if no params are associated with the nrgScheme */
 	public KeyValueParams createKeyValueParams() throws CreateException {
-		if (keyValueParamsProvider!=null) {
-			return keyValueParamsProvider.create().duplicate();
+		if (keyValueParamsProvider.isPresent()) {
+			return keyValueParamsProvider.get().create().duplicate();
 		} else {
 			return new KeyValueParams();
 		}
 	}
 	
 	//! Checks that a mark's initial parameters are correct
-	@Override
-	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
-		
-		super.checkMisconfigured( defaultInstances );
-		
-		if (elemInd==null && elemPair==null && elemAll==null ) {
-			throw new BeanMisconfiguredException("At least one of elemInd and elemPair and elemAll must be non-null");
-		}
-		
-		if (elemPair==null) {
-			elemPair = new FeatureList<>();
-		}
-		
-		if (elemInd==null) {
-			elemInd = new FeatureList<>();
-		}
-		
-		if (elemAll==null) {
-			elemAll = new FeatureList<>();
-		}
-		
+	private void checkAtLeastOneNRGElement() throws CreateException {
 		if ((elemInd.size()+elemPair.size()+elemAll.size())==0) {
-			throw new BeanMisconfiguredException("At least one NRG element must be specified");
+			throw new CreateException("At least one NRG element must be specified");
 		}
-	}
-
-	
-	public List<Feature<FeatureInputPairMemo>> getElemPair() {
-		return elemPair.asList();
-	}
-
-	public void setElemPair(List<Feature<FeatureInputPairMemo>> elemPair) {
-		this.elemPair = new FeatureList<>(elemPair);
 	}
 
 	// -1 means everything
@@ -186,62 +157,16 @@ public class NRGScheme extends FeatureRelatedBean<NRGScheme> {
 	public FeatureList<FeatureInputAllMemo> getElemAllAsFeatureList() {
 		return elemAll;
 	}	
-	
-	public List<Feature<FeatureInputSingleMemo>> getElemInd() {
-		return elemInd.asList();
-	}
-
-	public List<Feature<FeatureInputAllMemo>> getElemAll() {
-		return elemAll.asList();
-	}
-	
-	public void setElemAll(List<Feature<FeatureInputAllMemo>> elemAll) {
-		this.elemAll = new FeatureList<>(elemAll);
-	}
-	
-	// We put our normal setters and getters as List<Feature> so that the bean xml can use the normal factories for Lists
-	public void setElemInd(List<Feature<FeatureInputSingleMemo>> elemInd) {
-		this.elemInd = new FeatureList<>(elemInd);
-	}
 
 	public AddCriteriaPair getPairAddCriteria() {
 		return pairAddCriteria;
-	}
-
-	public void setPairAddCriteria(AddCriteriaPair pairAddCriteria) {
-		this.pairAddCriteria = pairAddCriteria;
-	}
-	
-	
-	public NRGScheme duplicateKeepFeatures() {
-		NRGScheme out = new NRGScheme();
-		out.add(this);
-		return out;
 	}
 
 	public List<NamedBean<Feature<FeatureInputStack>>> getListImageFeatures() {
 		return listImageFeatures;
 	}
 
-	public void setListImageFeatures(
-			List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures) {
-		this.listImageFeatures = listImageFeatures;
-	}
-
 	public RegionMap getRegionMap() {
 		return regionMap;
 	}
-
-	public void setRegionMap(RegionMap regionMap) {
-		this.regionMap = regionMap;
-	}
-
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
 }

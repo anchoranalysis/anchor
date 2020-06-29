@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
-import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**
@@ -42,9 +42,9 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * @author Owen Feehan
  *
  */
-public class NamedNRGSchemeSet implements Iterable<NamedBean<NRGScheme>> {
+public class NamedNRGSchemeSet implements Iterable<SimpleNameValue<NRGScheme>> {
 
-	private HashMap<String,NamedBean<NRGScheme>> delegate = new HashMap<>();
+	private HashMap<String,SimpleNameValue<NRGScheme>> delegate = new HashMap<>();
 	private SharedFeatureMulti sharedFeatures;
 	
 	public NamedNRGSchemeSet(SharedFeatureMulti sharedFeatures) {
@@ -61,16 +61,19 @@ public class NamedNRGSchemeSet implements Iterable<NamedBean<NRGScheme>> {
 	
 	public boolean add(String name, NRGScheme nrgScheme) {
 		assert nrgScheme.getRegionMap()!=null;
-		delegate.put(name, new NamedBean<NRGScheme>(name, nrgScheme) );
+		delegate.put(
+			name,
+			new SimpleNameValue<>(name, nrgScheme)
+		);
 		return true;
 	}
 	
-	public NamedBean<NRGScheme> get(String name) {
+	public SimpleNameValue<NRGScheme> get(String name) {
 		return delegate.get(name);
 	}
 	
 	@Override
-	public Iterator<NamedBean<NRGScheme>> iterator() {
+	public Iterator<SimpleNameValue<NRGScheme>> iterator() {
 		return delegate.values().iterator();
 	}
 		

@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.bean.operator;
 
+
+
 /*-
  * #%L
  * anchor-feature
@@ -27,6 +29,7 @@ package org.anchoranalysis.feature.bean.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -39,6 +42,14 @@ public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 	 */
 	private boolean ignoreNaN;
 	// END BEAN PROPERTIES
+	
+	public Sum() {
+		// Standard bean constructor
+	}
+	
+	public Sum(FeatureList<T> list) {
+		super(list);
+	}
 	
 	@Override
 	public double calc( SessionInput<T> input ) throws FeatureCalcException {

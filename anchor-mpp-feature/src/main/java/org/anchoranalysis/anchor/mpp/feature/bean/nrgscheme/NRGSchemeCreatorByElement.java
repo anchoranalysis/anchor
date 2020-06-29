@@ -29,6 +29,8 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
@@ -40,6 +42,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -79,43 +82,41 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	
 	@Override
 	public NRGScheme create() throws CreateException {
-		
-		NRGScheme out = new NRGScheme();
-		
-		if (keyValueParamsProvider!=null) {
-			out.setKeyValueParamsProvider(keyValueParamsProvider);
-		}
-		
-		out.setElemInd( elemIndCreator.create().asList() );
-		out.setElemPair( elemPairCreator.create().asList() );
-		out.setPairAddCriteria(pairAddCriteria);
-		out.setRegionMap(regionMap);
-	
-		if (elemAllCreator!=null) {
-			out.setElemAll( elemAllCreator.create().asList() );
-		}
-		
-		addImageFeatures( out.getListImageFeatures() );
-				
-		return out;
+		return new NRGScheme(
+			elemIndCreator.create(),
+			elemPairCreator.create(),
+			createAll(),
+			regionMap,
+			pairAddCriteria,
+			Optional.ofNullable(keyValueParamsProvider),
+			buildImageFeatures()
+		);
 	}
 	
-	private void addImageFeatures( List<NamedBean<Feature<FeatureInputStack>>> imageFeatures ) throws CreateException {
-		for( NamedBean<FeatureListProvider<FeatureInputStack>> ni : listImageFeatures) {
-			FeatureList<FeatureInputStack> fl = ni.getValue().create();
-			addImageFeature( fl, ni.getName(), imageFeatures );
+	private FeatureList<FeatureInputAllMemo> createAll() throws CreateException {
+		if (elemAllCreator != null) {
+			return elemAllCreator.create();
+		} else {
+			return new FeatureList<>();
 		}
 	}
 	
-	private void addImageFeature( FeatureList<FeatureInputStack> fl, String name, List<NamedBean<Feature<FeatureInputStack>>> imageFeatures ) {
-		Sum<FeatureInputStack> feature = new Sum<>();
-		feature.setList( fl.asList() );
-		
-		imageFeatures.add(
-			new NamedBean<Feature<FeatureInputStack>>(
-				nameForFeature( feature, name ),
-				feature
+	private List<NamedBean<Feature<FeatureInputStack>>> buildImageFeatures() throws CreateException {
+		return FunctionalUtilities.mapWithException(
+			listImageFeatures.stream(),
+			CreateException.class,
+			ni-> sumList(
+				ni.getValue().create(),
+				ni.getName()
 			)
+		).collect( Collectors.toList() );
+	}
+	
+	private NamedBean<Feature<FeatureInputStack>> sumList(FeatureList<FeatureInputStack> fl, String name) {
+		Sum<FeatureInputStack> feature = new Sum<>( fl );
+		return new NamedBean<Feature<FeatureInputStack>>(
+			nameForFeature( feature, name ),
+			feature
 		);
 	}
 	

@@ -63,8 +63,6 @@ public class NRGSchemeWithSharedFeatures {
 	private CalcElemIndTotalOperation operationIndCalc;
 	private LogErrorReporter logger;
 	
-	private int nrgSchemeIndCacheSize;
-	
 	// Caches NRG value by index
 	private class CalcElemIndTotalOperation implements CalculateForCache<Integer,NRGTotal> {
 
@@ -122,15 +120,12 @@ public class NRGSchemeWithSharedFeatures {
 		}
 		
 	}
-	
-
-	
+		
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
 			SharedFeatureMulti sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
-		this.nrgSchemeIndCacheSize = nrgSchemeIndCacheSize;
 		this.logger = logger;
 		
 		operationIndCalc = new CalcElemIndTotalOperation();
@@ -190,15 +185,6 @@ public class NRGSchemeWithSharedFeatures {
 		
 		return new NRGStackWithParams(raster,kvp);
 	}
-
-	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
-		return new FeatureInitParams( kvp );
-	}
-	
-	
-	public NRGSchemeWithSharedFeatures duplicateWithNewNRGScheme() {
-		return new NRGSchemeWithSharedFeatures(nrgScheme.duplicateKeepFeatures(), sharedFeatures, nrgSchemeIndCacheSize, logger );
-	}
 	
 	public NRGScheme getNrgScheme() {
 		return nrgScheme;
@@ -224,5 +210,9 @@ public class NRGSchemeWithSharedFeatures {
 
 	public RegionMap getRegionMap() {
 		return nrgScheme.getRegionMap();
+	}
+	
+	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
+		return new FeatureInitParams( kvp );
 	}
 }
