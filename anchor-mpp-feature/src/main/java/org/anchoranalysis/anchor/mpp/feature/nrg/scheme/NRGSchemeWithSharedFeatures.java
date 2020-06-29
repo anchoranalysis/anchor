@@ -3,7 +3,6 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaNRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
@@ -188,9 +187,6 @@ public class NRGSchemeWithSharedFeatures {
 	
 	public NRGScheme getNrgScheme() {
 		return nrgScheme;
-	}
-	public void setNrgScheme(NRGScheme nrgScheme) {
-		this.nrgScheme = nrgScheme;
 	}
 	
 	public AddCriteriaNRGElemPair createAddCriteria() throws CreateException {

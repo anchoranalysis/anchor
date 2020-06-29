@@ -1,4 +1,4 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
+package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 
 import java.util.ArrayList;
 

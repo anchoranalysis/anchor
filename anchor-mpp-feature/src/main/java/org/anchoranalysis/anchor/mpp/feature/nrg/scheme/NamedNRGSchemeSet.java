@@ -30,7 +30,6 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
