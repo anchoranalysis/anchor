@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.functional.BiFunctionWithException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.IntFunctionWithException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 /**
@@ -190,20 +191,61 @@ public class ObjectCollectionFactory {
 		);
 	}
 	
+	
+	/**
+	 * Creates a new collection by mapping integers (from a range) each to a {@link ObjectMask}
+	 * 
+	 * @param startInclusive start index for the integer range (inclusive)
+	 * @param endExclusive end index for the integer range (exclusive)
+	 * @param throwableClass the class of the exception that might be thrown during mapping
+	 * @param mapFunc function for mapping
+	 * @return a newly created ObjectCollection
+	 * @throws E if the exception is thrown during mapping
+	 */
+	public static <E extends Throwable> ObjectCollection mapFromRange(int startInclusive, int endExclusive, Class<?> throwableClass, IntFunctionWithException<ObjectMask,E> mapFunc ) throws E {
+		return new ObjectCollection(
+			FunctionalUtilities.mapIntStreamWithException(
+				IntStream.range(startInclusive, endExclusive),
+				throwableClass,
+				mapFunc
+			)
+		);
+	}
+	
 	/**
 	 * Creates a new collection by flat-mapping integers (from a range) each to a {@link ObjectMaskCollection}
 	 * 
 	 * @param startInclusive start index for the integer range (inclusive)
 	 * @param endExclusive end index for the integer range (exclusive)
+	 * @param throwableClass the class of the exception that might be thrown during mapping
 	 * @param mapFunc function for flat-mmapping
 	 * @return a newly created ObjectCollection
 	 */
 	public static ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, IntFunction<ObjectCollection> mapFunc ) {
 		return new ObjectCollection(
-			IntStream
-				.range(startInclusive, endExclusive)
+			IntStream.range(startInclusive, endExclusive)
 				.mapToObj(mapFunc)
 				.flatMap(ObjectCollection::streamStandardJava)
+		);
+	}
+	
+	/**
+	 * Creates a new collection by flat-mapping integers (from a range) each to a {@link ObjectMaskCollection}
+	 * 
+	 * @param startInclusive start index for the integer range (inclusive)
+	 * @param endExclusive end index for the integer range (exclusive)
+	 * @param mapFunc function for flat-mapping
+	 * @return a newly created ObjectCollection
+	 * @throws E exception if it occurs during mapping
+	 */
+	public static <E extends Throwable> ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, Class<?> throwableClass, IntFunctionWithException<ObjectCollection,E> mapFunc) throws E {
+		return new ObjectCollection(
+			FunctionalUtilities.mapIntStreamWithException(
+				IntStream.range(startInclusive, endExclusive),
+				throwableClass,
+				mapFunc
+			)
+			.flatMap(ObjectCollection::streamStandardJava)
 		);
 	}
 		

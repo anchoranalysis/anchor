@@ -233,13 +233,14 @@ public class FeatureListFactory {
 	 * @param throwableClass the class of the exception-type {@link E}
 	 * @param mapFunc function for mapping
 	 * @return a newly created feature-list
+	 * @throws E if the exception is thrown during mapping
 	 */
 	public static <T extends FeatureInput, E extends Throwable> FeatureList<T> mapFromRangeOptional(
 		int startInclusive,
 		int endExclusive,
 		Class<?> throwableClass,
 		IntFunctionWithException<Optional<Feature<T>>,E> mapFunc
-	) {
+	) throws E {
 		FeatureList<T> out = new FeatureList<>();
 		FunctionalUtilities.mapIntStreamWithException(
 			IntStream.range(startInclusive, endExclusive),

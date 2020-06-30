@@ -78,7 +78,7 @@ public class FunctionalUtilities {
 		IntStream stream,
 		Class<?> throwableClass,
 		IntFunctionWithException<T,E> mapFunc
-	) {
+	) throws E {
 		try {
 			return stream.mapToObj( index->
 				suppressCheckedException(index, mapFunc)
