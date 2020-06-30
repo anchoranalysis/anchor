@@ -37,9 +37,9 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -160,8 +160,8 @@ public class HistogramFactory {
 		Extent e = inputBuffer.extent();
 		Extent eMask = objMask.getBoundingBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCrnrMin();
-		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
 		
 		byte maskOnVal = objMask.getBinaryValuesByte().getOnByte();
 		

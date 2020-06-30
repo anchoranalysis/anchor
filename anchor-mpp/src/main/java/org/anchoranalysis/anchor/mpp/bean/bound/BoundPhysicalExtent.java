@@ -26,7 +26,7 @@ package org.anchoranalysis.anchor.mpp.bean.bound;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 //
 //  An upper and lower bound in degrees which is converted
@@ -52,12 +52,12 @@ public class BoundPhysicalExtent extends BoundMinMax {
 	}
 	
 	@Override
-	public double getMinRslvd( ImageRes sr, boolean do3D ) {
+	public double getMinRslvd( ImageResolution sr, boolean do3D ) {
 		return getMin() / sr.min(do3D);
 	}
 	
 	@Override
-	public double getMaxRslvd( ImageRes sr, boolean do3D ) {
+	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
 		double rslvd = getMax() / sr.min(do3D); 
 		//log.debug( String.format("max-rslvd %e to %f", getMax(), rslvd));
 		return rslvd;

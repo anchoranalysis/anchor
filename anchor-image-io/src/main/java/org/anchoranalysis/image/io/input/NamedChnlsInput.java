@@ -33,7 +33,7 @@ import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -50,7 +50,7 @@ public abstract class NamedChnlsInput extends ProvidesStackInput {
 	public abstract int numSeries() throws RasterIOException;
 	
 	/** Dimensions of a particular series */
-	public abstract ImageDim dim( int seriesIndex ) throws RasterIOException;
+	public abstract ImageDimensions dim( int seriesIndex ) throws RasterIOException;
 	
 	/** Number of channels */
 	public abstract int numChnl() throws RasterIOException;

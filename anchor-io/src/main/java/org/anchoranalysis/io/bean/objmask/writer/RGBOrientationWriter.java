@@ -39,8 +39,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBOrientationWriter extends ObjMaskWriter {
@@ -74,7 +74,7 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	
 	@Override
 	public PrecalcOverlay precalculate(ObjectWithProperties mask,
-			ImageDim dim) throws CreateException {
+			ImageDimensions dim) throws CreateException {
 		return new PrecalcOverlay(mask) {
 
 			@Override

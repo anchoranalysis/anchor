@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 // Measures either area or volume (depending if the do3D flag is employed)
@@ -50,7 +50,7 @@ public class UnitValueDistancePhysical extends UnitValueDistance {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double rslv(Optional<ImageRes> res, DirectionVector dirVector) throws OperationFailedException {
+	public double rslv(Optional<ImageResolution> res, DirectionVector dirVector) throws OperationFailedException {
 		
 		if (!res.isPresent()) {
 			throw new OperationFailedException("An image-resolution is missing, so cannot calculate physical distances");

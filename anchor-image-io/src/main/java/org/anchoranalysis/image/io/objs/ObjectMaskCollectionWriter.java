@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.io.objs;
 
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 
 public class ObjectMaskCollectionWriter {

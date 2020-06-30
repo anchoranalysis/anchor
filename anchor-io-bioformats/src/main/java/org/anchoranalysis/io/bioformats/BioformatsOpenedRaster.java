@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -155,7 +155,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	}
 
 	@Override
-	public ImageDim dim(int seriesIndex) {
+	public ImageDimensions dim(int seriesIndex) {
 		 return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
 	}
 	
@@ -179,7 +179,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			
 			TimeSequence ts = new TimeSequence(); 
 			
-			ImageDim sd = dim( seriesIndex );
+			ImageDimensions sd = dim( seriesIndex );
 			
 			// Assumes order of time first, and then channels
 			List<Channel> listAllChnls = createUninitialisedChnls(
@@ -215,7 +215,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	}
 	
 
-	private <BufferType extends Buffer> List<Channel> createUninitialisedChnls( ImageDim dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
+	private <BufferType extends Buffer> List<Channel> createUninitialisedChnls( ImageDimensions dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
 		
 		/** A list of all channels i.e. aggregating the channels associated with each stack */
 		List<Channel> listAllChnls = new ArrayList<>();
@@ -237,7 +237,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 		
 	private void copyBytesIntoChnls(
 		List<Channel> listChnls,
-		ImageDim dim,
+		ImageDimensions dim,
 		ProgressReporter progressReporter,
 		VoxelDataType dataType,
 		ReadOptions readOptions

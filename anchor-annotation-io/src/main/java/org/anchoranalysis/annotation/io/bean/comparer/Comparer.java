@@ -32,10 +32,10 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class Comparer extends AnchorBean<Comparer> {
 
-	public abstract Findable<ObjectCollection> createObjs( Path filePathSource, ImageDim dim, boolean debugMode ) throws CreateException;
+	public abstract Findable<ObjectCollection> createObjs( Path filePathSource, ImageDimensions dim, boolean debugMode ) throws CreateException;
 }

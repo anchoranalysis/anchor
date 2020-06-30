@@ -33,9 +33,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 // What can be projected on top of a raster through the GUI
 public abstract class Overlay implements Identifiable {
@@ -47,21 +47,21 @@ public abstract class Overlay implements Identifiable {
 	 * 
 	 * @return the bounding-box
 	 */
-	public abstract BoundingBox bbox( OverlayWriter overlayWriter, ImageDim dim );
+	public abstract BoundingBox bbox( OverlayWriter overlayWriter, ImageDimensions dim );
 	
 	public abstract ObjectWithProperties createScaledMask(
 		OverlayWriter overlayWriter,
 		double zoomFactorNew,
 		ObjectWithProperties om,
 		Overlay ol,
-		ImageDim sdUnscaled,
-		ImageDim sdScaled,
+		ImageDimensions sdUnscaled,
+		ImageDimensions sdScaled,
 		BinaryValuesByte bvOut
 	) throws CreateException;
 	
 	public abstract ObjectWithProperties createObjMask(
 		OverlayWriter overlayWriter,
-		ImageDim dimEntireImage,
+		ImageDimensions dimEntireImage,
 		BinaryValuesByte bvOut
 	) throws CreateException;
 	
@@ -80,5 +80,5 @@ public abstract class Overlay implements Identifiable {
 	@Override
 	public abstract int hashCode();
 	
-	public abstract OverlayProperties generateProperties(ImageRes sr);
+	public abstract OverlayProperties generateProperties(ImageResolution sr);
 }

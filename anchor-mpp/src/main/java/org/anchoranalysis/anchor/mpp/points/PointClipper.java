@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.points;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 /**
  * Ensures a point has values contained inside image-dimensions
@@ -36,13 +36,13 @@ import org.anchoranalysis.image.extent.ImageDim;
  */
 public class PointClipper {
 	
-	public static Point3i clip( Point3i pnt, ImageDim dim ) {
+	public static Point3i clip( Point3i pnt, ImageDimensions dim ) {
 		pnt = clipLow(pnt);
 		pnt = clipHigh(pnt, dim);
 		return pnt;
 	}
 	
-	public static Point3d clip( Point3d pnt, ImageDim dim ) {
+	public static Point3d clip( Point3d pnt, ImageDimensions dim ) {
 		pnt = clipLow(pnt);
 		pnt = clipHigh(pnt, dim);
 		return pnt;
@@ -56,13 +56,13 @@ public class PointClipper {
 		return pnt.max(0);	
 	}
 	
-	private static Point3i clipHigh( Point3i pnt, ImageDim dim ) {
+	private static Point3i clipHigh( Point3i pnt, ImageDimensions dim ) {
 		return pnt.min(
 			dim.getExtnt().createMinusOne().asTuple()
 		);
 	}
 	
-	private static Point3d clipHigh( Point3d pnt, ImageDim dim ) {
+	private static Point3d clipHigh( Point3d pnt, ImageDimensions dim ) {
 		return pnt.min(
 			dim.getExtnt().createMinusOne().asTuple()
 		);

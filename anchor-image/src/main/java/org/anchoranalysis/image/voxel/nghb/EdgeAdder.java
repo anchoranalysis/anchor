@@ -32,9 +32,9 @@ import java.util.function.Function;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
 /**
  * Adds edges if objects neighbour each other
@@ -47,7 +47,7 @@ class EdgeAdder<V> {
 	
 	private List<V> verticesAsList;
 	private Function<V,ObjectMask> vertexToObjMask;
-	private ObjMaskCollectionRTree rTree;
+	private ObjectCollectionRTree rTree;
 	private AddEdge<V> addEdge;
 	private boolean preventObjIntersection;
 	private boolean bigNghb;
@@ -74,7 +74,7 @@ class EdgeAdder<V> {
 	public EdgeAdder(
 		List<V> verticesAsList,
 		Function<V,ObjectMask> vertexToObjMask,
-		ObjMaskCollectionRTree rTree,
+		ObjectCollectionRTree rTree,
 		AddEdge<V> addEdge,
 		boolean preventObjIntersection,
 		boolean bigNghb,

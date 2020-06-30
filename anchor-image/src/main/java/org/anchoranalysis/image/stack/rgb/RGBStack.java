@@ -37,9 +37,9 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -49,7 +49,7 @@ public class RGBStack {
 
 	private Stack chnls;
 	
-	public RGBStack( ImageDim sd, ChannelFactorySingleType factory ) {
+	public RGBStack( ImageDimensions sd, ChannelFactorySingleType factory ) {
 		chnls = new Stack(sd, factory, 3);
 	}
 	
@@ -87,7 +87,7 @@ public class RGBStack {
 		return chnls.getChnl(index);
 	}
 	
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return chnls.getDimensions();
 	}
 	
@@ -146,13 +146,13 @@ public class RGBStack {
 		
 		Extent eMask = mask.getBoundingBox().extent();
 		
- 		for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+ 		for (pntGlobal.setY(bbox.getCornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 		
-			for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+			for (pntGlobal.setX(bbox.getCornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 				
 				int maskOffset = eMask.offset(
-					pntGlobal.getX() - mask.getBoundingBox().getCrnrMin().getX(),
-					pntGlobal.getY() - mask.getBoundingBox().getCrnrMin().getY()
+					pntGlobal.getX() - mask.getBoundingBox().getCornerMin().getX(),
+					pntGlobal.getY() - mask.getBoundingBox().getCornerMin().getY()
 				);
 				
 				if (inArr.get(maskOffset)!=maskOn ) {

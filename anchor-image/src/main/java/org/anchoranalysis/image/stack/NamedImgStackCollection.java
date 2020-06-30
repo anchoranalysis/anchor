@@ -44,7 +44,7 @@ import org.anchoranalysis.core.progress.IdentityOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 // A collection of Image Stacks each with a name
 public class NamedImgStackCollection extends NamedProviderStore<Stack> {
@@ -115,7 +115,7 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 	}
 
 	/** Applies an operation on each stack in the collection and returns a new derived collection */
-	public NamedImgStackCollection applyOperation( ImageDim dim, Function<Stack,Stack> stackOperation ) throws OperationFailedException {
+	public NamedImgStackCollection applyOperation( ImageDimensions dim, Function<Stack,Stack> stackOperation ) throws OperationFailedException {
 		
 		NamedImgStackCollection out = new NamedImgStackCollection();
 		

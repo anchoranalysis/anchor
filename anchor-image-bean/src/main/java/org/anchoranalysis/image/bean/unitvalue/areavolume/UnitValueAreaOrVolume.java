@@ -30,10 +30,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
 
 	// Value in pixels or voxels
-	public abstract double rslv( Optional<ImageRes> res ) throws UnitValueException;
+	public abstract double rslv( Optional<ImageResolution> res ) throws UnitValueException;
 }

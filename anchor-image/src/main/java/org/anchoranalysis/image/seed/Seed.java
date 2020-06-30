@@ -1,7 +1,7 @@
 package org.anchoranalysis.image.seed;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // A seed provides an ObjMask of pixels that exclusively
 //   belong to a particular object

@@ -30,13 +30,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class FeatureInputWithRes extends FeatureInput {
 
-	public abstract Optional<ImageRes> getResOptional();
+	public abstract Optional<ImageResolution> getResOptional();
 	
-	public ImageRes getResRequired() throws FeatureCalcException {
+	public ImageResolution getResRequired() throws FeatureCalcException {
 		return getResOptional().orElseThrow(
 			() -> new FeatureCalcException("An image-resolution is required to be associated with the input for this feature")	
 		);

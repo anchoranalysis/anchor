@@ -32,7 +32,7 @@ import java.util.function.Function;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
@@ -95,7 +95,7 @@ class ObjectMaskHDF5Writer {
 	
 	private void addAttr( String attrName, Function<ReadableTuple3i,Integer> extrVal) {
 		
-		Integer crnrVal = extrVal.apply( obj.getBoundingBox().getCrnrMin() );
+		Integer crnrVal = extrVal.apply( obj.getBoundingBox().getCornerMin() );
 		writer.uint32().setAttr(
 			pathHDF5,
 			attrName,

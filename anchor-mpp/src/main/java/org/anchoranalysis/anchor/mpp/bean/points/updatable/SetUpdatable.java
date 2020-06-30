@@ -54,7 +54,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -67,7 +67,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	private RandomSet<Point3d> setPnts;
 	
-	private ImageDim dim;
+	private ImageDimensions dim;
 	private BinaryChnl binaryImage;
 	private Channel binaryImageChnl;
 	
@@ -124,7 +124,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		// Where we actually do the work
 		Point3i pos = new Point3i();
 		
-		ImageDim sd = getDimensions();
+		ImageDimensions sd = getDimensions();
     	for( pos.setZ(0); pos.getZ()<sd.getZ(); pos.incrementZ()) {
     		
     		ByteBuffer bbBinaryImage = vbBinary.getPixelsForPlane(pos.getZ()).buffer();
@@ -155,7 +155,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	}
 	
 	@Override
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return dim;
 	}
 	
@@ -181,7 +181,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		// We add any points in our new mark to the set
 		PxlMark pxlMark = newMark.doOperation();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCrnrMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCornerMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
@@ -225,7 +225,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		PxlMark pxlMark = markToAdd.doOperation();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).getCrnrMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).getCornerMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();

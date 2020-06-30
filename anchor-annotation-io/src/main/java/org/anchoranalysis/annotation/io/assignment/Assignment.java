@@ -3,7 +3,7 @@ package org.anchoranalysis.annotation.io.assignment;
 import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /*
  * #%L

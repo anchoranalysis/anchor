@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 class IntersectionWriter {
@@ -57,20 +57,20 @@ class IntersectionWriter {
 		writeOnEachSlice(
 			stack,
 			color,
-			intersection.shiftBackBy( stackBBox.getCrnrMin() ),
+			intersection.shiftBackBy( stackBBox.getCornerMin() ),
 			mask.mapBoundingBox( bbox ->
-				bbox.shiftBackBy(stackBBox.getCrnrMin())
+				bbox.shiftBackBy(stackBBox.getCornerMin())
 			)
 		);
 	}
 	
 	private static void writeOnEachSlice(RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask mask) {
 
-		ReadableTuple3i maxGlobal = intersection.calcCrnrMax();
+		ReadableTuple3i maxGlobal = intersection.calcCornerMax();
 		Point3i pntGlobal = new Point3i();
 				
-		for (pntGlobal.setZ(intersection.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
-			int relZ = pntGlobal.getZ() - mask.getBoundingBox().getCrnrMin().getZ();
+		for (pntGlobal.setZ(intersection.getCornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
+			int relZ = pntGlobal.getZ() - mask.getBoundingBox().getCornerMin().getZ();
 			stack.writeRGBMaskToSlice( mask, intersection, color, pntGlobal, relZ, maxGlobal);
 		}
 	}

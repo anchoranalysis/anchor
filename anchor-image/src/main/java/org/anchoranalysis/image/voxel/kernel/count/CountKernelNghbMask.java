@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 /**
@@ -64,7 +64,7 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
 		super.notifyZChange(inSlices, z);
-		localSlicesRequireHigh = new LocalSlices(z + omRequireHigh.getBoundingBox().getCrnrMin().getZ(),3, vbRequireHigh.getVoxelBox());
+		localSlicesRequireHigh = new LocalSlices(z + omRequireHigh.getBoundingBox().getCornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
 	@Override
@@ -76,13 +76,13 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 			return false;
 		}
 		
-		int x1 = pnt.getX() + omRequireHigh.getBoundingBox().getCrnrMin().getX() + xShift;
+		int x1 = pnt.getX() + omRequireHigh.getBoundingBox().getCornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return false;
 		}
 		
-		int y1 = pnt.getY() + omRequireHigh.getBoundingBox().getCrnrMin().getY() + yShift; 
+		int y1 = pnt.getY() + omRequireHigh.getBoundingBox().getCornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return false;

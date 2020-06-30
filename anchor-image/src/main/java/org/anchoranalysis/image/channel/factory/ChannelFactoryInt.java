@@ -1,7 +1,7 @@
 package org.anchoranalysis.image.channel.factory;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBoxInt;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromIntBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -12,14 +12,14 @@ public class ChannelFactoryInt extends ChannelFactorySingleType {
 	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedInt.instance;
 	
 	@Override
-	public Channel createEmptyInitialised(ImageDim dim) {
+	public Channel createEmptyInitialised(ImageDimensions dim) {
 		assert(dim!=null);
 		VoxelBoxInt vb = new VoxelBoxInt( PixelsFromIntBufferArr.createInitialised(dim.getExtnt()) );
 		return create(vb, dim.getRes() );
 	}
 
 	@Override
-	public Channel createEmptyUninitialised(ImageDim dim) {
+	public Channel createEmptyUninitialised(ImageDimensions dim) {
 		
 		PixelsFromIntBufferArr pixels = PixelsFromIntBufferArr.createEmpty( dim.getExtnt() );
 		

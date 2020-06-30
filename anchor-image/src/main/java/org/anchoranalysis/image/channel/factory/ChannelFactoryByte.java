@@ -30,7 +30,7 @@ package org.anchoranalysis.image.channel.factory;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
@@ -48,7 +48,7 @@ public class ChannelFactoryByte extends ChannelFactorySingleType {
 	private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY = VoxelBoxFactory.getByte();
 	
 	@Override
-	public Channel createEmptyInitialised(ImageDim dim) {
+	public Channel createEmptyInitialised(ImageDimensions dim) {
 		assert(dim!=null);
 		VoxelBox<ByteBuffer> vb = FACTORY.create( dim.getExtnt() );
 		
@@ -58,7 +58,7 @@ public class ChannelFactoryByte extends ChannelFactorySingleType {
 	}
 
 	@Override
-	public Channel createEmptyUninitialised(ImageDim dim) {
+	public Channel createEmptyUninitialised(ImageDimensions dim) {
 		PixelsFromByteBufferArr pixels = PixelsFromByteBufferArr.createEmpty( dim.getExtnt() );
 
 		VoxelBox<ByteBuffer> vb = FACTORY.create(pixels);

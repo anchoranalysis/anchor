@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferFloat;
@@ -108,8 +108,8 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 
 		float valFloat = (float) val;
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {

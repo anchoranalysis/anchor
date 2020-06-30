@@ -9,7 +9,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
@@ -60,7 +60,7 @@ public class IterateVoxels {
 		
 		buffer.seek(
 			mask.map( om->
-				om.getBoundingBox().getCrnrMin().getZ()
+				om.getBoundingBox().getCornerMin().getZ()
 			).orElse(0)
 		);
 		
@@ -117,7 +117,7 @@ public class IterateVoxels {
 
 		Extent extent = voxels.extent();
 		Extent extentMask = mask.getVoxelBox().extent();
-		ReadableTuple3i crnrMin = mask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMin = mask.getBoundingBox().getCornerMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
@@ -159,7 +159,7 @@ public class IterateVoxels {
 	public static Optional<Point3i> findFirstPointOnMask( ObjectMask mask ) {
 		
 		Extent extentMask = mask.getVoxelBox().extent();
-		ReadableTuple3i crnrMin = mask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMin = mask.getBoundingBox().getCornerMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
@@ -208,8 +208,8 @@ public class IterateVoxels {
 	 */
 	public static void callEachPoint( BoundingBox bbox, ProcessVoxel process ) {
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
 		

@@ -37,9 +37,9 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 
 public abstract class MarkAbstractPosition extends Mark implements Serializable {
@@ -118,18 +118,18 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	}
 	
 	@Override
-	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut ) {
+	public ObjectWithProperties calcMask( ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut ) {
 		
 		ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut);
 		mask.setProperty(
 			"midpointInt",
-			calcRelativePoint(pos, mask.getBoundingBox().getCrnrMin())
+			calcRelativePoint(pos, mask.getBoundingBox().getCornerMin())
 		);
 		return mask;
 	}
 	
 	@Override
-	public OverlayProperties generateProperties(ImageRes sr) {
+	public OverlayProperties generateProperties(ImageResolution sr) {
 		OverlayProperties op = super.generateProperties(sr);
 		
 		int numDims = numDims();

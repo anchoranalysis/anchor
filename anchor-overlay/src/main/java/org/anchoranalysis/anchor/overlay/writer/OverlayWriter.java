@@ -40,9 +40,9 @@ import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.IDGetterObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.IDGetterObjMaskWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
@@ -86,7 +86,7 @@ public abstract class OverlayWriter {
 	//
 	//   We split the steps in two, so that they can be potentially cached
 	//
-	private void writeOverlays( ColoredOverlayCollection oc, ImageDim dim, RGBStack background, IDGetter<Overlay> idGetter, BoundingBox bboxContainer, double zoomFactor ) throws OperationFailedException {
+	private void writeOverlays( ColoredOverlayCollection oc, ImageDimensions dim, RGBStack background, IDGetter<Overlay> idGetter, BoundingBox bboxContainer, double zoomFactor ) throws OperationFailedException {
 		
 		try {
 			List<PrecalcOverlay> masksPreprocessed = precalculate( oc, this, dim, BinaryValues.getDefault().createByte() );
@@ -99,13 +99,13 @@ public abstract class OverlayWriter {
 	}
 		
 	// dim should be for the ENTIRE cfg, not just the bit in bboxContainer
-	public abstract void writePrecalculatedOverlays( List<PrecalcOverlay> precalculatedMasks, ColoredOverlayCollection overlays, ImageDim dim, RGBStack background, IDGetter<Overlay> idGetter, IDGetter<ObjectWithProperties> idGetterColor, BoundingBox bboxContainer ) throws OperationFailedException;
+	public abstract void writePrecalculatedOverlays( List<PrecalcOverlay> precalculatedMasks, ColoredOverlayCollection overlays, ImageDimensions dim, RGBStack background, IDGetter<Overlay> idGetter, IDGetter<ObjectWithProperties> idGetterColor, BoundingBox bboxContainer ) throws OperationFailedException;
 	
 	public abstract void writeOverlaysIfIntersects( ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter, List<BoundingBox> intersectList ) throws OperationFailedException;
 		
 	// Does computationally-intensive preprocessing (so it can be cached). Any object can be used, but there should be exactly one object
 	//  per Mark in the cfg, in the same order as the Cfg is inputted
-	public static List<PrecalcOverlay> precalculate(ColoredOverlayCollection coc, OverlayWriter maskWriter, ImageDim dim, BinaryValuesByte bvOut) throws CreateException {
+	public static List<PrecalcOverlay> precalculate(ColoredOverlayCollection coc, OverlayWriter maskWriter, ImageDimensions dim, BinaryValuesByte bvOut) throws CreateException {
 		
 		List<PrecalcOverlay> listOut = new ArrayList<>();
 		
@@ -127,7 +127,7 @@ public abstract class OverlayWriter {
 	}
 	
 	
-	public static PrecalcOverlay createPrecalc( OverlayWriter maskWriter, ObjectWithProperties om, ImageDim dim ) throws CreateException {
+	public static PrecalcOverlay createPrecalc( OverlayWriter maskWriter, ObjectWithProperties om, ImageDimensions dim ) throws CreateException {
 		return maskWriter.getObjMaskWriter().precalculate(om, dim);
 	}
 }

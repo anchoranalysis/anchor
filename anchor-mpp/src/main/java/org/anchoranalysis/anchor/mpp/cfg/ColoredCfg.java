@@ -37,7 +37,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class ColoredCfg implements Iterable<Mark> {
 
@@ -157,7 +157,7 @@ public class ColoredCfg implements Iterable<Mark> {
 	
 	
 	// Calculates mask
-	public ColoredCfg subsetWhereBBoxIntersects( ImageDim bndScene, int regionID, List<BoundingBox> intersectList ) {
+	public ColoredCfg subsetWhereBBoxIntersects( ImageDimensions bndScene, int regionID, List<BoundingBox> intersectList ) {
 		
 		ColoredCfg intersectCfg = new ColoredCfg();
 		

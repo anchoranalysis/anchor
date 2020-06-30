@@ -1,7 +1,7 @@
 package org.anchoranalysis.annotation.io.assignment;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public class ObjMaskCollectionDistanceMatrix {
 

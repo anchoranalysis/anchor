@@ -39,8 +39,8 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 /** Base-class for a conic that has a single radius (circle, sphere etc.) */
 public abstract class MarkSingleRadius extends MarkAbstractPosition implements Serializable {
@@ -113,13 +113,13 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 		setRadius( this.radius * mult_factor );
 	}
 	
-    public boolean randomizeMarks( RandomNumberGenerator re, ImageRes sr, BoundCalculator boundGenerator ) {
+    public boolean randomizeMarks( RandomNumberGenerator re, ImageResolution sr, BoundCalculator boundGenerator ) {
     	setRadius( this.boundRadius.rslv(sr, false).randOpen( re ) );
     	return true;
     }
     
 	@Override
-	public BoundingBox bbox( ImageDim bndScene, int regionID ) {
+	public BoundingBox bbox( ImageDimensions bndScene, int regionID ) {
 
 		// TODO should we have the extra 0.5 here?
 		return BoundingBoxCalculator.bboxFromBounds(
@@ -131,7 +131,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	}
 
 	@Override
-	public BoundingBox bboxAllRegions(ImageDim bndScene) {
+	public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
 		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_SHELL);
 	}
 		

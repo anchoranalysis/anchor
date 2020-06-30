@@ -26,8 +26,8 @@ package org.anchoranalysis.annotation.io.assignment;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 
 class PairObjMask {
 	private ObjectMask left;
@@ -41,7 +41,7 @@ class PairObjMask {
 		this.overlapRatio = overlapRatio;
 	}
 
-	public boolean atBorderXY( ImageDim sd ) {
+	public boolean atBorderXY( ImageDimensions sd ) {
 		return left.getBoundingBox().atBorderXY(sd) || right.getBoundingBox().atBorderXY(sd); 
 	}
 	

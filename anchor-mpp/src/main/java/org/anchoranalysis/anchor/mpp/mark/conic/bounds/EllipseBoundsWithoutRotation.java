@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 
@@ -76,12 +76,12 @@ public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 	}
 	
 	@Override
-	public double getMinRslvd( ImageRes sr, boolean do3D ) {
+	public double getMinRslvd( ImageResolution sr, boolean do3D ) {
 		return radius.getMinRslvd(sr, do3D);
 	}
 	
 	@Override
-	public double getMaxRslvd( ImageRes sr, boolean do3D ) {
+	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
 		return radius.getMaxRslvd(sr, do3D);
 	}
 	

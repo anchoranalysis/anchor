@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
  * Utility functions for generating random radii for {@link MarkConic}
@@ -46,7 +46,7 @@ public class RadiiRandomizer {
 	public static Point3d randomizeRadii(
 		Bound bound,
 		RandomNumberGenerator re,
-		ImageRes sr,
+		ImageResolution sr,
 		boolean do3D
 	) {
 		return new Point3d(
@@ -56,7 +56,7 @@ public class RadiiRandomizer {
 		);
 	}
 	
-	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator re, ImageRes sr ) {
+	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator re, ImageResolution sr ) {
 		return radiusBound.rslv(sr, true).randOpen( re );
 	}
 }

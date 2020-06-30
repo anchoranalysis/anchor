@@ -33,13 +33,13 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -61,7 +61,7 @@ public class Channel {
 	
 	private static ChannelFactory FACTORY = ChannelFactory.instance();
 	
-	private ImageDim dim;
+	private ImageDimensions dim;
 	private VoxelBox<? extends Buffer> delegate;
 		
 	/**
@@ -70,8 +70,8 @@ public class Channel {
 	 * @param voxelBox
 	 * @param res
 	 */
-	public Channel( VoxelBox<? extends Buffer> voxelBox, ImageRes res ) {
-		this.dim = new ImageDim(
+	public Channel( VoxelBox<? extends Buffer> voxelBox, ImageResolution res ) {
+		this.dim = new ImageDimensions(
 			voxelBox.extent(),
 			res
 		);
@@ -114,7 +114,7 @@ public class Channel {
 		
 		assert( FACTORY!=null );
 		
-		ImageDim sdNew = getDimensions().scaleXYTo(x,y);
+		ImageDimensions sdNew = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
 		assert(ba.extent().getX()==x);
@@ -158,11 +158,11 @@ public class Channel {
 		return delegate.countEqual(value);
 	}
 	
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return dim;
 	}
 
-	public void updateResolution(ImageRes res) {
+	public void updateResolution(ImageResolution res) {
 		dim = dim.duplicateChangeRes(res);
 	}
 

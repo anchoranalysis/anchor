@@ -29,7 +29,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
@@ -37,7 +37,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 
 	private int sizeBytesChnl;
-	private ImageDim sd;
+	private ImageDimensions sd;
 	
 	public ConvertToFloat() {
 		super( wrapper-> wrapper.asFloat() );
@@ -46,7 +46,7 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 	protected abstract int bytesPerPixel();
 	
 	@Override
-	protected void setupBefore(ImageDim sd, int numChnlsPerByteArray) {
+	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
 		sizeBytesChnl = sd.getX() * sd.getY() * bytesPerPixel();
 		this.sd = sd;
 		
@@ -59,5 +59,5 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 		return VoxelBufferFloat.wrap(fArr);
 	}
 
-	protected abstract float[] convertIntegerBytesToFloatArray( ImageDim sd, byte[] src, int srcOffset ) throws IOException;
+	protected abstract float[] convertIntegerBytesToFloatArray( ImageDimensions sd, byte[] src, int srcOffset ) throws IOException;
 }

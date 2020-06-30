@@ -43,9 +43,9 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
@@ -157,9 +157,9 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	// center point
 	public abstract Point3d centerPoint();
 	
-	public abstract BoundingBox bbox( ImageDim bndScene, int regionID );
+	public abstract BoundingBox bbox( ImageDimensions bndScene, int regionID );
 	
-	public abstract BoundingBox bboxAllRegions( ImageDim bndScene );
+	public abstract BoundingBox bboxAllRegions( ImageDimensions bndScene );
 
 	protected byte evalPntInside( Point3i pt ) {
 		return this.evalPntInside(
@@ -188,7 +188,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	}
 	
 	// Calculates the mask of an object
-	public ObjectWithProperties calcMask( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv ) {
+	public ObjectWithProperties calcMask( ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bv ) {
 		
 		BoundingBox bbox = this.bbox( bndScene, rm.getRegionID() );
 		
@@ -199,17 +199,17 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		
 		byte maskOn = bv.getOnByte();
 		
-		ReadableTuple3i maxPos = bbox.calcCrnrMax();
+		ReadableTuple3i maxPos = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.getCornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
-			int z_local = pnt.getZ() - bbox.getCrnrMin().getZ();
+			int z_local = pnt.getZ() - bbox.getCornerMin().getZ();
 			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
 
 			int cnt = 0;
-			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.getCornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.getCornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
 					
 					byte membership = evalPntInside(pnt);
 					
@@ -229,7 +229,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	
 	
 	// Calculates the mask of an object
-	public ObjectWithProperties calcMaskScaledXY( ImageDim bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
+	public ObjectWithProperties calcMaskScaledXY( ImageDimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut, double scaleFactor ) {
 			
 		 BoundingBox bbox = bbox( bndScene, rm.getRegionID() )
 				 .scale( new ScaleFactor(scaleFactor) );
@@ -241,21 +241,21 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		
 		byte maskOn = bvOut.getOnByte();
 		
-		ReadableTuple3i maxPos = bbox.calcCrnrMax();
+		ReadableTuple3i maxPos = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
 		Point3d pntScaled = new Point3d();
-		for (pnt.setZ(bbox.getCrnrMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.getCornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
-			int z_local = pnt.getZ() - bbox.getCrnrMin().getZ();
+			int z_local = pnt.getZ() - bbox.getCornerMin().getZ();
 			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
 
 			// Z co-ordinates are the same as we only scale in XY
 			pntScaled.setZ( pnt.getZ() );
 			
 			int cnt = 0;
-			for (pnt.setY(bbox.getCrnrMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.getCrnrMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.getCornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.getCornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
 					
 					pntScaled.setX( ((double) pnt.getX()) / scaleFactor );
 					pntScaled.setY( ((double) pnt.getY()) / scaleFactor );
@@ -290,7 +290,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		this.id = id;
 	}
 	
-	public OverlayProperties generateProperties(ImageRes res) {
+	public OverlayProperties generateProperties(ImageResolution res) {
 		
 		OverlayProperties nvc = new OverlayProperties();
 		nvc.add("Type", getName() );
@@ -311,7 +311,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		return nvc;
 	}
 
-	private void addPropertiesForRegions( OverlayProperties nvc, ImageRes res ) {
+	private void addPropertiesForRegions( OverlayProperties nvc, ImageResolution res ) {
 		for( int r=0; r<numRegions(); r++) {
 			double vol = volume(r);
 			

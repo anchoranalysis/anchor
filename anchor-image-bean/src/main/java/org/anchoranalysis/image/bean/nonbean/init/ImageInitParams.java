@@ -24,11 +24,11 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 
 // A wrapper around SharedObjects which types certain Image entities
@@ -45,7 +45,7 @@ public class ImageInitParams extends BeanInitParams {
 	private NamedProviderStore<ObjectCollection> storeObjMaskCollection;
 	private NamedProviderStore<Channel> storeChnl;
 	private NamedProviderStore<BinaryChnl> storeBinaryChnl;
-	private NamedProviderStore<BinarySgmn> storeBinarySgmn;
+	private NamedProviderStore<BinarySegmentation> storeBinarySgmn;
 	// END: Stores
 		
 	// START: Single Items
@@ -64,7 +64,7 @@ public class ImageInitParams extends BeanInitParams {
 		storeObjMaskCollection = so.getOrCreate(ObjectCollection.class);
 		storeChnl = so.getOrCreate(Channel.class);
 		storeBinaryChnl = so.getOrCreate(BinaryChnl.class);
-		storeBinarySgmn = so.getOrCreate(BinarySgmn.class);
+		storeBinarySgmn = so.getOrCreate(BinarySegmentation.class);
 		this.modelDir = modelDir;
 	}
 	
@@ -88,7 +88,7 @@ public class ImageInitParams extends BeanInitParams {
 		return storeBinaryChnl;
 	}
 	
-	public NamedProviderStore<BinarySgmn> getBinarySgmnSet() {
+	public NamedProviderStore<BinarySegmentation> getBinarySgmnSet() {
 		return storeBinarySgmn;
 	}
 
@@ -109,7 +109,7 @@ public class ImageInitParams extends BeanInitParams {
 		
 		PopulateStoreFromDefine<ImageInitParams> populate = new PopulateStoreFromDefine<>(define, pi, logger);
 		
-		populate.copyInit(BinarySgmn.class, getBinarySgmnSet());
+		populate.copyInit(BinarySegmentation.class, getBinarySgmnSet());
 		populate.copyProvider(BinaryChnlProvider.class, getBinaryImageCollection());
 		populate.copyProvider(ChnlProvider.class, getChnlCollection());
 		populate.copyProvider(ObjMaskProvider.class, getObjMaskCollection());

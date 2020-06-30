@@ -46,9 +46,9 @@ import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 /// A particular configuration of marks
 public final class Cfg implements Iterable<Mark>, Serializable {
@@ -181,7 +181,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	}
 	
 	public ObjectCollectionWithProperties calcMask(
-		ImageDim bndScene,
+		ImageDimensions bndScene,
 		RegionMembershipWithFlags rm,
 		BinaryValuesByte bvOut,
 		IDGetter<Mark> colorIDGetter
@@ -317,7 +317,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		return mergedNew;
 	}
 
-	public List<BoundingBox> bboxList( ImageDim bndScene, int regionID ) {
+	public List<BoundingBox> bboxList( ImageDimensions bndScene, int regionID ) {
 		
 		ArrayList<BoundingBox> list = new ArrayList<>(); 
 		for (Mark m : this) {
@@ -342,7 +342,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	
 	private static ObjectWithProperties calcMaskWithColor(
 		Mark mark,
-		ImageDim bndScene,
+		ImageDimensions bndScene,
 		RegionMembershipWithFlags rm,
 		BinaryValuesByte bvOut,
 		IDGetter<Mark> colorIDGetter,

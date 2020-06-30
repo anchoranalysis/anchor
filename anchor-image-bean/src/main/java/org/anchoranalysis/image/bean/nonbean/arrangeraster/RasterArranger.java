@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class RasterArranger {
 	
 	private BBoxSetOnPlane bboxSetOnPlane;
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
 	public void init( IArrangeRaster arrangeRaster, List<RGBStack> list ) throws InitException {
 
@@ -58,7 +58,7 @@ public class RasterArranger {
 			throw new InitException("rasterIterator has more items than can be accomodated");
 		}
 
-		dim = new ImageDim(
+		dim = new ImageDimensions(
 			bboxSetOnPlane.getExtnt()
 		);
 	}
@@ -102,7 +102,7 @@ public class RasterArranger {
 		Extent extent = stackIn.getDimensions().getExtnt();
 		Extent extentOut = stackIn.getDimensions().getExtnt();
 		
-		ReadableTuple3i leftCrnr = bbox.getCrnrMin();
+		ReadableTuple3i leftCrnr = bbox.getCornerMin();
 		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
 		int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
 		

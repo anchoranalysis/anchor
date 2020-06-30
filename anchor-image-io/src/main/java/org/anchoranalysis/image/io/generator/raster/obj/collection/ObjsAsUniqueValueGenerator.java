@@ -2,10 +2,10 @@ package org.anchoranalysis.image.io.generator.raster.obj.collection;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -22,11 +22,11 @@ public class ObjsAsUniqueValueGenerator extends ObjsGenerator {
 	
 	private static ChannelFactoryByte factory = new ChannelFactoryByte();
 	
-	public ObjsAsUniqueValueGenerator(ImageDim dim) {
+	public ObjsAsUniqueValueGenerator(ImageDimensions dim) {
 		super(dim);
 	}
 
-	public ObjsAsUniqueValueGenerator(ObjectCollection masks, ImageDim dim) {
+	public ObjsAsUniqueValueGenerator(ObjectCollection masks, ImageDimensions dim) {
 		super(masks, dim);
 	}
 	

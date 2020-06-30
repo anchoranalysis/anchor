@@ -3,7 +3,7 @@ package org.anchoranalysis.image.voxel.iterator.changed;
 import java.util.Optional;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class ProcessVoxelNeighbourFactory {
 

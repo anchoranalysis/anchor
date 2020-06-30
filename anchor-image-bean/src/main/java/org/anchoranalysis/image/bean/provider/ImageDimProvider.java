@@ -29,10 +29,10 @@ package org.anchoranalysis.image.bean.provider;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class ImageDimProvider extends ImageBean<ImageDimProvider> implements Provider<ImageDim> {
+public abstract class ImageDimProvider extends ImageBean<ImageDimProvider> implements Provider<ImageDimensions> {
 
-	public abstract ImageDim create() throws CreateException;
+	public abstract ImageDimensions create() throws CreateException;
 
 }

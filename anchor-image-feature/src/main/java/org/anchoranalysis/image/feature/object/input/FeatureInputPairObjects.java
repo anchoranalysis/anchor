@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 

@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.util.function.Function;
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -70,7 +70,7 @@ public abstract class ConvertTo<T extends Buffer> {
 	 * 
 	 **/
 	public void copyAllChnls(
-		ImageDim sd,
+		ImageDimensions sd,
 		byte[] src,
 		DestChnlForIndex dest,
 		int z,
@@ -102,7 +102,7 @@ public abstract class ConvertTo<T extends Buffer> {
 	 * @param sd dimension
 	 * @param numChnlsPerByteArray the number of channels that are found in the byte-array that will be passed to convertSingleChnl
 	 */
-	protected abstract void setupBefore( ImageDim sd, int numChnlsPerByteArray );
+	protected abstract void setupBefore( ImageDimensions sd, int numChnlsPerByteArray );
 	
 	/** Converts a single-channel only
 	 * 

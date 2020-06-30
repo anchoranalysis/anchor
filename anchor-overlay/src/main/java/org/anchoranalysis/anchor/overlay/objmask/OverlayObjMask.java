@@ -36,10 +36,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 public class OverlayObjMask extends Overlay {
 
@@ -57,7 +57,7 @@ public class OverlayObjMask extends Overlay {
 
 	// Assumes object mask is always inside the dim. TODO verify that is valid.
 	@Override
-	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
+	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDimensions dim) {
 		assert( dim.contains( om.getBoundingBox()) );
 		return om.getBoundingBox();
 	}
@@ -65,8 +65,8 @@ public class OverlayObjMask extends Overlay {
 	@Override
 	public ObjectWithProperties createScaledMask(
 			OverlayWriter overlayWriter, double zoomFactorNew,
-			ObjectWithProperties om, Overlay ol, ImageDim sdUnscaled,
-			ImageDim sdScaled, BinaryValuesByte bvOut) throws CreateException {
+			ObjectWithProperties om, Overlay ol, ImageDimensions sdUnscaled,
+			ImageDimensions sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
 		return scaledMaskCreator.createScaledMask(
 			overlayWriter,
@@ -80,7 +80,7 @@ public class OverlayObjMask extends Overlay {
 
 	// TODO do we need to duplicate here?
 	@Override
-	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
+	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDimensions dimEntireImage,
 			BinaryValuesByte bvOut) throws CreateException {
 		return om;
 	}
@@ -113,7 +113,7 @@ public class OverlayObjMask extends Overlay {
 	}
 
 	@Override
-	public OverlayProperties generateProperties(ImageRes sr) {
+	public OverlayProperties generateProperties(ImageResolution sr) {
 		// TODO take the properties from the object mask
 		OverlayProperties out = new OverlayProperties();
 		out.add("id", id);

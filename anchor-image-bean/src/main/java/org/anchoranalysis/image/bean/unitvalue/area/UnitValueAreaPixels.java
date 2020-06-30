@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.unitvalue.area;
 
 import java.util.Optional;
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
  * Area expressed as square pixels
@@ -47,7 +47,7 @@ public class UnitValueAreaPixels extends UnitValueArea {
 	}
 
 	@Override
-	public double rslv(Optional<ImageRes> res) {
+	public double rslv(Optional<ImageResolution> res) {
 		return getValue();
 	}
 

@@ -38,8 +38,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ObjMaskListWriter extends ObjMaskWriter {
@@ -62,7 +62,7 @@ public class ObjMaskListWriter extends ObjMaskWriter {
 
 	@Override
 	public PrecalcOverlay precalculate(ObjectWithProperties mask,
-			ImageDim dim) throws CreateException {
+			ImageDimensions dim) throws CreateException {
 
 		List<PrecalcOverlay> listPrecalc = new ArrayList<>();
 		

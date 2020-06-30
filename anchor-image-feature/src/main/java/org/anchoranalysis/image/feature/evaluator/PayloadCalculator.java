@@ -27,7 +27,7 @@ package org.anchoranalysis.image.feature.evaluator;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 @FunctionalInterface
 public interface PayloadCalculator {

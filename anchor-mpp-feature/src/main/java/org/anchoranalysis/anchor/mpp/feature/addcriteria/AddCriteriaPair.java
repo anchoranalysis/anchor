@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implements AddCriteria<Pair<Mark>> {
 
@@ -56,7 +56,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implem
 		return null;
 	}
 
-	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D ) throws IncludeMarksFailureException;
+	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D ) throws IncludeMarksFailureException;
 	
 	@Override
 	public String getBeanDscr() {

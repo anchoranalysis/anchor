@@ -34,10 +34,10 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.collection.ObjsAsUniqueValueGenerator;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -50,12 +50,12 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator i
 	private Cfg cfg;
 	private RegionMembershipWithFlags rm;
 	
-	public CfgMaskCollectionDifferentValuesGenerator( ImageDim dim, RegionMembershipWithFlags rm ) {
+	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dim, RegionMembershipWithFlags rm ) {
 		delegate = new ObjsAsUniqueValueGenerator(dim);
 		this.rm = rm;
 	}
 	
-	public CfgMaskCollectionDifferentValuesGenerator( ImageDim dim, RegionMembershipWithFlags rm, Cfg cfg ) {
+	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dim, RegionMembershipWithFlags rm, Cfg cfg ) {
 		this( dim, rm );
 		this.cfg = cfg;
 	}

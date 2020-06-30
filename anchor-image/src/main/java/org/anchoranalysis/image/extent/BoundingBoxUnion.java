@@ -27,11 +27,11 @@ private final BoundingBox bbox;
 	 */
 	public BoundingBox with( BoundingBox other ) {
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMinOther = other.getCrnrMin();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMinOther = other.getCornerMin();
 		
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
-		ReadableTuple3i crnrMaxOthr = other.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i crnrMaxOthr = other.calcCornerMax();
 		
 		ExtentBoundsComparer meiX = ExtentBoundsComparer.createMax(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getX() );
 		ExtentBoundsComparer meiY = ExtentBoundsComparer.createMax(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getY() );

@@ -36,9 +36,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
@@ -88,7 +88,7 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 	}
 	
 	// Does computational preprocessing (so it can be cached). Outputs a collection of ObjMasks that are later re used
-	public abstract PrecalcOverlay precalculate( ObjectWithProperties mask, ImageDim dim ) throws CreateException;
+	public abstract PrecalcOverlay precalculate( ObjectWithProperties mask, ImageDimensions dim ) throws CreateException;
 		
 	public void write(
 		ObjectCollectionWithProperties masks,

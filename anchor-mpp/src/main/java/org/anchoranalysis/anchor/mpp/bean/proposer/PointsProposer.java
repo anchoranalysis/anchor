@@ -39,11 +39,11 @@ import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class PointsProposer extends NullParamsBean<PointsProposer> implements ICompatibleWith {
 
-	public abstract Optional<List<Point3i>> propose( Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode ) throws ProposalAbnormalFailureException;
+	public abstract Optional<List<Point3i>> propose( Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode ) throws ProposalAbnormalFailureException;
 	
 	public abstract ICreateProposalVisualization proposalVisualization(boolean detailed);
 }

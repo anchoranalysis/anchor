@@ -32,7 +32,7 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
 public abstract class FeatureConvertRes<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
@@ -53,12 +53,12 @@ public abstract class FeatureConvertRes<T extends FeatureInputWithRes> extends F
 	}
 
 	@Override
-	protected double calcWithRes(double value, ImageRes res) throws FeatureCalcException {
+	protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
 		double valuePhysical = convertToPhysical( value, res );
 		return convertToUnits(valuePhysical);
 	}
 	
-	protected abstract double convertToPhysical( double value, ImageRes res ) throws FeatureCalcException;
+	protected abstract double convertToPhysical( double value, ImageResolution res ) throws FeatureCalcException;
 
 	public String getUnitType() {
 		return unitType;

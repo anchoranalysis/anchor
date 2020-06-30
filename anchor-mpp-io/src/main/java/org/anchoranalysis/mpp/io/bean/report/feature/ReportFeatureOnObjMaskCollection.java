@@ -30,7 +30,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public class ReportFeatureOnObjMaskCollection extends ReportFeatureOnObjMaskBase<FeatureInputObjectCollection> {
 

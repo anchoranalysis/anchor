@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public class FeatureInputObjectCollection extends FeatureInputNRGStack {
 

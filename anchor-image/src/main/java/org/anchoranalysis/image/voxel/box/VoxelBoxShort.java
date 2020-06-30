@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
@@ -72,18 +72,18 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		ObjectMask om = new ObjectMask(bbox );
 		
-		ReadableTuple3i pntMax = bbox.calcCrnrMax();
+		ReadableTuple3i pntMax = bbox.calcCornerMax();
 		
 		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ShortBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCrnrMin().getZ()).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					short chnlVal = pixelIn.get(index);
@@ -119,8 +119,8 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 
 		short valShort = (short) val;
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		Extent e = extent();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
@@ -183,14 +183,14 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 				
-		ReadableTuple3i pntMax = bbox.calcCrnrMax();
-		for (int z=bbox.getCrnrMin().getZ(); z<=pntMax.getZ(); z++) {
+		ReadableTuple3i pntMax = bbox.calcCornerMax();
+		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ShortBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.getCrnrMin().getZ()).buffer();
+			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.getCornerMin().getZ()).buffer();
 			
-			for (int y=bbox.getCrnrMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCrnrMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int indexMask = getPlaneAccess().extent().offset(x, y);
 					if (pixelsMask.get(indexMask)==maskOnByte) {

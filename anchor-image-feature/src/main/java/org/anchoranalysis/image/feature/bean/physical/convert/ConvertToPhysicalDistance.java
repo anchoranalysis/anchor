@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 // 
@@ -68,7 +68,7 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends Fe
 	}
 	
 	@Override
-	protected double convertToPhysical(double value, ImageRes res) throws FeatureCalcException {
+	protected double convertToPhysical(double value, ImageResolution res) throws FeatureCalcException {
 		// We use arbitrary direction as everything should be the same in a isometric XY plane
 		return ImageUnitConverter.convertToPhysicalDistance(value, res, dv );
 	}

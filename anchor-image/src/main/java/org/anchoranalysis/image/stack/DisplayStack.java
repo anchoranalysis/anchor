@@ -39,7 +39,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.stack.region.RegionExtracter;
@@ -181,7 +181,7 @@ public class DisplayStack {
 	}
 	
 	
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return delegate.getDimensions();
 	}
 
@@ -239,7 +239,7 @@ public class DisplayStack {
 		
 		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(index);
 		
-		Channel out = ChannelFactory.instance().createEmptyInitialised( new ImageDim(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
+		Channel out = ChannelFactory.instance().createEmptyInitialised( new ImageDimensions(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
 		
 		if (converter!=null) {
 			copyPixelsTo(index, bbox, out.getVoxelBox().asByte(), new BoundingBox(bbox.extent()) );

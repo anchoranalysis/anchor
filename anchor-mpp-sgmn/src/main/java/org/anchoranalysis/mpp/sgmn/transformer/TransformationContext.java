@@ -28,23 +28,23 @@ package org.anchoranalysis.mpp.sgmn.transformer;
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
 public class TransformationContext {
 
-	private ImageDim dim;
+	private ImageDimensions dim;
 	private KernelCalcContext kernelCalcContext;
 	private LogErrorReporter logger;
 	
-	public TransformationContext(ImageDim dim, KernelCalcContext kernelCalcContext, LogErrorReporter logger) {
+	public TransformationContext(ImageDimensions dim, KernelCalcContext kernelCalcContext, LogErrorReporter logger) {
 		super();
 		this.dim = dim;
 		this.kernelCalcContext = kernelCalcContext;
 		this.logger = logger;
 	}
 
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return dim;
 	}
 

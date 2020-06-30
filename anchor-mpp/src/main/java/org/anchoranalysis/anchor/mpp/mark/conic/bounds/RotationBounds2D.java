@@ -4,7 +4,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
@@ -21,7 +21,7 @@ public class RotationBounds2D extends RotationBounds {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Orientation randomOrientation(RandomNumberGenerator re, ImageRes res) {
+	public Orientation randomOrientation(RandomNumberGenerator re, ImageResolution res) {
 		return new Orientation2D( getRotationAngle().rslv(res, false).randOpen(re) );
 	}	
 	@Override

@@ -29,10 +29,10 @@ package org.anchoranalysis.image.io.generator.raster.obj.collection;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -45,11 +45,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
 	
-	public ObjsMergedAsBinaryChnlGenerator(ImageDim dim) {
+	public ObjsMergedAsBinaryChnlGenerator(ImageDimensions dim) {
 		super(dim);
 	}
 
-	public ObjsMergedAsBinaryChnlGenerator(ObjectCollection masks, ImageDim dim) {
+	public ObjsMergedAsBinaryChnlGenerator(ObjectCollection masks, ImageDimensions dim) {
 		super(masks, dim);
 	}
 

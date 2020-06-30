@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Keeps any on pixel that touches an off pixel where the off pixel has a corresponding HIGH value in vbRequireHigh
@@ -78,7 +78,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
 		super.notifyZChange(inSlices, z);
-		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().getCrnrMin().getZ(),3, vbRequireHigh.getVoxelBox());
+		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().getCornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
 	@Override
@@ -192,13 +192,13 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 			return outsideAtThreshold;
 		}
 		
-		int x1 = pnt.getX() + om.getBoundingBox().getCrnrMin().getX() + xShift;
+		int x1 = pnt.getX() + om.getBoundingBox().getCornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
-		int y1 = pnt.getY() + om.getBoundingBox().getCrnrMin().getY() + yShift; 
+		int y1 = pnt.getY() + om.getBoundingBox().getCornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;

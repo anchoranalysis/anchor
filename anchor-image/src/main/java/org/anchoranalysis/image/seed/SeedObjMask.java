@@ -28,7 +28,7 @@ package org.anchoranalysis.image.seed;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class SeedObjMask extends Seed {

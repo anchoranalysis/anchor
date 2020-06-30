@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Only processes a point if it lines on the region of an Object-Mask
@@ -38,7 +38,7 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 		this.mask = mask;
 		this.extent = mask.getVoxelBox().extent();
 		this.byteOn = mask.getBinaryValuesByte().getOnByte();
-		this.crnrMin = mask.getBoundingBox().getCrnrMin();
+		this.crnrMin = mask.getBoundingBox().getCornerMin();
 	}		
 						
 	@Override

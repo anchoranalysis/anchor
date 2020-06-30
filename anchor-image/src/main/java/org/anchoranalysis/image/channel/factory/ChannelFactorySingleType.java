@@ -30,8 +30,8 @@ package org.anchoranalysis.image.channel.factory;
 import java.nio.Buffer;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -42,11 +42,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  */
 public abstract class ChannelFactorySingleType {
 	
-	public abstract Channel createEmptyInitialised( ImageDim dim );
+	public abstract Channel createEmptyInitialised( ImageDimensions dim );
 
-	public abstract Channel createEmptyUninitialised(ImageDim dim);
+	public abstract Channel createEmptyUninitialised(ImageDimensions dim);
 	
-	public Channel create( VoxelBox<? extends Buffer> bufferAccess, ImageRes res ) {
+	public Channel create( VoxelBox<? extends Buffer> bufferAccess, ImageResolution res ) {
 		return new Channel( bufferAccess, res);
 	}
 	

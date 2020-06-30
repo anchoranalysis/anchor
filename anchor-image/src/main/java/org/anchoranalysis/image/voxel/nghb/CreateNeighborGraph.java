@@ -33,10 +33,10 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
 
 /**
@@ -140,7 +140,7 @@ public class CreateNeighborGraph<V> {
 		EdgeAdder<V> edgeAdder = new EdgeAdder<V>(
 			vertices,
 			vertexToObjMask,
-			new ObjMaskCollectionRTree(objs),
+			new ObjectCollectionRTree(objs),
 			createAndAddEdge(graph, edgeFromVertices),
 			preventObjIntersection,
 			bigNghb,

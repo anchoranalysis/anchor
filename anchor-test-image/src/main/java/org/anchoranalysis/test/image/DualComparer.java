@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;

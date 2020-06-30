@@ -58,11 +58,11 @@ public final class BoundingBoxIntersection {
 	 */
 	private Optional<BoundingBox> with( BoundingBox other, boolean createIntersectionBox) {
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMinOther = other.getCrnrMin();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMinOther = other.getCornerMin();
 		
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
-		ReadableTuple3i crnrMaxOthr = other.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i crnrMaxOthr = other.calcCornerMax();
 		
 		Optional<ExtentBoundsComparer> meiX = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getX() );
 		Optional<ExtentBoundsComparer> meiY = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getY() );

@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
@@ -66,7 +66,7 @@ public class CopyConvert {
 		IFormatReader reader,
 		List<Channel> dest,
 		ProgressReporter progressReporter,
-		ImageDim dim,
+		ImageDimensions dim,
 		int numChnl,
 		int numFrames,
 		ConvertTo<?> convertTo,
@@ -147,7 +147,7 @@ public class CopyConvert {
 		String dimOrder,
 		int numFrames,
 		int numByteArrays,
-		ImageDim dim,
+		ImageDimensions dim,
 		ApplyIterationToChnl chnlIteration
 	) throws IOException, FormatException {
 		
@@ -170,7 +170,7 @@ public class CopyConvert {
 		}
 	}
 	
-	private static void applyXYCZT(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+	private static void applyXYCZT(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
 		int chnlIndex = 0;
 		for( int t=0; t<numFrames; t++) {
 			for (int z=0; z<dim.getZ(); z++) {
@@ -181,7 +181,7 @@ public class CopyConvert {
 		}		
 	}
 	
-	private static void applyXYZCT(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+	private static void applyXYZCT(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
 		int chnlIndex = 0;
 		for( int t=0; t<numFrames; t++) {
 			for (int c=0; c<numByteArrays; c++ ) {
@@ -192,7 +192,7 @@ public class CopyConvert {
 		}	
 	}
 	
-	private static void applyXYZTC(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+	private static void applyXYZTC(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
 		int chnlIndex = 0;
 		for (int c=0; c<numByteArrays; c++ ) {
 			for( int t=0; t<numFrames; t++) {
@@ -203,7 +203,7 @@ public class CopyConvert {
 		}
 	}
 	
-	private static void applyXYCTZ(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+	private static void applyXYCTZ(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
 		int chnlIndex = 0;
 		for (int z=0; z<dim.getZ(); z++) {
 			for( int t=0; t<numFrames; t++) {	
@@ -214,7 +214,7 @@ public class CopyConvert {
 		}
 	}
 		
-	private static void applyXYTCZ(ImageDim dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
+	private static void applyXYTCZ(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
 		int chnlIndex = 0;
 		for (int z=0; z<dim.getZ(); z++) {
 			for (int c=0; c<numByteArrays; c++ ) {

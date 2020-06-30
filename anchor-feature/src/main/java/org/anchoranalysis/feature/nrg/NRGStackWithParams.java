@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.nrg;
 
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 
@@ -66,7 +66,7 @@ public class NRGStackWithParams {
 		this.params = new KeyValueParams();
 	}
 	
-	public NRGStackWithParams( ImageDim dim ) {
+	public NRGStackWithParams( ImageDimensions dim ) {
 		this.nrgStack = new NRGStack(dim);
 		this.params = new KeyValueParams();
 	}
@@ -86,7 +86,7 @@ public class NRGStackWithParams {
 		return params;
 	}
 
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return nrgStack.getDimensions();
 	}
 
