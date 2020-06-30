@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 
 
@@ -72,7 +72,7 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * @author Owen Feehan
  *
  */
-public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjs> {
+public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjects> {
 		
 	private CombinedCalculator calculator;
 
@@ -123,7 +123,7 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 	}
 	
 	@Override
-	public ResultsVector calc(FeatureInputPairObjs input) throws FeatureCalcException {
+	public ResultsVector calc(FeatureInputPairObjects input) throws FeatureCalcException {
 		return calculator.calcForInput(
 			input,
 			Optional.empty()
@@ -131,13 +131,13 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 	}
 
 	@Override
-	public ResultsVector calc(FeatureInputPairObjs input, FeatureList<FeatureInputPairObjs> featuresSubset)
+	public ResultsVector calc(FeatureInputPairObjects input, FeatureList<FeatureInputPairObjects> featuresSubset)
 			throws FeatureCalcException {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public ResultsVector calcSuppressErrors(FeatureInputPairObjs input, ErrorReporter errorReporter) {
+	public ResultsVector calcSuppressErrors(FeatureInputPairObjects input, ErrorReporter errorReporter) {
 		
 		try {
 			return calculator.calcForInput(
@@ -153,7 +153,7 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 		}
 	}
 	
-	public ResultsVector calcMaybeSuppressErrors(FeatureInputPairObjs input, ErrorReporter errorReporter) throws FeatureCalcException {
+	public ResultsVector calcMaybeSuppressErrors(FeatureInputPairObjects input, ErrorReporter errorReporter) throws FeatureCalcException {
 		if (suppressErrors) {
 			return calcSuppressErrors(input, errorReporter);
 		} else {
@@ -191,7 +191,7 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 	}
 	
 	@Override
-	public FeatureTableCalculator<FeatureInputPairObjs> duplicateForNewThread() {
+	public FeatureTableCalculator<FeatureInputPairObjects> duplicateForNewThread() {
 		return new FeatureCalculatorMergedPairs(
 			features.duplicate(),
 			include,

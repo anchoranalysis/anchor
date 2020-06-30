@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask;
+package org.anchoranalysis.image.feature.object.input;
 
 import java.util.Optional;
 
@@ -17,25 +17,25 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class FeatureInputSingleObj extends FeatureInputNRGStack {
+public class FeatureInputSingleObject extends FeatureInputNRGStack {
 
 	private ObjectMask objMask;
 	
-	public FeatureInputSingleObj(ObjectMask objMask) {
+	public FeatureInputSingleObject(ObjectMask objMask) {
 		this(
 			objMask,
 			Optional.empty()
 		);
 	}
 	
-	public FeatureInputSingleObj(ObjectMask objMask, NRGStackWithParams nrgStack) {
+	public FeatureInputSingleObject(ObjectMask objMask, NRGStackWithParams nrgStack) {
 		this(
 			objMask,
 			Optional.of(nrgStack)
 		);
 	}
 	
-	public FeatureInputSingleObj(ObjectMask objMask, Optional<NRGStackWithParams> nrgStack) {
+	public FeatureInputSingleObject(ObjectMask objMask, Optional<NRGStackWithParams> nrgStack) {
 		super(nrgStack);
 		this.objMask = objMask;
 	}
@@ -61,7 +61,7 @@ public class FeatureInputSingleObj extends FeatureInputNRGStack {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		FeatureInputSingleObj rhs = (FeatureInputSingleObj) obj;
+		FeatureInputSingleObject rhs = (FeatureInputSingleObject) obj;
 		return new EqualsBuilder()
 			.appendSuper( super.equals(obj) )
             .append(objMask, rhs.objMask)

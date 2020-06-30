@@ -40,15 +40,15 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSingleObj> {
+public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSingleObject> {
 
-	private FeatureCalculatorMulti<FeatureInputSingleObj> session;
+	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
 
-	private NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore;
+	private NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
 	
-	public SingleObjTableSession(NamedFeatureStore<FeatureInputSingleObj> namedFeatureStore) {
+	public SingleObjTableSession(NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore) {
 		this.namedFeatureStore = namedFeatureStore;
 	}
 
@@ -72,22 +72,22 @@ public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSi
 	}
 	
 	@Override
-	public FeatureTableCalculator<FeatureInputSingleObj> duplicateForNewThread() {
+	public FeatureTableCalculator<FeatureInputSingleObject> duplicateForNewThread() {
 		return new SingleObjTableSession(namedFeatureStore.deepCopy());
 	}
 
 	@Override
-	public ResultsVector calc(FeatureInputSingleObj input) throws FeatureCalcException {
+	public ResultsVector calc(FeatureInputSingleObject input) throws FeatureCalcException {
 		return session.calc(input);
 	}
 
 	@Override
-	public ResultsVector calc(FeatureInputSingleObj input, FeatureList<FeatureInputSingleObj> featuresSubset) throws FeatureCalcException {
+	public ResultsVector calc(FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset) throws FeatureCalcException {
 		return session.calc(input, featuresSubset);
 	}
 
 	@Override
-	public ResultsVector calcSuppressErrors(FeatureInputSingleObj input, ErrorReporter errorReporter) {
+	public ResultsVector calcSuppressErrors(FeatureInputSingleObject input, ErrorReporter errorReporter) {
 		return session.calcSuppressErrors( input, errorReporter );
 	}
 

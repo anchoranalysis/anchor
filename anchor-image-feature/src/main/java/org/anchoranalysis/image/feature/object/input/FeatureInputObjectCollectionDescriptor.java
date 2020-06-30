@@ -1,6 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.pair;
-
-
+package org.anchoranalysis.image.feature.object.input;
 
 /*-
  * #%L
@@ -30,13 +28,11 @@ package org.anchoranalysis.image.feature.objmask.pair;
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-public class FeatureInputPairObjsDescriptor extends FeatureInputDescriptor {
+public class FeatureInputObjectCollectionDescriptor extends FeatureInputDescriptor {
 
-	public static final FeatureInputPairObjsDescriptor instance = new FeatureInputPairObjsDescriptor();
+	public static final FeatureInputObjectCollectionDescriptor instance = new FeatureInputObjectCollectionDescriptor();
 	
-	private FeatureInputPairObjsDescriptor() {
-		
-	}
+	private FeatureInputObjectCollectionDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
@@ -45,6 +41,6 @@ public class FeatureInputPairObjsDescriptor extends FeatureInputDescriptor {
 
 	@Override
 	public Class<?> inputClass() {
-		return FeatureInputPairObjs.class;
+		return FeatureInputObjectCollectionDescriptor.class;
 	}
 }

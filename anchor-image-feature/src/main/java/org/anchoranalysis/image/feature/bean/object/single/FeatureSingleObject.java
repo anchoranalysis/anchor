@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask;
+package org.anchoranalysis.image.feature.bean.object.single;
 
 /*-
  * #%L
@@ -27,30 +27,14 @@ package org.anchoranalysis.image.feature.bean.objmask;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjsDescriptor;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDescriptor;
 
-public abstract class FeatureObjMaskCollection extends Feature<FeatureInputObjs> {
-
-	@Override
-	public double calc( SessionInput<FeatureInputObjs> input ) throws FeatureCalcException {
-		
-		if (input.get() instanceof FeatureInputObjs) {
-			return calc( (FeatureInputObjs) input.get() );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureInputObjs.class.getSimpleName() );
-		}
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureInputObjs params ) throws FeatureCalcException;
+public abstract class FeatureSingleObject extends Feature<FeatureInputSingleObject> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputObjsDescriptor.instance;
+		return FeatureInputSingleObjectDescriptor.instance;
 	}
-	
 }

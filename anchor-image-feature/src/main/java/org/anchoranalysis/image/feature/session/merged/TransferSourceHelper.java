@@ -9,16 +9,16 @@ import org.anchoranalysis.feature.session.strategy.child.CacheTransferSource;
 import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
+import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 class TransferSourceHelper {
 
 	private TransferSourceHelper() {}
 	
 	public static CacheTransferSourceCollection createTransferSource(
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategyFirstAndSecond,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategyMerged		
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> replaceStrategyFirstAndSecond,
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> replaceStrategyMerged		
 	) {
 
 		CacheTransferSourceCollection source = new CacheTransferSourceCollection();
@@ -37,8 +37,8 @@ class TransferSourceHelper {
 		return source;
 	}
 	
-	private static CacheTransferSource<FeatureInputSingleObj> sourceFromExistingCache(
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> replaceStrategy,			
+	private static CacheTransferSource<FeatureInputSingleObject> sourceFromExistingCache(
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> replaceStrategy,			
 		List<ChildCacheName> cacheNames
 	) {
 		return new CacheTransferSource<>(

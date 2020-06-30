@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.pair;
+package org.anchoranalysis.image.feature.object.input;
 
 import java.util.Optional;
 
@@ -20,22 +20,22 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class FeatureInputPairObjs extends FeatureInputNRGStack {
+public class FeatureInputPairObjects extends FeatureInputNRGStack {
 
 	private ObjectMask first;
 	private ObjectMask second;
 	
 	private Optional<ObjectMask> merged = Optional.empty();
 	
-	public FeatureInputPairObjs(ObjectMask first, ObjectMask second) {
+	public FeatureInputPairObjects(ObjectMask first, ObjectMask second) {
 		this(first, second, Optional.empty() );
 	}
 	
-	public FeatureInputPairObjs(ObjectMask first, ObjectMask second, Optional<NRGStackWithParams> nrgStack) {
+	public FeatureInputPairObjects(ObjectMask first, ObjectMask second, Optional<NRGStackWithParams> nrgStack) {
 		this(first, second, nrgStack, Optional.empty() );
 	}
 	
-	public FeatureInputPairObjs(
+	public FeatureInputPairObjects(
 		ObjectMask first,
 		ObjectMask second,
 		Optional<NRGStackWithParams> nrgStack,
@@ -47,7 +47,7 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		this.merged = merged;
 	}
 		
-	protected FeatureInputPairObjs( FeatureInputPairObjs src ) {
+	protected FeatureInputPairObjects( FeatureInputPairObjects src ) {
 		super( src.getNrgStackOptional()  );
 		this.first = src.first;
 		this.second = src.second;
@@ -94,9 +94,9 @@ public class FeatureInputPairObjs extends FeatureInputNRGStack {
 		if (this == obj) { return true; }
 		if (!super.equals(obj)) { return false; }
 		
-		if (!(obj instanceof FeatureInputPairObjs)) { return false; }
+		if (!(obj instanceof FeatureInputPairObjects)) { return false; }
 		
-		FeatureInputPairObjs objCast = (FeatureInputPairObjs) obj;
+		FeatureInputPairObjects objCast = (FeatureInputPairObjects) obj;
 		
 		if (!first.equals(objCast.first)) {
 			return false;

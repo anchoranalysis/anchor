@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.pair;
+package org.anchoranalysis.image.feature.object.calculation;
 
 /*-
  * #%L
@@ -27,7 +27,8 @@ package org.anchoranalysis.image.feature.objmask.pair;
  */
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -47,7 +48,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
+public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
 
 	public enum Extract {
 		FIRST,
@@ -69,15 +70,15 @@ public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingl
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputPairObjs input) {
-		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj(
+	protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
+		FeatureInputSingleObject paramsNew = new FeatureInputSingleObject(
 			extractObj(input)
 		);
 		paramsNew.setNrgStack( input.getNrgStackOptional() );
 		return paramsNew;
 	}
 	
-	private ObjectMask extractObj(FeatureInputPairObjs input) {
+	private ObjectMask extractObj(FeatureInputPairObjects input) {
 		
 		if (extract==Extract.MERGED) {
 			return input.getMerged();

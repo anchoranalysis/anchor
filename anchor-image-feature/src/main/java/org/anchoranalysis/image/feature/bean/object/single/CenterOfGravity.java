@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask;
+package org.anchoranalysis.image.feature.bean.object.single;
 
 /*-
  * #%L
@@ -30,9 +30,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class CenterOfGravity extends FeatureObjMask {
+public class CenterOfGravity extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -42,18 +42,22 @@ public class CenterOfGravity extends FeatureObjMask {
 	private double emptyValue = 0;
 	// END BEAN PROPERTIES
 	
-	public CenterOfGravity() {
-
-	}
+	/** Standard bean constructor */
+	public CenterOfGravity() {}
 	
+	/**
+	 * Constructor - create for a specific axis
+	 * 
+	 * @param axis axis
+	 */
 	public CenterOfGravity( AxisType axis ) {
 		this.axis = axis.toString().toLowerCase();
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) {
+	public double calc(SessionInput<FeatureInputSingleObject> input) {
 		
-		FeatureInputSingleObj params = input.get();
+		FeatureInputSingleObject params = input.get();
 		
 		double val = params.getObjMask().centerOfGravity(
 			axisType()

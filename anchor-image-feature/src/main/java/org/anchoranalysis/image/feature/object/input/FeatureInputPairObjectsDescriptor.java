@@ -1,4 +1,6 @@
-package org.anchoranalysis.image.feature.bean.objmask;
+package org.anchoranalysis.image.feature.object.input;
+
+
 
 /*-
  * #%L
@@ -26,25 +28,23 @@ package org.anchoranalysis.image.feature.bean.objmask;
  * #L%
  */
 
-
-
-
-
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObjDescriptor;
 
-/**
- * A feature that requires shared-objects during intialization
- * 
- * @author owen
- *
- */
-public abstract class FeatureObjMaskSharedObjects extends FeatureSharedObjs<FeatureInputSingleObj> {
+public class FeatureInputPairObjectsDescriptor extends FeatureInputDescriptor {
+
+	public static final FeatureInputPairObjectsDescriptor instance = new FeatureInputPairObjectsDescriptor();
+	
+	private FeatureInputPairObjectsDescriptor() {
+		
+	}
+	
+	@Override
+	public boolean isCompatibleWithEverything() {
+		return false;
+	}
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleObjDescriptor.instance;
+	public Class<?> inputClass() {
+		return FeatureInputPairObjects.class;
 	}
 }

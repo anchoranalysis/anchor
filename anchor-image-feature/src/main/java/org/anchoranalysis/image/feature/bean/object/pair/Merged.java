@@ -1,5 +1,6 @@
-package org.anchoranalysis.image.feature.objmask.pair.impl;
+package org.anchoranalysis.image.feature.bean.object.pair;
 
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 
 /*
@@ -30,22 +31,28 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Subtract second-object from first-object in a pair
+ * Evaluates the first-object in a pair only
  * 
  * @author owen
  *
  */
-public class SubtractSecondFromFirst extends FeatureDeriveFromPair {
+public class Merged extends FeatureDeriveFromPair {
+
+	public Merged() {
+		// BEAN Constructor
+	}
+	
+	public Merged(Feature<FeatureInputSingleObject> item) {
+		super(item);
+	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> params)
+	public double calc(SessionInput<FeatureInputPairObjects> params)
 			throws FeatureCalcException {
-		return valueFromFirst(params) - valueFromSecond(params); 
+		return valueFromMerged(params);
 	}
-
 }

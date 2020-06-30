@@ -47,10 +47,10 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity;
-import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
+import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
+import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
 import org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.orientation.DirectionVector;
@@ -74,7 +74,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	
 	private ObjectCollection objs;
 	
-	private FeatureList<FeatureInputSingleObj> features;
+	private FeatureList<FeatureInputSingleObject> features;
 	
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
 	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
@@ -82,7 +82,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	private NRGStackWithParams nrgStack;
 	private LogErrorReporter logErrorReporter;
 	
-	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObj> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
+	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
 		this.logErrorReporter = logErrorReporter;
@@ -102,7 +102,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 				
 		ResultsVectorCollection rvc;
 		try {
-			 FeatureCalculatorMulti<FeatureInputSingleObj> session = FeatureSession.with(
+			 FeatureCalculatorMulti<FeatureInputSingleObject> session = FeatureSession.with(
 				features,
 				paramsInit,
 				sharedFeatures,
@@ -138,9 +138,9 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 	
 	// Puts in some extra descriptive features at the start
-	private FeatureList<FeatureInputSingleObj> createFullFeatureList( FeatureList<FeatureInputSingleObj> features, LogErrorReporter logger ) {
+	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features, LogErrorReporter logger ) {
 		
-		StreamEx<Feature<FeatureInputSingleObj>> stream = StreamEx.of(
+		StreamEx<Feature<FeatureInputSingleObject>> stream = StreamEx.of(
 			addFeaturesForAxis(AxisType.X)
 		);
 		stream.append(
@@ -159,8 +159,8 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		return FeatureListFactory.fromStream(stream);
 	}
 	
-	private Feature<FeatureInputSingleObj> createNumVoxels() {
-		NumVoxels feature = new NumVoxels();
+	private Feature<FeatureInputSingleObject> createNumVoxels() {
+		NumberVoxels feature = new NumberVoxels();
 		feature.setCustomName("numVoxels");
 		return feature;
 	}
@@ -176,11 +176,11 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		}
 	}
 		
-	private static Stream<Feature<FeatureInputSingleObj>> addFeaturesForAxis(AxisType axis) {
+	private static Stream<Feature<FeatureInputSingleObject>> addFeaturesForAxis(AxisType axis) {
 		
 		// Using non-physical distances, and physical distances respectively
-		Feature<FeatureInputSingleObj> feature = new CenterOfGravity(axis);
-		Feature<FeatureInputSingleObj> featurePhysical = convertToPhysical(
+		Feature<FeatureInputSingleObject> feature = new CenterOfGravity(axis);
+		Feature<FeatureInputSingleObject> featurePhysical = convertToPhysical(
 			feature,
 			new DirectionVector(axis)
 		);
@@ -191,7 +191,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		return Stream.of(feature, featurePhysical);
 	}
 	
-	private static Feature<FeatureInputSingleObj> convertToPhysical( Feature<FeatureInputSingleObj> feature, DirectionVector dir ) {
+	private static Feature<FeatureInputSingleObject> convertToPhysical( Feature<FeatureInputSingleObject> feature, DirectionVector dir ) {
 		return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
 	}
 	
@@ -211,7 +211,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	private static FeatureInputSingleObj createParams(ObjectMask om, NRGStackWithParams nrgStack) {
-		return new FeatureInputSingleObj(om, nrgStack);
+	private static FeatureInputSingleObject createParams(ObjectMask om, NRGStackWithParams nrgStack) {
+		return new FeatureInputSingleObject(om, nrgStack);
 	}
 }

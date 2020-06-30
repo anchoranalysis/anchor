@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.pair.impl;
+package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -31,9 +31,8 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
  * Evaluates the first-object in a pair only
@@ -41,19 +40,19 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
  * @author owen
  *
  */
-public class Second extends FeatureDeriveFromPair {
+public class First extends FeatureDeriveFromPair {
 
-	public Second() {
+	public First() {
 		// BEAN Constructor
 	}
 	
-	public Second(Feature<FeatureInputSingleObj> item) {
+	public First(Feature<FeatureInputSingleObject> item) {
 		super(item);
 	}
-	
+		
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> params)
+	public double calc(SessionInput<FeatureInputPairObjects> params)
 			throws FeatureCalcException {
-		return valueFromSecond(params);
+		return valueFromFirst(params);
 	}
 }

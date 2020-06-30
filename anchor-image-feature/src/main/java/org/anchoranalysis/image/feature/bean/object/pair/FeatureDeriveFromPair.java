@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.pair;
+package org.anchoranalysis.image.feature.bean.object.pair;
 
 /*-
  * #%L
@@ -31,9 +31,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extract;
+import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
+import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
  * Base class for evaluating FeatureObjMaskPair in terms of another feature that operations on elements (first, second, merged etc.)
@@ -41,18 +42,18 @@ import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extr
  * @author owen
  *
  */
-public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
+public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInputSingleObj> item;
+	private Feature<FeatureInputSingleObject> item;
 	// END BEAN PROPERTIES
 	
 	protected FeatureDeriveFromPair() {
 		// NOTHING TO DO
 	}
 	
-	protected FeatureDeriveFromPair(Feature<FeatureInputSingleObj> item) {
+	protected FeatureDeriveFromPair(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 	
@@ -60,7 +61,7 @@ public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
 	public static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(FeatureDeriveFromPair.class, "second");
 	public static final ChildCacheName CACHE_NAME_MERGED = new ChildCacheName(FeatureDeriveFromPair.class, "merged");
 	
-	protected double valueFromFirst( SessionInput<FeatureInputPairObjs> input ) throws FeatureCalcException {
+	protected double valueFromFirst( SessionInput<FeatureInputPairObjects> input ) throws FeatureCalcException {
 		return featureValFrom(
 			input,
 			Extract.FIRST,
@@ -68,7 +69,7 @@ public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
 		);
 	}
 	
-	protected double valueFromSecond( SessionInput<FeatureInputPairObjs> input ) throws FeatureCalcException {
+	protected double valueFromSecond( SessionInput<FeatureInputPairObjects> input ) throws FeatureCalcException {
 		return featureValFrom(
 			input,
 			Extract.SECOND,
@@ -76,7 +77,7 @@ public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
 		);
 	}
 	
-	protected double valueFromMerged( SessionInput<FeatureInputPairObjs> input ) throws FeatureCalcException {
+	protected double valueFromMerged( SessionInput<FeatureInputPairObjects> input ) throws FeatureCalcException {
 		return featureValFrom(
 			input,
 			Extract.MERGED,
@@ -84,7 +85,7 @@ public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
 		);
 	}
 	
-	private double featureValFrom( SessionInput<FeatureInputPairObjs> input, Extract extract, ChildCacheName cacheName ) throws FeatureCalcException {
+	private double featureValFrom( SessionInput<FeatureInputPairObjects> input, Extract extract, ChildCacheName cacheName ) throws FeatureCalcException {
 	
 		return input.forChild().calc(
 			item,
@@ -93,11 +94,11 @@ public abstract class FeatureDeriveFromPair extends FeatureObjMaskPair {
 		);
 	}
 
-	public Feature<FeatureInputSingleObj> getItem() {
+	public Feature<FeatureInputSingleObject> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObj> item) {
+	public void setItem(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 	

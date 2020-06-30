@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask;
+package org.anchoranalysis.image.feature.object.calculation;
 
 /*
  * #%L
@@ -28,17 +28,14 @@ package org.anchoranalysis.image.feature.objmask;
 
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSingleObj> {
+public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSingleObject> {
 
 	private boolean mip=false;
-	
-	public CalculateNumVoxels() {
-		this(false);
-	}
 	
 	public CalculateNumVoxels(boolean mip) {
 		super();
@@ -55,7 +52,7 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 
 	// Public, as it's needed by Mockito in test verifications
 	@Override
-	public Double execute(FeatureInputSingleObj params) {
+	public Double execute(FeatureInputSingleObject params) {
 		return calc( params.getObjMask(), mip );
 	}
 	

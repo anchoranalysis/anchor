@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.pair.impl;
+package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -31,29 +31,32 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+
 
 /**
- * Evaluates the first-object in a pair only
+ * Ratio of first-object to second-object in a pair
  * 
  * @author owen
  *
  */
-public class Merged extends FeatureDeriveFromPair {
+public class Minimum extends FeatureDeriveFromPair {
 
-	public Merged() {
+	public Minimum() {
 		// BEAN Constructor
 	}
 	
-	public Merged(Feature<FeatureInputSingleObj> item) {
+	public Minimum(Feature<FeatureInputSingleObject> item) {
 		super(item);
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> params)
+	public double calc(SessionInput<FeatureInputPairObjects> params)
 			throws FeatureCalcException {
-		return valueFromMerged(params);
+		return Math.min(
+			valueFromFirst(params),
+			valueFromSecond(params)
+		);
 	}
 }

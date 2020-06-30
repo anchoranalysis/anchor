@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.objmask.pair.impl;
-
-import org.anchoranalysis.feature.cache.SessionInput;
+package org.anchoranalysis.image.feature.bean.object.pair;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -29,22 +27,15 @@ import org.anchoranalysis.feature.cache.SessionInput;
  */
 
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjectsDescriptor;
 
-
-/**
- * Ratio of first-object to second-object in a pair
- * 
- * @author owen
- *
- */
-public class RatioFirstToSecond extends FeatureDeriveFromPair {
+public abstract class FeaturePairObjects extends Feature<FeatureInputPairObjects> {
 
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> params)
-			throws FeatureCalcException {
-		return valueFromFirst(params) / valueFromSecond(params);
+	public FeatureInputDescriptor inputDescriptor() {
+		return FeatureInputPairObjectsDescriptor.instance;
 	}
 }

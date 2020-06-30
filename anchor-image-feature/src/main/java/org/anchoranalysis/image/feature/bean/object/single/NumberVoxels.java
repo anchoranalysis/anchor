@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.objmask;
+package org.anchoranalysis.image.feature.bean.object.single;
 
 /*
  * #%L
@@ -30,10 +30,10 @@ package org.anchoranalysis.image.feature.bean.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.calculation.CalculateNumVoxels;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class NumVoxels extends FeatureObjMask {
+public class NumberVoxels extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -41,7 +41,7 @@ public class NumVoxels extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return input.calc(
 			new CalculateNumVoxels(mip)
 		);

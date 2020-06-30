@@ -10,8 +10,8 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
@@ -36,21 +36,21 @@ class CombinedCalculator {
 	 * 
 	 * <p>Can be null, if neither the first or second features are included</p>
 	 */
-	private FeatureCalculatorMulti<FeatureInputSingleObj> calculatorFirstSecond;
+	private FeatureCalculatorMulti<FeatureInputSingleObject> calculatorFirstSecond;
 
 	/**
 	 * For calculating merged objects
 	 * 
 	 * <p>Can be null, if neither the merged are not included</p>
 	 */
-	private FeatureCalculatorMulti<FeatureInputSingleObj> calculatorMerged;
+	private FeatureCalculatorMulti<FeatureInputSingleObject> calculatorMerged;
 		
 	/**
 	 * For calculating pair objects
 	 * 
 	 * <p>Can be null, if neither the pair are not included</p>
 	 */
-	private FeatureCalculatorMulti<FeatureInputPairObjs> calculatorPair;
+	private FeatureCalculatorMulti<FeatureInputPairObjects> calculatorPair;
 	
 	public CombinedCalculator(MergedPairsFeatures features, CreateCalculatorHelper cc, MergedPairsInclude include, ImageInitParams soImage, boolean suppressErrors) throws InitException {
 		super();
@@ -61,14 +61,14 @@ class CombinedCalculator {
 		
 		createImage(soImage);
 		
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategyFirstSecond
 			= CachingStrategies.cacheAndReuse();
 		
 		createFirstAndSecond(soImage, cachingStrategyFirstSecond);
 		createMergedAndPair(soImage, cachingStrategyFirstSecond);
 	}
 		
-	public ResultsVector calcForInput(FeatureInputPairObjs input, Optional<ErrorReporter> errorReporter) throws FeatureCalcException {
+	public ResultsVector calcForInput(FeatureInputPairObjects input, Optional<ErrorReporter> errorReporter) throws FeatureCalcException {
 		
 		ResultsVectorBuilder helper = new ResultsVectorBuilder(
 			sizeFeatures(),
@@ -82,17 +82,17 @@ class CombinedCalculator {
 		
 		// First features
 		if (include.includeFirst()) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getFirst, calculatorFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjects::getFirst, calculatorFirstSecond );
 		}
 		
 		// Second features
 		if (include.includeSecond()) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, calculatorFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjects::getSecond, calculatorFirstSecond );
 		}
 		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
 		if (include.includeMerged()) {
-			helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, calculatorMerged );
+			helper.calcAndInsert(input, FeatureInputPairObjects::getMerged, calculatorMerged );
 		}
 
 		// Pair features
@@ -125,7 +125,7 @@ class CombinedCalculator {
 	
 	private void createFirstAndSecond(
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond		
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategyFirstSecond		
 	) throws InitException {
 		if (include.includeFirstOrSecond()) {
 			calculatorFirstSecond = features.createSingle(cc, soImage, cachingStrategyFirstSecond, suppressErrors);
@@ -134,9 +134,9 @@ class CombinedCalculator {
 	
 	private void createMergedAndPair(
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategyFirstSecond
 	) throws InitException {
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyMerged
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategyMerged
 			= CachingStrategies.cacheAndReuse();
 	
 		if (include.includeMerged()) {

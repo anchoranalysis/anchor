@@ -36,6 +36,8 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 
 public class InitParamsHelper {
 	
+	private InitParamsHelper() {}
+	
 	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
 		
 		Optional<KeyValueParams> kvp = nrgStack.map( n->n.getParams() );

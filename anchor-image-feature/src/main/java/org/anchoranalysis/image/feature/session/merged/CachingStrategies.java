@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
@@ -44,7 +44,7 @@ class CachingStrategies {
 	private CachingStrategies() {}
 	
 	/** Cache and re-use inputs */
-	public static BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cacheAndReuse() {
+	public static BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cacheAndReuse() {
 		return new BoundReplaceStrategy<>(CacheAndReuseStrategy::new);
 	}
 	

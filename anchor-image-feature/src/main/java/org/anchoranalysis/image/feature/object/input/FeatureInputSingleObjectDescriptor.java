@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask;
+package org.anchoranalysis.image.feature.object.input;
 
 
 
@@ -30,11 +30,11 @@ package org.anchoranalysis.image.feature.objmask;
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-public class FeatureInputSingleObjDescriptor extends FeatureInputDescriptor {
+public class FeatureInputSingleObjectDescriptor extends FeatureInputDescriptor {
 
-	public static final FeatureInputSingleObjDescriptor instance = new FeatureInputSingleObjDescriptor();
+	public static final FeatureInputSingleObjectDescriptor instance = new FeatureInputSingleObjectDescriptor();
 	
-	private FeatureInputSingleObjDescriptor() {
+	private FeatureInputSingleObjectDescriptor() {
 		
 	}
 	
@@ -45,6 +45,6 @@ public class FeatureInputSingleObjDescriptor extends FeatureInputDescriptor {
 
 	@Override
 	public Class<?> inputClass() {
-		return FeatureInputSingleObj.class;
+		return FeatureInputSingleObject.class;
 	}
 }

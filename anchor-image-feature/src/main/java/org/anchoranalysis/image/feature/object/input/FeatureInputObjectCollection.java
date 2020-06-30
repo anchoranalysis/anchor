@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.objmask.collection;
+package org.anchoranalysis.image.feature.object.input;
 
 import java.util.Optional;
 
@@ -6,15 +6,15 @@ import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public class FeatureInputObjs extends FeatureInputNRGStack {
+public class FeatureInputObjectCollection extends FeatureInputNRGStack {
 
 	private ObjectCollection objMaskCollection;
 	
-	public FeatureInputObjs(ObjectCollection objMaskCollection) {
+	public FeatureInputObjectCollection(ObjectCollection objMaskCollection) {
 		this.objMaskCollection = objMaskCollection;
 	}
 	
-	public FeatureInputObjs(ObjectCollection objMaskCollection, Optional<NRGStackWithParams> nrgStack) {
+	public FeatureInputObjectCollection(ObjectCollection objMaskCollection, Optional<NRGStackWithParams> nrgStack) {
 		super(nrgStack);
 		this.objMaskCollection = objMaskCollection;
 	}

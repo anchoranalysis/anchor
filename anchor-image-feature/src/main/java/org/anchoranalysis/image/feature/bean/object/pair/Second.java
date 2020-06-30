@@ -1,8 +1,11 @@
-package org.anchoranalysis.image.feature.bean.objmask.pair;
+package org.anchoranalysis.image.feature.bean.object.pair;
+
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*
  * #%L
- * anchor-image-feature
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,15 +30,29 @@ package org.anchoranalysis.image.feature.bean.objmask.pair;
  */
 
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescriptor;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public abstract class FeatureObjMaskPair extends Feature<FeatureInputPairObjs> {
+/**
+ * Evaluates the first-object in a pair only
+ * 
+ * @author owen
+ *
+ */
+public class Second extends FeatureDeriveFromPair {
 
+	public Second() {
+		// BEAN Constructor
+	}
+	
+	public Second(Feature<FeatureInputSingleObject> item) {
+		super(item);
+	}
+	
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairObjsDescriptor.instance;
+	public double calc(SessionInput<FeatureInputPairObjects> params)
+			throws FeatureCalcException {
+		return valueFromSecond(params);
 	}
 }

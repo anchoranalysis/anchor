@@ -1,11 +1,12 @@
-/** Evaluating FeatureObjMaskPair in terms of the order of the elements
- * (first object, second order etc.) */
-package org.anchoranalysis.image.feature.objmask.pair.impl;
-/*-
+package org.anchoranalysis.image.feature.bean.object.pair;
+
+import org.anchoranalysis.feature.cache.SessionInput;
+
+/*
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,3 +27,24 @@ package org.anchoranalysis.image.feature.objmask.pair.impl;
  * THE SOFTWARE.
  * #L%
  */
+
+
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+
+
+/**
+ * Subtract second-object from first-object in a pair
+ * 
+ * @author owen
+ *
+ */
+public class SubtractSecondFromFirst extends FeatureDeriveFromPair {
+	
+	@Override
+	public double calc(SessionInput<FeatureInputPairObjects> params)
+			throws FeatureCalcException {
+		return valueFromFirst(params) - valueFromSecond(params); 
+	}
+
+}

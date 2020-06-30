@@ -46,7 +46,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
@@ -58,7 +58,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private List<FeatureProvider<FeatureInputSingleObj>> listFeatureProvider = new ArrayList<>();
+	private List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider = new ArrayList<>();
 	
 	@BeanField @OptionalBean
 	private StackProvider stackProviderNRG;
@@ -80,7 +80,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		try {
 			ObjectCollection objsCollection = objs.create();
 			
-			FeatureList<FeatureInputSingleObj> features = FeatureListFactory.fromProviders(listFeatureProvider);
+			FeatureList<FeatureInputSingleObject> features = FeatureListFactory.fromProviders(listFeatureProvider);
 			
 			if (features.size()==0) {
 				throw new IOException("No features are set");
@@ -111,7 +111,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		FeatureInitParamsSharedObjs paramsInit,
 		NRGStackWithParams nrgStack,
 		ObjectCollection objsCollection,
-		FeatureList<FeatureInputSingleObj> features,
+		FeatureList<FeatureInputSingleObject> features,
 		LogErrorReporter logErrorReporter
 	) {
 		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
@@ -143,12 +143,12 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	}
 
 
-	public List<FeatureProvider<FeatureInputSingleObj>> getListFeatureProvider() {
+	public List<FeatureProvider<FeatureInputSingleObject>> getListFeatureProvider() {
 		return listFeatureProvider;
 	}
 
 
-	public void setListFeatureProvider(List<FeatureProvider<FeatureInputSingleObj>> listFeatureProvider) {
+	public void setListFeatureProvider(List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider) {
 		this.listFeatureProvider = listFeatureProvider;
 	}
 

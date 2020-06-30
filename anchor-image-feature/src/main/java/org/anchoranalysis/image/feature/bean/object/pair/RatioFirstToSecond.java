@@ -1,6 +1,5 @@
-package org.anchoranalysis.image.feature.objmask.pair.impl;
+package org.anchoranalysis.image.feature.bean.object.pair;
 
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 
 /*
@@ -31,29 +30,20 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+
 
 /**
- * Evaluates the first-object in a pair only
+ * Ratio of first-object to second-object in a pair
  * 
  * @author owen
  *
  */
-public class First extends FeatureDeriveFromPair {
+public class RatioFirstToSecond extends FeatureDeriveFromPair {
 
-	public First() {
-		// BEAN Constructor
-	}
-	
-	public First(Feature<FeatureInputSingleObj> item) {
-		super(item);
-	}
-		
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> params)
+	public double calc(SessionInput<FeatureInputPairObjects> params)
 			throws FeatureCalcException {
-		return valueFromFirst(params);
+		return valueFromFirst(params) / valueFromSecond(params);
 	}
 }
