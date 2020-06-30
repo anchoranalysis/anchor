@@ -35,23 +35,23 @@ import org.anchoranalysis.feature.bean.FeatureCastInitParams;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 
 
 /**
- * A feature that depends on SharedObjects being passed during the paramter-initialization
+ * A feature that depends on SharedObjects being passed during the parameter-initialization
  * 
  * @author owen
  *
  * @param <S> init-params params type
  * @param <T> feature input type
  */
-public abstract class FeatureSharedObjs<T extends FeatureInput> extends FeatureCastInitParams<FeatureInitParamsSharedObjs, T> {
+public abstract class FeatureShared<T extends FeatureInput> extends FeatureCastInitParams<FeatureInitParamsShared, T> {
 
 
-	protected FeatureSharedObjs() {
+	protected FeatureShared() {
 		super(
-			FeatureInitParamsSharedObjs.class,
+			FeatureInitParamsShared.class,
 			new PropertyInitializer<>(	FeatureInitParams.class, paramExtracters() )
 		);
 	}
@@ -60,14 +60,14 @@ public abstract class FeatureSharedObjs<T extends FeatureInput> extends FeatureC
 		return Arrays.asList(
 			new ExtractFromParam<>(
 				ImageInitParams.class,
-				p -> extractImageInitParams(p),
-				FeatureInitParamsSharedObjs.class
+				params -> extractImageInitParams(params),
+				FeatureInitParamsShared.class
 			)
 		);
 	}
 		
 	private static ImageInitParams extractImageInitParams(FeatureInitParams params) {
-		FeatureInitParamsSharedObjs paramCast = (FeatureInitParamsSharedObjs) params;
+		FeatureInitParamsShared paramCast = (FeatureInitParamsShared) params;
 		return paramCast.getSharedObjects();
 	}
 }

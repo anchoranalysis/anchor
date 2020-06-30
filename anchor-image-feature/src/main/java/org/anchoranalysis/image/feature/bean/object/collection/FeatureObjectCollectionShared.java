@@ -31,7 +31,7 @@ package org.anchoranalysis.image.feature.bean.object.collection;
 
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
+import org.anchoranalysis.image.feature.bean.FeatureShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDescriptor;
 
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDes
  * @author owen
  *
  */
-public abstract class FeatureObjectCollectionShared extends FeatureSharedObjs<FeatureInputSingleObject> {
+public abstract class FeatureObjectCollectionShared extends FeatureShared<FeatureInputSingleObject> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {

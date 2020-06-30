@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.session;
-
-import java.util.Optional;
+package org.anchoranalysis.image.feature.bean.stack;
 
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -28,30 +26,15 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.bean.FeatureShared;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 
-public class InitParamsHelper {
-	
-	private InitParamsHelper() {}
-	
-	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
-		
-		Optional<KeyValueParams> kvp = nrgStack.map( n->n.getParams() );
-				
-		FeatureInitParams params;
-		if (so!=null) {
-			params = new FeatureInitParamsShared(so);
-			params.setKeyValueParams(kvp);
-		} else {
-			params = new FeatureInitParams(kvp);
-		}
-		params.setNrgStack(
-			nrgStack.map( n->n.getNrgStack() )
-		);
-		return params;
+public abstract class FeatureStackShared extends FeatureShared<FeatureInputStack> {
+
+	@Override
+	public FeatureInputDescriptor inputDescriptor() {
+		return FeatureInputStackDescriptor.instance;
 	}
 }

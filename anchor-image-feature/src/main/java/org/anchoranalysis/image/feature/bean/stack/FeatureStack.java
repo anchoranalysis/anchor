@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.feature.init;
+package org.anchoranalysis.image.feature.bean.stack;
 
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,37 +26,16 @@ package org.anchoranalysis.image.feature.init;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 
-/**
- * Extension of typical feature initialization, that also sets shared objects
- * 
- * @author owen
- *
- */
-public class FeatureInitParamsSharedObjs extends FeatureInitParams {
-
-	private ImageInitParams sharedObjects;
-	
-	public FeatureInitParamsSharedObjs( ImageInitParams so ) {
-		super();
-		this.sharedObjects = so;
-	}
-	
-	private FeatureInitParamsSharedObjs( FeatureInitParams parent, ImageInitParams so ) {
-		super(parent);
-		this.sharedObjects = so;
-	}
-
-	public ImageInitParams getSharedObjects() {
-		return sharedObjects;
-	}
+public abstract class FeatureStack extends Feature<FeatureInputStack> {
 
 	@Override
-	public FeatureInitParams duplicate() {
-		return new FeatureInitParamsSharedObjs(super.duplicate(), sharedObjects);
+	public FeatureInputDescriptor inputDescriptor() {
+		return FeatureInputStackDescriptor.instance;
 	}
-	
-	
+
 }
