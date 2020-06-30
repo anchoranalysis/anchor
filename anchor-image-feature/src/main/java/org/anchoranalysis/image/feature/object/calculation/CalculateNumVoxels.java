@@ -53,7 +53,7 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 	// Public, as it's needed by Mockito in test verifications
 	@Override
 	public Double execute(FeatureInputSingleObject params) {
-		return calc( params.getObjMask(), mip );
+		return calc( params.getObjectMask(), mip );
 	}
 	
 	@Override

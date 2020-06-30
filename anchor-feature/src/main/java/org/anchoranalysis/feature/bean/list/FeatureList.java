@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 /**
  * A list of features with the same input-type.
  * 
- * @see {@FeatureListFactory} for creation methods.
+ * @see {@FeatureListFactory} for the preferred means of creating instances.
  * 
  * @author owen
  *
@@ -62,18 +62,18 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	private List<Feature<T>> list;
 	// END BEAN PARAMETERS
 	
-	/** Creates with an empty list */
-	FeatureList() {
+	/** Standard Bean Constructor. Creates with an empty list */
+	public FeatureList() {
 		this( new ArrayList<>() );
 	}
 	
 	/** Creates a list from a stream */
-	FeatureList( Stream<Feature<T>> stream ) {
+	public FeatureList( Stream<Feature<T>> stream ) {
 		this.list = stream.collect( Collectors.toList() );
 	}
 	
 	/** Wraps an existing list */
-	FeatureList( List<Feature<T>> list ) {
+	public FeatureList( List<Feature<T>> list ) {
 		this.list = list;
 	}
 	

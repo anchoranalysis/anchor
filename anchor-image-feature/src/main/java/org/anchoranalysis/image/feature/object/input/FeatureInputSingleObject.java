@@ -40,7 +40,7 @@ public class FeatureInputSingleObject extends FeatureInputNRGStack {
 		this.objMask = objMask;
 	}
 
-	public ObjectMask getObjMask() {
+	public ObjectMask getObjectMask() {
 		return objMask;
 	}
 

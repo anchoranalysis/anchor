@@ -35,19 +35,19 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
 
 /**
- * Calculates the first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of points
+ * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of points
+ * 
+ * <p>See <a href="Image moment">Image Moment on Wikipedia</a></p>
  * 
  * @author Owen Feehan
  *
  */
-public class MomentsFromPointsCalculator {
+public class ImageMoments {
 	
 	private List<EigenvalueAndVector> list;
 	private double[] mean = new double[3];
 	
-	private MomentsFromPointsCalculator() {
-		
-	}
+	private ImageMoments() {}
 	
 	/**
 	 * Calculates the second-moments from the covariance of a matrix of points 
@@ -60,13 +60,14 @@ public class MomentsFromPointsCalculator {
 	 * @param suppressZ iff TRUE the z-dimension is ignored
 	 * @param sortAscending if TRUE, eigenValues are sorted in ascendingOrder, if FALSE in descending order
 	 */
-	public MomentsFromPointsCalculator( DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending ) {
+	public ImageMoments(DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending) {
 
 		mean = calcFirstMoments(matrixPoints);
 		
-		DoubleMatrix2D secondMoments = calcSecondMoments( matrixPoints, suppressZ );
-		
-		list = EigenValueDecompose.apply(secondMoments, sortAscending);
+		list = EigenValueDecompose.apply(
+			calcSecondMoments(matrixPoints, suppressZ),
+			sortAscending
+		);
 	}
 		
 	public EigenvalueAndVector get(int index) {
@@ -104,8 +105,8 @@ public class MomentsFromPointsCalculator {
 	}
 	
 	
-	public MomentsFromPointsCalculator duplicate() {
-		MomentsFromPointsCalculator out = new MomentsFromPointsCalculator();
+	public ImageMoments duplicate() {
+		ImageMoments out = new ImageMoments();
 		out.list = new ArrayList<>();
 		for( int i=0; i<3; i++ ) {
 			out.list.add( list.get(i).duplicate() );

@@ -62,11 +62,14 @@ public class EigenvalueAndVector implements Comparable<EigenvalueAndVector> {
 		return Double.compare(this.eigenvalue,o.eigenvalue);
 	}
 	
-	// Justification
-	// http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments
-	// http://en.wikipedia.org/wiki/Image_moment
-	//
-	// This was checked on one image, and returns the same as the Matlab 'MajorAxisLength' feature
+	/**
+	 * A normalization of an eigen-value to represent axis-length.
+	 * 
+	 * <p>This normalization procedure is designed to return the same result as Matlab's "MajorAxisLength"
+	 * feature, as per <a href="http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments">Stackoverflow post</a>
+	 *
+	 * @return
+	 */
 	public double eigenvalueNormalizedAsAxisLength() {
 		return (4 * Math.sqrt(eigenvalue));
 	}

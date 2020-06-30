@@ -28,8 +28,6 @@ package org.anchoranalysis.image.index;
 
 
 import java.util.List;
-import java.util.stream.IntStream;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 

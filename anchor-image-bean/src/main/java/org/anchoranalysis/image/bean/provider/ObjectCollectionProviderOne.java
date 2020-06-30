@@ -30,11 +30,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-public abstract class ObjMaskProviderOne extends ObjMaskProvider {
+public abstract class ObjectCollectionProviderOne extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -46,11 +46,11 @@ public abstract class ObjMaskProviderOne extends ObjMaskProvider {
 	
 	protected abstract ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException;
 	
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 }

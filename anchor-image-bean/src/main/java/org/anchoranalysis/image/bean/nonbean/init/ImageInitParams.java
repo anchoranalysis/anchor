@@ -22,7 +22,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -112,7 +112,7 @@ public class ImageInitParams extends BeanInitParams {
 		populate.copyInit(BinarySegmentation.class, getBinarySgmnSet());
 		populate.copyProvider(BinaryChnlProvider.class, getBinaryImageCollection());
 		populate.copyProvider(ChnlProvider.class, getChnlCollection());
-		populate.copyProvider(ObjMaskProvider.class, getObjMaskCollection());
+		populate.copyProvider(ObjectCollectionProvider.class, getObjMaskCollection());
 		populate.copyProvider(HistogramProvider.class, getHistogramCollection());
 		
 		stackProviderBridge = populate.copyProvider(StackProvider.class, getStackCollection());
