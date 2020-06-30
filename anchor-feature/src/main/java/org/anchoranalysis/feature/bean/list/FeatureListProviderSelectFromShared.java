@@ -49,22 +49,15 @@ public class FeatureListProviderSelectFromShared<T extends FeatureInput> extends
 	
 	@Override
 	public FeatureList<T> create() throws CreateException {
-		
-		FeatureList<T> out = new FeatureList<>();
-		
-		for( String key : getSharedObjects().getFeatureListSet().keys() ) {
-			if( match==null || match.hasMatch(key) ) {
-				try {
-					out.add(
-						getSharedObjects().getSharedFeatureSet().getException(key).downcast()
-					);
-				} catch (NamedProviderGetException e) {
-					throw new CreateException(e);
-				}
-			}
+		try {
+			return FeatureListFactory.mapFromFiltered(
+				getSharedObjects().getFeatureListSet().keys(),
+				key -> match==null || match.hasMatch(key),	
+				key -> getSharedObjects().getSharedFeatureSet().getException(key).downcast()
+			);
+		} catch (NamedProviderGetException e) {
+			throw new CreateException(e);
 		}
-		
-		return out;
 	}
 
 	public RegEx getMatch() {

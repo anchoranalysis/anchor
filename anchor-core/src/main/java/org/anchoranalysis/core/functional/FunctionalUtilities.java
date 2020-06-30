@@ -1,6 +1,7 @@
 package org.anchoranalysis.core.functional;
 
 import java.util.Collection;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -59,7 +60,34 @@ public class FunctionalUtilities {
 		} catch (ConvertedToRuntimeException e) {
 			return throwException(e, throwableClass);
 		}
-	}	
+	}
+	
+	/**
+	 * Creates a new feature-list by mapping integers (from a range) each to a {@link Optional<Feature<T>>} accepting a checked-exception
+	 * 
+	 * <p>This uses some internal reflection trickery to suppress the checked exception, and then rethrow it.</p>
+	 * 
+	 * @param <T> end-type for mapping
+	 * @param <E> an exception that be thrown during mapping
+	 * @param stream stream of ints
+	 * @param throwableClass the class of the exception-type {@link E}
+	 * @param mapFunc function for mapping
+	 * @return the stream after the mapping
+	 */
+	public static <T, E extends Throwable> Stream<T> mapIntStreamWithException(
+		IntStream stream,
+		Class<?> throwableClass,
+		IntFunctionWithException<T,E> mapFunc
+	) {
+		try {
+			return stream.mapToObj( index->
+				suppressCheckedException(index, mapFunc)
+			);
+		} catch (ConvertedToRuntimeException e) {
+			return throwException(e, throwableClass);
+		}			
+	}
+
 	
 	/**
 	 * Performs a flat-map on a stream, but accepts a function that can throw a checked-exception
@@ -126,6 +154,17 @@ public class FunctionalUtilities {
 	private static <S,T,E extends Throwable> T suppressCheckedException(
 		S param,
 		FunctionWithException<S,T,E> function
+	) {
+		try {
+			return function.apply(param);
+		} catch (Throwable exc) {
+			throw new ConvertedToRuntimeException(exc);
+		}
+	}
+	
+	private static <T,E extends Throwable> T suppressCheckedException(
+		int param,
+		IntFunctionWithException<T,E> function
 	) {
 		try {
 			return function.apply(param);

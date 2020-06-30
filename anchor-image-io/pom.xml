@@ -75,6 +75,13 @@
 	    <version>0.0.1</version>
 	</dependency>
 	
+	<!-- For Advanced manipulation of streams -->
+	<dependency>
+	    <groupId>one.util</groupId>
+	    <artifactId>streamex</artifactId>
+	    <version>${streamex.version}</version>
+	</dependency>
+	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test</artifactId>

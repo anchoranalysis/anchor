@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.list;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -75,16 +74,9 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
 	}
 	
 	public FeatureNameList createFeatureNames() {
-		FeatureNameList out = new FeatureNameList();
-		addFeatureNamesToCollection( out.asList() );
-		return out;
-	}
-	
-	public void addFeatureNamesToCollection( Collection<String> listOut ) {
-		
-		for( NamedBean<Feature<T>> item : list ) {
-			listOut.add( item.getName() );
-		}
+		return new FeatureNameList(
+			list.stream().map( NamedBean::getName )
+		);
 	}
 	
 	public NamedBean<Feature<T>> get( String name ) {
@@ -116,14 +108,11 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
 
 	
 	public FeatureList<T> listFeaturesSubset(int start, int size) {
-		FeatureList<T> out = new FeatureList<>();
-		int end = start + size;
-		for( int i=start; i<end; i++ ) {
-			out.add(
-				list.get(i).getValue()
-			);
-		}
-		return out;
+		return FeatureListFactory.mapFromRange(
+			start,
+			start + size,
+			index -> list.get(index).getValue()
+		);
 	}
 	
 

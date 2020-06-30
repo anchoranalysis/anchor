@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.io.bean.feature;
 
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.axis.AxisType;
 
@@ -35,6 +36,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
@@ -57,6 +59,8 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+
+import one.util.streamex.StreamEx;
 
 /**
  * 
@@ -136,21 +140,29 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	// Puts in some extra descriptive features at the start
 	private FeatureList<FeatureInputSingleObj> createFullFeatureList( FeatureList<FeatureInputSingleObj> features, LogErrorReporter logger ) {
 		
-		FeatureList<FeatureInputSingleObj> featuresAll = new FeatureList<>();
-		
-		addFeaturesForAxis(AxisType.X, featuresAll);
-		addFeaturesForAxis(AxisType.Y, featuresAll);
-		addFeaturesForAxis(AxisType.Z, featuresAll);
-			
-		featuresAll.addWithCustomName(new NumVoxels(), "numVoxels");
-		
-		for (Feature<FeatureInputSingleObj> f : features) {
-			featuresAll.add(
-				duplicateSetCustomNameIfMissing(f)
-			);
-		}
-		
-		return featuresAll;
+		StreamEx<Feature<FeatureInputSingleObj>> stream = StreamEx.of(
+			addFeaturesForAxis(AxisType.X)
+		);
+		stream.append(
+			addFeaturesForAxis(AxisType.Y)
+		);
+		stream.append(
+			addFeaturesForAxis(AxisType.Z)
+		);
+		stream.append(
+			createNumVoxels()
+		);
+		stream.append(
+			features.asList().stream().map(ObjMaskFeatureListCSVGenerator::duplicateSetCustomNameIfMissing)	
+		);
+	
+		return FeatureListFactory.fromStream(stream);
+	}
+	
+	private Feature<FeatureInputSingleObj> createNumVoxels() {
+		NumVoxels feature = new NumVoxels();
+		feature.setCustomName("numVoxels");
+		return feature;
 	}
 
 	/** If there's no custom-name set, this sets in using the long description */
@@ -164,7 +176,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		}
 	}
 		
-	private static void addFeaturesForAxis(AxisType axis, FeatureList<FeatureInputSingleObj> featuresAll) {
+	private static Stream<Feature<FeatureInputSingleObj>> addFeaturesForAxis(AxisType axis) {
 		
 		// Using non-physical distances, and physical distances respectively
 		Feature<FeatureInputSingleObj> feature = new CenterOfGravity(axis);
@@ -174,8 +186,9 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		);
 		
 		String axisLabel = axis.toString().toLowerCase();
-		featuresAll.addWithCustomName(feature, axisLabel);
-		featuresAll.addWithCustomName(featurePhysical, axisLabel + "_p");
+		feature.setCustomName(axisLabel);
+		featurePhysical.setCustomName(axisLabel + "_p");
+		return Stream.of(feature, featurePhysical);
 	}
 	
 	private static Feature<FeatureInputSingleObj> convertToPhysical( Feature<FeatureInputSingleObj> feature, DirectionVector dir ) {

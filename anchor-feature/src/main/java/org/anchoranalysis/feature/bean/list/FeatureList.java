@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,13 +41,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 /**
+ * A list of features with the same input-type.
+ * 
+ * @see {@FeatureListFactory} for creation methods.
  * 
  * @author owen
  *
@@ -59,15 +62,17 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	private List<Feature<T>> list;
 	// END BEAN PARAMETERS
 	
-	public FeatureList() {
+	/** Creates with an empty list */
+	FeatureList() {
 		this( new ArrayList<>() );
 	}
 	
+	/** Creates a list from a stream */
 	FeatureList( Stream<Feature<T>> stream ) {
 		this.list = stream.collect( Collectors.toList() );
 	}
 	
-	// We wrap an existing list
+	/** Wraps an existing list */
 	FeatureList( List<Feature<T>> list ) {
 		this.list = list;
 	}
@@ -122,28 +127,33 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		return out;
 	}
 	
-	public FeatureNameList createNames() {
-		FeatureNameList out = new FeatureNameList();
-		for( Feature<T> f : list ) {
-			out.add( f.getFriendlyName() );
-		}
+	
+	/**
+	 * Appends one or more additional (optional) feature-lists
+	 * 
+	 * <p>This is an IMMUTABLE operation and the existing list is not altered.</p>
+	 * 
+	 * @param <T> input-type of feature(s) in list
+	 * @param feature the optional feature-lists to append
+	 * @return a newly-created list with all the existing features, as well as any optional additional features
+	 */
+	public FeatureList<T> append(Optional<FeatureList<T>> featureList) {
+		FeatureList<T> out = new FeatureList<>();
+		out.addAll(this);
+		featureList.ifPresent(out::addAll);
 		return out;
 	}
 	
-	// Copies all features using their CustomName to a set
-	public void copyToCustomName( NameValueSet<Feature<T>> set, boolean duplicate ) {
-		for( Feature<T> f : list ) {
-			
-			Feature<T> fToAdd = duplicate ? f.duplicateBean() : f;
-			assert(fToAdd!=null);
-			set.add( f.getCustomName(), fToAdd );
-		}
+	public FeatureNameList createNames() {
+		return new FeatureNameList(
+			list.stream().map(Feature::getFriendlyName)
+		);
 	}
 	
 	public int findIndex( String customName ) {
 		for( int i=0; i<list.size(); i++ ) {
-			Feature<T> f = list.get(i);
-			if (f.getCustomName().equals(customName)) {
+			Feature<T> feature = list.get(i);
+			if (feature.getCustomName().equals(customName)) {
 				return i;
 			}
 		}
@@ -162,15 +172,9 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		return out;
 	}
 	
-	// Delegate Methods
 	public boolean add(Feature<T> f) {
 		assert(f!=null);
 		return list.add(f);
-	}
-	
-	public void addWithCustomName( Feature<T> f, String customName ) {
-		f.setCustomName( customName );
-		add(f);
 	}
 
 	public boolean isEmpty() {
@@ -203,11 +207,15 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		return list.get(index);
 	}
 
-	public boolean addAll(FeatureList<T> other) {
-		return list.addAll( other.asList() );
-	}
-
 	public void clear() {
 		list.clear();
 	}
+	
+	// START: methods designed to be called only from the factory or internally
+	
+	boolean addAll(FeatureList<T> other) {
+		return list.addAll( other.asList() );
+	}
+	
+	// END: methods designed to be called only from the factory or internally
 }

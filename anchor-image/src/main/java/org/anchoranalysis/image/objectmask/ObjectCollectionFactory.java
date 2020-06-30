@@ -95,7 +95,7 @@ public class ObjectCollectionFactory {
 	
 	
 	/**
-	 * Creates a new ObjectCollection by mapping an {@link Iterable} to {@link ObjectMask}
+	 * Creates a new collection by mapping an {@link Iterable} to {@link ObjectMask}
 	 * 
 	 * @param <T> type that will be mapped to {@link ObjectCollection}
 	 * @param <E> exception-type that can be thrown during mapping
@@ -115,7 +115,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new ObjectCollection by mapping an {@link Iterable} to {@link Optional<ObjectMask>}
+	 * Creates a new collection by mapping an {@link Iterable} to {@link Optional<ObjectMask>}
 	 * 
 	 * <p>The object is only included in the outgoing collection if Optional.isPresent()<p/>
 	 * 
@@ -150,10 +150,9 @@ public class ObjectCollectionFactory {
 		}
 		return out;
 	}
-	
-	
+		
 	/**
-	 * Creates a new {@link ObjectCollection} from a set of {@link ObjectMask}
+	 * Creates a new collection from a set of {@link ObjectMask}
 	 * 
 	 * @param set set
 	 * @return the newly created collection
@@ -163,7 +162,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new {@link ObjectCollection} by repeatedly calling a function to create a single {@link ObjectMask}
+	 * Creates a new collection by repeatedly calling a function to create a single {@link ObjectMask}
 	 * 
 	 * @param repeats the number of objects created
 	 * @param createObjectMask creates a new object-mask
@@ -178,7 +177,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new ObjectCollection by mapping integers (from a range) each to a {@link ObjectMask}
+	 * Creates a new collection by mapping integers (from a range) each to a {@link ObjectMask}
 	 * 
 	 * @param startInclusive start index for the integer range (inclusive)
 	 * @param endExclusive end index for the integer range (exclusive)
@@ -192,7 +191,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new ObjectCollection by flat-mapping integers (from a range) each to a {@link ObjectMaskCollection}
+	 * Creates a new collection by flat-mapping integers (from a range) each to a {@link ObjectMaskCollection}
 	 * 
 	 * @param startInclusive start index for the integer range (inclusive)
 	 * @param endExclusive end index for the integer range (exclusive)
@@ -207,16 +206,15 @@ public class ObjectCollectionFactory {
 				.flatMap(ObjectCollection::streamStandardJava)
 		);
 	}
-	
-	
+		
 	/**
-	 * Creates a new ObjectCollection by filtering an iterable and then mapping it to {@link ObjectMask}
+	 * Creates a new collection by filtering an iterable and then mapping it to {@link ObjectMask}
 	 * 
 	 * @param <T> type that will be mapped to {@link ObjectCollection}
 	 * @param <E> exception-type that may be thrown during mapping
 	 * @param iterable incoming collection to be mapped
 	 * @param mapFunc function for mapping
-	 * @return a newly created ObjectCollection
+	 * @return a newly created {@link ObjectCollection}
 	 * @throws E if thrown by <code>mapFunc</code>
 	 */
 	public static <T,E extends Throwable> ObjectCollection filterAndMapFrom( Iterable<T> iterable, Predicate<T> predicate, FunctionWithException<T,ObjectMask,E> mapFunc ) throws E {
@@ -235,7 +233,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new ObjectCollection by filtering and a list and then mapping it to {@link ObjectMask}
+	 * Creates a new collection by filtering and a list and then mapping it to {@link ObjectMask}
 	 * 
 	 * @param <T> type that will be mapped to {@link ObjectCollection}
 	 * @param <E> exception that be thrown during mapping
@@ -263,7 +261,7 @@ public class ObjectCollectionFactory {
 	}
 		
 	/**
-	 * Creates a new ObjectCollection by flatMapping an incoming stream to {@link ObjectCollection}
+	 * Creates a new collection by flatMapping an incoming stream to {@link ObjectCollection}
 	 * 
 	 * @param <T> type that will be flatMapped to {@link ObjectCollection}
 	 * @param collection incoming collection to be flat-mapped
@@ -277,7 +275,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new ObjectCollection by flatMapping an incoming stream to {@link ObjectCollection} AND rethrowing any exception during mapping
+	 * Creates a new collection by flatMapping an incoming stream to {@link ObjectCollection} AND rethrowing any exception during mapping
 	 * 
 	 * @param <T> type that will be flatMapped to {@link ObjectCollection}
 	 * @param stream incoming stream to be flat-mapped
@@ -295,7 +293,7 @@ public class ObjectCollectionFactory {
 	}
 	
 	/**
-	 * Creates a new ObjectCollection by flatMapping an incoming stream to {@link Collection<ObjectMask>} AND rethrowing any exception during mapping
+	 * Creates a new {@link ObjectCollection} by flatMapping an incoming stream to {@link Collection<ObjectMask>} AND rethrowing any exception during mapping
 	 * 
 	 * @param <T> type that will be flatMapped to {@link ObjectCollection}
 	 * @param stream incoming stream to be flat-mapped

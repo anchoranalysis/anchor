@@ -31,7 +31,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -50,7 +51,11 @@ public class FeatureNameList implements Iterable<String> {
 		delegate = new ArrayList<String>();
 	}
 	
-	public FeatureNameList( String firstValue ) {
+	public FeatureNameList(Stream<String> stream) {
+		delegate = stream.collect( Collectors.toList() );
+	}
+	
+	public FeatureNameList(String firstValue) {
 		this();
 		delegate.add(firstValue);
 	}
@@ -88,26 +93,13 @@ public class FeatureNameList implements Iterable<String> {
 	}
 	
 	public FeatureNameList shallowCopy() {
-		FeatureNameList out = new FeatureNameList();
-		for( String s : delegate) {
-			out.delegate.add(s);
-		}
-		return out;
+		return new FeatureNameList( delegate.stream() );
 	}
 	
 	public FeatureNameList createUniqueNamesSorted() {
-		FeatureNameList out = new FeatureNameList();
-		
-		Set<String> set = new TreeSet<String>();
-		for( String name : delegate) {
-			set.add(name);
-		}
-		
-		for( String name : set ) {
-			out.add(name);
-		}
-		
-		return out;
+		return new FeatureNameList(
+			delegate.stream().distinct().sorted()
+		);
 	}
 	
 	@Override
