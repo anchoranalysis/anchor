@@ -34,9 +34,9 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -117,7 +117,7 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		ImageDim newSd = new ImageDim(
+		ImageDimensions newSd = new ImageDimensions(
 			bbox.extent(),
 			srcChnl.getDimensions().getRes()
 		);
@@ -126,7 +126,7 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
-		ReadableTuple3i maxGlobal = bbox.calcCrnrMax();
+		ReadableTuple3i maxGlobal = bbox.calcCornerMax();
 		Point3i pntGlobal = new Point3i();
 		Point3i pntLocal = new Point3i();
 		
@@ -134,15 +134,15 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
 		
 		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.getCrnrMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
+		for (pntGlobal.setZ(bbox.getCornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
 			
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pntGlobal.getZ());
 			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pntLocal.getZ());
 			
-			for (pntGlobal.setY(bbox.getCrnrMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+			for (pntGlobal.setY(bbox.getCornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 			
-				for (pntGlobal.setX(bbox.getCrnrMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+				for (pntGlobal.setX(bbox.getCornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 
 					if (maskIn.get()!=maskOn) {
 						continue;

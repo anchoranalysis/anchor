@@ -28,123 +28,155 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
+import java.util.stream.Stream;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 /**
+ * A list of features with the same input-type.
+ * 
+ * @see {@FeatureListFactory} for the preferred means of creating instances.
  * 
  * @author owen
  *
  * @param <T> input type of features contained in the list
  */
-public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>>, Collection<Feature<T>>, List<Feature<T>> {
+public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<T>> implements Iterable<Feature<T>> {
 	
 	// START BEAN PARAMETERS
 	@BeanField
 	private List<Feature<T>> list;
 	// END BEAN PARAMETERS
 	
+	/** Standard Bean Constructor. Creates with an empty list */
 	public FeatureList() {
-		super();
-		this.list = new ArrayList<>();
+		this( new ArrayList<>() );
 	}
 	
-	// We wrap an existing list
+	/** Creates a list from a stream */
+	public FeatureList( Stream<Feature<T>> stream ) {
+		this.list = stream.collect( Collectors.toList() );
+	}
+	
+	/** Wraps an existing list */
 	public FeatureList( List<Feature<T>> list ) {
 		this.list = list;
 	}
 	
-	public FeatureList( Iterable<Feature<T>> iterFeatures ) {
-		this.list = StreamSupport
-				.stream(iterFeatures.spliterator(), false)
-				.collect(Collectors.toList());
-	}
-
-	
-	public FeatureList( Feature<T> f ) {
-		this();
-		assert(f!=null);
-		this.list.add(f);
-	}
-	
-	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logErrorReporter ) throws InitException {
+	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logger ) throws InitException {
 		for( Feature<T> f : list) {
-			f.initRecursive(featureInitParams, logErrorReporter);
+			f.initRecursive(featureInitParams, logger);
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public FeatureList<FeatureInput> upcast() {
-		return (FeatureList<FeatureInput>) this;
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public <S extends FeatureInput> FeatureList<S> downcast() {
-		return (FeatureList<S>) this;
-	}
-	
-	public FeatureNameList createNames() {
-		FeatureNameList out = new FeatureNameList();
-		for( Feature<T> f : list ) {
-			out.add( f.getFriendlyName() );
+	/**
+	 * Creates a new feature-list where each feature is the result of applying a map-function to an existing feature
+	 * 
+	 * @param <S> input-type of feature to be created as result of mapping
+	 * @param <E> exception that can be thrown during mapping
+	 * @param mapFunc function to perform the mapping of each item
+	 * @return a newly created feature-list (with the same number of items) containing the mapped features.
+	 * @throws E if the mapping-function throws this exception
+	 */
+	public <S extends FeatureInput, E extends Throwable> FeatureList<S> map(FunctionWithException<Feature<T>,Feature<S>,E> mapFunc) throws E {
+		FeatureList<S> out = new FeatureList<>();
+		for(Feature<T> feature : list) {
+			out.add(
+				mapFunc.apply(feature)
+			);
 		}
 		return out;
 	}
 	
-	// Copies all features using their CustomName to a set
-	public void copyToCustomName( NameValueSet<Feature<T>> set, boolean duplicate ) {
-		for( Feature<T> f : list ) {
-			
-			Feature<T> fToAdd = duplicate ? f.duplicateBean() : f;
-			assert(fToAdd!=null);
-			set.add( f.getCustomName(), fToAdd );
+	
+	/**
+	 * Performs a {@link filter} and then a {@link map}
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 *
+ 	 * @param <S> input-type of feature to be created as result of mapping
+	 * @param <E> exception that can be thrown during mapping
+	 * @param mapFunc performs mapping
+	 * @param predicate iff true object is included, otherwise excluded
+	 * @return a newly created feature-list, a filtered version of all features, then mapped
+	 * @throws E if the mapping-function throws this exception
+	 */
+	public <S extends FeatureInput, E extends Throwable> FeatureList<S> filterAndMap(Predicate<Feature<T>> predicate, FunctionWithException<Feature<T>,Feature<S>,E> mapFunc) throws E {
+		FeatureList<S> out = new FeatureList<>();
+		for(Feature<T> feature : list) {
+			if (predicate.test(feature)) {
+				out.add(
+					mapFunc.apply(feature)
+				);
+			}
 		}
+		return out;
+	}
+	
+	
+	/**
+	 * Appends one or more additional (optional) feature-lists
+	 * 
+	 * <p>This is an IMMUTABLE operation and the existing list is not altered.</p>
+	 * 
+	 * @param <T> input-type of feature(s) in list
+	 * @param feature the optional feature-lists to append
+	 * @return a newly-created list with all the existing features, as well as any optional additional features
+	 */
+	public FeatureList<T> append(Optional<FeatureList<T>> featureList) {
+		FeatureList<T> out = new FeatureList<>();
+		out.addAll(this);
+		featureList.ifPresent(out::addAll);
+		return out;
+	}
+	
+	public FeatureNameList createNames() {
+		return new FeatureNameList(
+			list.stream().map(Feature::getFriendlyName)
+		);
 	}
 	
 	public int findIndex( String customName ) {
 		for( int i=0; i<list.size(); i++ ) {
-			Feature<T> f = list.get(i);
-			if (f.getCustomName().equals(customName)) {
+			Feature<T> feature = list.get(i);
+			if (feature.getCustomName().equals(customName)) {
 				return i;
 			}
 		}
 		return -1;
 	}
 	
-	// Delegate Methods
+	/**
+	 * Creates a new feature-list sorted in a particular order.
+	 * 
+	 * @return
+	 */
+	public FeatureList<T> sort( Comparator<Feature<T>> comparator ) {
+		// Creates a duplicate list, and sorts the items in place.
+		FeatureList<T> out = new FeatureList<>( this.list.stream() );
+		Collections.sort(out.asList(), comparator);
+		return out;
+	}
 	
-	@Override
 	public boolean add(Feature<T> f) {
 		assert(f!=null);
 		return list.add(f);
 	}
-	
-	public void addWithCustomName( Feature<T> f, String customName ) {
-		f.setCustomName( customName );
-		add(f);
-	}
 
-	@Override
-	public Feature<T> get(int index) {
-		return list.get(index);
-	}
-
-	@Override
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
@@ -154,136 +186,12 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		return list.iterator();
 	}
 
-	@Override
 	public int size() {
 		return list.size();
 	}
 
-	@Override
-	public ListIterator<Feature<T>> listIterator() {
-		return list.listIterator();
-	}
-
-
-	@Override
-	public void add(int arg0, Feature<T> f) {
-		assert(f!=null);
-		list.add(arg0, f);
-	}
-
-
-	@Override
-	public boolean addAll(Collection<? extends Feature<T>> arg0) {
-		return list.addAll(arg0);
-	}
-
-
-	@Override
-	public boolean addAll(int arg0, Collection<? extends Feature<T>> arg1) {
-		return list.addAll(arg0, arg1);
-	}
-
-
-	@Override
-	public void clear() {
-		list.clear();
-	}
-
-
-	@Override
-	public boolean contains(Object arg0) {
-		return list.contains(arg0);
-	}
-
-
-	@Override
-	public boolean containsAll(Collection<?> arg0) {
-		return list.containsAll(arg0);
-	}
-
-	@Override
-	public boolean equals(Object arg0) {
-		return list.equals(arg0);
-	}
-
-
-	@Override
-	public int hashCode() {
-		return list.hashCode();
-	}
-
-
-	@Override
-	public int indexOf(Object arg0) {
-		return list.indexOf(arg0);
-	}
-
-
-	@Override
-	public int lastIndexOf(Object arg0) {
-		return list.lastIndexOf(arg0);
-	}
-
-
-	@Override
-	public ListIterator<Feature<T>> listIterator(int arg0) {
-		return list.listIterator(arg0);
-	}
-
-
-	@Override
-	public Feature<T> remove(int arg0) {
-		return list.remove(arg0);
-	}
-
-
-	@Override
-	public boolean remove(Object arg0) {
-		return list.remove(arg0);
-	}
-
-
-	@Override
-	public boolean removeAll(Collection<?> arg0) {
-		return list.removeAll(arg0);
-	}
-
-
-	@Override
-	public boolean retainAll(Collection<?> arg0) {
-		return list.retainAll(arg0);
-	}
-
-
-	@Override
-	public Feature<T> set(int arg0, Feature<T> arg1) {
-		return list.set(arg0, arg1);
-	}
-
-
-	@Override
-	public List<Feature<T>> subList(int arg0, int arg1) {
-		return list.subList(arg0, arg1);
-	}
-
-
-	@Override
-	public Object[] toArray() {
-		return list.toArray();
-	}
-
-
-	@Override
-	public <U> U[] toArray(U[] arg0) {
-		return list.toArray(arg0);
-	}
-
-	public List<Feature<T>> getList() {
+	public List<Feature<T>> asList() {
 		return list;
-	}
-
-	public void setList(List<Feature<T>> list) {
-		this.list = list;
 	}
 
 	@Override
@@ -295,5 +203,19 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		);
 	}
 
+	public Feature<T> get(int index) {
+		return list.get(index);
+	}
+
+	public void clear() {
+		list.clear();
+	}
 	
+	// START: methods designed to be called only from the factory or internally
+	
+	boolean addAll(FeatureList<T> other) {
+		return list.addAll( other.asList() );
+	}
+	
+	// END: methods designed to be called only from the factory or internally
 }

@@ -33,11 +33,11 @@ import java.nio.file.Paths;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
@@ -90,7 +90,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjectMask> {
 		}
 	}
 	
-	private static String errorMessageMismatchingDims(BoundingBox bbox, ImageDim sd, Path filePath) {
+	private static String errorMessageMismatchingDims(BoundingBox bbox, ImageDimensions sd, Path filePath) {
 		return String.format(
 			"Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
 			bbox.extent(),

@@ -31,12 +31,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 
 public abstract class MovieWriter extends AnchorBean<MovieWriter> {
 
-	public abstract MovieOutputHandle writeMovie( Path filePath, ImageDim dim, int numChnl, int numFrames, int framesPerSecond ) throws IOException;
+	public abstract MovieOutputHandle writeMovie( Path filePath, ImageDimensions dim, int numChnl, int numFrames, int framesPerSecond ) throws IOException;
 	
 	public abstract String getDefaultFileExt();
 }

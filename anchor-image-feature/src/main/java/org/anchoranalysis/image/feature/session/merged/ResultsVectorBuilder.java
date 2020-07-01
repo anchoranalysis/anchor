@@ -35,9 +35,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectMask;
 
 class ResultsVectorBuilder {
 
@@ -63,11 +63,11 @@ class ResultsVectorBuilder {
 	 * Calculates and inserts a derived obj-mask params from a merged.
 	 */
 	public void calcAndInsert(
-		FeatureInputPairObjs inputPair,
-		Function<FeatureInputPairObjs,ObjectMask> extractObj,
-		FeatureCalculatorMulti<FeatureInputSingleObj> calc
+		FeatureInputPairObjects inputPair,
+		Function<FeatureInputPairObjects,ObjectMask> extractObj,
+		FeatureCalculatorMulti<FeatureInputSingleObject> calc
 	) throws FeatureCalcException {
-		FeatureInputSingleObj inputSingle = new FeatureInputSingleObj(
+		FeatureInputSingleObject inputSingle = new FeatureInputSingleObject(
 			extractObj.apply(inputPair)
 		);
 		calcAndInsert(inputSingle, calc);

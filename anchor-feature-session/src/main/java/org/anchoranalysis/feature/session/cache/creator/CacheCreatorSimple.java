@@ -26,9 +26,6 @@ package org.anchoranalysis.feature.session.cache.creator;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
@@ -71,15 +68,13 @@ public class CacheCreatorSimple implements CacheCreator {
 		);
 	}
 
+	/** Filters a feature-list to only include features compatible with a particular <code>paramsType</code> */
 	@SuppressWarnings("unchecked")
 	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
-		
-		List<Feature<T>> list = namedFeatures.getList().stream()
-			.filter( f -> f.inputDescriptor().isCompatibleWith(paramsType) )
-			.map( f -> (Feature<T>) f )
-			.collect( Collectors.toList() );
-		
-		return new FeatureList<>(list);
+		return namedFeatures.filterAndMap(
+			f -> f.inputDescriptor().isCompatibleWith(paramsType),
+			f -> (Feature<T>) f
+		);
 	}
 		
 	private <T extends FeatureInput> FeatureSessionCache<T> createCache(

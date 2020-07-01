@@ -292,7 +292,7 @@ public final class Extent implements Serializable {
 	}
 	
 	public boolean contains( BoundingBox bbox ) {
-		return contains( bbox.getCrnrMin() ) && contains( bbox.calcCrnrMax() );
+		return contains( bbox.getCornerMin() ) && contains( bbox.calcCornerMax() );
 	}
 	
 	public Extent scaleXYBy( ScaleFactor sf ) {

@@ -60,7 +60,7 @@ public class FeatureListProviderDefine<T extends FeatureInput> extends FeatureLi
 	
 	@Override
 	public FeatureList<T> create() throws CreateException {
-		return new FeatureList<>(list);
+		return FeatureListFactory.wrapDuplicate(list);
 	}
 
 	public List<Feature<T>> getList() {

@@ -29,13 +29,13 @@ package org.anchoranalysis.image.feature.bean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjsDescriptor;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjectsDescriptor;
 
 public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairObjsDescriptor.instance;
+		return FeatureInputPairObjectsDescriptor.instance;
 	}
 
 }

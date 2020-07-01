@@ -40,11 +40,11 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
@@ -69,15 +69,15 @@ public class BinaryChnl {
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
-		this(vb, new ImageRes(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance) );
+		this(vb, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance) );
 	}
 	
-	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageRes res, ChannelFactorySingleType factory ) {
+	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {
 		this.chnl = factory.create(vb.getVoxelBox(), res);
 		this.binaryValues = vb.getBinaryValues();
 	}
 
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return chnl.getDimensions();
 	}
 	

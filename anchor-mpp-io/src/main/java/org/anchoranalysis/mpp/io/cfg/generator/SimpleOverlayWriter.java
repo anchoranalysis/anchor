@@ -38,8 +38,8 @@ import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Converts a configuration to a set of object masks, using a simple ObjMaskWriter for
@@ -57,7 +57,7 @@ public class SimpleOverlayWriter extends OverlayWriter {
 	public void writePrecalculatedOverlays(
 		List<PrecalcOverlay> precalculatedMasks,
 		ColoredOverlayCollection overlays,
-		ImageDim dim,
+		ImageDimensions dim,
 		RGBStack background,
 		IDGetter<Overlay> idGetter,
 		IDGetter<ObjectWithProperties> idGetterColor,
@@ -86,7 +86,7 @@ public class SimpleOverlayWriter extends OverlayWriter {
 			RGBStack stack, IDGetter<Overlay> idGetter, List<BoundingBox> intersectList)
 			throws OperationFailedException {
 
-		ImageDim dim = stack.getDimensions();
+		ImageDimensions dim = stack.getDimensions();
 		ColoredOverlayCollection intersectOverlays = oc.subsetWhereBBoxIntersects(
 			dim,
 			this,

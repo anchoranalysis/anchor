@@ -30,7 +30,7 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public class UnitValueVolumeVoxels extends UnitValueVolume {
 	
@@ -57,7 +57,7 @@ public class UnitValueVolumeVoxels extends UnitValueVolume {
 	}
 
 	@Override
-	public double rslv(Optional<ImageRes> res) {
+	public double rslv(Optional<ImageResolution> res) {
 		return value;
 	}
 

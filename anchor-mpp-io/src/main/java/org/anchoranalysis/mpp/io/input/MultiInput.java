@@ -37,10 +37,10 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 

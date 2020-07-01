@@ -34,9 +34,9 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Pairs objects in left with objects in right
@@ -98,7 +98,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		return elements.asList();	
 	}
 	
-	public void removeTouchingBorderXY( ImageDim sd ) {
+	public void removeTouchingBorderXY( ImageDimensions sd ) {
 		removeTouchingBorderXYObjMask( sd, listUnassignedLeft );
 		removeTouchingBorderXYObjMask( sd, listUnassignedRight );
 		removeTouchingBorderXYPairObjMask( sd, listPairs );
@@ -221,7 +221,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		return listPairs.size() + listUnassignedRight.size();
 	}
 		
-	private static void removeTouchingBorderXYObjMask( ImageDim sd, List<ObjectMask> list ) {
+	private static void removeTouchingBorderXYObjMask( ImageDimensions sd, List<ObjectMask> list ) {
 		Iterator<ObjectMask> itr = list.iterator();
 		while( itr.hasNext() ) {
 			ObjectMask om = itr.next();
@@ -231,7 +231,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		}
 	}
 	
-	private static void removeTouchingBorderXYPairObjMask( ImageDim sd, List<PairObjMask> list ) {
+	private static void removeTouchingBorderXYPairObjMask( ImageDimensions sd, List<PairObjMask> list ) {
 		Iterator<PairObjMask> itr = list.iterator();
 		while( itr.hasNext() ) {
 			PairObjMask pom = itr.next();

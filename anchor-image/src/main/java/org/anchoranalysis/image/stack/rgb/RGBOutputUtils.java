@@ -31,11 +31,11 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class RGBOutputUtils {
 	
-	public static void writeRGBColorToByteArr( RGBColor c, Point3i pnt, ImageDim sd, ByteBuffer red, ByteBuffer blue, ByteBuffer green ) {
+	public static void writeRGBColorToByteArr( RGBColor c, Point3i pnt, ImageDimensions sd, ByteBuffer red, ByteBuffer blue, ByteBuffer green ) {
 		int index = sd.offset(pnt.getX(), pnt.getY(), 0);
 		red.put(index, (byte) c.getRed());
 		green.put(index, (byte) c.getGreen());

@@ -26,12 +26,12 @@ package org.anchoranalysis.feature.session;
  * #L%
  */
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -190,7 +190,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 	}
 
 	@Override
-	public ResultsVector calc(List<Feature<T>> features) throws FeatureCalcException {
+	public ResultsVector calc(FeatureList<T> features) throws FeatureCalcException {
 		return cache.calculator().calc(features, this );
 	}
 	

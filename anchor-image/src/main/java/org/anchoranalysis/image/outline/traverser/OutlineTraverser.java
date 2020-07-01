@@ -34,7 +34,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.VisitedPixels;
 
@@ -84,7 +84,7 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( Point3i root, List<Point3i> listOut ) throws OperationFailedException {
 
-		ReadableTuple3i crnrMin = omOutline.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMin = omOutline.getBoundingBox().getCornerMin();
 		Point3i rootRel = BoundingBox.relPosTo(root, crnrMin);
 
 		ContiguousPixelPath listOutRel = applyLocal(rootRel);

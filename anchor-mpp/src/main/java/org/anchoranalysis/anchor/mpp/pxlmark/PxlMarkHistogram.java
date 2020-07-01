@@ -40,10 +40,10 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
@@ -72,10 +72,10 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 	@Override
 	public void initForMark( Mark mark, NRGStack stack, RegionMap regionMap ) {
 		
-		ImageDim sd = stack.getDimensions();
+		ImageDimensions sd = stack.getDimensions();
 		BoundingBox bbox = mark.bboxAllRegions( sd );
 		
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		setObjMask( new ObjectMask(bbox) );
 		
@@ -88,7 +88,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		
 		ByteBuffer bufferMIP = getObjMaskMIP().getVoxelBox().getPixelsForPlane(0).buffer();
 		
-		for (int z=bbox.getCrnrMin().getZ(); z<=crnrMax.getZ(); z++) {
+		for (int z=bbox.getCornerMin().getZ(); z<=crnrMax.getZ(); z++) {
 
 			BufferArrList bufferArrList = new BufferArrList();
 			bufferArrList.init(stack, z);
@@ -113,7 +113,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		BoundingBox bbox,
 		ReadableTuple3i crnrMax,
 		Extent localExtnt,
-		ImageDim sd,
+		ImageDimensions sd,
 		NRGStack stack,
 		BufferArrList bufferArrList,
 		ByteBuffer bufferMIP,
@@ -123,22 +123,22 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		Point3d ptRunning = new Point3d();
 		ptRunning.setZ( z + 0.5 );
 		
-		int z_local = z - bbox.getCrnrMin().getZ();
+		int z_local = z - bbox.getCornerMin().getZ();
 		
 		List<RegionMembershipWithFlags> listRegionMembership = regionMap.createListMembershipWithFlags();
 		
 		ByteBuffer buffer = getObjMask().getVoxelBox().getPixelsForPlane(z_local).buffer();
 		
-		for (int y=bbox.getCrnrMin().getY(); y<=crnrMax.getY(); y++) {
+		for (int y=bbox.getCornerMin().getY(); y<=crnrMax.getY(); y++) {
 			ptRunning.setY( y + 0.5 );
 			
-			int y_local = y - bbox.getCrnrMin().getY();
+			int y_local = y - bbox.getCornerMin().getY();
 			
-			for (int x=bbox.getCrnrMin().getX(); x<=crnrMax.getX(); x++) {
+			for (int x=bbox.getCornerMin().getX(); x<=crnrMax.getX(); x++) {
 				
 				ptRunning.setX( x + 0.5 );
 								
-				int x_local = x - bbox.getCrnrMin().getX();
+				int x_local = x - bbox.getCornerMin().getX();
 				
 				int localOffset = localExtnt.offset(x_local, y_local);
 				int globalOffset = sd.offset(x, y);

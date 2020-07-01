@@ -29,28 +29,48 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance> {
 
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
-	public double rslv( Optional<ImageRes> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
-		DirectionVector dirVector = DirectionVector.createBetweenTwoPoints( pnt1, pnt2 );
-		return rslv(res,dirVector);
+	public double rslv( Optional<ImageResolution> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
+		return rslv(
+			res,
+			DirectionVector.createBetweenTwoPoints(pnt1, pnt2)
+		);
 	}
 	
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
-	public double rslv( Optional<ImageRes> res, Point3i pnt1, Point3i pnt2 ) throws OperationFailedException {
-		DirectionVector dirVector = DirectionVector.createBetweenTwoPoints( pnt1, pnt2 );
-		return rslv(res,dirVector);
+	public double rslv( Optional<ImageResolution> res, Point3i pnt1, Point3i pnt2 ) throws OperationFailedException {
+		return rslv(
+			res,
+			DirectionVector.createBetweenTwoPoints(pnt1, pnt2)
+		);
 	}
 	
 	// Returns value in voxels
-	public abstract double rslv( Optional<ImageRes> res, DirectionVector dirVector ) throws OperationFailedException;
+	public abstract double rslv( Optional<ImageResolution> res, DirectionVector dirVector ) throws OperationFailedException;
+	
+	/**
+	 * Resolves the distance in a direction aligned to a particular axis
+	 * 
+	 * @param res image-resolution
+	 * @param axis axis to indicate direction
+	 * @return the distance in the direction of the axis
+	 * @throws OperationFailedException
+	 */
+	public double rslvForAxis( Optional<ImageResolution> res, AxisType axis) throws OperationFailedException {
+		return rslv(
+			res,
+			new DirectionVector(axis)
+		);
+	}
 }

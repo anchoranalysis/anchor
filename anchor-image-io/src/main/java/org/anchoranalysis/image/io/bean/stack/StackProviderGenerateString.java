@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
@@ -131,7 +131,7 @@ public class StackProviderGenerateString extends StackProvider {
 	private Channel createExpandedChnl( Channel chnl, int zHeight ) throws CreateException {
 		assert (chnl.getDimensions().getZ()==1);
 		
-		ImageDim sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
+		ImageDimensions sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
 		
 		BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtnt());
 		BoundingBox bboxDest = bboxSrc;

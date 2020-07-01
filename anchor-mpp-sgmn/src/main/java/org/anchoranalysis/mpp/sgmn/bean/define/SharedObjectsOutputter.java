@@ -1,13 +1,10 @@
 package org.anchoranalysis.mpp.sgmn.bean.define;
 
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +26,10 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
  * #L%
  */
 
-import org.anchoranalysis.image.init.CreateCombinedStack;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;

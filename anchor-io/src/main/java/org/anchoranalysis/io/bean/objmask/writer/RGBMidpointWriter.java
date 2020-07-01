@@ -39,8 +39,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBMidpointWriter extends ObjMaskWriter {
@@ -72,7 +72,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		if (mask.hasProperty(PROPERTY_MIDPOINT)) {
 			return Point3i.immutableAdd(
 				(Point3i) mask.getProperty(PROPERTY_MIDPOINT),
-				mask.getBoundingBox().getCrnrMin()
+				mask.getBoundingBox().getCornerMin()
 			);
 		} else {
 			return PointConverter.intFromDouble( mask.getMask().centerOfGravity() );
@@ -88,7 +88,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	
 	@Override
 	public PrecalcOverlay precalculate(ObjectWithProperties mask,
-			ImageDim dim) throws CreateException {
+			ImageDimensions dim) throws CreateException {
 		
 		// We ignore the z-dimension so it's projectable onto a 2D slice
 		Point3i midPoint = calcMidpoint( mask, true );
@@ -119,7 +119,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	public static void writeRelPoint( Point3i pnt, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
 		if (bboxContainer.contains().point(pnt)) {
 			stack.writeRGBPoint(
-				Point3i.immutableSubtract(pnt, bboxContainer.getCrnrMin()),
+				Point3i.immutableSubtract(pnt, bboxContainer.getCornerMin()),
 				color
 			);
 		}

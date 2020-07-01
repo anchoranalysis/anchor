@@ -72,16 +72,9 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	 */
 	@Override
 	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() throws CreateException {
-
-		FeatureList<FeatureInputPairMemo> out = new FeatureList<>();
-		
-		// Now we add all the features we need from the nrgElemPairList
-		out.addAll(nrgElemPairList);
-		
-		// We put our features from the AddCriteriaPair first
-		featuresAddCriteria.ifPresent(out::addAll);
-				
-		return Optional.of(out);
+		return Optional.of(
+			nrgElemPairList.duplicateBean().append(featuresAddCriteria)
+		);
 	}
 
 	// Returns NULL if to reject an edge

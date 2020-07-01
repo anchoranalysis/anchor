@@ -2,8 +2,6 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
-
 /*-
  * #%L
  * anchor-mpp-feature

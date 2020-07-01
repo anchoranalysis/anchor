@@ -32,7 +32,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -70,7 +70,7 @@ public class ChnlFixture {
 		
 	public static Channel createChnl( Extent e, IntensityFunction createIntensity ) {
 		
-		ImageDim sd = new ImageDim( e, ImageResFixture.instance );
+		ImageDimensions sd = new ImageDimensions( e, ImageResFixture.instance );
 		
 		ChannelFactorySingleType factory = new ChannelFactoryByte();
 		Channel chnl = factory.createEmptyInitialised(sd);

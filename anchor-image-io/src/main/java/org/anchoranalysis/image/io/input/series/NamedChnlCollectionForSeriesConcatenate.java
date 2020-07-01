@@ -44,7 +44,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -147,7 +147,7 @@ public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> 
 		return false;
 	}
 	
-	public ImageDim dimensions() throws RasterIOException {
+	public ImageDimensions dimensions() throws RasterIOException {
 		// Assumes dimensions are the same for every item in the list
 		return list.get(0).dimensions();
 	}

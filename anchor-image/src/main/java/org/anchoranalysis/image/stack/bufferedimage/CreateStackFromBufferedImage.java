@@ -36,7 +36,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
@@ -49,7 +49,7 @@ public class CreateStackFromBufferedImage {
 		
 		Stack stackOut = new Stack();
 		
-		ImageDim sd = new ImageDim(
+		ImageDimensions sd = new ImageDimensions(
 			new Extent(
 				bufferedImage.getWidth(),
 				bufferedImage.getHeight(),

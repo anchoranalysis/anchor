@@ -26,14 +26,14 @@ package org.anchoranalysis.test.image;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public class ImageResFixture {
 
-	public static final ImageRes instance = create();
+	public static final ImageResolution instance = create();
 	
-	private static ImageRes create() {
-		return new ImageRes(
+	private static ImageResolution create() {
+		return new ImageResolution(
 			0.01,
 			0.01,
 			0.025

@@ -26,7 +26,7 @@ package org.anchoranalysis.anchor.mpp.bean.bound;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 //
 //  An upper and lower bound 
@@ -56,12 +56,12 @@ public class BoundUnitless extends BoundMinMax {
 	}
 
 	@Override
-	public double getMinRslvd( ImageRes sr, boolean do3D ) {
+	public double getMinRslvd( ImageResolution sr, boolean do3D ) {
 		return getMin();
 	}
 	
 	@Override
-	public double getMaxRslvd( ImageRes sr, boolean do3D ) {
+	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
 		return getMax();
 	}
 	

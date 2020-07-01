@@ -31,8 +31,8 @@ import java.util.function.Function;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 import loci.formats.IFormatReader;
@@ -49,7 +49,7 @@ public class DimensionsCreator {
 		this.lociMetadata = lociMetadata;
 	}
 			
-	public ImageDim apply( IFormatReader reader, ReadOptions readOptions, int seriesIndex ) {
+	public ImageDimensions apply( IFormatReader reader, ReadOptions readOptions, int seriesIndex ) {
 			
 		assert( lociMetadata != null );
 		
@@ -70,13 +70,13 @@ public class DimensionsCreator {
 			len -> res.setZ(len)
 		);
 		
-		return new ImageDim(
+		return new ImageDimensions(
 			new Extent(
 				reader.getSizeX(),
 				reader.getSizeY(),
 				readOptions.sizeZ(reader)
 			),
-			new ImageRes(res)
+			new ImageResolution(res)
 		);
 	}
 	

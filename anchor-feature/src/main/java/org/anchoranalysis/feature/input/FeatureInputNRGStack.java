@@ -31,8 +31,8 @@ import java.util.Optional;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class FeatureInputNRGStack extends FeatureInputParams {
 
@@ -48,10 +48,10 @@ public abstract class FeatureInputNRGStack extends FeatureInputParams {
 	}
 
 	@Override
-	public Optional<ImageRes> getResOptional() {
+	public Optional<ImageResolution> getResOptional() {
 		return nrgStack
 			.map( NRGStackWithParams::getDimensions )
-			.map( ImageDim::getRes );
+			.map( ImageDimensions::getRes );
 	}
 
 	@Override
@@ -59,13 +59,13 @@ public abstract class FeatureInputNRGStack extends FeatureInputParams {
 		return nrgStack.map( NRGStackWithParams::getParams );
 	}
 
-	public ImageDim getDimensionsRequired() throws FeatureCalcException {
+	public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
 		return getDimensionsOptional().orElseThrow(
 			() -> new FeatureCalcException("Dimensions are required in the input for this operation")
 		);
 	}
 	
-	public Optional<ImageDim> getDimensionsOptional() {
+	public Optional<ImageDimensions> getDimensionsOptional() {
 		return nrgStack.map( NRGStackWithParams::getDimensions );
 	}
 	

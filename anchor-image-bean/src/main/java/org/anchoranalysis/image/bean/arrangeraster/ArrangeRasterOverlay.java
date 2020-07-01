@@ -31,11 +31,11 @@ import java.util.Iterator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.arrangeraster.ArrangeRasterException;
-import org.anchoranalysis.image.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // Overlays one image on the other
@@ -67,7 +67,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		return getBeanName();
 	}
 
-	private int calcHorizontalPos( BBoxSetOnPlane bboxSet, ImageDim dim ) {
+	private int calcHorizontalPos( BBoxSetOnPlane bboxSet, ImageDimensions dim ) {
 
 		if (horizontalAlign.equalsIgnoreCase("left")) {
 			return 0;
@@ -78,7 +78,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		}
 	}
 	
-	private int calcVerticalPos( BBoxSetOnPlane bboxSet, ImageDim dim ) {
+	private int calcVerticalPos( BBoxSetOnPlane bboxSet, ImageDimensions dim ) {
 
 		if (verticalAlign.equalsIgnoreCase("top")) {
 			return 0;
@@ -89,7 +89,7 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		}
 	}
 	
-	private int calcZPos( BBoxSetOnPlane bboxSet, ImageDim dim ) {
+	private int calcZPos( BBoxSetOnPlane bboxSet, ImageDimensions dim ) {
 
 		if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
 			return 0;

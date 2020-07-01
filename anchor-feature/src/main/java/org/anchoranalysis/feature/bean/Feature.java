@@ -27,7 +27,6 @@ package org.anchoranalysis.feature.bean;
  */
 
 
-import java.util.List;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -93,6 +93,18 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 
 	public void setCustomName(String customName) {
 		this.customName = customName;
+	}
+	
+	/**
+	 * Duplicates the feature as per {@link duplicateBean} but sets a particular custom-name
+	 * 
+	 * @param customName the custom-name to set
+	 * @return a duplicated (deep copy of bean attributes) feature, identical to current feature, but with the specified custom-name
+	 */
+	public Feature<T> duplicateChangeName(String customName) {
+		Feature<T> duplicated = duplicateBean();
+		duplicated.setCustomName(customName);
+		return duplicated;
 	}
 
 	@Override
@@ -168,10 +180,10 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 */
 	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)
 			throws BeanMisconfiguredException {
-		
-		List<Feature<FeatureInput>> outUpcast = findChildrenOfClass( getOrCreateBeanFields(), Feature.class );
 
-		FeatureList<FeatureInput> out = new FeatureList<>(outUpcast);
+		FeatureList<FeatureInput> out = FeatureListFactory.wrapReuse(
+			findChildrenOfClass( getOrCreateBeanFields(), Feature.class )
+		);
 
 		if (includeAdditionallyUsed) {
 			addAdditionallyUsedFeatures(out);

@@ -29,17 +29,17 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
-public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureInputSingleObj> {
+public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureInputSingleObject> {
 
 	@Override
-	protected double calcFeatureOn(ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> session)
+	protected double calcFeatureOn(ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObject> session)
 			throws FeatureCalcException {
 		return session.calc(
-			new FeatureInputSingleObj(
+			new FeatureInputSingleObject(
 				extractObjFromCollection(objs)
 			)
 		);

@@ -40,9 +40,9 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 public class OverlayMark extends Overlay {
 
@@ -70,7 +70,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDim dim) {
+	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDimensions dim) {
 		return mark.bbox(
 			dim,
 			regionMembership.getRegionID()
@@ -80,8 +80,8 @@ public class OverlayMark extends Overlay {
 	@Override
 	public ObjectWithProperties createScaledMask(
 			OverlayWriter overlayWriter, double zoomFactorNew,
-			ObjectWithProperties om, Overlay ol, ImageDim sdUnscaled,
-			ImageDim sdScaled, BinaryValuesByte bvOut) throws CreateException {
+			ObjectWithProperties om, Overlay ol, ImageDimensions sdUnscaled,
+			ImageDimensions sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
 		ObjectWithProperties omScaled = scaledMaskCreator.createScaledMask(
 			overlayWriter,
@@ -97,7 +97,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDim dimEntireImage,
+	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDimensions dimEntireImage,
 			BinaryValuesByte bvOut) throws CreateException {
 		return mark.calcMask(
 			dimEntireImage,
@@ -138,7 +138,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public OverlayProperties generateProperties(ImageRes sr) {
+	public OverlayProperties generateProperties(ImageResolution sr) {
 		return mark.generateProperties(sr);
 	}
 }

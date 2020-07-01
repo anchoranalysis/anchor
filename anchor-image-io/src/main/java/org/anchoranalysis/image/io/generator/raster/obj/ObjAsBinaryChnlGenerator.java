@@ -33,10 +33,10 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -53,15 +53,15 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class ObjAsBinaryChnlGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
 	
 	private int maskVal;
-	private ImageRes res;
+	private ImageResolution res;
 	private ObjectMask mask;
 	
-	public ObjAsBinaryChnlGenerator(int maskVal, ImageRes res) {
+	public ObjAsBinaryChnlGenerator(int maskVal, ImageResolution res) {
 		this.maskVal = maskVal;
 		this.res = res;
 	}
 
-	public ObjAsBinaryChnlGenerator(ObjectMask mask, int maskVal, ImageRes dim) {
+	public ObjAsBinaryChnlGenerator(ObjectMask mask, int maskVal, ImageResolution dim) {
 		this.mask = mask;
 		this.maskVal = maskVal;
 		this.res = dim;
@@ -109,11 +109,11 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 		return false;
 	}
 
-	private static Channel createChnlFromMask( ObjectMask mask, ImageRes res, int chnlOutVal ) {
+	private static Channel createChnlFromMask( ObjectMask mask, ImageResolution res, int chnlOutVal ) {
 		
 		BoundingBox bbox = mask.getBoundingBox();
 		
-		ImageDim newSd = new ImageDim(
+		ImageDimensions newSd = new ImageDimensions(
 			bbox.extent(),
 			res
 		);

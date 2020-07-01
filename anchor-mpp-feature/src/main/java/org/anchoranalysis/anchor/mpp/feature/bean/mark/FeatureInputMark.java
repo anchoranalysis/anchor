@@ -33,22 +33,22 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public class FeatureInputMark extends FeatureInputParams {
 
 	private Mark mark;
-	private Optional<ImageDim> dim;
+	private Optional<ImageDimensions> dim;
 	private Optional<KeyValueParams> params;
 		
-	public FeatureInputMark(Mark mark, Optional<ImageDim> dim) {
+	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dim) {
 		this.mark = mark;
 		this.dim = dim;
 		this.params = Optional.empty();
 	}
 	
-	public FeatureInputMark(Mark mark, ImageDim dim, KeyValueParams params) {
+	public FeatureInputMark(Mark mark, ImageDimensions dim, KeyValueParams params) {
 		this(
 			mark,
 			Optional.of(dim),
@@ -56,7 +56,7 @@ public class FeatureInputMark extends FeatureInputParams {
 		);
 	}
 	
-	public FeatureInputMark(Mark mark, Optional<ImageDim> dim, Optional<KeyValueParams> params) {
+	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dim, Optional<KeyValueParams> params) {
 		super();
 		this.mark = mark;
 		this.dim = dim;
@@ -72,8 +72,8 @@ public class FeatureInputMark extends FeatureInputParams {
 	}
 
 	@Override
-	public Optional<ImageRes> getResOptional() {
-		return dim.map( ImageDim::getRes );
+	public Optional<ImageResolution> getResOptional() {
+		return dim.map( ImageDimensions::getRes );
 	}
 
 	@Override
@@ -81,11 +81,11 @@ public class FeatureInputMark extends FeatureInputParams {
 		return params;
 	}
 	
-	public Optional<ImageDim> getDimensionsOptional() {
+	public Optional<ImageDimensions> getDimensionsOptional() {
 		return dim;
 	}
 	
-	public ImageDim getDimensionsRequired() throws FeatureCalcException {
+	public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
 		return dim.orElseThrow(
 			() -> new FeatureCalcException("Dimensions are required in the input for this operation")
 		);

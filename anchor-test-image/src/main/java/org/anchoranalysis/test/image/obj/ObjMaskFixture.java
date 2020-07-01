@@ -36,17 +36,17 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class ObjMaskFixture {
 
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
-	public ObjMaskFixture(ImageDim dim ) {
+	public ObjMaskFixture(ImageDimensions dim ) {
 		this.dim = dim;
 	}
 	

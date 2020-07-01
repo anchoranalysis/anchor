@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 public class FeatureInputStack extends FeatureInputNRGStack {
 	
@@ -55,6 +55,18 @@ public class FeatureInputStack extends FeatureInputNRGStack {
 	public FeatureInputStack(NRGStack nrgStack) {
 		this.so = Optional.empty();
 		this.setNrgStack( new NRGStackWithParams(nrgStack) );
+	}
+	
+	/**
+	 * Params without any ImageInitParams
+	 * 
+	 * @param nrgStack
+	 */
+	public FeatureInputStack(Optional<NRGStack> nrgStack) {
+		this.so = Optional.empty();
+		if (nrgStack.isPresent()) {
+			this.setNrgStack( new NRGStackWithParams(nrgStack.get()) );
+		}
 	}
 
 	/**

@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes> extends FeatureGenericSingleElem<T> {
 
@@ -54,5 +54,5 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes> ex
 		);
 	}
 	
-	protected abstract double calcWithRes( double value, ImageRes res ) throws FeatureCalcException;
+	protected abstract double calcWithRes( double value, ImageResolution res ) throws FeatureCalcException;
 }

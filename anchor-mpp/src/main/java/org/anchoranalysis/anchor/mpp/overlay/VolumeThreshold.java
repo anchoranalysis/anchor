@@ -32,8 +32,8 @@ import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 class VolumeThreshold extends ScaledMaskCreator {
 
@@ -52,7 +52,7 @@ class VolumeThreshold extends ScaledMaskCreator {
 	@Override
 	public ObjectWithProperties createScaledMask(
 			OverlayWriter overlayWriter, ObjectWithProperties omUnscaled,
-			double scaleFactor, Object originalObject, ImageDim sdScaled,
+			double scaleFactor, Object originalObject, ImageDimensions sdScaled,
 			BinaryValuesByte bvOut)
 			throws CreateException {
 

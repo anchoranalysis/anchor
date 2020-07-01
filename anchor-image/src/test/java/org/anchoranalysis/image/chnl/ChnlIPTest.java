@@ -35,7 +35,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryFloat;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class ChnlIPTest {
 		
 		ChannelFactorySingleType imgChnlFloatFactory = new ChannelFactoryFloat();
 		
-		ImageDim sd = new ImageDim(
+		ImageDimensions sd = new ImageDimensions(
 			new Extent(2,2,1)
 		);
 		

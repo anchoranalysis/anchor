@@ -32,8 +32,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
@@ -48,7 +48,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  */
 public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
 	
-	public ObjWithBoundingBoxGenerator(ImageRes res ) {
+	public ObjWithBoundingBoxGenerator(ImageResolution res ) {
 		this(
 			new ObjAsBinaryChnlGenerator(
 				BinaryValuesByte.getDefault().getOnByte(),

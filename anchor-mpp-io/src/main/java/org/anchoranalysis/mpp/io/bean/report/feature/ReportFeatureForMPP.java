@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class ReportFeatureForMPP<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
 
@@ -41,7 +41,7 @@ public abstract class ReportFeatureForMPP<T extends FeatureInput> extends Report
 	private ImageDimProvider dim;
 	// END BEAN PROPERTIES
 	
-	protected ImageDim createImageDim() throws CreateException {
+	protected ImageDimensions createImageDim() throws CreateException {
 		return dim.create();
 	}
 

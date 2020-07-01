@@ -28,7 +28,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class BidirectionalBound {
 
@@ -198,7 +198,7 @@ public class BidirectionalBound {
 		return forwardUnbounded && reverseUnbounded;
 	}
 	
-	public double ratioBounds( ImageDim sd ) {
+	public double ratioBounds( ImageDimensions sd ) {
 		
 		if (getForward()==null || getReverse()==null) {
 			return -1;

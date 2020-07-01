@@ -56,8 +56,8 @@ public class PointsFromBinaryChnl {
 		
 		PointsFromChnlHelper helper = new PointsFromChnlHelper(
 				skipAfterSuccessiveEmptySlices,
-				bbox.getCrnrMin(),
-				bbox.calcCrnrMax(),
+				bbox.getCornerMin(),
+				bbox.calcCornerMax(),
 				chnl.getChnl().getVoxelBox().asByte(),
 				chnl.getBinaryValues().createByte(),
 				startZ,

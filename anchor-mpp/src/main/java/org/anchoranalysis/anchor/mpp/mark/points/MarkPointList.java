@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPointList;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class MarkPointList extends MarkAbstractPointList {
 
@@ -117,7 +117,7 @@ public class MarkPointList extends MarkAbstractPointList {
 	}
 	
 	@Override
-	public BoundingBox bboxAllRegions(ImageDim bndScene) {
+	public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
 		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
 	}
 }

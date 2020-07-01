@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class MarkPolygonCurve extends MarkAbstractPointList {
 
@@ -155,7 +155,7 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 	}
 	
 	@Override
-	public BoundingBox bboxAllRegions(ImageDim bndScene) {
+	public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
 		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
 	}
 }

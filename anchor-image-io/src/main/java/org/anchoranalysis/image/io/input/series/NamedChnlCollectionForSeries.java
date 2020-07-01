@@ -37,7 +37,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -54,7 +54,7 @@ public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
 	
 	public abstract int sizeT( ProgressReporter progressReporter ) throws RasterIOException;
 	
-	public abstract ImageDim dimensions() throws RasterIOException;
+	public abstract ImageDimensions dimensions() throws RasterIOException;
 
 	public abstract void addAsSeparateChnls( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws OperationFailedException;
 	public abstract void addAsSeparateChnls( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException;

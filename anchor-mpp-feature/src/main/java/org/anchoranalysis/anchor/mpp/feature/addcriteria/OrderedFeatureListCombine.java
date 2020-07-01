@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 class OrderedFeatureListCombine {
@@ -40,11 +41,10 @@ class OrderedFeatureListCombine {
 	
 	public static <T extends FeatureInput> Optional<FeatureList<T>> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
 		
-		FeatureList<T> out = new FeatureList<>();
-		
-		for( OrderedFeatureList<T> item : list) {
-			item.orderedListOfFeatures().ifPresent(out::addAll);
-		}
+		FeatureList<T> out = FeatureListFactory.flatMapFromOptional(
+			list,
+			OrderedFeatureList::orderedListOfFeatures
+		);
 		
 		if (!out.isEmpty()) {
 			return Optional.of(out);

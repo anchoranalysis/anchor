@@ -35,11 +35,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.arrangeraster.ArrangeRasterException;
-import org.anchoranalysis.image.arrangeraster.BBoxSetOnPlane;
-import org.anchoranalysis.image.arrangeraster.IArrangeRaster;
-import org.anchoranalysis.image.arrangeraster.TableItemArrangement;
-import org.anchoranalysis.image.arrangeraster.TableItemException;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.IArrangeRaster;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -111,7 +111,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 		//   the correct offset
 		for (BoundingBox bbox : src) {
 
-			Point3i crnrMin = new Point3i( bbox.getCrnrMin() );
+			Point3i crnrMin = new Point3i( bbox.getCornerMin() );
 			crnrMin.incrementX(shiftX);
 			crnrMin.incrementY(shiftY);
 

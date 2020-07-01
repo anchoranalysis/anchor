@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class TimeSequence implements Iterable<Stack> {
@@ -77,7 +77,7 @@ public class TimeSequence implements Iterable<Stack> {
 	}
 	
 	// Assumes all dimensions are the same, but doesn't check
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return list.get(0).getDimensions();
 	}
 }

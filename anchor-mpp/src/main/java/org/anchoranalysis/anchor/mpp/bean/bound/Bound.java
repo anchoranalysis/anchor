@@ -26,7 +26,7 @@ package org.anchoranalysis.anchor.mpp.bean.bound;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 
 //
@@ -41,7 +41,7 @@ public abstract class Bound extends MarkBounds {
 	
 	public abstract Bound duplicate();
 	
-	public RslvdBound rslv( ImageRes sr, boolean do3D ) {
+	public RslvdBound rslv( ImageResolution sr, boolean do3D ) {
 		return new RslvdBound( getMinRslvd(sr, do3D), getMaxRslvd(sr, do3D) );
 	}
 		

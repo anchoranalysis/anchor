@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.apache.commons.collections.ListUtils;
 
 public abstract class MarkAbstractPointList extends Mark {
@@ -77,7 +77,7 @@ public abstract class MarkAbstractPointList extends Mark {
 	}
 
 	@Override
-	public BoundingBox bbox(ImageDim bndScene, int regionID) {
+	public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
 		// FOR NOW WE IGNORE THE SHELL RADIUS
 		return new BoundingBox(min, max);
 	}

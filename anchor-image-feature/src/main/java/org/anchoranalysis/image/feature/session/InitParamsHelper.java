@@ -31,10 +31,12 @@ import java.util.Optional;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 
 public class InitParamsHelper {
+	
+	private InitParamsHelper() {}
 	
 	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
 		
@@ -42,7 +44,7 @@ public class InitParamsHelper {
 				
 		FeatureInitParams params;
 		if (so!=null) {
-			params = new FeatureInitParamsSharedObjs(so);
+			params = new FeatureInitParamsShared(so);
 			params.setKeyValueParams(kvp);
 		} else {
 			params = new FeatureInitParams(kvp);

@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
@@ -50,7 +50,7 @@ public class ConvertToByte_From16BitUnsigned extends ConvertToByte {
 	}		
 	
 	@Override
-	protected void setupBefore(ImageDim sd, int numChnlsPerByteArray) {
+	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
 		bytesPerPixel = 2 * numChnlsPerByteArray;
   		sizeXY = sd.getX() * sd.getY();
   		sizeBytes = sizeXY * bytesPerPixel;

@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.io.objs.ObjectMaskCollectionWriter;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;

@@ -31,9 +31,9 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class PxlListOperationFromMark extends AnchorBean<PxlListOperationFromMark> {
 
-	public abstract double doOperation( PxlMarkMemo pxlMarkMemo, ImageDim dim ) throws OperationFailedException;
+	public abstract double doOperation( PxlMarkMemo pxlMarkMemo, ImageDimensions dim ) throws OperationFailedException;
 }

@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.intersecting.IntersectionBBox;
+import org.anchoranalysis.image.object.intersecting.IntersectionBBox;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -112,7 +112,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 			ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
 			
 			int z_other = z + bbox.z().rel();
-			int z_global = z + src.getBoundingBox().getCrnrMin().getZ();
+			int z_global = z + src.getBoundingBox().getCornerMin().getZ();
 			
 			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(z_other).buffer();
 			ByteBuffer bufferMaskGlobal = maskGlobal.getPixelsForPlane(z_global).buffer();
@@ -125,8 +125,8 @@ class CountIntersectingPixelsRegionMembershipMask {
 				bufferOther,
 				bufferMaskGlobal,
 				bbox,
-				src.getBoundingBox().getCrnrMin().getX(),
-				src.getBoundingBox().getCrnrMin().getY(),
+				src.getBoundingBox().getCornerMin().getX(),
+				src.getBoundingBox().getCornerMin().getY(),
 				eGlobalMask,
 				onMaskGlobal
 			);

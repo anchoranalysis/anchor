@@ -30,18 +30,19 @@ import org.anchoranalysis.core.error.InitException;
  */
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.child.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.init.ImageInitParams;
 
 /**
- * The list of features that can be used in a {@link MergedPairsSession}
+ * The list of features that can be used in a {@link FeatureCalculatorMergedPairs}
  * 
  * @author Owen Feehan
  *
@@ -50,18 +51,18 @@ public class MergedPairsFeatures {
 
 	private FeatureList<FeatureInputStack> listImage;
 
-	private FeatureList<FeatureInputSingleObj> listSingle;
-	private FeatureList<FeatureInputPairObjs> listPair;
+	private FeatureList<FeatureInputSingleObject> listSingle;
+	private FeatureList<FeatureInputPairObjects> listPair;
 	
 	/**
 	 * Constructor - only calculate pair features
 	 * 
 	 * @param listPair features for a pair of objects
 	 */
-	public MergedPairsFeatures(FeatureList<FeatureInputPairObjs> listPair) {
+	public MergedPairsFeatures(FeatureList<FeatureInputPairObjects> listPair) {
 		this(
-			new FeatureList<>(),
-			new FeatureList<>(),
+			FeatureListFactory.empty(),
+			FeatureListFactory.empty(),
 			listPair
 		);
 	}	
@@ -73,8 +74,8 @@ public class MergedPairsFeatures {
 	 * @param listSingle features for single-objects
 	 * @param listPair features for a pair of objects
 	 */
-	public MergedPairsFeatures(FeatureList<FeatureInputStack> listImage, FeatureList<FeatureInputSingleObj> listSingle,
-			FeatureList<FeatureInputPairObjs> listPair) {
+	public MergedPairsFeatures(FeatureList<FeatureInputStack> listImage, FeatureList<FeatureInputSingleObject> listSingle,
+			FeatureList<FeatureInputPairObjects> listPair) {
 		super();
 		this.listImage = listImage;
 		this.listSingle = listSingle;
@@ -84,10 +85,10 @@ public class MergedPairsFeatures {
 	public FeatureList<FeatureInputStack> getImage() {
 		return listImage;
 	}
-	public FeatureList<FeatureInputSingleObj> getSingle() {
+	public FeatureList<FeatureInputSingleObject> getSingle() {
 		return listSingle;
 	}
-	public FeatureList<FeatureInputPairObjs> getPair() {
+	public FeatureList<FeatureInputPairObjects> getPair() {
 		return listPair;
 	}
 	
@@ -127,10 +128,10 @@ public class MergedPairsFeatures {
 		);
 	}
 	
-	public FeatureCalculatorMulti<FeatureInputSingleObj> createSingleSession(
+	public FeatureCalculatorMulti<FeatureInputSingleObject> createSingle(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategy,
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategy,
 		boolean suppressErrors
 	) throws InitException {
 		return cc.createCached(
@@ -141,7 +142,7 @@ public class MergedPairsFeatures {
 		);
 	}
 	
-	public FeatureCalculatorMulti<FeatureInputPairObjs> createPairSession(
+	public FeatureCalculatorMulti<FeatureInputPairObjects> createPair(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
 		CacheTransferSourceCollection cacheTransferSource

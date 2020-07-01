@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class ProposerContext {
 
@@ -95,7 +95,7 @@ public class ProposerContext {
 		return randomNumberGenerator;
 	}
 
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return nrgStack.getNrgStack().getDimensions();
 	}
 	

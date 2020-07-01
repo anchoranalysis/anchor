@@ -28,9 +28,9 @@ package org.anchoranalysis.anchor.overlay.collection;
 
 import org.anchoranalysis.anchor.overlay.objmask.OverlayObjMask;
 import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Two-way factory.

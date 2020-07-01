@@ -35,22 +35,22 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
 public class AssignmentObjMaskFactory {
 	
-	private FeatureEvaluator<FeatureInputPairObjs> featureEvaluator;
+	private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 	private boolean useMIP;
 	
 	// Remember the cost matrix, in case we need it later
 	private ObjMaskCollectionDistanceMatrix cost;
 	
-	public AssignmentObjMaskFactory(FeatureEvaluator<FeatureInputPairObjs> featureEvaluator, boolean useMIP ) {
+	public AssignmentObjMaskFactory(FeatureEvaluator<FeatureInputPairObjects> featureEvaluator, boolean useMIP ) {
 		super();
 		this.featureEvaluator = featureEvaluator;
 		this.useMIP = useMIP;
@@ -64,7 +64,7 @@ public class AssignmentObjMaskFactory {
 		ObjectCollection leftObjs,
 		ObjectCollection rightObjs,
 		double maxAcceptedCost,
-		ImageDim dim
+		ImageDimensions dim
 	) throws FeatureCalcException {
 
 		// Empty annotations
@@ -109,9 +109,9 @@ public class AssignmentObjMaskFactory {
 		}
 	}
 		
-	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjectCollection annotation, ObjectCollection result, ImageDim dim) throws FeatureCalcException {
+	private ObjMaskCollectionDistanceMatrix createCostMatrix( ObjectCollection annotation, ObjectCollection result, ImageDimensions dim) throws FeatureCalcException {
 
-		FeatureCalculatorSingle<FeatureInputPairObjs> session;
+		FeatureCalculatorSingle<FeatureInputPairObjects> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -146,8 +146,8 @@ public class AssignmentObjMaskFactory {
 		}
 	}
 	
-	private static FeatureInputPairObjs paramsFor( ObjectMask objMask1, ObjectMask objMask2, NRGStackWithParams nrgStack) {
-		return new FeatureInputPairObjs(
+	private static FeatureInputPairObjects paramsFor( ObjectMask objMask1, ObjectMask objMask2, NRGStackWithParams nrgStack) {
+		return new FeatureInputPairObjects(
 			objMask1,
 			objMask2,
 			Optional.of(nrgStack)

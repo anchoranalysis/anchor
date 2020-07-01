@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGScheme;
+
 /*-
  * #%L
  * anchor-mpp-feature

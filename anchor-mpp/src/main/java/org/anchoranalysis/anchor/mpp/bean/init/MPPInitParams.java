@@ -48,8 +48,8 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.init.PopulateStoreFromDefine;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 
 // A wrapper around SharedObjects which types certain MPP entities
 public class MPPInitParams extends BeanInitParams {

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -68,5 +68,5 @@ public abstract class OpenedRaster implements AutoCloseable {
 	
 	public abstract void close() throws RasterIOException;
 	
-	public abstract ImageDim dim( int seriesIndex ) throws RasterIOException;
+	public abstract ImageDimensions dim( int seriesIndex ) throws RasterIOException;
 }

@@ -35,8 +35,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -71,9 +71,9 @@ public class IJWrap {
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
 	
-	public static Channel chnlFromImageStackByte( ImageStack imageStack, ImageRes res, ChannelFactorySingleType factory ) {
+	public static Channel chnlFromImageStackByte( ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory ) {
 		
-		ImageDim sd = new ImageDim(
+		ImageDimensions sd = new ImageDimensions(
 			new Extent(imageStack.getWidth(), imageStack.getHeight(), imageStack.getSize()),
 			res
 		);
@@ -85,11 +85,11 @@ public class IJWrap {
 		return chnlOut;
 	}
 
-	public static Channel chnlFromImagePlus( ImagePlus imagePlus, ImageRes res ) throws IncorrectVoxelDataTypeException {
+	public static Channel chnlFromImagePlus( ImagePlus imagePlus, ImageResolution res ) throws IncorrectVoxelDataTypeException {
 		
 		ChannelFactory factory = ChannelFactory.instance();
 		
-		ImageDim sd = new ImageDim(
+		ImageDimensions sd = new ImageDimensions(
 			new Extent(
 				imagePlus.getWidth(),
 				imagePlus.getHeight(),
@@ -178,7 +178,7 @@ public class IJWrap {
 	public static ImagePlus createImagePlus( VoxelBoxWrapper voxelBox ) {
 	
 		ImageStack stackNew = createStackForVoxelBox( voxelBox );
-		return createImagePlus( stackNew, new ImageDim( voxelBox.any().extent(), new ImageRes() ), 1, 1, false );
+		return createImagePlus( stackNew, new ImageDimensions( voxelBox.any().extent(), new ImageResolution() ), 1, 1, false );
 	}
 	
 	public static ImagePlus createImagePlus( Channel chnl ) throws CreateException {
@@ -188,7 +188,7 @@ public class IJWrap {
 	
 	public static ImagePlus createImagePlus( Stack stack, boolean makeRGB ) throws CreateException {
 		
-		ImageDim sd = stack.getChnl(0).getDimensions();
+		ImageDimensions sd = stack.getChnl(0).getDimensions();
 		
 		// If we're making an RGB then we need to convert our stack
 		
@@ -218,7 +218,7 @@ public class IJWrap {
 		}		
 	}
 	
-	public static ImagePlus createImagePlus( ImageStack stack, ImageDim sd, int num_chnl, int num_frames, boolean makeComposite ) {
+	public static ImagePlus createImagePlus( ImageStack stack, ImageDimensions sd, int num_chnl, int num_frames, boolean makeComposite ) {
 		
 		// If we're making an RGB then we need to convert our stack
 		ImagePlus imp = null;
@@ -244,7 +244,7 @@ public class IJWrap {
 	// Creates an ImageJ colour processor stack (RGB in one processor) from an existing stack of three separate RGB channels 
 	public static ImageStack createColorProcessorStack( RGBStack stack ) {
 		
-		ImageDim sd = stack.getChnl(0).getDimensions();
+		ImageDimensions sd = stack.getChnl(0).getDimensions();
 
 		ImageStack stackNew = new ImageStack( sd.getX(), sd.getY() );
 
@@ -268,7 +268,7 @@ public class IJWrap {
 		return stackNew;
 	}
 	
-	private static Channel chnlFromImagePlusByte( ImagePlus imagePlus, ImageDim sd, ChannelFactorySingleType factory ) {
+	private static Channel chnlFromImagePlusByte( ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory ) {
 		
 		Channel chnlOut = factory.createEmptyUninitialised( sd );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
@@ -282,7 +282,7 @@ public class IJWrap {
 		return chnlOut;
 	}
 	
-	private static Channel chnlFromImagePlusShort( ImagePlus imagePlus, ImageDim sd, ChannelFactorySingleType factory ) {
+	private static Channel chnlFromImagePlusShort( ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory ) {
 		
 		Channel chnlOut = factory.createEmptyUninitialised( sd );
 		

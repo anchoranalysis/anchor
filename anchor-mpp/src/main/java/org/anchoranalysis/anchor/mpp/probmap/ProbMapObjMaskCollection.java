@@ -36,20 +36,20 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
 public class ProbMapObjMaskCollection extends ProbMap {
 
 	private ObjectCollection objMaskCollection;
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
 	private ProbWeights probWeights;
 	
 	public ProbMapObjMaskCollection(ObjectCollection objMaskCollection,
-			ImageDim dim) throws CreateException {
+			ImageDimensions dim) throws CreateException {
 		super();
 		this.objMaskCollection = objMaskCollection;
 		this.dim = dim;
@@ -81,7 +81,7 @@ public class ProbMapObjMaskCollection extends ProbMap {
 	}
 
 	@Override
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return dim;
 	}
 
@@ -129,9 +129,9 @@ public class ProbMapObjMaskCollection extends ProbMap {
 				int yRel = index2D/exY;
 				int zRel = slice;
 				
-				int x = xRel + om.getBoundingBox().getCrnrMin().getX();
-				int y = yRel + om.getBoundingBox().getCrnrMin().getY();
-				int z = zRel + om.getBoundingBox().getCrnrMin().getZ();
+				int x = xRel + om.getBoundingBox().getCornerMin().getX();
+				int y = yRel + om.getBoundingBox().getCornerMin().getY();
+				int z = zRel + om.getBoundingBox().getCornerMin().getZ();
 				
 				return new Point3d( x, y, z );
 			}

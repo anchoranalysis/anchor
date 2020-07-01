@@ -28,7 +28,7 @@ import java.nio.IntBuffer;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
 import loci.common.DataTools;
@@ -47,7 +47,7 @@ public class ConvertToInt_FromUnsigned32BitInt extends ConvertToInt {
 	}	
 	
 	@Override
-	protected void setupBefore(ImageDim sd, int numChnlsPerByteArray) {
+	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
   		sizeXY = sd.getX() * sd.getY();
   		sizeBytes = sizeXY * bytesPerPixel;
 	}

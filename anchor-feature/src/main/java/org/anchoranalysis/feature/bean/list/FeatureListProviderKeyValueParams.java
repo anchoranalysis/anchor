@@ -28,10 +28,10 @@ package org.anchoranalysis.feature.bean.list;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -50,30 +50,26 @@ public class FeatureListProviderKeyValueParams<T extends FeatureInput> extends F
 
 	@Override
 	public FeatureList<T> create() throws CreateException {
-
-		FeatureList<T> out = new FeatureList<>();
-		
-		KeyValueParamsInitParams soParams = getSharedObjects().getParams();
 		
 		try {
-			KeyValueParams kpv = soParams.getNamedKeyValueParamsCollection().getException(collectionID);
+			KeyValueParams kpv = getSharedObjects().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
 			
-			for( String key : kpv.keySet() ) {
-				
-				double val = kpv.getPropertyAsDouble(key);
-				
-				Constant<T> featureNew = new Constant<>();
-				featureNew.setCustomName( key );
-				featureNew.setValue( val );
-				
-				out.add(featureNew);
-			}
+			return FeatureListFactory.mapFrom(
+				kpv.keySet(),
+				key -> featureForKey(key, kpv)
+			);
 			
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
-		
-		return out;
+	}
+	
+	private Feature<T> featureForKey( String key, KeyValueParams kpv ) {
+		return new Constant<>(
+			key,
+			kpv.getPropertyAsDouble(key)
+		);
+
 	}
 
 	public String getCollectionID() {
@@ -83,5 +79,4 @@ public class FeatureListProviderKeyValueParams<T extends FeatureInput> extends F
 	public void setCollectionID(String collectionID) {
 		this.collectionID = collectionID;
 	}
-
 }

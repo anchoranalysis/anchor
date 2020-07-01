@@ -41,11 +41,11 @@ public class BoundingBoxDistance {
 			return 0;
 		}
 		
-		ReadableTuple3i box1CrnrMin = box1.getCrnrMin();
-		ReadableTuple3i box1CrnrMax = box1.calcCrnrMax();
+		ReadableTuple3i box1CrnrMin = box1.getCornerMin();
+		ReadableTuple3i box1CrnrMax = box1.calcCornerMax();
 		
-		ReadableTuple3i box2CrnrMin = box2.getCrnrMin();
-		ReadableTuple3i box2CrnrMax = box2.calcCrnrMax();
+		ReadableTuple3i box2CrnrMin = box2.getCornerMin();
+		ReadableTuple3i box2CrnrMax = box2.calcCornerMax();
 		
 		int xDist = minDist(
 			box1CrnrMin.getX(),

@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;

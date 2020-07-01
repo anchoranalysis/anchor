@@ -33,7 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 
@@ -91,7 +91,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
 		return chnls.size();
 	}
 	
-	public ImageDim getFirstDimensions() {
+	public ImageDimensions getFirstDimensions() {
 		assert( getNumChnl() > 0 );
 		return chnls.get(0).getDimensions();
 	}
@@ -102,7 +102,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
 			return true;
 		}
 		
-		ImageDim sd = chnls.get(0).getDimensions();
+		ImageDimensions sd = chnls.get(0).getDimensions();
 		
 		for (int c=1; c<chnls.size(); c++) {
 			

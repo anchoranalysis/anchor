@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
@@ -43,7 +44,21 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	@BeanField
 	private List<Feature<T>> list = new ArrayList<>();
 	// END BEAN PARAMETERS
-		
+	
+	/**
+	 * Standard bean constructor
+	 */
+	protected FeatureListElem() {}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param featureList feature-list
+	 */
+	protected FeatureListElem(FeatureList<T> featureList) {
+		this.list = featureList.asList();
+	}
+	
 	/**
 	 * A string description of all the items of the list concatenated together with a character in between
 	 * 
@@ -65,6 +80,10 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 
 	public void setList(List<Feature<T>> list) {
 		this.list = list;
+	}
+	
+	public void setList(FeatureList<T> list) {
+		this.list = list.asList();
 	}
 
 	@Override

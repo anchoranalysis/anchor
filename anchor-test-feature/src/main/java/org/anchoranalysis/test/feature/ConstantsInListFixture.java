@@ -30,6 +30,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -44,19 +45,19 @@ public class ConstantsInListFixture {
 	
 	/** creates a feature-list associated with the fixture */
 	public static <T extends FeatureInput> FeatureList<T> create() {
-		Feature<T> f1 = new Constant<>(f1Value);
-		Feature<T> f2 = new Constant<>(f2Value);
-		Feature<T> f3 = new Constant<>(f3Value);
-		
-		FeatureList<T> list = new FeatureList<>();
-		list.add(f1);
-		list.add(f2);
-		list.add(f3);
-		return list;
+		return FeatureListFactory.from(
+			constantFeatureFor(f1Value),
+			constantFeatureFor(f2Value),
+			constantFeatureFor(f3Value)
+		);
 	}
 		
 	/** checks that a result-vector has the results we expect from the feature-list associated with this fixture */
 	public static void checkResultVector( ResultsVector rv ) {
 		assertTrue( rv.equalsPrecision(eps, f1Value, f2Value, f3Value ) );
+	}
+	
+	private static <T extends FeatureInput> Feature<T> constantFeatureFor(double val) {
+		return new Constant<>(val);
 	}
 }

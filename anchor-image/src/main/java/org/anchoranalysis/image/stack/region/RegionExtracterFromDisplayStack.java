@@ -38,7 +38,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -100,7 +100,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		ScaleFactor sf = new ScaleFactor(zoomFactor);
 		
 		// We calculate how big our outgoing voxelbox wil be 
-		ImageDim sd = extractedSlice.getDimensions().scaleXYBy(sf);
+		ImageDimensions sd = extractedSlice.getDimensions().scaleXYBy(sf);
 		
 		Extent extentTrgt = bbox.extent().scaleXYBy(sf);
 
@@ -141,8 +141,8 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			
 			ByteBuffer bbIn = vbSrc.getPixelsForPlane(z).buffer();
@@ -173,8 +173,8 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			
 			assert( vbSrc.getPixelsForPlane(z) != null );

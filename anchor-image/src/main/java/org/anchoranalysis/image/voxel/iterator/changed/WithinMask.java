@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Processes only neighbouring voxels that lie on a mask.
@@ -63,7 +63,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		this.om = om;
 		this.maskOffVal = om.getBinaryValuesByte().getOffByte();
 		this.extent = om.getVoxelBox().extent();
-		this.crnrMin = om.getBoundingBox().getCrnrMin();
+		this.crnrMin = om.getBoundingBox().getCornerMin();
 	}
 	
 	@Override

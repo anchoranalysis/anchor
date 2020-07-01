@@ -41,11 +41,29 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 	private double value;
 	// END BEAN PARAMETERS
 	
-	public Constant() {
-	}
-	
+	/**
+	 * Standard Bean Constructor
+	 */
+	public Constant() {}
+
+	/**
+	 * Constructor with a particular value
+	 * 
+	 * @param value value
+	 */
 	public Constant( double value ) {
 		this.value = value;
+	}
+	
+	/**
+	 * Constructor with a particular value and a custom-name
+	 * 
+	 * @param customName custom-name for feature
+	 * @param value value
+	 */
+	public Constant( String customName, double value ) {
+		this.value = value;
+		setCustomName(customName);
 	}
 	
 	@Override

@@ -36,8 +36,8 @@ import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
@@ -251,7 +251,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	}
 
 	@Override
-	public BoundingBox bbox( ImageDim bndScene, int regionID ) {
+	public BoundingBox bbox( ImageDimensions bndScene, int regionID ) {
 		
 		DoubleMatrix1D s = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
@@ -358,7 +358,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	}
 	
 	@Override
-	public double[] createRadiiArrayRslvd( ImageRes sr ) {
+	public double[] createRadiiArrayRslvd( ImageResolution sr ) {
 		return EllipsoidUtilities.normalisedRadii( this, sr );
 	}
 	
@@ -429,7 +429,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 
 
 	@Override
-	public OverlayProperties generateProperties(ImageRes sr) {
+	public OverlayProperties generateProperties(ImageResolution sr) {
 		OverlayProperties op = super.generateProperties(sr);
 				
 		op.addDoubleAsString("Radius X (pixels)",  radii.getX() );
@@ -454,7 +454,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	}
 	
 	@Override
-	public BoundingBox bboxAllRegions(ImageDim bndScene) {
+	public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
 		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_OUTSIDE);
 	}
 

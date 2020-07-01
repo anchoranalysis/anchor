@@ -31,12 +31,12 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ProbMapUtilities {
 	
-	public static Point3d getUniformRandomPnt( RandomNumberGenerator re, ImageDim bndScene ) {
+	public static Point3d getUniformRandomPnt( RandomNumberGenerator re, ImageDimensions bndScene ) {
     	// Generate each point
     	Point3d pos = new Point3d();
     	pos.setX( re.nextDouble() * (bndScene.getX()-1) );

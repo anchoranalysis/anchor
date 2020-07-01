@@ -31,9 +31,9 @@ import org.anchoranalysis.bean.NullParamsBean;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class ScalarProposer extends NullParamsBean<ScalarProposer> {
 
-	public abstract double propose( RandomNumberGenerator re, ImageRes res ) throws OperationFailedException;
+	public abstract double propose( RandomNumberGenerator re, ImageResolution res ) throws OperationFailedException;
 }

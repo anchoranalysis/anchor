@@ -46,10 +46,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  *
  */
 public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput> {
-
-	// Raster experiment
-	public RasterTask() {
-	}
 	
 	@Override
 	public InputTypesExpected inputTypesExpected() {

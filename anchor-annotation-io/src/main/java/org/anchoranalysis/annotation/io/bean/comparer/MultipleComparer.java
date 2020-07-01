@@ -52,9 +52,9 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -66,7 +66,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputPairObjs> featureEvaluator;
+	private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 	
 	@BeanField @NonEmpty
 	private List<NamedBean<Comparer>> listComparers = new ArrayList<NamedBean<Comparer>>();
@@ -184,11 +184,11 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		}
 	}
 	
-	public FeatureEvaluator<FeatureInputPairObjs> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputPairObjects> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputPairObjs> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputPairObjects> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

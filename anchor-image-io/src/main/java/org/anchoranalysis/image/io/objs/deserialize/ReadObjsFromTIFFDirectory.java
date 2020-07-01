@@ -32,8 +32,9 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.folder.DeserializeFromFolder;
@@ -46,18 +47,18 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjectCollection> {
 	
 	@Override
 	public ObjectCollection deserialize(Path folderPath) throws DeserializationFailedException {
-		RasterReader rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
-		return readWithRaster(folderPath, rasterReader);
+		return readWithRaster(
+			folderPath,
+			RegisterBeanFactories.getDefaultInstances().get(RasterReader.class)
+		);
 	}
 	
 	private ObjectCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
 		
 		try {
-			SerializedObjectSetFolderSource folderSource = new SerializedObjectSetFolderSource(folderPath,"*.ser");
-			
 			DeserializeFromFolder<ObjectMask> deserializeFolder = new DeserializeFromFolderSimple<ObjectMask>(
 				new ObjMaskDualDeserializer(rasterReader),
-				folderSource
+				new SerializedObjectSetFolderSource(folderPath,"*.ser")
 			);
 			
 			return createFromLoadContainer( deserializeFolder.create() );	
@@ -68,15 +69,16 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjectCollection> {
 	}
 	
 	private static ObjectCollection createFromLoadContainer( LoadContainer<ObjectMask> lc ) throws CreateException {
-		ObjectCollection omc = new ObjectCollection();
 		try {
-			for( int i=lc.getCntr().getMinimumIndex(); i<=lc.getCntr().getMaximumIndex(); i++ ) {
-				omc.add( lc.getCntr().get(i) );
-			}
+			return ObjectCollectionFactory.mapFromRange(
+				lc.getCntr().getMinimumIndex(),
+				lc.getCntr().getMaximumIndex() + 1,
+				GetOperationFailedException.class,
+				index -> lc.getCntr().get(index)
+			);
+			
 		} catch (GetOperationFailedException e) {
 			throw new CreateException(e);
 		}
-		
-		return omc;
 	}
 }

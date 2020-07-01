@@ -43,7 +43,7 @@ import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
@@ -71,7 +71,7 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	}
 	
 	@Override
-	public ImageDim dimensions() throws RasterIOException {
+	public ImageDimensions dimensions() throws RasterIOException {
 		return openedRaster.dim(seriesNum);
 	}
 			

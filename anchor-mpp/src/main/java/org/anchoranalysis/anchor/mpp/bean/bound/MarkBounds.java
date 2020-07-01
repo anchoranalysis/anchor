@@ -31,7 +31,7 @@ import java.io.Serializable;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 @GroupingRoot
 public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Serializable {
@@ -41,11 +41,11 @@ public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Seria
 	 */
 	private static final long serialVersionUID = 0;
 	
-	public abstract double getMinRslvd( ImageRes sr, boolean do3D );
+	public abstract double getMinRslvd( ImageResolution sr, boolean do3D );
 	
-	public abstract double getMaxRslvd( ImageRes sr, boolean do3D );
+	public abstract double getMaxRslvd( ImageResolution sr, boolean do3D );
 
-	public RslvdBound calcMinMax( ImageRes sr, boolean do3D ) {
+	public RslvdBound calcMinMax( ImageResolution sr, boolean do3D ) {
 		return new RslvdBound( getMinRslvd(sr, do3D), getMaxRslvd(sr, do3D) );
 	}
 }

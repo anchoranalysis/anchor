@@ -30,8 +30,8 @@ import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 /**
  * Creates a scaled version of a mask from a mark/objMask that is not scaled
@@ -58,7 +58,7 @@ public abstract class ScaledMaskCreator {
 		ObjectWithProperties omUnscaled,
 		double scaleFactor,
 		Object originalObject,
-		ImageDim sdScaled,
+		ImageDimensions sdScaled,
 		BinaryValuesByte bv
 	) throws CreateException;
 }

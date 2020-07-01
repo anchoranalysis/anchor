@@ -26,7 +26,7 @@ package org.anchoranalysis.image.io.bean.seed;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
@@ -41,7 +41,7 @@ public class ObjMaskOutputter extends SeedCollectionOutputter {
 	
 	// END BEAN PROPERTIES
 	
-	public void output( SeedCollection seeds, ImageRes res, BoundOutputManagerRouteErrors outputManager ) {
+	public void output( SeedCollection seeds, ImageResolution res, BoundOutputManagerRouteErrors outputManager ) {
 		
 		IterableGeneratorWriter.writeSubfolder(
 			outputManager,

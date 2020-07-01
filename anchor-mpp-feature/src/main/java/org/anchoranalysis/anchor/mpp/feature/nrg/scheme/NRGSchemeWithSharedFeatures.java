@@ -3,7 +3,6 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaNRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
@@ -63,8 +62,6 @@ public class NRGSchemeWithSharedFeatures {
 	private CalcElemIndTotalOperation operationIndCalc;
 	private LogErrorReporter logger;
 	
-	private int nrgSchemeIndCacheSize;
-	
 	// Caches NRG value by index
 	private class CalcElemIndTotalOperation implements CalculateForCache<Integer,NRGTotal> {
 
@@ -122,15 +119,12 @@ public class NRGSchemeWithSharedFeatures {
 		}
 		
 	}
-	
-
-	
+		
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
 			SharedFeatureMulti sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
-		this.nrgSchemeIndCacheSize = nrgSchemeIndCacheSize;
 		this.logger = logger;
 		
 		operationIndCalc = new CalcElemIndTotalOperation();
@@ -190,21 +184,9 @@ public class NRGSchemeWithSharedFeatures {
 		
 		return new NRGStackWithParams(raster,kvp);
 	}
-
-	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
-		return new FeatureInitParams( kvp );
-	}
-	
-	
-	public NRGSchemeWithSharedFeatures duplicateWithNewNRGScheme() {
-		return new NRGSchemeWithSharedFeatures(nrgScheme.duplicateKeepFeatures(), sharedFeatures, nrgSchemeIndCacheSize, logger );
-	}
 	
 	public NRGScheme getNrgScheme() {
 		return nrgScheme;
-	}
-	public void setNrgScheme(NRGScheme nrgScheme) {
-		this.nrgScheme = nrgScheme;
 	}
 	
 	public AddCriteriaNRGElemPair createAddCriteria() throws CreateException {
@@ -224,5 +206,9 @@ public class NRGSchemeWithSharedFeatures {
 
 	public RegionMap getRegionMap() {
 		return nrgScheme.getRegionMap();
+	}
+	
+	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
+		return new FeatureInitParams( kvp );
 	}
 }

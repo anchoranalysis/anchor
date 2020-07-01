@@ -30,8 +30,8 @@ package org.anchoranalysis.image.channel.factory;
 import java.nio.Buffer;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -62,17 +62,17 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 		return instance;
 	}
 	
-	public Channel createEmptyInitialised(ImageDim dim, VoxelDataType chnlDataType ) {
+	public Channel createEmptyInitialised(ImageDimensions dim, VoxelDataType chnlDataType ) {
 		ChannelFactorySingleType factory = get(chnlDataType);
 		return factory.createEmptyInitialised(dim);
 	}
 
-	public Channel createEmptyUninitialised(ImageDim dim, VoxelDataType chnlDataType) {
+	public Channel createEmptyUninitialised(ImageDimensions dim, VoxelDataType chnlDataType) {
 		ChannelFactorySingleType factory = get(chnlDataType);
 		return factory.createEmptyUninitialised(dim);
 	}
 
-	public Channel create(VoxelBox<? extends Buffer> voxelBox, ImageRes res ) {
+	public Channel create(VoxelBox<? extends Buffer> voxelBox, ImageResolution res ) {
 		
 		VoxelDataType chnlDataType = voxelBox.dataType(); 
 		

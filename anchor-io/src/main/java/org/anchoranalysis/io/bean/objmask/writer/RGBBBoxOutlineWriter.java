@@ -37,9 +37,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -68,7 +68,7 @@ public class RGBBBoxOutlineWriter extends ObjMaskWriter {
 	}
 	
 	@Override
-	public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDim dim)
+	public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
 			throws CreateException {
 		ObjectMask outline = FindOutline.outline(
 			createBBoxMask(mask.getMask()),

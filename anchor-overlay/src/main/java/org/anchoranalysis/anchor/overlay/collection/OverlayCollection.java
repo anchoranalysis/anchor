@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
@@ -75,7 +75,7 @@ public class OverlayCollection implements Iterable<Overlay> {
 		return set;
 	}
 	
-	public List<BoundingBox> bboxList( OverlayWriter maskWriter, ImageDim dim ) {
+	public List<BoundingBox> bboxList( OverlayWriter maskWriter, ImageDimensions dim ) {
 		
 		List<BoundingBox> out = new ArrayList<>();
 		

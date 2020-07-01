@@ -44,7 +44,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
@@ -73,7 +73,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	public Mark fitMarkToPointsFromCfg( Cfg cfg, ImageDim dim ) throws OperationFailedException {
+	public Mark fitMarkToPointsFromCfg( Cfg cfg, ImageDimensions dim ) throws OperationFailedException {
 		
 		try {
 			Mark mark = markProvider.create().orElseThrow( ()->
@@ -98,7 +98,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 		}
 	}
 	
-	private Mark fitPoints( Mark mark, List<Point3f> pnts, ImageDim dim ) throws OperationFailedException {
+	private Mark fitPoints( Mark mark, List<Point3f> pnts, ImageDimensions dim ) throws OperationFailedException {
 		try {
 			pointsFitter.fit(pnts, mark, dim );
 		} catch (InsufficientPointsException e ) {

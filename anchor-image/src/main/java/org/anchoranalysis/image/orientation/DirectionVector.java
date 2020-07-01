@@ -1,5 +1,6 @@
 package org.anchoranalysis.image.orientation;
 
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /*-
@@ -50,6 +51,22 @@ public class DirectionVector {
 		vector.setX( x );
 		vector.setY( y );
 		vector.setZ( z );
+	}
+	
+	/**
+	 * Constructor - creates a direction-vector aligned to a particular axis
+	 * 
+	 * @param axisName
+	 */
+	public DirectionVector( AxisType axisType ) {
+		switch(axisType) {
+		case X:
+			this.vector = new Point3d(1, 0, 0);
+		case Y:
+			this.vector = new Point3d(0, 1, 0);
+		case Z:
+			this.vector = new Point3d(0, 0, 1);
+		}
 	}
 
 	public final double getX() {

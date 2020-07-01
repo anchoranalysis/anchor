@@ -33,8 +33,8 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 

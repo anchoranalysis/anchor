@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
@@ -77,7 +77,7 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Serializab
 		KernelCalcContext context
 	) throws KernelCalcNRGException;
 	
-	public abstract double calcAccptProb( int exstSize, int propSize, double poissonIntens, ImageDim sceneSize, double densityRatio );
+	public abstract double calcAccptProb( int exstSize, int propSize, double poissonIntens, ImageDimensions sceneSize, double densityRatio );
 	
 	public abstract String dscrLast();
 	

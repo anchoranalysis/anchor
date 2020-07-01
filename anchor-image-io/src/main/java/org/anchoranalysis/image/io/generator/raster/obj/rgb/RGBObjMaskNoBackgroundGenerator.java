@@ -35,32 +35,32 @@ import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class RGBObjMaskNoBackgroundGenerator extends RGBObjMaskGeneratorBase {
 	
 	private ChannelFactorySingleType factory = new ChannelFactoryByte();
-	private ImageDim backgroundDim;
+	private ImageDimensions backgroundDim;
 	
-	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ImageDim background, ColorIndex colorIndex) {
+	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ImageDimensions background, ColorIndex colorIndex) {
 		this(objMaskWriter, background, colorIndex, new IDGetterIter<ObjectWithProperties>(), new IDGetterIter<ObjectWithProperties>() );
 	}
 	
-	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ImageDim background, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
+	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ImageDimensions background, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
 		super(objMaskWriter, colorIndex, idGetter, colorIDGetter);
 	}
 
-	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ObjectCollectionWithProperties masks, ImageDim background, ColorIndex colorIndex) {
+	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,	ObjectCollectionWithProperties masks, ImageDimensions background, ColorIndex colorIndex) {
 		this(objMaskWriter, masks, background, colorIndex, new IDGetterIter<ObjectWithProperties>(), new IDGetterIter<ObjectWithProperties>() );
 	}
 	
 	public RGBObjMaskNoBackgroundGenerator(ObjMaskWriter objMaskWriter,
-			ObjectCollectionWithProperties masks, ImageDim background, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
+			ObjectCollectionWithProperties masks, ImageDimensions background, ColorIndex colorIndex, IDGetter<ObjectWithProperties> idGetter, IDGetter<ObjectWithProperties> colorIDGetter) {
 		super(objMaskWriter, colorIndex, idGetter, colorIDGetter);
 		this.setIterableElement(masks);
 		this.backgroundDim = background;

@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.points.PointClipper;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import cern.colt.matrix.DoubleMatrix1D;
 
@@ -52,7 +52,7 @@ public class BoundingBoxCalculator {
 	 * @param bndScene bounds on the scene, used to clip the bounding-box
 	 * @return
 	 */
-	public static BoundingBox bboxFromBounds( Point3d pos, double radius, boolean do3D, ImageDim bndScene ) {
+	public static BoundingBox bboxFromBounds( Point3d pos, double radius, boolean do3D, ImageDimensions bndScene ) {
 		DoubleMatrix1D radiusBBoxMatrix = threeElementMatrix( radius, radius, radius );
 		return bboxFromBounds(pos, radiusBBoxMatrix, do3D, bndScene);
 	}
@@ -66,7 +66,7 @@ public class BoundingBoxCalculator {
 	 * @param bndScene bounds on the scene, used to clip the bounding-box
 	 * @return
 	 */
-	public static BoundingBox bboxFromBounds( Point3d pos, DoubleMatrix1D radiiMatrix, boolean do3D, ImageDim bndScene ) {
+	public static BoundingBox bboxFromBounds( Point3d pos, DoubleMatrix1D radiiMatrix, boolean do3D, ImageDimensions bndScene ) {
 		Point3i minPt = subTwoPointsClip( pos, radiiMatrix, do3D, bndScene );
 		Point3i maxPt = addTwoPointsClip( pos, radiiMatrix, do3D, bndScene );
 		
@@ -77,12 +77,12 @@ public class BoundingBoxCalculator {
 		return new BoundingBox( minPt, maxPt );		
 	}
 	
-	private static Point3i subTwoPointsClip( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D, ImageDim sd ) {
+	private static Point3i subTwoPointsClip( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D, ImageDimensions sd ) {
 		Point3i pnt = subTwoPoints(pnt1, pnt2, do3D);
 		return PointClipper.clip(pnt, sd);
 	}
 	
-	private static Point3i addTwoPointsClip( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D, ImageDim sd ) {
+	private static Point3i addTwoPointsClip( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D, ImageDimensions sd ) {
 		Point3i pnt = addTwoPoints(pnt1, pnt2, do3D);
 		return PointClipper.clip(pnt, sd);
 	}

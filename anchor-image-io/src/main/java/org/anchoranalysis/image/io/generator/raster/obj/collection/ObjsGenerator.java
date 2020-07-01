@@ -29,9 +29,9 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -46,13 +46,13 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 public abstract class ObjsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {
 	
 	private ObjectCollection objs;
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
-	public ObjsGenerator(ImageDim dim) {
+	public ObjsGenerator(ImageDimensions dim) {
 		this.dim = dim;
 	}
 	
-	public ObjsGenerator(ObjectCollection objs, ImageDim dim) {
+	public ObjsGenerator(ObjectCollection objs, ImageDimensions dim) {
 		this(dim);
 		this.objs = objs;
 	}
@@ -85,7 +85,7 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 		return this;
 	}
 
-	public ImageDim getDimensions() {
+	public ImageDimensions getDimensions() {
 		return dim;
 	}
 

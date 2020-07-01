@@ -30,7 +30,7 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 public class UnitValueDistanceVoxels extends UnitValueDistance {
@@ -57,7 +57,7 @@ public class UnitValueDistanceVoxels extends UnitValueDistance {
 	}
 
 	@Override
-	public double rslv(Optional<ImageRes> res, DirectionVector dirVector) {
+	public double rslv(Optional<ImageResolution> res, DirectionVector dirVector) {
 		return value;
 	}
 

@@ -49,8 +49,9 @@ public class FeatureListProviderPrependName extends FeatureListProvider<FeatureI
 	// END BEAN PROPERTIES
 
 	public static void setNewNameOnFeature( Feature<? extends FeatureInput> f, String existingName, String prependString ) {
-		String nameNew = String.format("%s%s", prependString, existingName);
-		f.setCustomName(nameNew);
+		f.setCustomName(
+			String.format("%s%s", prependString, existingName)
+		);
 	}
 	
 	@Override

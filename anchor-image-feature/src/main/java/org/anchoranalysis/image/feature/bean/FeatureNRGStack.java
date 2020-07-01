@@ -38,16 +38,10 @@ public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
 
 	@Override
 	public double calc( SessionInput<FeatureInputNRGStack> input ) throws FeatureCalcException {
-		
-		if (input.get() instanceof FeatureInputNRGStack) {
-			return calcCast( (FeatureInputNRGStack) input.get() );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureInputNRGStack.class.getSimpleName() );
-		}
+		return calcForInput( input.get() );
 	}
 	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calcCast( FeatureInputNRGStack params ) throws FeatureCalcException;
+	public abstract double calcForInput( FeatureInputNRGStack params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
