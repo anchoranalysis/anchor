@@ -73,7 +73,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	@Override
 	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() throws CreateException {
 		return Optional.of(
-			nrgElemPairList.duplicateBean().append(featuresAddCriteria)
+			nrgElemPairList.shallowDuplicate().append(featuresAddCriteria)
 		);
 	}
 

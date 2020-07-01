@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
 
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
@@ -49,12 +48,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
  *
  * @param <T> the type of object that is modified
  */
-public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Serializable, ICompatibleWith {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 481147618512690557L;
+public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements ICompatibleWith {
 
 	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty

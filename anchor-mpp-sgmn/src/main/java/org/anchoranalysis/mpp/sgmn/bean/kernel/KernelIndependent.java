@@ -38,11 +38,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
  */
 public abstract class KernelIndependent<T> extends Kernel<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// Call ONCE before calculating anything
 	@Override
 	public void initBeforeCalc(KernelCalcContext context) {

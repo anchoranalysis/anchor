@@ -163,13 +163,22 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	/**
 	 * Creates a new feature-list sorted in a particular order.
 	 * 
-	 * @return
+	 * @return a newly-created list with the same elements in sorted order.
 	 */
 	public FeatureList<T> sort( Comparator<Feature<T>> comparator ) {
 		// Creates a duplicate list, and sorts the items in place.
-		FeatureList<T> out = new FeatureList<>( this.list.stream() );
+		FeatureList<T> out = shallowDuplicate();
 		Collections.sort(out.asList(), comparator);
 		return out;
+	}
+	
+	/**
+	 * Creates a new feature-list which contains identical elements
+	 * 
+	 * @return a newly-created list with the same elements in the same order
+	 */
+	public FeatureList<T> shallowDuplicate() {
+		return new FeatureList<>(this.list.stream());
 	}
 	
 	public boolean add(Feature<T> f) {
