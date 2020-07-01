@@ -35,7 +35,7 @@ package org.anchoranalysis.core.functional;
  * @param <E> exception-type if testing fails
  */
 @FunctionalInterface
-public interface PredicateWithException<T, E extends Throwable> {
+public interface PredicateWithException<T, E extends Exception> {
 
 	/**
 	 * Bridges an element to another element.

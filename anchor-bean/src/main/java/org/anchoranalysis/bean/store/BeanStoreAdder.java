@@ -108,7 +108,7 @@ public class BeanStoreAdder {
 	 * @param bridge bridge applied to item so it matches the type of cntr
 	 * @throws OperationFailedException if the operation cannot be completed
 	 */
-	public static <S extends AnchorBean<?>, D, E extends Throwable> void addPreserveNameEmbedded(
+	public static <S extends AnchorBean<?>, D> void addPreserveNameEmbedded(
 		List<NamedBean<S>> listItem,
 		NamedProviderStore<D> cntr,
 		FunctionWithException<NamedBean<S>, D, OperationFailedException> bridge

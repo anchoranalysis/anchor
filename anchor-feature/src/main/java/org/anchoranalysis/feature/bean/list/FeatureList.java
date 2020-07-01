@@ -92,7 +92,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	 * @return a newly created feature-list (with the same number of items) containing the mapped features.
 	 * @throws E if the mapping-function throws this exception
 	 */
-	public <S extends FeatureInput, E extends Throwable> FeatureList<S> map(FunctionWithException<Feature<T>,Feature<S>,E> mapFunc) throws E {
+	public <S extends FeatureInput, E extends Exception> FeatureList<S> map(FunctionWithException<Feature<T>,Feature<S>,E> mapFunc) throws E {
 		FeatureList<S> out = new FeatureList<>();
 		for(Feature<T> feature : list) {
 			out.add(
@@ -115,7 +115,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	 * @return a newly created feature-list, a filtered version of all features, then mapped
 	 * @throws E if the mapping-function throws this exception
 	 */
-	public <S extends FeatureInput, E extends Throwable> FeatureList<S> filterAndMap(Predicate<Feature<T>> predicate, FunctionWithException<Feature<T>,Feature<S>,E> mapFunc) throws E {
+	public <S extends FeatureInput, E extends Exception> FeatureList<S> filterAndMap(Predicate<Feature<T>> predicate, FunctionWithException<Feature<T>,Feature<S>,E> mapFunc) throws E {
 		FeatureList<S> out = new FeatureList<>();
 		for(Feature<T> feature : list) {
 			if (predicate.test(feature)) {

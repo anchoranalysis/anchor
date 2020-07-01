@@ -67,6 +67,8 @@ public final class RegisterBeanFactories {
 	// A check that registerAllPackageBeanFactories() has been called
 	private static boolean calledRegisterAllPackage = false;
 
+	private RegisterBeanFactories() {}
+	
 	/**
 	 * Registers the factories for the beans that exist in this package
 	 * 

@@ -219,11 +219,16 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		);
 	}
 	
-	public void assertObjMasksAreInside( Extent e ) {
+	public boolean objectsAreAllInside( Extent e ) {
 		for( ObjectMask om : this ) {
-			assert( e.contains( om.getBoundingBox().getCornerMin()) );
-			assert( e.contains( om.getBoundingBox().calcCornerMax()) );
+			if(!e.contains( om.getBoundingBox().getCornerMin()) ) {
+				return false;
+			}
+			if (!e.contains( om.getBoundingBox().calcCornerMax()) ) {
+				return false;
+			}
 		}
+		return true;
 	}
 	
 	public BinaryValuesByte getFirstBinaryValuesByte() {

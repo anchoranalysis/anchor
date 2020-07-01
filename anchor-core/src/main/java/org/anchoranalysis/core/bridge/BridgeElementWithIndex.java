@@ -35,7 +35,7 @@ package org.anchoranalysis.core.bridge;
  * @param <E> exception-thrown if something goes wrong
  */
 @FunctionalInterface
-public interface BridgeElementWithIndex<S, D, E extends Throwable> {
+public interface BridgeElementWithIndex<S, D, E extends Exception> {
 
 	D bridgeElement( int index, S sourceObject ) throws E;
 }

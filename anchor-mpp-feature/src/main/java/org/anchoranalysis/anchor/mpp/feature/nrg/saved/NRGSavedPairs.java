@@ -118,7 +118,7 @@ public class NRGSavedPairs implements UpdatableMarkSet {
 	
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) {
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
 		
 		// We calculate it's individual contribution
 		this.nrgTotal -= totalNRGForMark(mark.getMark());

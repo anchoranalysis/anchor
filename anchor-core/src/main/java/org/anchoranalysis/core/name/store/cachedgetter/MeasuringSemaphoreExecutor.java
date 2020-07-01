@@ -38,7 +38,7 @@ import org.apache.commons.lang.time.StopWatch;
  * @author owen
  * @param E exception throw if operation fails
  */
-class MeasuringSemaphoreExecutor<E extends Throwable> {
+class MeasuringSemaphoreExecutor<E extends Exception> {
 	private int cnt = 0;
 	private long subExecTime = 0; 
 	private long subMem = 0;

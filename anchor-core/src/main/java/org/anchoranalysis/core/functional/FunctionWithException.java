@@ -36,7 +36,7 @@ package org.anchoranalysis.core.functional;
  * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface FunctionWithException<S, V, E extends Throwable> {
+public interface FunctionWithException<S, V, E extends Exception> {
 
 	/**
 	 * Calls the function

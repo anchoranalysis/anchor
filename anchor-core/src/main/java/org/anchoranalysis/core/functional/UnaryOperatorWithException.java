@@ -35,6 +35,6 @@ package org.anchoranalysis.core.functional;
  * @param <E> type of exception that may be thrown if something goes wrong
  */
 @FunctionalInterface
-public interface UnaryOperatorWithException<T,E extends Throwable> {
+public interface UnaryOperatorWithException<T,E extends Exception> {
 	T apply( T in ) throws E;
 }

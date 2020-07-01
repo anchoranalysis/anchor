@@ -57,10 +57,6 @@ public final class Extent implements Serializable {
 	// Lengths in each dimension
 	private final ReadableTuple3i len;
 	
-	public Extent() {
-		this( new Point3i(0,0,0) );
-	}
-	
 	public Extent(int x, int y, int z) {
 		this( new Point3i( x, y, z) );
 	}
@@ -75,6 +71,10 @@ public final class Extent implements Serializable {
 	private Extent(ReadableTuple3i len) {
 		this.len = len;
 		this.sxy = len.getX() * len.getY();
+		
+		if (len.getX()<1 || len.getY()<1 || len.getZ()<1) {
+			throw new AnchorFriendlyRuntimeException("An extent must have at least one voxel in every dimension");
+		}
 	}
 
 	public int getVolumeAsInt() {

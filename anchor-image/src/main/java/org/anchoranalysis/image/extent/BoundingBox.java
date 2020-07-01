@@ -55,10 +55,6 @@ public final class BoundingBox implements Serializable {
 	private final Point3i cornerMin;
 	private final Extent extent;
 	
-	public BoundingBox() {
-		this( new Extent() );
-	}
-	
 	public BoundingBox(Extent extent) {
 		this( new Point3i(0,0,0), extent);
 	}

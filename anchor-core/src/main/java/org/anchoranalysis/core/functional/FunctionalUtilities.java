@@ -78,7 +78,7 @@ public class FunctionalUtilities {
 	 * @return the output of the flatMap
 	 * @throws E if the exception is thrown during mapping
 	 */
-	public static <S,T,E extends Throwable> Stream<T> mapWithException(
+	public static <S,T,E extends Exception> Stream<T> mapWithException(
 		Stream<S> stream,
 		Class<?> throwableClass,
 		FunctionWithException<S,T, E> mapFunction
@@ -105,7 +105,7 @@ public class FunctionalUtilities {
 	 * @return a newly-created list with the result of each mapped item
 	 * @throws E if the exception is thrown during mapping 
 	 */
-	public static <S,T,E extends Throwable> List<T> mapListWithProgress(
+	public static <S,T,E extends Exception> List<T> mapListWithProgress(
 		List<S> list,
 		ProgressReporter progressReporter,
 		FunctionWithException<S,T,E> mapFunction
@@ -149,7 +149,7 @@ public class FunctionalUtilities {
 	 * @return a newly-created list with the result of each mapped item
 	 * @throws E if the exception is thrown during mapping 
 	 */
-	public static <S,T,E extends Throwable> List<T> mapListOptionalWithProgress(
+	public static <S,T,E extends Exception> List<T> mapListOptionalWithProgress(
 		List<S> list,
 		ProgressReporter progressReporter,
 		FunctionWithException<S,Optional<T>,E> mapFunction
@@ -186,7 +186,7 @@ public class FunctionalUtilities {
 	 * @param mapFunc function for mapping
 	 * @return the stream after the mapping
 	 */
-	public static <T, E extends Throwable> Stream<T> mapIntStreamWithException(
+	public static <T, E extends Exception> Stream<T> mapIntStreamWithException(
 		IntStream stream,
 		Class<?> throwableClass,
 		IntFunctionWithException<T,E> mapFunc
@@ -218,7 +218,7 @@ public class FunctionalUtilities {
 	 * @return the output of the flatMap
 	 * @throws E if the exception
 	 */
-	public static <S,T,E extends Throwable> Stream<T> flatMapWithException(
+	public static <S,T,E extends Exception> Stream<T> flatMapWithException(
 		Stream<S> stream,
 		Class<?> throwableClass,
 		FunctionWithException<S, Collection<? extends T>, E> flatMapFunction
@@ -244,7 +244,7 @@ public class FunctionalUtilities {
 	 * @return nothing, as an exception will always be thrown
 	 * @throws E always, rethrowing either the run-time exception or its cause.
 	 */
-	private static <T, E extends Throwable> T throwException(ConvertedToRuntimeException e, Class<?> throwableClass) throws E {
+	private static <T, E extends Exception> T throwException(ConvertedToRuntimeException e, Class<?> throwableClass) throws E {
 		if (throwableClass.isAssignableFrom(e.getException().getClass())) {
 			throw (E) e.getException();	
 		} else {
@@ -263,24 +263,24 @@ public class FunctionalUtilities {
 	 * @return the return-value of the function
 	 * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@link function}
 	 */
-	private static <S,T,E extends Throwable> T suppressCheckedException(
+	private static <S,T,E extends Exception> T suppressCheckedException(
 		S param,
 		FunctionWithException<S,T,E> function
 	) {
 		try {
 			return function.apply(param);
-		} catch (Throwable exc) {
+		} catch (Exception exc) {
 			throw new ConvertedToRuntimeException(exc);
 		}
 	}
 	
-	private static <T,E extends Throwable> T suppressCheckedException(
+	private static <T,E extends Exception> T suppressCheckedException(
 		int param,
 		IntFunctionWithException<T,E> function
 	) {
 		try {
 			return function.apply(param);
-		} catch (Throwable exc) {
+		} catch (Exception exc) {
 			throw new ConvertedToRuntimeException(exc);
 		}
 	}

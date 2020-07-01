@@ -63,7 +63,7 @@ public final class ObjectMaskStream {
 	 * @return a newly created object-collection
 	 * @throws E if an exception is thrown by the mapping function.
 	 */
-	public <E extends Throwable> ObjectCollection map(FunctionWithException<ObjectMask,ObjectMask,E> mapFunc) throws E {
+	public <E extends Exception> ObjectCollection map(FunctionWithException<ObjectMask,ObjectMask,E> mapFunc) throws E {
 		ObjectCollection out = new ObjectCollection();
 		for( ObjectMask om : delegate) {
 			out.add(
@@ -98,7 +98,7 @@ public final class ObjectMaskStream {
 	 * @return a newly created list contained the mapped objects
 	 * @throws E if an exception occurs during mapping
 	 */
-	public <T,E extends Throwable> List<T> mapToList(FunctionWithException<ObjectMask,T,E> mapFunc) throws E {
+	public <T,E extends Exception> List<T> mapToList(FunctionWithException<ObjectMask,T,E> mapFunc) throws E {
 		List<T> out = new ArrayList<T>();
 		for( ObjectMask obj : delegate) {
 			out.add(
@@ -135,7 +135,7 @@ public final class ObjectMaskStream {
 	 * @return a newly created object-collection
 	 * @throws E if its thrown by <code>mapFunc</code>
 	 */
-	public <E extends Throwable> ObjectCollection flatMapWithException(
+	public <E extends Exception> ObjectCollection flatMapWithException(
 		Class<?> throwableClass,
 		FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc
 	) throws E {
@@ -173,7 +173,7 @@ public final class ObjectMaskStream {
 	 * @return a newly created object-collection, a filtered version of all objects
 	 * @throws E if thrown by the predicate
 	 */
-	public <E extends Throwable> ObjectCollection filter(PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRejected) throws E {
+	public <E extends Exception> ObjectCollection filter(PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRejected) throws E {
 		
 		ObjectCollection out = new ObjectCollection();
 		

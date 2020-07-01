@@ -43,7 +43,7 @@ public abstract class CacheableCalculationMap<
 	S,
 	T extends FeatureInput,
 	U,
-	E extends Throwable
+	E extends Exception
 > implements ResettableCalculation {
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving

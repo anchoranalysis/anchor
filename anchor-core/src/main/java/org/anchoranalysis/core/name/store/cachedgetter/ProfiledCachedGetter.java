@@ -43,13 +43,13 @@ import org.apache.commons.lang.StringUtils;
  * @param <T>
  * @param <E> exception thrown by operation
  */
-public class ProfiledCachedGetter<T, E extends Throwable> extends WrapOperationAsCached<T,E> {
+public class ProfiledCachedGetter<T, E extends Exception> extends WrapOperationAsCached<T,E> {
 
 	private String name;
 	private String storeDisplayName;
 	private LogErrorReporter logErrorReporter;
 	
-	private static MeasuringSemaphoreExecutor<Throwable> semaphore = new MeasuringSemaphoreExecutor<>();
+	private static MeasuringSemaphoreExecutor<Exception> semaphore = new MeasuringSemaphoreExecutor<>();
 	
 	private static final int STORE_DISPLAY_NAME_LENGTH = 30;
 	private static final int NAME_LENGTH = 30;

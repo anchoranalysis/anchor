@@ -37,7 +37,7 @@ package org.anchoranalysis.core.progress;
  * @param <E> exception throw if operation fails
  */
 @FunctionalInterface
-public interface OperationWithProgressReporter<R, E extends Throwable> {
+public interface OperationWithProgressReporter<R, E extends Exception> {
 
 	R doOperation( ProgressReporter progressReporter ) throws E;
 }

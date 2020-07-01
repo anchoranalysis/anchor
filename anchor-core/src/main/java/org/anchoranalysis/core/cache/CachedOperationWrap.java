@@ -36,11 +36,11 @@ package org.anchoranalysis.core.cache;
  * @param <R>
  * @param <E>
  */
-public class CachedOperationWrap<R, E extends Throwable> extends CachedOperation<R,E> {
+public class CachedOperationWrap<R, E extends Exception> extends CachedOperation<R,E> {
 
 	/** A functional to be wrapped */
 	@FunctionalInterface
-	public interface WrapFunctional<T, E extends Throwable> {
+	public interface WrapFunctional<T, E extends Exception> {
 		T apply() throws E;
 	}
 	

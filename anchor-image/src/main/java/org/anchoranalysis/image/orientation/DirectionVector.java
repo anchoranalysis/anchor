@@ -63,10 +63,13 @@ public class DirectionVector {
 		switch(axisType) {
 		case X:
 			this.vector = new Point3d(1, 0, 0);
+			break;
 		case Y:
 			this.vector = new Point3d(0, 1, 0);
+			break;
 		case Z:
 			this.vector = new Point3d(0, 0, 1);
+			break;
 		default:
 			throw new AnchorImpossibleSituationException();
 		}

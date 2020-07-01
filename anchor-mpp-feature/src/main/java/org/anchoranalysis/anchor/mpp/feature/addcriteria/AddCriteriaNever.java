@@ -36,21 +36,23 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
-public class AddCriteriaNever<EdgeType> implements AddCriteria<EdgeType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> edge-type
+ */
+public class AddCriteriaNever<T> implements AddCriteria<T> {
 
 	@Override
 	public boolean paramsEquals(Object other) {
-		if (other instanceof AddCriteriaNever) {
-			return true;
-		} else {
-			return false;
-		}
+		return (other instanceof AddCriteriaNever);
 	}
 
 	@Override
-	public EdgeType generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2,
+	public Optional<T> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2,
 			NRGStackWithParams nrgStack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws CreateException {
-		return null;
+		return Optional.empty();
 	}
 
 	@Override

@@ -131,7 +131,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created ObjectCollection
 	 * @throws E exception if it occurs during mapping
 	 */
-	public static <T,E extends Throwable> ObjectCollection mapFrom( Iterable<T> iterable, FunctionWithException<T,ObjectMask,E> mapFunc ) throws E {
+	public static <T,E extends Exception> ObjectCollection mapFrom( Iterable<T> iterable, FunctionWithException<T,ObjectMask,E> mapFunc ) throws E {
 		ObjectCollection out = new ObjectCollection();
 		for( T item : iterable ) {
 			out.add(
@@ -153,7 +153,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created ObjectCollection
 	 * @throws E exception if it occurs during mapping
 	 */
-	public static <T,E extends Throwable> ObjectCollection mapFromOptional( Iterable<T> iterable, FunctionWithException<T,Optional<ObjectMask>,E> mapFunc ) throws E {
+	public static <T,E extends Exception> ObjectCollection mapFromOptional( Iterable<T> iterable, FunctionWithException<T,Optional<ObjectMask>,E> mapFunc ) throws E {
 		ObjectCollection out = new ObjectCollection();
 		for( T item : iterable ) {
 			mapFunc.apply(item).ifPresent(out::add);
@@ -228,7 +228,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created ObjectCollection
 	 * @throws E if the exception is thrown during mapping
 	 */
-	public static <E extends Throwable> ObjectCollection mapFromRange(int startInclusive, int endExclusive, Class<?> throwableClass, IntFunctionWithException<ObjectMask,E> mapFunc ) throws E {
+	public static <E extends Exception> ObjectCollection mapFromRange(int startInclusive, int endExclusive, Class<?> throwableClass, IntFunctionWithException<ObjectMask,E> mapFunc ) throws E {
 		return new ObjectCollection(
 			FunctionalUtilities.mapIntStreamWithException(
 				IntStream.range(startInclusive, endExclusive),
@@ -264,7 +264,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created ObjectCollection
 	 * @throws E exception if it occurs during mapping
 	 */
-	public static <E extends Throwable> ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, Class<?> throwableClass, IntFunctionWithException<ObjectCollection,E> mapFunc) throws E {
+	public static <E extends Exception> ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, Class<?> throwableClass, IntFunctionWithException<ObjectCollection,E> mapFunc) throws E {
 		return new ObjectCollection(
 			FunctionalUtilities.mapIntStreamWithException(
 				IntStream.range(startInclusive, endExclusive),
@@ -285,7 +285,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created {@link ObjectCollection}
 	 * @throws E if thrown by <code>mapFunc</code>
 	 */
-	public static <T,E extends Throwable> ObjectCollection filterAndMapFrom( Iterable<T> iterable, Predicate<T> predicate, FunctionWithException<T,ObjectMask,E> mapFunc ) throws E {
+	public static <T,E extends Exception> ObjectCollection filterAndMapFrom( Iterable<T> iterable, Predicate<T> predicate, FunctionWithException<T,ObjectMask,E> mapFunc ) throws E {
 		ObjectCollection out = new ObjectCollection();
 		for( T item : iterable) {
 			
@@ -311,7 +311,7 @@ public class ObjectCollectionFactory {
 	 * @throws E 
 	 * @throw E if an exception is thrown during mapping
 	 */
-	public static <T,E extends Throwable> ObjectCollection filterAndMapWithIndexFrom( List<T> list, Predicate<T> predicate, BiFunctionWithException<T,Integer,ObjectMask,E> mapFuncWithIndex ) throws E {
+	public static <T,E extends Exception> ObjectCollection filterAndMapWithIndexFrom( List<T> list, Predicate<T> predicate, BiFunctionWithException<T,Integer,ObjectMask,E> mapFuncWithIndex ) throws E {
 		ObjectCollection out = new ObjectCollection();
 		for( int i=0; i<list.size(); i++) {
 			
@@ -352,7 +352,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created ObjectCollection
 	 * @throws E exception of it occurs during mapping
 	 */
-	public static <T,E extends Throwable> ObjectCollection flatMapFrom( Stream<T> stream, Class<?> throwableClass, FunctionWithException<T,ObjectCollection,E> mapFunc) throws E {
+	public static <T,E extends Exception> ObjectCollection flatMapFrom( Stream<T> stream, Class<?> throwableClass, FunctionWithException<T,ObjectCollection,E> mapFunc) throws E {
 		return flatMapFromCollection(
 			stream,
 			throwableClass,
@@ -370,7 +370,7 @@ public class ObjectCollectionFactory {
 	 * @return a newly created ObjectCollection
 	 * @throws E exception of it occurs during mapping
 	 */
-	public static <T,E extends Throwable> ObjectCollection flatMapFromCollection( Stream<T> stream, Class<?> throwableClass, FunctionWithException<T,Collection<? extends ObjectMask>,E> mapFunc) throws E {
+	public static <T,E extends Exception> ObjectCollection flatMapFromCollection( Stream<T> stream, Class<?> throwableClass, FunctionWithException<T,Collection<? extends ObjectMask>,E> mapFunc) throws E {
 		return new ObjectCollection(
 			FunctionalUtilities.flatMapWithException(
 				stream,

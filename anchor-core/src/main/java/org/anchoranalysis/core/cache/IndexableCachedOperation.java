@@ -35,7 +35,7 @@ package org.anchoranalysis.core.cache;
  * @param <K> key-type
  * @param <E> exception that is thrown if something goes wrong
  */
-public abstract class IndexableCachedOperation<V,K,E extends Throwable> extends CachedOperation<V,E> {
+public abstract class IndexableCachedOperation<V,K,E extends Exception> extends CachedOperation<V,E> {
 
 	public abstract K getKey();
 }

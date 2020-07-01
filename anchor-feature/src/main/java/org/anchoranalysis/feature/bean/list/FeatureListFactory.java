@@ -172,7 +172,7 @@ public class FeatureListFactory {
 	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link iterable}
 	 * @throws E exception if it occurs during mapping
 	 */
-	public static <S, T extends FeatureInput,E extends Throwable> FeatureList<T> mapFrom( Iterable<S> iterable, FunctionWithException<S,Feature<T>,E> mapFunc ) throws E {
+	public static <S, T extends FeatureInput,E extends Exception> FeatureList<T> mapFrom( Iterable<S> iterable, FunctionWithException<S,Feature<T>,E> mapFunc ) throws E {
 		FeatureList<T> out = new FeatureList<>();
 		for( S item : iterable ) {
 			out.add(
@@ -195,7 +195,7 @@ public class FeatureListFactory {
 	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link iterable}
 	 * @throws E exception if it occurs during mapping
 	 */
-	public static <S, T extends FeatureInput,E extends Throwable> FeatureList<T> mapFromFiltered( Iterable<S> iterable, Predicate<S> predicate, FunctionWithException<S,Feature<T>,E> mapFunc ) throws E {
+	public static <S, T extends FeatureInput,E extends Exception> FeatureList<T> mapFromFiltered( Iterable<S> iterable, Predicate<S> predicate, FunctionWithException<S,Feature<T>,E> mapFunc ) throws E {
 		FeatureList<T> out = new FeatureList<>();
 		for( S item : iterable ) {
 			if (predicate.test(item)) {
@@ -220,7 +220,7 @@ public class FeatureListFactory {
 	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link iterable}
 	 * @throws E exception if it occurs during mapping
 	 */
-	public static <S, T extends FeatureInput,E extends Throwable> FeatureList<T> flatMapFromOptional( Iterable<S> iterable, FunctionWithException<S,Optional<FeatureList<T>>,E> flatMapFunc ) throws E {
+	public static <S, T extends FeatureInput,E extends Exception> FeatureList<T> flatMapFromOptional( Iterable<S> iterable, FunctionWithException<S,Optional<FeatureList<T>>,E> flatMapFunc ) throws E {
 		FeatureList<T> out = new FeatureList<>();
 		for( S item : iterable ) {
 			flatMapFunc.apply(item).ifPresent(out::addAll);
@@ -261,7 +261,7 @@ public class FeatureListFactory {
 	 * @return a newly created feature-list
 	 * @throws E if the exception is thrown during mapping
 	 */
-	public static <T extends FeatureInput, E extends Throwable> FeatureList<T> mapFromRangeOptional(
+	public static <T extends FeatureInput, E extends Exception> FeatureList<T> mapFromRangeOptional(
 		int startInclusive,
 		int endExclusive,
 		Class<?> throwableClass,

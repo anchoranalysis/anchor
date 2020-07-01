@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.Operation;
  * @param <R> result-type
  * @param <E> exception that is thrown if something goes wrong
  */
-public abstract class CachedOperation<R,E extends Throwable> implements Operation<R,E> {
+public abstract class CachedOperation<R,E extends Exception> implements Operation<R,E> {
 
 	private R result = null;
 	private boolean done = false;
@@ -80,7 +80,7 @@ public abstract class CachedOperation<R,E extends Throwable> implements Operatio
 		return result;
 	}
 
-	public static <T,E extends Throwable> CachedOperation<T,E> wrap( Operation<T,E> op ) {
+	public static <T,E extends Exception> CachedOperation<T,E> wrap( Operation<T,E> op ) {
 		return new CachedOperation<T,E>() {
 
 			@Override

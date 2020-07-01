@@ -116,8 +116,6 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	@Override
 	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
-		assert( sharedFeatures!=null );
-		assert( logger!=null );
 		this.logger = logger;
 		this.sharedFeatures = sharedFeatures;
 		
@@ -153,7 +151,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	@Override
 	public void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
-		assert hasInit;
+		checkInit();
 		try {
 			this.graph.addVertex( newMark.getMark() );
 			calcPairsForMark( marksExisting, newMark, nrgStack );
@@ -164,8 +162,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	@Override
 	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
-		
-		assert hasInit;
+		checkInit();
 		
 		// We need to make a copy of the list, so we can perform the removal operation after the add
 		MemoList memoList = new MemoList(); 
@@ -180,13 +177,9 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) {
-		
-		assert(hasInit);
-		
-		assert this.graph.containsVertex(mark.getMark() );
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
+		checkInit();
 		this.graph.removeVertex(mark.getMark());
-		assert !this.graph.containsVertex(mark.getMark() );
 	}
 	
 	// START DELEGATES
@@ -284,17 +277,20 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				
 				PxlMarkMemo destMark = marks.getMemoForIndex(j);
 				
-				T pair = addCriteria.generateEdge(srcMark, destMark, stack, session, stack.getDimensions().getZ()>1 );
-				if( pair != null ) {
-					graph.addEdge( srcMark.getMark(), destMark.getMark(), pair );
-				}
+				addCriteria.generateEdge(
+					srcMark,
+					destMark,
+					stack,
+					session,
+					stack.getDimensions().getZ()>1
+				).ifPresent( pair->
+					graph.addEdge( srcMark.getMark(), destMark.getMark(), pair )
+				);
 			}
 		}
 	}
 	
 	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
-		assert sharedFeatures!=null;
-		assert logger!=null;
 		
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session;
 		
@@ -317,15 +313,22 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 
 			PxlMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
 			if (!otherMark.getMark().equals( newMark.getMark() )) {
-			
-				T pair = addCriteria.generateEdge(otherMark,newMark, nrgStack, session, nrgStack.getDimensions().getZ()>1 );
-				if (pair!=null) {
-					assert containsMark( otherMark.getMark() );
-					assert containsMark( newMark.getMark() );
-
-					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair );
-				}
+				addCriteria.generateEdge(
+					otherMark,
+					newMark,
+					nrgStack,
+					session,
+					nrgStack.getDimensions().getZ()>1
+				).ifPresent( pair->
+					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair )
+				);
 			} 
+		}
+	}
+		
+	private void checkInit() throws UpdateMarkSetException {
+		if (!hasInit) {
+			throw new UpdateMarkSetException("object has not been initialized");
 		}
 	}
 }

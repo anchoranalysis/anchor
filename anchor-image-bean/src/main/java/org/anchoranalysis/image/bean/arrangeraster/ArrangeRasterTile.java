@@ -124,7 +124,13 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	
 	private static BBoxSetOnPlane createSet( TableItemArrangement<BBoxSetOnPlane> table, MaxWidthHeight maxWidthHeight ) {
 		
-		BBoxSetOnPlane set = new BBoxSetOnPlane();
+		BBoxSetOnPlane set = new BBoxSetOnPlane(
+			new Extent(
+				maxWidthHeight.getTotalWidth(),
+				maxWidthHeight.getTotalHeight(),
+				maxWidthHeight.getMaxZ()
+			)	
+		);
 		
 		// We iterator over every cell in the table
 		for (int rowPos=0; rowPos<table.getNumRowsUsed(); rowPos++) {
@@ -148,15 +154,6 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 				addShifted( bboxSet, set, x, y );
 			}
 		}
-		
-		set.setExtnt(
-			new Extent(
-				maxWidthHeight.getTotalWidth(),
-				maxWidthHeight.getTotalHeight(),
-				maxWidthHeight.getMaxZ()
-			)	
-		);
-		
 		return set;
 	}
 	

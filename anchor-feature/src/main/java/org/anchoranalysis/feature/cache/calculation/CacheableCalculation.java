@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <T> feature input-type
  * @param <E> exception thrown if something goes wrong in the calculation
  */
-public abstract class CacheableCalculation<S, T extends FeatureInput, E extends Throwable> implements ResettableCalculation {
+public abstract class CacheableCalculation<S, T extends FeatureInput, E extends Exception> implements ResettableCalculation {
 	
 	private transient T input;
 	

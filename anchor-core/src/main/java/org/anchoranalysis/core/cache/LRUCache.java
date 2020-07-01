@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -75,6 +76,10 @@ public class LRUCache<K,V> {
 	 */
 	public LRUCache(int cacheSize, CalculateForCache<K,V> calculator) {
 	
+		if(cacheSize <= 0) {
+			throw new AnchorFriendlyRuntimeException("cacheSize must be a positive integer");
+		}
+		
 		cache = CacheBuilder.newBuilder()
 	       .maximumSize(cacheSize)
 	       .build(

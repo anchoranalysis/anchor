@@ -37,7 +37,7 @@ import org.anchoranalysis.core.functional.Operation;
  * @param <D> destination-type
  * @param <E> exception-type if something goes wrong
  */
-class CurriedObjectBridge<S, D, E extends Throwable> implements Operation<D,E> {
+class CurriedObjectBridge<S, D, E extends Exception> implements Operation<D,E> {
 
 	private FunctionWithException<S,D,E> bridge;
 	private S sourceObject;

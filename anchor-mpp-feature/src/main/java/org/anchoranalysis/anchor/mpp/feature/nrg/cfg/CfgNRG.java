@@ -166,13 +166,16 @@ public class CfgNRG implements Serializable {
 	
 
 	public void rmv( MemoCollection wrapperInd, int index, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
-		
-		getCalcMarkPair().rmv( wrapperInd, memoRmv );
-		wrapperInd.rmv( getCalcMarkInd(), index);
-		
-		rmv(index);
-		
-		updateTotal( wrapperInd, stack );
+		try {
+			getCalcMarkPair().rmv( wrapperInd, memoRmv );
+			wrapperInd.rmv( getCalcMarkInd(), index);
+			
+			rmv(index);
+			
+			updateTotal( wrapperInd, stack );
+		} catch (UpdateMarkSetException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
 	
@@ -189,10 +192,14 @@ public class CfgNRG implements Serializable {
 		MemoList memoList = new MemoList(); 
 		memoList.addAll( wrapperInd );
 		
-		getCalcMarkPair().rmv( memoList, memoRmv1 );
-		memoList.remove( memoRmv1 );
-		
-		getCalcMarkPair().rmv( memoList, memoRmv2 );
+		try {
+			getCalcMarkPair().rmv( memoList, memoRmv1 );
+			memoList.remove( memoRmv1 );
+			
+			getCalcMarkPair().rmv( memoList, memoRmv2 );
+		} catch (UpdateMarkSetException e) {
+			throw new FeatureCalcException(e);
+		}
 		
 		newCfg.removeTwo(index1, index2);
 		
