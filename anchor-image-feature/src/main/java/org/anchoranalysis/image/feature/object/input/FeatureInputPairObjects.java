@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.object.input;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
@@ -46,7 +46,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class FeatureInputPairObjects extends FeatureInputNRGStack {
+public class FeatureInputPairObjects extends FeatureInputNRG {
 
 	private ObjectMask first;
 	private ObjectMask second;

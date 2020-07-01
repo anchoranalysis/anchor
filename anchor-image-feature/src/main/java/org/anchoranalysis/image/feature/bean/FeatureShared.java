@@ -48,7 +48,6 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
  */
 public abstract class FeatureShared<T extends FeatureInput> extends FeatureCastInitParams<FeatureInitParamsShared, T> {
 
-
 	protected FeatureShared() {
 		super(
 			FeatureInitParamsShared.class,

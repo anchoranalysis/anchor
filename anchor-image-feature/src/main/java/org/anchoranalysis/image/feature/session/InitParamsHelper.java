@@ -40,7 +40,7 @@ public class InitParamsHelper {
 	
 	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
 		
-		Optional<KeyValueParams> kvp = nrgStack.map( n->n.getParams() );
+		Optional<KeyValueParams> kvp = nrgStack.map(NRGStackWithParams::getParams);
 				
 		FeatureInitParams params;
 		if (so!=null) {

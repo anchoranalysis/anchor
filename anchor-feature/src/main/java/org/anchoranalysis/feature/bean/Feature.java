@@ -162,7 +162,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 				
 		hasBeenInit = true;
 		this.logger = logger;
-		beforeCalc( );
+		beforeCalc();
 	}
 	
 

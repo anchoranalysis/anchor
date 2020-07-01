@@ -34,15 +34,15 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 
-public abstract class FeatureInputNRGStack extends FeatureInputParams {
+public abstract class FeatureInputNRG extends FeatureInputParams {
 
 	private Optional<NRGStackWithParams> nrgStack;
 	
-	public FeatureInputNRGStack() {
+	public FeatureInputNRG() {
 		this.nrgStack = Optional.empty();
 	}
 	
-	public FeatureInputNRGStack(Optional<NRGStackWithParams> nrgStack) {
+	public FeatureInputNRG(Optional<NRGStackWithParams> nrgStack) {
 		super();
 		this.nrgStack = nrgStack;
 	}
@@ -100,9 +100,9 @@ public abstract class FeatureInputNRGStack extends FeatureInputParams {
 	public boolean equals(Object obj) {
 		if (this == obj) { return true; }
 		if (!super.equals(obj)) { return false; }
-		if (!(obj instanceof FeatureInputNRGStack)) { return false; }
+		if (!(obj instanceof FeatureInputNRG)) { return false; }
 		
-		FeatureInputNRGStack objCast = (FeatureInputNRGStack) obj;
+		FeatureInputNRG objCast = (FeatureInputNRG) obj;
 
 		if (!nrgStack.equals(objCast.nrgStack)) {
 			return false;

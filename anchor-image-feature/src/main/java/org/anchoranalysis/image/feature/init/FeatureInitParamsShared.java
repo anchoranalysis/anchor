@@ -39,12 +39,12 @@ public class FeatureInitParamsShared extends FeatureInitParams {
 
 	private final ImageInitParams paramsInit;
 	
-	public FeatureInitParamsShared( ImageInitParams paramsInit ) {
+	public FeatureInitParamsShared(ImageInitParams paramsInit) {
 		super();
 		this.paramsInit = paramsInit;
 	}
 	
-	private FeatureInitParamsShared( FeatureInitParams parent, ImageInitParams paramsInit ) {
+	private FeatureInitParamsShared(FeatureInitParams parent, ImageInitParams paramsInit) {
 		super(parent);
 		this.paramsInit = paramsInit;
 	}
@@ -57,6 +57,4 @@ public class FeatureInitParamsShared extends FeatureInitParams {
 	public FeatureInitParams duplicate() {
 		return new FeatureInitParamsShared(super.duplicate(), paramsInit);
 	}
-	
-	
 }

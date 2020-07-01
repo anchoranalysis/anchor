@@ -2,7 +2,7 @@ package org.anchoranalysis.image.feature.stack;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 /*-
  * #%L
@@ -32,18 +32,13 @@ import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
-public class FeatureInputStack extends FeatureInputNRGStack {
-	
-	private final Optional<ImageInitParams> so;
-
+public class FeatureInputStack extends FeatureInputNRG {
 	
 	/**
 	 * Should only be used if it's guaranteed the NRG stack will be added later, as this this required.
 	 */
 	public FeatureInputStack() {
-		this.so = Optional.empty();
 		this.setNrgStack( Optional.empty() );
 	}
 	
@@ -53,7 +48,6 @@ public class FeatureInputStack extends FeatureInputNRGStack {
 	 * @param nrgStack
 	 */
 	public FeatureInputStack(NRGStack nrgStack) {
-		this.so = Optional.empty();
 		this.setNrgStack( new NRGStackWithParams(nrgStack) );
 	}
 	
@@ -63,25 +57,9 @@ public class FeatureInputStack extends FeatureInputNRGStack {
 	 * @param nrgStack
 	 */
 	public FeatureInputStack(Optional<NRGStack> nrgStack) {
-		this.so = Optional.empty();
 		if (nrgStack.isPresent()) {
 			this.setNrgStack( new NRGStackWithParams(nrgStack.get()) );
 		}
-	}
-
-	/**
-	 * Params with any ImageInitParams
-	 * 
-	 * @param nrgStack
-	 * @param so
-	 */
-	public FeatureInputStack(NRGStack nrgStack, ImageInitParams so) {
-		this.so = Optional.of(so);
-		this.setNrgStack( new NRGStackWithParams(nrgStack) );
-	}
-
-	public Optional<ImageInitParams> getSharedObjs() {
-		return so;
 	}
 	
 	@Override

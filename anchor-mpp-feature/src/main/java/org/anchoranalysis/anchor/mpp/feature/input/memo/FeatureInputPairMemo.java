@@ -29,10 +29,10 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class FeatureInputPairMemo extends FeatureInputNRGStack {
+public class FeatureInputPairMemo extends FeatureInputNRG {
 
 	private PxlMarkMemo obj1;
 	private PxlMarkMemo obj2;
@@ -47,8 +47,6 @@ public class FeatureInputPairMemo extends FeatureInputNRGStack {
 		);
 		this.obj1 = obj1;
 		this.obj2 = obj2;
-		assert obj1!=null;
-		assert obj2!=null;
 	}
 	public PxlMarkMemo getObj1() {
 		return obj1;
