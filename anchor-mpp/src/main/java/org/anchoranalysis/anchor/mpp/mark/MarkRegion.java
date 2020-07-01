@@ -1,10 +1,12 @@
 package org.anchoranalysis.anchor.mpp.mark;
 
-/*-
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
+/*
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +28,13 @@ package org.anchoranalysis.anchor.mpp.mark;
  * #L%
  */
 
-class MarkRegionUtilities {
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.GenerateUniqueParameterization;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+public abstract class MarkRegion extends AnchorBean<MarkRegion> implements GenerateUniqueParameterization {
+
+	public abstract VoxelStatistics createStatisticsFor( PxlMarkMemo pmm, ImageDimensions dim ) throws CreateException;
 }
