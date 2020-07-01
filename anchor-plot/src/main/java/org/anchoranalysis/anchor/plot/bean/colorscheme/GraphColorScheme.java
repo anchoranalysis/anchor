@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.graph.bean.colorscheme;
+package org.anchoranalysis.anchor.plot.bean.colorscheme;
 
 /*
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.graph.bean.colorscheme;
 
 import java.awt.Color;
 
+import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.color.RGBColorBean;

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.graph;
-
-import java.util.Optional;
+package org.anchoranalysis.anchor.plot.bean;
 
 /*
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -29,43 +27,31 @@ import java.util.Optional;
  */
 
 
-import org.jfree.chart.JFreeChart;
+import java.util.Iterator;
+import java.util.Optional;
 
-public class GraphInstance {
+import org.anchoranalysis.anchor.plot.AxisLimits;
+import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.error.CreateException;
 
-	private JFreeChart chart;
-	private boolean showVerticalAxisLines = true;
+// The sub classes don't have any BeanFields as a rule
+public abstract class GraphDefinition<ItemType> extends AnchorBean<GraphDefinition<ItemType>> {
+
+	/**
+	 * Creates a graph
+	 * 
+	 * @param items the items which determine the graph contents
+	 * @param domainLimits limits on X axis
+	 * @param rangeLimits limits on Y axis or (empty() and then they are guessed automatically) 
+	 * @return
+	 * @throws CreateException
+	 */
+	public abstract GraphInstance create( Iterator<ItemType> items, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException;
 	
-	private Optional<AxisLimits> rangeAxisLimits; 
+	public abstract boolean isItemAccepted( ItemType item );
 	
-	public GraphInstance(JFreeChart chart,  Optional<AxisLimits> rangeAxisLimits ) {
-		super();
-		this.chart = chart;
-		this.rangeAxisLimits = rangeAxisLimits;
-	}
-
-	public JFreeChart getChart() {
-		return chart;
-	}
-
-	public void setChart(JFreeChart chart) {
-		this.chart = chart;
-	}
-
-	public boolean isShowVerticalAxisLines() {
-		return showVerticalAxisLines;
-	}
-
-	public void setShowVerticalAxisLines(boolean showVerticalAxisLines) {
-		this.showVerticalAxisLines = showVerticalAxisLines;
-	}
-
-	public Optional<AxisLimits> getRangeAxisLimits() {
-		return rangeAxisLimits;
-	}
-
-	public void setRangeAxisLimits(Optional<AxisLimits> rangeAxisLimits) {
-		this.rangeAxisLimits = rangeAxisLimits;
-	}
+	public abstract String getTitle();
 	
+	public abstract String getShortTitle();
 }

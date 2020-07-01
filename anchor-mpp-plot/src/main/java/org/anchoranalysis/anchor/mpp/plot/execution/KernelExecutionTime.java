@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.mpp.graph.execution;
+package org.anchoranalysis.anchor.mpp.plot.execution;
 
 /*-
  * #%L
- * anchor-mpp-graph
+ * anchor-mpp-plot
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%

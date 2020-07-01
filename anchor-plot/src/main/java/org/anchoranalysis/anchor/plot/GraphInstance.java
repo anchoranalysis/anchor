@@ -1,8 +1,10 @@
-package org.anchoranalysis.anchor.mpp.graph.execution;
+package org.anchoranalysis.anchor.plot;
+
+import java.util.Optional;
 
 /*
  * #%L
- * anchor-mpp-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,42 +29,43 @@ package org.anchoranalysis.anchor.mpp.graph.execution;
  */
 
 
-// Stores a KernelExecutionTime for all kernels, and each kernel separately
-public class KernelExecutionTimeAllEach {
+import org.jfree.chart.JFreeChart;
 
-	private KernelExecutionTime all = null;
-	private KernelExecutionTime[] each;
+public class GraphInstance {
+
+	private JFreeChart chart;
+	private boolean showVerticalAxisLines = true;
 	
-	public KernelExecutionTimeAllEach( int numKernels )  {
-		each = new KernelExecutionTime[numKernels];
-	}
-
-	public KernelExecutionTime getAll() {
-		return all;
-	}
-
-	public void setAll(KernelExecutionTime all) {
-		this.all = all;
-	}
+	private Optional<AxisLimits> rangeAxisLimits; 
 	
-	public KernelExecutionTime getKernel( int index) {
-		return each[index];
+	public GraphInstance(JFreeChart chart,  Optional<AxisLimits> rangeAxisLimits ) {
+		super();
+		this.chart = chart;
+		this.rangeAxisLimits = rangeAxisLimits;
 	}
 
-	public void setKernel( int index, KernelExecutionTime ket ) {
-		each[index] = ket;
+	public JFreeChart getChart() {
+		return chart;
+	}
+
+	public void setChart(JFreeChart chart) {
+		this.chart = chart;
+	}
+
+	public boolean isShowVerticalAxisLines() {
+		return showVerticalAxisLines;
+	}
+
+	public void setShowVerticalAxisLines(boolean showVerticalAxisLines) {
+		this.showVerticalAxisLines = showVerticalAxisLines;
+	}
+
+	public Optional<AxisLimits> getRangeAxisLimits() {
+		return rangeAxisLimits;
+	}
+
+	public void setRangeAxisLimits(Optional<AxisLimits> rangeAxisLimits) {
+		this.rangeAxisLimits = rangeAxisLimits;
 	}
 	
-	public KernelExecutionTime[] getKernelArray() {
-		return each;
-	}
-	
-	// -1 indicates all, anything else is an ID for each
-	public KernelExecutionTime getForKernelID( int id ) {
-		if (id==-1) {
-			return all;
-		} else {
-			return each[id];
-		}
-	}
 }

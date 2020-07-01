@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.graph.index;
+package org.anchoranalysis.anchor.plot.index;
 
 /*-
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -30,7 +30,8 @@ import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.anchoranalysis.anchor.graph.GetForSeries;
+import org.anchoranalysis.anchor.plot.index.GraphIndexBase;
+import org.anchoranalysis.anchor.plot.GetForSeries;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.jfree.data.category.CategoryDataset;

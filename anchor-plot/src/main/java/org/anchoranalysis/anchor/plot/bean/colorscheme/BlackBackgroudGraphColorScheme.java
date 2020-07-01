@@ -1,10 +1,12 @@
-package org.anchoranalysis.anchor.graph.io;
+package org.anchoranalysis.anchor.plot.bean.colorscheme;
 
-/*
+import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
+
+/*-
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +28,14 @@ package org.anchoranalysis.anchor.graph.io;
  * #L%
  */
 
+import org.anchoranalysis.io.bean.color.RGBColorBean;
 
-import java.awt.image.BufferedImage;
+public class BlackBackgroudGraphColorScheme extends GraphColorScheme {
 
-import org.anchoranalysis.anchor.graph.GraphInstance;
-
-public class GraphOutputter {
-
-	private GraphOutputter() {}
-	
-	public static BufferedImage createBufferedImage( GraphInstance gi, int width, int height ) {
-		return gi.getChart().createBufferedImage(width, height);
+	public BlackBackgroudGraphColorScheme() {
+		
+		setBackgroundColor( new RGBColorBean(0, 0, 0) );
+		setPlotBackgroundColor( new RGBColorBean(0, 0, 0) );
+		setAxisColor( new RGBColorBean(255,255,255) );
 	}
 }

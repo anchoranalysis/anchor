@@ -1,10 +1,10 @@
-package org.anchoranalysis.anchor.graph;
+package org.anchoranalysis.anchor.mpp.plot.execution;
 
-/*-
+/*
  * #%L
- * anchor-graph
+ * anchor-mpp-plot
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,34 @@ package org.anchoranalysis.anchor.graph;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 
-/**
- * 
- * @author Owen Feehan
- *
- * @param <T> container-item type
- * @param <S> return-type
- */
-@FunctionalInterface
-public interface GetForSeries<T,S> {
-	S get( T item, int seriesNum ) throws GetOperationFailedException;
+public class ExecutionTimeItem {
+	
+	private String objectID;
+	private long executionTime;
+	
+	public ExecutionTimeItem(String objectID, long executionTime) {
+		super();
+		this.objectID = objectID;
+		this.executionTime = executionTime;
+	}
+
+	public String getObjectID() {
+		return objectID;
+	}
+
+	public void setObjectID(String objectID) {
+		this.objectID = objectID;
+	}
+
+	public long getExecutionTime() {
+		return executionTime;
+	}
+
+	public void setExecutionTime(long executionTime) {
+		this.executionTime = executionTime;
+	}
+	
+	
+	
 }

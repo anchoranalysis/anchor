@@ -1,8 +1,10 @@
-package org.anchoranalysis.anchor.graph;
+package org.anchoranalysis.anchor.plot;
+
+import org.anchoranalysis.anchor.plot.AxisLimits;
 
 /*
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%

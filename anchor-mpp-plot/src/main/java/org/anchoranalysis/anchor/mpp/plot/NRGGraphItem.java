@@ -1,10 +1,10 @@
-package org.anchoranalysis.anchor.graph.index;
+package org.anchoranalysis.anchor.mpp.plot;
 
-/*-
+/*
  * #%L
- * anchor-graph
+ * anchor-mpp-plot
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,47 @@ package org.anchoranalysis.anchor.graph.index;
  * #L%
  */
 
-/**
- * Labels for x and y axis in graph
- *
- */
-public class GraphAxisLabels {
 
-	private String x = "Index";
-	private String y = "Value";
+import java.awt.Color;
+import java.awt.Paint;
+
+public class NRGGraphItem {
 	
-	public String getX() {
-		return x;
+	private String objectID;
+	private double nrg;
+	private Paint paint = Color.BLUE;
+	
+	public NRGGraphItem() {
+		
 	}
-	public void setX(String x) {
-		this.x = x;
+	
+	public NRGGraphItem(String objectID, double nrg) {
+		super();
+		this.objectID = objectID;
+		this.nrg = nrg;
 	}
-	public String getY() {
-		return y;
+
+	public double getNrg() {
+		return nrg;
 	}
-	public void setXY(String x, String y) {
-		this.x = x;
-		this.y = y;
+	public void setNrg(double nrg) {
+		this.nrg = nrg;
 	}
-	public void setY(String y) {
-		this.y = y;
+
+	public String getObjectID() {
+		return objectID;
 	}
+
+	public void setObjectID(String objectID) {
+		this.objectID = objectID;
+	}
+
+	public Paint getPaint() {
+		return paint;
+	}
+
+	public void setPaint(Paint paint) {
+		this.paint = paint;
+	}
+	
 }

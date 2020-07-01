@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.graph.index;
+package org.anchoranalysis.anchor.plot.index;
 
 /*-
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -29,9 +29,10 @@ package org.anchoranalysis.anchor.graph.index;
 import java.util.Iterator;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.graph.AxisLimits;
-import org.anchoranalysis.anchor.graph.GraphInstance;
-import org.anchoranalysis.anchor.graph.bean.colorscheme.GraphColorScheme;
+import org.anchoranalysis.anchor.plot.index.GraphAxisLabels;
+import org.anchoranalysis.anchor.plot.AxisLimits;
+import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;

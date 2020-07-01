@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.mpp.graph.bean;
+package org.anchoranalysis.anchor.mpp.plot.bean;
 
 /*
  * #%L
- * anchor-mpp-graph
+ * anchor-mpp-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -30,12 +30,12 @@ package org.anchoranalysis.anchor.mpp.graph.bean;
 import java.util.Iterator;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.graph.AxisLimits;
-import org.anchoranalysis.anchor.graph.GraphInstance;
-import org.anchoranalysis.anchor.graph.bean.GraphDefinition;
-import org.anchoranalysis.anchor.graph.bean.colorscheme.GraphColorScheme;
-import org.anchoranalysis.anchor.graph.index.BarChart;
-import org.anchoranalysis.anchor.mpp.graph.NRGGraphItem;
+import org.anchoranalysis.anchor.mpp.plot.NRGGraphItem;
+import org.anchoranalysis.anchor.plot.AxisLimits;
+import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.bean.GraphDefinition;
+import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
+import org.anchoranalysis.anchor.plot.index.BarChart;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 

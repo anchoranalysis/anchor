@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.mpp.graph.execution;
+package org.anchoranalysis.anchor.plot.io;
 
 /*
  * #%L
- * anchor-mpp-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,33 +27,15 @@ package org.anchoranalysis.anchor.mpp.graph.execution;
  */
 
 
-public class ExecutionTimeItem {
-	
-	private String objectID;
-	private long executionTime;
-	
-	public ExecutionTimeItem(String objectID, long executionTime) {
-		super();
-		this.objectID = objectID;
-		this.executionTime = executionTime;
-	}
+import java.awt.image.BufferedImage;
 
-	public String getObjectID() {
-		return objectID;
-	}
+import org.anchoranalysis.anchor.plot.GraphInstance;
 
-	public void setObjectID(String objectID) {
-		this.objectID = objectID;
-	}
+public class GraphOutputter {
 
-	public long getExecutionTime() {
-		return executionTime;
+	private GraphOutputter() {}
+	
+	public static BufferedImage createBufferedImage( GraphInstance gi, int width, int height ) {
+		return gi.getChart().createBufferedImage(width, height);
 	}
-
-	public void setExecutionTime(long executionTime) {
-		this.executionTime = executionTime;
-	}
-	
-	
-	
 }

@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.graph.bean;
+package org.anchoranalysis.anchor.mpp.plot.execution;
 
 /*
  * #%L
- * anchor-graph
+ * anchor-mpp-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,31 +27,42 @@ package org.anchoranalysis.anchor.graph.bean;
  */
 
 
-import java.util.Iterator;
-import java.util.Optional;
+// Stores a KernelExecutionTime for all kernels, and each kernel separately
+public class KernelExecutionTimeAllEach {
 
-import org.anchoranalysis.anchor.graph.AxisLimits;
-import org.anchoranalysis.anchor.graph.GraphInstance;
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+	private KernelExecutionTime all = null;
+	private KernelExecutionTime[] each;
+	
+	public KernelExecutionTimeAllEach( int numKernels )  {
+		each = new KernelExecutionTime[numKernels];
+	}
 
-// The sub classes don't have any BeanFields as a rule
-public abstract class GraphDefinition<ItemType> extends AnchorBean<GraphDefinition<ItemType>> {
+	public KernelExecutionTime getAll() {
+		return all;
+	}
 
-	/**
-	 * Creates a graph
-	 * 
-	 * @param items the items which determine the graph contents
-	 * @param domainLimits limits on X axis
-	 * @param rangeLimits limits on Y axis or (empty() and then they are guessed automatically) 
-	 * @return
-	 * @throws CreateException
-	 */
-	public abstract GraphInstance create( Iterator<ItemType> items, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException;
+	public void setAll(KernelExecutionTime all) {
+		this.all = all;
+	}
 	
-	public abstract boolean isItemAccepted( ItemType item );
+	public KernelExecutionTime getKernel( int index) {
+		return each[index];
+	}
+
+	public void setKernel( int index, KernelExecutionTime ket ) {
+		each[index] = ket;
+	}
 	
-	public abstract String getTitle();
+	public KernelExecutionTime[] getKernelArray() {
+		return each;
+	}
 	
-	public abstract String getShortTitle();
+	// -1 indicates all, anything else is an ID for each
+	public KernelExecutionTime getForKernelID( int id ) {
+		if (id==-1) {
+			return all;
+		} else {
+			return each[id];
+		}
+	}
 }

@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.graph.bean.colorscheme;
+package org.anchoranalysis.anchor.plot;
 
 /*-
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,14 +26,16 @@ package org.anchoranalysis.anchor.graph.bean.colorscheme;
  * #L%
  */
 
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 
-public class BlackBackgroudGraphColorScheme extends GraphColorScheme {
-
-	public BlackBackgroudGraphColorScheme() {
-		
-		setBackgroundColor( new RGBColorBean(0, 0, 0) );
-		setPlotBackgroundColor( new RGBColorBean(0, 0, 0) );
-		setAxisColor( new RGBColorBean(255,255,255) );
-	}
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> container-item type
+ * @param <S> return-type
+ */
+@FunctionalInterface
+public interface GetForSeries<T,S> {
+	S get( T item, int seriesNum ) throws GetOperationFailedException;
 }
