@@ -71,11 +71,6 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * @param <T> type of the pair
  */
 public class PairCollectionAddCriteria<T> extends PairCollection<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3740934203419386237L;
 	
 	private GraphWithEdgeTypes<Mark,T> graph;
 	

@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.FileProviderException;
@@ -110,22 +111,11 @@ public class SpecificPathList extends FileProvider {
 	}
 	
 	private static Collection<File> matchingFilesForList( List<String> listPaths, ProgressReporter progressReporter ) {
-		
-		progressReporter.setMin(0);
-		progressReporter.setMax( listPaths.size() );
-		
-		List<File> listOut = new ArrayList<>();
-		
-		for( int i=0; i<listPaths.size(); i++) {
-			String s = listPaths.get(i);
-			
-			File f = new File(s);
-			listOut.add(f);
-			
-			progressReporter.update(i+1);
-		}
-		
-		return listOut;
+		return FunctionalUtilities.mapListWithProgress(
+			listPaths,
+			progressReporter,
+			File::new
+		);
 	}
 
 	public List<String> getListPaths() {

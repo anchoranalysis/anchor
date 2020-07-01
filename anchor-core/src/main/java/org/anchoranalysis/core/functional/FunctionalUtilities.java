@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional;
 
+import java.util.ArrayList;
+
 /*-
  * #%L
  * anchor-core
@@ -27,10 +29,13 @@ package org.anchoranalysis.core.functional;
  */
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.progress.ProgressReporter;
 
 public class FunctionalUtilities {
 
@@ -71,7 +76,7 @@ public class FunctionalUtilities {
 	 * @param throwableClass the class of the exception-type {@link E}
 	 * @param mapFunction the function to use for mapping
 	 * @return the output of the flatMap
-	 * @throws E if the exception
+	 * @throws E if the exception is thrown during mapping
 	 */
 	public static <S,T,E extends Throwable> Stream<T> mapWithException(
 		Stream<S> stream,
@@ -85,6 +90,87 @@ public class FunctionalUtilities {
 			
 		} catch (ConvertedToRuntimeException e) {
 			return throwException(e, throwableClass);
+		}
+	}
+	
+	/**
+	 * Maps a list to new list, updating a progress-reporter for every element
+	 * 
+	 * @param <S> input-type to map
+	 * @param <T> output-type of map
+	 * @param <E> exception that can be thrown by {@link mapFunction}
+	 * @param list the list to map
+	 * @param progressReporter the progress-reporter to update
+	 * @param mapFunction the function to use for mapping
+	 * @return a newly-created list with the result of each mapped item
+	 * @throws E if the exception is thrown during mapping 
+	 */
+	public static <S,T,E extends Throwable> List<T> mapListWithProgress(
+		List<S> list,
+		ProgressReporter progressReporter,
+		FunctionWithException<S,T,E> mapFunction
+	) throws E {
+		List<T> listOut = new ArrayList<>();
+		
+		progressReporter.setMin( 0 );
+		progressReporter.setMax( list.size() );
+		progressReporter.open();
+		
+		try {
+			for(int i=0; i<list.size(); i++) {
+				
+				S item = list.get(i);
+					
+				listOut.add(
+					mapFunction.apply(item)
+				);
+				
+				progressReporter.update(i+1);
+			}
+			return listOut;
+			
+		} finally {
+			progressReporter.close();
+		}
+	}
+	
+	
+	/**
+	 * Maps a list to a new list, including only certain items, updating a progress-reporter for every element
+	 * 
+	 * <p>Items where the mapping returns {@link Optional.empty()} are not included in the outputted list.</p>
+	 * 
+	 * @param <S> input-type to map
+	 * @param <T> output-type of map
+	 * @param <E> exception that can be thrown by {@link mapFunction}
+	 * @param list the list to map
+	 * @param progressReporter the progress-reporter to update
+	 * @param mapFunction the function to use for mapping
+	 * @return a newly-created list with the result of each mapped item
+	 * @throws E if the exception is thrown during mapping 
+	 */
+	public static <S,T,E extends Throwable> List<T> mapListOptionalWithProgress(
+		List<S> list,
+		ProgressReporter progressReporter,
+		FunctionWithException<S,Optional<T>,E> mapFunction
+	) throws E {
+		List<T> listOut = new ArrayList<>();
+		
+		progressReporter.setMin( 0 );
+		progressReporter.setMax( list.size() );
+		progressReporter.open();
+		
+		try {
+			for(int i=0; i<list.size(); i++) {
+				
+				S item = list.get(i);
+				mapFunction.apply(item).ifPresent(listOut::add);
+				progressReporter.update(i+1);
+			}
+			return listOut;
+			
+		} finally {
+			progressReporter.close();
 		}
 	}
 	

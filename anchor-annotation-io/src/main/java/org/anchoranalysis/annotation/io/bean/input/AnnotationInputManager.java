@@ -27,12 +27,12 @@ package org.anchoranalysis.annotation.io.bean.input;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -60,9 +60,7 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 			
-			List<T> inputs = input.inputObjects(
-				params
-			);
+			List<T> inputs = input.inputObjects(params);
 		
 			prm.incrWorker();
 		
@@ -76,33 +74,12 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 		}
 	}
 	
-	
 	private List<AnnotationWithStrategy<S>> createListInput( List<T> listInputObjects, ProgressReporter progressReporter ) throws AnchorIOException {
-		List<AnnotationWithStrategy<S>> outList = new ArrayList<>();
-
-		progressReporter.setMin( 0 );
-		progressReporter.setMax( listInputObjects.size() );
-		progressReporter.open();
-		
-		try {
-			for(int i=0; i<listInputObjects.size(); i++) {
-				
-				T item = listInputObjects.get(i);
-				outList.add(
-					createInput(item)
-				);
-				
-				progressReporter.update(i);
-			}
-		} finally {
-			progressReporter.close();
-		}
-		
-		return outList;
-	}
-	
-	public AnnotationWithStrategy<S> createInput( ProvidesStackInput item ) throws AnchorIOException {
-		return new AnnotationWithStrategy<S>(item, annotatorStrategy);
+		return FunctionalUtilities.mapListWithProgress(
+			listInputObjects,
+			progressReporter,
+			input -> new AnnotationWithStrategy<S>(input, annotatorStrategy)
+		);
 	}
 	
 	public InputManager<T> getInput() {

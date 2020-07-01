@@ -28,16 +28,18 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.image.stack.DisplayStack;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class AssignmentGeneratorFactory {
 
+	private AssignmentGeneratorFactory() {}
+	
 	public static AssignmentGenerator createAssignmentGenerator(
 		DisplayStack background,
 		Assignment assignment,
 		ColorPool colorPool,
 		boolean useMIP,
-		String leftName,
-		String rightName,
+		Pair<String,String> names,
 		int outlineWidth,
 		boolean appendNumberBrackets
 	) {
@@ -49,28 +51,40 @@ public class AssignmentGeneratorFactory {
 			useMIP
 		);
 		
-		setupNames(generator, assignment, appendNumberBrackets, leftName, rightName);
+		setupNames(generator, assignment, appendNumberBrackets, names);
 
 		generator.setOutlineWidth(outlineWidth);
 		return generator;
 	}
 	
-	private static void setupNames( AssignmentGenerator generator, Assignment assignment, boolean appendNumberBrackets, String leftName, String rightName ) {
-		// Input object's name get precedence
-		if (appendNumberBrackets) {
-			generator.setLeftName( appendNumberBrackets(leftName,assignment,true) );	
-			generator.setRightName( appendNumberBrackets(rightName,assignment,false) );
+	private static void setupNames(
+		AssignmentGenerator generator,
+		Assignment assignment,
+		boolean appendNumberBrackets,
+		Pair<String,String> names
+	) {
+		generator.setLeftName(
+			maybeAppendNumber(appendNumberBrackets, names.getLeft(),assignment,true)
+		);	
+		generator.setRightName(
+			maybeAppendNumber(appendNumberBrackets, names.getRight(),assignment,false)
+		);
+	}
+	
+	private static String maybeAppendNumber(
+		boolean doAppend,
+		String mainString,
+		Assignment assignment,
+		boolean left
+	) {
+		if (doAppend) {
+			return String.format(
+				"%s (%d)",
+				mainString,
+				assignment.numUnassigned(left)
+			);
 		} else {
-			generator.setLeftName(leftName);
-			generator.setRightName(rightName);
+			return mainString;
 		}
-	}
-	
-	private static String appendNumberBrackets( String mainString, Assignment assignment, boolean left ) {
-		return appendNumberBrackets(mainString,assignment.numUnassigned(left)); 
-	}
-	
-	private static String appendNumberBrackets( String mainString, int number ) {
-		return String.format("%s (%d)",mainString,number);
 	}
 }

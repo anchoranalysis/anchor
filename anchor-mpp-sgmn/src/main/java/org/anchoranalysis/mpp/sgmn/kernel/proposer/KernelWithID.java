@@ -27,16 +27,10 @@ package org.anchoranalysis.mpp.sgmn.kernel.proposer;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 
-public class KernelWithID<T> implements Serializable {
+public class KernelWithID<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5403284668400725293L;
 	private Kernel<T> kernel;
 	
 	private int id;

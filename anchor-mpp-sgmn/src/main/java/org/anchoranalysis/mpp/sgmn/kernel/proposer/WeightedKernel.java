@@ -27,17 +27,17 @@ package org.anchoranalysis.mpp.sgmn.kernel.proposer;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 
 
-public class WeightedKernel<T> implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7653661471207602713L;
+/**
+ * A kernel with an associated weight.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> type being modified by the kernel.
+ */
+public class WeightedKernel<T> {
 
 	private Kernel<T> kernel = null;
 	
@@ -45,16 +45,18 @@ public class WeightedKernel<T> implements Serializable {
 	
 	private String name;
 	
-	// Constructor for single kernel factory
-	// TODO make constructor package private
-	public WeightedKernel( Kernel<T> kernel, double weight ) {
-		
+	/** 
+	 * Constructor for single kernel factory
+	 * 
+	 * @param kernel the kernel
+	 * @param weight an associated weight (a positive floating-point number)
+	 **/
+	public WeightedKernel(Kernel<T> kernel, double weight) {
 		this.setKernel(kernel);
 		this.weight = weight;
 		this.name = kernel.getBeanName();
 	}
 	
-	// calculates the weight of the kernel
 	public double getWeight() {
 		return this.weight;
 	}
@@ -79,6 +81,4 @@ public class WeightedKernel<T> implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 }
