@@ -43,8 +43,8 @@
         <module>anchor-mpp-io</module>
         <module>anchor-mpp-sgmn</module>
         <module>anchor-image-experiment</module>
-        <module>anchor-mpp-graph</module>
-        <module>anchor-graph</module>
+        <module>anchor-mpp-plot</module>
+        <module>anchor-plot</module>
 	<module>anchor-annotation-io</module>
 
 	   <!-- IO modules that the test routines dependent on -->
