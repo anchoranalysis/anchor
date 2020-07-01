@@ -50,6 +50,12 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 		}
 	}
 
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 

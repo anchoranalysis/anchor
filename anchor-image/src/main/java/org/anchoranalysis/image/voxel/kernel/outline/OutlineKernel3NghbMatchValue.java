@@ -81,6 +81,12 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().getCornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 

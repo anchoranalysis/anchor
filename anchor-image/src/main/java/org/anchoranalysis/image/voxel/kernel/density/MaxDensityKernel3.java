@@ -36,7 +36,14 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
-// Erosion with a 3x3 or 3x3x3 kernel
+// 
+
+/**
+ * Erosion with a 3x3 or 3x3x3 kernel
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class MaxDensityKernel3 extends BinaryKernel {
 	
 	private boolean outsideAtThreshold = false;
@@ -69,6 +76,12 @@ public class MaxDensityKernel3 extends BinaryKernel {
 		this.inSlices = inSlices;
 	}
 
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 
@@ -168,5 +181,4 @@ public class MaxDensityKernel3 extends BinaryKernel {
 		
 		return cnt <= maxCnt;
 	}
-
 }

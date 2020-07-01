@@ -30,20 +30,30 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
 
 
-// 8-connectivity or 26-connectivity
-// Relies on IProcessRelPoint to do bound checking
-public class BigNghb extends Nghb {
+/**
+ * Provides either 8-connectivity or 26-connectivity as an neighborhood.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public final class BigNghb extends Nghb {
 	
-	private boolean includeCentrePoint = false;
+	private final boolean includeCentrePoint;
 	
 	public BigNghb() {
-		
+		this.includeCentrePoint = false;
 	}
 	
 	public BigNghb( boolean includeCentrePoint ) {
 		this.includeCentrePoint = includeCentrePoint;
 	}
 	
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> testNghb) {
 		

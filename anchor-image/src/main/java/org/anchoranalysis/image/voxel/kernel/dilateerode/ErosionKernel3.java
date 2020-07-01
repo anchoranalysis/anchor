@@ -32,7 +32,12 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
-// Erosion with a 3x3 or 3x3x3 kernel
+/**
+ * Erosion with a 3x3 or 3x3x3 kernel
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 	
 	// Constructor
@@ -40,6 +45,12 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		super(bv, outsideAtThreshold, useZ);
 	}
 
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 
