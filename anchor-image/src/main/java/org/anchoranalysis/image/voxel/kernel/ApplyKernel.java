@@ -49,7 +49,9 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
  */
 public class ApplyKernel {
 
-	private static VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.getByte();
+	private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY = VoxelBoxFactory.getByte();
+	
+	private ApplyKernel() {}
 	
 	public static VoxelBox<ByteBuffer> apply( BinaryKernel kernel, VoxelBox<ByteBuffer> in ) {
 		return apply(kernel, in, BinaryValuesByte.getDefault());
@@ -58,7 +60,7 @@ public class ApplyKernel {
 	// 3 pixel diameter kernel
 	public static VoxelBox<ByteBuffer> apply( BinaryKernel kernel, VoxelBox<ByteBuffer> in, BinaryValuesByte outBinary ) {
 		
-		VoxelBox<ByteBuffer> out = factory.create( in.extent() );
+		VoxelBox<ByteBuffer> out = FACTORY.create( in.extent() );
 		
 		int localSlicesSize = 3;
 		 

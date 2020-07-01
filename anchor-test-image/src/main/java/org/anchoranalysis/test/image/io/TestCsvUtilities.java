@@ -32,6 +32,8 @@ import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 
 public class TestCsvUtilities {
 
+	private TestCsvUtilities() {}
+	
 	/**
 	 * Checks if a particular string can be found in any cell of a CSV file
 	 * 
@@ -44,7 +46,6 @@ public class TestCsvUtilities {
 		
 		String[] line;
 		while ( (line = file.readLine())!=null ) {
-			
 			for( int i=0; i<line.length; i++) {
 				
 				if( line[i].contains(str)) {
@@ -52,7 +53,6 @@ public class TestCsvUtilities {
 				}
 			}
 		}
-		
 		return false;
 	}
 }

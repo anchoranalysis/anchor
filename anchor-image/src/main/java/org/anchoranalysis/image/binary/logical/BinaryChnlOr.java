@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.Extent;
 
 public class BinaryChnlOr {
 
-
+	private BinaryChnlOr() {}
 		
 	/**
 	 * A binary OR of chnlCrnt and chnlReceiver where chnlReceiver is overwritten with the output

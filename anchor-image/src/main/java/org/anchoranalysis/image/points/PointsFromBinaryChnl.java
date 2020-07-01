@@ -37,6 +37,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 
 public class PointsFromBinaryChnl {
 	
+	private PointsFromBinaryChnl() {}
+	
 	public static List<Point3i> pointsFromChnl( BinaryChnl chnl ) throws CreateException {
 		
 		List<Point3i> listOut = new ArrayList<>();

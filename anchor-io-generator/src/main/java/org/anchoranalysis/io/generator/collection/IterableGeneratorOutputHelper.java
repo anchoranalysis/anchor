@@ -47,6 +47,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class IterableGeneratorOutputHelper {
 
+	private IterableGeneratorOutputHelper() {}
+	
 	// TODO remove padding for nrgStack and switch to single channel outputs
 	public static <T> void output( NamedProvider<T> providers, IterableGenerator<T> generator, BoundOutputManager outputManager, String outputName, String prefix, ErrorReporter errorReporter, boolean suppressSubfoldersIn ) {
 

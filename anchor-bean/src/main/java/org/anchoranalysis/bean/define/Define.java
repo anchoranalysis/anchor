@@ -69,8 +69,7 @@ public class Define extends AnchorBean<Define> {
 		// Find the grouping-root from the item
 		Class<?> groupingRoot = findGroupingRoot(itemType);
 		
-		List<NamedBean<?>> list = listForGroup(groupingRoot);
-		list.add(bean);
+		listForGroup(groupingRoot).add(bean);
 	}
 
 	/**
@@ -157,14 +156,9 @@ public class Define extends AnchorBean<Define> {
 	 * @return an existing or newly-created list
 	 */
 	private List<NamedBean<?>> listForGroup( Class<?> groupingRoot ) {
-		
-		List<NamedBean<?>> list = map.get(groupingRoot);
-		
-		if (list==null) {
-			list = new ArrayList<>();
-			map.put(groupingRoot, list);
-		}
-		
-		return list;
+		return map.computeIfAbsent(
+			groupingRoot,
+			key -> new ArrayList<>()
+		);
 	}
 }

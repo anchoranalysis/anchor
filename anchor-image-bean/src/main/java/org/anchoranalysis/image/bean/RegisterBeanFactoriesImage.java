@@ -43,6 +43,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class RegisterBeanFactoriesImage {
 	
+	private RegisterBeanFactoriesImage() {}
+	
 	public static void registerBeanFactories() {
 		RegisterBeanFactories.register(
 			"featureList",

@@ -36,6 +36,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BufferedImageFactory {
 	
+	private BufferedImageFactory() {}
+	
 	public static BufferedImage createGrayscale( VoxelBox<ByteBuffer> vb ) throws CreateException {
 		
 		Extent e = vb.extent();

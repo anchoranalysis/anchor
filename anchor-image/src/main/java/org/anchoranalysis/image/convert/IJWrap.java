@@ -71,6 +71,8 @@ public class IJWrap {
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
 	
+	private IJWrap() {}
+	
 	public static Channel chnlFromImageStackByte( ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory ) {
 		
 		ImageDimensions sd = new ImageDimensions(

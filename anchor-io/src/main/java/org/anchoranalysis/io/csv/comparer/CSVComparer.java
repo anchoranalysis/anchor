@@ -37,6 +37,8 @@ import org.apache.commons.lang.ArrayUtils;
 
 public class CSVComparer {
 
+	private CSVComparer() {}
+	
 	/**
 	 * Are two CSV files equal?
 	 * 

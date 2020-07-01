@@ -36,6 +36,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 class AddPxlsToHistogram {
 
+	private AddPxlsToHistogram() {}
+	
 	public static void addPxls(
 		byte membership,			
 		List<RegionMembershipWithFlags> listRegionMembership,

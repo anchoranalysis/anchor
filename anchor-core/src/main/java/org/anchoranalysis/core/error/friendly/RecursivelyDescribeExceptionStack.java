@@ -39,6 +39,8 @@ import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
  */
 public class RecursivelyDescribeExceptionStack {
 
+	private RecursivelyDescribeExceptionStack() {}
+	
 	/**
 	 * Incrementally adds a line to a string builder with the message of each exception
 	 * moving onto the next nested exception until there are no more

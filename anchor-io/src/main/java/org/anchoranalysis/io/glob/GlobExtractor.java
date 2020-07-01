@@ -58,6 +58,8 @@ public class GlobExtractor {
 			return directory;
 		}
 	}
+	
+	private GlobExtractor() {}
 
 	/**
 	 * Extracts a glob, and a directory portion if it exists from a string with a wildcard

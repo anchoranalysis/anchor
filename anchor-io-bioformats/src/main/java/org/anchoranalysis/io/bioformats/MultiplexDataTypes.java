@@ -43,6 +43,8 @@ import loci.formats.FormatTools;
 
 class MultiplexDataTypes {
 
+	private MultiplexDataTypes() {}
+	
 	public static VoxelDataType multiplexFormat( int pixelType ) throws RasterIOException {
 		switch(pixelType) {
 		case FormatTools.UINT8:

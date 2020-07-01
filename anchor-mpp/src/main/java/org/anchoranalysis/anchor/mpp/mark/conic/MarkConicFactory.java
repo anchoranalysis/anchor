@@ -35,6 +35,8 @@ import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
 public class MarkConicFactory {
 	
+	private MarkConicFactory() {}
+	
 	public static Mark createMarkFromPoint3d( Point3d pnt, int size, boolean do3D ) {
 		assert(size>0);
 		if (do3D) {

@@ -34,6 +34,8 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 
 class SubNodeKeysHelper {
 	
+	private SubNodeKeysHelper() {}
+	
 	/**
 	 * A list of sub-nodes of the configuration
 	 * 

@@ -37,6 +37,8 @@ import org.anchoranalysis.io.manifest.match.Match;
 
 public class FinderUtilities {
 
+	private FinderUtilities() {}
+	
 	public static List<FileWrite> findListFile( ManifestRecorder manifestRecorder, Match<FileWrite> match ) {
 		
 		ArrayList<FileWrite> foundList = new ArrayList<>();

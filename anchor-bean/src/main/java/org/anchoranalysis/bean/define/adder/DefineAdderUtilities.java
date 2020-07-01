@@ -35,6 +35,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public class DefineAdderUtilities {
 	
+	private DefineAdderUtilities() {}
+	
 	public static void addBeansFromList( Define out, List<NamedBean<?>> list ) throws BeanXmlException {
 	
 		try {

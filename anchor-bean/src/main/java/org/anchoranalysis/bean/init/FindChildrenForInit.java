@@ -37,6 +37,8 @@ import org.anchoranalysis.core.error.InitException;
 
 class FindChildrenForInit {
 
+	private FindChildrenForInit() {}
+	
 	/**
 	 * Finds children of bean that need to be initialized - and adds them to a list
 	 * 

@@ -32,6 +32,8 @@ import java.util.function.Predicate;
 
 class PathMatcherUtilities {
 
+	private PathMatcherUtilities() {}
+	
 	public static Predicate<Path> filter(Path dir, String fileType, String fileFilter) {
 		PathMatcher matcher = PathMatcherUtilities.matcherForFilter(dir, fileType, fileFilter);
 		return p -> PathMatcherUtilities.acceptPathViaMatcher(p, matcher);

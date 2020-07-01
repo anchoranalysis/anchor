@@ -37,6 +37,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BinaryChnlInverter {
 	
+	private BinaryChnlInverter() {}
+	
 	public static ObjectMask invertObjMaskDuplicate( ObjectMask om ) {
 		BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();
 		bvb.invert();

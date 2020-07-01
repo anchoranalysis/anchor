@@ -38,6 +38,8 @@ class DeserializerHelper {
 	private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();
 	private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation = new XStreamDeserializer<>();
 	
+	private DeserializerHelper() {}
+	
 	public static Cfg deserializeCfg( Path path ) throws DeserializationFailedException {
 		return deserializerCfg.deserialize( path );
 	}

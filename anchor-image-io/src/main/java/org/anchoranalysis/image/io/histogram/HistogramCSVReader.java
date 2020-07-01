@@ -41,6 +41,8 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 public class HistogramCSVReader {
 
+	private HistogramCSVReader() {}
+	
 	public static Histogram readHistogramFromFile( Path filePath ) throws CSVReaderException {
 				
 		Map<Integer,Integer> map = new HashMap<>();

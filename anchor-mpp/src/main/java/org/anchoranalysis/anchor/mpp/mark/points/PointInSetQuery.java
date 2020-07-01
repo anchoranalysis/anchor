@@ -34,6 +34,8 @@ import com.google.common.base.Function;
 
 class PointInSetQuery {
 
+	private PointInSetQuery() {}
+	
 	public static boolean anyCrnrInSet(Point3d pnt, Set<Point3d> set) {
 		
 		// We test if any combination of the ceil, floor can be found in the set

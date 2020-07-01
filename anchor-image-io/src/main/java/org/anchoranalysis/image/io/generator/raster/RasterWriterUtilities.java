@@ -31,6 +31,8 @@ import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 public class RasterWriterUtilities {
+	
+	private RasterWriterUtilities() {}
 
 	/**
 	 * Gets the default raster-writer associated with outputWriteSettings

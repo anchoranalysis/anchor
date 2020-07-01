@@ -41,6 +41,8 @@ import org.apache.commons.configuration.tree.ConfigurationNode;
  */
 class HelperDescribeXmlNode {
 
+	private HelperDescribeXmlNode() {}
+	
 	/**
 	 * Do we consider an attribute a configuration attribute or not
 	 * 

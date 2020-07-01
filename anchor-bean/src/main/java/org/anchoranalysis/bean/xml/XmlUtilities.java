@@ -33,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class XmlUtilities {
 
+	private XmlUtilities() {}
 	
 	public static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

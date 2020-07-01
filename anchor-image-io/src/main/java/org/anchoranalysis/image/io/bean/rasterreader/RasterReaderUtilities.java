@@ -37,6 +37,8 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class RasterReaderUtilities {
 
+	private RasterReaderUtilities() {}
+	
 	public static Stack openStackFromPath( RasterReader rasterReader, Path path ) throws RasterIOException {
 		OpenedRaster openedRaster = rasterReader.openFile(path);
 		

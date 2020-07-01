@@ -35,7 +35,8 @@ import org.apache.commons.lang.StringUtils;
 
 class CompareUtilities {
 
-
+	private CompareUtilities() {}
+	
 	public static void checkZeroRows( boolean rejectZeroRows, String[] lines1, String[] lines2 ) throws CSVReaderException {
 		if (!rejectZeroRows) {
 			return;

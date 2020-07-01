@@ -28,6 +28,8 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 class ConvertHelper {
 
+	private ConvertHelper() {}
+	
 	public static float twoToPower( int exponent ) {
 		return (float) Math.pow(2.0, exponent);
 	}

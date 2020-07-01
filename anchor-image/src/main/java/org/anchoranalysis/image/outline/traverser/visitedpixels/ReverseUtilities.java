@@ -34,6 +34,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 
 public class ReverseUtilities {
 
+	private ReverseUtilities() {}
+	
 	public static List<Point3i> reversedList( List<Point3i> list ) {
 		List<Point3i> copy = new ArrayList<>( list );
 		Collections.reverse(copy);

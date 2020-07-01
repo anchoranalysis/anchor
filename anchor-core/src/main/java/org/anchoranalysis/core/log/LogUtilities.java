@@ -28,6 +28,8 @@ package org.anchoranalysis.core.log;
 
 public class LogUtilities {
 	
+	private LogUtilities() {}
+	
 	public static LogErrorReporter createNullErrorReporter() {
 		return new LogErrorReporter( new NullLogReporter() );
 	}

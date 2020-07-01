@@ -34,6 +34,8 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
 class EnsureUniqueNames {
 
+	private EnsureUniqueNames() {}
+	
 	public static <T> void apply( List<WeightedKernel<T>> lstKernelFactories ) {
 		Map<String,Integer> hashName = cntUniqueNames(lstKernelFactories);
 		appendIntegerIfNecessary(lstKernelFactories, hashName);

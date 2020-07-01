@@ -32,6 +32,8 @@ public class ImageResFixture {
 
 	public static final ImageResolution instance = create();
 	
+	private ImageResFixture() {}
+	
 	private static ImageResolution create() {
 		return new ImageResolution(
 			0.01,

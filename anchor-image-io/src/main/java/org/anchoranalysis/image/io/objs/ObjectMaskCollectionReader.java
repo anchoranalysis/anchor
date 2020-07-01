@@ -47,6 +47,8 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
  *
  */
 public class ObjectMaskCollectionReader {
+	
+	private ObjectMaskCollectionReader() {}
 
 	private static final String HDF5_EXTENSION = ".h5";
 	
@@ -72,7 +74,7 @@ public class ObjectMaskCollectionReader {
 		// 1. First check if has a file extension HDF5
 		if (hasHdf5Extension(path)) {
 			if (path.toFile().exists()) {
-				return hdf5.deserialize(path);
+				return HDF5.deserialize(path);
 			} else {
 				throw new DeserializationFailedException("File not found at " + path);
 			}
@@ -81,12 +83,12 @@ public class ObjectMaskCollectionReader {
 		// 2. Suffix a .h5 and see if the file exists
 		Path suffixed = addHdf5Extension(path);
 		if ( Files.exists(suffixed)) {
-			return hdf5.deserialize(suffixed);
+			return HDF5.deserialize(suffixed);
 		}
 		
 		// 3. Treat as a folder of TIFFs
 		if (path.toFile().exists()) {
-			return tiffCorrectMissing.deserialize(path);
+			return TIFF_CORRECT_MISSING.deserialize(path);
 		} else {
 			throw new DeserializationFailedException("Directory of object TIFFs not found at " + path);
 		}

@@ -30,6 +30,8 @@ import org.anchoranalysis.core.error.CreateException;
 
 public class CombineTypes {
 
+	private CombineTypes() {}
+	
 	public static VoxelDataType combineTypes( VoxelDataType type1, VoxelDataType type2 ) throws CreateException {
 		if (type1.equals(type2)) {
 			return type1;

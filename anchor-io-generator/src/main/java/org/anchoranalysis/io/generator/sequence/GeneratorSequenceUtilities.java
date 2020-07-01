@@ -40,6 +40,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GeneratorSequenceUtilities {
 
+	private GeneratorSequenceUtilities() {}
+	
 	public static <T> void generateListAsSubfolder(
 		String folderName,
 		int numDigits,

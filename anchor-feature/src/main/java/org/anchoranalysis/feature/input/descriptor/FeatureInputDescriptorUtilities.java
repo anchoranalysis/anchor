@@ -37,6 +37,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class FeatureInputDescriptorUtilities {
 
+	private FeatureInputDescriptorUtilities() {}
+	
 	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) {
 		return paramTypeForTwo( item1.inputDescriptor(), item2.inputDescriptor() );
 	}

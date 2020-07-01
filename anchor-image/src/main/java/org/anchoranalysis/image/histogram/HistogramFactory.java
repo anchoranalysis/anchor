@@ -50,6 +50,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class HistogramFactory {
 
+	private HistogramFactory() {}
+	
 	public static Histogram createGuessMaxBin( Collection<Histogram> histograms) throws CreateException {
 		
 		if (histograms.size()==0) {

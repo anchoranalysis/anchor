@@ -36,6 +36,8 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ConvertDisplayStackToRGB {
 	
+	private ConvertDisplayStackToRGB() {}
+	
 	public static RGBStack convert( DisplayStack background ) {
 		
 		try {

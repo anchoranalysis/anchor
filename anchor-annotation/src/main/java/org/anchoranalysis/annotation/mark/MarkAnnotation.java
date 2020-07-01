@@ -54,8 +54,7 @@ public class MarkAnnotation extends AnnotationWithCfg {
 	private Date timeAnnotationLastUpdated;				// Number of seconds since the UNIX epoch
 	private boolean finished = false;
 	
-	// Hard-coded... for now
-	//private RegionMap regionMap = RegionMapSingleton.instance();
+	// Hard-coded regionID
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	
 	public void markAccepted( Cfg cfg, Cfg cfgReject ) {

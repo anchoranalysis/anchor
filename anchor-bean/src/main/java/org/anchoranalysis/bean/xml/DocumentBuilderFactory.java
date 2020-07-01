@@ -36,6 +36,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 class DocumentBuilderHelper {
 	
+	private DocumentBuilderHelper() {}
+	
 	/**
 	 * Creates a document-builder with default error-handling
 	 * @return a document-builder with default-error-handling

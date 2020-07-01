@@ -40,6 +40,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class MorphologicalErosion {
 
+	private MorphologicalErosion() {}
+	
 	public static ObjectMask createErodedObjMask(
 		ObjectMask om,
 		Optional<Extent> extent,

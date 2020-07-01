@@ -48,6 +48,8 @@ import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3ZOnly;
 
 public class MorphologicalDilation {
 
+	private MorphologicalDilation() {}
+	
 	/**
 	 * 
 	 * @param om

@@ -30,11 +30,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 
 public class MarkPointListFactory extends MarkFactory {
-
-	
-	
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
 	
 	@Override
 	public Mark create() {

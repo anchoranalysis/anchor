@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class InterpolateUtilities {
 	
-	
+	private InterpolateUtilities() {}
 	
 	private static Transfer createTransfer( VoxelBoxWrapper src, VoxelBoxWrapper dest ) {
 		

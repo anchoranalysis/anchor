@@ -36,6 +36,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 class ManifestClashChecker {
 
+	private ManifestClashChecker() {}
+	
 	public static void throwExceptionIfClashes(
 		ManifestRecorder manifestExperiment,
 		BoundOutputManager boundOutput,

@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 
 public class PointConverter {
 
+	private PointConverter() {}
+	
 	// START singular points
 	
 	public static Point2i intFromDouble(Point2d p) {

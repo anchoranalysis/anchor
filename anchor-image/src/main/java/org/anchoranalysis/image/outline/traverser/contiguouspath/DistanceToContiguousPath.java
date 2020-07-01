@@ -30,6 +30,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 
 public class DistanceToContiguousPath {
 
+	private DistanceToContiguousPath() {}
+	
 	/** The distMax of a point to the closest point on the path */
 	public static DistanceIndex distMaxToClosestPoint(ContiguousPixelPath path, Point3i pnt ) {
 		

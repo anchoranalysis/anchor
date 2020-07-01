@@ -33,6 +33,9 @@ import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixel
 import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy.MergeCandidate;
 
 class CombineWithTarget {
+	
+	private CombineWithTarget() {}
+	
 	/**
 	 * 
 	 * @param paths

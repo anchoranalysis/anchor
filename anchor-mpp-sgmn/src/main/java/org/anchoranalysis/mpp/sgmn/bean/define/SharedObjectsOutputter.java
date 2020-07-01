@@ -38,6 +38,8 @@ import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
 class SharedObjectsOutputter {
 	
+	private SharedObjectsOutputter() {}
+	
 	public static void output(
 		ImageInitParams imageInit,
 		boolean suppressSubfolders,

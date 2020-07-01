@@ -32,6 +32,8 @@ import org.anchoranalysis.image.extent.Extent;
 
 public class ScaleFactorUtilities {
 	
+	private ScaleFactorUtilities() {}
+	
 	/**
 	 * Calculates a scaling factor so as to scale sdSource to sdTarget
 	 * 

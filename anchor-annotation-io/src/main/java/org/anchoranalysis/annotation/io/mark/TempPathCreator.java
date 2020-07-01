@@ -32,6 +32,8 @@ import java.nio.file.Paths;
 
 class TempPathCreator {
 
+	private TempPathCreator() {}
+	
 	public static Path deriveTempPath( Path annotationPath ) {
 		String fileName = annotationPath.getFileName().toString();
 		Path fileNameNew = Paths.get(fileName + ".temp");

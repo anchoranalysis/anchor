@@ -35,13 +35,13 @@ import org.anchoranalysis.image.object.ObjectMask;
 /**
  * Two-way factory.
  * 
- * Creation of OverlayCollection from marks
- * Retrieval of marks back from OverlayCollections
+ * <p>Creation of {@link OverlayCollection} from marks
+ * Retrieval of marks back from {@link OverlayCollection}s</p>
  * 
  * @author Owen Feehan
  *
  */
-public class OverlayCollectionObjMaskFactory {
+public class OverlayCollectionObjectFactory {
 	
 	public static OverlayCollection createWithoutColor( ObjectCollection objs, IDGetter<ObjectMask> idGetter ) {
 		OverlayCollection out = new OverlayCollection();

@@ -32,6 +32,8 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class EllipsoidUtilities {
 
+	private EllipsoidUtilities() {}
+	
 	public static double[] normalisedRadii( MarkEllipsoid mark, ImageResolution res ) {
 		// We re-calculate all the bounds to take account of the different z-resolution
 		

@@ -40,6 +40,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
  */
 public class BoundingBoxFromPoints {
 
+	private BoundingBoxFromPoints() {}
+	
 	/**
 	 * Create from a list of points
 	 * 

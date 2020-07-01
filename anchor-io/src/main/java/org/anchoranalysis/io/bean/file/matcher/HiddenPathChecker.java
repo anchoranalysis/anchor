@@ -36,6 +36,8 @@ import org.apache.commons.lang.SystemUtils;
 
 class HiddenPathChecker {
 	
+	private HiddenPathChecker() {}
+	
 	public static boolean includePath(Path path) {
 		try {
 			// There is a bug in Java (apparently fixed in version 13) where Files.isHidden

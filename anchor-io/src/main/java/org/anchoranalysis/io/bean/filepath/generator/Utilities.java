@@ -30,6 +30,8 @@ import java.nio.file.Path;
 
 class Utilities {
 
+	private Utilities() {}
+	
 	/** Converts backslashes to forward slashes in a path, and returns as a string */
 	public static String convertBackslashes( Path pathIn ) {
 		return pathIn.toString().replace('\\', '/');

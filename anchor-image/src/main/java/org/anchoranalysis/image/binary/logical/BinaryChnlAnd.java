@@ -36,6 +36,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BinaryChnlAnd {
 
+	private BinaryChnlAnd() {}
+	
 	public static void apply( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) throws CreateException {
 		apply(
 			chnlCrnt.getVoxelBox(),

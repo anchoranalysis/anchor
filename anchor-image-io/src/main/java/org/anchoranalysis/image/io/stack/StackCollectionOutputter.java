@@ -57,6 +57,8 @@ public class StackCollectionOutputter {
 	
 	private static final String OUTPUT_NAME = "stackCollection";
 	private static final String PREFIX = "";
+
+	private StackCollectionOutputter() {}
 	
 	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
 	 * @throws OutputWriteFailedException */

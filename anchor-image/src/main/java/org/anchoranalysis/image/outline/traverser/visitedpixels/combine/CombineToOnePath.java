@@ -31,9 +31,11 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
-import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
+import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
 public class CombineToOnePath {
+	
+	private CombineToOnePath() {}
 	
 	/** Combines all the contiguous paths to a single-path 
 	 * @throws OperationFailedException */
@@ -92,7 +94,7 @@ public class CombineToOnePath {
 	}
 			
 	private static boolean areHeadTailConnected(ContiguousPixelPath path) {
-		return PointsListNghbUtilities.arePointsNghb(
+		return PointsListNeighborUtilities.arePointsNghb(
 			path.head(),
 			path.tail()
 		);

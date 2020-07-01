@@ -39,6 +39,8 @@ import org.anchoranalysis.image.outline.FindOutline;
 
 public class PointsFromObjMask {
 	
+	private PointsFromObjMask() {}
+	
 	/**
 	 * A list of points from the entire object-mask
 	 * 

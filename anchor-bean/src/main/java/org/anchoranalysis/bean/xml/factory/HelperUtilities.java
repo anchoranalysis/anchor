@@ -35,6 +35,8 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 class HelperUtilities {
 	
+	private HelperUtilities() {}
+	
 	public static <T> T createBeanFromXML( XMLBeanDeclaration declXML, String configurationKey, Object param ) {
 		HierarchicalConfiguration itemConfig = declXML.getConfiguration().configurationAt(configurationKey);
 		T bean = HelperUtilities.createBeanFromConfig(itemConfig, param);

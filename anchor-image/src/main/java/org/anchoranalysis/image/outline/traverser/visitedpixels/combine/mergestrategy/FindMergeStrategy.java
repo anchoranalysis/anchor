@@ -30,6 +30,7 @@ import java.util.Arrays;
 
 class FindMergeStrategy {
 
+	private FindMergeStrategy() {}
 
 	/** 
 	 * Determines how we merge paths together

@@ -36,6 +36,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ProbMapUtilities {
 	
+	private ProbMapUtilities() {}
+	
 	public static Point3d getUniformRandomPnt( RandomNumberGenerator re, ImageDimensions bndScene ) {
     	// Generate each point
     	Point3d pos = new Point3d();
@@ -44,8 +46,6 @@ public class ProbMapUtilities {
     	pos.setZ( re.nextDouble() * (bndScene.getZ()-1) );
     	return pos;
     }
-	
-
     
     public static boolean accptPosBinary( VoxelBox<ByteBuffer> vb, Point3d pnt ) {
     	return accptPosBinary(vb, (int) pnt.getX(), (int) pnt.getY(), (int) pnt.getZ());

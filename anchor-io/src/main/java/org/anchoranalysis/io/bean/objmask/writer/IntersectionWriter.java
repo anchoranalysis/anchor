@@ -36,6 +36,8 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 class IntersectionWriter {
 
+	private IntersectionWriter() {}
+	
 	// Writes only to the intersection of mask and stack (positioned at stackBBox)
 	public static void writeRGBMaskIntersection( ObjectMask mask, RGBColor color, RGBStack stack, BoundingBox stackBBox ) throws OperationFailedException {
 

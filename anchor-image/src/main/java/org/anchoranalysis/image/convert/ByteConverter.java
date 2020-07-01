@@ -37,6 +37,8 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 
 public class ByteConverter {
     
+	private ByteConverter() {}
+	
     public static int unsignedByteToInt( byte b ) {
 		return b & 0xff;
 	}

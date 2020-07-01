@@ -36,6 +36,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
  */
 public class PointClipper {
 	
+	private PointClipper() {}
+	
 	public static Point3i clip( Point3i pnt, ImageDimensions dim ) {
 		pnt = clipLow(pnt);
 		pnt = clipHigh(pnt, dim);

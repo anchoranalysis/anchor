@@ -78,7 +78,7 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 		return FunctionalUtilities.mapListWithProgress(
 			listInputObjects,
 			progressReporter,
-			input -> new AnnotationWithStrategy<S>(input, annotatorStrategy)
+			inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy)
 		);
 	}
 	

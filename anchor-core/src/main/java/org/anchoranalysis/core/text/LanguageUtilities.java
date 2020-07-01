@@ -28,6 +28,9 @@ package org.anchoranalysis.core.text;
 
 
 public class LanguageUtilities {
+	
+	private LanguageUtilities() {}
+	
 
 	/**
 	 * Returns something or somethings depending on the number

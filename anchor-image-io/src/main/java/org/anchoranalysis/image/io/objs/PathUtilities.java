@@ -28,6 +28,8 @@ package org.anchoranalysis.image.io.objs;
 
 public class PathUtilities {
 	
+	private PathUtilities() {}
+	
 	public static String pathForObj( int index ) {
 		return String.format("ObjMaskCollection/%08d", index);
 	}

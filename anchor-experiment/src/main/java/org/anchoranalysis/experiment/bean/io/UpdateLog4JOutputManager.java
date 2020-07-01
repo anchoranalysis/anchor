@@ -34,6 +34,8 @@ import org.apache.log4j.LogManager;
 
 class UpdateLog4JOutputManager {
 	
+	private UpdateLog4JOutputManager() {}
+	
 	@SuppressWarnings("unchecked")	
 	public static void updateLog4J( BoundOutputManagerRouteErrors outputManager ) {
 		// Bit of reflection trickery involved

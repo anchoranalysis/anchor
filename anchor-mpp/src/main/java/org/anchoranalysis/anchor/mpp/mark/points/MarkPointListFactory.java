@@ -35,6 +35,8 @@ import org.anchoranalysis.core.geometry.PointConverter;
 
 public class MarkPointListFactory {
 
+	private MarkPointListFactory() {}
+	
 	public static MarkPointList create( List<Point3d> pnts ) {
 		return create(pnts, -1);
 	}

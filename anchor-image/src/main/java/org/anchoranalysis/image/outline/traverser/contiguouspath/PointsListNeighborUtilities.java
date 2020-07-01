@@ -30,8 +30,10 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
-public class PointsListNghbUtilities {
+public class PointsListNeighborUtilities {
 
+	private PointsListNeighborUtilities() {}
+	
 	/** Are all points in a list neighbouring the next point in the list? */
 	public static boolean areAllPointsInBigNghb( List<Point3i> list ) {
 		for( int i=0; i<list.size(); i++) {

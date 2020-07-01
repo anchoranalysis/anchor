@@ -30,6 +30,8 @@ import java.util.Optional;
 
 class IdentifierUtilities {
 
+	private IdentifierUtilities() {}
+	
 	public static String identifierFromNameVersion( String name, Optional<String> version ) {
 		StringBuilder sb = new StringBuilder(name);
 		version.ifPresent( v->

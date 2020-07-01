@@ -49,6 +49,7 @@ import org.anchoranalysis.test.LoggingFixture;
 
 public class OutputManagerFixture {
 
+	private OutputManagerFixture() {}
 	
 	// These operations must occur before creating TempBoundOutputManager
 	private static void globalSetup() {

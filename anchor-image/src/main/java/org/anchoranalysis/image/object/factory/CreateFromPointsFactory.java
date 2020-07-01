@@ -38,6 +38,8 @@ import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
 public class CreateFromPointsFactory {
 	
+	private CreateFromPointsFactory() {}
+	
 	public static ObjectMask create( List<Point3i> pnts ) throws CreateException {
 		
 		BoundingBox bbox;

@@ -53,6 +53,8 @@ import loci.formats.IFormatReader;
 
 public class ConvertToFactory {
 
+	private ConvertToFactory() {}
+	
 	public static ConvertTo<?> create( IFormatReader reader, VoxelDataType targetDataType, int effectiveBitsPerPixel ) throws CreateException {
 
 		boolean interleaved = reader.isInterleaved();
