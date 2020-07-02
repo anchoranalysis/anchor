@@ -64,26 +64,23 @@ public abstract class FeatureInputDescriptor {
 	 * @return
 	 */
 	public abstract Class<?> inputClass();
-	
+
 	/**
-	 * Rules for preferring to keep one dscr over another.
+	 * Prefer to keep descriptor whose input-class is a sub-class rather than a super-class
 	 * 
 	 * @param dscr
-	 * @return the favoured descriptor of the two, or NULL if there is no favourite
+	 * @return the favoured descriptor of the two, or Optional.empty() if there is no favourite
 	 */
-	// TODO remove
-	public Optional<FeatureInputDescriptor> preferTo( FeatureInputDescriptor dscr ) {
-		return Optional.empty();
-	}
-	
-	// TODO remove
 	public Optional<FeatureInputDescriptor> preferToBidirectional( FeatureInputDescriptor dscr ) {
-		// If the first try returns empty(), we try to get a preference in the other direction
-		Optional<FeatureInputDescriptor> first = preferTo(dscr);
-		if(first.isPresent()) {
-			return first;
+		if (isCompatibleWith(dscr.inputClass())) {
+			return Optional.of(dscr);
 		}
-		return dscr.preferTo(this);
+		
+		if (dscr.isCompatibleWith(this.inputClass())) {
+			return Optional.of(this);
+		}
+		
+		return Optional.empty();
 	}
 
 	@Override

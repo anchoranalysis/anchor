@@ -68,11 +68,16 @@ public class CacheCreatorSimple implements CacheCreator {
 		);
 	}
 
-	/** Filters a feature-list to only include features compatible with a particular <code>paramsType</code> */
+	/** 
+	 * Filters a feature-list to only include features compatible with a particular <code>paramsType</code>
+	 * 
+	 * <p>A feature in the list is deemed compatible if its class is either equal to or a super-class of
+	 * {@link paramsType}.</p> 
+	 *  */
 	@SuppressWarnings("unchecked")
-	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
+	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> inputType) {
 		return namedFeatures.filterAndMap(
-			f -> f.inputDescriptor().isCompatibleWith(paramsType),
+			f -> f.inputDescriptor().isCompatibleWith(inputType),
 			f -> (Feature<T>) f
 		);
 	}

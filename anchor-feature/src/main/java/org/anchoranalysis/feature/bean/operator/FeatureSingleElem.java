@@ -48,7 +48,7 @@ public abstract class FeatureSingleElem<T extends FeatureInput, S extends Featur
 	// END BEAN PARAMETERS
 	
 	public FeatureSingleElem() {
-		// B
+		// Standard Bean Constructor
 	}
 
 	public FeatureSingleElem( Feature<S> feature  ) {

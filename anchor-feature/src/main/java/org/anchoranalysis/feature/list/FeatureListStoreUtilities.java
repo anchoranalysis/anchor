@@ -44,9 +44,9 @@ public class FeatureListStoreUtilities {
 		
 		for( String key : featureListProvider.keys()) {
 			try {
-				FeatureList<FeatureInput> fl = featureListProvider.getException(key);
-				out.addNoDuplicate(fl);
-				
+				out.addNoDuplicate(
+					featureListProvider.getException(key)
+				);
 			} catch (NamedProviderGetException e) {
 				assert false;
 			}

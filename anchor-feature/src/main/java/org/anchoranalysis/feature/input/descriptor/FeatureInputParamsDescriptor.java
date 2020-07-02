@@ -29,7 +29,7 @@ import org.anchoranalysis.feature.input.FeatureInputParams;
  */
 
 /**
- * For features that are compatible with all inut-types...... so long as they have key-value-params.
+ * For features that are compatible with all input-types...... so long as they have key-value-params.
  * @author Owen Feehan
  *
  */
@@ -37,9 +37,7 @@ public class FeatureInputParamsDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputParamsDescriptor instance = new FeatureInputParamsDescriptor();
 	
-	private FeatureInputParamsDescriptor() {
-		
-	}
+	private FeatureInputParamsDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {

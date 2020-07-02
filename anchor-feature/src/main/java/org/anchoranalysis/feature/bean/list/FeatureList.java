@@ -181,9 +181,10 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		return new FeatureList<>(this.list.stream());
 	}
 	
-	public boolean add(Feature<T> f) {
+	@SuppressWarnings("unchecked")
+	public boolean add(Feature<? extends T> f) {
 		assert(f!=null);
-		return list.add(f);
+		return list.add( (Feature<T>) f);
 	}
 
 	public boolean isEmpty() {
@@ -219,12 +220,15 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	public void clear() {
 		list.clear();
 	}
+		
+	public void addAll(FeatureList<? extends T> other) {
+		for( Feature<? extends T> feature : other) {
+			add(feature);
+		}
+	}
 	
 	// START: methods designed to be called only from the factory or internally
-	
-	boolean addAll(FeatureList<T> other) {
-		return list.addAll( other.asList() );
-	}
+
 	
 	// END: methods designed to be called only from the factory or internally
 }

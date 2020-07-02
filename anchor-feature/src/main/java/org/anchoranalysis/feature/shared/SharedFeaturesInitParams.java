@@ -65,7 +65,10 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		
 		// We populate our shared features from our storeFeatureList
 		sharedFeatureSet = new SharedFeatureMulti();
-		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(storeFeatureList, sharedFeatureSet);
+		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(
+			storeFeatureList,
+			sharedFeatureSet
+		);
 	}
 	
 	public static SharedFeaturesInitParams create( SharedObjects so ) {

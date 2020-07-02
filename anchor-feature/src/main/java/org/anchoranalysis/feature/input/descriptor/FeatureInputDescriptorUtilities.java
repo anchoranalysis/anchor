@@ -107,7 +107,9 @@ public class FeatureInputDescriptorUtilities {
 					Optional<FeatureInputDescriptor> preferred = paramType.preferToBidirectional(chosenParamType);
 					if (!preferred.isPresent()) {
 						// We don't know which parameter to prefer
-						throw new AnchorFriendlyRuntimeException("All features in the list must have the same paramType, or a simple type, or a preference between conflicting type");
+						throw new AnchorFriendlyRuntimeException(
+							"All features in the list must have the same paramType, or a simple type, or a preference between conflicting type"
+						);
 					}
 					chosenParamType = preferred.get();
 				}

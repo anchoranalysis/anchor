@@ -32,9 +32,7 @@ public class FeatureInputCfgDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputCfgDescriptor instance = new FeatureInputCfgDescriptor();
 	
-	private FeatureInputCfgDescriptor() {
-		
-	}
+	private FeatureInputCfgDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
