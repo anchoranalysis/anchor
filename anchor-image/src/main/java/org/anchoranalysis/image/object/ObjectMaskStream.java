@@ -108,6 +108,29 @@ public final class ObjectMaskStream {
 		return out;
 	}
 		
+
+	/**
+	 * Creates a new {@link List} after mapping each item to another (optional) type
+	 * 
+	 * <p>Items are only included if the output type is not-empty()</p>.
+	 * 
+	 * <p>This is an IMMUTABLE operation.</p>
+	 *
+	 * @param <T> destination type for the mapping
+	 * @param <E> exception that can be thrown during mapping
+	 * @param mapFunc performs mapping
+	 * @return a newly created list contained the mapped objects (which aren't Optional.empty())
+	 * @throws E if an exception occurs during mapping
+	 */
+	public <T,E extends Exception> List<T> mapToListOptional(FunctionWithException<ObjectMask,Optional<T>,E> mapFunc) throws E {
+		List<T> out = new ArrayList<T>();
+		for( ObjectMask obj : delegate) {
+			Optional<T> result = mapFunc.apply(obj);
+			result.ifPresent(out::add);
+		}
+		return out;
+	}
+	
 	
 	/**
 	 * Creates a new {@link ObjectCollection} after mapping each item to several others

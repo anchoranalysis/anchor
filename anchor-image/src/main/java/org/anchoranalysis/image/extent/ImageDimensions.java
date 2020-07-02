@@ -140,6 +140,10 @@ public final class ImageDimensions implements Serializable {
 	public final int offset(Point3i pnt) {
 		return extent.offset(pnt);
 	}
+	
+	public final int offsetSlice(Point3i pnt) {
+		return extent.offsetSlice(pnt);
+	}
 
 	public ImageResolution getRes() {
 		return res;

@@ -58,9 +58,7 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
  */
 public class FindOutline {
 	
-	private FindOutline() {
-		
-	}
+	private FindOutline() {}
 	
 	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) throws CreateException {
 		// We create a new image for output

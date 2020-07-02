@@ -135,7 +135,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		
 		// X direction
 		for (int i=0; i<extraLength; i++) {
-			midpoint.decrX();
+			midpoint.decrementX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
 		midpoint.incrementX(extraLength);
@@ -144,21 +144,21 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 			midpoint.incrementX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.decrX(extraLength);
+		midpoint.decrementX(extraLength);
 		
 		
 		// Y direction
 		for (int i=0; i<extraLength; i++) {
-			midpoint.decrY();
+			midpoint.decrementY();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
 		midpoint.incrementY(extraLength);
 		
 		for (int i=0; i<extraLength; i++) {
-			midpoint.decrY();
+			midpoint.decrementY();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.decrY( extraLength );
+		midpoint.decrementY( extraLength );
 		
 	}
 	

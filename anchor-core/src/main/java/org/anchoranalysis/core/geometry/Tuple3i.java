@@ -154,27 +154,27 @@ public abstract class Tuple3i implements ReadableTuple3i {
 		this.z += val;
 	}
 	
-	public final void decrX() {
+	public final void decrementX() {
 		this.x--;
 	}
 	
-	public final void decrY() {
+	public final void decrementY() {
 		this.y--;
 	}
 	
-	public final void decrZ() {
+	public final void decrementZ() {
 		this.z--;
 	}
 	
-	public final void decrX(int val) {
+	public final void decrementX(int val) {
 		this.x -= val;
 	}
 	
-	public final void decrY(int val) {
+	public final void decrementY(int val) {
 		this.y -= val;
 	}
 	
-	public final void decrZ(int val) {
+	public final void decrementZ(int val) {
 		this.z -= val;
 	}
 	

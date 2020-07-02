@@ -59,16 +59,16 @@ final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 	}
 	
 	@Override
-	public boolean processPoint(int xChange, int yChange) {
+	public void processPoint(int xChange, int yChange) {
 		
 		int x1 = pnt.getX() + xChange;
 		int y1 = pnt.getY() + yChange;
 		
 		if (x1 < 0 || x1 >=extent.getX() || y1 < 0 || y1 >= extent.getY()) {
-			return false;
+			return;
 		}
 		
-		return delegate.processPoint(xChange, yChange, x1, y1);
+		delegate.processPoint(xChange, yChange, x1, y1);
 	}
 
 	@Override

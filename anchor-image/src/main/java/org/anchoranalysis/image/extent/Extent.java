@@ -296,14 +296,16 @@ public final class Extent implements Serializable {
 	}
 	
 	public Extent scaleXYBy( ScaleFactor sf ) {
-		return immutablePointOperation( p-> {
-			p.setX(
-				ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
-			);
-			p.setY(
-				ScaleFactorUtilities.scaleQuantity(sf.getY(), getY())
-			);			
-		});
+		return new Extent(
+			immutablePointOperation( p-> {
+				p.setX(
+					ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
+				);
+				p.setY(
+					ScaleFactorUtilities.scaleQuantity(sf.getY(), getY())
+				);			
+			})
+		);
 	}
 	
 	public Extent subtract(ReadableTuple3i toSubtract) {
@@ -313,14 +315,16 @@ public final class Extent implements Serializable {
 	}
 	
 	public Extent divide( int factor ) {
-		return immutablePointOperation( p->p.divideBy(factor) );
+		return new Extent(
+			immutablePointOperation( p->p.divideBy(factor) )
+		);
 	}
 	
 	/**
 	 * Creates a new Extent with each dimension decreased by one
 	 * @return the new extent
 	 */
-	public Extent createMinusOne() {
+	public Point3i createMinusOne() {
 		return immutablePointOperation( p->p.subtract(1) );
 	}
 	
@@ -343,9 +347,9 @@ public final class Extent implements Serializable {
 		);
 	}
 	
-	private Extent immutablePointOperation( Consumer<Point3i> pointOperation ) {
+	private Point3i immutablePointOperation( Consumer<Point3i> pointOperation ) {
 		Point3i lenDup = new Point3i(len);
 		pointOperation.accept(lenDup);	
-		return new Extent(lenDup);
+		return lenDup;
 	}
 }

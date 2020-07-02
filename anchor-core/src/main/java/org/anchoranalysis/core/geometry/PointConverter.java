@@ -37,71 +37,71 @@ public class PointConverter {
 	
 	// START singular points
 	
-	public static Point2i intFromDouble(Point2d p) {
-		return new Point2i( (int) p.getX(), (int) p.getY() );
+	public static Point2i intFromDouble(Point2d point) {
+		return new Point2i( (int) point.getX(), (int) point.getY() );
 	}
 	
-	public static Point3i intFromDouble(Point3d p) {
+	public static Point3i intFromDouble(Point3d point) {
 		return new Point3i(
-			(int) p.getX(),
-			(int) p.getY(),
-			(int) p.getZ()
+			(int) point.getX(),
+			(int) point.getY(),
+			(int) point.getZ()
 		);
 	}
 	
-	public static Point3i intFromDoubleCeil(Point3d p) {
+	public static Point3i intFromDoubleCeil(Point3d point) {
 		return new Point3i(
-			(int) Math.ceil(p.getX()),
-			(int) Math.ceil(p.getY()),
-			(int) Math.ceil(p.getZ())
+			(int) Math.ceil(point.getX()),
+			(int) Math.ceil(point.getY()),
+			(int) Math.ceil(point.getZ())
 		);
 	}
 	
-	public static Point3i convertTo3d(Point2i p) {
-		return new Point3i(p.getX(), p.getY(), 0);
+	public static Point3i convertTo3d(Point2i point) {
+		return new Point3i(point.getX(), point.getY(), 0);
 	}
 	
-	public static Point2d doubleFromFloat(Point2f p) {
-		return new Point2d( p.getX(), p.getY() );
+	public static Point2d doubleFromFloat(Point2f point) {
+		return new Point2d( point.getX(), point.getY() );
 	}
 	
-	public static Point3d doubleFromFloat(Point3f p) {
-		return new Point3d( p.getX(), p.getY(),	p.getZ() );
+	public static Point3d doubleFromFloat(Point3f point) {
+		return new Point3d( point.getX(), point.getY(),	point.getZ() );
 	}
 	
-	public static Point3d doubleFromInt(Point2i p) {
-		return new Point3d( (double) p.getX(), (double) p.getY(), 0);
+	public static Point3d doubleFromInt(Point2i point) {
+		return new Point3d( (double) point.getX(), (double) point.getY(), 0);
 	}
 	
-	public static Point3d doubleFromInt(ReadableTuple3i p) {
-		return new Point3d( (double) p.getX(), (double) p.getY(), (double) p.getZ() );
+	public static Point3d doubleFromInt(ReadableTuple3i point) {
+		return new Point3d( (double) point.getX(), (double) point.getY(), (double) point.getZ() );
 	}
 	
-	public static Point3f floatFromInt(Point2i p) {
-		return new Point3f( (float) p.getX(), (float) p.getY(), 0);
+	public static Point3f floatFromInt(Point2i point) {
+		return new Point3f( (float) point.getX(), (float) point.getY(), 0);
 	}
 	
-	public static Point3f floatFromDouble(Point3d p) {
-		return new Point3f( (float) p.getX(), (float) p.getY(), (float) p.getZ() );
+	public static Point3f floatFromDouble(Point3d point) {
+		return new Point3f( (float) point.getX(), (float) point.getY(), (float) point.getZ() );
 	}
 
 	
-	public static Point3f floatFromInt(ReadableTuple3i p) {
-		return new Point3f( (float) p.getX(), (float) p.getY(), (float) p.getZ());
+	public static Point3f floatFromInt(ReadableTuple3i point) {
+		return new Point3f( (float) point.getX(), (float) point.getY(), (float) point.getZ());
 	}
 	
-	public static Point3i intFromFloat(Point3f p, boolean round) {
+	public static Point3i intFromFloat(Point3f point, boolean round) {
 		if (round) {
 			return new Point3i(
-				roundInt(p.getX()),
-				roundInt(p.getY()),
-				roundInt(p.getZ())
+				roundInt(point.getX()),
+				roundInt(point.getY()),
+				roundInt(point.getZ())
 			);
 		} else {
 			return new Point3i(
-				ceilInt(p.getX()),
-				ceilInt(p.getY()),
-				ceilInt(p.getZ())
+				ceilInt(point.getX()),
+				ceilInt(point.getY()),
+				ceilInt(point.getZ())
 			);
 			
 		}
@@ -144,18 +144,18 @@ public class PointConverter {
 	
 	// END lists of points
 		
-	private static <S,T> List<S> convert( List<T> points, Function<T,S> funcMap ) {
+	private static <S,T> List<S> convert( List<T> points, Function<T,S> mapFunction ) {
 		return points
 				.stream()
-				.map(funcMap)
+				.map(mapFunction)
 				.collect( Collectors.toList() );
 	}
 			
-	private static int roundInt( double d ) {
-		return (int) Math.round(d);
+	private static int roundInt( double value ) {
+		return (int) Math.round(value);
 	}
 	
-	private static int ceilInt( double d ) {
-		return (int) Math.ceil(d);
+	private static int ceilInt( double value ) {
+		return (int) Math.ceil(value);
 	}
 }

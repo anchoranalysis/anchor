@@ -29,6 +29,8 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
@@ -51,6 +53,14 @@ public class MarkLineSegment extends Mark {
 	
 	private transient DistCalcToLine distCalcToLine = new DistCalcToLine();
 	
+	public MarkLineSegment() {
+		// Standard bean constructor
+	}
+	
+	public MarkLineSegment(Point3i startPoint, Point3i endPoint) {
+		this();
+		setPoints(startPoint, endPoint);
+	}
 	
 	// This isn't very efficient for lines, as we can analytically determine
 	//   which pixels are inside
@@ -125,8 +135,15 @@ public class MarkLineSegment extends Mark {
 		pnt.scale( 0.5 );
 		return pnt;
 	}
+	
+	public void setPoints(Point3i startPoint, Point3i endPoint) {
+		setPoints(
+			PointConverter.doubleFromInt(startPoint),
+			PointConverter.doubleFromInt(endPoint)
+		);
+	}
 
-	public void setPoints( Point3d startPoint, Point3d endPoint ) {
+	public void setPoints(Point3d startPoint, Point3d endPoint) {
 		distCalcToLine.setPoints(startPoint, endPoint);
 		clearCacheID();
 	}

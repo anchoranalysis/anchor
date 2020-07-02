@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.cfg;
 
+import java.awt.Color;
+
 /*
  * #%L
  * anchor-mpp
@@ -50,7 +52,6 @@ public class ColoredCfg implements Iterable<Mark> {
 	
 	public ColoredCfg(Cfg cfg, ColorList colorList) {
 		super();
-		assert(cfg!=null);
 		this.cfg = cfg;
 		this.colorList = colorList;
 	}
@@ -61,16 +62,12 @@ public class ColoredCfg implements Iterable<Mark> {
 	public ColoredCfg(Cfg cfg, ColorIndex colorIndex, IDGetter<Mark> colorIDGetter ) {
 		super();
 		this.cfg = cfg;
-		assert(cfg!=null);
-		assert( colorIndex!= null );
 		
 		this.colorList = new ColorList();
 		
-		if (cfg!=null) {
-			for( int i=0; i<cfg.size(); i++) {
-				Mark m = cfg.get(i); 
-				this.colorList.add( colorIndex.get( colorIDGetter.getID(m, i)) );
-			}
+		for( int i=0; i<cfg.size(); i++) {
+			Mark m = cfg.get(i); 
+			this.colorList.add( colorIndex.get( colorIDGetter.getID(m, i)) );
 		}
 	}
 	
@@ -87,20 +84,28 @@ public class ColoredCfg implements Iterable<Mark> {
 	public ColorList getColorList() {
 		return colorList;
 	}
-	
-	public void addChangeID( Mark m, RGBColor color ) {
-		cfg.add(m);
-		m.setId( colorList.addWithIndex( color ));
+
+	public void add(Mark mark, Color color) {
+		add(mark, new RGBColor(color));
 	}
 	
-	public void add( Mark m, RGBColor color ) {
-		cfg.add(m);
+	public void addChangeID(Mark mark, Color color) {
+		addChangeID(mark, new RGBColor(color));
+	}
+	
+	public void addChangeID(Mark mark, RGBColor color) {
+		cfg.add(mark);
+		mark.setId( colorList.addWithIndex( color ));
+	}
+	
+	public void add(Mark mark, RGBColor color) {
+		cfg.add(mark);
 		colorList.add( color );
 	}
 	
-	public void addAll( Cfg cfg, RGBColor color ) {
-		for( Mark m : cfg ) {
-			add( m, color );
+	public void addAll(Cfg cfg, RGBColor color) {
+		for(Mark mark : cfg) {
+			add(mark, color);
 		}
 	}
 	
@@ -138,7 +143,6 @@ public class ColoredCfg implements Iterable<Mark> {
 	public ColoredCfg createMerged( ColoredCfg toMerge ) {
 		
 		ColoredCfg mergedNew = shallowCopy();
-		//HashMap<Integer,Mark> mergedHash = cfg1.createIdHashMap();
 		
 		Set<Mark> set = mergedNew.getCfg().createSet();
 		
@@ -153,14 +157,10 @@ public class ColoredCfg implements Iterable<Mark> {
 		return mergedNew;
 	}
 	
-	
-	
-	
 	// Calculates mask
 	public ColoredCfg subsetWhereBBoxIntersects( ImageDimensions bndScene, int regionID, List<BoundingBox> intersectList ) {
 		
 		ColoredCfg intersectCfg = new ColoredCfg();
-		
 		for (int i=0; i<getCfg().size(); i++) {
 			Mark mark = getCfg().get(i);
 			
@@ -168,9 +168,6 @@ public class ColoredCfg implements Iterable<Mark> {
 				intersectCfg.add(mark.duplicate(), getColorList().get(i));
 			}
 		}
-		
-		//log.info( String.format("intersect size size=%d", intersectCfg.size() ));
-		
 		return intersectCfg;
 	}
 
@@ -178,7 +175,4 @@ public class ColoredCfg implements Iterable<Mark> {
 		colorList.remove(index);
 		cfg.remove(index);
 	}
-
-	
-
 }

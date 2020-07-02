@@ -95,7 +95,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 	}
 
 	@Override
-	public boolean processPoint(int xChange, int yChange) {
+	public void processPoint(int xChange, int yChange) {
 
 		int x1 = pnt.getX() + xChange;
 		int y1 = pnt.getY() + yChange;
@@ -104,28 +104,28 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		int relY1 = relativeToCrnr.getY() + yChange;
 		
 		if (relX1<0) {
-			return false;
+			return;
 		}
 		
 		if (relX1>=extent.getX()) {
-			return false;
+			return;
 		}
 
 		if (relY1<0) {
-			return false;
+			return;
 		}
 		
 		if (relY1>=extent.getY()) {
-			return false;
+			return;
 		}
 
 		int offset = maskOffsetXYAtPnt + xChange + (yChange*extent.getX());
 		
 		if (bbOM.get(offset)==maskOffVal) {
-			return false;
+			return;
 		}
 		
-		return delegate.processPoint(xChange, yChange,x1,y1,offset);
+		delegate.processPoint(xChange, yChange,x1,y1,offset);
 	}
 	
 	@Override
