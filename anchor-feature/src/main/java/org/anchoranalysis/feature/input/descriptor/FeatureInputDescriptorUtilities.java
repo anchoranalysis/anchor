@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.input.descriptor;
  */
 
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,12 +67,9 @@ public class FeatureInputDescriptorUtilities {
 	
 	
 	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) {
-		
-		List<Feature<T>> list = new ArrayList<>();
-		list.add( item1 );
-		list.add( item2 );
-		list.add( item3 );
-		return paramTypeForList( list );
+		return paramTypeForList(
+			Arrays.asList(item1,item2,item3)
+		);
 	}
 	
 	

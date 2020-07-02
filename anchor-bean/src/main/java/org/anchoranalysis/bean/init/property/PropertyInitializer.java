@@ -2,6 +2,7 @@ package org.anchoranalysis.bean.init.property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /*-
  * #%L
@@ -180,15 +181,15 @@ public class PropertyInitializer<P> {
 		Class<?> propertyClassToMatch,
 		Object paramToInitWith
 	) throws InitException {
-		PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
-		if (pd!=null) {
-			pd.doInitFor( propertyValue, paramToInitWith, parent, logger );
+		Optional<PropertyDefiner<?>> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
+		if (pd.isPresent()) {
+			pd.get().doInitFor( propertyValue, paramToInitWith, parent, logger );
 			return true;
 		}
 		return false;
 	}
 
-	private PropertyDefiner<?> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
+	private Optional<PropertyDefiner<?>> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
 		
 		if (propertyValue instanceof InitializableBean ) {
 			
@@ -196,13 +197,13 @@ public class PropertyInitializer<P> {
 			PropertyDefiner<?> pd = initBean.getPropertyDefiner();
 			
 			if (pd.accepts(paramType)) {
-				return pd;
+				return Optional.of(pd);
 			} else {
-				return null;
+				return Optional.empty();
 			}
 			
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
