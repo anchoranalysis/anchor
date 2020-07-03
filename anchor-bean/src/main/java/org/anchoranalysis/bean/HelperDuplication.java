@@ -32,6 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -50,17 +51,15 @@ class HelperDuplication {
 			
 			for(Field field  : bean.getOrCreateBeanFields()) {
 	
-		    	Object propertyOld = field.get(bean);
-		    	Object propertyNew = duplicatePropertyValue(
-		    		propertyOld,
+		    	Optional<Object> propertyNew = duplicatePropertyValue(
+		    		Optional.ofNullable( field.get(bean) ),
 		    		field.getName(),
 		    		field.isAnnotationPresent(OptionalBean.class),
 		    		beanOut
 		    	);
-		    	field.set(
-		    		beanOut,
-		    		propertyNew
-		    	);
+		    	if (propertyNew.isPresent()) {
+		    		field.set(beanOut, propertyNew.get());
+		    	}
 			}
 
 			// We also copy the localization information for the new bean
@@ -73,22 +72,39 @@ class HelperDuplication {
 	}
 
 	private static Object duplicateCollection( Collection<?> collection, String propertyName, AnchorBean<?> parentBean ) {
-		 return collection.stream().map( obj->
-		 	duplicatePropertyValue(obj, propertyName, false, parentBean)
-		 ).collect( Collectors.toList() );
+		 Stream<Optional<Object>> stream = collection.stream().map( obj ->
+		 	duplicatePropertyValue(
+		 		Optional.ofNullable(obj),
+		 		propertyName,
+		 		false,
+		 		parentBean
+		 	)
+		 );
+		 return stream.filter(Optional::isPresent)
+			.map(Optional::get)
+			.collect( Collectors.toList() );
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private static Optional<Object> duplicatePropertyValue( Object propertyValue, String propertyName, boolean optional, AnchorBean<?> parentBean ) {
+	private static Optional<Object> duplicatePropertyValue( Optional<Object> propertyValue, String propertyName, boolean optional, AnchorBean<?> parentBean ) {
 
-		if (propertyValue==null) {
+		if (!propertyValue.isPresent()) {
 			if (optional) {
 				return Optional.empty();
 			} else {
-				throw new BeanDuplicateException( String.format("Property '%s' of '%s' is null, but non-optional",propertyName,parentBean.getBeanName()) );
+				throw new BeanDuplicateException(
+					String.format("Property '%s' of '%s' is null, but non-optional",
+						propertyName,
+						parentBean.getBeanName()
+					)
+				);
 			}
 		}
+		
+		return duplicatePropertyValue(propertyValue.get(), propertyName, optional, parentBean);
+	}
 
+	@SuppressWarnings("rawtypes")
+	private static Optional<Object> duplicatePropertyValue( Object propertyValue, String propertyName, boolean optional, AnchorBean<?> parentBean ) {
 		if (propertyValue instanceof StringSet) {
 			StringSet propertyValueCast = (StringSet) propertyValue;
       	 	return Optional.of(
@@ -97,14 +113,14 @@ class HelperDuplication {
       	 	
 		} else if (propertyValue instanceof AnchorBean) {
 			// Our first priority is to duplicate a bean if we can, as it is possible for a Bean to be a Collection as well, and it's better
-       	//  to use the Bean's normal duplication method
+			//  to use the Bean's normal duplication method
 			AnchorBean propertyValueCast = (AnchorBean) propertyValue;
-       	return Optional.of(
-       		propertyValueCast.duplicateBean()
-       	);
+	       	return Optional.of(
+	       		propertyValueCast.duplicateBean()
+	       	);
        	
         } else if (propertyValue instanceof Collection) {
-       	// If it's a collection, then we do it item by item in the collection, and then exit
+        	// If it's a collection, then we do it item by item in the collection, and then exit
 			return Optional.of(
 				duplicateCollection(
 					(Collection<?>) propertyValue,
@@ -114,12 +130,12 @@ class HelperDuplication {
 			);
 			 
         } else if (isImmutableType(propertyValue.getClass())) {
-       	 // Any supported immutable type can be returned without duplication
-       	 return Optional.of(propertyValue);
+	       	 // Any supported immutable type can be returned without duplication
+	       	 return Optional.of(propertyValue);
        	 
         } else {
-       	 throw new BeanDuplicateException( String.format("Unsupported property type: %s", propertyValue.getClass().toString()) );
-        }
+        	 throw new BeanDuplicateException( String.format("Unsupported property type: %s", propertyValue.getClass().toString()) );
+        }		
 	}
 	
 	/** Is a particular class what Java considered an immutable type? */

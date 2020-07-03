@@ -182,9 +182,8 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	}
 	
 	@SuppressWarnings("unchecked")
-	public boolean add(Feature<? extends T> f) {
-		assert(f!=null);
-		return list.add( (Feature<T>) f);
+	public boolean add(Feature<? extends T> feature) {
+		return list.add( (Feature<T>) feature);
 	}
 
 	public boolean isEmpty() {
