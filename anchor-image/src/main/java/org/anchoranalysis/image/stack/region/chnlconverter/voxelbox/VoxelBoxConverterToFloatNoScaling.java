@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 
 // Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
 // So values larger than 255 are clipped
-public final class VoxelBoxConverterToFloatNoScaling extends VoxelBoxConverter<FloatBuffer> {
+public final class VoxelBoxConverterToFloatNoScaling implements VoxelBoxConverter<FloatBuffer> {
 
 	@Override
 	public VoxelBuffer<FloatBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {

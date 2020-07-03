@@ -154,7 +154,7 @@ public class HistogramFactory {
 	}
 	
 	private static boolean isDataTypeSupported(VoxelDataType dataType) {
-		return dataType.equals(VoxelDataTypeUnsignedByte.instance) || dataType.equals(VoxelDataTypeUnsignedShort.instance); 
+		return dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE) || dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE); 
 	}
 	
 	private static Histogram createWithMask( VoxelBox<?> inputBuffer, ObjectMask objMask ) {

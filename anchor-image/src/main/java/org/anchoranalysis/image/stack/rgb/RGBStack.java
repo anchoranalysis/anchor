@@ -122,7 +122,7 @@ public class RGBStack {
 	
 	// Only supports 8-bit
 	public void writeRGBPoint( Point3i point, RGBColor color) {
-		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance) );
+		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
 		writePoint(point, chnls.getChnl(0), (byte) color.getRed() );
 		writePoint(point, chnls.getChnl(1), (byte) color.getGreen() );
 		writePoint(point, chnls.getChnl(2), (byte) color.getBlue() );
@@ -134,7 +134,7 @@ public class RGBStack {
 		assert( pntGlobal.getZ()>= 0);
 		
 		assert( chnls.getNumChnl()==3 );
-		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance) );
+		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		

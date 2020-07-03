@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class CollectionGenerator<T> extends Generator implements IterableGenerator<Collection<T>> {
+public class CollectionGenerator<T> implements Generator, IterableGenerator<Collection<T>> {
 
 	private Collection<T> collection;
 	private IterableGenerator<T> generator;

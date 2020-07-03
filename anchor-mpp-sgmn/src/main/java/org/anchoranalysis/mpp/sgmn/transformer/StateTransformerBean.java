@@ -27,7 +27,6 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Transforms one type into another
@@ -39,6 +38,4 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public abstract class StateTransformerBean<S,T> extends AnchorBean<StateTransformerBean<S,T>> implements StateTransformer<S, T> {
 
-	@Override
-	public abstract T transform( S in, TransformationContext context ) throws OperationFailedException;
 }

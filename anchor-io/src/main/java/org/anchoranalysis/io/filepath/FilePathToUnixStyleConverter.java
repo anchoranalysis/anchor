@@ -29,12 +29,16 @@ package org.anchoranalysis.io.filepath;
 import java.nio.file.Path;
 import org.apache.commons.io.FilenameUtils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Conversion to Unix-style separators
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FilePathToUnixStyleConverter {
 
 	/**

@@ -38,32 +38,40 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> desgination-type
+ */
+public interface VoxelBoxConverter<T extends Buffer> {
 
-	public VoxelBox<DestinationType> convertFrom( VoxelBoxWrapper vbIn, VoxelBoxFactoryTypeBound<DestinationType> factory ) {
-		VoxelBox<DestinationType> vbOut = factory.create( vbIn.any().extent() );
+	default VoxelBox<T> convertFrom( VoxelBoxWrapper vbIn, VoxelBoxFactoryTypeBound<T> factory ) {
+		VoxelBox<T> vbOut = factory.create( vbIn.any().extent() );
 		convertFrom( vbIn, vbOut );
 		return vbOut;
 	}
 	
-	public final void convertFrom( VoxelBoxWrapper vbIn, VoxelBox<DestinationType> vbOut ) {
+	default void convertFrom( VoxelBoxWrapper vbIn, VoxelBox<T> vbOut ) {
 		// Otherwise, depending on the input type we spawn in different directions
-		if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
+		VoxelDataType inType = vbIn.getVoxelDataType();
+		if (inType.equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 			convertFromByte(vbIn.asByte(), vbOut);
-		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeFloat.instance )) {
+		} else if (inType.equals( VoxelDataTypeFloat.INSTANCE )) {
 			convertFromFloat(vbIn.asFloat(), vbOut);
-		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance )) {
+		} else if (inType.equals( VoxelDataTypeUnsignedShort.INSTANCE )) {
 			convertFromShort(vbIn.asShort(), vbOut);
-		} else if (vbIn.getVoxelDataType().equals( VoxelDataTypeUnsignedInt.instance )) {
+		} else if (inType.equals( VoxelDataTypeUnsignedInt.INSTANCE )) {
 			convertFromInt(vbIn.asInt(), vbOut);
 		}
 	}
 	
-	public final void convertFromByte(VoxelBox<ByteBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	default void convertFromByte(VoxelBox<ByteBuffer> vbIn, VoxelBox<T> vbOut) {
 		
 		for (int z=0; z<vbIn.extent().getZ(); z++) {
 			VoxelBuffer<ByteBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -71,7 +79,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public final void convertFromFloat(VoxelBox<FloatBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	default void convertFromFloat(VoxelBox<FloatBuffer> vbIn, VoxelBox<T> vbOut) {
 		
 		for (int z=0; z<vbIn.extent().getZ(); z++) {
 			VoxelBuffer<FloatBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -79,7 +87,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public final void convertFromInt(VoxelBox<IntBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	default void convertFromInt(VoxelBox<IntBuffer> vbIn, VoxelBox<T> vbOut) {
 		
 		for (int z=0; z<vbIn.extent().getZ(); z++) {
 			VoxelBuffer<IntBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -87,7 +95,7 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public final void convertFromShort(VoxelBox<ShortBuffer> vbIn, VoxelBox<DestinationType> vbOut) {
+	default void convertFromShort(VoxelBox<ShortBuffer> vbIn, VoxelBox<T> vbOut) {
 		
 		for (int z=0; z<vbIn.extent().getZ(); z++) {
 			VoxelBuffer<ShortBuffer> bufferIn = vbIn.getPixelsForPlane(z);
@@ -95,12 +103,11 @@ public abstract class VoxelBoxConverter<DestinationType extends Buffer> {
 		}
 	}
 	
-	public abstract VoxelBuffer<DestinationType> convertFromByte(VoxelBuffer<ByteBuffer> in);
+	VoxelBuffer<T> convertFromByte(VoxelBuffer<ByteBuffer> in);
 	
-	public abstract VoxelBuffer<DestinationType> convertFromFloat(VoxelBuffer<FloatBuffer> in);
+	VoxelBuffer<T> convertFromFloat(VoxelBuffer<FloatBuffer> in);
 	
-	public abstract VoxelBuffer<DestinationType> convertFromInt(VoxelBuffer<IntBuffer> in);
+	VoxelBuffer<T> convertFromInt(VoxelBuffer<IntBuffer> in);
 	
-	public abstract VoxelBuffer<DestinationType> convertFromShort(VoxelBuffer<ShortBuffer> in);
-
+	VoxelBuffer<T> convertFromShort(VoxelBuffer<ShortBuffer> in);
 }

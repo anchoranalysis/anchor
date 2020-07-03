@@ -44,7 +44,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 		this.bigNghb = bigNghb;
 		
 		if (useZ && bigNghb) {
-			throw new RuntimeException(
+			throw new CreateException(
 				"useZ and bigNghb cannot be simultaneously true, as this mode is not currently supported"
 			);
 		}

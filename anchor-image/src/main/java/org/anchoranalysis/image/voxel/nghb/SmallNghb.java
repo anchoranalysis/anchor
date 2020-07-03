@@ -31,7 +31,7 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
 // 4 or 6 connectivity
 // Relies on IProcessRelPoint to do bound checking
-public class SmallNghb extends Nghb {
+public class SmallNghb implements Nghb {
 
 	@Override
 	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> process) {

@@ -32,6 +32,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Two-way factory.
  * 
@@ -41,6 +44,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OverlayCollectionObjectFactory {
 	
 	public static OverlayCollection createWithoutColor( ObjectCollection objs, IDGetter<ObjectMask> idGetter ) {

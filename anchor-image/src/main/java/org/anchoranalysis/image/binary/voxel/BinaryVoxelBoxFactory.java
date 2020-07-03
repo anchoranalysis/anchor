@@ -57,7 +57,7 @@ public class BinaryVoxelBoxFactory {
 	 */
 	@SuppressWarnings("unchecked")
 	public BinaryVoxelBox<ByteBuffer> create( Extent extent ) throws CreateException  {
-		return (BinaryVoxelBox<ByteBuffer>) create(extent, VoxelDataTypeUnsignedByte.instance, BinaryValues.getDefault() );
+		return (BinaryVoxelBox<ByteBuffer>) create(extent, VoxelDataTypeUnsignedByte.INSTANCE, BinaryValues.getDefault() );
 	}
 	
 	
@@ -71,9 +71,9 @@ public class BinaryVoxelBoxFactory {
 	 * @throws CreateException
 	 */
 	public BinaryVoxelBox<?> create( Extent extent, VoxelDataType dataType, BinaryValues binaryValues ) throws CreateException  {
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return new BinaryVoxelBoxByte( VoxelBoxFactory.getByte().create(extent), binaryValues );
-		} else if (dataType.equals(VoxelDataTypeUnsignedInt.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
 			return new BinaryVoxelBoxInt( VoxelBoxFactory.getInt().create(extent), binaryValues );
 		} else {
 			throw new CreateException("Unsupported voxel-data-type, only unsigned byte and int are supported");

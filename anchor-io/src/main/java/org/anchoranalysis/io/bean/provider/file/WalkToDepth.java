@@ -72,6 +72,7 @@ class WalkToDepth extends DirectoryWalker<File> {
 		// NOTHING TO DO
 	}
 
+	@Override
 	protected boolean handleDirectory(File directory, int depth, Collection<File> results) {
 		
 		if (depth==1) {

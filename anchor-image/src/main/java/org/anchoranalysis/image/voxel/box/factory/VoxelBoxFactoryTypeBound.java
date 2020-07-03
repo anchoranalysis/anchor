@@ -43,11 +43,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *
  * @param <T> buffer-type
  */
-public abstract class VoxelBoxFactoryTypeBound<T extends Buffer> {
+public interface VoxelBoxFactoryTypeBound<T extends Buffer> {
 	
-	public abstract VoxelBox<T> create( IPixelsForPlane<T> pixelsForPlane );
+	VoxelBox<T> create( IPixelsForPlane<T> pixelsForPlane );
 	
-	public abstract VoxelBox<T> create( Extent e );
+	VoxelBox<T> create( Extent e );
 	
-	public abstract VoxelDataType dataType();
+	VoxelDataType dataType();
 }

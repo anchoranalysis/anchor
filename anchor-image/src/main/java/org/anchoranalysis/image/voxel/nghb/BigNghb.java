@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
  * @author Owen Feehan
  *
  */
-public final class BigNghb extends Nghb {
+public final class BigNghb implements Nghb {
 	
 	private final boolean includeCentrePoint;
 	

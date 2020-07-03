@@ -118,7 +118,7 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 			res
 		);
 				
-		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.instance );
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.INSTANCE );
 		
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		

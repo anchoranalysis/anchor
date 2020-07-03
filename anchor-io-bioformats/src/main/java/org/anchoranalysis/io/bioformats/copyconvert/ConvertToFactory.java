@@ -82,7 +82,7 @@ public class ConvertToFactory {
 		VoxelDataType targetDataType,
 		int bitsPerPixel	
 	) throws CreateException {
-		if (targetDataType.equals(VoxelDataTypeUnsignedByte.instance) && bitsPerPixel==8) {
+		if (targetDataType.equals(VoxelDataTypeUnsignedByte.INSTANCE) && bitsPerPixel==8) {
 			return new ConvertToByte_From8BitUnsigned_Interleaving();
 		} else {
 			throw new CreateException("For interleaved formats only 8-bits are supported");
@@ -100,13 +100,13 @@ public class ConvertToFactory {
 		boolean littleEndian = reader.isLittleEndian();
 		boolean floatingPoint = FormatTools.isFloatingPoint( reader.getPixelType() );
 		
-		if (targetDataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (targetDataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return toByte( bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint, signed );
-		} else if (targetDataType.equals(VoxelDataTypeUnsignedShort.instance) || targetDataType.equals(VoxelDataTypeSignedShort.instance)) {
+		} else if (targetDataType.equals(VoxelDataTypeUnsignedShort.INSTANCE) || targetDataType.equals(VoxelDataTypeSignedShort.instance)) {
 			return toShort( bitsPerPixel, littleEndian, signed );
-		} else if (targetDataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (targetDataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return toFloat( bitsPerPixel, littleEndian, signed );
-		} else if (targetDataType.equals(VoxelDataTypeUnsignedInt.instance)) {
+		} else if (targetDataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
 			return toInt( bitsPerPixel, littleEndian, floatingPoint, signed );
 		} else {
 			throw new CreateException("Unsupported voxel data-type");

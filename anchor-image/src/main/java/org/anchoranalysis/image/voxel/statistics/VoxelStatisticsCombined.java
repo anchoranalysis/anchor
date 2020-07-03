@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 
-public class VoxelStatisticsCombined extends VoxelStatistics {
+public class VoxelStatisticsCombined implements VoxelStatistics {
 
 	private List<VoxelStatistics> list = new ArrayList<>();
 

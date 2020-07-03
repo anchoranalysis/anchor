@@ -33,9 +33,9 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromFloatBufferAr
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
-public class ChannelFactoryFloat extends ChannelFactorySingleType {
+public class ChannelFactoryFloat implements ChannelFactorySingleType {
 
-	private static final VoxelDataTypeFloat DATA_TYPE = VoxelDataTypeFloat.instance;
+	private static final VoxelDataTypeFloat DATA_TYPE = VoxelDataTypeFloat.INSTANCE;
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDimensions dim) {

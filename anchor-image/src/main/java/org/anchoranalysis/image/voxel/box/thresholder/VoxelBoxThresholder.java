@@ -76,7 +76,7 @@ public class VoxelBoxThresholder {
 	
 		VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty( alwaysDuplicate );
 		
-		if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 		
 			IterateVoxels.callEachPoint(
 				mask,

@@ -101,13 +101,13 @@ public class ConnectedComponentUnitFindTest {
 	
 	private ObjectCollection deriveInt(boolean do3D) throws OperationFailedException, CreateException {
 		return cc.deriveConnectedInt(
-			createBufferWithObjs(VoxelDataTypeUnsignedInt.instance, do3D)	
+			createBufferWithObjs(VoxelDataTypeUnsignedInt.INSTANCE, do3D)	
 		);
 	}
 	
 	private ObjectCollection deriveByte(boolean do3D) throws OperationFailedException, CreateException {
 		return cc.deriveConnectedByte(
-			createBufferWithObjs(VoxelDataTypeUnsignedByte.instance, do3D)	
+			createBufferWithObjs(VoxelDataTypeUnsignedByte.INSTANCE, do3D)	
 		);
 	}
 	

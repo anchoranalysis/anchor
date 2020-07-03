@@ -32,7 +32,7 @@ import java.io.File;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 
-public abstract class ManifestDeserializer {
+public interface ManifestDeserializer {
 
-	public abstract ManifestRecorder deserializeManifest( File file ) throws DeserializationFailedException;
+	ManifestRecorder deserializeManifest( File file ) throws DeserializationFailedException;
 }

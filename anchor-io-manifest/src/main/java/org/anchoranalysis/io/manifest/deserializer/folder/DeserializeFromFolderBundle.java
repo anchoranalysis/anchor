@@ -35,38 +35,45 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.folder.DeserializedObjectFromFolderBundle.BundleDeserializers;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
-public abstract class DeserializeFromFolderBundle<HistoryType,CacheType extends Serializable> extends HistoryCreator<HistoryType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> history-type
+ * @param <S> cache-type
+ */
+public abstract class DeserializeFromFolderBundle<T,S extends Serializable> implements HistoryCreator<T> {
 
-	private final BundleDeserializers<CacheType> deserializers;
+	private final BundleDeserializers<S> deserializers;
 	private FolderWrite folder;
 	
 	private static final int CACHE_SIZE = 5;
 	
-	public DeserializeFromFolderBundle( final BundleDeserializers<CacheType> deserializers, FolderWrite folder) {
+	public DeserializeFromFolderBundle( final BundleDeserializers<S> deserializers, FolderWrite folder) {
 		this.deserializers = deserializers;
 		this.folder = folder;
 	}
 	
 	@Override
-	public LoadContainer<HistoryType> create() throws DeserializationFailedException {
+	public LoadContainer<T> create() throws DeserializationFailedException {
 		
 		assert( folder.getManifestFolderDescription().getSequenceType() != null );
 		
-		DeserializedObjectFromFolderBundle<CacheType> deserializeFromBundle = new DeserializedObjectFromFolderBundle<>( folder, deserializers, CACHE_SIZE );
+		DeserializedObjectFromFolderBundle<S> deserializeFromBundle = new DeserializedObjectFromFolderBundle<>( folder, deserializers, CACHE_SIZE );
 
-		IBoundedIndexContainer<HistoryType> boundedContainer = new BoundsFromSequenceType<>(
+		IBoundedIndexContainer<T> boundedContainer = new BoundsFromSequenceType<>(
 			createCntr(deserializeFromBundle),
 			deserializeFromBundle.getBundleParameters().getSequenceType() 
 		);
 		
-		LoadContainer<HistoryType> history = new LoadContainer<>();
+		LoadContainer<T> history = new LoadContainer<>();
 		history.setCntr( boundedContainer );
 		history.setExpensiveLoad( expensiveLoad() );
 		
 		return history;
 	}
 	
-	protected abstract ITypedGetFromIndex<HistoryType> createCntr( DeserializedObjectFromFolderBundle<CacheType> deserializeFromBundle);
+	protected abstract ITypedGetFromIndex<T> createCntr( DeserializedObjectFromFolderBundle<S> deserializeFromBundle);
 		
 	private boolean expensiveLoad() {
 		int numberOfBundles = folder.getManifestFolderDescription().getSequenceType().getNumElements();

@@ -40,7 +40,7 @@ import com.mortennobel.imagescaling.ResampleOp;
 // Lots of copying bytes, which doesn't make it very efficient
 // Doesn't seem to be a way to make a BufferedImage using existing butes without ending up with a BufferedImage.CUSTOM_TYPE
 //   type which messes up our scaling
-public class TransferViaByte extends Transfer {
+public class TransferViaByte implements Transfer {
 		
 		private VoxelBox<ByteBuffer> src;
 		private VoxelBox<ByteBuffer> trgt;

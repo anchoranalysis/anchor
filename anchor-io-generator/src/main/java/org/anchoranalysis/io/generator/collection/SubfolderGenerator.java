@@ -41,9 +41,16 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class SubfolderGenerator<T,CollectionType extends Collection<T>> extends Generator implements IterableGenerator<CollectionType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ * @param <S> collection-type
+ */
+public class SubfolderGenerator<T,S extends Collection<T>> implements Generator, IterableGenerator<S> {
 
-	private CollectionType element;
+	private S element;
 	
 	private IterableGenerator<T> generator;
 	private String collectionOutputName;
@@ -83,12 +90,12 @@ public class SubfolderGenerator<T,CollectionType extends Collection<T>> extends 
 	}
 
 	@Override
-	public CollectionType getIterableElement() {
+	public S getIterableElement() {
 		return element;
 	}
 
 	@Override
-	public void setIterableElement(CollectionType element)
+	public void setIterableElement(S element)
 			throws SetOperationFailedException {
 		this.element = element;
 	}

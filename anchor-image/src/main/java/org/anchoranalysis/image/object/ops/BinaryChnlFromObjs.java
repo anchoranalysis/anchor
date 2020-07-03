@@ -80,7 +80,7 @@ public class BinaryChnlFromObjs {
 		byte objState
 	) {
 		
-		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		
 		if (outVal.getOnInt()!=0) {

@@ -66,7 +66,7 @@ public final class VoxelBufferInt extends VoxelBuffer<IntBuffer> {
 	
 	@Override
 	public VoxelDataType dataType() {
-		return VoxelDataTypeUnsignedInt.instance;
+		return VoxelDataTypeUnsignedInt.INSTANCE;
 	}
 	
 	@Override

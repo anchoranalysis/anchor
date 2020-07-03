@@ -69,7 +69,7 @@ class ObjMaskDualDeserializer extends Deserializer<ObjectMask> {
 		BoundingBox bbox = bboxDeserializer.deserialize(filePath);
 		
 		try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
-			Stack stack = or.openCheckType(0, ProgressReporterNull.get(), VoxelDataTypeUnsignedByte.instance ).get(0);
+			Stack stack = or.openCheckType(0, ProgressReporterNull.get(), VoxelDataTypeUnsignedByte.INSTANCE ).get(0);
 			
 			if (stack.getNumChnl()!=1) {
 				throw new DeserializationFailedException("Raster file must have 1 channel exactly");

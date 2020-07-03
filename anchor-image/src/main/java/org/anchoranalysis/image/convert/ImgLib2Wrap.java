@@ -79,11 +79,11 @@ public class ImgLib2Wrap {
 		
 		VoxelDataType dataType = box.getVoxelDataType();
 		
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return wrapByte(box.asByte());
-		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return wrapShort(box.asShort());
-		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return wrapFloat(box.asFloat());			
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte, short and float are supported");
@@ -96,11 +96,11 @@ public class ImgLib2Wrap {
 		
 		VoxelDataType dataType = vb.dataType();
 		
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return wrapByte( (VoxelBuffer<ByteBuffer>) vb, e);
-		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return wrapShort( (VoxelBuffer<ShortBuffer>) vb, e);
-		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return wrapFloat( (VoxelBuffer<FloatBuffer>) vb, e);			
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte, short and float are supported");

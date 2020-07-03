@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class VoxelStatisticsFromHistogram extends VoxelStatistics {
+public class VoxelStatisticsFromHistogram implements VoxelStatistics {
 
 	private Histogram histogram;
 	

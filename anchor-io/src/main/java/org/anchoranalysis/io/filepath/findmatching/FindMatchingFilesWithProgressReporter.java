@@ -41,7 +41,7 @@ import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter.TraversalResult;
 
-public class FindMatchingFilesWithProgressReporter extends FindMatchingFiles {
+public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles {
 	
 	private boolean recursive;
 	private ProgressReporter progressReporter;

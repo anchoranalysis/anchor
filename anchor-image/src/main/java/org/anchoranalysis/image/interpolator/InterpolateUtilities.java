@@ -49,9 +49,9 @@ public class InterpolateUtilities {
 			throw new IncorrectVoxelDataTypeException("Data types don't match between src and dest");
 		}
 		
-		if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
+		if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 			return new TransferViaByte(src, dest);
-		} else if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance )) {
+		} else if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.INSTANCE )) {
 			return new TransferViaShort(src, dest);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");

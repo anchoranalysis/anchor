@@ -61,7 +61,7 @@ public class BinaryChnl {
 		super();
 		this.chnl = chnl;
 		
-		if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			throw new IncorrectVoxelDataTypeException("Only unsigned 8-bit data type is supported for BinaryChnl");
 		}
 		
@@ -69,7 +69,7 @@ public class BinaryChnl {
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
-		this(vb, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance) );
+		this(vb, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE) );
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {

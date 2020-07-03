@@ -49,11 +49,11 @@ import java.util.Arrays;
 */
 public class HungarianAlgorithm {
 	private final double[][] costMatrix;
-	private final int rows, cols, dim;
-	private final double[] labelByWorker, labelByJob;
+	private final int rows, cols, dim;	// NOSONAR
+	private final double[] labelByWorker, labelByJob;	// NOSONAR
 	private final int[] minSlackWorkerByJob;
 	private final double[] minSlackValueByJob;
-	private final int[] matchJobByWorker, matchWorkerByJob;
+	private final int[] matchJobByWorker, matchWorkerByJob;	// NOSONAR
 	private final int[] parentWorkerByCommittedJob;
 	private final boolean[] committedWorkers;
 	

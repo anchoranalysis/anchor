@@ -68,8 +68,8 @@ public class IJWrap {
 	/** A multiplication-factor to convert microns to meters */
 	private static final int MICRONS_TO_METERS = 1000000;
 	
-	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
-	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
+	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.INSTANCE;
+	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.INSTANCE;
 	
 	private IJWrap() {}
 	
@@ -104,13 +104,13 @@ public class IJWrap {
 			return chnlFromImagePlusByte(
 				imagePlus,
 				sd,
-				factory.get( VoxelDataTypeUnsignedByte.instance )
+				factory.get( VoxelDataTypeUnsignedByte.INSTANCE )
 			);
 		} else if (imagePlus.getType()==ImagePlus.GRAY16) {
 			return chnlFromImagePlusShort(
 				imagePlus,
 				sd,
-				factory.get( VoxelDataTypeUnsignedShort.instance )
+				factory.get( VoxelDataTypeUnsignedShort.INSTANCE )
 			);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned-8 and unsigned 16bit supported");

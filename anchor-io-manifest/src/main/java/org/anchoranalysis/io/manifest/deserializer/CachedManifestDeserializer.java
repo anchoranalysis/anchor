@@ -35,7 +35,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 
-public class CachedManifestDeserializer extends ManifestDeserializer {
+public class CachedManifestDeserializer implements ManifestDeserializer {
 	
 	private LRUCache<File,ManifestRecorder> cachedItems;
 	

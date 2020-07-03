@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 
-public class FindMatchingFilesWithoutProgressReporter extends FindMatchingFiles {
+public class FindMatchingFilesWithoutProgressReporter implements FindMatchingFiles {
 	
 	@Override
 	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {

@@ -34,8 +34,8 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
-public abstract class Generator implements WritableItem {
+public interface Generator extends WritableItem {
 	
-	public abstract Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings );
+	Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings );
 }
 

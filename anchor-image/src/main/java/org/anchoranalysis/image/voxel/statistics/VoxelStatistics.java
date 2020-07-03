@@ -33,32 +33,38 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 
-// Allows retrieval of statistics in relation to pixels
-public abstract class VoxelStatistics {
+/**
+ * Allows retrieval of statistics in relation to pixels
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface VoxelStatistics {
 
-	public abstract long size();
+	long size();
 	
-	public abstract long sum();
+	long sum();
 	
-	public abstract long sumOfSquares();
+	long sumOfSquares();
 	
-	public abstract VoxelStatistics threshold( RelationToThreshold relationToThreshold );
+	VoxelStatistics threshold( RelationToThreshold relationToThreshold );
 	
-	public abstract double quantile( double quantile ) throws OperationFailedException;
+	double quantile( double quantile ) throws OperationFailedException;
 	
-	public abstract Histogram histogram() throws OperationFailedException;
+	Histogram histogram() throws OperationFailedException;
 	
 	// Avoids the overhead with assigning new memory if we we are just counting
-	public abstract long countThreshold( RelationToThreshold relationToThreshold );
+	long countThreshold( RelationToThreshold relationToThreshold );
 
-	public double variance() {
+	default double variance() {
 		return new VarianceCalculator( sum(), sumOfSquares(),  size() ).variance();
 	}
 	
-	public double stdDev() {
+	default double stdDev() {
 		return Math.sqrt( variance() );
 	}
-	public double mean() {
+	
+	default double mean() {
 		return ((double) sum()) / size();
 	}
 }

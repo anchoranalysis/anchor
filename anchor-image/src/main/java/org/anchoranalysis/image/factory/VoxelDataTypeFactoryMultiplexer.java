@@ -62,13 +62,13 @@ public abstract class VoxelDataTypeFactoryMultiplexer<T> {
 	 */
 	public T get( VoxelDataType dataType ) {
 		
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return factoryByte;
-		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return factoryShort;
-		} else if (dataType.equals(VoxelDataTypeUnsignedInt.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
 			return factoryInt;
-		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return factoryFloat;
 		} else {
 			throw new IncorrectVoxelDataTypeException("Non-existent type");

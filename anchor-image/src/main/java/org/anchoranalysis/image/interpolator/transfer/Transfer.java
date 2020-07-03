@@ -28,11 +28,11 @@ package org.anchoranalysis.image.interpolator.transfer;
 
 import org.anchoranalysis.image.interpolator.Interpolator;
 
-public abstract class Transfer {
+public interface Transfer {
 	
-	public abstract void assignSlice( int z );
+	void assignSlice( int z );
 	
-	public abstract void transferCopyTo( int z );
+	void transferCopyTo( int z );
 	
-	public abstract void transferTo( int z, Interpolator interpolator );
+	void transferTo( int z, Interpolator interpolator );
 }
