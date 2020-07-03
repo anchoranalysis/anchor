@@ -30,6 +30,7 @@ import java.io.IOException;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -51,15 +52,15 @@ import org.anchoranalysis.io.manifest.match.helper.filewrite.FileWriteFileFuncti
  */
 public class FinderSerializedObject<T> extends FinderSingleFile {
 	
-	private T deserializedObject;
+	private Optional<T> deserializedObject = Optional.empty();
 	private String function;
 	
-	private Operation<T,IOException> operation = new WrapOperationAsCached<>(
+	private Operation<Optional<T>,IOException> operation = new WrapOperationAsCached<>(
 		() -> {
 			if (!exists()) {
-				return null;
+				return Optional.empty();
 			}
-			return get();
+			return Optional.of( get() );
 		}
 	);
 	
@@ -86,39 +87,41 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 
 	public T get() throws IOException {
 		assert( exists() );
-		if (deserializedObject==null) {
+		if (!deserializedObject.isPresent()) {
 			try {
-				deserializedObject = deserialize( getFoundFile() );
+				deserializedObject = Optional.of(
+					deserialize(getFoundFile())
+				);
 			} catch (DeserializationFailedException e) {
 				throw new IOException(e);
 			}
 		}
-		return deserializedObject;
+		return deserializedObject.get();
 	}
 
 
 	@Override
-	protected FileWrite findFile(ManifestRecorder manifestRecorder)	throws MultipleFilesException {
+	protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)	throws MultipleFilesException {
 		List<FileWrite> files = FinderUtilities.findListFile(
 			manifestRecorder,
 			new FileWriteFileFunctionType(function, "serialized")
 		);
 		
-		if (files.size()==0) {
-			return null;
+		if (files.isEmpty()) {
+			return Optional.empty();
 		}
 		
 		// We prioritise .ser ahead of anything else
 		for( FileWrite f : files) {
 			if (f.getFileName().endsWith(".ser")) {
-				return f;
+				return Optional.of(f);
 			}
 		}
 		
-		return files.get(0);
+		return Optional.of(files.get(0));
 	}
 	
-	public Operation<T,IOException> operation() {
+	public Operation<Optional<T>,IOException> operation() {
 		return operation;
 	}
 }

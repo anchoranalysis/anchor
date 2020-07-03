@@ -26,8 +26,7 @@ package org.anchoranalysis.annotation;
  * #L%
  */
 
-
-public abstract class Annotation {
-
+/** Parent class of different types of image annotations */
+public interface Annotation {
 
 }

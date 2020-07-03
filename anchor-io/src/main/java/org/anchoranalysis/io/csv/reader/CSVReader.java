@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 
 // Reads a CSV File
@@ -60,12 +61,12 @@ public class CSVReader {
 		}
 		
 		// Returns null when finished
-		public String[] readLine() throws IOException {
+		public Optional<String[]> readLine() throws IOException {
 			
 			String line = bufferedReader.readLine();
 			
 			if (line==null) {
-				return null;
+				return Optional.empty();
 			}
 			
 			String[] tokenized = line.split(regExSeperator);
@@ -81,7 +82,7 @@ public class CSVReader {
 			
 			maybeRemoveQuotes(tokenized);
 			
-			return tokenized;
+			return Optional.of(tokenized);
 		}
 		
 		public void setNumCols(int numCols) {

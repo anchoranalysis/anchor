@@ -167,11 +167,7 @@ public final class Extent implements Serializable {
 			return false;
 		Extent other = (Extent) obj;
 		
-		if (!len.equals(other.len)) {
-			return false;
-		}
-		
-		return true;
+		return len.equals(other.len);
 	}
 
 	@Override

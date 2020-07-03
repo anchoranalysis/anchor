@@ -31,7 +31,6 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -58,17 +57,15 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 	}
 	
 	private ObjWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
-		
-		add(generator);
-		
-		// We create an iterable bridge from ObjMask to BoundingBox
-		IterableGeneratorBridge<ObjectMask, BoundingBox> generatorBBox = new IterableGeneratorBridge<>(
-			new ObjectOutputStreamGenerator<>(
-				Optional.of("BoundingBox")
-			),
-			sourceObject -> sourceObject.getBoundingBox() 
+		super(
+			generator,
+			// We create an iterable bridge from ObjMask to BoundingBox
+			new IterableGeneratorBridge<>(
+				new ObjectOutputStreamGenerator<>(
+					Optional.of("BoundingBox")
+				),
+				ObjectMask::getBoundingBox 
+			)
 		);
-		
-		add(generatorBBox);
 	}
 }

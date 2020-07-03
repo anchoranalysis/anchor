@@ -41,7 +41,6 @@ import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 public class BoundOutputManagerRouteErrors {
@@ -97,19 +96,21 @@ public class BoundOutputManagerRouteErrors {
 		return delegate.getOutputFolderPath();
 	}
 	
+	/**
+	 * Creates a new outputManager by appending a relative folder-path to the current {@link BoundOutputManagerRouteErrors}
+	 * 
+	 * @see BoundOutputManager#resolveFolder(String, FolderWrite)
+	 */
 	public BoundOutputManagerRouteErrors resolveFolder(String folderPath) {
-		return resolveFolder(folderPath, new FolderWritePhysical() );
+		return new BoundOutputManagerRouteErrors(
+			delegate.resolveFolder(
+				folderPath,
+				new FolderWritePhysical()
+			),
+			errorReporter
+		);
 	}
 	
-	private BoundOutputManagerRouteErrors resolveFolder(String folderPath, FolderWrite folderWrite) {
-		try {
-			return new BoundOutputManagerRouteErrors( delegate.resolveFolder(folderPath, folderWrite), errorReporter );
-		} catch (OutputWriteFailedException e) {
-			errorReporter.recordError(BoundOutputManagerRouteErrors.class, e);
-			return null;
-		}
-	}
-
 	public ErrorReporter getErrorReporter() {
 		return errorReporter;
 	}

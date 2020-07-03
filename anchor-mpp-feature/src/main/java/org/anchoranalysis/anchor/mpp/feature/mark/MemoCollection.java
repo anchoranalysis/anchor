@@ -30,7 +30,6 @@ package org.anchoranalysis.anchor.mpp.feature.mark;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedInd;
@@ -39,6 +38,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
@@ -103,7 +103,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 	public PxlMarkMemo getMemoForMark( Cfg cfg, Mark mark ) {
 		int index = cfg.indexOf(mark);
 		if (index==-1) {
-			return null;
+			throw new AnchorFriendlyRuntimeException("Mark doesn't exist in cfg");
 		}
 		return pxlMarkMemo.get( index );
 	}

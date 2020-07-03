@@ -28,6 +28,7 @@ package org.anchoranalysis.io.csv.comparer;
 
 
 import java.io.PrintStream;
+import java.util.Optional;
 
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
@@ -37,12 +38,12 @@ class CompareUtilities {
 
 	private CompareUtilities() {}
 	
-	public static void checkZeroRows( boolean rejectZeroRows, String[] lines1, String[] lines2 ) throws CSVReaderException {
+	public static void checkZeroRows( boolean rejectZeroRows, Optional<String[]> lines1, Optional<String[]> lines2 ) throws CSVReaderException {
 		if (!rejectZeroRows) {
 			return;
 		}
 		
-		if (lines1==null || lines2==null) {
+		if (!lines1.isPresent() || !lines2.isPresent()) {
 			throw new CSVReaderException("At least one input csv file has zero rows");
 		}
 	}
@@ -56,25 +57,25 @@ class CompareUtilities {
 	 * @param ignoreFirstNumColumns
 	 * @return
 	 */
-	public static boolean areArraysEqual( String[] lines1, String[] lines2, int ignoreFirstNumColumns ) {
+	public static boolean areArraysEqual( Optional<String[]> lines1, Optional<String[]> lines2, int ignoreFirstNumColumns ) {
 		
 		if (ignoreFirstNumColumns>0) {
 
-			if (lines1==null) {
-				return lines2==null;
+			if (!lines1.isPresent()) {
+				return !lines2.isPresent();
 			}
-			if (lines2==null) {
-				return lines1==null;
+			if (!lines2.isPresent()) {
+				return !lines1.isPresent();
 			}
 			
-			if (lines1.length!=lines2.length) {
+			if (lines1.get().length!=lines2.get().length) {
 				return false;
 			}
 			
-			int maxInd = Math.max( lines1.length - ignoreFirstNumColumns, 0 );
+			int maxInd = Math.max( lines1.get().length - ignoreFirstNumColumns, 0 );
 			
 			for( int i=ignoreFirstNumColumns; i<maxInd; i++ ) {
-				if (!lines1[i].equals(lines2[i])) {
+				if (!lines1.get()[i].equals(lines2.get()[i])) {
 					return false;
 				}
 			}

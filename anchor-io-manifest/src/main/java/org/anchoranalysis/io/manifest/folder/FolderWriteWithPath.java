@@ -44,9 +44,7 @@ public abstract class FolderWriteWithPath extends FolderWrite {
 	
 	@Override
 	public Path getRelativePath() {
-		if (path==null) {
-			return null;
-		}
+		assert(path!=null);
 		return Paths.get(path);
 	}
 

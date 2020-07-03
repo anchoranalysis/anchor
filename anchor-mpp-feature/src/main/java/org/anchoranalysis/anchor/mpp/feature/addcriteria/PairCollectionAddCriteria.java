@@ -43,6 +43,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
@@ -230,12 +231,12 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	//  it's more efficient to sample from this, than to always insist upon uniqueness, as this involves
 	//  creating a HashMap each query (due to the implementation)
 	@Override
-	public T randomPairNonUniform( RandomNumberGenerator re ) {
+	public T sampleRandomPairNonUniform( RandomNumberGenerator re ) {
 		
 		int count = this.graph.edgeSetWithPossibleDuplicates().size();
 		
 		if (count==0) {
-			return null;
+			throw new AnchorFriendlyRuntimeException("No edges exist to sample from");
 		}
 		
 		// Pick an element from the existing configuration
@@ -248,7 +249,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 			}
 		}
 		
-		throw new RuntimeException("Invalid index chosen for randomPair");
+		throw new AnchorFriendlyRuntimeException("Invalid index chosen for randomPair");
 	}
 	
 	public AddCriteria<T> getAddCriteria() {

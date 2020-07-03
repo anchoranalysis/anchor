@@ -29,6 +29,7 @@ package org.anchoranalysis.io.manifest.finder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -59,7 +60,7 @@ public class FinderKeyValueParams extends FinderSingleFile {
 
 
 	@Override
-	protected FileWrite findFile(ManifestRecorder manifestRecorder)
+	protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
 			throws MultipleFilesException {
 		List<FileWrite> files = FinderUtilities.findListFile( manifestRecorder,
 			new FileWriteManifestMatch(
@@ -67,10 +68,12 @@ public class FinderKeyValueParams extends FinderSingleFile {
 			)
 		);
 		
-		if (files.size()==0) {
-			return null;
+		if (files.isEmpty()) {
+			return Optional.empty();
 		}
 		
-		return files.get(0);
+		return Optional.of(
+			files.get(0)
+		);
 	}
 }

@@ -28,8 +28,10 @@ package org.anchoranalysis.io.generator.combined;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -52,6 +54,14 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	
 	public IterableCombinedListGenerator() {
 		list = new ArrayList<>();
+	}
+	
+	@SafeVarargs
+	public IterableCombinedListGenerator(IterableGenerator<T> ...generator) {
+		this();
+		Arrays.stream(generator).forEach( gen->
+			add(gen, Optional.empty())
+		);
 	}
 	
 	@Override
@@ -80,12 +90,10 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 
 	@Override
 	public T getIterableElement() {
-		
-		if (list.size()==0) {
-			return null;
-		} else {
-			return list.get(0).getIterableElement();
+		if (list.isEmpty()) {
+			throw new AnchorFriendlyRuntimeException("List of generators is empty");
 		}
+		return list.get(0).getIterableElement();
 	}
 
 	@Override
@@ -99,13 +107,6 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	@Override
 	public Generator getGenerator() {
 		return this;
-	}
-
-	public void add(IterableGenerator<T> element) {
-		add(
-			element,
-			Optional.empty()
-		);
 	}
 	
 	public void add(String name, IterableGenerator<T> element) {

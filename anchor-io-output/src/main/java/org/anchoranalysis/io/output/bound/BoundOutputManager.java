@@ -48,7 +48,6 @@ import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecord
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.AlwaysAllowed;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
 import org.anchoranalysis.io.output.writer.Writer;
@@ -106,10 +105,15 @@ public class BoundOutputManager {
 		this.writeOperationRecorder = new DualWriterOperationRecorder( writeOperationRecorder, toAdd );
 	}
 
-	/** Creates a new outputManager by appending a relative folder-path to the current boundoutputmanager */
-	public BoundOutputManager resolveFolder( String folderPath, FolderWrite folderWrite ) throws OutputWriteFailedException {
+	/** 
+	 * Creates a new outputManager by appending a relative folder-path to the current {@link BoundOutputManager}
+	 * 
+	 * @param relativeFolderPath the relative-path to append
+	 * @param folderWrite a manifest-folder to create a new entry for
+	 **/
+	public BoundOutputManager resolveFolder( String relativeFolderPath, FolderWrite folderWrite ) {
 		
-		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(folderPath);
+		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(relativeFolderPath);
 		
 		FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
 		fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );

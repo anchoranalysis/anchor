@@ -28,6 +28,7 @@ package org.anchoranalysis.io.csv.reader;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ProcessCSVLine;
@@ -58,13 +59,13 @@ class ReadByLineImpl implements ReadByLine {
 		try {
 			openIfNecessary();
 			
-			String[] line;
+			Optional<String[]> line;
 			boolean firstLine = true; 
 			
 			int cnt = 0;
 			
-			while ( (line= openedFile.readLine())!=null ) {
-				lineProcessor.processLine(line, firstLine);
+			while ( (line= openedFile.readLine()).isPresent() ) {
+				lineProcessor.processLine(line.get(), firstLine);
 				firstLine = false;
 				cnt++;
 			}

@@ -42,5 +42,5 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 @GroupingRoot
 public abstract class PairCollection<T> extends AnchorBean<PairCollection<T>> implements UpdatableMarkSet {
 
-	public abstract T randomPairNonUniform( RandomNumberGenerator re );
+	public abstract T sampleRandomPairNonUniform( RandomNumberGenerator re );
 }

@@ -40,6 +40,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -141,8 +142,7 @@ public class NRGScheme {
 		} else if (cliqueSize==-1) {
 			return (FeatureList<T>) getElemAllAsFeatureList();
 		} else {
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
 	}
 	
