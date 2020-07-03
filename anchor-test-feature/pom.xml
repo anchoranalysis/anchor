@@ -22,10 +22,11 @@
           <version>0.0.8-SNAPSHOT</version>
         </dependency>
         				
+	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
         <dependency>
 		  <groupId>junit</groupId>
 		  <artifactId>junit</artifactId>
-		  <version>4.12</version>
+		  <version>${junit.version}</version>
 		  <scope>compile</scope>
 	      <optional>false</optional>
 		</dependency>
