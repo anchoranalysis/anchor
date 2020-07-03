@@ -70,8 +70,6 @@ class ResettableCachedCalculator<T extends FeatureInput> implements FeatureSessi
 	@SuppressWarnings("unchecked")
 	@Override
 	public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> calculation) {
-		assert(calculation!=null);
-
 		return new ResolvedCalculation<>(
 			(CacheableCalculation<U,T,FeatureCalcException>) setCalculation.findOrAdd(calculation,null)
 		);

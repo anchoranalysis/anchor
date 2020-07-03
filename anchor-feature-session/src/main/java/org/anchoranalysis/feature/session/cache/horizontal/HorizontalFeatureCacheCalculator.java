@@ -54,8 +54,6 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> implements Featur
 		FeatureResultMap<T> map,
 		Collection<String> ignorePrefixes
 	) {
-		super();
-		assert(delegate!=null);
 		this.delegate = delegate;
 		this.map = map;
 		this.ignorePrefixes = ignorePrefixes;
