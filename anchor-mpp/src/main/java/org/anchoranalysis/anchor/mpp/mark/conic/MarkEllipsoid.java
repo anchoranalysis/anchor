@@ -41,6 +41,8 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
+import com.google.common.base.Preconditions;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
@@ -287,11 +289,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	//   false -> maybe overlap, maybe not
 	@SuppressWarnings("static-access")
 	@Override
-	public boolean quickTestNoOverlap( Mark m, int regionID ) {
-		
-		//.class.isAssignableFrom(m.getClass())
-		assert m instanceof MarkEllipsoid;
-		MarkEllipsoid trgtMark = (MarkEllipsoid) m;
+	public boolean quickTestNoOverlap( Mark mark, int regionID ) {
+		Preconditions.checkArgument(mark instanceof MarkEllipsoid);
+		MarkEllipsoid trgtMark = (MarkEllipsoid) mark;
 		
 		DoubleMatrix1D relPos = TensorUtilities.threeElementMatrix(
 			trgtMark.getPos().getX() - getPos().getX(),
@@ -304,11 +304,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		double dist = relPosSq.zSum();
 		
 		// Definitely outside
-		if( dist > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0) ) {
-			return true;
-		}
-		
-		return false;
+		return dist > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0);
 	}
 	
 	private double getMaximumRadius( int regionID ) {
@@ -362,12 +358,12 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	
 	// NB objects are scaled in pre-rotated position i.e. when aligned to axes
 	@Override
-	public void scale( double mult_factor ) {
-		super.scale(mult_factor);
+	public void scale( double multFactor ) {
+		super.scale(multFactor);
 		
-		this.radii.setX( this.radii.getX() * mult_factor );
-		this.radii.setY( this.radii.getY() * mult_factor );
-		this.radii.setZ( this.radii.getZ() * mult_factor );
+		this.radii.setX( this.radii.getX() * multFactor );
+		this.radii.setY( this.radii.getY() * multFactor );
+		this.radii.setZ( this.radii.getZ() * multFactor );
 		updateAfterMarkChange();
 	}
 
@@ -388,11 +384,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 			return false;
 		}
 		
-		if (!orientation.equals(trgt.orientation)) {
-			return false;
-		}
-		
-		return true;
+		return orientation.equals(trgt.orientation);
 	}
 
 	@Override

@@ -39,6 +39,8 @@ import org.apache.commons.configuration.beanutils.BeanHelper;
 
 public class TestReaderWriterUtilities {
 
+	private TestReaderWriterUtilities() {}
+	
 	public static void ensureRasterReader() {
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		addIfMissing( RasterReader.class, createReader() );

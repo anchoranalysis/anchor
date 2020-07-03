@@ -63,8 +63,6 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 	private int seriesNum;
 	
 	public NamedChnlCollectionForSeriesMap(OpenedRaster openedRaster, ImgChnlMap chnlMap, int seriesNum) {
-		super();
-		assert( chnlMap!=null );
 		this.chnlMap = chnlMap;
 		this.seriesNum = seriesNum;
 		this.openedRaster = openedRaster;
@@ -175,7 +173,6 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 	
 	private TimeSequence createTs( ProgressReporter progressReporter ) throws GetOperationFailedException {
 		if( ts==null) {
-			// TODO create another way of inserting scaling information from the getChnlMap()
 			try {
 				ts = openedRaster.open(seriesNum, progressReporter );
 			} catch (RasterIOException e) {

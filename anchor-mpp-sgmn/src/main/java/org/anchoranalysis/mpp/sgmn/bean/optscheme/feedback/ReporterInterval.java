@@ -30,7 +30,7 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-public abstract class ReporterInterval<T> extends ReporterOptimizationStep<T> {
+public abstract class ReporterInterval<T> extends FeedbackReceiverBean<T> {
 
 	// START BEAN Parameters
 	/** 

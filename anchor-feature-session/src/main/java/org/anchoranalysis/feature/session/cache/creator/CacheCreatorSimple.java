@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.cache.creator;
 
+
+
 /*-
  * #%L
  * anchor-feature-session
@@ -88,7 +90,6 @@ public class CacheCreatorSimple implements CacheCreator {
 		FeatureInitParams featureInitParams,
 		LogErrorReporter logger			
 	) {
-		
 		SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 		
 		try {
@@ -98,7 +99,6 @@ public class CacheCreatorSimple implements CacheCreator {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
 		}
 		
-		assert(logger!=null);
 		FeatureSessionCache<T> cache = factory.create(namedFeatures, sharedFeaturesSet);
 		cache.init(featureInitParams, logger);
 		return cache;

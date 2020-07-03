@@ -47,7 +47,7 @@ public class HistogramArray extends Histogram {
 	// By default the minimum bin value is always 0
 	private int minBinVal;	// inclusive
 	private int maxBinVal;	// inclusive
-	private long cnt = 0;
+	private long countTotal = 0;
 	
 	public HistogramArray( int maxBinVal ) {
 		this(0, maxBinVal);
@@ -55,7 +55,7 @@ public class HistogramArray extends Histogram {
 	
 	public HistogramArray( int minBinVal, int maxBinVal ) {
 		arr = new int[maxBinVal-minBinVal+1];
-		cnt = 0;
+		countTotal = 0;
 		this.maxBinVal = maxBinVal;
 		this.minBinVal = minBinVal;
 	}
@@ -64,12 +64,12 @@ public class HistogramArray extends Histogram {
 	public HistogramArray duplicate() {
 		HistogramArray out = new HistogramArray(minBinVal,maxBinVal);
 		out.arr = ArrayUtils.clone(arr);
-		out.cnt = cnt;
+		out.countTotal = countTotal;
 		return out;
 	}
 	
 	public void reset() {
-		cnt = 0;
+		countTotal = 0;
 		for( int i=minBinVal;i<=maxBinVal;i++) {
 			arrSet(i,0);
 		}
@@ -77,7 +77,7 @@ public class HistogramArray extends Histogram {
 	
 	public void zeroVal( int val ) {
 		int indx = index(val);
-		cnt -= arr[ indx ];
+		countTotal -= arr[ indx ];
 		arr[ indx ] = 0;
 	}
 	
@@ -90,12 +90,12 @@ public class HistogramArray extends Histogram {
 	
 	public void incrVal( int val ) {
 		arrIncr(val, 1);
-		cnt++;
+		countTotal++;
 	}
 	
 	public void incrValBy( int val, int increase ) {
 		arrIncr(val, increase);
-		cnt+=increase;
+		countTotal+=increase;
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class HistogramArray extends Histogram {
 	}
 	
 	public boolean isEmpty() {
-		return cnt==0;
+		return countTotal==0;
 	}
 	
 	public int getCount( int val ) {
@@ -141,7 +141,7 @@ public class HistogramArray extends Histogram {
 		for( int i=getMinBin(); i<=getMaxBin(); i++) {
 			int otherCnt = other.getCount(i);
 			arrIncr(i, otherCnt);
-			cnt += otherCnt;
+			countTotal += otherCnt;
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class HistogramArray extends Histogram {
 			assert(sum>=0);
 		}
 		
-		return ((double) sum) / cnt;
+		return ((double) sum) / countTotal;
 	}
 	
 	public double meanGreaterEqualTo( int val ) throws OperationFailedException {
@@ -189,7 +189,7 @@ public class HistogramArray extends Histogram {
 			
 		}
 		
-		return ((double) sum)/(cnt-getCount(0));
+		return ((double) sum)/(countTotal-getCount(0));
 	}
 	
 	
@@ -210,14 +210,14 @@ public class HistogramArray extends Histogram {
 			arr[indx] = valNew;
 		}
 		
-		cnt = sum;
+		countTotal = sum;
 	}
 	
 	@Override
 	public int quantile( double quantile ) throws OperationFailedException {
 		checkAtLeastOneItemExists();
 		
-		double pos = quantile * cnt;
+		double pos = quantile * countTotal;
 		
 		long sum = 0;
 		for( int i=minBinVal; i<=maxBinVal; i++) {
@@ -234,7 +234,7 @@ public class HistogramArray extends Histogram {
 	public int quantileAboveZero( double quantile ) throws OperationFailedException {
 		checkAtLeastOneItemExists();
 		
-		long cntMinusZero = cnt - getCount(0);
+		long cntMinusZero = countTotal - getCount(0);
 		
 		double pos = quantile * cntMinusZero;
 		
@@ -272,7 +272,7 @@ public class HistogramArray extends Histogram {
 			sum += arrGet(i);
 		}
 		
-		return ((double) sum) / cnt;
+		return ((double) sum) / countTotal;
 	}
 	
 	@Override
@@ -408,13 +408,13 @@ public class HistogramArray extends Histogram {
 		double threshold = relationToThreshold.threshold();
 		
 		HistogramArray out = new HistogramArray(maxBinVal);
-		out.cnt = 0;
+		out.countTotal = 0;
 		for (int i=minBinVal; i<=maxBinVal; i++) {
 			
 			if (relation.isRelationToValueTrue(i, threshold)) {
 				int s = arrGet(i);
 				out.arrSet(i, s);
-				out.cnt += s;
+				out.countTotal += s;
 			}
 		}
 		
@@ -453,7 +453,7 @@ public class HistogramArray extends Histogram {
 
 	@Override
 	public long getTotalCount() {
-		return cnt;
+		return countTotal;
 	}
 	
 	public Histogram extractPixelsFromRight( long numPixels ) {
@@ -543,7 +543,7 @@ public class HistogramArray extends Histogram {
 			sum += arrGetLong(i) * Math.pow( iSub , power);
 		}
 		
-		return sum / cnt;
+		return sum / countTotal;
 	}
 	
 	private long calcSumHelper( LongUnaryOperator func ) {

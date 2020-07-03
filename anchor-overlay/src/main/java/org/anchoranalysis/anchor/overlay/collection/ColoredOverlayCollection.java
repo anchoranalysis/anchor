@@ -120,10 +120,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		return out;
 	}
 	
-	
-	
 	// TODO - make more efficient using RTrees
-	// Calculates mask
 	public ColoredOverlayCollection subsetWhereBBoxIntersects( ImageDimensions bndScene, OverlayWriter maskWriter, List<BoundingBox> intersectList ) {
 		
 		ColoredOverlayCollection out = new ColoredOverlayCollection();
@@ -138,10 +135,6 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		}
 		return out;
 	}
-	
-	
-	
-	
 	
 	// Everything from the two Cfgs which isn't in the intersection
 	public static OverlayCollection createIntersectionComplement( ColoredOverlayCollection cfg1, ColoredOverlayCollection cfg2 ) {

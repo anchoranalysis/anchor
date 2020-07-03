@@ -310,11 +310,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
 		double dist = relPosSq.zSum();
 		
 		// Definitely outside
-		if( dist > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0) ) {
-			return true;
-		}
-		
-		return false;
+		return dist > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0);
 	}
 	
 	private double getMaximumRadius() {
@@ -435,7 +431,6 @@ public class MarkEllipse extends MarkConic implements Serializable {
 	
 	@Override
 	public double[] createRadiiArrayRslvd( ImageResolution res ) {
-		Point2d radii = getRadii();
 		return twoElementArray( radii.getX(), radii.getY() );
 	}
 

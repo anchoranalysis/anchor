@@ -60,8 +60,8 @@ public interface FeatureSessionCache<T extends FeatureInput> {
 	
 	/**
 	 * Initialises the cache. Should always be called once before any calculations occur
-	 * @param featureInitParams TODO
-	 * @param logger TODO
+	 * @param featureInitParams params for initialization
+	 * @param logger logger
 	 */
 	public abstract void init(FeatureInitParams featureInitParams, LogErrorReporter logger);
 	
@@ -91,7 +91,7 @@ public interface FeatureSessionCache<T extends FeatureInput> {
 	 * @param <V> params-type of the child cache to found
 	 * @param childName name of the child-cache
 	 * @param inputType the type of V
-	 * @param cacheCreator TODO
+	 * @param cacheCreator factory for creating a cache
 	 * @return the existing or new child cache of the given name
 	 */
 	<V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> inputType, CacheCreator cacheCreator);

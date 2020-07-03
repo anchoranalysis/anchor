@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -38,25 +37,30 @@ class FeatureResultMap<T extends FeatureInput> {
 	private Map<Feature<T>,Double> mapFeature = new HashMap<>();
 	private Map<String,Double> mapID = new HashMap<>();
 	private Map<String,Feature<T>> mapFeatureName = new HashMap<>();
-	
+
+	/**
+	 * Adds a feature to map.
+	 * 
+	 * <p>Any existing entry with the same feature-name is replaced.</p>
+	 * 
+	 * @param feature feature to add
+	 */
 	public void add( Feature<T> feature, String featureName, Double result ) {
 		mapFeature.put(feature, result);
 		mapID.put( featureName, result);
 	}
 	
-	public void add( Feature<T> f ) throws OperationFailedException {
-		String customName = f.getCustomName();
+	/**
+	 * Adds a feature to map.
+	 * 
+	 * <p>Any existing entry with the same feature-name is replaced.</p>
+	 * 
+	 * @param feature feature to add
+	 */
+	public void add( Feature<T> feature ) {
+		String customName = feature.getCustomName();
 		if (customName!=null && !customName.isEmpty()) {
-			
-			if (mapFeatureName.containsKey(customName)) {
-				// REMOVED HOPING IT WILL SOLVE A PROBLEM
-				/*throw new OperationFailedException(
-					String.format("Map already contains a feature called: %s", customName)	
-				);*/
-				return;
-			}
-			
-			mapFeatureName.put( customName, f );
+			mapFeatureName.put( customName, feature );
 		}		
 	}
 	

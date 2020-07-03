@@ -70,7 +70,6 @@ public class HorizontalCalculationCache<T extends FeatureInput> implements Featu
 	// Set up the cache
 	@Override
 	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger) {
-		assert(logger!=null);
 		calculator.init(logger);
 	}
 	

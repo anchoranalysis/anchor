@@ -31,7 +31,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndPar
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 	
@@ -60,11 +59,6 @@ public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 	
 	@Override
 	public void reportEnd( OptimizationFeedbackEndParams<T> optStep ) {
-	}
-	
-	@Override
-	public void reportItr( Reporting<T> reporting ) {
-		super.reportItr( reporting );
 	}
 
 	protected abstract IAggregateReceiver<T> getAggregateReceiver();

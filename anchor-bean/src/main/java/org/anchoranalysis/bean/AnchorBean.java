@@ -176,7 +176,6 @@ public abstract class AnchorBean<F> {
 		List<Field> listFields,
 		Class<?> match
 	) throws BeanMisconfiguredException {
-		// TODO return to protected
 		return HelperFindChildren.findChildrenOfClass(this, listFields, match);
 	}
 	

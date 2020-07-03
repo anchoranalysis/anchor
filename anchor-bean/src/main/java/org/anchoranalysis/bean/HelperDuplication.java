@@ -100,11 +100,11 @@ class HelperDuplication {
 			}
 		}
 		
-		return duplicatePropertyValue(propertyValue.get(), propertyName, optional, parentBean);
+		return duplicatePropertyValue(propertyValue.get(), propertyName, parentBean);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static Optional<Object> duplicatePropertyValue( Object propertyValue, String propertyName, boolean optional, AnchorBean<?> parentBean ) {
+	private static Optional<Object> duplicatePropertyValue( Object propertyValue, String propertyName, AnchorBean<?> parentBean ) {
 		if (propertyValue instanceof StringSet) {
 			StringSet propertyValueCast = (StringSet) propertyValue;
       	 	return Optional.of(
