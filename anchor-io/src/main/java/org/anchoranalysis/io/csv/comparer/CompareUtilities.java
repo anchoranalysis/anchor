@@ -60,19 +60,19 @@ class CompareUtilities {
 	 * @return
 	 */
 	public static boolean areArraysEqual( Optional<String[]> lines1, Optional<String[]> lines2, int ignoreFirstNumColumns ) {
+
+		if (!lines1.isPresent()) {
+			return !lines2.isPresent();
+		}
+		if (!lines2.isPresent()) {
+			return !lines1.isPresent();
+		}
+		
+		if (lines1.get().length!=lines2.get().length) {
+			return false;
+		}
 		
 		if (ignoreFirstNumColumns>0) {
-
-			if (!lines1.isPresent()) {
-				return !lines2.isPresent();
-			}
-			if (!lines2.isPresent()) {
-				return !lines1.isPresent();
-			}
-			
-			if (lines1.get().length!=lines2.get().length) {
-				return false;
-			}
 			
 			int maxInd = Math.max( lines1.get().length - ignoreFirstNumColumns, 0 );
 			
