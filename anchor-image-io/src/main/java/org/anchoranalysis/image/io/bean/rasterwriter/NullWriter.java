@@ -27,7 +27,6 @@ package org.anchoranalysis.image.io.bean.rasterwriter;
  */
 
 
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
 import org.anchoranalysis.image.io.RasterIOException;
@@ -42,9 +41,7 @@ public class NullWriter extends RasterWriter {
 	}
 
 	@Override
-	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries,
-			Path filePath, boolean makeRGB)
-			throws RasterIOException {
+	public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException {
 		// NOTHING TO DO
 	}
 

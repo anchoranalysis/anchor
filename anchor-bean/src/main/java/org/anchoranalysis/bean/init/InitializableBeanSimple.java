@@ -44,8 +44,8 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extends InitializableBean<B, P> implements IInitParams<P> {
 
 	private boolean hasBeenInit = false;
-	private transient LogErrorReporter logger;
-	private transient PropertyDefiner<P> propertyDefiner;
+	private LogErrorReporter logger;
+	private PropertyDefiner<P> propertyDefiner;
 	
 	protected InitializableBeanSimple(
 			PropertyInitializer<P> propertyInitializer,

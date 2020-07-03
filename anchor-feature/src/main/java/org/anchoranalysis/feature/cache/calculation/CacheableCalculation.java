@@ -56,10 +56,10 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public abstract class CacheableCalculation<S, T extends FeatureInput, E extends Exception> implements ResettableCalculation {
 	
-	private transient T input;
+	private T input;
 	
 	// We delegate the actualy execution of the cache
-	private transient CachedOperation<S,E> delegate = new CachedOperation<S,E>() {
+	private CachedOperation<S,E> delegate = new CachedOperation<S,E>() {
 
 		@Override
 		protected S execute() throws E {

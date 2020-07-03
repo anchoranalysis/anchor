@@ -37,9 +37,9 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
  */
 public class AxisTypeConverter {
 
-	public final static String INVALID_AXIS_INDEX = "Index must be >=0 and <3";
+	public static final String INVALID_AXIS_INDEX = "Index must be >=0 and <3";
 	
-	public final static String UNKNOWN_AXIS_TYPE = "Unknown axis type";
+	public static final String UNKNOWN_AXIS_TYPE = "Unknown axis type";
 	
 	private AxisTypeConverter() {}
 	

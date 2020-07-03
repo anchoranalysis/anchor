@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class CacheAndReuseStrategy<T extends FeatureInput> extends ReplaceStrategy<T> {
 
-	private final static int CACHE_SIZE = 200;
+	private static final int CACHE_SIZE = 200;
 	
 	private LRUCache<T, SessionInput<T>> cache;
 	

@@ -44,10 +44,10 @@ class AddPxlsToHistogram {
 		IndexByChnl<Histogram> partitionList,
 		BufferArrList bufferArrList,
 		int globalOffset,
-		int z_local
+		int zLocal
 	) {
 		iterateRegions( membership, listRegionMembership, r->
-			addRegionToPartition(partitionList, bufferArrList, globalOffset, r, z_local)
+			addRegionToPartition(partitionList, bufferArrList, globalOffset, r, zLocal)
 		);
 	}
 	
@@ -56,13 +56,13 @@ class AddPxlsToHistogram {
 		BufferArrList bufferArrList,
 		int globalOffset,
 		int r,
-		int z_local
+		int zLocal
 	) {
 		for (int i=0; i<partitionList.size(); i++) {
 			byte val = bufferArrList.get(i).get(globalOffset);
 			partitionList.get(i).addToPxlList(
 				r,
-				z_local,
+				zLocal,
 				ByteConverter.unsignedByteToInt(val)
 			);
 		}		

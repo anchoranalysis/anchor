@@ -56,14 +56,14 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 			throw new DeserializationFailedException(
 				String.format("HDF5 file not found at %s", path)	
 			);
-		} catch (Throwable exc) {
+		} catch (Exception e) {
 			throw new DeserializationFailedException(
 				String.format(
 					"An error occurred while reading HDF5 at %s with rootPath=%s",
 					path,
 					PathUtilities.objsRootPath()
 				),
-				exc
+				e
 			);
 		}
 	}

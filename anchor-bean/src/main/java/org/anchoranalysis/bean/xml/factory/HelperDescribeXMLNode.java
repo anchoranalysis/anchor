@@ -118,7 +118,7 @@ class HelperDescribeXmlNode {
 	 */
 	public static String describeXMLNode( ConfigurationNode node ) {
 		// We recurse back to the top, putting each item at the front of a linked list
-		List<ConfigurationNode> listNames = new ArrayList<ConfigurationNode>();
+		List<ConfigurationNode> listNames = new ArrayList<>();
 		
 		ConfigurationNode nodeCurrent = node;
 		while( nodeCurrent!= null ) {

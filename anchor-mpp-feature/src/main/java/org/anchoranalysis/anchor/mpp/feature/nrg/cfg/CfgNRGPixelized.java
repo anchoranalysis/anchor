@@ -42,18 +42,18 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
-/* Contains a particular energy configuration */
-
-// A CfgNRG together with the cached voxelization calculations
+/**
+ * Contains a particular energy configuration
+ * 
+ * <p>i.e. A {@link CfgNRG} together with the cached voxelization calculations.</p> 
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class CfgNRGPixelized  {
-
-	/**
-	 * 
-	 */
 	
-	// A cached version of the calculations for
-	//   each energy component in the associated NRGScheme
-    private transient MemoCollection memoMarks;
+	/** A cached version of the calculations for each energy component in the associated {@link NRGScheme} */
+    private MemoCollection memoMarks;
     
     private CfgNRG cfgNrg;
     

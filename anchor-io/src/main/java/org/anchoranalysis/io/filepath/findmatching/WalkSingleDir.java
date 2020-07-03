@@ -50,9 +50,9 @@ class WalkSingleDir {
 				new AddFilesToList(listOut, constraints.getMatcherFile(), constraints.getMatcherDir())
 			);
 		} catch (AccessDeniedException e) {
-			throw new FindFilesException( String.format("Cannot access directory: %s",e.getFile().toString()) );
+			throw new FindFilesException( String.format("Cannot access directory: %s",e.getFile()) );
 		} catch (FileSystemException e) {
-			throw new FindFilesException( String.format("An file-system error occurring accessing directory: %s", e.getFile().toString()) );
+			throw new FindFilesException( String.format("An file-system error occurring accessing directory: %s", e.getFile()) );
 		} catch (IOException e) {
 			throw new FindFilesException( String.format("An IO error occurring accessing directory: %s", e.toString()) );
 		}

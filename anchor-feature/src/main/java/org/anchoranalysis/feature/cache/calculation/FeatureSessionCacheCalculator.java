@@ -74,7 +74,7 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 			} catch (FeatureCalcException e) {
 			
 				throw new FeatureCalcException(
-					String.format("Feature '%s' has thrown an error\n", f.getFriendlyName()),
+					String.format("Feature '%s' has thrown an error%n", f.getFriendlyName()),
 					e
 				);
 			}

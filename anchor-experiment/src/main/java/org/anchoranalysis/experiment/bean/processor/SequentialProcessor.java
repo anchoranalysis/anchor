@@ -89,7 +89,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		Optional<LogReporter> logReporterMonitor
 	) throws ExperimentExecutionException {
 		
-		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<T>(
+		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<>(
 			obj -> executeJobAndLog( obj, sharedState, paramsExperiment ),
 			obj -> obj.descriptiveName(),
 			logReporterMonitor,

@@ -27,7 +27,6 @@ package org.anchoranalysis.image.io.generator.raster.series;
  */
 
 
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -41,9 +40,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
 
-	private ImgStackSeries<ByteBuffer> stackSeries;
+	private ImgStackSeries stackSeries;
 	
-	public RGBTimeSeriesGenerator(ImgStackSeries<ByteBuffer> stackSeries) {
+	public RGBTimeSeriesGenerator(ImgStackSeries stackSeries) {
 		super();
 		this.stackSeries = stackSeries;
 	}

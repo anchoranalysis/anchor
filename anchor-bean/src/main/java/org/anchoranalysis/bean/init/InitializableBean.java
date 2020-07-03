@@ -44,7 +44,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
  */
 public abstract class InitializableBean<B,P extends BeanInitParams> extends AnchorBean<B> {
 
-	private transient PropertyInitializer<P> propertyInitializer; 
+	private PropertyInitializer<P> propertyInitializer; 
 	
 	protected InitializableBean(PropertyInitializer<P> propertyInitializer) {
 		super();

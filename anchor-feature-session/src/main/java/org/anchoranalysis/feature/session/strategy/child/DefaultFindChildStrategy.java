@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class DefaultFindChildStrategy extends FindChildStrategy {
 
-	public final static FindChildStrategy instance = new DefaultFindChildStrategy();
+	public static final FindChildStrategy instance = new DefaultFindChildStrategy();
 	
 	private DefaultFindChildStrategy() {}
 	

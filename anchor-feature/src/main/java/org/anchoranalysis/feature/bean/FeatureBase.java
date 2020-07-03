@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureBase<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
-	private transient FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
+	private FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
 	protected FeatureBase() {
 		super( new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class) );

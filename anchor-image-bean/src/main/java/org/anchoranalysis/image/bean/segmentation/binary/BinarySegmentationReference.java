@@ -47,7 +47,7 @@ public class BinarySegmentationReference extends BinarySegmentation {
 	private String id;
 	// END BEAN PROPERTIES
 	
-	private transient BinarySegmentation proxy;
+	private BinarySegmentation proxy;
 
 	@Override
 	public void onInit(ImageInitParams so) throws InitException {

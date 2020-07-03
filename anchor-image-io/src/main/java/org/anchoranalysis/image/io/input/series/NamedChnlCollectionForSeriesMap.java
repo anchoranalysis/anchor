@@ -53,7 +53,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSeries {
+public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSeries {
 
 	private ImgChnlMap chnlMap;
 

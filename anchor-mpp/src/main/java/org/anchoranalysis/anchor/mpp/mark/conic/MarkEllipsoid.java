@@ -302,7 +302,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		);
 		
 		DoubleMatrix1D relPosSq = relPos.copy();
-		relPosSq.assign( Functions.functions.square );
+		relPosSq.assign( Functions.functions.square );	// NOSONAR
 		double dist = relPosSq.zSum();
 		
 		// Definitely outside

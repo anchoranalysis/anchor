@@ -36,7 +36,7 @@ import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 
 public class XStreamDeserializer<T> extends Deserializer<T> {
 
-	private final static String[] ALLOWED_NAMESPACES = new String[] {
+	private static final String[] ALLOWED_NAMESPACES = new String[] {
 		"org.anchoranalysis.**",
 		"cern.colt.matrix.**"	
 	};

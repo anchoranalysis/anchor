@@ -44,8 +44,8 @@ public class ErrorReporterIntoLog implements ErrorReporter {
 	
 	private LogReporter logReporter;
 
-	private final static String START_BANNER = "------------ BEGIN ERROR ------------" + System.lineSeparator();
-	private final static String END_BANNER =  System.lineSeparator() + "------------ END ERROR ------------";
+	private static final String START_BANNER = "------------ BEGIN ERROR ------------" + System.lineSeparator();
+	private static final String END_BANNER =  System.lineSeparator() + "------------ END ERROR ------------";
 	
 	public ErrorReporterIntoLog(LogReporter logReporter) {
 		super();

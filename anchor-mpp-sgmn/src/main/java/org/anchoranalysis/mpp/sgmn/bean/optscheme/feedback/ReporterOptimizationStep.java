@@ -1,10 +1,5 @@
 package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
 
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
 /*
  * #%L
  * anchor-mpp-sgmn
@@ -34,15 +29,4 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ReporterOptimizationStep<T> extends FeedbackReceiverBean<T> {
 
-	@Override
-	public abstract void reportBegin(OptimizationFeedbackInitParams<T> initParams) throws ReporterException;
-	
-	@Override
-	public abstract void reportItr( Reporting<T> reporting ) throws ReporterException;
-	
-	@Override
-	public abstract void reportNewBest( Reporting<T> reporting ) throws ReporterException;
-	
-	@Override
-	public abstract void reportEnd( OptimizationFeedbackEndParams<T> optStep ) throws ReporterException;
 }

@@ -62,11 +62,11 @@ import ij.process.ShortProcessor;
 
 public class IJWrap {
 
-	private final static String IMAGEJ_UNIT_MICRON = "micron";
-	private final static String IMAGEJ_IMAGE_NAME = "imagename";
+	private static final String IMAGEJ_UNIT_MICRON = "micron";
+	private static final String IMAGEJ_IMAGE_NAME = "imagename";
 	
 	/** A multiplication-factor to convert microns to meters */
-	private final static int MICRONS_TO_METERS = 1000000;
+	private static final int MICRONS_TO_METERS = 1000000;
 	
 	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
 	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;

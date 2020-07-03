@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 public abstract class ImageBean<T> extends InitializableBeanSimple<T,ImageInitParams> {
 
-	private transient ImageInitParams so;
+	private ImageInitParams so;
 	
 	protected ImageBean() {
 		super(

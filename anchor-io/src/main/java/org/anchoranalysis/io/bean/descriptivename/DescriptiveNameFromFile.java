@@ -41,7 +41,7 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveNameFromFile> {
 
-	private final static String DEFAULT_ELSE_NAME = "unknownName";
+	private static final String DEFAULT_ELSE_NAME = "unknownName";
 	
 	/** Like descriptiveNamesForCheckUniqueness but with a default for emptyName */
 	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files ) throws AnchorIOException {

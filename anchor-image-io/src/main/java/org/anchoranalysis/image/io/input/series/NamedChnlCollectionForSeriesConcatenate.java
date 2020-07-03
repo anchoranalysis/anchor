@@ -27,7 +27,6 @@ package org.anchoranalysis.image.io.input.series;
  */
 
 
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -51,7 +50,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public class NamedChnlCollectionForSeriesConcatenate<BufferType extends Buffer> extends NamedChnlCollectionForSeries {
+public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollectionForSeries {
 
 	private List<NamedChnlCollectionForSeries> list = new ArrayList<>();
 

@@ -122,19 +122,19 @@ public class AlwaysAllowed extends Writer {
 		
 		preop.exec();
 		
-		Path outfile_path = bom.outFilePath(
+		Path outPath = bom.outFilePath(
 			outputNamePrefix + outputName + outputNameSuffix + "." + extension
 		);
 		
 		manifestDescription.ifPresent( md->
 			bom.writeFileToOperationRecorder(
 				outputName,
-				outfile_path,
+				outPath,
 				md,
 				index
 			)
 		);
-		return Optional.of(outfile_path);
+		return Optional.of(outPath);
 	}
 	
 	@Override

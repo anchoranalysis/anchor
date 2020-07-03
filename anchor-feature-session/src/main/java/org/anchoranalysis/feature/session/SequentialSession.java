@@ -64,7 +64,7 @@ import org.apache.commons.collections.CollectionUtils;
  */
 public class SequentialSession<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
-	private final static String ERROR_NOT_STARTED = "Session has not been started yet. Call start().";
+	private static final String ERROR_NOT_STARTED = "Session has not been started yet. Call start().";
 	
 	private FeatureList<T> listFeatures;
 	

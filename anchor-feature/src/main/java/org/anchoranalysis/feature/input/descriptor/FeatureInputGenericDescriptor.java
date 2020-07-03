@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class FeatureInputGenericDescriptor extends FeatureInputDescriptor {
 
-	public final static FeatureInputGenericDescriptor instance = new FeatureInputGenericDescriptor();
+	public static final FeatureInputGenericDescriptor instance = new FeatureInputGenericDescriptor();
 	
 	private FeatureInputGenericDescriptor() {}
 	

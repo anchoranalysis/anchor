@@ -93,7 +93,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		for( int i=0; i<delegate.size(); i++ ) {
 			RGBColor col = colors.get(i);
 			Overlay ol = delegate.get(i);
-			sb.append( String.format("col=%s\tol=%s\n", col, ol) );
+			sb.append( String.format("col=%s\tol=%s%n", col, ol) );
 		}
 		sb.append("}\n");
 		return sb.toString();

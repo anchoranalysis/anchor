@@ -69,6 +69,7 @@ public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 
 	protected abstract IAggregateReceiver<T> getAggregateReceiver();
 
+	@Override
 	protected LogErrorReporter getLogger() {
 		return logger;
 	}

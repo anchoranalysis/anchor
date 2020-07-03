@@ -275,6 +275,7 @@ public class HistogramArray extends Histogram {
 		return ((double) sum) / cnt;
 	}
 	
+	@Override
 	public int calcMode() throws OperationFailedException {
 		checkAtLeastOneItemExists();
 		return calcMode(0);
@@ -352,7 +353,7 @@ public class HistogramArray extends Histogram {
 		return num;
 	}
 	
-
+	@Override
 	public double stdDev() throws OperationFailedException {
 		checkAtLeastOneItemExists();
 		return Math.sqrt( variance() );
@@ -433,6 +434,7 @@ public class HistogramArray extends Histogram {
 	}
 	
 	// Includes zero values
+	@Override
 	public String csvString() {
 		StringBuilder sb = new StringBuilder();
 		for (int t=minBinVal; t<=maxBinVal; t++) {

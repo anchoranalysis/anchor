@@ -60,7 +60,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	private String customName = "";
 	// END BEAN PROPERTIES
 
-	private transient LogErrorReporter logger;
+	private LogErrorReporter logger;
 
 	private boolean hasBeenInit = false;
 

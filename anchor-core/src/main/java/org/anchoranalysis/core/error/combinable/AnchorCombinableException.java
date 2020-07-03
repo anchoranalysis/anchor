@@ -116,7 +116,6 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
 				
 			} else if (canExceptionBeSkipped(e)) { 		
 				e = e.getCause();
-				continue;
 			} else {
 				// If it's on neither or Combine-List or Skip-List we get out
 				break;
@@ -139,14 +138,11 @@ public abstract class AnchorCombinableException extends AnchorCheckedException {
 		Throwable e = this;
 		do {
 			if (canExceptionBeCombined(e)) {
-			
 				finalExc = e;
 				e = e.getCause();
-				
 			} else if (canExceptionBeSkipped(e)) { 		
 				// We skip certain types of exceptions (basically ignore them, and move to the next cause)
 				e = e.getCause();
-				continue;
 			} else {
 				// If it's on neither or Combine-List or Skip-List we get out
 				break;

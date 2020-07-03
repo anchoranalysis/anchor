@@ -50,7 +50,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
 public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjectCollection> {
 
 	// Name of the attribute in the root of the HDF5 that stores the number of objects
-	public final static String NUM_OBJS_ATTR_NAME = "numberObjects";
+	public static final String NUM_OBJS_ATTR_NAME = "numberObjects";
 	
 	private ObjectCollection item;
 	private boolean compressed;

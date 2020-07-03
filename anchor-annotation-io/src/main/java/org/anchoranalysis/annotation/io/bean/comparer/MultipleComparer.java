@@ -70,7 +70,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 	private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 	
 	@BeanField @NonEmpty
-	private List<NamedBean<Comparer>> listComparers = new ArrayList<NamedBean<Comparer>>();
+	private List<NamedBean<Comparer>> listComparers = new ArrayList<>();
 	
 	@BeanField
 	private boolean useMIP = false;

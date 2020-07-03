@@ -74,7 +74,7 @@ public class InputBound<T,S> {
 
 	/** Immutably changes the input-object */
 	public <U> InputBound<U,S> changeInputObject( U inputObjectNew ) {
-		InputBound<U,S> out = new InputBound<U,S>(context);
+		InputBound<U,S> out = new InputBound<>(context);
 		out.setManifest(manifest);
 		out.setSharedState(sharedState);
 		out.setDetailedLogging(detailedLogging);

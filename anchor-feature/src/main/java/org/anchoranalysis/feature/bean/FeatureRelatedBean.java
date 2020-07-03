@@ -46,7 +46,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  */
 public abstract class FeatureRelatedBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
 
-	private transient SharedFeaturesInitParams soFeature;
+	private SharedFeaturesInitParams soFeature;
 	
 	protected FeatureRelatedBean() {
 		super(

@@ -63,13 +63,11 @@ public class IterableObjectGeneratorBridge<S,T,V> implements IterableObjectGener
 
 	@Override
 	public void setIterableElement(T element) throws SetOperationFailedException {
-		
-		assert(element!=null);
 		this.element = element;
 		try {
 			V bridgedElement = elementBridge.apply(element); 
 			internalGenerator.setIterableElement( bridgedElement );
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw new SetOperationFailedException(e);
 		}
 	}

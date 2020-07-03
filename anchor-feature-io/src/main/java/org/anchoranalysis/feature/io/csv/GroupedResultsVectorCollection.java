@@ -51,8 +51,8 @@ import com.google.common.collect.Comparators;
 
 public class GroupedResultsVectorCollection implements Closeable {
 
-	private final static String OUTPUT_NAME_FEATURES = "features";
-	private final static String OUTPUT_NAME_FEATURES_AGGREGATED = "featuresAggregated";
+	private static final String OUTPUT_NAME_FEATURES = "features";
+	private static final String OUTPUT_NAME_FEATURES_AGGREGATED = "featuresAggregated";
 	
 	private final MetadataHeaders metadata;
 	private final FeatureNameList featureNamesNonAggregate;

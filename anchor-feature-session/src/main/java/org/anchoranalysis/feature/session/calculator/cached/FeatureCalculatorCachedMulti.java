@@ -80,7 +80,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 		this.source = source;
 		this.suppressErrors = suppressErrors;
 		
-		this.cacheResults = new LRUCache<T,ResultsVector>(
+		this.cacheResults = new LRUCache<>(
 			cacheSize,
 			new GetterImpl()
 		);

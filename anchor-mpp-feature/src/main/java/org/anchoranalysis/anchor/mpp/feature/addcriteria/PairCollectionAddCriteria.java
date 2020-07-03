@@ -79,13 +79,13 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private Class<?> pairTypeClass;
 	
 	@BeanField
-	private transient AddCriteria<T> addCriteria;
+	private AddCriteria<T> addCriteria;
 	// END BEAN PROPERTIES
 	
-	private transient boolean hasInit = false;
-	private transient NRGStackWithParams nrgStack;
-	private transient LogErrorReporter logger;
-	private transient SharedFeatureMulti sharedFeatures;
+	private boolean hasInit = false;
+	private NRGStackWithParams nrgStack;
+	private LogErrorReporter logger;
+	private SharedFeatureMulti sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
 		this.pairTypeClass = pairTypeClass;

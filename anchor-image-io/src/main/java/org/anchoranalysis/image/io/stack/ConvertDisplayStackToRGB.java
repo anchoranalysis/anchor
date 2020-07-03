@@ -71,22 +71,11 @@ public class ConvertDisplayStackToRGB {
 					background.createChnlDuplicateForBBox(2,bbox)
 				);
 			} else {
-				assert false;
-				return null;
+				throw new AnchorImpossibleSituationException();
 			}
-		} catch (IncorrectImageSizeException e) {
+		} catch (IncorrectImageSizeException | CreateException e) {
 			// This should not be possible
-			assert false;
-			return null;
-		} catch (CreateException e) {
-			// This should not be possible
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
-		
 	}
-	
-	
-
-
 }
