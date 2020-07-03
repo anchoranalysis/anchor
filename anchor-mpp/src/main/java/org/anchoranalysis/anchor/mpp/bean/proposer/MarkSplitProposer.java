@@ -27,7 +27,7 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
  */
 
 
-import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
@@ -36,20 +36,13 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.geometry.Point3f;
 
 @GroupingRoot
 public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer> implements ICompatibleWith {
 
-	public abstract PairPxlMarkMemo propose( PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen ) throws ProposalAbnormalFailureException;
-	
-	// A debug method for optionally associating points with the last proposal made
-	public List<Point3f> getLastPnts1() {
-		return null;
-	}
-	
-	// A debug method for optionally associating points with the last proposal made
-	public List<Point3f> getLastPnts2() {
-		return null;
-	}
+	public abstract Optional<PairPxlMarkMemo> propose(
+		PxlMarkMemo mark,
+		ProposerContext context,
+		CfgGen cfgGen
+	) throws ProposalAbnormalFailureException;
 }

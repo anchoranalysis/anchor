@@ -2,7 +2,7 @@ package org.anchoranalysis.anchor.mpp.probmap;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+
 
 /*-
  * #%L
@@ -32,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -86,8 +87,7 @@ public class ProbMapObjMaskCollection extends ProbMap {
 	}
 
 	@Override
-	public BinaryChnl visualization()
-			throws OptionalOperationUnsupportedException {
+	public BinaryChnl visualization() throws OptionalOperationUnsupportedException {
 		try {
 			return BinaryChnlFromObjs.createFromObjs(
 				objMaskCollection,
@@ -95,14 +95,8 @@ public class ProbMapObjMaskCollection extends ProbMap {
 				BinaryValues.getDefault()
 			);
 		} catch (CreateException e) {
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
-	}
-
-	@Override
-	public UpdatableMarkSet updater() {
-		return null;
 	}
 
 	private Point3d sampleFromObjMask( ObjectMask om, RandomNumberGenerator re ) {

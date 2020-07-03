@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.bound;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 
 /*-
@@ -32,180 +34,66 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class BidirectionalBound {
 
-	private RslvdBound forward;
-	private RslvdBound reverse;
+	private final Optional<RslvdBound> forward;
+	private final Optional<RslvdBound> reverse;
 	
-	public RslvdBound getForward() {
-		return forward;
-	}
-	public void setForward(RslvdBound forward) {
+	public BidirectionalBound(Optional<RslvdBound> forward, Optional<RslvdBound> reverse) {
+		super();
 		this.forward = forward;
-	}
-	public RslvdBound getReverse() {
-		return reverse;
-	}
-	public void setReverse(RslvdBound reverse) {
 		this.reverse = reverse;
-	}
-	
-	// We get the lowest of forward or reverse
-	public RslvdBound calcMinimum() {
-		
-		if (forward==null) {
-			if (reverse==null) {
-				return null;
-			} else {
-				return reverse;
-			}
-		}
-		
-		if (reverse==null) {
-			return forward;
-		}
-		
-		if (reverse.getMin() < forward.getMin()) {
-			return reverse;
-		} else {
-			return forward;
-		}
-	}
-	
-	public RslvdBound calcIntersection() {
-		if (forward==null) {
-			if (reverse==null) {
-				return null;
-			} else {
-				return reverse;
-			}
-		}
-		
-		if (reverse==null) {
-			return forward;
-		}
-		
-		// If this returns null, it means there is no intersection between the two bounds
-		return forward.intersect(reverse);
-	}
-	
-	
-	public RslvdBound calcUnion() {
-		if (forward==null) {
-			if (reverse==null) {
-				return null;
-			} else {
-				return reverse;
-			}
-		}
-		
-		if (reverse==null) {
-			return forward;
-		}
-		
-		// If this returns null, it means there is no intersection between the two bounds
-		return forward.union(reverse);
-	}
+	}	
 	
 	public double getMaxOfMax() {
-		if (forward!=null && reverse!=null) {
-			return Math.max(forward.getMax(), reverse.getMax());
+		if (forward.isPresent() && reverse.isPresent()) {
+			return Math.max(forward.get().getMax(), reverse.get().getMax());
 		}
 		
-		if (forward!=null) {
-			return forward.getMax();
+		if (forward.isPresent()) {
+			return forward.get().getMax();
 		}
 		
-		if (reverse!=null) {
-			return reverse.getMax();
-		}
-		
-		return Double.NaN;
-	}
-	
-	
-	public double getMinOfMax() {
-		if (forward!=null && reverse!=null) {
-			return Math.min(forward.getMax(), reverse.getMax());
-		}
-		
-		if (forward!=null) {
-			return forward.getMax();
-		}
-		
-		if (reverse!=null) {
-			return reverse.getMax();
+		if (reverse.isPresent()) {
+			return reverse.get().getMax();
 		}
 		
 		return Double.NaN;
 	}
-	
-	public double getMaxOfMin() {
-		if (forward!=null && reverse!=null) {
-			return Math.max(forward.getMin(), reverse.getMin());
-		}
 		
-		if (forward!=null) {
-			return forward.getMax();
-		}
-		
-		if (reverse!=null) {
-			return reverse.getMax();
-		}
-		
-		return Double.NaN;
-	}
-	
-	public double getMinOfMin() {
-		if (forward!=null && reverse!=null) {
-			return Math.min(forward.getMin(), reverse.getMin());
-		}
-		
-		if (forward!=null) {
-			return forward.getMax();
-		}
-		
-		if (reverse!=null) {
-			return reverse.getMax();
-		}
-		
-		return Double.NaN;
-	}
-	
 	@Override
 	public String toString() {
 		return String.format("[%s and %s]", forward, reverse);
 	}
 	
 	public boolean isUnboundedAtBothEnds() {
-		return getForward()==null && getReverse()==null;
+		return !forward.isPresent() && !reverse.isPresent();
 	}
 	
 	public boolean isUnbounded() {
-		return getForward()==null || getReverse()==null;
+		return !forward.isPresent() || !reverse.isPresent();
 	}
 	
 	public boolean isUnboundedOrOutsideRange( double range ) {
 		if (isUnbounded()) {
 			return true;
 		}
-		
 		return getMaxOfMax()>range;
 	}
 	
 	public boolean isUnboundedOrOutsideRangeAtBothEnds( double range ) {
 		
-		boolean forwardUnbounded = getForward()==null || getForward().getMax()>range;
-		boolean reverseUnbounded = getReverse()==null || getReverse().getMax()>range;
+		boolean forwardUnbounded = !forward.isPresent() || forward.get().getMax()>range;
+		boolean reverseUnbounded = !reverse.isPresent() || reverse.get().getMax()>range;
 		return forwardUnbounded && reverseUnbounded;
 	}
 	
 	public double ratioBounds( ImageDimensions sd ) {
 		
-		if (getForward()==null || getReverse()==null) {
+		if (isUnbounded()) {
 			return -1;
 		}
 		
-		double fwd = getForward().getMax();
-		double rvrs = getReverse().getMax();
+		double fwd = forward.get().getMax();
+		double rvrs = reverse.get().getMax();
 		
 		double maxBoth, minBoth;
 		if (fwd >= rvrs) {
@@ -218,24 +106,12 @@ public class BidirectionalBound {
 		
 		return maxBoth / minBoth;
 	}
-	
-	// Checks if the forward-direction has the smallest maximum, unbounded max are treated as infinitey
-	public boolean hasForwardDirectionSmallestMax() {
 		
-		// Should never be called if no max is defined
-		if (getForward()==null && getReverse()==null) {
-			assert false;
-			return true;
-		}
-		
-		if (getForward()==null) {
-			return false;
-		}
-		
-		if (getReverse()==null) {
-			return true;
-		}
-		
-		return (getForward().getMax() < getReverse().getMax());
+	public Optional<RslvdBound> getForward() {
+		return forward;
+	}
+
+	public Optional<RslvdBound> getReverse() {
+		return reverse;
 	}
 }

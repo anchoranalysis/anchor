@@ -76,6 +76,49 @@ public abstract class Tuple3i implements ReadableTuple3i {
 		this.x = (int) (factor * this.x);
 		this.y = (int) (factor * this.y);
 	}
+	
+	/**
+	 * Element-wise minimum between this point and another
+	 * 
+	 * @param pnt the other point
+	 * @return a new point containing the minimum of the x, y, z components
+	 */
+	public Point3i min( ReadableTuple3i pnt ) {
+		return new Point3i(
+			Math.min(x, pnt.getX()),
+			Math.min(y, pnt.getY()),
+			Math.min(z, pnt.getZ())
+		);
+	}
+	
+	
+	/**
+	 * Element-wise maximum between this point and another
+	 * 
+	 * @param pnt the other point
+	 * @return a new point containing the minimum of the x, y, z components
+	 */
+	public Point3i max( ReadableTuple3i pnt ) {
+		return new Point3i(
+			Math.max(x, pnt.getX()),
+			Math.max(y, pnt.getY()),
+			Math.max(z, pnt.getZ())
+		);
+	}
+	
+	/**
+	 * Element-wise maximum between this point and a scalar
+	 * 
+	 * @param val the scalar
+	 * @return a new point containing the minimum of the x, y, z components
+	 */
+	public Point3i max( int val ) {
+		return new Point3i(
+			Math.max(x, val),
+			Math.max(y, val),
+			Math.max(z, val)
+		);
+	}
 
 	@Override
 	public final int getX() {

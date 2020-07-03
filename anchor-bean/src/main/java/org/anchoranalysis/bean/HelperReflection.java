@@ -44,23 +44,17 @@ class HelperReflection {
 		return beanInfo.getPropertyDescriptors();
 	}
 	
-	// Find a property-descriptor with a particular name from an array
-	public static PropertyDescriptor findMatchingPropertyDescriptor( PropertyDescriptor[] descriptors, String fieldName ) {
-		
-		for( PropertyDescriptor pd : descriptors ) {
-			if (pd.getName().equals(fieldName)) {
-				return pd;
-			}
-		}
-		return null;
-	}
-	
-	// Gets all fields, including inherited fields
-	public static List<Field> findAllFields( Class<?> c ) {
+	/** 
+	 * Finds all fields, including fields in parents in the inheritance tree.
+	 * 
+	 * @param classWithFields class with fields
+	 * @return all fields in the class
+	 **/
+	public static List<Field> findAllFields( Class<?> classWithFields ) {
 		
 		List<Field> out = new ArrayList<>();
 		
-		Class<?> current = c;
+		Class<?> current = classWithFields;
 		do {
 			for( Field f : current.getDeclaredFields() ) {
 				out.add(f);

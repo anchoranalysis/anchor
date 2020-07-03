@@ -1,7 +1,6 @@
 package org.anchoranalysis.anchor.mpp.bean.bound;
 
 import java.io.Serializable;
-
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -50,9 +49,8 @@ public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
 	private double max = 1.0;
 	// END BEAN PROPERTIES
 	
-	public RslvdBound() {
-		
-	}
+	/** Standard bean constructor */
+	public RslvdBound() {}
 	
 	public RslvdBound(double min, double max) {
 		super();
@@ -95,37 +93,10 @@ public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
 		this.max = this.max * mult_factor;
 	}
 	
-	public RslvdBound intersect( RslvdBound b ) {
-		
-		double minNew = Math.max( this.min, b.min );
-		double maxNew = Math.min( this.max, b.max );
-		
-		if (minNew > maxNew) {
-			return null;
-		}
-		
-		return new RslvdBound(minNew, maxNew);
-	}
-	
-	public RslvdBound union( RslvdBound b ) {
-		double minNew = Math.min( this.min, b.min );
-		double maxNew = Math.max( this.max, b.max );
-		
-		if (minNew > maxNew) {
-			return null;
-		}
-		
-		return new RslvdBound(minNew, maxNew);
-	}
-	
 	// A random value between the bounds (open interval)
 	public double randOpen( RandomNumberGenerator re ) {
 		double diff = max - min;
 		return min + (re.nextDouble() * diff );
-	}
-	
-	public double diff() {
-		return max - min;
 	}
 	
 	@Override

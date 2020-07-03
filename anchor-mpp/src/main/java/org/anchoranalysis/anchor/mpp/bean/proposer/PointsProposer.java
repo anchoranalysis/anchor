@@ -45,5 +45,5 @@ public abstract class PointsProposer extends NullParamsBean<PointsProposer> impl
 
 	public abstract Optional<List<Point3i>> propose( Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode ) throws ProposalAbnormalFailureException;
 	
-	public abstract CreateProposalVisualization proposalVisualization(boolean detailed);
+	public abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed);
 }

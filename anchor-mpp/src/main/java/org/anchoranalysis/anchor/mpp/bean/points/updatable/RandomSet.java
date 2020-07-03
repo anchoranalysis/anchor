@@ -34,8 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cern.jet.random.engine.RandomEngine;
-
 // http://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
 class RandomSet<E> extends AbstractSet<E> {
 
@@ -56,9 +54,9 @@ class RandomSet<E> extends AbstractSet<E> {
      * Override element at position <code>id</code> with last element.
      * @param id
      */
-    public E removeAt(int id) {
+    public void removeAt(int id) {
         if (id >= dta.size()) {
-            return null;
+            return;
         }
         E res = dta.get(id);
         idx.remove(res);
@@ -68,7 +66,6 @@ class RandomSet<E> extends AbstractSet<E> {
             idx.put(last, id);
             dta.set(id, last);
         }
-        return res;
     }
 
     @Override
@@ -83,14 +80,6 @@ class RandomSet<E> extends AbstractSet<E> {
 
     public E get(int i) {
         return dta.get(i);
-    }
-
-    public E pollRandom(RandomEngine rnd) {
-        if (dta.isEmpty()) {
-            return null;
-        }
-        int id = (int) (rnd.nextDouble() * dta.size());
-        return removeAt(id);
     }
 
     @Override

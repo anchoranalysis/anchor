@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -80,11 +81,11 @@ public class SpecificPathList extends FileProvider {
 	@Override
 	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
-		List<String> selectedPaths = selectListPaths(params.getInputContext());
+		Optional<List<String>> selectedPaths = selectListPaths(params.getInputContext());
 		
-		if (selectedPaths!=null) {
+		if (selectedPaths.isPresent()) {
 			return matchingFilesForList(
-				selectListPaths(params.getInputContext()),
+				selectedPaths.get(),
 				params.getProgressReporter()
 			);
 			
@@ -95,14 +96,16 @@ public class SpecificPathList extends FileProvider {
 		}
 	}
 	
-	private List<String> selectListPaths(InputContextParams inputContext) {
+	private Optional<List<String>> selectListPaths(InputContextParams inputContext) {
 		
 		if (listPaths!=null) {
-			return listPaths;
+			return Optional.of(listPaths);
 		} else if (inputContext.hasInputPaths()) {
-			return stringFromPaths(inputContext.getInputPaths());
+			return Optional.of(
+				stringFromPaths(inputContext.getInputPaths())
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
@@ -110,7 +113,7 @@ public class SpecificPathList extends FileProvider {
 		return paths.stream().map( s->s.toString() ).collect(Collectors.toList());
 	}
 	
-	private static Collection<File> matchingFilesForList( List<String> listPaths, ProgressReporter progressReporter ) {
+	private static Collection<File> matchingFilesForList(List<String> listPaths, ProgressReporter progressReporter ) {
 		return FunctionalUtilities.mapListWithProgress(
 			listPaths,
 			progressReporter,

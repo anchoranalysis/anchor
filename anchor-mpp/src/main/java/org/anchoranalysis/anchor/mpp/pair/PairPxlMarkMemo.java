@@ -65,10 +65,6 @@ public class PairPxlMarkMemo {
 	
 	@Override
 	public int hashCode() { 
-		if (source==null || destination==null) {
-			return 0;
-		}
-		
 		return (source.getMark().getId() * 3) + destination.getMark().getId();
   	}
 

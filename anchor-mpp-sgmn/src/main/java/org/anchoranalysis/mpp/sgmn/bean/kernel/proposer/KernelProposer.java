@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
@@ -205,7 +206,6 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 			} 
 		}
 		
-		assert false;
-		return null;
+		throw new AnchorImpossibleSituationException();
 	}
 }

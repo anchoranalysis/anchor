@@ -32,6 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -46,7 +47,7 @@ class DefaultBeanFactoryHelperInit {
 	private static class InitCollection {
 		
 		private Collection<Object> beanCollection;
-		private Class<?> defaultClass;
+		private Optional<Class<?>> defaultClass;
 				
 		public InitCollection(Collection<Object> beanCollection, String propName) {
 			super();
@@ -69,11 +70,22 @@ class DefaultBeanFactoryHelperInit {
 		}
 		
 		private void addWithoutParam( BeanDeclaration decl ) {
-			beanCollection.add(BeanHelper.createBean(decl, defaultClass));
+			beanCollection.add(
+				BeanHelper.createBean(
+					decl,
+					defaultClass.orElse(null)
+				)
+			);
 		}
 		
 		private void addWithParam( BeanDeclaration decl, Object parameter ) {
-			beanCollection.add(BeanHelper.createBean(decl, defaultClass, parameter));
+			beanCollection.add(
+				BeanHelper.createBean(
+					decl,
+					defaultClass.orElse(null),
+					parameter
+				)
+			);
 		}
 	}
 	
@@ -114,11 +126,18 @@ class DefaultBeanFactoryHelperInit {
 		private void initNonCollection( Object bean ) {
 			for (Map.Entry<String, Object> e : nestedBeans.entrySet()) {
 	            String propName = e.getKey();
-	            Class<?> defaultClass = getDefaultClass(bean, propName);
+	            Optional<Class<?>> defaultClass = getDefaultClass(bean, propName);
 	            
 	            if (e.getValue() instanceof BeanDeclaration) {
-	            	initProperty(bean, propName, BeanHelper.createBean(
-	    	                (BeanDeclaration) e.getValue(), defaultClass, parameter));	
+	            	initProperty(
+	            		bean,
+	            		propName,
+	            		BeanHelper.createBean(
+	    	                (BeanDeclaration) e.getValue(),
+	    	                defaultClass.orElse(null),
+	    	                parameter
+	    	            )
+	            	);	
 	            } else {
 	            	// TODO what kind of error should be thrown here if there's a non-bean parameter?
 	            }
@@ -168,15 +187,17 @@ class DefaultBeanFactoryHelperInit {
      * @param propName The name of the property.
      * @return The class associated with the property or null.
      */
-    private static Class<?> getDefaultClass(Object bean, String propName) {
+    private static Optional<Class<?>> getDefaultClass(Object bean, String propName) {
         try {
             PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(bean, propName);
             if (desc == null) {
-                return null;
+                return Optional.empty();
             }
-            return desc.getPropertyType();
+            return Optional.of(
+            	desc.getPropertyType()
+            );
         } catch (Exception ex) {
-            return null;
+            return Optional.empty();
         }
     }
     

@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -198,8 +199,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 				try {
 					h.addHistogram(hChnl);
 				} catch (OperationFailedException e) {
-					assert false;
-					return null;
+					throw new AnchorImpossibleSituationException();
 				}
 			}
 		}
