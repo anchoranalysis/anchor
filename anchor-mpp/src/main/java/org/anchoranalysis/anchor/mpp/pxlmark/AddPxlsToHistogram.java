@@ -27,7 +27,7 @@ package org.anchoranalysis.anchor.mpp.pxlmark;
  */
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.pixelpart.IndexByChnl;
@@ -68,7 +68,7 @@ class AddPxlsToHistogram {
 		}		
 	}
 	
-	private static void iterateRegions( byte membership, List<RegionMembershipWithFlags> listRegionMembership, Consumer<Integer> func ) {
+	private static void iterateRegions( byte membership, List<RegionMembershipWithFlags> listRegionMembership, IntConsumer func ) {
 		// We optimise this
 		for( int r=0; r<listRegionMembership.size(); r++) {
 			RegionMembershipWithFlags rm = listRegionMembership.get(r);

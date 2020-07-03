@@ -53,7 +53,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessionCache<T> {
+public class HorizontalFeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
 
 	private FeatureSessionCache<T> delegate;
 	

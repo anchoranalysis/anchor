@@ -52,7 +52,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  * @param parameter-type
  */
-public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
+public class HorizontalCalculationCache<T extends FeatureInput> implements FeatureSessionCache<T> {
 	
 	private ResettableCachedCalculator<T> calculator;
 	

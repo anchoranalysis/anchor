@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param T feature-input type that the cache supports
  */
-public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> implements CalculationResolver<T>, FeatureSymbolCalculator<T> {
+public interface FeatureSessionCacheCalculator<T extends FeatureInput> extends CalculationResolver<T>, FeatureSymbolCalculator<T> {
 	
 	/**
 	 * Calculate a feature with particular values
@@ -52,7 +52,7 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 	 * @return the feature-value
 	 * @throws FeatureCalcException
 	 */
-	public abstract double calc( Feature<T> feature, SessionInput<T> input ) throws FeatureCalcException;
+	double calc( Feature<T> feature, SessionInput<T> input ) throws FeatureCalcException;
 	
 	/**
 	 * Calculates a feature-list throwing an exception if there is an error
@@ -62,7 +62,7 @@ public abstract class FeatureSessionCacheCalculator<T extends FeatureInput> impl
 	 * @return the results of each feature, with Double.NaN (and the stored exception) if an error occurs
 	 * @throws FeatureCalcException 
 	 */
-	public ResultsVector calc( FeatureList<T> features, SessionInput<T> input ) throws FeatureCalcException {
+	default ResultsVector calc( FeatureList<T> features, SessionInput<T> input ) throws FeatureCalcException {
 		ResultsVector out = new ResultsVector(features.size());
 		for( int i=0; i<features.size(); i++ ) {
 			

@@ -2,7 +2,7 @@ package org.anchoranalysis.image.histogram;
 
 import static java.lang.Math.toIntExact;
 import java.util.Arrays;
-import java.util.function.Function;
+import java.util.function.LongUnaryOperator;
 
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.LessThanBean;
@@ -103,7 +103,7 @@ public class HistogramArray extends Histogram {
 	 * 
 	 * @throws ArithmeticException if incresae cannot be converted to an int safely
 	 */
-	public void incrValBy( int val, long increase ) throws ArithmeticException {
+	public void incrValBy( int val, long increase ) {
 		incrValBy( val, toIntExact(increase) );
 	}
 	
@@ -546,12 +546,12 @@ public class HistogramArray extends Histogram {
 		return sum / cnt;
 	}
 	
-	private long calcSumHelper( Function<Long,Long> funcInteger ) {
+	private long calcSumHelper( LongUnaryOperator func ) {
 		
 		long sum = 0;
 		
 		for (int i=minBinVal; i<=maxBinVal; i++) {
-			long add = arrGetLong(i) * funcInteger.apply( (long) i);
+			long add = arrGetLong(i) * func.applyAsLong( (long) i);
 			assert(add>=0);
 			sum += add;
 			assert(sum>=0);

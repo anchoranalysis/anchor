@@ -168,7 +168,7 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 	
 	@Override
 	public Operation<Stack,OperationFailedException> allChnlsAsStack(int t) {
-		return new WrapOperationAsCached<Stack,OperationFailedException>(
+		return new WrapOperationAsCached<>(
 			() -> stackForAllChnls(t)
 		);
 	}

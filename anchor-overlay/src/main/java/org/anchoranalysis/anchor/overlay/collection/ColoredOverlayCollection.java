@@ -60,10 +60,6 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		return delegate.add(e);
 	}
 
-//	public boolean addAll(Collection<? extends Overlay> c) {
-//		return delegate.addAll(c);
-//	}
-
 	@Override
 	public Iterator<Overlay> iterator() {
 		return delegate.iterator();
@@ -140,9 +136,6 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 				out.add(overlay, getColor(i));
 			}
 		}
-		
-		//log.info( String.format("intersect size size=%d", intersectCfg.size() ));
-		
 		return out;
 	}
 	

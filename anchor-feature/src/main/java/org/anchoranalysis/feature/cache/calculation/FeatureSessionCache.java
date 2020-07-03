@@ -55,7 +55,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param T feature-input
  *
  */
-public abstract class FeatureSessionCache<T extends FeatureInput> {
+public interface FeatureSessionCache<T extends FeatureInput> {
 
 	
 	/**
@@ -68,12 +68,12 @@ public abstract class FeatureSessionCache<T extends FeatureInput> {
 	/**
 	 * Invalidates existing caches so all calculations occur freshly
 	 */
-	public abstract void invalidate();
+	void invalidate();
 	
 	/**
 	 * Invalidates existing caches so all calculations occur freshly - except some particular child-caches who are not invalidated
 	 */
-	public abstract void invalidateExcept( Set<ChildCacheName> childCacheNames );
+	void invalidateExcept( Set<ChildCacheName> childCacheNames );
 	
 	
 	/**
@@ -81,7 +81,7 @@ public abstract class FeatureSessionCache<T extends FeatureInput> {
 	 * 
 	 * @return
 	 */
-	public abstract FeatureSessionCacheCalculator<T> calculator();
+	FeatureSessionCacheCalculator<T> calculator();
 	
 	/**
 	 * Gets/creates a child-cache for a given name
@@ -94,5 +94,5 @@ public abstract class FeatureSessionCache<T extends FeatureInput> {
 	 * @param cacheCreator TODO
 	 * @return the existing or new child cache of the given name
 	 */
-	public abstract <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> inputType, CacheCreator cacheCreator);
+	<V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> inputType, CacheCreator cacheCreator);
 }

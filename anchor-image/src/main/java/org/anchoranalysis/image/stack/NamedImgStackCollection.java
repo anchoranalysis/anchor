@@ -55,7 +55,7 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 		map = new HashMap<>();
 	}
 	
-	public Optional<OperationWithProgressReporter<Stack,OperationFailedException>> getAsOperation( String identifier ) throws IllegalArgumentException {
+	public Optional<OperationWithProgressReporter<Stack,OperationFailedException>> getAsOperation( String identifier ) {
 		return Optional.ofNullable(
 			map.get(identifier)
 		);
@@ -175,5 +175,5 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 				throw new OperationFailedException(e.summarize());
 			}
 		}
-	};
+	}
 }

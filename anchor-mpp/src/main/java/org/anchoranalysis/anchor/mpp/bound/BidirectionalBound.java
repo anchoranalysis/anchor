@@ -95,7 +95,8 @@ public class BidirectionalBound {
 		double fwd = forward.get().getMax();	// NOSONAR
 		double rvrs = reverse.get().getMax();	// NOSONAR
 		
-		double maxBoth, minBoth;
+		double maxBoth;
+		double minBoth;
 		if (fwd >= rvrs) {
 			maxBoth = fwd;
 			minBoth = rvrs;
