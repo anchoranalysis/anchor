@@ -74,7 +74,7 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 				Optional.ofNullable( map.get(key) ),
 				ret -> ret.doOperation()
 			);
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw NamedProviderGetException.wrap(key, e);
 		}
 	}

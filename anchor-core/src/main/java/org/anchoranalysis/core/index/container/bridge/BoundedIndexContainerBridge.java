@@ -57,7 +57,7 @@ public abstract class BoundedIndexContainerBridge<H,S> implements IBoundedIndexC
 		H internalState = delegate.get(index);
 		try {
 			return bridge(index, internalState);
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw new GetOperationFailedException(e);
 		}
 	}
