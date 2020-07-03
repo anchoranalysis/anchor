@@ -136,7 +136,15 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 		};
 	}
 	
-	private void writeOrientationLine( Point3i midpoint, double orientationRadians, RGBColor color, RGBStack stack, BoundingBox bbox, Point3d min, Point3d max ) {
+	private void writeOrientationLine(
+		Point3i midpoint,
+		double orientationRadians,
+		RGBColor color,
+		RGBStack stack,
+		BoundingBox bbox,
+		Point3d min,
+		Point3d max
+	) {
 		
 		// We start at 0
 		double x = midpoint.getX();
@@ -146,22 +154,17 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 		double yIncr = Math.sin( orientationRadians ) * xDiv;
 		
 		while( true ) {
-			int xI = (int) x;
-			int yI = (int) y;
+			Point3i pnt = new Point3i( (int) x, (int) y, 0);
 
-			if (!bbox.contains().x(xI)) {
-				break;
-			}
-
-			if (!bbox.contains().y(yI)) {
+			if (!bbox.contains().x(pnt.getX()) || !bbox.contains().y(pnt.getY())) {
 				break;
 			}
 			
-			if ( (xI < min.getX() || xI > max.getX()) && (yI < min.getY() || yI > max.getY())) {
+			if ( (pnt.getX() < min.getX() || pnt.getX() > max.getX()) && (pnt.getY() < min.getY() || pnt.getY() > max.getY())) {
 				break;
 			}
 		
-			RGBMidpointWriter.writeRelPoint( new Point3i(xI,yI,0), color, stack, bbox );
+			RGBMidpointWriter.writeRelPoint(pnt, color, stack, bbox );
 						
 			x += xIncr;
 			y += yIncr;

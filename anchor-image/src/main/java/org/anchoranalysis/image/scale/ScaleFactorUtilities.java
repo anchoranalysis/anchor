@@ -3,6 +3,9 @@ package org.anchoranalysis.image.scale;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-image-bean
@@ -29,10 +32,8 @@ import org.anchoranalysis.image.extent.Extent;
  * #L%
  */
 
-
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ScaleFactorUtilities {
-	
-	private ScaleFactorUtilities() {}
 	
 	/**
 	 * Calculates a scaling factor so as to scale sdSource to sdTarget

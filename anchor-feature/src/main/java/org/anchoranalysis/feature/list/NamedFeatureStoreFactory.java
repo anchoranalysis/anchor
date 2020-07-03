@@ -36,12 +36,14 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class NamedFeatureStoreFactory {
 
 	/** iff TRUE, only describe the parameters of the features, but not the name. Otherwise both are described. */
 	private boolean paramsOnlyInDescription = false;
-	
-	private NamedFeatureStoreFactory() {}
 	
 	public static NamedFeatureStoreFactory factoryParamsOnly() {
 		NamedFeatureStoreFactory out = new NamedFeatureStoreFactory();

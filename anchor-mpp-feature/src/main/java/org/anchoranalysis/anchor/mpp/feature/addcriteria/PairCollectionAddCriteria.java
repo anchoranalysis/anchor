@@ -191,7 +191,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	// Each pair appears twice
 	public Set<T> createPairsUnique() {
-		HashSet<T> setOut = new HashSet<T>();
+		HashSet<T> setOut = new HashSet<>();
 		for( EdgeTypeWithVertices<Mark,T> pair : getPairsWithPossibleDuplicates()) {
 			setOut.add(pair.getEdge());
 		}

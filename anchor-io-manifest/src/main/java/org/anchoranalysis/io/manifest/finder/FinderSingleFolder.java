@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
-public abstract class FinderSingleFolder extends Finder {
+public abstract class FinderSingleFolder implements Finder {
 
 	private Optional<FolderWrite> foundFolder = Optional.empty();
 	

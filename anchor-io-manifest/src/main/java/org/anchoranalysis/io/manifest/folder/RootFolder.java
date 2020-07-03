@@ -30,7 +30,6 @@ package org.anchoranalysis.io.manifest.folder;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.List;
-
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.Match;
@@ -42,18 +41,16 @@ public class RootFolder extends FolderWrite implements Serializable {
 	 */
 	private static final long serialVersionUID = -939826653076766321L;
 
-	private FileList delegate;
+	private final FileList delegate;
 	
 	// We don't want to serialize this, as its temporary state (and an error will be thrown as WindowsPath is not serializable)
-	private transient Path rootPath;
+	private final transient Path rootPath;
 	
-	// This must be always called before it can used, as the state is kept transient
-	public void initRootPath( Path rootFolderPath ) {
-		if (delegate==null) {
-			delegate = new FileList(this);
-		}
-		this.rootPath = rootFolderPath;
-	}
+	public RootFolder(Path rootPath) {
+		super();
+		this.rootPath = rootPath;
+		delegate = new FileList(this);
+	}	
 	
 	@Override
 	public void write(String outputName,
@@ -64,7 +61,6 @@ public class RootFolder extends FolderWrite implements Serializable {
 
 	@Override
 	public Path getRelativePath() {
-		assert( rootPath!= null );
 		return rootPath;
 	}
 
@@ -86,5 +82,4 @@ public class RootFolder extends FolderWrite implements Serializable {
 	public void add( FolderWrite folder ) {
 		getFolderList().add(folder);
 	}
-
 }

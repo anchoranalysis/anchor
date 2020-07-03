@@ -35,9 +35,11 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class FeatureInputDescriptorUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private FeatureInputDescriptorUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FeatureInputDescriptorUtilities {
 	
 	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) {
 		return paramTypeForTwo( item1.inputDescriptor(), item2.inputDescriptor() );
@@ -75,14 +77,14 @@ public class FeatureInputDescriptorUtilities {
 	
 	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForList( List<Feature<T>> list ) {
 		
-		if (list.size()==0) {
-			return FeatureInputGenericDescriptor.instance;
+		if (list.isEmpty()) {
+			return FeatureInputGenericDescriptor.INSTANCE;
 		}
 		
 		FeatureInputDescriptor chosenParamType = chooseParamType(list); 
 		
 		if (chosenParamType==null) {
-			return FeatureInputGenericDescriptor.instance;
+			return FeatureInputGenericDescriptor.INSTANCE;
 		} else {
 			return chosenParamType;
 		}

@@ -34,14 +34,16 @@ import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * The default strategy for finding children by always directly taking (or creating a child-cache) as necessary.
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class DefaultFindChildStrategy extends FindChildStrategy {
 
 	public static final FindChildStrategy instance = new DefaultFindChildStrategy();
-	
-	private DefaultFindChildStrategy() {}
 	
 	@Override
 	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(

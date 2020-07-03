@@ -33,9 +33,11 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class DefineAdderUtilities {
-	
-	private DefineAdderUtilities() {}
 	
 	public static void addBeansFromList( Define out, List<NamedBean<?>> list ) throws BeanXmlException {
 	

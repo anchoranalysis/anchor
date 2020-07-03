@@ -31,9 +31,11 @@ import java.util.Optional;
 
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 
-public class TestCsvUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private TestCsvUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class TestCsvUtilities {
 	
 	/**
 	 * Checks if a particular string can be found in any cell of a CSV file

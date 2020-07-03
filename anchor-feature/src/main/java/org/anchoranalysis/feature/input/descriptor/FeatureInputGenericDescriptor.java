@@ -2,6 +2,9 @@ package org.anchoranalysis.feature.input.descriptor;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-feature
@@ -35,11 +38,10 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureInputGenericDescriptor extends FeatureInputDescriptor {
 
-	public static final FeatureInputGenericDescriptor instance = new FeatureInputGenericDescriptor();
-	
-	private FeatureInputGenericDescriptor() {}
+	public static final FeatureInputGenericDescriptor INSTANCE = new FeatureInputGenericDescriptor();
 	
 	@Override
 	public boolean isCompatibleWithEverything() {

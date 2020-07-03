@@ -70,7 +70,7 @@ public class ChnlFixture {
 		
 	public static Channel createChnl( Extent e, IntensityFunction createIntensity ) {
 		
-		ImageDimensions sd = new ImageDimensions( e, ImageResFixture.instance );
+		ImageDimensions sd = new ImageDimensions( e, ImageResFixture.INSTANCE );
 		
 		ChannelFactorySingleType factory = new ChannelFactoryByte();
 		Channel chnl = factory.createEmptyInitialised(sd);

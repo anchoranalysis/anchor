@@ -33,12 +33,14 @@ import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class DeserializerHelper {
 
 	private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();
 	private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation = new XStreamDeserializer<>();
-	
-	private DeserializerHelper() {}
 	
 	public static Cfg deserializeCfg( Path path ) throws DeserializationFailedException {
 		return deserializerCfg.deserialize( path );

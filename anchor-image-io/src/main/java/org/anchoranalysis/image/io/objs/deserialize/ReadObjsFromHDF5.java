@@ -50,7 +50,7 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 
 		try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
 
-			return readObjs(reader, PathUtilities.objsRootPath() );
+			return readObjs(reader, PathUtilities.OBJS_ROOT_PATH );
 		
 		} catch (HDF5FileNotFoundException e) {
 			throw new DeserializationFailedException(
@@ -61,7 +61,7 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 				String.format(
 					"An error occurred while reading HDF5 at %s with rootPath=%s",
 					path,
-					PathUtilities.objsRootPath()
+					PathUtilities.OBJS_ROOT_PATH
 				),
 				e
 			);

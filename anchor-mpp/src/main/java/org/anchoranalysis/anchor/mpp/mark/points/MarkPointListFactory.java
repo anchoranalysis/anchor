@@ -52,7 +52,7 @@ public class MarkPointListFactory {
 	public static MarkPointList createMarkFromPoints3f( List<Point3f> pts, boolean round ) {
 		MarkPointList markPts = new MarkPointList();
 		markPts.getPoints().addAll(
-			PointConverter.convert3f_3d(pts)
+			PointConverter.convert3fTo3d(pts)
 		);
 		markPts.updateAfterPointsChange();
 		return markPts;

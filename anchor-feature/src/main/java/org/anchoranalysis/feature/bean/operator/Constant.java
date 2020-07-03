@@ -34,17 +34,15 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class Constant<T extends FeatureInput> extends Feature<T> {
 
 	// START BEAN PARAMETERS
 	@BeanField
 	private double value;
 	// END BEAN PARAMETERS
-	
-	/**
-	 * Standard Bean Constructor
-	 */
-	public Constant() {}
 
 	/**
 	 * Constructor with a particular value
@@ -91,7 +89,7 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.instance;
+		return FeatureInputGenericDescriptor.INSTANCE;
 	}
 
 }

@@ -34,9 +34,11 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
-class CompareUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private CompareUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class CompareUtilities {
 	
 	public static void checkZeroRows( boolean rejectZeroRows, Optional<String[]> lines1, Optional<String[]> lines2 ) throws CSVReaderException {
 		if (!rejectZeroRows) {
@@ -83,7 +85,7 @@ class CompareUtilities {
 			
 		} else {
 			// The simple case where we don't ignore any columns
-			return ArrayUtils.isEquals(lines1, lines2);
+			return ArrayUtils.isEquals(lines1.get(), lines2.get());
 		}
 	}
 
@@ -95,7 +97,7 @@ class CompareUtilities {
 	 * 
 	 * Default delimeter of "  "
 	 */
-	public static void printTwoLines( PrintStream messageStream, String[] line1, String line2[] ) {
+	public static void printTwoLines( PrintStream messageStream, String[] line1, String[] line2 ) {
 		printTwoLines(messageStream,line1,line2,"  ");
 	}
 	
@@ -109,7 +111,7 @@ class CompareUtilities {
 	 * @param line2 an array of strings for second line
 	 * @param delimter a string that separates each column
 	 */
-	public static void printTwoLines( PrintStream messageStream, String[] line1, String line2[], String delimeter ) {
+	public static void printTwoLines( PrintStream messageStream, String[] line1, String[] line2, String delimeter ) {
 		
 		StringBuilder out1 = new StringBuilder();
 		StringBuilder out2 = new StringBuilder();

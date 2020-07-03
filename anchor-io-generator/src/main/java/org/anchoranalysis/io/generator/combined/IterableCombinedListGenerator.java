@@ -29,10 +29,13 @@ package org.anchoranalysis.io.generator.combined;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
@@ -43,25 +46,40 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import com.google.common.base.Preconditions;
+
 // We can probably have a more efficient implementation by not using the CombinedListGenerator as a delegate
 //  but we leave it for now
 // Should always have at least one item added
 public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator implements IterableGenerator<T> {
 
-	private CombinedListGenerator delegate = new CombinedListGenerator();
+	private final CombinedListGenerator delegate = new CombinedListGenerator();
 	
-	private ArrayList<IterableGenerator<T>> list = new ArrayList<>();
+	private final List<IterableGenerator<T>> list = new ArrayList<>();
 	
-	public IterableCombinedListGenerator() {
-		list = new ArrayList<>();
+	public IterableCombinedListGenerator( NameValue<IterableGenerator<T>> namedGenerator ) {
+		add(
+			namedGenerator.getValue(),
+			Optional.of(namedGenerator.getName())
+		);
+	}
+	
+	public IterableCombinedListGenerator( Stream<NameValue<IterableGenerator<T>>> namedGenerators ) {
+		namedGenerators.forEach( item->
+			add(
+				item.getValue(),
+				Optional.of(item.getName())
+			)
+		);
+		checkNonEmptyList();
 	}
 	
 	@SafeVarargs
 	public IterableCombinedListGenerator(IterableGenerator<T> ...generator) {
-		this();
 		Arrays.stream(generator).forEach( gen->
 			add(gen, Optional.empty())
 		);
+		checkNonEmptyList();
 	}
 	
 	@Override
@@ -126,5 +144,9 @@ public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator 
 	private void add(IterableGenerator<T> element, Optional<String> name) {
 		list.add(element);
 		delegate.add(element.getGenerator(), name);
+	}
+	
+	private void checkNonEmptyList() {
+		Preconditions.checkArgument(!list.isEmpty());
 	}
 }

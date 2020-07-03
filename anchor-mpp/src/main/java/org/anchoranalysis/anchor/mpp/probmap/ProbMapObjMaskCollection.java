@@ -30,9 +30,7 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -49,8 +47,7 @@ public class ProbMapObjMaskCollection extends ProbMap {
 	
 	private ProbWeights probWeights;
 	
-	public ProbMapObjMaskCollection(ObjectCollection objMaskCollection,
-			ImageDimensions dim) throws CreateException {
+	public ProbMapObjMaskCollection(ObjectCollection objMaskCollection,	ImageDimensions dim) {
 		super();
 		this.objMaskCollection = objMaskCollection;
 		this.dim = dim;
@@ -88,15 +85,11 @@ public class ProbMapObjMaskCollection extends ProbMap {
 
 	@Override
 	public BinaryChnl visualization() throws OptionalOperationUnsupportedException {
-		try {
-			return BinaryChnlFromObjs.createFromObjs(
-				objMaskCollection,
-				dim,
-				BinaryValues.getDefault()
-			);
-		} catch (CreateException e) {
-			throw new AnchorImpossibleSituationException();
-		}
+		return BinaryChnlFromObjs.createFromObjs(
+			objMaskCollection,
+			dim,
+			BinaryValues.getDefault()
+		);
 	}
 
 	private Point3d sampleFromObjMask( ObjectMask om, RandomNumberGenerator re ) {

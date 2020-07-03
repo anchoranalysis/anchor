@@ -101,7 +101,18 @@ public class CSVReader {
 			}
 			
 		}
-
+		
+		private void maybeRemoveQuotes( String[] arr ) {
+			
+			if (!quotedStrings) {
+				// Exit early if we don't supported quoted strings
+				return;
+			}
+			
+			for( int i=0; i<arr.length; i++) {
+				arr[i] = CSVReader.maybeRemoveQuotes( arr[i] );
+			}
+		}
 	}
 	
 	public CSVReader( String regExSeperator, boolean firstLineHeaders ) {
@@ -152,20 +163,8 @@ public class CSVReader {
 			throw new CSVReaderException(e);
 		}
 	}
-	
-	private void maybeRemoveQuotes( String[] arr ) {
-		
-		if (!quotedStrings) {
-			// Exit early if we don't supported quoted strings
-			return;
-		}
-		
-		for( int i=0; i<arr.length; i++) {
-			arr[i] = maybeRemoveQuotes( arr[i] );
-		}
-	}
-	
-	private static String maybeRemoveQuotes( String s ) {
+
+	private static String maybeRemoveQuotes( String s ) {		// NOSONAR
 		if (s.length()<=2) {
 			return s;
 		}
@@ -175,5 +174,5 @@ public class CSVReader {
 		} else {
 			return s;
 		}
-	}	
+	}
 }

@@ -35,9 +35,11 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.InitException;
 
-class FindChildrenForInit {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private FindChildrenForInit() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class FindChildrenForInit {
 	
 	/**
 	 * Finds children of bean that need to be initialized - and adds them to a list
@@ -83,7 +85,7 @@ class FindChildrenForInit {
 		}
 	}
 	
-	private static void addChildren( List<BeanAndParent> listOut, BeanAndParent bean, Object propertyValue, boolean optional ) throws InitException {
+	private static void addChildren( List<BeanAndParent> listOut, BeanAndParent bean, Object propertyValue, boolean optional ) {
 		
 		// If it's an optional attribute we check that it's not null
     	if (optional && propertyValue==null) {

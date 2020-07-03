@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.index;
 
+
 /*
  * #%L
  * anchor-core
@@ -26,9 +27,7 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 /**
  * Holds a single-index which is hashable and comparable
@@ -36,9 +35,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author FEEHANO
  *
  */
-public class SingleIndexCntr implements IIndexGetter, Comparable<IIndexGetter> {
+@EqualsAndHashCode
+public abstract class SingleIndexCntr implements IIndexGetter, Comparable<IIndexGetter> {
 
-	private int index;
+	private final int index;
 	
 	public SingleIndexCntr(int index) {
 		super();
@@ -59,24 +59,5 @@ public class SingleIndexCntr implements IIndexGetter, Comparable<IIndexGetter> {
 		} else {
 			return 0;
 		}
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if( obj instanceof SingleIndexCntr) {
-			SingleIndexCntr other = (SingleIndexCntr) obj;
-			return new EqualsBuilder()
-	            .append(index, other.index)
-	            .isEquals();
-		
-		} else {
-			return false;
-		}
-	}
-	@Override
-	public int hashCode() {
-		 return new HashCodeBuilder()
-	        .append(index)
-	        .toHashCode();
 	}
 }

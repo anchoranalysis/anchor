@@ -34,9 +34,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
-class TextFileLogHelper {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private TextFileLogHelper() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class TextFileLogHelper {
 	
 	public static Optional<FileOutput> createOutput( BoundOutputManager bom, String outputName ) throws OutputWriteFailedException {
 		return FileOutputFromManager.create(

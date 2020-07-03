@@ -74,7 +74,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 		
 		Deserializer<T> deserializer;
 		if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {
-			deserializer = new KeyValueParamsDeserializer<T>();
+			deserializer = new KeyValueParamsDeserializer<>();
 		} else if (fileWrite.getFileName().toLowerCase().endsWith(".xml")) {
 			deserializer = new XStreamDeserializer<>();
 		} else {

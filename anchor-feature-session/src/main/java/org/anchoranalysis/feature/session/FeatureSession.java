@@ -45,6 +45,9 @@ import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrateg
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * A single-point in the code for creating feature-sessions (a factory).
  * 
@@ -55,9 +58,8 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureSession {
-
-	private FeatureSession() {}
 	
 	/**
 	 * Starts a feature-session for a single feature
@@ -155,9 +157,7 @@ public class FeatureSession {
 			Optional.of(sharedFeatures),
 			logger,
 			new ArrayList<>(),
-			new BoundReplaceStrategy<>(
-				cacheCreator -> new ReuseSingletonStrategy<>(cacheCreator)
-			)
+			new BoundReplaceStrategy<>(ReuseSingletonStrategy::new)
 		);
 	}
 	

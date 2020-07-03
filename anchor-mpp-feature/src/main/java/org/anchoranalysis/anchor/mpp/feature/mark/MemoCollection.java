@@ -65,7 +65,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
     
 	// START CONSTRUCTORS
     public MemoCollection() {
-    	pxlMarkMemo = new ArrayList<PxlMarkMemo>();
+    	pxlMarkMemo = new ArrayList<>();
     }
     
 	public MemoCollection(
@@ -152,10 +152,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 	
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
-	public PxlMarkMemo exchange( NRGSavedInd nrgSavedInd, int index, PxlMarkMemo newMark, NRGStack stack, Cfg cfg, NRGSchemeWithSharedFeatures nrgSchemeTotal ) throws FeatureCalcException {
-		
-		assert( newMark != null );
-
+	public PxlMarkMemo exchange( NRGSavedInd nrgSavedInd, int index, PxlMarkMemo newMark, NRGStack stack, NRGSchemeWithSharedFeatures nrgSchemeTotal ) throws FeatureCalcException {
 		// We calculate energy for individual components
 		NRGTotal ind = nrgSchemeTotal.calcElemIndTotal(newMark, stack );
 		nrgSavedInd.exchange(index, ind);

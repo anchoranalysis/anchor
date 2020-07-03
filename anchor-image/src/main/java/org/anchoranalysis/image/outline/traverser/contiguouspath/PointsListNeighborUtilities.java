@@ -30,9 +30,11 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
-public class PointsListNeighborUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private PointsListNeighborUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class PointsListNeighborUtilities {
 	
 	/** Are all points in a list neighbouring the next point in the list? */
 	public static boolean areAllPointsInBigNghb( List<Point3i> list ) {
@@ -76,10 +78,7 @@ public class PointsListNeighborUtilities {
 		if (distSingleDim(pnt1.getY(), pnt2.getY())) {
 			return false;
 		}
-		if (distSingleDim(pnt1.getZ(), pnt2.getZ())) {
-			return false;
-		}
-		return true;
+		return (!distSingleDim(pnt1.getZ(), pnt2.getZ()));
 	}
 	
 	private static boolean distSingleDim( int x, int y ) {

@@ -33,7 +33,6 @@ public class MarkPointListFactory extends MarkFactory {
 	
 	@Override
 	public Mark create() {
-		MarkPointList mark = new MarkPointList();
-		return mark;
+		return new MarkPointList();
 	}
 }

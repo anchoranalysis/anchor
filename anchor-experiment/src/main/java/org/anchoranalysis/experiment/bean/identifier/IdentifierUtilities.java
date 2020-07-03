@@ -2,6 +2,9 @@ package org.anchoranalysis.experiment.bean.identifier;
 
 import java.util.Optional;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-experiment
@@ -28,9 +31,8 @@ import java.util.Optional;
  * #L%
  */
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class IdentifierUtilities {
-
-	private IdentifierUtilities() {}
 	
 	public static String identifierFromNameVersion( String name, Optional<String> version ) {
 		StringBuilder sb = new StringBuilder(name);

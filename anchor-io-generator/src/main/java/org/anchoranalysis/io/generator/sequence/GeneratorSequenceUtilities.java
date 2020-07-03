@@ -38,9 +38,11 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class GeneratorSequenceUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private GeneratorSequenceUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class GeneratorSequenceUtilities {
 	
 	public static <T> void generateListAsSubfolder(
 		String folderName,

@@ -28,7 +28,6 @@ package org.anchoranalysis.image.object.ops;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -43,12 +42,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class BinaryChnlFromObjs {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private BinaryChnlFromObjs() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class BinaryChnlFromObjs {
 	
 	/** We look for space IN objects, and create channel to display it */
-	public static BinaryChnl createFromObjs( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) throws CreateException {
+	public static BinaryChnl createFromObjs( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) {
 		return createChnlObjMaskCollectionHelper(
 			masks,
 			sd,
@@ -60,7 +61,7 @@ public class BinaryChnlFromObjs {
 	
 
 	/** We look for space NOT in the objects, and create channel to display it */
-	public static BinaryChnl createFromNotObjs( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal ) throws CreateException {
+	public static BinaryChnl createFromNotObjs( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal ) {
 		return createChnlObjMaskCollectionHelper(
 			objs,
 			sd,
@@ -77,7 +78,7 @@ public class BinaryChnlFromObjs {
 		BinaryValues outVal,
 		int initialState,
 		byte objState
-	) throws CreateException {
+	) {
 		
 		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();

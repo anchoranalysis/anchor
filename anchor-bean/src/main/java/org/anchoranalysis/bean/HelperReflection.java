@@ -35,9 +35,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-class HelperReflection {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private HelperReflection() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class HelperReflection {
 	
 	public static PropertyDescriptor[] findAllPropertyDescriptors( Class<?> beanClass ) throws IntrospectionException {
 		BeanInfo beanInfo = Introspector.getBeanInfo(beanClass, Object.class);

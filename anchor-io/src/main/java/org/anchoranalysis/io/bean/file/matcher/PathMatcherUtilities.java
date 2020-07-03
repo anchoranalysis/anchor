@@ -30,9 +30,11 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.function.Predicate;
 
-class PathMatcherUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private PathMatcherUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class PathMatcherUtilities {
 	
 	public static Predicate<Path> filter(Path dir, String fileType, String fileFilter) {
 		PathMatcher matcher = PathMatcherUtilities.matcherForFilter(dir, fileType, fileFilter);

@@ -28,10 +28,11 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class TensorUtilities {
-	
-	private TensorUtilities() {}
 	
 	public static final double squared( double val ) {
 		return Math.pow(val,  2);

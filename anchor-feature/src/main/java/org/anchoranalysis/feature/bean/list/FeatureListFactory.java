@@ -44,15 +44,17 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Factory for creating {@link FeatureList} in different ways
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureListFactory {
-
-	private FeatureListFactory() {}
 	
 	/**
 	 * Creates an empty list of features

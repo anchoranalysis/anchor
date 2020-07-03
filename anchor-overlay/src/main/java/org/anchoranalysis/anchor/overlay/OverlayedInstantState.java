@@ -29,17 +29,17 @@ package org.anchoranalysis.anchor.overlay;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.index.SingleIndexCntr;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+@EqualsAndHashCode(callSuper = true)
 public class OverlayedInstantState extends SingleIndexCntr {
 
-	private OverlayCollection overlayCollection;
+	@Getter
+	private final OverlayCollection overlayCollection;
 	
 	public OverlayedInstantState(int iter, OverlayCollection overlayCollection) {
 		super(iter);
-		assert(overlayCollection!=null);
 		this.overlayCollection = overlayCollection;
-	}
-
-	public OverlayCollection getOverlayCollection() {
-		return overlayCollection;
 	}
 }

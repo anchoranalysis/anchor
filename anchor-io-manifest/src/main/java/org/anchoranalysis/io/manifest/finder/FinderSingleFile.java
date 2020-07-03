@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 
-public abstract class FinderSingleFile extends Finder {
+public abstract class FinderSingleFile implements Finder {
 
 	private Optional<FileWrite> foundFile = Optional.empty();
 	

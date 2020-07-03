@@ -32,9 +32,11 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
-public class ReverseUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private ReverseUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class ReverseUtilities {
 	
 	public static List<Point3i> reversedList( List<Point3i> list ) {
 		List<Point3i> copy = new ArrayList<>( list );

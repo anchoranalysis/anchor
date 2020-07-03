@@ -70,7 +70,7 @@ public class CSVComparer {
 		
 		if (sortLines) {
 			CompareSorted compareWithSorting = new CompareSorted( ignoreFirstNumColumns, rejectZeroRows );
-			return compareWithSorting.compare( file1, file2, System.out );
+			return compareWithSorting.compare( file1, file2, System.out );	// NOSONAR
 		} else {
 			CompareUnsorted compareUnsorted = new CompareUnsorted();
 			return compareUnsorted.compareCsvFilesWithoutSorting( file1, file2, ignoreFirstNumColumns, rejectZeroRows );

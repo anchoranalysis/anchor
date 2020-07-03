@@ -1,5 +1,8 @@
 package org.anchoranalysis.image.object;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-image
@@ -32,9 +35,8 @@ package org.anchoranalysis.image.object;
  * @author owen
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OverlapCalculator {
-	
-	private OverlapCalculator() {}
 	
 	public static double calcOverlapRatio( ObjectMask objA, ObjectMask objB, ObjectMask objMerged ) {
 		

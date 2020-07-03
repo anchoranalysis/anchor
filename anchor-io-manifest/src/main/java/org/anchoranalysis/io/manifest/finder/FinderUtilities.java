@@ -36,9 +36,11 @@ import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.match.Match;
 
-public class FinderUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private FinderUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FinderUtilities {
 	
 	public static List<FileWrite> findListFile( ManifestRecorder manifestRecorder, Match<FileWrite> match ) {
 		

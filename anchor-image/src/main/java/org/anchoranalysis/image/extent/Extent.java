@@ -280,11 +280,7 @@ public final class Extent implements Serializable {
 			return false;
 		}
 		
-		if (z >= len.getZ()) {
-			return false;
-		}
-		
-		return true;
+		return (z < len.getZ());
 	}
 	
 	public boolean contains( BoundingBox bbox ) {

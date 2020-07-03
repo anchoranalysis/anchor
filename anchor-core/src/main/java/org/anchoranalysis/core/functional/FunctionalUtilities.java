@@ -37,9 +37,11 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 
-public class FunctionalUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private FunctionalUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FunctionalUtilities {
 	
 	/** An exception that wraps another exception, but exposes itself as a RuntimeException */
 	public static class ConvertedToRuntimeException extends AnchorFriendlyRuntimeException {
@@ -49,7 +51,7 @@ public class FunctionalUtilities {
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		private Throwable exception;
+		private final Throwable exception;
 		
 		public ConvertedToRuntimeException(Throwable exception) {
 			super(exception);

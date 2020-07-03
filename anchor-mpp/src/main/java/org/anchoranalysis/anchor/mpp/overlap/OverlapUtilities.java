@@ -34,9 +34,11 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class OverlapUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private OverlapUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class OverlapUtilities {
 	
 	public static double overlapWith( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
 

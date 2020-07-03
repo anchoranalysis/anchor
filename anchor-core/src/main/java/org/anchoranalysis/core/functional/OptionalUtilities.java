@@ -29,15 +29,17 @@ package org.anchoranalysis.core.functional;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Additional utility functions for {@link Optional} and exceptions.
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OptionalUtilities {
-	
-	private OptionalUtilities() {}
 
 	/**
 	 * Function used to map from one optional to another

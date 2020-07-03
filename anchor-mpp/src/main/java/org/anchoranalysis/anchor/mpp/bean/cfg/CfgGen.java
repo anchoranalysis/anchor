@@ -36,6 +36,9 @@ import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class CfgGen extends NullParamsBean<CfgGen> {
 	
 	// START BEAN PARAMETERS
@@ -48,11 +51,6 @@ public class CfgGen extends NullParamsBean<CfgGen> {
 	// END BEAN PARAMETERS
 	
 	private IdCounter idCounter;
-	
-	// Configuration generation
-	public CfgGen() {
-		// Standard bean constructor
-	}
 	
 	// Constructor
 	public CfgGen(MarkFactory templateMark ) {

@@ -151,7 +151,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
 	private static void addPointsFrom( MarkPointList mark, List<Point3f> pnts ) {
 		pnts.addAll(
-			PointConverter.convert3d_3f( mark.getPoints() )
+			PointConverter.convert3dTo3f( mark.getPoints() )
 		);
 	}
 	

@@ -38,9 +38,11 @@ import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStra
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-class TransferSourceHelper {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private TransferSourceHelper() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class TransferSourceHelper {
 	
 	public static CacheTransferSourceCollection createTransferSource(
 		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> replaceStrategyFirstAndSecond,
@@ -68,9 +70,7 @@ class TransferSourceHelper {
 		List<ChildCacheName> cacheNames
 	) {
 		return new CacheTransferSource<>(
-			() -> replaceStrategy.getStrategy().map( strategy -> 
-				strategy.getCache()
-			),
+			() -> replaceStrategy.getStrategy().map(CacheAndReuseStrategy::getCache),
 			new HashSet<>(cacheNames)
 		);
 	}

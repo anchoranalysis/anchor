@@ -31,9 +31,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class XmlUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private XmlUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class XmlUtilities {
 	
 	public static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

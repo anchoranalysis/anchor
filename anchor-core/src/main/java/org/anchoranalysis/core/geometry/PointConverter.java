@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PointConverter {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private PointConverter() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class PointConverter {
 	
 	// START singular points
 	
@@ -111,27 +113,27 @@ public class PointConverter {
 	
 	// START lists of points
 	
-	public static List<Point3f> convert3i_3f( List<Point3i> points ) {
+	public static List<Point3f> convert3iTo3f( List<Point3i> points ) {
 		return convert( points, PointConverter::floatFromInt );
 	}
 	
-	public static List<Point3f> convert3d_3f( List<Point3d> points ) {
+	public static List<Point3f> convert3dTo3f( List<Point3d> points ) {
 		return convert( points, PointConverter::floatFromDouble );
 	}
 	
-	public static List<Point3f> convert2i_3f( List<Point2i> points ) {
+	public static List<Point3f> convert2iTo3f( List<Point2i> points ) {
 		return convert( points, PointConverter::floatFromInt );
 	}
 	
-	public static List<Point3d> convert2i_3d( List<Point2i> points ) {
+	public static List<Point3d> convert2iTo3d( List<Point2i> points ) {
 		return convert( points, PointConverter::doubleFromInt );
 	}
 	
-	public static List<Point3d> convert3f_3d( List<Point3f> points ) {
+	public static List<Point3d> convert3fTo3d( List<Point3f> points ) {
 		return convert( points, PointConverter::doubleFromFloat );
 	}
 	
-	public static List<Point3i> convert3i( List<Point3f> points, boolean round ) {
+	public static List<Point3i> convert3i(List<Point3f> points, boolean round) {
 		return convert(
 			points,
 			pnt -> intFromFloat(pnt, round) 

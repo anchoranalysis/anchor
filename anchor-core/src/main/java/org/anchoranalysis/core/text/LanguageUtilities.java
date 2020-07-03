@@ -1,5 +1,8 @@
 package org.anchoranalysis.core.text;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-core
@@ -26,11 +29,8 @@ package org.anchoranalysis.core.text;
  * #L%
  */
 
-
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class LanguageUtilities {
-	
-	private LanguageUtilities() {}
-	
 
 	/**
 	 * Returns something or somethings depending on the number

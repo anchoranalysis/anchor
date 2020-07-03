@@ -172,7 +172,6 @@ public class BoundOutputManager {
 	public IWriteOperationRecorder writeFolderToOperationRecorder( Path path, ManifestFolderDescription manifestDescription, Optional<FolderWriteWithPath> manifestFolder ) {
 		if (manifestFolder.isPresent()) {
 			// Assume the folder are writing to has no path
-			assert(manifestFolder.get().calcPath()==null);
 			Path relativePath = boundFilePathPrefix.relativePath(path);
 			
 			return writeOperationRecorder.writeFolder( relativePath, manifestDescription, manifestFolder.get());
@@ -182,8 +181,7 @@ public class BoundOutputManager {
 	}
 	
 	private static IWriteOperationRecorder writeRecorder( Optional<ManifestRecorder> manifestRecorder ) {
-		Optional<IWriteOperationRecorder> opt = manifestRecorder
-			.map( mr->mr.getRootFolder() );
+		Optional<IWriteOperationRecorder> opt = manifestRecorder.map(ManifestRecorder::getRootFolder);
 		return opt.orElse(
 			new NullWriteOperationRecorder()
 		);

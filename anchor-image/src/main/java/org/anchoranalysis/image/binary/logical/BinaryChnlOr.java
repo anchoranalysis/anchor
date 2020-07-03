@@ -34,9 +34,11 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
-public class BinaryChnlOr {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private BinaryChnlOr() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class BinaryChnlOr {
 		
 	/**
 	 * A binary OR of chnlCrnt and chnlReceiver where chnlReceiver is overwritten with the output
@@ -45,7 +47,7 @@ public class BinaryChnlOr {
 	 * @param chnlReceiver second-channel for OR (and the channel where the result is overwritten)
 	 * @throws CreateException
 	 */
-	public static void binaryOr( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) throws CreateException {
+	public static void binaryOr( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) {
 		
 		BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
 		BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();

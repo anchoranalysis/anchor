@@ -53,49 +53,4 @@ public class MarkEllipsoidFactory extends MarkFactory {
 	public void setShellRad(double shellRad) {
 		this.shellRad = shellRad;
 	}
-	
-	
-//	public static MarkEllipsoid createMarkEllipsoidMoments( ObjMask om, boolean suppressZCovariance ) {
-//		
-//		SecondMomentMatrix	moments = SecondMomentMatrixFactory.createSecondMomentsForObjMaskPoints(om, suppressZCovariance);
-//		
-//		double radMaj = moments.get(0).eigenvalueNormalizedAsAxisLength()/2;
-//		double radMinor = moments.get(1).eigenvalueNormalizedAsAxisLength()/2;
-//		double radMostMinor = moments.get(2).eigenvalueNormalizedAsAxisLength()/2;
-//		
-//		if (radMaj<1.0) {
-//			radMaj = 1.0;
-//		}
-//		if (radMinor<1.0) {
-//			radMinor = 1.0;
-//		}
-//		if (radMostMinor<1.0) {
-//			radMostMinor = 1.0;
-//		}
-//		
-//		assert(radMaj>0.0);
-//		assert(radMinor>0.0);
-//		assert(radMostMinor>0.0);
-//		
-//		Point3d posNew = new Point3d(
-//				moments.getMean(0) + om.getBoundingBox().getCrnrMin().getX(),
-//				moments.getMean(1) + om.getBoundingBox().getCrnrMin().getY(),
-//				moments.getMean(2) + om.getBoundingBox().getCrnrMin().getZ()
-//			);
-//		
-//		RotationMatrix rotMatrix = RotationMatrix.createFrom3Vecs(
-//			moments.get(0).getEigenvector(),
-//			moments.get(1).getEigenvector(),
-//			moments.get(2).getEigenvector()
-//		);
-//		
-//		//RotationMatrix rotMatrix = RotationMatrix.createToAlignXAxisWith( moments.get(2).getEigenVector(), moments.get(1).getEigenVector() );
-//		
-//		Orientation orientation = new OrientationRotationMatrix(rotMatrix); 
-//		
-//		MarkEllipsoid me = new MarkEllipsoid();
-//		me.setMarksExplicit( posNew, orientation, new Point3d( radMaj, radMinor, radMostMinor ) );
-//		return me;
-//	}
-
 }

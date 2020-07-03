@@ -36,9 +36,11 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CreateFromPointsFactory {
-	
-	private CreateFromPointsFactory() {}
 	
 	public static ObjectMask create( List<Point3i> pnts ) throws CreateException {
 		

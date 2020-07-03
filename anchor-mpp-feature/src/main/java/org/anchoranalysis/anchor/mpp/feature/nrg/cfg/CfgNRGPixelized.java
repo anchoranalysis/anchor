@@ -132,7 +132,7 @@ public final class CfgNRGPixelized  {
 	}
 	
 	public void add( PxlMarkMemo newPxlMark, NRGStack stack ) throws FeatureCalcException {
-		cfgNrg.add(memoMarks, newPxlMark, stack, logger);
+		cfgNrg.add(memoMarks, newPxlMark, stack);
 	}
 	
 	public void rmv( int index, NRGStack stack ) throws FeatureCalcException {

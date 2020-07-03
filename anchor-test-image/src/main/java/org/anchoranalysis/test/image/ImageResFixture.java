@@ -28,11 +28,13 @@ package org.anchoranalysis.test.image;
 
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ImageResFixture {
 
-	public static final ImageResolution instance = create();
-	
-	private ImageResFixture() {}
+	public static final ImageResolution INSTANCE = create();
 	
 	private static ImageResolution create() {
 		return new ImageResolution(

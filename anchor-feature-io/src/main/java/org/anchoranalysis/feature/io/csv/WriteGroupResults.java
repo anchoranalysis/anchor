@@ -53,12 +53,16 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Writing the group or aggregated related results to the filesystem
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class WriteGroupResults {
 
 	/** The name of the CSV file outputted with feature-values for each group */
@@ -71,9 +75,7 @@ class WriteGroupResults {
 	
 	private static final ManifestDescription MANIFEST_PARAMS = new ManifestDescription("paramsXML", "aggregateObjMask");
 	
-	private WriteGroupResults() {}
-	
-	public static <T extends FeatureInput> void writeResultsForSingleGroup(
+	public static void writeResultsForSingleGroup(
 		Optional<MultiName> groupName,
 		ResultsVectorCollection results,
 		FeatureNameList featureNames,
@@ -90,7 +92,7 @@ class WriteGroupResults {
 		}
 	}
 		
-	public static <T extends FeatureInput> void maybeWriteAggregatedResultsForSingleGroup(
+	public static void maybeWriteAggregatedResultsForSingleGroup(
 		Optional<MultiName> groupName,
 		ResultsVectorCollection results,
 		FeatureNameList featureNames,

@@ -29,6 +29,9 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNrgTotal;
 import org.anchoranalysis.core.index.SingleIndexCntr;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
 public class CfgWithNrgTotalInstantState extends SingleIndexCntr {
 
 	private CfgWithNrgTotal cfg;

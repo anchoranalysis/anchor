@@ -46,17 +46,11 @@ public class ManifestRecorder implements Serializable {
 	private RootFolder rootFolder;	// Paths relative to this
 
 	private static Log log = LogFactory.getLog(ManifestRecorder.class);
-	
-	public ManifestRecorder() {
-		super();
-		rootFolder = new RootFolder();
-	}	
 
 	public void init( Path rootFolderPath ) {
 		
 		log.debug( String.format("init %s", rootFolderPath) ); 
-
-		rootFolder.initRootPath( rootFolderPath );
+		rootFolder = new RootFolder(rootFolderPath);
 	}
 
 	public FolderWrite getRootFolder() {

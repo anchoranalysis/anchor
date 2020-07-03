@@ -40,7 +40,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -138,7 +137,7 @@ public class CfgNRG implements Serializable {
 	}
 
 	
-	public void add( MemoCollection wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack, LogErrorReporter logger ) throws FeatureCalcException {
+	public void add( MemoCollection wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack) throws FeatureCalcException {
 		
 		delegate.add(newPxlMarkMemo);
 		
@@ -225,7 +224,13 @@ public class CfgNRG implements Serializable {
 		delegate.exchange(index, newMark);
 		
 		// We do the exchange on the calcMarkInd first, as our calcMarkPair is expressed relative
-		PxlMarkMemo newPxlMarkMemo = wrapperInd.exchange( getCalcMarkInd(), index, newMark, nrgStack.getNrgStack(), delegate.getCfg(), delegate.getNrgScheme() );
+		PxlMarkMemo newPxlMarkMemo = wrapperInd.exchange(
+			getCalcMarkInd(),
+			index,
+			newMark,
+			nrgStack.getNrgStack(),
+			delegate.getNrgScheme()
+		);
 		try {
 			PxlMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark( getCfg(), oldMark );
 			getCalcMarkPair().exchange( wrapperInd, oldPxlMarkMemo, index, newPxlMarkMemo );

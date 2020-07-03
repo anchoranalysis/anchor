@@ -1,5 +1,8 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -26,9 +29,8 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
  * #L%
  */
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ConvertHelper {
-
-	private ConvertHelper() {}
 	
 	public static float twoToPower( int exponent ) {
 		return (float) Math.pow(2.0, exponent);

@@ -28,6 +28,9 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
 public class CfgNRGNonHandleInstantState extends CfgNRGInstantState {
 
 	private CfgNRG cfgNRG;

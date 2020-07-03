@@ -30,9 +30,11 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-public class EllipsoidUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private EllipsoidUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class EllipsoidUtilities {
 	
 	public static double[] normalisedRadii( MarkEllipsoid mark, ImageResolution res ) {
 		// We re-calculate all the bounds to take account of the different z-resolution

@@ -30,9 +30,11 @@ import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class AssignmentGeneratorFactory {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private AssignmentGeneratorFactory() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class AssignmentGeneratorFactory {
 	
 	public static AssignmentGenerator createAssignmentGenerator(
 		DisplayStack background,

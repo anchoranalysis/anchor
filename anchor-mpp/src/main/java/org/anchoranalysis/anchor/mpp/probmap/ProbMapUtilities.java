@@ -34,9 +34,11 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ProbMapUtilities {
-	
-	private ProbMapUtilities() {}
 	
 	public static Point3d getUniformRandomPnt( RandomNumberGenerator re, ImageDimensions bndScene ) {
     	// Generate each point

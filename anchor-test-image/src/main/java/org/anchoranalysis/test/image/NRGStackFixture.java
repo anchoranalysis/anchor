@@ -35,9 +35,11 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.image.ChnlFixture.IntensityFunction;
 
-public class NRGStackFixture {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private NRGStackFixture() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class NRGStackFixture {
 	
 	public static NRGStackWithParams create( boolean big, boolean do3D ) {
 	

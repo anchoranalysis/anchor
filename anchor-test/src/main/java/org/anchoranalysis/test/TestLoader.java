@@ -31,7 +31,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -74,13 +73,13 @@ public class TestLoader {
 	private TestLoader( Path root ) {
 		super();
 		
-		if (!Files.exists(root)) {
+		if (!root.toFile().exists()) {
 			throw new TestDataInitException(
 			  String.format("Cannot find path '%s' path", root)
 			);
 		}
 		
-		if (!Files.isDirectory(root)) {
+		if (!root.toFile().isDirectory()) {
 			throw new TestDataInitException(
 			  String.format("Path '%s' is not a folder", root)
 			);			
@@ -156,7 +155,7 @@ public class TestLoader {
 		
 		Path fileNameReslvd = resolveTestPath( testFilePath );
 
-		return Files.exists(fileNameReslvd);
+		return fileNameReslvd.toFile().exists();
 	}
 	
 	
@@ -168,11 +167,8 @@ public class TestLoader {
 	 * @return true if a file is found at the location, false otherwise
 	 */
 	public boolean doesPathExist( String testFolderPath, String fileName ) {
-		
-		Path folderPathRslvd = resolveTestPath( testFolderPath );
-		
-		Path path = folderPathRslvd.resolve(fileName);
-		return Files.exists(path);
+		Path folder = resolveTestPath( testFolderPath );
+		return folder.resolve(fileName).toFile().exists();
 	}
 	
 	
@@ -182,13 +178,13 @@ public class TestLoader {
 	    if (firstLevelFiles != null && firstLevelFiles.length > 0) {
 	        for (File aFile : firstLevelFiles) {
 	            for (int i = 0; i < level; i++) {
-	                System.out.print("\t");
+	                System.out.print("\t");		// NOSONAR
 	            }
 	            if (aFile.isDirectory()) {
-	                System.out.println("[" + aFile.getName() + "]");
+	                System.out.println("[" + aFile.getName() + "]");	// NOSONAR
 	                listDirectory(aFile.getAbsolutePath(), level + 1);
 	            } else {
-	                System.out.println(aFile.getName());
+	                System.out.println(aFile.getName());	// NOSONAR
 	            }
 	        }
 	    }

@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
@@ -68,14 +69,14 @@ public class SerializedObjectSetFolderSource implements SequencedFolder {
 		
 		FolderWritePhysical fwp = new FolderWritePhysical();
 		fwp.setPath( folderPath );
-		fwp.setParentFolder(null);
+		fwp.setParentFolder( Optional.empty());
 		
 		try {
 			Collection<File> files = fileSet.create(
 				new InputManagerParams(
 					new InputContextParams(),
 					ProgressReporterNull.get(),
-					null		// HACK: Can be safely set to null as fileSet.setIgnoreHidden(false);						
+					null		// HACK: Can be safely set to null as fileSet.setIgnoreHidden(false);	// NOSONAR						
 				)
 			);
 			

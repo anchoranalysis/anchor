@@ -100,7 +100,7 @@ public abstract class OutputExperiment extends Experiment {
 			stopWatchExperiment.start();
 			
 			
-			initBeforeDo( params.getOutputManager(), params.getExperimentArguments().isDebugEnabled() );
+			initBeforeDo( params.getOutputManager() );
 			
 			params.getLogReporterExperiment().start( );
 					
@@ -173,7 +173,7 @@ public abstract class OutputExperiment extends Experiment {
 		}
 	}
 	
-	private void initBeforeDo( BoundOutputManagerRouteErrors bom, boolean debugMode ) {
+	private void initBeforeDo( BoundOutputManagerRouteErrors bom) {
 		UpdateLog4JOutputManager.updateLog4J(bom);
 	}
 	

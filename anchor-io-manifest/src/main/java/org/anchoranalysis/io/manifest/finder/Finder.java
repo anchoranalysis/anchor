@@ -28,12 +28,12 @@ package org.anchoranalysis.io.manifest.finder;
 
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 
-public abstract class Finder {
+public interface Finder {
 
 	// true, if there was a successful match, false otherwise
-	public abstract boolean doFind( ManifestRecorder manifestRecorder );
+	boolean doFind( ManifestRecorder manifestRecorder );
 	
 	// doFind must be called first
 	// Does the object exist?
-	public abstract boolean exists();
+	boolean exists();
 }

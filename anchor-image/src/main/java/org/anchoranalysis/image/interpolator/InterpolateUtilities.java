@@ -37,10 +37,12 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class InterpolateUtilities {
-	
-	private InterpolateUtilities() {}
-	
+
 	private static Transfer createTransfer( VoxelBoxWrapper src, VoxelBoxWrapper dest ) {
 		
 		if (!src.getVoxelDataType().equals(dest.getVoxelDataType())) {
@@ -63,8 +65,6 @@ public class InterpolateUtilities {
 		Extent eTrgt = trgt.any().extent();
 		
 		Transfer biWrapper = createTransfer(src,trgt);
-
-		//resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
 		
 		for (int z=0; z<eSrc.getZ(); z++) {
 			

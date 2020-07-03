@@ -38,17 +38,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T> {
 
 	// START BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter
 	private List<Feature<T>> list = new ArrayList<>();
 	// END BEAN PARAMETERS
-	
-	/**
-	 * Standard bean constructor
-	 */
-	protected FeatureListElem() {}
 	
 	/**
 	 * Constructor
@@ -74,10 +74,6 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 		return String.join(operatorDscr, featureDscrs);
 	}
 	
-	public List<Feature<T>> getList() {
-		return list;
-	}
-
 	public void setList(List<Feature<T>> list) {
 		this.list = list;
 	}

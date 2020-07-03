@@ -32,9 +32,11 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.apache.log4j.Appender;
 import org.apache.log4j.LogManager;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class UpdateLog4JOutputManager {
-	
-	private UpdateLog4JOutputManager() {}
 	
 	@SuppressWarnings("unchecked")	
 	public static void updateLog4J( BoundOutputManagerRouteErrors outputManager ) {
@@ -49,8 +51,7 @@ class UpdateLog4JOutputManager {
 				
 				if (appender instanceof Log4JFileAppender) {
 					Log4JFileAppender logjApp = (Log4JFileAppender) appender;
-					
-					
+										
 					String outputName = logjApp.getOutputName();
 					if (!outputManager.isOutputAllowed(outputName)) {
 						LogManager.getRootLogger().removeAppender(appender);
@@ -58,12 +59,11 @@ class UpdateLog4JOutputManager {
 					}
 					
 					logjApp.init( outputManager );
-					
 					logjApp.activateOptions();
 				}
 				
 			} catch (Exception e) {
-				continue;
+				// Do nothing, and continue in loop
 			}
 	    }
 	}

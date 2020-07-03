@@ -28,12 +28,14 @@ package org.anchoranalysis.image.histogram;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /** 
  * Further statistics that can be derived from a histogram in addition to those callable directly from the {@link Histogram} class
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class HistogramStatistics {
-	
-	private HistogramStatistics() {}
 	
 	public static double coefficientOfVariation( Histogram hist ) throws OperationFailedException {
 		double mean = hist.mean();

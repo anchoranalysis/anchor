@@ -2,6 +2,9 @@ package org.anchoranalysis.core.axis;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-core
@@ -35,13 +38,12 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class AxisTypeConverter {
 
 	public static final String INVALID_AXIS_INDEX = "Index must be >=0 and <3";
 	
 	public static final String UNKNOWN_AXIS_TYPE = "Unknown axis type";
-	
-	private AxisTypeConverter() {}
 	
 	/** Maps a string of x, y, z (case ignored) to a corresponding axis type */
 	public static AxisType createFromString( String axis ) {

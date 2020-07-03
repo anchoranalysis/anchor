@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.file.FileWrite;
@@ -40,6 +41,7 @@ import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // A folder contains a list of subfolders, contained files varies by implementation
 public abstract class FolderWrite implements SequencedFolder, IWriteOperationRecorder, Serializable {
@@ -47,9 +49,10 @@ public abstract class FolderWrite implements SequencedFolder, IWriteOperationRec
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1342671218988826781L;
+	private static final long serialVersionUID = 1L;
 
-	private FolderWrite parentFolder = null;
+	// Not Optional as it needs to be serialized
+	private @Nullable FolderWrite parentFolder;
 	
 	private ArrayList<FolderWrite> folders = new ArrayList<>();
 
@@ -59,6 +62,7 @@ public abstract class FolderWrite implements SequencedFolder, IWriteOperationRec
 	
 	public FolderWrite() {
 		log.debug( "New Folder Write: empty" );
+		parentFolder = null;
 	}
 	
 	// Parent folder
@@ -111,31 +115,26 @@ public abstract class FolderWrite implements SequencedFolder, IWriteOperationRec
 			if (folder==null) {
 				continue;
 			}
-			//assert(folder!=null);
-			
 			folder.findFolder(foundList, match);
 		}
 	}
 	
 	@Override
 	public synchronized IWriteOperationRecorder writeFolder( Path relativeFolderPath, ManifestFolderDescription manifestFolderDescription, FolderWriteWithPath folder ) {
-		
-		assert(folder!=null);
-		folder.setParentFolder(this);
+		folder.setParentFolder( Optional.of(this) );
 		folder.setPath( relativeFolderPath );
 		folder.setManifestFolderDescription(manifestFolderDescription);
 		folders.add(folder);
-		
 		return folder;
 	}
 
 
-	protected FolderWrite getParentFolder() {
-		return parentFolder;
+	protected Optional<FolderWrite> getParentFolder() {
+		return Optional.ofNullable(parentFolder);
 	}
 
-	public void setParentFolder(FolderWrite parentFolder) {
-		this.parentFolder = parentFolder;
+	public void setParentFolder(Optional<FolderWrite> parentFolder) {
+		this.parentFolder = parentFolder.orElse(null);
 	}
 
 	protected List<FolderWrite> getFolderList() {

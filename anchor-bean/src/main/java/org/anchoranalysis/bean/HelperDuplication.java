@@ -39,9 +39,11 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.apache.commons.lang3.ClassUtils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HelperDuplication {
-	
-	private HelperDuplication() {}
 	
 	@SuppressWarnings("unchecked")
 	public static <T> AnchorBean<T> duplicate( AnchorBean<T> bean ) {
