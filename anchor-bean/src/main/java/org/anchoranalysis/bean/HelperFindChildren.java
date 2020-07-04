@@ -36,11 +36,11 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 
-class HelperFindChildren {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private HelperFindChildren() {
-		
-	}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class HelperFindChildren {
 	
 	/**
 	 * Finds all bean-fields that are instance of a certain class.  All immediate children are checked, and any items

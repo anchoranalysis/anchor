@@ -28,6 +28,8 @@ package org.anchoranalysis.image.extent;
 
 
 import java.io.Serializable;
+import java.util.function.ToDoubleFunction;
+
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -40,10 +42,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * A bounding-box in 2 or 3 dimensions
- * 
- * A 2D bounding-box should always have a z-extent of 1 pixel
- *
- * <p>This is an IMMUTABLE class</p>.
+ * <p>
+ * A 2D bounding-box should always have a z-extent of 1 pixel.
+ * <p>
+ * This is an <i>immutable</i> class.
  */
 public final class BoundingBox implements Serializable {
 	
@@ -220,7 +222,6 @@ public final class BoundingBox implements Serializable {
 		return cornerMin;
 	}
 	
-	// TODO make this an IMMUTABLE method
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
 
 		// Subtract the padding from the corner
@@ -427,17 +428,19 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	private Point3d meanOfExtent( int subtractFromEachDimension ) {
-		Point3d pnt = new Point3d();
-		
-		double e_x = ((double) this.extent.getX() - subtractFromEachDimension)/2;
-		double e_y = ((double) this.extent.getY() - subtractFromEachDimension)/2;
-		double e_z = ((double) this.extent.getZ() - subtractFromEachDimension)/2;
-		
-		pnt.setX( e_x + this.cornerMin.getX() ); 
-		pnt.setY( e_y + this.cornerMin.getY() );
-		pnt.setZ( e_z + this.cornerMin.getZ() );
-		
-		return pnt;
+		return new Point3d(
+			calcMeanForDim(ReadableTuple3i::getX, subtractFromEachDimension),
+			calcMeanForDim(ReadableTuple3i::getY, subtractFromEachDimension),
+			calcMeanForDim(ReadableTuple3i::getZ, subtractFromEachDimension)
+		);
+	}
+	
+	private double calcMeanForDim(
+		ToDoubleFunction<ReadableTuple3i> extractDim,
+		int subtractFromEachDimension
+	) {
+		double midPointInExtent = (extractDim.applyAsDouble(extent.asTuple()) - subtractFromEachDimension)/2;
+		return extractDim.applyAsDouble(cornerMin) + midPointInExtent;
 	}
 	
 	private static int closestPntOnAxis( double val, int axisMin, int axisMax) {

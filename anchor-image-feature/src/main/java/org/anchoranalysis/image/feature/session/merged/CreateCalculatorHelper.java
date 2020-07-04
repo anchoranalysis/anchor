@@ -28,7 +28,6 @@ package org.anchoranalysis.image.feature.session.merged;
  * #L%
  */
 
-import java.util.Collection;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -50,23 +49,14 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.InitParamsHelper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 class CreateCalculatorHelper {
 
 	// Prefixes that are ignored
-	private Collection<String> ignoreFeaturePrefixes;
-	private Optional<NRGStackWithParams> nrgStack;
-	private LogErrorReporter logErrorReporter;
-	
-	public CreateCalculatorHelper(
-		Collection<String> ignoreFeaturePrefixes,
-		Optional<NRGStackWithParams> nrgStack,
-		LogErrorReporter logErrorReporter
-	) {
-		super();
-		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
-		this.nrgStack = nrgStack;
-		this.logErrorReporter = logErrorReporter;
-	}	
+	private final Optional<NRGStackWithParams> nrgStack;
+	private final LogErrorReporter logger;
 		
 	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createCached(
 		FeatureList<T> features,
@@ -136,8 +126,7 @@ class CreateCalculatorHelper {
 				features,
 				createInitParams(soImage),
 				Optional.empty(),
-				logErrorReporter,
-				ignoreFeaturePrefixes,
+				logger,
 				replacePolicyFactory
 			);
 			

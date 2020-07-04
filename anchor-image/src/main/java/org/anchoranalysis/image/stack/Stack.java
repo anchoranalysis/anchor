@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.UnaryOperatorWithException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -44,8 +45,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * One ore more single-channel images that all have the same dimensions.
- * 
- * <p>This is one of the fundamental image data structures in Anchor.</p>
+ * <p>
+ * This is one of the fundamental image data structures in Anchor.
  * 
  * @author Owen Feehan
  *
@@ -171,8 +172,7 @@ public class Stack implements Iterable<Channel> {
 	}
 	
 	public Stack duplicate() {
-		Stack out = new Stack(this);
-		return out;
+		return new Stack(this);
 	}
 	
 	public Stack extractUpToThreeChnls() {
@@ -182,7 +182,7 @@ public class Stack implements Iterable<Channel> {
 			try {
 				out.addChnl( delegate.getChnl(i) );
 			} catch (IncorrectImageSizeException e) {
-				assert false;
+				throw new AnchorImpossibleSituationException();
 			}
 		}
 		return out;

@@ -29,8 +29,6 @@ package org.anchoranalysis.image.feature.session.merged;
  */
 
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
@@ -44,6 +42,8 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
+
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -72,38 +72,23 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjects> {
-		
+
+	// START REQUIRED ARGUMENTS
+	private final MergedPairsFeatures features;
+	private final MergedPairsInclude include;
+	private final boolean suppressErrors;
+	// END REQUIRED ARGUMENTS
+	
 	private CombinedCalculator calculator;
 
-	// The lists we need
-	private MergedPairsFeatures features;
-	private MergedPairsInclude include;
-	
-	// Prefixes that are ignored
-	private Collection<String> ignoreFeaturePrefixes;
-	
-	private boolean suppressErrors;
-	
 	public FeatureCalculatorMergedPairs(MergedPairsFeatures features) {
 		this(
 			features,
 			new MergedPairsInclude(),
-			Collections.emptySet(),
 			true
 		);
-	}
-		
-	public FeatureCalculatorMergedPairs(
-		MergedPairsFeatures features,
-		MergedPairsInclude include,
-		Collection<String> ignoreFeaturePrefixes,
-		boolean suppressErrors
-	) {
-		this.include = include;
-		this.features = features;
-		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
-		this.suppressErrors = suppressErrors;
 	}
 	
 	@Override
@@ -115,7 +100,7 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 		
 		calculator = new CombinedCalculator(
 			features,
-			new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter),
+			new CreateCalculatorHelper(nrgStack,logErrorReporter),
 			include,			
 			soImage,
 			suppressErrors
@@ -195,7 +180,6 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 		return new FeatureCalculatorMergedPairs(
 			features.duplicate(),
 			include,
-			ignoreFeaturePrefixes,	// NOT DUPLICATED
 			suppressErrors
 		);
 	}

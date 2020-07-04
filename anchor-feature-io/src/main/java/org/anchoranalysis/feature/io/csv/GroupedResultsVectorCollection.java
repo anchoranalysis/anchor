@@ -63,7 +63,7 @@ public class GroupedResultsVectorCollection implements Closeable {
 	 * A map which stores an aggregate structure for all entries (based on their unique names) and also on an aggregation-key extracted from the name
 	 */
 	private MapCreate<Optional<MultiName>,ResultsVectorCollection> map = new MapCreate<>(
-		() -> new ResultsVectorCollection(),
+		ResultsVectorCollection::new,
 		Comparators.emptiesFirst(Comparator.naturalOrder())
 	);
 	

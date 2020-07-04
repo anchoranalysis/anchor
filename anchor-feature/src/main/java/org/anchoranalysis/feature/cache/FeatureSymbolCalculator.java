@@ -51,7 +51,7 @@ public interface FeatureSymbolCalculator<T extends FeatureInput> {
 	 * Searches for a feature that matches a particular ID
 	 * 
 	 * @param resolvedID
-	 * @param input TODO
+	 * @param input
 	 * @throws FeatureCalcException 
 	 */
 	double calcFeatureByID( String resolvedID, SessionInput<T> input ) throws FeatureCalcException;

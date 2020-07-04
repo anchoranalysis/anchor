@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.FunctionalUtilities;
@@ -81,7 +82,7 @@ public final class ObjectMaskStream {
 	 * @param  mapFunc maps the bounding-box to a new bounding-box
 	 * @return a newly created object-collection
 	 */
-	public ObjectCollection mapBoundingBox(Function<BoundingBox,BoundingBox> mapFunc) {
+	public ObjectCollection mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
 		return map( om->
 			om.mapBoundingBox(mapFunc)
 		);
@@ -223,7 +224,7 @@ public final class ObjectMaskStream {
 	 * @param  predicate iff true object is included, otherwise excluded
 	 * @return a newly created object-collection, a filtered version of all objects, then mapped
 	 */
-	public ObjectCollection filterAndMap(Predicate<ObjectMask> predicate, Function<ObjectMask,ObjectMask> mapFunc) {
+	public ObjectCollection filterAndMap(Predicate<ObjectMask> predicate, UnaryOperator<ObjectMask> mapFunc) {
 		return new ObjectCollection(
 			delegate.streamStandardJava().filter(predicate).map(mapFunc)
 		);

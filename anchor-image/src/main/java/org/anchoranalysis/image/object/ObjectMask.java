@@ -29,7 +29,7 @@ package org.anchoranalysis.image.object;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.CreateException;
@@ -650,7 +650,7 @@ public class ObjectMask {
 	 * 
 	 * @return a new object-mask with the updated bounding box
 	 */
-	public ObjectMask mapBoundingBox( Function<BoundingBox,BoundingBox> mapFunc ) {
+	public ObjectMask mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
 		return new ObjectMask(
 			delegate.mapBoundingBox(mapFunc),
 			bv,

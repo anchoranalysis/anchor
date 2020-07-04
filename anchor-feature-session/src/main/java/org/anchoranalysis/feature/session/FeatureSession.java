@@ -1,7 +1,5 @@
 package org.anchoranalysis.feature.session;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Optional;
 
 /*-
@@ -156,7 +154,6 @@ public class FeatureSession {
 			initParams,
 			Optional.of(sharedFeatures),
 			logger,
-			new ArrayList<>(),
 			new BoundReplaceStrategy<>(ReuseSingletonStrategy::new)
 		);
 	}
@@ -166,10 +163,9 @@ public class FeatureSession {
 		FeatureInitParams initParams,
 		Optional<SharedFeatureMulti> sharedFeatures,
 		LogErrorReporter logger,
-		Collection<String> ignoreFeaturePrefixes,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
 	) throws FeatureCalcException {
-		SequentialSession<T> session = new SequentialSession<>(features, ignoreFeaturePrefixes, replacePolicyFactory); 
+		SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory); 
 		startSession(
 			session,
 			initParams,

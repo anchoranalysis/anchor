@@ -96,11 +96,10 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
 	        final JFreeChart chart = createChart(dataset, this.graphName, proposedRangeLimits );
 	
 	        // For now we don't set any limits for bar graphs
-	        GraphInstance graphInstance = new GraphInstance(
+	        return new GraphInstance(
 	        	chart,
 	        	proposedRangeLimits
 	        );
-			return graphInstance;
     	} catch (GetOperationFailedException e) {
     		throw new CreateException(e);
     	}

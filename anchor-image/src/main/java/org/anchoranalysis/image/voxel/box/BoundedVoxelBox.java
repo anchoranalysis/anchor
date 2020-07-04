@@ -30,6 +30,7 @@ package org.anchoranalysis.image.voxel.box;
 import java.nio.Buffer;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -446,7 +447,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * 
 	 * @return a new object-mask with the updated bounding box
 	 */
-	public BoundedVoxelBox<T> mapBoundingBox( Function<BoundingBox,BoundingBox> mapFunc ) {
+	public BoundedVoxelBox<T> mapBoundingBox( UnaryOperator<BoundingBox> mapFunc ) {
 		return new BoundedVoxelBox<>(
 			mapFunc.apply(boundingBox),
 			voxelBox

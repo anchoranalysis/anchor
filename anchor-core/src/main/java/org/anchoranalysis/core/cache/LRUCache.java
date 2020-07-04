@@ -94,9 +94,7 @@ public class LRUCache<K,V> {
 	public V get(K key) throws GetOperationFailedException {
 		try {
 			return cache.get(key);
-		} catch (ExecutionException e) {
-			throw new GetOperationFailedException(e.getCause());
-		} catch (UncheckedExecutionException e) {
+		} catch (ExecutionException | UncheckedExecutionException e) {
 			throw new GetOperationFailedException(e.getCause());
 		}
 	}

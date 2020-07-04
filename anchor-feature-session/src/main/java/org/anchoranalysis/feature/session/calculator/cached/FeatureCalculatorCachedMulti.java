@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.calculator.cached;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-feature
@@ -29,7 +31,6 @@ package org.anchoranalysis.feature.session.calculator.cached;
 
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
-import org.anchoranalysis.core.cache.LRUCache.CalculateForCache;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -46,18 +47,14 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
  */
 public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
-	private FeatureCalculatorMulti<T> source;
+	private static final int DEFAULT_CACHE_SIZE = 1000;
 	
-	private LRUCache<T,ResultsVector> cacheResults;
-
-	private static int DEFAULT_CACHE_SIZE = 1000;
-	
-	private boolean suppressErrors = false;
+	private final FeatureCalculatorMulti<T> source;
+	private final LRUCache<T,ResultsVector> cacheResults;
 	
 	// We update this every time so it matches whatever is passed to calcSuppressErrors
-	private ErrorReporter errorReporter = null;
+	private Optional<ErrorReporter> errorReporter = Optional.empty();
 	
-
 	/**
 	 * Creates a feature-calculator with a new cache
 	 * 
@@ -76,21 +73,31 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 	 * @param cacheSize size of cache to use
 	 */
 	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors, int cacheSize) {
-		super();
 		this.source = source;
-		this.suppressErrors = suppressErrors;
-		
 		this.cacheResults = new LRUCache<>(
 			cacheSize,
-			new GetterImpl()
+			index -> {
+				try {
+					if (suppressErrors) {
+						if (errorReporter.isPresent()) {
+							return source.calcSuppressErrors(index,errorReporter.get());
+						} else {
+							throw new FeatureCalcException("Cannot calculate with suppressed errors unless an error-reporter has been set");
+						}
+					} else {
+						return source.calc(index);
+					}
+				} catch (FeatureCalcException e) {
+					throw new CacheRetrievalFailed(e);
+				}
+			}
 		);
 		
 	}
 
 	@Override
 	public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
-		
-		this.errorReporter = errorReporter;
+		this.errorReporter = Optional.of(errorReporter);
 		try {
 			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
@@ -108,11 +115,9 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 		}
 	}
 	
-
 	@Override
 	public ResultsVector calc(T input, FeatureList<T> featuresSubset) throws FeatureCalcException {
-		// TODO how should we cache?
-		throw new FeatureCalcException("This operation is not supported");
+		throw new FeatureCalcException("This operation is not supported for subsets of features");
 	}
 
 
@@ -129,23 +134,6 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 	/** Number of items currently in the cache */
 	public long sizeCurrentLoad() {
 		return cacheResults.sizeCurrentLoad();
-	}
-	
-	private class GetterImpl implements CalculateForCache<T,ResultsVector> {
-
-		@Override
-		public ResultsVector calculate(T index)	throws CacheRetrievalFailed {
-			try {
-				if (suppressErrors) {
-					return source.calcSuppressErrors(index,errorReporter);
-				} else {
-					return source.calc(index);
-				}
-			} catch (FeatureCalcException e) {
-				throw new CacheRetrievalFailed(e);
-			}
-		}
-		
 	}
 	
 	/** Return a vector with all NaNs */

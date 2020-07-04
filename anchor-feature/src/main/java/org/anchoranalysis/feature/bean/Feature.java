@@ -136,7 +136,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	protected abstract double calc(SessionInput<T> input) throws FeatureCalcException;
 
 	protected void duplicateHelper(Feature<FeatureInput> out) {
-		out.customName = new String(customName);
+		out.customName = customName;
 	}
 	
 	/**

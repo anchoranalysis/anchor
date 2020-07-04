@@ -187,9 +187,6 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * @return the number of pixels successfully "set"
 	 */
 	public int setPixelsCheckMask( ObjectMask om, int value ) {
-		assert( om!= null );
-		assert( om.getBoundingBox()!=null );
-		assert( om.getVoxelBox()!=null );
 		return setPixelsCheckMask(
 			om.getBoundingBox(),
 			om.getVoxelBox(),
@@ -211,9 +208,6 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * @return the number of pixels successfully "set"
 	 */
 	public int setPixelsCheckMask( ObjectMask om, int value, byte maskMatchValue ) {
-		assert( om!= null );
-		assert( om.getBoundingBox()!= null );
-		assert( om.getVoxelBox()!= null );
 		return setPixelsCheckMask(
 			om.getBoundingBox(),
 			om.getVoxelBox(),
