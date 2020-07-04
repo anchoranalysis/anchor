@@ -29,8 +29,11 @@ package org.anchoranalysis.io.output.bound;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Memoizes LazyDirectoryInit creation for particular outputDirectory (normalized)
@@ -40,19 +43,20 @@ import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
  * @author owen
  *
  */
+@RequiredArgsConstructor
 public class LazyDirectoryFactory {
 
-	private boolean delExistingFolder;
-		
-	public LazyDirectoryFactory(boolean delExistingFolder) {
-		super();
-		this.delExistingFolder = delExistingFolder;
-	}
+	// START REQUIRED ARGUMENTS
+	private final boolean delExistingFolder;
+	// END REQUIRED ARGUMENTS
 
 	// Cache all directories created by Path
 	private Map<Path, WriterExecuteBeforeEveryOperation> map = new HashMap<>();
 	
-	public synchronized WriterExecuteBeforeEveryOperation createOrReuse( Path outputDirectory, WriterExecuteBeforeEveryOperation parent ) {
+	public synchronized WriterExecuteBeforeEveryOperation createOrReuse(
+		Path outputDirectory,
+		Optional<WriterExecuteBeforeEveryOperation> parent
+	) {
 		// So that we are always referring to a canonical output-directory path
 		Path outputDirectoryNormalized = outputDirectory.normalize();
 		return map.computeIfAbsent(

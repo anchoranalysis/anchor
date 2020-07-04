@@ -39,26 +39,29 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class CheckIfAllowed extends Writer {
-
-	// Execute before every operation
-	private WriterExecuteBeforeEveryOperation preop;
+	
+	// START REQUIRED ARGUMENTS
+	/** The associated output-manager */
+	private final BoundOutputManager outputManager;
+	
+	/** Execute before every operation */
+	private final WriterExecuteBeforeEveryOperation preop;
 		
-	private BoundOutputManager bom;
-	private Writer writer;
-
-	public CheckIfAllowed(BoundOutputManager bom, WriterExecuteBeforeEveryOperation preop, Writer writer) {
-		this.bom = bom;
-		this.writer = writer;
-		this.preop = preop;
-	}
+	private final Writer writer;
+	// END REQUIRED ARGUMENTS
 
 	@Override
-	public Optional<BoundOutputManager> bindAsSubFolder(String outputName,
-			ManifestFolderDescription manifestDescription,
-			Optional<FolderWriteWithPath> folder) throws OutputWriteFailedException {
+	public Optional<BoundOutputManager> bindAsSubFolder(
+		String outputName,
+		ManifestFolderDescription manifestDescription,
+		Optional<FolderWriteWithPath> folder
+	) throws OutputWriteFailedException {
 		
-		if (!bom.isOutputAllowed(outputName)) {
+		if (!outputManager.isOutputAllowed(outputName)) {
 			return Optional.empty();
 		}
 
@@ -68,11 +71,12 @@ public class CheckIfAllowed extends Writer {
 	}
 
 	@Override
-	public void writeSubfolder(String outputName,
-			Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator)
-			throws OutputWriteFailedException {
+	public void writeSubfolder(
+		String outputName,
+		Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator
+	) throws OutputWriteFailedException {
 		
-		if (!bom.isOutputAllowed(outputName)) {
+		if (!outputManager.isOutputAllowed(outputName)) {
 			return;
 		}
 
@@ -86,7 +90,7 @@ public class CheckIfAllowed extends Writer {
 			Operation<? extends WritableItem,OutputWriteFailedException> generator, String index)
 			throws OutputWriteFailedException {
 		
-		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) {
+		if ( !outputManager.isOutputAllowed(outputNameStyle.getOutputName())) {
 			return -1;
 		}
 
@@ -99,7 +103,7 @@ public class CheckIfAllowed extends Writer {
 	public void write(OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator)
 			throws OutputWriteFailedException {
 
-		if ( !bom.isOutputAllowed(outputNameStyle.getOutputName())) return;
+		if ( !outputManager.isOutputAllowed(outputNameStyle.getOutputName())) return;
 		
 		preop.exec();
 		
@@ -111,7 +115,7 @@ public class CheckIfAllowed extends Writer {
 			Optional<ManifestDescription> manifestDescription, String outputNamePrefix,
 			String outputNameSuffix, String index) {
 		
-		if (!bom.isOutputAllowed(outputName)) {
+		if (!outputManager.isOutputAllowed(outputName)) {
 			return Optional.empty();
 		}
 		
@@ -122,7 +126,7 @@ public class CheckIfAllowed extends Writer {
 	
 	@Override
 	public OutputWriteSettings getOutputWriteSettings() {
-		return bom.getOutputWriteSettings();
+		return outputManager.getOutputWriteSettings();
 	}
 
 

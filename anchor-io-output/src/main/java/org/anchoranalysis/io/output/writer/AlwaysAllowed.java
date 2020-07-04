@@ -43,17 +43,18 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class AlwaysAllowed extends Writer {
 
-	private BoundOutputManager bom;
+	// START REQUIRED ARGUMENTS
+	/** Bound output manager */
+	private final BoundOutputManager bom;
 	
-	// Execute before every operation
-	private WriterExecuteBeforeEveryOperation preop;
-
-	public AlwaysAllowed(BoundOutputManager bom, WriterExecuteBeforeEveryOperation preop ) {
-		this.bom = bom;
-		this.preop = preop;
-	}
+	/** Execute before every operation */
+	private final WriterExecuteBeforeEveryOperation preop;
+	// END REQUIRED ARGUMENTS
 	
 	@Override
 	public Optional<BoundOutputManager> bindAsSubFolder(
@@ -82,7 +83,7 @@ public class AlwaysAllowed extends Writer {
 				bom.getOutputWriteSettings(),
 				recorderNew,
 				bom.getLazyDirectoryFactory(),
-				preop
+				Optional.of(preop)
 			)
 		);
 	}

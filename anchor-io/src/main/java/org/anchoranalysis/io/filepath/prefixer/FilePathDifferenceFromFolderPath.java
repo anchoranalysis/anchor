@@ -54,6 +54,7 @@ public class FilePathDifferenceFromFolderPath {
 	private String filename;
 	private Path folder;
 	
+	// TODO change from the two init methods to two factory constructors
 	public FilePathDifferenceFromFolderPath() {
 		// Nothing to do
 	}

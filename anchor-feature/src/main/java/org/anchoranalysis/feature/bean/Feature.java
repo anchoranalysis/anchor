@@ -42,6 +42,9 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.InitializableFeature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Feature that calculates a result (double) for some parameters
@@ -55,8 +58,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements InitializableFeature<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	@AllowEmpty
+	/** An optional additional name that be associated with the feature (defaults to an empty string) */
+	@BeanField @AllowEmpty @Getter @Setter
 	private String customName = "";
 	// END BEAN PROPERTIES
 
@@ -87,14 +90,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 		return getBeanDscr();
 	}
 
-	public String getCustomName() {
-		return customName;
-	}
-
-	public void setCustomName(String customName) {
-		this.customName = customName;
-	}
-	
 	/**
 	 * Duplicates the feature as per {@link duplicateBean} but sets a particular custom-name
 	 * 

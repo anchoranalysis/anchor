@@ -27,10 +27,13 @@ package org.anchoranalysis.io.output.bound;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.output.error.OutputManagerAlreadyExistsException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.apache.commons.io.FileUtils;
+
+import lombok.RequiredArgsConstructor;
 
 /** 
  * Creates the output-directory lazily on the first occasion exec() is called
@@ -44,35 +47,27 @@ import org.apache.commons.io.FileUtils;
  * </ul>
  * 
  **/
+@RequiredArgsConstructor
 class LazyDirectoryInit implements WriterExecuteBeforeEveryOperation {
 
+	// START REQUIRED ARGUMENTS
+	/** The output-directory to be init */
+	private final Path outputDirectory;
+	
+	/** Whether to delete the existing folder if it exists */
+	private final boolean delExistingFolder;
+	
+	/** A parent whose exec() is called before our exec() is called (if empty(), ignored) */
+	private final Optional<WriterExecuteBeforeEveryOperation> parent;
+	// END REQUIRED ARGUMENTS
+	
 	private boolean needsInit = true;
-	
-	private Path outputDirectory;
-	private boolean delExistingFolder;
-	private WriterExecuteBeforeEveryOperation parent;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param outputDirectory the output-directory to be init
-	 * @param delExistingFolder
-	 * @param if non-NULL a parent whose exec() is called before our exec() is called. if NULL, ignored.
-	 */
-	LazyDirectoryInit(Path outputDirectory, boolean delExistingFolder, WriterExecuteBeforeEveryOperation parent) {
-		super();
-		this.outputDirectory = outputDirectory;
-		this.delExistingFolder = delExistingFolder;
-		this.parent = parent;
-	}
 
 	@Override
 	public synchronized void exec() {
 		if (needsInit) {
 			
-			if (parent!=null) {
-				parent.exec();
-			}
+			parent.ifPresent(WriterExecuteBeforeEveryOperation::exec);
 			
 			if (outputDirectory.toFile().exists()) {
 				if (delExistingFolder) {
