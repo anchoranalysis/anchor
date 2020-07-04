@@ -586,7 +586,7 @@ public class ObjectMask {
 	 * 
 	 * <p>See {@link org.anchoranalysis.image.voxel.box.VoxelBox::region) for more details.</p>
 	 * 
-	 * @param bounding-box in absolute coordinates.
+	 * @param bbox bounding-box in absolute coordinates.
 	 * @param reuseIfPossible if TRUE the existing mask will be reused if possible, otherwise a new mask is always created.
 	 * @return a mask corresponding to the requested region, either newly-created or reused
 	 * @throws CreateException

@@ -108,12 +108,9 @@ public class GroupedResultsVectorCollection implements Closeable {
 	 *    featuresAggregatedGroup.xml	the aggregate-functions applied to this particular-group (in an XML format)
 	 * </pre>
 	 * 
-	 * @param featureNamesNonAggregate	names of feature functions (non-aggregate)
 	 * @param featuresAggregate			aggregate-features
 	 * @param includeGroups 			iff TRUE a group-column is included in the CSV file and the group exports occur, otherwise not
-	 * @param outputManager				the output-manager
-	 * @param logErrorReporter			logging and error-reporting
-	 * @throws IOException
+	 * @throws AnchorIOException
 	 */
 	public void writeResultsForAllGroups(
 		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,

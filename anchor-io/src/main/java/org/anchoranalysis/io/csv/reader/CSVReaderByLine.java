@@ -26,7 +26,6 @@ package org.anchoranalysis.io.csv.reader;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -52,6 +51,7 @@ public class CSVReaderByLine {
 		/**
 		 * The headers of the CSV file
 		 * 
+		 * @throws CSVReaderException
 		 * @return a string or NULL if the headers don't exist
 		 */
 		String[] headers() throws CSVReaderException;
@@ -63,14 +63,14 @@ public class CSVReaderByLine {
 		 * 
 		 * @param lineProcessor called one for each row incrementally
 		 * @return the number of lines read
-		 * @throws IOException
+		 * @throws CSVReaderException
 		 */
 		int read( ProcessCSVLine lineProcessor ) throws CSVReaderException;
 		
 		/**
 		 * Closes any opened-files
 		 * 
-		 * @throws IOException
+		 * @throws CSVReaderException
 		 */
 		void close() throws CSVReaderException;
 	}

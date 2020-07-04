@@ -53,15 +53,16 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class StackCollectionOutputter {
 	
 	private static final String OUTPUT_NAME = "stackCollection";
 	private static final String PREFIX = "";
-
-	private StackCollectionOutputter() {}
 	
-	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
-	 * @throws OutputWriteFailedException */
+	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager */ 
 	public static void outputSubset(
 		NamedProvider<Stack> stacks,
 		String secondLevelOutputKey,

@@ -36,7 +36,6 @@ import org.anchoranalysis.core.bridge.BridgeElementWithIndex;
  *
  * @param <S> external-type
  * @param <H> hidden-type
- * @param <E> exception thrown if soemthing goes wrong
  */
 public class TypedGetFromIndexBridge<S,H> implements ITypedGetFromIndex<S> {
 

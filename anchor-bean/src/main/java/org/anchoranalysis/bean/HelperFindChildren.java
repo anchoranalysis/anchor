@@ -35,7 +35,6 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
-import org.anchoranalysis.core.error.OperationFailedException;
 
 class HelperFindChildren {
 
@@ -51,7 +50,6 @@ class HelperFindChildren {
 	 * @param listFields the list of fields associated with the bean
 	 * @param match the class that a field must be assignable from (equal to or inherit from)
 	 * @return
-	 * @throws OperationFailedException 
 	 * @throws BeanMisconfiguredException 
 	 */
 	public static <T extends AnchorBean<?>> List<T> findChildrenOfClass(

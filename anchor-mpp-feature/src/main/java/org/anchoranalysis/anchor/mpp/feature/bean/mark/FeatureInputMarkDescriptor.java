@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-mpp-feature
@@ -40,8 +42,8 @@ public class FeatureInputMarkDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
-		return FeatureInputMarkDescriptor.class;
+	public Class<? extends FeatureInput> inputClass() {
+		return FeatureInputMark.class;
 	}
 
 }

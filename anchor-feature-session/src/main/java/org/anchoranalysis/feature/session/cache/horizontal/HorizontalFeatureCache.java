@@ -105,7 +105,7 @@ public class HorizontalFeatureCache<T extends FeatureInput> implements FeatureSe
 	@Override
 	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
 		ChildCacheName childName,
-		Class<?> paramsType,
+		Class<? extends FeatureInput> paramsType,
 		CacheCreator cacheCreator
 	) {
 		return delegate.childCacheFor(childName, paramsType, cacheCreator);

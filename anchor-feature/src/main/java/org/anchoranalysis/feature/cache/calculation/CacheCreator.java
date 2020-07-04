@@ -32,5 +32,5 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface CacheCreator {
 
-	<T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType );
+	<T extends FeatureInput> FeatureSessionCache<T> create( Class<? extends FeatureInput> paramsType );
 }

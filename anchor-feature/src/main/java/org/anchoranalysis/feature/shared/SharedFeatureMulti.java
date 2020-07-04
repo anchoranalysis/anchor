@@ -74,7 +74,7 @@ public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>,
 	
 	/** Extracts the subset of inputs that are compatible with a particular input-type */ 
 	@SuppressWarnings("unchecked")
-	public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(Class<?> inputType) {
+	public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(Class<? extends FeatureInput> inputType) {
 		
 		 NameValueSet<Feature<S>> out = new  NameValueSet<>();
 		 

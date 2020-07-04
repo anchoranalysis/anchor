@@ -90,7 +90,7 @@ public final class BoundingBox implements Serializable {
 	 *  
 	 * <p>It may not be integral, and could end with .5</p>
 	 *  
-	 * @return
+	 * @return the midpoint
 	 */
 	public Point3d midpoint() {
 		return meanOfExtent(0);
@@ -101,7 +101,7 @@ public final class BoundingBox implements Serializable {
 	 * 
 	 * <p>It should be the same in each dimension as (crnr+extent-1)/2</p>
 	 *  
-	 * @return
+	 * @return the center-of-gravity
 	 */
 	public Point3i centerOfGravity() {
 		return PointConverter.intFromDouble(

@@ -39,7 +39,7 @@ public class ProcessVoxelNeighbourFactory {
 	 * Within either a mask or an extent (as a fallback)
 	 * 
 	 * @param containingMask if defined, the process is restricted to only process points within this mask
-	 * @param extentFallback if {@link containingMask} is not defined, then as a fallback, the process is restricted to only process points in this extent
+	 * @param extentFallback if {@code containingMask} is not defined, then as a fallback, the process is restricted to only process points in this extent
 	 * @param process a process which will be wrapped inside a restriction
 	 * @return a new process with a restriction on the existing process
 	 */

@@ -179,9 +179,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 	/**
 	 * Creates a grown bounding-box relative to this current box (absolute coordinates)
 	 * 
-	 * @param neg how much to grow in the negative direction
-	 * @param pos how much to grow in the negative direction
-	 * @param clipRegion a region to clip to, which we can't grow beyond
+	 * @param  neg how much to grow in the negative direction
+	 * @param  pos how much to grow in the negative direction
+	 * @param  clipRegion a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extent is absolute
 	 */
 	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
@@ -194,9 +194,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 	/**
 	 * Creates a grown bounding-box relative to this current box (relative coordinates)
 	 * 
-	 * @param neg how much to grow in the negative direction
-	 * @param pos how much to grow in the negative direction
-	 * @param a region to clip to, which we can't grow beyond
+	 * @param  neg how much to grow in the negative direction
+	 * @param  pos how much to grow in the negative direction
+	 * @param  a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box (multipled by -1), the extent is absolute
 	 */
 	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
@@ -209,23 +209,17 @@ public class BoundedVoxelBox<T extends Buffer> {
 		
 		ReadableTuple3i bboxMax = boundingBox.calcCornerMax();
 		
-		int maxPossibleX;
-		int maxPossibleY;
-		int maxPossibleZ;
+		ReadableTuple3i maxPossible;
 		if (clipRegion.isPresent()) {
-			maxPossibleX = clipRegion.get().getX();
-			maxPossibleY = clipRegion.get().getY();
-			maxPossibleZ = clipRegion.get().getZ();
+			maxPossible = clipRegion.get().asTuple();
 		} else {
-			maxPossibleX = Integer.MAX_VALUE;
-			maxPossibleY = Integer.MAX_VALUE;
-			maxPossibleZ = Integer.MAX_VALUE;
+			maxPossible = new Point3i(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE);
 		}
 		
 		Point3i growBy = new Point3i(
-			clipPos(bboxMax.getX(), pos.getX(), maxPossibleX) + negClip.getX(),
-			clipPos(bboxMax.getY(), pos.getY(), maxPossibleY) + negClip.getY(),
-			clipPos(bboxMax.getZ(), pos.getZ(), maxPossibleZ) + negClip.getZ()
+			clipPos(bboxMax.getX(), pos.getX(), maxPossible.getX()) + negClip.getX(),
+			clipPos(bboxMax.getY(), pos.getY(), maxPossible.getY()) + negClip.getY(),
+			clipPos(bboxMax.getZ(), pos.getZ(), maxPossible.getZ()) + negClip.getZ()
 		);
 		return new BoundingBox(
 			negClip,
@@ -235,15 +229,22 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	
 	/**
-	 * Creates a new copy of the object mask with the buffer grown in pos and neg directions by a certain amount
+	 * Grows buffer of the object-mask in positive and negative directions by a certain amount.
 	 * 
-	 * @param neg
-	 * @param pos
-	 * @param clipRegion if defined, clips the buffer to this region
-	 * @param factory
-	 * @return
+	 * <p>This operation is <i>immutable</i>.
+	 * 
+	 * @param  growthNegative
+	 * @param  growthPositive
+	 * @param  clipRegion if defined, clips the buffer to this region
+	 * @param  factory
+	 * @return the grown object mask with newly-created buffers
 	 */
-	public BoundedVoxelBox<T> growBuffer( Point3i neg, Point3i pos, Optional<Extent> clipRegion, VoxelBoxFactoryTypeBound<T> factory ) throws OperationFailedException {
+	public BoundedVoxelBox<T> growBuffer(
+		Point3i growthNegative,
+		Point3i growthPositive,
+		Optional<Extent> clipRegion,
+		VoxelBoxFactoryTypeBound<T> factory
+	) throws OperationFailedException {
 		
 		if(clipRegion.isPresent() && !clipRegion.get().contains(this.boundingBox) ) {
 			throw new OperationFailedException("Cannot grow the bounding-box of the object-mask, as it is already outside the clipping region.");
@@ -251,11 +252,15 @@ public class BoundedVoxelBox<T extends Buffer> {
 		
 		Extent e = this.voxelBox.extent();
 				
-		BoundingBox grownBox = createGrownBoxRelative( neg, pos, clipRegion );
+		BoundingBox grownBox = createGrownBoxRelative( growthNegative, growthPositive, clipRegion );
 				
 		// We allocate a new buffer
 		VoxelBox<T> bufferNew = factory.create( grownBox.extent() );
-		this.voxelBox.copyPixelsTo(new BoundingBox(e), bufferNew, new BoundingBox(grownBox.getCornerMin(),e)  );
+		this.voxelBox.copyPixelsTo(
+			new BoundingBox(e),
+			bufferNew,
+			new BoundingBox(grownBox.getCornerMin(),e)
+		);
 		
 		// We create a new bounding box
 		BoundingBox bbo = new BoundingBox(
@@ -343,9 +348,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * 
 	 * <p>This will always reuse the existing voxel-buffers.</p.
 	 * 
-	 * @param zMin minimum z-slice index, inclusive.
-	 * @param zMax maximum z-slice index, inclusive.
-	 * @param factory factory to use to create new voxels.
+	 * @param  zMin minimum z-slice index, inclusive.
+	 * @param  zMax maximum z-slice index, inclusive.
+	 * @param  factory factory to use to create new voxels.
 	 * @return a newly created box for the slice-range requested.
 	 * @throws CreateException
 	 */
@@ -371,15 +376,14 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	/**
 	 * A (sub-)region of the voxels.
+	 * <p>
+	 * The region may some smaller portion of the voxel-box, or the voxel-box as a whole.
+	 * <p>
+	 * It should <b>never</b> be larger than the voxel-box.
 	 * 
-	 * <p>The region may some smaller portion of the voxel-box, or the voxel-box as a whole.</p>
-	 * 
-	 * <p>It should <b>never</b> be larger than the voxel-box.</p>
-	 * 
-	 * <p>See {@link org.anchoranalysis.image.voxel.box.VoxelBox::region) for more details.</p>
-	 *   
-	 * @param bounding-box in absolute coordinates.
-	 * @param reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new box is always created.
+	 * @see    org.anchoranalysis.image.voxel.box.VoxelBox#region
+	 * @param  bbox bounding-box in absolute coordinates.
+	 * @param  reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new box is always created.
 	 * @return a bounded voxel-box corresponding to the requested region, either newly-created or reused
 	 * @throws CreateException
 	 */

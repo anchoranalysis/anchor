@@ -2,8 +2,7 @@ package org.anchoranalysis.feature.input.descriptor;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /*
  * #%L
@@ -45,16 +44,10 @@ public abstract class FeatureInputDescriptor {
 	/** 
 	 * Can these parameters be used with a particular feature?
 	 *  
-	 * @throws FeatureCalcException */
-	public boolean isCompatibleWith(Feature<?> feature) {
-		return inputClass().isAssignableFrom( feature.inputDescriptor().inputClass() );
-	}
-	
-	/** 
-	 * Can these parameters be used with a particular feature?
-	 *  
-	 * @throws FeatureCalcException */
-	public boolean isCompatibleWith(Class<?> paramTypeClass) {
+	 * @param paramTypeClass the class of input
+	 * @return true iff the feature-input is compatible with {@code paramTypeClass} 
+	 *  */
+	public boolean isCompatibleWith(Class<? extends FeatureInput> paramTypeClass) {
 		return inputClass().isAssignableFrom( paramTypeClass );
 	}
 	
@@ -63,7 +56,7 @@ public abstract class FeatureInputDescriptor {
 	 * 
 	 * @return
 	 */
-	public abstract Class<?> inputClass();
+	public abstract Class<? extends FeatureInput> inputClass();
 
 	/**
 	 * Prefer to keep descriptor whose input-class is a sub-class rather than a super-class

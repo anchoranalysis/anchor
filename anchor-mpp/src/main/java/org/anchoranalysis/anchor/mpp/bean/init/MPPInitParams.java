@@ -42,7 +42,6 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -140,7 +139,7 @@ public class MPPInitParams extends BeanInitParams {
 	 * This is stored in all our named-definition files, from now on as "primary"
 	 * 
 	 * @return
-	 * @throws GetOperationFailedException
+	 * @throws NamedProviderGetException
 	 */
 	public MarkBounds getMarkBounds() throws NamedProviderGetException {
 		return getMarkBoundsSet().getException("primary");

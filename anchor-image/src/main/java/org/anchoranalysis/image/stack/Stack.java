@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.UnaryOperatorWithException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -85,20 +86,21 @@ public class Stack implements Iterable<Channel> {
 		delegate = src.delegate.duplicate();
 	}
 	
-	/** Produces a new stack with a particular operation applied to each channel.
+	/** 
+	 * Produces a new stack with a particular operation applied to each channel.
+	 * <p>
+	 * The function applied to the channel should ensure it produces uniform sizes.
 	 * 
-	 *  <p>The function applied to the channel should ensure it produces uniform sizes</p>
-	 * 
-	 * @param mapFunc performs an operation on a channel and produces a modified channel (or a different one entirely)
-	 * @return a new stack containing mapFunc(chnl) preserving the channel order
-	 * @throws IncorrectImageSizeException if the channels produced have non-uniform sizes
+	 * @param mapping performs an operation on a channel and produces a modified channel (or a different one entirely)
+	 * @return a new stack (after any modification by {@code mapFunc}) preserving the channel order
+	 * @throws OperationFailedException if the channels produced have non-uniform sizes
 	 * */ 
-	public Stack mapChnl( ChannelMapOperation mapFunc ) throws OperationFailedException {
+	public Stack mapChnl(UnaryOperatorWithException<Channel, OperationFailedException> mapping) throws OperationFailedException {
 		Stack out = new Stack();
 		for( Channel c : this ) {
 			try {
 				out.addChnl(
-					mapFunc.apply(c)
+					mapping.apply(c)
 				);
 			} catch (IncorrectImageSizeException e) {
 				throw new OperationFailedException(e);

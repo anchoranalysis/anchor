@@ -60,7 +60,7 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	@Override
-	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> inputType ) {
+	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<? extends FeatureInput> inputType ) {
 		FeatureList<T> featureList = filterFeatureList(inputType);
 		return createCache(
 			featureList,
@@ -71,13 +71,13 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	/** 
-	 * Filters a feature-list to only include features compatible with a particular <code>paramsType</code>
-	 * 
-	 * <p>A feature in the list is deemed compatible if its class is either equal to or a super-class of
-	 * {@link paramsType}.</p> 
+	 * Filters a feature-list to only include features compatible with a particular {@code inputType}
+	 * <p>
+	 * A feature in the list is deemed compatible if its class is either equal to or a super-class of
+	 * {@code inputType}. 
 	 *  */
 	@SuppressWarnings("unchecked")
-	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> inputType) {
+	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<? extends FeatureInput> inputType) {
 		return namedFeatures.filterAndMap(
 			f -> f.inputDescriptor().isCompatibleWith(inputType),
 			f -> (Feature<T>) f
@@ -86,7 +86,7 @@ public class CacheCreatorSimple implements CacheCreator {
 		
 	private <T extends FeatureInput> FeatureSessionCache<T> createCache(
 		FeatureList<T> namedFeatures,
-		Class<?> inputType,
+		Class<? extends FeatureInput> inputType,
 		FeatureInitParams featureInitParams,
 		LogErrorReporter logger			
 	) {

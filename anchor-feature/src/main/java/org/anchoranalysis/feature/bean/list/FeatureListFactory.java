@@ -164,14 +164,14 @@ public class FeatureListFactory {
 	
 	
 	/**
-	 * Creates a new feature-list by mapping an {@link Iterable} to {@link Feature<T>}
+	 * Creates a new feature-list by mapping an {@link Iterable} to {@link Feature}
 	 * 
-	 * @param <S> type that will be mapped to {@link Feature<T>}
-	 * @param <T> feature input-type for the result of the mapping
-	 * @param <E> exception-type that can be thrown during mapping
-	 * @param iterable source of entities to be mapped
-	 * @param mapFunc function for mapping
-	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link iterable}
+	 * @param  <S> type that will be mapped to {@link Feature}
+	 * @param  <T> feature input-type for the result of the mapping
+	 * @param  <E> exception-type that can be thrown during mapping
+	 * @param  iterable source of entities to be mapped
+	 * @param  mapFunc function for mapping
+	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link Iterable}
 	 * @throws E exception if it occurs during mapping
 	 */
 	public static <S, T extends FeatureInput,E extends Exception> FeatureList<T> mapFrom( Iterable<S> iterable, FunctionWithException<S,Feature<T>,E> mapFunc ) throws E {
@@ -186,15 +186,15 @@ public class FeatureListFactory {
 	
 	
 	/**
-	 * Creates a new feature-list by filtering a {@link Iterable} and then mapping it to {@link Feature<T>}
+	 * Creates a new feature-list by filtering an iterable and then mapping it to a feature
 	 * 
-	 * @param <S> type that will be filtered anmd then mapped to {@link Feature<T>}
-	 * @param <T> feature input-type for the result of the mapping
-	 * @param <E> exception-type that can be thrown during mapping
-	 * @param iterable source of entities to be mapped
-	 * @param predicate only items in iterable that fulfill this condition are mapped
-	 * @param mapFunc function for mapping
-	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link iterable}
+	 * @param  <S> type that will be filtered and then mapped to a feature
+	 * @param  <T> feature input-type for the result of the mapping
+	 * @param  <E> exception-type that can be thrown during mapping
+	 * @param  iterable source of entities to be mapped
+	 * @param  predicate only items in  {@code iterable} that fulfill this condition will be mapped
+	 * @param  mapFunc function for mapping
+	 * @return a newly created feature-list, with the result (in order) of the mapping of each item in {@link iterable}
 	 * @throws E exception if it occurs during mapping
 	 */
 	public static <S, T extends FeatureInput,E extends Exception> FeatureList<T> mapFromFiltered( Iterable<S> iterable, Predicate<S> predicate, FunctionWithException<S,Feature<T>,E> mapFunc ) throws E {
@@ -210,16 +210,16 @@ public class FeatureListFactory {
 	}
 	
 	/**
-	 * Creates a new feature-list by flat-mapping an {@link Iterable} to {@link Optional<Feature<T>>}
-	 *
-	 * <p>Any {@link Optional.empty()} results are not included.</p>
+	 * Creates a new feature-list by flat-mapping an iterable to an optional feature
+	 * <p>
+	 * Any {@link Optional#empty} results are not included.
 	 * 
-	 * @param <S> type that will be mapped to {@link Optional<Feature<T>>}
-	 * @param <T> feature input-type for the result of the mapping
-	 * @param <E> exception-type that can be thrown during mapping
-	 * @param iterable source of entities to be mapped
-	 * @param flatMapFunc function for mapping
-	 * @return a newly created feature-list, with the result (in order) of the mapping of each iterm in {@link iterable}
+	 * @param  <S> type that will be mapped to an optional feature.
+	 * @param  <T> feature input-type for the result of the mapping
+	 * @param  <E> exception-type that can be thrown during mapping
+	 * @param  iterable source of entities to be mapped
+	 * @param  flatMapFunc function for mapping
+	 * @return a newly created feature-list, with the result (in order) of the mapping of each item in {@link iterable}
 	 * @throws E exception if it occurs during mapping
 	 */
 	public static <S, T extends FeatureInput,E extends Exception> FeatureList<T> flatMapFromOptional( Iterable<S> iterable, FunctionWithException<S,Optional<FeatureList<T>>,E> flatMapFunc ) throws E {
@@ -232,12 +232,12 @@ public class FeatureListFactory {
 	
 	
 	/**
-	 * Creates a new feature-list by mapping integers (from a range) each to a {@link Feature<T>}
+	 * Creates a new feature-list by mapping integers (from a range) each to a feature
 	 * 
-	 * @param <T> feature input-type for the result of the mapping
-	 * @param startInclusive start index for the integer range (inclusive)
-	 * @param endExclusive end index for the integer range (exclusive)
-	 * @param mapFunc function for mapping
+	 * @param  <T> feature input-type for the result of the mapping
+	 * @param  startInclusive start index for the integer range (inclusive)
+	 * @param  endExclusive end index for the integer range (exclusive)
+	 * @param  mapFunc function for mapping
 	 * @return a newly created feature-list
 	 */
 	public static <T extends FeatureInput> FeatureList<T> mapFromRange(
@@ -252,21 +252,21 @@ public class FeatureListFactory {
 	
 	
 	/**
-	 * Creates a new feature-list by mapping integers (from a range) each to a {@link Optional<Feature<T>>}
+	 * Creates a new feature-list by mapping integers (from a range) each to an optional feature
 	 * 
-	 * @param <T> feature input-type for the result of the mapping
-	 * @param <E> an exception that be thrown during mapping
-	 * @param startInclusive start index for the integer range (inclusive)
-	 * @param endExclusive end index for the integer range (exclusive)
-	 * @param throwableClass the class of the exception-type {@link E}
-	 * @param mapFunc function for mapping
+	 * @param  <T> feature input-type for the result of the mapping
+	 * @param  <E> an exception that be thrown during mapping
+	 * @param  startInclusive start index for the integer range (inclusive)
+	 * @param  endExclusive end index for the integer range (exclusive)
+	 * @param  throwableClass the class of {@code E}
+	 * @param  mapFunc function for mapping
 	 * @return a newly created feature-list
 	 * @throws E if the exception is thrown during mapping
 	 */
 	public static <T extends FeatureInput, E extends Exception> FeatureList<T> mapFromRangeOptional(
 		int startInclusive,
 		int endExclusive,
-		Class<?> throwableClass,
+		Class<? extends Exception> throwableClass,
 		IntFunctionWithException<Optional<Feature<T>>,E> mapFunc
 	) throws E {
 		FeatureList<T> out = new FeatureList<>();

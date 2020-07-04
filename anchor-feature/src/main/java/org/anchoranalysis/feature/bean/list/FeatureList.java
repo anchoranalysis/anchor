@@ -104,7 +104,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 	
 	
 	/**
-	 * Performs a {@link filter} and then a {@link map}
+	 * Filters inputs and then performs a {@link #map}
 	 * 
 	 * <p>This is an IMMUTABLE operation.</p>
 	 *

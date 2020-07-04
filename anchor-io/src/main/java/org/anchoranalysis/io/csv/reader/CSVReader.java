@@ -131,7 +131,7 @@ public class CSVReader {
 	 * 
 	 * @param filePath path to file
 	 * @return the opened-file (that must eventually be closed)
-	 * @throws IOException
+	 * @throws CSVReaderException
 	 */
 	public OpenedCSVFile read( Path filePath ) throws CSVReaderException {
 		

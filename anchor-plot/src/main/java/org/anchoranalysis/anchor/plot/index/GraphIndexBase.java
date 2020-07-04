@@ -29,12 +29,10 @@ package org.anchoranalysis.anchor.plot.index;
 import java.util.Iterator;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.plot.index.GraphAxisLabels;
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GraphInstance;
 import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.Dataset;
@@ -58,12 +56,10 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
 	private GraphAxisLabels labels = new GraphAxisLabels();
 	
 	/**
+	 * Constructor
 	 * 
 	 * @param graphName
 	 * @param seriesNames
-	 * @param labelGetter
-	 * @param colorGetter color-getter or NULL to use default colors
-	 * @throws InitException
 	 */
 	public GraphIndexBase(
 		String graphName,

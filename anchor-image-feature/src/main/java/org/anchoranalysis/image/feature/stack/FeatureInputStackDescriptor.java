@@ -42,7 +42,7 @@ public class FeatureInputStackDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInputStack> inputClass() {
 		return FeatureInputStack.class;
 	}
 }

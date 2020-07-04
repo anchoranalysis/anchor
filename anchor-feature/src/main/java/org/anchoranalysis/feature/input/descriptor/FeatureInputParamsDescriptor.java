@@ -47,7 +47,7 @@ public class FeatureInputParamsDescriptor extends FeatureInputDescriptor {
 	}
 	
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInputParams> inputClass() {
 		return FeatureInputParams.class;
 	}
 }

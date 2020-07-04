@@ -72,8 +72,7 @@ public class ChnlFixture {
 		
 		ImageDimensions sd = new ImageDimensions( e, ImageResFixture.INSTANCE );
 		
-		ChannelFactorySingleType factory = new ChannelFactoryByte();
-		Channel chnl = factory.createEmptyInitialised(sd);
+		Channel chnl = new ChannelFactoryByte().createEmptyInitialised(sd);
 		
 		// Populate the channel with values
 		for( int z=0; z<e.getZ(); z++) {

@@ -26,7 +26,6 @@ package org.anchoranalysis.feature.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -53,7 +52,7 @@ public interface FeatureSymbolCalculator<T extends FeatureInput> {
 	 * 
 	 * @param resolvedID
 	 * @param input TODO
-	 * @throws GetOperationFailedException 
+	 * @throws FeatureCalcException 
 	 */
 	double calcFeatureByID( String resolvedID, SessionInput<T> input ) throws FeatureCalcException;
 }

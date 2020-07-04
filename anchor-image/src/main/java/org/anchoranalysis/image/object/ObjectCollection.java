@@ -101,7 +101,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * Checks if two collections are equal in a shallow way
 	 * 
 	 * <p>Specifically, objects are tested to be equal using their object references (i.e. they are equal iff they have the same reference)</p>
-	 * <p>This is a cheaper equality check than with {@link equalsDeep}</p>
+	 * <p>This is a cheaper equality check than with {@link #equalsDeep}</p>
 	 * <p>Both collections must have identical ordering.</p> 
 	 */
 	@Override
@@ -113,7 +113,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * Checks if two collections are equal in a deeper way
 	 * 
 	 * <p>Specifically, objects are tested to be equal using a deep byte-by-byte comparison using {@link ObjectMask.equalsDeep}. Their objects do not need to be equal.
-	 * <p>This is more expensive equality check than with {@link equalsDeep}, but is useful for comparing objects that were instantiated in different places.</p>
+	 * <p>This is more expensive equality check than with {@link #equalsDeep}, but is useful for comparing objects that were instantiated in different places.</p>
 	 * <p>Both collections must have identical ordering.</p>
 	 */	
 	public boolean equalsDeep(ObjectCollection othr) {

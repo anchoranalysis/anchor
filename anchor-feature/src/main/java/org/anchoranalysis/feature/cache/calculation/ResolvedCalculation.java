@@ -38,7 +38,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <S> result-type of the calculation
  * @param <T> feature input-type
- * @param <E> exception that is thrown if something goes wrong during calculation
  */
 public class ResolvedCalculation<S, T extends FeatureInput> {
 
@@ -60,7 +59,7 @@ public class ResolvedCalculation<S, T extends FeatureInput> {
 	 * 
 	 * @param input If there is no existing cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
 	 * @return the result of the calculation
-	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
+	 * @throws FeatureCalcException if the calculation cannot finish, for whatever reason
 	 */
 	public S getOrCalculate( T input) throws FeatureCalcException {
 		return calc.getOrCalculate(input);

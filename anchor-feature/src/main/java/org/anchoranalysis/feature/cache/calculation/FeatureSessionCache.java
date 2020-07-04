@@ -94,5 +94,5 @@ public interface FeatureSessionCache<T extends FeatureInput> {
 	 * @param cacheCreator factory for creating a cache
 	 * @return the existing or new child cache of the given name
 	 */
-	<V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> inputType, CacheCreator cacheCreator);
+	<V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<? extends FeatureInput> inputType, CacheCreator cacheCreator);
 }

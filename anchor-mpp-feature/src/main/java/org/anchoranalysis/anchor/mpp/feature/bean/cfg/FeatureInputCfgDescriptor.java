@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-mpp-feature
@@ -40,7 +42,7 @@ public class FeatureInputCfgDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputCfg.class;
 	}
 

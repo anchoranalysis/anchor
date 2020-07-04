@@ -75,7 +75,7 @@ class CompareSorted {
 	 * @param file2 second file to compare
 	 * @param messageStream if non-equal, additional explanation messages are printed here
 	 * @return true if they are identical (subject to the conditions above), false otherwise
-	 * @throws IOException if something goes wrong accessing the csv files
+	 * @throws CSVReaderException if something goes wrong accessing the csv files
 	 */
 	public boolean compare( OpenedCSVFile file1, OpenedCSVFile file2, PrintStream messageStream ) throws CSVReaderException {
 

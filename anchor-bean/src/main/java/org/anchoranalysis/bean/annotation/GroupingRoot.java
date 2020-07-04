@@ -39,7 +39,7 @@ import java.lang.annotation.RetentionPolicy;
  * 
  * It is typically set on the abstract parent class of a set of classes
  * 
- * See {{@link ch.ethz.biol.cell.mpp.NamedDefinitionsDynamic}
+ * @see org.anchoranalysis.bean.define.Define
  * 
  * @author Owen Feehan
  *

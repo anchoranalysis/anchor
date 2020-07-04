@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A {@link CalculationMap} that has been resolved against a cache.
+ * A {@link CacheableCalculationMap} that has been resolved against a cache.
  * 
  * @author Owen Feehan
  *

@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
@@ -134,7 +133,6 @@ public class ResultsVector {
 	 * @param src vector to copy from
 	 * @param srcIndex index in the source away to start from
 	 * @return
-	 * @throws FeatureCalcException
 	 */
 	public void copyFrom( int index, int length, ResultsVector src, int srcIndex ) {
 		

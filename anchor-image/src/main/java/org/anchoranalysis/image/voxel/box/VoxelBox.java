@@ -180,7 +180,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	/**
 	 * Sets pixels in a box to a particular value if they match an Object-Mask
 	 * 
-	 * See {@ #setPixelsCheckMask(BoundingBox, VoxelBox, BoundingBox, int, byte) for details
+	 * See {@link #setPixelsCheckMask} for details
 	 * 
 	 * @param om the object-mask to restrict which values in the buffer are written to
 	 * @param value value to be set in matched pixels

@@ -83,7 +83,11 @@ public final class PointRange {
 		return deriveBoundingBoxNoCheck();
 	}
 	
-	/** Like {@link deriveBoundingBox} but doesn't throw an exception if no points exist. Consider calling {@link isEmpty} first to check. */
+	/** 
+	 * Like {@link #deriveBoundingBox} but doesn't throw an exception if no points exist.
+	 * <p>
+	 * Consider calling {@link #isEmpty} first to check.
+	 */
 	public BoundingBox deriveBoundingBoxNoCheck() {
 		return new BoundingBox(min, max);
 	}

@@ -1,6 +1,6 @@
 package org.anchoranalysis.io.output.csv;
 
-import java.io.IOException;
+
 
 /*
  * #%L
@@ -58,8 +58,8 @@ public class CSVWriter implements AutoCloseable {
 	 * 
 	 * @param outputName output-name
 	 * @param outputManager output-manager
-	 * @return the csv-write or null if it's not allowed
-	 * @throws IOException
+	 * @return the csv-writer if it's allowed, or empty if it's not.
+	 * @throws AnchorIOException
 	 */
 	public static Optional<CSVWriter> createFromOutputManager( String outputName, BoundOutputManager outputManager ) throws AnchorIOException {
 		
@@ -80,17 +80,15 @@ public class CSVWriter implements AutoCloseable {
 		}
 		
 		OptionalUtilities.ifPresent(output, FileOutput::start);
-		return output.map( fo->
-			new CSVWriter(fo)
-		);
+		return output.map(CSVWriter::new);
 	}
 	
 	/**
 	 * Creates and starts a CSVWriter (it's always allowed, so will never return NULL)
 	 * 
 	 * @param path path to write the CSV to
-	 * @return
-	 * @throws IOException
+	 * @return the csv-writer
+	 * @throws AnchorIOException
 	 */
 	public static CSVWriter create( Path path ) throws AnchorIOException {
 		FileOutput output = new FileOutput(path.toString());

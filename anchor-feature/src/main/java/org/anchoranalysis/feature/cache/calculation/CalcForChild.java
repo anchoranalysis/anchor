@@ -58,7 +58,7 @@ public interface CalcForChild<T extends FeatureInput> {
 	
 	
 	/**
-	 * Calculates a feature in a child-cache using a new input created from a {@link #FeatureCalculation}
+	 * Calculates a feature in a child-cache using a new input created from a {@link FeatureCalculation}
 	 * 
 	 * @param <S> input-type for feature to calculate
 	 * @param feature feature to calculate with

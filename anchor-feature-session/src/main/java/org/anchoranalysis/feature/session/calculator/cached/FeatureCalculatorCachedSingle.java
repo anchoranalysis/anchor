@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
 
 /**
- * A {@link #FeatureCalculatorSingle} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
+ * A {@link FeatureCalculatorSingle} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
  * 
  * @author Owen Feehan
  *

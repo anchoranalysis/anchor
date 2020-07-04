@@ -31,7 +31,6 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -91,7 +90,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	}
 
 	/**
-	 * Duplicates the feature as per {@link duplicateBean} but sets a particular custom-name
+	 * Duplicates the feature as per {@link #duplicateBean} but sets a particular custom-name
 	 * 
 	 * @param customName the custom-name to set
 	 * @return a duplicated (deep copy of bean attributes) feature, identical to current feature, but with the specified custom-name
@@ -144,8 +143,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
 	 * 
 	 * @param params parameters used for initialization that are simply passed to beforeCalc()
-	 * @param logger logger
-	 * 
 	 * @param logger the logger, saved and made available to the feature
 	 */
 	@Override
@@ -170,7 +167,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * It ignores features that are referenced from elsewhere.
 	 * 
 	 * @return
-	 * @throws CreateException
 	 * @throws BeanMisconfiguredException
 	 */
 	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)

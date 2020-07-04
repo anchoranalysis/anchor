@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 /**
- * A {@link #FeatureCalculatorMulti} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
+ * A {@link FeatureCalculatorMulti} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
  * 
  * @author Owen Feehan
  *

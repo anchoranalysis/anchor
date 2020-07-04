@@ -51,7 +51,7 @@ public abstract class CacheableCalculationMap<
 	 * 
 	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
 	 * @return the result of the calculation
-	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
+	 * @throws E if the calculation cannot finish, for whatever reason
 	 */
 	public abstract S getOrCalculate( T input, U key ) throws E;
 

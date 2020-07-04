@@ -28,8 +28,6 @@ package org.anchoranalysis.io.bean.file.matcher;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -60,9 +58,9 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 	 * @param ignoreHidden whether to ignore hidden files/directories or not 
 	 * @param maxDirDepth a maximum depth in directories to search
 	 * @param params parameters providing input-context
-	 * @param boolean acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging it), otherwise throws an exception
+	 * @param acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging it), otherwise throws an exception
 	 * @return a collection of files matching the conditions
-	 * @throws IOException if an error occurrs reading/writing or interacting with the filesystem
+	 * @throws AnchorIOException if an error occurrs reading/writing or interacting with the filesystem
 	 */
 	public Collection<File> matchingFiles(
 		Path dir,
@@ -73,7 +71,7 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 		InputManagerParams params
 	) throws AnchorIOException {
 		
-		if (!Files.exists(dir) || !Files.isDirectory(dir)) {
+		if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
 			throw new AnchorIOException( String.format("Directory '%s' does not exist", dir) );
 		}
 		

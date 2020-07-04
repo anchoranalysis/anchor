@@ -29,7 +29,6 @@ package org.anchoranalysis.io.output.bound;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -77,9 +76,7 @@ public class BoundOutputManager {
 	 * @param boundFilePathPrefix
 	 * @param outputWriteSettings
 	 * @param writeOperationRecorder
-	 * @param delExistingFolder
 	 * @param parentInit iff defined, parent initializer to call, before our own initializer is called.
-	 * @throws IOException
 	 */
 	public BoundOutputManager(
 		OutputManager outputManager,

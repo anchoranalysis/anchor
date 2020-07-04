@@ -49,7 +49,7 @@ public class FeatureInputGenericDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInput.class;
 	}
 }

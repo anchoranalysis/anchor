@@ -51,11 +51,11 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * 
  * <div>
  * <ul>
- * <li>the image in which the object exists (on {@link #listImage}) i.e. the nrg-stack.</li>
- * <li>the left-object in the pair (on {@link #listSingle})</li>
- * <li>the right-object in the pair (on {@link #listSingle})</li>
- * <li>the pair (on {@link #listPair})</li>
- * <li>both objects merged together (on {@link #listSingle}}</li>
+ * <li>the image in which the object exists (on {code listImage}) i.e. the nrg-stack.</li>
+ * <li>the left-object in the pair (on {@code listSingle})</li>
+ * <li>the right-object in the pair (on {@code listSingle})</li>
+ * <li>the pair (on {code listPair})</li>
+ * <li>both objects merged together (on {code listSingle}}</li>
  * </ul>
  * </div>
  * 

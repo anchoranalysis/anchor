@@ -323,7 +323,7 @@ public class IterateVoxels {
 	/**
 	 * Iterate over each voxel that is located on a mask if it exists, otherwise iterate over the entire voxel-box.
 	 * 
-	 * <p>This is similar behaviour to {@link callEachPoint} but adds a buffer for each slice.</p>
+	 * <p>This is similar behaviour to {@link #callEachPoint} but adds a buffer for each slice.
 	 */
 	public static <T extends Buffer> void callEachPoint( Optional<ObjectMask> mask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
 		Extent extent = voxels.extent();
