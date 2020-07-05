@@ -35,6 +35,9 @@ import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Executes different processors depending on whether we are in debug mode or not
  * 
@@ -46,11 +49,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class DebugDependentProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int maxNumProcessors;
-	
-	@BeanField
-	private boolean supressExceptions = false;
 	
 	/** 
 	 *  How many processors to avoid using for the tasks.
@@ -59,7 +59,7 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 	 *  for other tasks on the operating system. This is particularly valuable on a desktop PC where other tasks (e.g web
 	 *  browsing) may be ongoing during processing.</p>
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int keepProcessorsFree = 1;
 	// END BEAN PROPERTIES
 
@@ -77,39 +77,15 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 		if (debugMode) {
 			SequentialProcessor<T,S> sp = new SequentialProcessor<>();
 			sp.setTask(getTask());
-			sp.setSupressExceptions(supressExceptions);
+			sp.setSuppressExceptions(isSuppressExceptions());
 			return sp;
 		} else {
 			ParallelProcessor<T,S> pp = new ParallelProcessor<>();
 			pp.setMaxNumProcessors(maxNumProcessors);
 			pp.setTask(getTask());
-			pp.setSupressExceptions(supressExceptions);
+			pp.setSuppressExceptions(isSuppressExceptions());
 			pp.setKeepProcessorsFree(keepProcessorsFree);
 			return pp;
 		}
-	}
-
-	public int getMaxNumProcessors() {
-		return maxNumProcessors;
-	}
-
-	public void setMaxNumProcessors(int maxNumProcessors) {
-		this.maxNumProcessors = maxNumProcessors;
-	}
-
-	public boolean isSupressExceptions() {
-		return supressExceptions;
-	}
-
-	public void setSupressExceptions(boolean supressExceptions) {
-		this.supressExceptions = supressExceptions;
-	}
-
-	public int getKeepProcessorsFree() {
-		return keepProcessorsFree;
-	}
-
-	public void setKeepProcessorsFree(int keepProcessorsFree) {
-		this.keepProcessorsFree = keepProcessorsFree;
 	}
 }

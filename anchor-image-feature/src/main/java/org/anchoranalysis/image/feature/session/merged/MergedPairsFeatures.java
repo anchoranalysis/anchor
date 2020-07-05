@@ -117,28 +117,24 @@ public class MergedPairsFeatures {
 	public FeatureCalculatorMulti<FeatureInputStack> createImageSession(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputStack,? extends ReplaceStrategy<FeatureInputStack>> cachingStrategy,
-		boolean suppressErrors
+		BoundReplaceStrategy<FeatureInputStack,? extends ReplaceStrategy<FeatureInputStack>> cachingStrategy
 	) throws InitException {
 		return cc.createCached(
 			getImage(),
 			soImage,
-			cachingStrategy,
-			suppressErrors
+			cachingStrategy
 		);
 	}
 	
 	public FeatureCalculatorMulti<FeatureInputSingleObject> createSingle(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategy,
-		boolean suppressErrors
+		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategy
 	) throws InitException {
 		return cc.createCached(
 			getSingle(),
 			soImage,
-			cachingStrategy,
-			suppressErrors
+			cachingStrategy
 		);
 	}
 	

@@ -129,7 +129,6 @@ public class GroupedResultsVectorCollection implements Closeable {
 		if (featuresAggregate.isPresent()) {
 			writeAggregated(
 				featuresAggregate.get(),
-				includeGroups,
 				context,
 				contextGroups
 			);
@@ -149,7 +148,6 @@ public class GroupedResultsVectorCollection implements Closeable {
 	
 	private void writeAggregated(
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
-		boolean includeGroups,
 		BoundIOContext context,
 		CacheSubdirectoryContext contextGroups
 	) throws AnchorIOException {
@@ -160,12 +158,12 @@ public class GroupedResultsVectorCollection implements Closeable {
 			metadata.groupHeaders(),
 			featuresAggregate.createFeatureNames(),
 			context,
-			(name, results, writer) -> WriteGroupResults.maybeWriteAggregatedResultsForSingleGroup(
+			(name, results, csvWriter) -> WriteGroupResults.maybeWriteAggregatedResultsForSingleGroup(
 				name,
 				results,
 				featureNamesNonAggregate,
 				featuresAggregate,
-				writer,
+				csvWriter,
 				contextGroups.get(
 					name.map(MultiName::toString)
 				)

@@ -1,6 +1,6 @@
 package org.anchoranalysis.experiment.task;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+
 
 /*-
  * #%L
@@ -29,10 +29,12 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
  */
 
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
@@ -43,90 +45,44 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  * @param <T> input-object type
  * @aram <S> shared-state type
  */
+@AllArgsConstructor
 public class InputBound<T,S> {
-
-	private ManifestRecorder manifest;
 	
-	private T inputObject;
-	private S sharedState;
+	@Getter
+	private final T inputObject;
 	
-	private boolean detailedLogging;
+	@Getter
+	private final S sharedState;
 	
-	private BoundContextSpecify context;
+	@Getter
+	private final ManifestRecorder manifest;
 	
-	public InputBound(
-		ExperimentExecutionArguments experimentArguments,
-		BoundOutputManagerRouteErrors outputManager,
-		StatefulLogReporter logReporter,
-		ErrorReporter errorReporter
-	) {
-		this.context = new BoundContextSpecify(
-			experimentArguments,
-			outputManager,
-			logReporter,
-			errorReporter
-		);
-	}
+	@Getter
+	private final boolean detailedLogging;
 	
-	private InputBound(BoundContextSpecify context) {
-		this.context = context;
-	}
+	private final BoundContextSpecify context;
 
 	/** Immutably changes the input-object */
 	public <U> InputBound<U,S> changeInputObject( U inputObjectNew ) {
-		InputBound<U,S> out = new InputBound<>(context);
-		out.setManifest(manifest);
-		out.setSharedState(sharedState);
-		out.setDetailedLogging(detailedLogging);
-		
-		// The new input-object
-		out.setInputObject(inputObjectNew);
-		return out;
+		return new InputBound<>(
+			inputObjectNew,
+			sharedState,
+			manifest,
+			detailedLogging,
+			context
+		);
 	}
-
+	
 	public BoundIOContext context() {
 		return context;
 	}
 	
-	
-	public boolean isDetailedLogging() {
-		return detailedLogging;
-	}
-
-	public void setDetailedLogging(boolean detailedLogging) {
-		this.detailedLogging = detailedLogging;
-	}
-
-	public ManifestRecorder getManifest() {
-		return manifest;
-	}
-
-	public void setManifest(ManifestRecorder manifest) {
-		this.manifest = manifest;
-	}
-
 	public BoundOutputManagerRouteErrors getOutputManager() {
 		return context.getOutputManager();
 	}
 	
 	public LogErrorReporter getLogger() {
 		return context.getLogger();
-	}
-
-	public T getInputObject() {
-		return inputObject;
-	}
-
-	public void setInputObject(T inputObject) {
-		this.inputObject = inputObject;
-	}
-
-	public S getSharedState() {
-		return sharedState;
-	}
-
-	public void setSharedState(S sharedState) {
-		this.sharedState = sharedState;
 	}
 
 	public StatefulLogReporter getLogReporterJob() {

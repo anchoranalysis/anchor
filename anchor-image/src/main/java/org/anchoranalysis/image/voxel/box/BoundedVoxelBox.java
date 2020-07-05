@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel.box;
 
 import java.nio.Buffer;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -371,8 +370,8 @@ public class BoundedVoxelBox<T extends Buffer> {
 			boundingBox.extent().duplicateChangeZ(zMax-zMin+1)
 		);
 		
-		SubrangeVoxelAccess<T> voxelAccess = new SubrangeVoxelAccess<T>(relZ,target.extent(),this);
-		return new BoundedVoxelBox<T>( target, factory.create(voxelAccess) );
+		SubrangeVoxelAccess<T> voxelAccess = new SubrangeVoxelAccess<>(relZ,target.extent(),this);
+		return new BoundedVoxelBox<>( target, factory.create(voxelAccess) );
 	}
 	
 	/**

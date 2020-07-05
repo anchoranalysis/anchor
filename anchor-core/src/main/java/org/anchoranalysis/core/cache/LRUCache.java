@@ -29,8 +29,8 @@ package org.anchoranalysis.core.cache;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -49,24 +49,6 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 public class LRUCache<K,V> {
 
 	private LoadingCache<K, V> cache;
-
-	/** Calculates a value for a given key */
-	@FunctionalInterface
-	public interface CalculateForCache<K,V> {
-		V calculate(K index) throws CacheRetrievalFailed;
-	}
-	
-	public static class CacheRetrievalFailed extends AnchorFriendlyCheckedException {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 6073623853829327626L;
-
-		public CacheRetrievalFailed( Exception exc ) {
-			super( exc );
-		}
-	}
 	
 	/**
 	 * Constructor
@@ -74,7 +56,7 @@ public class LRUCache<K,V> {
 	 * @param cacheSize maximum-size of cache
 	 * @param calculator calculates the value for a given key if it's not already in the cache
 	 */
-	public LRUCache(int cacheSize, CalculateForCache<K,V> calculator) {
+	public <E extends Exception> LRUCache(int cacheSize, FunctionWithException<K,V,E> calculator) {
 	
 		if(cacheSize <= 0) {
 			throw new AnchorFriendlyRuntimeException("cacheSize must be a positive integer");
@@ -84,8 +66,8 @@ public class LRUCache<K,V> {
 	       .maximumSize(cacheSize)
 	       .build(
 	           new CacheLoader<K, V>() {
-				 public V load(K key) throws CacheRetrievalFailed {
-					 return calculator.calculate(key);
+				 public V load(K key) throws E {
+					 return calculator.apply(key);
 	             }
 	           }
 	        );

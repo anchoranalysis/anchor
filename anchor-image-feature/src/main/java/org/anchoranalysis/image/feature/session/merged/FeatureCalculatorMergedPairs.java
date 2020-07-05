@@ -102,8 +102,7 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 			features,
 			new CreateCalculatorHelper(nrgStack,logErrorReporter),
 			include,			
-			soImage,
-			suppressErrors
+			soImage
 		);
 	}
 	

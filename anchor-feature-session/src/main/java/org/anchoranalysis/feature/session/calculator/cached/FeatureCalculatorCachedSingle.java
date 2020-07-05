@@ -52,8 +52,7 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput> implements Fe
 	 */
 	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors) {
 		delegate = new FeatureCalculatorCachedMulti<>(
-			new FeatureCalculatorMultiFromSingle<>(source),
-			suppressErrors
+			new FeatureCalculatorMultiFromSingle<>(source)
 		);
 	}
 	
@@ -64,10 +63,9 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput> implements Fe
 	 * @param suppressErrors
 	 * @param cacheSize size of cache
 	 */
-	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors, int cacheSize) {
+	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, int cacheSize) {
 		delegate = new FeatureCalculatorCachedMulti<>(
 			new FeatureCalculatorMultiFromSingle<>(source),
-			suppressErrors,
 			cacheSize
 		);
 	}

@@ -2,6 +2,8 @@ package org.anchoranalysis.feature.session.calculator.cached;
 
 import java.util.Optional;
 
+
+
 /*
  * #%L
  * anchor-feature
@@ -30,7 +32,6 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -59,45 +60,25 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 	 * Creates a feature-calculator with a new cache
 	 * 
 	 * @param source the underlying feature-calculator to use for calculating unknown results
-	 * @param suppressErrors
 	 */
-	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors) {
-		this(source, suppressErrors, DEFAULT_CACHE_SIZE);
+	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source) {
+		this(source, DEFAULT_CACHE_SIZE);
 	}
 	
 	/**
 	 * Creates a feature-calculator with a new cache
 	 * 
 	 * @param source the underlying feature-calculator to use for calculating unknown results
-	 * @param suppressErrors
 	 * @param cacheSize size of cache to use
 	 */
-	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, boolean suppressErrors, int cacheSize) {
+	public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, int cacheSize) {
 		this.source = source;
-		this.cacheResults = new LRUCache<>(
-			cacheSize,
-			index -> {
-				try {
-					if (suppressErrors) {
-						if (errorReporter.isPresent()) {
-							return source.calcSuppressErrors(index,errorReporter.get());
-						} else {
-							throw new FeatureCalcException("Cannot calculate with suppressed errors unless an error-reporter has been set");
-						}
-					} else {
-						return source.calc(index);
-					}
-				} catch (FeatureCalcException e) {
-					throw new CacheRetrievalFailed(e);
-				}
-			}
-		);
-		
+		this.cacheResults = new LRUCache<>(cacheSize, this::calcInsideCache);
 	}
 
 	@Override
 	public ResultsVector calcSuppressErrors(T input, ErrorReporter errorReporter) {
-		this.errorReporter = Optional.of(errorReporter);
+		this.errorReporter = Optional.of(errorReporter); 	// Suppress errors in cache
 		try {
 			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
@@ -108,6 +89,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 
 	@Override
 	public ResultsVector calc(T input) throws FeatureCalcException {
+		this.errorReporter = Optional.empty();	// Do not suppress errors in cache
 		try {
 			return cacheResults.get(input);
 		} catch (GetOperationFailedException e) {
@@ -142,4 +124,13 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput> implements Fea
 		rv.setErrorAll(e);
 		return rv;
 	}
+	
+	private ResultsVector calcInsideCache(T index) throws FeatureCalcException {
+		if (errorReporter.isPresent()) {
+			return source.calcSuppressErrors(index,errorReporter.get());
+		} else {
+			return source.calc(index);
+		}
+	}
+
 }

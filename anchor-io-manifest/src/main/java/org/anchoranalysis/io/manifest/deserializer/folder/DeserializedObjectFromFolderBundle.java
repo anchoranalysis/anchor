@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.core.index.container.IOrderProvider;
@@ -82,7 +82,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 					Bundle<T> bundle = BundleUtilities.generateBundle( deserializers.getDeserializerBundle(), bundleFolder, index);
 					return bundle.createHashMap();
 				} catch (IllegalArgumentException | DeserializationFailedException e) {
-					throw new CacheRetrievalFailed(e);
+					throw new OperationFailedException(e);
 				}
 			}
 		);
@@ -110,8 +110,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 			throw new GetOperationFailedException( String.format("Cannot find index %i in bundle",index) );
 		}
 		
-		T obj = hashMap.get( index );
-		return obj;
+		return hashMap.get( index );
 	}
 
 	public BundleParameters getBundleParameters() {

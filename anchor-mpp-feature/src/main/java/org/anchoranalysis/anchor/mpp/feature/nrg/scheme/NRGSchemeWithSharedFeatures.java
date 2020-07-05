@@ -9,8 +9,6 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
-import org.anchoranalysis.core.cache.LRUCache.CalculateForCache;
 
 /*
  * #%L
@@ -41,6 +39,7 @@ import org.anchoranalysis.core.cache.LRUCache.CalculateForCache;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -63,7 +62,7 @@ public class NRGSchemeWithSharedFeatures {
 	private LogErrorReporter logger;
 	
 	// Caches NRG value by index
-	private class CalcElemIndTotalOperation implements CalculateForCache<Integer,NRGTotal> {
+	private class CalcElemIndTotalOperation implements FunctionWithException<Integer,NRGTotal,FeatureCalcException> {
 
 		private PxlMarkMemo pmm;
 		private NRGStack raster;
@@ -86,29 +85,18 @@ public class NRGSchemeWithSharedFeatures {
 		}
 		
 		@Override
-		public NRGTotal calculate(Integer index) throws CacheRetrievalFailed {
-			try {
-				return calc();
-			} catch (FeatureCalcException e) {
-				throw new CacheRetrievalFailed(e);
-			}
+		public NRGTotal apply(Integer index) throws FeatureCalcException {
+			return calc();
 		}
 		
 		public NRGTotal calc() throws FeatureCalcException {
 			
-			FeatureCalculatorMulti<FeatureInputSingleMemo> session;
-			
-			try {
-				session = FeatureSession.with(
-					nrgScheme.getElemIndAsFeatureList(),
-					createInitParams(kvp),
-					sharedFeatures,
-					logger
-				);
-
-			} catch (CreateException e) {
-				throw new FeatureCalcException(e);
-			}
+			FeatureCalculatorMulti<FeatureInputSingleMemo> session = FeatureSession.with(
+				nrgScheme.getElemIndAsFeatureList(),
+				new FeatureInitParams(kvp),
+				sharedFeatures,
+				logger
+			);
 						
 			FeatureInputSingleMemo params = new FeatureInputSingleMemo(
 				pmm,
@@ -135,25 +123,20 @@ public class NRGSchemeWithSharedFeatures {
 		
 		NRGStackWithParams nrgStack = createNRGStack(raster);
 	
-		try {
-			FeatureCalculatorMulti<FeatureInputAllMemo> session = FeatureSession.with(
-				nrgScheme.getElemAllAsFeatureList(),
-				createInitParams(nrgStack.getParams()),
-				sharedFeatures,
-				logger
-			);
-			
-			FeatureInputAllMemo params = new FeatureInputAllMemo(
-				pxlMarkMemoList,
-				nrgStack
-			);
-			
-			assert pxlMarkMemoList!=null;
-			return new NRGTotal( session.calc(params).total() );
+		FeatureCalculatorMulti<FeatureInputAllMemo> session = FeatureSession.with(
+			nrgScheme.getElemAllAsFeatureList(),
+			new FeatureInitParams(nrgStack.getParams()),
+			sharedFeatures,
+			logger
+		);
+		
+		FeatureInputAllMemo params = new FeatureInputAllMemo(
+			pxlMarkMemoList,
+			nrgStack
+		);
 
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+		return new NRGTotal( session.calc(params).total() );
+
 	}
 	
 	public NRGTotal calcElemIndTotal( PxlMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
@@ -206,9 +189,5 @@ public class NRGSchemeWithSharedFeatures {
 
 	public RegionMap getRegionMap() {
 		return nrgScheme.getRegionMap();
-	}
-	
-	private static FeatureInitParams createInitParams( KeyValueParams kvp ) throws CreateException {
-		return new FeatureInitParams( kvp );
 	}
 }

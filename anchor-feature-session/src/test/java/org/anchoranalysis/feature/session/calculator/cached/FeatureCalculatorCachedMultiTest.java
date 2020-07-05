@@ -46,8 +46,7 @@ public class FeatureCalculatorCachedMultiTest {
 		cached = new FeatureCalculatorCachedMulti<>(
 			FeatureCalculatorMultiFixture.createFeatureCalculator(
 				new ResultsVector(1)	// Result is irrelevant
-			),
-			true
+			)
 		);
 	}
 	

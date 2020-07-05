@@ -42,6 +42,9 @@ import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Processes a job
@@ -54,8 +57,11 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorBean<JobProcessor<T,S>> implements IReplaceTask<T, S> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Task<T,S> task;
+		
+	@BeanField @Getter @Setter
+	private boolean suppressExceptions = true;
 	// END BEAN PROPERTIES
 	
 	/**
@@ -76,6 +82,20 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 		
 		if (paramsExperiment.isDetailedLogging()) {
 			logStats(stats, paramsExperiment);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
+
+		// This is a bit hacky. If the underlying task inherit from IReplaceTask then, rather than directly
+		//  replacing the task, we call this method. In effect, this allows skipping of the task that is replaced.
+		if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
+			((IReplaceTask<T,S>) this.task).replaceTask(taskToReplace);
+		} else {
+			// If not, then we replace the task directly
+			this.task = taskToReplace;
 		}
 	}
 	
@@ -109,7 +129,7 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 	protected Optional<LogReporter> logReporterForMonitor(ParametersExperiment paramsExperiment) {
 		return OptionalUtilities.createFromFlag(
 			paramsExperiment.isDetailedLogging(),
-			() -> paramsExperiment.getLogReporterExperiment()
+			paramsExperiment::getLogReporterExperiment
 		);
 	}
 		
@@ -118,28 +138,6 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 			paramsExperiment.getLogReporterExperiment()
 		);
 		statisticsLogger.logTextualMessage(stats);		
-	}
-	
-	public Task<T,S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<T,S> task) {
-		this.task = task;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
-
-		// This is a bit hacky. If the underlying task inherit from IReplaceTask then, rather than directly
-		//  replacing the task, we call this method. In effect, this allows skipping of the task that is replaced.
-		if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
-			((IReplaceTask<T,S>) this.task).replaceTask(taskToReplace);
-		} else {
-			// If not, then we replace the task directly
-			this.task = taskToReplace;
-		}
 	}
 }
 

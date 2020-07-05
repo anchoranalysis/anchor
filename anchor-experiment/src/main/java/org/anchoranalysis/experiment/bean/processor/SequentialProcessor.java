@@ -29,7 +29,6 @@ package org.anchoranalysis.experiment.bean.processor;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.LogReporter;
@@ -51,11 +50,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @param <S> shared-object type
  */
 public class SequentialProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
-
-	// START BEAN
-	@BeanField
-	private boolean supressExceptions = true;
-	// END BEAN
 	
 	@Override
 	protected TaskStatistics execute(
@@ -66,13 +60,10 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		
 		S sharedState = getTask().beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
 		
-		int totalNumJobs = inputObjects.size();
-		
 		TaskStatistics stats = executeAllJobs(
 			inputObjects,
 			sharedState,
 			paramsExperiment,
-			totalNumJobs,
 			logReporterForMonitor(paramsExperiment)
 		);
 		
@@ -85,13 +76,12 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		List<T> inputObjects,
 		S sharedState,
 		ParametersExperiment paramsExperiment,
-		int totalNumJobs,
 		Optional<LogReporter> logReporterMonitor
 	) throws ExperimentExecutionException {
 		
 		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<>(
 			obj -> executeJobAndLog( obj, sharedState, paramsExperiment ),
-			obj -> obj.descriptiveName(),
+			T::descriptiveName,
 			logReporterMonitor,
 			false
 		);
@@ -105,24 +95,17 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		ErrorReporter errorReporter = new ErrorReporterIntoLog(logReporter);
 
 		try {
-			ParametersUnbound<T,S> paramsUnbound = new ParametersUnbound<>(paramsExperiment);
-			paramsUnbound.setInputObject(inputObj);
-			paramsUnbound.setSharedState(sharedState);
-			paramsUnbound.setSupressExceptions(supressExceptions);
-			
+			ParametersUnbound<T,S> paramsUnbound = new ParametersUnbound<>(
+				paramsExperiment,
+				inputObj,
+				sharedState,
+				isSuppressExceptions()
+			);
 			return getTask().executeJob( paramsUnbound );
 						
 		} catch (JobExecutionException e) {
 			errorReporter.recordError(SequentialProcessor.class, e);
 			return false;
 		}
-	}
-
-	public boolean isSupressExceptions() {
-		return supressExceptions;
-	}
-
-	public void setSupressExceptions(boolean supressExceptions) {
-		this.supressExceptions = supressExceptions;
 	}
 }

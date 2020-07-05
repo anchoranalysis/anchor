@@ -61,14 +61,12 @@ class CreateCalculatorHelper {
 	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createCached(
 		FeatureList<T> features,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory,
-		boolean suppressErrors
+		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
 	) throws InitException {
 		
 		return wrapWithNrg( 
 			new FeatureCalculatorCachedMulti<>(
-				createWithoutNrg(features, soImage, replacePolicyFactory ),
-				suppressErrors
+				createWithoutNrg(features, soImage, replacePolicyFactory )
 			)
 		);		
 	}
@@ -139,7 +137,7 @@ class CreateCalculatorHelper {
 	private <T extends FeatureInputNRG> FeatureCalculatorMulti<T> wrapWithNrg(
 		FeatureCalculatorMulti<T> calculator
 	) {
-		return new FeatureCalculatorMultiChangeInput<T>(
+		return new FeatureCalculatorMultiChangeInput<>(
 			calculator,
 			input->input.setNrgStack(nrgStack)
 		);
