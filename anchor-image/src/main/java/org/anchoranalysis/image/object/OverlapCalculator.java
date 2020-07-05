@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 /**
  * Calculates overlap between object-masks
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

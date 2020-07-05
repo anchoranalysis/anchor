@@ -29,7 +29,7 @@ package org.anchoranalysis.core.error.friendly;
 /**
  * Categorizes different types of exceptions
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class ExceptionTypes {

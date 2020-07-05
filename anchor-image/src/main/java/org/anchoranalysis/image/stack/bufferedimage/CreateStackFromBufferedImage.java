@@ -75,12 +75,12 @@ public class CreateStackFromBufferedImage {
 		}
 	}
 	
-	private static byte[][] bytesFromBufferedImage(BufferedImage image) throws OperationFailedException {
+	private static byte[][] bytesFromBufferedImage(BufferedImage image) {
 	    WritableRaster wr = image.getRaster();
 	    return bytesFromBufferedImage(wr,0, 0, wr.getWidth(), wr.getHeight());
 	}
 
-	private static byte[][] bytesFromBufferedImage(WritableRaster wr, int x, int y, int sx, int sy) throws OperationFailedException  {
+	private static byte[][] bytesFromBufferedImage(WritableRaster wr, int x, int y, int sx, int sy) {
 		  
 		  if (x == 0 && y == 0 && sx == wr.getWidth() && sy == wr.getHeight() && wr.getDataBuffer() instanceof DataBufferByte) {
 			  return ((DataBufferByte) wr.getDataBuffer()).getBankData();

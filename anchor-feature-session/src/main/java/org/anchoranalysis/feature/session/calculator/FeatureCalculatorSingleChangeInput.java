@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Likes a SequentialSession but automatically changes parameters before calculation
  *
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature-input
  */

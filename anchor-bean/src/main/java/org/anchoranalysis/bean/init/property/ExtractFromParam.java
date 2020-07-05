@@ -32,7 +32,7 @@ import java.util.function.Function;
 /**
  * Extracts on type of parameter from another
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <S> source-type
  * @param <T> destination-type

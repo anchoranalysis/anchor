@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 /** 
  * Methods for checking intersection between a particular bounding-box and others
  *
- * @author owen
+ * @author Owen Feehan
  **/
 public final class BoundingBoxIntersection {
 

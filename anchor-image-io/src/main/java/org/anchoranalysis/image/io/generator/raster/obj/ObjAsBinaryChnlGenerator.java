@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Writes an object-mask as a channel
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjAsBinaryChnlGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {

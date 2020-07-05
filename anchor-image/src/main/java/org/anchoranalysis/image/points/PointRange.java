@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
  * 
  * <p>Points can be dynamically added and the min/max is updated continuously</p>
  * 
- * @author owen
+ * @author Owen Feehan
  * 
  *  */
 public final class PointRange {

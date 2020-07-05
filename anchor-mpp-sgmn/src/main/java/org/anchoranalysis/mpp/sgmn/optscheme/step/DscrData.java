@@ -31,7 +31,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> kernel-type
  */

@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Calculates the result of a feature for particular params
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature input-type
  */

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 /**
  * Creates a bounding-box from one or more points
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class BoundingBoxFromPoints {

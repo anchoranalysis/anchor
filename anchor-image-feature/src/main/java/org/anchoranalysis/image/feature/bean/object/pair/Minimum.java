@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 /**
  * Ratio of first-object to second-object in a pair
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Minimum extends FeatureDeriveFromPair {

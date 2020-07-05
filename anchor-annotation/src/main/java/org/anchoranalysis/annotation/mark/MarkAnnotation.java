@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
  * An annotation that consists of two sets of marks (accepted marks, and rejected marks)
  *   as well as a possible reason for rejecting the entire image
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class MarkAnnotation extends AnnotationWithCfg {

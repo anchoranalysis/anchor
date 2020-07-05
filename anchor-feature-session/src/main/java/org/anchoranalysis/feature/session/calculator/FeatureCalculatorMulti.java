@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Calculates one or more features for given params
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature input-type
  */

@@ -39,7 +39,7 @@ public class SmallNghb implements Nghb {
 		int numDims = do3D ? 3 : 2;
 		
 		boolean b = process.notifyChangeZ(0);
-		assert(b==true);
+		assert(b);
 		
 		for (int d=0; d<numDims; d++) {
 			for (int j=-1; j<=1; j+=2) {

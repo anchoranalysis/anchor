@@ -43,7 +43,7 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
  *
  * @param <T> item-type in the store
  *  */
-public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
+public class EagerEvaluationStore<T> implements NamedProviderStore<T> {
 
 	private NameValueSet<T> delegate = new NameValueSet<>();
 
@@ -56,7 +56,7 @@ public class EagerEvaluationStore<T> extends NamedProviderStore<T> {
 	public void add(String name, Operation<T,OperationFailedException> getter) throws OperationFailedException {
 
 		SimpleNameValue<T> item = new SimpleNameValue<>(
-			new String(name),
+			name,
 			getter.doOperation()
 		);
 		

@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Exposes a {@link FeatureCalculatorMulti} as a {@link FeatureCalculatorSingle}
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature input-type
  */

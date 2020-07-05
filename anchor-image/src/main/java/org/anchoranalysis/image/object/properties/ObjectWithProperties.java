@@ -94,7 +94,7 @@ public class ObjectWithProperties {
 	public ObjectWithProperties duplicate() {
 		ObjectWithProperties out = new ObjectWithProperties( mask.duplicate() );
 		for( String key : properties.keySet()) {
-			out.properties.put( new String(key), properties.get(key) );
+			out.properties.put(key, properties.get(key) );
 		}
 		return out;
 	}

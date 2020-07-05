@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Extent;
  *   
  *   (we make inlining as easy as possible for the JVM)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class IntersectionBBox {

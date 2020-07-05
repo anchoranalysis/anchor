@@ -43,7 +43,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  *   The mask is written as a 3D array of 255 and 0 bytes
  *   The corner-position of the bounding box is added as attributes: x, y, z
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 class ObjectMaskHDF5Writer {

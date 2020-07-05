@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Outputs a channel but with ONLY the pixels in a mask shown, and others set to 0.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ChnlMaskedWithObjGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {

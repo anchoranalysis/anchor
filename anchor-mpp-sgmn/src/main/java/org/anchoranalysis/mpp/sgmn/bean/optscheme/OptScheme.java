@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
  * 
  * TODO replace updatableMarkSetCollection with a more generic type.
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> state returned from algorithm, and reported to the outside world
  * @param <U> type of kernel proposer

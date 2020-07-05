@@ -48,7 +48,7 @@ import org.anchoranalysis.io.params.InputContextParams;
  * 
  * <p>If no paths are specified in the bean, then can be read from the Input-Context</p>
  * <p>If none are available in the Input-Context, then either the fallback is called if it exists, or an error is thrown</p>
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class SpecificPathList extends FileProvider {

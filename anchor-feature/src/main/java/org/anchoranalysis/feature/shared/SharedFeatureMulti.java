@@ -48,7 +48,7 @@ import org.apache.commons.collections.map.MultiValueMap;
 /**
  * A group of features (of possibly heterogeneous type) made available to other features to reference
  * 
- * @author owen
+ * @author Owen Feehan
  */
 public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>, Iterable<NameValue<Feature<FeatureInput>>> {
 	

@@ -77,8 +77,8 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 		}
 	}
 	
-	public KernelWithID<T> initialKernel( RandomNumberGenerator re ) {
-		return new KernelWithID<T>(lstKernelFactories.get(0).getKernel(),0);
+	public KernelWithID<T> initialKernel() {
+		return new KernelWithID<>(lstKernelFactories.get(0).getKernel(),0);
 	}
 	
 	// Proposes a kernel
@@ -95,7 +95,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 	
 	public WeightedKernelList<T> getAllKernelFactories() {
 		
-		WeightedKernelList<T> listOut = new WeightedKernelList<T>();
+		WeightedKernelList<T> listOut = new WeightedKernelList<>();
 		for( int i=0; i<getNumKernel(); i++) {
 			WeightedKernel<T> wkf = lstKernelFactories.get(i);
 			listOut.add( wkf );
@@ -202,7 +202,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 			WeightedKernel<T> wkf = getWeightedKernelFactory(i);
 			
 			if (rand<cumProbArr[i] ) {
-				return new KernelWithID<T>( wkf.getKernel(), i );
+				return new KernelWithID<>( wkf.getKernel(), i );
 			} 
 		}
 		

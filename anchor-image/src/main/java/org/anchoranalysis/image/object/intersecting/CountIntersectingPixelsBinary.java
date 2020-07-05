@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 /**
  * Counts the number of intersecting pixels where each buffer is encoded as Binary-Values
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class CountIntersectingPixelsBinary extends CountIntersectingPixels {
@@ -56,13 +56,13 @@ public class CountIntersectingPixelsBinary extends CountIntersectingPixels {
 
 		int cnt = 0;
 		for (int y=bbox.y().min(); y<bbox.y().max(); y++) {
-			int y_other = y + bbox.y().rel();
+			int yOther = y + bbox.y().rel();
 			
 			for (int x=bbox.x().min(); x<bbox.x().max(); x++) {
-				int x_other = x + bbox.x().rel();
+				int xOther = x + bbox.x().rel();
 				
 				byte posCheck = buffer1.get( bbox.e1().offset(x, y) );
-				byte posCheckOther = buffer2.get( bbox.e2().offset(x_other, y_other) );
+				byte posCheckOther = buffer2.get( bbox.e2().offset(xOther, yOther) );
 				
 				if ( posCheck==byteOn1  && posCheckOther==byteOn2 ) {
 					cnt++;

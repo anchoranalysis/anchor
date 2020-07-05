@@ -56,12 +56,12 @@ public class BoundingBoxRTree {
 		int minEntries = 1;
 		int maxEntries = Math.max(maxEntriesSuggested,minEntries*2);
 		
-		rTree = new RTree<Integer>( maxEntries, minEntries, 3);
+		rTree = new RTree<>( maxEntries, minEntries, 3);
 	}
 	
 	public BoundingBoxRTree( List<BoundingBox> bboxList ) {
 		
-		rTree = new RTree<Integer>(DEFAULT_MAX_ENTRIES, 1, 3);
+		rTree = new RTree<>(DEFAULT_MAX_ENTRIES, 1, 3);
 		
 		for( int i=0; i<bboxList.size(); i++ ) {
 			add(

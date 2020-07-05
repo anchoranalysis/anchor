@@ -45,23 +45,27 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 
+import lombok.Getter;
+
 class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
-	private static ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
+	private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
 	
-	private NamedProvider<Stack> stackCollection;
-	private NamedProvider<Channel> namedChnlCollection;
-	private NamedProvider<BinaryChnl> namedBinaryImageCollection;
-	private NamedProvider<Stack> combinedStackProvider;
+	private final NamedProvider<Stack> stacks;
+	private final NamedProvider<Channel> channels;
+	private final NamedProvider<BinaryChnl> masks;
+	
+	@Getter
+	private final NamedProvider<Stack> combinedStackProvider;
 	
 	public CombineDiverseProvidersAsStacks(
-		NamedProvider<Stack> stackCollection,
-		NamedProvider<Channel> namedChnlCollection,
-		NamedProvider<BinaryChnl> namedBinaryImageCollection
+		NamedProvider<Stack> stacks,
+		NamedProvider<Channel> channels,
+		NamedProvider<BinaryChnl> masks
 	) {
-		this.stackCollection = stackCollection;
-		this.namedChnlCollection = namedChnlCollection;
-		this.namedBinaryImageCollection = namedBinaryImageCollection;
+		this.stacks = stacks;
+		this.channels = channels;
+		this.masks = masks;
 		
 		combinedStackProvider = createCombinedStackProvider();
 	}
@@ -70,11 +74,6 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 	public Optional<Stack> getOptional(String key) throws NamedProviderGetException {
 		return combinedStackProvider.getOptional(key);
 	}
-	
-
-	public NamedProvider<Stack> getCombinedStackProvider() {
-		return combinedStackProvider;
-	}
 
 	@Override
 	public Set<String> keys() {
@@ -82,28 +81,27 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 	}
 
 	private NamedProvider<Stack> createCombinedStackProvider() {
-		
-		// Channel collection bridge
-		NamedProviderBridge<Channel,Stack> namedChnlCollectionAsStackBridge =
-			new NamedProviderBridge<>(
-				namedChnlCollection,
-				chnl -> new Stack(chnl),
-				false
-			);
-
-		// Binary Img Collection bridge
-		NamedProviderBridge<BinaryChnl,Stack> namedBinaryChnlCollectionAsStackBridge =
-			new NamedProviderBridge<>(
-				namedBinaryImageCollection,
-				CombineDiverseProvidersAsStacks::stackFromBinary,
-				false
-			);
-		
 		NamedProviderCombine<Stack> combined = new NamedProviderCombine<>(); 
-		combined.add( stackCollection );
-		combined.add( namedChnlCollectionAsStackBridge );
-		combined.add( namedBinaryChnlCollectionAsStackBridge );
+		combined.add( stacks );
+		combined.add( channelsBridge() );
+		combined.add( masksBridge() );
 		return combined;
+	}
+	
+	private NamedProviderBridge<Channel,Stack> channelsBridge() {
+		return new NamedProviderBridge<>(
+			channels,
+			Stack::new,
+			false
+		);
+	}
+	
+	private NamedProviderBridge<BinaryChnl,Stack> masksBridge() {
+		return new NamedProviderBridge<>(
+			masks,
+			CombineDiverseProvidersAsStacks::stackFromBinary,
+			false
+		);
 	}
 
 	private static Stack stackFromBinary( BinaryChnl sourceObject ) {

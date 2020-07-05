@@ -36,7 +36,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
 
-public class ChnlConverterChnlMaxIntensity extends ChnlConverterAttached<Channel, ByteBuffer>{
+public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Channel, ByteBuffer>{
 
 	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
 	

@@ -83,12 +83,11 @@ public class IncrementalSequenceType extends SequenceType {
 	
 	private double indexToNumPeriods( int index ) {
 		int norm = (index - start);
-		double div = ((double) norm) / incrementSize;
-		return div;
+		return ((double) norm) / incrementSize;
 	}
 	
 	private int numPeriodsToIndex( double numPeriods ) {
-		return  (int) ( numPeriods*incrementSize) + start;
+		return (int) ( numPeriods*incrementSize) + start;
 	}
 	
 	@Override
@@ -154,12 +153,7 @@ public class IncrementalSequenceType extends SequenceType {
 
 	@Override
 	public IOrderProvider createOrderProvider() {
-		return new IOrderProvider() {
-			@Override
-			public int order(String index) {
-				return indexToNumPeriodsInt( Integer.valueOf(index) );
-			}
-		};
+		return index -> indexToNumPeriodsInt( Integer.valueOf(index) );
 	}
 
 	public void setEnd(int end) {

@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 /**
  * Applies a kernel to a Voxel Box
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ApplyKernel {

@@ -44,7 +44,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 /**
  * Modifies an Object by applying a kernel
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> the type of object that is modified
  */

@@ -46,7 +46,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 /**
  * Creates KeyValueParams for a particular NRGStack that is associated with a NRGScheme
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class KeyValueParamsForImageCreator {

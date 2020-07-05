@@ -39,7 +39,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Writes objects a binary-mask (with all objects merged together for the mask)
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {

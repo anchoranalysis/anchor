@@ -35,7 +35,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 /**
  * Switches between two log-reporters depending on whether detailed logging is switched on or not
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class LogReporterBeanSwitchDetailedLogging extends LogReporterBean {

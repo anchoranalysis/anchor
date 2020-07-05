@@ -46,7 +46,7 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  * 1. Elements named "add" are treated as instances of DefineAdderBean 
  * 2. Otherwise every subelement of NamedDefinitions is simply assumed to be a list of beans (the names of the subelements are irrelevant)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class DefineFactory extends AnchorBeanFactory {

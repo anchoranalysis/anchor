@@ -39,7 +39,7 @@ import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 /**
  * Adds edges if objects neighbour each other
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <V> vertice-type
  */

@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
  * 
  * <p>Note it won't skip such an exception if it is the final one in the chain</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class ExceptionToPrintIterator implements Iterator<Throwable> {

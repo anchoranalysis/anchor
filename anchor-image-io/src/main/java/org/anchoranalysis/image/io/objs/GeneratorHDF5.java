@@ -44,7 +44,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
 /**
  * Writes an object-mask-collection to a HDF5 file
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjectCollection> {

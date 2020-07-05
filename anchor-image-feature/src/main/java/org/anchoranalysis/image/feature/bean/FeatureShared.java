@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 /**
  * A feature that depends on SharedObjects being passed during the parameter-initialization
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <S> init-params params type
  * @param <T> feature input type

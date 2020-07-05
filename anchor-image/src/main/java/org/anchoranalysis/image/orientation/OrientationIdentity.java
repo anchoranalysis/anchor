@@ -51,8 +51,7 @@ public class OrientationIdentity extends Orientation {
 	
 	@Override
 	public Orientation duplicate() {
-		OrientationIdentity out = new OrientationIdentity( delegate.getNumDims() );
-		return out;
+		return new OrientationIdentity( delegate.getNumDims() );
 	}
 
 	@Override

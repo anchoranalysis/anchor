@@ -37,7 +37,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public class WrapStackAsTimeSequenceStore extends NamedProviderStore<TimeSequence> {
+public class WrapStackAsTimeSequenceStore implements NamedProviderStore<TimeSequence> {
 	
 	private NamedProviderStore<Stack> namedProvider;
 	private int t;

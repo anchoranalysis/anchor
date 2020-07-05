@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 /**
  * Holds a single-index which is hashable and comparable
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 @EqualsAndHashCode

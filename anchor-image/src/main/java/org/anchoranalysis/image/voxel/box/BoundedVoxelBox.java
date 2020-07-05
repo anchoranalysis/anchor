@@ -46,25 +46,27 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
  * A a voxel buffer representing an object
  *  i.e. a region bounded in space
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> BufferType
  */
 public class BoundedVoxelBox<T extends Buffer> {
 
-	private static final Point3i allOnes2D = new Point3i(1,1,0);
-	private static final Point3i allOnes3D = new Point3i(1,1,1);
+	private static final Point3i ALL_ONES_2D = new Point3i(1,1,0);
+	private static final Point3i ALL_ONES_3D = new Point3i(1,1,1);
 	
 	private BoundingBox boundingBox;
 	private VoxelBox<T> voxelBox;
 	
-	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
-	public BoundedVoxelBox(BoundingBox bbox, VoxelBoxFactoryTypeBound<T> factory) {
-		super();
-		this.boundingBox = bbox;
-		assert(!bbox.extent().isEmpty());
-		assert(bbox.extent().getZ()>0);
-		this.voxelBox = factory.create( bbox.extent() );
+	/**
+	 * Initialises a voxel box to match a BoundingBox size, with all values set to 0
+	 *   
+	 * @param boundingBox bounding-box
+	 * @param factory factory for voxel-box
+	 */
+	public BoundedVoxelBox(BoundingBox boundingBox, VoxelBoxFactoryTypeBound<T> factory) {
+		this.boundingBox = boundingBox;
+		this.voxelBox = factory.create( boundingBox.extent() );
 		assert(sizesMatch());
 	}
 	
@@ -78,13 +80,15 @@ public class BoundedVoxelBox<T extends Buffer> {
 		this.voxelBox = voxelBox;
 	}
 	
-	// Copy constructor
-	public BoundedVoxelBox(BoundedVoxelBox<T> src) {
+	/**
+	 * Copy constructor
+	 * 
+	 * @param source where to copy from
+	 */
+	public BoundedVoxelBox(BoundedVoxelBox<T> source) {
 		super();
-		this.boundingBox = src.getBoundingBox();
-		assert( src.voxelBox.extent().getZ() > 0 );
-		this.voxelBox = src.voxelBox.duplicate();
-		assert( this.voxelBox.extent().equals( src.voxelBox.extent() ));
+		this.boundingBox = source.getBoundingBox();
+		this.voxelBox = source.voxelBox.duplicate();
 	}
 	
 	public boolean equalsDeep( BoundedVoxelBox<?> other) {
@@ -171,7 +175,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extent is absolute
 	 */
 	public BoundingBox dilate( boolean do3D, Optional<Extent> clipRegion ) {
-		Point3i allOnes = do3D ? allOnes3D : allOnes2D;
+		Point3i allOnes = do3D ? ALL_ONES_3D : ALL_ONES_2D;
 		return createGrownBoxAbsolute(allOnes,allOnes, clipRegion);
 	}
 	

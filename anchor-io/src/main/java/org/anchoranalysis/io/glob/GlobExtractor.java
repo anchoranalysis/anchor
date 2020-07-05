@@ -33,7 +33,7 @@ import org.anchoranalysis.io.bean.provider.file.SingleFile;
 /**
  * Extracts a glob 
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class GlobExtractor {

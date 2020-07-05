@@ -33,11 +33,11 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 /**
  * A positive-result when an object is found
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T>
  */
-public class Found<T> extends Findable<T> {
+public class Found<T> implements Findable<T> {
 
 	private T obj;
 

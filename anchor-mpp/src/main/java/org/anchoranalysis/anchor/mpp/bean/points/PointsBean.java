@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 /**
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> bean-type
  */

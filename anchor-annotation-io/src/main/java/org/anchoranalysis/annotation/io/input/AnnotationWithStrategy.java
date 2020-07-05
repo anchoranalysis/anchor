@@ -46,7 +46,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * 
  * An annotation that has been combined with it's strategy
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {

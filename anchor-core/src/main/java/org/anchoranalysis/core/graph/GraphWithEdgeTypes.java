@@ -107,7 +107,7 @@ public class GraphWithEdgeTypes<V,E> {
 	public void removeVertex( V node ) {
 		setVertices.remove(node);
 		
-		tableEdge.row(node).clear();;
+		tableEdge.row(node).clear();
 		tableEdge.column(node).clear();
 	}
 	

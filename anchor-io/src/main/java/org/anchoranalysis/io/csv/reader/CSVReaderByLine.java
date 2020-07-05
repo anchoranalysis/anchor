@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * This is a helpful class that quickly processes a CSV file without having to directly
  * interact with CSVReader
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class CSVReaderByLine {

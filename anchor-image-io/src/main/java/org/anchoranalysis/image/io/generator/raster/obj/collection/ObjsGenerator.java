@@ -40,7 +40,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 /**
  * Base class for generators that accept a set of objects as input
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class ObjsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {

@@ -42,7 +42,7 @@ import loci.formats.IFormatReader;
 
 /**
  * Copies the bytes from a IFormatReader to a list of channels, converting if necessary
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class CopyConvert {

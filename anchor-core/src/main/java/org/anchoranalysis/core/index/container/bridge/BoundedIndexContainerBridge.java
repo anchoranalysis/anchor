@@ -42,7 +42,7 @@ import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
  */
-public abstract class BoundedIndexContainerBridge<H,S> implements IBoundedIndexContainer<S> {
+public abstract class BoundedIndexContainerBridge<H,S,E extends Exception> implements IBoundedIndexContainer<S> {
 
 	private IBoundedIndexContainer<H> delegate;
 	
@@ -62,7 +62,7 @@ public abstract class BoundedIndexContainerBridge<H,S> implements IBoundedIndexC
 		}
 	}
 	
-	protected abstract S bridge(int index, H internalState) throws Exception;
+	protected abstract S bridge(int index, H internalState) throws E;
 	
 	@Override
 	public void addBoundChangeListener(BoundChangeListener cl) {

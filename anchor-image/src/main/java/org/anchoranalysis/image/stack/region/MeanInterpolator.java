@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.Extent;
 
 class MeanInterpolator {
 	
-	private final String EXC_ZERO_CNT = "\"The interpolator has a count of 0, and cannot return a valid value\"";
+	private static final String EXC_ZERO_CNT = "\"The interpolator has a count of 0, and cannot return a valid value\"";
 	
 	private int sizeX;
 	private int sizeY;

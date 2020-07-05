@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.pixelpart.PixelPart;
 
 /**
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> part-type
  */

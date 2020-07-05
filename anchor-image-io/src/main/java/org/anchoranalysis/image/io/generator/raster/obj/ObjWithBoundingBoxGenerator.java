@@ -42,7 +42,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
  * 
  * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator} but also outputs a serialized bounding box.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
 // Always takes t=0 from the time-sequence
 public class WrapTimeSequenceAsStack implements NamedProvider<Stack> {
 	
-	private final int TIME_INDEX = 0;
+	private static final int TIME_INDEX = 0;
 	
 	private NamedProvider<TimeSequence> namedProvider;
 		 

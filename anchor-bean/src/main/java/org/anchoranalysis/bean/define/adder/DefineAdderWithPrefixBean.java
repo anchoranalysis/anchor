@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 /**
  * Adds a prefix
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {

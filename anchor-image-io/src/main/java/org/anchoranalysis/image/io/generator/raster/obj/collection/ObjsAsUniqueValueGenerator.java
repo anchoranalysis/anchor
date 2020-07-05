@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * Writes objects as a Raster with unique id values for each object.
  * 
  * <p>Note that a maximum of 254 objects are allowed to be written on a channel in this way (for a 8-bit image)</p>
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjsAsUniqueValueGenerator extends ObjsGenerator {

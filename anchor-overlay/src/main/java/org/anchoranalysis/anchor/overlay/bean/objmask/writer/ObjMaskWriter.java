@@ -44,7 +44,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 /**
  * Writes an object-mask to the file-system
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> pre-calculate object type
  */

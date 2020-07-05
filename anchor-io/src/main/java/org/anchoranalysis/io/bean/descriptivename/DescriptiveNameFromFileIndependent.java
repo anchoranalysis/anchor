@@ -38,7 +38,7 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 /**
  * Calculates the descriptive-name independently for each file
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class DescriptiveNameFromFileIndependent extends DescriptiveNameFromFile {

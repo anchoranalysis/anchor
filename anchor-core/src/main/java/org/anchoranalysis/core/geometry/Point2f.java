@@ -95,11 +95,7 @@ public final class Point2f implements Serializable {
 	    	return false;
 	    }
 	    
-	    if (!FloatUtilities.areEqual(y, objCast.y)) {
-	    	return false;
-	    }
-    
-	    return true;
+	    return FloatUtilities.areEqual(y, objCast.y);
 	}
 	
 	@Override

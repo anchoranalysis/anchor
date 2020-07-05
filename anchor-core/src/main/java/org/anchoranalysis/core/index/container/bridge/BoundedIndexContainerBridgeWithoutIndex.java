@@ -40,21 +40,22 @@ import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
  *
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
+ * @param <E> exception that can be thrown during briging
  */
-public class BoundedIndexContainerBridgeWithoutIndex<H,S> extends BoundedIndexContainerBridge<H, S> {
+public class BoundedIndexContainerBridgeWithoutIndex<H,S,E extends Exception> extends BoundedIndexContainerBridge<H,S,E> {
 	
-	private FunctionWithException<H, S, ? extends Exception> bridge;
+	private FunctionWithException<H,S,E> bridge;
 	
 	public BoundedIndexContainerBridgeWithoutIndex(
 		IBoundedIndexContainer<H> source,
-		FunctionWithException<H,S, ? extends Exception> bridge
+		FunctionWithException<H,S,E> bridge
 	) {
 		super(source);
 		this.bridge = bridge;
 	}
 	
 	@Override
-	protected S bridge(int index, H internalState) throws Exception {
+	protected S bridge(int index, H internalState) throws E {
 		return bridge.apply(internalState);
 	}
 }

@@ -87,7 +87,7 @@ public class PointsFromBinaryVoxelBox {
 	
 
 	// Add: is added to each point before they are added to the list 
-	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, ReadableTuple3i add, Collection<Point3i> out  ) throws CreateException {
+	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, ReadableTuple3i add, Collection<Point3i> out  ) {
 		
 		Extent e = voxelBox.extent();
 

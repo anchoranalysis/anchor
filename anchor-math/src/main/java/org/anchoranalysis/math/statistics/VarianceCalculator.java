@@ -31,7 +31,7 @@ package org.anchoranalysis.math.statistics;
  * 
  * It bundles a sum, sumSquares and count class together
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  */
 public class VarianceCalculator {
 	

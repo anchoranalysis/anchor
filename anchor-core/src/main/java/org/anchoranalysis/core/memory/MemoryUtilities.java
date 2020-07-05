@@ -42,9 +42,6 @@ public class MemoryUtilities {
 	}
 	
 	public static void logMemoryUsage( String id, LogReporter logReporter ) {
-		
-		assert logReporter!=null;
-		
 		Runtime runtime = java.lang.Runtime.getRuntime();
 		long totalMemory = runtime.totalMemory();
 		long freeMemory = runtime.freeMemory();

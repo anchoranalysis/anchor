@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.AnchorBean;
 /**
  * Transforms one type into another
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> source-type for transformation
  * @param <T> destination-type for transformation

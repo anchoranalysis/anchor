@@ -33,7 +33,7 @@ import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixel
  * A path and a location onto which a merge can occur, and the index of the vertice
  *  in the original list
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 class MergeTarget {

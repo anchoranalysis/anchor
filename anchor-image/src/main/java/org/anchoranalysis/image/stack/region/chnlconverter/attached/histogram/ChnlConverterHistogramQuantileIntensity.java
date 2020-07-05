@@ -39,7 +39,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
 
 // Scales by a quantile of the intensity values of an image
-public class ChnlConverterHistogramQuantileIntensity extends ChnlConverterAttached<Histogram, ByteBuffer>{
+public class ChnlConverterHistogramQuantileIntensity implements ChnlConverterAttached<Histogram, ByteBuffer>{
 
 	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
 	private double quantile = 1.0;

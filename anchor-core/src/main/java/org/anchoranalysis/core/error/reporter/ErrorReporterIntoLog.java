@@ -48,8 +48,6 @@ public class ErrorReporterIntoLog implements ErrorReporter {
 	private static final String END_BANNER =  System.lineSeparator() + "------------ END ERROR ------------";
 	
 	public ErrorReporterIntoLog(LogReporter logReporter) {
-		super();
-		assert logReporter!=null;
 		this.logReporter = logReporter;
 	}
 

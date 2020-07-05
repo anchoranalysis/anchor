@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Generates a CSV file like a table
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> rows-object type
  */

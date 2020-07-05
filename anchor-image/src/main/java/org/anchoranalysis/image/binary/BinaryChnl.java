@@ -124,7 +124,7 @@ public class BinaryChnl {
 	}
 	
 	// Creates a mask from the binaryChnl
-	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) throws CreateException {
+	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) {
 		assert( chnl.getDimensions().contains(bbox) );
 		return new ObjectMask( bbox, chnl.getVoxelBox().asByte().region(bbox, reuseIfPossible), binaryValues);
 	}

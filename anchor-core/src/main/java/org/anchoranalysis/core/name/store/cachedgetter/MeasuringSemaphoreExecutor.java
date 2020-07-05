@@ -35,7 +35,7 @@ import org.apache.commons.lang.time.StopWatch;
 /**
  * Allows for multiple simultaneous calls to execute(), measuring the total time and memory from the first starts until the last completes.
  *  
- * @author owen
+ * @author Owen Feehan
  * @param E exception throw if operation fails
  */
 class MeasuringSemaphoreExecutor<E extends Exception> {

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 /**
  * Evaluates the first-object in a pair only
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Merged extends FeatureDeriveFromPair {

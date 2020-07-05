@@ -37,7 +37,7 @@ package org.anchoranalysis.io.params;
  * </ul>
  * </div>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class DebugModeParams {

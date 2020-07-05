@@ -50,7 +50,7 @@ import lombok.Setter;
  * 
  * <p>It should always be called in a context of a session, which first initializes the feature before doing calculations.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input-type 
  */

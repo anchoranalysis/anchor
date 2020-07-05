@@ -79,7 +79,6 @@ public class ConnectedComponentUnionFind {
 			voxels,
 			omc,
 			minNumberVoxels,
-			bigNghb,
 			new ReadWriteByte()
 		);
 		return omc;
@@ -98,7 +97,6 @@ public class ConnectedComponentUnionFind {
 			voxels,
 			omc,
 			minNumberVoxels,
-			bigNghb,
 			new ReadWriteInt()
 		);
 		return omc;
@@ -108,26 +106,20 @@ public class ConnectedComponentUnionFind {
 		BinaryVoxelBox<T> visited,
 		ObjectCollection omc,
 		int minNumberVoxels,
-		boolean bigNghb,
 		BufferReadWrite<T> bufferReaderWriter
 	) throws OperationFailedException {
 		
 		UnionFind<Integer> unionIndex = new UnionFind<>( new HashSet<Integer>() );
 		VoxelBox<IntBuffer> indexBuffer = VoxelBoxFactory.getInt().create( visited.extent() );
-
-		PopulateIndexProcessor<T> process = new PopulateIndexProcessor<>(
-			visited,
-			indexBuffer,
-			createMergeWithNghbs(indexBuffer, unionIndex),
-			bufferReaderWriter
-		);
 		
 		int maxBigIDAdded = populateIndexFromBinary(
 			visited,
-			process,
-			indexBuffer,
-			unionIndex,
-			bigNghb
+			new PopulateIndexProcessor<>(
+				visited,
+				indexBuffer,
+				createMergeWithNghbs(indexBuffer, unionIndex),
+				bufferReaderWriter
+			)
 		);
 		
 		processIndexBuffer(
@@ -150,11 +142,8 @@ public class ConnectedComponentUnionFind {
 	
 	private static <T extends Buffer> int populateIndexFromBinary(
 		BinaryVoxelBox<T> visited,
-		PopulateIndexProcessor<T> process,
-		VoxelBox<IntBuffer> indexBuffer,
-		UnionFind<Integer> unionIndex,
-		boolean bigNghb
-	) throws OperationFailedException {
+		PopulateIndexProcessor<T> process
+	) {
 		IterateVoxels.callEachPoint(
 			visited.getVoxelBox(),
 			process
@@ -164,7 +153,7 @@ public class ConnectedComponentUnionFind {
 	
 	// Assumes unionFind begins at 1
 	private static Set<Integer> setFromUnionFind( int maxValue, UnionFind<Integer> unionIndex ) {
-		TreeSet<Integer> set = new TreeSet<Integer>();
+		TreeSet<Integer> set = new TreeSet<>();
 		for( int i=1; i<=maxValue; i++) {
 			set.add( unionIndex.find(i) );
 		}
@@ -174,7 +163,7 @@ public class ConnectedComponentUnionFind {
 	// Maps the set of integers to a sequence of integers starting at 1
 	private static Map<Integer,Integer> mapValuesToContiguousSet( Set<Integer> setIDs ) {
 		// We create a map between big ID and small ID
-		Map<Integer,Integer> mapIDOrdered = new TreeMap<Integer,Integer>();
+		Map<Integer,Integer> mapIDOrdered = new TreeMap<>();
 		int cnt = 1;
 		for( Integer id : setIDs ) {
 			mapIDOrdered.put(id,cnt);
@@ -230,7 +219,6 @@ public class ConnectedComponentUnionFind {
 		PointRangeWithCount[] bboxArr,
 		Map<Integer,Integer> mapIDOrdered,
 		VoxelBox<IntBuffer> indexBuffer,
-		UnionFind<Integer> unionIndex,
 		int minNumberVoxels,
 		ObjectCollection omc
 	) throws OperationFailedException {
@@ -276,7 +264,6 @@ public class ConnectedComponentUnionFind {
 			bboxArr,
 			mapIDOrdered,
 			indexBuffer,
-			unionIndex,
 			minNumberVoxels,
 			omc
 		);

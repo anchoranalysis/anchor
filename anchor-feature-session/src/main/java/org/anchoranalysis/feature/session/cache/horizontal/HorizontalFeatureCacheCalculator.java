@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature-input
  */

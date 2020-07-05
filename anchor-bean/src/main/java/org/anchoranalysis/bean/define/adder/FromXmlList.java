@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 /**
  * Adds a list of Named-Items define in a XML file in the current directory
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class FromXmlList extends DefineAdderBean {

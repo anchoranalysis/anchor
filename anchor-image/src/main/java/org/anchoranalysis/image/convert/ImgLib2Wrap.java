@@ -66,7 +66,7 @@ import net.imglib2.util.Fraction;
 /**
  * Converts the {@link VoxelBox} and {@link VoxelBuffer} data-types used in Anchor to the {@link NativeImg} used in ImgLib2
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ImgLib2Wrap {

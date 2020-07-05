@@ -103,12 +103,9 @@ public abstract class Histogram {
 	
 	public abstract int calcNumNonZero();
 	
-
-	public double stdDev() throws OperationFailedException {
-		return Math.sqrt( variance() );
-	}
-	
-	public double variance() throws OperationFailedException {
+	public abstract double stdDev() throws OperationFailedException;
+		
+	public double variance() {
 		return new VarianceCalculator( calcSum(), calcSumSquares(),  getTotalCount() ).variance();
 	}
 	

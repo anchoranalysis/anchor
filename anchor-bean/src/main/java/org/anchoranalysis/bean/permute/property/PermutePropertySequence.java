@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.sequence.SequenceInteger;
 /**
  * Base class for permute-properties involving a sequence of numbers
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T>
  */

@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
 /**
  * Generates a nice string representation of an Exception and its causes according to certain rules.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

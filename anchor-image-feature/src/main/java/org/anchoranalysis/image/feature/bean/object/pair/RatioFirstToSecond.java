@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 /**
  * Ratio of first-object to second-object in a pair
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class RatioFirstToSecond extends FeatureDeriveFromPair {

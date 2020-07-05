@@ -32,11 +32,11 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 
 /**
  * An object that can be Found or Not-Found
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> object-type
  */
-public abstract class Findable<T> {
+public interface Findable<T> {
 
 	/**
 	 * Returns the found object (or empty() if it's not found..... and in this case logs a message describing what went wrong)
@@ -44,9 +44,9 @@ public abstract class Findable<T> {
 	 * @param name
 	 * @param logErrorReporter
 	 * 
-	 * @return true if sucessful, false if not-found
+	 * @return true if successful, false if not-found
 	 */
-	public abstract Optional<T> getFoundOrLog(
+	Optional<T> getFoundOrLog(
 		String name,
 		LogErrorReporter logErrorReporter		
 	);

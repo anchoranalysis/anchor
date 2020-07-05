@@ -38,7 +38,7 @@ import org.anchoranalysis.image.histogram.Histogram;
  * A well-behaved CalculateLevel should implements equals() and hashCode()
  * If it doesn't, these methods should assert(false)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public abstract class CalculateLevel extends NullParamsBean<CalculateLevel> {

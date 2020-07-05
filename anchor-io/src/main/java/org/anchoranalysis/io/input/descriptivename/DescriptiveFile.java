@@ -32,7 +32,7 @@ import java.nio.file.Path;
 /**
  * A file with an associated descriptive-name
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class DescriptiveFile {

@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
  * Each ContiguousPixelPath is a vertex
  * An edge with a cost, represents a possible merge between them
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class MergePathGraphNghb {

@@ -44,7 +44,7 @@ import lombok.NoArgsConstructor;
 /**
  * Reads an {@link ObjectCollection} from the filesystem
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

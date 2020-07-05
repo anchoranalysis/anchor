@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 /**
  * Beans-related to features that require initialization with {@link SharedFeaturesInitParams}
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> bean-type
  */

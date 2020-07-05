@@ -38,7 +38,7 @@ import org.apache.commons.lang.StringUtils;
  * <p>As it is recurisvely called during the evaluation process, we subtract
 //   the time spent in other 'execute' methods from the main one</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T>
  * @param <E> exception thrown by operation
@@ -67,9 +67,9 @@ public class ProfiledCachedGetter<T, E extends Exception> extends WrapOperationA
 	@Override
 	protected T execute() throws E {
 		// As a hack, we assume the exception type is always the same between calls to ProfiledCachedGetter
-		// This may not be valid in practice. TODO consider an alternative means to profile.
+		// This may not be valid in practice.
 		return ((MeasuringSemaphoreExecutor<E>) semaphore).execute(
-			() -> super.execute(),
+			super::execute,
 			name,
 			storeDisplayName,
 			logErrorReporter

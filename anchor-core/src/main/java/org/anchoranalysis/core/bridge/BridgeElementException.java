@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 /**
  * An exception that occurs when bridging two elements
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class BridgeElementException extends AnchorFriendlyCheckedException {

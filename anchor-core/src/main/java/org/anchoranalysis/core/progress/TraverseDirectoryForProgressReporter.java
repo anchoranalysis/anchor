@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class TraverseDirectoryForProgressReporter {
@@ -94,7 +95,12 @@ public class TraverseDirectoryForProgressReporter {
 		while (true) {
 			List<Path> filesOutCurrent = new ArrayList<>();
 			List<Path> definiteLeafsCurrent = new ArrayList<>();
-			List<Path> subDirectories = TraverseDirectoryForProgressReporter.subDirectoriesFor( currentFolders, definiteLeafsCurrent, filesOutCurrent, matcherDir );
+			List<Path> subDirectories = TraverseDirectoryForProgressReporter.subDirectoriesFor(
+				currentFolders,
+				definiteLeafsCurrent,
+				Optional.of(filesOutCurrent),
+				matcherDir
+			);
 
 			filesOut.addAll(filesOutCurrent);
 			
@@ -112,12 +118,12 @@ public class TraverseDirectoryForProgressReporter {
 	
 	public static TraversalResult traverseNotRecursive( Path parent, Predicate<Path> matcherDir ) throws IOException {
 		List<Path> filesOut = new ArrayList<>();
-		subDirectoriesFor(parent, null, filesOut, matcherDir);
+		subDirectoriesFor(parent, Optional.empty(), Optional.of(filesOut), matcherDir);
 		return new TraversalResult( new ArrayList<>(), filesOut, 1 );
 	}
 	
 	
-	private static boolean subDirectoriesFor( Path parent, List<Path> directoriesOut, List<Path> filesOut, Predicate<Path> matcherDir ) throws IOException {
+	private static boolean subDirectoriesFor( Path parent, Optional<List<Path>> directoriesOut, Optional<List<Path>> filesOut, Predicate<Path> matcherDir ) throws IOException {
 		
 		boolean addedDirectory = false;
 		
@@ -142,22 +148,21 @@ public class TraverseDirectoryForProgressReporter {
 	/**
 	 * Adds a path to either the directoriesOut or filesOut
 	 * 
-	 * @param directoriesOut directories-added (if non-NULL)
-	 * @param filesOut files-added (if non-NULL)
+	 * @param directoriesOut directories-added (if present)
+	 * @param filesOut files-added (if present)
 	 * @return true if directory is added, false otherwise
 	 */
-	private static boolean addFileOrDirectory( Path file, List<Path> directoriesOut, List<Path> filesOut ) {
-		if (Files.isDirectory(file)) {
-    		if (directoriesOut!=null) {
-    			directoriesOut.add(file);
-    		}
+	private static boolean addFileOrDirectory( Path file, Optional<List<Path>> directoriesOut, Optional<List<Path>> filesOut ) {
+		if (file.toFile().isDirectory()) {
+			directoriesOut.ifPresent( list ->
+				list.add(file)
+			);
     		return true;
     		
     	} else {
-    		
-    		if (filesOut!=null) {
-    			filesOut.add(file);
-    		}
+    		filesOut.ifPresent( list->
+    			list.add(file)
+    		);
     		return false;
     	}
 	}
@@ -165,7 +170,7 @@ public class TraverseDirectoryForProgressReporter {
 
 
 		
-	private static List<Path> subDirectoriesFor( List<Path> parents, List<Path> definiteLeafs, List<Path> filesOut, Predicate<Path> matcherDir ) throws IOException {
+	private static List<Path> subDirectoriesFor( List<Path> parents, List<Path> definiteLeafs, Optional<List<Path>> filesOut, Predicate<Path> matcherDir ) throws IOException {
 		List<Path> out = new ArrayList<>();
 		for( Path p : parents ) {
 
@@ -173,7 +178,7 @@ public class TraverseDirectoryForProgressReporter {
 				continue;
 			}
 			
-			if (!subDirectoriesFor( p, out, filesOut, matcherDir )) {
+			if (!subDirectoriesFor( p, Optional.of(out), filesOut, matcherDir )) {
 				// If we fail to find any sub-folders, then we have a definite leaf, which we treat seperately
 				//   so as to include it in our final list, but not to recurse further on it
 				definiteLeafs.add(p);

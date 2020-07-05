@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
  * 
  *  <p>The {@code parent} parameter is always assumed to be uniform for a given outputDirectory
  *  
- * @author owen
+ * @author Owen Feehan
  *
  */
 @RequiredArgsConstructor

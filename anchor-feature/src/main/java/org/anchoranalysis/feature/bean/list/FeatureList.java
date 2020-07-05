@@ -51,7 +51,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
  * 
  * @see {@FeatureListFactory} for the preferred means of creating instances.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input type of features contained in the list
  */

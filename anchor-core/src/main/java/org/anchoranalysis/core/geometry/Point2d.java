@@ -112,11 +112,7 @@ public final class Point2d implements Serializable {
 	    	return false;
 	    }
 	    
-	    if (!DoubleUtilities.areEqual(y, objCast.y)) {
-	    	return false;
-	    }
-    
-	    return true;
+	    return (DoubleUtilities.areEqual(y, objCast.y));
 	}
 	
 	public Point2f toFloat() {

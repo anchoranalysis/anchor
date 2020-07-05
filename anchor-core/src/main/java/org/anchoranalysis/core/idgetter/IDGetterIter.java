@@ -27,7 +27,7 @@ package org.anchoranalysis.core.idgetter;
  */
 
 
-public class IDGetterIter<T> extends IDGetter<T> {
+public class IDGetterIter<T> implements IDGetter<T> {
 
 	@Override
 	public int getID( T m, int iter ) {

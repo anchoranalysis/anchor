@@ -32,7 +32,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 /**
  * Extension of typical feature initialization, that also sets shared objects
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class FeatureInitParamsShared extends FeatureInitParams {

@@ -29,6 +29,7 @@ package org.anchoranalysis.core.name.store;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
  *
  * @param <T> item-type in the store
  */
-public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
+public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
 
 	private HashMap<String,	WrapOperationAsCached<T,OperationFailedException>> map = new HashMap<>();
 	
@@ -72,7 +73,7 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 		try {
 			return OptionalUtilities.map(
 				Optional.ofNullable( map.get(key) ),
-				ret -> ret.doOperation()
+				WrapOperationAsCached::doOperation
 			);
 		} catch (Exception e) {
 			throw NamedProviderGetException.wrap(key, e);
@@ -82,9 +83,9 @@ public class LazyEvaluationStore<T> extends NamedProviderStore<T> {
 	// We only refer to 
 	public Set<String> keysEvaluated() {
 		HashSet<String> keysUsed = new HashSet<>();
-		for( String key : map.keySet() ) {
-			if( map.get(key).isDone() ) {
-				keysUsed.add(key);
+		for(Entry<String,WrapOperationAsCached<T,OperationFailedException>> entry : map.entrySet()) {
+			if( entry.getValue().isDone() ) {
+				keysUsed.add(entry.getKey());
 			}
 		}
 		return keysUsed;

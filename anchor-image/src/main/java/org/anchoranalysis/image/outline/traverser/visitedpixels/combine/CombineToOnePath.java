@@ -29,7 +29,6 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
@@ -39,7 +38,7 @@ public class CombineToOnePath {
 	
 	/** Combines all the contiguous paths to a single-path 
 	 * @throws OperationFailedException */
-	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths, Extent extent ) throws OperationFailedException {
+	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths ) throws OperationFailedException {
 		
 		FindTargetAndCombine findCombine = new FindTargetAndCombine(paths);
 				

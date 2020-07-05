@@ -47,7 +47,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 // A collection of Image Stacks each with a name
-public class NamedImgStackCollection extends NamedProviderStore<Stack> {
+public class NamedImgStackCollection implements NamedProviderStore<Stack> {
 	
 	private HashMap<String, OperationWithProgressReporter<Stack,OperationFailedException>> map;
 	

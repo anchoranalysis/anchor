@@ -44,7 +44,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 /**
  * TODO make more generic than FeatureObjMaskParams
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature-calculation parameters
  */

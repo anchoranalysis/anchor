@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 /**
  * A path of successively-neighbouring points along the edge of an object
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class Contour {

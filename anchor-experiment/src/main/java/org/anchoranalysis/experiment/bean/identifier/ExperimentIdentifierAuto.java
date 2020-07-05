@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * Automatically populates a experiment-name and version number
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ExperimentIdentifierAuto extends ExperimentIdentifier {

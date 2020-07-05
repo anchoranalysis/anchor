@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input type for feature list
  */

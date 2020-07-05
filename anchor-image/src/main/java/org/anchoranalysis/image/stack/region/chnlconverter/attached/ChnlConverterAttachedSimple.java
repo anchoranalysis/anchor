@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
  * @param <S> attachment-type
  * @param <T> destination-type
  */
-public class ChnlConverterAttachedSimple<S,T extends Buffer> extends ChnlConverterAttached<S,T> {
+public class ChnlConverterAttachedSimple<S,T extends Buffer> implements ChnlConverterAttached<S,T> {
 
 	private ChannelConverter<T> delegate;
 		

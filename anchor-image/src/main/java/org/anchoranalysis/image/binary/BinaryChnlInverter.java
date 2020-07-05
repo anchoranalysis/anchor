@@ -28,7 +28,6 @@ package org.anchoranalysis.image.binary;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -45,7 +44,7 @@ public class BinaryChnlInverter {
 		return new ObjectMask(bvb);
 	}
 	
-	public static void invertChnl( BinaryChnl chnl ) throws CreateException {
+	public static void invertChnl( BinaryChnl chnl ) {
 		
 		BinaryValues bv = chnl.getBinaryValues();
 		BinaryValuesByte bvb = bv.createByte();
