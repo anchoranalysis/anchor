@@ -102,7 +102,7 @@ public class RasterArranger {
 		Extent extent = stackIn.getDimensions().getExtnt();
 		Extent extentOut = stackIn.getDimensions().getExtnt();
 		
-		ReadableTuple3i leftCrnr = bbox.getCornerMin();
+		ReadableTuple3i leftCrnr = bbox.cornerMin();
 		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
 		int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
 		

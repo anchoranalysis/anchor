@@ -221,7 +221,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	
 	public boolean objectsAreAllInside( Extent e ) {
 		for( ObjectMask om : this ) {
-			if(!e.contains( om.getBoundingBox().getCornerMin()) ) {
+			if(!e.contains( om.getBoundingBox().cornerMin()) ) {
 				return false;
 			}
 			if (!e.contains( om.getBoundingBox().calcCornerMax()) ) {

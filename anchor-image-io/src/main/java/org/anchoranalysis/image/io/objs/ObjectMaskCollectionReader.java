@@ -29,7 +29,6 @@ import static org.anchoranalysis.image.io.objs.deserialize.ObjMaskCollectionDese
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
@@ -84,7 +83,7 @@ public class ObjectMaskCollectionReader {
 		
 		// 2. Suffix a .h5 and see if the file exists
 		Path suffixed = addHdf5Extension(path);
-		if ( Files.exists(suffixed)) {
+		if (suffixed.toFile().exists()) {
 			return HDF5.deserialize(suffixed);
 		}
 		

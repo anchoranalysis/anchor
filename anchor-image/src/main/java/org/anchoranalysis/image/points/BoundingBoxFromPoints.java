@@ -50,12 +50,12 @@ public class BoundingBoxFromPoints {
 	 * @throws OperationFailedException if there are zero points
 	 */
 	public static BoundingBox forList( List<Point3i> pnts ) throws OperationFailedException {
-		if (pnts.size()==0) {
+		if (pnts.isEmpty()) {
 			throw new OperationFailedException("Points list must contain at least one item");
 		}
 		
 		PointRange range = new PointRange();
-		pnts.forEach( pnt-> range.add(pnt) );
+		pnts.forEach(range::add);
 		
 		return range.deriveBoundingBox();
 	}

@@ -60,7 +60,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 				)
 			);
 			
-			if (files.size()==0) {
+			if (files.isEmpty()) {
 				throw new CreateException("No files are provided");
 			}
 			

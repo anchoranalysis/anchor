@@ -87,7 +87,7 @@ public class SingleContainer<T> implements IBoundedIndexContainer<T> {
 	}
 	
 	@Override
-	public int getMaximumIndex() {
+	public int getMaximumIndex() {	// NOSONAR
 		return index;
 	}
 	

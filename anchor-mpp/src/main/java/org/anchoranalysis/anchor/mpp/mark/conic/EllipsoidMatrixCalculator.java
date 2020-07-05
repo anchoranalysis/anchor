@@ -59,10 +59,7 @@ public class EllipsoidMatrixCalculator implements Serializable {
 		DoubleFactory2D F2 = DoubleFactory2D.dense;
 		
 		this.matEll = F2.make(matNumDim,matNumDim);
-		
 		this.matBBox = F1.make(matNumDim);
-		
-		//assert( !Double.isNaN(matEll.get(0, 0)) );
 	};
 	
 	public EllipsoidMatrixCalculator(EllipsoidMatrixCalculator src) {
@@ -73,8 +70,6 @@ public class EllipsoidMatrixCalculator implements Serializable {
 		this.matBBox = src.matBBox.copy();
 		this.radMax = src.radMax;
 		this.radMaxSq = src.radMaxSq;
-		
-		//assert( !Double.isNaN(matEll.get(0, 0)) );
 	}
 	
 	public DoubleMatrix2D getEllipsoidMatrix() {

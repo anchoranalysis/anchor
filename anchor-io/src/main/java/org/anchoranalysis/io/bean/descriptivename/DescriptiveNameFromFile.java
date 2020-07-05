@@ -36,6 +36,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
@@ -44,13 +45,13 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	private static final String DEFAULT_ELSE_NAME = "unknownName";
 	
 	/** Like descriptiveNamesForCheckUniqueness but with a default for emptyName */
-	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files ) throws AnchorIOException {
-		return descriptiveNamesForCheckUniqueness(files, DEFAULT_ELSE_NAME);
+	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files, LogErrorReporter logger ) throws AnchorIOException {
+		return descriptiveNamesForCheckUniqueness(files, DEFAULT_ELSE_NAME, logger);
 	}
 	
 	/** Like descriptiveNames for but checks that the final list of descriptive-files all have unique descriptive-names */
-	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files, String elseName ) throws AnchorIOException {
-		List<DescriptiveFile> list = descriptiveNamesFor(files, elseName);
+	public List<DescriptiveFile> descriptiveNamesForCheckUniqueness( Collection<File> files, String elseName, LogErrorReporter logger) throws AnchorIOException {
+		List<DescriptiveFile> list = descriptiveNamesFor(files, elseName, logger);
 		checkUniqueness(list);
 		checkNoPredicate(list, DescriptiveNameFromFile::containsBackslash, "contain backslashes");
 		checkNoPredicate(list, DescriptiveNameFromFile::emptyString, "contain an empty string");
@@ -65,8 +66,8 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 * @return
 	 * @throws AnchorIOException
 	 */
-	public DescriptiveFile descriptiveNameFor( File file, String elseName ) throws AnchorIOException {
-		return descriptiveNamesFor( Arrays.asList(file), elseName ).get(0);
+	public DescriptiveFile descriptiveNameFor( File file, String elseName, LogErrorReporter logger) {
+		return descriptiveNamesFor( Arrays.asList(file), elseName, logger ).get(0);
 	}
 	
 	/**
@@ -74,14 +75,15 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 * 
 	 * @param files the files
 	 * @param elseName a string to use if an error occurs extracting the descriptive-name (used as a prefix with an index)
+	 * @param logger TODO
 	 * @return a list of identical size and order to files, corresponding to the extracted names
 	 */
-	public abstract List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName );
+	public abstract List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName, LogErrorReporter logger );
 	
 	private static void checkUniqueness( List<DescriptiveFile> list ) throws AnchorIOException {
 		Map<String,Long> countDescriptiveNames = list.stream().collect(
 			Collectors.groupingBy(
-				d -> d.getDescriptiveName(),
+				DescriptiveFile::getDescriptiveName,
 				Collectors.counting()
 			)
 		);

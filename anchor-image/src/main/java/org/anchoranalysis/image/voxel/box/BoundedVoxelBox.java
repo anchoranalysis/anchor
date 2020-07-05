@@ -121,7 +121,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		assert(this.voxelBox.extent().getZ()==1);
 		
 		BoundingBox bboxNew = new BoundingBox(
-			boundingBox.getCornerMin(),
+			boundingBox.cornerMin(),
 			boundingBox.extent().duplicateChangeZ(sz)
 		);
 		
@@ -186,7 +186,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 */
 	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
-		return relBox.reflectThroughOrigin().shiftBy( boundingBox.getCornerMin() );
+		return relBox.reflectThroughOrigin().shiftBy( boundingBox.cornerMin() );
 	}
 
 	
@@ -202,9 +202,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		
 		Point3i negClip = new Point3i(
-			clipNeg(boundingBox.getCornerMin().getX(), neg.getX()),
-			clipNeg(boundingBox.getCornerMin().getY(), neg.getY()),
-			clipNeg(boundingBox.getCornerMin().getZ(), neg.getZ())
+			clipNeg(boundingBox.cornerMin().getX(), neg.getX()),
+			clipNeg(boundingBox.cornerMin().getY(), neg.getY()),
+			clipNeg(boundingBox.cornerMin().getZ(), neg.getZ())
 		);
 		
 		ReadableTuple3i bboxMax = boundingBox.calcCornerMax();
@@ -259,12 +259,12 @@ public class BoundedVoxelBox<T extends Buffer> {
 		this.voxelBox.copyPixelsTo(
 			new BoundingBox(e),
 			bufferNew,
-			new BoundingBox(grownBox.getCornerMin(),e)
+			new BoundingBox(grownBox.cornerMin(),e)
 		);
 		
 		// We create a new bounding box
 		BoundingBox bbo = new BoundingBox(
-			Point3i.immutableSubtract( this.boundingBox.getCornerMin(), grownBox.getCornerMin() ),
+			Point3i.immutableSubtract( this.boundingBox.cornerMin(), grownBox.cornerMin() ),
 			grownBox.extent()
 		);
 		
@@ -288,7 +288,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			interpolator
 		);
 		
-		return new BoundedVoxelBox<T>(
+		return new BoundedVoxelBox<>(
 			boundingBox.scale(scaleFactor, voxelBoxOut.extent()),
 			voxelBoxOut
 		);
@@ -363,10 +363,10 @@ public class BoundedVoxelBox<T extends Buffer> {
 			throw new CreateException("zMax outside range");
 		}
 		
-		int relZ = zMin - boundingBox.getCornerMin().getZ();
+		int relZ = zMin - boundingBox.cornerMin().getZ();
 		
 		BoundingBox target = new BoundingBox(
-			boundingBox.getCornerMin().duplicateChangeZ(zMin),
+			boundingBox.cornerMin().duplicateChangeZ(zMin),
 			boundingBox.extent().duplicateChangeZ(zMax-zMin+1)
 		);
 		

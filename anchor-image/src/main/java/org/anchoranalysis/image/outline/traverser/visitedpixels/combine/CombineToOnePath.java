@@ -41,39 +41,8 @@ public class CombineToOnePath {
 	 * @throws OperationFailedException */
 	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths, Extent extent ) throws OperationFailedException {
 		
-		System.out.printf("START Paths in %s (sum=%d)%n", paths, CombineWithTarget.cnt(paths) );
-		
-		int cntWithConnPnt = 0;
-		int cntWithoutConnPnt = 0;
-		for( ContiguousPixelPath cpp : paths ) {
-			System.out.println(cpp.toString());
-			System.out.println(cpp.points());
-			if (cpp.getConnPnt()!=null) {
-				cntWithConnPnt++;
-			} else {
-				cntWithoutConnPnt++;
-			}
-		}
-		System.out.printf("END Paths in %s (with=%d,without=%d)%n", paths, cntWithConnPnt, cntWithoutConnPnt );
-		
 		FindTargetAndCombine findCombine = new FindTargetAndCombine(paths);
-		
-		
-		/*try {
-			// Build graph of possible merges
-			MergePathGraphConnPoint graph = new MergePathGraphConnPoint( paths, extent );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		try {
-			// Build graph of possible merges
-			MergePathGraphNghb graph = new MergePathGraphNghb( paths, extent );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}*/
-		
-		
+				
 		while( findCombine.combineAnyTwoPaths() ) {
 			// DO NOTHING
 		}

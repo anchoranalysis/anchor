@@ -48,7 +48,6 @@ class BeanAndParent {
 		super();
 		this.bean = bean;
 		this.parent = parent;
-		assert bean!=null;
 	}
 
 	public AnchorBean<?> getBean() {

@@ -94,7 +94,7 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 				assert( colorIndex!=null );
 				
 				// TODO this can get broken! Fix!
-				assert( om.getBoundingBox().getCornerMin().getZ()>=0 );
+				assert( om.getBoundingBox().cornerMin().getZ()>=0 );
 				
 				int colorID = colorIDGetter.getID(omMask, iter);
 				assert( colorIndex.has(colorID) );

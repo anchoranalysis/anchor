@@ -126,7 +126,7 @@ public class MergePathGraphNghb {
 		CreateNeighborGraph<RasterizedPath> creator = new CreateNeighborGraph<>(true);
 		nghbs = creator.createGraph(
 			rasterized,
-			a->a.getRasterized(),
+			RasterizedPath::getRasterized,
 			(v1, v2, numPixels) -> new PotentialMerge( v1.getId(), v2.getId(), numPixels ),
 			sceneExtnt,
 			false,

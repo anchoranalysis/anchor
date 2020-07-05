@@ -61,8 +61,6 @@ class ApplyMergeStrategy extends MergeStrategy {
 			maybeReverse( candidate.getMerge().points(), keepLeft==mergeLeft ),
 			keepLeft
 		);
-		
-		//assertTrue( PointsListNghbUtilities.areNghbDistinct(candidate.getKeep().getPath().points()) );
 	}
 
 	@Override

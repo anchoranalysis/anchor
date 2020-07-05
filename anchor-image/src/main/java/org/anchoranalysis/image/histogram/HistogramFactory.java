@@ -164,7 +164,7 @@ public class HistogramFactory {
 		Extent e = inputBuffer.extent();
 		Extent eMask = objMask.getBoundingBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().cornerMin();
 		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
 		
 		byte maskOnVal = objMask.getBinaryValuesByte().getOnByte();

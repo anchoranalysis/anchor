@@ -43,7 +43,7 @@ public class ChnlConverterChnlMaxIntensity extends ChnlConverterAttached<Channel
 	private ChannelConverterToUnsignedByte delegate;
 	
 	public ChnlConverterChnlMaxIntensity() {
-		// Initialise with a dummy value;
+		// Initialise with a dummy value
 		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMaxValue(1);
 		
 		delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);

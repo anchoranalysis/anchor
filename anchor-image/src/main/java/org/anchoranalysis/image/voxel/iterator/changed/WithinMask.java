@@ -63,7 +63,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		this.om = om;
 		this.maskOffVal = om.getBinaryValuesByte().getOffByte();
 		this.extent = om.getVoxelBox().extent();
-		this.crnrMin = om.getBoundingBox().getCornerMin();
+		this.crnrMin = om.getBoundingBox().cornerMin();
 	}
 	
 	@Override

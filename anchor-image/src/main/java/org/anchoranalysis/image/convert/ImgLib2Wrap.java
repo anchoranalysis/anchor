@@ -139,7 +139,7 @@ public class ImgLib2Wrap {
 			buffer,
 			e,
 			b -> new ByteArray(b.array()),
-			img -> new UnsignedByteType(img)
+			UnsignedByteType::new
 		);
 	}
 
@@ -149,7 +149,7 @@ public class ImgLib2Wrap {
 			buffer,
 			e,
 			b -> new ShortArray(b.array()),
-			img -> new UnsignedShortType(img)
+			UnsignedShortType::new
 		);
 	}
 	
@@ -159,7 +159,7 @@ public class ImgLib2Wrap {
 			buffer,
 			e,
 			b -> new FloatArray(b.array()),
-			img -> new FloatType(img)
+			FloatType::new
 		);
 	}
 	

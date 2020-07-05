@@ -58,7 +58,7 @@ public class IncrementalSequenceType extends SequenceType {
 	@Override
 	public void update(String indexStr) throws SequenceTypeException {
 	
-		int index = Integer.valueOf(indexStr);
+		int index = Integer.parseInt(indexStr);
 		
 		// If end has been set, we always increment
 		if (end==-1) {

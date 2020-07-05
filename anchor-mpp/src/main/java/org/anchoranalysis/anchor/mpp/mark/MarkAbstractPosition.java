@@ -123,7 +123,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 		ObjectWithProperties mask = super.calcMask(bndScene, rm, bvOut);
 		mask.setProperty(
 			"midpointInt",
-			calcRelativePoint(pos, mask.getBoundingBox().getCornerMin())
+			calcRelativePoint(pos, mask.getBoundingBox().cornerMin())
 		);
 		return mask;
 	}

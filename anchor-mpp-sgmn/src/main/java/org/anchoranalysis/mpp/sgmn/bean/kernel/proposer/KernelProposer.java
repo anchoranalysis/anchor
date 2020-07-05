@@ -162,7 +162,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 
 	private void calcCumProb( List<KernelProposerOption<T>> options ) throws InitException {
 		
-		if (options.size()==0) {
+		if (options.isEmpty()) {
 			throw new InitException("At least one option must be specified");
 		}
 		

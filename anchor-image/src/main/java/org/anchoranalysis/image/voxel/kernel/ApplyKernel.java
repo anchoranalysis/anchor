@@ -137,13 +137,13 @@ public class ApplyKernel {
 		ReadableTuple3i pntMax = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCornerMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(bbox.getCornerMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.getCornerMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
 					
 					int ind = extent.offset(pnt.getX(), pnt.getY());
 					cnt += kernel.countAtPos(ind, pnt);
@@ -182,13 +182,13 @@ public class ApplyKernel {
 		ReadableTuple3i pntMax = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCornerMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(bbox.getCornerMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.getCornerMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
 					
 					int ind = extent.offsetSlice(pnt);
 					if (kernel.countAtPos(ind, pnt)>0) {
@@ -243,7 +243,7 @@ public class ApplyKernel {
 		int cnt = 0;
 		
 		BoundingBox bbox = om.getBoundingBox();
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		Extent extent = in.extent();

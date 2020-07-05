@@ -57,9 +57,9 @@ public class CreateFromPointsFactory {
 		
 		for (Point3i p : pnts) {
 			
-			int x = p.getX() - bbox.getCornerMin().getX();
-			int y = p.getY() - bbox.getCornerMin().getY();
-			int z = p.getZ() - bbox.getCornerMin().getZ();
+			int x = p.getX() - bbox.cornerMin().getX();
+			int y = p.getY() - bbox.cornerMin().getY();
+			int z = p.getZ() - bbox.cornerMin().getZ();
 			
 			ByteBuffer buffer = mask.getVoxelBox().getPixelsForPlane(z).buffer();
 			buffer.put( mask.getBoundingBox().extent().offset(x,y), maskOn );

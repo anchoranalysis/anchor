@@ -46,7 +46,7 @@ public class PixelPartFactoryHistogramReuse extends PixelPartFactory<Histogram> 
 		@Override
 		public Histogram create() {
 
-			if (listUnused.size()>0) {
+			if (!listUnused.isEmpty()) {
 				// we retrieve one from the unused list and reset it
 				
 				Histogram h = listUnused.remove(0);

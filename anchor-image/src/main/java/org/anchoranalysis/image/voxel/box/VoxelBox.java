@@ -119,7 +119,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		checkExtentMatch(sourceBox, destBox);
 		
-		ReadableTuple3i srcStart = sourceBox.getCornerMin();
+		ReadableTuple3i srcStart = sourceBox.cornerMin();
 		ReadableTuple3i srcEnd = sourceBox.calcCornerMax();
 		
 		Point3i relPos = destBox.relPosTo(sourceBox);
@@ -150,7 +150,7 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		checkExtentMatch(sourceBox, destBox);
 		
-		ReadableTuple3i srcStart = sourceBox.getCornerMin();
+		ReadableTuple3i srcStart = sourceBox.cornerMin();
 		ReadableTuple3i srcEnd = sourceBox.calcCornerMax();
 		
 		Point3i relPos = destBox.relPosTo(sourceBox);
@@ -248,18 +248,18 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		for (int z=0; z<eIntersectingBox.getZ(); z++) {
 			
-			VoxelBuffer<?> pixels = getPlaneAccess().getPixelsForPlane(z + bboxToBeAssigned.getCornerMin().getZ());
-			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z + bboxMask.getCornerMin().getZ()).buffer();
+			VoxelBuffer<?> pixels = getPlaneAccess().getPixelsForPlane(z + bboxToBeAssigned.cornerMin().getZ());
+			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z + bboxMask.cornerMin().getZ()).buffer();
 			
 			for (int y=0; y<eIntersectingBox.getY(); y++) {
 				for (int x=0; x<eIntersectingBox.getX(); x++) {
 
-					int indexMask = eMaskBuffer.offset(x + bboxMask.getCornerMin().getX(), y + bboxMask.getCornerMin().getY());
+					int indexMask = eMaskBuffer.offset(x + bboxMask.cornerMin().getX(), y + bboxMask.cornerMin().getY());
 					
 					if (pixelsMask.get(indexMask)==maskMatchValue) {
 						int indexAssgn = eAssignBuffer.offset(
-							x + bboxToBeAssigned.getCornerMin().getX(),
-							y + bboxToBeAssigned.getCornerMin().getY()
+							x + bboxToBeAssigned.cornerMin().getX(),
+							y + bboxToBeAssigned.cornerMin().getY()
 						);
 						pixels.putInt(indexAssgn, value );
 						cnt++;
@@ -287,14 +287,14 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		byte maskOut = om.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					
@@ -321,14 +321,14 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		byte maskOut = om.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					
@@ -359,15 +359,15 @@ public abstract class VoxelBox<T extends Buffer> {
 		byte maskInVal = maskIn.getBinaryValuesByte().getOnByte();
 		byte maskOutVal = maskOut.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelMaskIn = maskIn.getVoxelBox().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = maskOut.getVoxelBox().getPixelsForPlane(z - bbox.getCornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = maskOut.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					
@@ -460,7 +460,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public int countEqualMask( int equalVal, ObjectMask om ) {
 		
-		ReadableTuple3i srcStart = om.getBoundingBox().getCornerMin();
+		ReadableTuple3i srcStart = om.getBoundingBox().cornerMin();
 		ReadableTuple3i srcEnd = om.getBoundingBox().calcCornerMax();
 
 		int count = 0;
@@ -664,9 +664,9 @@ public abstract class VoxelBox<T extends Buffer> {
 	private VoxelBox<T> regionAvoidNewIfPossible(BoundingBox bbox) {
 		
 		if (   bbox.equals(new BoundingBox(extent()))
-			&& bbox.getCornerMin().getX()==0
-			&& bbox.getCornerMin().getY()==0
-			&& bbox.getCornerMin().getZ()==0
+			&& bbox.cornerMin().getX()==0
+			&& bbox.cornerMin().getY()==0
+			&& bbox.cornerMin().getZ()==0
 		) {
 			return this;
 		}

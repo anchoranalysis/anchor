@@ -59,9 +59,9 @@ class IntersectionWriter {
 		writeOnEachSlice(
 			stack,
 			color,
-			intersection.shiftBackBy( stackBBox.getCornerMin() ),
+			intersection.shiftBackBy( stackBBox.cornerMin() ),
 			mask.mapBoundingBox( bbox ->
-				bbox.shiftBackBy(stackBBox.getCornerMin())
+				bbox.shiftBackBy(stackBBox.cornerMin())
 			)
 		);
 	}
@@ -71,8 +71,8 @@ class IntersectionWriter {
 		ReadableTuple3i maxGlobal = intersection.calcCornerMax();
 		Point3i pntGlobal = new Point3i();
 				
-		for (pntGlobal.setZ(intersection.getCornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
-			int relZ = pntGlobal.getZ() - mask.getBoundingBox().getCornerMin().getZ();
+		for (pntGlobal.setZ(intersection.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
+			int relZ = pntGlobal.getZ() - mask.getBoundingBox().cornerMin().getZ();
 			stack.writeRGBMaskToSlice( mask, intersection, color, pntGlobal, relZ, maxGlobal);
 		}
 	}

@@ -65,10 +65,6 @@ public class DensityKernel extends BinaryKernel {
 			int sizeSq = size * size;
 			return ((double) numberHit) / sizeSq;
 		}
-		
-		/*public int getNumberOn() {
-			return numberOn;
-		}*/
 	}
 	
 	public DensityKernel(int size, BinaryValuesByte bv, double minDensityRatio) {

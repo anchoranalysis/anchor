@@ -96,9 +96,9 @@ public class BoundingBoxRTree {
 	
 	private static float[] minPnt( BoundingBox bbox ) {
 		return new float[] {
-			bbox.getCornerMin().getX(),
-			bbox.getCornerMin().getY(),
-			bbox.getCornerMin().getZ()
+			bbox.cornerMin().getX(),
+			bbox.cornerMin().getY(),
+			bbox.cornerMin().getZ()
 		};
 	}
 	

@@ -141,7 +141,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			
@@ -173,7 +173,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			

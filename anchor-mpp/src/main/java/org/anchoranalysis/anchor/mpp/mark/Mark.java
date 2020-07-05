@@ -202,14 +202,14 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		ReadableTuple3i maxPos = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.getCornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
-			int z_local = pnt.getZ() - bbox.getCornerMin().getZ();
+			int z_local = pnt.getZ() - bbox.cornerMin().getZ();
 			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
 
 			int cnt = 0;
-			for (pnt.setY(bbox.getCornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.getCornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
 					
 					byte membership = evalPntInside(pnt);
 					
@@ -245,17 +245,17 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		
 		Point3i pnt = new Point3i();
 		Point3d pntScaled = new Point3d();
-		for (pnt.setZ(bbox.getCornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
-			int z_local = pnt.getZ() - bbox.getCornerMin().getZ();
+			int z_local = pnt.getZ() - bbox.cornerMin().getZ();
 			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
 
 			// Z co-ordinates are the same as we only scale in XY
 			pntScaled.setZ( pnt.getZ() );
 			
 			int cnt = 0;
-			for (pnt.setY(bbox.getCornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.getCornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
 					
 					pntScaled.setX( ((double) pnt.getX()) / scaleFactor );
 					pntScaled.setY( ((double) pnt.getY()) / scaleFactor );

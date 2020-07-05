@@ -46,10 +46,9 @@ public class ChnlConverterHistogramQuantileIntensity extends ChnlConverterAttach
 	private ChannelConverterToUnsignedByte delegate;
 	
 	public ChnlConverterHistogramQuantileIntensity( double quantile ) {
-		// Initialise with a dummy value;
+		// Initialise with a dummy value
 		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMaxValue(1);
 		this.quantile = quantile;
-		
 		delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
 	}
 	

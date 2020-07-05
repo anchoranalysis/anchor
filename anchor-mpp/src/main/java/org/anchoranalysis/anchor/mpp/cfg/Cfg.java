@@ -218,7 +218,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		byte flags = rm.flags();
 		
 		// We cycle through each item in the configuration
-		//int s = 0;
 		for (Mark m : this) {
 			
 			byte membership = m.evalPntInside(pnt);
@@ -226,7 +225,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 				cfgOut.add( m );
 			}
 		}
-		
 		return cfgOut;
 	}
 	
@@ -248,7 +246,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	}
 
 	// A hashmap of all the marks, using the Id as an index
-	public HashMap<Integer,Mark> createIdHashMap() {
+	public Map<Integer,Mark> createIdHashMap() {
 		
 		HashMap<Integer,Mark> hashMap = new HashMap<>();
 	

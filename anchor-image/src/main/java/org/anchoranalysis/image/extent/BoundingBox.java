@@ -38,7 +38,10 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A bounding-box in 2 or 3 dimensions
@@ -47,6 +50,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * <p>
  * This is an <i>immutable</i> class.
  */
+@EqualsAndHashCode @Accessors(fluent=true)
 public final class BoundingBox implements Serializable {
 	
 	/**
@@ -54,7 +58,12 @@ public final class BoundingBox implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/** The bottom-left corner of the bounding box. */
+	@Getter
 	private final Point3i cornerMin;
+	
+	/** Dimensions in pixels needed to represent the bounding box */
+	@Getter
 	private final Extent extent;
 	
 	public BoundingBox(Extent extent) {
@@ -178,48 +187,6 @@ public final class BoundingBox implements Serializable {
 		}
 		
 		return false;
-	}
-	
-	// An extent representing the number of pixels needed to represent the bounding box
-	public Extent extent() {
-		return this.extent;
-	}
-
-	@Override
-	public boolean equals( Object obj ) {
-		if (this == obj) return true;
-	    if (!(obj instanceof BoundingBox)) {
-	        return false;
-	    }
-	    
-	    BoundingBox objCast = (BoundingBox) obj;
-	    if (!objCast.getCornerMin().equals(getCornerMin())) {
-	    	return false;
-	    }
-	    if (!objCast.extent().equals(extent())) {
-	    	return false;
-	    }
-	    
-	    return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append( getCornerMin() )
-			.append( extent() )
-			.toHashCode();
-	}
-	
-	/** 
-	 * 
-	 * The bottom-left corner of the bounding box.
-	 * 
-	 * <p>The return value should be treated read-only, as this class is designed to be IMMUTABLE</o>.
-	 * 
-	 * */
-	public ReadableTuple3i getCornerMin() {
-		return cornerMin;
 	}
 	
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {

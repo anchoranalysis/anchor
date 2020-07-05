@@ -33,7 +33,13 @@ import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
-public abstract class NullParamsBean<BeanType> extends InitializableBeanSimple<BeanType,NullInitParams> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> bean-type
+ */
+public abstract class NullParamsBean<T> extends InitializableBeanSimple<T,NullInitParams> {
 
 	protected NullParamsBean() {
 		super( new PropertyInitializer<NullInitParams>(NullInitParams.class), new SimplePropertyDefiner<NullInitParams>(NullInitParams.class) );

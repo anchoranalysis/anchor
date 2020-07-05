@@ -45,9 +45,7 @@ public class WrapStackAsTimeSequence implements NamedProvider<TimeSequence> {
 
 	@Override
 	public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {
-		return namedProvider.getOptional(key).map( stack->
-			new TimeSequence(stack)
-		);
+		return namedProvider.getOptional(key).map(TimeSequence::new);
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
 		super.notifyZChange(inSlices, z);
-		localSlicesRequireHigh = new LocalSlices(z + omRequireHigh.getBoundingBox().getCornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
+		localSlicesRequireHigh = new LocalSlices(z + omRequireHigh.getBoundingBox().cornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
 	@Override
@@ -76,13 +76,13 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 			return false;
 		}
 		
-		int x1 = pnt.getX() + omRequireHigh.getBoundingBox().getCornerMin().getX() + xShift;
+		int x1 = pnt.getX() + omRequireHigh.getBoundingBox().cornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return false;
 		}
 		
-		int y1 = pnt.getY() + omRequireHigh.getBoundingBox().getCornerMin().getY() + yShift; 
+		int y1 = pnt.getY() + omRequireHigh.getBoundingBox().cornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return false;

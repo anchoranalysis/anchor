@@ -95,7 +95,7 @@ class ObjectMaskHDF5Writer {
 	
 	private void addAttr( String attrName, Function<ReadableTuple3i,Integer> extrVal) {
 		
-		Integer crnrVal = extrVal.apply( obj.getBoundingBox().getCornerMin() );
+		Integer crnrVal = extrVal.apply( obj.getBoundingBox().cornerMin() );
 		writer.uint32().setAttr(
 			pathHDF5,
 			attrName,

@@ -236,11 +236,11 @@ public class MergePathGraphConnPoint {
         visited.add(s); 
         queue.add(s); 
   
-        while (queue.size() != 0) 
+        while (!queue.isEmpty()) 
         { 
             // Dequeue a vertex from queue and print it 
             s = queue.poll(); 
-            //System.out.print(s+" "); 
+
   
             // Get all adjacent vertices of the dequeued vertex s 
             // If a adjacent has not been visited, then mark it 

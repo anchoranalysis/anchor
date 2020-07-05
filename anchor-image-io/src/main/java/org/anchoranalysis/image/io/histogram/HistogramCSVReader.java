@@ -58,14 +58,14 @@ public class HistogramCSVReader {
 	
 	private static void addLineToMap( Map<Integer,Integer> map, String[] line ) throws OperationFailedException {
 		
-		float binF = Float.valueOf(line[0]);
+		float binF = Float.parseFloat(line[0]);
 		int bin = (int) binF;
 		
 		if (binF!=bin) {
 			throw new OperationFailedException( String.format("Bin-value of %f is not integer.",binF) );
 		}
 		
-		float countF = Float.valueOf(line[1]);
+		float countF = Float.parseFloat(line[1]);
 		int count = (int) countF;
 		
 		if (countF!=count) {

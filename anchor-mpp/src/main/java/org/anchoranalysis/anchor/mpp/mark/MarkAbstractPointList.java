@@ -69,8 +69,7 @@ public abstract class MarkAbstractPointList extends Mark {
 	
 	
 	public void updateAfterPointsChange() {
-		
-		assert(points.size()>=1);
+		assert(!points.isEmpty());
 				
 		this.min = calcMin( getPoints() );
 		this.max = calcMax( getPoints() );

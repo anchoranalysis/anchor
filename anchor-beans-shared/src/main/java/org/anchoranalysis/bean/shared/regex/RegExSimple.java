@@ -34,20 +34,15 @@ import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class RegExSimple extends RegEx {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String matchString;
 	// END BEAN PROPERTIES
-
-	public String getMatchString() {
-		return matchString;
-	}
-
-	public void setMatchString(String matchString) {
-		this.matchString = matchString;
-	}
 
 	@Override
 	public Optional<String[]> match( String str ) {
@@ -57,7 +52,6 @@ public class RegExSimple extends RegEx {
 		Matcher matcher = p.matcher( str );
 		
 		if (!matcher.matches()) {
-			//throw new IOException( String.format("RegEx string '%s' does not match '%s'", regEx, ff.getRemainderCombined() ));
 			return Optional.empty();
 		}
 		return Optional.of(

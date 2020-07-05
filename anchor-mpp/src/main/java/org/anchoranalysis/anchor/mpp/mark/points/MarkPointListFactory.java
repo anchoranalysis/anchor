@@ -33,6 +33,8 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 
+import com.google.common.base.Preconditions;
+
 public class MarkPointListFactory {
 
 	private MarkPointListFactory() {}
@@ -59,7 +61,7 @@ public class MarkPointListFactory {
 	}
 	
 	public static MarkPointList createMarkFromPoints3i( List<Point3i> pts ) {
-		assert( pts.size()>= 1 );
+		Preconditions.checkArgument( !pts.isEmpty(), "are empty" );
 		MarkPointList markPts = new MarkPointList();
 		
 		for (Point3i p : pts) {

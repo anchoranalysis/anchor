@@ -111,7 +111,7 @@ public class BinaryChnlFromObjs {
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
 		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.getCornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
+		for (pntGlobal.setZ(bbox.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
 			
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			
@@ -120,7 +120,7 @@ public class BinaryChnlFromObjs {
 				maskIn,
 				pixelsOut,
 				voxelBoxOut.extent(),
-				bbox.getCornerMin(),
+				bbox.cornerMin(),
 				pntGlobal,
 				maxGlobal,
 				maskOn,

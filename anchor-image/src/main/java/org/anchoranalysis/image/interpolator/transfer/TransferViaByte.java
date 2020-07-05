@@ -55,11 +55,8 @@ public class TransferViaByte implements Transfer {
 			
 			int trgtX = trgt.any().extent().getX();
 			int trgtY = trgt.any().extent().getY();
-			
-			//bi = new BufferedImage( trgtX, trgtY, BufferedImage.TYPE_BYTE_GRAY );
 			assert( trgtX > 0 );
 			assert( trgtY > 0 );
-			
 			resampleOp = new ResampleOp(trgtX,trgtY);
 			resampleOp.setFilter( ResampleFilters.getBiCubicFilter() );
 			
@@ -77,12 +74,6 @@ public class TransferViaByte implements Transfer {
 		
 		@Override
 		public void transferTo( int z, Interpolator interpolator ) {
-//			BufferedImage rescaledImage = resampleOp.filter(bi, null);
-//			byte[] imgData = ((DataBufferByte)bi.getRaster().getDataBuffer()).getData();
-//			System.arraycopy(buffer.buffer().array(), 0, imgData, 0, buffer.buffer().array().length);
-//			byte[] rescaledImageData = ((DataBufferByte)rescaledImage.getRaster().getDataBuffer()).getData();
-//			trgt.setPixelsForPlane(z, VoxelBufferByte.wrap(rescaledImageData) );
-			
 			VoxelBuffer<ByteBuffer> bufIn = trgt.getPixelsForPlane(z);
 			VoxelBuffer<ByteBuffer> bufOut = interpolator.interpolateByte(buffer, bufIn, src.extent(), trgt.extent() ) ;
 			if (!bufOut.equals(bufIn)) {

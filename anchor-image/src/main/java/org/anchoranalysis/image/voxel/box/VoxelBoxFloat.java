@@ -108,7 +108,7 @@ public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 
 		float valFloat = (float) val;
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		Extent e = extent();
 		

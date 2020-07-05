@@ -93,9 +93,9 @@ public class ExtendObjsInto3DMask {
 		
 			int ind = 0;
 			
-			for (pnt.setY(newBBox.getCornerMin().getY()); pnt.getY() <= max.getY(); pnt.incrementY() ) {
+			for (pnt.setY(newBBox.cornerMin().getY()); pnt.getY() <= max.getY(); pnt.incrementY() ) {
 			
-				for (pnt.setX(newBBox.getCornerMin().getX()); pnt.getX() <= max.getX(); pnt.incrementX(), ind++ ) {	
+				for (pnt.setX(newBBox.cornerMin().getX()); pnt.getX() <= max.getX(); pnt.incrementX(), ind++ ) {	
 					
 					if (bufferIn2D.get(ind)!=bv.getOnByte() ) {
 						continue;
@@ -113,7 +113,7 @@ public class ExtendObjsInto3DMask {
 	}
 	
 	private static BoundingBox createBoundingBoxForAllZ( BoundingBox exst, int z ) {
-		Point3i crnrMin = copyPointChangeZ( exst.getCornerMin(), 0 );
+		Point3i crnrMin = copyPointChangeZ( exst.cornerMin(), 0 );
 		Extent e = copyExtentChangeZ( exst.extent(), z );
 
 		return new BoundingBox( crnrMin, e );

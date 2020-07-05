@@ -38,23 +38,22 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 // 
+@NoArgsConstructor
 public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
 
-	
-	
 	// START BEAN PROPERTIES
 	
-	// Defaults to a unit vector in the Z-plane along the X-axis
-	@BeanField
+	/** Direction of the distance being converted, defaults to a unit vector along the X-axis */
+	@BeanField @Getter @Setter
 	private DirectionVectorBean directionVector = new DirectionVectorBean(1.0, 0, 0);
 	// END BEAN PROPERTIES
 	
 	private DirectionVector dv;
-
-	public ConvertToPhysicalDistance() {
-		
-	}
 	
 	public ConvertToPhysicalDistance( Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector ) {
 		super(feature, unitType);
@@ -72,15 +71,4 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends Fe
 		// We use arbitrary direction as everything should be the same in a isometric XY plane
 		return ImageUnitConverter.convertToPhysicalDistance(value, res, dv );
 	}
-
-	public DirectionVectorBean getDirectionVector() {
-		return directionVector;
-	}
-
-	public void setDirectionVector(DirectionVectorBean directionVector) {
-		this.directionVector = directionVector;
-	}
-
-
-
 }

@@ -32,6 +32,8 @@ import java.io.Serializable;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.index.IIndexGetter;
 
+import lombok.Getter;
+
 public class KernelIterDescription implements Serializable, IIndexGetter {
 
 	/**
@@ -39,16 +41,27 @@ public class KernelIterDescription implements Serializable, IIndexGetter {
 	 */
 	private static final long serialVersionUID = -5135255409310941727L;
 	
-	private int id;
-	private String description;
-	private boolean accepted;
-	private boolean proposed;
-	private int[] changedMarkIDArr = null;
-	private transient ProposerFailureDescription noProposalReason;
+	@Getter
+	private final int id;
 	
-	// For now we store this here, but we probably should separate executionTime
-	//  out into a different form of storage
-	private long executionTime;
+	@Getter
+	private final String description;
+	
+	@Getter
+	private final boolean accepted;
+	
+	@Getter
+	private final boolean proposed;
+	
+	@Getter
+	private final int[] changedMarkIDArr;
+	
+	@Getter
+	private final transient ProposerFailureDescription noProposalReason;
+
+	@Getter
+	private final long executionTime;
+	
 	private int iter;
 	
 	public KernelIterDescription( KernelWithID<?> kernelWithID, boolean accepted, boolean proposed, int[] changedMarkIDArr, long executionTime, int iter, ProposerFailureDescription noProposalReason ) {
@@ -63,45 +76,8 @@ public class KernelIterDescription implements Serializable, IIndexGetter {
 		this.noProposalReason = noProposalReason;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public boolean isAccepted() {
-		return accepted;
-	}
-
-	public boolean isProposed() {
-		return proposed;
-	}
-
-	public int[] getChangedMarkIDArr() {
-		return changedMarkIDArr;
-	}
-
-	public void setChangedMarkIDArr(int[] changedMarkIDArr) {
-		this.changedMarkIDArr = changedMarkIDArr;
-	}
-
-	public long getExecutionTime() {
-		return executionTime;
-	}
-
 	@Override
 	public int getIndex() {
 		return iter;
 	}
-	
-	public int getIter() {
-		return iter;
-	}
-
-	public ProposerFailureDescription getNoProposalReason() {
-		return noProposalReason;
-	}
-
 }

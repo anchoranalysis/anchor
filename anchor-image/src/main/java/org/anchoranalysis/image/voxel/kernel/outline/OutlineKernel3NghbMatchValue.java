@@ -78,7 +78,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
 		super.notifyZChange(inSlices, z);
-		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().getCornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
+		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().cornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
 	/**
@@ -198,13 +198,13 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 			return outsideAtThreshold;
 		}
 		
-		int x1 = pnt.getX() + om.getBoundingBox().getCornerMin().getX() + xShift;
+		int x1 = pnt.getX() + om.getBoundingBox().cornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
-		int y1 = pnt.getY() + om.getBoundingBox().getCornerMin().getY() + yShift; 
+		int y1 = pnt.getY() + om.getBoundingBox().cornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;

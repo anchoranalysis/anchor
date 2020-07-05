@@ -116,9 +116,9 @@ public class ProbMapObjMaskCollection extends ProbMap {
 				int yRel = index2D/exY;
 				int zRel = slice;
 				
-				int x = xRel + om.getBoundingBox().getCornerMin().getX();
-				int y = yRel + om.getBoundingBox().getCornerMin().getY();
-				int z = zRel + om.getBoundingBox().getCornerMin().getZ();
+				int x = xRel + om.getBoundingBox().cornerMin().getX();
+				int y = yRel + om.getBoundingBox().cornerMin().getY();
+				int z = zRel + om.getBoundingBox().cornerMin().getZ();
 				
 				return new Point3d( x, y, z );
 			}

@@ -83,7 +83,7 @@ public class IntersectionBBox {
 		
 		Point3i relPosSrc = bboxIntersect.relPosTo( bboxSrc );
 		
-		Point3i relPosTrgtToSrc = Point3i.immutableSubtract(bboxSrc.getCornerMin(), bboxOther.getCornerMin());
+		Point3i relPosTrgtToSrc = Point3i.immutableSubtract(bboxSrc.cornerMin(), bboxOther.cornerMin());
 		
 		Point3i relPosSrcMax = Point3i.immutableAdd(relPosSrc, bboxIntersect.extent().asTuple());
 		

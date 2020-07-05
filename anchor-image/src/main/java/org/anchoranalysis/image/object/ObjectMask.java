@@ -489,9 +489,9 @@ public class ObjectMask {
 			return false;
 		}
 		
-		int xRel = pnt.getX() - delegate.getBoundingBox().getCornerMin().getX();
-		int yRel = pnt.getY() - delegate.getBoundingBox().getCornerMin().getY();
-		int zRel = pnt.getZ() - delegate.getBoundingBox().getCornerMin().getZ();
+		int xRel = pnt.getX() - delegate.getBoundingBox().cornerMin().getX();
+		int yRel = pnt.getY() - delegate.getBoundingBox().cornerMin().getY();
+		int zRel = pnt.getZ() - delegate.getBoundingBox().cornerMin().getZ();
 		
 		return delegate.getVoxelBox().getVoxel(xRel, yRel, zRel)==bv.getOnInt();
 	}
@@ -503,8 +503,8 @@ public class ObjectMask {
 			return false;
 		}
 		
-		int xRel = pnt.getX() - delegate.getBoundingBox().getCornerMin().getX();
-		int yRel = pnt.getY() - delegate.getBoundingBox().getCornerMin().getY();
+		int xRel = pnt.getX() - delegate.getBoundingBox().cornerMin().getX();
+		int yRel = pnt.getY() - delegate.getBoundingBox().cornerMin().getY();
 		
 		Extent e = delegate.getBoundingBox().extent();
 		for( int z=0; z<e.getZ(); z++) {

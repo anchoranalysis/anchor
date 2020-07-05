@@ -51,7 +51,7 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  */
 public class DefineFactory extends AnchorBeanFactory {
 	
-	private static String ELEMENT_NAME_ADD = "add";
+	private static final String ELEMENT_NAME_ADD = "add";
 	
     // Creates the bean. Checks if already an instance exists.
 	@Override

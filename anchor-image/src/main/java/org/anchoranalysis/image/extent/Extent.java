@@ -284,7 +284,7 @@ public final class Extent implements Serializable {
 	}
 	
 	public boolean contains( BoundingBox bbox ) {
-		return contains( bbox.getCornerMin() ) && contains( bbox.calcCornerMax() );
+		return contains( bbox.cornerMin() ) && contains( bbox.calcCornerMax() );
 	}
 	
 	public Extent scaleXYBy( ScaleFactor sf ) {

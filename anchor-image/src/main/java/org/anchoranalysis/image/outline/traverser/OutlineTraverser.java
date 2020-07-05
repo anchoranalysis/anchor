@@ -84,7 +84,7 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( Point3i root, List<Point3i> listOut ) throws OperationFailedException {
 
-		ReadableTuple3i crnrMin = omOutline.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = omOutline.getBoundingBox().cornerMin();
 		Point3i rootRel = BoundingBox.relPosTo(root, crnrMin);
 
 		ContiguousPixelPath listOutRel = applyLocal(rootRel);

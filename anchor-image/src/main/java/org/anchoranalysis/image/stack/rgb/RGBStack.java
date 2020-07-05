@@ -146,13 +146,13 @@ public class RGBStack {
 		
 		Extent eMask = mask.getBoundingBox().extent();
 		
- 		for (pntGlobal.setY(bbox.getCornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+ 		for (pntGlobal.setY(bbox.cornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 		
-			for (pntGlobal.setX(bbox.getCornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+			for (pntGlobal.setX(bbox.cornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 				
 				int maskOffset = eMask.offset(
-					pntGlobal.getX() - mask.getBoundingBox().getCornerMin().getX(),
-					pntGlobal.getY() - mask.getBoundingBox().getCornerMin().getY()
+					pntGlobal.getX() - mask.getBoundingBox().cornerMin().getX(),
+					pntGlobal.getY() - mask.getBoundingBox().cornerMin().getY()
 				);
 				
 				if (inArr.get(maskOffset)!=maskOn ) {

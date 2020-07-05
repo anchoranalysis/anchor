@@ -53,7 +53,7 @@ public class ChnlConverterHistogramUpperLowerQuantileIntensity extends ChnlConve
 	}
 	
 	public ChnlConverterHistogramUpperLowerQuantileIntensity( double quantileLower, double quantileUpper, double scaleLower, double scaleUpper ) {
-		// Initialise with a dummy value;
+		// Initialise with a dummy value
 		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMinMaxValue(0,1);
 		this.quantileLower = quantileLower;
 		this.quantileUpper = quantileUpper;

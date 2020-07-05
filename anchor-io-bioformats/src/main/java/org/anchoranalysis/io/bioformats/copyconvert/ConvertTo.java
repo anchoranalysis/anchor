@@ -35,7 +35,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class ConvertTo<T extends Buffer> {
 
-	private static Log log = LogFactory.getLog(ConvertToByte.class);
+	private static Log log = LogFactory.getLog(ConvertTo.class);
 	
 	private Function<VoxelBoxWrapper,VoxelBox<T>> funcCastWrapper;
 	
