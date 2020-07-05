@@ -54,8 +54,8 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 	}
 
 	@Override
-	protected VoxelBuffer<FloatBuffer> convertSingleChnl(byte[] src, int c_rel) throws IOException {
-		int index = (sizeBytesChnl*c_rel);
+	protected VoxelBuffer<FloatBuffer> convertSingleChnl(byte[] src, int channelRelative) throws IOException {
+		int index = (sizeBytesChnl*channelRelative);
 		float[] fArr = convertIntegerBytesToFloatArray(sd, src, index);
 		return VoxelBufferFloat.wrap(fArr);
 	}

@@ -28,17 +28,10 @@ package org.anchoranalysis.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -46,15 +39,8 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.glob.GlobExtractor;
 import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
-import org.anchoranalysis.io.params.InputContextParams;
 
-@SuppressWarnings("unused")
 public class SearchDirectory extends FileProviderWithDirectoryString {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1232904558425899995L;
 	
 	// START BEAN PROPERTIES
 	@BeanField

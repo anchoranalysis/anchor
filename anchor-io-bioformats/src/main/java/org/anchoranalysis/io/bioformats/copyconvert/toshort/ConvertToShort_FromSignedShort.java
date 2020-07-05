@@ -53,7 +53,7 @@ public class ConvertToShort_FromSignedShort extends ConvertToShort {
 	}
 
 	@Override
-	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 
 		short[] crntChnlShorts = new short[sizeXY];
 		

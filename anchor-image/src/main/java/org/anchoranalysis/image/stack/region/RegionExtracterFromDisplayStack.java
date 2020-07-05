@@ -50,7 +50,7 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class RegionExtracterFromDisplayStack extends RegionExtracter {
+public class RegionExtracterFromDisplayStack implements RegionExtracter {
 	
 	// Used to convert our source buffer to bytes, not called if it's already bytes
 	private List<ChnlConverterAttached<Channel,ByteBuffer>> listChnlConverter;

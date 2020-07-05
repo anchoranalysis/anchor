@@ -81,34 +81,20 @@ public class Contour {
 	
 	public boolean connectedTo( Contour c ) {
 		
-		if ( connectedToFirstPointOf(c) ) {
+		if (connectedToFirstPointOf(c)) {
 			return true;
 		}
 		
-		if ( connectedToLastPointOf(c) ) {
-			return true;
-		}
-		
-		return false;
+		return connectedToLastPointOf(c);
 	}
 	
 	
 	public boolean connectedToFirstPointOf( Contour c ) {
-		
-		if (getLastPoint().distance(c.getFirstPoint()) < maxDistToDefinedConnected) {
-			return true;
-		}
-		
-		return false;
+		return getLastPoint().distance(c.getFirstPoint()) < maxDistToDefinedConnected;
 	}
 
 	public boolean connectedToLastPointOf( Contour c ) {
-		
-		if (getFirstPoint().distance(c.getLastPoint()) < maxDistToDefinedConnected) {
-			return true;
-		}
-		
-		return false;
+		return getFirstPoint().distance(c.getLastPoint()) < maxDistToDefinedConnected;
 	}
 
 	public String summaryStr() {

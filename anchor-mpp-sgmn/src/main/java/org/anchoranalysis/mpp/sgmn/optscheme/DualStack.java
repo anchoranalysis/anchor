@@ -42,7 +42,7 @@ public class DualStack {
 		);
 	}
 	
-	public DualStack(NRGStackWithParams nrgStack, DisplayStack bgStack) throws CreateException {
+	public DualStack(NRGStackWithParams nrgStack, DisplayStack bgStack) {
 		super();
 		this.nrgStack = nrgStack;
 		this.bgStack = bgStack;

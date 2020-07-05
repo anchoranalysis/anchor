@@ -51,7 +51,7 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 	private String manifestFunction;
 	private boolean mip;
 	
-	public ExtractedBBoxOnRGBObjMaskGenerator(RGBObjMaskGenerator rgbObjMaskGenerator, ExtractedBBoxGenerator chnlGenerator, String manifestFunction,  boolean mip ) throws CreateException {
+	public ExtractedBBoxOnRGBObjMaskGenerator(RGBObjMaskGenerator rgbObjMaskGenerator, ExtractedBBoxGenerator chnlGenerator, String manifestFunction,  boolean mip ) {
 		super();
 		this.rgbObjMaskGenerator = rgbObjMaskGenerator;
 		this.chnlGenerator = chnlGenerator;
@@ -96,9 +96,7 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 		
 		rgbObjMaskGenerator.setIterableElement( objs );
 		
-		Stack stack = rgbObjMaskGenerator.generate();
-
-		return stack;
+		return rgbObjMaskGenerator.generate();
 	}
 
 	@Override

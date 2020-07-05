@@ -62,7 +62,7 @@ class WalkToDepth extends DirectoryWalker<File> {
 	}
 
 	public List<File> findDirs(File root) throws IOException {
-		List<File> results = new ArrayList<File>();
+		List<File> results = new ArrayList<>();
 		walk(root, results);
 		return results;
 	}

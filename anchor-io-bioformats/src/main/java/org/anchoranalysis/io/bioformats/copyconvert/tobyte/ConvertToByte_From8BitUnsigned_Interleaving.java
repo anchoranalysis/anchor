@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
  
 public class ConvertToByte_From8BitUnsigned_Interleaving extends ConvertToByte {
 
-	private int bytesPerPixel_Out = 1;
+	private int bytesPerPixelOut = 1;
 	private int sizeXY;
 	private int numChnlsPerByteArray;
 	
@@ -46,10 +46,10 @@ public class ConvertToByte_From8BitUnsigned_Interleaving extends ConvertToByte {
 	}
 
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 		ByteBuffer buffer = ByteBuffer.wrap(src);
 		
-		int sizeTotalBytes = sizeXY * bytesPerPixel_Out;
+		int sizeTotalBytes = sizeXY * bytesPerPixelOut;
 		byte[] crntChnlBytes = new byte[sizeTotalBytes];
 		
 		// Loop through the relevant positions
@@ -57,7 +57,7 @@ public class ConvertToByte_From8BitUnsigned_Interleaving extends ConvertToByte {
 		
 		
 		int indOut = 0;
-		for(int indIn =c_rel; indIn<totalBytesBuffer; indIn+=numChnlsPerByteArray) {
+		for(int indIn =channelRelative; indIn<totalBytesBuffer; indIn+=numChnlsPerByteArray) {
 			crntChnlBytes[indOut++] = buffer.get(indIn);
 		}
 		return VoxelBufferByte.wrap( crntChnlBytes );

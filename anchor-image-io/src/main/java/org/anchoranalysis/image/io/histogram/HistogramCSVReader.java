@@ -30,6 +30,7 @@ package org.anchoranalysis.image.io.histogram;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -110,9 +111,11 @@ public class HistogramCSVReader {
 		
 		Histogram hist = new HistogramArray(maxHistVal);
 		
-		for( Integer bin : map.keySet() ) {
-			Integer count = map.get(bin);
-			hist.incrValBy(bin, count);
+		for( Entry<Integer,Integer> entry : map.entrySet() ) {
+			hist.incrValBy(
+				entry.getValue(),
+				entry.getKey()
+			);
 		}
 		return hist;
 	}

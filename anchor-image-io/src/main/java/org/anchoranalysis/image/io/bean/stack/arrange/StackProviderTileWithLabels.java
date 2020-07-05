@@ -76,29 +76,10 @@ public class StackProviderTileWithLabels extends StackProvider {
 		
 		// Add stack providers
 		for( StackProviderWithLabel spwl : list ) {
-			
 			spar.getList().add( spwl.getStackProvider() );
-			
-			{
-				StackProviderGenerateString spgs = new StackProviderGenerateString();
-				
-				StringRasterGenerator srg = new StringRasterGenerator( spwl.getLabel() );
-				srg.setText( spwl.getLabel() );
-				srg.setWidth(-1);
-				srg.setHeight(-1);
-				srg.setPadding(3);
-				
-				spgs.setStringRasterGenerator(srg);
-				spgs.setCreateShort(createShort);
-				if (scaleLabel) {
-					spgs.setInstensityProvider( spwl.getStackProvider() );
-				}
-				if (expandLabelZ) {
-					spgs.setRepeatZProvider( spwl.getStackProvider() );
-				}
-				
-				spar.getList().add( spgs );
-			}
+			spar.getList().add(
+				addGenerateString(spwl, createShort, scaleLabel, expandLabelZ)
+			);
 		}
 		
 		ArrangeRasterTile art = new ArrangeRasterTile();
@@ -115,6 +96,31 @@ public class StackProviderTileWithLabels extends StackProvider {
 		spar.setArrangeRaster(art);
 		
 		return spar;
+	}
+	
+	private static StackProviderGenerateString addGenerateString(
+		StackProviderWithLabel spwl,
+		boolean createShort,
+		boolean scaleLabel,
+		boolean expandLabelZ
+	) {
+		StackProviderGenerateString spgs = new StackProviderGenerateString();
+		
+		StringRasterGenerator srg = new StringRasterGenerator( spwl.getLabel() );
+		srg.setText( spwl.getLabel() );
+		srg.setWidth(-1);
+		srg.setHeight(-1);
+		srg.setPadding(3);
+		
+		spgs.setStringRasterGenerator(srg);
+		spgs.setCreateShort(createShort);
+		if (scaleLabel) {
+			spgs.setInstensityProvider( spwl.getStackProvider() );
+		}
+		if (expandLabelZ) {
+			spgs.setRepeatZProvider( spwl.getStackProvider() );
+		}
+		return spgs;
 	}
 
 	@Override

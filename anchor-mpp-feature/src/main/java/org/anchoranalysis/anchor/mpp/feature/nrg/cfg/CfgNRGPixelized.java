@@ -1,7 +1,5 @@
 package org.anchoranalysis.anchor.mpp.feature.nrg.cfg;
 
-import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
@@ -62,71 +60,72 @@ public final class CfgNRGPixelized  {
     private LogErrorReporter logger;
 	
 	/** A cached version of the calculations for each energy component in the associated {@link NRGScheme} */
-    private Optional<MemoCollection> memoMarks;
+    private MemoCollection memoMarks;
     
-    public CfgNRGPixelized( CfgNRG cfgNRG, LogErrorReporter logger ) {
+    public CfgNRGPixelized( CfgNRG cfgNRG, NRGStackWithParams nrgStack, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException, FeatureCalcException {
+    	this(
+    		cfgNRG,
+    		createMemoCollection(cfgNRG, nrgStack, sharedFeatures, logger),
+    		logger
+    	);
+    }
+    
+    private CfgNRGPixelized( CfgNRG cfgNRG, MemoCollection memoMarks, LogErrorReporter logger ) {
     	this.cfgNRG = cfgNRG;
-    	this.memoMarks = Optional.empty();
+    	this.memoMarks = memoMarks;
     	this.logger = logger;
     }
    
     // Copy constructor - we do shallow copying of configuration
     public CfgNRGPixelized shallowCopy() {
-    	CfgNRGPixelized newCfgNRG = new CfgNRGPixelized(cfgNRG.shallowCopy(), logger); 
-    	newCfgNRG.memoMarks = memoMarks.map(MemoCollection::new);
-    	return newCfgNRG;
+    	return new CfgNRGPixelized(
+    		cfgNRG.shallowCopy(),
+    		new MemoCollection(memoMarks),
+    		logger
+    	); 
     }
-    
-    
+        
     // Copy constructor - we do shallow copying of configuration
     public CfgNRGPixelized deepCopy() {
-    	CfgNRGPixelized newCfgNRG = new CfgNRGPixelized(cfgNRG.deepCopy(), logger);
-    	newCfgNRG.memoMarks = memoMarks.map(MemoCollection::new);
-    	return newCfgNRG;
+    	return new CfgNRGPixelized(
+    		cfgNRG.deepCopy(),
+    		new MemoCollection(memoMarks),
+    		logger
+    	);
     }
-
-	
+    	
 	public Cfg getCfg() {
 		return cfgNRG.getCfg();
 	}
 	
-
-	
-	public void assertValid() {
-		memoMarks.ifPresent(MemoCollection::assertValid);
-		cfgNRG.assertValid();
-	}
-	
-	public void assertFresh( NRGStackWithParams nrgStack, SharedFeatureMulti sharedFeatures ) throws FeatureCalcException, InitException {
-
-		double old = cfgNRG.getNrgTotal();
-		this.init( nrgStack, sharedFeatures );
-		assert( Math.abs( cfgNRG.getNrgTotal() - old) < 1e-6 );
-	}
-	
 	// The initial calculation of the NRG, thereafter it can be updated
-	public void init( NRGStackWithParams nrgStack, SharedFeatureMulti sharedFeatures ) throws InitException, FeatureCalcException {
+	private static MemoCollection createMemoCollection(
+		CfgNRG cfgNRG,
+		NRGStackWithParams nrgStack,
+		SharedFeatureMulti sharedFeatures,
+		LogErrorReporter logger
+	) throws InitException, FeatureCalcException {
 
 		cfgNRG.init();
 		
-		this.memoMarks = Optional.of(
-			new MemoCollection(
-				cfgNRG.getCalcMarkInd(),
-				nrgStack.getNrgStack(),
-				cfgNRG.getCfg(),
-				cfgNRG.getNrgScheme()
-			)
+		MemoCollection memo = new MemoCollection(
+			cfgNRG.getCalcMarkInd(),
+			nrgStack.getNrgStack(),
+			cfgNRG.getCfg(),
+			cfgNRG.getNrgScheme()
 		);
 		
-		cfgNRG.getCalcMarkPair().initUpdatableMarkSet( memoMarks.get(), nrgStack, logger, sharedFeatures );
+		cfgNRG.getCalcMarkPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
 		
 		// Some nrg components need to be calculated in terms of interactions
 		//  this we need to track in an intelligent way
-		cfgNRG.updateTotal( memoMarks.get(), nrgStack.getNrgStack() );
+		cfgNRG.updateTotal( memo, nrgStack.getNrgStack() );
+		
+		return memo;
 	}
 	
 	public void clean() {
-		memoMarks.ifPresent(MemoCollection::clean);
+		memoMarks.clean();
 	}
 	
 	public NRGSchemeWithSharedFeatures getNRGScheme() {
@@ -134,20 +133,20 @@ public final class CfgNRGPixelized  {
 	}
 	
 	public void add( PxlMarkMemo newPxlMark, NRGStack stack ) throws FeatureCalcException {
-		cfgNRG.add(memoMarks.get(), newPxlMark, stack);
+		cfgNRG.add(memoMarks, newPxlMark, stack);
 	}
 	
 	public void rmv( int index, NRGStack stack ) throws FeatureCalcException {
 		PxlMarkMemo memoRmv = getMemoForIndex(index);
-		cfgNRG.rmv(memoMarks.get(), index, memoRmv, stack );
+		cfgNRG.rmv(memoMarks, index, memoRmv, stack );
 	}
 	
 	public void rmv(PxlMarkMemo memoRmv, NRGStack stack) throws FeatureCalcException {
-		cfgNRG.rmv(memoMarks.get(), memoRmv, stack);
+		cfgNRG.rmv(memoMarks, memoRmv, stack);
 	}
 
 	public void rmvTwo( int index1, int index2, NRGStack stack ) throws FeatureCalcException {
-		cfgNRG.rmvTwo(memoMarks.get(), index1, index2, stack);
+		cfgNRG.rmvTwo(memoMarks, index1, index2, stack);
 	}
 
 	// Does the pairs hash only contains items contained in a particular configuration
@@ -158,13 +157,52 @@ public final class CfgNRGPixelized  {
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
 	public void exchange( int index, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws FeatureCalcException {
-		cfgNRG.exchange(memoMarks.get(), index, newMark, nrgStack );
+		cfgNRG.exchange(memoMarks, index, newMark, nrgStack );
 	}
 
 	public double getTotal() {
 		return cfgNRG.getNrgTotal();
 	}
+
+	// Adds all current marks to the updatable-pair list
+	public void addAllToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList ) throws UpdateMarkSetException {
+		updatablePairList.add(memoMarks);
+	}
 	
+	// Adds the particular memo to the updatable pair-list
+	public void addToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, PxlMarkMemo memo ) throws UpdateMarkSetException {
+		updatablePairList.add(memoMarks, memo );
+	}
+	
+	// Removes a memo from the updatable pair-list
+	public void rmvFromUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, Mark mark ) throws UpdateMarkSetException {
+		PxlMarkMemo memo = getMemoForMark( mark );
+		updatablePairList.rmv(memoMarks, memo);
+	}
+	
+	// Exchanges one mark with another on the updatable pair list
+	public void exchangeOnUpdatablePairList(ListUpdatableMarkSetCollection updatablePairList, Mark markExst, PxlMarkMemo memoNew) throws UpdateMarkSetException {
+		PxlMarkMemo memoExst = getMemoForMark( markExst );
+		updatablePairList.exchange(memoMarks, memoExst, getCfg().indexOf(markExst), memoNew );
+	}
+	
+	
+	public MemoList createDuplicatePxlMarkMemoList() {
+		MemoList list = new MemoList();
+		list.addAll(memoMarks);
+		return list;
+	}
+	
+	public PxlMarkMemo getMemoForMark(Mark mark ) {
+		return memoMarks.getMemoForMark(cfgNRG.getCfg(), mark );
+	}
+	
+	public PxlMarkMemo getMemoForIndex(int index ) {
+		PxlMarkMemo pmm = memoMarks.getMemoForIndex(index);
+		assert(pmm!=null);
+		return pmm;
+	}
+		
 	@Override
 	public String toString() {
 		
@@ -181,44 +219,5 @@ public final class CfgNRGPixelized  {
 		s.append( newLine );
 		
 		return s.toString();
-	}
-
-	// Adds all current marks to the updatable-pair list
-	public void addAllToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList ) throws UpdateMarkSetException {
-		updatablePairList.add( memoMarks.get() );
-	}
-	
-	// Adds the particular memo to the updatable pair-list
-	public void addToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, PxlMarkMemo memo ) throws UpdateMarkSetException {
-		updatablePairList.add( memoMarks.get(), memo );
-	}
-	
-	// Removes a memo from the updatable pair-list
-	public void rmvFromUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, Mark mark ) throws UpdateMarkSetException {
-		PxlMarkMemo memo = getMemoForMark( mark );
-		updatablePairList.rmv(memoMarks.get(), memo);
-	}
-	
-	// Exchanges one mark with another on the updatable pair list
-	public void exchangeOnUpdatablePairList(ListUpdatableMarkSetCollection updatablePairList, Mark markExst, PxlMarkMemo memoNew) throws UpdateMarkSetException {
-		PxlMarkMemo memoExst = getMemoForMark( markExst );
-		updatablePairList.exchange(memoMarks.get(), memoExst, getCfg().indexOf(markExst), memoNew );
-	}
-	
-	
-	public MemoList createDuplicatePxlMarkMemoList() {
-		MemoList list = new MemoList();
-		list.addAll(memoMarks.get());
-		return list;
-	}
-	
-	public PxlMarkMemo getMemoForMark(Mark mark ) {
-		return memoMarks.get().getMemoForMark(cfgNRG.getCfg(), mark );
-	}
-	
-	public PxlMarkMemo getMemoForIndex(int index ) {
-		PxlMarkMemo pmm = memoMarks.get().getMemoForIndex(index);
-		assert(pmm!=null);
-		return pmm;
 	}
 }

@@ -53,7 +53,7 @@ class AppendHelper {
 	/** Reads an object from a path */
 	@FunctionalInterface
 	private interface ReadFromPath<T> {
-		T apply(Path in) throws Exception;
+		T apply(Path in) throws Exception;	// NOSONAR
 	}
 	
 	// We assume all the input files are single channel images

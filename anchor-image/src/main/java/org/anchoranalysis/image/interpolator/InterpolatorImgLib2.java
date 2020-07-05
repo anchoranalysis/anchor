@@ -45,7 +45,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.view.Views;
 
-public abstract class InterpolatorImgLib2 extends Interpolator {
+public abstract class InterpolatorImgLib2 implements Interpolator {
 	
 	private InterpolatorFactory<UnsignedByteType,RandomAccessible<UnsignedByteType>> factoryByte;
 	private InterpolatorFactory<UnsignedShortType,RandomAccessible<UnsignedShortType>> factoryShort;

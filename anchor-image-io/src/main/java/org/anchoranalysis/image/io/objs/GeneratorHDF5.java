@@ -29,15 +29,12 @@ package org.anchoranalysis.image.io.objs;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
 
@@ -55,7 +52,7 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	private ObjectCollection item;
 	private boolean compressed;
 
-	public static void writeObjsToFile( ObjectCollection objs, Path filePath) throws OutputWriteFailedException {
+	public static void writeObjsToFile( ObjectCollection objs, Path filePath) {
 		GeneratorHDF5 generator = new GeneratorHDF5(true);
 		generator.setIterableElement(objs);
 		generator.writeToFile( new OutputWriteSettings(), filePath);
@@ -72,18 +69,12 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	}
 
 	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
-			throws OutputWriteFailedException {
+	public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath) {
 		// Write a HDF file
-		try {
-			writeObjMaskCollection( getIterableElement(), filePath );
-
-		} catch (OperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		}
+		writeObjMaskCollection( getIterableElement(), filePath );
 	}
 	
-	private void writeObjMaskCollection( ObjectCollection objs, Path filePath ) throws OperationFailedException {
+	private void writeObjMaskCollection( ObjectCollection objs, Path filePath ) {
 
 		IHDF5Writer writer = HDF5Factory.open( filePath.toString() );
 		

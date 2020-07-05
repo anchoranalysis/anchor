@@ -153,20 +153,7 @@ public class BinaryChnl {
 		BinaryChnl binaryChnl = new BinaryChnl(scaled, binaryValues);
 		
 		// We threshold to make sure it's still binary
-		{
-			int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
-		
-			try {
-				VoxelBoxThresholder.thresholdForLevel(
-					binaryChnl.getVoxelBox(),
-					thresholdVal,
-					binaryChnl.getBinaryValues().createByte()
-				);
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
-			}
-			
-		}
+		applyThreshold(binaryChnl);
 		
 		return binaryChnl;
 	}
@@ -179,5 +166,18 @@ public class BinaryChnl {
 			throws IncorrectImageSizeException {
 		chnl.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
 	}
-
+	
+	private void applyThreshold(BinaryChnl binaryChnl) throws OperationFailedException {
+		int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
+		
+		try {
+			VoxelBoxThresholder.thresholdForLevel(
+				binaryChnl.getVoxelBox(),
+				thresholdVal,
+				binaryChnl.getBinaryValues().createByte()
+			);
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+	}
 }

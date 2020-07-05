@@ -36,7 +36,7 @@ public class ErrorNodeException extends AnchorCheckedException {
 	 * 
 	 */
 	private static final long serialVersionUID = -4000166470139114311L;
-	private String str;
+	private final String str;
 
 	public ErrorNodeException(String str) {
 		super(str);

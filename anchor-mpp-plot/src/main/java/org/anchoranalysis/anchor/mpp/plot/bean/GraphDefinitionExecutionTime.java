@@ -66,10 +66,9 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
 	}
 	
 	private static <S,T> T checkFirstSeries( S item, int seriesNum, Function<S,T> func ) {
-		switch( seriesNum ) {
-		case 0:
+		if (seriesNum==0) {
 			return func.apply(item);
-		default:
+		} else {
 			throw new AnchorFriendlyRuntimeException(
 				String.format("seriesNum must be 0 but instead it is %d", seriesNum)
 			);	

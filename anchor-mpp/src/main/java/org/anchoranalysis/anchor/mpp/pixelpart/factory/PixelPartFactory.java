@@ -35,9 +35,9 @@ import org.anchoranalysis.anchor.mpp.pixelpart.PixelPart;
  *
  * @param <T> part-type
  */
-public abstract class PixelPartFactory<T> {
+public interface PixelPartFactory<T> {
 
-	public abstract PixelPart<T> create( int numSlices );
+	PixelPart<T> create( int numSlices );
 	
-	public abstract void addUnused( T part );
+	void addUnused( T part );
 }

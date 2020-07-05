@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.input;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
@@ -53,9 +54,8 @@ public class OperationMap<T> implements MultiInputSubMap<T> {
 	
 	@Override
 	public void addToStore( NamedProviderStore<T> namedStore ) throws OperationFailedException {
-		
-		for( final String name : map.keySet()) {
-			namedStore.add( name,  map.get(name) );
+		for(Entry<String,Operation<T,OperationFailedException>> entry : map.entrySet()) {
+			namedStore.add(entry.getKey(),  entry.getValue());
 		}
 	}
 

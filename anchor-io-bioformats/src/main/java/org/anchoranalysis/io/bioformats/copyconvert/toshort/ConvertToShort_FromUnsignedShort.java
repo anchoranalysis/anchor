@@ -55,7 +55,7 @@ public class ConvertToShort_FromUnsignedShort extends ConvertToShort {
 	}
 
 	@Override
-	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 
 		short[] crntChnlBytes = new short[sizeXY];
 		

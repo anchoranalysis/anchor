@@ -80,15 +80,15 @@ public abstract class ConvertTo<T extends Buffer> {
 		
 		setupBefore(sd, numChnlsPerByteArray);
   		
-		for (int c_rel=0; c_rel<numChnlsPerByteArray; c_rel++) {
+		for (int channelRelative=0; channelRelative<numChnlsPerByteArray; channelRelative++) {
 		
-			VoxelBuffer<T> converted = convertSingleChnl(src, c_rel);
+			VoxelBuffer<T> converted = convertSingleChnl(src, channelRelative);
 			copyBytesIntoDestChnl(
 				converted,
 				funcCastWrapper,
 				dest,
 				z,
-				c_rel
+				channelRelative
 			);
 		}
 

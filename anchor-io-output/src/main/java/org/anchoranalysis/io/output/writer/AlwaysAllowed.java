@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class AlwaysAllowed extends Writer {
+public class AlwaysAllowed implements Writer {
 
 	// START REQUIRED ARGUMENTS
 	/** Bound output manager */

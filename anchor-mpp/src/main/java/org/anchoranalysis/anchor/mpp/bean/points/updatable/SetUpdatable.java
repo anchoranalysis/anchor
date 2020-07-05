@@ -298,12 +298,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		for (int i=0; i<all.size(); i++) {
 			
 			PxlMarkMemo pmm = all.getMemoForIndex(i);
-			if (pmm!=source) {
+			if (pmm!=source && OverlapUtilities.overlapWith(source,pmm,regionID)>0) {
 				// We check if there's any overlap
-				if (OverlapUtilities.overlapWith(source,pmm,regionID)>0) {
-					list.add(pmm);
-				}
-				
+				list.add(pmm);
 			}
 		}
 		return list;

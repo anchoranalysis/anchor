@@ -44,14 +44,18 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class CfgNRG implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3736631685393590174L;
+	private static final long serialVersionUID = 1L;
 
-	private CfgWithNrgTotal delegate;
+	// START REQUIRED ARGUMENTS
+	private final CfgWithNRGTotal delegate;
 	
     private NRGSavedInd calcMarkInd;
     
@@ -61,15 +65,15 @@ public class CfgNRG implements Serializable {
     // Certain features are stored for every object, so that we can reference
     //  them in our calculations for the 'all' component
     private transient NRGSavedAll calcMarkAll;
-    
-	
-	public CfgNRG( CfgWithNrgTotal delegate ) {
+    // END REQUIRED ARGUMENTS
+      
+	public CfgNRG(CfgWithNRGTotal delegate) {
 		this.delegate = delegate;
-
-    	this.calcMarkInd = null;
-    	this.calcMarkPair = null;
+		this.calcMarkInd = null;
+		this.calcMarkPair = null;
+		this.calcMarkAll = null;
 	}
-	
+    
 	// The initial calculation of the NRG, thereafter it can be updated
 	public void init() throws FeatureCalcException {
 		this.calcMarkInd = new NRGSavedInd();
@@ -94,7 +98,7 @@ public class CfgNRG implements Serializable {
 	}
 	
 	// This should be accessed read-only
-	public CfgWithNrgTotal getCfgWithTotal() {
+	public CfgWithNRGTotal getCfgWithTotal() {
 		return delegate;
 	}
 	
@@ -109,19 +113,21 @@ public class CfgNRG implements Serializable {
 	}
 	
 	public CfgNRG shallowCopy() {
-		CfgNRG out = new CfgNRG(delegate.shallowCopy());
-		out.calcMarkInd = this.calcMarkInd.shallowCopy();
-    	out.calcMarkPair =  this.calcMarkPair.shallowCopy();
-    	out.calcMarkAll = this.calcMarkAll.shallowCopy();
-		return out;
+		return new CfgNRG(
+			delegate.shallowCopy(),
+			calcMarkInd.shallowCopy(),
+			calcMarkPair.shallowCopy(),
+			calcMarkAll.shallowCopy()
+		);
 	}
 	
 	public CfgNRG deepCopy() {
-		CfgNRG out = new CfgNRG(delegate.deepCopy());
-		out.calcMarkInd = this.calcMarkInd.deepCopy();
-    	out.calcMarkPair =  this.calcMarkPair.deepCopy();
-    	out.calcMarkAll = this.calcMarkAll.deepCopy();
-		return out;
+		return new CfgNRG(
+			delegate.deepCopy(),
+			calcMarkInd.deepCopy(),
+			calcMarkPair.deepCopy(),
+			calcMarkAll.deepCopy()
+		);
 	}
 	
 	public double getNrgTotal() {

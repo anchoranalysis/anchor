@@ -110,39 +110,30 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		x--;
 		ind--;
 		if (x>=0) {
-			if (bv.isOff(inArrZ.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,-1,0,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; }
-					cnt++;
-				}
+			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(pnt,-1,0,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,-1,0,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; }
-					cnt++;
-				}
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,-1,0,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
 			}
 		}
 		
 		x += 2;
 		ind += 2;
 		if (x<extent.getX()) {
-			if (bv.isOff(inArrZ.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,+1,0,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; }
-					cnt++;
-				}
+			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(pnt,+1,0,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,+1,0,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; }
-					cnt++;
-				}
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,+1,0,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
 			}
 		}
-		x--;
 		ind--;
 		
 		
@@ -150,77 +141,57 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		y--;
 		ind -= xLength;
 		if (y>=0) {
-			if (bv.isOff(inArrZ.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,0,-1,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; }
-					cnt++;
-				}
+			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(pnt,0,-1,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,0,-1,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; }
-					cnt++;
-				}
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,0,-1,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
 			}
 		}
 		
 		y += 2;
 		ind += (2*xLength);
 		if (y<(extent.getY())) {
-			if (bv.isOff(inArrZ.get(ind))) {
-				if (isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
+			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; }
+				cnt++;
+			}
+		} else {
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
+				if (!multipleMatchesPerVoxel) { return 1; };
+				cnt++;
+			}
+		}
+		ind -= xLength;
+		
+		if (useZ) {
+			if (inArrZLess1!=null) {
+				if (bv.isOff(inArrZLess1.get(ind)) && isNghbVoxelAccepted(pnt,0,0,-1, extent)) {
+					if (!multipleMatchesPerVoxel) { return 1; }
+					cnt++;
+				}
+			} else {
+				if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,0,0,-1, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; }
 					cnt++;
 				}
 			}
-		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				if (isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
-					if (!multipleMatchesPerVoxel) { return 1; };
+			
+			if (inArrZPlus1!=null) {
+				if (bv.isOff(inArrZPlus1.get(ind)) && isNghbVoxelAccepted(pnt,0,0,+1, extent)) {
+					if (!multipleMatchesPerVoxel) { return 1; }
+					cnt++;
+				}
+			} else {
+				if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,0,0,+1, extent)) {
+					if (!multipleMatchesPerVoxel) { return 1; }
 					cnt++;
 				}
 			}
 		}
-		y--;
-		ind -= xLength;
-		
-		
-		if (useZ) {
-			
-			if (inArrZLess1!=null) {
-				if (bv.isOff(inArrZLess1.get(ind))) {
-					if (isNghbVoxelAccepted(pnt,0,0,-1, extent)) {
-						if (!multipleMatchesPerVoxel) { return 1; }
-						cnt++;
-					}
-				}
-			} else {
-				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					if (isNghbVoxelAccepted(pnt,0,0,-1, extent)) {
-						if (!multipleMatchesPerVoxel) { return 1; }
-						cnt++;
-					}
-				}
-			}
-			
-			if (inArrZPlus1!=null) {
-				if (bv.isOff(inArrZPlus1.get(ind))) {
-					if (isNghbVoxelAccepted(pnt,0,0,+1, extent)) {
-						if (!multipleMatchesPerVoxel) { return 1; }
-						cnt++;
-					}
-				}
-			} else {
-				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					if (isNghbVoxelAccepted(pnt,0,0,+1, extent)) {
-						if (!multipleMatchesPerVoxel) { return 1; }
-						cnt++;
-					}
-				}
-			}
-		}
-		
 		return cnt;
 	}
 

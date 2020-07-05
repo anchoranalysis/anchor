@@ -33,7 +33,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-class ReadObjsFromTIFFDirectoryCorrectMissing extends Deserializer<ObjectCollection> {
+class ReadObjsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
 
 	@Override
 	public ObjectCollection deserialize(Path path) throws DeserializationFailedException {

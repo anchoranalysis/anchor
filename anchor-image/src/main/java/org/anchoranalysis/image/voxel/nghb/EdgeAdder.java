@@ -53,7 +53,6 @@ class EdgeAdder<V> {
 	private boolean bigNghb;
 	private boolean testBothDirs;
 
-	// TODO replace with class which behaves differently
 	@FunctionalInterface
 	public static interface AddEdge<V> {
 		void addEdge( V src, V dest, int numBorderPixels );
@@ -150,17 +149,15 @@ class EdgeAdder<V> {
 		V vertexWith,
 		V vertexOther
 	) {
-		if (preventObjIntersection) {
-			// Check that they don't overlap
-			if (om.hasIntersectingPixels(omOther)) {
-				return;
-			}
+		// Check that they don't overlap
+		if (preventObjIntersection && om.hasIntersectingPixels(omOther)) {
+			return;
 		}
 			
 		// How many border pixels shared between the two?
 		int numBorderPixels = numBorderPixels(omDilated, omOther); 
 		if( numBorderPixels>0 ) {
-			addEdge.addEdge(vertexWith,vertexOther, numBorderPixels);
+			addEdge.addEdge(vertexWith,vertexOther,numBorderPixels);
 		}
 	}
 	

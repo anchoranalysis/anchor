@@ -51,7 +51,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
  *   2. A raster mask somename.tif
  *
  */
-class ObjMaskDualDeserializer extends Deserializer<ObjectMask> {
+class ObjMaskDualDeserializer implements Deserializer<ObjectMask> {
 
 	private ObjectInputStreamDeserializer<BoundingBox> bboxDeserializer = new ObjectInputStreamDeserializer<>();
 	private RasterReader rasterReader;

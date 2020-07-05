@@ -30,19 +30,20 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Extent;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(callSuper=false)
 public class SizeXY extends AnchorBean<SizeXY>{
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int width;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int height;
 	// END BEAN PROPERTIES
-
-	public SizeXY() {
-		// STANDARD BEAN CONSTRUCTOR
-	}
 
 	/**
 	 * Constructor
@@ -62,46 +63,5 @@ public class SizeXY extends AnchorBean<SizeXY>{
 	
 	public Extent asExtent() {
 		return new Extent(width,height,1);
-	}
-	
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + height;
-		result = prime * result + width;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SizeXY other = (SizeXY) obj;
-		if (height != other.height)
-			return false;
-		if (width != other.width)
-			return false;
-		return true;
 	}
 }

@@ -34,9 +34,17 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public abstract class GeneratorSequenceFactory extends AnchorBean<GeneratorSequenceFactory> {
 
-	public abstract <GeneratorType> GeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
+	/**
+	 * 
+	 * @param <GeneratorType> generator-type
+	 * @param outputManager
+	 * @param outputName
+	 * @param generator
+	 * @return
+	 */
+	public abstract <T> GeneratorSequenceNonIncremental<T> createGeneratorSequenceNonIncremental(
 			BoundOutputManagerRouteErrors outputManager,
 			String outputName,
-			IterableObjectGenerator<GeneratorType, Stack> generator		
+			IterableObjectGenerator<T, Stack> generator		
 	);
 }

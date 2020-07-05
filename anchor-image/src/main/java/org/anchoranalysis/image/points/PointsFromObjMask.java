@@ -48,8 +48,8 @@ public class PointsFromObjMask {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static List<Point3i> pntsFromMask( ObjectMask om ) throws CreateException {
-		List<Point3i> pts = new ArrayList<Point3i>();
+	public static List<Point3i> pntsFromMask( ObjectMask om ) {
+		List<Point3i> pts = new ArrayList<>();
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( om.binaryVoxelBox(), om.getBoundingBox().cornerMin(), pts );
 		return pts;
 	}
@@ -59,10 +59,9 @@ public class PointsFromObjMask {
 	 * 
 	 * @param om
 	 * @return
-	 * @throws CreateException
 	 */
-	public static List<Point3d> pntsFromMaskDouble( ObjectMask om ) throws CreateException {
-		List<Point3d> pts = new ArrayList<Point3d>();
+	public static List<Point3d> pntsFromMaskDouble( ObjectMask om ) {
+		List<Point3d> pts = new ArrayList<>();
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3DDouble(
 			om.binaryVoxelBox(),
 			om.getBoundingBox().cornerMin(),
@@ -79,7 +78,7 @@ public class PointsFromObjMask {
 	 * @throws CreateException
 	 */
 	public static List<Point3i> pntsFromMaskOutline( ObjectMask om ) throws CreateException {
-		List<Point3i> pts = new ArrayList<Point3i>();
+		List<Point3i> pts = new ArrayList<>();
 		ObjectMask outline = FindOutline.outline(om, 1, false, true);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), pts );
 		return pts;
@@ -87,7 +86,7 @@ public class PointsFromObjMask {
 		
 	public static Set<Point3i> pntsFromMaskOutlineSet( ObjectMask om ) throws CreateException {
 
-		Set<Point3i> pts = new HashSet<Point3i>();
+		Set<Point3i> pts = new HashSet<>();
 		
 		ObjectMask outline = FindOutline.outline(om, 1, false, false);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), pts );

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.histogram.HistogramCreator;
 
-public class PixelPartFactoryHistogramReuse extends PixelPartFactory<Histogram> {
+public class PixelPartFactoryHistogramReuse implements PixelPartFactory<Histogram> {
 
 	private int maxSize = 100;
 	private List<Histogram> listUnused = new ArrayList<>();

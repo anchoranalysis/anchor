@@ -57,7 +57,7 @@ public class ConvertToByte_From16BitUnsigned extends ConvertToByte {
 	}
 	
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 		// we assign a default that maps from 16-bit to 8-bit
 		ApplyScaling applyScaling = new ApplyScaling(
 			ConvertHelper.twoToPower(8-maxTotalBits),
@@ -68,7 +68,7 @@ public class ConvertToByte_From16BitUnsigned extends ConvertToByte {
 		
 		int indOut = 0;
 		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int s = (int) DataTools.bytesToShort( src, indIn + (c_rel*2), 2, littleEndian);
+			int s = (int) DataTools.bytesToShort( src, indIn + (channelRelative*2), 2, littleEndian);
 			
 			// Make unsigned
 			if (s<0) {

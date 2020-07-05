@@ -122,7 +122,7 @@ public class PointsFromBinaryVoxelBox {
 		BinaryVoxelBox<ByteBuffer> voxelBox,
 		ReadableTuple3i add,
 		Collection<Point3d> out
-	) throws CreateException {
+	) {
 		
 		Extent e = voxelBox.extent();
 

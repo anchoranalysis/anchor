@@ -30,6 +30,13 @@ import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 
 import org.anchoranalysis.bean.Provider;
 
-public abstract class MPPProvider<BeanType,ProviderType> extends MPPBean<BeanType> implements Provider<ProviderType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> bean-type
+ * @param <S> provider-type
+ */
+public abstract class MPPProvider<T,S> extends MPPBean<T> implements Provider<S> {
 
 }

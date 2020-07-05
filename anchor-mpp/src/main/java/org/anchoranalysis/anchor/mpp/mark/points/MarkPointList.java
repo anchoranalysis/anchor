@@ -86,12 +86,12 @@ public class MarkPointList extends MarkAbstractPointList {
 	}
 
 	@Override
-	public void scale(double mult_factor) throws OptionalOperationUnsupportedException {
+	public void scale(double multFactor) throws OptionalOperationUnsupportedException {
 
 		for( int i=0; i<getPoints().size(); i++) {
 			
 			Point3d pnt = getPoints().get(i); 
-			pnt.scale(mult_factor);
+			pnt.scale(multFactor);
 		}
 	}
 

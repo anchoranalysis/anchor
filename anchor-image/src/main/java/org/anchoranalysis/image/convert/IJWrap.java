@@ -212,11 +212,8 @@ public class IJWrap {
 	private static void maybeCorrectComposite( Stack stack, ImagePlus imp ) {
 		
 		// Avoids IMP being set to composite mode, if it's a single channel stack
-		if (stack.getNumChnl()==1) {
-			
-			if (imp instanceof CompositeImage) {
-				((CompositeImage)imp).setMode(IJ.GRAYSCALE);
-			}
+		if (stack.getNumChnl()==1 && imp instanceof CompositeImage) {
+			((CompositeImage)imp).setMode(IJ.GRAYSCALE);
 		}		
 	}
 	

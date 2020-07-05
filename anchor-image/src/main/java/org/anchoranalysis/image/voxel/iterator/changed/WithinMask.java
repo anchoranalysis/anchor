@@ -53,7 +53,6 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 	
 	// Current ByteBuffer for the object mask
 	private ByteBuffer bbOM;
-	private int z1;
 	private byte maskOffVal;
 	
 	private int maskOffsetXYAtPnt;
@@ -78,7 +77,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 
 	@Override
 	public boolean notifyChangeZ(int zChange) {
-		z1 = pnt.getZ() + zChange;
+		int z1 = pnt.getZ() + zChange;
 		
 		int relZ1 = relativeToCrnr.getZ() + zChange;
 		

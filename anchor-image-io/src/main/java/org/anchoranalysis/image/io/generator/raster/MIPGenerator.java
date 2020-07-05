@@ -55,9 +55,7 @@ public class MIPGenerator extends RasterGenerator implements IterableObjectGener
 	public Stack generate() throws OutputWriteFailedException {
 		
 		Stack stack = delegate.getIterableElement();
-		
-		Stack mip = stack.maxIntensityProj();
-		return mip;
+		return stack.maxIntensityProj();
 	}
 
 	@Override

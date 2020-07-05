@@ -36,34 +36,21 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class ManifestRecorderFile extends CachedOperation<ManifestRecorder,OperationFailedException> {
 
-	private File file;
-	private ManifestDeserializer manifestDeserializer;
-
-	//private static Log log = LogFactory.getLog(ManifestRecorderFile.class);
-	
-	public ManifestRecorderFile(File file, ManifestDeserializer manifestDeserializer) {
-		super();
-		this.file = file;
-		this.manifestDeserializer = manifestDeserializer;
-	}
+	private final File file;
+	private final ManifestDeserializer manifestDeserializer;
 
 	@Override
 	protected ManifestRecorder execute() throws OperationFailedException {
-
 		try {
-			//StopWatch sw = new StopWatch();
-			//sw.start();
-			
 			if (!file.exists()) {
 				throw new OperationFailedException( String.format("File %s cannot be found",file.getPath()) );
 			}
-			
-			//log.info( String.format("File %s deserialization started", file.getPath() ) );
-			ManifestRecorder manifestRecorder = manifestDeserializer.deserializeManifest(file);
-			//log.info( String.format("File %s deserialization ended (%dms)", file.getPath(), ((int) (sw.getTime())) ) );
-			return manifestRecorder;
+			return manifestDeserializer.deserializeManifest(file);
 		} catch (DeserializationFailedException e) {
 			throw new OperationFailedException(e);
 		}

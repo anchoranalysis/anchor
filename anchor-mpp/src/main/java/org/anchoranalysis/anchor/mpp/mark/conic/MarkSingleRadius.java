@@ -31,16 +31,13 @@ import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.squared;
 import java.io.Serializable;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
 
 /** Base-class for a conic that has a single radius (circle, sphere etc.) */
 public abstract class MarkSingleRadius extends MarkAbstractPosition implements Serializable {
@@ -50,9 +47,9 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
-	private static byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
-	private static byte FLAG_SUBMARK_SHELL = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_SHELL );
+	private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
+	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
+	private static final byte FLAG_SUBMARK_SHELL = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_SHELL );
 		
 	// START mark state
 	private double radius;
@@ -61,7 +58,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
     private double radiusSq;
     private double radiusExtraSq;
     
-    private static double SphereExtraRad = 2;
+    private static final double SPHERE_EXTRA_RAD = 2;
     
 	private Bound boundRadius;
 	
@@ -102,25 +99,19 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	 * 
 	 */
 	@Override
-	public void scale( double mult_factor )  {
-		super.scale(mult_factor);
+	public void scale( double multFactor )  {
+		super.scale(multFactor);
 		
 		if (this.boundRadius!=null) {
 			this.boundRadius = this.boundRadius.duplicate();
-			this.boundRadius.scale( mult_factor );
+			this.boundRadius.scale( multFactor );
 		}
 		
-		setRadius( this.radius * mult_factor );
+		setRadius( this.radius * multFactor );
 	}
-	
-    public boolean randomizeMarks( RandomNumberGenerator re, ImageResolution sr, BoundCalculator boundGenerator ) {
-    	setRadius( this.boundRadius.rslv(sr, false).randOpen( re ) );
-    	return true;
-    }
     
 	@Override
 	public BoundingBox bbox( ImageDimensions bndScene, int regionID ) {
-
 		// TODO should we have the extra 0.5 here?
 		return BoundingBoxCalculator.bboxFromBounds(
 			getPos(),
@@ -201,7 +192,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 		this.radius = radius;
 		
     	this.radiusSq = squared(radius);
-    	this.radiusExtraSq = squared(radius + SphereExtraRad);
+    	this.radiusExtraSq = squared(radius + SPHERE_EXTRA_RAD);
 	}
 	
 	public double getRadius() {
@@ -209,7 +200,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	}
 	
 	protected double radiusForRegion( int regionID ) {
-		return regionID==GlobalRegionIdentifiers.SUBMARK_INSIDE ? radius : radius + SphereExtraRad; 
+		return regionID==GlobalRegionIdentifiers.SUBMARK_INSIDE ? radius : radius + SPHERE_EXTRA_RAD; 
 	}
 	
 	protected double radiusForRegionSquared( int regionID ) {

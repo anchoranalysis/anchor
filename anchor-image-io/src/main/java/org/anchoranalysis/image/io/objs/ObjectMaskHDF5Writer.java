@@ -123,7 +123,6 @@ class ObjectMaskHDF5Writer {
 	}
 	
 	private static int[] dimsFromExtnt( Extent e ) {
-		int[] adims = { e.getX(), e.getY(), e.getZ() };
-		return adims;
+		return new int[]{ e.getX(), e.getY(), e.getZ() };
 	}
 }

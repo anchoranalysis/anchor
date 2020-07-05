@@ -113,7 +113,7 @@ public class RGBObjMaskGeneratorCropped extends RGBObjMaskGeneratorBaseWithBackg
 		);
 	}
 	
-	private static ObjectCollectionWithProperties relTo(ObjectCollection in, BoundingBox src ) throws CreateException {
+	private static ObjectCollectionWithProperties relTo(ObjectCollection in, BoundingBox src ) {
 		
 		ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
 		

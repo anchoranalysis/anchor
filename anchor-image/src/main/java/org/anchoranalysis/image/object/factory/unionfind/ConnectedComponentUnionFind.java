@@ -223,8 +223,7 @@ public class ConnectedComponentUnionFind {
 		ObjectCollection omc
 	) throws OperationFailedException {
 		
-		for( Integer bigID : mapIDOrdered.keySet()) {
-			int smallID = mapIDOrdered.get(bigID);
+		for( int smallID : mapIDOrdered.values()) {
 			
 			PointRangeWithCount bboxWithCnt = bboxArr[smallID-1];
 			

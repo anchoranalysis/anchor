@@ -41,7 +41,7 @@ import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 
-class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
+class ReadObjsFromHDF5 implements Deserializer<ObjectCollection> {
 
 	private ObjMaskHDF5Reader objReader = new ObjMaskHDF5Reader();
 	

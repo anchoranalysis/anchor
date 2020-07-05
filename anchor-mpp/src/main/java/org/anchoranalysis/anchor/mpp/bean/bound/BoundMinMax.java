@@ -77,8 +77,8 @@ public abstract class BoundMinMax extends Bound {
 	}
 	
 	@Override
-	public void scale( double mult_factor ) {
-		delegate.scale(mult_factor);
+	public void scale( double multFactor ) {
+		delegate.scale(multFactor);
 	}
 
 	public RslvdBound getDelegate() {

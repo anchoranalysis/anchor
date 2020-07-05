@@ -124,24 +124,24 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		Point3d ptRunning = new Point3d();
 		ptRunning.setZ( z + 0.5 );
 		
-		int z_local = z - bbox.cornerMin().getZ();
+		int zLocal = z - bbox.cornerMin().getZ();
 		
 		List<RegionMembershipWithFlags> listRegionMembership = regionMap.createListMembershipWithFlags();
 		
-		ByteBuffer buffer = getObjMask().getVoxelBox().getPixelsForPlane(z_local).buffer();
+		ByteBuffer buffer = getObjMask().getVoxelBox().getPixelsForPlane(zLocal).buffer();
 		
 		for (int y=bbox.cornerMin().getY(); y<=crnrMax.getY(); y++) {
 			ptRunning.setY( y + 0.5 );
 			
-			int y_local = y - bbox.cornerMin().getY();
+			int yLocal = y - bbox.cornerMin().getY();
 			
 			for (int x=bbox.cornerMin().getX(); x<=crnrMax.getX(); x++) {
 				
 				ptRunning.setX( x + 0.5 );
 								
-				int x_local = x - bbox.cornerMin().getX();
+				int xLocal = x - bbox.cornerMin().getX();
 				
-				int localOffset = localExtnt.offset(x_local, y_local);
+				int localOffset = localExtnt.offset(xLocal, yLocal);
 				int globalOffset = sd.offset(x, y);
 				
 				byte membership = mark.evalPntInside( new Point3d(ptRunning) );
@@ -155,7 +155,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 					partitionList,
 					bufferArrList,
 					globalOffset,
-					z_local
+					zLocal
 				);
 			}
 		}

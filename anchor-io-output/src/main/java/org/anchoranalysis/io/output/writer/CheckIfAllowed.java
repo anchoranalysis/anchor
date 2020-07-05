@@ -42,7 +42,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CheckIfAllowed extends Writer {
+public class CheckIfAllowed implements Writer {
 	
 	// START REQUIRED ARGUMENTS
 	/** The associated output-manager */

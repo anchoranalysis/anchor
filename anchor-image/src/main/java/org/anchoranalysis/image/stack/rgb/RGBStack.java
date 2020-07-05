@@ -53,7 +53,7 @@ public class RGBStack {
 		chnls = new Stack(sd, factory, 3);
 	}
 	
-	public RGBStack( Stack in ) throws CreateException {
+	public RGBStack( Stack in ) {
 		chnls = in;
 	}
 	
@@ -65,7 +65,7 @@ public class RGBStack {
 		chnls = src.chnls.duplicate();
 	}
 	
-	public RGBStack( Channel red, Channel green, Channel blue) throws CreateException, IncorrectImageSizeException {
+	public RGBStack( Channel red, Channel green, Channel blue) throws IncorrectImageSizeException {
 		chnls = new Stack();
 		chnls.addChnl( red );
 		chnls.addChnl( green );

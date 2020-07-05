@@ -43,7 +43,7 @@ import org.anchoranalysis.io.manifest.deserializer.folder.LoadContainer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.manifest.serialized.SerializedObjectSetFolderSource;
 
-class ReadObjsFromTIFFDirectory extends Deserializer<ObjectCollection> {
+class ReadObjsFromTIFFDirectory implements Deserializer<ObjectCollection> {
 	
 	@Override
 	public ObjectCollection deserialize(Path folderPath) throws DeserializationFailedException {
@@ -56,7 +56,7 @@ class ReadObjsFromTIFFDirectory extends Deserializer<ObjectCollection> {
 	private ObjectCollection readWithRaster( Path folderPath, RasterReader rasterReader ) throws DeserializationFailedException {
 		
 		try {
-			DeserializeFromFolder<ObjectMask> deserializeFolder = new DeserializeFromFolderSimple<ObjectMask>(
+			DeserializeFromFolder<ObjectMask> deserializeFolder = new DeserializeFromFolderSimple<>(
 				new ObjMaskDualDeserializer(rasterReader),
 				new SerializedObjectSetFolderSource(folderPath,"*.ser")
 			);

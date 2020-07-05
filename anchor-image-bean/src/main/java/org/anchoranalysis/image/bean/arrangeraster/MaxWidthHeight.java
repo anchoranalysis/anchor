@@ -34,8 +34,8 @@ import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 
 class MaxWidthHeight {
 	
-	private int rowMaxHeight[];
-	private int colMaxWidth[];
+	private int[] rowMaxHeight;
+	private int[] colMaxWidth;
 	private int totalHeight;
 	private int totalWidth;
 	private int maxZ;

@@ -32,9 +32,8 @@ import java.io.Serializable;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class CfgWithNrgTotal implements Serializable {
+public class CfgWithNRGTotal implements Serializable {
 
     /**
 	 * 
@@ -50,30 +49,30 @@ public class CfgWithNrgTotal implements Serializable {
     // Associated NRG Scheme, which should include the NRGSavedPairs
     private transient NRGSchemeWithSharedFeatures nrgScheme;
     
-    public CfgWithNrgTotal( Cfg cfg, NRGSchemeWithSharedFeatures nrgScheme ) {
+    public CfgWithNRGTotal( Cfg cfg, NRGSchemeWithSharedFeatures nrgScheme ) {
     	this.cfg = cfg;
     	this.nrgScheme = nrgScheme;
     	
     	this.nrgTotal = 0;
     }
 
-	public CfgWithNrgTotal shallowCopy() {
-		CfgWithNrgTotal out = new CfgWithNrgTotal( this.cfg, this.nrgScheme );
+	public CfgWithNRGTotal shallowCopy() {
+		CfgWithNRGTotal out = new CfgWithNRGTotal( this.cfg, this.nrgScheme );
 		out.nrgTotal = this.nrgTotal;
 		return out;
 	}
 	
-	public CfgWithNrgTotal deepCopy() {
-		CfgWithNrgTotal out = new CfgWithNrgTotal( this.cfg.deepCopy(), this.nrgScheme );
+	public CfgWithNRGTotal deepCopy() {
+		CfgWithNRGTotal out = new CfgWithNRGTotal( this.cfg.deepCopy(), this.nrgScheme );
 		out.nrgTotal = this.nrgTotal;
 		return out;
 	}
 	
-	public CfgWithNrgTotal deepCopyCfgShallowRest() {
+	public CfgWithNRGTotal deepCopyCfgShallowRest() {
 		
 		Cfg newCfg = this.cfg.deepCopy();
 		
-		CfgWithNrgTotal out = new CfgWithNrgTotal(newCfg, this.nrgScheme);
+		CfgWithNRGTotal out = new CfgWithNRGTotal(newCfg, this.nrgScheme);
 		out.nrgTotal = this.nrgTotal;
 		return out;
 	}
@@ -90,9 +89,7 @@ public class CfgWithNrgTotal implements Serializable {
 		return nrgScheme;
 	}
 	
-
-	
-	public void add( PxlMarkMemo newPxlMarkMemo ) throws FeatureCalcException {
+	public void add( PxlMarkMemo newPxlMarkMemo ) {
 		Cfg newCfg = this.cfg.shallowCopy();
 		newCfg.add(newPxlMarkMemo.getMark());
 		// We adopt the new configuration
@@ -115,7 +112,7 @@ public class CfgWithNrgTotal implements Serializable {
 	
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
-	public void exchange( int index, PxlMarkMemo newMark ) throws FeatureCalcException {
+	public void exchange( int index, PxlMarkMemo newMark ) {
 		
 		// We shallow copy the existing configuration
 		Cfg newCfg = this.cfg.shallowCopy();

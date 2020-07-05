@@ -35,41 +35,57 @@ import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.bean.root.SplitPath;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Rooted extends FilePathGenerator {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FilePathGenerator item;
 	
 	// The name of the RootPath to associate with this fileset
-	@BeanField
+	@BeanField @Getter @Setter
 	private String rootName;
 	
 	/**
 	 * if TRUE, the root is not added to the outFilePath, and the path is instead localized against the location of the BeanXML. if FALSE, nothing is changed
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressRootOut = false;
 	
 	/**
 	 * if TRUE, the pathIn and pathOut are logged. Useful for debugging
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean logPath = false;
 	// END BEAN PROPERTIES
 
 	private Logger logger = Logger.getLogger(Rooted.class.getName());
-	
-	public void setSuppressRootOut(boolean suppressRootOut) {
-		this.suppressRootOut = suppressRootOut;
-	}
 
 	@Override
 	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		
-		SplitPath pathInWithoutRoot = RootPathMap.instance().split(pathIn, rootName, debugMode);		
+		SplitPath pathInWithoutRoot = RootPathMap.instance().split(
+			pathIn,
+			rootName,
+			debugMode
+		);		
+				
+		Path pathOut = determinePathOut(pathInWithoutRoot, debugMode);
+		if (logPath) {
+			logger.info( () -> String.format("pathIn=%s", pathIn) );
+			logger.info( () -> String.format("pathOut=%s", pathOut) );
+		}
+		return pathOut;
+	}
+	
+	private Path determinePathOut(SplitPath pathInWithoutRoot, boolean debugMode) throws AnchorIOException {
 		
-		Path pathOut = item.outFilePath(pathInWithoutRoot.getPath(), debugMode);
+		Path pathOut = item.outFilePath(
+			pathInWithoutRoot.getPath(),
+			debugMode
+		);
 		
 		if (suppressRootOut) {
 			pathOut = BeanPathUtilities.combine( getLocalPath(), pathOut );
@@ -77,40 +93,6 @@ public class Rooted extends FilePathGenerator {
 			pathOut = pathInWithoutRoot.getRoot().resolve(pathOut);
 		}
 		
-		if (logPath) {
-			logger.info( String.format("pathIn=%s", pathIn) );
-			logger.info( String.format("pathOut=%s", pathOut) );
-		}
-		
 		return pathOut;
 	}
-	
-	public FilePathGenerator getItem() {
-		return item;
-	}
-
-	public void setItem(FilePathGenerator item) {
-		this.item = item;
-	}
-
-	public boolean isLogPath() {
-		return logPath;
-	}
-
-	public void setLogPath(boolean logPath) {
-		this.logPath = logPath;
-	}
-
-	public boolean isSuppressRootOut() {
-		return suppressRootOut;
-	}
-
-	public String getRootName() {
-		return rootName;
-	}
-
-	public void setRootName(String rootName) {
-		this.rootName = rootName;
-	}
-
 }

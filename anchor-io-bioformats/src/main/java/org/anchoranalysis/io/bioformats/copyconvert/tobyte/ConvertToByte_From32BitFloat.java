@@ -36,7 +36,8 @@ import loci.common.DataTools;
 
 public class ConvertToByte_From32BitFloat extends ConvertToByte {
 
-	private int BYTES_PER_PIXEL = 4;
+	private static final int BYTES_PER_PIXEL = 4;
+	
 	private int sizeXY;
 	private int sizeBytes;
 	
@@ -54,7 +55,7 @@ public class ConvertToByte_From32BitFloat extends ConvertToByte {
 	}
 
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 		byte[] crntChnlBytes = new byte[sizeXY];
 		
 		int indOut = 0;

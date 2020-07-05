@@ -38,7 +38,6 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
@@ -66,18 +65,13 @@ public class CSVWriter implements AutoCloseable {
 		if (!outputManager.isOutputAllowed(outputName)) {
 			return Optional.empty();
 		}
-		
-		Optional<FileOutput> output;
-		try {
-			output = FileOutputFromManager.create(
-				"csv",
-				Optional.empty(),
-				outputManager,
-				outputName
-			);
-		} catch (OutputWriteFailedException e) {
-			throw new AnchorIOException("Cannot write csv output", e);
-		}
+
+		Optional<FileOutput> output = FileOutputFromManager.create(
+			"csv",
+			Optional.empty(),
+			outputManager,
+			outputName
+		);
 		
 		OptionalUtilities.ifPresent(output, FileOutput::start);
 		return output.map(CSVWriter::new);

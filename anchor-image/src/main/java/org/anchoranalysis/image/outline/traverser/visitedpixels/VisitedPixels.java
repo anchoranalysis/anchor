@@ -31,7 +31,6 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.CombineToOnePath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.FindMinDistance;
@@ -67,8 +66,8 @@ public class VisitedPixels {
 		
 	/** Combines all the contiguous paths to a single-path 
 	 * @throws OperationFailedException */
-	public ContiguousPixelPath combineToOnePath( Extent extent ) throws OperationFailedException {
-		return CombineToOnePath.combineToOnePath(paths );
+	public ContiguousPixelPath combineToOnePath() throws OperationFailedException {
+		return CombineToOnePath.combineToOnePath(paths);
 	}
 
 	@Override

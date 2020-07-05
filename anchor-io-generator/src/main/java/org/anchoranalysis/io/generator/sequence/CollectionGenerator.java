@@ -82,8 +82,7 @@ public class CollectionGenerator<T> implements Generator, IterableGenerator<Coll
 		
 		// In this context, we take the index as an indication of the first id to use - and assume the String index is a number
 		int indexInt = Integer.parseInt(index);
-		int numWritten = writeCollection( subfolderName, outputNameStyle, indexInt );
-		return numWritten;
+		return writeCollection( subfolderName, outputNameStyle, indexInt );
 	}
 	
 	private int writeCollection( String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex ) throws OutputWriteFailedException {

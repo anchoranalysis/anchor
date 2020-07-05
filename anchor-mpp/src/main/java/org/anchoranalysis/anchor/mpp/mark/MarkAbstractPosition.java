@@ -73,13 +73,13 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
    
     
     @Override
-	public void scale( double mult_factor ) {
-    	scaleXYPnt(this.pos,mult_factor);
+	public void scale( double multFactor ) {
+    	scaleXYPnt(this.pos,multFactor);
     }
     
-    public static void scaleXYPnt( Point3d pnt, double mult_factor ) {
-    	pnt.setX( pnt.getX() * mult_factor ); 
-    	pnt.setY( pnt.getY() * mult_factor );
+    public static void scaleXYPnt( Point3d pnt, double multFactor ) {
+    	pnt.setX( pnt.getX() * multFactor ); 
+    	pnt.setY( pnt.getY() * multFactor );
     }
     
 	@Override

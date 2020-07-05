@@ -67,9 +67,7 @@ public class MergeCandidate {
 	 * @return the number of pixels removed
 	 */
 	public int merge() {
-		
 		MergeStrategy strategy = FindMergeStrategy.apply(keep,merge);
-		System.out.printf("DEBUG Merging with strategy=%s%n", strategy);
 		strategy.applyStrategy(this);
 		return strategy.getCost();
 	}

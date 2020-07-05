@@ -26,7 +26,7 @@ package org.anchoranalysis.io.bioformats;
  * #L%
  */
 
-import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 import java.util.function.Function;
 
 import org.anchoranalysis.core.geometry.Point3d;
@@ -80,7 +80,7 @@ public class DimensionsCreator {
 		);
 	}
 	
-	private void metadataDim( Function<IMetadata,Length> funcDimRes, Consumer<Double> setter ) {
+	private void metadataDim( Function<IMetadata,Length> funcDimRes, DoubleConsumer setter ) {
 		Length len = funcDimRes.apply(lociMetadata);
 		if (len!=null) {
 			Double dbl = len.value( UNITS.METER ).doubleValue();

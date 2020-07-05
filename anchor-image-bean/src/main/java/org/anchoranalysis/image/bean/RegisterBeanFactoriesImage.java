@@ -48,7 +48,7 @@ public class RegisterBeanFactoriesImage {
 	public static void registerBeanFactories() {
 		RegisterBeanFactories.register(
 			"featureList",
-			(List<Feature<FeatureInput>> list) -> FeatureListFactory.wrapReuse(list)	// SONAR
+			(List<Feature<FeatureInput>> list) -> FeatureListFactory.wrapReuse(list)	// NOSONAR
 		);
 	}
 }

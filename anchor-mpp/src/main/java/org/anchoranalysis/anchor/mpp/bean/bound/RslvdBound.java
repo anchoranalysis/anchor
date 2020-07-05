@@ -88,9 +88,9 @@ public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
 		return String.format("rslvdBound(min=%f,max=%f)", getMin(), getMax());
 	}
 	
-	public void scale( double mult_factor ) {
-		this.min = this.min * mult_factor;
-		this.max = this.max * mult_factor;
+	public void scale( double multFactor ) {
+		this.min = this.min * multFactor;
+		this.max = this.max * multFactor;
 	}
 	
 	// A random value between the bounds (open interval)

@@ -90,8 +90,8 @@ public class GlobExtractor {
 	}
 	
 	private static int positionFinalSlashBeforeWildcard( String str ) {
-		int firstWildcardPos = str.indexOf("*");
+		int firstWildcardPos = str.indexOf('*');
 		String strWithoutWildcard = str.substring(0, firstWildcardPos);
-		return strWithoutWildcard.lastIndexOf("/");
+		return strWithoutWildcard.lastIndexOf('/');
 	}
 }

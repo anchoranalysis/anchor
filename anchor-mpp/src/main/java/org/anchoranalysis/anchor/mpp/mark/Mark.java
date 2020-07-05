@@ -29,8 +29,7 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.util.function.Function;
-
+import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.anchor.overlay.id.Identifiable;
@@ -96,8 +95,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	public int getCacheID() {
 		return cacheID;
 	}
-	
-	
+		
 	public void assignFrom( Mark srcMark ) throws OptionalOperationUnsupportedException {
 		// We deliberately don't copy the ID		
 		if (srcMark.cacheID!=null) {
@@ -107,7 +105,6 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		}
 	}
 		
-	
 	// We can define an alternative "quick" metric for overlap
 	//  for a mark, which takes the place of the voxel by
 	//  voxel bounding box comparison
@@ -150,7 +147,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	@Override
 	public abstract String toString();
 
-	public abstract void scale( double mult_factor ) throws OptionalOperationUnsupportedException;
+	public abstract void scale( double multFactor ) throws OptionalOperationUnsupportedException;
 
 	public abstract int numDims();
 	
@@ -204,8 +201,8 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
-			int z_local = pnt.getZ() - bbox.cornerMin().getZ();
-			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
+			int zLocal = pnt.getZ() - bbox.cornerMin().getZ();
+			ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 
 			int cnt = 0;
 			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
@@ -214,7 +211,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 					byte membership = evalPntInside(pnt);
 					
 					if (rm.isMemberFlag(membership)) {
-						mask_slice.put(cnt, maskOn);
+						maskSlice.put(cnt, maskOn);
 					}
 					cnt++;
 					
@@ -247,8 +244,8 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		Point3d pntScaled = new Point3d();
 		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
 			
-			int z_local = pnt.getZ() - bbox.cornerMin().getZ();
-			ByteBuffer mask_slice = mask.getVoxelBox().getPixelsForPlane(z_local).buffer();
+			int zLocal = pnt.getZ() - bbox.cornerMin().getZ();
+			ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 
 			// Z co-ordinates are the same as we only scale in XY
 			pntScaled.setZ( pnt.getZ() );
@@ -263,7 +260,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 					byte membership = evalPntInside(pntScaled);
 					
 					if (rm.isMemberFlag(membership)) {
-						mask_slice.put(cnt, maskOn);
+						maskSlice.put(cnt, maskOn);
 					}
 					cnt++;
 					
@@ -319,8 +316,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 			UnitSuffix unit = numDims()==3 ? 
 				UnitSuffix.CUBIC_MICRO : UnitSuffix.SQUARE_MICRO;
 			
-			Function<Double,Double> conversionFunc = numDims()==3 ?
-				res::convertVolume : res::convertArea;
+			DoubleUnaryOperator conversionFunc = numDims()==3 ?	res::convertVolume : res::convertArea;
 				
 			nvc.addWithUnits(
 				String.format("%s [geom] %d",name, r),

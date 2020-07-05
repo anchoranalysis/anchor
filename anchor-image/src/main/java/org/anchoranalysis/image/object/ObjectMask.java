@@ -467,7 +467,7 @@ public class ObjectMask {
 	 * @param maskMatchValue mask-value to match against for second mask
 	 * @return the total number of pixels written
 	 */
-	private static int setPixelsTwoMasks(
+	private static int setPixelsTwoMasks(	// NOSONAR
 		VoxelBox<ByteBuffer> vbMaskOut,
 		VoxelBox<ByteBuffer> voxelBox1,
 		VoxelBox<ByteBuffer> voxelBox2,

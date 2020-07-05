@@ -28,7 +28,7 @@ package org.anchoranalysis.image.channel;
 
 
 import java.nio.Buffer;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -59,7 +59,7 @@ public class Channel {
 
 	private static final Interpolator DEFAULT_INTERPOLATOR = new InterpolatorImgLib2Lanczos();
 	
-	private static ChannelFactory FACTORY = ChannelFactory.instance();
+	private static final ChannelFactory FACTORY = ChannelFactory.instance();
 	
 	private ImageDimensions dim;
 	private VoxelBox<? extends Buffer> delegate;
@@ -192,7 +192,7 @@ public class Channel {
 	 * @param flattenFunc function to perform the flattening
 	 * @return flattened box (i.e. 2D)
 	 */
-	private Channel flattenZProjection( Function<VoxelBox<? extends Buffer>,VoxelBox<? extends Buffer>> flattenFunc ) {
+	private Channel flattenZProjection( UnaryOperator<VoxelBox<? extends Buffer>> flattenFunc ) {
 		int prevZSize = delegate.extent().getZ();
 		return FACTORY.create(
 			flattenFunc.apply(delegate),

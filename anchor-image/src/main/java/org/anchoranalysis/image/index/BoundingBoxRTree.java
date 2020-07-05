@@ -49,7 +49,7 @@ public class BoundingBoxRTree {
 	private float[] singlePointExtnt = new float[]{1,1,1};
 	
 	// TODO. How does this affect our memory profile?  Should we restrict it when we can
-	private static int DEFAULT_MAX_ENTRIES = 10000;
+	private static final int DEFAULT_MAX_ENTRIES = 10000;
 	
 	public BoundingBoxRTree( int maxEntriesSuggested ) {
 		// We insist that maxEntries is at least twice the minimum num items

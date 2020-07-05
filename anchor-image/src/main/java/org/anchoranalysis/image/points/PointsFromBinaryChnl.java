@@ -39,7 +39,7 @@ public class PointsFromBinaryChnl {
 	
 	private PointsFromBinaryChnl() {}
 	
-	public static List<Point3i> pointsFromChnl( BinaryChnl chnl ) throws CreateException {
+	public static List<Point3i> pointsFromChnl( BinaryChnl chnl ) {
 		
 		List<Point3i> listOut = new ArrayList<>();
 		
@@ -52,7 +52,7 @@ public class PointsFromBinaryChnl {
 		return PointsFromBinaryVoxelBox.pointsFromVoxelBox2D( chnl.binaryVoxelBox() );
 	}
 	
-	public static List<Point3i> pointsFromChnlInsideBox( BinaryChnl chnl, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices ) throws CreateException {
+	public static List<Point3i> pointsFromChnlInsideBox( BinaryChnl chnl, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices ) {
 		
 		List<Point3i> listOut = new ArrayList<>();
 		

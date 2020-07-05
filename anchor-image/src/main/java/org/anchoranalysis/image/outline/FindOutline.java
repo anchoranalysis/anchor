@@ -30,7 +30,6 @@ package org.anchoranalysis.image.outline;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
@@ -61,17 +60,13 @@ public class FindOutline {
 	
 	private FindOutline() {}
 	
-	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) throws CreateException {
+	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) {
 		// We create a new image for output
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
 		BinaryChnl chnlOutBinary = new BinaryChnl(chnlOut, chnl.getBinaryValues());
 		
 		// Gets outline
-		try {
-			outlineChnlInto( chnl, chnlOutBinary, do3D, erodeEdges );
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+		outlineChnlInto( chnl, chnlOutBinary, do3D, erodeEdges );
 		
 		return chnlOutBinary;
 	}
@@ -90,7 +85,7 @@ public class FindOutline {
 
 	}
 
-	private static BinaryVoxelBox<ByteBuffer> outlineMultiplex( BinaryVoxelBox<ByteBuffer> voxelBox, int numberErosions, boolean erodeEdges, boolean do3D) throws CreateException {
+	private static BinaryVoxelBox<ByteBuffer> outlineMultiplex( BinaryVoxelBox<ByteBuffer> voxelBox, int numberErosions, boolean erodeEdges, boolean do3D) {
 		// If we just want an edge of size 1, we can do things more optimally
 		if (numberErosions==1) {
 			return outlineByKernel(voxelBox, erodeEdges, do3D);
@@ -100,7 +95,7 @@ public class FindOutline {
 	}
 		
 	// Assumes imgChnlOut has the same ImgChnlRegions
-	private static void outlineChnlInto( BinaryChnl imgChnl, BinaryChnl imgChnlOut, boolean do3D, boolean erodeEdges ) throws OperationFailedException {
+	private static void outlineChnlInto( BinaryChnl imgChnl, BinaryChnl imgChnlOut, boolean do3D, boolean erodeEdges ) {
 
 		BinaryVoxelBox<ByteBuffer> box = new BinaryVoxelBoxByte( imgChnl.getVoxelBox(), imgChnl.getBinaryValues() );
 		

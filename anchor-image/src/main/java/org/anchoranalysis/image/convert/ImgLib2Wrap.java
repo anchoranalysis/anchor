@@ -178,7 +178,7 @@ public class ImgLib2Wrap {
 	) {
 		Extent e = box.extent();
 		
-		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
+		long[] dim = new long[]{e.getX(),e.getY(),e.getZ()};
 		
 		PlanarImg<S,T> img = new PlanarImg<>(
 			slicesFor(box, transform),
@@ -202,7 +202,7 @@ public class ImgLib2Wrap {
 		Function<U,T> transform,
 		Function<AbstractNativeImg<S,T>,S> createType
 	) {
-		long dim[] = new long[]{e.getX(),e.getY()};
+		long[] dim = new long[]{e.getX(),e.getY()};
 		ArrayImg<S, T> img = new ArrayImg<>(
 			transform.apply(buffer.buffer()),
 			dim,

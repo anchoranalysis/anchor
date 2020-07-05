@@ -91,9 +91,7 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
 
 	@Override
 	public double quantile(double quantile) {
-		// TODO currently unspported
-		assert false;
-		return -1;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

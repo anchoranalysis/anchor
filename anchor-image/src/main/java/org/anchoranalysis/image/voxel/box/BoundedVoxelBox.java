@@ -67,7 +67,6 @@ public class BoundedVoxelBox<T extends Buffer> {
 	public BoundedVoxelBox(BoundingBox boundingBox, VoxelBoxFactoryTypeBound<T> factory) {
 		this.boundingBox = boundingBox;
 		this.voxelBox = factory.create( boundingBox.extent() );
-		assert(sizesMatch());
 	}
 	
 	public BoundedVoxelBox(VoxelBox<T> voxelBox ) {
@@ -294,14 +293,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 			voxelBoxOut
 		);
 	}
-	
-	private boolean sizesMatch() {
-		boolean xCrct = ((this.getBoundingBox().extent().getX())==getVoxelBox().extent().getX());
-		boolean yCrct = ((this.getBoundingBox().extent().getY())==getVoxelBox().extent().getY());
-		boolean zCrct = ((this.getBoundingBox().extent().getZ())==getVoxelBox().extent().getZ());
-		return xCrct && yCrct && zCrct;
-	}
-	
+		
 	public BoundedVoxelBox<T> createMaxIntensityProjection() {
 		BoundingBox bboxNew = boundingBox.flattenZ();
 		return new BoundedVoxelBox<>(bboxNew,voxelBox.maxIntensityProj());
@@ -322,9 +314,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox<T> duplicate() {
-		BoundedVoxelBox<T> newMask = new BoundedVoxelBox<>(this);
-		assert(newMask.sizesMatch());
-		return newMask;
+		return new BoundedVoxelBox<>(this);
 	}
 	
 	public BoundingBox getBoundingBox() {

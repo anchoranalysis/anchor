@@ -27,7 +27,6 @@ package org.anchoranalysis.image.io.stack;
  */
 
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -49,7 +48,7 @@ public class ConvertDisplayStackToRGB {
 			} else {
 				throw new AnchorImpossibleSituationException();
 			}
-		} catch (IncorrectImageSizeException | CreateException e) {
+		} catch (IncorrectImageSizeException e) {
 			throw new AnchorImpossibleSituationException();
 		}
 	}
@@ -73,7 +72,7 @@ public class ConvertDisplayStackToRGB {
 			} else {
 				throw new AnchorImpossibleSituationException();
 			}
-		} catch (IncorrectImageSizeException | CreateException e) {
+		} catch (IncorrectImageSizeException e) {
 			// This should not be possible
 			throw new AnchorImpossibleSituationException();
 		}

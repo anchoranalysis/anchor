@@ -102,12 +102,12 @@ public class OutlineTraverser {
 	
 		processQueue( queue, visitedPixels );
 				
-		return visitedPixels.combineToOnePath( omOutline.getBoundingBox().extent() );
+		return visitedPixels.combineToOnePath();
 	
 	}
 	
 	// process FIFO
-	private void processQueue( PriorityQueueVisit queue, VisitedPixels visitedPixels ) throws OperationFailedException {
+	private void processQueue( PriorityQueueVisit queue, VisitedPixels visitedPixels ) {
 		
 		while(true) {
 			
@@ -122,7 +122,7 @@ public class OutlineTraverser {
 		}
 	}
 		
-	private void visit( Point3iWithDist pntWithDist, PriorityQueueVisit queue, VisitedPixels visitedPixels ) throws OperationFailedException {
+	private void visit( Point3iWithDist pntWithDist, PriorityQueueVisit queue, VisitedPixels visitedPixels ) {
 		
 		Point3i pnt = pntWithDist.getPoint();
 
