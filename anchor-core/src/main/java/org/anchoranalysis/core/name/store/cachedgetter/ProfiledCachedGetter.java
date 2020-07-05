@@ -69,7 +69,7 @@ public class ProfiledCachedGetter<T, E extends Exception> extends WrapOperationA
 		// As a hack, we assume the exception type is always the same between calls to ProfiledCachedGetter
 		// This may not be valid in practice.
 		return ((MeasuringSemaphoreExecutor<E>) semaphore).execute(
-			super::execute,
+			() -> super.execute(),	// NOSONAR
 			name,
 			storeDisplayName,
 			logErrorReporter
