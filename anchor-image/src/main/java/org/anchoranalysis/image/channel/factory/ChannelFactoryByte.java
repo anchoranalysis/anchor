@@ -40,10 +40,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class ChannelFactoryByte extends ChannelFactorySingleType {
+public class ChannelFactoryByte implements ChannelFactorySingleType {
 
 	private static Log log = LogFactory.getLog(ChannelFactoryByte.class);
-	private static final VoxelDataTypeUnsignedByte DATA_TYPE = VoxelDataTypeUnsignedByte.instance;
+	private static final VoxelDataTypeUnsignedByte DATA_TYPE = VoxelDataTypeUnsignedByte.INSTANCE;
 	
 	private static final VoxelBoxFactoryTypeBound<ByteBuffer> FACTORY = VoxelBoxFactory.getByte();
 	

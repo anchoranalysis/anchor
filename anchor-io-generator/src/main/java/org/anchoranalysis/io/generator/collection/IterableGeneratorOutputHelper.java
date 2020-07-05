@@ -45,8 +45,12 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class IterableGeneratorOutputHelper {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class IterableGeneratorOutputHelper {
+	
 	// TODO remove padding for nrgStack and switch to single channel outputs
 	public static <T> void output( NamedProvider<T> providers, IterableGenerator<T> generator, BoundOutputManager outputManager, String outputName, String prefix, ErrorReporter errorReporter, boolean suppressSubfoldersIn ) {
 

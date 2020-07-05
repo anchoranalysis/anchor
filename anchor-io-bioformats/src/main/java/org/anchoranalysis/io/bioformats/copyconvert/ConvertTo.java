@@ -35,7 +35,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class ConvertTo<T extends Buffer> {
 
-	private static Log log = LogFactory.getLog(ConvertToByte.class);
+	private static Log log = LogFactory.getLog(ConvertTo.class);
 	
 	private Function<VoxelBoxWrapper,VoxelBox<T>> funcCastWrapper;
 	
@@ -81,15 +80,15 @@ public abstract class ConvertTo<T extends Buffer> {
 		
 		setupBefore(sd, numChnlsPerByteArray);
   		
-		for (int c_rel=0; c_rel<numChnlsPerByteArray; c_rel++) {
+		for (int channelRelative=0; channelRelative<numChnlsPerByteArray; channelRelative++) {
 		
-			VoxelBuffer<T> converted = convertSingleChnl(src, c_rel);
+			VoxelBuffer<T> converted = convertSingleChnl(src, channelRelative);
 			copyBytesIntoDestChnl(
 				converted,
 				funcCastWrapper,
 				dest,
 				z,
-				c_rel
+				channelRelative
 			);
 		}
 
@@ -107,19 +106,19 @@ public abstract class ConvertTo<T extends Buffer> {
 	/** Converts a single-channel only
 	 * 
 	 *  @param src source buffer containing the bytes we copy from
-	 *  @param c_rel 0 if the buffer contains only 1 channel per byte array, or otherwise the index of the channel
+	 *  @param cRel 0 if the buffer contains only 1 channel per byte array, or otherwise the index of the channel
 	 **/
-	protected abstract VoxelBuffer<T> convertSingleChnl( byte[] src, int c_rel ) throws IOException;
+	protected abstract VoxelBuffer<T> convertSingleChnl( byte[] src, int cRel ) throws IOException;
 		
 	public static <S extends Buffer> void copyBytesIntoDestChnl(
 		VoxelBuffer<S> voxelBuffer,
 		Function<VoxelBoxWrapper,VoxelBox<S>> funcCastWrapper,
 		DestChnlForIndex dest,
 		int z,
-		int c_rel
+		int cRel
 	) {
 		VoxelBox<S> vb = funcCastWrapper.apply(
-			dest.get(c_rel).getVoxelBox()
+			dest.get(cRel).getVoxelBox()
 		);
 		vb.getPlaneAccess().setPixelsForPlane( z, voxelBuffer );
 	}

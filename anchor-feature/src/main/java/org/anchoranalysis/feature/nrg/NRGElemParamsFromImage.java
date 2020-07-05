@@ -30,6 +30,7 @@ package org.anchoranalysis.feature.nrg;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.anchoranalysis.core.params.KeyValueParams;
 
@@ -44,7 +45,7 @@ public class NRGElemParamsFromImage implements Serializable {
 	private Map<String,Double> params;
 
 	public NRGElemParamsFromImage() {
-		params = new HashMap<String,Double>();
+		params = new HashMap<>();
 	}
 	
 	public boolean containsKey(String key) {
@@ -61,8 +62,11 @@ public class NRGElemParamsFromImage implements Serializable {
 	
 	public KeyValueParams createKeyValueParams() {
 		KeyValueParams out = new KeyValueParams();
-		for( String key : params.keySet() ) {
-			out.put(key, params.get(key));
+		for( Entry<String,Double> entry : params.entrySet() ) {
+			out.put(
+				entry.getKey(),
+				entry.getValue()
+			);
 		}
 		return out;
 	}

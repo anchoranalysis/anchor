@@ -60,10 +60,6 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		return delegate.add(e);
 	}
 
-//	public boolean addAll(Collection<? extends Overlay> c) {
-//		return delegate.addAll(c);
-//	}
-
 	@Override
 	public Iterator<Overlay> iterator() {
 		return delegate.iterator();
@@ -93,7 +89,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		for( int i=0; i<delegate.size(); i++ ) {
 			RGBColor col = colors.get(i);
 			Overlay ol = delegate.get(i);
-			sb.append( String.format("col=%s\tol=%s\n", col, ol) );
+			sb.append( String.format("col=%s\tol=%s%n", col, ol) );
 		}
 		sb.append("}\n");
 		return sb.toString();
@@ -124,10 +120,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 		return out;
 	}
 	
-	
-	
 	// TODO - make more efficient using RTrees
-	// Calculates mask
 	public ColoredOverlayCollection subsetWhereBBoxIntersects( ImageDimensions bndScene, OverlayWriter maskWriter, List<BoundingBox> intersectList ) {
 		
 		ColoredOverlayCollection out = new ColoredOverlayCollection();
@@ -140,15 +133,8 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 				out.add(overlay, getColor(i));
 			}
 		}
-		
-		//log.info( String.format("intersect size size=%d", intersectCfg.size() ));
-		
 		return out;
 	}
-	
-	
-	
-	
 	
 	// Everything from the two Cfgs which isn't in the intersection
 	public static OverlayCollection createIntersectionComplement( ColoredOverlayCollection cfg1, ColoredOverlayCollection cfg2 ) {

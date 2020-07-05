@@ -34,6 +34,10 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ProbMapUtilities {
 	
 	public static Point3d getUniformRandomPnt( RandomNumberGenerator re, ImageDimensions bndScene ) {
@@ -44,8 +48,6 @@ public class ProbMapUtilities {
     	pos.setZ( re.nextDouble() * (bndScene.getZ()-1) );
     	return pos;
     }
-	
-
     
     public static boolean accptPosBinary( VoxelBox<ByteBuffer> vb, Point3d pnt ) {
     	return accptPosBinary(vb, (int) pnt.getX(), (int) pnt.getY(), (int) pnt.getZ());

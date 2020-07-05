@@ -51,8 +51,8 @@ import com.google.common.collect.Comparators;
 
 public class GroupedResultsVectorCollection implements Closeable {
 
-	private final static String OUTPUT_NAME_FEATURES = "features";
-	private final static String OUTPUT_NAME_FEATURES_AGGREGATED = "featuresAggregated";
+	private static final String OUTPUT_NAME_FEATURES = "features";
+	private static final String OUTPUT_NAME_FEATURES_AGGREGATED = "featuresAggregated";
 	
 	private final MetadataHeaders metadata;
 	private final FeatureNameList featureNamesNonAggregate;
@@ -63,7 +63,7 @@ public class GroupedResultsVectorCollection implements Closeable {
 	 * A map which stores an aggregate structure for all entries (based on their unique names) and also on an aggregation-key extracted from the name
 	 */
 	private MapCreate<Optional<MultiName>,ResultsVectorCollection> map = new MapCreate<>(
-		() -> new ResultsVectorCollection(),
+		ResultsVectorCollection::new,
 		Comparators.emptiesFirst(Comparator.naturalOrder())
 	);
 	
@@ -108,12 +108,9 @@ public class GroupedResultsVectorCollection implements Closeable {
 	 *    featuresAggregatedGroup.xml	the aggregate-functions applied to this particular-group (in an XML format)
 	 * </pre>
 	 * 
-	 * @param featureNamesNonAggregate	names of feature functions (non-aggregate)
 	 * @param featuresAggregate			aggregate-features
 	 * @param includeGroups 			iff TRUE a group-column is included in the CSV file and the group exports occur, otherwise not
-	 * @param outputManager				the output-manager
-	 * @param logErrorReporter			logging and error-reporting
-	 * @throws IOException
+	 * @throws AnchorIOException
 	 */
 	public void writeResultsForAllGroups(
 		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
@@ -132,7 +129,6 @@ public class GroupedResultsVectorCollection implements Closeable {
 		if (featuresAggregate.isPresent()) {
 			writeAggregated(
 				featuresAggregate.get(),
-				includeGroups,
 				context,
 				contextGroups
 			);
@@ -152,7 +148,6 @@ public class GroupedResultsVectorCollection implements Closeable {
 	
 	private void writeAggregated(
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
-		boolean includeGroups,
 		BoundIOContext context,
 		CacheSubdirectoryContext contextGroups
 	) throws AnchorIOException {
@@ -163,12 +158,12 @@ public class GroupedResultsVectorCollection implements Closeable {
 			metadata.groupHeaders(),
 			featuresAggregate.createFeatureNames(),
 			context,
-			(name, results, writer) -> WriteGroupResults.maybeWriteAggregatedResultsForSingleGroup(
+			(name, results, csvWriter) -> WriteGroupResults.maybeWriteAggregatedResultsForSingleGroup(
 				name,
 				results,
 				featureNamesNonAggregate,
 				featuresAggregate,
-				writer,
+				csvWriter,
 				contextGroups.get(
 					name.map(MultiName::toString)
 				)

@@ -31,7 +31,7 @@ import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
-public class SeedObjMask extends Seed {
+public class SeedObjMask implements Seed {
 	
 	private ObjectMask om;
 	
@@ -72,10 +72,7 @@ public class SeedObjMask extends Seed {
 	public boolean equalsDeep(Seed other) {
 		if (other instanceof SeedObjMask) {
 			SeedObjMask otherCast = (SeedObjMask) other;
-			if (!om.equalsDeep(otherCast.om)) {
-				return false;
-			}
-			return true;
+			return om.equalsDeep(otherCast.om);
 		} else {
 			return false;
 		}

@@ -1,5 +1,9 @@
 package org.anchoranalysis.feature.input;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-feature
@@ -28,13 +32,11 @@ package org.anchoranalysis.feature.input;
 
 
 // When we don't care about parameters
+
+@EqualsAndHashCode(callSuper=false) @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureInputNull extends FeatureInput {
 
 	private static FeatureInputNull instance = new FeatureInputNull();
-	
-	private FeatureInputNull() {
-		
-	}
 	
 	public static FeatureInputNull instance() {
 		return instance;

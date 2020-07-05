@@ -40,15 +40,15 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  * Creates a Chnl for a specific data-type
  *
  */
-public abstract class ChannelFactorySingleType {
+public interface ChannelFactorySingleType {
 	
-	public abstract Channel createEmptyInitialised( ImageDimensions dim );
+	Channel createEmptyInitialised( ImageDimensions dim );
 
-	public abstract Channel createEmptyUninitialised(ImageDimensions dim);
+	Channel createEmptyUninitialised(ImageDimensions dim);
 	
-	public Channel create( VoxelBox<? extends Buffer> bufferAccess, ImageResolution res ) {
+	default Channel create( VoxelBox<? extends Buffer> bufferAccess, ImageResolution res ) {
 		return new Channel( bufferAccess, res);
 	}
 	
-	public abstract VoxelDataType dataType();
+	VoxelDataType dataType();
 }

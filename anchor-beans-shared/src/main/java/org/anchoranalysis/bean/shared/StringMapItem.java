@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 /**
  * A simple mapping from one string (source) to another (target)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class StringMapItem extends AnchorBean<StringMapItem> {

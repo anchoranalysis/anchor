@@ -63,11 +63,12 @@ public class BBoxIntersection extends AddCriteriaPair {
 	@Override
 	public boolean paramsEquals(Object other) {
 		
-		if( (other instanceof BBoxIntersection)) {
+		if( !(other instanceof BBoxIntersection)) {
 			return false;
 		}
 		
-		return true;
+		BBoxIntersection otherCast = (BBoxIntersection) other;
+		return suppressZ == otherCast.suppressZ;
 	}
 
 	public boolean isSuppressZ() {

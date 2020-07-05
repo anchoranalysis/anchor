@@ -38,7 +38,7 @@ public class ChannelConverterToFloat extends ChannelConverter<FloatBuffer> {
 
 	public ChannelConverterToFloat() {
 		super(
-			VoxelDataTypeFloat.instance,
+			VoxelDataTypeFloat.INSTANCE,
 			new VoxelBoxConverterToFloatNoScaling(),
 			VoxelBoxFactory.getFloat()
 		);

@@ -27,7 +27,6 @@ package org.anchoranalysis.annotation.io.input;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +46,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * 
  * An annotation that has been combined with it's strategy
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {
@@ -78,7 +77,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements Inpu
 	}
 	
 	/** A label to be used when aggregrating this annotation with others, or NULL if this makes no sense 
-	 * @throws IOException */
+	 * @throws AnchorIOException */
 	public Optional<String> labelForAggregation() throws AnchorIOException {
 		return annotationStrategy.annotationLabelFor(input);
 	}

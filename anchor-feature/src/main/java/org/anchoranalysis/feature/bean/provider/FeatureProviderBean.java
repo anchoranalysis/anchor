@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <B> bean-type
  * @param <P> provider-type

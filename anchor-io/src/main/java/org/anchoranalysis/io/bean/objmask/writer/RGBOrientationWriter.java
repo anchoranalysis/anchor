@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 
@@ -53,22 +55,26 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 	private boolean drawReverseLine = false;
 	// END BEAN PROPERTIES
 	
-	public static Point3d calcPoint(ObjectWithProperties mask, String propertyName) {
+	public static Optional<Point3d> calcPoint(ObjectWithProperties mask, String propertyName) {
 		
 		if (!mask.hasProperty(propertyName)) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return new Point3d( (Point3d) mask.getProperty(propertyName) );
+		return Optional.of(
+			new Point3d( (Point3d) mask.getProperty(propertyName) )
+		);
 	}
 
-	public static Double calcOrientation(ObjectWithProperties mask) {
+	public static Optional<Double> calcOrientation(ObjectWithProperties mask) {
 		
 		if (!mask.hasProperty("orientationRadians")) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return (Double) mask.getProperty("orientationRadians");
+		return Optional.of(
+			(Double) mask.getProperty("orientationRadians")
+		);
 	}
 	
 	
@@ -87,26 +93,42 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 					return;
 				}
 				
-				Double orientationRadians = calcOrientation( mask );
-				if (orientationRadians==null) {
+				Optional<Double> orientationRadians = calcOrientation( mask );
+				if (!orientationRadians.isPresent()) {
 					return;
 				}
 				
-				Point3d xAxisMin = calcPoint(mask, "xAxisMin");
-				if (xAxisMin==null) {
+				Optional<Point3d> xAxisMin = calcPoint(mask, "xAxisMin");
+				if (!xAxisMin.isPresent()) {
 					return;
 				}
 				
-				Point3d xAxisMax = calcPoint(mask, "xAxisMax");
-				if (xAxisMax==null) {
+				Optional<Point3d> xAxisMax = calcPoint(mask, "xAxisMax");
+				if (!xAxisMax.isPresent()) {
 					return;
 				}
 				
-				writeOrientationLine(  midpoint, orientationRadians, colorIndex.get( colorIDGetter.getID(mask, iter) ), stack, bboxContainer, xAxisMin, xAxisMax );
+				writeOrientationLine(
+					midpoint,
+					orientationRadians.get(),
+					colorIndex.get( colorIDGetter.getID(mask, iter) ),
+					stack,
+					bboxContainer,
+					xAxisMin.get(),
+					xAxisMax.get()
+				);
 				
 				// Reverse
 				if (drawReverseLine) {
-					writeOrientationLine( midpoint, orientationRadians, colorIndex.get( colorIDGetter.getID(mask, iter) ), stack, bboxContainer, xAxisMin, xAxisMax );
+					writeOrientationLine(
+						midpoint,
+						orientationRadians.get(),
+						colorIndex.get( colorIDGetter.getID(mask, iter) ),
+						stack,
+						bboxContainer,
+						xAxisMin.get(),
+						xAxisMax.get()
+					);
 				}
 				
 			}
@@ -114,7 +136,15 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 		};
 	}
 	
-	private void writeOrientationLine( Point3i midpoint, double orientationRadians, RGBColor color, RGBStack stack, BoundingBox bbox, Point3d min, Point3d max ) {
+	private void writeOrientationLine(
+		Point3i midpoint,
+		double orientationRadians,
+		RGBColor color,
+		RGBStack stack,
+		BoundingBox bbox,
+		Point3d min,
+		Point3d max
+	) {
 		
 		// We start at 0
 		double x = midpoint.getX();
@@ -124,22 +154,17 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 		double yIncr = Math.sin( orientationRadians ) * xDiv;
 		
 		while( true ) {
-			int xI = (int) x;
-			int yI = (int) y;
+			Point3i pnt = new Point3i( (int) x, (int) y, 0);
 
-			if (!bbox.contains().x(xI)) {
-				break;
-			}
-
-			if (!bbox.contains().y(yI)) {
+			if (!bbox.contains().x(pnt.getX()) || !bbox.contains().y(pnt.getY())) {
 				break;
 			}
 			
-			if ( (xI < min.getX() || xI > max.getX()) && (yI < min.getY() || yI > max.getY())) {
+			if ( (pnt.getX() < min.getX() || pnt.getX() > max.getX()) && (pnt.getY() < min.getY() || pnt.getY() > max.getY())) {
 				break;
 			}
 		
-			RGBMidpointWriter.writeRelPoint( new Point3i(xI,yI,0), color, stack, bbox );
+			RGBMidpointWriter.writeRelPoint(pnt, color, stack, bbox );
 						
 			x += xIncr;
 			y += yIncr;

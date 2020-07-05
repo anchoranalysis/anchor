@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 
 public abstract class ParamsBean<T> extends InitializableBeanSimple<T,KeyValueParamsInitParams> {
 
-	private transient KeyValueParamsInitParams soParams;
+	private KeyValueParamsInitParams soParams;
 	
 	protected ParamsBean() {
 		super( new PropertyInitializer<KeyValueParamsInitParams>(KeyValueParamsInitParams.class), new SimplePropertyDefiner<KeyValueParamsInitParams>(KeyValueParamsInitParams.class) );

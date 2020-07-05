@@ -41,7 +41,7 @@ import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 
-class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
+class ReadObjsFromHDF5 implements Deserializer<ObjectCollection> {
 
 	private ObjMaskHDF5Reader objReader = new ObjMaskHDF5Reader();
 	
@@ -50,20 +50,20 @@ class ReadObjsFromHDF5 extends Deserializer<ObjectCollection> {
 
 		try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
 
-			return readObjs(reader, PathUtilities.objsRootPath() );
+			return readObjs(reader, PathUtilities.OBJS_ROOT_PATH );
 		
 		} catch (HDF5FileNotFoundException e) {
 			throw new DeserializationFailedException(
 				String.format("HDF5 file not found at %s", path)	
 			);
-		} catch (Throwable exc) {
+		} catch (Exception e) {
 			throw new DeserializationFailedException(
 				String.format(
 					"An error occurred while reading HDF5 at %s with rootPath=%s",
 					path,
-					PathUtilities.objsRootPath()
+					PathUtilities.OBJS_ROOT_PATH
 				),
-				exc
+				e
 			);
 		}
 	}

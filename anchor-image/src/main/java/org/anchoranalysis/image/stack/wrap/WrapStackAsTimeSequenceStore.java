@@ -37,7 +37,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public class WrapStackAsTimeSequenceStore extends NamedProviderStore<TimeSequence> {
+public class WrapStackAsTimeSequenceStore implements NamedProviderStore<TimeSequence> {
 	
 	private NamedProviderStore<Stack> namedProvider;
 	private int t;
@@ -53,9 +53,7 @@ public class WrapStackAsTimeSequenceStore extends NamedProviderStore<TimeSequenc
 
 	@Override
 	public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {
-		return namedProvider.getOptional(key).map( stack->
-			new TimeSequence(stack)
-		);
+		return namedProvider.getOptional(key).map(TimeSequence::new);
 	}
 
 	@Override

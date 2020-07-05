@@ -27,11 +27,11 @@ package org.anchoranalysis.image.stack;
  */
 
 
-import java.nio.Buffer;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.IdentityOperation;
@@ -47,7 +47,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 // A collection of Image Stacks each with a name
-public class NamedImgStackCollection extends NamedProviderStore<Stack> {
+public class NamedImgStackCollection implements NamedProviderStore<Stack> {
 	
 	private HashMap<String, OperationWithProgressReporter<Stack,OperationFailedException>> map;
 	
@@ -55,7 +55,7 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 		map = new HashMap<>();
 	}
 	
-	public Optional<OperationWithProgressReporter<Stack,OperationFailedException>> getAsOperation( String identifier ) throws IllegalArgumentException {
+	public Optional<OperationWithProgressReporter<Stack,OperationFailedException>> getAsOperation( String identifier ) {
 		return Optional.ofNullable(
 			map.get(identifier)
 		);
@@ -95,27 +95,22 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 		);
 	}
 	
-	public NamedImgStackCollection maxIntensityProj() {
+	public NamedImgStackCollection maxIntensityProj() throws OperationFailedException {
 		
 		NamedImgStackCollection out = new NamedImgStackCollection();
 		
-		for ( String name : map.keySet() ) {
-			try {
-				Stack projection = map
-						.get(name)
-						.doOperation( ProgressReporterNull.get() )
-						.maxIntensityProj();
-				out.addImageStack( name, projection );
-			} catch (Throwable e) {
-				assert false;
-			}
+		for (Entry<String,OperationWithProgressReporter<Stack,OperationFailedException>> entry : map.entrySet()) {
+			Stack projection = entry.getValue()
+					.doOperation( ProgressReporterNull.get() )
+					.maxIntensityProj();
+			out.addImageStack( entry.getKey(), projection );
 		}
 		
 		return out;
 	}
 
 	/** Applies an operation on each stack in the collection and returns a new derived collection */
-	public NamedImgStackCollection applyOperation( ImageDimensions dim, Function<Stack,Stack> stackOperation ) throws OperationFailedException {
+	public NamedImgStackCollection applyOperation( ImageDimensions dim, UnaryOperator<Stack> stackOperation ) throws OperationFailedException {
 		
 		NamedImgStackCollection out = new NamedImgStackCollection();
 		
@@ -150,24 +145,23 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 	public void addFrom( NamedProvider<Stack> src ) {
 		
 		for( String name : src.keys() ) {
-			addImageStack(name, new OperationStack<>(src,name) );
+			addImageStack(name, new OperationStack(src,name) );
 		}
 	}
 	
 	public void addFromWithPrefix( final NamedProvider<Stack> src, String prefix ) {
 		
 		for( final String name : src.keys() ) {
-			addImageStack( prefix+name, new OperationStack<>(src,name) );
+			addImageStack( prefix+name, new OperationStack(src,name) );
 		}
 	}
 	
-	private static class OperationStack<BufferType extends Buffer> implements OperationWithProgressReporter<Stack, OperationFailedException> {
+	private static class OperationStack implements OperationWithProgressReporter<Stack, OperationFailedException> {
 		
 		private NamedProvider<Stack> src;
 		private String name;
 		
-		public OperationStack(NamedProvider<Stack> src,
-				String name) {
+		public OperationStack(NamedProvider<Stack> src,	String name) {
 			super();
 			this.src = src;
 			this.name = name;
@@ -181,6 +175,5 @@ public class NamedImgStackCollection extends NamedProviderStore<Stack> {
 				throw new OperationFailedException(e.summarize());
 			}
 		}
-		
-	};
+	}
 }

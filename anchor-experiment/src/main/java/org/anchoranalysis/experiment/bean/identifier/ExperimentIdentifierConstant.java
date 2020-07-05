@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 /**
  * Defines constants for name and version of an experiment
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ExperimentIdentifierConstant extends ExperimentIdentifier {

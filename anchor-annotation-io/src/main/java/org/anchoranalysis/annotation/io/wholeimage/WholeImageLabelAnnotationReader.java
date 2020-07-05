@@ -42,22 +42,26 @@ public class WholeImageLabelAnnotationReader implements AnnotationReader<WholeIm
 	public Optional<WholeImageLabelAnnotation> read(Path path) throws AnchorIOException {
 		
 		try( FileReader fileReader = new FileReader(path.toFile()) ) {
-			try (BufferedReader bufferedReader = new BufferedReader( fileReader )) {
-				String label = bufferedReader.readLine();
-				
-				if (hasAnotherLine(bufferedReader)) {
-					// Something went wrong as we are not at the End Of File
-					throw new AnchorIOException("We expect the a whole-image label to be in a text file with a single line only");
-				}
-
-				return Optional.of(
-					new WholeImageLabelAnnotation(label)
-				);
-			} catch (IOException e) {
-				throw new AnchorIOException("A failure occurred reading a line from the annotation file");
-			}
+			return Optional.of(
+				readFromFile(fileReader)
+			);
 		} catch (IOException e) {
 			throw new AnchorIOException("A failure opening the annotation file for reading");
+		}
+	}
+	
+	private static WholeImageLabelAnnotation readFromFile(FileReader fileReader) throws AnchorIOException {
+		try (BufferedReader bufferedReader = new BufferedReader( fileReader )) {
+			String label = bufferedReader.readLine();
+			
+			if (hasAnotherLine(bufferedReader)) {
+				// Something went wrong as we are not at the End Of File
+				throw new AnchorIOException("We expect the a whole-image label to be in a text file with a single line only");
+			}
+
+			return new WholeImageLabelAnnotation(label);
+		} catch (IOException e) {
+			throw new AnchorIOException("A failure occurred reading a line from the annotation file");
 		}
 	}
 	

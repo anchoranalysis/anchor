@@ -49,11 +49,11 @@ import java.util.Arrays;
 */
 public class HungarianAlgorithm {
 	private final double[][] costMatrix;
-	private final int rows, cols, dim;
-	private final double[] labelByWorker, labelByJob;
+	private final int rows, cols, dim;	// NOSONAR
+	private final double[] labelByWorker, labelByJob;	// NOSONAR
 	private final int[] minSlackWorkerByJob;
 	private final double[] minSlackValueByJob;
-	private final int[] matchJobByWorker, matchWorkerByJob;
+	private final int[] matchJobByWorker, matchWorkerByJob;	// NOSONAR
 	private final int[] parentWorkerByCommittedJob;
 	private final boolean[] committedWorkers;
 	
@@ -164,15 +164,14 @@ public class HungarianAlgorithm {
 	*/
 	protected void executePhase() {
 		while (true) {
-			int minSlackWorker = -1, minSlackJob = -1;
+			int minSlackWorker = -1;
+			int minSlackJob = -1;
 			double minSlackValue = Double.POSITIVE_INFINITY;
 			for (int j = 0; j < dim; j++) {
-			if (parentWorkerByCommittedJob[j] == -1) {
-				if (minSlackValueByJob[j] < minSlackValue) {
-					minSlackValue = minSlackValueByJob[j];
-					minSlackWorker = minSlackWorkerByJob[j];
-					minSlackJob = j;
-				}
+			if (parentWorkerByCommittedJob[j] == -1 && minSlackValueByJob[j] < minSlackValue) {
+				minSlackValue = minSlackValueByJob[j];
+				minSlackWorker = minSlackWorkerByJob[j];
+				minSlackJob = j;
 			}
 		}
 		if (minSlackValue > 0) {

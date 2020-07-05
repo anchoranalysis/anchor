@@ -26,7 +26,6 @@ package org.anchoranalysis.image.io.generator.raster.obj.collection;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -40,7 +39,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Writes objects a binary-mask (with all objects merged together for the mask)
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
@@ -55,19 +54,11 @@ public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
 
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
-		
-		try {
-			BinaryChnl chnl = BinaryChnlFromObjs.createFromObjs(
-				getObjs(),
-				getDimensions(),
-				BinaryValues.getDefault()
-			);
-			return new ChnlGenerator(chnl.getChnl(), "maskCollection").generate();
-		} catch (CreateException e) {
-			throw new OutputWriteFailedException(e);
-		}
-		
-		
+		BinaryChnl chnl = BinaryChnlFromObjs.createFromObjs(
+			getObjs(),
+			getDimensions(),
+			BinaryValues.getDefault()
+		);
+		return new ChnlGenerator(chnl.getChnl(), "maskCollection").generate();
 	}
-
 }

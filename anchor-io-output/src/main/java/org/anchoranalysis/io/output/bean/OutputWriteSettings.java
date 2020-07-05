@@ -66,10 +66,10 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 	private List<NamedBean<?>> writers;
 	// END BEAN PROPERTIES
 	
-	private static String HTML_EXTENSION = "html";
-	private static String XML_EXTENSION = "xml";
-	private static String TEXT_EXTENSION = "txt";
-	private static String SERIALIZED_EXTENSION = "ser";
+	private static final String HTML_EXTENSION = "html";
+	private static final String XML_EXTENSION = "xml";
+	private static final String TEXT_EXTENSION = "txt";
+	private static final String SERIALIZED_EXTENSION = "ser";
 
 	// Contains instances for each writer
 	private BeanInstanceMap writerInstances;

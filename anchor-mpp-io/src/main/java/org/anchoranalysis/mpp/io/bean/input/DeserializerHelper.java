@@ -33,6 +33,10 @@ import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class DeserializerHelper {
 
 	private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();

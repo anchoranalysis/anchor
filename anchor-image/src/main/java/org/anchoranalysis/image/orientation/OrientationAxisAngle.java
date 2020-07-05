@@ -29,8 +29,19 @@ package org.anchoranalysis.image.orientation;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrixFromAxisAngleCreator;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+
+/**
+ * An orientation in axis-angle representation.
+ * 
+ * @see <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation>Wikipedia</a>
+ * 
+ * @author Owen Feehan
+ *
+ */
+@Value @EqualsAndHashCode(callSuper=false)
 public class OrientationAxisAngle extends Orientation {
 
 	/**
@@ -38,10 +49,11 @@ public class OrientationAxisAngle extends Orientation {
 	 */
 	private static final long serialVersionUID = -2592680414423106545L;
 	
-	// START BEAN PROPERTIES
-	private Vector3d axis;	// should be normalised
-	private double angle;	// in radians
-	// END BEAN PROPERTIES
+	/** Axis part of axis-angle orientation (should be normalized) */
+	private Vector3d axis;
+	
+	/** Angle part of axis-angle orientation (in radians) */
+	private double angle;
 	
 	@Override
 	public String toString() {
@@ -50,10 +62,10 @@ public class OrientationAxisAngle extends Orientation {
 	
 	@Override
 	public OrientationAxisAngle duplicate() {
-		OrientationAxisAngle out = new OrientationAxisAngle();
-		out.axis = new Vector3d(axis);
-		out.angle = angle;
-		return out;
+		return new OrientationAxisAngle(
+			new Vector3d(axis),
+			angle
+		);
 	}
 
 	@Override
@@ -62,32 +74,11 @@ public class OrientationAxisAngle extends Orientation {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		
-		if (other == null) { return false; }
-		if (other == this) { return true; }
-		
-		if (!(other instanceof OrientationAxisAngle)) {
-			return false;
-		}
-		
-		OrientationAxisAngle otherC = (OrientationAxisAngle) other;
-		return axis.equals(otherC.axis) && angle==otherC.angle;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(axis)
-				.append(angle)
-				.toHashCode();
-	}
-
-	@Override
 	public Orientation negative() {
-		OrientationAxisAngle dup = duplicate();
-		dup.angle = dup.angle + Math.PI;
-		return dup;
+		return new OrientationAxisAngle(
+			new Vector3d(axis),
+			angle + Math.PI
+		);
 	}
 
 	public static Orientation rotateOneVectorOntoAnother( Vector3d vecSrc, Vector3d vecOnto ) {
@@ -107,40 +98,30 @@ public class OrientationAxisAngle extends Orientation {
 		
 		
 		if (mag > ep) {
-		
 			crossProd.scale(1/mag);
-			
-			//out.angle = Math.acos(dotProd);
-		
-			OrientationAxisAngle out = new OrientationAxisAngle();
-			out.angle = Math.atan2(mag, dotProd);
-			out.axis = crossProd;
-			return out;
+			return new OrientationAxisAngle(
+				crossProd,
+				Math.atan2(mag, dotProd)
+			);
 			
 		} else {
 			
 			if (dotProd > 0){
 
-				 // Nearly positively aligned; skip rotation, or compute
+				// Nearly positively aligned; skip rotation, or compute
 			    // axis and angle using other means
 				return new OrientationIdentity(3);
 				
 			} else {
 				
 				// negatively aligned we set an angle of PI
-
 				
-				 // Nearly negatively aligned; axis is any vector perpendicular
+				// Nearly negatively aligned; axis is any vector perpendicular
 			    // to either vector, and angle is 180 degrees
-				
-				// TO find a perpendic
-				
-				
-				OrientationAxisAngle out = new OrientationAxisAngle();
-				out.angle = Math.PI;
-				out.axis = findPerpVector( vecSrc );
-				return out;
-
+				return new OrientationAxisAngle(
+					findPerpVector( vecSrc ),
+					Math.PI
+				);
 			}
 		}
 	}
@@ -155,24 +136,6 @@ public class OrientationAxisAngle extends Orientation {
 			// This handle's the case where both X and Y are 0
 			return new Vector3d( 0, vec.getZ()*-1, vec.getY() );
 		}
-	}
-
-
-	public Vector3d getAxis() {
-		return axis;
-	}
-
-	public void setAxis(Vector3d axis) {
-		this.axis = axis;
-	}
-
-	public double getAngle() {
-		return angle;
-	}
-
-	// In radians
-	public void setAngle(double angle) {
-		this.angle = angle;
 	}
 	
 	@Override

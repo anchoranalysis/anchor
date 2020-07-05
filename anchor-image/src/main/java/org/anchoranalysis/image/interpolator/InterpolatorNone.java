@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * Doesn't do any interpolation, just copies values
  *
  */
-public class InterpolatorNone extends Interpolator {
+public class InterpolatorNone implements Interpolator {
 
 	@Override
 	public VoxelBuffer<ByteBuffer> interpolateByte(VoxelBuffer<ByteBuffer> src,

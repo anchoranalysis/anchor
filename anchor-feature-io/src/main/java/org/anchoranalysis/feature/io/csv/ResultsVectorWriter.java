@@ -36,9 +36,11 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
-class ResultsVectorWriter {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private ResultsVectorWriter() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class ResultsVectorWriter {
 	
 	/** Called on each results entry */
 	public interface ProcessResultsEntry<T> {

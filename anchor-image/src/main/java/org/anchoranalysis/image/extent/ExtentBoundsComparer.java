@@ -27,8 +27,8 @@ package org.anchoranalysis.image.extent;
  */
 
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -44,13 +44,13 @@ class ExtentBoundsComparer {
 		ReadableTuple3i min2,
 		ReadableTuple3i max1,
 		ReadableTuple3i max2,
-		Function<ReadableTuple3i,Integer> extract
+		ToIntFunction<ReadableTuple3i> extract
 	) {
 		return calc(
-			extract.apply(min1),
-			extract.apply(min2),
-			extract.apply(max1),
-			extract.apply(max2),
+			extract.applyAsInt(min1),
+			extract.applyAsInt(min2),
+			extract.applyAsInt(max1),
+			extract.applyAsInt(max2),
 			Math::min,
 			Math::max
 		).orElseThrow(AnchorImpossibleSituationException::new);
@@ -61,13 +61,13 @@ class ExtentBoundsComparer {
 		ReadableTuple3i min2,
 		ReadableTuple3i max1,
 		ReadableTuple3i max2,
-		Function<ReadableTuple3i,Integer> extract
+		ToIntFunction<ReadableTuple3i> extract
 	) {
 		return calc(
-			extract.apply(min1),
-			extract.apply(min2),
-			extract.apply(max1),
-			extract.apply(max2),
+			extract.applyAsInt(min1),
+			extract.applyAsInt(min2),
+			extract.applyAsInt(max1),
+			extract.applyAsInt(max2),
 			Math::max,
 			Math::min
 		);
@@ -78,11 +78,11 @@ class ExtentBoundsComparer {
 		int min2,
 		int max1,
 		int max2,
-		BiFunction<Integer,Integer,Integer> minOp,
-		BiFunction<Integer,Integer,Integer> maxOp
+		IntBinaryOperator minOp,
+		IntBinaryOperator maxOp
 	) {
-		int minNew = minOp.apply(min1, min2);
-		int maxNew = maxOp.apply(max1, max2);
+		int minNew = minOp.applyAsInt(min1, min2);
+		int maxNew = maxOp.applyAsInt(max1, max2);
 		if (minNew <= maxNew) {
 			return Optional.of(
 				new ExtentBoundsComparer(

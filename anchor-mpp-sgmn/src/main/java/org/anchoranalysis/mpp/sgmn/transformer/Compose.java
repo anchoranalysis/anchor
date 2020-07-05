@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 /**
  * Combines a transformation from S->U with U->T
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> source type
  * @param <T> destination type

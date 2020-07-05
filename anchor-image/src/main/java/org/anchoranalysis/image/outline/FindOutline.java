@@ -30,7 +30,7 @@ package org.anchoranalysis.image.outline;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -58,28 +58,21 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
  */
 public class FindOutline {
 	
-	private FindOutline() {
-		
-	}
+	private FindOutline() {}
 	
-	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) throws CreateException {
+	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) {
 		// We create a new image for output
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.instance );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
 		BinaryChnl chnlOutBinary = new BinaryChnl(chnlOut, chnl.getBinaryValues());
 		
 		// Gets outline
-		try {
-			outlineChnlInto( chnl, chnlOutBinary, do3D, erodeEdges );
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+		outlineChnlInto( chnl, chnlOutBinary, do3D, erodeEdges );
 		
 		return chnlOutBinary;
 	}
 	
 	/** Outline using multiple erosions to create a deeper outline */
 	public static ObjectMask outline(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
-		assert( mask.getVoxelBox().extent().getZ() > 0 );
 		
 		ObjectMask maskIn = mask.duplicate();
 				
@@ -92,7 +85,7 @@ public class FindOutline {
 
 	}
 
-	private static BinaryVoxelBox<ByteBuffer> outlineMultiplex( BinaryVoxelBox<ByteBuffer> voxelBox, int numberErosions, boolean erodeEdges, boolean do3D) throws CreateException {
+	private static BinaryVoxelBox<ByteBuffer> outlineMultiplex( BinaryVoxelBox<ByteBuffer> voxelBox, int numberErosions, boolean erodeEdges, boolean do3D) {
 		// If we just want an edge of size 1, we can do things more optimally
 		if (numberErosions==1) {
 			return outlineByKernel(voxelBox, erodeEdges, do3D);
@@ -102,27 +95,22 @@ public class FindOutline {
 	}
 		
 	// Assumes imgChnlOut has the same ImgChnlRegions
-	private static void outlineChnlInto( BinaryChnl imgChnl, BinaryChnl imgChnlOut, boolean do3D, boolean erodeEdges ) throws OperationFailedException {
+	private static void outlineChnlInto( BinaryChnl imgChnl, BinaryChnl imgChnlOut, boolean do3D, boolean erodeEdges ) {
 
 		BinaryVoxelBox<ByteBuffer> box = new BinaryVoxelBoxByte( imgChnl.getVoxelBox(), imgChnl.getBinaryValues() );
 		
-		BinaryVoxelBox<ByteBuffer> outline;
-		try {
-			outline = outlineByKernel(box, erodeEdges, do3D );
-		} catch (CreateException e1) {
-			throw new OperationFailedException(e1);
-		}
+		BinaryVoxelBox<ByteBuffer> outline = outlineByKernel(box, erodeEdges, do3D );
 		
 		try {
 			imgChnlOut.replaceBy(outline);
 		} catch (IncorrectImageSizeException e) {
-			assert false;
+			throw new AnchorImpossibleSituationException();
 		}
 		
 	}
 		
 	/** Find an outline only 1 pixel deep by using a kernel directly */
-	private static BinaryVoxelBox<ByteBuffer> outlineByKernel( BinaryVoxelBox<ByteBuffer> voxelBox, boolean erodeEdges, boolean do3D ) throws CreateException {
+	private static BinaryVoxelBox<ByteBuffer> outlineByKernel( BinaryVoxelBox<ByteBuffer> voxelBox, boolean erodeEdges, boolean do3D ) {
 		
 		// if our solid is too small, we don't apply the kernel, as it fails on anything less than 3x3, and instead we simply return the solid as it is
 		if (isTooSmall(voxelBox.extent(), do3D)) {
@@ -138,7 +126,7 @@ public class FindOutline {
 	}
 	
 	/** Find an outline by doing (maybe more than 1) morphological erosions, and subtracting from original object */
-	private static BinaryVoxelBox<ByteBuffer> outlineByErosion( BinaryVoxelBox<ByteBuffer> voxelBox, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
+	private static BinaryVoxelBox<ByteBuffer> outlineByErosion( BinaryVoxelBox<ByteBuffer> voxelBox, int numberErosions, boolean erodeEdges, boolean do3D ) {
 		
 		// Otherwise if > 1
 		VoxelBox<ByteBuffer> eroded = multipleErode( voxelBox, numberErosions, erodeEdges, do3D );
@@ -167,9 +155,6 @@ public class FindOutline {
 		if (e.getX()<3 || e.getY()<3) {
 			return true;
 		}
-		if (do3D && e.getZ() < 3) {
-			return true;
-		}
-		return false;
+		return (do3D && e.getZ() < 3);
 	}
 }

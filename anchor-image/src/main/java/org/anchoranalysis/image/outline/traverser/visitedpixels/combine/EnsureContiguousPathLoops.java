@@ -30,10 +30,12 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
-import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
+import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
 /** Makes sure the head() and tail() of a ContiguousPath are neighbours */
 class EnsureContiguousPathLoops {
+	
+	private EnsureContiguousPathLoops() {}
 	
 	/** Ensures the head() and tail() of a path are neighbours, chopping off points if appropriate */
 	public static boolean apply(ContiguousPixelPath path) {
@@ -152,7 +154,7 @@ class EnsureContiguousPathLoops {
 		
 		private void maybeUpdate( int i, int j, Point3i pntLeft, Point3i pntRight ) {
 
-			if (PointsListNghbUtilities.arePointsNghb(pntLeft, pntRight)) {
+			if (PointsListNeighborUtilities.arePointsNghb(pntLeft, pntRight)) {
 				
 				// Then it's possible we make these two points the head and tail of 
 				//   the list. This would cost us a certain number of pixels, that

@@ -65,13 +65,10 @@ public class MapCreate<K,V> {
 	}
 	
 	public synchronized V getOrCreateNew( K key ) {
-		
-		V val = map.get(key);
-		if (val==null) {
-			val = opCreateNew.doOperation();
-			map.put(key, val);
-		}
-		return val;
+		return map.computeIfAbsent(
+			key,
+			k -> opCreateNew.doOperation()
+		);
 	}
 
 	public Set<Entry<K, V>> entrySet() {

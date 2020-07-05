@@ -1,5 +1,8 @@
 package org.anchoranalysis.core.log;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-core
@@ -26,6 +29,7 @@ package org.anchoranalysis.core.log;
  * #L%
  */
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class LogUtilities {
 	
 	public static LogErrorReporter createNullErrorReporter() {

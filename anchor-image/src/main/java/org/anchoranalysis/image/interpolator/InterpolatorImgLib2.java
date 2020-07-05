@@ -45,7 +45,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.view.Views;
 
-public abstract class InterpolatorImgLib2 extends Interpolator {
+public abstract class InterpolatorImgLib2 implements Interpolator {
 	
 	private InterpolatorFactory<UnsignedByteType,RandomAccessible<UnsignedByteType>> factoryByte;
 	private InterpolatorFactory<UnsignedShortType,RandomAccessible<UnsignedShortType>> factoryShort;
@@ -64,12 +64,10 @@ public abstract class InterpolatorImgLib2 extends Interpolator {
 		
 		Img<UnsignedByteType> imIng = ImgLib2Wrap.wrapByte(src, eSrc );
 		Img<UnsignedByteType> imgOut = ImgLib2Wrap.wrapByte(dest, eDest );
-		
-		//InterpolatorFactory<UnsignedByteType,RandomAccessible<UnsignedByteType>> factory = new LanczosInterpolatorFactory<UnsignedByteType>();
-		//InterpolatorFactory<UnsignedByteType,RandomAccessible<UnsignedByteType>> factory = new NLinearInterpolatorFactory<UnsignedByteType>();
+
 		RealRandomAccessible<UnsignedByteType> interpolant = Views.interpolate( Views.extendMirrorSingle( imIng ), factoryByte );
 		
-		interpolate2D( interpolant, imgOut, eSrc, eDest );
+		interpolate2D( interpolant, imgOut, eSrc );
 		return dest;
 	}
 
@@ -82,31 +80,30 @@ public abstract class InterpolatorImgLib2 extends Interpolator {
 		
 		RealRandomAccessible<UnsignedShortType> interpolant = Views.interpolate( Views.extendMirrorSingle( imIng ), factoryShort );
 		
-		interpolate2D( interpolant, imgOut, eSrc, eDest );
+		interpolate2D( interpolant, imgOut, eSrc );
 		return dest;
 	}
 
 
 
 	
-  private static < T extends Type<T> > Img<T> interpolate2D( RealRandomAccessible<T> source,  Img<T> destination, Extent eSrc, Extent eTrgt )
-  {
+  private static < T extends Type<T> > Img<T> interpolate2D( RealRandomAccessible<T> source,  Img<T> destination, Extent eSrc ) {
         // cursor to iterate over all pixels
-        Cursor< T > cursor = destination.localizingCursor();
+        Cursor<T> cursor = destination.localizingCursor();
  
         // create a RealRandomAccess on the source (interpolator)
-        RealRandomAccess< T > realRandomAccess = source.realRandomAccess();
+        RealRandomAccess<T> realRandomAccess = source.realRandomAccess();
  
         // the temporary array to compute the position
-        double[] tmp = new double[ 2 ];
+        double[] tmp = new double[2];
  
         // for all pixels of the output image
         while ( cursor.hasNext() ) {
         	
             cursor.fwd();
  
-            tmp[ 0 ] = (cursor.getDoublePosition( 0 ) / (destination.realMax( 0 )) * eSrc.getX());
-            tmp[ 1 ] = (cursor.getDoublePosition( 1 ) / (destination.realMax( 1 )) * eSrc.getY());
+            tmp[0] = (cursor.getDoublePosition(0) / (destination.realMax(0)) * eSrc.getX());
+            tmp[1] = (cursor.getDoublePosition(1) / (destination.realMax(1)) * eSrc.getY());
  
             // set the position
             realRandomAccess.setPosition( tmp );

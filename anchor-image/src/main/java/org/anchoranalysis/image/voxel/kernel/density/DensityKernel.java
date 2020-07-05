@@ -45,30 +45,15 @@ public class DensityKernel extends BinaryKernel {
 
 	private static class Density {
 		private int numberHit = 0;
-		//private int numberTotal = 0;
-		
 		
 		public void incrOn() {
 			numberHit++;
-			//numberTotal++;
 		}
-		
-		public void incrOff() {
-			//numberTotal++;
-		}
-		
-		/*public double ratioOn() {
-			return ((double) numberOn) / numberTotal;
-		}*/
-
+	
 		public double ratioSize2D( int size ) {
 			int sizeSq = size * size;
 			return ((double) numberHit) / sizeSq;
 		}
-		
-		/*public int getNumberOn() {
-			return numberOn;
-		}*/
 	}
 	
 	public DensityKernel(int size, BinaryValuesByte bv, double minDensityRatio) {
@@ -106,10 +91,7 @@ public class DensityKernel extends BinaryKernel {
 
 					if (bv.isOn(arr.get(indLocal))) {
 						density.incrOn();
-					} else {
-						density.incrOff();
-					}
-					
+					}					
 					indLocal++;
 				}
 			}

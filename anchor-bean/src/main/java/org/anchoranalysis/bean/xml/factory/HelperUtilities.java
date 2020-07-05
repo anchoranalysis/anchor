@@ -33,11 +33,15 @@ import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HelperUtilities {
 	
 	public static <T> T createBeanFromXML( XMLBeanDeclaration declXML, String configurationKey, Object param ) {
 		HierarchicalConfiguration itemConfig = declXML.getConfiguration().configurationAt(configurationKey);
-		T bean = HelperUtilities.createBeanFromConfig(itemConfig, param);
+		T bean = HelperUtilities.createBeanFromConfig(itemConfig, param);	// NOSONAR
 		return bean;
 	}
 	

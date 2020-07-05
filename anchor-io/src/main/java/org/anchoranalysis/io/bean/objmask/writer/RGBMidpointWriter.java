@@ -72,7 +72,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		if (mask.hasProperty(PROPERTY_MIDPOINT)) {
 			return Point3i.immutableAdd(
 				(Point3i) mask.getProperty(PROPERTY_MIDPOINT),
-				mask.getBoundingBox().getCornerMin()
+				mask.getBoundingBox().cornerMin()
 			);
 		} else {
 			return PointConverter.intFromDouble( mask.getMask().centerOfGravity() );
@@ -119,7 +119,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 	public static void writeRelPoint( Point3i pnt, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
 		if (bboxContainer.contains().point(pnt)) {
 			stack.writeRGBPoint(
-				Point3i.immutableSubtract(pnt, bboxContainer.getCornerMin()),
+				Point3i.immutableSubtract(pnt, bboxContainer.cornerMin()),
 				color
 			);
 		}
@@ -135,7 +135,7 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 		
 		// X direction
 		for (int i=0; i<extraLength; i++) {
-			midpoint.decrX();
+			midpoint.decrementX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
 		midpoint.incrementX(extraLength);
@@ -144,21 +144,21 @@ public class RGBMidpointWriter extends ObjMaskWriter {
 			midpoint.incrementX();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.decrX(extraLength);
+		midpoint.decrementX(extraLength);
 		
 		
 		// Y direction
 		for (int i=0; i<extraLength; i++) {
-			midpoint.decrY();
+			midpoint.decrementY();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
 		midpoint.incrementY(extraLength);
 		
 		for (int i=0; i<extraLength; i++) {
-			midpoint.decrY();
+			midpoint.decrementY();
 			writeRelPoint( midpoint, color, stack, bboxContainer);
 		}
-		midpoint.decrY( extraLength );
+		midpoint.decrementY( extraLength );
 		
 	}
 	

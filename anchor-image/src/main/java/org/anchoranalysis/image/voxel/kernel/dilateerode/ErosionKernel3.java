@@ -32,7 +32,12 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
-// Erosion with a 3x3 or 3x3x3 kernel
+/**
+ * Erosion with a 3x3 or 3x3x3 kernel
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 	
 	// Constructor
@@ -40,19 +45,25 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		super(bv, outsideAtThreshold, useZ);
 	}
 
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 
-		ByteBuffer inArr_Z = inSlices.getLocal(0);
-		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
-		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
+		ByteBuffer inArrZ = inSlices.getLocal(0);
+		ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+		ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 		
 		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
 		
-		if (bv.isOff(inArr_Z.get(ind))) {
+		if (bv.isOff(inArrZ.get(ind))) {
 			return false;
 		}
 		
@@ -60,7 +71,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		x--;
 		ind--;
 		if (x>=0) {
-			if (bv.isOff(inArr_Z.get(ind))) {
+			if (bv.isOff(inArrZ.get(ind))) {
 				return false;
 			}
 		} else {
@@ -72,7 +83,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		x += 2;
 		ind += 2;
 		if (x<extent.getX()) {
-			if (bv.isOff(inArr_Z.get(ind))) {
+			if (bv.isOff(inArrZ.get(ind))) {
 				return false;
 			}
 		} else {
@@ -88,7 +99,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		y--;
 		ind -= xLength;
 		if (y>=0) {
-			if (bv.isOff(inArr_Z.get(ind))) {
+			if (bv.isOff(inArrZ.get(ind))) {
 				return false;
 			}
 		} else {
@@ -100,7 +111,7 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		y += 2;
 		ind += (2*xLength);
 		if (y<(extent.getY())) {
-			if (bv.isOff(inArr_Z.get(ind))) {
+			if (bv.isOff(inArrZ.get(ind))) {
 				return false;
 			}
 		} else {
@@ -114,8 +125,8 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 		
 		if (useZ) {
 			
-			if (inArr_ZLess1!=null) {
-				if (bv.isOff(inArr_ZLess1.get(ind))) {
+			if (inArrZLess1!=null) {
+				if (bv.isOff(inArrZLess1.get(ind))) {
 					return false;
 				}
 			} else {
@@ -124,8 +135,8 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 				}
 			}
 			
-			if (inArr_ZPlus1!=null) {
-				if (bv.isOff(inArr_ZPlus1.get(ind))) {
+			if (inArrZPlus1!=null) {
+				if (bv.isOff(inArrZPlus1.get(ind))) {
 					return false;
 				}
 			} else {

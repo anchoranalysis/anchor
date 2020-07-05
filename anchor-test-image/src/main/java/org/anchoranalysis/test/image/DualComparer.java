@@ -99,7 +99,7 @@ public class DualComparer {
 	 * @param rejectZeroRows throws an exception if either of the CSV files have zero rows
 	 * @param messageStream if non-equal, additional explanation messages are printed here
 	 * @return TRUE if the csv-files are identical, FALSE otherwise
-	 * @throws IOException if something goes wrong with csv I/O
+	 * @throws CSVReaderException if something goes wrong with csv I/O
 	 */
 	public boolean compareTwoCsvFiles( String path, String regExSeperator, boolean firstLineHeaders, boolean rejectZeroRows, PrintStream messageStream ) throws CSVReaderException {
 		return compareTwoCsvFiles(path, regExSeperator, firstLineHeaders, 0, false, rejectZeroRows, messageStream );
@@ -119,7 +119,7 @@ public class DualComparer {
 	 * @param rejectZeroRows throws an exception if either of the CSV files have zero rows
 	 * @param messageStream if non-equal, additional explanation messages are printed here
 	 * @return TRUE if the csv-files are identical apart from the ignored columns, fALSE otherwise
-	 * @throws IOException if something goes wrong with csv I/O or a csv file is reject
+	 * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject
 	 */
 	public boolean compareTwoCsvFiles(
 		String path,

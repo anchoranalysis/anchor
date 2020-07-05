@@ -30,7 +30,6 @@ import static org.anchoranalysis.io.bioformats.MultiplexDataTypes.*;
 
 
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,8 +90,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 		this.sizeT = readOptions.sizeT(reader);
 		this.rgb = readOptions.isRGB(reader);
 		this.bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
-		  
-		//log.debug( String.format("Opening Image... (series=%d, slices=%d, chnls=%d, width=%d, height=%d, bytespp=%d, dimorder=%s)", seriesCount, sd.getZ(), numChnl, sd.getX(), sd.getY(), bytesPerPixel, r.getDimensionOrder()) );
+
 		this.lociMetadata = lociMetadata;
 		
 		// Our total num channels
@@ -202,20 +200,12 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			
 			return ts;
 			
-		} catch (FormatException e) {
-			throw new RasterIOException(e);
-		} catch (IOException e) {
-			throw new RasterIOException(e);
-		} catch (IncorrectImageSizeException e) {
-			throw new RasterIOException(e);
-		} catch (CreateException e) {
+		} catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
 			throw new RasterIOException(e);
 		}
-			
 	}
-	
 
-	private <BufferType extends Buffer> List<Channel> createUninitialisedChnls( ImageDimensions dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
+	private List<Channel> createUninitialisedChnls( ImageDimensions dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
 		
 		/** A list of all channels i.e. aggregating the channels associated with each stack */
 		List<Channel> listAllChnls = new ArrayList<>();

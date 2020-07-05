@@ -35,6 +35,8 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AllArgsConstructor;
+
 /**
  * An existing cache that can be used as a source for child-caches elsewhere
  * 
@@ -42,16 +44,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <T> input-type associated with cache
  */
+@AllArgsConstructor
 public class CacheTransferSource<T extends FeatureInput> {
-	
-	private CacheSupplier<T,OperationFailedException> cacheToSearch;
-	private Set<ChildCacheName> specificChildren;
-	
-	public CacheTransferSource(CacheSupplier<T,OperationFailedException> cacheToSearch, Set<ChildCacheName> specificChildren) {
-		super();
-		this.cacheToSearch = cacheToSearch;
-		this.specificChildren = specificChildren;
-	}
+
+	private final CacheSupplier<T,OperationFailedException> cacheToSearch;
+	private final Set<ChildCacheName> specificChildren;
 
 	public boolean containsChild(ChildCacheName name) {
 		return specificChildren.contains(name);

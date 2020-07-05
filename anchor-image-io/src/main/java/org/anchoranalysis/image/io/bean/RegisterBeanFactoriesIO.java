@@ -35,6 +35,8 @@ import org.anchoranalysis.image.io.chnl.map.CreateImgChnlMapFromEntries;
 
 // An externally loadable component of the system
 public final class RegisterBeanFactoriesIO {
+	
+	private RegisterBeanFactoriesIO() {}
 
 	public static void registerBeanFactories() {
 		RegisterBeanFactories.register(

@@ -61,7 +61,7 @@ public class BinaryChnl {
 		super();
 		this.chnl = chnl;
 		
-		if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			throw new IncorrectVoxelDataTypeException("Only unsigned 8-bit data type is supported for BinaryChnl");
 		}
 		
@@ -69,7 +69,7 @@ public class BinaryChnl {
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
-		this(vb, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance) );
+		this(vb, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE) );
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {
@@ -124,7 +124,7 @@ public class BinaryChnl {
 	}
 	
 	// Creates a mask from the binaryChnl
-	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) throws CreateException {
+	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) {
 		assert( chnl.getDimensions().contains(bbox) );
 		return new ObjectMask( bbox, chnl.getVoxelBox().asByte().region(bbox, reuseIfPossible), binaryValues);
 	}
@@ -153,20 +153,7 @@ public class BinaryChnl {
 		BinaryChnl binaryChnl = new BinaryChnl(scaled, binaryValues);
 		
 		// We threshold to make sure it's still binary
-		{
-			int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
-		
-			try {
-				VoxelBoxThresholder.thresholdForLevel(
-					binaryChnl.getVoxelBox(),
-					thresholdVal,
-					binaryChnl.getBinaryValues().createByte()
-				);
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
-			}
-			
-		}
+		applyThreshold(binaryChnl);
 		
 		return binaryChnl;
 	}
@@ -179,5 +166,18 @@ public class BinaryChnl {
 			throws IncorrectImageSizeException {
 		chnl.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
 	}
-
+	
+	private void applyThreshold(BinaryChnl binaryChnl) throws OperationFailedException {
+		int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
+		
+		try {
+			VoxelBoxThresholder.thresholdForLevel(
+				binaryChnl.getVoxelBox(),
+				thresholdVal,
+				binaryChnl.getBinaryValues().createByte()
+			);
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+	}
 }

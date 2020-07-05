@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.strategy.replace;
 
+
+
 /*-
  * #%L
  * anchor-feature-session
@@ -27,7 +29,6 @@ package org.anchoranalysis.feature.session.strategy.replace;
  */
 
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.core.cache.LRUCache.CacheRetrievalFailed;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
@@ -45,29 +46,13 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class CacheAndReuseStrategy<T extends FeatureInput> extends ReplaceStrategy<T> {
 
-	private final static int CACHE_SIZE = 200;
+	private static final int CACHE_SIZE = 200;
 	
 	private LRUCache<T, SessionInput<T>> cache;
 	
 	public CacheAndReuseStrategy(CacheCreator cacheCreator) {
-		this(
-			cacheCreator,
-			new AlwaysNew<>(cacheCreator)
-		);
-	}
-	
-	public CacheAndReuseStrategy(CacheCreator cacheCreator, ReplaceStrategy<T> delegate ) {
-		super();
-		cache = new LRUCache<>(
-			CACHE_SIZE,
-			input -> {
-				try {
-					return delegate.createOrReuse(input);
-				} catch (FeatureCalcException e) {
-					throw new CacheRetrievalFailed(e);
-				}
-			}
-		);
+		ReplaceStrategy<T> delegate = new AlwaysNew<>(cacheCreator);
+		cache = new LRUCache<>(CACHE_SIZE, delegate::createOrReuse);
 	}
 	
 	@Override

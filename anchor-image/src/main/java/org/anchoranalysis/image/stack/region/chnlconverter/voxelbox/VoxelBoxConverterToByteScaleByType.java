@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 // So there is no clipping of values, but some might become very small.
 //
 // Note that the Type.MAX_VALUE in Java assumes siged types.  So we multiply by two to get unsigned sizes
-public final class VoxelBoxConverterToByteScaleByType extends VoxelBoxConverter<ByteBuffer> {
+public final class VoxelBoxConverterToByteScaleByType implements VoxelBoxConverter<ByteBuffer> {
 
 	// This doesn't really make sense for a float, as the maximum value is so much higher, so we take
 	//  it as being the same as Integer.MAX_VALUE

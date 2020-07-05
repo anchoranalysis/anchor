@@ -76,6 +76,49 @@ public abstract class Tuple3i implements ReadableTuple3i {
 		this.x = (int) (factor * this.x);
 		this.y = (int) (factor * this.y);
 	}
+	
+	/**
+	 * Element-wise minimum between this point and another
+	 * 
+	 * @param pnt the other point
+	 * @return a new point containing the minimum of the x, y, z components
+	 */
+	public Point3i min( ReadableTuple3i pnt ) {
+		return new Point3i(
+			Math.min(x, pnt.getX()),
+			Math.min(y, pnt.getY()),
+			Math.min(z, pnt.getZ())
+		);
+	}
+	
+	
+	/**
+	 * Element-wise maximum between this point and another
+	 * 
+	 * @param pnt the other point
+	 * @return a new point containing the minimum of the x, y, z components
+	 */
+	public Point3i max( ReadableTuple3i pnt ) {
+		return new Point3i(
+			Math.max(x, pnt.getX()),
+			Math.max(y, pnt.getY()),
+			Math.max(z, pnt.getZ())
+		);
+	}
+	
+	/**
+	 * Element-wise maximum between this point and a scalar
+	 * 
+	 * @param val the scalar
+	 * @return a new point containing the minimum of the x, y, z components
+	 */
+	public Point3i max( int val ) {
+		return new Point3i(
+			Math.max(x, val),
+			Math.max(y, val),
+			Math.max(z, val)
+		);
+	}
 
 	@Override
 	public final int getX() {
@@ -154,27 +197,27 @@ public abstract class Tuple3i implements ReadableTuple3i {
 		this.z += val;
 	}
 	
-	public final void decrX() {
+	public final void decrementX() {
 		this.x--;
 	}
 	
-	public final void decrY() {
+	public final void decrementY() {
 		this.y--;
 	}
 	
-	public final void decrZ() {
+	public final void decrementZ() {
 		this.z--;
 	}
 	
-	public final void decrX(int val) {
+	public final void decrementX(int val) {
 		this.x -= val;
 	}
 	
-	public final void decrY(int val) {
+	public final void decrementY(int val) {
 		this.y -= val;
 	}
 	
-	public final void decrZ(int val) {
+	public final void decrementZ(int val) {
 		this.z -= val;
 	}
 	
@@ -206,8 +249,6 @@ public abstract class Tuple3i implements ReadableTuple3i {
 			return false;
 		if (y != other.y)
 			return false;
-		if (z != other.z)
-			return false;
-		return true;
+		return (z == other.z);
 	}
 }

@@ -43,7 +43,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 public class CreateStackFromBufferedImage {
 
-	private static ChannelFactorySingleType factory = new ChannelFactoryByte();
+	private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
+	
+	private CreateStackFromBufferedImage() {}
 	
 	public static Stack create( BufferedImage bufferedImage ) throws OperationFailedException {
 		
@@ -62,7 +64,7 @@ public class CreateStackFromBufferedImage {
 		try {
 			int numChnl = 3;
 			for (int c =0; c<numChnl; c++) {
-				Channel chnl = factory.createEmptyUninitialised(sd);
+				Channel chnl = FACTORY.createEmptyUninitialised(sd);
 				chnl.getVoxelBox().asByte().getPlaneAccess().setPixelsForPlane(0, VoxelBufferByte.wrap(arr[c]) );
 				stackOut.addChnl(chnl);
 			}
@@ -73,12 +75,12 @@ public class CreateStackFromBufferedImage {
 		}
 	}
 	
-	private static byte[][] bytesFromBufferedImage(BufferedImage image) throws OperationFailedException {
+	private static byte[][] bytesFromBufferedImage(BufferedImage image) {
 	    WritableRaster wr = image.getRaster();
 	    return bytesFromBufferedImage(wr,0, 0, wr.getWidth(), wr.getHeight());
 	}
 
-	private static byte[][] bytesFromBufferedImage(WritableRaster wr, int x, int y, int sx, int sy) throws OperationFailedException  {
+	private static byte[][] bytesFromBufferedImage(WritableRaster wr, int x, int y, int sx, int sy) {
 		  
 		  if (x == 0 && y == 0 && sx == wr.getWidth() && sy == wr.getHeight() && wr.getDataBuffer() instanceof DataBufferByte) {
 			  return ((DataBufferByte) wr.getDataBuffer()).getBankData();

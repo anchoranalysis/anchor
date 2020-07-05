@@ -32,7 +32,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
-public abstract class DeserializeFromFolder<T> extends HistoryCreator<T> {
+public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
 	
 	private SequencedFolder folder;
 	
@@ -57,8 +57,6 @@ public abstract class DeserializeFromFolder<T> extends HistoryCreator<T> {
 		
 		history.setCntr( boundedContainer );
 		history.setExpensiveLoad( false );
-		//history.setExpensiveLoad( true );
-		
 		return history;
 	}
 

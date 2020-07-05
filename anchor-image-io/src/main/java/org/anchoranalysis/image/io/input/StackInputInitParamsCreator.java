@@ -36,6 +36,8 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class StackInputInitParamsCreator {
 	
+	private StackInputInitParamsCreator() {}
+	
 	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, BoundIOContext context ) throws OperationFailedException {
 		ImageInitParams soImage = ImageInitParamsFactory.create(context);
 		addInput(soImage, inputObject);

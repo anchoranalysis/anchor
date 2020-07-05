@@ -54,6 +54,7 @@ public class FilePathDifferenceFromFolderPath {
 	private String filename;
 	private Path folder;
 	
+	// TODO change from the two init methods to two factory constructors
 	public FilePathDifferenceFromFolderPath() {
 		// Nothing to do
 	}
@@ -63,7 +64,7 @@ public class FilePathDifferenceFromFolderPath {
 	 * 
 	 * @param baseFolderPath path to a base folder
 	 * @param filePath the path to resolve
-	 * @throws IOException if the canonical file cannot be found
+	 * @throws AnchorIOException if the canonical file cannot be found
 	 */
 	public void init( Path baseFolderPath, Path filePath ) throws AnchorIOException {
 		

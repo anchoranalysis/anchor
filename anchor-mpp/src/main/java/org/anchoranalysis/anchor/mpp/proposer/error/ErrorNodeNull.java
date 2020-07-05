@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 /**
  * Singleton that does nothing with errors
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ErrorNodeNull extends ErrorNode {

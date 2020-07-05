@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Extent;
  *   
  *   (we make inlining as easy as possible for the JVM)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class IntersectionBBox {
@@ -83,7 +83,7 @@ public class IntersectionBBox {
 		
 		Point3i relPosSrc = bboxIntersect.relPosTo( bboxSrc );
 		
-		Point3i relPosTrgtToSrc = Point3i.immutableSubtract(bboxSrc.getCornerMin(), bboxOther.getCornerMin());
+		Point3i relPosTrgtToSrc = Point3i.immutableSubtract(bboxSrc.cornerMin(), bboxOther.cornerMin());
 		
 		Point3i relPosSrcMax = Point3i.immutableAdd(relPosSrc, bboxIntersect.extent().asTuple());
 		

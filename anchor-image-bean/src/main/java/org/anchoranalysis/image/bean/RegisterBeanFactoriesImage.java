@@ -43,10 +43,12 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class RegisterBeanFactoriesImage {
 	
+	private RegisterBeanFactoriesImage() {}
+	
 	public static void registerBeanFactories() {
 		RegisterBeanFactories.register(
 			"featureList",
-			(List<Feature<FeatureInput>> list) -> FeatureListFactory.wrapReuse(list)
+			(List<Feature<FeatureInput>> list) -> FeatureListFactory.wrapReuse(list)	// NOSONAR
 		);
 	}
 }

@@ -53,7 +53,7 @@ public class ConvertToInt_FromUnsigned32BitInt extends ConvertToInt {
 	}
 
 	@Override
-	protected VoxelBuffer<IntBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<IntBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 
 		int[] crntChnlBytes = new int[sizeXY];
 		

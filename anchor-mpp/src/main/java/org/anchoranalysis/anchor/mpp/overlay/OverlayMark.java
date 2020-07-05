@@ -83,7 +83,7 @@ public class OverlayMark extends Overlay {
 			ObjectWithProperties om, Overlay ol, ImageDimensions sdUnscaled,
 			ImageDimensions sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
-		ObjectWithProperties omScaled = scaledMaskCreator.createScaledMask(
+		return scaledMaskCreator.createScaledMask(
 			overlayWriter,
 			om,
 			zoomFactorNew,
@@ -91,9 +91,6 @@ public class OverlayMark extends Overlay {
 			sdUnscaled,
 			bvOut
 		);
-		//assert( omScaled.getMask().numPixels()>0 );
-		//System.out.printf("Scaling %s with %f to %s\n", om, zoomFactorNew, omScaled);
-		return omScaled;
 	}
 
 	@Override

@@ -44,10 +44,13 @@ public class FromMask extends ScaledMaskCreator {
 	
 	@Override
 	public ObjectWithProperties createScaledMask(
-			OverlayWriter overlayWriter, ObjectWithProperties omUnscaled,
-			double scaleFactor, Object originalObject, ImageDimensions sdScaled,
-			BinaryValuesByte bvOut)
-			throws CreateException {
+		OverlayWriter overlayWriter,
+		ObjectWithProperties omUnscaled,
+		double scaleFactor,
+		Object originalObject,
+		ImageDimensions sdScaled,
+		BinaryValuesByte bvOut
+	) throws CreateException {
 
 		try {
 			// Then we have to create the scaled-object fresh
@@ -56,8 +59,6 @@ public class FromMask extends ScaledMaskCreator {
 				new ScaleFactor(scaleFactor),
 				interpolator
 			);
-			
-			//System.out.printf("create Scaling from %s to %s for zoom=%f\n", omUnscaled.toString(), omScaled.toString(), scaleFactor );
 			
 			assert( omScaled.hasPixelsGreaterThan(0) );
 			

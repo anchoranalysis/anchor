@@ -32,9 +32,9 @@ import java.io.IOException;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 // TODO decouple from Writer class and move to anchor-image-io
-public abstract class MovieOutputHandle {
+public interface MovieOutputHandle {
 
-	public abstract void add( RGBStack stack ) throws IOException;
+	void add( RGBStack stack ) throws IOException;
 	
-	public abstract void close() throws IOException;
+	void close() throws IOException;
 }

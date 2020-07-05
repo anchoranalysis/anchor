@@ -27,7 +27,7 @@ package org.anchoranalysis.core.idgetter;
  */
 
 
-public class IDGetterMod<T> extends IDGetter<T> {
+public class IDGetterMod<T> implements IDGetter<T> {
 
 	private IDGetter<T> idGetter;
 	private int mod;

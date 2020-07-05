@@ -26,7 +26,6 @@ package org.anchoranalysis.feature.cache;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -46,14 +45,14 @@ public interface FeatureSymbolCalculator<T extends FeatureInput> {
 	 * @param id
 	 * @return
 	 */
-	public abstract String resolveFeatureID( String id );
+	String resolveFeatureID( String id );
 	
 	/**
 	 * Searches for a feature that matches a particular ID
 	 * 
 	 * @param resolvedID
-	 * @param input TODO
-	 * @throws GetOperationFailedException 
+	 * @param input
+	 * @throws FeatureCalcException 
 	 */
-	public abstract double calcFeatureByID( String resolvedID, SessionInput<T> input ) throws FeatureCalcException;
+	double calcFeatureByID( String resolvedID, SessionInput<T> input ) throws FeatureCalcException;
 }

@@ -40,19 +40,22 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class CfgNRG implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3736631685393590174L;
+	private static final long serialVersionUID = 1L;
 
-	private CfgWithNrgTotal delegate;
+	// START REQUIRED ARGUMENTS
+	private final CfgWithNRGTotal delegate;
 	
     private NRGSavedInd calcMarkInd;
     
@@ -62,15 +65,15 @@ public class CfgNRG implements Serializable {
     // Certain features are stored for every object, so that we can reference
     //  them in our calculations for the 'all' component
     private transient NRGSavedAll calcMarkAll;
-    
-	
-	public CfgNRG( CfgWithNrgTotal delegate ) {
+    // END REQUIRED ARGUMENTS
+      
+	public CfgNRG(CfgWithNRGTotal delegate) {
 		this.delegate = delegate;
-
-    	this.calcMarkInd = null;
-    	this.calcMarkPair = null;
+		this.calcMarkInd = null;
+		this.calcMarkPair = null;
+		this.calcMarkAll = null;
 	}
-	
+    
 	// The initial calculation of the NRG, thereafter it can be updated
 	public void init() throws FeatureCalcException {
 		this.calcMarkInd = new NRGSavedInd();
@@ -95,7 +98,7 @@ public class CfgNRG implements Serializable {
 	}
 	
 	// This should be accessed read-only
-	public CfgWithNrgTotal getCfgWithTotal() {
+	public CfgWithNRGTotal getCfgWithTotal() {
 		return delegate;
 	}
 	
@@ -110,19 +113,21 @@ public class CfgNRG implements Serializable {
 	}
 	
 	public CfgNRG shallowCopy() {
-		CfgNRG out = new CfgNRG(delegate.shallowCopy());
-		out.calcMarkInd = this.calcMarkInd.shallowCopy();
-    	out.calcMarkPair =  this.calcMarkPair.shallowCopy();
-    	out.calcMarkAll = this.calcMarkAll.shallowCopy();
-		return out;
+		return new CfgNRG(
+			delegate.shallowCopy(),
+			calcMarkInd.shallowCopy(),
+			calcMarkPair.shallowCopy(),
+			calcMarkAll.shallowCopy()
+		);
 	}
 	
 	public CfgNRG deepCopy() {
-		CfgNRG out = new CfgNRG(delegate.deepCopy());
-		out.calcMarkInd = this.calcMarkInd.deepCopy();
-    	out.calcMarkPair =  this.calcMarkPair.deepCopy();
-    	out.calcMarkAll = this.calcMarkAll.deepCopy();
-		return out;
+		return new CfgNRG(
+			delegate.deepCopy(),
+			calcMarkInd.deepCopy(),
+			calcMarkPair.deepCopy(),
+			calcMarkAll.deepCopy()
+		);
 	}
 	
 	public double getNrgTotal() {
@@ -138,7 +143,7 @@ public class CfgNRG implements Serializable {
 	}
 
 	
-	public void add( MemoCollection wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack, LogErrorReporter logger ) throws FeatureCalcException {
+	public void add( MemoCollection wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack) throws FeatureCalcException {
 		
 		delegate.add(newPxlMarkMemo);
 		
@@ -166,13 +171,16 @@ public class CfgNRG implements Serializable {
 	
 
 	public void rmv( MemoCollection wrapperInd, int index, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
-		
-		getCalcMarkPair().rmv( wrapperInd, memoRmv );
-		wrapperInd.rmv( getCalcMarkInd(), index);
-		
-		rmv(index);
-		
-		updateTotal( wrapperInd, stack );
+		try {
+			getCalcMarkPair().rmv( wrapperInd, memoRmv );
+			wrapperInd.rmv( getCalcMarkInd(), index);
+			
+			rmv(index);
+			
+			updateTotal( wrapperInd, stack );
+		} catch (UpdateMarkSetException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
 	
@@ -189,10 +197,14 @@ public class CfgNRG implements Serializable {
 		MemoList memoList = new MemoList(); 
 		memoList.addAll( wrapperInd );
 		
-		getCalcMarkPair().rmv( memoList, memoRmv1 );
-		memoList.remove( memoRmv1 );
-		
-		getCalcMarkPair().rmv( memoList, memoRmv2 );
+		try {
+			getCalcMarkPair().rmv( memoList, memoRmv1 );
+			memoList.remove( memoRmv1 );
+			
+			getCalcMarkPair().rmv( memoList, memoRmv2 );
+		} catch (UpdateMarkSetException e) {
+			throw new FeatureCalcException(e);
+		}
 		
 		newCfg.removeTwo(index1, index2);
 		
@@ -218,7 +230,13 @@ public class CfgNRG implements Serializable {
 		delegate.exchange(index, newMark);
 		
 		// We do the exchange on the calcMarkInd first, as our calcMarkPair is expressed relative
-		PxlMarkMemo newPxlMarkMemo = wrapperInd.exchange( getCalcMarkInd(), index, newMark, nrgStack.getNrgStack(), delegate.getCfg(), delegate.getNrgScheme() );
+		PxlMarkMemo newPxlMarkMemo = wrapperInd.exchange(
+			getCalcMarkInd(),
+			index,
+			newMark,
+			nrgStack.getNrgStack(),
+			delegate.getNrgScheme()
+		);
 		try {
 			PxlMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark( getCfg(), oldMark );
 			getCalcMarkPair().exchange( wrapperInd, oldPxlMarkMemo, index, newPxlMarkMemo );

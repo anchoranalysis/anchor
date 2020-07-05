@@ -34,9 +34,9 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 
-public class XStreamDeserializer<T> extends Deserializer<T> {
+public class XStreamDeserializer<T> implements Deserializer<T> {
 
-	private final static String[] ALLOWED_NAMESPACES = new String[] {
+	private static final String[] ALLOWED_NAMESPACES = new String[] {
 		"org.anchoranalysis.**",
 		"cern.colt.matrix.**"	
 	};

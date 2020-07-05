@@ -26,7 +26,6 @@ package org.anchoranalysis.image.io.objs.deserialize;
  * #L%
  */
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -34,7 +33,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-class ReadObjsFromTIFFDirectoryCorrectMissing extends Deserializer<ObjectCollection> {
+class ReadObjsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
 
 	@Override
 	public ObjectCollection deserialize(Path path) throws DeserializationFailedException {
@@ -48,15 +47,21 @@ class ReadObjsFromTIFFDirectoryCorrectMissing extends Deserializer<ObjectCollect
 	
 	/** If the path is missing, but "objMaskCollection" is found as a parent-component */
 	private static boolean isMissingButLooksLikeCollection( Path folderPath ) {
-		if (!Files.exists(folderPath)) {
+		if (!folderPath.toFile().exists()) {
 			
 			Path parent = folderPath.getParent();
 			
 			// Check if one folder up exists and is equal to "objMaskCollection"
-			if (parent.getName(parent.getNameCount()-1).toString().equals("objMaskCollection") && Files.exists(parent)) {
+			if (parent.toFile().exists() && namedAsObjectDirectory(parent)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private static boolean namedAsObjectDirectory(Path path) {
+		return path.getName(
+			path.getNameCount()-1
+		).toString().equals("objMaskCollection");
 	}
 }

@@ -26,23 +26,26 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNrgTotal;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.core.index.SingleIndexCntr;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
 public class CfgWithNrgTotalInstantState extends SingleIndexCntr {
 
-	private CfgWithNrgTotal cfg;
+	private CfgWithNRGTotal cfg;
 	
-	public CfgWithNrgTotalInstantState(int iter, CfgWithNrgTotal cfg) {
+	public CfgWithNrgTotalInstantState(int iter, CfgWithNRGTotal cfg) {
 		super(iter);
 		this.cfg = cfg;
 	}
 
-	public CfgWithNrgTotal getCfg() {
+	public CfgWithNRGTotal getCfg() {
 		return cfg;
 	}
 
-	public void setCfg(CfgWithNrgTotal cfg) {
+	public void setCfg(CfgWithNRGTotal cfg) {
 		this.cfg = cfg;
 	}
 

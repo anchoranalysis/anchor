@@ -34,10 +34,10 @@ import org.junit.Test;
 
 public class LRUCacheTest {
 
-	private final static String KEY1 = "apple";
-	private final static String KEY2 = "orange";
-	private final static String KEY3 = "pear";
-	private final static String KEY4 = "grapes";
+	private static final String KEY1 = "apple";
+	private static final String KEY2 = "orange";
+	private static final String KEY3 = "pear";
+	private static final String KEY4 = "grapes";
 	
 	/** Adds some keys and sees if what is evicted is sensible */
 	@Test

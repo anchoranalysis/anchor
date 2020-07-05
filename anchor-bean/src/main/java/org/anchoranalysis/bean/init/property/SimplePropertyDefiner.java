@@ -30,20 +30,18 @@ import org.anchoranalysis.bean.init.params.IInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 
  * @author Owen Feehan
  *
  * @param <P> param type
  */
-public class SimplePropertyDefiner<P> extends PropertyDefiner<P> {
+@RequiredArgsConstructor
+public class SimplePropertyDefiner<P> extends PropertyDefiner {
 
-	private Class<?> paramTypeMatch;
-		
-	public SimplePropertyDefiner(Class<?> paramTypeMatch) {
-		super();
-		this.paramTypeMatch = paramTypeMatch;
-	}
+	private final Class<?> paramTypeMatch;
 
 	@Override
 	public boolean accepts(Class<?> paramType) {

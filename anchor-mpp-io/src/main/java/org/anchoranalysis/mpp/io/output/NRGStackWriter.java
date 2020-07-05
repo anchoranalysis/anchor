@@ -32,10 +32,11 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceUtilities;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
-public class NRGStackWriter {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private NRGStackWriter() {
-	}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class NRGStackWriter {
 	
 	public static void writeNRGStack( NRGStackWithParams nrgStack, BoundIOContext context) {
 		// We write the nrg stack seperately as individual channels
@@ -48,8 +49,6 @@ public class NRGStackWriter {
 		);
 		
 		if (nrgStack.getParams()!=null) {
-
-			//XStreamGenerator<NRGElemParamsFromImage> generatorParamsImage = new XStreamGenerator<NRGElemParamsFromImage>(nrgStack.getParams(),"nrgStackImageParams");
 			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"nrgStackParams",
 				() ->  new KeyValueParamsGenerator(nrgStack.getParams(), "nrgStackParams")

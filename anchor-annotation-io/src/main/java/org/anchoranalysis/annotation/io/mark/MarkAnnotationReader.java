@@ -29,7 +29,6 @@ package org.anchoranalysis.annotation.io.mark;
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -78,7 +77,7 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 
 	private Optional<Path> fileNameToRead( Path annotationPath ) {
 		
-		if (Files.exists(annotationPath)) {
+		if (annotationPath.toFile().exists()) {
 			return Optional.of(annotationPath);
 		}
 		
@@ -88,7 +87,7 @@ public class MarkAnnotationReader implements AnnotationReader<MarkAnnotation> {
 		
 		Path pathUnfinished = TempPathCreator.deriveTempPath(annotationPath);
 		
-		if (Files.exists(pathUnfinished)) {
+		if (pathUnfinished.toFile().exists()) {
 			return Optional.of(pathUnfinished);
 		}
 

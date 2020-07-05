@@ -40,7 +40,7 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
  * 
  * Writes the corner information as a binary-serialized file in the directory
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjectCollection,List<ObjectMask>> {

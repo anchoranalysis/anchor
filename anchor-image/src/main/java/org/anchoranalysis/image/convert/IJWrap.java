@@ -62,14 +62,16 @@ import ij.process.ShortProcessor;
 
 public class IJWrap {
 
-	private final static String IMAGEJ_UNIT_MICRON = "micron";
-	private final static String IMAGEJ_IMAGE_NAME = "imagename";
+	private static final String IMAGEJ_UNIT_MICRON = "micron";
+	private static final String IMAGEJ_IMAGE_NAME = "imagename";
 	
 	/** A multiplication-factor to convert microns to meters */
-	private final static int MICRONS_TO_METERS = 1000000;
+	private static final int MICRONS_TO_METERS = 1000000;
 	
-	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.instance;
-	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.instance;
+	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.INSTANCE;
+	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.INSTANCE;
+	
+	private IJWrap() {}
 	
 	public static Channel chnlFromImageStackByte( ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory ) {
 		
@@ -85,7 +87,7 @@ public class IJWrap {
 		return chnlOut;
 	}
 
-	public static Channel chnlFromImagePlus( ImagePlus imagePlus, ImageResolution res ) throws IncorrectVoxelDataTypeException {
+	public static Channel chnlFromImagePlus( ImagePlus imagePlus, ImageResolution res ) {
 		
 		ChannelFactory factory = ChannelFactory.instance();
 		
@@ -102,20 +104,20 @@ public class IJWrap {
 			return chnlFromImagePlusByte(
 				imagePlus,
 				sd,
-				factory.get( VoxelDataTypeUnsignedByte.instance )
+				factory.get( VoxelDataTypeUnsignedByte.INSTANCE )
 			);
 		} else if (imagePlus.getType()==ImagePlus.GRAY16) {
 			return chnlFromImagePlusShort(
 				imagePlus,
 				sd,
-				factory.get( VoxelDataTypeUnsignedShort.instance )
+				factory.get( VoxelDataTypeUnsignedShort.INSTANCE )
 			);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned-8 and unsigned 16bit supported");
 		}
 	}
 	
-	public static VoxelBoxWrapper voxelBoxFromImagePlus( ImagePlus imagePlus ) throws IncorrectVoxelDataTypeException {
+	public static VoxelBoxWrapper voxelBoxFromImagePlus( ImagePlus imagePlus ) {
 		
 		if (imagePlus.getType()==ImagePlus.GRAY8) {
 			return new VoxelBoxWrapper(voxelBoxFromImagePlusByte(imagePlus));
@@ -210,22 +212,19 @@ public class IJWrap {
 	private static void maybeCorrectComposite( Stack stack, ImagePlus imp ) {
 		
 		// Avoids IMP being set to composite mode, if it's a single channel stack
-		if (stack.getNumChnl()==1) {
-			
-			if (imp instanceof CompositeImage) {
-				((CompositeImage)imp).setMode(IJ.GRAYSCALE);
-			}
+		if (stack.getNumChnl()==1 && imp instanceof CompositeImage) {
+			((CompositeImage)imp).setMode(IJ.GRAYSCALE);
 		}		
 	}
 	
-	public static ImagePlus createImagePlus( ImageStack stack, ImageDimensions sd, int num_chnl, int num_frames, boolean makeComposite ) {
+	public static ImagePlus createImagePlus( ImageStack stack, ImageDimensions sd, int numChnl, int numFrames, boolean makeComposite ) {
 		
 		// If we're making an RGB then we need to convert our stack
 		ImagePlus imp = null;
 		if (makeComposite) {
-			imp = createCompositeImagePlus( stack, num_chnl, sd.getZ(), num_frames, IMAGEJ_IMAGE_NAME );
+			imp = createCompositeImagePlus( stack, numChnl, sd.getZ(), numFrames, IMAGEJ_IMAGE_NAME );
 		} else {
-			imp = createNonCompositeImagePlus( stack, 1, sd.getZ(), num_frames, IMAGEJ_IMAGE_NAME );
+			imp = createNonCompositeImagePlus( stack, 1, sd.getZ(), numFrames, IMAGEJ_IMAGE_NAME );
 		}
 		
 		imp.getCalibration().setXUnit(IMAGEJ_UNIT_MICRON);
@@ -252,7 +251,7 @@ public class IJWrap {
 		
 		VoxelBox<ByteBuffer> vbRed = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbGreen = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
-		VoxelBox<ByteBuffer> vbBlue = stack.getChnl(srcSliceNum++).getVoxelBox().asByte();
+		VoxelBox<ByteBuffer> vbBlue = stack.getChnl(srcSliceNum).getVoxelBox().asByte();
 
 		for (int z=0; z<sd.getZ(); z++) {
 			ColorProcessor cp = new ColorProcessor( sd.getX(), sd.getY() );
@@ -298,19 +297,19 @@ public class IJWrap {
 	}
 	
 	
-	private static ImagePlus createCompositeImagePlus( ImageStack stackNew, int num_chnl, int num_slices, int num_frames, String imageName ) {
-		ImagePlus impNC = createNonCompositeImagePlus( stackNew, num_chnl, num_slices, num_frames, imageName);
-		assert( impNC.getNSlices()==num_slices );
+	private static ImagePlus createCompositeImagePlus( ImageStack stackNew, int numChnl, int numSlices, int numFrames, String imageName ) {
+		ImagePlus impNC = createNonCompositeImagePlus( stackNew, numChnl, numSlices, numFrames, imageName);
+		assert( impNC.getNSlices()==numSlices );
 		ImagePlus impOut = new CompositeImage( impNC, CompositeImage.COLOR );
 		
 		// The Composite image sometimes sets these wrong, so we force the correct dimensionality
-		impOut.setDimensions(num_chnl, num_slices, num_frames);
+		impOut.setDimensions(numChnl, numSlices, numFrames);
 		return impOut;
 	}
 	
 	
 	// Create an interleaved stack of images
-	private static ImageStack createInterleavedStack( Extent e, Stack stack) throws CreateException {
+	private static ImageStack createInterleavedStack( Extent e, Stack stack) {
 		
 		ImageStack stackNew = new ImageStack( e.getX(), e.getY() );
 		
@@ -368,9 +367,9 @@ public class IJWrap {
 		return stackNew;
 	}
 	
-	private static ImagePlus createNonCompositeImagePlus( ImageStack stackNew, int num_chnl, int num_slices, int num_frames, String imageName ) {
+	private static ImagePlus createNonCompositeImagePlus( ImageStack stackNew, int numChnl, int numSlices, int numFrames, String imageName ) {
 		ImagePlus imp = new ImagePlus();
-		imp.setStack( stackNew, num_chnl, num_slices, num_frames );
+		imp.setStack( stackNew, numChnl, numSlices, numFrames );
 		imp.setTitle( imageName ); 
 		return imp;
 	}

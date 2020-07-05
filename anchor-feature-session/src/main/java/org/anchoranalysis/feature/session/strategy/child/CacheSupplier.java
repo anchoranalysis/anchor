@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @FunctionalInterface
-public interface CacheSupplier<T extends FeatureInput, E extends Throwable> {
+public interface CacheSupplier<T extends FeatureInput, E extends Exception> {
 	
 	Optional<LRUCache<T,SessionInput<T>>> get() throws E;
 }

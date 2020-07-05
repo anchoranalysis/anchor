@@ -51,16 +51,16 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 
-		ByteBuffer inArr_Z = inSlices.getLocal(0);
-		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
-		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
+		ByteBuffer inArrZ = inSlices.getLocal(0);
+		ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+		ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 		
-		if (bv.isOn(inArr_Z.get(ind))) {
+		if (bv.isOn(inArrZ.get(ind))) {
 			return true;
 		}
 			
-		if (inArr_ZLess1!=null) {
-			if (bv.isOn(inArr_ZLess1.get(ind))) {
+		if (inArrZLess1!=null) {
+			if (bv.isOn(inArrZLess1.get(ind))) {
 				return true;
 			}
 		} else {
@@ -69,8 +69,8 @@ public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
 			}
 		}
 		
-		if (inArr_ZPlus1!=null) {
-			if (bv.isOn(inArr_ZPlus1.get(ind))) {
+		if (inArrZPlus1!=null) {
+			if (bv.isOn(inArrZPlus1.get(ind))) {
 				return true;
 			}
 		} else {

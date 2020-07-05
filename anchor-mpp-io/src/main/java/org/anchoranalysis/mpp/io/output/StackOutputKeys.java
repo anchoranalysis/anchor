@@ -32,4 +32,6 @@ public class StackOutputKeys {
 	public static final String CFG = "cfg";
 	public static final String HISTOGRAM = "hist";
 	public static final String OBJS = "objs";
+	
+	private StackOutputKeys() {}
 }

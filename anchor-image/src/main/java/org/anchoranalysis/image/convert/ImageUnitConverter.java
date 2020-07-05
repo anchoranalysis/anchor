@@ -33,6 +33,8 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 
 public class ImageUnitConverter {
 	
+	private ImageUnitConverter() {}
+	
 	public static double convertToPhysicalVolume( double value, ImageResolution res ) {
 		return value * res.unitVolume();		
 	}

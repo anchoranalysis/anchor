@@ -33,7 +33,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramCreator;
 import org.anchoranalysis.image.histogram.HistogramCreatorSimple;
 
-public class PixelPartFactoryHistogram extends PixelPartFactory<Histogram> {
+public class PixelPartFactoryHistogram implements PixelPartFactory<Histogram> {
 	
 	private HistogramCreator factorySimple = new HistogramCreatorSimple();
 	

@@ -1,5 +1,7 @@
 package org.anchoranalysis.experiment.task;
 
+import lombok.Value;
+
 /*
  * #%L
  * anchor-experiment
@@ -34,46 +36,14 @@ package org.anchoranalysis.experiment.task;
  * @param <T> input-object type
  * @param <S> shared-object type
  */
+@Value
 public class ParametersUnbound<T,S> {
 
-	private ParametersExperiment parametersExperiment;
-	private T inputObject;
-	private S sharedState;
-	private boolean supressExceptions;
-
-	public ParametersUnbound(ParametersExperiment parametersExperiment) {
-		super();
-		this.parametersExperiment = parametersExperiment;
-	}
-
-	public ParametersExperiment getParametersExperiment() {
-		return parametersExperiment;
-	}
-
-	public T getInputObject() {
-		return inputObject;
-	}
-
-	public void setInputObject(T inputObject) {
-		this.inputObject = inputObject;
-	}
-
-	public S getSharedState() {
-		return sharedState;
-	}
-
-	public void setSharedState(S sharedState) {
-		this.sharedState = sharedState;
-	}
+	ParametersExperiment parametersExperiment;
 	
-	public boolean isSupressExceptions() {
-		return supressExceptions;
-	}
-	public void setSupressExceptions(boolean supressExceptions) {
-		this.supressExceptions = supressExceptions;
-	}
+	T inputObject;
 	
-	public boolean isDetailedLogging() {
-		return parametersExperiment.isDetailedLogging();
-	}
+	S sharedState;
+	
+	boolean suppressExceptions;
 }

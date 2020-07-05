@@ -40,10 +40,12 @@ import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HelperBindOutputManager {
-	
-	private HelperBindOutputManager() {}
 	
 	// If pathForBinding is null, we bind to the root folder instead
 	public static BoundOutputManager createOutputManagerForTask(

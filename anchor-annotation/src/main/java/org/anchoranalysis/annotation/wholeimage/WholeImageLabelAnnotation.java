@@ -28,7 +28,7 @@ package org.anchoranalysis.annotation.wholeimage;
 
 import org.anchoranalysis.annotation.Annotation;
 
-public class WholeImageLabelAnnotation extends Annotation {
+public class WholeImageLabelAnnotation implements Annotation {
 
 	private String label;
 	

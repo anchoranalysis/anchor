@@ -1,5 +1,8 @@
 package org.anchoranalysis.image.io.objs;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-image-io
@@ -26,13 +29,12 @@ package org.anchoranalysis.image.io.objs;
  * #L%
  */
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class PathUtilities {
+	
+	public static final String OBJS_ROOT_PATH = "/ObjMaskCollection/";	// NOSONAR
 	
 	public static String pathForObj( int index ) {
 		return String.format("ObjMaskCollection/%08d", index);
-	}
-	
-	public static String objsRootPath() {
-		return "/ObjMaskCollection/";
 	}
 }

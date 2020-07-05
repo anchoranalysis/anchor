@@ -35,16 +35,12 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //  we are interested in is nearby
 public class LocalSlices {
 
-	//private int z;
-	//private int kernelSize;		// Should always be odd, the centre item will form the z-slice
-	private byte[][] arr;
-	private int shift;
+	private final byte[][] arr;
+	private final int shift;
 	
 	// Loads the local slices
 	public LocalSlices(int z, int kernelSize, VoxelBox<ByteBuffer> bufferAccess) {
 		super();
-		//this.z = z;
-		//this.kernelSize = kernelSize;
 		
 		arr = new byte[kernelSize][];
 		

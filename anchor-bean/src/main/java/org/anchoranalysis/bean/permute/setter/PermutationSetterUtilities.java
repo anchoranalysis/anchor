@@ -31,9 +31,11 @@ import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class PermutationSetterUtilities {
-	
-	private PermutationSetterUtilities() {}
 
 	/** Searches through a list of property fields to find one that matches the propertyName 
 	 * @throws PermutationSetterException */

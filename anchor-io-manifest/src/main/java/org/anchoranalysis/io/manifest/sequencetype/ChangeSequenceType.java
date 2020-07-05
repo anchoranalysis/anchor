@@ -54,12 +54,10 @@ public class ChangeSequenceType extends SequenceType {
 	@Override
 	public void update( String indexStr ) throws SequenceTypeException {
 		
-		int index = Integer.valueOf(indexStr);
+		int index = Integer.parseInt(indexStr);
 		
-		if (maximumIndex!=-1) {
-			if (index <= maximumIndex) {
-				throw new SequenceTypeException("indexes are not being addded sequentially");
-			}
+		if (maximumIndex!=-1 && index <= maximumIndex) {
+			throw new SequenceTypeException("indexes are not being addded sequentially");
 		}
 		
 		maximumIndex = index;

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.channel.Channel;
  * As a byte-array can contain more than one channel, an index determines
  *  which destination-channel is selected
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 @FunctionalInterface

@@ -29,6 +29,7 @@ package org.anchoranalysis.io.csv.comparer;
 import static org.anchoranalysis.io.csv.comparer.CompareUtilities.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
@@ -40,11 +41,11 @@ class CompareUnsorted {
 			boolean first = true;
 			
 			while( true ) {
-				String[] lines1 = file1.readLine();
-				String[] lines2 = file2.readLine();
+				Optional<String[]> lines1 = file1.readLine();
+				Optional<String[]> lines2 = file2.readLine();
 				
 				if (first) {
-					checkZeroRows(rejectZeroRows, lines1,lines2);
+					checkZeroRows(rejectZeroRows, lines1, lines2);
 					first = false;
 				}
 				
@@ -52,7 +53,7 @@ class CompareUnsorted {
 					return false;
 				}
 				
-				if (lines1==null) {
+				if (!lines1.isPresent()) {
 					// lines2 must also be null by this point
 					return true;
 				}

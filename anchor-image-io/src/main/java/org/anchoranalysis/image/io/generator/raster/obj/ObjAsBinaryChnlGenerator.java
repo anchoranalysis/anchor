@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Writes an object-mask as a channel
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjAsBinaryChnlGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
@@ -118,7 +118,7 @@ public class ObjAsBinaryChnlGenerator extends RasterGenerator implements Iterabl
 			res
 		);
 				
-		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.instance );
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised( newSd, VoxelDataTypeUnsignedByte.INSTANCE );
 		
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		

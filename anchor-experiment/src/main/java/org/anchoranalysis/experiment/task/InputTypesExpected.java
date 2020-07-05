@@ -35,7 +35,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 /**
  * A list of base (parent) classes for input-types that a task expects
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class InputTypesExpected {

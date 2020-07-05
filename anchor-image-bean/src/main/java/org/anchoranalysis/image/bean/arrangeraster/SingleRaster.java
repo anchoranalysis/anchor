@@ -29,12 +29,10 @@ package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.Iterator;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class SingleRaster extends ArrangeRasterBean {
@@ -49,16 +47,13 @@ public class SingleRaster extends ArrangeRasterBean {
 		}
 		
 		RGBStack stack = rasterIterator.next();
-		ImageDimensions sd = stack.getChnl(0).getDimensions();
+
+		Extent extent = stack.getChnl(0).getDimensions().getExtnt();
 		
-		Point3i crnrMin = new Point3i( 0, 0, 0 );
-		Extent extent = new Extent( sd.getX(), sd.getY(), sd.getZ() );
-		BoundingBox bbox = new BoundingBox(crnrMin, extent);
-		
-		BBoxSetOnPlane set = new BBoxSetOnPlane();
-		set.setExtnt(extent);
-		set.add(bbox);
-		return set;
+		return new BBoxSetOnPlane(
+			extent,
+			new BoundingBox(extent)
+		);
 	}
 
 }

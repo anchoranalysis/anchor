@@ -75,9 +75,9 @@ public class VoxelBoxWrapper {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public VoxelBox<ByteBuffer> asByte() throws IncorrectVoxelDataTypeException {
+	public VoxelBox<ByteBuffer> asByte() {
 		
-		if (!voxelDataType.equals( VoxelDataTypeUnsignedByte.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain unsigned 8-bit data (byte)");
 		}
 		
@@ -85,9 +85,9 @@ public class VoxelBoxWrapper {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public VoxelBox<FloatBuffer> asFloat() throws IncorrectVoxelDataTypeException {
+	public VoxelBox<FloatBuffer> asFloat() {
 		
-		if (!voxelDataType.equals( VoxelDataTypeFloat.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeFloat.INSTANCE )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain float data");
 		}
 		
@@ -95,9 +95,9 @@ public class VoxelBoxWrapper {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public VoxelBox<ShortBuffer> asShort() throws IncorrectVoxelDataTypeException {
+	public VoxelBox<ShortBuffer> asShort() {
 		
-		if (!voxelDataType.equals( VoxelDataTypeUnsignedShort.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeUnsignedShort.INSTANCE )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain unsigned 16-bit data (int)");
 		}
 		
@@ -105,9 +105,9 @@ public class VoxelBoxWrapper {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public VoxelBox<IntBuffer> asInt() throws IncorrectVoxelDataTypeException {
+	public VoxelBox<IntBuffer> asInt() {
 		
-		if (!voxelDataType.equals( VoxelDataTypeUnsignedInt.instance )) {
+		if (!voxelDataType.equals( VoxelDataTypeUnsignedInt.INSTANCE )) {
 			throw new IncorrectVoxelDataTypeException("VoxelBox does not contain unsigned 32-bit data (int)");
 		}
 		
@@ -127,7 +127,7 @@ public class VoxelBoxWrapper {
 		
 		// If the input-channel is Byte then we do it in-place
 		// Otherwise we create a new voxelbox
-		if(!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+		if(!alwaysDuplicate && getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			boxOut = asByte();
 		} else {
 			boxOut = VoxelBoxFactory.getByte().create( any().extent() );

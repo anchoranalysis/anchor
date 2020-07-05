@@ -43,6 +43,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
@@ -71,11 +72,6 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * @param <T> type of the pair
  */
 public class PairCollectionAddCriteria<T> extends PairCollection<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3740934203419386237L;
 	
 	private GraphWithEdgeTypes<Mark,T> graph;
 	
@@ -84,13 +80,13 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	private Class<?> pairTypeClass;
 	
 	@BeanField
-	private transient AddCriteria<T> addCriteria;
+	private AddCriteria<T> addCriteria;
 	// END BEAN PROPERTIES
 	
-	private transient boolean hasInit = false;
-	private transient NRGStackWithParams nrgStack;
-	private transient LogErrorReporter logger;
-	private transient SharedFeatureMulti sharedFeatures;
+	private boolean hasInit = false;
+	private NRGStackWithParams nrgStack;
+	private LogErrorReporter logger;
+	private SharedFeatureMulti sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
 		this.pairTypeClass = pairTypeClass;
@@ -121,8 +117,6 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	@Override
 	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
-		assert( sharedFeatures!=null );
-		assert( logger!=null );
 		this.logger = logger;
 		this.sharedFeatures = sharedFeatures;
 		
@@ -158,7 +152,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	@Override
 	public void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
-		assert hasInit;
+		checkInit();
 		try {
 			this.graph.addVertex( newMark.getMark() );
 			calcPairsForMark( marksExisting, newMark, nrgStack );
@@ -169,8 +163,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	@Override
 	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
-		
-		assert hasInit;
+		checkInit();
 		
 		// We need to make a copy of the list, so we can perform the removal operation after the add
 		MemoList memoList = new MemoList(); 
@@ -185,13 +178,9 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) {
-		
-		assert(hasInit);
-		
-		assert this.graph.containsVertex(mark.getMark() );
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
+		checkInit();
 		this.graph.removeVertex(mark.getMark());
-		assert !this.graph.containsVertex(mark.getMark() );
 	}
 	
 	// START DELEGATES
@@ -202,7 +191,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	// Each pair appears twice
 	public Set<T> createPairsUnique() {
-		HashSet<T> setOut = new HashSet<T>();
+		HashSet<T> setOut = new HashSet<>();
 		for( EdgeTypeWithVertices<Mark,T> pair : getPairsWithPossibleDuplicates()) {
 			setOut.add(pair.getEdge());
 		}
@@ -242,12 +231,12 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	//  it's more efficient to sample from this, than to always insist upon uniqueness, as this involves
 	//  creating a HashMap each query (due to the implementation)
 	@Override
-	public T randomPairNonUniform( RandomNumberGenerator re ) {
+	public T sampleRandomPairNonUniform( RandomNumberGenerator re ) {
 		
 		int count = this.graph.edgeSetWithPossibleDuplicates().size();
 		
 		if (count==0) {
-			return null;
+			throw new AnchorFriendlyRuntimeException("No edges exist to sample from");
 		}
 		
 		// Pick an element from the existing configuration
@@ -260,7 +249,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 			}
 		}
 		
-		throw new RuntimeException("Invalid index chosen for randomPair");
+		throw new AnchorFriendlyRuntimeException("Invalid index chosen for randomPair");
 	}
 	
 	public AddCriteria<T> getAddCriteria() {
@@ -289,17 +278,20 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 				
 				PxlMarkMemo destMark = marks.getMemoForIndex(j);
 				
-				T pair = addCriteria.generateEdge(srcMark, destMark, stack, session, stack.getDimensions().getZ()>1 );
-				if( pair != null ) {
-					graph.addEdge( srcMark.getMark(), destMark.getMark(), pair );
-				}
+				addCriteria.generateEdge(
+					srcMark,
+					destMark,
+					stack,
+					session,
+					stack.getDimensions().getZ()>1
+				).ifPresent( pair->
+					graph.addEdge( srcMark.getMark(), destMark.getMark(), pair )
+				);
 			}
 		}
 	}
 	
 	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
-		assert sharedFeatures!=null;
-		assert logger!=null;
 		
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session;
 		
@@ -322,15 +314,22 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 
 			PxlMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
 			if (!otherMark.getMark().equals( newMark.getMark() )) {
-			
-				T pair = addCriteria.generateEdge(otherMark,newMark, nrgStack, session, nrgStack.getDimensions().getZ()>1 );
-				if (pair!=null) {
-					assert containsMark( otherMark.getMark() );
-					assert containsMark( newMark.getMark() );
-
-					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair );
-				}
+				addCriteria.generateEdge(
+					otherMark,
+					newMark,
+					nrgStack,
+					session,
+					nrgStack.getDimensions().getZ()>1
+				).ifPresent( pair->
+					this.graph.addEdge( otherMark.getMark(), newMark.getMark(), pair )
+				);
 			} 
+		}
+	}
+		
+	private void checkInit() throws UpdateMarkSetException {
+		if (!hasInit) {
+			throw new UpdateMarkSetException("object has not been initialized");
 		}
 	}
 }

@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * 
  * @param T underlying feature-input type
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public interface SessionInput<T extends FeatureInput> {

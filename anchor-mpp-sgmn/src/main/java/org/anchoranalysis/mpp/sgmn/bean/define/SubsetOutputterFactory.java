@@ -102,7 +102,7 @@ class SubsetOutputterFactory {
 			Function<BoundOutputManagerRouteErrors,OutputAllowed> outputAllowedFunc,
 			String id
 		) {
-		return new SubsetOutputter<T>(
+		return new SubsetOutputter<>(
 			store,
 			outputAllowedFunc.apply(outputManager),
 			generator,

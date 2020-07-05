@@ -28,9 +28,11 @@ package org.anchoranalysis.feature.io.csv.name;
 
 import java.util.Optional;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class MultiNameFactory {
-	
-	private MultiNameFactory() {}
 
 	/**
 	 * Creates either a multi-name that is either has a single part or a double part (with a group as first part)

@@ -33,24 +33,20 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
  * 
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public abstract class PrecalcOverlay {
 
-	private ObjectWithProperties first;		// Result of the Mark->ObjMaskWithProperties 	
-	
-	public PrecalcOverlay(ObjectWithProperties first) {
-		super();
-		this.first = first;
-	}
-
-	public ObjectWithProperties getFirst() {
-		return first;
-	}
+	@Getter
+	private final ObjectWithProperties first; 	
 
 	public abstract void writePrecalculatedMask(
 		RGBStack stack,

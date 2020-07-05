@@ -53,7 +53,7 @@ class AppendHelper {
 	/** Reads an object from a path */
 	@FunctionalInterface
 	private interface ReadFromPath<T> {
-		T apply(Path in) throws Exception;
+		T apply(Path in) throws Exception;	// NOSONAR
 	}
 	
 	// We assume all the input files are single channel images
@@ -88,7 +88,7 @@ class AppendHelper {
 			inputObject,				
 			list,
 			MultiInput::histogram,
-			outPath -> HistogramCSVReader.readHistogramFromFile( outPath ),
+			HistogramCSVReader::readHistogramFromFile,
 			debugMode
 		);
 	}
@@ -121,7 +121,7 @@ class AppendHelper {
 			inputObject,				
 			list,
 			MultiInput::keyValueParams,
-			outPath -> KeyValueParams.readFromFile(outPath),
+			KeyValueParams::readFromFile,
 			debugMode
 		);
 	}
@@ -136,7 +136,7 @@ class AppendHelper {
 			inputObject,				
 			listAppendCfg,
 			MultiInput::cfg,
-			outPath -> DeserializerHelper.deserializeCfg( outPath ),
+			DeserializerHelper::deserializeCfg,
 			debugMode
 		);
 	}
@@ -171,7 +171,7 @@ class AppendHelper {
 			inputObject,
 			listAppendCfg,
 			MultiInput::objs,
-			outPath -> ObjectMaskCollectionReader.createFromPath(outPath),
+			ObjectMaskCollectionReader::createFromPath,
 			debugMode
 		);
 	}
@@ -215,7 +215,7 @@ class AppendHelper {
 		// Delayed-calculation of the appending path as it can be a bit expensive when multiplied by so many items
 		CachedOperation<Path, AnchorIOException> outPath = new OperationOutFilePath(
 			ni,
-			()->inputObject.pathForBinding(),
+			inputObject::pathForBinding,
 			debugMode
 		);						
 		

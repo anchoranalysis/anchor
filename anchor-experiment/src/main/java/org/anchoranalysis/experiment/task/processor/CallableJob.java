@@ -103,7 +103,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<Optio
 			logger.logEnd(jobDescription, jobState, success);
 			return Optional.empty();
 			
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			// If executeTask is called with supressException==TRUE then Exceptions shouldn't occur here as a rule from specific-tasks,
 			//   as they should be logged internally to task-log. So if any error is actually thrown here, let's consider it suspciously
 			//

@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * A feature that must be initialized with params first before being valid
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <S> feature initialization type (this feature should only be initialized with this type, or an exception will be thrown)
  * @param <T> feature input-type
@@ -62,7 +62,6 @@ public abstract class FeatureCastInitParams<S extends FeatureInitParams, T exten
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(FeatureInitParams params, FeatureBase<T> parentFeature, LogErrorReporter logger) throws InitException {
-		assert( logger!=null );
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
 			S paramsCast = (S) params;
 			super.init(params, parentFeature, logger);

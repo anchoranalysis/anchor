@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.error.BeanXmlException;
 /**
  * Adds bean-definitions to a Define class
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 @FunctionalInterface

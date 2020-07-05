@@ -35,8 +35,12 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 
-public class RasterReaderUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class RasterReaderUtilities {
+	
 	public static Stack openStackFromPath( RasterReader rasterReader, Path path ) throws RasterIOException {
 		OpenedRaster openedRaster = rasterReader.openFile(path);
 		

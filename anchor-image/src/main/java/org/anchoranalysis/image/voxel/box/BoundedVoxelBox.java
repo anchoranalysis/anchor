@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.box;
 
 import java.nio.Buffer;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,26 +46,27 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
  * A a voxel buffer representing an object
  *  i.e. a region bounded in space
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> BufferType
  */
 public class BoundedVoxelBox<T extends Buffer> {
 
-	private static final Point3i allOnes2D = new Point3i(1,1,0);
-	private static final Point3i allOnes3D = new Point3i(1,1,1);
+	private static final Point3i ALL_ONES_2D = new Point3i(1,1,0);
+	private static final Point3i ALL_ONES_3D = new Point3i(1,1,1);
 	
 	private BoundingBox boundingBox;
 	private VoxelBox<T> voxelBox;
 	
-	// Initialises a voxel box to match a BoundingBox size, with all values set to 0  
-	public BoundedVoxelBox(BoundingBox bbox, VoxelBoxFactoryTypeBound<T> factory) {
-		super();
-		this.boundingBox = bbox;
-		assert(!bbox.extent().isEmpty());
-		assert(bbox.extent().getZ()>0);
-		this.voxelBox = factory.create( bbox.extent() );
-		assert(sizesMatch());
+	/**
+	 * Initialises a voxel box to match a BoundingBox size, with all values set to 0
+	 *   
+	 * @param boundingBox bounding-box
+	 * @param factory factory for voxel-box
+	 */
+	public BoundedVoxelBox(BoundingBox boundingBox, VoxelBoxFactoryTypeBound<T> factory) {
+		this.boundingBox = boundingBox;
+		this.voxelBox = factory.create( boundingBox.extent() );
 	}
 	
 	public BoundedVoxelBox(VoxelBox<T> voxelBox ) {
@@ -78,13 +79,15 @@ public class BoundedVoxelBox<T extends Buffer> {
 		this.voxelBox = voxelBox;
 	}
 	
-	// Copy constructor
-	public BoundedVoxelBox(BoundedVoxelBox<T> src) {
+	/**
+	 * Copy constructor
+	 * 
+	 * @param source where to copy from
+	 */
+	public BoundedVoxelBox(BoundedVoxelBox<T> source) {
 		super();
-		this.boundingBox = src.getBoundingBox();
-		assert( src.voxelBox.extent().getZ() > 0 );
-		this.voxelBox = src.voxelBox.duplicate();
-		assert( this.voxelBox.extent().equals( src.voxelBox.extent() ));
+		this.boundingBox = source.getBoundingBox();
+		this.voxelBox = source.voxelBox.duplicate();
 	}
 	
 	public boolean equalsDeep( BoundedVoxelBox<?> other) {
@@ -92,10 +95,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		if(!boundingBox.equals(other.boundingBox)) {
 			return false;
 		}
-		if(!voxelBox.equalsDeep(other.voxelBox)) {
-			return false;
-		}
-		return true;
+		return voxelBox.equalsDeep(other.voxelBox);
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		assert(this.voxelBox.extent().getZ()==1);
 		
 		BoundingBox bboxNew = new BoundingBox(
-			boundingBox.getCornerMin(),
+			boundingBox.cornerMin(),
 			boundingBox.extent().duplicateChangeZ(sz)
 		);
 		
@@ -171,7 +171,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extent is absolute
 	 */
 	public BoundingBox dilate( boolean do3D, Optional<Extent> clipRegion ) {
-		Point3i allOnes = do3D ? allOnes3D : allOnes2D;
+		Point3i allOnes = do3D ? ALL_ONES_3D : ALL_ONES_2D;
 		return createGrownBoxAbsolute(allOnes,allOnes, clipRegion);
 	}
 	
@@ -179,14 +179,14 @@ public class BoundedVoxelBox<T extends Buffer> {
 	/**
 	 * Creates a grown bounding-box relative to this current box (absolute coordinates)
 	 * 
-	 * @param neg how much to grow in the negative direction
-	 * @param pos how much to grow in the negative direction
-	 * @param clipRegion a region to clip to, which we can't grow beyond
+	 * @param  neg how much to grow in the negative direction
+	 * @param  pos how much to grow in the negative direction
+	 * @param  clipRegion a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box, the extent is absolute
 	 */
 	private BoundingBox createGrownBoxAbsolute( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
-		return relBox.reflectThroughOrigin().shiftBy( boundingBox.getCornerMin() );
+		return relBox.reflectThroughOrigin().shiftBy( boundingBox.cornerMin() );
 	}
 
 	
@@ -194,38 +194,32 @@ public class BoundedVoxelBox<T extends Buffer> {
 	/**
 	 * Creates a grown bounding-box relative to this current box (relative coordinates)
 	 * 
-	 * @param neg how much to grow in the negative direction
-	 * @param pos how much to grow in the negative direction
-	 * @param a region to clip to, which we can't grow beyond
+	 * @param  neg how much to grow in the negative direction
+	 * @param  pos how much to grow in the negative direction
+	 * @param  a region to clip to, which we can't grow beyond
 	 * @return a bounding box: the crnr is the relative-position to the current bounding box (multipled by -1), the extent is absolute
 	 */
 	private BoundingBox createGrownBoxRelative( Point3i neg, Point3i pos, Optional<Extent> clipRegion ) {
 		
 		Point3i negClip = new Point3i(
-			clipNeg(boundingBox.getCornerMin().getX(), neg.getX()),
-			clipNeg(boundingBox.getCornerMin().getY(), neg.getY()),
-			clipNeg(boundingBox.getCornerMin().getZ(), neg.getZ())
+			clipNeg(boundingBox.cornerMin().getX(), neg.getX()),
+			clipNeg(boundingBox.cornerMin().getY(), neg.getY()),
+			clipNeg(boundingBox.cornerMin().getZ(), neg.getZ())
 		);
 		
 		ReadableTuple3i bboxMax = boundingBox.calcCornerMax();
 		
-		int maxPossibleX;
-		int maxPossibleY;
-		int maxPossibleZ;
+		ReadableTuple3i maxPossible;
 		if (clipRegion.isPresent()) {
-			maxPossibleX = clipRegion.get().getX();
-			maxPossibleY = clipRegion.get().getY();
-			maxPossibleZ = clipRegion.get().getZ();
+			maxPossible = clipRegion.get().asTuple();
 		} else {
-			maxPossibleX = Integer.MAX_VALUE;
-			maxPossibleY = Integer.MAX_VALUE;
-			maxPossibleZ = Integer.MAX_VALUE;
+			maxPossible = new Point3i(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE);
 		}
 		
 		Point3i growBy = new Point3i(
-			clipPos(bboxMax.getX(), pos.getX(), maxPossibleX) + negClip.getX(),
-			clipPos(bboxMax.getY(), pos.getY(), maxPossibleY) + negClip.getY(),
-			clipPos(bboxMax.getZ(), pos.getZ(), maxPossibleZ) + negClip.getZ()
+			clipPos(bboxMax.getX(), pos.getX(), maxPossible.getX()) + negClip.getX(),
+			clipPos(bboxMax.getY(), pos.getY(), maxPossible.getY()) + negClip.getY(),
+			clipPos(bboxMax.getZ(), pos.getZ(), maxPossible.getZ()) + negClip.getZ()
 		);
 		return new BoundingBox(
 			negClip,
@@ -235,15 +229,22 @@ public class BoundedVoxelBox<T extends Buffer> {
 	
 	
 	/**
-	 * Creates a new copy of the object mask with the buffer grown in pos and neg directions by a certain amount
+	 * Grows buffer of the object-mask in positive and negative directions by a certain amount.
 	 * 
-	 * @param neg
-	 * @param pos
-	 * @param clipRegion if defined, clips the buffer to this region
-	 * @param factory
-	 * @return
+	 * <p>This operation is <i>immutable</i>.
+	 * 
+	 * @param  growthNegative
+	 * @param  growthPositive
+	 * @param  clipRegion if defined, clips the buffer to this region
+	 * @param  factory
+	 * @return the grown object mask with newly-created buffers
 	 */
-	public BoundedVoxelBox<T> growBuffer( Point3i neg, Point3i pos, Optional<Extent> clipRegion, VoxelBoxFactoryTypeBound<T> factory ) throws OperationFailedException {
+	public BoundedVoxelBox<T> growBuffer(
+		Point3i growthNegative,
+		Point3i growthPositive,
+		Optional<Extent> clipRegion,
+		VoxelBoxFactoryTypeBound<T> factory
+	) throws OperationFailedException {
 		
 		if(clipRegion.isPresent() && !clipRegion.get().contains(this.boundingBox) ) {
 			throw new OperationFailedException("Cannot grow the bounding-box of the object-mask, as it is already outside the clipping region.");
@@ -251,15 +252,19 @@ public class BoundedVoxelBox<T extends Buffer> {
 		
 		Extent e = this.voxelBox.extent();
 				
-		BoundingBox grownBox = createGrownBoxRelative( neg, pos, clipRegion );
+		BoundingBox grownBox = createGrownBoxRelative( growthNegative, growthPositive, clipRegion );
 				
 		// We allocate a new buffer
 		VoxelBox<T> bufferNew = factory.create( grownBox.extent() );
-		this.voxelBox.copyPixelsTo(new BoundingBox(e), bufferNew, new BoundingBox(grownBox.getCornerMin(),e)  );
+		this.voxelBox.copyPixelsTo(
+			new BoundingBox(e),
+			bufferNew,
+			new BoundingBox(grownBox.cornerMin(),e)
+		);
 		
 		// We create a new bounding box
 		BoundingBox bbo = new BoundingBox(
-			Point3i.immutableSubtract( this.boundingBox.getCornerMin(), grownBox.getCornerMin() ),
+			Point3i.immutableSubtract( this.boundingBox.cornerMin(), grownBox.cornerMin() ),
 			grownBox.extent()
 		);
 		
@@ -283,19 +288,12 @@ public class BoundedVoxelBox<T extends Buffer> {
 			interpolator
 		);
 		
-		return new BoundedVoxelBox<T>(
+		return new BoundedVoxelBox<>(
 			boundingBox.scale(scaleFactor, voxelBoxOut.extent()),
 			voxelBoxOut
 		);
 	}
-	
-	private boolean sizesMatch() {
-		boolean xCrct = ((this.getBoundingBox().extent().getX())==getVoxelBox().extent().getX());
-		boolean yCrct = ((this.getBoundingBox().extent().getY())==getVoxelBox().extent().getY());
-		boolean zCrct = ((this.getBoundingBox().extent().getZ())==getVoxelBox().extent().getZ());
-		return xCrct && yCrct && zCrct;
-	}
-	
+		
 	public BoundedVoxelBox<T> createMaxIntensityProjection() {
 		BoundingBox bboxNew = boundingBox.flattenZ();
 		return new BoundedVoxelBox<>(bboxNew,voxelBox.maxIntensityProj());
@@ -316,9 +314,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	}
 	
 	public BoundedVoxelBox<T> duplicate() {
-		BoundedVoxelBox<T> newMask = new BoundedVoxelBox<>(this);
-		assert(newMask.sizesMatch());
-		return newMask;
+		return new BoundedVoxelBox<>(this);
 	}
 	
 	public BoundingBox getBoundingBox() {
@@ -343,9 +339,9 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * 
 	 * <p>This will always reuse the existing voxel-buffers.</p.
 	 * 
-	 * @param zMin minimum z-slice index, inclusive.
-	 * @param zMax maximum z-slice index, inclusive.
-	 * @param factory factory to use to create new voxels.
+	 * @param  zMin minimum z-slice index, inclusive.
+	 * @param  zMax maximum z-slice index, inclusive.
+	 * @param  factory factory to use to create new voxels.
 	 * @return a newly created box for the slice-range requested.
 	 * @throws CreateException
 	 */
@@ -358,28 +354,27 @@ public class BoundedVoxelBox<T extends Buffer> {
 			throw new CreateException("zMax outside range");
 		}
 		
-		int relZ = zMin - boundingBox.getCornerMin().getZ();
+		int relZ = zMin - boundingBox.cornerMin().getZ();
 		
 		BoundingBox target = new BoundingBox(
-			boundingBox.getCornerMin().duplicateChangeZ(zMin),
+			boundingBox.cornerMin().duplicateChangeZ(zMin),
 			boundingBox.extent().duplicateChangeZ(zMax-zMin+1)
 		);
 		
-		SubrangeVoxelAccess<T> voxelAccess = new SubrangeVoxelAccess<T>(relZ,target.extent(),this);
-		return new BoundedVoxelBox<T>( target, factory.create(voxelAccess) );
+		SubrangeVoxelAccess<T> voxelAccess = new SubrangeVoxelAccess<>(relZ,target.extent(),this);
+		return new BoundedVoxelBox<>( target, factory.create(voxelAccess) );
 	}
 	
 	/**
 	 * A (sub-)region of the voxels.
+	 * <p>
+	 * The region may some smaller portion of the voxel-box, or the voxel-box as a whole.
+	 * <p>
+	 * It should <b>never</b> be larger than the voxel-box.
 	 * 
-	 * <p>The region may some smaller portion of the voxel-box, or the voxel-box as a whole.</p>
-	 * 
-	 * <p>It should <b>never</b> be larger than the voxel-box.</p>
-	 * 
-	 * <p>See {@link org.anchoranalysis.image.voxel.box.VoxelBox::region) for more details.</p>
-	 *   
-	 * @param bounding-box in absolute coordinates.
-	 * @param reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new box is always created.
+	 * @see    org.anchoranalysis.image.voxel.box.VoxelBox#region
+	 * @param  bbox bounding-box in absolute coordinates.
+	 * @param  reuseIfPossible if TRUE the existing box will be reused if possible, otherwise a new box is always created.
 	 * @return a bounded voxel-box corresponding to the requested region, either newly-created or reused
 	 * @throws CreateException
 	 */
@@ -442,7 +437,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * 
 	 * @return a new object-mask with the updated bounding box
 	 */
-	public BoundedVoxelBox<T> mapBoundingBox( Function<BoundingBox,BoundingBox> mapFunc ) {
+	public BoundedVoxelBox<T> mapBoundingBox( UnaryOperator<BoundingBox> mapFunc ) {
 		return new BoundedVoxelBox<>(
 			mapFunc.apply(boundingBox),
 			voxelBox

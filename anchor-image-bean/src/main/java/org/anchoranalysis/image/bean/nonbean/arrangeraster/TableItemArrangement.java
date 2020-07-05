@@ -30,10 +30,16 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableItemArrangement<ItemType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> item-type
+ */
+public class TableItemArrangement<T> {
 
-	private List<List<ItemType>> rows;
-	private List<List<ItemType>> cols;
+	private List<List<T>> rows;
+	private List<List<T>> cols;
 	
 	private int numCols;
 	
@@ -47,11 +53,11 @@ public class TableItemArrangement<ItemType> {
 	
 	// Assumes we will only ever call get() on an index that is one more than
 	//  than existing items, so add() is sufficient
-	private List<ItemType> getListOrAdd( List<List<ItemType>> list, int index ) {
+	private List<T> getListOrAdd( List<List<T>> list, int index ) {
 		
 		
 		if (index >= list.size()) {
-			List<ItemType> crntList = new ArrayList<>();
+			List<T> crntList = new ArrayList<>();
 			list.add( crntList );
 			return crntList;
 		} else {
@@ -70,15 +76,15 @@ public class TableItemArrangement<ItemType> {
 		return true;
 	}
 	
-	public ItemType get( int rowIndex, int colIndex ) {
+	public T get( int rowIndex, int colIndex ) {
 		return rows.get(rowIndex).get(colIndex);
 	}
 	
-	public List<ItemType> getRow( int index ) {
+	public List<T> getRow( int index ) {
 		return rows.get(index);
 	}
 	
-	public List<ItemType> getCol( int index ) {
+	public List<T> getCol( int index ) {
 		return cols.get(index);
 	}
 	
@@ -98,7 +104,7 @@ public class TableItemArrangement<ItemType> {
 		return index % numCols;
 	}
 	
-	public TableItemArrangement( ITableCreator<ItemType> rasterIterator, int numRows, int numCols ) throws TableItemException {
+	public TableItemArrangement( ITableCreator<T> rasterIterator, int numRows, int numCols ) throws TableItemException {
 		
 		this.numCols = numCols;
 		
@@ -112,11 +118,11 @@ public class TableItemArrangement<ItemType> {
 					return;
 				}
 				
-				ItemType item = rasterIterator.createNext(crntRow, crntCol);
+				T item = rasterIterator.createNext(crntRow, crntCol);
 				assert( item != null );
 				
-				List<ItemType> crntRowList = getListOrAdd( rows, crntRow );
-				List<ItemType> crntColList = getListOrAdd( cols, crntCol );
+				List<T> crntRowList = getListOrAdd( rows, crntRow );
+				List<T> crntColList = getListOrAdd( cols, crntCol );
 				
 				crntRowList.add(item);
 				crntColList.add(item);

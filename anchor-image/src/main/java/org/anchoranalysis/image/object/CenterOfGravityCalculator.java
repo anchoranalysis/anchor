@@ -75,7 +75,7 @@ final class CenterOfGravityCalculator {
 		}
 
 		sum.divideBy(cnt);
-		sum.add(om.getBoundingBox().getCornerMin());
+		sum.add(om.getBoundingBox().cornerMin());
 		return sum;
 	}
 	
@@ -117,7 +117,7 @@ final class CenterOfGravityCalculator {
 			return Double.NaN;
 		}
 		
-		return (sum / cnt) + om.getBoundingBox().getCornerMin().getValueByDimension(axisType);
+		return (sum / cnt) + om.getBoundingBox().cornerMin().getValueByDimension(axisType);
 	}
 		
 	private static Point3d emptyPoint() {

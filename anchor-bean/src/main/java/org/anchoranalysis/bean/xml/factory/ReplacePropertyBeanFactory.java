@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
@@ -81,20 +82,27 @@ public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorB
 		return bean;
     }
 	
-	private T extractBeanAndReplace( XMLBeanDeclaration declXML, String key, boolean attribute, Object param ) throws Exception {
+	private T extractBeanAndReplace( XMLBeanDeclaration declXML, String key, boolean attribute, Object param ) throws BeanXmlException {
 		T bean = HelperUtilities.createBeanFromXML(declXML, ITEM, param);
 		
 		// Update bean with replacement
-		Object replacement = extractReplacement( declXML, key, attribute, param );
+		Object replacement = extractReplacement( declXML, attribute, param );
 		
 		// Check that the key exists to replace
 		if (!hasProperty(bean, key)) {
-			throw new Exception(
+			throw new BeanXmlException(
 				String.format("There is no property '%s' on the item on which the replacement occurs",key)
 			);
 		}
 		
-		BeanUtils.setProperty(bean, key, replacement);
+		try {
+			BeanUtils.setProperty(bean, key, replacement);
+		} catch (IllegalAccessException | InvocationTargetException exc) {
+			throw new BeanXmlException(
+				String.format("Cannot set property '%s'",key),
+				exc
+			);
+		}
 		return bean;
 	}
 	
@@ -108,7 +116,7 @@ public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorB
 	}
 	
 	/*** Depending of we are replacing an attribute or an element (field or bean) we extract it differently */ 
-	private Object extractReplacement( XMLBeanDeclaration declXML, String key, boolean attribute, Object param ) throws Exception {
+	private Object extractReplacement( XMLBeanDeclaration declXML, boolean attribute, Object param ) {
 		if (attribute) {
 			return declXML.getBeanProperties().get(REPLACEMENT);
 		} else {

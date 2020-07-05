@@ -34,23 +34,19 @@ import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.match.FolderWriteExperimentalFileFolder;
 
 // Finders
-public class FinderExperimentFileFolders extends Finder {
+public class FinderExperimentFileFolders implements Finder {
 
-	private List<FolderWrite> list;
+	private List<FolderWrite> list=null;
 	
 	@Override
 	public boolean doFind(ManifestRecorder manifestRecorder) {
-		
-		
-		// TODO Auto-generated method stub
 		list = FinderUtilities.findListFolder(manifestRecorder, new FolderWriteExperimentalFileFolder() );
-		
-		return list.size() > 0;
+		return !list.isEmpty();
 	}
 
 	@Override
 	public boolean exists() {
-		return list!=null && list.size() > 0;
+		return list!=null && !list.isEmpty();
 	}
 
 	public List<FolderWrite> getList() {

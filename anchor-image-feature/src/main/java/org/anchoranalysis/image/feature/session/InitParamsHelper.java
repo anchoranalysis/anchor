@@ -34,13 +34,15 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class InitParamsHelper {
-	
-	private InitParamsHelper() {}
 	
 	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
 		
-		Optional<KeyValueParams> kvp = nrgStack.map( n->n.getParams() );
+		Optional<KeyValueParams> kvp = nrgStack.map(NRGStackWithParams::getParams);
 				
 		FeatureInitParams params;
 		if (so!=null) {
@@ -50,7 +52,7 @@ public class InitParamsHelper {
 			params = new FeatureInitParams(kvp);
 		}
 		params.setNrgStack(
-			nrgStack.map( n->n.getNrgStack() )
+			nrgStack.map(NRGStackWithParams::getNrgStack)
 		);
 		return params;
 	}

@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.bean.points;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
@@ -73,7 +74,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	public Mark fitMarkToPointsFromCfg( Cfg cfg, ImageDimensions dim ) throws OperationFailedException {
+	public Optional<Mark> fitMarkToPointsFromCfg( Cfg cfg, ImageDimensions dim ) throws OperationFailedException {
 		
 		try {
 			Mark mark = markProvider.create().orElseThrow( ()->
@@ -98,19 +99,18 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 		}
 	}
 	
-	private Mark fitPoints( Mark mark, List<Point3f> pnts, ImageDimensions dim ) throws OperationFailedException {
+	private Optional<Mark> fitPoints( Mark mark, List<Point3f> pnts, ImageDimensions dim ) throws OperationFailedException {
 		try {
 			pointsFitter.fit(pnts, mark, dim );
+			return Optional.of(mark);
 		} catch (InsufficientPointsException e ) {
 			return maybeThrowInsufficientPointsException(pnts);
 		} catch (PointsFitterException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		return mark;
 	}
 			
-	private Mark maybeThrowInsufficientPointsException( List<Point3f> pnts ) throws OperationFailedException {
+	private Optional<Mark> maybeThrowInsufficientPointsException( List<Point3f> pnts ) throws OperationFailedException {
 		if (throwExceptionForInsufficientPoints) {
 			throw new OperationFailedException(
 				String.format(
@@ -120,7 +120,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 				)
 			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
@@ -151,7 +151,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
 	private static void addPointsFrom( MarkPointList mark, List<Point3f> pnts ) {
 		pnts.addAll(
-			PointConverter.convert3d_3f( mark.getPoints() )
+			PointConverter.convert3dTo3f( mark.getPoints() )
 		);
 	}
 	

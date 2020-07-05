@@ -38,13 +38,12 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
-public class ChnlConverterDelegateToHistogram<T extends Buffer> extends ChnlConverterAttached<Channel, T> {
+import lombok.RequiredArgsConstructor;
 
-	private ChnlConverterAttached<Histogram, T> delegate;
-	
-	public ChnlConverterDelegateToHistogram(ChnlConverterAttached<Histogram, T> delegate) {
-		this.delegate = delegate;
-	}
+@RequiredArgsConstructor
+public class ChnlConverterDelegateToHistogram<T extends Buffer> implements ChnlConverterAttached<Channel, T> {
+
+	private final ChnlConverterAttached<Histogram, T> delegate;
 	
 	@Override
 	public void attachObject(Channel obj) throws OperationFailedException {

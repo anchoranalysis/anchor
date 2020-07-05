@@ -75,10 +75,8 @@ public class StackGenerator extends RasterGenerator implements IterableObjectGen
 		}
 		
 		try {
-			if (padIfNec) {
-				if (stackOut.getNumChnl()==2) {
-					stackOut.addBlankChnl();
-				}
+			if (padIfNec && stackOut.getNumChnl()==2) {
+				stackOut.addBlankChnl();
 			}
 		} catch (OperationFailedException e) {
 			throw new OutputWriteFailedException(e);

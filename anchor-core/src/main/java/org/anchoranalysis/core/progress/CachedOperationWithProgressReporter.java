@@ -35,7 +35,7 @@ import org.anchoranalysis.core.functional.Operation;
  * @param <R> result-type
  * @param <E> exception thrown during operation
  */
-public abstract class CachedOperationWithProgressReporter<R, E extends Throwable> implements OperationWithProgressReporter<R,E>, Operation<R,E> {
+public abstract class CachedOperationWithProgressReporter<R, E extends Exception> implements OperationWithProgressReporter<R,E>, Operation<R,E> {
 
 	private R result = null;
 	private boolean done = false;

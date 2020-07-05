@@ -27,8 +27,6 @@ package org.anchoranalysis.anchor.mpp.pair;
  */
 
 
-import java.io.Serializable;
-
 import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
@@ -42,12 +40,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
  * @param <T> pair-type
  */
 @GroupingRoot
-public abstract class PairCollection<T> extends AnchorBean<PairCollection<T>> implements Serializable, UpdatableMarkSet {
+public abstract class PairCollection<T> extends AnchorBean<PairCollection<T>> implements UpdatableMarkSet {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public abstract T randomPairNonUniform( RandomNumberGenerator re );
+	public abstract T sampleRandomPairNonUniform( RandomNumberGenerator re );
 }

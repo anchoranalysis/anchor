@@ -45,7 +45,7 @@ import org.anchoranalysis.experiment.task.TaskStatistics;
  *  - how long did execution take?
  *  - etc.
  *  
- * @author FEEHANO
+ * @author Owen Feehan
  * @param T inputType
  */
 public class MonitoredSequentialExecutor<T> {

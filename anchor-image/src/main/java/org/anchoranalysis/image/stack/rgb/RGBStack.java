@@ -53,7 +53,7 @@ public class RGBStack {
 		chnls = new Stack(sd, factory, 3);
 	}
 	
-	public RGBStack( Stack in ) throws CreateException {
+	public RGBStack( Stack in ) {
 		chnls = in;
 	}
 	
@@ -65,7 +65,7 @@ public class RGBStack {
 		chnls = src.chnls.duplicate();
 	}
 	
-	public RGBStack( Channel red, Channel green, Channel blue) throws CreateException, IncorrectImageSizeException {
+	public RGBStack( Channel red, Channel green, Channel blue) throws IncorrectImageSizeException {
 		chnls = new Stack();
 		chnls.addChnl( red );
 		chnls.addChnl( green );
@@ -122,7 +122,7 @@ public class RGBStack {
 	
 	// Only supports 8-bit
 	public void writeRGBPoint( Point3i point, RGBColor color) {
-		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance) );
+		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
 		writePoint(point, chnls.getChnl(0), (byte) color.getRed() );
 		writePoint(point, chnls.getChnl(1), (byte) color.getGreen() );
 		writePoint(point, chnls.getChnl(2), (byte) color.getBlue() );
@@ -134,7 +134,7 @@ public class RGBStack {
 		assert( pntGlobal.getZ()>= 0);
 		
 		assert( chnls.getNumChnl()==3 );
-		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance) );
+		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
@@ -146,13 +146,13 @@ public class RGBStack {
 		
 		Extent eMask = mask.getBoundingBox().extent();
 		
- 		for (pntGlobal.setY(bbox.getCornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+ 		for (pntGlobal.setY(bbox.cornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 		
-			for (pntGlobal.setX(bbox.getCornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+			for (pntGlobal.setX(bbox.cornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 				
 				int maskOffset = eMask.offset(
-					pntGlobal.getX() - mask.getBoundingBox().getCornerMin().getX(),
-					pntGlobal.getY() - mask.getBoundingBox().getCornerMin().getY()
+					pntGlobal.getX() - mask.getBoundingBox().cornerMin().getX(),
+					pntGlobal.getY() - mask.getBoundingBox().cornerMin().getY()
 				);
 				
 				if (inArr.get(maskOffset)!=maskOn ) {

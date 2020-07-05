@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
 
 /**
- * A {@link #FeatureCalculatorSingle} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
+ * A {@link FeatureCalculatorSingle} but calculations are cached to avoid repetition if equal {@link FeatureInput} are passed.
  * 
  * @author Owen Feehan
  *
@@ -47,13 +47,11 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput> implements Fe
 	 * Creates a feature-calculator with a new cache
 	 * 
 	 * @param source the underlying feature-calculator to use for calculating unknown results
-	 * @param suppressErrors
 	 * @param cacheSize size of cache
 	 */
-	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors) {
+	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source) {
 		delegate = new FeatureCalculatorCachedMulti<>(
-			new FeatureCalculatorMultiFromSingle<>(source),
-			suppressErrors
+			new FeatureCalculatorMultiFromSingle<>(source)
 		);
 	}
 	
@@ -64,10 +62,9 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput> implements Fe
 	 * @param suppressErrors
 	 * @param cacheSize size of cache
 	 */
-	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, boolean suppressErrors, int cacheSize) {
+	public FeatureCalculatorCachedSingle(FeatureCalculatorSingle<T> source, int cacheSize) {
 		delegate = new FeatureCalculatorCachedMulti<>(
 			new FeatureCalculatorMultiFromSingle<>(source),
-			suppressErrors,
 			cacheSize
 		);
 	}

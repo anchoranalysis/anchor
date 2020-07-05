@@ -28,14 +28,13 @@ package org.anchoranalysis.io.bean.deserializer;
 
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-public class ObjectInputStreamDeserializer<T> extends Deserializer<T> {
+public class ObjectInputStreamDeserializer<T> implements Deserializer<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -63,7 +62,7 @@ public class ObjectInputStreamDeserializer<T> extends Deserializer<T> {
 		}
 	}
 	
-	private static ObjectInputStream createInputStream( Path filePath ) throws FileNotFoundException, IOException {
+	private static ObjectInputStream createInputStream( Path filePath ) throws IOException {
 		return new ObjectInputStream(
 			new FileInputStream(
 					filePath.toFile()

@@ -45,6 +45,8 @@ import org.w3c.dom.Document;
 
 public class XmlOutputter {
 
+	private XmlOutputter() {}
+	
 	public static void writeXmlToFile( Document doc, Path filePath ) throws TransformerException, IOException {
 
       Transformer trans = createTransformer();

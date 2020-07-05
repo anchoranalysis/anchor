@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 public class NamedFeatureStore<T extends FeatureInput> implements Iterable<NamedBean<Feature<T>>> {
 	
 	private List<NamedBean<Feature<T>>> list = new ArrayList<>();
-	private Map<String,Integer> mapIndex = new HashMap<String,Integer>();
+	private Map<String,Integer> mapIndex = new HashMap<>();
 	
 	// 
 	

@@ -35,9 +35,9 @@ import org.junit.Test;
 
 public class FeatureCalculatorCachedMultiTest {
 
-	private final static MockFeatureInput INPUT_1 = new MockFeatureInput("1");
-	private final static MockFeatureInput INPUT_2 = new MockFeatureInput("2");
-	private final static MockFeatureInput INPUT_1_REPEATED = new MockFeatureInput("1");
+	private static final MockFeatureInput INPUT_1 = new MockFeatureInput("1");
+	private static final MockFeatureInput INPUT_2 = new MockFeatureInput("2");
+	private static final MockFeatureInput INPUT_1_REPEATED = new MockFeatureInput("1");
 	
 	private FeatureCalculatorCachedMulti<MockFeatureInput> cached;
 	
@@ -46,8 +46,7 @@ public class FeatureCalculatorCachedMultiTest {
 		cached = new FeatureCalculatorCachedMulti<>(
 			FeatureCalculatorMultiFixture.createFeatureCalculator(
 				new ResultsVector(1)	// Result is irrelevant
-			),
-			true
+			)
 		);
 	}
 	

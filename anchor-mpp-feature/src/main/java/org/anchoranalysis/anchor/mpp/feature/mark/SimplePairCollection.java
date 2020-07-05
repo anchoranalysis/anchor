@@ -32,10 +32,13 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 
 
-// A simple pair collection where the underlying PairType is a simple Pair
+/**
+ * A pair collection where the underlying type is a simple {@link Pair}
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class SimplePairCollection extends PairCollectionAddCriteria<Pair<Mark>> {
-
-	private static final long serialVersionUID = 8228326469200660736L;
 
 	public SimplePairCollection() {
 		super( Pair.class );
@@ -45,6 +48,4 @@ public class SimplePairCollection extends PairCollectionAddCriteria<Pair<Mark>> 
 	public String getBeanDscr() {
 		return getBeanName();
 	}
-
-
 }

@@ -26,7 +26,6 @@ package org.anchoranalysis.io.bean.root;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -72,7 +71,7 @@ public class RootPath extends AnchorBean<RootPath> {
 	 * 
 	 * @param path path to split
 	 * @return the split-path
-	 * @throws IOException if the path cannot be matched against the root
+	 * @throws AnchorIOException if the path cannot be matched against the root
 	 */
 	public SplitPath split( Path path ) throws AnchorIOException {
 		

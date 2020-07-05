@@ -96,7 +96,7 @@ public class FeatureListProviderListSequence<T extends FeatureInput> extends Fea
 	
 	private Feature<T> createSingleSequence() {
 		
-		FeatureListElem<T> out = (FeatureListElem<T>) feature;
+		FeatureListElem<T> out = feature;
 		
 		for( int i=sequence.getStart(); i<=sequence.getEnd(); i+= sequence.getIncrement()) {
 			out.getList().add( createReferenceFeature(prependString, Integer.toString(i)) );
@@ -107,7 +107,7 @@ public class FeatureListProviderListSequence<T extends FeatureInput> extends Fea
 	
 	private Feature<T> createDoubleSequence() {
 		
-		FeatureListElem<T> out = (FeatureListElem<T>) feature;
+		FeatureListElem<T> out = feature;
 		
 		for( int i=sequence.getStart(); i<=sequence.getEnd(); i+= sequence.getIncrement()) {
 			for( int j=sequenceAdditional.getStart(); j<=sequenceAdditional.getEnd(); j+= sequenceAdditional.getIncrement()) {

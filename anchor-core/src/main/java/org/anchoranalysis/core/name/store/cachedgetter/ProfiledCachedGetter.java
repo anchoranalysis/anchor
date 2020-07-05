@@ -38,18 +38,18 @@ import org.apache.commons.lang.StringUtils;
  * <p>As it is recurisvely called during the evaluation process, we subtract
 //   the time spent in other 'execute' methods from the main one</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T>
  * @param <E> exception thrown by operation
  */
-public class ProfiledCachedGetter<T, E extends Throwable> extends WrapOperationAsCached<T,E> {
+public class ProfiledCachedGetter<T, E extends Exception> extends WrapOperationAsCached<T,E> {
 
 	private String name;
 	private String storeDisplayName;
 	private LogErrorReporter logErrorReporter;
 	
-	private static MeasuringSemaphoreExecutor<Throwable> semaphore = new MeasuringSemaphoreExecutor<>();
+	private static MeasuringSemaphoreExecutor<Exception> semaphore = new MeasuringSemaphoreExecutor<>();
 	
 	private static final int STORE_DISPLAY_NAME_LENGTH = 30;
 	private static final int NAME_LENGTH = 30;
@@ -67,9 +67,9 @@ public class ProfiledCachedGetter<T, E extends Throwable> extends WrapOperationA
 	@Override
 	protected T execute() throws E {
 		// As a hack, we assume the exception type is always the same between calls to ProfiledCachedGetter
-		// This may not be valid in practice. TODO consider an alternative means to profile.
+		// This may not be valid in practice.
 		return ((MeasuringSemaphoreExecutor<E>) semaphore).execute(
-			() -> super.execute(),
+			() -> super.execute(),	// NOSONAR
 			name,
 			storeDisplayName,
 			logErrorReporter

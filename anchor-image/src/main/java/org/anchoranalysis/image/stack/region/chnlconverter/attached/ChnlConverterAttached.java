@@ -42,11 +42,11 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
  * @param <S> attachment-type
  * @param <T> destination-type
  */
-public abstract class ChnlConverterAttached<S,T extends Buffer> {
+public interface ChnlConverterAttached<S,T extends Buffer> {
 
-	public abstract void attachObject( S obj ) throws OperationFailedException;
+	void attachObject( S obj ) throws OperationFailedException;
 
-	public abstract Channel convert(Channel chnl, ConversionPolicy changeExisting);
+	Channel convert(Channel chnl, ConversionPolicy changeExisting);
 	
-	public abstract VoxelBoxConverter<T> getVoxelBoxConverter();
+	VoxelBoxConverter<T> getVoxelBoxConverter();
 }

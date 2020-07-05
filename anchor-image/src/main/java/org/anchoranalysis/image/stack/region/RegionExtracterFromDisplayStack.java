@@ -50,7 +50,7 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class RegionExtracterFromDisplayStack extends RegionExtracter {
+public class RegionExtracterFromDisplayStack implements RegionExtracter {
 	
 	// Used to convert our source buffer to bytes, not called if it's already bytes
 	private List<ChnlConverterAttached<Channel,ByteBuffer>> listChnlConverter;
@@ -108,7 +108,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 
 		MeanInterpolator interpolator = (zoomFactor < 1) ? new MeanInterpolator(zoomFactor) : null;
 		
-		if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
+		if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 			VoxelBox<ByteBuffer> vb = extractedSlice.getVoxelBox().asByte(); 
 			interpolateRegionFromByte( vb,bufferSc,extractedSlice.getDimensions().getExtnt(),extentTrgt,bbox,zoomFactor,interpolator );
 			
@@ -116,7 +116,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 				chnlConverter.getVoxelBoxConverter().convertFromByte(bufferSc, bufferSc);
 			}
 			
-		} else if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance ) && chnlConverter!=null) {
+		} else if (extractedSlice.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.INSTANCE ) && chnlConverter!=null) {
 			
 			VoxelBox<ShortBuffer> vb = extractedSlice.getVoxelBox().asShort();
 			
@@ -132,7 +132,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 		
 		return ChannelFactory
 				.instance()
-				.get(VoxelDataTypeUnsignedByte.instance)
+				.get(VoxelDataTypeUnsignedByte.INSTANCE)
 				.create(bufferSc, sd.getRes());
 		
 	}
@@ -141,7 +141,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			
@@ -173,7 +173,7 @@ public class RegionExtracterFromDisplayStack extends RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
 			

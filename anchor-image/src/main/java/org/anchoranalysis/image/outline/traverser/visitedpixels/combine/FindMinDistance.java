@@ -35,6 +35,8 @@ import org.anchoranalysis.image.outline.traverser.contiguouspath.DistanceToConti
 
 public class FindMinDistance {
 
+	private FindMinDistance() {}
+	
 	/** The distMax of a point to the closest contiguous-path */
 	public static int minDistMaxToHeadTail(Point3i pnt, List<ContiguousPixelPath> paths ) {
 		

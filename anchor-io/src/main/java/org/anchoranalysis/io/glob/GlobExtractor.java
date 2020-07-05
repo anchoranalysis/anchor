@@ -33,7 +33,7 @@ import org.anchoranalysis.io.bean.provider.file.SingleFile;
 /**
  * Extracts a glob 
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class GlobExtractor {
@@ -58,6 +58,8 @@ public class GlobExtractor {
 			return directory;
 		}
 	}
+	
+	private GlobExtractor() {}
 
 	/**
 	 * Extracts a glob, and a directory portion if it exists from a string with a wildcard
@@ -88,8 +90,8 @@ public class GlobExtractor {
 	}
 	
 	private static int positionFinalSlashBeforeWildcard( String str ) {
-		int firstWildcardPos = str.indexOf("*");
+		int firstWildcardPos = str.indexOf('*');
 		String strWithoutWildcard = str.substring(0, firstWildcardPos);
-		return strWithoutWildcard.lastIndexOf("/");
+		return strWithoutWildcard.lastIndexOf('/');
 	}
 }

@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class FileOutputFromManager {
 	
@@ -55,7 +54,7 @@ public class FileOutputFromManager {
 		Optional<ManifestDescription> manifestDescription,
 		BoundOutputManager outputManager,
 		String outputName
-	) throws OutputWriteFailedException {
+	) {
 
 		Optional<Path> fileOutputPath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
 			outputName,

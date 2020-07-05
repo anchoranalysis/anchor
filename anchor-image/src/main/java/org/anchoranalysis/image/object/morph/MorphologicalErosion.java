@@ -40,6 +40,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class MorphologicalErosion {
 
+	private MorphologicalErosion() {}
+	
 	public static ObjectMask createErodedObjMask(
 		ObjectMask om,
 		Optional<Extent> extent,
@@ -54,7 +56,7 @@ public class MorphologicalErosion {
 		// TODO
 		// We can make this more efficient, then remaking a mask needlessly
 		//  by having a smarter "isOutside" check in the Erosion routine
-		if (outsideAtThreshold==false) {
+		if (!outsideAtThreshold) {
 			// If we want to treat the outside of the image as if it's at a threshold, then
 			//  we put an extra 1-pixel border around the object-mask, so that there's always
 			//  whitespace around the object-mask, so long as it exists in the image scene

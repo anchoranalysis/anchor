@@ -27,7 +27,6 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.saved;
  */
 
 
-import java.io.Serializable;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -46,12 +45,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 
-public class NRGSavedPairs implements Serializable, UpdatableMarkSet {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6408778390479765273L;
+public class NRGSavedPairs implements UpdatableMarkSet {
 	
     // Pairwise total
     private double nrgTotal;
@@ -124,7 +118,7 @@ public class NRGSavedPairs implements Serializable, UpdatableMarkSet {
 	
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) {
+	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
 		
 		// We calculate it's individual contribution
 		this.nrgTotal -= totalNRGForMark(mark.getMark());

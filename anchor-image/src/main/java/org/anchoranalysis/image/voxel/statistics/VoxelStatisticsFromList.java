@@ -32,7 +32,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
-public class VoxelStatisticsFromList extends VoxelStatistics {
+public class VoxelStatisticsFromList implements VoxelStatistics {
 
 	private VoxelIntensityList pixelList;
 

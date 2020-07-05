@@ -63,9 +63,6 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> implemen
 		this.zChange = zChange;
 	}
 	
-	/** Collects the result of the operation after processing neighbour pixels */
-	public abstract T collectResult();
-	
 	protected int offset(int xChange, int yChange) {
 		return extent.offset(xChange, yChange);
 	}

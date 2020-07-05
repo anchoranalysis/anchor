@@ -2,6 +2,7 @@ package org.anchoranalysis.bean.init.property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /*-
  * #%L
@@ -109,12 +110,7 @@ public class PropertyInitializer<P> {
 		}
 
 		// Properties with other property-types (whose parameters can be extracted from the current parameters)
-		if (initExtractedParams(propertyValue, parent, logger)) {
-			return true;
-		}
-		
-		return false;
-		
+		return initExtractedParams(propertyValue, parent, logger);
 	}
 
 	public Class<?> getInitParamType() {
@@ -180,29 +176,29 @@ public class PropertyInitializer<P> {
 		Class<?> propertyClassToMatch,
 		Object paramToInitWith
 	) throws InitException {
-		PropertyDefiner<?> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
-		if (pd!=null) {
-			pd.doInitFor( propertyValue, paramToInitWith, parent, logger );
+		Optional<PropertyDefiner> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
+		if (pd.isPresent()) {
+			pd.get().doInitFor( propertyValue, paramToInitWith, parent, logger );
 			return true;
 		}
 		return false;
 	}
 
-	private PropertyDefiner<?> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
+	private Optional<PropertyDefiner> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
 		
 		if (propertyValue instanceof InitializableBean ) {
 			
 			InitializableBean<?,?> initBean = (InitializableBean<?,?>) propertyValue;
-			PropertyDefiner<?> pd = initBean.getPropertyDefiner();
+			PropertyDefiner pd = initBean.getPropertyDefiner();
 			
 			if (pd.accepts(paramType)) {
-				return pd;
+				return Optional.of(pd);
 			} else {
-				return null;
+				return Optional.empty();
 			}
 			
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	

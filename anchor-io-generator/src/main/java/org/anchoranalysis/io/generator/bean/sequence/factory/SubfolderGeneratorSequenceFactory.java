@@ -36,10 +36,10 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class SubfolderGeneratorSequenceFactory extends GeneratorSequenceFactory {
 
 	@Override
-	public <GeneratorType> GeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
+	public <T> GeneratorSequenceNonIncremental<T> createGeneratorSequenceNonIncremental(
 			BoundOutputManagerRouteErrors outputManager,
 		String outputName,
-		IterableObjectGenerator<GeneratorType, Stack> generator		
+		IterableObjectGenerator<T, Stack> generator		
 	) {
 		
 		return new GeneratorSequenceNonIncrementalWriter<>(

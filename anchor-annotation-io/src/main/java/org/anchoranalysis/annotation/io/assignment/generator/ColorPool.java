@@ -37,12 +37,10 @@ public class ColorPool {
 	private ColorSetGenerator colorSetGeneratorUnpaired;
 	private boolean differentColorsForMatches;
 	
-	public ColorPool( int numPaired, ColorSetGenerator colorSetGeneratorPaired, ColorSetGenerator colorSetGeneratorUnpaired, boolean differentColorsForMatches ) {
+	public ColorPool(int numPaired, ColorSetGenerator colorSetGeneratorPaired, ColorSetGenerator colorSetGeneratorUnpaired, boolean differentColorsForMatches) {
 		this.numPaired = numPaired;
 		this.colorSetGeneratorPaired = colorSetGeneratorPaired;
 		this.colorSetGeneratorUnpaired = colorSetGeneratorUnpaired;
-		assert( colorSetGeneratorPaired != null);
-		assert( colorSetGeneratorUnpaired != null);
 		this.differentColorsForMatches = differentColorsForMatches;
 	}
 			

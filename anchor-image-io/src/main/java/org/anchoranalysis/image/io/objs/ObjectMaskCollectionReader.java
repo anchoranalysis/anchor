@@ -29,50 +29,53 @@ import static org.anchoranalysis.image.io.objs.deserialize.ObjMaskCollectionDese
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 
 /**
  * Reads an {@link ObjectCollection} from the filesystem
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjectMaskCollectionReader {
 
 	private static final String HDF5_EXTENSION = ".h5";
 	
 	/**
-	 * Like createFromFolder but if the path is missing (and some other criteria are fulfilled), we pretend it's an empty collection
+	 * Reads an object-collection from a path (or path prefix) trying different methods to read the objects.
 	 * 
-	 * The following order is used to look for an object-mask collection
-	 *   1. If path ends in .h5 it is read as a HDF5 object-mask collection
-	 *   2. Otherwise, .h5 is suffixed, and if this path exists, it is read as a HDF5 object-mask collection
-	 *   3. Otherwise, the path is assumed to be a directory, and this is read as a TIFFDirectory
+	 * <p>
+	 * The following order is used to look for an object-mask collection:
+	 * <ol>
+	 * <li>If path ends in <pre>.h5</pre> it is read as a HDF5 object-mask collection.
+	 * <li>Otherwise, <pre>.h5</pre> is suffixed, and if this path exists, it is read as a HDF5 object-mask collection.
+	 * <li>Otherwise, the path is assumed to be a directory, and this is read as a TIFF-directory with serialized bounding-boxes.
+	 * </ol>
+	 * <p>
+	 * In the case of 3, if the path does not exist, but it is the subpath of an <pre>"ObjMaskCollection/"</pre> directory which does
+	 *  then a special case occurs. An empty {@code ObjectCollection} is returned.
 	 *   
-	 *   In the case of 3, if the path does not exist, but it is the subpath of an "ObjMaskCollection" directory which does
-	 *   then a special case occurs. An empty ObjMaskCollection() is returned.
-	 *   
-	 * @param path path used to search for an ObjMaskCollection using the rules above
-	 * @param rasterReader a rasterReader that can be used for reading the object-masks
-	 * @return the obj-mask collection
-	 * @throws CreateException if something goes wrong
-	 * @throws DeserializationFailedException 
+	 * @param path path or (or path missing a <pre>.h5</pre> extension) used to search for an object-collection using the rules above
+	 * @return the object-collection read from this path.
+	 * @throws DeserializationFailedException if no objects are found at this path, or anything else prevents their deserialization.
 	 */
 	public static ObjectCollection createFromPath( Path path ) throws DeserializationFailedException {
 		
 		// 1. First check if has a file extension HDF5
 		if (hasHdf5Extension(path)) {
 			if (path.toFile().exists()) {
-				return hdf5.deserialize(path);
+				return HDF5.deserialize(path);
 			} else {
 				throw new DeserializationFailedException("File not found at " + path);
 			}
@@ -80,13 +83,13 @@ public class ObjectMaskCollectionReader {
 		
 		// 2. Suffix a .h5 and see if the file exists
 		Path suffixed = addHdf5Extension(path);
-		if ( Files.exists(suffixed)) {
-			return hdf5.deserialize(suffixed);
+		if (suffixed.toFile().exists()) {
+			return HDF5.deserialize(suffixed);
 		}
 		
 		// 3. Treat as a folder of TIFFs
 		if (path.toFile().exists()) {
-			return tiffCorrectMissing.deserialize(path);
+			return TIFF_CORRECT_MISSING.deserialize(path);
 		} else {
 			throw new DeserializationFailedException("Directory of object TIFFs not found at " + path);
 		}

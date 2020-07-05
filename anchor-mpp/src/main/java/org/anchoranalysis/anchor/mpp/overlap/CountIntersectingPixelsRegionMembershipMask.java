@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 /**
  * Counts the number of intersecting-pixels where bytes are encoded as region memberships
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 class CountIntersectingPixelsRegionMembershipMask {
@@ -111,10 +111,10 @@ class CountIntersectingPixelsRegionMembershipMask {
 
 			ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
 			
-			int z_other = z + bbox.z().rel();
-			int z_global = z + src.getBoundingBox().getCornerMin().getZ();
+			int zOther = z + bbox.z().rel();
+			int z_global = z + src.getBoundingBox().cornerMin().getZ();
 			
-			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(z_other).buffer();
+			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
 			ByteBuffer bufferMaskGlobal = maskGlobal.getPixelsForPlane(z_global).buffer();
 
 			buffer.clear();
@@ -125,8 +125,8 @@ class CountIntersectingPixelsRegionMembershipMask {
 				bufferOther,
 				bufferMaskGlobal,
 				bbox,
-				src.getBoundingBox().getCornerMin().getX(),
-				src.getBoundingBox().getCornerMin().getY(),
+				src.getBoundingBox().cornerMin().getX(),
+				src.getBoundingBox().cornerMin().getY(),
 				eGlobalMask,
 				onMaskGlobal
 			);
@@ -148,18 +148,18 @@ class CountIntersectingPixelsRegionMembershipMask {
 		
 		int cnt = 0;
 		for (int y=bbox.y().min(); y<bbox.y().max(); y++) {
-			int y_other = y + bbox.y().rel();
+			int yOther = y + bbox.y().rel();
 			int y_global = y + yGlobalRel;
 			
 			for (int x=bbox.x().min(); x<bbox.x().max(); x++) {
-				int x_other = x + bbox.x().rel();
+				int xOther = x + bbox.x().rel();
 				int x_global = x + xGlobalRel;
 				
 				byte globalMask = bufferMaskGlobal.get( extentGlobal.offset(x_global, y_global) );
 				if (globalMask==onMaskGlobal) {
 				
 					byte posCheck = buffer1.get( bbox.e1().offset(x, y) );
-					byte posCheckOther = buffer2.get( bbox.e2().offset(x_other, y_other) );
+					byte posCheckOther = buffer2.get( bbox.e2().offset(xOther, yOther) );
 					
 					if ( isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther) ) {
 						cnt++;

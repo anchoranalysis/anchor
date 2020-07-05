@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Outputs a channel but with ONLY the pixels in a mask shown, and others set to 0.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ChnlMaskedWithObjGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
@@ -134,15 +134,15 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
 		
 		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.getCornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
+		for (pntGlobal.setZ(bbox.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
 			
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pntGlobal.getZ());
 			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pntLocal.getZ());
 			
-			for (pntGlobal.setY(bbox.getCornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+			for (pntGlobal.setY(bbox.cornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
 			
-				for (pntGlobal.setX(bbox.getCornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+				for (pntGlobal.setX(bbox.cornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
 
 					if (maskIn.get()!=maskOn) {
 						continue;

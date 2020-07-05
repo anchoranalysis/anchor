@@ -27,8 +27,7 @@ package org.anchoranalysis.anchor.overlay;
  */
 
 import java.util.Iterator;
-import java.util.function.Function;
-
+import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
@@ -57,11 +56,11 @@ public class OverlayProperties implements Iterable<NameValue<String>> {
 	public void addWithUnits(
 		String name,
 		double value,
-		Function<Double,Double> convertToUnits,
+		DoubleUnaryOperator convertToUnits,
 		UnitSuffix unitSuffix
 	) {
 		double valueUnits = SpatialConversionUtilities.convertToUnits(
-			convertToUnits.apply(value),
+			convertToUnits.applyAsDouble(value),
 			unitSuffix
 		);
 		

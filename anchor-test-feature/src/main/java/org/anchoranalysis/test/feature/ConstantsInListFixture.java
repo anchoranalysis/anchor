@@ -43,6 +43,8 @@ public class ConstantsInListFixture {
 
 	private static double eps = 1e-16;
 	
+	private ConstantsInListFixture() {}
+	
 	/** creates a feature-list associated with the fixture */
 	public static <T extends FeatureInput> FeatureList<T> create() {
 		return FeatureListFactory.from(

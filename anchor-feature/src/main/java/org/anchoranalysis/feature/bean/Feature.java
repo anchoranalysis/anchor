@@ -31,7 +31,6 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -42,25 +41,28 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.InitializableFeature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Feature that calculates a result (double) for some parameters
  * 
  * <p>It should always be called in a context of a session, which first initializes the feature before doing calculations.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input-type 
  */
 public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements InitializableFeature<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	@AllowEmpty
+	/** An optional additional name that be associated with the feature (defaults to an empty string) */
+	@BeanField @AllowEmpty @Getter @Setter
 	private String customName = "";
 	// END BEAN PROPERTIES
 
-	private transient LogErrorReporter logger;
+	private LogErrorReporter logger;
 
 	private boolean hasBeenInit = false;
 
@@ -87,16 +89,8 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 		return getBeanDscr();
 	}
 
-	public String getCustomName() {
-		return customName;
-	}
-
-	public void setCustomName(String customName) {
-		this.customName = customName;
-	}
-	
 	/**
-	 * Duplicates the feature as per {@link duplicateBean} but sets a particular custom-name
+	 * Duplicates the feature as per {@link #duplicateBean} but sets a particular custom-name
 	 * 
 	 * @param customName the custom-name to set
 	 * @return a duplicated (deep copy of bean attributes) feature, identical to current feature, but with the specified custom-name
@@ -142,15 +136,13 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	protected abstract double calc(SessionInput<T> input) throws FeatureCalcException;
 
 	protected void duplicateHelper(Feature<FeatureInput> out) {
-		out.customName = new String(customName);
+		out.customName = customName;
 	}
 	
 	/**
 	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
 	 * 
 	 * @param params parameters used for initialization that are simply passed to beforeCalc()
-	 * @param logger logger
-	 * 
 	 * @param logger the logger, saved and made available to the feature
 	 */
 	@Override
@@ -162,7 +154,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 				
 		hasBeenInit = true;
 		this.logger = logger;
-		beforeCalc( );
+		beforeCalc();
 	}
 	
 
@@ -175,7 +167,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * It ignores features that are referenced from elsewhere.
 	 * 
 	 * @return
-	 * @throws CreateException
 	 * @throws BeanMisconfiguredException
 	 */
 	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)

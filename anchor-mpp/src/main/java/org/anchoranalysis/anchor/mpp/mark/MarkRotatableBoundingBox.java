@@ -51,7 +51,7 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
  * 
  * <p>Axis-aligned bounding boxes are also supported by fixing orientation.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class MarkRotatableBoundingBox extends MarkAbstractPosition {

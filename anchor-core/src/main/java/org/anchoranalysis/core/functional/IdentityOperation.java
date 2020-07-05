@@ -29,7 +29,7 @@ package org.anchoranalysis.core.functional;
 
 
 
-public class IdentityOperation<T,E extends Throwable> implements Operation<T,E> {
+public class IdentityOperation<T,E extends Exception> implements Operation<T,E> {
 
 	private T obj;
 			

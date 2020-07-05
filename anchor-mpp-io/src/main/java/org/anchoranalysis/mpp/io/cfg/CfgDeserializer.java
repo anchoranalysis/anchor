@@ -34,7 +34,7 @@ import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-public class CfgDeserializer extends Deserializer<Cfg> {
+public class CfgDeserializer implements Deserializer<Cfg> {
 
 	private XStreamDeserializer<Cfg> delegate;
 

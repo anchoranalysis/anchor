@@ -145,11 +145,7 @@ public class Tuple3f implements Serializable {
 	    	return false;
 	    }
 	    
-	    if (!FloatUtilities.areEqual(z, objCast.z)) {
-	    	return false;
-	    }
-	    
-	    return true;
+	    return FloatUtilities.areEqual(z, objCast.z);
 	}
 		
 	@Override

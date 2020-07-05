@@ -31,15 +31,17 @@ import java.util.function.Supplier;
 
 import org.anchoranalysis.core.error.CreateException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Utility function to create Optional<> from providers, which may be null
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OptionalFactory {
-
-	private OptionalFactory() {}
 	
 	/**
 	 * Creates from a provider if non-null

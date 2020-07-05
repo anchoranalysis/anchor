@@ -36,7 +36,7 @@ import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class InterpolatorImageJ extends Interpolator {
+public class InterpolatorImageJ implements Interpolator {
 
 	@Override
 	public VoxelBuffer<ByteBuffer> interpolateByte(VoxelBuffer<ByteBuffer> src,

@@ -34,6 +34,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class DocumentBuilderHelper {
 	
 	/**

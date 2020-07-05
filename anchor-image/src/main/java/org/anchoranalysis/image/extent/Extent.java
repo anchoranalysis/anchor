@@ -57,10 +57,6 @@ public final class Extent implements Serializable {
 	// Lengths in each dimension
 	private final ReadableTuple3i len;
 	
-	public Extent() {
-		this( new Point3i(0,0,0) );
-	}
-	
 	public Extent(int x, int y, int z) {
 		this( new Point3i( x, y, z) );
 	}
@@ -75,6 +71,10 @@ public final class Extent implements Serializable {
 	private Extent(ReadableTuple3i len) {
 		this.len = len;
 		this.sxy = len.getX() * len.getY();
+		
+		if (len.getX()<1 || len.getY()<1 || len.getZ()<1) {
+			throw new AnchorFriendlyRuntimeException("An extent must have at least one voxel in every dimension");
+		}
 	}
 
 	public int getVolumeAsInt() {
@@ -167,11 +167,7 @@ public final class Extent implements Serializable {
 			return false;
 		Extent other = (Extent) obj;
 		
-		if (!len.equals(other.len)) {
-			return false;
-		}
-		
-		return true;
+		return len.equals(other.len);
 	}
 
 	@Override
@@ -284,26 +280,24 @@ public final class Extent implements Serializable {
 			return false;
 		}
 		
-		if (z >= len.getZ()) {
-			return false;
-		}
-		
-		return true;
+		return (z < len.getZ());
 	}
 	
 	public boolean contains( BoundingBox bbox ) {
-		return contains( bbox.getCornerMin() ) && contains( bbox.calcCornerMax() );
+		return contains( bbox.cornerMin() ) && contains( bbox.calcCornerMax() );
 	}
 	
 	public Extent scaleXYBy( ScaleFactor sf ) {
-		return immutablePointOperation( p-> {
-			p.setX(
-				ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
-			);
-			p.setY(
-				ScaleFactorUtilities.scaleQuantity(sf.getY(), getY())
-			);			
-		});
+		return new Extent(
+			immutablePointOperation( p-> {
+				p.setX(
+					ScaleFactorUtilities.scaleQuantity(sf.getX(), getX())
+				);
+				p.setY(
+					ScaleFactorUtilities.scaleQuantity(sf.getY(), getY())
+				);			
+			})
+		);
 	}
 	
 	public Extent subtract(ReadableTuple3i toSubtract) {
@@ -313,14 +307,16 @@ public final class Extent implements Serializable {
 	}
 	
 	public Extent divide( int factor ) {
-		return immutablePointOperation( p->p.divideBy(factor) );
+		return new Extent(
+			immutablePointOperation( p->p.divideBy(factor) )
+		);
 	}
 	
 	/**
 	 * Creates a new Extent with each dimension decreased by one
 	 * @return the new extent
 	 */
-	public Extent createMinusOne() {
+	public Point3i createMinusOne() {
 		return immutablePointOperation( p->p.subtract(1) );
 	}
 	
@@ -343,9 +339,9 @@ public final class Extent implements Serializable {
 		);
 	}
 	
-	private Extent immutablePointOperation( Consumer<Point3i> pointOperation ) {
+	private Point3i immutablePointOperation( Consumer<Point3i> pointOperation ) {
 		Point3i lenDup = new Point3i(len);
 		pointOperation.accept(lenDup);	
-		return new Extent(lenDup);
+		return lenDup;
 	}
 }

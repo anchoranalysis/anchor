@@ -100,10 +100,7 @@ public final class Point2i implements Serializable {
 	    if (x!=objCast.x) {
 	    	return false;
 	    }
-	    if (y!=objCast.y) {
-	    	return false;
-	    }
-	    return true;
+	    return y==objCast.y;
 	}
 	
 	@Override

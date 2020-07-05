@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-class ResettableCachedCalculator<T extends FeatureInput> extends FeatureSessionCacheCalculator<T> {
+class ResettableCachedCalculator<T extends FeatureInput> implements FeatureSessionCacheCalculator<T> {
 
 	private ResettableSet<FeatureCalculation<?,T>> setCalculation = new ResettableSet<>(false);
 	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCalculationMap = new ResettableSet<>(false);
@@ -70,8 +70,6 @@ class ResettableCachedCalculator<T extends FeatureInput> extends FeatureSessionC
 	@SuppressWarnings("unchecked")
 	@Override
 	public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> calculation) {
-		assert(calculation!=null);
-
 		return new ResolvedCalculation<>(
 			(CacheableCalculation<U,T,FeatureCalcException>) setCalculation.findOrAdd(calculation,null)
 		);

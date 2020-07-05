@@ -128,19 +128,20 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
 		return (exc instanceof NoSuchMethodException && exc.getMessage().equals("java.util.List.<init>()"));
 	}
 	
+	/**
+	 * Returns null as {@Optional} is not supported by {@link BeanFactory} interface.
+	 */
 	@Override
     public Class<?> getDefaultBeanClass() {
         return null;
     }
 
-	protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data)
-            throws Exception
+	protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data) throws Exception //NOSONAR
     {
         return beanClass.getConstructor().newInstance();
     }
 
-    protected void initBeanInstance(Object bean, BeanDeclaration data, Object parameter)
-            throws Exception
+    protected void initBeanInstance(Object bean, BeanDeclaration data, Object parameter) throws Exception //NOSONAR
     {
     	DefaultBeanFactoryHelperInit.initBean(bean, data, parameter);
     }

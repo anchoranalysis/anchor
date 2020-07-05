@@ -34,9 +34,11 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class CreateFromEntireChnlFactory {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private CreateFromEntireChnlFactory() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class CreateFromEntireChnlFactory {
 			
 	public static ObjectMask createObjMask( BinaryChnl binaryImgChnl ) {
 		Channel chnl = binaryImgChnl.getChnl();

@@ -2,8 +2,7 @@ package org.anchoranalysis.feature.input.descriptor;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /*
  * #%L
@@ -45,16 +44,10 @@ public abstract class FeatureInputDescriptor {
 	/** 
 	 * Can these parameters be used with a particular feature?
 	 *  
-	 * @throws FeatureCalcException */
-	public boolean isCompatibleWith(Feature<?> feature) {
-		return inputClass().isAssignableFrom( feature.inputDescriptor().inputClass() );
-	}
-	
-	/** 
-	 * Can these parameters be used with a particular feature?
-	 *  
-	 * @throws FeatureCalcException */
-	public boolean isCompatibleWith(Class<?> paramTypeClass) {
+	 * @param paramTypeClass the class of input
+	 * @return true iff the feature-input is compatible with {@code paramTypeClass} 
+	 *  */
+	public boolean isCompatibleWith(Class<? extends FeatureInput> paramTypeClass) {
 		return inputClass().isAssignableFrom( paramTypeClass );
 	}
 	
@@ -63,27 +56,24 @@ public abstract class FeatureInputDescriptor {
 	 * 
 	 * @return
 	 */
-	public abstract Class<?> inputClass();
-	
+	public abstract Class<? extends FeatureInput> inputClass();
+
 	/**
-	 * Rules for preferring to keep one dscr over another.
+	 * Prefer to keep descriptor whose input-class is a sub-class rather than a super-class
 	 * 
 	 * @param dscr
-	 * @return the favoured descriptor of the two, or NULL if there is no favourite
+	 * @return the favoured descriptor of the two, or Optional.empty() if there is no favourite
 	 */
-	// TODO remove
-	public Optional<FeatureInputDescriptor> preferTo( FeatureInputDescriptor dscr ) {
-		return Optional.empty();
-	}
-	
-	// TODO remove
 	public Optional<FeatureInputDescriptor> preferToBidirectional( FeatureInputDescriptor dscr ) {
-		// If the first try returns empty(), we try to get a preference in the other direction
-		Optional<FeatureInputDescriptor> first = preferTo(dscr);
-		if(first.isPresent()) {
-			return first;
+		if (isCompatibleWith(dscr.inputClass())) {
+			return Optional.of(dscr);
 		}
-		return dscr.preferTo(this);
+		
+		if (dscr.isCompatibleWith(this.inputClass())) {
+			return Optional.of(this);
+		}
+		
+		return Optional.empty();
 	}
 
 	@Override

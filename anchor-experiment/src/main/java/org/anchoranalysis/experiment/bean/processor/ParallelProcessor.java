@@ -45,6 +45,9 @@ import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Executes jobs in parallel
  * 
@@ -56,14 +59,11 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class ParallelProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
 
 	// START BEAN
-	@BeanField
-	private boolean supressExceptions = true;
-	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int maxNumProcessors = 64;
 	
 	/** When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. */
-	@BeanField
+	@BeanField  @Getter @Setter
 	private int showOngoingJobsLessThan = 0;
 	
 	/** 
@@ -73,7 +73,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	 *  for other tasks on the operating system. This is particularly valuable on a desktop PC where other tasks (e.g web
 	 *  browsing) may be ongoing during processing.</p>
 	 */
-	@BeanField
+	@BeanField  @Getter @Setter
 	private int keepProcessorsFree = 1;
 	// END BEAN
 		
@@ -112,9 +112,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		eservice.shutdown();
 		
 	    // Wait until all threads are finish
-	    while (!eservice.isTerminated()) {
-
-	    }
+	    while (!eservice.isTerminated());
 		
 		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.context() );
 		return monitor.createStatistics();
@@ -146,10 +144,12 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		
 		JobDescription td = new JobDescription(inputObj.descriptiveName(), index );
 		
-		ParametersUnbound<T,S> paramsUnbound = new ParametersUnbound<>(paramsExperiment);
-		paramsUnbound.setInputObject(inputObj);
-		paramsUnbound.setSharedState(sharedState);
-		paramsUnbound.setSupressExceptions( supressExceptions );
+		ParametersUnbound<T,S> paramsUnbound = new ParametersUnbound<>(
+			paramsExperiment,
+			inputObj,
+			sharedState,
+			isSuppressExceptions()
+		);
 					
 		// Task always gets duplicated when it's called
 		JobState taskState = new JobState();
@@ -167,37 +167,5 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		
 		SubmittedJob submittedTask = new SubmittedJob( td, taskState);
 		monitor.add( submittedTask );
-	}
-
-	public boolean isSupressExceptions() {
-		return supressExceptions;
-	}
-
-	public void setSupressExceptions(boolean supressExceptions) {
-		this.supressExceptions = supressExceptions;
-	}
-
-	public int getMaxNumProcessors() {
-		return maxNumProcessors;
-	}
-
-	public void setMaxNumProcessors(int maxNumProcessors) {
-		this.maxNumProcessors = maxNumProcessors;
-	}
-
-	public int getShowOngoingJobsLessThan() {
-		return showOngoingJobsLessThan;
-	}
-
-	public void setShowOngoingJobsLessThan(int showOngoingJobsLessThan) {
-		this.showOngoingJobsLessThan = showOngoingJobsLessThan;
-	}
-
-	public int getKeepProcessorsFree() {
-		return keepProcessorsFree;
-	}
-
-	public void setKeepProcessorsFree(int keepProcessorsFree) {
-		this.keepProcessorsFree = keepProcessorsFree;
 	}
 }

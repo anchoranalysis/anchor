@@ -29,8 +29,6 @@ package org.anchoranalysis.image.feature.session.merged;
  */
 
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
@@ -45,17 +43,19 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 
+import lombok.RequiredArgsConstructor;
+
 
 /**
  * A particular type of feature-session where successive pairs of objects are evaluated by features in five different ways:
  * 
  * <div>
  * <ul>
- * <li>the image in which the object exists (on {@link #listImage}) i.e. the nrg-stack.</li>
- * <li>the left-object in the pair (on {@link #listSingle})</li>
- * <li>the right-object in the pair (on {@link #listSingle})</li>
- * <li>the pair (on {@link #listPair})</li>
- * <li>both objects merged together (on {@link #listSingle}}</li>
+ * <li>the image in which the object exists (on {code listImage}) i.e. the nrg-stack.</li>
+ * <li>the left-object in the pair (on {@code listSingle})</li>
+ * <li>the right-object in the pair (on {@code listSingle})</li>
+ * <li>the pair (on {code listPair})</li>
+ * <li>both objects merged together (on {code listSingle}}</li>
  * </ul>
  * </div>
  * 
@@ -72,38 +72,23 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjects> {
-		
+
+	// START REQUIRED ARGUMENTS
+	private final MergedPairsFeatures features;
+	private final MergedPairsInclude include;
+	private final boolean suppressErrors;
+	// END REQUIRED ARGUMENTS
+	
 	private CombinedCalculator calculator;
 
-	// The lists we need
-	private MergedPairsFeatures features;
-	private MergedPairsInclude include;
-	
-	// Prefixes that are ignored
-	private Collection<String> ignoreFeaturePrefixes;
-	
-	private boolean suppressErrors;
-	
 	public FeatureCalculatorMergedPairs(MergedPairsFeatures features) {
 		this(
 			features,
 			new MergedPairsInclude(),
-			Collections.emptySet(),
 			true
 		);
-	}
-		
-	public FeatureCalculatorMergedPairs(
-		MergedPairsFeatures features,
-		MergedPairsInclude include,
-		Collection<String> ignoreFeaturePrefixes,
-		boolean suppressErrors
-	) {
-		this.include = include;
-		this.features = features;
-		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
-		this.suppressErrors = suppressErrors;
 	}
 	
 	@Override
@@ -115,10 +100,9 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 		
 		calculator = new CombinedCalculator(
 			features,
-			new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter),
+			new CreateCalculatorHelper(nrgStack,logErrorReporter),
 			include,			
-			soImage,
-			suppressErrors
+			soImage
 		);
 	}
 	
@@ -195,7 +179,6 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 		return new FeatureCalculatorMergedPairs(
 			features.duplicate(),
 			include,
-			ignoreFeaturePrefixes,	// NOT DUPLICATED
 			suppressErrors
 		);
 	}

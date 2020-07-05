@@ -43,31 +43,33 @@ import loci.formats.FormatTools;
 
 class MultiplexDataTypes {
 
+	private MultiplexDataTypes() {}
+	
 	public static VoxelDataType multiplexFormat( int pixelType ) throws RasterIOException {
 		switch(pixelType) {
 		case FormatTools.UINT8:
-			return VoxelDataTypeUnsignedByte.instance;
+			return VoxelDataTypeUnsignedByte.INSTANCE;
 		case FormatTools.UINT16:
-			return VoxelDataTypeUnsignedShort.instance;
+			return VoxelDataTypeUnsignedShort.INSTANCE;
 		case FormatTools.INT16:
 			return VoxelDataTypeSignedShort.instance;			
 		case FormatTools.FLOAT:
-			return VoxelDataTypeFloat.instance;
+			return VoxelDataTypeFloat.INSTANCE;
 		default:
 			throw new RasterIOException( String.format("File has unknown type %s",  FormatTools.getPixelTypeString(pixelType) ) );
 		}	
 	}
 	
 	public static ChannelFactorySingleType multiplexVoxelDataType( VoxelDataType voxelDataType ) {
-		if (voxelDataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (voxelDataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return new ChannelFactoryByte();
-		} else if (voxelDataType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (voxelDataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return new ChannelFactoryShort();
 		} else if (voxelDataType.equals(VoxelDataTypeSignedShort.instance)) {
 			return new ChannelFactoryShort();			
-		} else if (voxelDataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (voxelDataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return new ChannelFactoryFloat();
-		} else if (voxelDataType.equals(VoxelDataTypeUnsignedInt.instance)) {
+		} else if (voxelDataType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
 			return new ChannelFactoryInt();
 		} else {
 			throw new UnsupportedOperationException();

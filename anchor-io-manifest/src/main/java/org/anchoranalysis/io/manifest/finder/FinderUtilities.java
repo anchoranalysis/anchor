@@ -29,14 +29,19 @@ package org.anchoranalysis.io.manifest.finder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.match.Match;
 
-public class FinderUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FinderUtilities {
+	
 	public static List<FileWrite> findListFile( ManifestRecorder manifestRecorder, Match<FileWrite> match ) {
 		
 		ArrayList<FileWrite> foundList = new ArrayList<>();
@@ -52,16 +57,18 @@ public class FinderUtilities {
 	}
 	
 	
-	public static FileWrite findSingleItem( ManifestRecorder manifestRecorder, Match<FileWrite> match ) throws MultipleFilesException {
+	public static Optional<FileWrite> findSingleItem( ManifestRecorder manifestRecorder, Match<FileWrite> match ) throws MultipleFilesException {
 		
 		List<FileWrite> files = findListFile( manifestRecorder, match );
-		if (files.size()==0) {
-			return null;
+		if (files.isEmpty()) {
+			return Optional.empty();
 		}
 		if (files.size()>1) {
 			throw new MultipleFilesException("More than one matching object was found in the manifest");
 		}
 		
-		return files.get(0);
+		return Optional.of(
+			files.get(0)
+		);
 	}
 }

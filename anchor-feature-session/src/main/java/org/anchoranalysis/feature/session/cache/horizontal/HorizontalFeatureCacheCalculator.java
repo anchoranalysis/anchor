@@ -39,11 +39,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature-input
  */
-class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSessionCacheCalculator<T> {
+class HorizontalFeatureCacheCalculator<T extends FeatureInput> implements FeatureSessionCacheCalculator<T> {
 
 	private FeatureSessionCacheCalculator<T> delegate;
 	private FeatureResultMap<T> map;
@@ -54,8 +54,6 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput> extends FeatureSe
 		FeatureResultMap<T> map,
 		Collection<String> ignorePrefixes
 	) {
-		super();
-		assert(delegate!=null);
 		this.delegate = delegate;
 		this.map = map;
 		this.ignorePrefixes = ignorePrefixes;

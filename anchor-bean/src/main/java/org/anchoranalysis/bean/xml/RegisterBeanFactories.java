@@ -39,7 +39,11 @@ import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ReplacePropertyBeanFactory;
 import org.anchoranalysis.bean.xml.factory.StringListFactory;
 import org.anchoranalysis.bean.xml.factory.StringSetFactory;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanHelper;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -51,6 +55,7 @@ import org.apache.commons.configuration.beanutils.BeanHelper;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public final class RegisterBeanFactories {
 
 	// START keys for factories
@@ -66,7 +71,7 @@ public final class RegisterBeanFactories {
 	
 	// A check that registerAllPackageBeanFactories() has been called
 	private static boolean calledRegisterAllPackage = false;
-
+	
 	/**
 	 * Registers the factories for the beans that exist in this package
 	 * 
@@ -106,7 +111,7 @@ public final class RegisterBeanFactories {
 		if (calledRegisterAllPackage) {
 			return ((AnchorDefaultBeanFactory) BeanHelper.getDefaultBeanFactory()).getDefaultInstances();
 		} else {
-			throw new RuntimeException("Unable to retrieve defaultInstances as registerAllPackageBeanFactories() has never been called");
+			throw new AnchorFriendlyRuntimeException("Unable to retrieve defaultInstances as registerAllPackageBeanFactories() has never been called");
 		}
 	}
 

@@ -33,7 +33,6 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.memory.MemoryUtilities;
@@ -69,13 +68,8 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T,S>> {
 
-	// START BEAN
-	@BeanField
-	private String outputNameManifest = "manifest";
-	
-	@BeanField
-	private String outputNameExecutionTime = "executionTime";
-	// END BEAN
+	private static final String OUTPUT_NAME_MANIFEST = "manifest";
+	private static final String OUTPUT_NAME_EXECUTION_TIME = "executionTime";
 	
 	/** Is the execution-time of the task per-input expected to be very quick to execute? */
 	public abstract boolean hasVeryQuickPerInputExecution();
@@ -87,9 +81,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	
 	// Runs the experiment on a particular file
 	public boolean executeJob(	ParametersUnbound<T,S> paramsUnbound ) throws JobExecutionException {
-		
-		assert paramsUnbound.getParametersExperiment().getLogReporterExperiment() != null;
-		
 		ManifestRecorder manifestTask = new ManifestRecorder();
 		
 		// Bind an outputManager for the task
@@ -98,13 +89,12 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			Optional.of(manifestTask),
 			paramsUnbound.getParametersExperiment()
 		);
-		
 		assert(outputManagerTask.getOutputWriteSettings().hasBeenInit());	
 		
 		// Create other bound arguments
 		
 		InputBound<T,S> paramsBound = bindOtherParams( paramsUnbound, outputManagerTask, manifestTask );
-		return executeJobLogExceptions( paramsBound, paramsUnbound.isSupressExceptions() );
+		return executeJobLogExceptions( paramsBound, paramsUnbound.isSuppressExceptions() );
 		
 	}
 	
@@ -150,23 +140,24 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		);
 		
 		// We create new parameters bound specifically to the job
-		InputBound<T,S> paramsBound = new InputBound<>(
-			paramsUnbound.getParametersExperiment().getExperimentArguments(),
-			outputManagerTaskRouteErrors,
-			logReporterJob,
-			errorReporterJob
+		return new InputBound<>(
+			paramsUnbound.getInputObject(),
+			paramsUnbound.getSharedState(),
+			manifestTask,
+			paramsUnbound.getParametersExperiment().isDetailedLogging(),
+			new BoundContextSpecify(
+				paramsUnbound.getParametersExperiment().getExperimentArguments(),
+				outputManagerTaskRouteErrors,
+				logReporterJob,
+				errorReporterJob
+			)
 		);
-		paramsBound.setInputObject(paramsUnbound.getInputObject());
-		paramsBound.setSharedState(paramsUnbound.getSharedState());
-		paramsBound.setManifest(manifestTask);
-		paramsBound.setDetailedLogging(paramsUnbound.isDetailedLogging());
-		return paramsBound;
 	}
 	
 	
 	private boolean executeJobLogExceptions(
 		InputBound<T,S> params,
-		boolean supressExceptions
+		boolean suppressExceptions
 	) throws JobExecutionException {
 		
 		StatefulLogReporter logReporterJob = params.getLogReporterJob();
@@ -195,7 +186,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		} catch (Exception e) {
 			params.getLogger().getErrorReporter().recordError(Task.class, e);
 			logReporterJob.log("This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
-			if (!supressExceptions) {
+			if (!suppressExceptions) {
 				throw new JobExecutionException("Job encountered a fatal error", e);	
 			}
 			
@@ -231,42 +222,22 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		
 		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 
 		writeIfAllowed.write(
-			outputNameManifest,
+			OUTPUT_NAME_MANIFEST,
 			() -> new XStreamGenerator<Object>(
 				params.getManifest(),
 				Optional.empty())	// Don't put into the manifest
 		);
 		writeIfAllowed.write(
-			outputNameManifest,
+			OUTPUT_NAME_MANIFEST,
 			() -> new ObjectOutputStreamGenerator<>(
 				params.getManifest(),
 				Optional.empty()	// Don't put into the manifest
 			)
 		);
-		
 		// This is written after the manfiests are already written, so it won't exist in the manifest
 		writeIfAllowed.write(
-			outputNameExecutionTime,
+			OUTPUT_NAME_EXECUTION_TIME,
 			() -> new StringGenerator( Long.toString(stopWatchFile.getTime()) )
 		);
 	}
-	
-	// START: public
-	
-	public String getOutputNameManifest() {
-		return outputNameManifest;
-	}
-
-	public void setOutputNameManifest(String outputNameManifest) {
-		this.outputNameManifest = outputNameManifest;
-	}
-
-	public String getOutputNameExecutionTime() {
-		return outputNameExecutionTime;
-	}
-
-	public void setOutputNameExecutionTime(String outputNameExecutionTime) {
-		this.outputNameExecutionTime = outputNameExecutionTime;
-	}
-	// END: public
 }

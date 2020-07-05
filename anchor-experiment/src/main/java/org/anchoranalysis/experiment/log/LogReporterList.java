@@ -27,26 +27,19 @@ package org.anchoranalysis.experiment.log;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
 
 public class LogReporterList implements StatefulLogReporter {
 
-	private List<StatefulLogReporter> list;
+	private final List<StatefulLogReporter> list;
 	
-	public LogReporterList() {
-		list = new ArrayList<>();
-	}
-	
-	public LogReporterList( StatefulLogReporter first, StatefulLogReporter second ) {
-		assert first!=null;
-		assert second!=null;
-		list = new ArrayList<>();
-		list.add(first);
-		list.add(second);
+	public LogReporterList(Stream<StatefulLogReporter> stream) {
+		list = stream.collect(Collectors.toList());
 	}
 	
 	@Override

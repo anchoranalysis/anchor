@@ -29,49 +29,19 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
-import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
+import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
 public class CombineToOnePath {
 	
+	private CombineToOnePath() {}
+	
 	/** Combines all the contiguous paths to a single-path 
 	 * @throws OperationFailedException */
-	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths, Extent extent ) throws OperationFailedException {
-		
-		System.out.printf("START Paths in %s (sum=%d)%n", paths, CombineWithTarget.cnt(paths) );
-		
-		int cntWithConnPnt = 0;
-		int cntWithoutConnPnt = 0;
-		for( ContiguousPixelPath cpp : paths ) {
-			System.out.println(cpp.toString());
-			System.out.println(cpp.points());
-			if (cpp.getConnPnt()!=null) {
-				cntWithConnPnt++;
-			} else {
-				cntWithoutConnPnt++;
-			}
-		}
-		System.out.printf("END Paths in %s (with=%d,without=%d)%n", paths, cntWithConnPnt, cntWithoutConnPnt );
+	public static ContiguousPixelPath combineToOnePath( List<ContiguousPixelPath> paths ) throws OperationFailedException {
 		
 		FindTargetAndCombine findCombine = new FindTargetAndCombine(paths);
-		
-		
-		/*try {
-			// Build graph of possible merges
-			MergePathGraphConnPoint graph = new MergePathGraphConnPoint( paths, extent );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		try {
-			// Build graph of possible merges
-			MergePathGraphNghb graph = new MergePathGraphNghb( paths, extent );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}*/
-		
-		
+				
 		while( findCombine.combineAnyTwoPaths() ) {
 			// DO NOTHING
 		}
@@ -84,15 +54,13 @@ public class CombineToOnePath {
 		
 		// If the start and end of the path aren't neighbours we should chop
 		//  off whatever is necessary to make them neighbours
-		if (!areHeadTailConnected(singlePath)) {
-			if (!EnsureContiguousPathLoops.apply(singlePath)) {
-				throw new OperationFailedException("head() and tail() of outline are not neigbours");
-			}
+		if (!areHeadTailConnected(singlePath) && !EnsureContiguousPathLoops.apply(singlePath)) {
+			throw new OperationFailedException("head() and tail() of outline are not neigbours");
 		}
 	}
 			
 	private static boolean areHeadTailConnected(ContiguousPixelPath path) {
-		return PointsListNghbUtilities.arePointsNghb(
+		return PointsListNeighborUtilities.arePointsNghb(
 			path.head(),
 			path.tail()
 		);

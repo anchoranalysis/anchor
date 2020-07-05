@@ -40,14 +40,17 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BinarySegmentationReference extends BinarySegmentation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id;
 	// END BEAN PROPERTIES
 	
-	private transient BinarySegmentation proxy;
+	private BinarySegmentation proxy;
 
 	@Override
 	public void onInit(ImageInitParams so) throws InitException {
@@ -66,13 +69,5 @@ public class BinarySegmentationReference extends BinarySegmentation {
 		Optional<ObjectMask> mask
 	) throws SgmnFailedException {
 		return proxy.sgmn(voxelBox, params, mask);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 }

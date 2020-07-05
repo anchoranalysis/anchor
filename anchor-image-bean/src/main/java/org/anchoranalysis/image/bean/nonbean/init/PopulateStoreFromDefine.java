@@ -134,10 +134,10 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 		
 		List<NamedBean<S>> listItem = define.getList(defineClss);
 		
-		InitBridge<S,T,V> bridge = new InitBridge<S,T,V>(
+		InitBridge<S,T,V> bridge = new InitBridge<>(
 			pi,
 			logger,
-			s->s.create()		// Initializes and then gets whats provided
+			S::create		// Initializes and then gets whats provided
 		);		
 		
 		BeanStoreAdder.addPreserveName(

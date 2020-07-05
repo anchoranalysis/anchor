@@ -53,7 +53,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSeries {
+public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSeries {
 
 	private ImgChnlMap chnlMap;
 
@@ -63,8 +63,6 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	private int seriesNum;
 	
 	public NamedChnlCollectionForSeriesMap(OpenedRaster openedRaster, ImgChnlMap chnlMap, int seriesNum) {
-		super();
-		assert( chnlMap!=null );
 		this.chnlMap = chnlMap;
 		this.seriesNum = seriesNum;
 		this.openedRaster = openedRaster;
@@ -168,14 +166,13 @@ public class NamedChnlCollectionForSeriesMap extends NamedChnlCollectionForSerie
 	
 	@Override
 	public Operation<Stack,OperationFailedException> allChnlsAsStack(int t) {
-		return new WrapOperationAsCached<Stack,OperationFailedException>(
+		return new WrapOperationAsCached<>(
 			() -> stackForAllChnls(t)
 		);
 	}
 	
 	private TimeSequence createTs( ProgressReporter progressReporter ) throws GetOperationFailedException {
 		if( ts==null) {
-			// TODO create another way of inserting scaling information from the getChnlMap()
 			try {
 				ts = openedRaster.open(seriesNum, progressReporter );
 			} catch (RasterIOException e) {

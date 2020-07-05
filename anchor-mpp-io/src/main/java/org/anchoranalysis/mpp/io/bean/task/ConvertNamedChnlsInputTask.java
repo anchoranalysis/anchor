@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
  * 
  * <p>Note that the presence of IReplaceTask gives special behavior to this task in the JobProcessor</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> the named-chnls-input we expect to receive
  * @param <S> shared-state of the task

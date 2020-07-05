@@ -31,36 +31,21 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 
+import lombok.Value;
+
 /**
  * A negative-result when an object is NOT found at a particular location
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T>
  */
-public class NotFound<T> extends Findable<T> {
+@Value
+public class NotFound<T> implements Findable<T> {
 
-	private Path path;
-	private String reason;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param path the path an object was not found at.
-	 */
-	public NotFound(Path path, String reason) {
-		super();
-		this.path = path;
-		this.reason = reason;
-	}
-
-	public Path getPath() {
-		return path;
-	}
-
-	public String getReason() {
-		return reason;
-	}
+	/** the path an object was not found at. */
+	private final Path path;
+	private final String reason;
 
 	@Override
 	public Optional<T> getFoundOrLog(String name, LogErrorReporter logErrorReporter) {

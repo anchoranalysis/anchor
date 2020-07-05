@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
@@ -76,8 +77,8 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 		}
 	}
 	
-	public KernelWithID<T> initialKernel( RandomNumberGenerator re ) {
-		return new KernelWithID<T>(lstKernelFactories.get(0).getKernel(),0);
+	public KernelWithID<T> initialKernel() {
+		return new KernelWithID<>(lstKernelFactories.get(0).getKernel(),0);
 	}
 	
 	// Proposes a kernel
@@ -94,7 +95,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 	
 	public WeightedKernelList<T> getAllKernelFactories() {
 		
-		WeightedKernelList<T> listOut = new WeightedKernelList<T>();
+		WeightedKernelList<T> listOut = new WeightedKernelList<>();
 		for( int i=0; i<getNumKernel(); i++) {
 			WeightedKernel<T> wkf = lstKernelFactories.get(i);
 			listOut.add( wkf );
@@ -161,7 +162,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 
 	private void calcCumProb( List<KernelProposerOption<T>> options ) throws InitException {
 		
-		if (options.size()==0) {
+		if (options.isEmpty()) {
 			throw new InitException("At least one option must be specified");
 		}
 		
@@ -201,11 +202,10 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 			WeightedKernel<T> wkf = getWeightedKernelFactory(i);
 			
 			if (rand<cumProbArr[i] ) {
-				return new KernelWithID<T>( wkf.getKernel(), i );
+				return new KernelWithID<>( wkf.getKernel(), i );
 			} 
 		}
 		
-		assert false;
-		return null;
+		throw new AnchorImpossibleSituationException();
 	}
 }

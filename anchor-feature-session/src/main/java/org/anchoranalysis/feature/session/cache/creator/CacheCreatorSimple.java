@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.session.cache.creator;
 
+
+
 /*-
  * #%L
  * anchor-feature-session
@@ -58,7 +60,7 @@ public class CacheCreatorSimple implements CacheCreator {
 	}
 
 	@Override
-	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<?> inputType ) {
+	public <T extends FeatureInput> FeatureSessionCache<T> create( Class<? extends FeatureInput> inputType ) {
 		FeatureList<T> featureList = filterFeatureList(inputType);
 		return createCache(
 			featureList,
@@ -68,22 +70,26 @@ public class CacheCreatorSimple implements CacheCreator {
 		);
 	}
 
-	/** Filters a feature-list to only include features compatible with a particular <code>paramsType</code> */
+	/** 
+	 * Filters a feature-list to only include features compatible with a particular {@code inputType}
+	 * <p>
+	 * A feature in the list is deemed compatible if its class is either equal to or a super-class of
+	 * {@code inputType}. 
+	 *  */
 	@SuppressWarnings("unchecked")
-	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<?> paramsType) {
+	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<? extends FeatureInput> inputType) {
 		return namedFeatures.filterAndMap(
-			f -> f.inputDescriptor().isCompatibleWith(paramsType),
+			f -> f.inputDescriptor().isCompatibleWith(inputType),
 			f -> (Feature<T>) f
 		);
 	}
 		
 	private <T extends FeatureInput> FeatureSessionCache<T> createCache(
 		FeatureList<T> namedFeatures,
-		Class<?> inputType,
+		Class<? extends FeatureInput> inputType,
 		FeatureInitParams featureInitParams,
 		LogErrorReporter logger			
 	) {
-		
 		SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 		
 		try {
@@ -93,7 +99,6 @@ public class CacheCreatorSimple implements CacheCreator {
 			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
 		}
 		
-		assert(logger!=null);
 		FeatureSessionCache<T> cache = factory.create(namedFeatures, sharedFeaturesSet);
 		cache.init(featureInitParams, logger);
 		return cache;

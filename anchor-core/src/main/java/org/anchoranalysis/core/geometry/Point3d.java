@@ -160,4 +160,25 @@ public final class Point3d extends Tuple3d {
 			return false;
 		}
 	}
+	
+	/** Performs an addition without changing any values in an existing point */
+	public static Point3d immutableAdd(Tuple3d point, Tuple3d toAdd) {
+		Point3d pntDup = new Point3d(point);
+		pntDup.add(toAdd);
+		return pntDup;
+	}
+	
+	/** Performs a subtraction without changing any values in an existing point */
+	public static Point3d immutableSubtract(Tuple3d point, Tuple3d toSubtract) {
+		Point3d pntDup = new Point3d(point);
+		pntDup.subtract(toSubtract);
+		return pntDup;
+	}
+	
+	/** Performs a scale without changing any values in an existing point */
+	public static Point3d immutableScale(Tuple3d pnt, int factor) {
+		Point3d pntDup = new Point3d(pnt);
+		pntDup.scale(factor);
+		return pntDup;
+	}
 }

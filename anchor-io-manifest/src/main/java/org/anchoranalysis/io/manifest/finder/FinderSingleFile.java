@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.manifest.finder;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-io
@@ -30,14 +32,14 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 
-public abstract class FinderSingleFile extends Finder {
+public abstract class FinderSingleFile implements Finder {
 
-	private FileWrite foundFile;
+	private Optional<FileWrite> foundFile = Optional.empty();
 	
 	private ErrorReporter errorReporter;
 	
 	// A simple method to override in each finder that is based upon finding a single file
-	protected abstract FileWrite findFile( ManifestRecorder manifestRecorder ) throws MultipleFilesException;
+	protected abstract Optional<FileWrite> findFile( ManifestRecorder manifestRecorder ) throws MultipleFilesException;
 	
 	public FinderSingleFile( ErrorReporter errorReporter ) {
 		this.errorReporter = errorReporter;
@@ -52,12 +54,7 @@ public abstract class FinderSingleFile extends Finder {
 		
 		try {
 			foundFile = findFile(manifestRecorder);
-			
-			if (!exists()) {
-				return false;
-			}
-			
-			return true;
+			return exists();
 		} catch (MultipleFilesException e) {
 			if (errorReporter!=null) {
 				errorReporter.recordError(FinderSingleFile.class, e);
@@ -68,10 +65,10 @@ public abstract class FinderSingleFile extends Finder {
 	
 	@Override
 	public final boolean exists() {
-		return foundFile != null;
+		return foundFile.isPresent();
 	}
 
 	protected FileWrite getFoundFile() {
-		return foundFile;
+		return foundFile.get();
 	}
 }

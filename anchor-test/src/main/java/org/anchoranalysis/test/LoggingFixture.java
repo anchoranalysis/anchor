@@ -34,7 +34,7 @@ import org.anchoranalysis.core.log.LogReporter;
 /**
  * Fixtures to create loggers that don't output anything
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class LoggingFixture {

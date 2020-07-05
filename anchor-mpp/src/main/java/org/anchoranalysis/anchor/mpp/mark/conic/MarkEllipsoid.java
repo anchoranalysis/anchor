@@ -41,6 +41,8 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
+import com.google.common.base.Preconditions;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
@@ -64,14 +66,14 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	 */
 	private static final long serialVersionUID = -2678275834893266874L;
 
-	private static int MatDim = 3;
+	private static final int NUM_DIM = 3;
 	
-	private static byte FLAG_SUBMARK_NONE = flagForNoRegion();
-	private static byte FLAG_SUBMARK_REGION0 = flagForRegion( SUBMARK_INSIDE, SUBMARK_CORE, SUBMARK_CORE_INNER);
-	private static byte FLAG_SUBMARK_REGION1 = flagForRegion( SUBMARK_INSIDE, SUBMARK_CORE);
-	private static byte FLAG_SUBMARK_REGION2 = flagForRegion( SUBMARK_INSIDE, SUBMARK_SHELL);
-	private static byte FLAG_SUBMARK_REGION3 = flagForRegion( SUBMARK_SHELL, SUBMARK_SHELL_OUTSIDE);
-	private static byte FLAG_SUBMARK_REGION4 = flagForRegion( SUBMARK_OUTSIDE );
+	private static final byte FLAG_SUBMARK_NONE = flagForNoRegion();
+	private static final byte FLAG_SUBMARK_REGION0 = flagForRegion( SUBMARK_INSIDE, SUBMARK_CORE, SUBMARK_CORE_INNER);
+	private static final byte FLAG_SUBMARK_REGION1 = flagForRegion( SUBMARK_INSIDE, SUBMARK_CORE);
+	private static final byte FLAG_SUBMARK_REGION2 = flagForRegion( SUBMARK_INSIDE, SUBMARK_SHELL);
+	private static final byte FLAG_SUBMARK_REGION3 = flagForRegion( SUBMARK_SHELL, SUBMARK_SHELL_OUTSIDE);
+	private static final byte FLAG_SUBMARK_REGION4 = flagForRegion( SUBMARK_OUTSIDE );
 	
 	// START Mark State	
 	private double shellRad = 0.1;
@@ -104,7 +106,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	public MarkEllipsoid() {
 		super();
 		this.radii = new Point3d();
-        ellipsoidCalculator = new EllipsoidMatrixCalculator(MatDim);
+        ellipsoidCalculator = new EllipsoidMatrixCalculator(NUM_DIM);
 	}
 	
 	// Copy Constructor
@@ -134,15 +136,13 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	
 	@Override
 	public String getName() {
-		return new String("ellipsoid");
+		return "ellipsoid";
 	}
 
 	public static double getEllipsoidSum( double x, double y, double z, DoubleMatrix2D mat ) {
-		
-		double sum = x * (x * mat.get(0, 0) + y*mat.get(1, 0) + z*mat.get(2, 0)) +
+		return x * (x * mat.get(0, 0) + y*mat.get(1, 0) + z* mat.get(2, 0)) +
 			y * (x * mat.get(0, 1) + y * mat.get(1, 1) + z * mat.get(2, 1)) +
 			z * (x * mat.get(0, 2) + y * mat.get(1, 2) + z * mat.get(2, 2));
-		return sum;
 	}
 	
 	private static double l2norm( double x, double y, double z) {
@@ -289,11 +289,9 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	//   false -> maybe overlap, maybe not
 	@SuppressWarnings("static-access")
 	@Override
-	public boolean quickTestNoOverlap( Mark m, int regionID ) {
-		
-		//.class.isAssignableFrom(m.getClass())
-		assert m instanceof MarkEllipsoid;
-		MarkEllipsoid trgtMark = (MarkEllipsoid) m;
+	public boolean quickTestNoOverlap( Mark mark, int regionID ) {
+		Preconditions.checkArgument(mark instanceof MarkEllipsoid);
+		MarkEllipsoid trgtMark = (MarkEllipsoid) mark;
 		
 		DoubleMatrix1D relPos = TensorUtilities.threeElementMatrix(
 			trgtMark.getPos().getX() - getPos().getX(),
@@ -302,20 +300,16 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		);
 		
 		DoubleMatrix1D relPosSq = relPos.copy();
-		relPosSq.assign( Functions.functions.square );
+		relPosSq.assign( Functions.functions.square );	// NOSONAR
 		double dist = relPosSq.zSum();
 		
 		// Definitely outside
-		if( dist > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0) ) {
-			return true;
-		}
-		
-		return false;
+		return dist > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0);
 	}
 	
 	private double getMaximumRadius( int regionID ) {
 		
-		double maxRadius = ellipsoidCalculator.getMaximumRadius();;
+		double maxRadius = ellipsoidCalculator.getMaximumRadius();
 		
 		if (regionID==GlobalRegionIdentifiers.SUBMARK_SHELL) {
 			maxRadius *= (1+shellRad);
@@ -364,12 +358,12 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	
 	// NB objects are scaled in pre-rotated position i.e. when aligned to axes
 	@Override
-	public void scale( double mult_factor ) {
-		super.scale(mult_factor);
+	public void scale( double multFactor ) {
+		super.scale(multFactor);
 		
-		this.radii.setX( this.radii.getX() * mult_factor );
-		this.radii.setY( this.radii.getY() * mult_factor );
-		this.radii.setZ( this.radii.getZ() * mult_factor );
+		this.radii.setX( this.radii.getX() * multFactor );
+		this.radii.setY( this.radii.getY() * multFactor );
+		this.radii.setZ( this.radii.getZ() * multFactor );
 		updateAfterMarkChange();
 	}
 
@@ -390,11 +384,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 			return false;
 		}
 		
-		if (!orientation.equals(trgt.orientation)) {
-			return false;
-		}
-		
-		return true;
+		return orientation.equals(trgt.orientation);
 	}
 
 	@Override

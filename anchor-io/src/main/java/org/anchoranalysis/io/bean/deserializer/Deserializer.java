@@ -31,7 +31,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-public abstract class Deserializer<T> {
+public interface Deserializer<T> {
 
-	public abstract T deserialize( Path filePath ) throws DeserializationFailedException;
+	T deserialize( Path filePath ) throws DeserializationFailedException;
 }

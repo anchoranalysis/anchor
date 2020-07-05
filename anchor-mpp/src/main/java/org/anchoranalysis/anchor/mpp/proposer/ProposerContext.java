@@ -55,11 +55,9 @@ public class ProposerContext {
 		this.nrgStack = nrgStack;
 		this.regionMap = regionMap;
 		this.errorNode = errorNode;
-		assert(errorNode!=null);
 	}
 	
 	public ProposerContext replaceError( ErrorNode errorNode ) {
-		assert( errorNode!=null );
 		return new ProposerContext(
 			randomNumberGenerator,
 			nrgStack,

@@ -33,6 +33,8 @@ import java.nio.file.Path;
 
 public class WriteStringToFile {
 	
+	private WriteStringToFile() {}
+	
 	public static void apply( String element, Path filePath ) throws IOException {
 		FileWriter outFile = new FileWriter( filePath.toFile() );
 		PrintWriter out = new PrintWriter(outFile);

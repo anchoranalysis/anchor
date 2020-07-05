@@ -29,23 +29,23 @@ package org.anchoranalysis.image.binary.logical;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BinaryChnlOr {
-
-
 		
 	/**
 	 * A binary OR of chnlCrnt and chnlReceiver where chnlReceiver is overwritten with the output
 	 *  
 	 * @param chnlCrnt first-channel for OR
 	 * @param chnlReceiver second-channel for OR (and the channel where the result is overwritten)
-	 * @throws CreateException
 	 */
-	public static void binaryOr( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) throws CreateException {
+	public static void binaryOr( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) {
 		
 		BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
 		BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();

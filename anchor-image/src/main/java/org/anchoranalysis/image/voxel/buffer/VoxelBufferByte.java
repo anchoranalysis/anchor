@@ -82,7 +82,7 @@ public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
 	@Override
 	public VoxelDataType dataType() {
-		return VoxelDataTypeUnsignedByte.instance;
+		return VoxelDataTypeUnsignedByte.INSTANCE;
 	}
 
 	@Override

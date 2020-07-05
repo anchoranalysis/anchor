@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.io.stack;
 
-import java.nio.file.Path;
+
 
 
 /*
@@ -30,20 +30,13 @@ import java.nio.file.Path;
  */
 
 
-import java.util.Set;
-
 import org.anchoranalysis.core.cache.WrapOperationWithProgressReporterAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorOutputHelper;
@@ -53,13 +46,16 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class StackCollectionOutputter {
 	
 	private static final String OUTPUT_NAME = "stackCollection";
 	private static final String PREFIX = "";
 	
-	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager 
-	 * @throws OutputWriteFailedException */
+	/** Only outputs stacks whose names are allowed by the StackCollection part of the OutputManager */ 
 	public static void outputSubset(
 		NamedProvider<Stack> stacks,
 		String secondLevelOutputKey,
@@ -122,32 +118,6 @@ public class StackCollectionOutputter {
 		}
 		
 		return out;
-	}
-		
-	public static void copyFrom(
-		NamedChnlCollectionForSeries src,
-		NamedImgStackCollection target,
-		Path modelDir,
-		ProgressReporter progressReporter
-	) throws OperationFailedException {
-		
-		Set<String> keys = src.chnlNames();
-		
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, keys.size()) ) {
-			for (String id : keys) {
-				if (!target.keys().contains((id))) {
-					target.addImageStack(
-						id,
-						new Stack(
-							src.getChnl(id, 0, new ProgressReporterOneOfMany(prm))
-						)
-					);
-					prm.incrWorker();
-				}
-			}
-		} catch (GetOperationFailedException e) {
-			throw new OperationFailedException(e);
-		}
 	}
 
 	private static OperationWithProgressReporter<Stack,OperationFailedException> extractStackCached(NamedProvider<Stack> stackCollection, String name) {

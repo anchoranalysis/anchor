@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
  * An annotation that consists of two sets of marks (accepted marks, and rejected marks)
  *   as well as a possible reason for rejecting the entire image
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class MarkAnnotation extends AnnotationWithCfg {
@@ -54,8 +54,7 @@ public class MarkAnnotation extends AnnotationWithCfg {
 	private Date timeAnnotationLastUpdated;				// Number of seconds since the UNIX epoch
 	private boolean finished = false;
 	
-	// Hard-coded... for now
-	//private RegionMap regionMap = RegionMapSingleton.instance();
+	// Hard-coded regionID
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	
 	public void markAccepted( Cfg cfg, Cfg cfgReject ) {

@@ -37,19 +37,21 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class InterpolateUtilities {
-	
-	
-	
+
 	private static Transfer createTransfer( VoxelBoxWrapper src, VoxelBoxWrapper dest ) {
 		
 		if (!src.getVoxelDataType().equals(dest.getVoxelDataType())) {
 			throw new IncorrectVoxelDataTypeException("Data types don't match between src and dest");
 		}
 		
-		if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
+		if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 			return new TransferViaByte(src, dest);
-		} else if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.instance )) {
+		} else if (src.getVoxelDataType().equals( VoxelDataTypeUnsignedShort.INSTANCE )) {
 			return new TransferViaShort(src, dest);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte and short are supported");
@@ -63,8 +65,6 @@ public class InterpolateUtilities {
 		Extent eTrgt = trgt.any().extent();
 		
 		Transfer biWrapper = createTransfer(src,trgt);
-
-		//resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
 		
 		for (int z=0; z<eSrc.getZ(); z++) {
 			

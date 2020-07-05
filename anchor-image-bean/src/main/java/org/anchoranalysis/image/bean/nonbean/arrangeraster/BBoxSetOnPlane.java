@@ -36,10 +36,20 @@ import org.anchoranalysis.image.extent.Extent;
 
 // Describes a set of bounding boxes on top of a plane
 public class BBoxSetOnPlane implements Iterable<BoundingBox> {
-	
-	private Extent extent = new Extent();
+
+	private Extent extent;
 	
 	private List<BoundingBox> list = new ArrayList<>();
+	
+	public BBoxSetOnPlane(Extent extent) {
+		super();
+		this.extent = extent;
+	}
+	
+	public BBoxSetOnPlane(Extent extent, BoundingBox bbox) {
+		this(extent);
+		add(bbox);
+	}
 	
 	public void add(BoundingBox obj) {
 		list.add(obj);
@@ -60,10 +70,6 @@ public class BBoxSetOnPlane implements Iterable<BoundingBox> {
 
 	public Extent getExtnt() {
 		return extent;
-	}
-
-	public void setExtnt(Extent extent) {
-		this.extent = extent;
 	}
 	
 }

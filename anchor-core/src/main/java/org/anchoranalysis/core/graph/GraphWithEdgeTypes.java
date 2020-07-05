@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.graph;
 
-import java.io.Serializable;
-
 /*
  * #%L
  * anchor-core
@@ -44,12 +42,7 @@ import com.google.common.collect.HashBasedTable;
  * @param <V> Vertex-type
  * @param <E> Edge-type
  */
-public class GraphWithEdgeTypes<V,E> implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class GraphWithEdgeTypes<V,E> {
 	
 	private HashSet<V> setVertices;
 	private HashBasedTable<V, V, EdgeTypeWithVertices<V,E>> tableEdge;
@@ -114,7 +107,7 @@ public class GraphWithEdgeTypes<V,E> implements Serializable {
 	public void removeVertex( V node ) {
 		setVertices.remove(node);
 		
-		tableEdge.row(node).clear();;
+		tableEdge.row(node).clear();
 		tableEdge.column(node).clear();
 	}
 	

@@ -109,7 +109,7 @@ public class SetSequenceType extends SequenceType {
 	@Override
 	public String indexStr(int index) {
 		
-		assert(set.size()>0);
+		assert(!set.isEmpty());
 		
 		Iterator<String> itr = set.iterator();
 		

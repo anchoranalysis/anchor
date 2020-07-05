@@ -35,7 +35,7 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * A FileProviderWithDirectory where the directory is specified a String BeanField
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class FileProviderWithDirectoryString extends FileProviderWithDirectory {

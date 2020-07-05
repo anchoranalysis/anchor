@@ -36,11 +36,13 @@ import org.apache.commons.lang.SystemUtils;
 
 class HiddenPathChecker {
 	
+	private HiddenPathChecker() {}
+	
 	public static boolean includePath(Path path) {
 		try {
 			// There is a bug in Java (apparently fixed in version 13) where Files.isHidden
 			//  does not recognize directories as hidden.
-			return !Files.exists(path) || !isHidden(path);
+			return !path.toFile().exists() || !isHidden(path);
 		} catch (Exception e) {
 			// If we can't perform these operations, we consider the file not to be hidden
 			// rather than throwing an exception

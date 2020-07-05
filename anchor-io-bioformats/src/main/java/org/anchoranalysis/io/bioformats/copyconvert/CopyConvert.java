@@ -42,7 +42,7 @@ import loci.formats.IFormatReader;
 
 /**
  * Copies the bytes from a IFormatReader to a list of channels, converting if necessary
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class CopyConvert {
@@ -90,8 +90,8 @@ public class CopyConvert {
 				(t, z, c, readerIndex) -> {
 					
 					/** Selects a destination channel for a particular relative channel */
-					DestChnlForIndex destC = c_rel -> dest.get(
-						destIndex(c + c_rel, t, numChnl)
+					DestChnlForIndex destC = channelRelative -> dest.get(
+						destIndex(c + channelRelative, t, numChnl)
 					);
 					
 					byte[] b = reader.openBytes(readerIndex);

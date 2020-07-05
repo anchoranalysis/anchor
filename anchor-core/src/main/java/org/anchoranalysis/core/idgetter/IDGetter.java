@@ -27,7 +27,7 @@ package org.anchoranalysis.core.idgetter;
  */
 
 
-public abstract class IDGetter<T> {
+public interface IDGetter<T> {
 
-	public abstract int getID( T m, int iter );
+	int getID( T m, int iter );
 }

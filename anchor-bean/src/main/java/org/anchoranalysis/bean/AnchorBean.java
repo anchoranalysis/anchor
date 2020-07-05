@@ -56,14 +56,14 @@ public abstract class AnchorBean<F> {
 	 * We cache this in the class, to avoid having to regenerate it every
 	 *  time an object is duplicated, init-ed, or checkInitParams() is called etc.
 	 */
-	private transient List<Field> listBeanFields;
+	private List<Field> listBeanFields;
 
 
 	/**
 	 * If non-null, a local path on the file-system associate with this bean (from serialization).
 	 * If null, no such local-path has been assigned.
 	 */
-	private transient Path localPath;
+	private Path localPath;
 
 	/**
 	 * A short-name identifying a bean (by default the name of the class associated with the bean)
@@ -176,7 +176,6 @@ public abstract class AnchorBean<F> {
 		List<Field> listFields,
 		Class<?> match
 	) throws BeanMisconfiguredException {
-		// TODO return to protected
 		return HelperFindChildren.findChildrenOfClass(this, listFields, match);
 	}
 	

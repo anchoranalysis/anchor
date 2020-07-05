@@ -27,8 +27,6 @@ package org.anchoranalysis.io.generator;
  */
 
 
-public abstract class MultipleFileTypeGenerator extends Generator {
-
-	
+public abstract class MultipleFileTypeGenerator implements Generator {
 
 }

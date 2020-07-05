@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
  * 
  * Creates an undirected graph where each vertex is an object, and edge exists if the objects neighbour
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <V> vertex-type
  */

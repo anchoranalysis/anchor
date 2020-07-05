@@ -35,6 +35,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class RGBOutputUtils {
 	
+	private RGBOutputUtils() {}
+	
 	public static void writeRGBColorToByteArr( RGBColor c, Point3i pnt, ImageDimensions sd, ByteBuffer red, ByteBuffer blue, ByteBuffer green ) {
 		int index = sd.offset(pnt.getX(), pnt.getY(), 0);
 		red.put(index, (byte) c.getRed());
@@ -42,6 +44,4 @@ public class RGBOutputUtils {
 		blue.put(index, (byte) c.getBlue());
 		
 	}
-
-
 }

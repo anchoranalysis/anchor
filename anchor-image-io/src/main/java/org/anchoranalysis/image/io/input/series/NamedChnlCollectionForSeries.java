@@ -44,20 +44,26 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-public abstract class NamedChnlCollectionForSeries implements ChnlGetter {
+public interface NamedChnlCollectionForSeries extends ChnlGetter {
 	
-	public abstract Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+	Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
 	
-	public abstract Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+	Set<String> chnlNames();
 	
-	public abstract Set<String> chnlNames();
+	int sizeT( ProgressReporter progressReporter ) throws RasterIOException;
 	
-	public abstract int sizeT( ProgressReporter progressReporter ) throws RasterIOException;
-	
-	public abstract ImageDimensions dimensions() throws RasterIOException;
+	ImageDimensions dimensions() throws RasterIOException;
 
-	public abstract void addAsSeparateChnls( NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter ) throws OperationFailedException;
-	public abstract void addAsSeparateChnls( NamedProviderStore<TimeSequence> stackCollection, final int t ) throws OperationFailedException;
+	void addAsSeparateChnls(
+		NamedImgStackCollection stackCollection,
+		int t,
+		ProgressReporter progressReporter
+	) throws OperationFailedException;
 	
-	public abstract Operation<Stack,OperationFailedException> allChnlsAsStack( final int t );
+	void addAsSeparateChnls(
+		NamedProviderStore<TimeSequence> stackCollection,
+		int t
+	) throws OperationFailedException;
+	
+	Operation<Stack,OperationFailedException> allChnlsAsStack(int t);
 }

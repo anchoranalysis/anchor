@@ -60,6 +60,6 @@ public class OperationOutFilePath extends CachedOperation<Path,AnchorIOException
 				new AnchorIOException("A binding-path must be associated with the input for this operation")
 			),
 			debugMode
-		).toAbsolutePath();
+		).toAbsolutePath().normalize();
 	}
 }

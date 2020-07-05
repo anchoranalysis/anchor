@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.Writer;
 
-public class SubfolderWriter extends SequenceWriter {
+public class SubfolderWriter implements SequenceWriter {
 
 	private BoundOutputManager parentOutputManager;
 	private IndexableOutputNameStyle outputNameStyle;

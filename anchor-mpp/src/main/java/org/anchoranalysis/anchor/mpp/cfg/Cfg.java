@@ -35,6 +35,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
@@ -58,11 +60,20 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	 */
 	private static final long serialVersionUID = 2398855316191681489L;
 	
-	private ArrayList<Mark> marks;
+	private final List<Mark> marks;
 
 	public Cfg() {
-		super();
-		marks = new ArrayList<>();
+		this( new ArrayList<>() );
+	}
+	
+	public Cfg( Stream<Mark> stream ) {
+		this(
+			stream.collect( Collectors.toList() )
+		);
+	}
+		
+	public Cfg( List<Mark> marks ) {
+		this.marks = marks;
 	}
 	
 	public Cfg( Mark m ) {
@@ -71,31 +82,13 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	}
 	
 	public Cfg shallowCopy() {
-		
-		Cfg newCfg = new Cfg();
-		
-		// We copy all the marks
-		newCfg.marks = new ArrayList<>( this.marks.size() );
-		for( Mark mark : this.marks ) {
-			newCfg.marks.add( mark );
-		}
-		
-		return newCfg;
+		return new Cfg( marks.stream() );
 	}
-	
-	
-	// Deep Copy
+
 	public Cfg deepCopy() {
-		
-		Cfg newCfg = new Cfg();
-		
-		// We copy all the marks
-		newCfg.marks = new ArrayList<>( this.marks.size() );
-		for( Mark mark : this.marks ) {
-			newCfg.marks.add( mark.duplicate() );
-		}
-		
-		return newCfg;
+		return new Cfg(
+			marks.stream().map(Mark::duplicate)
+		);
 	}
 
 	public boolean add(Mark arg0) {
@@ -225,7 +218,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		byte flags = rm.flags();
 		
 		// We cycle through each item in the configuration
-		//int s = 0;
 		for (Mark m : this) {
 			
 			byte membership = m.evalPntInside(pnt);
@@ -233,7 +225,6 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 				cfgOut.add( m );
 			}
 		}
-		
 		return cfgOut;
 	}
 	
@@ -255,7 +246,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	}
 
 	// A hashmap of all the marks, using the Id as an index
-	public HashMap<Integer,Mark> createIdHashMap() {
+	public Map<Integer,Mark> createIdHashMap() {
 		
 		HashMap<Integer,Mark> hashMap = new HashMap<>();
 	
@@ -330,15 +321,9 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		return marks.set(index, element);
 	}
 
-
-	public ArrayList<Mark> getMarks() {
+	public List<Mark> getMarks() {
 		return marks;
 	}
-
-	public void setMarks(ArrayList<Mark> marks) {
-		this.marks = marks;
-	}
-
 	
 	private static ObjectWithProperties calcMaskWithColor(
 		Mark mark,

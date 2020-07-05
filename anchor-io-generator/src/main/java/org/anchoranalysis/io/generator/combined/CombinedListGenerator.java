@@ -58,7 +58,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 			});
 		}
 		
-		if (all.size()>0) {
+		if (!all.isEmpty()) {
 			return Optional.of(
 				all.toArray( new FileType[]{} )
 			);
@@ -71,11 +71,7 @@ public class CombinedListGenerator extends MultipleFileTypeGenerator  {
 	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
 		
 		for( OptionalNameValue<Generator> ni : list) {
-
-			ni.getName().ifPresent( outputName->
-				outputNameStyle.setOutputName(outputName)	
-			);
-			
+			ni.getName().ifPresent(outputNameStyle::setOutputName);
 			ni.getValue().write(outputNameStyle, outputManager);
 		}
 		

@@ -109,6 +109,6 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
 
 	@Override
 	public List<FileWrite> fileList() {
-		throw new RuntimeException("unsupported method");
+		throw new UnsupportedOperationException();
 	}
 }

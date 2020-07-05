@@ -35,15 +35,10 @@ public class SequenceMemory {
 	private HashMap<String,Integer> map = new HashMap<>();
 
 	public int lastIndex( String key ) {
-		
-		Integer index = map.get(key);
-		
-		if (index==null) {
-			index = Integer.valueOf(0);
-			map.put(key, index );
-		}
-		
-		return index;
+		return map.computeIfAbsent(
+			key,
+			k -> Integer.valueOf(0)
+		);
 	}
 	
 	// Increments the index and returns the new incremented index

@@ -40,7 +40,6 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
-import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecorder;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
@@ -111,12 +110,16 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		try {
 			FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
 			
-			if (writeOperationRecorder!=null) {
-				writeOperationRecorder.init(prefix.getFolderPath());
-				return new BoundOutputManager( this, prefix, getOutputWriteSettings(), writeOperationRecorder.getRootFolder(), lazyDirectoryFactory(), null );
-			} else {
-				return new BoundOutputManager( this, prefix, getOutputWriteSettings(), new NullWriteOperationRecorder(), lazyDirectoryFactory(), null );
-			}
+			writeOperationRecorder.init(prefix.getFolderPath());
+			return new BoundOutputManager(
+				this,
+				prefix,
+				getOutputWriteSettings(),
+				writeOperationRecorder.getRootFolder(),
+				lazyDirectoryFactory(),
+				Optional.empty()
+			);
+
 		} catch (FilePathPrefixerException e) {
 			throw new BindFailedException(e);
 		}

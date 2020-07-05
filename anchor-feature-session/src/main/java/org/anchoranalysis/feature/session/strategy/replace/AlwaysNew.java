@@ -70,7 +70,7 @@ public class AlwaysNew<T extends FeatureInput> extends ReplaceStrategy<T> {
 	
 	@Override
 	public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
-		return new SessionInputSequential<T>(
+		return new SessionInputSequential<>(
 			input,
 			cacheCreator,
 			findChildStrategy

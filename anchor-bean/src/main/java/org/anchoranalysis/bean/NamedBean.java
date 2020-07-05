@@ -83,7 +83,7 @@ public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean
 	
 	/** The item that is to be named (i.e. the underlying bean) */
 	public T getItem() {
-		return item;
+		return getValue();
 	}
 	
 	/** {@link setItem} */

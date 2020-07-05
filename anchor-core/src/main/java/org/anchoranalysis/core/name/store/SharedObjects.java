@@ -32,53 +32,45 @@ import java.util.Map;
 
 import org.anchoranalysis.core.log.LogErrorReporter;
 
+import lombok.RequiredArgsConstructor;
+
 /**
- * Objects shared between different components
- * Components can re-use existing objects, or add new objects as they prefer
+ * Objects shared between different components.
  * 
- * TODO: we probably will need to implement some form of reference counting later
- *   so we can remove items that are no longer necessary, but for now we don't do this
+ * <p>This provides a <i>memory</i> between particular processing components, offering
+ * a variable state.</p>
  * 
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class SharedObjects {
+	
+	// START REQUIRED ARGUMENTS
+	private final LogErrorReporter logger;
+	// END REQUIRED ARGUMENTS
 	
 	/**
 	 * A set of NamedItemStores, partitioned by Class<?>
 	 */
-	private Map<Class<?>,NamedProviderStore<?>> setStores;
-	
-	private LogErrorReporter logger;
-	
-	public SharedObjects(
-		LogErrorReporter logger
-	) {
-		this.logger = logger;
-		assert logger!=null;
+	private Map<Class<?>,NamedProviderStore<?>> setStores = new HashMap<>();
 		
-		setStores = new HashMap<>();
-	}
-	
 	/**
 	 * Gets an existing store, or creates a new one
 	 * 
 	 * @param key unique-identifier for the store
 	 * @param <T> type of item in store
-	 * @param <E> exception thrown by type in store
 	 * @return an existing-store, or a newly-created one
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> NamedProviderStore<T> getOrCreate( Class<?> key ) {
-		
-		NamedProviderStore<?> store = setStores.get(key);
-		
-		if (store==null) {
-			store = new LazyEvaluationStore<>(logger,key.getSimpleName());
-			setStores.put(key, store);
-		}
-		
-		return (NamedProviderStore<T>) store;
+		return (NamedProviderStore<T>) setStores.computeIfAbsent(
+			key,
+			cls -> new LazyEvaluationStore<>(
+				logger,
+				cls.getSimpleName()
+			)
+		);
 	}
 }
 

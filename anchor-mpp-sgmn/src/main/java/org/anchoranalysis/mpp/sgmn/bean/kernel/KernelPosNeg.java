@@ -30,11 +30,6 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public abstract class KernelPosNeg<T> extends KernelIndependent<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6239037929577769871L;
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -43,9 +38,6 @@ public abstract class KernelPosNeg<T> extends KernelIndependent<T> {
 	@BeanField
 	private double probNeg = 0.5;
 	// END BEAN PROPERTIES
-	
-	public KernelPosNeg() {
-	}
 	
 	public double getProbPos() {
 		return probPos;

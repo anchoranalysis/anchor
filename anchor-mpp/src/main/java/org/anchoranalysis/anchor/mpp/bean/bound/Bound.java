@@ -45,5 +45,5 @@ public abstract class Bound extends MarkBounds {
 		return new RslvdBound( getMinRslvd(sr, do3D), getMaxRslvd(sr, do3D) );
 	}
 		
-	public abstract void scale( double mult_factor );
+	public abstract void scale(double multFactor);
 }

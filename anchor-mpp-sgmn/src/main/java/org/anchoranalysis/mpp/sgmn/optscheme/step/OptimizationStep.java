@@ -2,6 +2,7 @@ package org.anchoranalysis.mpp.sgmn.optscheme.step;
 
 import java.util.Optional;
 
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -28,7 +29,7 @@ import java.util.Optional;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,7 +42,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> kernel-type
  * @param <T> optimization-state type
@@ -79,7 +80,7 @@ public class OptimizationStep<S,T> {
 		this.proposal = proposalNew;
 	}
 
-	public void acceptProposal( Function<T,Double> funcScore ) {
+	public void acceptProposal( ToDoubleFunction<T> funcScore ) {
 		accptd = true;
 		assgnCrntFromProposal(funcScore);
 		
@@ -116,7 +117,7 @@ public class OptimizationStep<S,T> {
 		proposal = Optional.empty();
 	}
 
-	private void assgnCrntFromProposal( Function<T,Double> funcScore ) {
+	private void assgnCrntFromProposal( ToDoubleFunction<T> funcScore ) {
 		// We can rely that a proposal exists, as it has been accepted
 		state.assignCrnt( proposal.get() );
 		maybeAssignAsBest( funcScore );
@@ -127,7 +128,7 @@ public class OptimizationStep<S,T> {
 		dscrData.setKernelNoProposalDescription(kernelRejectionDescription);
 	}
 	
-	private void maybeAssignAsBest( Function<T,Double> funcScore ) {
+	private void maybeAssignAsBest( ToDoubleFunction<T> funcScore ) {
 		// Is the score from crnt, greater than the score from best?
 		if( !state.getBest().isPresent() || scoreCurrentBetterThanBest(funcScore) ) {
 			state.assignBestFromCrnt();
@@ -135,12 +136,12 @@ public class OptimizationStep<S,T> {
 		}
 	}
 	
-	private boolean scoreCurrentBetterThanBest(Function<T,Double> funcScore) {
+	private boolean scoreCurrentBetterThanBest( ToDoubleFunction<T> funcScore) {
 		if (!state.getCrnt().isPresent()) {
 			return false;
 		}
-		return funcScore.apply( state.getCrnt().get() ) 
-				> funcScore.apply( state.getBest().get() );
+		return funcScore.applyAsDouble( state.getCrnt().get() ) 
+				> funcScore.applyAsDouble( state.getBest().get() );
 	}
 	
 	private void markChanged( KernelWithID<S> kid ) {

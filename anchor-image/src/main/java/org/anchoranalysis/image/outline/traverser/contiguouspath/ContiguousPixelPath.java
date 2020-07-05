@@ -34,28 +34,36 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
 
+import lombok.Getter;
+
 /** A list of visited pixels which forms one contiguous path (each pixel neighbours each other) */
 public class ContiguousPixelPath {
 	
 	private List<Point3i> list;
-	private Point3i initialPnt;
-	private Point3i connPnt;	//  NULL
+	
+	@Getter
+	private Optional<Point3i> initialPnt;
+	
+	@Getter
+	private Optional<Point3i> connPnt;
 	
 	/** With a single initial-point, and maybe a connection point */
 	public ContiguousPixelPath( Point3i initialPnt, Point3i connPnt ) {
-		this(connPnt);
-		this.initialPnt = initialPnt;
+		this(Optional.of(connPnt));
+		this.initialPnt = Optional.of(initialPnt);
 		maybeAddPntToClosestEnd(initialPnt);
 	}
 	
 	/** Without any connection-point */
 	public ContiguousPixelPath() {
-		this(null);
+		this(Optional.empty());
+		initialPnt = Optional.empty();
 	}
 	
-	private ContiguousPixelPath( Point3i connPnt ) {
-		list = new ArrayList<>();
+	private ContiguousPixelPath( Optional<Point3i> connPnt ) {
 		this.connPnt = connPnt;
+		initialPnt = Optional.empty();
+		list = new ArrayList<>();
 	}
 	
 	public ContiguousPixelPath duplicate() {
@@ -180,12 +188,8 @@ public class ContiguousPixelPath {
 		);
 	}
 	
-	private static String pntOrNull( Point3i pnt ) {
-		if (pnt!=null) {
-			return pnt.toString();
-		} else {
-			return "null";
-		}
+	private static String pntOrNull( Optional<Point3i> pnt ) {
+		return pnt.map(Point3i::toString).orElse("null");
 	}
 			
 	public Point3i tail() {
@@ -197,18 +201,12 @@ public class ContiguousPixelPath {
 	}
 	
 	private static List<Point3i> copySubList( List<Point3i> list, int from, int to) {
-		return new ArrayList<Point3i>( list.subList(from, to) );
-	}
-
-	public Point3i getConnPnt() {
-		return connPnt;
-	}
-
-	public Point3i getInitialPnt() {
-		return initialPnt;
+		return new ArrayList<>( list.subList(from, to) );
 	}
 	
-	public int indexInitialPnt() {
-		return list.indexOf(initialPnt);
+	public Optional<Integer> indexInitialPnt() {
+		return initialPnt.map( pnt->
+			list.indexOf(pnt)
+		);
 	}
 }

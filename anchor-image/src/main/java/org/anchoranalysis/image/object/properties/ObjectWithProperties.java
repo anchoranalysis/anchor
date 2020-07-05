@@ -30,7 +30,8 @@ package org.anchoranalysis.image.object.properties;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Map.Entry;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -52,21 +53,21 @@ public class ObjectWithProperties {
 		this(new ObjectMask(bbox));
 	}
 	
-	public ObjectWithProperties( ObjectMask objMask ) {
+	public ObjectWithProperties(ObjectMask objMask) {
 		mask = objMask;
 		properties = new HashMap<>();
 	}
 			
-	public ObjectWithProperties( ObjectMask objMask, Map<String,Object> properties ) {
+	public ObjectWithProperties(ObjectMask objMask, Map<String,Object> properties) {
 		mask = objMask;
 		this.properties = properties;
 	}
 	
-	public void setProperty( String name, Object value ) {
+	public void setProperty(String name, Object value) {
 		properties.put(name, value);
 	}
 	
-	public Object getProperty( String name ) {
+	public Object getProperty(String name) {
 		return properties.get(name);
 	}
 	
@@ -84,7 +85,7 @@ public class ObjectWithProperties {
 	 * @param funcMap
 	 * @return the mapped object (with identical properties) to previously.
 	 */
-	public ObjectWithProperties map(Function<ObjectMask,ObjectMask> funcMap) {
+	public ObjectWithProperties map(UnaryOperator<ObjectMask> funcMap) {
 		return new ObjectWithProperties(
 			funcMap.apply(mask),
 			properties
@@ -93,8 +94,8 @@ public class ObjectWithProperties {
 	
 	public ObjectWithProperties duplicate() {
 		ObjectWithProperties out = new ObjectWithProperties( mask.duplicate() );
-		for( String key : properties.keySet()) {
-			out.properties.put( new String(key), properties.get(key) );
+		for( Entry<String,Object> entry : properties.entrySet()) {
+			out.properties.put(entry.getKey(), entry.getValue());
 		}
 		return out;
 	}

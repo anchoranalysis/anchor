@@ -47,6 +47,8 @@ import org.anchoranalysis.core.color.RGBColor;
  */
 public class OverlayCollectionMarkFactory {
 	
+	private OverlayCollectionMarkFactory() {}
+	
 	public static OverlayCollection createWithoutColor( Cfg cfg, RegionMembershipWithFlags regionMembership ) {
 		OverlayCollection out = new OverlayCollection();
 		

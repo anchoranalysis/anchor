@@ -30,6 +30,7 @@ package org.anchoranalysis.image.io.histogram;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,6 +42,8 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 public class HistogramCSVReader {
 
+	private HistogramCSVReader() {}
+	
 	public static Histogram readHistogramFromFile( Path filePath ) throws CSVReaderException {
 				
 		Map<Integer,Integer> map = new HashMap<>();
@@ -56,14 +59,14 @@ public class HistogramCSVReader {
 	
 	private static void addLineToMap( Map<Integer,Integer> map, String[] line ) throws OperationFailedException {
 		
-		float binF = Float.valueOf(line[0]);
+		float binF = Float.parseFloat(line[0]);
 		int bin = (int) binF;
 		
 		if (binF!=bin) {
 			throw new OperationFailedException( String.format("Bin-value of %f is not integer.",binF) );
 		}
 		
-		float countF = Float.valueOf(line[1]);
+		float countF = Float.parseFloat(line[1]);
 		int count = (int) countF;
 		
 		if (countF!=count) {
@@ -108,9 +111,11 @@ public class HistogramCSVReader {
 		
 		Histogram hist = new HistogramArray(maxHistVal);
 		
-		for( Integer bin : map.keySet() ) {
-			Integer count = map.get(bin);
-			hist.incrValBy(bin, count);
+		for( Entry<Integer,Integer> entry : map.entrySet() ) {
+			hist.incrValBy(
+				entry.getValue(),
+				entry.getKey()
+			);
 		}
 		return hist;
 	}

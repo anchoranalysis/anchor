@@ -78,29 +78,32 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
 		super.notifyZChange(inSlices, z);
-		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().getCornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
+		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().cornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
 	public boolean accptPos( int ind, Point3i pnt ) {
 
-		ByteBuffer inArr_Z = inSlices.getLocal(0);
-		ByteBuffer inArr_ZLess1 = inSlices.getLocal(-1);
-		ByteBuffer inArr_ZPlus1 = inSlices.getLocal(+1);
+		ByteBuffer inArrZ = inSlices.getLocal(0);
+		ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+		ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
 		
-		ByteBuffer inArr_R = localSlicesRequireHigh.getLocal(0);
-		ByteBuffer inArr_RLess1 = localSlicesRequireHigh.getLocal(-1);
-		ByteBuffer inArr_RPlus1 = localSlicesRequireHigh.getLocal(+1);
-		
-		
-		
-		
+		ByteBuffer inArrR = localSlicesRequireHigh.getLocal(0);
+		ByteBuffer inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
+		ByteBuffer inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
+				
 		int xLength = extent.getX();
 		
 		int x = pnt.getX();
 		int y = pnt.getY();
 		
-		if (bv.isOff(inArr_Z.get(ind))) {
+		if (bv.isOff(inArrZ.get(ind))) {
 			return false;
 		}
 		
@@ -108,27 +111,26 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		x--;
 		ind--;
 		if (x>=0) {
-			if (bv.isOff(inArr_Z.get(ind))) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,-1,0);
+			if (bv.isOff(inArrZ.get(ind))) {
+				return checkIfRequireHighIsTrue(inArrR,pnt,-1,0);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,-1,0);
+				return checkIfRequireHighIsTrue(inArrR,pnt,-1,0);
 			}
 		}
 		
 		x += 2;
 		ind += 2;
 		if (x<extent.getX()) {
-			if (bv.isOff(inArr_Z.get(ind))) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,+1,0);
+			if (bv.isOff(inArrZ.get(ind))) {
+				return checkIfRequireHighIsTrue(inArrR,pnt,+1,0);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,+1,0);
+				return checkIfRequireHighIsTrue(inArrR,pnt,+1,0);
 			}
 		}
-		x--;
 		ind--;
 		
 		
@@ -136,49 +138,47 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		y--;
 		ind -= xLength;
 		if (y>=0) {
-			if (bv.isOff(inArr_Z.get(ind))) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,0,-1);
+			if (bv.isOff(inArrZ.get(ind))) {
+				return checkIfRequireHighIsTrue(inArrR,pnt,0,-1);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,0,-1);
+				return checkIfRequireHighIsTrue(inArrR,pnt,0,-1);
 			}
 		}
 		
 		y += 2;
 		ind += (2*xLength);
 		if (y<(extent.getY())) {
-			if (bv.isOff(inArr_Z.get(ind))) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,0,+1);
+			if (bv.isOff(inArrZ.get(ind))) {
+				return checkIfRequireHighIsTrue(inArrR,pnt,0,+1);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArr_R,pnt,0,+1);
+				return checkIfRequireHighIsTrue(inArrR,pnt,0,+1);
 			}
 		}
-		y--;
 		ind -= xLength;
-		
 		
 		if (useZ) {
 			
-			if (inArr_ZLess1!=null) {
-				if (bv.isOff(inArr_ZLess1.get(ind))) {
-					return checkIfRequireHighIsTrue(inArr_RLess1,pnt,0,0);
+			if (inArrZLess1!=null) {
+				if (bv.isOff(inArrZLess1.get(ind))) {
+					return checkIfRequireHighIsTrue(inArrRLess1,pnt,0,0);
 				}
 			} else {
 				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					return checkIfRequireHighIsTrue(inArr_RLess1,pnt,0,0);
+					return checkIfRequireHighIsTrue(inArrRLess1,pnt,0,0);
 				}
 			}
 			
-			if (inArr_ZPlus1!=null) {
-				if (bv.isOff(inArr_ZPlus1.get(ind))) {
-					return checkIfRequireHighIsTrue(inArr_RPlus1,pnt,0,0);
+			if (inArrZPlus1!=null) {
+				if (bv.isOff(inArrZPlus1.get(ind))) {
+					return checkIfRequireHighIsTrue(inArrRPlus1,pnt,0,0);
 				}
 			} else {
 				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					return checkIfRequireHighIsTrue(inArr_RPlus1,pnt,0,0);
+					return checkIfRequireHighIsTrue(inArrRPlus1,pnt,0,0);
 				}
 			}
 		}
@@ -192,13 +192,13 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 			return outsideAtThreshold;
 		}
 		
-		int x1 = pnt.getX() + om.getBoundingBox().getCornerMin().getX() + xShift;
+		int x1 = pnt.getX() + om.getBoundingBox().cornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
-		int y1 = pnt.getY() + om.getBoundingBox().getCornerMin().getY() + yShift; 
+		int y1 = pnt.getY() + om.getBoundingBox().cornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;

@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 
 // Reads a CSV File
@@ -60,12 +61,12 @@ public class CSVReader {
 		}
 		
 		// Returns null when finished
-		public String[] readLine() throws IOException {
+		public Optional<String[]> readLine() throws IOException {
 			
 			String line = bufferedReader.readLine();
 			
 			if (line==null) {
-				return null;
+				return Optional.empty();
 			}
 			
 			String[] tokenized = line.split(regExSeperator);
@@ -81,7 +82,7 @@ public class CSVReader {
 			
 			maybeRemoveQuotes(tokenized);
 			
-			return tokenized;
+			return Optional.of(tokenized);
 		}
 		
 		public void setNumCols(int numCols) {
@@ -100,7 +101,18 @@ public class CSVReader {
 			}
 			
 		}
-
+		
+		private void maybeRemoveQuotes( String[] arr ) {
+			
+			if (!quotedStrings) {
+				// Exit early if we don't supported quoted strings
+				return;
+			}
+			
+			for( int i=0; i<arr.length; i++) {
+				arr[i] = CSVReader.maybeRemoveQuotes( arr[i] );
+			}
+		}
 	}
 	
 	public CSVReader( String regExSeperator, boolean firstLineHeaders ) {
@@ -119,7 +131,7 @@ public class CSVReader {
 	 * 
 	 * @param filePath path to file
 	 * @return the opened-file (that must eventually be closed)
-	 * @throws IOException
+	 * @throws CSVReaderException
 	 */
 	public OpenedCSVFile read( Path filePath ) throws CSVReaderException {
 		
@@ -151,20 +163,8 @@ public class CSVReader {
 			throw new CSVReaderException(e);
 		}
 	}
-	
-	private void maybeRemoveQuotes( String[] arr ) {
-		
-		if (!quotedStrings) {
-			// Exit early if we don't supported quoted strings
-			return;
-		}
-		
-		for( int i=0; i<arr.length; i++) {
-			arr[i] = maybeRemoveQuotes( arr[i] );
-		}
-	}
-	
-	private static String maybeRemoveQuotes( String s ) {
+
+	private static String maybeRemoveQuotes( String s ) {		// NOSONAR
 		if (s.length()<=2) {
 			return s;
 		}
@@ -174,5 +174,5 @@ public class CSVReader {
 		} else {
 			return s;
 		}
-	}	
+	}
 }

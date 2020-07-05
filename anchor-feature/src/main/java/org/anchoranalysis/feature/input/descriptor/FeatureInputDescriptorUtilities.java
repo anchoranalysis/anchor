@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.input.descriptor;
  */
 
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +35,12 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class FeatureInputDescriptorUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FeatureInputDescriptorUtilities {
+	
 	public static FeatureInputDescriptor paramTypeForTwo( Feature<?> item1, Feature<?> item2 ) {
 		return paramTypeForTwo( item1.inputDescriptor(), item2.inputDescriptor() );
 	}
@@ -65,25 +69,22 @@ public class FeatureInputDescriptorUtilities {
 	
 	
 	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForThree( Feature<T> item1, Feature<T> item2, Feature<T> item3 ) {
-		
-		List<Feature<T>> list = new ArrayList<>();
-		list.add( item1 );
-		list.add( item2 );
-		list.add( item3 );
-		return paramTypeForList( list );
+		return paramTypeForList(
+			Arrays.asList(item1,item2,item3)
+		);
 	}
 	
 	
 	public static <T extends FeatureInput> FeatureInputDescriptor paramTypeForList( List<Feature<T>> list ) {
 		
-		if (list.size()==0) {
-			return FeatureInputGenericDescriptor.instance;
+		if (list.isEmpty()) {
+			return FeatureInputGenericDescriptor.INSTANCE;
 		}
 		
 		FeatureInputDescriptor chosenParamType = chooseParamType(list); 
 		
 		if (chosenParamType==null) {
-			return FeatureInputGenericDescriptor.instance;
+			return FeatureInputGenericDescriptor.INSTANCE;
 		} else {
 			return chosenParamType;
 		}
@@ -108,7 +109,9 @@ public class FeatureInputDescriptorUtilities {
 					Optional<FeatureInputDescriptor> preferred = paramType.preferToBidirectional(chosenParamType);
 					if (!preferred.isPresent()) {
 						// We don't know which parameter to prefer
-						throw new AnchorFriendlyRuntimeException("All features in the list must have the same paramType, or a simple type, or a preference between conflicting type");
+						throw new AnchorFriendlyRuntimeException(
+							"All features in the list must have the same paramType, or a simple type, or a preference between conflicting type"
+						);
 					}
 					chosenParamType = preferred.get();
 				}

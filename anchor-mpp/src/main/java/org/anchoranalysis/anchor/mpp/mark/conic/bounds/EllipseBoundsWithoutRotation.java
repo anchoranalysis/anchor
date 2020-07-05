@@ -71,8 +71,8 @@ public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 	}
 	
 	// NB objects are scaled in pre-rotated position i.e. when aligned to axes
-	public void scaleXY( double mult_factor ) {
-		this.radius.scale(mult_factor);
+	public void scaleXY( double multFactor ) {
+		this.radius.scale(multFactor);
 	}
 	
 	@Override

@@ -1,5 +1,8 @@
 package org.anchoranalysis.image.feature.stack.nrg;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -41,7 +44,7 @@ public class FeatureInputNRGStackDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
-		return FeatureInputNRGStackDescriptor.class;
+	public Class<? extends FeatureInput> inputClass() {
+		return FeatureInputNRG.class;
 	}
 }

@@ -90,7 +90,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 	 * @param inputObject the input-object corresponding to this stack (a set of named-channels)
 	 * @param seriesIndex the index that is being currently processed from the series
 	 * @param numSeries the total number of images in the series (constant for a given task)
-	 * @param context TODO
+	 * @param context IO context
 	 * @throws JobExecutionException
 	 */
 	public abstract void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context ) throws JobExecutionException;

@@ -43,6 +43,8 @@ import cern.colt.matrix.DoubleMatrix1D;
  */
 public class BoundingBoxCalculator {
 
+	private BoundingBoxCalculator() {}
+	
 	/**
 	 * Calculates a bounding box for a point with a scalar radius in all dimensions
 	 * 

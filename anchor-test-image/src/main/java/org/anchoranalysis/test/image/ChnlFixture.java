@@ -30,7 +30,6 @@ import java.nio.Buffer;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -41,19 +40,19 @@ public class ChnlFixture {
 	// Creates an intensity value for a given location
 	@FunctionalInterface
 	public interface IntensityFunction {
-		int valueFor( int x, int y, int z );
+		int valueFor(int x, int y, int z);
 	}
 
 	// START: IntensityFunction examples
-	public static int sumMod( int x, int y, int z ) {
+	public static int sumMod(int x, int y, int z) {
 		return mod(x+y+z);
 	}
 	
-	public static int diffMod( int x, int y, int z ) {
+	public static int diffMod(int x, int y, int z) {
 		return mod(x-y-z);
 	}
 	
-	public static int multMod( int x, int y, int z ) {
+	public static int multMod(int x, int y, int z) {
 		int xy = mod(x*y);
 		return mod(xy*z);
 	}
@@ -70,10 +69,9 @@ public class ChnlFixture {
 		
 	public static Channel createChnl( Extent e, IntensityFunction createIntensity ) {
 		
-		ImageDimensions sd = new ImageDimensions( e, ImageResFixture.instance );
+		ImageDimensions sd = new ImageDimensions( e, ImageResFixture.INSTANCE );
 		
-		ChannelFactorySingleType factory = new ChannelFactoryByte();
-		Channel chnl = factory.createEmptyInitialised(sd);
+		Channel chnl = new ChannelFactoryByte().createEmptyInitialised(sd);
 		
 		// Populate the channel with values
 		for( int z=0; z<e.getZ(); z++) {

@@ -26,10 +26,11 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergest
  * #L%
  */
 
-import java.util.Arrays;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FindMergeStrategy {
-
 
 	/** 
 	 * Determines how we merge paths together
@@ -56,13 +57,8 @@ class FindMergeStrategy {
 			merge.size()									// we throw away merge altogether
 		};
 		
-		System.out.printf("DEBUG distsArr = %s%n", Arrays.toString(dists) );
-		
 		int minIndex = findIndexMinimum(dists);
 		int cost = dists[minIndex];
-		
-		// Catch unacceptably high costs early
-		//assert( cost <= 10 );
 		
 		return createStrategy(minIndex, cost );
 	}

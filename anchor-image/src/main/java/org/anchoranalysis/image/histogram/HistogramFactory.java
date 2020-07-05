@@ -48,11 +48,15 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class HistogramFactory {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class HistogramFactory {
+	
 	public static Histogram createGuessMaxBin( Collection<Histogram> histograms) throws CreateException {
 		
-		if (histograms.size()==0) {
+		if (histograms.isEmpty()) {
 			throw new CreateException("Cannot determine a maxBinVal as the collection is empty");
 		}
 		
@@ -66,7 +70,7 @@ public class HistogramFactory {
 	// Assumes histograms all have the same max Bin
 	public static Histogram create( Collection<Histogram> histograms, int maxBinVal ) throws CreateException {
 		
-		if (histograms.size()==0) {
+		if (histograms.isEmpty()) {
 			return new HistogramArray(maxBinVal);
 		}
 		
@@ -150,7 +154,7 @@ public class HistogramFactory {
 	}
 	
 	private static boolean isDataTypeSupported(VoxelDataType dataType) {
-		return dataType.equals(VoxelDataTypeUnsignedByte.instance) || dataType.equals(VoxelDataTypeUnsignedShort.instance); 
+		return dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE) || dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE); 
 	}
 	
 	private static Histogram createWithMask( VoxelBox<?> inputBuffer, ObjectMask objMask ) {
@@ -160,7 +164,7 @@ public class HistogramFactory {
 		Extent e = inputBuffer.extent();
 		Extent eMask = objMask.getBoundingBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().cornerMin();
 		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
 		
 		byte maskOnVal = objMask.getBinaryValuesByte().getOnByte();

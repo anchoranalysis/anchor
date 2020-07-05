@@ -35,7 +35,7 @@ package org.anchoranalysis.core.functional;
  * @param <E> exception that is thrown if something goes wrong
  */
 @FunctionalInterface
-public interface Operation<R,E extends Throwable> {
+public interface Operation<R,E extends Exception> {
 
 	R doOperation() throws E;
 }

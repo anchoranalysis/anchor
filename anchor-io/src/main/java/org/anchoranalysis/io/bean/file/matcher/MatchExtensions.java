@@ -41,7 +41,7 @@ import org.apache.commons.io.FilenameUtils;
  * 
  * <p>The extensions are always checked in a case-insensitive manner</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class MatchExtensions extends FileMatcher {

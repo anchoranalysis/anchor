@@ -91,14 +91,14 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 		
 		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			IntBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.getCornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					int chnlVal = pixelIn.get(index);
@@ -131,7 +131,7 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public void setPixelsTo( BoundingBox bbox, int val ) {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		Extent e = extent();
 		
@@ -207,13 +207,13 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 				
 		ReadableTuple3i pntMax = bbox.calcCornerMax();
-		for (int z=bbox.getCornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			IntBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.getCornerMin().getZ()).buffer();
+			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.cornerMin().getZ()).buffer();
 			
-			for (int y=bbox.getCornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.getCornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
 					
 					int indexMask = getPlaneAccess().extent().offset(x, y);
 					if (pixelsMask.get(indexMask)==maskOnByte) {

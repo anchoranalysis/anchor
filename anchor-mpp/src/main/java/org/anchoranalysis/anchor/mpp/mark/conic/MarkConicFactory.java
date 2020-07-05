@@ -30,12 +30,24 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
 public class MarkConicFactory {
 	
-	public static Mark createMarkFromPoint3d( Point3d pnt, int size, boolean do3D ) {
+	private MarkConicFactory() {}
+	
+	public static Mark createMarkFromPoint(Point3i pnt, int size, boolean do3D) {
+		return createMarkFromPoint(
+			PointConverter.doubleFromInt(pnt),
+			size,
+			do3D
+		);
+	}
+	
+	public static Mark createMarkFromPoint(Point3d pnt, int size, boolean do3D) {
 		assert(size>0);
 		if (do3D) {
 			MarkEllipsoid me = new MarkEllipsoid();

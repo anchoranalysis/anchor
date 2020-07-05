@@ -29,7 +29,7 @@ package org.anchoranalysis.core.progress;
 
 
 
-public class IdentityOperationWithProgressReporter<T, E extends Throwable> implements OperationWithProgressReporter<T, E> {
+public class IdentityOperationWithProgressReporter<T, E extends Exception> implements OperationWithProgressReporter<T, E> {
 
 	private T obj;
 			

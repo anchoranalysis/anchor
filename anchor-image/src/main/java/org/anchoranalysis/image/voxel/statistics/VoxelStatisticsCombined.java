@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 
-public class VoxelStatisticsCombined extends VoxelStatistics {
+public class VoxelStatisticsCombined implements VoxelStatistics {
 
 	private List<VoxelStatistics> list = new ArrayList<>();
 
@@ -91,9 +91,7 @@ public class VoxelStatisticsCombined extends VoxelStatistics {
 
 	@Override
 	public double quantile(double quantile) {
-		// TODO currently unspported
-		assert false;
-		return -1;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

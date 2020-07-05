@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.histogram;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -40,7 +42,7 @@ public class FeatureInputHistogramDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputHistogram.class;
 	}
 

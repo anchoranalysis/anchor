@@ -41,13 +41,12 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 /**
  * A feature that depends on SharedObjects being passed during the parameter-initialization
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <S> init-params params type
  * @param <T> feature input type
  */
 public abstract class FeatureShared<T extends FeatureInput> extends FeatureCastInitParams<FeatureInitParamsShared, T> {
-
 
 	protected FeatureShared() {
 		super(
@@ -60,7 +59,7 @@ public abstract class FeatureShared<T extends FeatureInput> extends FeatureCastI
 		return Arrays.asList(
 			new ExtractFromParam<>(
 				ImageInitParams.class,
-				params -> extractImageInitParams(params),
+				params -> extractImageInitParams(params),	// NOSONAR
 				FeatureInitParamsShared.class
 			)
 		);

@@ -37,13 +37,9 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromIntBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
-final class VoxelBoxFactoryInt extends VoxelBoxFactoryTypeBound<IntBuffer> {
+final class VoxelBoxFactoryInt implements VoxelBoxFactoryTypeBound<IntBuffer> {
 
-	private static final VoxelDataType dataType = VoxelDataTypeUnsignedInt.instance;
-	
-	public VoxelBoxFactoryInt() {
-		// Prevent creation outside this package
-	}
+	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedInt.INSTANCE;
 	
 	@Override
 	public VoxelBox<IntBuffer> create(
@@ -58,6 +54,6 @@ final class VoxelBoxFactoryInt extends VoxelBoxFactoryTypeBound<IntBuffer> {
 
 	@Override
 	public VoxelDataType dataType() {
-		return dataType;
+		return DATA_TYPE;
 	}
 }

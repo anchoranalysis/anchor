@@ -32,10 +32,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.FileProviderException;
@@ -46,7 +48,7 @@ import org.anchoranalysis.io.params.InputContextParams;
  * 
  * <p>If no paths are specified in the bean, then can be read from the Input-Context</p>
  * <p>If none are available in the Input-Context, then either the fallback is called if it exists, or an error is thrown</p>
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class SpecificPathList extends FileProvider {
@@ -79,11 +81,11 @@ public class SpecificPathList extends FileProvider {
 	@Override
 	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
-		List<String> selectedPaths = selectListPaths(params.getInputContext());
+		Optional<List<String>> selectedPaths = selectListPaths(params.getInputContext());
 		
-		if (selectedPaths!=null) {
+		if (selectedPaths.isPresent()) {
 			return matchingFilesForList(
-				selectListPaths(params.getInputContext()),
+				selectedPaths.get(),
 				params.getProgressReporter()
 			);
 			
@@ -94,38 +96,29 @@ public class SpecificPathList extends FileProvider {
 		}
 	}
 	
-	private List<String> selectListPaths(InputContextParams inputContext) {
+	private Optional<List<String>> selectListPaths(InputContextParams inputContext) {
 		
 		if (listPaths!=null) {
-			return listPaths;
+			return Optional.of(listPaths);
 		} else if (inputContext.hasInputPaths()) {
-			return stringFromPaths(inputContext.getInputPaths());
+			return Optional.of(
+				stringFromPaths(inputContext.getInputPaths())
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
 	private static List<String> stringFromPaths( List<Path> paths ) {
-		return paths.stream().map( s->s.toString() ).collect(Collectors.toList());
+		return paths.stream().map(Path::toString).collect(Collectors.toList());
 	}
 	
-	private static Collection<File> matchingFilesForList( List<String> listPaths, ProgressReporter progressReporter ) {
-		
-		progressReporter.setMin(0);
-		progressReporter.setMax( listPaths.size() );
-		
-		List<File> listOut = new ArrayList<>();
-		
-		for( int i=0; i<listPaths.size(); i++) {
-			String s = listPaths.get(i);
-			
-			File f = new File(s);
-			listOut.add(f);
-			
-			progressReporter.update(i+1);
-		}
-		
-		return listOut;
+	private static Collection<File> matchingFilesForList(List<String> listPaths, ProgressReporter progressReporter ) {
+		return FunctionalUtilities.mapListWithProgress(
+			listPaths,
+			progressReporter,
+			File::new
+		);
 	}
 
 	public List<String> getListPaths() {

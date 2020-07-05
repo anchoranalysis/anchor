@@ -52,15 +52,13 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @param <T> input-object type
  */
 public abstract class TaskWithoutSharedState<T extends InputFromManager> extends Task<T,NoSharedState> {
-
-	private static final NoSharedState SINGLETON_RETURN_VALUE = new NoSharedState();
 	
 	@Override
 	public final NoSharedState beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 		// No shared-state by default, so we use a placeholder shared-state type
-		return SINGLETON_RETURN_VALUE;
+		return NoSharedState.INSTANCE;
 	}
 
 	@Override

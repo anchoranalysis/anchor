@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
  *
  * @param <P> init-param type
  */
-public abstract class PropertyDefiner<P> {
+public abstract class PropertyDefiner {
 
 	public abstract boolean accepts( Class<?> paramType );
 	

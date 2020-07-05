@@ -27,7 +27,7 @@ package org.anchoranalysis.image.io.objs;
  */
 
 import java.nio.ByteBuffer;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -43,7 +43,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  *   The mask is written as a 3D array of 255 and 0 bytes
  *   The corner-position of the bounding box is added as attributes: x, y, z
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 class ObjectMaskHDF5Writer {
@@ -88,14 +88,14 @@ class ObjectMaskHDF5Writer {
 	}
 	
 	private void addCrnr() {
-		addAttr("x", p->p.getX() );
-		addAttr("y", p->p.getY() );
-		addAttr("z", p->p.getZ() );
+		addAttr("x", ReadableTuple3i::getX );
+		addAttr("y", ReadableTuple3i::getY );
+		addAttr("z", ReadableTuple3i::getZ );
 	}
 	
-	private void addAttr( String attrName, Function<ReadableTuple3i,Integer> extrVal) {
+	private void addAttr( String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
 		
-		Integer crnrVal = extrVal.apply( obj.getBoundingBox().getCornerMin() );
+		Integer crnrVal = extrVal.applyAsInt( obj.getBoundingBox().cornerMin() );
 		writer.uint32().setAttr(
 			pathHDF5,
 			attrName,
@@ -123,7 +123,6 @@ class ObjectMaskHDF5Writer {
 	}
 	
 	private static int[] dimsFromExtnt( Extent e ) {
-		int[] adims = { e.getX(), e.getY(), e.getZ() };
-		return adims;
+		return new int[]{ e.getX(), e.getY(), e.getZ() };
 	}
 }

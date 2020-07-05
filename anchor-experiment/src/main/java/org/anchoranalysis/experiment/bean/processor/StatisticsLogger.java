@@ -56,7 +56,7 @@ class StatisticsLogger {
 				"All ",
 				stats.numCompletedSuccess(),
 				" completed successfully.",
-				() -> stats.meanExecutionTimeSuccess()
+				stats::meanExecutionTimeSuccess
 			);
 		} else {
 			
@@ -64,14 +64,14 @@ class StatisticsLogger {
 				"",
 				stats.numCompletedSuccess(),
 				String.format(" out of %d completed successfully.", stats.numTotalScheduledJobs()),
-				() -> stats.meanExecutionTimeSuccess()
+				stats::meanExecutionTimeSuccess
 			);
 			
 			logMessageAboutTasks(
 				"",
 				stats.numCompletedFailed(),
 				" failed.",
-				() -> stats.meanExecutionTimeFailed()
+				stats::meanExecutionTimeFailed
 			);
 			
 			long numNotCompleted = stats.numNotCompleted();

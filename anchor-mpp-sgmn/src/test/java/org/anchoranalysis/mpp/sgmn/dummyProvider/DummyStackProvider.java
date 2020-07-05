@@ -29,12 +29,13 @@ package org.anchoranalysis.mpp.sgmn.dummyProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
+import static org.mockito.Mockito.*;
 
 public class DummyStackProvider extends StackProvider {
 
 	@Override
 	public Stack create() throws CreateException {
-		return null;
+		return mock(Stack.class);
 	}
 
 }

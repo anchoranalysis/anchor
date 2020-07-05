@@ -33,14 +33,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.configuration.tree.ConfigurationNode;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Describes an XMLNode so a user can identify it in a document
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HelperDescribeXmlNode {
-
+	
 	/**
 	 * Do we consider an attribute a configuration attribute or not
 	 * 
@@ -116,7 +120,7 @@ class HelperDescribeXmlNode {
 	 */
 	public static String describeXMLNode( ConfigurationNode node ) {
 		// We recurse back to the top, putting each item at the front of a linked list
-		List<ConfigurationNode> listNames = new ArrayList<ConfigurationNode>();
+		List<ConfigurationNode> listNames = new ArrayList<>();
 		
 		ConfigurationNode nodeCurrent = node;
 		while( nodeCurrent!= null ) {

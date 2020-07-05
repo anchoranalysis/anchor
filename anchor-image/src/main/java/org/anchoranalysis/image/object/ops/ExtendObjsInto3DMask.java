@@ -39,6 +39,9 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 
 /**
  * Extends 2D objects as much as possible in z-dimension, while staying within a 3D binary mask.
@@ -46,9 +49,8 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
  * TODO remove slices which have nothing in them from top and bottom
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ExtendObjsInto3DMask {
-	
-	private ExtendObjsInto3DMask() {}
 	
 	public static ObjectCollection extendObjs( ObjectCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
 		return objs2D.stream().map( om->
@@ -60,7 +62,6 @@ public class ExtendObjsInto3DMask {
 		return new ObjectMask( 
 			extendObj(
 				obj2D.getVoxelBoxBounded(),
-				obj2D.getBinaryValuesByte(),
 				voxelBox3D
 			)
 		);
@@ -68,7 +69,6 @@ public class ExtendObjsInto3DMask {
 	
 	private static BoundedVoxelBox<ByteBuffer> extendObj(
 		BoundedVoxelBox<ByteBuffer> obj2D,
-		BinaryValuesByte bvbObj,
 		BinaryVoxelBox<ByteBuffer> mask3D
 	) {
 
@@ -93,9 +93,9 @@ public class ExtendObjsInto3DMask {
 		
 			int ind = 0;
 			
-			for (pnt.setY(newBBox.getCornerMin().getY()); pnt.getY() <= max.getY(); pnt.incrementY() ) {
+			for (pnt.setY(newBBox.cornerMin().getY()); pnt.getY() <= max.getY(); pnt.incrementY() ) {
 			
-				for (pnt.setX(newBBox.getCornerMin().getX()); pnt.getX() <= max.getX(); pnt.incrementX(), ind++ ) {	
+				for (pnt.setX(newBBox.cornerMin().getX()); pnt.getX() <= max.getX(); pnt.incrementX(), ind++ ) {	
 					
 					if (bufferIn2D.get(ind)!=bv.getOnByte() ) {
 						continue;
@@ -113,7 +113,7 @@ public class ExtendObjsInto3DMask {
 	}
 	
 	private static BoundingBox createBoundingBoxForAllZ( BoundingBox exst, int z ) {
-		Point3i crnrMin = copyPointChangeZ( exst.getCornerMin(), 0 );
+		Point3i crnrMin = copyPointChangeZ( exst.cornerMin(), 0 );
 		Extent e = copyExtentChangeZ( exst.extent(), z );
 
 		return new BoundingBox( crnrMin, e );

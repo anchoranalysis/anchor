@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 /**
  * Remembers the current state of type T and some best state (which was once set from the current state)
  *  
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T>
  */

@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.bean.rasterwriter;
 
 
 
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.AnchorBean;
@@ -43,7 +42,7 @@ public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 	// Get the default extension for a writer
 	public abstract String dfltExt();
 	
-	public abstract void writeTimeSeriesStackByte( ImgStackSeries<ByteBuffer> stackSeries, Path filePath, boolean makeRGB ) throws RasterIOException;
+	public abstract void writeTimeSeriesStackByte( ImgStackSeries stackSeries, Path filePath, boolean makeRGB ) throws RasterIOException;
 	
 	public void writeStack( Stack stack, Path filePath, boolean makeRGB ) throws RasterIOException {
 		

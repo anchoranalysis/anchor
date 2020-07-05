@@ -37,7 +37,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class SingleFileTypeGenerator extends Generator {
+public abstract class SingleFileTypeGenerator implements Generator {
 
 	// We delegate to a much simpler method, for single file generators
 	@Override	

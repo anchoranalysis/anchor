@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.TreeSet;
 
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
@@ -74,7 +75,7 @@ class CompareSorted {
 	 * @param file2 second file to compare
 	 * @param messageStream if non-equal, additional explanation messages are printed here
 	 * @return true if they are identical (subject to the conditions above), false otherwise
-	 * @throws IOException if something goes wrong accessing the csv files
+	 * @throws CSVReaderException if something goes wrong accessing the csv files
 	 */
 	public boolean compare( OpenedCSVFile file1, OpenedCSVFile file2, PrintStream messageStream ) throws CSVReaderException {
 
@@ -103,20 +104,20 @@ class CompareSorted {
 			boolean first = true;
 			
 			while( true ) {
-				String[] lines1 = file1.readLine();
-				String[] lines2 = file2.readLine();
+				Optional<String[]> lines1 = file1.readLine();
+				Optional<String[]> lines2 = file2.readLine();
 				
 				if (first) {
 					CompareUtilities.checkZeroRows(rejectZeroRows, lines1, lines2);
 					first = false;
 				}
 				
-				if (lines1==null || lines2==null) {
-					return lines1==null && lines2==null;
+				if (!lines1.isPresent() || !lines2.isPresent()) {
+					return !lines1.isPresent() && !lines2.isPresent();
 				}
 				
-				sortedLines1.add( lines1 );
-				sortedLines2.add( lines2 );
+				sortedLines1.add( lines1.get() );
+				sortedLines2.add( lines2.get() );
 			}
 		} catch (IOException e) {
 			throw new CSVReaderException(e);
@@ -139,7 +140,11 @@ class CompareSorted {
 			String[] line1 = itr1.next();
 			String[] line2 = itr2.next();
 			
-			if (!CompareUtilities.areArraysEqual(line1,line2,ignoreFirstNumColumns)) {
+			if (!CompareUtilities.areArraysEqual(
+				Optional.of(line1),
+				Optional.of(line2),
+				ignoreFirstNumColumns
+			)) {
 				
 				messageStream.println("The following lines are not identical:");
 				CompareUtilities.printTwoLines(messageStream, line1, line2, "  ");

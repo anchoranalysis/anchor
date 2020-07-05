@@ -56,7 +56,7 @@ public class ExtractedBBoxGenerator extends RasterGenerator implements IterableO
 	 * @param factory must match the type of the input stack
 	 * @throws CreateException
 	 */
-	public ExtractedBBoxGenerator(Stack stack, String manifestFunction) throws CreateException {
+	public ExtractedBBoxGenerator(Stack stack, String manifestFunction) {
 		super();
 		//
 		this.stack = stack;

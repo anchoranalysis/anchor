@@ -140,29 +140,34 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 		public ObjectGenerator<Stack> getGenerator() {
 			return this;
 		}
+		
+		private Rectangle2D calcDefaultSize() {
+			
+			BufferedImage bufferedImage = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
+			Graphics2D graphics = createGraphicsFromBufferedImage( bufferedImage );
+			FontMetrics fm = graphics.getFontMetrics();
+			return fm.getStringBounds(text, graphics);
+		}
+		
+		private Graphics2D createGraphicsFromBufferedImage( BufferedImage bufferedImage ) {
+			
+			Graphics2D graphics = bufferedImage.createGraphics();
+			
+			Font font = new Font( "SansSerif", bold ? Font.BOLD : Font.PLAIN, fontSize );
+			
+			graphics.setColor( fontColor.toAWTColor() );
+			graphics.setFont( font );
+			return graphics;
+		}
+		
+		private void drawCenteredString(String s, int w, int h, Graphics g) {
+		    FontMetrics fm = g.getFontMetrics();
+		    int x = (w - fm.stringWidth(s)) / 2;
+		    int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
+		    g.drawString(s, x, y);
+		}
 	}
-	
-	
 
-	private Graphics2D createGraphicsFromBufferedImage( BufferedImage bufferedImage ) {
-		
-		Graphics2D graphics = bufferedImage.createGraphics();
-		
-		Font font = new Font( "SansSerif", bold ? Font.BOLD : Font.PLAIN, fontSize );
-		
-		graphics.setColor( fontColor.toAWTColor() );
-		graphics.setFont( font );
-		return graphics;
-	}
-	
-	private Rectangle2D calcDefaultSize() {
-		
-		BufferedImage bufferedImage = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
-		Graphics2D graphics = createGraphicsFromBufferedImage( bufferedImage );
-		FontMetrics fm = graphics.getFontMetrics();
-		return fm.getStringBounds(text, graphics);
-	}
-	
 	// Create an iterable generator, which produces Stack for different Strings
 	public IterableObjectGenerator<String, Stack> createGenerator() {
 		return new Generator();
@@ -172,14 +177,6 @@ public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 	public Stack generateStack() throws OutputWriteFailedException {
 		return new Generator().generate();
 	}
-	
-	
-	private static void drawCenteredString(String s, int w, int h, Graphics g) {
-	    FontMetrics fm = g.getFontMetrics();
-	    int x = (w - fm.stringWidth(s)) / 2;
-	    int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
-	    g.drawString(s, x, y);
-	 }
 
 	public int getFontSize() {
 		return fontSize;

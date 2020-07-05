@@ -26,7 +26,6 @@ package org.anchoranalysis.io.bean.root;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
@@ -67,7 +66,7 @@ public class RootPathMap {
 	 * @param rootName identifier for a root to use
 	 * @param debugMode whether we are in debug mode or not
 	 * @return the split-path
-	 * @throws IOException if the path cannot be matched against the root
+	 * @throws AnchorIOException if the path cannot be matched against the root
 	 */
 	public SplitPath split( Path pathIn, String rootName, boolean debugMode ) throws AnchorIOException {
 		
@@ -101,7 +100,6 @@ public class RootPathMap {
 	 * Adds root-paths contained in a list of XML Beans in an xml file
 	 * 
 	 * @param path the path to the XML file containing the root-paths
-	 * @throws BeanXmlException 
 	 * @throws OperationFailedException 
 	 */
 	public void addFromXmlFile( Path path ) throws OperationFailedException {
@@ -139,7 +137,7 @@ public class RootPathMap {
 	 * @param name this name must match
 	 * @param debug if TRUE, priority is given to root paths which also match debug. 
 	 * @return the found root, or an exception if one cannot be found
-	 * @throws IOException 
+	 * @throws AnchorIOException 
 	 */
 	@SuppressWarnings("unchecked")
 	public RootPath findRoot( String name, boolean debug ) throws AnchorIOException {

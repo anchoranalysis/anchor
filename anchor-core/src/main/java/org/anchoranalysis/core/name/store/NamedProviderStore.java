@@ -40,7 +40,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
  *
  * @param <T> item-type in the store
  */
-public abstract class NamedProviderStore<T> implements NamedProvider<T> {
+public interface NamedProviderStore<T> extends NamedProvider<T> {
 
-	public abstract void add( String name, Operation<T,OperationFailedException> getter ) throws OperationFailedException;
+	void add( String name, Operation<T,OperationFailedException> getter ) throws OperationFailedException;
 }

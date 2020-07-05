@@ -43,13 +43,13 @@ public class ConvertToByte_From8BitUnsigned_NoInterleaving extends ConvertToByte
 	}
 
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int c_rel) {
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
 		ByteBuffer buffer = ByteBuffer.wrap(src);
 		
 		int sizeTotalBytes = sizeXY * bytesPerPixel;
 		byte[] crntChnlBytes = new byte[sizeTotalBytes];
 		
-		buffer.position(sizeTotalBytes*c_rel);
+		buffer.position(sizeTotalBytes*channelRelative);
 		buffer.get( crntChnlBytes, 0, sizeTotalBytes);
 		return VoxelBufferByte.wrap(crntChnlBytes);
 	}

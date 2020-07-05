@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.LogReporter;
 /**
  * A test on whether to terminate the optimization or not
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  */
 public abstract class TerminationCondition extends AnchorBean<TerminationCondition> {
 

@@ -38,7 +38,7 @@ import org.anchoranalysis.io.params.InputContextParams;
 /**
  * Predicates that matches a file-path against a regular expression
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class MatchRegEx extends FileMatcher {

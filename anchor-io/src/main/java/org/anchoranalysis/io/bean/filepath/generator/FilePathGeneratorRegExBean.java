@@ -33,7 +33,7 @@ import java.util.StringJoiner;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.FilePathNormalizer;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 
 // Generates an out string where $digit$ is replaced with the #digit group from a regex
 
@@ -59,7 +59,7 @@ public class FilePathGeneratorRegExBean extends FilePathGenerator {
 	@Override
 	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		
-		String pathInStr = FilePathNormalizer.normalizeFilePath(pathIn.toString());
+		String pathInStr = FilePathToUnixStyleConverter.toStringUnixStyle(pathIn);
 		
 		String[] components = regEx.match(pathInStr).orElseThrow( ()->
 			new AnchorIOException( String.format("RegEx string '%s' does not match '%s'", regEx, pathInStr ))

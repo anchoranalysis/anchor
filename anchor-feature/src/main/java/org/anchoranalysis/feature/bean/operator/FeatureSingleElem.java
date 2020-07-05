@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 /**
  * A feature that contains another feature as a property (the single element)
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input-type used for calculating feature
  * @param <S> input-type used for the "item" that is the single element
@@ -48,7 +48,7 @@ public abstract class FeatureSingleElem<T extends FeatureInput, S extends Featur
 	// END BEAN PARAMETERS
 	
 	public FeatureSingleElem() {
-		// B
+		// Standard Bean Constructor
 	}
 
 	public FeatureSingleElem( Feature<S> feature  ) {

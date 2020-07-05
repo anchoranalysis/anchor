@@ -28,7 +28,6 @@ package org.anchoranalysis.io.bean.provider.file.filter;
 
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,7 @@ public class FilterForExistingFiles extends FilterFileProvider {
 			for( FilePathGenerator fpg : listFilePathGenerator ) {
 				Path annotationPath = fpg.outFilePath( file.toPath(), debugMode );
 				
-				if (!Files.exists( annotationPath )) {
+				if (!annotationPath.toFile().exists()) {
 					return false;
 				}
 			}

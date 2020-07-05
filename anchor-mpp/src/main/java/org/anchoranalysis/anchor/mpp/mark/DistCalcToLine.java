@@ -50,21 +50,21 @@ class DistCalcToLine {
 	public double distToLine( Point3d pt ) {
 		// http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 		
-		double x2_x1_dist_sq = endPoint.distanceSquared(startPoint);
-		double x1_x0_dist_sq = startPoint.distanceSquared(pt);
+		double distanceSquared2to1 = endPoint.distanceSquared(startPoint);
+		double distanceSquared1to0 = startPoint.distanceSquared(pt);
 		
 		// Let's calculation the dot_product
-		double first_x = startPoint.getX() - pt.getX();
-		double first_y = startPoint.getY() - pt.getY();
-		double first_z = startPoint.getZ() - pt.getZ();
+		double firstX = startPoint.getX() - pt.getX();
+		double firstY = startPoint.getY() - pt.getY();
+		double firstZ = startPoint.getZ() - pt.getZ();
 		
-		double dot_prod = 
-		  (first_x * directionVector.getX())
-		  + (first_y * directionVector.getY())
-		  + (first_z * directionVector.getZ());
+		double dotProduct = 
+		  (firstX * directionVector.getX())
+		  + (firstY * directionVector.getY())
+		  + (firstZ * directionVector.getZ());
 		
-		double num = (x2_x1_dist_sq * x1_x0_dist_sq) - Math.pow(dot_prod, 2);
-		return num / x2_x1_dist_sq;
+		double num = (distanceSquared2to1 * distanceSquared1to0) - Math.pow(dotProduct, 2);
+		return num / distanceSquared2to1;
 	}
 
 	public Point3d getStartPoint() {

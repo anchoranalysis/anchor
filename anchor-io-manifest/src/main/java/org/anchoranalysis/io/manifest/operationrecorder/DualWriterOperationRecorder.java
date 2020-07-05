@@ -37,7 +37,7 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
  * 
  * <p>Every operation is applied to both.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class DualWriterOperationRecorder implements IWriteOperationRecorder {

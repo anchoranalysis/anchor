@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams> {
 
-	private transient MPPInitParams soMPP;
+	private MPPInitParams soMPP;
 	
 	protected MPPBean() {
 		super(

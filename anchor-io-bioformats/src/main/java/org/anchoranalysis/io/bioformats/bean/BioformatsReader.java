@@ -77,7 +77,7 @@ public class BioformatsReader extends RasterReader {
 	public OpenedRaster openFile(Path filePath) throws RasterIOException {
 
 		try {
-			IFormatReader r = selectAndInitReader( filePath );
+			IFormatReader r = selectAndInitReader();
 
 			OMEXMLMetadata metadata = createMetadata(); 
 			r.setMetadataStore( metadata );
@@ -86,12 +86,12 @@ public class BioformatsReader extends RasterReader {
 			return new BioformatsOpenedRaster(r, metadata, options );
 		} catch (UnknownFormatException e) {
 			throw new RasterIOException("An unknown file format was used");
-		} catch (FormatException | IOException | CreateException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (FormatException | IOException | CreateException | NoSuchMethodException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
 			throw new RasterIOException(e);
 		}
 	}
 	
-	private IFormatReader selectAndInitReader( Path filePath ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private IFormatReader selectAndInitReader() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		
 		if (!forceReader.isEmpty()) {
 			return (IFormatReader) Class.forName(forceReader).getConstructor().newInstance();

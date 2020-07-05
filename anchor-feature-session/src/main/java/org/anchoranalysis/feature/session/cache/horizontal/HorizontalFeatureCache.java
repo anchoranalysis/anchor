@@ -30,7 +30,6 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.Collection;
 import java.util.Set;
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
@@ -53,7 +52,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
  * @author Owen Feehan
  *
  */
-public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessionCache<T> {
+public class HorizontalFeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
 
 	private FeatureSessionCache<T> delegate;
 	
@@ -70,25 +69,19 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 		super();
 		this.delegate = delegate;
 		
-		try {
-			for( Feature<T> f : namedFeatures ) {
-				map.add(f);
-			}
-			
-			for( NameValue<Feature<T>> f : sharedFeatures.getSet() ) {
-				map.add(f.getValue());
-			}
-			
-			retriever = new HorizontalFeatureCacheCalculator<>(
-				delegate.calculator(),
-				map,
-				ignorePrefixes
-			);
-			
-		} catch (OperationFailedException e) {
-			// TODO
-			assert(false);
+		for( Feature<T> f : namedFeatures ) {
+			map.add(f);
 		}
+		
+		for( NameValue<Feature<T>> f : sharedFeatures.getSet() ) {
+			map.add(f.getValue());
+		}
+		
+		retriever = new HorizontalFeatureCacheCalculator<>(
+			delegate.calculator(),
+			map,
+			ignorePrefixes
+		);
 	}
 
 	@Override
@@ -112,7 +105,7 @@ public class HorizontalFeatureCache<T extends FeatureInput> extends FeatureSessi
 	@Override
 	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
 		ChildCacheName childName,
-		Class<?> paramsType,
+		Class<? extends FeatureInput> paramsType,
 		CacheCreator cacheCreator
 	) {
 		return delegate.childCacheFor(childName, paramsType, cacheCreator);

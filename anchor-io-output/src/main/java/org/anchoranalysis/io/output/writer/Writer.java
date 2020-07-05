@@ -40,8 +40,6 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// 
-
 /**
  * Allows users to write various things to the file system based upon
 //  the properties of the current bound output manager
@@ -51,26 +49,26 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  *
  */
-public abstract class Writer {
+public interface Writer {
 
-	public abstract Optional<BoundOutputManager> bindAsSubFolder(
+	Optional<BoundOutputManager> bindAsSubFolder(
 		String outputName,
 		ManifestFolderDescription manifestDescription,
 		Optional<FolderWriteWithPath> folder
 	) throws OutputWriteFailedException;
 	
-	public abstract void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException;
+	void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException;
 	
-	public abstract int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, String index ) throws OutputWriteFailedException;
+	int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, String index ) throws OutputWriteFailedException;
 
-	public abstract void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException;
+	void write( OutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException;
 	
-	public void write( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException {
+	default void write( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> generator ) throws OutputWriteFailedException {
 		write( new SimpleOutputNameStyle(outputName), generator);
 	}
 	
 	// Write a file with an index represented by an int, returns the number of files created
-	public int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, int index ) throws OutputWriteFailedException {
+	default int write( IndexableOutputNameStyle outputNameStyle, Operation<? extends WritableItem,OutputWriteFailedException> generator, int index ) throws OutputWriteFailedException {
 		return write( outputNameStyle, generator, Integer.toString(index) );
 	}
 
@@ -85,7 +83,7 @@ public abstract class Writer {
 	 * @param index
 	 * @return the path to write to or null if the output is not allowed
 	 */
-	public abstract Optional<Path> writeGenerateFilename(
+	Optional<Path> writeGenerateFilename(
 		String outputName,
 		String extension,
 		Optional<ManifestDescription> manifestDescription,
@@ -94,5 +92,5 @@ public abstract class Writer {
 		String index
 	);
 	
-	public abstract OutputWriteSettings getOutputWriteSettings();
+	OutputWriteSettings getOutputWriteSettings();
 }

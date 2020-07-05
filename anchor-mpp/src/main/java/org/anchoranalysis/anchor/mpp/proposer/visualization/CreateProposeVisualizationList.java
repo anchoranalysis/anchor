@@ -32,17 +32,17 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 
-public class CreateProposeVisualizationList implements ICreateProposalVisualization {
+public class CreateProposeVisualizationList implements CreateProposalVisualization {
 
-	private List<ICreateProposalVisualization> list = new ArrayList<>();
+	private List<CreateProposalVisualization> list = new ArrayList<>();
 
-	public boolean add(ICreateProposalVisualization e) {
+	public boolean add(CreateProposalVisualization e) {
 		return list.add(e);
 	}
 
 	@Override
 	public void addToCfg(ColoredCfg cfg) {
-		for (ICreateProposalVisualization item : list) {
+		for (CreateProposalVisualization item : list) {
 			item.addToCfg(cfg);
 		}
 		

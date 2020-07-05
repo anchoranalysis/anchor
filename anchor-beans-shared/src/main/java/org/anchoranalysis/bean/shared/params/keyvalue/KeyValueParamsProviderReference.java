@@ -39,7 +39,7 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 	private String id = "";
 	// END BEAN PROPERTIES
 	
-	private transient KeyValueParams params;
+	private KeyValueParams params;
 	
 	@Override
 	public void onInit(KeyValueParamsInitParams so)

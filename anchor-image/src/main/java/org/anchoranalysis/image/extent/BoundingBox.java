@@ -28,6 +28,8 @@ package org.anchoranalysis.image.extent;
 
 
 import java.io.Serializable;
+import java.util.function.ToDoubleFunction;
+
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -36,15 +38,19 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A bounding-box in 2 or 3 dimensions
- * 
- * A 2D bounding-box should always have a z-extent of 1 pixel
- *
- * <p>This is an IMMUTABLE class</p>.
+ * <p>
+ * A 2D bounding-box should always have a z-extent of 1 pixel.
+ * <p>
+ * This is an <i>immutable</i> class.
  */
+@EqualsAndHashCode @Accessors(fluent=true)
 public final class BoundingBox implements Serializable {
 	
 	/**
@@ -52,12 +58,13 @@ public final class BoundingBox implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/** The bottom-left corner of the bounding box. */
+	@Getter
 	private final Point3i cornerMin;
-	private final Extent extent;
 	
-	public BoundingBox() {
-		this( new Extent() );
-	}
+	/** Dimensions in pixels needed to represent the bounding box */
+	@Getter
+	private final Extent extent;
 	
 	public BoundingBox(Extent extent) {
 		this( new Point3i(0,0,0), extent);
@@ -94,7 +101,7 @@ public final class BoundingBox implements Serializable {
 	 *  
 	 * <p>It may not be integral, and could end with .5</p>
 	 *  
-	 * @return
+	 * @return the midpoint
 	 */
 	public Point3d midpoint() {
 		return meanOfExtent(0);
@@ -105,7 +112,7 @@ public final class BoundingBox implements Serializable {
 	 * 
 	 * <p>It should be the same in each dimension as (crnr+extent-1)/2</p>
 	 *  
-	 * @return
+	 * @return the center-of-gravity
 	 */
 	public Point3i centerOfGravity() {
 		return PointConverter.intFromDouble(
@@ -140,11 +147,7 @@ public final class BoundingBox implements Serializable {
 			return true;
 		}
 		
-		if (atBorderZ(sd)) {
-			return true;
-		}
-		
-		return false;
+		return atBorderZ(sd);
 	}
 	
 	public boolean atBorderXY( ImageDimensions sd ) {
@@ -161,11 +164,7 @@ public final class BoundingBox implements Serializable {
 		if (crnrMax.getX()==(sd.getX()-1)) {
 			return true;
 		}
-		if (crnrMax.getY()==(sd.getY()-1)) {
-			return true;
-		}
-		
-		return false;
+		return crnrMax.getY()==(sd.getY()-1);
 	}
 	
 	public boolean atBorderZ( ImageDimensions sd ) {
@@ -182,49 +181,6 @@ public final class BoundingBox implements Serializable {
 		return false;
 	}
 	
-	// An extent representing the number of pixels needed to represent the bounding box
-	public Extent extent() {
-		return this.extent;
-	}
-
-	@Override
-	public boolean equals( Object obj ) {
-		if (this == obj) return true;
-	    if (!(obj instanceof BoundingBox)) {
-	        return false;
-	    }
-	    
-	    BoundingBox objCast = (BoundingBox) obj;
-	    if (!objCast.getCornerMin().equals(getCornerMin())) {
-	    	return false;
-	    }
-	    if (!objCast.extent().equals(extent())) {
-	    	return false;
-	    }
-	    
-	    return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append( getCornerMin() )
-			.append( extent() )
-			.toHashCode();
-	}
-	
-	/** 
-	 * 
-	 * The bottom-left corner of the bounding box.
-	 * 
-	 * <p>The return value should be treated read-only, as this class is designed to be IMMUTABLE</o>.
-	 * 
-	 * */
-	public ReadableTuple3i getCornerMin() {
-		return cornerMin;
-	}
-	
-	// TODO make this an IMMUTABLE method
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
 
 		// Subtract the padding from the corner
@@ -431,17 +387,19 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	private Point3d meanOfExtent( int subtractFromEachDimension ) {
-		Point3d pnt = new Point3d();
-		
-		double e_x = ((double) this.extent.getX() - subtractFromEachDimension)/2;
-		double e_y = ((double) this.extent.getY() - subtractFromEachDimension)/2;
-		double e_z = ((double) this.extent.getZ() - subtractFromEachDimension)/2;
-		
-		pnt.setX( e_x + this.cornerMin.getX() ); 
-		pnt.setY( e_y + this.cornerMin.getY() );
-		pnt.setZ( e_z + this.cornerMin.getZ() );
-		
-		return pnt;
+		return new Point3d(
+			calcMeanForDim(ReadableTuple3i::getX, subtractFromEachDimension),
+			calcMeanForDim(ReadableTuple3i::getY, subtractFromEachDimension),
+			calcMeanForDim(ReadableTuple3i::getZ, subtractFromEachDimension)
+		);
+	}
+	
+	private double calcMeanForDim(
+		ToDoubleFunction<ReadableTuple3i> extractDim,
+		int subtractFromEachDimension
+	) {
+		double midPointInExtent = (extractDim.applyAsDouble(extent.asTuple()) - subtractFromEachDimension)/2;
+		return extractDim.applyAsDouble(cornerMin) + midPointInExtent;
 	}
 	
 	private static int closestPntOnAxis( double val, int axisMin, int axisMax) {

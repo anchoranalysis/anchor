@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.overlay.Overlay;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
 
-public class IDGetterOverlayID extends IDGetter<Overlay> {
+public class IDGetterOverlayID implements IDGetter<Overlay> {
 
 	@Override
 	public int getID( Overlay ol, int iter ) {

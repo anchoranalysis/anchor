@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
  * When an OutputManager already exists. This is thrown as a RuntimeException to
  * cause the application to immediately end.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class OutputManagerAlreadyExistsException extends AnchorFriendlyRuntimeException {

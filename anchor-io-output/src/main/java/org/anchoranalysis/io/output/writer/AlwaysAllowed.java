@@ -43,17 +43,18 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class AlwaysAllowed extends Writer {
+import lombok.RequiredArgsConstructor;
 
-	private BoundOutputManager bom;
+@RequiredArgsConstructor
+public class AlwaysAllowed implements Writer {
+
+	// START REQUIRED ARGUMENTS
+	/** Bound output manager */
+	private final BoundOutputManager bom;
 	
-	// Execute before every operation
-	private WriterExecuteBeforeEveryOperation preop;
-
-	public AlwaysAllowed(BoundOutputManager bom, WriterExecuteBeforeEveryOperation preop ) {
-		this.bom = bom;
-		this.preop = preop;
-	}
+	/** Execute before every operation */
+	private final WriterExecuteBeforeEveryOperation preop;
+	// END REQUIRED ARGUMENTS
 	
 	@Override
 	public Optional<BoundOutputManager> bindAsSubFolder(
@@ -82,7 +83,7 @@ public class AlwaysAllowed extends Writer {
 				bom.getOutputWriteSettings(),
 				recorderNew,
 				bom.getLazyDirectoryFactory(),
-				preop
+				Optional.of(preop)
 			)
 		);
 	}
@@ -122,19 +123,19 @@ public class AlwaysAllowed extends Writer {
 		
 		preop.exec();
 		
-		Path outfile_path = bom.outFilePath(
+		Path outPath = bom.outFilePath(
 			outputNamePrefix + outputName + outputNameSuffix + "." + extension
 		);
 		
 		manifestDescription.ifPresent( md->
 			bom.writeFileToOperationRecorder(
 				outputName,
-				outfile_path,
+				outPath,
 				md,
 				index
 			)
 		);
-		return Optional.of(outfile_path);
+		return Optional.of(outPath);
 	}
 	
 	@Override

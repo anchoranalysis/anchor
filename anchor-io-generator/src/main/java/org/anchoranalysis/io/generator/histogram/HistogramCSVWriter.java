@@ -38,6 +38,8 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 
 class HistogramCSVWriter {
 
+	private HistogramCSVWriter() {}
+	
 	public static void writeHistogramToFile( Histogram histogram, Path filePath, boolean ignoreZeros ) throws AnchorIOException {
 		
 		List<String> headers = new ArrayList<>();

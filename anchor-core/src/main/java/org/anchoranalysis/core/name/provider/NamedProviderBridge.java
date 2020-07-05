@@ -34,6 +34,8 @@ import java.util.Set;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 
  * @author Owen Feehan
@@ -41,25 +43,15 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
  * @param <S> src-type
  * @param <T> destination-type
  */
+@RequiredArgsConstructor
 public class NamedProviderBridge<S,T> implements NamedProvider<T> {
 
-	private NamedProvider<S> srcProvider;
-	private FunctionWithException<S,T,? extends Exception> bridge;
-	private boolean bridgeNulls = true;
+	private final NamedProvider<S> srcProvider;
+	private final FunctionWithException<S,T,? extends Exception> bridge;
+	private final boolean bridgeNulls;
 	
 	public NamedProviderBridge(NamedProvider<S> srcProvider, FunctionWithException<S,T,? extends Exception> bridge) {
-		super();
-		assert(srcProvider!=null);
-		this.srcProvider = srcProvider;
-		this.bridge = bridge;
-	}
-	
-	public NamedProviderBridge(NamedProvider<S> srcProvider, FunctionWithException<S,T,? extends Exception> bridge, boolean bridgeNulls ) {
-		super();
-		assert(srcProvider!=null);
-		this.srcProvider = srcProvider;
-		this.bridge = bridge;
-		this.bridgeNulls = bridgeNulls;
+		this(srcProvider, bridge, true);
 	}
 
 	@Override
@@ -72,10 +64,7 @@ public class NamedProviderBridge<S,T> implements NamedProvider<T> {
 		}
 		
 		try {
-			return OptionalUtilities.map(
-				srcVal,
-				element -> bridge.apply(element)
-			);
+			return OptionalUtilities.map(srcVal, bridge::apply);
 		} catch (Exception e) {
 			throw NamedProviderGetException.wrap(key, e);
 		}

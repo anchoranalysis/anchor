@@ -27,7 +27,7 @@ package org.anchoranalysis.image.io.stack;
  */
 
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -35,6 +35,8 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ConvertDisplayStackToRGB {
+	
+	private ConvertDisplayStackToRGB() {}
 	
 	public static RGBStack convert( DisplayStack background ) {
 		
@@ -44,19 +46,11 @@ public class ConvertDisplayStackToRGB {
 			} else if (background.getNumChnl()==3) {
 				return new RGBStack( background.createImgStackDuplicate() );
 			} else {
-				assert false;
-				return null;
+				throw new AnchorImpossibleSituationException();
 			}
 		} catch (IncorrectImageSizeException e) {
-			// This should not be possible
-			assert false;
-			return null;
-		} catch (CreateException e) {
-			// This should not be possible
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
-		
 	}
 	
 	public static RGBStack convertCropped( DisplayStack background, BoundingBox bbox ) {
@@ -76,22 +70,11 @@ public class ConvertDisplayStackToRGB {
 					background.createChnlDuplicateForBBox(2,bbox)
 				);
 			} else {
-				assert false;
-				return null;
+				throw new AnchorImpossibleSituationException();
 			}
 		} catch (IncorrectImageSizeException e) {
 			// This should not be possible
-			assert false;
-			return null;
-		} catch (CreateException e) {
-			// This should not be possible
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
-		
 	}
-	
-	
-
-
 }

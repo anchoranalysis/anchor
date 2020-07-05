@@ -80,8 +80,8 @@ public abstract class CountIntersectingPixels {
 
 			ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
 			
-			int z_other = z + bbox.z().rel();
-			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(z_other).buffer();
+			int zOther = z + bbox.z().rel();
+			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
 							
 			cnt += countIntersectingPixels(
 				buffer,

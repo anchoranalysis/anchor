@@ -84,27 +84,27 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 	}
 	
 	public synchronized long numberCompletedJobs() {
-		return numberJobs( j->j.isCompleted() );
+		return numberJobs( JobState::isCompleted );
 	}
 	
 	public synchronized long numberCompletedSuccessfullyJobs() {
-		return numberJobs( j->j.isCompletedSuccessfully() );
+		return numberJobs( JobState::isCompletedSuccessfully );
 	}
 	
 	public synchronized long numberCompletedFailureJobs() {
-		return numberJobs( j->j.isCompletedFailure() );
+		return numberJobs( JobState::isCompletedFailure );
 	}
 	
 	public synchronized long numberExecutingJobs() {
-		return numberJobs( j->j.isExecuting() );
+		return numberJobs( JobState::isExecuting );
 	}
 	
 	public synchronized long sumCompletedSuccessfullyExectionTime() {
-		return sumExectionTime( j->j.isCompletedSuccessfully() );
+		return sumExectionTime( JobState::isCompletedSuccessfully );
 	}
 	
 	public synchronized long sumCompletedFailureExectionTime() {
-		return sumExectionTime( j->j.isCompletedFailure() );
+		return sumExectionTime( JobState::isCompletedFailure );
 	}
 	
 	public synchronized TaskStatistics createStatistics() {

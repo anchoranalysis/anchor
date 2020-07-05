@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class CollectionGenerator<T> extends Generator implements IterableGenerator<Collection<T>> {
+public class CollectionGenerator<T> implements Generator, IterableGenerator<Collection<T>> {
 
 	private Collection<T> collection;
 	private IterableGenerator<T> generator;
@@ -82,8 +82,7 @@ public class CollectionGenerator<T> extends Generator implements IterableGenerat
 		
 		// In this context, we take the index as an indication of the first id to use - and assume the String index is a number
 		int indexInt = Integer.parseInt(index);
-		int numWritten = writeCollection( subfolderName, outputNameStyle, indexInt );
-		return numWritten;
+		return writeCollection( subfolderName, outputNameStyle, indexInt );
 	}
 	
 	private int writeCollection( String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex ) throws OutputWriteFailedException {

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.object.properties;
 
 import org.anchoranalysis.core.idgetter.IDGetter;
 
-public class IDGetterObjMaskWithProperties extends IDGetter<ObjectWithProperties> {
+public class IDGetterObjMaskWithProperties implements IDGetter<ObjectWithProperties> {
 
 	private String propertyName;
 	

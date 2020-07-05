@@ -39,8 +39,8 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class MaxIntensityProjectionPair {
 	
-	private BoundedVoxelBox<ByteBuffer> bufferMIP1;
-	private BoundedVoxelBox<ByteBuffer> bufferMIP2;
+	private final BoundedVoxelBox<ByteBuffer> bufferMIP1;
+	private final BoundedVoxelBox<ByteBuffer> bufferMIP2;
 	
 	public MaxIntensityProjectionPair(
 		BoundedVoxelBox<ByteBuffer> buffer1,
@@ -48,24 +48,15 @@ public class MaxIntensityProjectionPair {
 		RegionMembershipWithFlags rmFlags1,
 		RegionMembershipWithFlags rmFlags2
 	) {
-		BinaryVoxelBox<ByteBuffer> bvb1 = createBinaryVoxelBoxForFlag(buffer1.getVoxelBox(), rmFlags1);
-		BinaryVoxelBox<ByteBuffer> bvb2 = createBinaryVoxelBoxForFlag(buffer2.getVoxelBox(), rmFlags2);
-		
-		BoundedVoxelBox<ByteBuffer> bvbBounded1 = new BoundedVoxelBox<>(buffer1.getBoundingBox(), bvb1.getVoxelBox());
-		BoundedVoxelBox<ByteBuffer> bvbBounded2 = new BoundedVoxelBox<>(buffer2.getBoundingBox(), bvb2.getVoxelBox());
-		
-		bufferMIP1 = bvbBounded1.createMaxIntensityProjection();
-		bufferMIP2 = bvbBounded2.createMaxIntensityProjection();
+		bufferMIP1 = intensityProjectionFor(buffer1, rmFlags1);
+		bufferMIP2 = intensityProjectionFor(buffer2, rmFlags2);
 	}
 	
 	public int countIntersectingPixels() {
 		// Relies on the binary voxel buffer ON being 255
 		return new CountIntersectingPixelsRegionMembership(
 			(byte) 1
-		).countIntersectingPixels(
-			bufferMIP1,
-			bufferMIP2
-		);
+		).countIntersectingPixels(bufferMIP1, bufferMIP2);
 	}
 	
 	public int minArea() {
@@ -91,21 +82,42 @@ public class MaxIntensityProjectionPair {
 			int offset = 0;
 			for( int y=0; y<vb.extent().getY(); y++) {
 				for( int x=0; x<vb.extent().getX(); x++) {
-					
-					byte b = bb.get(offset);
-					if ( rmFlags.isMemberFlag(b)) {
-						bbOut.put( offset, bvb.getOnByte() );
-					} else {
-						if (bvb.getOffByte()!=0) {
-							bbOut.put( offset, bvb.getOffByte() );
-						}
-					}
-					
-					offset++;
+					maybeOutputByte(offset++, bb, bbOut, bvb, rmFlags);
 				}
 			}
 		}
 		
 		return new BinaryVoxelBoxByte(vbOut,bvb.createInt());
-	}	
+	}
+	
+	private static void maybeOutputByte(
+		int offset,
+		ByteBuffer bb,
+		ByteBuffer bbOut,
+		BinaryValuesByte bvb,
+		RegionMembershipWithFlags rmFlags
+	) {
+		byte b = bb.get(offset);
+		if ( rmFlags.isMemberFlag(b)) {
+			bbOut.put( offset, bvb.getOnByte() );
+		} else {
+			if (bvb.getOffByte()!=0) {
+				bbOut.put( offset, bvb.getOffByte() );
+			}
+		}
+	}
+	
+	private static BoundedVoxelBox<ByteBuffer> intensityProjectionFor(
+		BoundedVoxelBox<ByteBuffer> buffer,
+		RegionMembershipWithFlags rmFlags
+	) {
+		BinaryVoxelBox<ByteBuffer> bvb = createBinaryVoxelBoxForFlag(buffer.getVoxelBox(), rmFlags);
+		
+		BoundedVoxelBox<ByteBuffer> bvbBounded = new BoundedVoxelBox<>(
+			buffer.getBoundingBox(),
+			bvb.getVoxelBox()
+		);
+		
+		return bvbBounded.createMaxIntensityProjection();
+	}
 }

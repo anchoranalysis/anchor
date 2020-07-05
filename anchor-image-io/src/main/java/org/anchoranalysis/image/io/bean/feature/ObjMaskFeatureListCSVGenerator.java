@@ -64,7 +64,7 @@ import one.util.streamex.StreamEx;
 
 /**
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature calculation params
  */

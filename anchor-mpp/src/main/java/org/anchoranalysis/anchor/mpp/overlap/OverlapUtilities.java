@@ -32,12 +32,13 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class OverlapUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private OverlapUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class OverlapUtilities {
 	
 	public static double overlapWith( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
 
@@ -103,28 +104,6 @@ public class OverlapUtilities {
 			mark2.getVoxelBox(),
 			globalMask,
 			onGlobalMask
-		);
-	}
-	
-	public static MaxIntensityProjectionPair createMaxIntensityProjectionPair( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
-			
-		// Otherwise we do it the slow way by seeing if any pixels intersect
-		// between the two bounding box
-		PxlMark mark1 = pmm1.doOperation(); 
-		PxlMark mark2 = pmm2.doOperation();
-		
-		BoundingBox bbox1 = mark1.getBoundingBox(regionID).flattenZ();
-		BoundingBox bbox2 = mark2.getBoundingBox(regionID).flattenZ();
-		
-		if (!bbox1.intersection().existsWith(bbox2)) {
-			return null;
-		}
-		
-		return new MaxIntensityProjectionPair(
-			mark1.getVoxelBox(),
-			mark2.getVoxelBox(),
-			pmm1.getRegionMap().membershipWithFlagsForIndex(regionID),
-			pmm2.getRegionMap().membershipWithFlagsForIndex(regionID)
 		);
 	}
 }

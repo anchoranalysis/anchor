@@ -46,13 +46,13 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 /**
  * Caches CachedCalculations that occur repeatedly across many features, and store similar child caches.
- * 
- * <p>The caches are reset every time invalidate() is called</p>
+ * <p>
+ * The caches are reset every time {@link #invalidate} is called.
  * 
  * @author Owen Feehan
- * @param parameter-type
+ * @param <T> feature-input type
  */
-public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureSessionCache<T> {
+public class HorizontalCalculationCache<T extends FeatureInput> implements FeatureSessionCache<T> {
 	
 	private ResettableCachedCalculator<T> calculator;
 	
@@ -70,7 +70,6 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	// Set up the cache
 	@Override
 	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger) {
-		assert(logger!=null);
 		calculator.init(logger);
 	}
 	
@@ -103,7 +102,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> extends FeatureS
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<?> inputType, CacheCreator cacheCreator) {
+	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(ChildCacheName childName, Class<? extends FeatureInput> inputType, CacheCreator cacheCreator) {
 		// Creates a new child-cache if it doesn't already exist for a particular name
 		return (FeatureSessionCache<V>) children.computeIfAbsent(
 			childName,

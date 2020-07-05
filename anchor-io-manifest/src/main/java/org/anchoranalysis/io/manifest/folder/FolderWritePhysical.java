@@ -67,7 +67,4 @@ public class FolderWritePhysical extends FolderWriteWithPath {
 	public List<FileWrite> fileList() {
 		return delegate.getFileList();
 	}
-
-
-
 }

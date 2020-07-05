@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.bean.objmask.writer;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-io
@@ -40,6 +42,9 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class IfElseWriter extends ObjMaskWriter {
 
 	// START BEAN PROPERTIES
@@ -50,22 +55,18 @@ public class IfElseWriter extends ObjMaskWriter {
 	private ObjMaskWriter falseWriter;
 	// END BEAN PROPERTIES
 	
-	private Condition condition;
+	private Optional<Condition> condition = Optional.empty();
 	
-	public static abstract class Condition {
-		public abstract boolean isTrue(ObjectWithProperties mask, RGBStack stack, int id);
+	@FunctionalInterface
+	public interface Condition {
+		boolean isTrue(ObjectWithProperties mask, RGBStack stack, int id);
 	}
 	
-	public IfElseWriter() {
-		
-	}
-	
-	public IfElseWriter(Condition condition, ObjMaskWriter trueWriter,
-			ObjMaskWriter falseWriter) {
+	public IfElseWriter(Condition condition, ObjMaskWriter trueWriter, ObjMaskWriter falseWriter) {
 		super();
-		this.condition = condition;
-		this.trueWriter = (ObjMaskWriter) trueWriter;
-		this.falseWriter = (ObjMaskWriter) falseWriter;
+		this.condition = Optional.of(condition);
+		this.trueWriter = trueWriter;
+		this.falseWriter = falseWriter;
 	}
 
 	public ObjMaskWriter getTrueWriter() {
@@ -98,7 +99,7 @@ public class IfElseWriter extends ObjMaskWriter {
 			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
 					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
-				if ( condition.isTrue(mask, stack, idGetter.getID(mask, iter))) {
+				if (condition.isPresent() && condition.get().isTrue(mask, stack, idGetter.getID(mask, iter))) {
 					precalcTrue.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);
 				} else {
 					precalcFalse.writePrecalculatedMask(stack, idGetter, colorIDGetter, iter, colorIndex, bboxContainer);

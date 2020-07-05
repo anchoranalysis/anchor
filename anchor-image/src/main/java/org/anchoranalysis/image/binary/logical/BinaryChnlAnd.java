@@ -28,15 +28,18 @@ package org.anchoranalysis.image.binary.logical;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class BinaryChnlAnd {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	public static void apply( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) throws CreateException {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class BinaryChnlAnd {
+	
+	public static void apply( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) {
 		apply(
 			chnlCrnt.getVoxelBox(),
 			chnlReceiver.getVoxelBox(),
@@ -50,7 +53,7 @@ public class BinaryChnlAnd {
 		VoxelBox<ByteBuffer> voxelBoxReceiver,
 		BinaryValuesByte bvbCrnt,
 		BinaryValuesByte bvbReceiver
-	) throws CreateException {
+	) {
 		
 		Extent e = voxelBoxCrnt.extent();
 		

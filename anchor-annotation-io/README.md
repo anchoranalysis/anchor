@@ -1,6 +1,6 @@
 # anchor-annotation-io
 
-Reading / writing related to `anchor-annotation.
+Reading / writing related to [anchor-annotation](https://github.com/anchoranalysis/anchor/tree/master/anchor-annotation).
 
 ## What is Anchor?
 

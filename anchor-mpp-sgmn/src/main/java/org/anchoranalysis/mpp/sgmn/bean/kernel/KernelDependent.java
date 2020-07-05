@@ -28,9 +28,4 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
 public abstract class KernelDependent<T> extends Kernel<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 }

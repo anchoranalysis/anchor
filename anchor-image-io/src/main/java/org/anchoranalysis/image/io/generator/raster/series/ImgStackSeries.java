@@ -27,7 +27,6 @@ package org.anchoranalysis.image.io.generator.raster.series;
  */
 
 
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
-public class ImgStackSeries<BufferType extends Buffer> implements Iterable<Stack>  {
+public class ImgStackSeries implements Iterable<Stack>  {
 
 	private List<Stack> delegate = new ArrayList<>();
 	

@@ -107,9 +107,7 @@ public class RelationToConstant extends RelationToThreshold {
 				return false;
 		} else if (!relation.equals(other.relation))
 			return false;
-		if (Double.doubleToLongBits(threshold) != Double.doubleToLongBits(other.threshold))
-			return false;
-		return true;
+		return (Double.doubleToLongBits(threshold) == Double.doubleToLongBits(other.threshold));
 	}
 
 	@Override

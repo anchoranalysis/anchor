@@ -31,14 +31,18 @@ import java.io.Writer;
 
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Generates a nice string representation of an Exception and its causes according to certain rules.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class RecursivelyDescribeExceptionStack {
-
+	
 	/**
 	 * Incrementally adds a line to a string builder with the message of each exception
 	 * moving onto the next nested exception until there are no more
@@ -60,7 +64,7 @@ public class RecursivelyDescribeExceptionStack {
 			maxLength = wordWrapLimit;
 		}
 		
-		String prefixCurrent = "";
+		StringBuilder prefixBuilder = new StringBuilder();
 		
 		boolean firstLine = true;
 		
@@ -78,12 +82,12 @@ public class RecursivelyDescribeExceptionStack {
 			// with maybe prefix and suffix
 			splitFromExc(e,!showExceptionType).appendNicelyWrappedLines(
 				writer,
-				prefixCurrent,
+				prefixBuilder.toString(),
 				suffixFor(showExceptionType, e),
 				maxLength
 			);
 			
-			prefixCurrent = prefixCurrent + prefix;
+			prefixBuilder.append(prefix);
 			
 			if (itr.hasNext()) {
 				e = itr.next();

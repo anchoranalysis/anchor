@@ -34,8 +34,12 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-class ManifestClashChecker {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class ManifestClashChecker {
+	
 	public static void throwExceptionIfClashes(
 		ManifestRecorder manifestExperiment,
 		BoundOutputManager boundOutput,

@@ -62,7 +62,7 @@ public final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 	
 	@Override
 	public VoxelDataType dataType() {
-		return VoxelDataTypeFloat.instance;
+		return VoxelDataTypeFloat.INSTANCE;
 	}
 	
 	public static VoxelBufferFloat allocate( int size ) {

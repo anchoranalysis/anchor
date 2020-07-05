@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session;
  */
 
 
-import java.util.Collection;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -47,7 +46,6 @@ import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Calculates features with successively different parameters, taking care of caching etc. appropriately.
@@ -64,7 +62,7 @@ import org.apache.commons.collections.CollectionUtils;
  */
 public class SequentialSession<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
-	private final static String ERROR_NOT_STARTED = "Session has not been started yet. Call start().";
+	private static final String ERROR_NOT_STARTED = "Session has not been started yet. Call start().";
 	
 	private FeatureList<T> listFeatures;
 	
@@ -91,14 +89,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * 
 	 * @param listFeatures the features that will be calculated in this session
 	 */
-	@SuppressWarnings("unchecked")
 	SequentialSession(Iterable<Feature<T>> iterFeatures) {
 		this(
 			iterFeatures,
-			(Collection<String>) CollectionUtils.EMPTY_COLLECTION,
-			new BoundReplaceStrategy<>(
-				cacheCreator -> new ReuseSingletonStrategy<>(cacheCreator)
-			)
+			new BoundReplaceStrategy<>(ReuseSingletonStrategy::new)
 		);
 	}
 	
@@ -109,10 +103,9 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param prependFeatureName a string that can be prepended to feature-ID references e.g. when looking for  featureX,  concat(prependFeatureName,featureX)
 	 *         is also considered. This helps with scoping.
 	 */
-	SequentialSession(Iterable<Feature<T>> iterFeatures, Collection<String> ignorePrefixes, BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory) {
+	SequentialSession(Iterable<Feature<T>> iterFeatures, BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory) {
 		this.replacePolicyFactory = replacePolicyFactory;
 		this.listFeatures = FeatureListFactory.fromIterable(iterFeatures);
-		assert(listFeatures!=null);
 	}
 	
 	/**
@@ -130,9 +123,6 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}
 		
 		checkNoIntersectionWithSharedFeatures( sharedFeatures );
-		
-		assert( logger!=null );
-		
 		setupCacheAndInit( featureInitParams, sharedFeatures, logger );
 		
 		isStarted = true;
@@ -167,7 +157,6 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * 
 	 * @param params
 	 * @return
-	 * @throws FeatureCalcException
 	 */
 	public ResultsVector calcSuppressErrors( T params, ErrorReporter errorReporter ) {
 		

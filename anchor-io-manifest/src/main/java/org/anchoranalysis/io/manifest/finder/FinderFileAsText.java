@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -42,7 +43,7 @@ import org.anchoranalysis.io.manifest.match.FileWriteOutputName;
 
 public class FinderFileAsText extends FinderSingleFile {
 	
-	private String text;
+	private Optional<String> text = Optional.empty();
 	private String outputName;
 	
 	public FinderFileAsText(String outputName, ErrorReporter errorReporter) {
@@ -82,26 +83,30 @@ public class FinderFileAsText extends FinderSingleFile {
 
 	public String get() throws GetOperationFailedException {
 		assert( exists() );
-		if (text==null) {
+		if (!text.isPresent()) {
 			try {
-				text = readFileFromFileWrite( getFoundFile() );
+				text = Optional.of(
+					readFileFromFileWrite( getFoundFile() )
+				);
 			} catch (IOException e) {
 				throw new GetOperationFailedException(e);
 			}
 		}
-		return text;
+		return text.get();
 	}
 
 
 	@Override
-	protected FileWrite findFile(ManifestRecorder manifestRecorder)
+	protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
 			throws MultipleFilesException {
 		List<FileWrite> files = FinderUtilities.findListFile( manifestRecorder, new FileWriteOutputName(outputName) );
 		
-		if (files.size()==0) {
-			return null;
+		if (files.isEmpty()) {
+			return Optional.empty();
 		}
 		
-		return files.get(0);
+		return Optional.of(
+			files.get(0)
+		);
 	}
 }

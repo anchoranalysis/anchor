@@ -36,7 +36,7 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * We keep it thread-safe as there might be multiple calls in parallel
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class JobStartStopLogger {

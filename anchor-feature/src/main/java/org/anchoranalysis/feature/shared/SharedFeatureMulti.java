@@ -48,7 +48,7 @@ import org.apache.commons.collections.map.MultiValueMap;
 /**
  * A group of features (of possibly heterogeneous type) made available to other features to reference
  * 
- * @author owen
+ * @author Owen Feehan
  */
 public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>, Iterable<NameValue<Feature<FeatureInput>>> {
 	
@@ -74,7 +74,7 @@ public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>,
 	
 	/** Extracts the subset of inputs that are compatible with a particular input-type */ 
 	@SuppressWarnings("unchecked")
-	public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(Class<?> inputType) {
+	public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(Class<? extends FeatureInput> inputType) {
 		
 		 NameValueSet<Feature<S>> out = new  NameValueSet<>();
 		 
@@ -87,7 +87,7 @@ public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>,
 			 }
 		 }
 				
-		return new SharedFeatureSet<S>(out);	
+		return new SharedFeatureSet<>(out);	
 	}
 	
 	@Override

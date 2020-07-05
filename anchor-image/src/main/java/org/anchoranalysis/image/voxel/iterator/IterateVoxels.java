@@ -86,7 +86,7 @@ public class IterateVoxels {
 		
 		buffer.seek(
 			mask.map( om->
-				om.getBoundingBox().getCornerMin().getZ()
+				om.getBoundingBox().cornerMin().getZ()
 			).orElse(0)
 		);
 		
@@ -143,7 +143,7 @@ public class IterateVoxels {
 
 		Extent extent = voxels.extent();
 		Extent extentMask = mask.getVoxelBox().extent();
-		ReadableTuple3i crnrMin = mask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = mask.getBoundingBox().cornerMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
@@ -185,7 +185,7 @@ public class IterateVoxels {
 	public static Optional<Point3i> findFirstPointOnMask( ObjectMask mask ) {
 		
 		Extent extentMask = mask.getVoxelBox().extent();
-		ReadableTuple3i crnrMin = mask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = mask.getBoundingBox().cornerMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
@@ -234,7 +234,7 @@ public class IterateVoxels {
 	 */
 	public static void callEachPoint( BoundingBox bbox, ProcessVoxel process ) {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
@@ -323,7 +323,7 @@ public class IterateVoxels {
 	/**
 	 * Iterate over each voxel that is located on a mask if it exists, otherwise iterate over the entire voxel-box.
 	 * 
-	 * <p>This is similar behaviour to {@link callEachPoint} but adds a buffer for each slice.</p>
+	 * <p>This is similar behaviour to {@link #callEachPoint} but adds a buffer for each slice.
 	 */
 	public static <T extends Buffer> void callEachPoint( Optional<ObjectMask> mask, VoxelBox<T> voxels, ProcessVoxelSliceBuffer<T> process) {
 		Extent extent = voxels.extent();

@@ -29,19 +29,26 @@ package org.anchoranalysis.image.feature.bean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.stack.nrg.FeatureInputNRGStackDescriptor;
 
-public abstract class FeatureNRGStack extends Feature<FeatureInputNRGStack> {
+/**
+ * A base class for features that only require an input that extends from {@link FeatureInputNRG}
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature input-type
+ */
+public abstract class FeatureNRGStack<T extends FeatureInputNRG> extends Feature<T> {
 
 
 	@Override
-	public double calc( SessionInput<FeatureInputNRGStack> input ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		return calcForInput( input.get() );
 	}
 	
-	public abstract double calcForInput( FeatureInputNRGStack params ) throws FeatureCalcException;
+	public abstract double calcForInput( FeatureInputNRG params ) throws FeatureCalcException;
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {

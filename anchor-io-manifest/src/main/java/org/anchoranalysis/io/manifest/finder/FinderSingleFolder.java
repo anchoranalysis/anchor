@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.manifest.finder;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-manifest
@@ -29,31 +31,27 @@ package org.anchoranalysis.io.manifest.finder;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
-public abstract class FinderSingleFolder extends Finder {
+public abstract class FinderSingleFolder implements Finder {
 
-	private FolderWrite foundFolder;
+	private Optional<FolderWrite> foundFolder = Optional.empty();
 	
 	// A simple method to override in each finder that is based upon finding a single file
-	protected abstract FolderWrite findFolder( ManifestRecorder manifestRecorder );
+	protected abstract Optional<FolderWrite> findFolder( ManifestRecorder manifestRecorder );
 	
 	@Override
 	public final boolean doFind( ManifestRecorder manifestRecorder ) {
 		
 		foundFolder = findFolder(manifestRecorder);
 		
-		if (!exists()) {
-			return false;
-		}
-		
-		return true;
+		return exists();
 	}
 	
 	@Override
 	public final boolean exists() {
-		return foundFolder != null;
+		return foundFolder.isPresent();
 	}
 
 	protected FolderWrite getFoundFolder() {
-		return foundFolder;
+		return foundFolder.get();
 	}
 }

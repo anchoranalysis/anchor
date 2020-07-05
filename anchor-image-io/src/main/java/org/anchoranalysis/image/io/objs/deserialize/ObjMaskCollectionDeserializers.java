@@ -32,6 +32,8 @@ import org.anchoranalysis.io.bean.deserializer.Deserializer;
 /** Entry point to deserializers */
 public class ObjMaskCollectionDeserializers {
 	
-	public static final Deserializer<ObjectCollection> tiffCorrectMissing = new ReadObjsFromTIFFDirectoryCorrectMissing();
-	public static final Deserializer<ObjectCollection> hdf5 = new ReadObjsFromHDF5();
+	private ObjMaskCollectionDeserializers() {}
+	
+	public static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING = new ReadObjsFromTIFFDirectoryCorrectMissing();
+	public static final Deserializer<ObjectCollection> HDF5 = new ReadObjsFromHDF5();
 }

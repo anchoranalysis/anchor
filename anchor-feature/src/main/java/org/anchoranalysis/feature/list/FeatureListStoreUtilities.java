@@ -33,9 +33,11 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureListStoreUtilities {
-	
-	private FeatureListStoreUtilities() {}
 	
 	public static void addFeatureListToStoreNoDuplicateDirectly(
 		NamedProvider<FeatureList<FeatureInput>> featureListProvider,
@@ -44,9 +46,9 @@ public class FeatureListStoreUtilities {
 		
 		for( String key : featureListProvider.keys()) {
 			try {
-				FeatureList<FeatureInput> fl = featureListProvider.getException(key);
-				out.addNoDuplicate(fl);
-				
+				out.addNoDuplicate(
+					featureListProvider.getException(key)
+				);
 			} catch (NamedProviderGetException e) {
 				assert false;
 			}

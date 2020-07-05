@@ -73,7 +73,7 @@ public class Reference<T extends FeatureInput> extends Feature<T> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.instance;
+		return FeatureInputGenericDescriptor.INSTANCE;
 	}
 
 

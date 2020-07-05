@@ -35,7 +35,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=false)
 public class FeatureInputMark extends FeatureInputParams {
 
 	private Mark mark;

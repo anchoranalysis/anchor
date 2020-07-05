@@ -26,7 +26,6 @@ package org.anchoranalysis.io.csv.comparer;
  * #L%
  */
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 
@@ -37,16 +36,18 @@ import org.apache.commons.lang.ArrayUtils;
 
 public class CSVComparer {
 
+	private CSVComparer() {}
+	
 	/**
 	 * Are two CSV files equal?
 	 * 
-	 * @param file1 first file to compare, without any lines having been already read
-	 * @param file2 second file to compare, without any lines having been already read
+	 * @param path1 path to first file to compare, without any lines having been already read
+	 * @param path2 path to second file to compare, without any lines having been already read
 	 * @param ignoreFirstNumColumns ignore the first number of columns (left most) when measuring equality
  	 * @param sortLines if true, all lines in the CSV file are sorted before comparison. if false, the order remains unchanged.
  	 * @param rejectZeroRows throws an exception if the CSV file has zero rows
  	 * @param messageStream if non-equal, additional explanation messages are printed here 
-	 * @throws IOException if something goes wrong
+	 * @throws CSVReaderException if something goes wrong
 	 */
 	public static boolean areCsvFilesEqual(
 		Path path1,
@@ -68,7 +69,7 @@ public class CSVComparer {
 		
 		if (sortLines) {
 			CompareSorted compareWithSorting = new CompareSorted( ignoreFirstNumColumns, rejectZeroRows );
-			return compareWithSorting.compare( file1, file2, System.out );
+			return compareWithSorting.compare( file1, file2, System.out );	// NOSONAR
 		} else {
 			CompareUnsorted compareUnsorted = new CompareUnsorted();
 			return compareUnsorted.compareCsvFilesWithoutSorting( file1, file2, ignoreFirstNumColumns, rejectZeroRows );

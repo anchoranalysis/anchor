@@ -43,7 +43,7 @@ public class ChannelConverterToUnsignedByte extends ChannelConverter<ByteBuffer>
 	
 	public ChannelConverterToUnsignedByte( VoxelBoxConverter<ByteBuffer> voxelBoxConverter ) {
 		super(
-			VoxelDataTypeUnsignedByte.instance,
+			VoxelDataTypeUnsignedByte.INSTANCE,
 			voxelBoxConverter,
 			VoxelBoxFactory.getByte()
 		);

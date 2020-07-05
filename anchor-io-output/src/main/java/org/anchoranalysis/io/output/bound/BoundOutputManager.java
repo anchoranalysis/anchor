@@ -29,7 +29,6 @@ package org.anchoranalysis.io.output.bound;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -48,7 +47,6 @@ import org.anchoranalysis.io.manifest.operationrecorder.NullWriteOperationRecord
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.AlwaysAllowed;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
 import org.anchoranalysis.io.output.writer.Writer;
@@ -57,12 +55,14 @@ import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 public class BoundOutputManager {
 
-	private OutputManager outputManager = null;
-
-	private FilePathPrefix boundFilePathPrefix = null;
-	private OutputWriteSettings outputWriteSettings;
+	private final OutputManager outputManager;
+	private final FilePathPrefix boundFilePathPrefix;
+	private final OutputWriteSettings outputWriteSettings;
 	private IWriteOperationRecorder writeOperationRecorder;
+	
+	
 	private LazyDirectoryFactory lazyDirectoryFactory;
+
 	
 	private Writer writerAlwaysAllowed;
 	private Writer writerCheckIfAllowed;
@@ -76,9 +76,7 @@ public class BoundOutputManager {
 	 * @param boundFilePathPrefix
 	 * @param outputWriteSettings
 	 * @param writeOperationRecorder
-	 * @param delExistingFolder
-	 * @param parentInit if non-NULL, parent initializer to call, before our own initializer is called
-	 * @throws IOException
+	 * @param parentInit iff defined, parent initializer to call, before our own initializer is called.
 	 */
 	public BoundOutputManager(
 		OutputManager outputManager,
@@ -86,7 +84,7 @@ public class BoundOutputManager {
 		OutputWriteSettings outputWriteSettings,
 		IWriteOperationRecorder writeOperationRecorder,
 		LazyDirectoryFactory lazyDirectoryFactory,
-		WriterExecuteBeforeEveryOperation parentInit
+		Optional<WriterExecuteBeforeEveryOperation> parentInit
 	) {
 		
 		this.boundFilePathPrefix = boundFilePathPrefix;
@@ -94,27 +92,44 @@ public class BoundOutputManager {
 		this.outputWriteSettings = outputWriteSettings;
 		this.writeOperationRecorder = writeOperationRecorder;
 		this.lazyDirectoryFactory = lazyDirectoryFactory;
-		assert(writeOperationRecorder!=null);
 		
-		initIfNeeded = lazyDirectoryFactory.createOrReuse(boundFilePathPrefix.getFolderPath(), parentInit);
+		initIfNeeded = lazyDirectoryFactory.createOrReuse(
+			boundFilePathPrefix.getFolderPath(),
+			parentInit
+		);
 		writerAlwaysAllowed = new AlwaysAllowed(this, initIfNeeded);
 		writerCheckIfAllowed = new CheckIfAllowed(this, initIfNeeded, writerAlwaysAllowed);
 	}
 	
 	/** Adds an additional operation recorder alongside any existing recorders */
 	public void addOperationRecorder( IWriteOperationRecorder toAdd ) {
-		this.writeOperationRecorder = new DualWriterOperationRecorder( writeOperationRecorder, toAdd );
+		this.writeOperationRecorder = new DualWriterOperationRecorder(
+			writeOperationRecorder,
+			toAdd
+		);
 	}
 
-	/** Creates a new outputManager by appending a relative folder-path to the current boundoutputmanager */
-	public BoundOutputManager resolveFolder( String folderPath, FolderWrite folderWrite ) throws OutputWriteFailedException {
+	/** 
+	 * Creates a new outputManager by appending a relative folder-path to the current {@link BoundOutputManager}
+	 * 
+	 * @param relativeFolderPath the relative-path to append
+	 * @param folderWrite a manifest-folder to create a new entry for
+	 **/
+	public BoundOutputManager resolveFolder( String relativeFolderPath, FolderWrite folderWrite ) {
 		
-		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(folderPath);
+		Path folderPathNew = boundFilePathPrefix.getFolderPath().resolve(relativeFolderPath);
 		
 		FilePathPrefix fppNew = new FilePathPrefix( folderPathNew );
 		fppNew.setFilenamePrefix( boundFilePathPrefix.getFilenamePrefix() );
 		
-		return new BoundOutputManager(outputManager,fppNew,outputWriteSettings, folderWrite, lazyDirectoryFactory, initIfNeeded);
+		return new BoundOutputManager(
+			outputManager,
+			fppNew,
+			outputWriteSettings,
+			folderWrite,
+			lazyDirectoryFactory,
+			Optional.of(initIfNeeded)
+		);
 	}
 	
 	/** Derives a BoundOutputManager from a file that is somehow relative to the root directory */
@@ -133,7 +148,7 @@ public class BoundOutputManager {
 				outputWriteSettings,
 				writeRecorder(manifestRecorder),
 				lazyDirectoryFactory,
-				initIfNeeded
+				Optional.of(initIfNeeded)
 			);
 		} catch (FilePathPrefixerException e) {
 			throw new BindFailedException(e);
@@ -168,18 +183,18 @@ public class BoundOutputManager {
 	public IWriteOperationRecorder writeFolderToOperationRecorder( Path path, ManifestFolderDescription manifestDescription, Optional<FolderWriteWithPath> manifestFolder ) {
 		if (manifestFolder.isPresent()) {
 			// Assume the folder are writing to has no path
-			assert(manifestFolder.get().calcPath()==null);
-			Path relativePath = boundFilePathPrefix.relativePath(path);
-			
-			return writeOperationRecorder.writeFolder( relativePath, manifestDescription, manifestFolder.get());
+			return writeOperationRecorder.writeFolder(
+				boundFilePathPrefix.relativePath(path),
+				manifestDescription,
+				manifestFolder.get()
+			);
 		} else {
 			return writeOperationRecorder;
 		}
 	}
 	
 	private static IWriteOperationRecorder writeRecorder( Optional<ManifestRecorder> manifestRecorder ) {
-		Optional<IWriteOperationRecorder> opt = manifestRecorder
-			.map( mr->mr.getRootFolder() );
+		Optional<IWriteOperationRecorder> opt = manifestRecorder.map(ManifestRecorder::getRootFolder);
 		return opt.orElse(
 			new NullWriteOperationRecorder()
 		);

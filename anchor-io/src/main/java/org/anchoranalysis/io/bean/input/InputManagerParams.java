@@ -34,7 +34,7 @@ import org.anchoranalysis.io.params.InputContextParams;
 /**
  * Parameters passed to an InputManager to generate input-objects
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class InputManagerParams {

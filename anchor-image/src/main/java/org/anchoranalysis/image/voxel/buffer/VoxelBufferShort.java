@@ -66,7 +66,7 @@ public final class VoxelBufferShort extends VoxelBuffer<ShortBuffer> {
 	
 	@Override
 	public VoxelDataType dataType() {
-		return VoxelDataTypeUnsignedShort.instance;
+		return VoxelDataTypeUnsignedShort.INSTANCE;
 	}
 	
 	@Override

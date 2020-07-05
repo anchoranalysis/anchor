@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class NamedProviderCombine<T> implements NamedProvider<T> {
 
@@ -53,22 +54,12 @@ public class NamedProviderCombine<T> implements NamedProvider<T> {
 
 	@Override
 	public Set<String> keys() {
-
-		HashSet<String> combinedList = new HashSet<>();
-		
-		for (NamedProvider<T> item : list) {
-			combinedList.addAll( item.keys() );
-		}
-		
-		return combinedList;
+		return list.stream().flatMap( item->item.keys().stream() ).collect(
+			Collectors.toCollection(HashSet::new)	
+		);
 	}
 	
 	public void add( NamedProvider<T> key ) {
-		assert( key != null );
 		list.add(key);
 	}
-
-
-	
-	
 }

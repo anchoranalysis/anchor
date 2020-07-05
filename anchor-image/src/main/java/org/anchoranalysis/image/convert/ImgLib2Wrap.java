@@ -66,7 +66,7 @@ import net.imglib2.util.Fraction;
 /**
  * Converts the {@link VoxelBox} and {@link VoxelBuffer} data-types used in Anchor to the {@link NativeImg} used in ImgLib2
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ImgLib2Wrap {
@@ -79,11 +79,11 @@ public class ImgLib2Wrap {
 		
 		VoxelDataType dataType = box.getVoxelDataType();
 		
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return wrapByte(box.asByte());
-		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return wrapShort(box.asShort());
-		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return wrapFloat(box.asFloat());			
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte, short and float are supported");
@@ -96,11 +96,11 @@ public class ImgLib2Wrap {
 		
 		VoxelDataType dataType = vb.dataType();
 		
-		if (dataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return wrapByte( (VoxelBuffer<ByteBuffer>) vb, e);
-		} else if (dataType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return wrapShort( (VoxelBuffer<ShortBuffer>) vb, e);
-		} else if (dataType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (dataType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return wrapFloat( (VoxelBuffer<FloatBuffer>) vb, e);			
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only unsigned byte, short and float are supported");
@@ -139,7 +139,7 @@ public class ImgLib2Wrap {
 			buffer,
 			e,
 			b -> new ByteArray(b.array()),
-			img -> new UnsignedByteType(img)
+			UnsignedByteType::new
 		);
 	}
 
@@ -149,7 +149,7 @@ public class ImgLib2Wrap {
 			buffer,
 			e,
 			b -> new ShortArray(b.array()),
-			img -> new UnsignedShortType(img)
+			UnsignedShortType::new
 		);
 	}
 	
@@ -159,7 +159,7 @@ public class ImgLib2Wrap {
 			buffer,
 			e,
 			b -> new FloatArray(b.array()),
-			img -> new FloatType(img)
+			FloatType::new
 		);
 	}
 	
@@ -178,7 +178,7 @@ public class ImgLib2Wrap {
 	) {
 		Extent e = box.extent();
 		
-		long dim[] = new long[]{e.getX(),e.getY(),e.getZ()};
+		long[] dim = new long[]{e.getX(),e.getY(),e.getZ()};
 		
 		PlanarImg<S,T> img = new PlanarImg<>(
 			slicesFor(box, transform),
@@ -202,7 +202,7 @@ public class ImgLib2Wrap {
 		Function<U,T> transform,
 		Function<AbstractNativeImg<S,T>,S> createType
 	) {
-		long dim[] = new long[]{e.getX(),e.getY()};
+		long[] dim = new long[]{e.getX(),e.getY()};
 		ArrayImg<S, T> img = new ArrayImg<>(
 			transform.apply(buffer.buffer()),
 			dim,

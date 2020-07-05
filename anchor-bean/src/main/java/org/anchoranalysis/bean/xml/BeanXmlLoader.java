@@ -82,14 +82,7 @@ public class BeanXmlLoader {
 		try {
 			return loadBeanLocalized(path, xmlPath);
 		} catch (LocalisedBeanException e) {
-			
 			throw e.summarizeIgnoreIdenticalFilePath(path);
-
-		} catch (IOException e) {
-			throw new BeanXmlException(
-			  "An error occurred resolving a path associated with a bean",
-			  e
-			);
 		}
 	}
 	
@@ -112,7 +105,7 @@ public class BeanXmlLoader {
 	 * @throws LocalisedBeanException problem occurs somewhere processing a configuration
 	 * @throws IOException some kind of io error
 	 */
-	public static <T> T loadBeanLocalized( Path path, String xmlPath ) throws BeanXmlException, LocalisedBeanException, IOException {
+	public static <T> T loadBeanLocalized( Path path, String xmlPath ) throws BeanXmlException, LocalisedBeanException {
 		checkBeansRegistered();
 		
 		XMLConfiguration includeXML;

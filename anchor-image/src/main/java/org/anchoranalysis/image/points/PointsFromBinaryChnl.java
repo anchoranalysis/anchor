@@ -37,7 +37,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 
 public class PointsFromBinaryChnl {
 	
-	public static List<Point3i> pointsFromChnl( BinaryChnl chnl ) throws CreateException {
+	private PointsFromBinaryChnl() {}
+	
+	public static List<Point3i> pointsFromChnl( BinaryChnl chnl ) {
 		
 		List<Point3i> listOut = new ArrayList<>();
 		
@@ -50,13 +52,13 @@ public class PointsFromBinaryChnl {
 		return PointsFromBinaryVoxelBox.pointsFromVoxelBox2D( chnl.binaryVoxelBox() );
 	}
 	
-	public static List<Point3i> pointsFromChnlInsideBox( BinaryChnl chnl, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices ) throws CreateException {
+	public static List<Point3i> pointsFromChnlInsideBox( BinaryChnl chnl, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices ) {
 		
 		List<Point3i> listOut = new ArrayList<>();
 		
 		PointsFromChnlHelper helper = new PointsFromChnlHelper(
 				skipAfterSuccessiveEmptySlices,
-				bbox.getCornerMin(),
+				bbox.cornerMin(),
 				bbox.calcCornerMax(),
 				chnl.getChnl().getVoxelBox().asByte(),
 				chnl.getBinaryValues().createByte(),

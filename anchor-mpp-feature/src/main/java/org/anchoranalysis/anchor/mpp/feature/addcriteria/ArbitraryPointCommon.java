@@ -70,12 +70,7 @@ public class ArbitraryPointCommon extends AddCriteriaPair {
 
 	@Override
 	public boolean paramsEquals(Object other) {
-		
-		if( (other instanceof ArbitraryPointCommon)) {
-			return false;
-		}
-		
-		return true;
+		return(other instanceof ArbitraryPointCommon);
 	}
 
 

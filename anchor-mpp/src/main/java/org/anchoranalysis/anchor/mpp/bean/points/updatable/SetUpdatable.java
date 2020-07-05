@@ -88,7 +88,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     @Override
 	public Optional<Point3d> sample( RandomNumberGenerator re ) {
 	
-    	if (setPnts.size()==0) {
+    	if (setPnts.isEmpty()) {
     		return Optional.empty();
     	}
     	
@@ -181,7 +181,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		// We add any points in our new mark to the set
 		PxlMark pxlMark = newMark.doOperation();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).getCornerMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).cornerMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
@@ -225,10 +225,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		PxlMark pxlMark = markToAdd.doOperation();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).getCornerMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).cornerMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
-		byte flags = rm.flags();
 		
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
 		Extent e = voxelBox.extent();
@@ -237,11 +236,46 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
-		/*IterateVoxels.callEachPoint(
-			voxelBox,
-			binaryImageChnl.getVoxelBox(),
-			(Point3i pnt, T buffer, int offset) -> {
-				int globOffset = e.offsetXY(pnt);
+		Point3i crntExtntPnt = new Point3i();
+		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
+			
+			int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
+			
+			addPointsForSlice(
+				crntExtntPnt,
+				crnrPnt,
+				e,
+				voxelBox.getPixelsForPlane(crntExtntPnt.getZ()),
+				vbBinary.getPixelsForPlane(zGlobal).buffer(),
+				bvb,
+				zGlobal,
+				rm,
+				neighbours
+			);
+		}
+	}
+	
+	private void addPointsForSlice(
+		Point3i crntExtntPnt,
+		ReadableTuple3i crnrPnt,
+		Extent e,
+		ByteBuffer buffer,
+		ByteBuffer bbBinaryImage,
+		BinaryValuesByte bvb,
+		int zGlobal,
+		RegionMembership rm,
+		List<PxlMarkMemo> neighbours
+	) {
+		byte flags = rm.flags();
+		
+		for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
+			int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
+			
+			for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
+				
+				int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
+						
+				int globOffset = e.offset(xGlobal, yGlobal);
 				byte posCheck = buffer.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
 				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
 					
@@ -253,38 +287,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
 					}
 				}
 			}
-		);*/
-		
-		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
-			
-			int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
-			
-			ByteBuffer buffer = voxelBox.getPixelsForPlane(crntExtntPnt.getZ());
-			ByteBuffer bbBinaryImage = vbBinary.getPixelsForPlane(zGlobal).buffer();
-			
-			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
-				int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
-				
-				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
-					
-					int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
-			
-					
-					int globOffset = e.offset(xGlobal, yGlobal);
-					byte posCheck = buffer.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
-					if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
-						
-						Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
-						
-						// Now we check to make sure the point isn't contained in any of its neighbours
-						if (!isPointInList(neighbours, pntGlobal)) {
-							setPnts.add(pntGlobal);	
-						}
-					}
-				}
-			}
 		}
+		
 	}
 
 	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) {
@@ -294,12 +298,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		for (int i=0; i<all.size(); i++) {
 			
 			PxlMarkMemo pmm = all.getMemoForIndex(i);
-			if (pmm!=source) {
+			if (pmm!=source && OverlapUtilities.overlapWith(source,pmm,regionID)>0) {
 				// We check if there's any overlap
-				if (OverlapUtilities.overlapWith(source,pmm,regionID)>0) {
-					list.add(pmm);
-				}
-				
+				list.add(pmm);
 			}
 		}
 		return list;
@@ -339,5 +340,4 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	public void setRegionID(int regionID) {
 		this.regionID = regionID;
 	}
-
 }

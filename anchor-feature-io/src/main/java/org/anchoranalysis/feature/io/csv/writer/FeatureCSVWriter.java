@@ -56,7 +56,7 @@ public class FeatureCSVWriter {
 		FeatureNameList featureNames
 	) throws AnchorIOException {
 		
-		List<String> allHeaders = new ArrayList<String>( Arrays.asList(firstHeaderNames) );
+		List<String> allHeaders = new ArrayList<>( Arrays.asList(firstHeaderNames) );
 		allHeaders.addAll( featureNames.asList() );
 		
 		if (!outputManager.isOutputAllowed(outputName) || featureNames==null) {

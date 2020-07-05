@@ -1,5 +1,8 @@
 package org.anchoranalysis.core.arithmetic;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-core
@@ -32,9 +35,8 @@ package org.anchoranalysis.core.arithmetic;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class PrecisionConstants {
-
-	private PrecisionConstants() {}
 	
 	/** Minimum acceptable difference before two floating-point numbers are considered equal */
 	public static final float EPSILON = 1e-10f;

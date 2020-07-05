@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.bean.operator;
 
+import java.util.Arrays;
+
 /*
  * #%L
  * anchor-feature
@@ -31,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -55,17 +58,24 @@ public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 	private Feature<T> z;
 	// END BEAN PROPERTIES
 	
-	public VectorFromFeature() {
-		super();
+	public Vector3d calc( SessionInput<T> input ) throws FeatureCalcException {
+		return new Vector3d(
+			input.calc(x),
+			input.calc(y),
+			input.calc(z)
+		);
 	}
 	
-	public Vector3d calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double valX = input.calc(x);
-		double valY = input.calc(y);
-		double valZ = input.calc(z);
-		
-		return new Vector3d(valX,valY,valZ);
+	/** A list of the features for all dimensions */
+	public FeatureList<T> allFeatures() {
+		return new FeatureList<>(
+			Arrays.asList(x,y,z)
+		);
+	}
+	
+	@Override
+	public FeatureInputDescriptor inputDescriptor() {
+		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
 	}
 
 	public Feature<T> getX() {
@@ -90,10 +100,5 @@ public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 
 	public void setZ(Feature<T> z) {
 		this.z = z;
-	}
-
-	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
 	}
 }

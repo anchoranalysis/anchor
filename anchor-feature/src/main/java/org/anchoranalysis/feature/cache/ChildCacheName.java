@@ -107,6 +107,4 @@ public class ChildCacheName {
 	public String toString() {
 		return String.format("%s:%s", cls.getCanonicalName(), part);
 	}
-	
-	
 }

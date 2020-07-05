@@ -30,35 +30,45 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
 
 
-// 8-connectivity or 26-connectivity
-// Relies on IProcessRelPoint to do bound checking
-public class BigNghb extends Nghb {
+/**
+ * Provides either 8-connectivity or 26-connectivity as an neighborhood.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public final class BigNghb implements Nghb {
 	
-	private boolean includeCentrePoint = false;
+	private final boolean includeCentrePoint;
 	
 	public BigNghb() {
-		
+		this.includeCentrePoint = false;
 	}
 	
 	public BigNghb( boolean includeCentrePoint ) {
 		this.includeCentrePoint = includeCentrePoint;
 	}
 	
+	/**
+	 * This method is deliberately not broken into smaller pieces to avoid inlining.
+	 * 
+	 * <p>This efficiency matters as it is called so many times over a large image.</p>
+	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
+	 */
 	@Override
-	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> testNghb) {
+	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> process) {
 		
 		if (do3D) {
 			
 			for (int z=-1; z<=1; z++) {
 				
-				if (!testNghb.notifyChangeZ(z)) {
+				if (!process.notifyChangeZ(z)) {
 					continue;
 				}
 				
 				for (int y=-1; y<=1; y++) {
 					for (int x=-1; x<=1; x++) {
 						if (includeCentrePoint || x!=0 || y!=0 || z!=0) {
-							testNghb.processPoint( x, y );
+							process.processPoint( x, y );
 						}
 					}
 				}
@@ -66,14 +76,14 @@ public class BigNghb extends Nghb {
 			
 		} else {
 			
-			if (!testNghb.notifyChangeZ(0)) {
+			if (!process.notifyChangeZ(0)) {
 				return;
 			}
 			
 			for (int y=-1; y<=1; y++) {
 				for (int x=-1; x<=1; x++) {
 					if (includeCentrePoint || x!=0 || y!=0 ) {
-						testNghb.processPoint(x, y );
+						process.processPoint(x, y );
 					}
 				}
 			}

@@ -2,6 +2,7 @@ package org.anchoranalysis.image.orientation;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 
 /*-
  * #%L
@@ -62,10 +63,15 @@ public class DirectionVector {
 		switch(axisType) {
 		case X:
 			this.vector = new Point3d(1, 0, 0);
+			break;
 		case Y:
 			this.vector = new Point3d(0, 1, 0);
+			break;
 		case Z:
 			this.vector = new Point3d(0, 0, 1);
+			break;
+		default:
+			throw new AnchorImpossibleSituationException();
 		}
 	}
 

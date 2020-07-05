@@ -37,8 +37,12 @@ import org.anchoranalysis.io.bioformats.bean.options.ForceTimeSeriesToStack;
 import org.anchoranalysis.io.ij.bean.writer.IJTiffWriter;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
-public class TestReaderWriterUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class TestReaderWriterUtilities {
+	
 	public static void ensureRasterReader() {
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		addIfMissing( RasterReader.class, createReader() );

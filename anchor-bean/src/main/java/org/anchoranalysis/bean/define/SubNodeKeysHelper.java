@@ -32,6 +32,10 @@ import java.util.TreeSet;
 
 import org.apache.commons.configuration.SubnodeConfiguration;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SubNodeKeysHelper {
 	
 	/**
@@ -65,22 +69,14 @@ class SubNodeKeysHelper {
 		// We iterate through all beans defined, and assume each is a list of NamedBeans
     	Iterator<String> itr = subConfig.getKeys();
     	while( itr.hasNext() ) {
-		
     		String keyShort = stripLongName( itr.next() );
-    		
-    		if (keyShort.isEmpty()) {
-    			// We skip empty short keys
-    			continue;
-    		}
-    		
+
+			// We skip empty short keys
     		// We skip any key with a . as this means we've iterated onto the next level (i.e. it is no longer a direct child)
-    		if (keyShort.contains(".")) {
-    			continue;
+    		if (!keyShort.isEmpty() && !keyShort.contains(".")) {
+    			out.add( keyShort );
     		}
-    		
-    		out.add( keyShort );
     	}
-    	
     	return out;
 	}
 	

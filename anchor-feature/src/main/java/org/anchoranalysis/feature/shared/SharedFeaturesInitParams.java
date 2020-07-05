@@ -65,7 +65,10 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		
 		// We populate our shared features from our storeFeatureList
 		sharedFeatureSet = new SharedFeatureMulti();
-		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(storeFeatureList, sharedFeatureSet);
+		FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(
+			storeFeatureList,
+			sharedFeatureSet
+		);
 	}
 	
 	public static SharedFeaturesInitParams create( SharedObjects so ) {
@@ -94,16 +97,6 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	) throws OperationFailedException {
 		
 		assert( getFeatureListSet()!=null );
-		
-		// Rather than lazily adding the feature-list providers, instead they are all eagerly
-		// turned into feature-lists, and initialized, so as to be available to both the sharedFeatureSet
-		// as well as the store
-		/*BeanStoreAdder.addPreserveNameEmbedded(
-			namedFeatureListCreator,
-			storeFeatureList,
-			new FeatureBridge<>(getSharedFeatureSet(), this, logger )
-		);*/
-		
 		try {
 			for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
 				namedBean.getItem().initRecursive(this, logger);

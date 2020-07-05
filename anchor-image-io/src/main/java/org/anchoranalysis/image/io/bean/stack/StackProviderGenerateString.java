@@ -128,7 +128,7 @@ public class StackProviderGenerateString extends StackProvider {
 		}
 	}
 	
-	private Channel createExpandedChnl( Channel chnl, int zHeight ) throws CreateException {
+	private Channel createExpandedChnl( Channel chnl, int zHeight ) {
 		assert (chnl.getDimensions().getZ()==1);
 		
 		ImageDimensions sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);

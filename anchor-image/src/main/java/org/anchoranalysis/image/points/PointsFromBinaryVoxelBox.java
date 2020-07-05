@@ -44,18 +44,15 @@ public class PointsFromBinaryVoxelBox {
 	
 	private PointsFromBinaryVoxelBox() {}
 	
-
 	// Add: is added to each point before they are added to the list 
 	public static void addPointsFromVoxelBox(
 		BinaryVoxelBox<ByteBuffer> voxelBox,
 		ReadableTuple3i add,
 		List<Point2i> listOut
-	) throws CreateException {
-		
+	) {
 		Extent e = voxelBox.extent();
 
 		BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
-		
 		ByteBuffer bb = voxelBox.getPixelsForPlane(0).buffer();
 		
 		for( int y=0; y<e.getY(); y++) {
@@ -66,7 +63,9 @@ public class PointsFromBinaryVoxelBox {
 					int xAdj = add.getX() + x;
 					int yAdj = add.getY() + y;
 					
-					listOut.add( new Point2i(xAdj,yAdj) );
+					listOut.add(
+						new Point2i(xAdj,yAdj)
+					);
 				}
 				
 			}
@@ -88,7 +87,7 @@ public class PointsFromBinaryVoxelBox {
 	
 
 	// Add: is added to each point before they are added to the list 
-	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, ReadableTuple3i add, Collection<Point3i> out  ) throws CreateException {
+	public static void addPointsFromVoxelBox3D( BinaryVoxelBox<ByteBuffer> voxelBox, ReadableTuple3i add, Collection<Point3i> out  ) {
 		
 		Extent e = voxelBox.extent();
 
@@ -123,7 +122,7 @@ public class PointsFromBinaryVoxelBox {
 		BinaryVoxelBox<ByteBuffer> voxelBox,
 		ReadableTuple3i add,
 		Collection<Point3d> out
-	) throws CreateException {
+	) {
 		
 		Extent e = voxelBox.extent();
 

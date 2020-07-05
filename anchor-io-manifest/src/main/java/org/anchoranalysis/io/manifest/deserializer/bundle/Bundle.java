@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Bundle<T extends Serializable> implements Serializable, Iterable<BundleItem<T>> {
 
@@ -70,7 +71,7 @@ public class Bundle<T extends Serializable> implements Serializable, Iterable<Bu
 		return list.iterator();
 	}
 	
-	public HashMap<Integer,T> createHashMap() {
+	public Map<Integer,T> createHashMap() {
 		HashMap<Integer,T> hashMap = new HashMap<>();
 		for( BundleItem<T> item : list ) {
 			hashMap.put( Integer.parseInt(item.getIndex()), item.getObject() );

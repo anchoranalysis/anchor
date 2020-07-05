@@ -35,6 +35,8 @@ public class RegionMapSingleton {
 
 	private static RegionMap regionMap = null;
 	
+	private RegionMapSingleton() {}
+	
 	public static synchronized RegionMap instance() {
 		if (regionMap==null) {
 			regionMap = new RegionMap();

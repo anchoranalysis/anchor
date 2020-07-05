@@ -27,11 +27,16 @@ package org.anchoranalysis.test.image.io;
  */
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 
-public class TestCsvUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class TestCsvUtilities {
+	
 	/**
 	 * Checks if a particular string can be found in any cell of a CSV file
 	 * 
@@ -42,17 +47,15 @@ public class TestCsvUtilities {
 	 */
 	public static boolean doesCsvFileContainString( OpenedCSVFile file, String str ) throws IOException {
 		
-		String[] line;
-		while ( (line = file.readLine())!=null ) {
-			
-			for( int i=0; i<line.length; i++) {
+		Optional<String[]> line;
+		while ( (line = file.readLine()).isPresent() ) {
+			for( int i=0; i<line.get().length; i++) {
 				
-				if( line[i].contains(str)) {
+				if( line.get()[i].contains(str)) {
 					return true;
 				}
 			}
 		}
-		
 		return false;
 	}
 }

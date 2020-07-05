@@ -35,13 +35,12 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
-import org.anchoranalysis.core.error.OperationFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class HelperFindChildren {
-
-	private HelperFindChildren() {
-		
-	}
 	
 	/**
 	 * Finds all bean-fields that are instance of a certain class.  All immediate children are checked, and any items
@@ -51,7 +50,6 @@ class HelperFindChildren {
 	 * @param listFields the list of fields associated with the bean
 	 * @param match the class that a field must be assignable from (equal to or inherit from)
 	 * @return
-	 * @throws OperationFailedException 
 	 * @throws BeanMisconfiguredException 
 	 */
 	public static <T extends AnchorBean<?>> List<T> findChildrenOfClass(
@@ -107,7 +105,6 @@ class HelperFindChildren {
 		if (fieldValue instanceof Collection) {
 			Collection<AnchorBean<?>> valueCast = (Collection<AnchorBean<?>>) fieldValue;
 			maybeAddCollection( valueCast, match, out );
-			return;
 		}
 	}
 	

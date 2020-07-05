@@ -73,13 +73,13 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	@Override
 	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() throws CreateException {
 		return Optional.of(
-			nrgElemPairList.duplicateBean().append(featuresAddCriteria)
+			nrgElemPairList.shallowDuplicate().append(featuresAddCriteria)
 		);
 	}
 
 	// Returns NULL if to reject an edge
 	@Override
-	public NRGPair generateEdge(
+	public Optional<NRGPair> generateEdge(
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		NRGStackWithParams nrgStack,
@@ -116,12 +116,14 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 				).calc(params, nrgElemPairList);
 
 				Pair<Mark> pair = new Pair<>( mark1.getMark(), mark2.getMark() );
-				return new NRGPair(pair, new NRGTotal(rv.total()) );
+				return Optional.of(
+					new NRGPair(pair, new NRGTotal(rv.total()) )
+				);
 			} catch( FeatureCalcException e ) {
 				throw new CreateException(e);
 			}
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -139,11 +141,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 			return false;
 		}
 		
-		if (!pairAddCriteria.paramsEquals(obj.pairAddCriteria)) {
-			return false;
-		}
-		
-		return true;
+		return pairAddCriteria.paramsEquals(obj.pairAddCriteria);
 	}
 
 	

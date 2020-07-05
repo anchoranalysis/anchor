@@ -27,13 +27,15 @@ package org.anchoranalysis.anchor.mpp.mark.points;
  */
 
 import java.util.Set;
-
+import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.core.geometry.Point3d;
 
-import com.google.common.base.Function;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class PointInSetQuery {
-
+	
 	public static boolean anyCrnrInSet(Point3d pnt, Set<Point3d> set) {
 		
 		// We test if any combination of the ceil, floor can be found in the set
@@ -49,9 +51,9 @@ class PointInSetQuery {
 	private static boolean pntInSet(
 		Point3d pnt,
 		Set<Point3d> set,
-		Function<Double,Double> funcX,
-		Function<Double,Double> funcY,
-		Function<Double,Double> funcZ
+		DoubleUnaryOperator funcX,
+		DoubleUnaryOperator funcY,
+		DoubleUnaryOperator funcZ
 	) {
 		Point3d pntNew = new Point3d(
 			applyFuncIfNonNull(pnt.getX(), funcX),
@@ -61,9 +63,9 @@ class PointInSetQuery {
 		return pntInSet(pntNew, set);
 	}
 	
-	private static double applyFuncIfNonNull( double in, Function<Double,Double> func ) {
+	private static double applyFuncIfNonNull( double in, DoubleUnaryOperator func ) {
 		if (func!=null) {
-			return func.apply(in);
+			return func.applyAsDouble(in);
 		} else {
 			return in;
 		}

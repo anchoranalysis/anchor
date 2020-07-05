@@ -33,15 +33,20 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-public class KeyValueParamsDeserializer<ObjectType> extends Deserializer<ObjectType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> object-type
+ */
+public class KeyValueParamsDeserializer<T> implements Deserializer<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ObjectType deserialize(Path filePath)
-			throws DeserializationFailedException {
+	public T deserialize(Path filePath)	throws DeserializationFailedException {
 		try {
 			KeyValueParams obj = KeyValueParams.readFromFile( filePath );
-			return (ObjectType) obj;
+			return (T) obj;
 			
 		} catch (IOException e) {
 			throw new DeserializationFailedException(e);

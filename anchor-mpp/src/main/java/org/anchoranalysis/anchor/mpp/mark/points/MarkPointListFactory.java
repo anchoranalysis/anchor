@@ -33,8 +33,12 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 
+import com.google.common.base.Preconditions;
+
 public class MarkPointListFactory {
 
+	private MarkPointListFactory() {}
+	
 	public static MarkPointList create( List<Point3d> pnts ) {
 		return create(pnts, -1);
 	}
@@ -47,17 +51,17 @@ public class MarkPointListFactory {
 		return mark;
 	}
 		
-	public static MarkPointList createMarkFromPoints3f( List<Point3f> pts, boolean round ) {
+	public static MarkPointList createMarkFromPoints3f( List<Point3f> pts ) {
 		MarkPointList markPts = new MarkPointList();
 		markPts.getPoints().addAll(
-			PointConverter.convert3f_3d(pts)
+			PointConverter.convert3fTo3d(pts)
 		);
 		markPts.updateAfterPointsChange();
 		return markPts;
 	}
 	
 	public static MarkPointList createMarkFromPoints3i( List<Point3i> pts ) {
-		assert( pts.size()>= 1 );
+		Preconditions.checkArgument( !pts.isEmpty(), "are empty" );
 		MarkPointList markPts = new MarkPointList();
 		
 		for (Point3i p : pts) {

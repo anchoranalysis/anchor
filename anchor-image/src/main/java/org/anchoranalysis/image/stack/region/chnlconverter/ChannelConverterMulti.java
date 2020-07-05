@@ -45,13 +45,13 @@ public class ChannelConverterMulti {
 		
 		if (chnlIn.getVoxelDataType().equals(outputType)) {
 			return chnlIn;
-		} else if (outputType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		} else if (outputType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			return new ChannelConverterToUnsignedByte().convert(chnlIn, conversionPolicy);
-		} else if (outputType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		} else if (outputType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			return new ChannelConverterToUnsignedShort().convert(chnlIn, conversionPolicy);
-		} else if (outputType.equals(VoxelDataTypeFloat.instance)) {
+		} else if (outputType.equals(VoxelDataTypeFloat.INSTANCE)) {
 			return new ChannelConverterToFloat().convert(chnlIn, conversionPolicy);
-		} else if (outputType.equals(VoxelDataTypeUnsignedInt.instance)) {
+		} else if (outputType.equals(VoxelDataTypeUnsignedInt.INSTANCE)) {
 			throw new UnsupportedOperationException("UnsignedInt is not yet supported for this operation");
 		} else { 
 			throw new UnsupportedOperationException();

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 /**
  * TODO make more generic than FeatureObjMaskParams
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> feature-calculation parameters
  */
@@ -57,19 +57,6 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
-		
-	
-//	// Init our shared features
-//	for( String key : sharedFeatureList.keys() ) {
-//		Feature f;
-//		try {
-//			f = sharedFeatureList.getNull(key);
-//			assert(f!=null);
-//			f.init(paramsInit);
-//		} catch (GetOperationFailedException | InitException e) {
-//			throw new OperationFailedException(e);
-//		}
-//	}
 	
 	@Override
 	public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
@@ -82,8 +69,8 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 			session,
 			params -> {
 				// Use reflection, to only set the nrgStack on params that supports them
-				if (params instanceof FeatureInputNRGStack && nrgStack.isPresent()) {
-					((FeatureInputNRGStack) params).setNrgStack( nrgStack.get() );
+				if (params instanceof FeatureInputNRG && nrgStack.isPresent()) {
+					((FeatureInputNRG) params).setNrgStack( nrgStack.get() );
 				}
 			}
 		);

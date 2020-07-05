@@ -101,10 +101,13 @@ public class AssignmentGenerator extends RasterGenerator {
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
 		
-		Stack stackLeft = createRGBOutlineStack( background, assignment, true, colorPool );
-		Stack stackRight = createRGBOutlineStack( background, assignment, false, colorPool );
+		StackProviderArrangeRaster stackProvider = createTiledStackProvider(
+			createRGBOutlineStack(true),
+			createRGBOutlineStack(false),
+			leftName,
+			rightName
+		);
 		
-		StackProviderArrangeRaster stackProvider = createTiledStackProvider(stackLeft, stackRight, leftName, rightName);
 		try {
 			Stack combined = stackProvider.create();
 			delegate.setIterableElement(combined);
@@ -134,10 +137,9 @@ public class AssignmentGenerator extends RasterGenerator {
 		);
 	}
 	
-	private Stack createRGBOutlineStack( DisplayStack background, Assignment assignment, boolean left, ColorPool colorPool ) throws OutputWriteFailedException {
+	private Stack createRGBOutlineStack(boolean left) throws OutputWriteFailedException {
 		try {
 			return createRGBOutlineStack(
-				background,
 				assignment.getListPaired(left),
 				colorPool,
 				assignment.getListUnassigned(left)
@@ -147,7 +149,7 @@ public class AssignmentGenerator extends RasterGenerator {
 		}
 	}
 	
-	private Stack createRGBOutlineStack( DisplayStack background, List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
+	private Stack createRGBOutlineStack(List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
 		
 		ObjectCollection omc = ObjectCollectionFactory.from(matchedObjs, otherObjs);
 

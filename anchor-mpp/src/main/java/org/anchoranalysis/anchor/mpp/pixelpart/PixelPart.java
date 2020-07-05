@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 /**
  * A partition of pixels
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> part-type
  */

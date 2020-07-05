@@ -2,6 +2,8 @@ package org.anchoranalysis.image.feature.object.input;
 
 
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -44,7 +46,7 @@ public class FeatureInputPairObjectsDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputPairObjects.class;
 	}
 }

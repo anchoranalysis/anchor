@@ -36,7 +36,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.histogram.HistogramCreator;
 
-public class PixelPartFactoryHistogramReuse extends PixelPartFactory<Histogram> {
+public class PixelPartFactoryHistogramReuse implements PixelPartFactory<Histogram> {
 
 	private int maxSize = 100;
 	private List<Histogram> listUnused = new ArrayList<>();
@@ -46,7 +46,7 @@ public class PixelPartFactoryHistogramReuse extends PixelPartFactory<Histogram> 
 		@Override
 		public Histogram create() {
 
-			if (listUnused.size()>0) {
+			if (!listUnused.isEmpty()) {
 				// we retrieve one from the unused list and reset it
 				
 				Histogram h = listUnused.remove(0);

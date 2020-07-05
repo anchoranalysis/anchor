@@ -36,14 +36,14 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
 
-public class ChnlConverterChnlMaxIntensity extends ChnlConverterAttached<Channel, ByteBuffer>{
+public class ChnlConverterChnlMaxIntensity implements ChnlConverterAttached<Channel, ByteBuffer>{
 
 	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
 	
 	private ChannelConverterToUnsignedByte delegate;
 	
 	public ChnlConverterChnlMaxIntensity() {
-		// Initialise with a dummy value;
+		// Initialise with a dummy value
 		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMaxValue(1);
 		
 		delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);

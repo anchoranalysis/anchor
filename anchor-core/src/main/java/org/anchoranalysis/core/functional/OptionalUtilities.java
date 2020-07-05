@@ -29,15 +29,17 @@ package org.anchoranalysis.core.functional;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Additional utility functions for {@link Optional} and exceptions.
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OptionalUtilities {
-	
-	private OptionalUtilities() {}
 
 	/**
 	 * Function used to map from one optional to another
@@ -49,7 +51,7 @@ public class OptionalUtilities {
 	 * @param <E> exception that can be thrown during mapping
 	 */ 
 	@FunctionalInterface
-	public interface MapFunction<S, T, E extends Throwable> {
+	public interface MapFunction<S, T, E extends Exception> {
 		T apply(S in) throws E;
 	}
 	
@@ -63,7 +65,7 @@ public class OptionalUtilities {
 	 * @param <E> exception that can be thrown during mapping
 	 */ 
 	@FunctionalInterface
-	public interface MapFunctionTwo<T, U, V, E extends Throwable> {
+	public interface MapFunctionTwo<T, U, V, E extends Exception> {
 		T apply(U in1, V in2) throws E;
 	}
 	
@@ -76,7 +78,7 @@ public class OptionalUtilities {
 	 * @param <E> exception that can be thrown during apply
 	 */ 
 	@FunctionalInterface
-	public interface ConsumerWithException<S, E extends Throwable> {
+	public interface ConsumerWithException<S, E extends Exception> {
 		void accept(S in) throws E;
 	}
 		
@@ -91,7 +93,7 @@ public class OptionalUtilities {
 	 * @return the outgoing "mapped" optional
 	 * @throws E an exception if the mapping function throws it
 	 */
-	public static <S,E extends Throwable> void ifPresent( Optional<S> opt, ConsumerWithException<S,E> consumerFunc ) throws E {
+	public static <S,E extends Exception> void ifPresent( Optional<S> opt, ConsumerWithException<S,E> consumerFunc ) throws E {
 		if (opt.isPresent()) {
 			consumerFunc.accept( opt.get() );
 		}
@@ -108,7 +110,7 @@ public class OptionalUtilities {
 	 * @return the outgoing "mapped" optional
 	 * @throws E an exception if the mapping function throws it
 	 */
-	public static <S,T,E extends Throwable> Optional<T> map( Optional<S> opt, MapFunction<S,T,E> mapFunc ) throws E {
+	public static <S,T,E extends Exception> Optional<T> map( Optional<S> opt, MapFunction<S,T,E> mapFunc ) throws E {
 		if (opt.isPresent()) {
 			T target = mapFunc.apply( opt.get() );
 			return Optional.of(target);
@@ -128,7 +130,7 @@ public class OptionalUtilities {
 	 * @return the outgoing "mapped" optional
 	 * @throws E an exception if the mapping function throws it
 	 */
-	public static <S,T,E extends Throwable> Optional<T> flatMap( Optional<S> opt, MapFunction<S,Optional<T>,E> mapFunc ) throws E {
+	public static <S,T,E extends Exception> Optional<T> flatMap( Optional<S> opt, MapFunction<S,Optional<T>,E> mapFunc ) throws E {
 		if (opt.isPresent()) {
 			return mapFunc.apply( opt.get() );
 		} else {
@@ -147,7 +149,7 @@ public class OptionalUtilities {
 	 * @param mapFunc the function that does the mapping from both incoming objects to outgoing
 	 * @return the outgoing "mapped" optional (empty() if either incoming optional is empty)
 	 */
-	public static <T,U,V,E extends Throwable> Optional<T> mapBoth( Optional<U> optional1, Optional<V> optional2, MapFunctionTwo<T, U, V, E> mapFunc) throws E {
+	public static <T,U,V,E extends Exception> Optional<T> mapBoth( Optional<U> optional1, Optional<V> optional2, MapFunctionTwo<T, U, V, E> mapFunc) throws E {
 		if (optional1.isPresent() && optional2.isPresent()) {
 			return Optional.of(
 				mapFunc.apply(optional1.get(), optional2.get())	

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 /**
  * Subtract second-object from first-object in a pair
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class SubtractSecondFromFirst extends FeatureDeriveFromPair {

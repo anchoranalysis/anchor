@@ -64,11 +64,7 @@ public class FolderWriteManifestMatch implements Match<FolderWrite> {
 			return false;
 		}
 		
-		if (sequenceTypeMatch!=null && !sequenceTypeMatch.matches( obj.getManifestFolderDescription().getSequenceType() )) {
-			return false;
-		}
-		
-		return true;
+		return !(sequenceTypeMatch!=null && !sequenceTypeMatch.matches( obj.getManifestFolderDescription().getSequenceType() ));
 	}
 
 }

@@ -1,5 +1,8 @@
 package org.anchoranalysis.core.arithmetic;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-core
@@ -32,9 +35,8 @@ package org.anchoranalysis.core.arithmetic;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class DoubleUtilities {
-
-	private DoubleUtilities() {}
 	
 	/** Are the two numbers equal? */
 	public static boolean areEqual( double d1, double d2 ) {

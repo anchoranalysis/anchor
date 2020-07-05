@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterBean;
@@ -60,7 +59,6 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 	@BeanField
 	private List<IterableObjectGenerator<IterationType,Stack>> generatorList =	new ArrayList<>();
 	// END BEAN PROPERTIES
-	
 	
 	private class Generator extends RasterGenerator implements IterableObjectGenerator<IterationType, Stack> {
 
@@ -117,17 +115,14 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 
 		@Override
 		public IterationType getIterableElement() {
-			
 			return generatorList.get(0).getIterableElement();
 		}
 
 		@Override
 		public void setIterableElement(IterationType element) throws SetOperationFailedException {
-
 			for (IterableObjectGenerator<IterationType,Stack> generator : generatorList) {
 				generator.setIterableElement(element);
 			}
-			
 		}
 
 		@Override
@@ -135,49 +130,28 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 			return this;
 		}
 
-
 		@Override
 		public boolean isRGB() {
 			return true;
 		}
-		
-	}
-	
-	
-		
-	
-	
 
-
-	public CombineRasterGenerator() {
-		super();
-	}
-
-	
-
-	public void add( IterableObjectGenerator<IterationType,Stack> generator ) {
-		generatorList.add( generator );
-	}
-	
-	
-	
-
-
-	private List<RGBStack>  generateAll() throws OutputWriteFailedException {
-		
-		try {
+		private List<RGBStack>  generateAll() throws OutputWriteFailedException {
 			List<RGBStack>  listOut = new ArrayList<>();
 			for (IterableObjectGenerator<IterationType,Stack> generator : generatorList) {
 				Stack stackOut = generator.getGenerator().generate();
 				listOut.add( new RGBStack(stackOut) );
 			}
 			return listOut;
-		} catch (CreateException e) {
-			throw new OutputWriteFailedException(e);
 		}
-		
+	}
+	public CombineRasterGenerator() {
+		super();
 	}
 
+	public void add( IterableObjectGenerator<IterationType,Stack> generator ) {
+		generatorList.add( generator );
+	}
+	
 	public IterableObjectGenerator<IterationType, Stack> createGenerator() {
 		return new Generator();
 	}

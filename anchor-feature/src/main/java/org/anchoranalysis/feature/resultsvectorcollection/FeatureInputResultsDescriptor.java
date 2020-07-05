@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.resultsvectorcollection;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-feature
@@ -32,9 +34,7 @@ public class FeatureInputResultsDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureInputResultsDescriptor instance = new FeatureInputResultsDescriptor();
 	
-	private FeatureInputResultsDescriptor() {
-		
-	}
+	private FeatureInputResultsDescriptor() {}
 	
 	@Override
 	public boolean isCompatibleWithEverything() {
@@ -42,7 +42,7 @@ public class FeatureInputResultsDescriptor extends FeatureInputDescriptor {
 	}
 
 	@Override
-	public Class<?> inputClass() {
+	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputResults.class;
 	}
 }

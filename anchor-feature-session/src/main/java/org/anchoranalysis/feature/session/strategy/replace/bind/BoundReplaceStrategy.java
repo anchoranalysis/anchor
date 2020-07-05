@@ -3,7 +3,7 @@ package org.anchoranalysis.feature.session.strategy.replace.bind;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+
 
 /*-
  * #%L
@@ -62,13 +62,6 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 		SharedFeatureMulti sharedFeatures, 
 		LogErrorReporter logger
 	) {
-		
-		// 1. Extract the set of relevant shared-features from the set, duplicate and initialize
-		// 2. Add all the features in the list to these-features
-		/*SharedFeatureMulti sharedSet = new SharedFeatureMulti(
-			sharedFeatures.getSet()
-		);*/
-		
 		CacheCreator cacheCreator = new CacheCreatorSimple(featureList, sharedFeatures, featureInitParams, logger);
 		if (!strategy.isPresent()) {
 			strategy = Optional.of(
@@ -78,7 +71,7 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 		return strategy.get();
 	}
 
-	public Optional<S> getStrategy() throws OperationFailedException {
+	public Optional<S> getStrategy() {
 		return strategy;
 	}
 }

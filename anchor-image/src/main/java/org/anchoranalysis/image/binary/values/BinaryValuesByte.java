@@ -36,11 +36,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 /**
- * Two values representing {@link byte} binary states in an unsigned-byte buffer e.g. 0 for OFF and -1 for ON
+ * Two values representing {@code byte} binary states in an unsigned-byte buffer e.g. {@code 0} for <i>OFF</i> and {@code -1} for <i>ON</i>
  * 
- * <p>This class is IMMUTABLE</p>
+ * <p>This class is <i>immutable</i>.
  * 
- * <p>See {@link BinaryValueBytes} for an equivalent class that stores these states as {@link int}</p>
+ * <p>See {@link org.anchoranalysis.image.binary.values.BinaryValueBytes} for an equivalent class that stores these states as {@code int}
  * 
  * @author Owen Feehan
  *

@@ -29,12 +29,14 @@ package org.anchoranalysis.mpp.sgmn.dummyProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
+import static org.mockito.Mockito.*;
 
+/** For referencing in BeanXML */
 public class DummyChnlProvider extends ChnlProvider {
 
 	@Override
 	public Channel create() throws CreateException {
-		return null;
+		return mock(Channel.class);
 	}
 
 }

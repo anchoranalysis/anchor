@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
  * <p>It is vital that the insertion order is preserved, so a LinkedHashMap or similar should be used</p>
  * 
  * This bean has a custom-factory
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ImgChnlMap {

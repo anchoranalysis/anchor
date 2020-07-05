@@ -33,9 +33,9 @@ import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromShortBufferAr
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class ChannelFactoryShort extends ChannelFactorySingleType {
+public class ChannelFactoryShort implements ChannelFactorySingleType {
 
-	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.instance;
+	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.INSTANCE;
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDimensions dim) {

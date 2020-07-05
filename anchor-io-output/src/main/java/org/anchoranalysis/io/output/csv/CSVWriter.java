@@ -1,6 +1,6 @@
 package org.anchoranalysis.io.output.csv;
 
-import java.io.IOException;
+
 
 /*
  * #%L
@@ -38,7 +38,6 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
@@ -58,39 +57,32 @@ public class CSVWriter implements AutoCloseable {
 	 * 
 	 * @param outputName output-name
 	 * @param outputManager output-manager
-	 * @return the csv-write or null if it's not allowed
-	 * @throws IOException
+	 * @return the csv-writer if it's allowed, or empty if it's not.
+	 * @throws AnchorIOException
 	 */
 	public static Optional<CSVWriter> createFromOutputManager( String outputName, BoundOutputManager outputManager ) throws AnchorIOException {
 		
 		if (!outputManager.isOutputAllowed(outputName)) {
 			return Optional.empty();
 		}
-		
-		Optional<FileOutput> output;
-		try {
-			output = FileOutputFromManager.create(
-				"csv",
-				Optional.empty(),
-				outputManager,
-				outputName
-			);
-		} catch (OutputWriteFailedException e) {
-			throw new AnchorIOException("Cannot write csv output", e);
-		}
+
+		Optional<FileOutput> output = FileOutputFromManager.create(
+			"csv",
+			Optional.empty(),
+			outputManager,
+			outputName
+		);
 		
 		OptionalUtilities.ifPresent(output, FileOutput::start);
-		return output.map( fo->
-			new CSVWriter(fo)
-		);
+		return output.map(CSVWriter::new);
 	}
 	
 	/**
 	 * Creates and starts a CSVWriter (it's always allowed, so will never return NULL)
 	 * 
 	 * @param path path to write the CSV to
-	 * @return
-	 * @throws IOException
+	 * @return the csv-writer
+	 * @throws AnchorIOException
 	 */
 	public static CSVWriter create( Path path ) throws AnchorIOException {
 		FileOutput output = new FileOutput(path.toString());

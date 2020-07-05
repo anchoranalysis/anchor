@@ -114,7 +114,7 @@ public class DisplayStack {
 	private void addConvertersAsNeeded() throws SetOperationFailedException {
 		addEmptyConverters( getNumChnl() );
 		for( int c=0; c<getNumChnl(); c++) {
-			if (!delegate.getChnl(c).getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
+			if (!delegate.getChnl(c).getVoxelDataType().equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 				setConverterFor(c,new ChnlConverterChnlUpperLowerQuantileIntensity(0.0001,0.9999) );
 			}
 		}
@@ -201,7 +201,7 @@ public class DisplayStack {
 			ConversionPolicy policy = alwaysNew ? ConversionPolicy.ALWAYS_NEW : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
 			return converter.convert(chnl, policy );
 		} else {
-			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 				// Datatype is not supported
 				assert false;
 			}
@@ -223,7 +223,7 @@ public class DisplayStack {
 		if (converter!=null) {
 			return converter.convert(chnl, ConversionPolicy.ALWAYS_NEW );
 		} else {
-			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 				// Datatype is not supported
 				assert false;
 			}
@@ -239,12 +239,12 @@ public class DisplayStack {
 		
 		ChnlConverterAttached<Channel,ByteBuffer> converter = listConverters.get(index);
 		
-		Channel out = ChannelFactory.instance().createEmptyInitialised( new ImageDimensions(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.instance);
+		Channel out = ChannelFactory.instance().createEmptyInitialised( new ImageDimensions(bbox.extent(), chnl.getDimensions().getRes()), VoxelDataTypeUnsignedByte.INSTANCE);
 		
 		if (converter!=null) {
 			copyPixelsTo(index, bbox, out.getVoxelBox().asByte(), new BoundingBox(bbox.extent()) );
 		} else {
-			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 				// Datatype is not supported
 				assert false;
 			}
@@ -301,7 +301,7 @@ public class DisplayStack {
 			destBoxByte.copyPixelsTo(allLocalBox, destVoxelBox, destBox);
 			
 		} else {
-			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 				// Datatype is not supported
 				assert false;
 			}
@@ -383,7 +383,7 @@ public class DisplayStack {
 				VoxelBoxFactory.getByte()
 			);
 		} else {
-			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 				// Datatype is not supported
 				assert false;
 			}
@@ -406,7 +406,7 @@ public class DisplayStack {
 				VoxelBoxFactory.getByte()
 			);
 		} else {
-			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 				// Datatype is not supported
 				assert false;
 			}

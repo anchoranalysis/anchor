@@ -29,9 +29,11 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class PropertyUtilities {
-	
-	private PropertyUtilities() {}
 	
 	public static void addPoint2dProperty( ObjectWithProperties mask, String propertyName, double x, double y ) {
 		mask.setProperty(

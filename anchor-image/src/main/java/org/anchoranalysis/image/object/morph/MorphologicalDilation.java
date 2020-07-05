@@ -48,6 +48,8 @@ import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3ZOnly;
 
 public class MorphologicalDilation {
 
+	private MorphologicalDilation() {}
+	
 	/**
 	 * 
 	 * @param om
@@ -130,10 +132,8 @@ public class MorphologicalDilation {
 			VoxelBox<ByteBuffer> next = ApplyKernel.apply(kernelDilation, buf, bvb.getBinaryValues().createByte() );
 			
 			try {
-				if (acceptConditions.isPresent()) {
-					if (!acceptConditions.get().acceptIteration(next, bvb.getBinaryValues())) {
-						break;
-					}
+				if (acceptConditions.isPresent() && !acceptConditions.get().acceptIteration(next, bvb.getBinaryValues())) {
+					break;
 				}
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);

@@ -64,7 +64,7 @@ public interface ProcessVoxelNeighbour<T> {
 	 * @param zChange the change in X-dimension to reach this neighbour relative to the source coordinate
 	 * @param yChange the change in Y-dimension to reach this neighbour relative to the source coordinate
 	 **/
-	boolean processPoint(int xChange, int yChange);
+	void processPoint(int xChange, int yChange);
 	
 	/** Collects the result of the operation after processing neighbour pixels */
 	public abstract T collectResult();

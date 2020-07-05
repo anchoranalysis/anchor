@@ -55,11 +55,9 @@ public class EdgeTypeWithVertices<V,E> {
 
 	// Returns the OTHER vertex on the edge i.e. the one that isn't vertex 
 	public V otherVertex( V vertex ) {
-		assert node1!=node2;
 		if (node1==vertex) {
 			return node2;
 		} else {
-			assert node2==vertex;
 			return node1;
 		}
 	}

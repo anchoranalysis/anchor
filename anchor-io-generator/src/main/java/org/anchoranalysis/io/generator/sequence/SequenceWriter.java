@@ -36,13 +36,13 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class SequenceWriter {
+public interface SequenceWriter {
 
-	public abstract void init( FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder  ) throws InitException;
+	void init( FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder  ) throws InitException;
 	
-	public abstract boolean isOn();
+	boolean isOn();
 	
-	public abstract void write(Operation<Generator,OutputWriteFailedException> generator, String index) throws OutputWriteFailedException;
+	void write(Operation<Generator,OutputWriteFailedException> generator, String index) throws OutputWriteFailedException;
 	
-	public abstract Optional<BoundOutputManager> getOutputManagerForFiles();
+	Optional<BoundOutputManager> getOutputManagerForFiles();
 }

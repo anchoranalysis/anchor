@@ -52,12 +52,9 @@ public class ConfigureBioformatsLogging {
 		// DISABLE ALL LOGGING FROM BIOFORMATS, can be "ERROR", "INFO" etc.
 		//
 		// This affects both the two systems Log4j and SL4J that bioformats might be using
-		// See: LogbackTools.enableLogging("OFF'); and Log4jTools.enableLogging("OFF");
+		// See: LogbackTools.enableLogging("OFF'); and Log4jTools.enableLogging("OFF");		// NOSONAR
 		//
 		DebugTools.enableLogging("OFF");
-		
-		//LogbackTools.setRootLevel("DEBUG");
-		//LogbackTools.setRootLevel("ERROR");
 		LogbackTools.setRootLevel("OFF");
 	}
 	

@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.cache.calculation;
 
+
+
 /*-
  * #%L
  * anchor-feature
@@ -30,5 +32,5 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface CacheCreator {
 
-	<T extends FeatureInput> FeatureSessionCache<T> create( Class<?> paramsType );
+	<T extends FeatureInput> FeatureSessionCache<T> create( Class<? extends FeatureInput> paramsType );
 }

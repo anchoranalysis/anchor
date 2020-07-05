@@ -1,6 +1,6 @@
 package org.anchoranalysis.anchor.mpp.probmap;
 
-import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+
 
 /*-
  * #%L
@@ -34,8 +34,4 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 public abstract class ProbMap implements PointSampler {
 
 	public abstract BinaryChnl visualization() throws OptionalOperationUnsupportedException;
-	
-	// Interface for updating the probability map with events, if null is returned then the prob map
-	//   is not updatable
-	public abstract UpdatableMarkSet updater();
 }

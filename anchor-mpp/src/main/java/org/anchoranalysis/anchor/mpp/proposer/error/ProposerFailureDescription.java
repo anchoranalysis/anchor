@@ -73,19 +73,4 @@ public class ProposerFailureDescription implements Serializable {
 		root.addErrorDescription(sb);
 		return sb.toString();
 	}
-	
-	/*public void add( String failureLine ) {
-		sb.append( failureLine );
-		sb.append( newLine );
-	}*/
-	
-	/*public String getDescription() {
-		return sb.toString();
-	}*/
-	
-	/*public static void addEntry( ProposerFailureDescription proposerFailureDescription, String className, Point3d pos, String error ) {
-		if (proposerFailureDescription!=null) {
-			proposerFailureDescription.add( String.format("%s(pos=%s): %s", className, pos.toString(), error) );
-		}
-	}*/
 }

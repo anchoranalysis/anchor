@@ -28,7 +28,6 @@ package org.anchoranalysis.image.object.ops;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -43,12 +42,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class BinaryChnlFromObjs {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private BinaryChnlFromObjs() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class BinaryChnlFromObjs {
 	
 	/** We look for space IN objects, and create channel to display it */
-	public static BinaryChnl createFromObjs( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) throws CreateException {
+	public static BinaryChnl createFromObjs( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) {
 		return createChnlObjMaskCollectionHelper(
 			masks,
 			sd,
@@ -60,7 +61,7 @@ public class BinaryChnlFromObjs {
 	
 
 	/** We look for space NOT in the objects, and create channel to display it */
-	public static BinaryChnl createFromNotObjs( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal ) throws CreateException {
+	public static BinaryChnl createFromNotObjs( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal ) {
 		return createChnlObjMaskCollectionHelper(
 			objs,
 			sd,
@@ -77,9 +78,9 @@ public class BinaryChnlFromObjs {
 		BinaryValues outVal,
 		int initialState,
 		byte objState
-	) throws CreateException {
+	) {
 		
-		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 		VoxelBox<ByteBuffer> vbNew = chnlNew.getVoxelBox().asByte();
 		
 		if (outVal.getOnInt()!=0) {
@@ -110,7 +111,7 @@ public class BinaryChnlFromObjs {
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
 		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.getCornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
+		for (pntGlobal.setZ(bbox.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
 			
 			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
 			
@@ -119,7 +120,7 @@ public class BinaryChnlFromObjs {
 				maskIn,
 				pixelsOut,
 				voxelBoxOut.extent(),
-				bbox.getCornerMin(),
+				bbox.cornerMin(),
 				pntGlobal,
 				maxGlobal,
 				maskOn,

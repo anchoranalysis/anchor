@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 /** 
  * Methods for checking intersection between a particular bounding-box and others
  *
- * @author owen
+ * @author Owen Feehan
  **/
 public final class BoundingBoxIntersection {
 
@@ -84,15 +84,15 @@ public final class BoundingBoxIntersection {
 	 */
 	private Optional<BoundingBox> with( BoundingBox other, boolean createIntersectionBox) {
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
-		ReadableTuple3i crnrMinOther = other.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
+		ReadableTuple3i crnrMinOther = other.cornerMin();
 		
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		ReadableTuple3i crnrMaxOthr = other.calcCornerMax();
 		
-		Optional<ExtentBoundsComparer> meiX = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getX() );
-		Optional<ExtentBoundsComparer> meiY = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getY() );
-		Optional<ExtentBoundsComparer> meiZ = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, p->p.getZ() );
+		Optional<ExtentBoundsComparer> meiX = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, ReadableTuple3i::getX);
+		Optional<ExtentBoundsComparer> meiY = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, ReadableTuple3i::getY);
+		Optional<ExtentBoundsComparer> meiZ = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, ReadableTuple3i::getZ);
 		
 		if (!meiX.isPresent() || !meiY.isPresent() || !meiZ.isPresent()) {
 			return Optional.empty();

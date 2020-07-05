@@ -29,7 +29,7 @@ package org.anchoranalysis.image.object;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.CreateException;
@@ -467,7 +467,7 @@ public class ObjectMask {
 	 * @param maskMatchValue mask-value to match against for second mask
 	 * @return the total number of pixels written
 	 */
-	private static int setPixelsTwoMasks(
+	private static int setPixelsTwoMasks(	// NOSONAR
 		VoxelBox<ByteBuffer> vbMaskOut,
 		VoxelBox<ByteBuffer> voxelBox1,
 		VoxelBox<ByteBuffer> voxelBox2,
@@ -489,9 +489,9 @@ public class ObjectMask {
 			return false;
 		}
 		
-		int xRel = pnt.getX() - delegate.getBoundingBox().getCornerMin().getX();
-		int yRel = pnt.getY() - delegate.getBoundingBox().getCornerMin().getY();
-		int zRel = pnt.getZ() - delegate.getBoundingBox().getCornerMin().getZ();
+		int xRel = pnt.getX() - delegate.getBoundingBox().cornerMin().getX();
+		int yRel = pnt.getY() - delegate.getBoundingBox().cornerMin().getY();
+		int zRel = pnt.getZ() - delegate.getBoundingBox().cornerMin().getZ();
 		
 		return delegate.getVoxelBox().getVoxel(xRel, yRel, zRel)==bv.getOnInt();
 	}
@@ -503,8 +503,8 @@ public class ObjectMask {
 			return false;
 		}
 		
-		int xRel = pnt.getX() - delegate.getBoundingBox().getCornerMin().getX();
-		int yRel = pnt.getY() - delegate.getBoundingBox().getCornerMin().getY();
+		int xRel = pnt.getX() - delegate.getBoundingBox().cornerMin().getX();
+		int yRel = pnt.getY() - delegate.getBoundingBox().cornerMin().getY();
 		
 		Extent e = delegate.getBoundingBox().extent();
 		for( int z=0; z<e.getZ(); z++) {
@@ -586,7 +586,7 @@ public class ObjectMask {
 	 * 
 	 * <p>See {@link org.anchoranalysis.image.voxel.box.VoxelBox::region) for more details.</p>
 	 * 
-	 * @param bounding-box in absolute coordinates.
+	 * @param bbox bounding-box in absolute coordinates.
 	 * @param reuseIfPossible if TRUE the existing mask will be reused if possible, otherwise a new mask is always created.
 	 * @return a mask corresponding to the requested region, either newly-created or reused
 	 * @throws CreateException
@@ -650,7 +650,7 @@ public class ObjectMask {
 	 * 
 	 * @return a new object-mask with the updated bounding box
 	 */
-	public ObjectMask mapBoundingBox( Function<BoundingBox,BoundingBox> mapFunc ) {
+	public ObjectMask mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
 		return new ObjectMask(
 			delegate.mapBoundingBox(mapFunc),
 			bv,

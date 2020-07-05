@@ -30,10 +30,10 @@ import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartPixelList;
 
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
-public class PixelPartFactoryPixelList extends PixelPartFactory<VoxelIntensityList> {
+public class PixelPartFactoryPixelList implements PixelPartFactory<VoxelIntensityList> {
 
 	@Override
-	public PixelPartPixelList create( int numSlices ) {
+	public PixelPartPixelList create(int numSlices) {
 		return new PixelPartPixelList( numSlices );
 	}
 

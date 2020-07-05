@@ -28,14 +28,13 @@ package org.anchoranalysis.image.feature.session.merged;
  * #L%
  */
 
-import java.util.Collection;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -50,35 +49,24 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.InitParamsHelper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 class CreateCalculatorHelper {
 
 	// Prefixes that are ignored
-	private Collection<String> ignoreFeaturePrefixes;
-	private Optional<NRGStackWithParams> nrgStack;
-	private LogErrorReporter logErrorReporter;
-	
-	public CreateCalculatorHelper(
-		Collection<String> ignoreFeaturePrefixes,
-		Optional<NRGStackWithParams> nrgStack,
-		LogErrorReporter logErrorReporter
-	) {
-		super();
-		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
-		this.nrgStack = nrgStack;
-		this.logErrorReporter = logErrorReporter;
-	}	
+	private final Optional<NRGStackWithParams> nrgStack;
+	private final LogErrorReporter logger;
 		
-	public <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createCached(
+	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createCached(
 		FeatureList<T> features,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory,
-		boolean suppressErrors
+		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
 	) throws InitException {
 		
 		return wrapWithNrg( 
 			new FeatureCalculatorCachedMulti<>(
-				createWithoutNrg(features, soImage, replacePolicyFactory ),
-				suppressErrors
+				createWithoutNrg(features, soImage, replacePolicyFactory )
 			)
 		);		
 	}
@@ -94,7 +82,7 @@ class CreateCalculatorHelper {
 	 * @return
 	 * @throws InitException
 	 */
-	public <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createPair(
+	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createPair(
 		FeatureList<T> features,
 		ImageInitParams soImage,
 		CacheTransferSourceCollection cacheTransferSource
@@ -103,7 +91,7 @@ class CreateCalculatorHelper {
 		BoundReplaceStrategy<T,ReplaceStrategy<T>> replaceStrategy = new BoundReplaceStrategy<>( cacheCreator ->
 			new ReuseSingletonStrategy<>(
 				cacheCreator,
-				new CheckCacheForSpecificChildren<>(
+				new CheckCacheForSpecificChildren(
 					FeatureInputSingleObject.class,
 					cacheTransferSource
 				)
@@ -115,7 +103,7 @@ class CreateCalculatorHelper {
 		);		
 	}
 	
-	public <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> create(
+	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> create(
 		FeatureList<T> features,
 		ImageInitParams soImage,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
@@ -125,7 +113,7 @@ class CreateCalculatorHelper {
 		);		
 	}
 	
-	private <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createWithoutNrg(
+	private <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createWithoutNrg(
 		FeatureList<T> features,
 		ImageInitParams soImage,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
@@ -136,8 +124,7 @@ class CreateCalculatorHelper {
 				features,
 				createInitParams(soImage),
 				Optional.empty(),
-				logErrorReporter,
-				ignoreFeaturePrefixes,
+				logger,
 				replacePolicyFactory
 			);
 			
@@ -147,10 +134,10 @@ class CreateCalculatorHelper {
 	}
 	
 	/** Ensures any input-parameters have the NRG-stack attached */
-	private <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> wrapWithNrg(
+	private <T extends FeatureInputNRG> FeatureCalculatorMulti<T> wrapWithNrg(
 		FeatureCalculatorMulti<T> calculator
 	) {
-		return new FeatureCalculatorMultiChangeInput<T>(
+		return new FeatureCalculatorMultiChangeInput<>(
 			calculator,
 			input->input.setNrgStack(nrgStack)
 		);

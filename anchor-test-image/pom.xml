@@ -51,13 +51,14 @@
 	      <artifactId>anchor-io-ij</artifactId>
 	      <version>0.0.1-SNAPSHOT</version>
 	    </dependency>
-	
-	
-		<dependency>
+		
+	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
+        <dependency>
 		  <groupId>junit</groupId>
 		  <artifactId>junit</artifactId>
-		  <version>4.12</version>
-	      <optional>true</optional>
+		  <version>${junit.version}</version>
+		  <scope>compile</scope>
+	      <optional>false</optional>
 		</dependency>
 		
 	</dependencies>

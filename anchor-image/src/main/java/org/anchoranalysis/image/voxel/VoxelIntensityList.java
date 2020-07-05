@@ -50,7 +50,6 @@ public final class VoxelIntensityList {
 	}
 	
 	public final void add( byte val ) {
-		//assert( val >= 0 );
 		lst.add( ByteConverter.unsignedByteToInt(val) );
 	}
 	
@@ -63,12 +62,8 @@ public final class VoxelIntensityList {
 	}
 	
 	public final double variance( double mean ) {
-		
 		int size = lst.size();
-		
 		double sum = mean * size;
-		//double sum = Descriptive.sum( lst );
-		
 		return Descriptive.variance( size, sum, sumOfSquares() );
 	}
 	

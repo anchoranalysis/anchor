@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 /**
  * Converts the optimization state to a form that the reporter needs
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public abstract class StateReporter<T,S> extends AnchorBean<StateReporter<T,S>> {

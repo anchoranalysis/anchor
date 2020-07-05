@@ -67,7 +67,7 @@ public class WriterRouterErrors {
 		}			
 	}
 	
-	public <T> void writeSubfolder(String outputName,
+	public void writeSubfolder(String outputName,
 			Operation<WritableItem,OutputWriteFailedException> collectionGenerator)	{
 		try {
 			delegate.writeSubfolder(outputName, collectionGenerator);

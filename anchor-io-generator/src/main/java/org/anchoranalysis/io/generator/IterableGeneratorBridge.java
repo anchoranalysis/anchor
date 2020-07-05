@@ -49,7 +49,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <S> source-type
  * @param <T> destination-type
  */
-public class IterableGeneratorBridge<S,T> extends Generator implements IterableGenerator<S> {
+public class IterableGeneratorBridge<S,T> implements Generator, IterableGenerator<S> {
 
 	private S element;
 	
@@ -73,7 +73,7 @@ public class IterableGeneratorBridge<S,T> extends Generator implements IterableG
 		this.element = element;
 		try {
 			delegate.setIterableElement( bridge.apply(element) );
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw new SetOperationFailedException(e);
 		}
 	}

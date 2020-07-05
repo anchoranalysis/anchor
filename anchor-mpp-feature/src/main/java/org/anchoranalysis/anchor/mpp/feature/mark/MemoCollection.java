@@ -30,7 +30,6 @@ package org.anchoranalysis.anchor.mpp.feature.mark;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedInd;
@@ -39,6 +38,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
@@ -65,7 +65,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
     
 	// START CONSTRUCTORS
     public MemoCollection() {
-    	pxlMarkMemo = new ArrayList<PxlMarkMemo>();
+    	pxlMarkMemo = new ArrayList<>();
     }
     
 	public MemoCollection(
@@ -103,15 +103,13 @@ public class MemoCollection implements Serializable, MemoForIndex {
 	public PxlMarkMemo getMemoForMark( Cfg cfg, Mark mark ) {
 		int index = cfg.indexOf(mark);
 		if (index==-1) {
-			return null;
+			throw new AnchorFriendlyRuntimeException("Mark doesn't exist in cfg");
 		}
 		return pxlMarkMemo.get( index );
 	}
 	
 	public PxlMarkMemo getMemoForIndex( int index ) {
-		PxlMarkMemo pmm = pxlMarkMemo.get( index );
-		assert( pmm != null );
-		return pmm;
+		return pxlMarkMemo.get( index );
 	}
 	
 	public int getIndexForMemo( PxlMarkMemo memo ) {
@@ -152,10 +150,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 	
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
-	public PxlMarkMemo exchange( NRGSavedInd nrgSavedInd, int index, PxlMarkMemo newMark, NRGStack stack, Cfg cfg, NRGSchemeWithSharedFeatures nrgSchemeTotal ) throws FeatureCalcException {
-		
-		assert( newMark != null );
-
+	public PxlMarkMemo exchange( NRGSavedInd nrgSavedInd, int index, PxlMarkMemo newMark, NRGStack stack, NRGSchemeWithSharedFeatures nrgSchemeTotal ) throws FeatureCalcException {
 		// We calculate energy for individual components
 		NRGTotal ind = nrgSchemeTotal.calcElemIndTotal(newMark, stack );
 		nrgSavedInd.exchange(index, ind);

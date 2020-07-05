@@ -29,7 +29,6 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import java.io.Serializable;
 
-import cern.colt.function.DoubleFunction;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix1D;
@@ -42,7 +41,7 @@ public class EllipsoidMatrixCalculator implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6844865854045587235L;
-
+	
 	private int matNumDim;
 
 	private double radMax;
@@ -55,14 +54,8 @@ public class EllipsoidMatrixCalculator implements Serializable {
 		super();
 		this.matNumDim = matNumDim;
 		
-		DoubleFactory1D F1 = DoubleFactory1D.dense;
-		DoubleFactory2D F2 = DoubleFactory2D.dense;
-		
-		this.matEll = F2.make(matNumDim,matNumDim);
-		
-		this.matBBox = F1.make(matNumDim);
-		
-		//assert( !Double.isNaN(matEll.get(0, 0)) );
+		this.matEll = DoubleFactory2D.dense.make(matNumDim,matNumDim);
+		this.matBBox = DoubleFactory1D.dense.make(matNumDim);
 	};
 	
 	public EllipsoidMatrixCalculator(EllipsoidMatrixCalculator src) {
@@ -73,8 +66,6 @@ public class EllipsoidMatrixCalculator implements Serializable {
 		this.matBBox = src.matBBox.copy();
 		this.radMax = src.radMax;
 		this.radMaxSq = src.radMaxSq;
-		
-		//assert( !Double.isNaN(matEll.get(0, 0)) );
 	}
 	
 	public DoubleMatrix2D getEllipsoidMatrix() {
@@ -118,30 +109,24 @@ public class EllipsoidMatrixCalculator implements Serializable {
         res2.zMult( matRot.viewDice(), this.matEll );
         assert( !Double.isNaN(matEll.get(0, 0)) );
         
-        DoubleFunction bboxFunc = new DoubleFunction() {
-			
-        	// 0.5 is due to pixel shift in how we calculate pixels inside or not
-			@Override
-			public double apply(double arg0) {
-				return Math.sqrt(Math.abs(arg0)) + 0.5;
-			}
-		 }; 
-        
-		 DoubleMatrix2D matEllInv;
-		 try {
+		DoubleMatrix2D matEllInv;
+		try {
 			 matEllInv = new Algebra().inverse( matEll );
-		 } catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			 matEllInv = matEll;
-		 }
+		}
 		  	
-		 for (int i=0; i<matNumDim; i++) {
+		for (int i=0; i<matNumDim; i++) {
 			 this.matBBox.set(i, matEllInv.get(i,i) );
-		 }
-		
-		 this.matBBox.assign( bboxFunc );
+		}
+
+	    // 0.5 is due to pixel shift in how we calculate pixels inside or not
+		this.matBBox.assign(val->
+		 	Math.sqrt(Math.abs(val)) + 0.5
+		);
 		 
-		 if (this.radMax>0) {
-			 assert( !Double.isNaN(matEll.get(0, 0)) );
-		 }
+		if (this.radMax>0) {
+			assert( !Double.isNaN(matEll.get(0, 0)) );
+		}
 	}
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
-public class IDGetterMaskFromOverlay extends IDGetter<ObjectWithProperties> {
+public class IDGetterMaskFromOverlay implements IDGetter<ObjectWithProperties> {
 
 	private IDGetter<Overlay> delegate;
 

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
  * @param <T> return-type of operation
  * @param <E> exception that is thrown if something goes wrong during execution
  */
-public class WrapOperationWithProgressReporterAsCached<T, E extends Throwable> extends CachedOperationWithProgressReporter<T, E> {
+public class WrapOperationWithProgressReporterAsCached<T, E extends Exception> extends CachedOperationWithProgressReporter<T, E> {
 
 	private OperationWithProgressReporter<T, E> operation;
 	

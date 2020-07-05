@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -88,7 +89,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		
 		ByteBuffer bufferMIP = getObjMaskMIP().getVoxelBox().getPixelsForPlane(0).buffer();
 		
-		for (int z=bbox.getCornerMin().getZ(); z<=crnrMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=crnrMax.getZ(); z++) {
 
 			BufferArrList bufferArrList = new BufferArrList();
 			bufferArrList.init(stack, z);
@@ -123,24 +124,24 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		Point3d ptRunning = new Point3d();
 		ptRunning.setZ( z + 0.5 );
 		
-		int z_local = z - bbox.getCornerMin().getZ();
+		int zLocal = z - bbox.cornerMin().getZ();
 		
 		List<RegionMembershipWithFlags> listRegionMembership = regionMap.createListMembershipWithFlags();
 		
-		ByteBuffer buffer = getObjMask().getVoxelBox().getPixelsForPlane(z_local).buffer();
+		ByteBuffer buffer = getObjMask().getVoxelBox().getPixelsForPlane(zLocal).buffer();
 		
-		for (int y=bbox.getCornerMin().getY(); y<=crnrMax.getY(); y++) {
+		for (int y=bbox.cornerMin().getY(); y<=crnrMax.getY(); y++) {
 			ptRunning.setY( y + 0.5 );
 			
-			int y_local = y - bbox.getCornerMin().getY();
+			int yLocal = y - bbox.cornerMin().getY();
 			
-			for (int x=bbox.getCornerMin().getX(); x<=crnrMax.getX(); x++) {
+			for (int x=bbox.cornerMin().getX(); x<=crnrMax.getX(); x++) {
 				
 				ptRunning.setX( x + 0.5 );
 								
-				int x_local = x - bbox.getCornerMin().getX();
+				int xLocal = x - bbox.cornerMin().getX();
 				
-				int localOffset = localExtnt.offset(x_local, y_local);
+				int localOffset = localExtnt.offset(xLocal, yLocal);
 				int globalOffset = sd.offset(x, y);
 				
 				byte membership = mark.evalPntInside( new Point3d(ptRunning) );
@@ -154,7 +155,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 					partitionList,
 					bufferArrList,
 					globalOffset,
-					z_local
+					zLocal
 				);
 			}
 		}
@@ -198,8 +199,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 				try {
 					h.addHistogram(hChnl);
 				} catch (OperationFailedException e) {
-					assert false;
-					return null;
+					throw new AnchorImpossibleSituationException();
 				}
 			}
 		}

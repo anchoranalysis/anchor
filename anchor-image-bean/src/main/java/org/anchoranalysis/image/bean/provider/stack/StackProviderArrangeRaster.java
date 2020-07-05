@@ -72,7 +72,7 @@ public class StackProviderArrangeRaster extends StackProvider {
 	@Override
 	public Stack create() throws CreateException {
 		
-		if (list.size()==0) {
+		if (list.isEmpty()) {
 			throw new CreateException("At least one stack must be present in list");
 		}
 		

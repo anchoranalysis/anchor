@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetterUtilities;
 /**
  * Base classes for PermuteProperty that require a path
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {

@@ -29,17 +29,16 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import lombok.EqualsAndHashCode;
 
-public class FeatureInputSingleMemo extends FeatureInputNRGStack {
+@EqualsAndHashCode(callSuper=true)
+public class FeatureInputSingleMemo extends FeatureInputNRG {
 
 	private PxlMarkMemo pxlPartMemo;
 	
-	public FeatureInputSingleMemo(
-		PxlMarkMemo pxlPartMemo,
-		NRGStackWithParams nrgStack
-	) {
+	public FeatureInputSingleMemo(PxlMarkMemo pxlPartMemo, NRGStackWithParams nrgStack) {
 		this(
 			pxlPartMemo,
 			Optional.of(nrgStack)
