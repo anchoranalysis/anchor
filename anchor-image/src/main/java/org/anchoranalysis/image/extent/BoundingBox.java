@@ -147,11 +147,7 @@ public final class BoundingBox implements Serializable {
 			return true;
 		}
 		
-		if (atBorderZ(sd)) {
-			return true;
-		}
-		
-		return false;
+		return atBorderZ(sd);
 	}
 	
 	public boolean atBorderXY( ImageDimensions sd ) {
@@ -168,11 +164,7 @@ public final class BoundingBox implements Serializable {
 		if (crnrMax.getX()==(sd.getX()-1)) {
 			return true;
 		}
-		if (crnrMax.getY()==(sd.getY()-1)) {
-			return true;
-		}
-		
-		return false;
+		return crnrMax.getY()==(sd.getY()-1);
 	}
 	
 	public boolean atBorderZ( ImageDimensions sd ) {

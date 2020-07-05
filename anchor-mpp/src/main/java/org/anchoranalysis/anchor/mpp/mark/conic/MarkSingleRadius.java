@@ -190,11 +190,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 		
 		MarkSingleRadius trgt = (MarkSingleRadius) mark;
 		
-		if (radius!=trgt.radius) {
-			return false;
-		}
-		
-		return true;
+		return radius==trgt.radius;
 	}
 	    
     public String strMarks() {

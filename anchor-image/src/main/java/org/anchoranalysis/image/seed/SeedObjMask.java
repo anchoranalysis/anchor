@@ -72,10 +72,7 @@ public class SeedObjMask implements Seed {
 	public boolean equalsDeep(Seed other) {
 		if (other instanceof SeedObjMask) {
 			SeedObjMask otherCast = (SeedObjMask) other;
-			if (!om.equalsDeep(otherCast.om)) {
-				return false;
-			}
-			return true;
+			return om.equalsDeep(otherCast.om);
 		} else {
 			return false;
 		}

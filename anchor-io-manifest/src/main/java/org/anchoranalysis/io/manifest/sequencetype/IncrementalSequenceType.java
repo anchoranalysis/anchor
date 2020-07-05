@@ -28,6 +28,9 @@ package org.anchoranalysis.io.manifest.sequencetype;
 
 import org.anchoranalysis.core.index.container.IOrderProvider;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class IncrementalSequenceType extends SequenceType {
 
 	/**
@@ -37,8 +40,10 @@ public class IncrementalSequenceType extends SequenceType {
 
 	private int end = -1;
 	
+	@Getter @Setter
 	private int start = 0;
-	
+
+	@Getter @Setter
 	private int incrementSize = 1;
 	
 	public IncrementalSequenceType() {
@@ -73,21 +78,6 @@ public class IncrementalSequenceType extends SequenceType {
 			throw new SequenceTypeException("Incorrectly ordered index in update");
 		}
 		
-	}
-
-	
-	private int indexToNumPeriodsInt( int index ) {
-		int norm = (index - start);
-		return norm / incrementSize;
-	}
-	
-	private double indexToNumPeriods( int index ) {
-		int norm = (index - start);
-		return ((double) norm) / incrementSize;
-	}
-	
-	private int numPeriodsToIndex( double numPeriods ) {
-		return (int) ( numPeriods*incrementSize) + start;
 	}
 	
 	@Override
@@ -134,23 +124,6 @@ public class IncrementalSequenceType extends SequenceType {
 		return end;
 	}
 
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getIncrementSize() {
-		return incrementSize;
-	}
-
-	public void setIncrementSize(int incrementSize) {
-		this.incrementSize = incrementSize;
-		assert(incrementSize!=0);
-	}
-
 	@Override
 	public IOrderProvider createOrderProvider() {
 		return index -> indexToNumPeriodsInt( Integer.valueOf(index) );
@@ -167,20 +140,32 @@ public class IncrementalSequenceType extends SequenceType {
 		}
 		this.end = end;
 	}
-	
-	private int getRangeIndex() {
-		return getMaximumIndex() - getMinimumIndex() + 1;
-	}
 
 	@Override
 	public int getNumElements() {
 		return (getRangeIndex() / incrementSize) + 1;
 	}
 	
-
 	@Override
 	public String indexStr(int index) {
 		return String.valueOf(index);
 	}
-
+	
+	private int getRangeIndex() {
+		return getMaximumIndex() - getMinimumIndex() + 1;
+	}
+	
+	private int indexToNumPeriodsInt( int index ) {
+		int norm = (index - start);
+		return norm / incrementSize;
+	}
+	
+	private double indexToNumPeriods( int index ) {
+		int norm = (index - start);
+		return ((double) norm) / incrementSize;
+	}
+	
+	private int numPeriodsToIndex( double numPeriods ) {
+		return (int) ( numPeriods*incrementSize) + start;
+	}
 }

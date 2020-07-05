@@ -43,7 +43,7 @@ public class ProbWeights {
 		listWeights.add(e);
 		
 		// Update cumulative
-		if (listWeightsCum.size()==0) {
+		if (listWeightsCum.isEmpty()) {
 			// First
 			listWeightsCum.add( e );
 		} else {
@@ -53,7 +53,7 @@ public class ProbWeights {
 	}
 	
 	public double getTotal() {
-		if (listWeightsCum.size()==0) {
+		if (listWeightsCum.isEmpty()) {
 			return 0;
 		}
 		return listWeightsCum.get( listWeightsCum.size()-1 );

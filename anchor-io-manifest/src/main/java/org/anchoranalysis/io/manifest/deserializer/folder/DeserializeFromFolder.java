@@ -57,8 +57,6 @@ public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
 		
 		history.setCntr( boundedContainer );
 		history.setExpensiveLoad( false );
-		//history.setExpensiveLoad( true );
-		
 		return history;
 	}
 

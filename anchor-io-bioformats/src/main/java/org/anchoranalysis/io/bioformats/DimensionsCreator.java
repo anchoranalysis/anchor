@@ -57,17 +57,17 @@ public class DimensionsCreator {
 		
 		metadataDim(
 			metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex),
-			len -> res.setX(len)
+			res::setX
 		);
 		
 		metadataDim(
 			metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex),
-			len -> res.setY(len)
+			res::setY
 		);
 		
 		metadataDim(
 			metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex),
-			len -> res.setZ(len)
+			res::setZ
 		);
 		
 		return new ImageDimensions(

@@ -270,8 +270,7 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 				}
 			}
 		}
-		
-		//assert( mask.getMask().hasPixelsGreaterThan(0) );
+
 		assert( mask.getVoxelBox().extent().getZ() > 0 );
 			
 		return mask;

@@ -96,10 +96,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 		if(!boundingBox.equals(other.boundingBox)) {
 			return false;
 		}
-		if(!voxelBox.equalsDeep(other.voxelBox)) {
-			return false;
-		}
-		return true;
+		return voxelBox.equalsDeep(other.voxelBox);
 	}
 	
 	/**

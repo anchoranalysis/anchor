@@ -109,9 +109,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 	}
 	
 	public PxlMarkMemo getMemoForIndex( int index ) {
-		PxlMarkMemo pmm = pxlMarkMemo.get( index );
-		assert( pmm != null );
-		return pmm;
+		return pxlMarkMemo.get( index );
 	}
 	
 	public int getIndexForMemo( PxlMarkMemo memo ) {

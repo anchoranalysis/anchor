@@ -57,19 +57,6 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
 	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
-		
-	
-//	// Init our shared features
-//	for( String key : sharedFeatureList.keys() ) {
-//		Feature f;
-//		try {
-//			f = sharedFeatureList.getNull(key);
-//			assert(f!=null);
-//			f.init(paramsInit);
-//		} catch (GetOperationFailedException | InitException e) {
-//			throw new OperationFailedException(e);
-//		}
-//	}
 	
 	@Override
 	public FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {

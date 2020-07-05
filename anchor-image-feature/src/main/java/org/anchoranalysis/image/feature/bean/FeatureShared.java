@@ -59,7 +59,7 @@ public abstract class FeatureShared<T extends FeatureInput> extends FeatureCastI
 		return Arrays.asList(
 			new ExtractFromParam<>(
 				ImageInitParams.class,
-				params -> extractImageInitParams(params),
+				params -> extractImageInitParams(params),	// NOSONAR
 				FeatureInitParamsShared.class
 			)
 		);

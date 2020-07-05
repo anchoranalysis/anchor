@@ -110,7 +110,7 @@ public class SpecificPathList extends FileProvider {
 	}
 	
 	private static List<String> stringFromPaths( List<Path> paths ) {
-		return paths.stream().map( s->s.toString() ).collect(Collectors.toList());
+		return paths.stream().map(Path::toString).collect(Collectors.toList());
 	}
 	
 	private static Collection<File> matchingFilesForList(List<String> listPaths, ProgressReporter progressReporter ) {

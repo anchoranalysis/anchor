@@ -27,7 +27,7 @@ package org.anchoranalysis.image.io.objs;
  */
 
 import java.nio.ByteBuffer;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -88,14 +88,14 @@ class ObjectMaskHDF5Writer {
 	}
 	
 	private void addCrnr() {
-		addAttr("x", p->p.getX() );
-		addAttr("y", p->p.getY() );
-		addAttr("z", p->p.getZ() );
+		addAttr("x", ReadableTuple3i::getX );
+		addAttr("y", ReadableTuple3i::getY );
+		addAttr("z", ReadableTuple3i::getZ );
 	}
 	
-	private void addAttr( String attrName, Function<ReadableTuple3i,Integer> extrVal) {
+	private void addAttr( String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
 		
-		Integer crnrVal = extrVal.apply( obj.getBoundingBox().cornerMin() );
+		Integer crnrVal = extrVal.applyAsInt( obj.getBoundingBox().cornerMin() );
 		writer.uint32().setAttr(
 			pathHDF5,
 			attrName,

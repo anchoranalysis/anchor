@@ -139,7 +139,6 @@ public class HistogramsAfterSplit {
 			Histogram h = itr.next();
 			
 			if (h.getTotalCount()==0) {
-				//System.out.println("Removing empty");
 				itr.remove();
 			}
 		}

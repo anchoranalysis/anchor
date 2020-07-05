@@ -44,13 +44,16 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class RGBOutlineWriter extends ObjMaskWriter {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int outlineWidth;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean force2D = false;
 	// END BEAN PROPERTIES
 	
@@ -88,18 +91,14 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 			public void writePrecalculatedMask(RGBStack stack, IDGetter<ObjectWithProperties> idGetter,
 					IDGetter<ObjectWithProperties> colorIDGetter, int iter, ColorIndex colorIndex,
 					BoundingBox bboxContainer) throws OperationFailedException {
-				
+
 				assert( om.getVoxelBox().extent().getZ() > 0 );
-				assert( colorIDGetter!=null );
-				assert( colorIndex!=null );
-				
 				// TODO this can get broken! Fix!
 				assert( om.getBoundingBox().cornerMin().getZ()>=0 );
 				
-				int colorID = colorIDGetter.getID(omMask, iter);
-				assert( colorIndex.has(colorID) );
-				
-				RGBColor color = colorIndex.get( colorID );
+				RGBColor color = colorIndex.get(
+					colorIDGetter.getID(omMask, iter)
+				);
 				
 				IntersectionWriter.writeRGBMaskIntersection(
 					om,
@@ -111,21 +110,5 @@ public class RGBOutlineWriter extends ObjMaskWriter {
 			
 		};
 			
-	}
-	
-	public boolean isForce2D() {
-		return force2D;
-	}
-
-	public void setForce2D(boolean force2d) {
-		force2D = force2d;
-	}
-
-	public int getOutlineWidth() {
-		return outlineWidth;
-	}
-
-	public void setOutlineWidth(int outlineWidth) {
-		this.outlineWidth = outlineWidth;
 	}
 }

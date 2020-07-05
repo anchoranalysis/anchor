@@ -108,11 +108,6 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 		return list;
 	}
 	
-	// Items should only ever be equal if they are of the same type
-	/*public <T extends IUpdatableMarkSet> T findOrAdd(T target) {
-		return (T) ListUtilities.findOrAddParamsEquals(this, target);
-	}*/
-	
 	@Override
 	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
 		for (UpdatableMarkSet item : delegate) {

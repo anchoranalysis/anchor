@@ -32,9 +32,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy.MergeCandidate;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CombineWithTarget {
-	
-	private CombineWithTarget() {}
 	
 	/**
 	 * 
@@ -50,20 +52,20 @@ class CombineWithTarget {
 		MergeTarget mergeSrc,
 		MergeTarget mergeTarget
 	) {
-				
-		System.out.printf("DEBUG: combining %s with %s%n", mergeSrc.getPath(), mergeTarget );
-		
-		int removedPixels = combineDetermineOrder(
+		return combineDetermineOrder(
 			paths,
 			mergeSrc,
 			mergeTarget
 		);
-		
-		System.out.printf("Sum is %d (removedPixels=%d)%n", cnt(paths), removedPixels );
-		
-		return removedPixels;
 	}
 	
+	/**
+	 * 
+	 * @param paths
+	 * @param mergeSrc
+	 * @param mergeTarget
+	 * @return the number of removed pixels
+	 */
 	private static int combineDetermineOrder(
 		List<ContiguousPixelPath> paths,
 		MergeTarget mergeSrc,

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
@@ -40,7 +41,7 @@ public abstract class ConvertToFloat extends ConvertTo<FloatBuffer> {
 	private ImageDimensions sd;
 	
 	public ConvertToFloat() {
-		super( wrapper-> wrapper.asFloat() );
+		super(VoxelBoxWrapper::asFloat);
 	}
 	
 	protected abstract int bytesPerPixel();

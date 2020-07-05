@@ -88,7 +88,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     @Override
 	public Optional<Point3d> sample( RandomNumberGenerator re ) {
 	
-    	if (setPnts.size()==0) {
+    	if (setPnts.isEmpty()) {
     		return Optional.empty();
     	}
     	

@@ -141,11 +141,7 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 			return false;
 		}
 		
-		if (!pairAddCriteria.paramsEquals(obj.pairAddCriteria)) {
-			return false;
-		}
-		
-		return true;
+		return pairAddCriteria.paramsEquals(obj.pairAddCriteria);
 	}
 
 	

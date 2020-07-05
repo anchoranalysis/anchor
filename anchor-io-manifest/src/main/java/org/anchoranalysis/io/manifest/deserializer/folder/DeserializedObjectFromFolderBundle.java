@@ -28,7 +28,7 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,7 +44,7 @@ import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 public class DeserializedObjectFromFolderBundle<T extends Serializable> implements ITypedGetFromIndex<T> {
 
-	private LRUCache<Integer,HashMap<Integer,T>> cache;
+	private LRUCache<Integer,Map<Integer,T>> cache;
 	private BundleParameters bundleParameters;
 	private IOrderProvider orderProvider;
 	
@@ -104,7 +104,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 		int bundleIndex = orderProvider.order( String.valueOf(index) ) / bundleParameters.getBundleSize();
 		
 		// This HashMap can contain NULL keys representing deliberately null objects
-		HashMap<Integer,T> hashMap = this.cache.get(bundleIndex);
+		Map<Integer,T> hashMap = this.cache.get(bundleIndex);
 		
 		if (!hashMap.containsKey(index)) {
 			throw new GetOperationFailedException( String.format("Cannot find index %i in bundle",index) );

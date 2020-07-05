@@ -28,20 +28,19 @@ package org.anchoranalysis.anchor.mpp.bean.bound;
 
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.NoArgsConstructor;
+
 //
 //  An upper and lower bound in degrees which is converted
 //   to radians when resolved
 // 
+@NoArgsConstructor
 public class BoundPhysicalExtent extends BoundMinMax {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5440824428055546445L;
-	
-	public BoundPhysicalExtent() {
-		super();
-	}
 	
 	public BoundPhysicalExtent( double min, double max ) {
 		super(min,max);
@@ -58,9 +57,7 @@ public class BoundPhysicalExtent extends BoundMinMax {
 	
 	@Override
 	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
-		double rslvd = getMax() / sr.min(do3D); 
-		//log.debug( String.format("max-rslvd %e to %f", getMax(), rslvd));
-		return rslvd;
+		return getMax() / sr.min(do3D); 
 	}
 	
 	@Override

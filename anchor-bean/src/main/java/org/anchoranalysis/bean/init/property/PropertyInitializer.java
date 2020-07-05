@@ -110,12 +110,7 @@ public class PropertyInitializer<P> {
 		}
 
 		// Properties with other property-types (whose parameters can be extracted from the current parameters)
-		if (initExtractedParams(propertyValue, parent, logger)) {
-			return true;
-		}
-		
-		return false;
-		
+		return initExtractedParams(propertyValue, parent, logger);
 	}
 
 	public Class<?> getInitParamType() {

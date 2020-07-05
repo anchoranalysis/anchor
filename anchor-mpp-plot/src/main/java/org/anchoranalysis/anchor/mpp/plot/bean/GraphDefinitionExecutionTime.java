@@ -51,7 +51,7 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
 				(ExecutionTimeItem item, int seriesNum) -> checkFirstSeries(
 					item,
 					seriesNum,
-					a -> a.getObjectID()
+					ExecutionTimeItem::getObjectID
 				),
 				(ExecutionTimeItem item, int seriesNum) -> checkFirstSeries(
 					item,
