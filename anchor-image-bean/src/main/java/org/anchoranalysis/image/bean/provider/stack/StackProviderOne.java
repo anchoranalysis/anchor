@@ -30,10 +30,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.stack.Stack;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class StackProviderOne extends StackProvider {
 
 	// START BEAN FIELDS
-	@BeanField
+	@BeanField @Getter @Setter
 	private StackProvider stack;
 	// END BEAN FIELDS
 	
@@ -44,15 +47,5 @@ public abstract class StackProviderOne extends StackProvider {
 		);
 	}
 	
-	protected abstract Stack createFromStack(Stack Stack) throws CreateException;
-
-	public StackProvider getStack() {
-		return stack;
-	}
-
-	public void setStack(StackProvider stack) {
-		this.stack = stack;
-	}
-
-
+	protected abstract Stack createFromStack(Stack stack) throws CreateException;
 }

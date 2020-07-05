@@ -1,7 +1,5 @@
 package org.anchoranalysis.feature.input;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 /*
  * #%L
  * anchor-feature
@@ -38,18 +36,4 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  */
 public abstract class FeatureInput {
-	
-	public FeatureInput() {
-		super();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
-	}
 }

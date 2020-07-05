@@ -32,7 +32,9 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
 public class FeatureInputStack extends FeatureInputNRG {
 	
 	/**
@@ -60,20 +62,5 @@ public class FeatureInputStack extends FeatureInputNRG {
 		if (nrgStack.isPresent()) {
 			this.setNrgStack( new NRGStackWithParams(nrgStack.get()) );
 		}
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		return super.equals(obj);
-	}
-
-	@Override
-	public int hashCode() {
-		return super.hashCode();
 	}
 }

@@ -91,7 +91,7 @@ class CreateCalculatorHelper {
 		BoundReplaceStrategy<T,ReplaceStrategy<T>> replaceStrategy = new BoundReplaceStrategy<>( cacheCreator ->
 			new ReuseSingletonStrategy<>(
 				cacheCreator,
-				new CheckCacheForSpecificChildren<>(
+				new CheckCacheForSpecificChildren(
 					FeatureInputSingleObject.class,
 					cacheTransferSource
 				)

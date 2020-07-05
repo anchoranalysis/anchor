@@ -31,7 +31,9 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
 public class FeatureInputSingleMemo extends FeatureInputNRG {
 
 	private PxlMarkMemo pxlPartMemo;

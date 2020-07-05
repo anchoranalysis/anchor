@@ -34,6 +34,9 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=false)
 public abstract class FeatureInputNRG extends FeatureInputParams {
 
 	private Optional<NRGStackWithParams> nrgStack;
@@ -93,26 +96,5 @@ public abstract class FeatureInputNRG extends FeatureInputParams {
 	
 	public void setNrgStack(Optional<NRGStackWithParams> nrgStack) {
 		this.nrgStack = nrgStack;
-	}
-	
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) { return true; }
-		if (!super.equals(obj)) { return false; }
-		if (!(obj instanceof FeatureInputNRG)) { return false; }
-		
-		FeatureInputNRG objCast = (FeatureInputNRG) obj;
-
-		if (!nrgStack.equals(objCast.nrgStack)) {
-			return false;
-		}	
-		
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		return nrgStack.hashCode();
 	}
 }

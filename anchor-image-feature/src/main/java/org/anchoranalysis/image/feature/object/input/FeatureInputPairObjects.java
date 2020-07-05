@@ -32,7 +32,8 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -46,6 +47,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=true)
 public class FeatureInputPairObjects extends FeatureInputNRG {
 
 	private ObjectMask first;
@@ -113,40 +115,5 @@ public class FeatureInputPairObjects extends FeatureInputNRG {
 			first.centerOfGravity(),
 			second.centerOfGravity()
 		);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) { return true; }
-		if (!super.equals(obj)) { return false; }
-		
-		if (!(obj instanceof FeatureInputPairObjects)) { return false; }
-		
-		FeatureInputPairObjects objCast = (FeatureInputPairObjects) obj;
-		
-		if (!first.equals(objCast.first)) {
-			return false;
-		}
-		
-		if (!second.equals(objCast.second)) {
-			return false;
-		}
-		
-		if (!merged.equals(objCast.merged)) {
-			return false;
-		}
-		
-		return true;
-
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.appendSuper( super.hashCode() )
-				.append(first)
-				.append(second)
-				.append(merged)
-				.toHashCode();
 	}
 }

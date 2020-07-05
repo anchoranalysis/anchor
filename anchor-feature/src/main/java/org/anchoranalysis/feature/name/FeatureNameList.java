@@ -48,7 +48,7 @@ public class FeatureNameList implements Iterable<String> {
 	private List<String> delegate;
 
 	public FeatureNameList() {
-		delegate = new ArrayList<String>();
+		delegate = new ArrayList<>();
 	}
 	
 	public FeatureNameList(Stream<String> stream) {
@@ -63,7 +63,7 @@ public class FeatureNameList implements Iterable<String> {
 	
 	// We wrap an existing list
 	public FeatureNameList( Set<String> set ) {
-		delegate = new ArrayList<String>(set);
+		delegate = new ArrayList<>(set);
 	}
 	
 	public List<String> asList() {

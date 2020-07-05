@@ -48,7 +48,7 @@ public abstract class FeatureBase<T extends FeatureInput> extends InitializableB
 	}
 	
 	@Override
-	public PropertyDefiner<FeatureInitParams> getPropertyDefiner() {
+	public PropertyDefiner getPropertyDefiner() {
 		return featureDefiner;
 	}
 		

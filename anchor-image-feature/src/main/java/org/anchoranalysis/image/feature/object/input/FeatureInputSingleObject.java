@@ -31,18 +31,18 @@ import java.util.Optional;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 /**
  * An input representing a single object-mask (with maybe an NRG-stack associated)
  * 
  * <p>Equals and hash-code must be sensibly defined as these inputs can be used as keys
- * in a cache</p>.
+ * in a cache. The equals implementation assumes equals of {@link ObjectMask} is shallow and computationally inexpensive.</p>.
  * 
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=true)
 public class FeatureInputSingleObject extends FeatureInputNRG {
 
 	private ObjectMask objMask;
@@ -77,29 +77,5 @@ public class FeatureInputSingleObject extends FeatureInputNRG {
 	@Override
 	public String toString() {
 		return objMask.toString();
-	}
-
-	/** This assumes objMask's equals() is cheap i.e. shallow-equals not deep-equals */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		FeatureInputSingleObject rhs = (FeatureInputSingleObject) obj;
-		return new EqualsBuilder()
-			.appendSuper( super.equals(obj) )
-            .append(objMask, rhs.objMask)
-            .isEquals();
-	}
-
-	/** This assumes objMask's equals() is cheap i.e. shallow-equals not deep-equals */
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.appendSuper( super.hashCode() )
-			.append(objMask)
-			.toHashCode();
 	}
 }

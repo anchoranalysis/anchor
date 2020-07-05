@@ -32,6 +32,9 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=true)
 public class FeatureInputAllMemo extends FeatureInputNRG {
 
 	private MemoCollection pxlMarkMemoList;

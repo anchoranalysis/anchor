@@ -45,11 +45,11 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 
 	private boolean hasBeenInit = false;
 	private LogErrorReporter logger;
-	private PropertyDefiner<P> propertyDefiner;
+	private PropertyDefiner propertyDefiner;
 	
 	protected InitializableBeanSimple(
 			PropertyInitializer<P> propertyInitializer,
-			PropertyDefiner<P> propertyDefiner) {
+			PropertyDefiner propertyDefiner) {
 		super(propertyInitializer);
 		this.propertyDefiner = propertyDefiner;
 	}
@@ -59,8 +59,6 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 	public final void init(P params, LogErrorReporter logger) throws InitException {
 		this.hasBeenInit = true;
 		this.logger = logger;
-		assert logger!=null;
-		
 		onInit(params);
 	}
 	
@@ -78,7 +76,7 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 	}
 
 	@Override
-	public PropertyDefiner<P> getPropertyDefiner() {
+	public PropertyDefiner getPropertyDefiner() {
 		return propertyDefiner;
 	}
 }

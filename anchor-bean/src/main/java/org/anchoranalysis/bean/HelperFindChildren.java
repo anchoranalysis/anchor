@@ -105,7 +105,6 @@ class HelperFindChildren {
 		if (fieldValue instanceof Collection) {
 			Collection<AnchorBean<?>> valueCast = (Collection<AnchorBean<?>>) fieldValue;
 			maybeAddCollection( valueCast, match, out );
-			return;
 		}
 	}
 	

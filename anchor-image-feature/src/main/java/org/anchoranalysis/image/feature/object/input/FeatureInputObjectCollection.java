@@ -32,6 +32,9 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=true)
 public class FeatureInputObjectCollection extends FeatureInputNRG {
 
 	private ObjectCollection objMaskCollection;

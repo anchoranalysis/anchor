@@ -87,7 +87,7 @@ public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>,
 			 }
 		 }
 				
-		return new SharedFeatureSet<S>(out);	
+		return new SharedFeatureSet<>(out);	
 	}
 	
 	@Override

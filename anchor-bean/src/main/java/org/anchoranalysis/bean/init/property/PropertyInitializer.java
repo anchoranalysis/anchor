@@ -181,7 +181,7 @@ public class PropertyInitializer<P> {
 		Class<?> propertyClassToMatch,
 		Object paramToInitWith
 	) throws InitException {
-		Optional<PropertyDefiner<?>> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
+		Optional<PropertyDefiner> pd = findPropertyThatDefines( propertyValue, propertyClassToMatch );
 		if (pd.isPresent()) {
 			pd.get().doInitFor( propertyValue, paramToInitWith, parent, logger );
 			return true;
@@ -189,12 +189,12 @@ public class PropertyInitializer<P> {
 		return false;
 	}
 
-	private Optional<PropertyDefiner<?>> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
+	private Optional<PropertyDefiner> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
 		
 		if (propertyValue instanceof InitializableBean ) {
 			
 			InitializableBean<?,?> initBean = (InitializableBean<?,?>) propertyValue;
-			PropertyDefiner<?> pd = initBean.getPropertyDefiner();
+			PropertyDefiner pd = initBean.getPropertyDefiner();
 			
 			if (pd.accepts(paramType)) {
 				return Optional.of(pd);

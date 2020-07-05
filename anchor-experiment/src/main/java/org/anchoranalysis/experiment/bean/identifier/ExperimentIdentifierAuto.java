@@ -35,6 +35,9 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Automatically populates a experiment-name and version number
  * @author Owen Feehan
@@ -44,25 +47,25 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 
 	// START BEAN FIELDS
 	/** If there's no task-name, then this constant is used as a fallback name */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String fallbackName = "experiment";
 	
 	/** If true, the current day (yyyy.MM.dd) is included in the output */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean day = true;
 	
 	/** If true, the current time (HH.mm.ss) is included in the output */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean time = true;
 	
 	/** Only relevant if time==true. Whether the second is included in the time */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean second = true;
 	// END BEAN FIELDS
 
-	private static String FORMAT_DAY = "yyyy.MM.dd";
-	private static String FORMAT_TIME_BASE = "HH.mm";
-	private static String FORMAT_TIME_SECOND = "ss";
+	private static final String FORMAT_DAY = "yyyy.MM.dd";
+	private static final String FORMAT_TIME_BASE = "HH.mm";
+	private static final String FORMAT_TIME_SECOND = "ss";
 	
 	@Override
 	public String identifier(Optional<String> taskName) {
@@ -132,37 +135,5 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 	
 	private static String removeSpecialChars(String str) {
 		return str.replaceAll("[^a-zA-Z]+","");
-	}
-
-	public String getFallbackName() {
-		return fallbackName;
-	}
-
-	public void setFallbackName(String fallbackName) {
-		this.fallbackName = fallbackName;
-	}
-
-	public boolean isDay() {
-		return day;
-	}
-
-	public void setDay(boolean day) {
-		this.day = day;
-	}
-
-	public boolean isTime() {
-		return time;
-	}
-
-	public void setTime(boolean time) {
-		this.time = time;
-	}
-
-	public boolean isSecond() {
-		return second;
-	}
-
-	public void setSecond(boolean second) {
-		this.second = second;
 	}
 }

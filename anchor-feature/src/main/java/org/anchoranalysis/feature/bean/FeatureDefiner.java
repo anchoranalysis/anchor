@@ -32,7 +32,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner<FeatureInitParams> {
+class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
 
 	@Override
 	public boolean accepts( Class<?> paramType ) {

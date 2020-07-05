@@ -149,8 +149,7 @@ class DefaultBeanFactoryHelperInit {
 		
 	}
 	
-	public static void initBean(Object bean, BeanDeclaration data, Object parameter)
-            throws ConfigurationRuntimeException {
+	public static void initBean(Object bean, BeanDeclaration data, Object parameter) {
         BeanHelper.initBeanProperties(bean, data);
 
         Map<String, Object> nestedBeans = data.getNestedBeanDeclarations();
