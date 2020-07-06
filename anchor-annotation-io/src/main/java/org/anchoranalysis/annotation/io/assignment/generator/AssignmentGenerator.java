@@ -187,25 +187,17 @@ public class AssignmentGenerator extends RasterGenerator {
 	
 	
 	private ObjMaskWriter createConditionalWriter( List<ObjectMask> otherObjs, ObjMaskWriter writer ) {
-		
-		IfElseWriter.Condition condition = new IfElseWriter.Condition() {
-
-			@Override
-			public boolean isTrue(ObjectWithProperties mask,
-					RGBStack stack, int id) {
-				return otherObjs.contains(mask.getMask());
-			}
-			
-		};
-		
-		return new IfElseWriter(condition, writer, new RGBSolidWriter() );
+		return new IfElseWriter(
+			(ObjectWithProperties mask, RGBStack stack, int id) ->
+				otherObjs.contains(mask.getMask()),
+			writer,
+			new RGBSolidWriter()
+		);
 	}
 	
 	private ObjMaskWriter createOutlineWriter() {
 		return new RGBOutlineWriter(outlineWidth,mipOutline);
 	}
-	
-	
 	
 	@Override
 	public Optional<ManifestDescription> createManifestDescription() {

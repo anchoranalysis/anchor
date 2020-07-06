@@ -137,7 +137,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 		InitBridge<S,T,V> bridge = new InitBridge<>(
 			pi,
 			logger,
-			S::create		// Initializes and then gets whats provided
+			s -> s.create()		// NOSONAR Initializes and then gets whats provided
 		);		
 		
 		BeanStoreAdder.addPreserveName(
