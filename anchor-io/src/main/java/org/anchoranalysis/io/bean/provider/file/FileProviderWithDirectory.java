@@ -36,12 +36,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 
 public abstract class FileProviderWithDirectory extends FileProvider {
-
-	/** Like getDirectory as Path but converts any relative path to absolute one */
-	public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {
-		Path path = getDirectoryAsPath(inputContext);
-		return makeAbsolutePathIfNecessary(path);
-	}
 	
 	public abstract Path getDirectoryAsPath(InputContextParams inputContext);
 	
@@ -57,7 +51,14 @@ public abstract class FileProviderWithDirectory extends FileProvider {
 		Path directory,
 		InputManagerParams params
 	) throws FileProviderException;
-		
+	
+
+	/** Like getDirectory as Path but converts any relative path to absolute one */
+	public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {
+		Path path = getDirectoryAsPath(inputContext);
+		return makeAbsolutePathIfNecessary(path);
+	}
+	
 	/**
 	 * If path is absolute, it's returned as-is
 	 * If path is relative, and the 'makeAbsolute' option is activated, it's added to the localizedPath 

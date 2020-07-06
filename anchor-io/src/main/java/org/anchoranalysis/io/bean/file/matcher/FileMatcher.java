@@ -71,6 +71,10 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 		InputManagerParams params
 	) throws AnchorIOException {
 		
+		if (dir.toString().isEmpty()) {
+			throw new AnchorIOException("The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
+		}
+		
 		if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
 			throw new AnchorIOException( String.format("Directory '%s' does not exist", dir) );
 		}

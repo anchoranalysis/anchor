@@ -56,11 +56,16 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
 		//  then we use this
 		//
 		// This is a convenient way for the ExperimentLauncher to parameterize the input-directory
-		if (directory.isEmpty() && inputContext.hasInputDir()) {
-			return inputContext.getInputDir();
+		if (!directory.isEmpty()) {
+			return Paths.get(directory);	
+		} else {
+			if (inputContext.hasInputDir()) {
+				return inputContext.getInputDir();
+			} else {
+				// The current working directory
+				return Paths.get(".");
+			}
 		}
-		
-		return Paths.get(directory);
 	}
 	
 	public String getDirectory() {
