@@ -87,7 +87,7 @@ public class OutputManagerFixture {
 		}
 		
 		OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
-		outputManager.setDelExistingFolder( true );
+		outputManager.setSilentlyDeleteExisting(true);
 		outputManager.setOutputWriteSettings( ows );
 		outputManager.setFilePathPrefixer( 
 			new FilePathPrefixerConstantPath(pathTempFolder)

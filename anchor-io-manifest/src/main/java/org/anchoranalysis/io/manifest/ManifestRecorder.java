@@ -32,8 +32,6 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.RootFolder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class ManifestRecorder implements Serializable {
 
