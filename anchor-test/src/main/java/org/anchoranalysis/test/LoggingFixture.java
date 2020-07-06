@@ -28,8 +28,8 @@ package org.anchoranalysis.test;
 
 import static org.mockito.Mockito.mock;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * Fixtures to create loggers that don't output anything
@@ -41,14 +41,14 @@ public class LoggingFixture {
 	
 	private LoggingFixture() {}
 
-	/** A {@link LogReporter} that doesn't output anything */
-	public static LogReporter suppressedLogReporter() {
-		return mock(LogReporter.class);
+	/** A {@link MessageLogger} that doesn't output anything */
+	public static MessageLogger suppressedLogReporter() {
+		return mock(MessageLogger.class);
 	}
 
-	/** A {@link LogErrorReporter} that doesn't output anything */
-	public static LogErrorReporter suppressedLogErrorReporter() {
-		return new LogErrorReporter(
+	/** A {@link Logger} that doesn't output anything */
+	public static Logger suppressedLogErrorReporter() {
+		return new Logger(
 			suppressedLogReporter()
 		);
 	}

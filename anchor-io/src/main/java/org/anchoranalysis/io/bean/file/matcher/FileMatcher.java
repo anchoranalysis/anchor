@@ -38,7 +38,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.findmatching.FindFilesException;
 import org.anchoranalysis.io.filepath.findmatching.FindMatchingFiles;
 import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithProgressReporter;
-import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithoutProgressReporter;
 import org.anchoranalysis.io.filepath.findmatching.PathMatchConstraints;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -111,11 +110,7 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 	
 	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext );
 	
-	private FindMatchingFiles createMatchingFiles( ProgressReporter progressReporter, boolean recursive ) {
-		if (progressReporter==null) {
-			return new FindMatchingFilesWithoutProgressReporter();
-		} else {
-			return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
-		}
+	private FindMatchingFiles createMatchingFiles(ProgressReporter progressReporter, boolean recursive ) {
+		return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
 	}
 }

@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 /**
@@ -44,7 +44,7 @@ import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 public abstract class DescriptiveNameFromFileIndependent extends DescriptiveNameFromFile {
 
 	@Override
-	public List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName, LogErrorReporter logger ) {
+	public List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName, Logger logger ) {
 		
 		List<DescriptiveFile> out = new ArrayList<>();
 		
@@ -59,14 +59,14 @@ public abstract class DescriptiveNameFromFileIndependent extends DescriptiveName
 	
 	protected abstract String createDescriptiveName( File file, int index ) throws CreateException;
 	
-	private String createDescriptiveNameOrElse( File file, int index, String elseName, LogErrorReporter logger ) {
+	private String createDescriptiveNameOrElse( File file, int index, String elseName, Logger logger ) {
 		try {
 			return createDescriptiveName(file, index);
 		} catch (CreateException e) {
 			
 			String elseNameWithIndex = String.format("%s04%d", elseName, index);
 
-			logger.getErrorReporter().recordError(
+			logger.errorReporter().recordError(
 				DescriptiveNameFromFileIndependent.class,
 				String.format(
 					"Cannot create a descriptive-name for file %s and index %d. Using '%s' instead.",

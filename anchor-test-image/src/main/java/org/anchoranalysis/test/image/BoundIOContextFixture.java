@@ -26,7 +26,7 @@ package org.anchoranalysis.test.image;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.test.LoggingFixture;
 
@@ -44,11 +44,11 @@ public class BoundIOContextFixture {
 		);
 	}
 	
-	public static BoundIOContext withLogger(LogErrorReporter logger) {
+	public static BoundIOContext withLogger(Logger logger) {
 		BoundIOContext out = mock(BoundIOContext.class);
 		when(out.getLogger()).thenReturn(logger);
-		when(out.getLogReporter()).thenReturn(logger.getLogReporter());
-		when(out.getErrorReporter()).thenReturn(logger.getErrorReporter());
+		when(out.getLogReporter()).thenReturn(logger.messageLogger());
+		when(out.getErrorReporter()).thenReturn(logger.errorReporter());
 		return out;
 	}
 	

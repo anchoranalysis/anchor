@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.bean;
 
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -61,7 +61,7 @@ public abstract class FeatureCastInitParams<S extends FeatureInitParams, T exten
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(FeatureInitParams params, FeatureBase<T> parentFeature, LogErrorReporter logger) throws InitException {
+	public void init(FeatureInitParams params, FeatureBase<T> parentFeature, Logger logger) throws InitException {
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
 			S paramsCast = (S) params;
 			super.init(params, parentFeature, logger);

@@ -28,8 +28,8 @@ package org.anchoranalysis.experiment.task;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -81,11 +81,11 @@ public class InputBound<T,S> {
 		return context.getOutputManager();
 	}
 	
-	public LogErrorReporter getLogger() {
+	public Logger getLogger() {
 		return context.getLogger();
 	}
 
-	public StatefulLogReporter getLogReporterJob() {
+	public StatefulMessageLogger getLogReporterJob() {
 		return context.getStatefulLogReporter();
 	}
 }

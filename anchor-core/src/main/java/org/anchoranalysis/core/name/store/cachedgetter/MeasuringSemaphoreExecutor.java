@@ -27,7 +27,7 @@ package org.anchoranalysis.core.name.store.cachedgetter;
  */
 
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.apache.commons.lang.time.StopWatch;
 
@@ -43,7 +43,7 @@ class MeasuringSemaphoreExecutor<E extends Exception> {
 	private long subExecTime = 0; 
 	private long subMem = 0;
 	
-	public <T> T execute(Operation<T,E> exec, String name, String storeDisplayName, LogErrorReporter logErrorReporter) throws E {
+	public <T> T execute(Operation<T,E> exec, String name, String storeDisplayName, Logger logger) throws E {
 		cnt++;
 
 		StopWatch sw = new StopWatch();
@@ -60,7 +60,7 @@ class MeasuringSemaphoreExecutor<E extends Exception> {
 		
 		long memoryUsed = Math.max( memoryAdded - subMem, 0);
 		
-		logErrorReporter.getLogReporter().log( String.format("Execution Time \t(%6dms, %7dkb)\t%s\t%s", timeTaken, memoryUsed/1000, name, storeDisplayName ) );
+		logger.messageLogger().log( String.format("Execution Time \t(%6dms, %7dkb)\t%s\t%s", timeTaken, memoryUsed/1000, name, storeDisplayName ) );
 		cnt--;
 		
 		if (cnt==0) {

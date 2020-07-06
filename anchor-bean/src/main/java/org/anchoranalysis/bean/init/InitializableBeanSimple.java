@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.init.params.IInitParams;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * 
@@ -44,7 +44,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extends InitializableBean<B, P> implements IInitParams<P> {
 
 	private boolean hasBeenInit = false;
-	private LogErrorReporter logger;
+	private Logger logger;
 	private PropertyDefiner propertyDefiner;
 	
 	protected InitializableBeanSimple(
@@ -56,7 +56,7 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 	
 	// Dummy method, that children can optionally override
 	@Override
-	public final void init(P params, LogErrorReporter logger) throws InitException {
+	public final void init(P params, Logger logger) throws InitException {
 		this.hasBeenInit = true;
 		this.logger = logger;
 		onInit(params);
@@ -67,7 +67,7 @@ public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extend
 		// Empty implementation to be replaced in sub-classes
 	}
 	
-	protected LogErrorReporter getLogger() {
+	protected Logger getLogger() {
 		return logger;
 	}
 

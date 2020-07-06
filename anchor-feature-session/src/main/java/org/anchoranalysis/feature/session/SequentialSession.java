@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -116,7 +116,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param sharedFeatures		A list of features that are shared between the features we are calculating (and thus also init-ed)
 	 * @throws InitException
 	 */
-	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException{
+	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger ) throws InitException{
 		
 		if (isStarted) {
 			throw new InitException("Session has already been started.");
@@ -261,7 +261,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}
 	}
 		
-	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException {
+	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger ) throws InitException {
 		assert(featureInitParams!=null);
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);

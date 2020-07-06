@@ -30,7 +30,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
@@ -40,7 +39,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class TextFileLogHelper {
 	
-	public static Optional<FileOutput> createOutput( BoundOutputManager bom, String outputName ) throws OutputWriteFailedException {
+	public static Optional<FileOutput> createOutput( BoundOutputManager bom, String outputName ) {
 		return FileOutputFromManager.create(
 			"txt",
 			Optional.of(

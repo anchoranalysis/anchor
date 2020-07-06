@@ -28,7 +28,7 @@ package org.anchoranalysis.io.output.bound;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 
 /**
@@ -64,7 +64,7 @@ class RedirectIntoSubdirectory implements BoundIOContext {
 	}
 
 	@Override
-	public LogErrorReporter getLogger() {
+	public Logger getLogger() {
 		return delegate.getLogger();
 	}		
 	

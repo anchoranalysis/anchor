@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -64,7 +64,7 @@ public class PointsInitParams extends BeanInitParams {
 		return storePointsFitter;
 	}
 
-	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
+	public void populate( PropertyInitializer<?> pi, Define define, Logger logger ) throws OperationFailedException {
 		
 		PopulateStoreFromDefine<PointsInitParams> populater = new PopulateStoreFromDefine<>(define, pi, logger);
 		populater.copyInit(PointsFitter.class, storePointsFitter);

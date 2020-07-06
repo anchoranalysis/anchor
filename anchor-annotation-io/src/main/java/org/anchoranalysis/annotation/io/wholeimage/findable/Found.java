@@ -28,7 +28,7 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * A positive-result when an object is found
@@ -56,7 +56,7 @@ public class Found<T> implements Findable<T> {
 	}
 
 	@Override
-	public Optional<T> getFoundOrLog(String name, LogErrorReporter logErrorReporter) {
+	public Optional<T> getFoundOrLog(String name, Logger logger) {
 		return Optional.of(obj);
 	}
 }

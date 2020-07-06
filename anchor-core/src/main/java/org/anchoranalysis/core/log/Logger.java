@@ -1,8 +1,8 @@
-package org.anchoranalysis.bean;
+package org.anchoranalysis.core.log;
 
 /*
  * #%L
- * anchor-beans-shared
+ * anchor-core
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,42 +26,42 @@ package org.anchoranalysis.bean;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
-import org.anchoranalysis.bean.init.params.NullInitParams;
-import org.anchoranalysis.bean.init.property.PropertyInitializer;
-import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.Logger;
+
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
+ * A logging-mechanism for both messages and errors.
+ * <p>
+ * Messages are written to a {@link MessageLogger} whereas errors are written to
+ * a {@link ErrorReporter} (which may or may not report the errors back into the message-logger).
  * 
  * @author Owen Feehan
  *
- * @param <T> bean-type
  */
-public abstract class NullParamsBean<T> extends InitializableBeanSimple<T,NullInitParams> {
+@RequiredArgsConstructor @Accessors(fluent = true)
+public class Logger {
 
-	protected NullParamsBean() {
-		super( new PropertyInitializer<NullInitParams>(NullInitParams.class), new SimplePropertyDefiner<NullInitParams>(NullInitParams.class) );
-	}
+	/** Where messages logged to */
+	@Getter
+	private final MessageLogger messageLogger;
 	
-	
-	
-	@Override
-	public final void onInit(NullInitParams so) throws InitException {
-		onInit();
-	}
+	/** Where errors are reported to */
+	@Getter
+	private final ErrorReporter errorReporter;
 	
 	/**
-	 * As there's no parameters we expose a different method
+	 * Constructs with an error-reporter that writes into the message logger.
 	 * 
+	 * @param messageLogger
 	 */
-	public void onInit() throws InitException {
-		// NOTHING TO DO. This method exists so it can be overrided as needed in sub-classes.
-	}
-
-	public void initRecursive(Logger logger)
-			throws InitException {
-		super.initRecursive(NullInitParams.instance(), logger);
+	public Logger(MessageLogger messageLogger) {
+		super();
+		this.messageLogger = messageLogger;
+		this.errorReporter = new ErrorReporterIntoLog(messageLogger);
 	}
 }

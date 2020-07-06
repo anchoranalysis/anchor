@@ -32,7 +32,7 @@ import org.anchoranalysis.core.axis.AxisType;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -80,13 +80,13 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
 	
 	private NRGStackWithParams nrgStack;
-	private LogErrorReporter logErrorReporter;
+	private Logger logger;
 	
-	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
+	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, Logger logger ) {
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
-		this.logErrorReporter = logErrorReporter;
-		this.features = createFullFeatureList( features, logErrorReporter );
+		this.logger = logger;
+		this.features = createFullFeatureList( features, logger );
 		
 		delegate = new FeatureListCSVGeneratorVertical( "objMaskFeatures", features.createNames() );
 	}
@@ -106,7 +106,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 				features,
 				paramsInit,
 				sharedFeatures,
-				logErrorReporter
+				logger
 			);
 			
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
@@ -115,7 +115,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 				rvc.add( 
 					session.calcSuppressErrors(
 						createParams(om, nrgStack),
-						logErrorReporter.getErrorReporter()
+						logger.errorReporter()
 					)
 				);
 			}
@@ -138,7 +138,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 	
 	// Puts in some extra descriptive features at the start
-	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features, LogErrorReporter logger ) {
+	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features, Logger logger ) {
 		
 		StreamEx<Feature<FeatureInputSingleObject>> stream = StreamEx.of(
 			addFeaturesForAxis(AxisType.X)

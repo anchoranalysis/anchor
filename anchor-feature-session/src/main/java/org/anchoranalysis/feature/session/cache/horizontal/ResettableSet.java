@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.calculation.ResettableCalculation;
 
 class ResettableSet<T extends ResettableCalculation> {
@@ -58,7 +58,7 @@ class ResettableSet<T extends ResettableCalculation> {
 	 * @param logger if non-NULL logging messages are written out indicating if the object was added or not
 	 * @return an existing CachedCalculation if found, otherwise target if added
 	 */
-	public T findOrAdd( T target, LogErrorReporter logger ) {
+	public T findOrAdd( T target, Logger logger ) {
 		assert(target!=null);
 		
 		T existing = map.get(target);
@@ -66,7 +66,7 @@ class ResettableSet<T extends ResettableCalculation> {
 		if (existing==null) {
 			
 			if (doLogging && logger!=null) {
-				logger.getLogReporter().logFormatted("Cache-addding: %s (%d)", target, target.hashCode() );
+				logger.messageLogger().logFormatted("Cache-addding: %s (%d)", target, target.hashCode() );
 			}
 			
 			map.put(target, target);
@@ -77,7 +77,7 @@ class ResettableSet<T extends ResettableCalculation> {
 			
 			// Reusing an existing item
 			if (doLogging && logger!=null) {
-				logger.getLogReporter().logFormatted("Cache-reusing: %s (%d)", existing, existing.hashCode() );
+				logger.messageLogger().logFormatted("Cache-reusing: %s (%d)", existing, existing.hashCode() );
 			}
 			
 			return existing;

@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.wholeimage.findable;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 import lombok.Value;
 
@@ -48,9 +48,9 @@ public class NotFound<T> implements Findable<T> {
 	private final String reason;
 
 	@Override
-	public Optional<T> getFoundOrLog(String name, LogErrorReporter logErrorReporter) {
+	public Optional<T> getFoundOrLog(String name, Logger logger) {
 
-		logErrorReporter.getLogReporter().logFormatted(
+		logger.messageLogger().logFormatted(
 			"Cannot find %s: %s at %s",
 			name,
 			reason,

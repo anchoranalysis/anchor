@@ -27,7 +27,7 @@ package org.anchoranalysis.bean.init.params;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * 
@@ -38,5 +38,5 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 @FunctionalInterface
 public interface IInitParams<T> {
 
-	void init( T so, LogErrorReporter logger ) throws InitException;
+	void init( T so, Logger logger ) throws InitException;
 }

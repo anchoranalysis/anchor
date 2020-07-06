@@ -1,4 +1,4 @@
-package org.anchoranalysis.experiment.bean.logreporter;
+package org.anchoranalysis.experiment.bean.log;
 
 /*
  * #%L
@@ -26,18 +26,46 @@ package org.anchoranalysis.experiment.bean.logreporter;
  * #L%
  */
 
+
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.ConsoleLogReporter;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.bean.require.RequireArguments;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-public class ConsoleLogReporterBean extends LogReporterBean {
+import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * Logs messages to a particular location ONLY if certain conditions are fulfilled.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class OnlyIf extends LoggingDestination {
+
+	// START BEAN PROPERTIES
+	/** The logger to use if conditions are fulfilled */
+	@BeanField @Getter @Setter
+	private LoggingDestination logger;
+	
+	/** The conditions that must be fulfilled */
+	@BeanField  @Getter @Setter
+	private RequireArguments requireArguments;
+	// END BEAN PROPERTIES
+	
 	@Override
-	public StatefulLogReporter create( String outputName, BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
-		return new ConsoleLogReporter();
+	public StatefulMessageLogger create(
+		BoundOutputManager outputManager,
+		ErrorReporter errorReporter,
+		ExperimentExecutionArguments arguments,
+		boolean detailedLogging
+	) {
+		if (requireArguments.hasAllRequiredArguments(arguments.isDebugEnabled())) {
+			return logger.create(outputManager, errorReporter, arguments, detailedLogging);
+		} else {
+			return new StatefulNullMessageLogger();
+		}
 	}
-
-
 }

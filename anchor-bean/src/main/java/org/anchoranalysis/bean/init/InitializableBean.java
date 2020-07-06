@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * A bean that must be initialized with some parameters before being used
@@ -59,7 +59,7 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	 * @param logger 	logger
 	 * @throws InitException if the initialization fails
 	 */
-	public void initRecursiveWithInitializer( PropertyInitializer<?> pi, LogErrorReporter logger ) throws InitException {
+	public void initRecursiveWithInitializer( PropertyInitializer<?> pi, Logger logger ) throws InitException {
 		HelperInit.initRecursive(this, pi, logger);
 	}
 
@@ -72,7 +72,7 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	 * @param logger logger
 	 * @throws InitException if the initialization fails
 	 */
-	public void initRecursive( P params, LogErrorReporter logger ) throws InitException {
+	public void initRecursive( P params, Logger logger ) throws InitException {
 		propertyInitializer.setParam(params);
 		HelperInit.initRecursive( this, propertyInitializer, logger );
 	}

@@ -44,7 +44,7 @@ import org.apache.commons.io.FilenameUtils;
  *       
  *     then the difference is "_someFile.xml"
  *     
- *  The different is recorded seperately as folder and filename components
+ *  The difference is recorded seperately as folder and filename components
  * 
  * @author Owen Feehan
  *
@@ -55,6 +55,7 @@ public class FilePathDifferenceFromFolderPath {
 	private Path folder;
 	
 	// TODO change from the two init methods to two factory constructors
+	// TODO change nullable to Optional
 	public FilePathDifferenceFromFolderPath() {
 		// Nothing to do
 	}

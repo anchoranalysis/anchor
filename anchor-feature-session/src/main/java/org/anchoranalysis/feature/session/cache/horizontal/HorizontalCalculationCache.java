@@ -35,7 +35,7 @@ import java.util.Set;
  */
 
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
@@ -69,7 +69,7 @@ public class HorizontalCalculationCache<T extends FeatureInput> implements Featu
 	
 	// Set up the cache
 	@Override
-	public void init(FeatureInitParams featureInitParams, LogErrorReporter logger) {
+	public void init(FeatureInitParams featureInitParams, Logger logger) {
 		calculator.init(logger);
 	}
 	

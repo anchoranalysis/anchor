@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -53,7 +53,7 @@ public abstract class FeatureTableCalculator<T extends FeatureInput> implements 
 	 * @param logger
 	 * @param features
 	 */
-	public abstract void start( ImageInitParams initParams, Optional<NRGStackWithParams> nrgStack, LogErrorReporter logger ) throws InitException;
+	public abstract void start( ImageInitParams initParams, Optional<NRGStackWithParams> nrgStack, Logger logger ) throws InitException;
 	
 	/**
 	 * Makes a copy of the feature-store for a new thread. Deep-copies the features. Shallow-copies everything else.

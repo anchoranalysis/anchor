@@ -27,7 +27,7 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  */
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
@@ -35,9 +35,9 @@ public class TransformationContext {
 
 	private ImageDimensions dim;
 	private KernelCalcContext kernelCalcContext;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
-	public TransformationContext(ImageDimensions dim, KernelCalcContext kernelCalcContext, LogErrorReporter logger) {
+	public TransformationContext(ImageDimensions dim, KernelCalcContext kernelCalcContext, Logger logger) {
 		super();
 		this.dim = dim;
 		this.kernelCalcContext = kernelCalcContext;
@@ -52,7 +52,7 @@ public class TransformationContext {
 		return kernelCalcContext;
 	}
 
-	public LogErrorReporter getLogger() {
+	public Logger getLogger() {
 		return logger;
 	}
 

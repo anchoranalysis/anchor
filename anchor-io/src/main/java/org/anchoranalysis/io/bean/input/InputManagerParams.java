@@ -26,7 +26,7 @@ package org.anchoranalysis.io.bean.input;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -43,10 +43,10 @@ public class InputManagerParams {
 	
 	private ProgressReporter progressReporter;
 	
-	private LogErrorReporter logger;
+	private Logger logger;
 
 	public InputManagerParams(InputContextParams inputContext, ProgressReporter progressReporter,
-			LogErrorReporter logger) {
+			Logger logger) {
 		super();
 		this.inputContext = inputContext;
 		this.progressReporter = progressReporter;
@@ -65,7 +65,7 @@ public class InputManagerParams {
 		return progressReporter;
 	}
 
-	public LogErrorReporter getLogger() {
+	public Logger getLogger() {
 		return logger;
 	}
 

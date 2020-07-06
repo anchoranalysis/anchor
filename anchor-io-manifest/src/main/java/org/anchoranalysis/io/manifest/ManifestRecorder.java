@@ -41,15 +41,10 @@ public class ManifestRecorder implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7253272905284863941L;
-	
-	// TODO we change this to be a RootFolder, but for now just to be backwards compatible, we allow all FolderWire and optionreplace in the constructor
+
 	private RootFolder rootFolder;	// Paths relative to this
 
-	private static Log log = LogFactory.getLog(ManifestRecorder.class);
-
 	public void init( Path rootFolderPath ) {
-		
-		log.debug( String.format("init %s", rootFolderPath) ); 
 		rootFolder = new RootFolder(rootFolderPath);
 	}
 

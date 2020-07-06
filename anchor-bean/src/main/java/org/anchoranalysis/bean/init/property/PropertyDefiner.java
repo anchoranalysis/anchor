@@ -27,7 +27,7 @@ package org.anchoranalysis.bean.init.property;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * 
@@ -39,7 +39,7 @@ public abstract class PropertyDefiner {
 
 	public abstract boolean accepts( Class<?> paramType );
 	
-	public abstract void doInitFor( Object propertyValue, Object param, Object parent, LogErrorReporter logger ) throws InitException;
+	public abstract void doInitFor( Object propertyValue, Object param, Object parent, Logger logger ) throws InitException;
 	
 	public abstract String describeAcceptedClasses();
 }

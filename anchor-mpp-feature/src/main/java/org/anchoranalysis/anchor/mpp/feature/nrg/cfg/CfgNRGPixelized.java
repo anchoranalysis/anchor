@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -57,12 +57,12 @@ public final class CfgNRGPixelized  {
 	@Getter
     private CfgNRG cfgNRG;
 	
-    private LogErrorReporter logger;
+    private Logger logger;
 	
 	/** A cached version of the calculations for each energy component in the associated {@link NRGScheme} */
     private MemoCollection memoMarks;
     
-    public CfgNRGPixelized( CfgNRG cfgNRG, NRGStackWithParams nrgStack, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException, FeatureCalcException {
+    public CfgNRGPixelized( CfgNRG cfgNRG, NRGStackWithParams nrgStack, SharedFeatureMulti sharedFeatures, Logger logger ) throws InitException, FeatureCalcException {
     	this(
     		cfgNRG,
     		createMemoCollection(cfgNRG, nrgStack, sharedFeatures, logger),
@@ -70,7 +70,7 @@ public final class CfgNRGPixelized  {
     	);
     }
     
-    private CfgNRGPixelized( CfgNRG cfgNRG, MemoCollection memoMarks, LogErrorReporter logger ) {
+    private CfgNRGPixelized( CfgNRG cfgNRG, MemoCollection memoMarks, Logger logger ) {
     	this.cfgNRG = cfgNRG;
     	this.memoMarks = memoMarks;
     	this.logger = logger;
@@ -103,7 +103,7 @@ public final class CfgNRGPixelized  {
 		CfgNRG cfgNRG,
 		NRGStackWithParams nrgStack,
 		SharedFeatureMulti sharedFeatures,
-		LogErrorReporter logger
+		Logger logger
 	) throws InitException, FeatureCalcException {
 
 		cfgNRG.init();

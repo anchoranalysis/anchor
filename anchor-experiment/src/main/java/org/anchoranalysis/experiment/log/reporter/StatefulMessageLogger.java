@@ -1,10 +1,10 @@
-package org.anchoranalysis.core.log;
+package org.anchoranalysis.experiment.log.reporter;
 
-/*
+/*-
  * #%L
- * anchor-core
+ * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,14 @@ package org.anchoranalysis.core.log;
  * #L%
  */
 
+import org.anchoranalysis.core.log.MessageLogger;
 
-public interface LogReporter  {
-		
-	void log( String message );
+/** 
+ * A {@link MessageLogger} that can be started and stopped, and is aware this state.
+ **/
+public interface StatefulMessageLogger extends MessageLogger {
 	
-	void logFormatted( String formatString, Object ...args );
+	void start();
+	
+	void close(boolean successful);
 }

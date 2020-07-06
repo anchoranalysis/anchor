@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -56,7 +56,7 @@ public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSi
 	public void start(
 		ImageInitParams soImage,
 		Optional<NRGStackWithParams> nrgStack,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws InitException {
 		
 		try {
@@ -64,7 +64,7 @@ public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSi
 				namedFeatureStore.listFeatures(),
 				InitParamsHelper.createInitParams(soImage,nrgStack),
 				soImage.getFeature().getSharedFeatureSet(),
-				logErrorReporter
+				logger
 			);
 		} catch (FeatureCalcException e) {
 			throw new InitException(e);

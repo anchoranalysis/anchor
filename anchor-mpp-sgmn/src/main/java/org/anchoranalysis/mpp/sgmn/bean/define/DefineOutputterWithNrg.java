@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -50,7 +50,7 @@ public abstract class DefineOutputterWithNrg extends DefineOutputter {
 	
 	protected NRGStackWithParams createNRGStack(
 		ImageInitParams so,
-		LogErrorReporter logger
+		Logger logger
 	) throws InitException, CreateException {
 
 		// Extract the NRG stack

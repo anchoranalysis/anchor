@@ -1,4 +1,6 @@
-package org.anchoranalysis.core.log;
+package org.anchoranalysis.experiment.log;
+
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 
 /*
  * #%L
@@ -27,40 +29,27 @@ package org.anchoranalysis.core.log;
  */
 
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 
-public class LogErrorReporter {
+public class ConsoleMessageLogger implements StatefulMessageLogger {
 
-	private LogReporter logReporter;
-	private ErrorReporter errorReporter;
-	
-	public LogErrorReporter(LogReporter logReporter) {
-		super();
-		this.logReporter = logReporter;
-		this.errorReporter = new ErrorReporterIntoLog(logReporter);
+	@Override
+	public void start() {
+		// NOTHING TO DO
+	}
+
+	@Override
+	public void log(String message) {
+		System.out.println(message); // NOSONAR
 	}
 	
-	public LogErrorReporter(LogReporter logReporter, ErrorReporter errorReporter) {
-		super();
-		this.logReporter = logReporter;
-		this.errorReporter = errorReporter;
+	@Override
+	public void logFormatted(String formatString, Object... args) {
+		log( String.format(formatString,args) );
 	}
 
-	public LogReporter getLogReporter() {
-		return logReporter;
-	}
-
-	public void setLogReporter(LogReporter logReporter) {
-		this.logReporter = logReporter;
-	}
-
-	public ErrorReporter getErrorReporter() {
-		return errorReporter;
-	}
-
-	public void setErrorReporter(ErrorReporter errorReporter) {
-		this.errorReporter = errorReporter;
+	@Override
+	public void close(boolean successful) {
+		// NOTHING TO CLOSE
 	}
 	
 	

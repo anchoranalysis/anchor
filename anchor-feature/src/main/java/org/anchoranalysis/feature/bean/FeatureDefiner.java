@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.bean;
 
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -41,7 +41,7 @@ class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void doInitFor(Object propertyValue, Object params, Object parent, LogErrorReporter logger) throws InitException {
+	public void doInitFor(Object propertyValue, Object params, Object parent, Logger logger) throws InitException {
 		
 		if (parent!=null) {
 			if (!(parent instanceof FeatureBase)) {

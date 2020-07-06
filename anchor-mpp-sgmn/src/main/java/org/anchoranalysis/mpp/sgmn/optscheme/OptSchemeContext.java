@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
  */
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNodeNull;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -98,7 +98,7 @@ public class OptSchemeContext {
 		return triggerTerminationCondition;
 	}
 
-	public LogErrorReporter getLogger() {
+	public Logger getLogger() {
 		return context.getLogger();
 	}
 	public BoundOutputManagerRouteErrors getOutputManager() {

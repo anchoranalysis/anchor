@@ -26,7 +26,7 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiv
 
 public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 	
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	// Constructor
 	public ReporterAgg() {
@@ -64,7 +64,7 @@ public abstract class ReporterAgg<T> extends ReporterInterval<T> {
 	protected abstract IAggregateReceiver<T> getAggregateReceiver();
 
 	@Override
-	protected LogErrorReporter getLogger() {
+	protected Logger getLogger() {
 		return logger;
 	}
 }

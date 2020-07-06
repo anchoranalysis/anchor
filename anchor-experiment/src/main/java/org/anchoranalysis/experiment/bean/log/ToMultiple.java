@@ -1,4 +1,4 @@
-package org.anchoranalysis.experiment.bean.logreporter;
+package org.anchoranalysis.experiment.bean.log;
 
 /*
  * #%L
@@ -33,43 +33,47 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.LogReporterList;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.log.MessageLoggerList;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-public class LogReporterBeanList extends LogReporterBean {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * Rather than logging to one location, logs to multiple locations (from a list).
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor
+public class ToMultiple extends LoggingDestination {
 
 	// START BEAN
-	@BeanField
-	private List<LogReporterBean> list = new ArrayList<>();
+	/** The list of loggers to log to */
+	@BeanField @Getter @Setter
+	private List<LoggingDestination> list = new ArrayList<>();
 	// END BEAN
 	
-	public LogReporterBeanList() {
-		
-	}
-	
-	public LogReporterBeanList( LogReporterBean first, LogReporterBean second ) {
-		assert( first!=null );
-		assert( second!=null );
+	/**
+	 * Constructs a logger to two locations
+	 * 
+	 * @param first first-location
+	 * @param second second-location
+	 */
+	public ToMultiple( LoggingDestination first, LoggingDestination second ) {
+		this();
 		list.add(first);
 		list.add(second);
 	}
 
-	public List<LogReporterBean> getList() {
-		return list;
-	}
-
-	public void setList(List<LogReporterBean> list) {
-		this.list = list;
-	}
-
 	@Override
-	public StatefulLogReporter create( String outputName, BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
-		return new LogReporterList(
-			list.stream().map( logReporter->
-				logReporter.create(outputName, bom, errorReporter, expArgs, detailedLogging)
+	public StatefulMessageLogger create( BoundOutputManager outputManager, ErrorReporter errorReporter, ExperimentExecutionArguments arguments, boolean detailedLogging ) {
+		return new MessageLoggerList(
+			list.stream().map( logger->
+				logger.create(outputManager, errorReporter, arguments, detailedLogging)
 			)
 		);
 	}
-	
 }

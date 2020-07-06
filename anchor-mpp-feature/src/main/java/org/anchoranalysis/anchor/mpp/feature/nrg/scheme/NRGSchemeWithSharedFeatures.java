@@ -41,7 +41,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -59,7 +59,7 @@ public class NRGSchemeWithSharedFeatures {
 	
 	private LRUCache<Integer,NRGTotal> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	// Caches NRG value by index
 	private class CalcElemIndTotalOperation implements FunctionWithException<Integer,NRGTotal,FeatureCalcException> {
@@ -109,7 +109,7 @@ public class NRGSchemeWithSharedFeatures {
 	}
 		
 	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureMulti sharedFeatures, int nrgSchemeIndCacheSize, LogErrorReporter logger ) {
+			SharedFeatureMulti sharedFeatures, int nrgSchemeIndCacheSize, Logger logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;

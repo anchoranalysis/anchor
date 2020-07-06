@@ -1,6 +1,6 @@
 package org.anchoranalysis.experiment.bean.task;
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
@@ -59,13 +59,13 @@ public class HelloWorldTask<S extends InputFromManager> extends TaskWithoutShare
 	
 	@Override
 	public void doJobOnInputObject(InputBound<S,NoSharedState> params) throws JobExecutionException {
-		printMessage( params.getLogger().getLogReporter() );
+		printMessage( params.getLogger().messageLogger() );
 		
 	}
 
-	private void printMessage( LogReporter logReporter ) {
-		logReporter.log("Hello World");
-		logReporter.log("Consider replacing this task, with one appropriate to your intentions.");		
+	private void printMessage( MessageLogger logger ) {
+		logger.log("Hello World");
+		logger.log("Consider replacing this task, with one appropriate to your intentions.");		
 	}
 
 	@Override

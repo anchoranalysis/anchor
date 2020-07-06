@@ -63,7 +63,7 @@ public abstract class RasterTask extends TaskWithoutSharedState<NamedChnlsInput>
 			
 			startSeries(
 				outputManager,
-				params.getLogger().getErrorReporter()
+				params.getLogger().errorReporter()
 			);
 			
 			for (int s=0; s<numSeries; s++) {

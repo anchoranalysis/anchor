@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.store.BeanStoreAdder;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
 /**
@@ -54,7 +54,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 	
 	private PropertyInitializer<?> pi;
 	private Define define;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	/***
 	 * Constructor
@@ -63,7 +63,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 	 * @param pi used to intitialize the properties of objects added with initialization
 	 * @param logger passed to objects added with initialization
 	 */
-	public PopulateStoreFromDefine(Define define, PropertyInitializer<?> pi, LogErrorReporter logger) {
+	public PopulateStoreFromDefine(Define define, PropertyInitializer<?> pi, Logger logger) {
 		super();
 		this.pi = pi;
 		this.define = define;

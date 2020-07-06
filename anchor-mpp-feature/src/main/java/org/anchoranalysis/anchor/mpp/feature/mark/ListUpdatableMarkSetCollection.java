@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
@@ -54,7 +54,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	}
 
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, Logger logger, SharedFeatureMulti sharedFeatures ) throws InitException {
 		for (UpdatableMarkSet item : delegate) {
 			item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);
 		}

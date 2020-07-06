@@ -1,8 +1,8 @@
-package org.anchoranalysis.experiment.bean.logreporter;
+package org.anchoranalysis.core.log;
 
 /*
  * #%L
- * anchor-experiment
+ * anchor-core
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,17 +26,15 @@ package org.anchoranalysis.experiment.bean.logreporter;
  * #L%
  */
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
-import org.anchoranalysis.experiment.log.reporter.TextFileLogReporter;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-
-public class TextFileLogReporterBean extends LogReporterBean {
+/**
+ * Logs messages (strings) somewhere.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface MessageLogger  {
+		
+	void log( String message );
 	
-	@Override
-	public StatefulLogReporter create( String outputName, BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging ) {
-		return new TextFileLogReporter( outputName, bom, errorReporter );
-	}
-
+	void logFormatted( String formatString, Object ...args );
 }

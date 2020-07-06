@@ -37,7 +37,7 @@ public abstract class Experiment extends AnchorBean<Experiment> implements IAsso
 	// Allows to reference the xml configuration from where the experiment was defined
 	private XMLConfiguration xmlConfiguration = null;
 	
-	public abstract void doExperiment(ExperimentExecutionArguments expArgs) throws ExperimentExecutionException;
+	public abstract void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException;
 
 	public XMLConfiguration getXMLConfiguration() {
 		return xmlConfiguration;

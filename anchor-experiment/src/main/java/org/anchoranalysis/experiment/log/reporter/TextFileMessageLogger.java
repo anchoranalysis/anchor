@@ -29,31 +29,64 @@ package org.anchoranalysis.experiment.log.reporter;
 
 import java.io.PrintWriter;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 
-public class TextFileLogReporter implements StatefulLogReporter {
+/**
+ * Logs messages to a text-file.
+ * <p>
+ * Both the path of text-file can be determined in different ways by the constructor, and whether
+ * it is written at all.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class TextFileMessageLogger implements StatefulMessageLogger {
 
-	private String outputName;
-	private BoundOutputManager bom;
-	private ErrorReporter errorReporter;
+	// START REQUIRED ARGUMENTS
+	private final Supplier<Optional<FileOutput>> fileOutputSupplier;
+	private final ErrorReporter errorReporter;
+	// END REQUIRED ARGUMENTS
 	
-	private Optional<FileOutput> fileOutput;
-	private Optional<PrintWriter> printWriter;
+	private Optional<FileOutput> fileOutput = Optional.empty();
+	private Optional<PrintWriter> printWriter = Optional.empty();
 	
-	public TextFileLogReporter(String outputName, BoundOutputManager bom,
-			ErrorReporter errorReporter) {
-		super();
-		this.outputName = outputName;
-		this.bom = bom;
+	/**
+	 * Constructs a logger that (always) writes messages to a text-file with a specific path.
+	 * 
+	 * @param filePath path to write the log to
+	 * @param errorReporter error-reporter an error is outputted here if the log cannot be created, and no further logging occurs.
+	 */
+	public TextFileMessageLogger(String filePath, ErrorReporter errorReporter) {
+		this.fileOutputSupplier = () -> Optional.of(
+			new FileOutput(filePath)
+		);
 		this.errorReporter = errorReporter;
 	}
+		
+	/**
+	 * Constructs a logger that (maybe) writes messages to a text-file, with a path based upon an <i>output name</i> applied
+	 * 	to a {@link BoundOutputManager}.
+	 * <p>
+	 * The message-log will only be outputted, if allowed by the {@link BoundOutputManager}.
+	 * 
+	 * @param outputName output-name
+	 * @param outputManager output-manager
+	 * @param errorReporter error-reporter an error is outputted here if the log cannot be created, and no further logging occurs.
+	 */
+	public TextFileMessageLogger(
+		String outputName,
+		BoundOutputManager outputManager,
+		ErrorReporter errorReporter
+	) {
+		this.fileOutputSupplier = () -> TextFileLogHelper.createOutput(outputManager, outputName);
+		this.errorReporter = errorReporter;
+	}	
 
 	@Override
 	public void logFormatted(String formatString, Object... args) {
@@ -63,7 +96,7 @@ public class TextFileLogReporter implements StatefulLogReporter {
 	@Override
 	public void start() {
 		try {
-			fileOutput = TextFileLogHelper.createOutput(bom, outputName);
+			fileOutput = fileOutputSupplier.get();
 			printWriter = OptionalUtilities.map(
 				fileOutput,
 				output -> {
@@ -71,8 +104,8 @@ public class TextFileLogReporter implements StatefulLogReporter {
 					return output.getWriter();
 				}
 			);
-		} catch (AnchorIOException | OutputWriteFailedException e) {
-			errorReporter.recordError(LogReporter.class, e);
+		} catch (Exception e) {
+			errorReporter.recordError(MessageLogger.class, e);
 		}		
 	}
 

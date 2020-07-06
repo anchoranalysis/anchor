@@ -28,7 +28,7 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -45,7 +45,7 @@ public class JobStartStopLogger {
 	private static final String HASH_SEPERATOR = StringUtils.repeat('#', 80);
 	
 	private final String jobDscrText;
-	private final Optional<LogReporter> logger;
+	private final Optional<MessageLogger> logger;
 	private final ConcurrentJobMonitor monitor;
 	private final boolean showHashSeperators;
 	private final boolean disableLogMessages;
@@ -59,7 +59,7 @@ public class JobStartStopLogger {
 	 * @param showOngoingJobsLess When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0 disables. 
 	 * @param monitor
 	 */
-	public JobStartStopLogger(String jobDscrText, Optional<LogReporter> logger, ConcurrentJobMonitor monitor, boolean showHashSeperators, int showOngoingJobsLessThan ) {
+	public JobStartStopLogger(String jobDscrText, Optional<MessageLogger> logger, ConcurrentJobMonitor monitor, boolean showHashSeperators, int showOngoingJobsLessThan ) {
 		super();
 		this.jobDscrText = jobDscrText;
 		this.logger = logger;

@@ -1,12 +1,10 @@
-package org.anchoranalysis.experiment.log;
+package org.anchoranalysis.core.functional;
 
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,29 +26,22 @@ import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
  * #L%
  */
 
+/**
+ * Like {@java.util.Supplier} but can also throw an exception.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> type of object to supply
+ * @param <E> exception-type if supplying fails
+ */
+@FunctionalInterface
+public interface SupplierWithException<T, E extends Exception> {
 
-
-public class ConsoleLogReporter implements StatefulLogReporter {
-
-	@Override
-	public void start() {
-		// NOTHING TO DO
-	}
-
-	@Override
-	public void log(String message) {
-		System.out.println(message); // NOSONAR
-	}
-	
-	@Override
-	public void logFormatted(String formatString, Object... args) {
-		log( String.format(formatString,args) );
-	}
-
-	@Override
-	public void close(boolean successful) {
-		// NOTHING TO CLOSE
-	}
-	
-	
+	/**
+	 * Applies a supplier like with {@link java.util.Supplier#get).
+	 * 
+	 * @return the supplied object.
+	 * @throws E an exception that may be thrown
+	 */
+	T get() throws E;
 }

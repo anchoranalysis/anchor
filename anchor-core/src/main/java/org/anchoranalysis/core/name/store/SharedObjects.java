@@ -30,7 +30,7 @@ package org.anchoranalysis.core.name.store;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 public class SharedObjects {
 	
 	// START REQUIRED ARGUMENTS
-	private final LogErrorReporter logger;
+	private final Logger logger;
 	// END REQUIRED ARGUMENTS
 	
 	/**

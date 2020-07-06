@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -47,7 +47,7 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String genFeatureStrFor(MPPInitParams so, LogErrorReporter logger)
+	public String genFeatureStrFor(MPPInitParams so, Logger logger)
 			throws OperationFailedException {
 		try {
 			objs.initRecursive( so.getImage(), logger );

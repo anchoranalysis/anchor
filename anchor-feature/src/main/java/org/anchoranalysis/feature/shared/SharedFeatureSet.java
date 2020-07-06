@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.shared;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.NameValue;
@@ -44,7 +44,7 @@ public class SharedFeatureSet<T extends FeatureInput> {
 		this.set = set;
 	}
 
-	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logger ) throws InitException {
+	public void initRecursive( FeatureInitParams featureInitParams, Logger logger ) throws InitException {
 		for( NameValue<Feature<T>> nv : set ) {
 			nv.getValue().initRecursive( featureInitParams, logger);
 		}

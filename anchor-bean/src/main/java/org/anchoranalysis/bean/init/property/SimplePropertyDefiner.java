@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.init.property;
 
 import org.anchoranalysis.bean.init.params.IInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,7 @@ public class SimplePropertyDefiner<P> extends PropertyDefiner {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doInitFor(Object propertyValue, Object param,
-			Object parent, LogErrorReporter logger) throws InitException {
+			Object parent, Logger logger) throws InitException {
 		assert propertyValue instanceof IInitParams;
 		assert paramTypeMatch.isAssignableFrom( param.getClass() );
 		

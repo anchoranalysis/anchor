@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -172,7 +172,7 @@ class WriteGroupResults {
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
 		FeatureNameList featureNamesSource,
 		ResultsVectorCollection featuresCollection,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws AnchorIOException {
 		
 		FeatureCalculatorMulti<FeatureInputResults> session;
@@ -180,11 +180,11 @@ class WriteGroupResults {
 		try {
 			session = FeatureSession.with(
 				featuresAggregate.listFeatures(),
-				logErrorReporter
+				logger
 			);
 			
 		} catch (FeatureCalcException e1) {
-			logErrorReporter.getErrorReporter().recordError(GroupedResultsVectorCollection.class, e1);
+			logger.errorReporter().recordError(GroupedResultsVectorCollection.class, e1);
 			throw new AnchorIOException("Cannot start feature-session", e1);
 		}
 		
@@ -193,7 +193,7 @@ class WriteGroupResults {
 			featureNamesSource.createMapToIndex()
 		);
 		
-		return session.calcSuppressErrors(params, logErrorReporter.getErrorReporter() );
+		return session.calcSuppressErrors(params, logger.errorReporter() );
 	}
 	
 	private static <T extends FeatureInput> void writeAggregatedAsParams(
@@ -222,7 +222,7 @@ class WriteGroupResults {
 				paramsOut.writeToFile(fileOutPath.get());
 			}
 		} catch (IOException | OutputWriteFailedException e) {
-			context.getLogger().getErrorReporter().recordError(GroupedResultsVectorCollection.class, e);
+			context.getLogger().errorReporter().recordError(GroupedResultsVectorCollection.class, e);
 		}
 	}
 }

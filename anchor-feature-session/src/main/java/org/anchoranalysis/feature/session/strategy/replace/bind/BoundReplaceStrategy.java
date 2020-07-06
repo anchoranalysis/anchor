@@ -31,7 +31,7 @@ import java.util.function.Function;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -60,7 +60,7 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 		FeatureList<T> featureList,
 		FeatureInitParams featureInitParams,
 		SharedFeatureMulti sharedFeatures, 
-		LogErrorReporter logger
+		Logger logger
 	) {
 		CacheCreator cacheCreator = new CacheCreatorSimple(featureList, sharedFeatures, featureInitParams, logger);
 		if (!strategy.isPresent()) {

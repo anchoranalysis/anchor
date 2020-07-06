@@ -26,19 +26,19 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 
 public class OptimizationFeedbackEndParams<T> {
 
 	private T state;
-	private LogReporter logReporter;
+	private MessageLogger logger;
 
-	public LogReporter getLogReporter() {
-		return logReporter;
+	public MessageLogger getLogReporter() {
+		return logger;
 	}
 	
-	public void setLogReporter(LogReporter logReporter) {
-		this.logReporter = logReporter;
+	public void setLogReporter(MessageLogger logger) {
+		this.logger = logger;
 	}
 	
 	public T getState() {

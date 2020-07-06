@@ -1,10 +1,10 @@
-package org.anchoranalysis.experiment.bean.logreporter;
+package org.anchoranalysis.experiment.bean.log;
 
-/*-
+/*
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +28,20 @@ package org.anchoranalysis.experiment.bean.logreporter;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.FailureOnlyTextFileLogReporter;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-public class FailureOnlyTextFileLogReporterBean extends LogReporterBean {
+/**
+ * Logs messages to the console.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ToConsole extends LoggingDestination {
 
 	@Override
-	public StatefulLogReporter create(String outputName, BoundOutputManager bom,
-			ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
-		return new FailureOnlyTextFileLogReporter(bom, errorReporter, outputName);
+	public StatefulMessageLogger create( BoundOutputManager outputManager, ErrorReporter errorReporter, ExperimentExecutionArguments arguments, boolean detailedLogging ) {
+		return new ConsoleMessageLogger();
 	}
-
 }

@@ -58,7 +58,7 @@ public class OutputManagerFixture {
 	
 	public static BoundOutputManagerRouteErrors outputManagerForRouterErrors( Path pathTempFolder ) throws BindFailedException {
 		
-		ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().getErrorReporter();
+		ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().errorReporter();
 
 		return new BoundOutputManagerRouteErrors(
 			createBoundOutputManagerFor(pathTempFolder, errorReporter),
@@ -69,7 +69,7 @@ public class OutputManagerFixture {
 	public static BoundOutputManager outputManagerFor( Path pathTempFolder ) throws BindFailedException {
 		return createBoundOutputManagerFor(
 			pathTempFolder,
-			LoggingFixture.suppressedLogErrorReporter().getErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter().errorReporter()
 		);
 	}
 	

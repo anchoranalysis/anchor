@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 
 public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
@@ -55,7 +55,7 @@ public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
 	}
 
 	@Override
-	public String genFeatureStrFor(MPPInitParams obj, LogErrorReporter logger)
+	public String genFeatureStrFor(MPPInitParams obj, Logger logger)
 			throws OperationFailedException {
 		try {
 			return item.genFeatureStrFor(obj, logger);

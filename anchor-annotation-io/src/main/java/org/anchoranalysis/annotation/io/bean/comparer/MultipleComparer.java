@@ -46,7 +46,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -84,13 +84,13 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		DisplayStack background,
 		Path annotationPath,
 		ColorSetGenerator colorSetGenerator,
-		LogErrorReporter logErrorReporter,
+		Logger logger,
 		boolean debugMode
 	) throws CreateException {
 		
-		SharedFeaturesInitParams so = SharedFeaturesInitParams.create(logErrorReporter);
+		SharedFeaturesInitParams so = SharedFeaturesInitParams.create(logger);
 		try {
-			featureEvaluator.initRecursive( so, logErrorReporter );
+			featureEvaluator.initRecursive( so, logger );
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}
@@ -105,7 +105,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 			
 			Findable<ObjectCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
 			
-			Optional<ObjectCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logErrorReporter);
+			Optional<ObjectCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logger);
 			
 			if (!foundObjs.isPresent()) {
 				continue;

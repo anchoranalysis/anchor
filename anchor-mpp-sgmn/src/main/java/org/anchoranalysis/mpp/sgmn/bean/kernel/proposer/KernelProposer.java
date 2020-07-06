@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -64,7 +64,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 		EnsureUniqueNames.apply( lstKernelFactories );		
 	}
 		
-	public void initWithProposerSharedObjects( MPPInitParams so, LogErrorReporter logger ) throws InitException {
+	public void initWithProposerSharedObjects( MPPInitParams so, Logger logger ) throws InitException {
 		
 		for (WeightedKernel<T> wkf : lstKernelFactories) {
 			wkf.getKernel().initRecursive(so, logger);

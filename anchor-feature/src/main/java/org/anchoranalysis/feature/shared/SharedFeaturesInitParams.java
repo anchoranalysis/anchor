@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -79,11 +79,11 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	/**
 	 * Creates empty params
 	 * 
-	 * @param logErrorReporter
+	 * @param logger
 	 * @return
 	 */
-	public static SharedFeaturesInitParams create( LogErrorReporter logErrorReporter ) {
-		SharedObjects so = new SharedObjects(logErrorReporter);
+	public static SharedFeaturesInitParams create( Logger logger ) {
+		SharedObjects so = new SharedObjects(logger);
 		return create(so);
 	}
 	
@@ -93,7 +93,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	
 	public void populate(
 		List<NamedBean<FeatureListProvider<FeatureInput>>> namedFeatureListCreator,
-		LogErrorReporter logger
+		Logger logger
 	) throws OperationFailedException {
 		
 		assert( getFeatureListSet()!=null );
@@ -107,7 +107,7 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		}
 	}
 	
-	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb, LogErrorReporter logger ) throws OperationFailedException {
+	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb, Logger logger ) throws OperationFailedException {
 		
 		try {
 			FeatureList<FeatureInput> fl = nb.getItem().create();

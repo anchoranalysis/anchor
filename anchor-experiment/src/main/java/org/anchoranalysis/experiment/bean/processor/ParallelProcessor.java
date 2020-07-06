@@ -31,7 +31,7 @@ import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -87,7 +87,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		S sharedState = getTask().beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
 			
 		int nrOfProcessors = selectNumProcessors(
-			paramsExperiment.getLogReporterExperiment(),
+			paramsExperiment.getLoggerExperiment(),
 			paramsExperiment.isDetailedLogging()
 		);
 		ExecutorService eservice = Executors.newFixedThreadPool(nrOfProcessors);
@@ -114,11 +114,11 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 	    // Wait until all threads are finish
 	    while (!eservice.isTerminated());
 		
-		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.context() );
+		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.getContext() );
 		return monitor.createStatistics();
 	}
 	
-	private int selectNumProcessors( LogReporter logReporter, boolean detailedLogging ) {
+	private int selectNumProcessors( MessageLogger logger, boolean detailedLogging ) {
 		
 		int availableProcessors = Runtime.getRuntime().availableProcessors();
 		
@@ -129,7 +129,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 		}
 		
 		if (detailedLogging) {
-			logReporter.logFormatted(
+			logger.logFormatted(
 				"Using %s from: %d",
 				LanguageUtilities.prefixPluralizeMaybe(nrOfProcessors, "processor"),
 				availableProcessors
@@ -160,7 +160,7 @@ public class ParallelProcessor<T extends InputFromManager,S> extends JobProcesso
 				taskState,
 				td,
 				monitor,
-				logReporterForMonitor(paramsExperiment),
+				loggerForMonitor(paramsExperiment),
 				showOngoingJobsLessThan
 			)
 		);

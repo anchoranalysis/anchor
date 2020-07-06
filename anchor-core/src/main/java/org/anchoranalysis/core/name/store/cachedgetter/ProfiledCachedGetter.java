@@ -28,7 +28,7 @@ package org.anchoranalysis.core.name.store.cachedgetter;
 
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -47,16 +47,16 @@ public class ProfiledCachedGetter<T, E extends Exception> extends WrapOperationA
 
 	private String name;
 	private String storeDisplayName;
-	private LogErrorReporter logErrorReporter;
+	private Logger logger;
 	
 	private static MeasuringSemaphoreExecutor<Exception> semaphore = new MeasuringSemaphoreExecutor<>();
 	
 	private static final int STORE_DISPLAY_NAME_LENGTH = 30;
 	private static final int NAME_LENGTH = 30;
 	
-	public ProfiledCachedGetter(Operation<T,E> getter, String name, String storeDisplayName, LogErrorReporter logErrorReporter) {
+	public ProfiledCachedGetter(Operation<T,E> getter, String name, String storeDisplayName, Logger logger) {
 		super(getter);
-		this.logErrorReporter = logErrorReporter;
+		this.logger = logger;
 		
 		// We pad the display name to a fixed with
 		this.name = StringUtils.rightPad( name, NAME_LENGTH );
@@ -72,7 +72,7 @@ public class ProfiledCachedGetter<T, E extends Exception> extends WrapOperationA
 			() -> super.execute(),	// NOSONAR
 			name,
 			storeDisplayName,
-			logErrorReporter
+			logger
 		);
 	}
 }

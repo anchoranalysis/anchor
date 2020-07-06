@@ -47,7 +47,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -85,7 +85,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	private boolean hasInit = false;
 	private NRGStackWithParams nrgStack;
-	private LogErrorReporter logger;
+	private Logger logger;
 	private SharedFeatureMulti sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
@@ -116,7 +116,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, Logger logger, SharedFeatureMulti sharedFeatures ) throws InitException {
 		this.logger = logger;
 		this.sharedFeatures = sharedFeatures;
 		

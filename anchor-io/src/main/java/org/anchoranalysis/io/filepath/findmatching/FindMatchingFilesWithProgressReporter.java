@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter;
@@ -61,7 +61,7 @@ public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles 
 	}
 	
 	@Override
-	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
+	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, Logger logger ) throws FindFilesException {
 		
 		try {
 			TraversalResult traversal;
@@ -85,7 +85,7 @@ public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles 
 		}
 	}
 	
-	private List<File> convertToList( TraversalResult traversal, PathMatchConstraints constraints, boolean acceptDirectoryErrors, LogErrorReporter logger ) throws FindFilesException {
+	private List<File> convertToList( TraversalResult traversal, PathMatchConstraints constraints, boolean acceptDirectoryErrors, Logger logger ) throws FindFilesException {
 
 		List<File> listOut = new ArrayList<>();
 		
@@ -139,7 +139,7 @@ public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles 
 		PathMatchConstraints pathMatchConstraints,
 		List<File> listOut,
 		boolean acceptDirectoryErrors,
-		LogErrorReporter logger
+		Logger logger
 	) throws FindFilesException {
 		// Then every other folder is treated as a bucket
 		for( Path dirProgress : progressFolders) {
@@ -152,7 +152,7 @@ public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles 
 				);
 			} catch (FindFilesException e) {
 				if (acceptDirectoryErrors) {
-					logger.getErrorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
+					logger.errorReporter().recordError(FindMatchingFilesWithProgressReporter.class, e);
 				} else {
 					// Rethrow the exception
 					throw e;

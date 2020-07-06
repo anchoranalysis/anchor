@@ -1,10 +1,10 @@
-package org.anchoranalysis.experiment.log.reporter;
+package org.anchoranalysis.core.log;
 
-/*-
+/*
  * #%L
- * anchor-experiment
+ * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,21 @@ package org.anchoranalysis.experiment.log.reporter;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
+/**
+ * Does nothing with (i.e. simply ignores) with any messages logged.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class NullMessageLogger implements MessageLogger {
+	
+	@Override
+	public void log(String message) {
+		// NOTHING TO DO		
+	}
 
-/* A log-reporter that can be started and stopped, and is aware of the state of an experiment */
-public interface StatefulLogReporter extends LogReporter {
-	
-	void start();
-	
-	void close(boolean successful);
+	@Override
+	public void logFormatted(String formatString, Object... args) {
+		// NOTHING TO DO		
+	}
 }

@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -77,7 +77,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 		this.list = list;
 	}
 	
-	public void initRecursive( FeatureInitParams featureInitParams, LogErrorReporter logger ) throws InitException {
+	public void initRecursive( FeatureInitParams featureInitParams, Logger logger ) throws InitException {
 		for( Feature<T> f : list) {
 			f.initRecursive(featureInitParams, logger);
 		}

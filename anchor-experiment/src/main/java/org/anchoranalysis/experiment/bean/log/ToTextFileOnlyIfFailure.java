@@ -1,10 +1,10 @@
-package org.anchoranalysis.experiment.bean.logreporter;
+package org.anchoranalysis.experiment.bean.log;
 
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,23 +26,32 @@ package org.anchoranalysis.experiment.bean.logreporter;
  * #L%
  */
 
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.log.reporter.FailureOnlyMessageLogger;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-public abstract class LogReporterBean extends AnchorBean<LogReporterBean> {
+/**
+ * Logs to a text file like with {@link org.anchoranalysis.experiment.bean.log.ToTextFile}
+ * but the log is ONLY written if a failure occurs in the experiment.
+ * <p>
+ * If no failure, occurs no file is outputted on the filesystem at all.
+ * <p>
+ * This is a convenient means of avoiding write and sotrage costs of files of perhaps
+ * minimal value if nothing went wrong.
+ * 
+ * @author Owen Feehan
+  */
+public class ToTextFileOnlyIfFailure extends ToTextFileBase {
 
-	/**
-	 * Creates a log-reporter
-	 * 
-	 * @param outputName what name to use iff the log is outputted to the file-system, otherwise ignroed
-	 * @param bom a bound output manager
-	 * @param errorReporter error-reporter
-	 * @param expArgs experiment-arguments
-	 * @param detailedLogging whether detailed logging should occur in this reporter, or a less detailed version
-	 * @return
-	 */
-	public abstract StatefulLogReporter create( String outputName, BoundOutputManager bom, ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging );
+	@Override
+	public StatefulMessageLogger create(
+		BoundOutputManager outputManager,
+		ErrorReporter errorReporter,
+		ExperimentExecutionArguments arguments,
+		boolean detailedLogging
+	) {
+		return new FailureOnlyMessageLogger(getOutputName(), outputManager, errorReporter);
+	}
 }

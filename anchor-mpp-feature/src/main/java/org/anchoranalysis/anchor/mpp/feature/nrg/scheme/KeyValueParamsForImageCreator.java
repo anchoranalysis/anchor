@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -53,10 +53,10 @@ public class KeyValueParamsForImageCreator {
 
 	private NRGScheme nrgScheme;
 	private SharedFeatureMulti sharedFeatures;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureMulti sharedFeatures,
-			LogErrorReporter logger) {
+			Logger logger) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;

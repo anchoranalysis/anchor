@@ -30,8 +30,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * Certain parameters that are exposed after any file-system binding for inputs and outputs has occurred.
@@ -47,14 +47,14 @@ public interface BoundIOContext {
 		
 	boolean isDebugEnabled();
 	
-	LogErrorReporter getLogger();
+	Logger getLogger();
 	
 	default ErrorReporter getErrorReporter() {
-		return getLogger().getErrorReporter();
+		return getLogger().errorReporter();
 	}
 	
-	default LogReporter getLogReporter() {
-		return getLogger().getLogReporter();
+	default MessageLogger getLogReporter() {
+		return getLogger().messageLogger();
 	}
 	
 	/**

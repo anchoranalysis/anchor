@@ -30,7 +30,7 @@ package org.anchoranalysis.image.feature.session.merged;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -56,7 +56,7 @@ class CreateCalculatorHelper {
 
 	// Prefixes that are ignored
 	private final Optional<NRGStackWithParams> nrgStack;
-	private final LogErrorReporter logger;
+	private final Logger logger;
 		
 	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createCached(
 		FeatureList<T> features,

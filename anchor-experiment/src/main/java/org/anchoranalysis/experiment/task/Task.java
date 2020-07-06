@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
@@ -121,17 +121,14 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 	 * @return a complete ParametersBound object with all parameters set to objects bound for the specific task
 	 */
 	private InputBound<T,S> bindOtherParams( ParametersUnbound<T,S> paramsUnbound, BoundOutputManager outputManagerTask, ManifestRecorder manifestTask ) {
-		
+
 		// We create a new log reporter for this job only
-		ErrorReporter errorReporterFallback = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
-		StatefulLogReporter logReporterJob = paramsUnbound.getParametersExperiment().getLogReporterTaskCreator().create(
-			"job_log",
-			outputManagerTask,
-			errorReporterFallback,
-			paramsUnbound.getParametersExperiment().getExperimentArguments(), paramsUnbound.getParametersExperiment().isDetailedLogging()
+		StatefulMessageLogger loggerJob = createJobLog(
+			paramsUnbound.getParametersExperiment(),
+			outputManagerTask
 		);
 		
-		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(logReporterJob);
+		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(loggerJob);
 		
 		// We initialise the output manager
 		BoundOutputManagerRouteErrors outputManagerTaskRouteErrors = new BoundOutputManagerRouteErrors(
@@ -148,35 +145,43 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			new BoundContextSpecify(
 				paramsUnbound.getParametersExperiment().getExperimentArguments(),
 				outputManagerTaskRouteErrors,
-				logReporterJob,
+				loggerJob,
 				errorReporterJob
 			)
 		);
 	}
 	
+	private StatefulMessageLogger createJobLog(ParametersExperiment params, BoundOutputManager outputManagerTask) {
+		return params.getLoggerTaskCreator().createWithLogFallback(
+			outputManagerTask,
+			params.getLoggerExperiment(),
+			params.getExperimentArguments(),
+			params.isDetailedLogging()
+		);
+	}
 	
 	private boolean executeJobLogExceptions(
 		InputBound<T,S> params,
 		boolean suppressExceptions
 	) throws JobExecutionException {
 		
-		StatefulLogReporter logReporterJob = params.getLogReporterJob();
+		StatefulMessageLogger loggerJob = params.getLogReporterJob();
 		
 		StopWatch stopWatchFile = new StopWatch();
 		stopWatchFile.start();
 		
 		boolean successfullyFinished = false;
 		try {
-			logReporterJob.start();
+			loggerJob.start();
 			
 			if (params.isDetailedLogging()) {
 				
-				params.getLogger().getLogReporter().logFormatted(
+				params.getLogger().messageLogger().logFormatted(
 					"Output Folder has path: \t%s",
 					params.getOutputManager().getOutputFolderPath().toString()
 				);
 				
-				logReporterJob.logFormatted("File processing started: %s", params.getInputObject().descriptiveName());
+				loggerJob.logFormatted("File processing started: %s", params.getInputObject().descriptiveName());
 			}
 			
 			executeJobAdditionalOutputs( params, stopWatchFile );
@@ -184,8 +189,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			successfullyFinished = true;
 			
 		} catch (Exception e) {
-			params.getLogger().getErrorReporter().recordError(Task.class, e);
-			logReporterJob.log("This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
+			params.getLogger().errorReporter().recordError(Task.class, e);
+			loggerJob.log("This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
 			if (!suppressExceptions) {
 				throw new JobExecutionException("Job encountered a fatal error", e);	
 			}
@@ -195,11 +200,11 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 			stopWatchFile.stop();
 			
 			if (params.isDetailedLogging()) {
-				logReporterJob.logFormatted("File processing ended:   %s (time taken = %ds)", params.getInputObject().descriptiveName(), stopWatchFile.getTime()/1000);
-				MemoryUtilities.logMemoryUsage("End file processing", logReporterJob );
+				loggerJob.logFormatted("File processing ended:   %s (time taken = %ds)", params.getInputObject().descriptiveName(), stopWatchFile.getTime()/1000);
+				MemoryUtilities.logMemoryUsage("End file processing", loggerJob );
 			}
 						
-			logReporterJob.close(successfullyFinished);
+			loggerJob.close(successfullyFinished);
 		}
 		return successfullyFinished;
 	}
@@ -217,7 +222,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 		} finally {
 			// We close the input objects as soon as the task is completed, so as to free up file handles
 			// NB Deal with this in the future... if a task is never called, then close() might never be called on the InputObject
-			params.getInputObject().close( params.getLogger().getErrorReporter() );
+			params.getInputObject().close( params.getLogger().errorReporter() );
 		}
 		
 		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 

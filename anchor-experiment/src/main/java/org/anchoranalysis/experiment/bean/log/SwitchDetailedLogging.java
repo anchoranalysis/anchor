@@ -1,4 +1,4 @@
-package org.anchoranalysis.experiment.bean.logreporter;
+package org.anchoranalysis.experiment.bean.log;
 
 /*-
  * #%L
@@ -29,8 +29,11 @@ package org.anchoranalysis.experiment.bean.logreporter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Switches between two log-reporters depending on whether detailed logging is switched on or not
@@ -38,40 +41,25 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
  * @author Owen Feehan
  *
  */
-public class LogReporterBeanSwitchDetailedLogging extends LogReporterBean {
+public class SwitchDetailedLogging extends LoggingDestination {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private LogReporterBean detailed;
+	/** Logger to use when detailed-logging is on */
+	@BeanField @Getter @Setter
+	private LoggingDestination whenDetailed;
 	
-	@BeanField
-	private LogReporterBean notDetailed;
+	/** Logger to use when detailed-logging is off */
+	@BeanField @Getter @Setter
+	private LoggingDestination whenNot;
 	// END BEAN PROPERTIES
 
 	@Override
-	public StatefulLogReporter create(String outputName, BoundOutputManager bom,
-			ErrorReporter errorReporter, ExperimentExecutionArguments expArgs, boolean detailedLogging) {
+	public StatefulMessageLogger create(BoundOutputManager bom, ErrorReporter errorReporter,
+			ExperimentExecutionArguments arguments, boolean detailedLogging) {
 		if (detailedLogging) {
-			return detailed.create(outputName, bom, errorReporter, expArgs, detailedLogging);
+			return whenDetailed.create(bom, errorReporter, arguments, detailedLogging);
 		} else {
-			return notDetailed.create(outputName, bom, errorReporter, expArgs, detailedLogging);
+			return whenNot.create(bom, errorReporter, arguments, detailedLogging);
 		}
 	}
-
-	public LogReporterBean getDetailed() {
-		return detailed;
-	}
-
-	public void setDetailed(LogReporterBean detailed) {
-		this.detailed = detailed;
-	}
-
-	public LogReporterBean getNotDetailed() {
-		return notDetailed;
-	}
-
-	public void setNotDetailed(LogReporterBean notDetailed) {
-		this.notDetailed = notDetailed;
-	}
-
 }

@@ -44,20 +44,25 @@ import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
 	// BEAN PROPERTIES
-	@BeanField
-	private FilePathPrefixer filePathPrefixer = null;
+	@BeanField @Getter @Setter
+	private FilePathPrefixer filePathPrefixer;
 	
 	/**  
+	 * Whether to silently first delete any existing output at the intended path, or rather throw an error.
+	 * 
 	 * If true, if an existing output folder (at intended path) is deleted
 	 * If false, an error is thrown if the folder already exists
 	 */
-	@BeanField
-	private boolean delExistingFolder = true;
+	@BeanField @Getter @Setter
+	private boolean silentlyDeleteExisting = false;
 
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 	// END BEAN PROPERTIES
 		
@@ -126,37 +131,6 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 	}
 	
 	private LazyDirectoryFactory lazyDirectoryFactory() {
-		return new LazyDirectoryFactory(delExistingFolder);
+		return new LazyDirectoryFactory(silentlyDeleteExisting);
 	}
-
-	
-	// START BEAN getters and setters
-	public FilePathPrefixer getFilePathPrefixer() {
-		return filePathPrefixer;
-	}
-
-
-	public void setFilePathPrefixer(FilePathPrefixer filePathPrefixer) {
-		this.filePathPrefixer = filePathPrefixer;
-	}
-	
-
-	public boolean isDelExistingFolder() {
-		return delExistingFolder;
-	}
-
-
-	public void setDelExistingFolder(boolean delExistingFolder) {
-		this.delExistingFolder = delExistingFolder;
-	}
-	
-	
-	public OutputWriteSettings getOutputWriteSettings() {
-		return outputWriteSettings;
-	}
-
-	public void setOutputWriteSettings(OutputWriteSettings outputWriteSettings) {
-		this.outputWriteSettings = outputWriteSettings;
-	}	
-	// END BEAN getters and setters
 }

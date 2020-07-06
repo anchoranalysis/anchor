@@ -39,10 +39,13 @@ import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class FilePathProviderDefine extends FilePathProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FileProvider fileProvider;
 	// END BEAN PROPERTIES
 
@@ -70,14 +73,4 @@ public class FilePathProviderDefine extends FilePathProvider {
 		
 		return files.iterator().next().toPath();
 	}
-
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
-
-	public void setFileProvider(FileProvider fileProvider) {
-		this.fileProvider = fileProvider;
-	}
-
-
 }

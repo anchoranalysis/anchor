@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -62,7 +62,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	private String customName = "";
 	// END BEAN PROPERTIES
 
-	private LogErrorReporter logger;
+	private Logger logger;
 
 	private boolean hasBeenInit = false;
 
@@ -149,7 +149,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	public void init(
 		FeatureInitParams params,
 		FeatureBase<T> parentFeature,
-		LogErrorReporter logger
+		Logger logger
 	) throws InitException {
 				
 		hasBeenInit = true;
@@ -205,7 +205,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 		// Does nothing. To be overridden in children if needed.
 	}
 
-	protected LogErrorReporter getLogger() {
+	protected Logger getLogger() {
 		return logger;
 	}
 	

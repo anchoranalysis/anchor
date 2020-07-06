@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -112,12 +112,12 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		NRGStackWithParams nrgStack,
 		ObjectCollection objsCollection,
 		FeatureList<FeatureInputSingleObject> features,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) {
 		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
 			features,
 			nrgStack,
-			logErrorReporter
+			logger
 		);
 		generator.setParamsInit(paramsInit);
 		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet() );

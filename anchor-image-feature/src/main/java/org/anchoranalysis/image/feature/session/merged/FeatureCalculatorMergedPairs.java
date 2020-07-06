@@ -33,7 +33,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -95,12 +95,12 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 	public void start(
 		ImageInitParams soImage,
 		Optional<NRGStackWithParams> nrgStack,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws InitException {
 		
 		calculator = new CombinedCalculator(
 			features,
-			new CreateCalculatorHelper(nrgStack,logErrorReporter),
+			new CreateCalculatorHelper(nrgStack,logger),
 			include,			
 			soImage
 		);

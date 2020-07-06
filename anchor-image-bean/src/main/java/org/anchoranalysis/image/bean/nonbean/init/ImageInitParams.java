@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -126,7 +126,7 @@ public class ImageInitParams extends BeanInitParams {
 		return soFeature;
 	}
 	
-	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
+	public void populate( PropertyInitializer<?> pi, Define define, Logger logger ) throws OperationFailedException {
 		
 		soFeature.populate(
 			define.getList(FeatureListProvider.class),

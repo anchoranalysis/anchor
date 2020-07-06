@@ -30,10 +30,11 @@ package org.anchoranalysis.experiment.log.reporter;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+
+import lombok.RequiredArgsConstructor;
 
 /** Writes text to a file, but only if close is called with a successful=true
  * 
@@ -42,20 +43,16 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author feehano
  *
  */
-public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
+@RequiredArgsConstructor
+public class FailureOnlyMessageLogger implements StatefulMessageLogger {
 
+	// START REQUIRED ARGUMENTS
+	private final String outputName;
+	private final BoundOutputManager outputManager;
+	private final ErrorReporter errorReporter;
+	// END REQUIRED ARGUMENTS
+	
 	private StringBuilder sb;
-	
-	private BoundOutputManager bom;
-	private ErrorReporter errorReporter;
-	private String outputName;
-	
-	public FailureOnlyTextFileLogReporter(BoundOutputManager bom, ErrorReporter errorReporter, String outputName) {
-		super();
-		this.bom = bom;
-		this.errorReporter = errorReporter;
-		this.outputName = outputName;
-	}	
 	
 	@Override
 	public void log(String message) {
@@ -84,7 +81,7 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 		
 		try {
 			OptionalUtilities.ifPresent(
-				TextFileLogHelper.createOutput(bom, outputName),
+				TextFileLogHelper.createOutput(outputManager, outputName),
 				output -> {
 					output.start();
 					output.getWriter().append( message );
@@ -92,8 +89,8 @@ public class FailureOnlyTextFileLogReporter implements StatefulLogReporter {
 				}
 			);
 				
-		} catch (AnchorIOException | OutputWriteFailedException e) {
-			errorReporter.recordError(LogReporter.class, e);
+		} catch (AnchorIOException e) {
+			errorReporter.recordError(MessageLogger.class, e);
 		}
 	}
 
