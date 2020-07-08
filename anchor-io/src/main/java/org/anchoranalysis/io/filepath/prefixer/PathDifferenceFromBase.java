@@ -31,63 +31,58 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.apache.commons.io.FilenameUtils;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Calculates the difference between a path and a base
- * 
- * i.e. if   a base is c:\root\somePrefix_
- *       and a file is c:\root\somePrefix_someFile.xml
+ * Calculates the "difference" between a path and a base
+ * <p>
+ * i.e. if   a base is <code>c:\root\somePrefix_</code>
+ *       and a file is <code>c:\root\somePrefix_someFile.xml</code>
  *       
- *     then the difference is "_someFile.xml"
- *     
- *  The difference is recorded seperately as folder and filename components
+ *     then the difference is <code>_someFile.xml</code>
+ * <p>    
+ *  The difference is recorded separately as folder and filename components
+ * <p>
+ * Internally, both paths are converted to absolute paths and URIs.
  * 
  * @author Owen Feehan
  *
  */
-public class FilePathDifferenceFromFolderPath {
+@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
+public class PathDifferenceFromBase {
 	
-	private String filename;
-	private Path folder;
+	@Getter
+	private final String filename;
 	
-	// TODO change from the two init methods to two factory constructors
-	// TODO change nullable to Optional
-	public FilePathDifferenceFromFolderPath() {
-		// Nothing to do
-	}
+	@Getter
+	private final Optional<Path> folder;
+	
 
 	/**
-	 * Converts both paths to absolute paths and URIs and considers the difference
+	 * Finds the difference between a path and a base
 	 * 
 	 * @param baseFolderPath path to a base folder
 	 * @param filePath the path to resolve
 	 * @throws AnchorIOException if the canonical file cannot be found
 	 */
-	public void init( Path baseFolderPath, Path filePath ) throws AnchorIOException {
+	public static PathDifferenceFromBase differenceFrom( Path baseFolderPath, Path filePath ) throws AnchorIOException {
 		
 		try {
 			String base = baseFolderPath.toFile().getCanonicalFile().toURI().getPath();
 		    String all = filePath.toFile().getCanonicalFile().toURI().getPath();
 		    
 		    // As we've converted to URIs the seperator is always a forward slash
-		    calcDiff(base, all);
+		    return calcDiff(base, all);
 		} catch (IOException e) {
 			throw new AnchorIOException("Cannot fully resolve paths");
 		}
-	}
-	
-	/**
-	 * Doesn't do any conversion of paths, and considers the difference
-	 * 
-	 * @param baseFolderPath path to a base folder
-	 * @param filePath the path to resolve
-	 */
-	public void initDirect( Path baseFolderPath, Path filePath ) {
-		calcDiff(baseFolderPath.toString(), filePath.toString() );		
 	}
 	
 	/**
@@ -98,7 +93,7 @@ public class FilePathDifferenceFromFolderPath {
 	 * @param base the base-folder as a string
 	 * @param all the entire path as a string
 	 */
-	private void calcDiff( String baseFolderPath, String entirePath ) {
+	private static PathDifferenceFromBase calcDiff( String baseFolderPath, String entirePath ) {
 		
 		// Convert the base, and all to forward slashes only
 		String base = FilePathToUnixStyleConverter.toStringUnixStyle(baseFolderPath);
@@ -117,34 +112,25 @@ public class FilePathDifferenceFromFolderPath {
 	    
 	    // Remainder path
 	    String remainder = all.substring( base.length() );
+	    
 	    File remainderFile = new File(remainder);
 	    
-	    File parentFile = remainderFile.getParentFile();
-	    if (parentFile!=null) {
-	    	this.folder = remainderFile.getParentFile().toPath();
-	    } else {
-	    	this.folder = null;
-	    }
-	    this.filename = remainderFile.getName();
+	    return new PathDifferenceFromBase(
+	    	remainderFile.getName(),
+	    	Optional.ofNullable(remainderFile.getParentFile()).map(File::toPath)
+	    );
 	}
 	
-	public Path getRemainderCombined() {
-		if (folder!=null) {
-			return getFolder().resolve( getFilename() );
+	/** 
+	 * The folder (if it exists) and filename combned.
+	 * 
+	 * @return the combined-path
+	 */
+	public Path combined() {
+		if (folder.isPresent()) {
+			return folder.get().resolve( getFilename() );
 		} else {
 			return Paths.get( getFilename() );
 		}
-	}
-	
-	public String getFilename() {
-		return this.filename;
-	}
-	
-	public String getFilenameWithoutExtension() {
-		return FilenameUtils.removeExtension( this.filename );
-	}
-
-	public Path getFolder() {
-		return folder;
 	}
 }

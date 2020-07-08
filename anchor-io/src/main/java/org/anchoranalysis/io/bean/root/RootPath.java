@@ -32,8 +32,11 @@ import java.nio.file.Paths;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Defines a *root path* i.e. a directory in which files are read/written during analysis
@@ -46,22 +49,19 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-		
+@EqualsAndHashCode(callSuper=false)	
 public class RootPath extends AnchorBean<RootPath> {
-	
-	
 
 	// START PROPERTIES
-	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String name;
 	
 	/*** A path on a filesystem to the directory, that defines the root */ 
-	@BeanField
+	@BeanField @Getter @Setter
 	private String path;
 	
 	/*** If TRUE this root is preferred, when executing a job in debugging mode */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean debug = false;
 
 	// END PROPERTIES
@@ -80,76 +80,13 @@ public class RootPath extends AnchorBean<RootPath> {
 		Path rootPath = asPath();
 				
 		// We get the difference of what is left, or else an exception is thrown if it cannot match
-		FilePathDifferenceFromFolderPath diff = new FilePathDifferenceFromFolderPath();
-		diff.init( rootPath, path);
-		
+		PathDifferenceFromBase diff = PathDifferenceFromBase.differenceFrom( rootPath, path);
 		out.setRoot( rootPath );
-		out.setPath( diff.getRemainderCombined() );
+		out.setPath( diff.combined() );
 		return out;
 	}
-	
-	
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public Path asPath() {
 		return Paths.get(path);
 	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-	}
-
-	@Override
-	public boolean equals( Object obj ) {
-		if (this == obj) {
-			return true;
-		}
-	    if (!(obj instanceof RootPath)) {
-	        return false;
-	    }
-	    RootPath objCast = (RootPath) obj;
-	    
-	    if (!name.equals(objCast.name)) {
-	    	return false;
-	    }
-	    
-	    if (!path.equals(objCast.path)) {
-	    	return false;
-	    }
-	    
-	    if (debug!=objCast.debug) {
-	    	return false;
-	    }
-
-	    return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-	        .append(name)
-	        .append(path)
-	        .append(debug)
-	        .toHashCode();
-	}
-	
-	
 }

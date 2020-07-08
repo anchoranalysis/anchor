@@ -34,7 +34,7 @@ import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -79,10 +79,9 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( input, expIdentifier, context );
 		
-		FilePathDifferenceFromFolderPath fpd = new FilePathDifferenceFromFolderPath();
-		
+		PathDifferenceFromBase fpd;
 		try {
-			fpd.init(
+			fpd = PathDifferenceFromBase.differenceFrom(
 				this.filePathPrefixer.rootFolderPrefix(expIdentifier, context).getCombinedPrefix(),
 				fpp.getCombinedPrefix()
 			);
@@ -91,7 +90,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		}
 			
 		experimentalManifestRecorder.ifPresent(
-			mr -> writeManifestExperimentFolder(mr, fpd.getRemainderCombined())
+			mr -> writeManifestExperimentFolder(mr, fpd.combined())
 		);
 
 		manifestRecorder.ifPresent(
