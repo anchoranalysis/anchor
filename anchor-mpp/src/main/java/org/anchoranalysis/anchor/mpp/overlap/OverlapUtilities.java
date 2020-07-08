@@ -30,7 +30,7 @@ package org.anchoranalysis.anchor.mpp.overlap;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -42,25 +42,21 @@ public class OverlapUtilities {
 	
 	public static double overlapWith( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
 
+		Mark mark1 = pmm1.getMark();
+		Mark mark2 = pmm2.getMark();
+
 		// If we have a quick routine available, we use this
-		if (pmm2.getMark().hasOverlapWithQuick()) {
-			return pmm1.getMark().overlapWithQuick( pmm2.getMark(), regionID );	
-		}
-		
 		// We do some quick tests to get rid of obvious cases which do not overlap
-		if ( pmm1.getMark().quickTestNoOverlap( pmm2.getMark(), regionID) ) {
+		if (mark1.quickOverlap().isPresent() && mark1.quickOverlap().get().noOverlapWith(mark2, regionID)) {	// NOSONAR
 			return 0.0;
 		}
-			
+					
 		// Otherwise we do it the slow way by seeing if any pixels intersect
 		// between the two bounding box
-		PxlMark mark1 = pmm1.doOperation(); 
-		PxlMark mark2 = pmm2.doOperation();
-		
 		byte flag = RegionMembershipUtilities.flagForRegion(regionID);
 		return new CountIntersectingPixelsRegionMembership(flag).countIntersectingPixels(
-			mark1.getVoxelBox(),
-			mark2.getVoxelBox()
+			pmm1.doOperation().getVoxelBox(),
+			pmm2.doOperation().getVoxelBox()
 		);
 	}
 	
@@ -82,26 +78,20 @@ public class OverlapUtilities {
 		VoxelBox<ByteBuffer> globalMask,
 		byte onGlobalMask
 	) {
-
-		// If we have a quick routine available, we use this
-		if (pmm2.getMark().hasOverlapWithQuick()) {
-			return pmm1.getMark().overlapWithQuick( pmm2.getMark(), regionID );	
-		}
+		Mark mark1 = pmm1.getMark();
+		Mark mark2 = pmm2.getMark();
 		
+		// If we have a quick routine available, we use this
 		// We do some quick tests to get rid of obvious cases which do not overlap
-		if ( pmm1.getMark().quickTestNoOverlap( pmm2.getMark(), regionID) ) {
+		if (mark1.quickOverlap().isPresent() && mark1.quickOverlap().get().noOverlapWith(mark2, regionID)) {	// NOSONAR
 			return 0.0;
 		}
 			
-		// Otherwise we do it the slow way by seeing if any pixels intersect
-		// between the two bounding box
-		PxlMark mark1 = pmm1.doOperation(); 
-		PxlMark mark2 = pmm2.doOperation();
-		
+		// Otherwise we do it the slow way by seeing if any pixels intersect between the two bounding box
 		byte flag = RegionMembershipUtilities.flagForRegion(regionID);
 		return new CountIntersectingPixelsRegionMembershipMask(flag).countIntersectingPixelsMaskGlobal(
-			mark1.getVoxelBox(),
-			mark2.getVoxelBox(),
+			pmm1.doOperation().getVoxelBox(),
+			pmm2.doOperation().getVoxelBox(),
 			globalMask,
 			onGlobalMask
 		);

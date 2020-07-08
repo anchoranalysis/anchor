@@ -70,7 +70,7 @@ public abstract class OverlayWriter {
 			stack.getDimensions(),
 			stack,
 			idGetter,
-			new BoundingBox(stack.getDimensions().getExtnt())
+			new BoundingBox(stack.getDimensions().getExtent())
 		);
 	}
 	

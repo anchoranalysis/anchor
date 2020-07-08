@@ -28,12 +28,14 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point2d;
@@ -284,21 +286,14 @@ public class MarkEllipse extends MarkConic implements Serializable {
             
 		return BoundingBoxCalculator.bboxFromBounds( getPos(), bboxMatrix, false, bndScene );
 	}
-
-	// Does a quick test to see if we can reject the possibility
-	// of overlap
-	//   true -> no overlap
-	//   false -> maybe overlap, maybe not
-	@SuppressWarnings("static-access")
-	@Override
-	public boolean quickTestNoOverlap( Mark m, int regionID ) {
-		
+	
+	private transient QuickOverlapCalculation quickOverlap = (Mark mark, int regionID ) -> {
 		// No quick tests unless it's the same type of class
-		if (!(m instanceof MarkEllipse)) {
+		if (!(mark instanceof MarkEllipse)) {
 			return false;
 		}
 		
-		MarkEllipse trgtMark = (MarkEllipse) m;
+		MarkEllipse trgtMark = (MarkEllipse) mark;
 		
 		DoubleMatrix1D relPos = twoElementMatrix(
 			trgtMark.getPos().getX() - getPos().getX(),
@@ -306,11 +301,16 @@ public class MarkEllipse extends MarkConic implements Serializable {
 		);
 		
 		DoubleMatrix1D relPosSq = relPos.copy();
-		relPosSq.assign( Functions.functions.square );	// NOSONAR
+		relPosSq.assign( Functions.square );	// NOSONAR
 		double dist = relPosSq.zSum();
 		
 		// Definitely outside
 		return dist > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0);
+	};
+
+	@Override
+	public Optional<QuickOverlapCalculation> quickOverlap() {
+		return Optional.of(quickOverlap);
 	}
 	
 	private double getMaximumRadius() {

@@ -68,7 +68,7 @@ public class BBoxSetOnPlane implements Iterable<BoundingBox> {
 		return bboxIterator();
 	}
 
-	public Extent getExtnt() {
+	public Extent getExtent() {
 		return extent;
 	}
 	

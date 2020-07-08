@@ -29,6 +29,7 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
@@ -47,6 +48,9 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
 
 	/**
@@ -54,6 +58,16 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	 */
 	private static final long serialVersionUID = 3272456193681334471L;
 
+	public Mark( Mark src ) {
+		// We do not deep copy
+		this.id = src.id;
+		if (src.cacheID!=null) {
+			this.cacheID = src.cacheID;
+		} else {
+			src.cacheID=null;
+		}
+	}
+	
 	// null == not cacheable
 	// If set, it means that any other mark with the same cacheID has
 	//  the exact same state, as far as feature calculation is concerned
@@ -105,43 +119,14 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 		}
 	}
 		
-	// We can define an alternative "quick" metric for overlap
-	//  for a mark, which takes the place of the voxel by
-	//  voxel bounding box comparison
-	public boolean hasOverlapWithQuick( ) {
-		return false;
-	}
-	public double overlapWithQuick( Mark m, int regionID ) {
-		return 0.0;
-	}
-	
-	/**
-	 * A quick (computationally-efficient) test to see if we can reject the possibility of overlap
-	 * 
-	 * @param mark the other mark to assess overlap with
-	 * @param regionID the region to check for overlap
-	 * @return TRUE if there's definitely no overlap, FLASE if there is maybe overlap or not
-	 */
-	public boolean quickTestNoOverlap( Mark mark, int regionID ) {
-		return false;
+	/** An alternative "quick" metric for overlap for a mark*/
+	public Optional<QuickOverlapCalculation> quickOverlap() {
+		return Optional.empty();
 	}
 	
 	public abstract double volume( int regionID );
-	
-	// Constructor
-	public Mark() {
-		super();
-	}
 
-	public Mark( Mark src ) {
-		// We do not deep copy
-		this.id = src.id;
-		if (src.cacheID!=null) {
-			this.cacheID = src.cacheID;
-		} else {
-			src.cacheID=null;
-		}
-	}
+	
 
 	// String representation of mark
 	@Override

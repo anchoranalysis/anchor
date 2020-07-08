@@ -28,10 +28,12 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -40,8 +42,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
-
-import com.google.common.base.Preconditions;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -282,15 +282,13 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		);
 	}
 
-
-	// Does a quick test to see if we can reject the possibility
-	// of overlap
-	//   true -> no overlap
-	//   false -> maybe overlap, maybe not
 	@SuppressWarnings("static-access")
-	@Override
-	public boolean quickTestNoOverlap( Mark mark, int regionID ) {
-		Preconditions.checkArgument(mark instanceof MarkEllipsoid);
+	private transient QuickOverlapCalculation quickOverlap = (Mark mark, int regionID ) -> {
+		// No quick tests unless it's the same type of class
+		if (!(mark instanceof MarkEllipsoid)) {
+			return false;
+		}
+		
 		MarkEllipsoid trgtMark = (MarkEllipsoid) mark;
 		
 		DoubleMatrix1D relPos = TensorUtilities.threeElementMatrix(
@@ -305,6 +303,11 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		
 		// Definitely outside
 		return dist > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0);
+	};
+
+	@Override
+	public Optional<QuickOverlapCalculation> quickOverlap() {
+		return Optional.of(quickOverlap);
 	}
 	
 	private double getMaximumRadius( int regionID ) {

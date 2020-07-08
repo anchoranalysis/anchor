@@ -29,7 +29,7 @@ package org.anchoranalysis.test.image.obj;
 import org.anchoranalysis.image.extent.Extent;
 
 /** The bounding box is filled apart from cuboids cut out of the corners */
-public class CutOffCorners extends VoxelPattern {
+public class CutOffCorners implements VoxelPattern {
 	
 	private int edgeXY;
 	private int edgeZ;

@@ -47,7 +47,7 @@ public class VoxelBoxList implements Iterable<VoxelBoxWrapper>{
 		return list.iterator();
 	}
 
-	public Extent getFirstExtnt() {
+	public Extent getFirstExtent() {
 		return list.get(0).any().extent();
 	}
 

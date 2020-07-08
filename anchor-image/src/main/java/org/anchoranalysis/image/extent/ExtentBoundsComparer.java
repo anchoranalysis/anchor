@@ -33,11 +33,16 @@ import java.util.function.ToIntFunction;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
-// Helper classes for calculating the union/intersection along each axis
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
+/** Helper classes for calculating the union/intersection along each axis */
+@Value @AllArgsConstructor(access=AccessLevel.PRIVATE)
 class ExtentBoundsComparer {
 
-	private int min;
-	private int extent;
+	private final int min;
+	private final int extent;
 	
 	public static ExtentBoundsComparer createMax(
 		ReadableTuple3i min1,
@@ -94,19 +99,4 @@ class ExtentBoundsComparer {
 			return Optional.empty();
 		}
 	}
-
-	private ExtentBoundsComparer(int min, int extent) {
-		super();
-		this.min = min;
-		this.extent = extent;
-	}
-	
-	public int getMin() {
-		return min;
-	}
-
-	public int getExtnt() {
-		return extent;
-	}
-
 }

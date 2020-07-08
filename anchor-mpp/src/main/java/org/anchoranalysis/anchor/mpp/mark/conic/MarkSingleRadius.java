@@ -29,12 +29,14 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.squared;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
+import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -141,26 +143,20 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 		return FLAG_SUBMARK_NONE;
 	}
 	
-	@Override
-	public  boolean hasOverlapWithQuick( ) {
-		return true;
-	}
-
-	@Override
-	public boolean quickTestNoOverlap( Mark mark, int regionID ) {
-		return overlapWithQuick(mark, regionID)==0;
-	}
-
-	/**  Note that this does not return the exact number of voxels of overlap, but some sort of approximation based upon the volume ratios */
-	@Override
-	public double overlapWithQuick( Mark mark, int regionID ) {
-
+	private transient QuickOverlapCalculation quickOverlap = (Mark mark, int regionID ) -> {
 		if (getClass().equals(mark.getClass())) {
-			MarkSingleRadius target = (MarkSingleRadius) mark;
-			return this.radius + target.radius - this.getPos().distance(target.getPos());
+			MarkSingleRadius markCast = ((MarkSingleRadius) mark);
+			double radiusSum = MarkSingleRadius.this.radius + markCast.radius;
+			double distanceBetweenCenters =  MarkSingleRadius.this.getPos().distance(markCast.getPos());
+			return radiusSum > distanceBetweenCenters;
 		} else {
 			throw new UnsupportedOperationException();
 		}
+	};
+
+	@Override
+	public Optional<QuickOverlapCalculation> quickOverlap() {
+		return Optional.of(quickOverlap);
 	}
 	
 	@Override
@@ -214,5 +210,8 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	public void setBoundRadius(Bound boundRadius) {
 		this.boundRadius = boundRadius;
 	}
+
+
+
 
 }

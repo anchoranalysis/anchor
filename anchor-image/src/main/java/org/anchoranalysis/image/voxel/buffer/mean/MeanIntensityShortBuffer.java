@@ -37,8 +37,8 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 public class MeanIntensityShortBuffer extends MeanIntensityBuffer<ShortBuffer> {
 
 	/** Simple constructor since no preprocessing is necessary. */
-	public MeanIntensityShortBuffer( Extent srcExtnt ) {
-		super( VoxelBoxFactory.getShort(), srcExtnt );
+	public MeanIntensityShortBuffer( Extent srcExtent ) {
+		super( VoxelBoxFactory.getShort(), srcExtent );
 	}
 	
 	@Override

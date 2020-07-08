@@ -35,8 +35,8 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class MaxIntensityBufferShort extends MaxIntensityBuffer<ShortBuffer> {
 	
-	public MaxIntensityBufferShort( Extent srcExtnt ) {
-		super( srcExtnt, VoxelBoxFactory.getShort() );
+	public MaxIntensityBufferShort( Extent srcExtent ) {
+		super( srcExtent, VoxelBoxFactory.getShort() );
 	}
 	
 	@Override

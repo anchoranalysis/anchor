@@ -39,14 +39,14 @@ public class ChannelFactoryFloat implements ChannelFactorySingleType {
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDimensions dim) {
-		VoxelBoxFloat vb = new VoxelBoxFloat( PixelsFromFloatBufferArr.createInitialised(dim.getExtnt()) );
+		VoxelBoxFloat vb = new VoxelBoxFloat( PixelsFromFloatBufferArr.createInitialised(dim.getExtent()) );
 		return create(vb, dim.getRes() );
 	}
 
 	@Override
 	public Channel createEmptyUninitialised(ImageDimensions dim) {
 		
-		PixelsFromFloatBufferArr pixels = PixelsFromFloatBufferArr.createEmpty( dim.getExtnt() );
+		PixelsFromFloatBufferArr pixels = PixelsFromFloatBufferArr.createEmpty( dim.getExtent() );
 		
 		VoxelBoxFloat vb = new VoxelBoxFloat( pixels );
 		return create(vb, dim.getRes() );

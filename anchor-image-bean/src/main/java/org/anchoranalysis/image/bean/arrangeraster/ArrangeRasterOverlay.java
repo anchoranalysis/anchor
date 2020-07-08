@@ -72,9 +72,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		if (horizontalAlign.equalsIgnoreCase("left")) {
 			return 0;
 		} else if (horizontalAlign.equalsIgnoreCase("right")) {
-			return bboxSet.getExtnt().getX() - dim.getX();
+			return bboxSet.getExtent().getX() - dim.getX();
 		} else {
-			return(bboxSet.getExtnt().getX() - dim.getX()) / 2;
+			return(bboxSet.getExtent().getX() - dim.getX()) / 2;
 		}
 	}
 	
@@ -83,9 +83,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		if (verticalAlign.equalsIgnoreCase("top")) {
 			return 0;
 		} else if (verticalAlign.equalsIgnoreCase("bottom")) {
-			return bboxSet.getExtnt().getY() - dim.getY();
+			return bboxSet.getExtent().getY() - dim.getY();
 		} else {
-			return(bboxSet.getExtnt().getY() - dim.getY()) / 2;
+			return(bboxSet.getExtent().getY() - dim.getY()) / 2;
 		}
 	}
 	
@@ -94,9 +94,9 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
 			return 0;
 		} else if (zAlign.equalsIgnoreCase("top")) {
-			return bboxSet.getExtnt().getZ() - dim.getZ();
+			return bboxSet.getExtent().getZ() - dim.getZ();
 		} else {
-			return(bboxSet.getExtnt().getZ() - dim.getZ()) / 2;
+			return(bboxSet.getExtent().getZ() - dim.getZ()) / 2;
 		}
 	}
 	
@@ -118,8 +118,8 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		RGBStack overlayImg = rasterIterator.next();
 		
 		Extent overlayE = deriveExtent(
-			overlayImg.getChnl(0).getDimensions().getExtnt(),
-			bboxSet.getExtnt()
+			overlayImg.getChnl(0).getDimensions().getExtent(),
+			bboxSet.getExtent()
 		);
 				
 		int hPos = calcHorizontalPos(bboxSet, overlayImg.getDimensions() );

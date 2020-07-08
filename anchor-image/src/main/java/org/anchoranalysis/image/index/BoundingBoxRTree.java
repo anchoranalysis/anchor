@@ -46,7 +46,7 @@ public class BoundingBoxRTree {
 	// We re-use this singlePoint to avoid memory allocation for a single point
 	private float[] singlePoint = new float[]{0,0,0};
 	
-	private float[] singlePointExtnt = new float[]{1,1,1};
+	private float[] singlePointExtent = new float[]{1,1,1};
 	
 	// TODO. How does this affect our memory profile?  Should we restrict it when we can
 	private static final int DEFAULT_MAX_ENTRIES = 10000;
@@ -76,7 +76,7 @@ public class BoundingBoxRTree {
 		singlePoint[1] = (float) pnt.getY();
 		singlePoint[2] = (float) pnt.getZ();
 
-		return rTree.search(singlePoint, singlePointExtnt);
+		return rTree.search(singlePoint, singlePointExtent);
 	}
 	
 	public List<Integer> intersectsWith( BoundingBox bbox ) {

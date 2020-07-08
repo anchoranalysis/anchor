@@ -103,7 +103,7 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 			colorIndex,
 			idGetter,
 			colorIDGetter,
-			new BoundingBox(background.getDimensions().getExtnt())
+			new BoundingBox(background.getDimensions().getExtent())
 		);
 	}
 

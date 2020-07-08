@@ -59,7 +59,7 @@ public class RasterArranger {
 		}
 
 		dim = new ImageDimensions(
-			bboxSetOnPlane.getExtnt()
+			bboxSetOnPlane.getExtent()
 		);
 	}
 	
@@ -99,8 +99,8 @@ public class RasterArranger {
 		
 		assert(stackIn.getNumChnl()==stackOut.getNumChnl());
 		
-		Extent extent = stackIn.getDimensions().getExtnt();
-		Extent extentOut = stackIn.getDimensions().getExtnt();
+		Extent extent = stackIn.getDimensions().getExtent();
+		Extent extentOut = stackIn.getDimensions().getExtent();
 		
 		ReadableTuple3i leftCrnr = bbox.cornerMin();
 		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;

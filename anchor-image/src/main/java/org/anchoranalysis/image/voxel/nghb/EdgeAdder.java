@@ -93,14 +93,14 @@ class EdgeAdder<V> {
 		int ignoreIndex,
 		ObjectMask om,
 		V vertexWith,
-		Extent sceneExtnt,
+		Extent sceneExtent,
 		boolean do3D
 	) throws CreateException {
 		
 		ObjectMask omDilated = MorphologicalDilation.createDilatedObjMask(
 			om,
-			Optional.of(sceneExtnt),
-			do3D && sceneExtnt.getZ()>1,
+			Optional.of(sceneExtent),
+			do3D && sceneExtent.getZ()>1,
 			1,
 			bigNghb
 		);

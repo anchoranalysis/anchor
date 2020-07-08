@@ -104,7 +104,7 @@ class MaxWidthHeight {
 		int max = -1;
 		
 		for( BBoxSetOnPlane item : list ) {
-			max = Math.max( max, item.getExtnt().getX() );
+			max = Math.max( max, item.getExtent().getX() );
 		}
 		
 		return max;
@@ -117,7 +117,7 @@ class MaxWidthHeight {
 		
 		for( BBoxSetOnPlane item : list ) {
 			assert( item != null );
-			max = Math.max( max, item.getExtnt().getY() );
+			max = Math.max( max, item.getExtent().getY() );
 		}
 		
 		return max;
@@ -130,7 +130,7 @@ class MaxWidthHeight {
 		
 		for( BBoxSetOnPlane item : list ) {
 			assert( item != null );
-			max = Math.max( max, item.getExtnt().getZ() );
+			max = Math.max( max, item.getExtent().getZ() );
 		}
 		
 		return max;

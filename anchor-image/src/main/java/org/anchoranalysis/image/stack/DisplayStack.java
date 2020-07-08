@@ -347,7 +347,7 @@ public class DisplayStack {
 				bufferForChnl(0),
 				bufferForChnl(1),
 				bufferForChnl(2),
-				delegate.getDimensions().getExtnt()
+				delegate.getDimensions().getExtent()
 			);
 		}
 		return BufferedImageFactory.createGrayscale(bufferForChnl(0));

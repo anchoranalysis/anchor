@@ -97,7 +97,7 @@ public class HistogramFactory {
 	
 	public static Histogram create( Channel chnl, BinaryChnl mask ) throws CreateException {
 		
-		if (!chnl.getDimensions().getExtnt().equals(mask.getDimensions().getExtnt())) {
+		if (!chnl.getDimensions().getExtent().equals(mask.getDimensions().getExtent())) {
 			throw new CreateException("Size of chnl and mask do not match");
 		}
 		

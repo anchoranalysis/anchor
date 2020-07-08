@@ -133,7 +133,7 @@ public class StackProviderGenerateString extends StackProvider {
 		
 		ImageDimensions sdNew = chnl.getDimensions().duplicateChangeZ(zHeight);
 		
-		BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtnt());
+		BoundingBox bboxSrc = new BoundingBox(chnl.getDimensions().getExtent());
 		BoundingBox bboxDest = bboxSrc;
 		
 		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(sdNew, chnl.getVoxelDataType());

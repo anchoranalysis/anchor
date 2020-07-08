@@ -107,7 +107,7 @@ class ObjectMaskHDF5Writer {
 
 		Extent e = bvb.extent();
 		
-		MDByteArray md = new MDByteArray( dimsFromExtnt(e) );
+		MDByteArray md = new MDByteArray( dimsFromExtent(e) );
 		
 		for( int z=0; z<e.getZ(); z++) {
 		
@@ -122,7 +122,7 @@ class ObjectMaskHDF5Writer {
 		return md;
 	}
 	
-	private static int[] dimsFromExtnt( Extent e ) {
+	private static int[] dimsFromExtent( Extent e ) {
 		return new int[]{ e.getX(), e.getY(), e.getZ() };
 	}
 }

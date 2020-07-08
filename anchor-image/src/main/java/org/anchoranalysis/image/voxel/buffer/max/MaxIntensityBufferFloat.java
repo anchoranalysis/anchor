@@ -34,8 +34,8 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class MaxIntensityBufferFloat extends MaxIntensityBuffer<FloatBuffer> {
 	
-	public MaxIntensityBufferFloat( Extent srcExtnt ) {
-		super( srcExtnt, VoxelBoxFactory.getFloat() );
+	public MaxIntensityBufferFloat( Extent srcExtent ) {
+		super( srcExtent, VoxelBoxFactory.getFloat() );
 	}
 	
 	@Override

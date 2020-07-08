@@ -70,9 +70,9 @@ private final BoundingBox bbox;
 				meiZ.getMin()
 			),
 			new Extent(
-				meiX.getExtnt(),
-				meiY.getExtnt(),
-				meiZ.getExtnt()
+				meiX.getExtent(),
+				meiY.getExtent(),
+				meiZ.getExtent()
 			)
 		);
 	}

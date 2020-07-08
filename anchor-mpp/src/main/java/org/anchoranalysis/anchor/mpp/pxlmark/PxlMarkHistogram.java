@@ -83,8 +83,8 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		BoundingBox bboxMIP = bbox.flattenZ();
 		setObjMaskMIP( new ObjectMask(bboxMIP) );
 		
-		Extent localExtnt = bbox.extent();
-		partitionList.init( factoryHistogram, stack.getNumChnl(), regionMap.numRegions(), localExtnt.getZ() );
+		Extent localExtent = bbox.extent();
+		partitionList.init( factoryHistogram, stack.getNumChnl(), regionMap.numRegions(), localExtent.getZ() );
 		
 		ByteBuffer bufferMIP = getObjMaskMIP().getVoxelBox().getPixelsForPlane(0).buffer();
 		
@@ -97,7 +97,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 				mark,
 				bbox,
 				crnrMax,
-				localExtnt,
+				localExtent,
 				sd,
 				bufferArrList,
 				bufferMIP,
@@ -111,7 +111,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		Mark mark,
 		BoundingBox bbox,
 		ReadableTuple3i crnrMax,
-		Extent localExtnt,
+		Extent localExtent,
 		ImageDimensions sd,
 		BufferArrList bufferArrList,
 		ByteBuffer bufferMIP,
@@ -138,7 +138,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 								
 				int xLocal = x - bbox.cornerMin().getX();
 				
-				int localOffset = localExtnt.offset(xLocal, yLocal);
+				int localOffset = localExtent.offset(xLocal, yLocal);
 				int globalOffset = sd.offset(x, y);
 				
 				byte membership = mark.evalPntInside( new Point3d(ptRunning) );

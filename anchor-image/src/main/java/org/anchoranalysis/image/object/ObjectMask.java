@@ -406,7 +406,7 @@ public class ObjectMask {
 	public Optional<ObjectMask> intersect( ObjectMask other, ImageDimensions dim ) {
 		
 		// we combine the two masks
-		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dim.getExtnt() );
+		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dim.getExtent() );
 		
 		if (!bboxIntersect.isPresent()) {
 			return Optional.empty();

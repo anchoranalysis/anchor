@@ -124,4 +124,8 @@ public class SeedCollection implements Iterable<Seed> {
 		return true;
 	}
 
+	public boolean isEmpty() {
+		return delegate.isEmpty();
+	}
+
 }

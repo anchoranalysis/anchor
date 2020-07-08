@@ -77,7 +77,7 @@ public class CreateNeighborGraph<V> {
 	 * @param vertices
 	 * @param vertexToObjMask
 	 * @param edgeFromVertices
-	 * @param sceneExtnt
+	 * @param sceneExtent
 	 * @param do3D
 	 * @param bigNghb
 	 * @param undirected
@@ -88,14 +88,14 @@ public class CreateNeighborGraph<V> {
 	public GraphWithEdgeTypes<V,Integer> createGraphWithNumPixels(
 			List<V> vertices,
 			Function<V,ObjectMask> vertexToObjMask,
-			Extent sceneExtnt,
+			Extent sceneExtent,
 			boolean do3D
 		) throws CreateException {
 		return createGraph(
 			vertices,
 			vertexToObjMask,
 			(v1, v2, numPixels) -> numPixels,
-			sceneExtnt,
+			sceneExtent,
 			do3D,
 			false,
 			true,
@@ -110,7 +110,7 @@ public class CreateNeighborGraph<V> {
 	 * @param vertices vertices to construct graph from
 	 * @param vertexToObjMask converts the vertex to an object-mask (called repeatedly so should be low-cost)
 	 * @param edgeFromVertices creates an edge for two vertices (and the number of neighbouring pixels)
-	 * @param sceneExtnt
+	 * @param sceneExtent
 	 * @param do3D
 	 * @param <E> edge-type of graph
 	 * @param bigNghb iff TRUE uses bigNghb for dilation
@@ -123,7 +123,7 @@ public class CreateNeighborGraph<V> {
 		List<V> vertices,
 		Function<V,ObjectMask> vertexToObjMask,
 		EdgeFromVertices<V,E> edgeFromVertices,
-		Extent sceneExtnt,
+		Extent sceneExtent,
 		boolean do3D,
 		boolean bigNghb,
 		boolean undirected,
@@ -135,7 +135,7 @@ public class CreateNeighborGraph<V> {
 		
 		// Objects from each vertex
 		ObjectCollection objs = ObjectCollectionFactory.mapFrom(vertices, vertexToObjMask::apply);
-		checkObjsInScene(objs, sceneExtnt);
+		checkObjsInScene(objs, sceneExtent);
 				
 		EdgeAdder<V> edgeAdder = new EdgeAdder<>(
 			vertices,
@@ -156,7 +156,7 @@ public class CreateNeighborGraph<V> {
 				i,
 				objs.get(i),
 				vertexWith,
-				sceneExtnt,
+				sceneExtent,
 				do3D
 			);
 		}
@@ -164,14 +164,14 @@ public class CreateNeighborGraph<V> {
 		return graph;
 	}
 	
-	private static void checkObjsInScene( ObjectCollection objs, Extent sceneExtnt ) throws CreateException {
+	private static void checkObjsInScene( ObjectCollection objs, Extent sceneExtent ) throws CreateException {
 		for( ObjectMask om : objs ) {
-			if (!sceneExtnt.contains(om.getBoundingBox())) {
+			if (!sceneExtent.contains(om.getBoundingBox())) {
 				throw new CreateException(
 					String.format(
 						"Object is not contained (fully or partially) inside scene extent: %s is not in %s",
 						om.getBoundingBox(),
-						sceneExtnt
+						sceneExtent
 					)
 				);
 			}

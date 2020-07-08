@@ -197,7 +197,7 @@ public class IJWrap {
 		if (makeRGB) {
 			stackNew = createColorProcessorStack( new RGBStack( (Stack) stack) );
 		} else {
-			stackNew = createInterleavedStack( sd.getExtnt(), stack);
+			stackNew = createInterleavedStack( sd.getExtent(), stack);
 		}
 		
 		ImagePlus imp = createImagePlus( stackNew, sd, stack.getNumChnl(), 1, !makeRGB );

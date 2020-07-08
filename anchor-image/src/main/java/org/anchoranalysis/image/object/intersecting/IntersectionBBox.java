@@ -46,8 +46,8 @@ public class IntersectionBBox {
 	private Dimension x;
 	private Dimension y;
 	private Dimension z;
-	private Extent e1;	// Extnt of source bbox
-	private Extent e2;	// Extnt of other bbox
+	private Extent e1;	// Extent of source bbox
+	private Extent e2;	// Extent of other bbox
 	
 	public static class Dimension {
 

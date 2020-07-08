@@ -140,7 +140,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 			BoundingBox box = BoundingBoxFromPoints.forList(
 				rotateAddPos(points)
 			);
-			return box.clipTo(bndScene.getExtnt());
+			return box.clipTo(bndScene.getExtent());
 		} catch (OperationFailedException e) {
 			throw new AnchorImpossibleSituationException();
 		}

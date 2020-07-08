@@ -117,7 +117,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 	private void addEntireScene( BinaryValuesByte bvb ) {
 		
-		Extent e = binaryImageChnl.getDimensions().getExtnt();
+		Extent e = binaryImageChnl.getDimensions().getExtent();
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
@@ -165,10 +165,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		rmvPntsInMark( newMark );
 	}
 	
-	private void rmvPnt( ReadableTuple3i crntExtntPnt,  ReadableTuple3i crnrPnt ) {
-		int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
-		int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
-		int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
+	private void rmvPnt( ReadableTuple3i crntExtentPnt,  ReadableTuple3i crnrPnt ) {
+		int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
+		int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
+		int zGlobal = crnrPnt.getZ() + crntExtentPnt.getZ();
 		
 		Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
 		
@@ -189,18 +189,18 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
 		Extent e = voxelBox.extent();
 		
-		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
+		Point3i crntExtentPnt = new Point3i();
+		for (crntExtentPnt.setZ(0); crntExtentPnt.getZ()<e.getZ(); crntExtentPnt.incrementZ()) {
 			
-			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtntPnt.getZ());
+			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtentPnt.getZ());
 			
-			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
-				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
+			for (crntExtentPnt.setY(0); crntExtentPnt.getY()<e.getY(); crntExtentPnt.incrementY()) {
+				for (crntExtentPnt.setX(0); crntExtentPnt.getX()<e.getX(); crntExtentPnt.incrementX()) {
 
-					byte membership = fb.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
+					byte membership = fb.get( e.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
 					
 					if ( !rm.isMemberFlag(membership, flags) ) {
-						rmvPnt( crntExtntPnt, crnrPnt );
+						rmvPnt( crntExtentPnt, crnrPnt );
 					}
 				}
 			}
@@ -236,16 +236,16 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
-		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
+		Point3i crntExtentPnt = new Point3i();
+		for (crntExtentPnt.setZ(0); crntExtentPnt.getZ()<e.getZ(); crntExtentPnt.incrementZ()) {
 			
-			int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
+			int zGlobal = crnrPnt.getZ() + crntExtentPnt.getZ();
 			
 			addPointsForSlice(
-				crntExtntPnt,
+				crntExtentPnt,
 				crnrPnt,
 				e,
-				voxelBox.getPixelsForPlane(crntExtntPnt.getZ()),
+				voxelBox.getPixelsForPlane(crntExtentPnt.getZ()),
 				vbBinary.getPixelsForPlane(zGlobal).buffer(),
 				bvb,
 				zGlobal,
@@ -256,7 +256,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	}
 	
 	private void addPointsForSlice(
-		Point3i crntExtntPnt,
+		Point3i crntExtentPnt,
 		ReadableTuple3i crnrPnt,
 		Extent e,
 		ByteBuffer buffer,
@@ -268,15 +268,15 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	) {
 		byte flags = rm.flags();
 		
-		for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
-			int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
+		for (crntExtentPnt.setY(0); crntExtentPnt.getY()<e.getY(); crntExtentPnt.incrementY()) {
+			int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
 			
-			for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
+			for (crntExtentPnt.setX(0); crntExtentPnt.getX()<e.getX(); crntExtentPnt.incrementX()) {
 				
-				int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
+				int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
 						
 				int globOffset = e.offset(xGlobal, yGlobal);
-				byte posCheck = buffer.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
+				byte posCheck = buffer.get( e.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
 				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
 					
 					Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );

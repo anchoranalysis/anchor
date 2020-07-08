@@ -107,9 +107,9 @@ public final class BoundingBoxIntersection {
 						meiZ.get().getMin()
 					),
 					new Extent(
-						meiX.get().getExtnt(),
-						meiY.get().getExtnt(),
-						meiZ.get().getExtnt()
+						meiX.get().getExtent(),
+						meiY.get().getExtent(),
+						meiZ.get().getExtent()
 					)
 				)	
 			);
