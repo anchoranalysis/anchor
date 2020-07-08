@@ -27,9 +27,14 @@ package org.anchoranalysis.core.index.container;
  */
 
 
-public interface IBoundedRange {
+public interface BoundedRangeIncomplete extends BoundedRange {
 	
-	int getMinimumIndex();
+	// Return -1 if there is no next index
+	int nextIndex( int index );
 	
-	int getMaximumIndex();
+	// Return -1 if there is no previous index
+	int previousIndex( int index );
+	
+	// Return -1 if there is no previous index
+	int previousEqualIndex( int index );
 }

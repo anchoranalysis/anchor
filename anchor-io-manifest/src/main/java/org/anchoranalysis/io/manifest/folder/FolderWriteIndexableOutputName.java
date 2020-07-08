@@ -76,9 +76,6 @@ public class FolderWriteIndexableOutputName extends FolderWriteWithPath {
 	//   has no SequenceType then something is wrong and we throw an exception
 	@Override
 	public void findFile(List<FileWrite> foundList, Match<FileWrite> match, boolean recursive) {
-
-		assert(match!=null);
-		
 		SequenceType sequenceType = getManifestFolderDescription().getSequenceType();
 		
 		int i = sequenceType.getMinimumIndex();

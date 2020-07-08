@@ -37,7 +37,7 @@ public class FolderWritePathFileFunctionType implements Match<FolderWrite> {
 
 	private Match<FolderWrite> delegate;
 	
-	public FolderWritePathFileFunctionType(String path, String function, String type) {
+	public FolderWritePathFileFunctionType(String function, String type) {
 		super();
 		
 		delegate = new FolderWriteManifestMatch(

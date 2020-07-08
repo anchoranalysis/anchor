@@ -43,6 +43,8 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
@@ -53,6 +55,20 @@ public class GroupedResultsVectorCollection implements Closeable {
 
 	private static final String OUTPUT_NAME_FEATURES = "features";
 	private static final String OUTPUT_NAME_FEATURES_AGGREGATED = "featuresAggregated";
+	
+	/** The highest-level group directory */
+	private static final ManifestFolderDescription MANIFEST_GROUP_ROOT = new ManifestFolderDescription(
+		"groupedResultsRoot",
+		"featureCsv",
+		new SetSequenceType()
+	);
+	
+	/** The second highest-level group directory */
+	private static final ManifestFolderDescription MANIFEST_GROUP_SUBROOT = new ManifestFolderDescription(
+			"groupedResults",
+			"featureCsv",
+			new SetSequenceType()
+		);
 	
 	private final MetadataHeaders metadata;
 	private final FeatureNameList featureNamesNonAggregate;
@@ -119,7 +135,8 @@ public class GroupedResultsVectorCollection implements Closeable {
 	) throws AnchorIOException {
 		
 		CacheSubdirectoryContext contextGroups = new CacheSubdirectoryContext(
-			context.subdirectory("grouped")
+			context.subdirectory("grouped", MANIFEST_GROUP_ROOT),
+			MANIFEST_GROUP_SUBROOT
 		);
 		
 		if (includeGroups) {

@@ -35,53 +35,63 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class BoundOutputManagerRouteErrors {
 
-	private BoundOutputManager delegate;
-
-	private ErrorReporter errorReporter;
+	@Getter
+	private final BoundOutputManager delegate;
 	
-	public BoundOutputManagerRouteErrors(BoundOutputManager delegate, ErrorReporter errorReporter) {
-		super();
-		assert( delegate != null );
-		this.delegate = delegate;
-		this.errorReporter = errorReporter;
-	}
-
-	public boolean equals(Object obj) {
-		return delegate.equals(obj);
-	}
-
-	public OutputWriteSettings getOutputWriteSettings() {
-		return delegate.getOutputWriteSettings();
-	}
-
-	public int hashCode() {
-		return delegate.hashCode();
-	}
-
-	public boolean isOutputAllowed(String outputName) {
-		return delegate.isOutputAllowed(outputName);
-	}
+	@Getter
+	private final ErrorReporter errorReporter;
 	
-	public OutputAllowed outputAllowedSecondLevel(String key) {
-		return delegate.outputAllowedSecondLevel(key);
-	}	
-
-	public String toString() {
-		return delegate.toString();
+	
+	/**
+	 * Creates a new outputManager by appending a relative folder-path to the current {@link BoundOutputManagerRouteErrors}
+	 * 
+	 * @see BoundOutputManager#deriveSubdirectory
+	 * 
+	 * @param subdirectoryName
+	 * @param manifestDescription
+	 * @param manifestFolder
+	 * @return
+	 */
+	public BoundOutputManagerRouteErrors deriveSubdirectory(
+		String subdirectoryName,
+		ManifestFolderDescription manifestDescription
+	) {
+		return new BoundOutputManagerRouteErrors(
+			delegate.deriveSubdirectory(
+				subdirectoryName,
+				manifestDescription,
+				Optional.of( new FolderWritePhysical() )
+			),
+			errorReporter
+		);
 	}
 
-	public BoundOutputManager getDelegate() {
-		return delegate;
+	public void addOperationRecorder(WriteOperationRecorder toAdd) {
+		delegate.addOperationRecorder(toAdd);
+	}
+
+	public BoundOutputManager deriveFromInput(
+		PathWithDescription input,
+		String expIdentifier,
+		Optional<ManifestRecorder> manifestRecorder,
+		Optional<ManifestRecorder> experimentalManifestRecorder,
+		FilePathPrefixerParams context
+	) throws BindFailedException {
+		return delegate.deriveFromInput(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
 	}
 	
 	public WriterRouterErrors getWriterAlwaysAllowed() {
@@ -91,45 +101,38 @@ public class BoundOutputManagerRouteErrors {
 	public WriterRouterErrors getWriterCheckIfAllowed() {
 		return new WriterRouterErrors( delegate.getWriterCheckIfAllowed(), errorReporter );
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return delegate.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return delegate.hashCode();
+	}
 
+	public OutputWriteSettings getOutputWriteSettings() {
+		return delegate.getOutputWriteSettings();
+	}
+
+	public boolean isOutputAllowed(String outputName) {
+		return delegate.isOutputAllowed(outputName);
+	}
+	
+	public OutputAllowed outputAllowedSecondLevel(String key) {
+		return delegate.outputAllowedSecondLevel(key);
+	}
+	
 	public Path getOutputFolderPath() {
 		return delegate.getOutputFolderPath();
 	}
 	
-	/**
-	 * Creates a new outputManager by appending a relative folder-path to the current {@link BoundOutputManagerRouteErrors}
-	 * 
-	 * @see BoundOutputManager#resolveFolder(String, FolderWrite)
-	 */
-	public BoundOutputManagerRouteErrors resolveFolder(String folderPath) {
-		return new BoundOutputManagerRouteErrors(
-			delegate.resolveFolder(
-				folderPath,
-				new FolderWritePhysical()
-			),
-			errorReporter
-		);
-	}
-	
-	public ErrorReporter getErrorReporter() {
-		return errorReporter;
-	}
-
-	public void addOperationRecorder(WriteOperationRecorder toAdd) {
-		delegate.addOperationRecorder(toAdd);
-	}
-
-	public BoundOutputManager bindFile(
-		PathWithDescription input,
-		String expIdentifier,
-		Optional<ManifestRecorder> manifestRecorder,
-		Optional<ManifestRecorder> experimentalManifestRecorder,
-		FilePathPrefixerParams context
-	) throws BindFailedException {
-		return delegate.bindFile(input, expIdentifier, manifestRecorder, experimentalManifestRecorder, context);
-	}
-
 	public Path outFilePath(String filePathRelative) {
 		return delegate.outFilePath(filePathRelative);
+	}
+
+	public String toString() {
+		return delegate.toString();
 	}
 }

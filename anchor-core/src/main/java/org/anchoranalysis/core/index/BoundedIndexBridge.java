@@ -29,13 +29,13 @@ package org.anchoranalysis.core.index;
 
 
 import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 public class BoundedIndexBridge<T> implements FunctionWithException<Integer, T, GetOperationFailedException> {
 	
-	private IBoundedIndexContainer<T> cntr;
+	private BoundedIndexContainer<T> cntr;
 	
-	public BoundedIndexBridge(IBoundedIndexContainer<T> cntr) {
+	public BoundedIndexBridge(BoundedIndexContainer<T> cntr) {
 		super();
 		this.cntr = cntr;
 	}
@@ -50,7 +50,7 @@ public class BoundedIndexBridge<T> implements FunctionWithException<Integer, T, 
 	}
 
 	// Updates the cntr associated with the bridge
-	public void setCntr(IBoundedIndexContainer<T> cntr) {
+	public void setCntr(BoundedIndexContainer<T> cntr) {
 		this.cntr = cntr;
 	}
 

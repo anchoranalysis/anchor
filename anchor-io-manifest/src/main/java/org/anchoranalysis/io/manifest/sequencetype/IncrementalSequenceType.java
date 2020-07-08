@@ -26,7 +26,7 @@ package org.anchoranalysis.io.manifest.sequencetype;
  * #L%
  */
 
-import org.anchoranalysis.core.index.container.IOrderProvider;
+import org.anchoranalysis.core.index.container.OrderProvider;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -125,7 +125,7 @@ public class IncrementalSequenceType extends SequenceType {
 	}
 
 	@Override
-	public IOrderProvider createOrderProvider() {
+	public OrderProvider createOrderProvider() {
 		return index -> indexToNumPeriodsInt( Integer.valueOf(index) );
 	}
 

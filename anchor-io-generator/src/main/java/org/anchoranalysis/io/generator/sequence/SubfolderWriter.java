@@ -69,7 +69,7 @@ public class SubfolderWriter implements SequenceWriter {
 			return Optional.of(parentOutputManager);
 		} else {
 			Writer writer = checkIfAllowed ? parentOutputManager.getWriterCheckIfAllowed() : parentOutputManager.getWriterAlwaysAllowed();
-			return writer.bindAsSubFolder(
+			return writer.bindAsSubdirectory(
 				subfolderName,
 				folderDescription,
 				Optional.of(subFolderWrite)
@@ -80,14 +80,14 @@ public class SubfolderWriter implements SequenceWriter {
 	@Override
 	public void init( FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder ) throws InitException {
 		
-		ManifestFolderDescription folderDescription = new ManifestFolderDescription();
-		
 		if (fileTypes.length==0) {
 			throw new InitException("The generator has no associated FileTypes");
 		}
-		
-		folderDescription.setFileDescription( createFolderDescription(fileTypes) );
-		folderDescription.setSequenceType( sequenceType );
+
+		ManifestFolderDescription folderDescription = new ManifestFolderDescription(
+			createFolderDescription(fileTypes),
+			sequenceType
+		);
 		
  		// FolderWriteIndexableOutputName
 		FolderWriteIndexableOutputName subFolderWrite = new FolderWriteIndexableOutputName(
@@ -96,7 +96,6 @@ public class SubfolderWriter implements SequenceWriter {
 		for (FileType fileType : fileTypes) {
 			subFolderWrite.addFileType(fileType);
 		}
-
 		
 		try {
 			this.subFolderOutputManager = createSubfolder( suppressSubfolder, folderDescription, subFolderWrite );

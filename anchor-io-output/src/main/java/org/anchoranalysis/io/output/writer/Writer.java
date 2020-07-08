@@ -51,7 +51,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public interface Writer {
 
-	Optional<BoundOutputManager> bindAsSubFolder(
+	Optional<BoundOutputManager> bindAsSubdirectory(
 		String outputName,
 		ManifestFolderDescription manifestDescription,
 		Optional<FolderWriteWithPath> folder

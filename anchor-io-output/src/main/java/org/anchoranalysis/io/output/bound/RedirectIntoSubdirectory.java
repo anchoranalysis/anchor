@@ -29,6 +29,7 @@ package org.anchoranalysis.io.output.bound;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 
 /**
@@ -42,10 +43,13 @@ class RedirectIntoSubdirectory implements BoundIOContext {
 	private BoundIOContext delegate;
 	private BoundOutputManagerRouteErrors replacementOutputManager;
 	
-	public RedirectIntoSubdirectory(BoundIOContext delegate, String folderPath) {
+	public RedirectIntoSubdirectory(BoundIOContext delegate, String folderPath, ManifestFolderDescription manifestDescription) {
 		super();
 		this.delegate = delegate;
-		this.replacementOutputManager = delegate.getOutputManager().resolveFolder(folderPath);
+		this.replacementOutputManager = delegate.getOutputManager().deriveSubdirectory(
+			folderPath,
+			manifestDescription
+		);
 	}
 
 	@Override

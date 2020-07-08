@@ -30,27 +30,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+
+import lombok.RequiredArgsConstructor;
+
 /**
  * Caches sub-directories as they are created, so as to reuse the BoundIOContext, without creating duplicate manifest entries.
  * 
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class CacheSubdirectoryContext {
 
+	/** the context of the directory in which subdirectories may be created */
+	private final BoundIOContext parentContext;
+	
+	/** A description to use for every created folder */
+	private final ManifestFolderDescription manifestFolderDescription;
+	
 	private Map<Optional<String>, BoundIOContext> mapOutputManagers = new HashMap<>();
-	
-	private BoundIOContext parentContext;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param parentContext the context of the directory in which subdirectories may be created
-	 */
-	public CacheSubdirectoryContext(BoundIOContext parentContext) {
-		super();
-		this.parentContext = parentContext;
-	}		
 	
 	/**
 	 * Gets (from the cache if it's already there) subdirectory for a given-name
@@ -61,7 +60,7 @@ public class CacheSubdirectoryContext {
 	public BoundIOContext get(Optional<String> subdirectoryName) {
 		return mapOutputManagers.computeIfAbsent(
 			subdirectoryName,
-			key -> parentContext.maybeSubdirectory(key)
+			key -> parentContext.maybeSubdirectory(key,manifestFolderDescription)
 		);
 	}
 }

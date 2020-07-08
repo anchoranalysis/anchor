@@ -27,7 +27,9 @@ package org.anchoranalysis.core.index.container;
  */
 
 
-public interface IBoundedRangeIncompleteDynamic extends IBoundedRangeIncomplete {
+public interface BoundedRange {
 	
-	void addBoundChangeListener( BoundChangeListener cl );
+	int getMinimumIndex();
+	
+	int getMaximumIndex();
 }

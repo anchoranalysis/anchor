@@ -29,7 +29,7 @@ package org.anchoranalysis.core.index.container.bridge;
 
 
 import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 /**
  * Bridges calls from hidden-type to external-type. Uses an IObjectBridge for the bridging.
@@ -47,7 +47,7 @@ public class BoundedIndexContainerBridgeWithoutIndex<H,S,E extends Exception> ex
 	private FunctionWithException<H,S,E> bridge;
 	
 	public BoundedIndexContainerBridgeWithoutIndex(
-		IBoundedIndexContainer<H> source,
+		BoundedIndexContainer<H> source,
 		FunctionWithException<H,S,E> bridge
 	) {
 		super(source);

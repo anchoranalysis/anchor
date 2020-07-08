@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.manifest.match;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io-manifest
@@ -33,23 +35,14 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 public class FolderWriteManifestMatch implements Match<FolderWrite> {
 
 	private Match<ManifestDescription> manifestDescriptionMatch;
-	private Match<SequenceType> sequenceTypeMatch;
+	private Optional<Match<SequenceType>> sequenceTypeMatch;
 	
 
 	// If match is null, we match everything
 	public FolderWriteManifestMatch(Match<ManifestDescription> manifestDescriptionMatch) {
 		super();
 		this.manifestDescriptionMatch = manifestDescriptionMatch;
-		this.sequenceTypeMatch = null;
-	}
-	
-	// If match is null, we match everything
-	public FolderWriteManifestMatch(
-			Match<ManifestDescription> manifestDescriptionMatch,
-			Match<SequenceType> sequenceTypeMatch) {
-		super();
-		this.manifestDescriptionMatch = manifestDescriptionMatch;
-		this.sequenceTypeMatch = sequenceTypeMatch;
+		this.sequenceTypeMatch = Optional.empty();
 	}
 
 
@@ -60,11 +53,11 @@ public class FolderWriteManifestMatch implements Match<FolderWrite> {
 			return false;
 		}
 		
-		if (manifestDescriptionMatch!=null && !manifestDescriptionMatch.matches( obj.getManifestFolderDescription().getFileDescription() )) {
+		if (!manifestDescriptionMatch.matches( obj.getManifestFolderDescription().getFileDescription() )) {
 			return false;
 		}
 		
-		return !(sequenceTypeMatch!=null && !sequenceTypeMatch.matches( obj.getManifestFolderDescription().getSequenceType() ));
+		return !(sequenceTypeMatch.isPresent() && !sequenceTypeMatch.get().matches( obj.getManifestFolderDescription().getSequenceType() ));
 	}
 
 }

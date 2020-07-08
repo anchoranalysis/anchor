@@ -43,6 +43,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // A folder contains a list of subfolders, contained files varies by implementation
 public abstract class FolderWrite implements SequencedFolder, WriteOperationRecorder, Serializable {
 
@@ -52,12 +55,15 @@ public abstract class FolderWrite implements SequencedFolder, WriteOperationReco
 	private static final long serialVersionUID = 1L;
 
 	// Not Optional as it needs to be serialized
-	private @Nullable FolderWrite parentFolder;
+	@Nullable 
+	private FolderWrite parentFolder;
 	
 	private ArrayList<FolderWrite> folders = new ArrayList<>();
 
 	private static Log log = LogFactory.getLog(FolderWrite.class);
 
+	// Not Optional as it needs to be serialized
+	@Nullable @Getter @Setter
 	private ManifestFolderDescription manifestFolderDescription;
 	
 	public FolderWrite() {
@@ -70,14 +76,6 @@ public abstract class FolderWrite implements SequencedFolder, WriteOperationReco
 		super();
 		log.debug( "New Folder Write: " + parentFolder.getRelativePath() );
 		this.parentFolder = parentFolder;
-	}
-	
-	public ManifestFolderDescription getManifestFolderDescription() {
-		return manifestFolderDescription;
-	}
-
-	public void setManifestFolderDescription(ManifestFolderDescription manifestFolderDescription) {
-		this.manifestFolderDescription = manifestFolderDescription;
 	}
 	
 	public abstract Path getRelativePath();

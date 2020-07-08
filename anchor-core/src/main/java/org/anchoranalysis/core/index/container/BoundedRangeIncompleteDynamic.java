@@ -1,10 +1,10 @@
 package org.anchoranalysis.core.index.container;
 
-/*-
+/*
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,8 @@ package org.anchoranalysis.core.index.container;
  * #L%
  */
 
-import org.anchoranalysis.core.index.ITypedGetFromIndex;
 
-
-public interface IBoundedIndexContainer<T> extends IBoundedRangeIncompleteDynamic, ITypedGetFromIndex<T> {
-
+public interface BoundedRangeIncompleteDynamic extends BoundedRangeIncomplete {
 	
+	void addBoundChangeListener( BoundChangeListener cl );
 }

@@ -51,7 +51,6 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -100,9 +99,6 @@ class WriteGroupResults {
 		Optional<FeatureCSVWriter> csvWriterAggregate,
 		BoundIOContext contextGroup
 	) throws AnchorIOException {
-
-		assert(results!=null);
-				
 		if (csvWriterAggregate.isPresent() || groupName.isPresent()) {
 			writeAggregateResultsForSingleGroup(
 				groupName,
@@ -221,7 +217,7 @@ class WriteGroupResults {
 			if(fileOutPath.isPresent()) {
 				paramsOut.writeToFile(fileOutPath.get());
 			}
-		} catch (IOException | OutputWriteFailedException e) {
+		} catch (IOException e) {
 			context.getLogger().errorReporter().recordError(GroupedResultsVectorCollection.class, e);
 		}
 	}

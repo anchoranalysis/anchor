@@ -40,15 +40,20 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
+import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
-
 import lombok.Getter;
 import lombok.Setter;
 
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
+	private static final ManifestFolderDescription MANIFEST_FOLDER_ROOT = new ManifestFolderDescription(
+		"root",
+		"experiment",
+		new SetSequenceType()
+	);
+	
 	// BEAN PROPERTIES
 	@BeanField @Getter @Setter
 	private FilePathPrefixer filePathPrefixer;
@@ -90,7 +95,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		}
 			
 		experimentalManifestRecorder.ifPresent(
-			mr -> writeManifestExperimentFolder(mr, fpd.combined())
+			mr -> writeRootFolderInManifest(mr, fpd.combined())
 		);
 
 		manifestRecorder.ifPresent(
@@ -100,36 +105,31 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		return fpp;
 	}
 	
-	private static void writeManifestExperimentFolder( ManifestRecorder manifestRecorderExperiment, Path rootPath ) {
-		manifestRecorderExperiment.getRootFolder().writeFolder(
-			rootPath,
-			new ManifestFolderDescription(), 
-			new ExperimentFileFolder()
-		);	
-	}
-	
 	@Override
 	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws BindFailedException {
 
 		try {
 			FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
-			
 			writeOperationRecorder.init(prefix.getFolderPath());
+			
 			return new BoundOutputManager(
 				this,
 				prefix,
 				getOutputWriteSettings(),
 				writeOperationRecorder.getRootFolder(),
-				lazyDirectoryFactory(),
-				Optional.empty()
+				silentlyDeleteExisting
 			);
 
 		} catch (FilePathPrefixerException e) {
 			throw new BindFailedException(e);
 		}
 	}
-	
-	private LazyDirectoryFactory lazyDirectoryFactory() {
-		return new LazyDirectoryFactory(silentlyDeleteExisting);
+		
+	private static void writeRootFolderInManifest( ManifestRecorder manifestRecorderExperiment, Path rootPath ) {
+		manifestRecorderExperiment.getRootFolder().writeFolder(
+			rootPath,
+			MANIFEST_FOLDER_ROOT, 
+			new ExperimentFileFolder()
+		);	
 	}
 }

@@ -28,6 +28,6 @@ package org.anchoranalysis.core.index.container;
 
 
 @FunctionalInterface
-public interface IOrderProvider {
+public interface OrderProvider {
 	int order( String index );
 }

@@ -30,9 +30,9 @@ package org.anchoranalysis.io.manifest.sequencetype;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.anchoranalysis.core.index.container.IOrderProvider;
+import org.anchoranalysis.core.index.container.OrderProvider;
 
-public class OrderProviderHashMap implements IOrderProvider {
+public class OrderProviderHashMap implements OrderProvider {
 	
 	// Maps each index to its bundle index
 	private HashMap<String,Integer> indexHash;
