@@ -231,11 +231,7 @@ public class ObjectMask {
 		if(!bv.equals(other.bv)) {
 			return false;
 		}
-		if(!bvb.equals(other.bvb)) {
-			return false;
-		}
-		// DOES NOT CHECK factory
-		return true;
+		return bvb.equals(other.bvb);
 	}
 
 	public int countIntersectingPixels(ObjectMask other) {

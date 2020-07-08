@@ -109,12 +109,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 		}
 		
 		MarkAbstractPosition trgt = (MarkAbstractPosition) m;
-		
-		if (!pos.equals(trgt.pos)) {
-			return false;
-		}
-
-		return true;
+		return pos.equals(trgt.pos);
 	}
 	
 	@Override

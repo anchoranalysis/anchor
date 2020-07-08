@@ -76,10 +76,7 @@ public class TableItemArrangement<T> {
 		if (rowIndex >= rows.size()) {
 			return false;
 		}
-		if (colIndex >= rows.get(rowIndex).size()) {
-			return false;
-		}
-		return true;
+		return colIndex < rows.get(rowIndex).size();
 	}
 	
 	public T get( int rowIndex, int colIndex ) {

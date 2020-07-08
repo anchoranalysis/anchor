@@ -176,12 +176,8 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	
 	// Checks if two marks are equal by comparing all attributes
 	public boolean equalsDeep(Mark m) {
-		
 		// ID check
-		if (!equalsID(m)) {
-			return false;
-		}
-		return true;
+		return equalsID(m);
 	}
 	
 	// Calculates the mask of an object

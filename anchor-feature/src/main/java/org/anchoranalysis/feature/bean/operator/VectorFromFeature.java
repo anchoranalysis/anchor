@@ -40,6 +40,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Calculates a vector of results, based upon 3 features that define the x, y and z components of the vector
  * 
@@ -48,13 +51,13 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtiliti
 public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Feature<T> x;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Feature<T> y;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Feature<T> z;
 	// END BEAN PROPERTIES
 	
@@ -76,29 +79,5 @@ public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
-	}
-
-	public Feature<T> getX() {
-		return x;
-	}
-
-	public void setX(Feature<T> x) {
-		this.x = x;
-	}
-
-	public Feature<T> getY() {
-		return y;
-	}
-
-	public void setY(Feature<T> y) {
-		this.y = y;
-	}
-
-	public Feature<T> getZ() {
-		return z;
-	}
-
-	public void setZ(Feature<T> z) {
-		this.z = z;
 	}
 }
