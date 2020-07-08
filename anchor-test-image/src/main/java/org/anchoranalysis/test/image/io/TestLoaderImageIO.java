@@ -57,26 +57,26 @@ public class TestLoaderImageIO {
 		rasterReader = RegisterBeanFactories.getDefaultInstances().get(RasterReader.class);
 	}
 	
-	public Channel openChnlFromTestPath( String testPath ) throws TestDataLoadException {
+	public Channel openChnlFromTestPath( String testPath ) {
 		return extractChnl(
 			openStackFromTestPath(testPath)
 		);
 	}
 	
-	public Channel openChnlFromFilePath( Path filePath ) throws TestDataLoadException {
+	public Channel openChnlFromFilePath( Path filePath ) {
 		return extractChnl(
 			openStackFromFilePath(filePath)
 		);
 	}
 	
-	public Stack openStackFromTestPath( String testPath ) throws TestDataLoadException {
+	public Stack openStackFromTestPath( String testPath ) {
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		
 		Path filePath = delegate.resolveTestPath( testPath);
 		return openStackFromFilePath(filePath);
 	}
 	
-	public Stack openStackFromFilePath( Path filePath ) throws TestDataLoadException {
+	public Stack openStackFromFilePath( Path filePath ) {
 		
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		
@@ -133,15 +133,10 @@ public class TestLoaderImageIO {
 		
 		Stack stackSaved = loader2.openStackFromTestPath(path2);
 		
-		if ( !stackWritten.equals(stackSaved) ) {
-			return false;
-		}
-		
-		return true;		
+		return stackWritten.equals(stackSaved);		
 	}
-
 	
-	public ObjectCollection openObjsFromTestPath( String testFolderPath ) throws TestDataLoadException {
+	public ObjectCollection openObjsFromTestPath( String testFolderPath ) {
 		Path filePath = delegate.resolveTestPath( testFolderPath);
 		return openObjsFromFilePath(filePath);
 	}
@@ -153,7 +148,7 @@ public class TestLoaderImageIO {
 	 * @return an object mask collection
 	 * @throws TestDataLoadException if data cannot be loaded
 	 */
-	public ObjectCollection openObjsFromFilePath( Path folderPath ) throws TestDataLoadException {
+	public ObjectCollection openObjsFromFilePath( Path folderPath ) {
 
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		TestReaderWriterUtilities.ensureRasterReader();
@@ -173,7 +168,7 @@ public class TestLoaderImageIO {
 	 * @param path2 second-path
 	 * @return TRUE if the object-mask-collection are equal (every object-pixel is identical)
 	 */
-	public boolean compareTwoObjMaskCollection( String path1, String path2 ) throws TestDataLoadException {
+	public boolean compareTwoObjMaskCollection( String path1, String path2 ) {
 		
 		if (!getTestLoader().doesPathExist(path1) ) {
 			throw new TestDataLoadException(

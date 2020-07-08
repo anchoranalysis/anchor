@@ -30,7 +30,6 @@ package org.anchoranalysis.anchor.plot.index;
 import java.awt.Paint;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.plot.index.GraphIndexBaseCategorical;
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GetForSeries;
 import org.anchoranalysis.core.error.InitException;
@@ -81,14 +80,12 @@ public class BoxPlot<T> extends GraphIndexBaseCategorical<T,DefaultBoxAndWhisker
         final BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
         renderer.setFillBox(true);
         renderer.setMeanVisible(false);
-        
-        final CategoryPlot plot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
 
-        final JFreeChart chart = new JFreeChart(
-            title,
-            plot
+        return new JFreeChart(
+        	title,
+        	new CategoryPlot(dataset, xAxis, yAxis, renderer)
         );
-        return chart;    	
+   	
     }
     
 

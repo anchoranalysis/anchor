@@ -29,7 +29,6 @@ package org.anchoranalysis.anchor.plot.bean.colorscheme;
 
 import java.awt.Color;
 
-import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -70,14 +69,12 @@ public class GraphColorScheme extends AnchorBean<GraphColorScheme> {
 
     public void colorPlot( XYPlot plot ) {
     	plot.setBackgroundPaint( plotBackgroundColor.toAWTColor() );
-    //  plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
         plot.setDomainGridlinePaint( plotGridlineColor.toAWTColor() );
         plot.setRangeGridlinePaint( plotGridlineColor.toAWTColor() );
     }
     
     public void colorPlot( CategoryPlot plot ) {
     	plot.setBackgroundPaint( plotBackgroundColor.toAWTColor() );
-    //  plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
         plot.setDomainGridlinePaint( plotGridlineColor.toAWTColor() );
         plot.setRangeGridlinePaint( plotGridlineColor.toAWTColor() );
     }

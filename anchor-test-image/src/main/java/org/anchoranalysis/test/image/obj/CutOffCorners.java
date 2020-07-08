@@ -66,9 +66,6 @@ public class CutOffCorners extends VoxelPattern {
 		if (z<edgeZ) {
 			return false;
 		}
-		if (z>rightBorder.getZ()) {
-			return false;
-		}
-		return true;
+		return z<=rightBorder.getZ();
 	}
 }

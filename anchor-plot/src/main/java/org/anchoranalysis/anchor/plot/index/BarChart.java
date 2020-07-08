@@ -32,7 +32,6 @@ import hep.aida.bin.DynamicBin1D;
 import java.awt.Paint;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.plot.index.GraphIndexBaseCategorical;
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GetForSeries;
 import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;

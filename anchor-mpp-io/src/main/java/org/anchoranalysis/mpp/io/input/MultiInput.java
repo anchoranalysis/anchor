@@ -61,8 +61,6 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 	}
 	
 	public MultiInput( String mainObjectName, ProvidesStackInput mainInputObject ) {
-		super();
-		assert(mainInputObject!=null);
 		this.stackWithMap = new StackWithMap(mainObjectName, mainInputObject);
 	}
 
@@ -76,7 +74,6 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 			progressReporter
 		);
 	}
-
 
 	@Override
 	public void addToStoreWithName(

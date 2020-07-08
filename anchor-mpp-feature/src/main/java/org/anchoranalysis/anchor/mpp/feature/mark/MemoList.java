@@ -32,49 +32,14 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = false)
 public class MemoList implements MemoForIndex {
 
 	private List<PxlMarkMemo> delegate = new ArrayList<>();
-	
-	@Override
-	public boolean equals(Object obj) {
 		
-		if (super.equals(obj)) {
-			return true;
-		}
-		
-		MemoList objCast = (MemoList) obj;
-		
-		if (objCast==null) {
-			return false;
-		}
-		
-		if (size()!=objCast.size()) {
-			return false;
-		}
-		
-		for (int i=0; i<size(); i++) {
-			if (!get(i).equals(objCast.get(i))) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-
-		HashCodeBuilder builder = new HashCodeBuilder();
-		builder.append( size() );
-		for (int i=0; i<size(); i++) {
-			builder.append( get(i).hashCode() );
-		}
-		return builder.hashCode();
-	}	
-	
 	public boolean hasCacheIDs() {
 		
 		for(PxlMarkMemo pmm : delegate) {

@@ -39,31 +39,29 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.histogram.Histogram;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /** 
  * Memoization of retrieving a PxlMark from a mark
  * 
  * <p>This is avoid repeated expensive operations (rasterization of a mark).</p>
  */
+@AllArgsConstructor
 public class PxlMarkMemo extends CachedOperation<PxlMark,AnchorNeverOccursException> {
 
-	// Parameters
+	// START REQUIRED ARGUMENTS
 	private Mark mark;
 	private NRGStack stack;
-	private RegionMap regionMap;
-	private PixelPartFactory<Histogram> factoryHistogram;
-
-	public PxlMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap, PixelPartFactory<Histogram> factoryHistogram ) {
-		super();
-		assert(regionMap!=null);
-		this.mark = mark;
-		this.stack = stack;
-		this.factoryHistogram = factoryHistogram;
-		this.regionMap = regionMap;
-	}
+	
+	@Getter
+	private final RegionMap regionMap;
+	
+	private final PixelPartFactory<Histogram> factoryHistogram;
+	// END REQUIRED ARGUMENTS
 	
 	public PxlMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap, PixelPartFactory<Histogram> factoryHistogram, PxlMark result ) {
 		super(result);
-		assert(regionMap!=null);
 		this.mark = mark;
 		this.stack = stack;
 		this.factoryHistogram = factoryHistogram;
@@ -102,9 +100,5 @@ public class PxlMarkMemo extends CachedOperation<PxlMark,AnchorNeverOccursExcept
 		if (pm!=null) {
 			pm.cleanUp();
 		}
-	}
-
-	public RegionMap getRegionMap() {
-		return regionMap;
 	}
 }

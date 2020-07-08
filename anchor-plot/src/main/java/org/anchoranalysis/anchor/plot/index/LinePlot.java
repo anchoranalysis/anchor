@@ -67,15 +67,20 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
 	private AxisLimits domainAxisLimits;
 	private AxisLimits rangeAxisLimits;
 	
+	/**
+	 * 
+	 * @author Owen Feehan
+	 *
+	 * @param <T> container item-type
+	 */
 	@FunctionalInterface
-	public interface YValGetter<CntrItemType> {
-		double getYVal( CntrItemType item, int yIndex ) throws GetOperationFailedException;
+	public interface YValGetter<T> {
+		double getYVal( T item, int yIndex ) throws GetOperationFailedException;
 	}
 	
 	public LinePlot( String graphName, String[] seriesNames, YValGetter<T> yValGetter ) {
 		super(graphName, seriesNames);
-	
-		this.yValGetter = yValGetter;
+			this.yValGetter = yValGetter;
 	}
 	
 	@Override

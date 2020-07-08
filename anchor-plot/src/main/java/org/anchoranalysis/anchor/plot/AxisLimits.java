@@ -1,7 +1,5 @@
 package org.anchoranalysis.anchor.plot;
 
-import org.anchoranalysis.anchor.plot.AxisLimits;
-
 /*
  * #%L
  * anchor-plot
