@@ -39,7 +39,7 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 
-public class PointsInitParams extends BeanInitParams {
+public class PointsInitParams implements BeanInitParams {
 	
 	// START: InitParams
 	private ImageInitParams soImage;

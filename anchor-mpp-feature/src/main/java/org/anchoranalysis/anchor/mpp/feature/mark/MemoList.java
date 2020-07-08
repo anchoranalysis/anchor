@@ -36,7 +36,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class MemoList implements MemoForIndex {
 
-	private List<PxlMarkMemo> delegate = new ArrayList<PxlMarkMemo>();
+	private List<PxlMarkMemo> delegate = new ArrayList<>();
 	
 	@Override
 	public boolean equals(Object obj) {

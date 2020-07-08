@@ -59,7 +59,6 @@ public class NamedNRGSchemeSet implements Iterable<SimpleNameValue<NRGScheme>> {
 	}
 	
 	public boolean add(String name, NRGScheme nrgScheme) {
-		assert nrgScheme.getRegionMap()!=null;
 		delegate.put(
 			name,
 			new SimpleNameValue<>(name, nrgScheme)

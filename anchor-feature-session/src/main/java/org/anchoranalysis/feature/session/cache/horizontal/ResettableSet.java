@@ -97,12 +97,11 @@ class ResettableSet<T extends ResettableCalculation> {
 	
 	public String describe() {
 		StringBuilder sb = new StringBuilder();
-		for( T key  : map.keySet() ) {
-			T item = map.get(key);
-			sb.append( System.identityHashCode(item) + ": " + item.toString() );
-			sb.append("\n");
+		for( T item  : map.values()) {
+			sb.append(
+				String.format("%s: %s%n", System.identityHashCode(item), item.toString())
+			);
 		}
-		
 		return sb.toString();
 	}
 

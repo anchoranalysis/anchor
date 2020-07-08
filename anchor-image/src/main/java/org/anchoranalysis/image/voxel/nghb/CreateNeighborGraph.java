@@ -137,7 +137,7 @@ public class CreateNeighborGraph<V> {
 		ObjectCollection objs = ObjectCollectionFactory.mapFrom(vertices, vertexToObjMask::apply);
 		checkObjsInScene(objs, sceneExtnt);
 				
-		EdgeAdder<V> edgeAdder = new EdgeAdder<V>(
+		EdgeAdder<V> edgeAdder = new EdgeAdder<>(
 			vertices,
 			vertexToObjMask,
 			new ObjectCollectionRTree(objs),

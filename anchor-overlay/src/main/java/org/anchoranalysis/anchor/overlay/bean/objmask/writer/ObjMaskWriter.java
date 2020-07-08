@@ -127,10 +127,6 @@ public abstract class ObjMaskWriter extends AnchorBean<ObjMaskWriter> {
 		IDGetter<ObjectWithProperties> colorIDGetter,
 		BoundingBox bboxContainer
 	) throws OperationFailedException {
-
-		assert( masks != null );
-		assert(colorIndex!=null);
-
 		// We iterate through every mark
 		int i = 0;
 		for ( ObjectWithProperties mask : masks ) {

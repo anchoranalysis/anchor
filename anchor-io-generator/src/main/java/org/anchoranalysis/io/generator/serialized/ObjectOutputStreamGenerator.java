@@ -56,7 +56,6 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
 			ObjectOutputStream out = new ObjectOutputStream(fos);
 			out.writeObject( element );
 			out.close();
-			fos.close();
 			
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);

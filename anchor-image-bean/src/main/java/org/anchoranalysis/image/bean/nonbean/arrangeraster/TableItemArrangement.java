@@ -43,11 +43,17 @@ public class TableItemArrangement<T> {
 	
 	private int numCols;
 	
-	public static interface ITableCreator<ItemType> {
+	/**
+	 * 
+	 * @author Owen Feehan
+	 *
+	 * @param <T> item-type
+	 */
+	public static interface TableCreator<T> {
 		
 		boolean hasNext();
 		
-		ItemType createNext( int rowPos, int colPos ) throws TableItemException;
+		T createNext( int rowPos, int colPos ) throws TableItemException;
 	}
 	
 	
@@ -104,7 +110,7 @@ public class TableItemArrangement<T> {
 		return index % numCols;
 	}
 	
-	public TableItemArrangement( ITableCreator<T> rasterIterator, int numRows, int numCols ) throws TableItemException {
+	public TableItemArrangement( TableCreator<T> rasterIterator, int numRows, int numCols ) throws TableItemException {
 		
 		this.numCols = numCols;
 		

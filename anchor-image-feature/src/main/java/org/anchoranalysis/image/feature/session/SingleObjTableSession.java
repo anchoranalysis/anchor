@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSingleObject> {
+public class SingleObjTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
 
 	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
 

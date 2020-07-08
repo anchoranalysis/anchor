@@ -72,8 +72,7 @@ public class VoxelBoxThresholder {
 		BinaryValuesByte bvOut,
 		Optional<ObjectMask> mask,
 		boolean alwaysDuplicate
-	) throws CreateException {
-	
+	) {
 		VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty( alwaysDuplicate );
 		
 		if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {

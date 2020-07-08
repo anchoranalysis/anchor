@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
-	private List<Overlay> delegate = new ArrayList<Overlay>();
+	private List<Overlay> delegate = new ArrayList<>();
 
 	@Override
 	public Iterator<Overlay> iterator() {

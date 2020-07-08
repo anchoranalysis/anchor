@@ -33,7 +33,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-public class PixelsFromByteBufferArr implements IPixelsForPlane<ByteBuffer> {
+public class PixelsFromByteBufferArr implements PixelsForPlane<ByteBuffer> {
 
 	private final VoxelBuffer<ByteBuffer>[] buffer;
 	private final Extent extent;

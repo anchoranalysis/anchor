@@ -109,7 +109,7 @@ public abstract class OverlayWriter {
 		
 		List<PrecalcOverlay> listOut = new ArrayList<>();
 		
-		IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<Overlay>();
+		IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<>();
 		
 		for( int i=0; i< coc.size(); i++ ) {
 			

@@ -38,12 +38,7 @@ public class VoxelBoxList implements Iterable<VoxelBoxWrapper>{
 
 	private ArrayList<VoxelBoxWrapper> list = new ArrayList<>();
 
-	public VoxelBoxList() {
-		super();
-	}
-	
 	public boolean add(VoxelBoxWrapper vb) {
-		assert( vb!= null );
 		return list.add(vb);
 	}
 

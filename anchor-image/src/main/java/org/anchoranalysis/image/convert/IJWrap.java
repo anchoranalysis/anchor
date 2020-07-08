@@ -30,7 +30,6 @@ package org.anchoranalysis.image.convert;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
@@ -156,12 +155,12 @@ public class IJWrap {
 	}
 	
 
-	public static ImageProcessor imageProcessorByte( IPixelsForPlane<ByteBuffer> planeAccess, int z ) {
+	public static ImageProcessor imageProcessorByte( PixelsForPlane<ByteBuffer> planeAccess, int z ) {
 		Extent e = planeAccess.extent();
 		return new ByteProcessor( e.getX(), e.getY(), planeAccess.getPixelsForPlane(z).buffer().array(), null);
 	}
 	
-	public static ImageProcessor imageProcessorShort( IPixelsForPlane<ShortBuffer> planeAccess, int z ) {
+	public static ImageProcessor imageProcessorShort( PixelsForPlane<ShortBuffer> planeAccess, int z ) {
 		Extent e = planeAccess.extent();
 		assert( e.getVolumeXY()==planeAccess.getPixelsForPlane(z).buffer().array().length );
 		return new ShortProcessor( e.getX(), e.getY(), planeAccess.getPixelsForPlane(z).buffer().array(), null);
@@ -183,12 +182,12 @@ public class IJWrap {
 		return createImagePlus( stackNew, new ImageDimensions( voxelBox.any().extent(), new ImageResolution() ), 1, 1, false );
 	}
 	
-	public static ImagePlus createImagePlus( Channel chnl ) throws CreateException {
+	public static ImagePlus createImagePlus( Channel chnl ) {
 		Stack stack = new Stack( chnl );
 		return createImagePlus(stack,false);
 	}
 	
-	public static ImagePlus createImagePlus( Stack stack, boolean makeRGB ) throws CreateException {
+	public static ImagePlus createImagePlus( Stack stack, boolean makeRGB ) {
 		
 		ImageDimensions sd = stack.getChnl(0).getDimensions();
 		

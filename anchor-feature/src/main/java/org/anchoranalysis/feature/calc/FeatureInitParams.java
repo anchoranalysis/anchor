@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
  * @author Owen Feehan
  *
  */
-public class FeatureInitParams extends BeanInitParams {
+public class FeatureInitParams implements BeanInitParams {
 
 	private Optional<KeyValueParams> keyValueParams;
 	private Optional<NRGStack> nrgStack;

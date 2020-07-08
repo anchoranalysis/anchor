@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramCreator;
 
-public class PixelPartHistogram extends PixelPart<Histogram> {
+public class PixelPartHistogram implements PixelPart<Histogram> {
 
 	private Histogram combined;
 	private List<Histogram> list;

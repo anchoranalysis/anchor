@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
-public class ProbMapObjMaskCollection extends ProbMap {
+public class ProbMapObjMaskCollection implements ProbMap {
 
 	private ObjectCollection objMaskCollection;
 	private ImageDimensions dim;

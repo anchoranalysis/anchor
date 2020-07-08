@@ -181,7 +181,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		// We add any points in our new mark to the set
 		PxlMark pxlMark = newMark.doOperation();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).cornerMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
@@ -225,7 +225,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		PxlMark pxlMark = markToAdd.doOperation();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).cornerMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 		

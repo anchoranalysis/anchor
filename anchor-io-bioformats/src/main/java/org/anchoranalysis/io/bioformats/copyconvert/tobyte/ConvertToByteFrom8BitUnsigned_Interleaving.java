@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
  
-public class ConvertToByte_From8BitUnsigned_Interleaving extends ConvertToByte {
+public class ConvertToByteFrom8BitUnsigned_Interleaving extends ConvertToByte {
 
 	private int bytesPerPixelOut = 1;
 	private int sizeXY;

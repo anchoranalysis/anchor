@@ -36,13 +36,19 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class RasterGeneratorFromDisplayStack<IterType> extends RasterGenerator implements IterableObjectGenerator<IterType, Stack> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> iteration-type
+ */
+public class RasterGeneratorFromDisplayStack<T> extends RasterGenerator implements IterableObjectGenerator<T, Stack> {
 
-	private IterableObjectGenerator<IterType,DisplayStack> delegate;
+	private IterableObjectGenerator<T,DisplayStack> delegate;
 	private boolean rgb;
 	
 	public RasterGeneratorFromDisplayStack(
-			IterableObjectGenerator<IterType, DisplayStack> delegate, boolean rgb) {
+			IterableObjectGenerator<T, DisplayStack> delegate, boolean rgb) {
 		super();
 		this.delegate = delegate;
 		this.rgb = rgb;
@@ -76,12 +82,12 @@ public class RasterGeneratorFromDisplayStack<IterType> extends RasterGenerator i
 	}
 	
 	@Override
-	public IterType getIterableElement() {
+	public T getIterableElement() {
 		return delegate.getIterableElement();
 	}
 
 	@Override
-	public void setIterableElement(IterType element)
+	public void setIterableElement(T element)
 			throws SetOperationFailedException {
 		delegate.setIterableElement(element);
 	}

@@ -43,19 +43,11 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.FeatureListStoreUtilities;
 
-public class SharedFeaturesInitParams extends BeanInitParams {
+public class SharedFeaturesInitParams implements BeanInitParams {
 
-	// START: InitParams
 	private KeyValueParamsInitParams soParams;
-	// END: InitParams
-	
-	// START: Stores
 	private NamedProviderStore<FeatureList<FeatureInput>> storeFeatureList;
-	// END: Stores
-	
-	// START: Single Items
 	private SharedFeatureMulti sharedFeatureSet;
-	// END: Single Items
 
 	private SharedFeaturesInitParams(SharedObjects so) {
 		super();

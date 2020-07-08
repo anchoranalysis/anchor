@@ -31,10 +31,10 @@ package org.anchoranalysis.mpp.sgmn.bean.cfg;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm 
-public abstract class ExperimentState {
+public interface ExperimentState {
 	
-	public abstract void outputBeforeAnyTasksAreExecuted( BoundOutputManagerRouteErrors outputManager );
+	void outputBeforeAnyTasksAreExecuted( BoundOutputManagerRouteErrors outputManager );
 	
 	// We just need any single kernel proposer to write out
-	public abstract void outputAfterAllTasksAreExecuted( BoundOutputManagerRouteErrors outputManager );
+	void outputAfterAllTasksAreExecuted( BoundOutputManagerRouteErrors outputManager );
 }

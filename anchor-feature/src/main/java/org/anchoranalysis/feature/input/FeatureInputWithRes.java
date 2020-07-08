@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 import org.anchoranalysis.image.extent.ImageResolution;
 
-public abstract class FeatureInputWithRes extends FeatureInput {
+public abstract class FeatureInputWithRes implements FeatureInput {
 
 	public abstract Optional<ImageResolution> getResOptional();
 	

@@ -107,15 +107,7 @@ class HelperBeanFields {
 		return fieldsOut;
 	}
 	
-	
-	
-
-	
-	
-	
-	
-	
-	private static String describeBean( AnchorBean<?> bean ) throws BeanMisconfiguredException, OperationFailedException {
+	private static String describeBean( AnchorBean<?> bean ) {
 				
 		StringBuilder sb = new StringBuilder();
 		sb.append( bean.getBeanName() );
@@ -125,19 +117,11 @@ class HelperBeanFields {
 		return sb.toString();
 	}
 	
-	
-	
 	static void throwMissingPropertyException( String fieldName, String className ) throws BeanMisconfiguredException {
 		throw new BeanMisconfiguredException(
 			String.format("Property %s of class %s must be non-null", fieldName, className  )
 		);
 	}
-	
-	
-	
-	
-
-	
 
 	private static String describeField( Field field, AnchorBean<?> bean ) throws OperationFailedException, BeanMisconfiguredException {
 		try {

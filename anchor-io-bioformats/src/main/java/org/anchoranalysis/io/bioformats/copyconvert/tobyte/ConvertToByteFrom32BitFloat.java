@@ -32,25 +32,44 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-public class ConvertToByte_From8BitUnsigned_NoInterleaving extends ConvertToByte {
+import loci.common.DataTools;
 
-	private int bytesPerPixel = 1;
+public class ConvertToByteFrom32BitFloat extends ConvertToByte {
+
+	private static final int BYTES_PER_PIXEL = 4;
+	
 	private int sizeXY;
+	private int sizeBytes;
+	
+	private boolean littleEndian;
+	
+	public ConvertToByteFrom32BitFloat(boolean littleEndian) {
+		super();
+		this.littleEndian = littleEndian;
+	}		
 	
 	@Override
 	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-		sizeXY = sd.getX() * sd.getY();
+  		sizeXY = sd.getX() * sd.getY();
+  		sizeBytes = sizeXY * BYTES_PER_PIXEL;
 	}
 
 	@Override
 	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
-		ByteBuffer buffer = ByteBuffer.wrap(src);
+		byte[] crntChnlBytes = new byte[sizeXY];
 		
-		int sizeTotalBytes = sizeXY * bytesPerPixel;
-		byte[] crntChnlBytes = new byte[sizeTotalBytes];
-		
-		buffer.position(sizeTotalBytes*channelRelative);
-		buffer.get( crntChnlBytes, 0, sizeTotalBytes);
+		int indOut = 0;
+		for(int indIn =0; indIn<sizeBytes; indIn+=BYTES_PER_PIXEL) {
+			float f = DataTools.bytesToFloat(src, indIn, littleEndian);
+				
+			if (f>255) {
+				f = 255;
+			}
+			if (f<0) {
+				f = 0;
+			}
+			crntChnlBytes[indOut++] = (byte) (f);
+		}
 		return VoxelBufferByte.wrap(crntChnlBytes);
 	}
 	

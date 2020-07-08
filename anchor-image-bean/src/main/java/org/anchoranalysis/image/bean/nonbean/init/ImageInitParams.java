@@ -58,7 +58,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 
 // A wrapper around SharedObjects which types certain Image entities
-public class ImageInitParams extends BeanInitParams {
+public class ImageInitParams implements BeanInitParams {
 
 	// START: InitParams
 	private KeyValueParamsInitParams soParams;

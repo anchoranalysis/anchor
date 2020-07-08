@@ -32,53 +32,26 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-import loci.common.DataTools;
+public class ConvertToByteFrom8BitUnsigned_NoInterleaving extends ConvertToByte {
 
-public class ConvertToByte_From32BitUnsignedInt extends ConvertToByte {
-
-	private double convertRatio;
-	private int bytesPerPixel = 4;
+	private int bytesPerPixel = 1;
 	private int sizeXY;
-	private int sizeBytes;
-	
-	private int effectiveBitsPerPixel;
-	private boolean littleEndian;
-
-	public ConvertToByte_From32BitUnsignedInt(int effectiveBitsPerPixel, boolean littleEndian) {
-		super();
-		this.effectiveBitsPerPixel = effectiveBitsPerPixel;
-		this.littleEndian = littleEndian;
-	}
 	
 	@Override
-	protected void setupBefore( ImageDimensions sd, int numChnlsPerByteArray ) {
-
-		convertRatio = calculateConvertRatio();
-		
-  		sizeXY = sd.getX() * sd.getY();
-  		sizeBytes = sizeXY * bytesPerPixel;
+	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
+		sizeXY = sd.getX() * sd.getY();
 	}
-	
 
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl( byte[] src, int channelRelative ) {
-		byte[] crntChnlBytes = new byte[sizeXY];
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+		ByteBuffer buffer = ByteBuffer.wrap(src);
 		
-		int indOut = 0;
-		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int i = DataTools.bytesToInt( src, indIn, littleEndian);
-			crntChnlBytes[indOut++] = (byte) (i*convertRatio);
-		}
-		return VoxelBufferByte.wrap( crntChnlBytes );
+		int sizeTotalBytes = sizeXY * bytesPerPixel;
+		byte[] crntChnlBytes = new byte[sizeTotalBytes];
+		
+		buffer.position(sizeTotalBytes*channelRelative);
+		buffer.get( crntChnlBytes, 0, sizeTotalBytes);
+		return VoxelBufferByte.wrap(crntChnlBytes);
 	}
 	
-	private double calculateConvertRatio() {
-		if (effectiveBitsPerPixel==32) {
-			return 1.0;
-		} else {
-			return ConvertHelper.twoToPower(
-				-1*(effectiveBitsPerPixel-8)
-			);
-		}		
-	}
 }

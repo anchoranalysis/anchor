@@ -53,8 +53,9 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 	
 	public abstract Path annotationPathFor( ProvidesStackInput item ) throws AnchorIOException;
 	
-	/** Returns a label describing the annotation, or empty() if this makes no sense 
-	 * @throws AnchorIOException TODO*/
+	/** Returns a label describing the annotation, or empty() if this makes no sense
+	 *  
+	 * @throws AnchorIOException*/
 	public abstract Optional<String> annotationLabelFor( ProvidesStackInput item ) throws AnchorIOException;
 	
 	public abstract int weightWidthDescription();

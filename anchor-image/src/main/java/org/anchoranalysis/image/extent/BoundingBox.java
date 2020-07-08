@@ -174,11 +174,7 @@ public final class BoundingBox implements Serializable {
 		if (cornerMin.getZ()==0) {
 			return true;
 		}
-		if (crnrMax.getZ()==(sd.getZ()-1)) {
-			return true;
-		}
-		
-		return false;
+		return crnrMax.getZ()==(sd.getZ()-1);
 	}
 	
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {

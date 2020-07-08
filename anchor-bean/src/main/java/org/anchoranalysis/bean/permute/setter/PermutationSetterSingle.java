@@ -48,7 +48,7 @@ import org.anchoranalysis.bean.AnchorBean;
  * @author Owen Feehan
  *
  */
-public class PermutationSetterSingle extends PermutationSetter {
+public class PermutationSetterSingle implements PermutationSetter {
 
 	/**
 	 * Intermediate properties that must be traversed before getting to the final field

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public class HistogramsAfterSplit {
 	
-	private List<Histogram> list = new ArrayList<Histogram>();
+	private List<Histogram> list = new ArrayList<>();
 
 	public boolean add(Histogram e) {
 		return list.add(e);
@@ -113,7 +113,7 @@ public class HistogramsAfterSplit {
 	}
 		
 	public List<IndexMean> indicesSortedByMeanAscending() throws OperationFailedException {
-		ArrayList<IndexMean> out = new ArrayList<IndexMean>();
+		ArrayList<IndexMean> out = new ArrayList<>();
 		
 		int i = 0;
 		for( Histogram h : list ) {

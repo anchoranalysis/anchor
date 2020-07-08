@@ -32,7 +32,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
+class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 
 	@Override
 	public boolean accepts( Class<?> paramType ) {
@@ -43,10 +43,8 @@ class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
 	@Override
 	public void doInitFor(Object propertyValue, Object params, Object parent, Logger logger) throws InitException {
 		
-		if (parent!=null) {
-			if (!(parent instanceof FeatureBase)) {
-				throw new InitException("A feature may only have another FeatureBase as a bean-parent");
-			}
+		if (parent!=null && !(parent instanceof FeatureBase)) {
+			throw new InitException("A feature may only have another FeatureBase as a bean-parent");
 		}
 
 		if (propertyValue instanceof Feature) {

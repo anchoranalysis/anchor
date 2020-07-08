@@ -34,11 +34,11 @@ import lombok.NoArgsConstructor;
 // When we don't care about parameters
 
 @EqualsAndHashCode(callSuper=false) @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class FeatureInputNull extends FeatureInput {
+public class FeatureInputNull implements FeatureInput {
 
-	private static FeatureInputNull instance = new FeatureInputNull();
+	private static final FeatureInputNull INSTANCE = new FeatureInputNull();
 	
 	public static FeatureInputNull instance() {
-		return instance;
+		return INSTANCE;
 	}
 }

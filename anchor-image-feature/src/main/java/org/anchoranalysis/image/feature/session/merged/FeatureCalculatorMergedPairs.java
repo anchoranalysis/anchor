@@ -73,7 +73,7 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @RequiredArgsConstructor
-public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjects> {
+public class FeatureCalculatorMergedPairs implements FeatureTableCalculator<FeatureInputPairObjects> {
 
 	// START REQUIRED ARGUMENTS
 	private final MergedPairsFeatures features;

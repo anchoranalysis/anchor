@@ -33,7 +33,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 
-public class KeyValueParamsInitParams extends BeanInitParams {
+public class KeyValueParamsInitParams implements BeanInitParams {
 	
 	// START: Stores
 	private NamedProviderStore<KeyValueParams> storeKeyValueParams;

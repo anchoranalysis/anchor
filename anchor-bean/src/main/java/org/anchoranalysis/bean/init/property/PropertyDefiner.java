@@ -35,11 +35,11 @@ import org.anchoranalysis.core.log.Logger;
  *
  * @param <P> init-param type
  */
-public abstract class PropertyDefiner {
+public interface PropertyDefiner {
 
-	public abstract boolean accepts( Class<?> paramType );
+	boolean accepts( Class<?> paramType );
 	
-	public abstract void doInitFor( Object propertyValue, Object param, Object parent, Logger logger ) throws InitException;
+	void doInitFor( Object propertyValue, Object param, Object parent, Logger logger ) throws InitException;
 	
-	public abstract String describeAcceptedClasses();
+	String describeAcceptedClasses();
 }

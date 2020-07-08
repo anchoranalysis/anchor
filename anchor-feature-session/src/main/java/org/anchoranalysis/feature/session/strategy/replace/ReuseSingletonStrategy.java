@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
 /** 
  * Always re-use a singleton SessionInput, invalidating it each time a new call occurs
  **/
-public class ReuseSingletonStrategy<T extends FeatureInput> extends ReplaceStrategy<T> {
+public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceStrategy<T> {
 
 	private Optional<SessionInputSequential<T>> sessionInput = Optional.empty();
 	

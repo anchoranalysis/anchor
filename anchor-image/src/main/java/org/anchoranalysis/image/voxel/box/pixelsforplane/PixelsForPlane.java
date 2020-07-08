@@ -32,9 +32,17 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public interface IPixelsForPlane<BufferType extends Buffer> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> buffer-type
+ */
+public interface PixelsForPlane<T extends Buffer> {
 
-	public void setPixelsForPlane( int z, VoxelBuffer<BufferType> pixels );
-	public VoxelBuffer<BufferType> getPixelsForPlane( int z );
+	public VoxelBuffer<T> getPixelsForPlane( int z );
+	
+	public void setPixelsForPlane( int z, VoxelBuffer<T> pixels );
+	
 	public Extent extent();
 }

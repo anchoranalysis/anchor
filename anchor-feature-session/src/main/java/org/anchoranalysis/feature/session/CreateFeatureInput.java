@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public abstract class CreateFeatureInput <T extends FeatureInput> {
+public interface CreateFeatureInput<T extends FeatureInput> {
 	
-	public abstract T createForFeature( Feature<?> feature ) throws CreateException;
+	T createForFeature( Feature<?> feature ) throws CreateException;
 }

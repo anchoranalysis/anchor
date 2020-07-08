@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
  *
  * @param <T>
  */
-public abstract class FeatureTableCalculator<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
+public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureCalculatorMulti<T> {
 	
 	/**
 	 * Initializes a feature store that has the same structure as that previously created by createFeatures() from the same object
@@ -53,15 +53,15 @@ public abstract class FeatureTableCalculator<T extends FeatureInput> implements 
 	 * @param logger
 	 * @param features
 	 */
-	public abstract void start( ImageInitParams initParams, Optional<NRGStackWithParams> nrgStack, Logger logger ) throws InitException;
+	void start( ImageInitParams initParams, Optional<NRGStackWithParams> nrgStack, Logger logger ) throws InitException;
 	
 	/**
 	 * Makes a copy of the feature-store for a new thread. Deep-copies the features. Shallow-copies everything else.
 	 * 
 	 * @return
 	 */
-	public abstract FeatureTableCalculator<T> duplicateForNewThread();
+	FeatureTableCalculator<T> duplicateForNewThread();
 	
 	/** A list of names for each feature (columns ofthe table) */
-	public abstract FeatureNameList createFeatureNames();
+	FeatureNameList createFeatureNames();
 }

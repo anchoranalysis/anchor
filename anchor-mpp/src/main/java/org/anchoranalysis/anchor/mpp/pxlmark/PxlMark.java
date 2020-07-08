@@ -49,11 +49,11 @@ public abstract class PxlMark {
 		return objMask.getVoxelBoxBounded();
 	}
 	
-	public BoundingBox getBoundingBox( int regionID ) {
+	public BoundingBox getBoundingBox() {
 		return objMask.getBoundingBox();
 	}
 	
-	public BoundingBox getBoundingBoxMIP( int regionID ) {
+	public BoundingBox getBoundingBoxMIP() {
 		return objMaskMIP.getBoundingBox();
 	}
 
@@ -82,15 +82,4 @@ public abstract class PxlMark {
 	public abstract VoxelStatistics statisticsFor( int chnlID, int regionID, int sliceID );
 	
 	public abstract void cleanUp();
-	
-
-	@Override
-	public boolean equals( Object other ) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int hashCode() {
-		throw new UnsupportedOperationException();
-	}	
 }

@@ -199,11 +199,8 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 					return true;
 				}
 			}
-			y--;
 			ind -= xLength;
-			
-			
-			x--;
+
 			ind--;
 		}
 		

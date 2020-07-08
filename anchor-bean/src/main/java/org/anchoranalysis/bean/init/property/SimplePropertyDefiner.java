@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
  * @param <P> param type
  */
 @RequiredArgsConstructor
-public class SimplePropertyDefiner<P> extends PropertyDefiner {
+public class SimplePropertyDefiner<P> implements PropertyDefiner {
 
 	private final Class<?> paramTypeMatch;
 

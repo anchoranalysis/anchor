@@ -55,8 +55,6 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	public CountKernelNghbMask(boolean useZ, BinaryValuesByte bv, ObjectMask omRequireHigh, boolean multipleMatchesPerVoxel) {
 		super(useZ, bv, multipleMatchesPerVoxel);
 		this.omRequireHigh = omRequireHigh;
-		
-		this.omRequireHigh = omRequireHigh;
 		this.vbRequireHigh = omRequireHigh.binaryVoxelBox();
 		this.bvRequireHigh = vbRequireHigh.getBinaryValues().createByte();
 	}

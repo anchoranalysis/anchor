@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.AnchorBean;
  * @author Owen Feehan
  *
  */
-public class PermutationSetterList extends PermutationSetter {
+public class PermutationSetterList implements PermutationSetter {
 
 	private List<PermutationSetter> list = new ArrayList<>();
 	

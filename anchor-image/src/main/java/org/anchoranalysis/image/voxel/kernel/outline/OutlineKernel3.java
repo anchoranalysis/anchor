@@ -90,7 +90,6 @@ public class OutlineKernel3 extends OutlineKernel3Base {
 				return true;
 			}
 		}
-		x--;
 		ind--;
 		
 		

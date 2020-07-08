@@ -38,7 +38,7 @@ public abstract class CheckMark extends MPPBean<CheckMark> implements ICompatibl
 
 	/**
 	 * Called before any calls to check()
-	 * @param nrgStack TODO
+	 * @param nrgStack
 	 */
 	public void start(NRGStackWithParams nrgStack) throws OperationFailedException {
 

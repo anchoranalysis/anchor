@@ -61,8 +61,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static byte FLAG_SUBMARK_NONE = flagForNoRegion();
-	private static byte FLAG_SUBMARK_REGION0 = flagForRegion( SUBMARK_INSIDE );
+	private static final byte FLAG_SUBMARK_NONE = flagForNoRegion();
+	private static final byte FLAG_SUBMARK_REGION0 = flagForRegion( SUBMARK_INSIDE );
 	
 	// START mark state
 

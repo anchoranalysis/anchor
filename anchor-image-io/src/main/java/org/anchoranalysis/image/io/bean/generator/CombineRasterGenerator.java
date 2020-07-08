@@ -47,9 +47,16 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-// Combines a number of generators of Raster images by tiling their outputs together
-// The order of generators is left to right, then top to bottom
-public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRasterGenerator<IterationType>> {
+/**
+ * Combines a number of generators of Raster images by tiling their outputs together
+ * <p>
+ * The order of generators is left to right, then top to bottom
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> iteration-type
+ */
+public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -57,10 +64,10 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 	
 	// A list of all generators to be tiled (left to right, then top to bottom)
 	@BeanField
-	private List<IterableObjectGenerator<IterationType,Stack>> generatorList =	new ArrayList<>();
+	private List<IterableObjectGenerator<T,Stack>> generatorList =	new ArrayList<>();
 	// END BEAN PROPERTIES
 	
-	private class Generator extends RasterGenerator implements IterableObjectGenerator<IterationType, Stack> {
+	private class Generator extends RasterGenerator implements IterableObjectGenerator<T, Stack> {
 
 		@Override
 		public Stack generate() throws OutputWriteFailedException {
@@ -86,7 +93,6 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 
 		@Override
 		public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-			// TODO rethink
 			return generatorList.get(0).getGenerator().getFileExtension(outputWriteSettings);
 		}
 
@@ -100,7 +106,7 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 		@Override
 		public void start() throws OutputWriteFailedException {
 			
-			for (IterableObjectGenerator<IterationType,Stack> generator : generatorList) {
+			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
 				generator.start();
 			}
 		}
@@ -108,19 +114,19 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 		@Override
 		public void end() throws OutputWriteFailedException {
 			
-			for (IterableObjectGenerator<IterationType,Stack> generator : generatorList) {
+			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
 				generator.end();
 			}
 		}
 
 		@Override
-		public IterationType getIterableElement() {
+		public T getIterableElement() {
 			return generatorList.get(0).getIterableElement();
 		}
 
 		@Override
-		public void setIterableElement(IterationType element) throws SetOperationFailedException {
-			for (IterableObjectGenerator<IterationType,Stack> generator : generatorList) {
+		public void setIterableElement(T element) throws SetOperationFailedException {
+			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
 				generator.setIterableElement(element);
 			}
 		}
@@ -137,7 +143,7 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 
 		private List<RGBStack>  generateAll() throws OutputWriteFailedException {
 			List<RGBStack>  listOut = new ArrayList<>();
-			for (IterableObjectGenerator<IterationType,Stack> generator : generatorList) {
+			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
 				Stack stackOut = generator.getGenerator().generate();
 				listOut.add( new RGBStack(stackOut) );
 			}
@@ -148,11 +154,11 @@ public class CombineRasterGenerator<IterationType> extends AnchorBean<CombineRas
 		super();
 	}
 
-	public void add( IterableObjectGenerator<IterationType,Stack> generator ) {
+	public void add( IterableObjectGenerator<T,Stack> generator ) {
 		generatorList.add( generator );
 	}
 	
-	public IterableObjectGenerator<IterationType, Stack> createGenerator() {
+	public IterableObjectGenerator<T, Stack> createGenerator() {
 		return new Generator();
 	}
 

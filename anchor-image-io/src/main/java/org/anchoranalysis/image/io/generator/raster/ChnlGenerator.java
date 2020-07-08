@@ -61,8 +61,7 @@ public class ChnlGenerator extends RasterGenerator implements IterableObjectGene
 			throw new OutputWriteFailedException("no mutable element set");
 		}
 		
-		Stack stack = new Stack( getIterableElement() );
-		return stack;
+		return new Stack( getIterableElement() );
 	}
 
 	@Override

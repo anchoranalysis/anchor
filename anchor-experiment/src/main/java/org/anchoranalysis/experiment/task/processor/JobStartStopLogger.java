@@ -97,7 +97,7 @@ public class JobStartStopLogger {
 			return;
 		}
 		
-		logWithDecoration( () -> {
+		logWithDecoration( () ->
 			logger.get().logFormatted(
 				"%s %4d:\t%s\t[%s]\t%s\t%s  %s",
 				jobDscrText,
@@ -107,8 +107,8 @@ public class JobStartStopLogger {
 				timeStr,
 				job.getJobShortName(),
 				ongoingJobStr()
-			);
-		});
+			)
+		);
 	}
 	
 	private String ongoingJobStr() {

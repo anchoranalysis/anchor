@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
  *
  * @param <T> feature-input type
  */
-public class AlwaysNew<T extends FeatureInput> extends ReplaceStrategy<T> {
+public class AlwaysNew<T extends FeatureInput> implements ReplaceStrategy<T> {
 
 	private CacheCreator cacheCreator;
 	private FindChildStrategy findChildStrategy;

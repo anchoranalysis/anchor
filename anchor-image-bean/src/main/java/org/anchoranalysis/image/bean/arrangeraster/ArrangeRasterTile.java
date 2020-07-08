@@ -60,7 +60,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	private ArrangeRasterBean cellDefault = new SingleRaster();
 	// END BEAN PROPERTIES
 
-	private class TableCreator implements TableItemArrangement.ITableCreator<BBoxSetOnPlane> {
+	private class TableCreator implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
 		
 		private Iterator<RGBStack> rasterIterator;
 		
@@ -146,7 +146,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 				int colWidth = maxWidthHeight.getMaxWidthForCol( colPos );
 				
 				int rowX = maxWidthHeight.sumWidthBeforeCol(colPos);
-				int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos);; 
+				int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos); 
 				
 				int x = rowX + ((colWidth - bboxSet.getExtnt().getX()) / 2);	// We center
 				int y = rowY + ((rowHeight - bboxSet.getExtnt().getY()) / 2);	// We center

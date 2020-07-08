@@ -117,8 +117,6 @@ public class Channel {
 		ImageDimensions sdNew = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
-		assert(ba.extent().getX()==x);
-		assert(ba.extent().getY()==y);
 		assert(ba.extent().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
 		return FACTORY.create( ba, sdNew.getRes() );
 	}

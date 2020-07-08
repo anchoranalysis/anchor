@@ -34,11 +34,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeSignedShort;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte_From16BitUnsigned;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte_From32BitFloat;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte_From32BitUnsignedInt;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte_From8BitUnsigned_Interleaving;
-import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByte_From8BitUnsigned_NoInterleaving;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByteFrom16BitUnsigned;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByteFrom32BitFloat;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByteFrom32BitUnsignedInt;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByteFrom8BitUnsigned_Interleaving;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ConvertToByteFrom8BitUnsigned_NoInterleaving;
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.ConvertToFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.ConvertToFloat_From32BitFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.ConvertToFloat_From8Bit;
@@ -83,7 +83,7 @@ public class ConvertToFactory {
 		int bitsPerPixel	
 	) throws CreateException {
 		if (targetDataType.equals(VoxelDataTypeUnsignedByte.INSTANCE) && bitsPerPixel==8) {
-			return new ConvertToByte_From8BitUnsigned_Interleaving();
+			return new ConvertToByteFrom8BitUnsigned_Interleaving();
 		} else {
 			throw new CreateException("For interleaved formats only 8-bits are supported");
 		}				
@@ -117,17 +117,17 @@ public class ConvertToFactory {
 		
 		if (bitsPerPixel==8 && !signed) {
 			assert(effectiveBitsPerPixel==8);
-			return new ConvertToByte_From8BitUnsigned_NoInterleaving();
+			return new ConvertToByteFrom8BitUnsigned_NoInterleaving();
 			
 		} else if (bitsPerPixel==16 && !signed) {
-			return new ConvertToByte_From16BitUnsigned(littleEndian, effectiveBitsPerPixel);
+			return new ConvertToByteFrom16BitUnsigned(littleEndian, effectiveBitsPerPixel);
 			
 		} else if (bitsPerPixel==32 && !signed) {
 			
 			if (floatingPoint) {
-				return new ConvertToByte_From32BitFloat(littleEndian);
+				return new ConvertToByteFrom32BitFloat(littleEndian);
 			} else {
-				return new ConvertToByte_From32BitUnsignedInt(effectiveBitsPerPixel, littleEndian);
+				return new ConvertToByteFrom32BitUnsignedInt(effectiveBitsPerPixel, littleEndian);
 			}
 			
 		} else {

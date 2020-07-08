@@ -32,7 +32,7 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxFloat;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromFloatBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
@@ -43,7 +43,7 @@ final class VoxelBoxFactoryFloat implements VoxelBoxFactoryTypeBound<FloatBuffer
 	
 	@Override
 	public VoxelBox<FloatBuffer> create(
-			IPixelsForPlane<FloatBuffer> pixelsForPlane) {
+			PixelsForPlane<FloatBuffer> pixelsForPlane) {
 		return new VoxelBoxFloat(pixelsForPlane);
 	}
 

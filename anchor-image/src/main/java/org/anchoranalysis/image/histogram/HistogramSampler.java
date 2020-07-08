@@ -30,12 +30,11 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 public class HistogramSampler {
 	
-	private int arr[];
+	private int[] arr;
 	private int sum;
 	private int maxVal;
 	
 	public HistogramSampler( Histogram histogram ) {
-		assert(histogram!=null);
 		arr = new int[histogram.size()];
 		
 		sum = 0;

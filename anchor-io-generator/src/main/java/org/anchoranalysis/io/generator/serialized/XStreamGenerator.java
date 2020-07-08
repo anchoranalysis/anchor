@@ -29,7 +29,6 @@ package org.anchoranalysis.io.generator.serialized;
  */
 
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -51,7 +50,7 @@ public class XStreamGenerator<T> extends SerializedIterableGenerator<T> {
 		super(rootObject, manifestFunction);
 	}
 
-	public static <T> void writeObjectToFile(T rootObject, Path filePath ) throws FileNotFoundException, IOException {
+	public static <T> void writeObjectToFile(T rootObject, Path filePath ) throws IOException {
 		XStream xstream = new XStream();
 		
 		try( FileOutputStream fos = new FileOutputStream(filePath.toFile()) ) {

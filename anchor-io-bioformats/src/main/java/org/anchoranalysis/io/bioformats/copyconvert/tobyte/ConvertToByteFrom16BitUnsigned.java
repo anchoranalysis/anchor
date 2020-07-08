@@ -34,43 +34,60 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 import loci.common.DataTools;
 
-public class ConvertToByte_From32BitFloat extends ConvertToByte {
+public class ConvertToByteFrom16BitUnsigned extends ConvertToByte {
 
-	private static final int BYTES_PER_PIXEL = 4;
-	
+	private int bytesPerPixel;
 	private int sizeXY;
 	private int sizeBytes;
 	
 	private boolean littleEndian;
+	private int maxTotalBits;
 	
-	public ConvertToByte_From32BitFloat(boolean littleEndian) {
+	public ConvertToByteFrom16BitUnsigned(boolean littleEndian, int maxTotalBits) {
 		super();
 		this.littleEndian = littleEndian;
+		this.maxTotalBits = maxTotalBits;
 	}		
 	
 	@Override
 	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
+		bytesPerPixel = 2 * numChnlsPerByteArray;
   		sizeXY = sd.getX() * sd.getY();
-  		sizeBytes = sizeXY * BYTES_PER_PIXEL;
+  		sizeBytes = sizeXY * bytesPerPixel;
 	}
-
+	
 	@Override
 	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+		// we assign a default that maps from 16-bit to 8-bit
+		ApplyScaling applyScaling = new ApplyScaling(
+			ConvertHelper.twoToPower(8-maxTotalBits),
+			0
+		);
+		  
 		byte[] crntChnlBytes = new byte[sizeXY];
 		
 		int indOut = 0;
-		for(int indIn =0; indIn<sizeBytes; indIn+=BYTES_PER_PIXEL) {
-			float f = DataTools.bytesToFloat(src, indIn, littleEndian);
-				
-			if (f>255) {
-				f = 255;
+		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
+			int s = (int) DataTools.bytesToShort( src, indIn + (channelRelative*2), 2, littleEndian);
+			
+			// Make unsigned
+			if (s<0) {
+				s+= 65536;
 			}
-			if (f<0) {
-				f = 0;
+			
+			if (applyScaling!=null) {
+				s = applyScaling.apply(s);
 			}
-			crntChnlBytes[indOut++] = (byte) (f);
+			
+			if (s>255) {
+				s = 255;
+			}
+			if (s<0) {
+				s = 0;
+			}
+			
+			crntChnlBytes[indOut++] = (byte)( s );
 		}
-		return VoxelBufferByte.wrap(crntChnlBytes);
+		return VoxelBufferByte.wrap( crntChnlBytes );
 	}
-	
 }

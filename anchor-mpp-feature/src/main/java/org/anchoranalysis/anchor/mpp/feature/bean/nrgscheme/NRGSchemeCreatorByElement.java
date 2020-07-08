@@ -116,7 +116,7 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	
 	private NamedBean<Feature<FeatureInputStack>> sumList(FeatureList<FeatureInputStack> fl, String name) {
 		Sum<FeatureInputStack> feature = new Sum<>( fl );
-		return new NamedBean<Feature<FeatureInputStack>>(
+		return new NamedBean<>(
 			nameForFeature( feature, name ),
 			feature
 		);

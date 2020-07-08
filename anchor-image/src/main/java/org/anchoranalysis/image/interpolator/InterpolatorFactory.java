@@ -33,7 +33,7 @@ public class InterpolatorFactory {
 
 	private static Interpolator noInterpolator = new InterpolatorNone();
 	
-	private static Interpolator resizingInterpolator = new InterpolatorImageJ(); // InterpolatorImgLib2Lanczos();
+	private static Interpolator resizingInterpolator = new InterpolatorImageJ();
 	
 	public static InterpolatorFactory getInstance() {
 		if (instance==null) {

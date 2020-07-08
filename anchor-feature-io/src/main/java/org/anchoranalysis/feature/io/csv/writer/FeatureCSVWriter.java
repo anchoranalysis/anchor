@@ -73,10 +73,6 @@ public class FeatureCSVWriter {
 	}
 	
 	public void addResultsVector( StringLabelsForCsvRow identifier, ResultsVector resultsFromFeatures) {
-
-		
-		assert(resultsFromFeatures!=null);
-		
 		if (writer==null) {
 			return;
 		}

@@ -39,7 +39,6 @@ public class ChannelFactoryShort implements ChannelFactorySingleType {
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDimensions dim) {
-		assert(dim!=null);
 		VoxelBoxShort vb = new VoxelBoxShort( PixelsFromShortBufferArr.createInitialised(dim.getExtnt()) );
 		return create(vb, dim.getRes() );
 	}

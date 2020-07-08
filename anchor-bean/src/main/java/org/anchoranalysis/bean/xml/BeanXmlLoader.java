@@ -140,11 +140,6 @@ public class BeanXmlLoader {
 			return loadBeanAssociatedXmlLocalized( path, xmlPath );
 		} catch (LocalisedBeanException e) {
 			throw e.summarizeIgnoreIdenticalFilePath(path);
-		} catch (IOException e) {
-			throw new BeanXmlException(
-			  "An error occurred resolving a path associated with a bean",
-			  e
-			);
 		}
 	}
 	
@@ -163,7 +158,7 @@ public class BeanXmlLoader {
 	 * @param xmlPath	xml-path to where the bean is located within the XML
 	 * @param <T>		bean-type
 	 */
-	private static <T extends IAssociateXmlUponLoad> T loadBeanAssociatedXmlLocalized( Path path, String xmlPath ) throws BeanXmlException, LocalisedBeanException, IOException {
+	private static <T extends IAssociateXmlUponLoad> T loadBeanAssociatedXmlLocalized( Path path, String xmlPath ) throws BeanXmlException, LocalisedBeanException {
 		checkBeansRegistered();
 		try {
 			XMLConfiguration configXML = HelperReadXml.readBeanXMLFromFilesystem(path);
@@ -245,13 +240,8 @@ public class BeanXmlLoader {
 	// CurrentFilePath is the file where the xml was retrieved from, allowing us to process relative paths to other files
 	@SuppressWarnings("unchecked")
 	private static <T> T createFromXMLConfiguration( HierarchicalConfiguration config, String xmlPath, Path currentFilePath ) {
-		
 		assert currentFilePath.isAbsolute();
-		
-		// Get segmentation bean
-		T obj = (T) BeanHelper.createBean( new XMLBeanDeclaration(config, xmlPath), null, currentFilePath.toString() );
-
-		return obj;
+		return (T) BeanHelper.createBean( new XMLBeanDeclaration(config, xmlPath), null, currentFilePath.toString() );
 	}
 		
 	/**

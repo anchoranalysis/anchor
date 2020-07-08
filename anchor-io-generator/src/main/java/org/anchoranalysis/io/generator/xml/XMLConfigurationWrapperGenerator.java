@@ -39,16 +39,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.xml.XmlOutputter;
 import org.apache.commons.configuration.XMLConfiguration;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class XMLConfigurationWrapperGenerator extends XMLGenerator {
 
-	private XMLConfiguration config;
+	private final XMLConfiguration config;
 	
-	public XMLConfigurationWrapperGenerator(XMLConfiguration config) {
-		super();
-		assert(config!=null);
-		this.config = config;
-	}
-
 	@Override
 	public void writeToFile(OutputWriteSettings outputWriteSettings,
 			Path filePath) throws OutputWriteFailedException {

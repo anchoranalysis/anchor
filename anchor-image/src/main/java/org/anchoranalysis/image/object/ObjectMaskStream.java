@@ -100,7 +100,7 @@ public final class ObjectMaskStream {
 	 * @throws E if an exception occurs during mapping
 	 */
 	public <T,E extends Exception> List<T> mapToList(FunctionWithException<ObjectMask,T,E> mapFunc) throws E {
-		List<T> out = new ArrayList<T>();
+		List<T> out = new ArrayList<>();
 		for( ObjectMask obj : delegate) {
 			out.add(
 				mapFunc.apply(obj)

@@ -130,12 +130,7 @@ public class PropertyInitializer<P> {
 	 * @throws InitException
 	 */
 	private boolean initIdenticalParamTypes(Object propertyValue, Object parent, Logger logger) throws InitException {
-		if (param!=null) {
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), param)) {
-				return true;
-			}
-		}
-		return false;
+		return param!=null && initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), param);
 	}
 	
 	

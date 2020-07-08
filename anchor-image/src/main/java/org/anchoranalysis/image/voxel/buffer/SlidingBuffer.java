@@ -37,19 +37,19 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  * 
  * Can then be shifted (incremented) across all z-slices
  *
- * @param <BufferType> buffer-type
+ * @param <T> buffer-type
  */
-public final class SlidingBuffer<BufferType extends Buffer> {
+public final class SlidingBuffer<T extends Buffer> {
 
-	private final VoxelBox<BufferType> vb;
+	private final VoxelBox<T> vb;
 	
-	private VoxelBuffer<BufferType> centre;
-	private VoxelBuffer<BufferType> plusOne;
-	private VoxelBuffer<BufferType> minusOne;
+	private VoxelBuffer<T> centre;
+	private VoxelBuffer<T> plusOne;
+	private VoxelBuffer<T> minusOne;
 	
 	private int sliceNum = -1;
 	
-	public SlidingBuffer(VoxelBox<BufferType> vb) {
+	public SlidingBuffer(VoxelBox<T> vb) {
 		super();
 		this.vb = vb;
 		seek(0);	// We start off on slice 0 always
@@ -68,14 +68,10 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 		
 		if ((sliceNum-1) >= 0) {
 			minusOne = vb.getPixelsForPlane(sliceNum-1);
-		} else {
-			minusOne = null;
 		}
 		
 		if ((sliceNum+1) < vb.extent().getZ()) {
 			plusOne = vb.getPixelsForPlane(sliceNum+1);
-		} else {
-			plusOne = null;
 		}
 	}
 	
@@ -93,7 +89,7 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 		}
 	}
 
-	public VoxelBuffer<BufferType> bufferRel( int rel ) {
+	public VoxelBuffer<T> bufferRel( int rel ) {
 		switch( rel ) {
 		case 1:
 			return plusOne;
@@ -106,7 +102,7 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 		}
 	}
 	
-	public VoxelBox<BufferType> getVoxelBox() {
+	public VoxelBox<T> getVoxelBox() {
 		return vb;
 	}
 	
@@ -114,22 +110,22 @@ public final class SlidingBuffer<BufferType extends Buffer> {
 		return vb.extent();
 	}
 	
-	public VoxelBuffer<BufferType> getCentre() {
+	public VoxelBuffer<T> getCentre() {
 		return centre;
 	}
-	public void setCentre(VoxelBuffer<BufferType> centre) {
+	public void setCentre(VoxelBuffer<T> centre) {
 		this.centre = centre;
 	}
-	public VoxelBuffer<BufferType> getPlusOne() {
+	public VoxelBuffer<T> getPlusOne() {
 		return plusOne;
 	}
-	public void setPlusOne(VoxelBuffer<BufferType> plusOne) {
+	public void setPlusOne(VoxelBuffer<T> plusOne) {
 		this.plusOne = plusOne;
 	}
-	public VoxelBuffer<BufferType> getMinusOne() {
+	public VoxelBuffer<T> getMinusOne() {
 		return minusOne;
 	}
-	public void setMinusOne(VoxelBuffer<BufferType> minusOne) {
+	public void setMinusOne(VoxelBuffer<T> minusOne) {
 		this.minusOne = minusOne;
 	}
 	

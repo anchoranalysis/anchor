@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.factory.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class VoxelBoxFactory extends VoxelDataTypeFactoryMultiplexer<VoxelBoxFactoryTypeBound<? extends Buffer>> {
@@ -68,7 +68,7 @@ public class VoxelBoxFactory extends VoxelDataTypeFactoryMultiplexer<VoxelBoxFac
 		return instance;
 	}
 
-	public <T extends Buffer> VoxelBoxWrapper create( IPixelsForPlane<T> pixelsForPlane, VoxelDataType dataType ) {
+	public <T extends Buffer> VoxelBoxWrapper create( PixelsForPlane<T> pixelsForPlane, VoxelDataType dataType ) {
 		@SuppressWarnings("unchecked")
 		VoxelBoxFactoryTypeBound<T> factory = (VoxelBoxFactoryTypeBound<T>) get(dataType);
 		VoxelBox<T> buffer = factory.create(pixelsForPlane);

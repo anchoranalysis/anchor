@@ -51,7 +51,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 
 // A wrapper around SharedObjects which types certain MPP entities
-public class MPPInitParams extends BeanInitParams {
+public class MPPInitParams implements BeanInitParams {
 
 	// START: InitParams
 	private ImageInitParams soImage;

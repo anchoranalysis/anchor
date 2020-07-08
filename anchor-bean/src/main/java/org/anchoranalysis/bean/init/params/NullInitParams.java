@@ -1,5 +1,8 @@
 package org.anchoranalysis.bean.init.params;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-bean
@@ -26,16 +29,12 @@ package org.anchoranalysis.bean.init.params;
  * #L%
  */
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class NullInitParams implements BeanInitParams {
 
-public class NullInitParams extends BeanInitParams {
-
-	private static NullInitParams instance = new NullInitParams();
-	
-	private NullInitParams() {
-		
-	}
+	private static final NullInitParams INSTANCE = new NullInitParams();
 	
 	public static NullInitParams instance() {
-		return instance;
+		return INSTANCE;
 	}
 }
