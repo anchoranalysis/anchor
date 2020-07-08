@@ -52,6 +52,12 @@ import org.apache.commons.lang.time.StopWatch;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * An experiment that uses a {@link OutputManager} to control outputting of results (which results are outputted, location etc.)
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class OutputExperiment extends Experiment {
 
 	private static final String OUTPUT_NAME_CONFIG_COPY = "config";
@@ -62,7 +68,7 @@ public abstract class OutputExperiment extends Experiment {
 	private OutputManager output;
 	
 	@BeanField @Getter @Setter
-	private LoggingDestination loggerExperiment = new ToConsole();
+	private LoggingDestination logExperiment = new ToConsole();
 	
 	@BeanField @Getter @Setter
 	private ExperimentIdentifier experimentIdentifier;
@@ -145,7 +151,7 @@ public abstract class OutputExperiment extends Experiment {
 		BoundOutputManager rootOutputManager,
 		ExperimentExecutionArguments expArgs
 	) {
-		return loggerExperiment.createWithConsoleFallback(
+		return logExperiment.createWithConsoleFallback(
 			rootOutputManager,
 			expArgs,
 			useDetailedLogging()

@@ -35,7 +35,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
+import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -69,7 +69,7 @@ public class AlwaysAllowed implements Writer {
 		Path folderOut = bom.outFilePath(outputName);
 		
 		// We only change the writeOperationRecorder if we actually pass a folder
-		IWriteOperationRecorder recorderNew = bom.writeFolderToOperationRecorder(
+		WriteOperationRecorder recorderNew = bom.writeFolderToOperationRecorder(
 			folderOut,
 			manifestDescription,
 			folder

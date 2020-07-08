@@ -32,7 +32,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 
-public interface IWriteOperationRecorder {
+public interface WriteOperationRecorder {
 
 	/**
 	 * Writes a new file to the manifest
@@ -52,5 +52,5 @@ public interface IWriteOperationRecorder {
 	 * @param folderWrite the folder object to write
 	 * @return
 	 */
-	IWriteOperationRecorder writeFolder( Path relativeFolderPath, ManifestFolderDescription manifestDescription, FolderWriteWithPath folderWrite );
+	WriteOperationRecorder writeFolder( Path relativeFolderPath, ManifestFolderDescription manifestDescription, FolderWriteWithPath folderWrite );
 }

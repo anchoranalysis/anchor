@@ -38,7 +38,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.FolderWritePhysical;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
+import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -115,7 +115,7 @@ public class BoundOutputManagerRouteErrors {
 		return errorReporter;
 	}
 
-	public void addOperationRecorder(IWriteOperationRecorder toAdd) {
+	public void addOperationRecorder(WriteOperationRecorder toAdd) {
 		delegate.addOperationRecorder(toAdd);
 	}
 

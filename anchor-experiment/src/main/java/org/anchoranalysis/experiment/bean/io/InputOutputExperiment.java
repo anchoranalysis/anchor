@@ -68,7 +68,7 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	private JobProcessor<T,S> taskProcessor;
 	
 	@BeanField @Getter @Setter
-	private LoggingDestination loggerTask = new ToConsole();
+	private LoggingDestination logTask = new ToConsole();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -84,7 +84,7 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 			);
 			checkCompabilityInputObjects(inputObjects);
 			
-			params.setLoggerTaskCreator(loggerTask);
+			params.setLoggerTaskCreator(logTask);
 						
 			taskProcessor.executeLogStats(
 				params.getOutputManager(),
