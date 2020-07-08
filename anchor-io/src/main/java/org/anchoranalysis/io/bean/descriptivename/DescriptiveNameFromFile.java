@@ -75,7 +75,7 @@ public abstract class DescriptiveNameFromFile extends AnchorBean<DescriptiveName
 	 * 
 	 * @param files the files
 	 * @param elseName a string to use if an error occurs extracting the descriptive-name (used as a prefix with an index)
-	 * @param logger TODO
+	 * @param logger the logger
 	 * @return a list of identical size and order to files, corresponding to the extracted names
 	 */
 	public abstract List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName, Logger logger );

@@ -92,14 +92,14 @@ public class SharedFeaturesInitParams implements BeanInitParams {
 		try {
 			for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
 				namedBean.getItem().initRecursive(this, logger);
-				addFeatureList(namedBean, logger);
+				addFeatureList(namedBean);
 			}
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb, Logger logger ) throws OperationFailedException {
+	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb) throws OperationFailedException {
 		
 		try {
 			FeatureList<FeatureInput> fl = nb.getItem().create();

@@ -27,8 +27,6 @@ package org.anchoranalysis.bean.permute.property;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.sequence.IntegerSequenceIterator;
-import org.anchoranalysis.bean.sequence.SequenceInteger;
 
 /**
  * Base class for permute-properties involving a sequence of numbers
@@ -47,7 +45,7 @@ public abstract class PermutePropertySequence<T> extends PermutePropertyWithPath
 	private SequenceInteger sequence;
 	// END BEAN PROPERTIES
 	
-	protected IntegerSequenceIterator range() {
+	protected SequenceIntegerIterator range() {
 		return sequence.iterator();
 	}
 

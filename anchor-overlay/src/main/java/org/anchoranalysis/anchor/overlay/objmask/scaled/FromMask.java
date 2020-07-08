@@ -38,7 +38,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
-public class FromMask extends ScaledMaskCreator {
+public class FromMask implements ScaledMaskCreator {
 
 	private static Interpolator interpolator = InterpolatorFactory.getInstance().binaryResizing();
 	

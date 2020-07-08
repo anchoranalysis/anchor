@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.init;
 
 
 import org.anchoranalysis.bean.init.params.BeanInitParams;
-import org.anchoranalysis.bean.init.params.IInitParams;
+import org.anchoranalysis.bean.init.params.ParamsInitializer;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
@@ -41,7 +41,7 @@ import org.anchoranalysis.core.log.Logger;
  * @param <B> bean type
  * @param <P> init-param type
  */
-public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extends InitializableBean<B, P> implements IInitParams<P> {
+public abstract class InitializableBeanSimple<B,P extends BeanInitParams> extends InitializableBean<B, P> implements ParamsInitializer<P> {
 
 	private boolean hasBeenInit = false;
 	private Logger logger;

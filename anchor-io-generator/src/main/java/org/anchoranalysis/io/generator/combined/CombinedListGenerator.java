@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // currently untested
-public class CombinedListGenerator extends MultipleFileTypeGenerator  {
+public class CombinedListGenerator implements MultipleFileTypeGenerator  {
 
 	private ArrayList<OptionalNameValue<Generator>> list = new ArrayList<>();
 	

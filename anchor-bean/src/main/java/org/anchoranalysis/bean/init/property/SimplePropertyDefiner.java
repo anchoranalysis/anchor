@@ -26,7 +26,7 @@ package org.anchoranalysis.bean.init.property;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.params.IInitParams;
+import org.anchoranalysis.bean.init.params.ParamsInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 
@@ -50,12 +50,27 @@ public class SimplePropertyDefiner<P> implements PropertyDefiner {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void doInitFor(Object propertyValue, Object param,
-			Object parent, Logger logger) throws InitException {
-		assert propertyValue instanceof IInitParams;
-		assert paramTypeMatch.isAssignableFrom( param.getClass() );
+	public void doInitFor(Object propertyValue, Object param, Object parent, Logger logger) throws InitException {
 		
-		IInitParams<P> propertyValueCast = (IInitParams<P>) propertyValue;
+		if (!(propertyValue instanceof ParamsInitializer)) {
+			throw new InitException(
+				String.format(
+					"propertyValue is not an instance of %s, as is required for this property-definer",
+					ParamsInitializer.class.getSimpleName()
+				)
+			);
+		}
+
+		if (!paramTypeMatch.isAssignableFrom( param.getClass() )) {
+			throw new InitException(
+				String.format(
+					"param is not the same class or a subclass of %s, as is required for this property-definer",
+					paramTypeMatch.getSimpleName()
+				)
+			);
+		}
+		
+		ParamsInitializer<P> propertyValueCast = (ParamsInitializer<P>) propertyValue;
 		propertyValueCast.init( (P) param, logger);
 	}
 

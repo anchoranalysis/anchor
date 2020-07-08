@@ -29,6 +29,8 @@ package org.anchoranalysis.io.filepath.findmatching;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Some constraints on which paths to match
  *
@@ -45,11 +47,10 @@ public class PathMatchConstraints {
 	private int maxDirDepth;
 	
 	public PathMatchConstraints(Predicate<Path> matcherFile, Predicate<Path> matcherDir, int maxDirDepth) {
-		super();
+		Preconditions.checkArgument(maxDirDepth>= 0);
 		this.matcherFile = matcherFile;
 		this.matcherDir = matcherDir;
 		this.maxDirDepth = maxDirDepth;
-		assert( maxDirDepth>= 0 );
 	}
 	
 	public PathMatchConstraints replaceMaxDirDepth( int replacementMaxDirDepth ) {

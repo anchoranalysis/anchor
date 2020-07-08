@@ -74,13 +74,14 @@ public class OverlayCollectionMarkFactory {
 		ColoredOverlayCollection out = new ColoredOverlayCollection();
 		
 		for(int i=0; i<cfg.size(); i++) {
-			Mark m = cfg.get(i);
-			RGBColor color = colorIndex.get(i);
-			
-			// TODO should we duplicate color?
-			out.add( new OverlayMark(m, regionMembership), color );
+			out.add(
+				new OverlayMark(
+					cfg.get(i),
+					regionMembership
+				),
+				colorIndex.get(i)
+			);
 		}
-		
 		return out;
 	}
 

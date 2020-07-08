@@ -35,26 +35,24 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
-class VolumeThreshold extends ScaledMaskCreator {
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+class VolumeThreshold implements ScaledMaskCreator {
 
 	private ScaledMaskCreator greaterThanEqualThreshold;
 	private ScaledMaskCreator lessThreshold;
 	private int threshold;
 	
-	public VolumeThreshold(ScaledMaskCreator greaterThanEqualThreshold,
-			ScaledMaskCreator lessThreshold, int threshold) {
-		super();
-		this.greaterThanEqualThreshold = greaterThanEqualThreshold;
-		this.lessThreshold = lessThreshold;
-		this.threshold = threshold;
-	}
-
 	@Override
 	public ObjectWithProperties createScaledMask(
-			OverlayWriter overlayWriter, ObjectWithProperties omUnscaled,
-			double scaleFactor, Object originalObject, ImageDimensions sdScaled,
-			BinaryValuesByte bvOut)
-			throws CreateException {
+		OverlayWriter overlayWriter,
+		ObjectWithProperties omUnscaled,
+		double scaleFactor,
+		Object originalObject,
+		ImageDimensions sdScaled,
+		BinaryValuesByte bvOut
+	) throws CreateException {
 
 		Mark originalMark = (Mark) originalObject;
 		

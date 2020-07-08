@@ -51,7 +51,7 @@ import com.google.common.base.Preconditions;
 // We can probably have a more efficient implementation by not using the CombinedListGenerator as a delegate
 //  but we leave it for now
 // Should always have at least one item added
-public class IterableCombinedListGenerator<T> extends MultipleFileTypeGenerator implements IterableGenerator<T> {
+public class IterableCombinedListGenerator<T> implements MultipleFileTypeGenerator, IterableGenerator<T> {
 
 	private final CombinedListGenerator delegate = new CombinedListGenerator();
 	

@@ -84,7 +84,7 @@ public class VarianceCalculator {
 		// Formula for variance
 		// https://en.wikipedia.org/wiki/Variance
 		// https://www.sciencebuddies.org/science-fair-projects/science-fair/variance-and-standard-deviation
-		double second = ((double) Math.pow(sum,2.0) ) /count;
+		double second = (Math.pow(sum,2.0) ) /count;
 		double val = ( (double) sumSquares - second ) / count; 
 		
 		assert(val>=0);

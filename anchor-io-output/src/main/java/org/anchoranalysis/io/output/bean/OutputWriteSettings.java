@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -90,7 +89,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 		writerInstances = new BeanInstanceMap();
 		
 		// First load in the defaults
-		writerInstances.addFrom( RegisterBeanFactories.getDefaultInstances() );
+		writerInstances.addFrom(defaultInstances);
 		
 		// Then load in the explicitly-specified writers (overriding any existing entries)
 		if (writers!=null) {

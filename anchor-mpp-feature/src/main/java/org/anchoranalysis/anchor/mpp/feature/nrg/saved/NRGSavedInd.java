@@ -64,9 +64,9 @@ public class NRGSavedInd implements Serializable, Iterable<NRGTotal> {
 		
 		// Copy each item directly
     	out.ind = new ArrayList<>();
-    	for( NRGTotal ind : this.ind ) {
-    		out.ind.add( ind.deepCopy() );
-    	}
+    	ind.forEach( indComponent->
+    		out.ind.add( indComponent.deepCopy() )
+    	);
     	out.nrgTotal = this.nrgTotal;
     	return out;
 	}

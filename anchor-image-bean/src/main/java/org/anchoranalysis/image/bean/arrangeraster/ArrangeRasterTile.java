@@ -60,11 +60,11 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	private ArrangeRasterBean cellDefault = new SingleRaster();
 	// END BEAN PROPERTIES
 
-	private class TableCreator implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
+	private class CreateTable implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
 		
 		private Iterator<RGBStack> rasterIterator;
 		
-		public TableCreator(Iterator<RGBStack> rasterIterator) {
+		public CreateTable(Iterator<RGBStack> rasterIterator) {
 			super();
 			this.rasterIterator = rasterIterator;
 		}
@@ -162,9 +162,9 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	public BBoxSetOnPlane createBBoxSetOnPlane( final Iterator<RGBStack> rasterIterator ) throws ArrangeRasterException {
 	
 		try {
-			TableItemArrangement<BBoxSetOnPlane> table = new TableItemArrangement<>( new TableCreator(rasterIterator), numRows, numCols );
+			TableItemArrangement<BBoxSetOnPlane> table = new TableItemArrangement<>( new CreateTable(rasterIterator), numRows, numCols );
 			
-			MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table, numRows, numCols);
+			MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table);
 			
 			return createSet(table, maxWidthHeight );
 			

@@ -167,9 +167,7 @@ public class RootPathMap {
 				return first;
 			}
 			
-			RootPath second = itr.next();
-			assert(second.isDebug()==debug);
-			return second;
+			return itr.next();
 		}
 	}
 	

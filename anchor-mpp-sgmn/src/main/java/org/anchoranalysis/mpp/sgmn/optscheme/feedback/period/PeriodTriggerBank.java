@@ -38,7 +38,7 @@ public class PeriodTriggerBank<S> {
 	private HashMap<Integer, PeriodTrigger<S,PeriodReceiverList<S>> > map = new HashMap< >();
 	private ArrayList< PeriodTrigger<S,PeriodReceiverList<S>> > list = new ArrayList< >();
 	
-	public PeriodTrigger<S,PeriodReceiverList<S>> obtain( int period, IPeriodReceiver<S> periodReceiver ) {
+	public PeriodTrigger<S,PeriodReceiverList<S>> obtain( int period, PeriodReceiver<S> periodReceiver ) {
 
 		PeriodTrigger<S,PeriodReceiverList<S>> exst = map.get(period);
 		

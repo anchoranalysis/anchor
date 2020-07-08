@@ -77,14 +77,14 @@ public class PointsFromObjMask {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static List<Point3i> pntsFromMaskOutline( ObjectMask om ) throws CreateException {
+	public static List<Point3i> pntsFromMaskOutline( ObjectMask om ) {
 		List<Point3i> pts = new ArrayList<>();
 		ObjectMask outline = FindOutline.outline(om, 1, false, true);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), pts );
 		return pts;
 	}
 		
-	public static Set<Point3i> pntsFromMaskOutlineSet( ObjectMask om ) throws CreateException {
+	public static Set<Point3i> pntsFromMaskOutlineSet( ObjectMask om ) {
 
 		Set<Point3i> pts = new HashSet<>();
 		

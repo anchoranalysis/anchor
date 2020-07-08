@@ -77,7 +77,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		S sharedState,
 		ParametersExperiment paramsExperiment,
 		Optional<MessageLogger> loggerMonitor
-	) throws ExperimentExecutionException {
+	) {
 		
 		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<>(
 			obj -> executeJobAndLog( obj, sharedState, paramsExperiment ),

@@ -1,10 +1,10 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
+package org.anchoranalysis.bean.permute.property;
 
-/*-
+/*
  * #%L
- * anchor-plugin-io
+ * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,29 +27,50 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
  */
 
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
-
-public class ConvertToFloat_From8Bit extends ConvertToFloat {
-
-	@Override
-	protected float[] convertIntegerBytesToFloatArray(ImageDimensions sd, byte[] src, int srcOffset) {
-		
-		float[] fArr = new float[sd.getX()*sd.getY()];
-		  
-		int cntLoc = 0;
-		for (int y=0; y<sd.getY(); y++) {
-			  for (int x=0; x<sd.getX(); x++) {
-				  float f = ByteConverter.unsignedByteToInt( src[srcOffset++] );
-				  fArr[cntLoc++] = f;
-			  }
-		}
-		return fArr;
+/**
+ * Represents a sequence of integers to satisfy {@code start <= i <= end} (in certain increments)
+ * 
+ * @author Owen Feehan
+ *
+ */
+class SequenceIntegerIterator implements Iterator<Integer> {
+	
+	private final int end;
+	private final int increment;
+	
+    private int current;
+    
+    public SequenceIntegerIterator(int start, int end, int increment) {
+		super();
+		this.current = start;
+		this.end = end;
+		this.increment = increment;
 	}
 
-	@Override
-	protected int bytesPerPixel() {
-		return 1;
-	}
+    @Override
+    public boolean hasNext() {
+        return current <= end;
+    }
+
+    @Override
+    public Integer next() {
+    	
+    	int out = current;
+    	
+    	if (current>end) {
+    		throw new NoSuchElementException();
+    	}
+    	
+    	current += increment;
+    	
+    	return out;
+    }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -161,7 +161,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(pnt,0,+1,0, extent)) {
-				if (!multipleMatchesPerVoxel) { return 1; };
+				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
 		}

@@ -1,10 +1,10 @@
-package org.anchoranalysis.bean.sequence;
+package org.anchoranalysis.bean.init.params;
 
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,54 +26,17 @@ package org.anchoranalysis.bean.sequence;
  * #L%
  */
 
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.log.Logger;
 
 /**
- * Represents a sequence of integers to satisfy
- *  start <= i <= end (in certain increments)
- * 
- * TODO rename to IntegerSequence
  * 
  * @author Owen Feehan
  *
+ * @param <T> init-params type
  */
-public class IntegerSequenceIterator implements Iterator<Integer> {
-	
-	private int end;
-	private int increment;
-	
-    private int current;
-    
-    public IntegerSequenceIterator(int start, int end, int increment) {
-		super();
-		this.current = start;
-		this.end = end;
-		this.increment = increment;
-	}
+@FunctionalInterface
+public interface ParamsInitializer<T> {
 
-    @Override
-    public boolean hasNext() {
-        return current <= end;
-    }
-
-    @Override
-    public Integer next() {
-    	
-    	int out = current;
-    	
-    	if (current>end) {
-    		throw new NoSuchElementException();
-    	}
-    	
-    	current += increment;
-    	
-    	return out;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
+	void init( T so, Logger logger ) throws InitException;
 }

@@ -123,7 +123,7 @@ class HelperBeanFields {
 		);
 	}
 
-	private static String describeField( Field field, AnchorBean<?> bean ) throws OperationFailedException, BeanMisconfiguredException {
+	private static String describeField( Field field, AnchorBean<?> bean ) throws OperationFailedException {
 		try {
 			
 			Object val = field.get(bean);

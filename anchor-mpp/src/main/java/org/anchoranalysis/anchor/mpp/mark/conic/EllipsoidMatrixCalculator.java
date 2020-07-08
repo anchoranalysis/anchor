@@ -56,7 +56,7 @@ public class EllipsoidMatrixCalculator implements Serializable {
 		
 		this.matEll = DoubleFactory2D.dense.make(matNumDim,matNumDim);
 		this.matBBox = DoubleFactory1D.dense.make(matNumDim);
-	};
+	}
 	
 	public EllipsoidMatrixCalculator(EllipsoidMatrixCalculator src) {
 		

@@ -91,7 +91,7 @@ public class BioformatsReader extends RasterReader {
 		}
 	}
 	
-	private IFormatReader selectAndInitReader() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, IllegalArgumentException, NoSuchMethodException, SecurityException {
+	private IFormatReader selectAndInitReader() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		
 		if (!forceReader.isEmpty()) {
 			return (IFormatReader) Class.forName(forceReader).getConstructor().newInstance();

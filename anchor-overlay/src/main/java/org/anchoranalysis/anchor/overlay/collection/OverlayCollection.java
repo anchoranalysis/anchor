@@ -68,7 +68,7 @@ public class OverlayCollection implements Iterable<Overlay> {
 	}
 	
 	public Set<Integer> integerSet() {
-		HashSet<Integer> set = new HashSet<Integer>();
+		HashSet<Integer> set = new HashSet<>();
 		for( Overlay ol : delegate ) {
 			set.add( ol.getId() );
 		}

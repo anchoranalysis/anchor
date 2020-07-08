@@ -99,7 +99,6 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 				crnrMax,
 				localExtnt,
 				sd,
-				stack,
 				bufferArrList,
 				bufferMIP,
 				regionMap
@@ -114,7 +113,6 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		ReadableTuple3i crnrMax,
 		Extent localExtnt,
 		ImageDimensions sd,
-		NRGStack stack,
 		BufferArrList bufferArrList,
 		ByteBuffer bufferMIP,
 		RegionMap regionMap

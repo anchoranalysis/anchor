@@ -112,10 +112,10 @@ class CountIntersectingPixelsRegionMembershipMask {
 			ByteBuffer buffer = src.getVoxelBox().getPixelsForPlane(z).buffer();
 			
 			int zOther = z + bbox.z().rel();
-			int z_global = z + src.getBoundingBox().cornerMin().getZ();
+			int zGlobal = z + src.getBoundingBox().cornerMin().getZ();
 			
 			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
-			ByteBuffer bufferMaskGlobal = maskGlobal.getPixelsForPlane(z_global).buffer();
+			ByteBuffer bufferMaskGlobal = maskGlobal.getPixelsForPlane(zGlobal).buffer();
 
 			buffer.clear();
 			bufferOther.clear();
@@ -149,13 +149,13 @@ class CountIntersectingPixelsRegionMembershipMask {
 		int cnt = 0;
 		for (int y=bbox.y().min(); y<bbox.y().max(); y++) {
 			int yOther = y + bbox.y().rel();
-			int y_global = y + yGlobalRel;
+			int yGlobal = y + yGlobalRel;
 			
 			for (int x=bbox.x().min(); x<bbox.x().max(); x++) {
 				int xOther = x + bbox.x().rel();
-				int x_global = x + xGlobalRel;
+				int xGlobal = x + xGlobalRel;
 				
-				byte globalMask = bufferMaskGlobal.get( extentGlobal.offset(x_global, y_global) );
+				byte globalMask = bufferMaskGlobal.get( extentGlobal.offset(xGlobal, yGlobal) );
 				if (globalMask==onMaskGlobal) {
 				
 					byte posCheck = buffer1.get( bbox.e1().offset(x, y) );

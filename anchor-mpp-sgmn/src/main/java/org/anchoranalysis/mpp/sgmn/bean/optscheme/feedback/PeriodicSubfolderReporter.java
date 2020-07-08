@@ -37,21 +37,22 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalW
 import org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.IPeriodReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodReceiverException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgNRGPixelized> {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String outputName;
 	// END BEAN PROPER
 	
@@ -59,39 +60,8 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 	
 	private BoundOutputManagerRouteErrors parentOutputManager;
 	
-	
-	public PeriodicSubfolderReporter() {
-		super();
-	}
-	
-	// We generate an OutputName class from the outputName string
-	protected IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,10);
-	}
-	
-	// We setup the manifest from an IterableGenerator
-	protected IncrementalSequenceType init( IterableGenerator<T> iterableGenerator ) throws OutputWriteFailedException {
-		
-		IncrementalSequenceType sequenceType = new IncrementalSequenceType();
-		sequenceType.setIncrementSize( getAggInterval() );
-		sequenceType.setStart(0);
-		
-		IndexableOutputNameStyle outputStyle = generateOutputNameStyle(); 
-		this.sequenceWriter = new GeneratorSequenceNonIncrementalWriter<>(
-			getParentOutputManager().getDelegate(),
-			outputStyle.getOutputName(),
-			outputStyle,
-			iterableGenerator,
-			true
-		);
-		
-		this.sequenceWriter.start( sequenceType, -1 );
-		
-		return sequenceType;
-	}
-	
-	// Inner class to handle period receiver updates
-	private class PeriodReceiver implements IPeriodReceiver<CfgNRGPixelized> {
+	/** Handles period-receiver updates */
+	private class AddToWriter implements PeriodReceiver<CfgNRGPixelized> {
 		
 		private Optional<T> runningElement;
 		
@@ -124,8 +94,33 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 			// NOTHING TO DO
 		}
 	}
-
 	
+	// We generate an OutputName class from the outputName string
+	protected IndexableOutputNameStyle generateOutputNameStyle() {
+		return new IntegerSuffixOutputNameStyle(outputName,10);
+	}
+	
+	// We setup the manifest from an IterableGenerator
+	protected IncrementalSequenceType init( IterableGenerator<T> iterableGenerator ) throws OutputWriteFailedException {
+		
+		IncrementalSequenceType sequenceType = new IncrementalSequenceType();
+		sequenceType.setIncrementSize( getAggInterval() );
+		sequenceType.setStart(0);
+		
+		IndexableOutputNameStyle outputStyle = generateOutputNameStyle(); 
+		this.sequenceWriter = new GeneratorSequenceNonIncrementalWriter<>(
+			getParentOutputManager().getDelegate(),
+			outputStyle.getOutputName(),
+			outputStyle,
+			iterableGenerator,
+			true
+		);
+		
+		this.sequenceWriter.start( sequenceType, -1 );
+		
+		return sequenceType;
+	}
+		
 	@Override
 	public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> optInit) throws ReporterException {
 		
@@ -138,27 +133,11 @@ public abstract class PeriodicSubfolderReporter<T> extends ReporterInterval<CfgN
 		
 		optInit.getPeriodTriggerBank().obtain(
 			getAggInterval(),
-			new PeriodReceiver()
+			new AddToWriter()
 		);
 	}
 
 	protected abstract Optional<T> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
-
-	public String getOutputName() {
-		return outputName;
-	}
-
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
-
-	protected OutputWriteSettings getOutputWriteSettings() {
-		return this.getParentOutputManager().getOutputWriteSettings();
-	}
-	
-	protected Optional<BoundOutputManager> getSubFolderOutputManager() {
-		return sequenceWriter.getSubFolderOutputManager();
-	}
 	
 	protected BoundOutputManagerRouteErrors getParentOutputManager() {
 		return parentOutputManager;

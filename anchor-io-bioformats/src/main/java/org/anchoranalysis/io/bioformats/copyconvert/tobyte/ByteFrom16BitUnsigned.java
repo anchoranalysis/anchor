@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bioformats.copyconvert.toshort;
+package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 /*-
  * #%L
@@ -26,59 +26,66 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
  * #L%
  */
 
-import java.nio.ShortBuffer;
+import java.nio.ByteBuffer;
 
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 import loci.common.DataTools;
 
-public class ConvertToShort_FromUnsignedShort extends ConvertToShort {
+public class ByteFrom16BitUnsigned extends ConvertToByte {
 
-	private int bytesPerPixel = 2;
+	private int bytesPerPixel;
 	private int sizeXY;
 	private int sizeBytes;
 	
 	private boolean littleEndian;
+	private int maxTotalBits;
 	
-	public ConvertToShort_FromUnsignedShort(boolean littleEndian) {
+	public ByteFrom16BitUnsigned(boolean littleEndian, int maxTotalBits) {
 		super();
 		this.littleEndian = littleEndian;
-	}	
+		this.maxTotalBits = maxTotalBits;
+	}		
 	
 	@Override
 	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
+		bytesPerPixel = 2 * numChnlsPerByteArray;
   		sizeXY = sd.getX() * sd.getY();
   		sizeBytes = sizeXY * bytesPerPixel;
 	}
-
+	
 	@Override
-	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
-
-		short[] crntChnlBytes = new short[sizeXY];
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+		// we assign a default that maps from 16-bit to 8-bit
+		ApplyScaling applyScaling = new ApplyScaling(
+			ConvertHelper.twoToPower(8-maxTotalBits),
+			0
+		);
+		  
+		byte[] crntChnlBytes = new byte[sizeXY];
 		
 		int indOut = 0;
 		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int s = DataTools.bytesToShort( src, indIn, bytesPerPixel, littleEndian);
+			int s = (int) DataTools.bytesToShort( src, indIn + (channelRelative*2), 2, littleEndian);
 			
-			// Make positive
+			// Make unsigned
 			if (s<0) {
-				s += (VoxelDataTypeUnsignedShort.MAX_VALUE_INT+1);
+				s+= 65536;
 			}
 			
-			if (s>VoxelDataTypeUnsignedShort.MAX_VALUE_INT) {
-				s = VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
+			s = applyScaling.apply(s);
+			
+			if (s>255) {
+				s = 255;
 			}
 			if (s<0) {
-				s= 0;
+				s = 0;
 			}
 			
-			crntChnlBytes[indOut++] = (short) s;
+			crntChnlBytes[indOut++] = (byte)( s );
 		}
-		
-		return VoxelBufferShort.wrap(crntChnlBytes);
+		return VoxelBufferByte.wrap( crntChnlBytes );
 	}
-
 }

@@ -40,7 +40,7 @@ class MaxWidthHeight {
 	private int totalWidth;
 	private int maxZ;
 	
-	public MaxWidthHeight( TableItemArrangement<BBoxSetOnPlane> firstGeneratedTable, int numRows, int numCols ) {
+	public MaxWidthHeight(TableItemArrangement<BBoxSetOnPlane> firstGeneratedTable) {
 		
 		// We calculate a max width for every column
 		rowMaxHeight = new int[ firstGeneratedTable.getNumRowsUsed() ];

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
-class FromMark extends ScaledMaskCreator {
+class FromMark implements ScaledMaskCreator {
 
 	private RegionMembershipWithFlags regionMembership;
 	

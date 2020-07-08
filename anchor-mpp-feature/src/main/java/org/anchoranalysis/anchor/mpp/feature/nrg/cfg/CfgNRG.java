@@ -258,8 +258,7 @@ public class CfgNRG implements Serializable {
 		delegate.rmv(index);
 	}
 
-	public void exchange(int index, PxlMarkMemo newMark)
-			throws FeatureCalcException {
+	public void exchange(int index, PxlMarkMemo newMark) {
 		delegate.exchange(index, newMark);
 	}
 

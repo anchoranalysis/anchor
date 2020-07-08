@@ -161,8 +161,6 @@ public class MemoCollection implements Serializable, MemoForIndex {
 	}
 	
 	public PxlMarkMemo add( NRGSavedInd nrgSavedInd, PxlMarkMemo pmm, NRGStack stack, NRGSchemeWithSharedFeatures nrgScheme ) throws FeatureCalcException {
-		
-		assert( pmm!=null );
 		NRGTotal nrg = nrgScheme.calcElemIndTotal(pmm, stack);
 		
 		// We calculate energy for individual components

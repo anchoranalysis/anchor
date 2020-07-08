@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
+package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 /*-
  * #%L
@@ -26,32 +26,59 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
  * #L%
  */
 
-import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-public class ConvertToByteFrom8BitUnsigned_NoInterleaving extends ConvertToByte {
+import loci.common.DataTools;
 
-	private int bytesPerPixel = 1;
+public class ShortFromUnsignedShort extends ConvertToShort {
+
+	private int bytesPerPixel = 2;
 	private int sizeXY;
+	private int sizeBytes;
+	
+	private boolean littleEndian;
+	
+	public ShortFromUnsignedShort(boolean littleEndian) {
+		super();
+		this.littleEndian = littleEndian;
+	}	
 	
 	@Override
 	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-		sizeXY = sd.getX() * sd.getY();
+  		sizeXY = sd.getX() * sd.getY();
+  		sizeBytes = sizeXY * bytesPerPixel;
 	}
 
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
-		ByteBuffer buffer = ByteBuffer.wrap(src);
+	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+
+		short[] crntChnlBytes = new short[sizeXY];
 		
-		int sizeTotalBytes = sizeXY * bytesPerPixel;
-		byte[] crntChnlBytes = new byte[sizeTotalBytes];
+		int indOut = 0;
+		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
+			int s = DataTools.bytesToShort( src, indIn, bytesPerPixel, littleEndian);
+			
+			// Make positive
+			if (s<0) {
+				s += (VoxelDataTypeUnsignedShort.MAX_VALUE_INT+1);
+			}
+			
+			if (s>VoxelDataTypeUnsignedShort.MAX_VALUE_INT) {
+				s = VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
+			}
+			if (s<0) {
+				s= 0;
+			}
+			
+			crntChnlBytes[indOut++] = (short) s;
+		}
 		
-		buffer.position(sizeTotalBytes*channelRelative);
-		buffer.get( crntChnlBytes, 0, sizeTotalBytes);
-		return VoxelBufferByte.wrap(crntChnlBytes);
+		return VoxelBufferShort.wrap(crntChnlBytes);
 	}
-	
+
 }

@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy
  *
  * @param <T> feature input-type
  */
-public class CheckCacheForSpecificChildren extends FindChildStrategy {
+public class CheckCacheForSpecificChildren implements FindChildStrategy {
 	
 	private Class<?> cacheInputType;
 	private CacheTransferSourceCollection source;

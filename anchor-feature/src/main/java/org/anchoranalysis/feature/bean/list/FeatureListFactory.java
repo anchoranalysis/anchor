@@ -75,7 +75,6 @@ public class FeatureListFactory {
 	 */
 	@SafeVarargs
 	public static <T extends FeatureInput> FeatureList<T> from(Feature<T> ...feature) {
-		assert(feature!=null);
 		return new FeatureList<>(
 			Arrays.stream(feature)
 		);

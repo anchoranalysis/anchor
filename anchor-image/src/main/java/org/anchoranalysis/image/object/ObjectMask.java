@@ -263,12 +263,12 @@ public class ObjectMask {
 				
 				// We threshold to make sure it's still binary
 				int thresholdVal = (bv.getOnInt() + bv.getOffInt()) /2;
-				
-				try {
-					VoxelBoxThresholder.thresholdForLevel(boxNew.getVoxelBox(), thresholdVal, bv.createByte());
-				} catch (CreateException e) {
-					throw new OperationFailedException("Cannot convert binary values into bytes");
-				}
+
+				VoxelBoxThresholder.thresholdForLevel(
+					boxNew.getVoxelBox(),
+					thresholdVal,
+					bv.createByte()
+				);
 			}
 			
 			return new ObjectMask(boxNew, bv);
@@ -299,13 +299,11 @@ public class ObjectMask {
 				// We threshold to make sure it's still binary
 				int thresholdVal = (bv.getOnInt() + bv.getOffInt()) /2;
 				
-				try {
-					VoxelBoxThresholder.thresholdForLevel(scaled.getVoxelBox(), thresholdVal, bv.createByte());
-				} catch (CreateException e) {
-					throw new AnchorFriendlyRuntimeException("Cannot convert binary values into bytes");
-				}
-
-				
+				VoxelBoxThresholder.thresholdForLevel(
+					scaled.getVoxelBox(),
+					thresholdVal,
+					bv.createByte()
+				);
 			}
 			return new ObjectMask(scaled, bv);
 			

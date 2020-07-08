@@ -86,7 +86,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
 		this.logger = logger;
-		this.features = createFullFeatureList( features, logger );
+		this.features = createFullFeatureList( features);
 		
 		delegate = new FeatureListCSVGeneratorVertical( "objMaskFeatures", features.createNames() );
 	}
@@ -138,7 +138,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	}
 	
 	// Puts in some extra descriptive features at the start
-	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features, Logger logger ) {
+	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features) {
 		
 		StreamEx<Feature<FeatureInputSingleObject>> stream = StreamEx.of(
 			addFeaturesForAxis(AxisType.X)

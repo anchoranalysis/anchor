@@ -1,12 +1,10 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
+package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-/*
+/*-
  * #%L
- * anchor-mpp-sgmn
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,9 +27,29 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
  */
 
 
-public interface IPeriodReceiver<T> {
 
-	public abstract void periodStart( Reporting<T> reporting ) throws PeriodReceiverException;
+import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
-	public abstract void periodEnd( Reporting<T> reporting ) throws PeriodReceiverException;
+public class FloatFrom8Bit extends ConvertToFloat {
+
+	@Override
+	protected float[] convertIntegerBytesToFloatArray(ImageDimensions sd, byte[] src, int srcOffset) {
+		
+		float[] fArr = new float[sd.getX()*sd.getY()];
+		  
+		int cntLoc = 0;
+		for (int y=0; y<sd.getY(); y++) {
+			  for (int x=0; x<sd.getX(); x++) {
+				  float f = ByteConverter.unsignedByteToInt( src[srcOffset++] );
+				  fArr[cntLoc++] = f;
+			  }
+		}
+		return fArr;
+	}
+
+	@Override
+	protected int bytesPerPixel() {
+		return 1;
+	}
 }

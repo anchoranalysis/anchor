@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.bean.list;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.bean.sequence.SequenceInteger;
+import org.anchoranalysis.bean.permute.property.SequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;

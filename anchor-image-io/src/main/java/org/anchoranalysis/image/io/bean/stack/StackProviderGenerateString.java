@@ -115,7 +115,7 @@ public class StackProviderGenerateString extends StackProvider {
 				
 				Stack stackIntensity = intensityProvider.create();
 				double maxValue = maxValueFromStack(stackIntensity);
-				double mult = (double) maxValue / maxTypeValue; 
+				double mult = maxValue / maxTypeValue; 
 				
 				for( Channel c : stack) {
 					c.getVoxelBox().any().multiplyBy(mult);

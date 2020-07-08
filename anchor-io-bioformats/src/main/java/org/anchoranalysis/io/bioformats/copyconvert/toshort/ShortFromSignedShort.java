@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
+package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 /*-
  * #%L
@@ -26,59 +26,44 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
  * #L%
  */
 
-import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
-
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import loci.common.DataTools;
 
-public class ConvertToByteFrom32BitUnsignedInt extends ConvertToByte {
+public class ShortFromSignedShort extends ConvertToShort {
 
-	private double convertRatio;
-	private int bytesPerPixel = 4;
+	private int bytesPerPixel = 2;
 	private int sizeXY;
 	private int sizeBytes;
 	
-	private int effectiveBitsPerPixel;
 	private boolean littleEndian;
-
-	public ConvertToByteFrom32BitUnsignedInt(int effectiveBitsPerPixel, boolean littleEndian) {
+	
+	public ShortFromSignedShort(boolean littleEndian) {
 		super();
-		this.effectiveBitsPerPixel = effectiveBitsPerPixel;
 		this.littleEndian = littleEndian;
-	}
+	}	
 	
 	@Override
-	protected void setupBefore( ImageDimensions sd, int numChnlsPerByteArray ) {
-
-		convertRatio = calculateConvertRatio();
-		
+	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
   		sizeXY = sd.getX() * sd.getY();
   		sizeBytes = sizeXY * bytesPerPixel;
 	}
-	
 
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl( byte[] src, int channelRelative ) {
-		byte[] crntChnlBytes = new byte[sizeXY];
+	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+
+		short[] crntChnlShorts = new short[sizeXY];
 		
 		int indOut = 0;
 		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int i = DataTools.bytesToInt( src, indIn, littleEndian);
-			crntChnlBytes[indOut++] = (byte) (i*convertRatio);
+			short s = DataTools.bytesToShort( src, indIn, bytesPerPixel, littleEndian);
+			crntChnlShorts[indOut++] = s;
 		}
-		return VoxelBufferByte.wrap( crntChnlBytes );
+		
+		return VoxelBufferShort.wrap(crntChnlShorts);
 	}
-	
-	private double calculateConvertRatio() {
-		if (effectiveBitsPerPixel==32) {
-			return 1.0;
-		} else {
-			return ConvertHelper.twoToPower(
-				-1*(effectiveBitsPerPixel-8)
-			);
-		}		
-	}
+
 }

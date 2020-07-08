@@ -45,6 +45,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import com.google.common.base.Preconditions;
+
 public class RGBStack {
 
 	private Stack chnls;
@@ -130,19 +132,17 @@ public class RGBStack {
 	
 	// Only supports 8-bit
 	public void writeRGBMaskToSlice( ObjectMask mask, BoundingBox bbox, RGBColor c, Point3i pntGlobal, int zLocal, ReadableTuple3i maxGlobal) {
-		
-		assert( pntGlobal.getZ()>= 0);
-		
-		assert( chnls.getNumChnl()==3 );
-		assert( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
+		Preconditions.checkArgument( pntGlobal.getZ()>=0 );
+		Preconditions.checkArgument( chnls.getNumChnl()==3 );
+		Preconditions.checkArgument( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
 		ByteBuffer inArr = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 		
-		ByteBuffer redOut = chnls.getChnl(0).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
-		ByteBuffer greenOut = chnls.getChnl(1).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
-		ByteBuffer blueOut = chnls.getChnl(2).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
+		ByteBuffer red = extractBuffer(0, pntGlobal.getZ());
+		ByteBuffer green = extractBuffer(1, pntGlobal.getZ());
+		ByteBuffer blue = extractBuffer(2, pntGlobal.getZ());
 		
 		Extent eMask = mask.getBoundingBox().extent();
 		
@@ -158,12 +158,21 @@ public class RGBStack {
 				if (inArr.get(maskOffset)!=maskOn ) {
 					continue;
 				}
-				
-				assert( chnls.getChnl(0).getDimensions().contains(pntGlobal) );
-				RGBOutputUtils.writeRGBColorToByteArr( c, pntGlobal, chnls.getChnl(0).getDimensions(), redOut, blueOut, greenOut );
+
+				RGBOutputUtils.writeRGBColorToByteArr(
+					c,
+					pntGlobal,
+					chnls.getChnl(0).getDimensions(),
+					red, blue,
+					green
+				);
 			}
 		}
 	}
 	
-	
+	private ByteBuffer extractBuffer( int chnlIndex, int zIndex ) {
+		return chnls.getChnl(chnlIndex).getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(
+			zIndex
+		).buffer();
+	}	
 }

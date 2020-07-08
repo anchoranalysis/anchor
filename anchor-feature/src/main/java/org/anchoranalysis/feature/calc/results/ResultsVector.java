@@ -52,10 +52,6 @@ public class ResultsVector {
 		arr = new Object[size];
 	}
 	
-	public ResultsVector( int size, String identifier ) {
-		this(size);
-	}
-	
 	public double total() {
 		double sum = 0.0;
 		for( int i=0; i<arr.length; i++ ) {

@@ -1,12 +1,10 @@
-package org.anchoranalysis.io.bioformats.copyconvert.toint;
+package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
-import java.nio.IntBuffer;
-
-/*-
+/*
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,42 +26,62 @@ import java.nio.IntBuffer;
  * #L%
  */
 
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
-import loci.common.DataTools;
 
-public class ConvertToInt_FromUnsigned32BitInt extends ConvertToInt {
+import com.google.common.io.LittleEndianDataInputStream;
 
-	private int bytesPerPixel = 4;
-	private int sizeXY;
-	private int sizeBytes;
-	
+public class FloatFrom32Bit extends ConvertToFloat {
+
 	private boolean littleEndian;
 	
-	public ConvertToInt_FromUnsigned32BitInt(boolean littleEndian) {
+	public FloatFrom32Bit( boolean littleEndian ) {
 		super();
 		this.littleEndian = littleEndian;
-	}	
-	
-	@Override
-	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-  		sizeXY = sd.getX() * sd.getY();
-  		sizeBytes = sizeXY * bytesPerPixel;
 	}
 
 	@Override
-	protected VoxelBuffer<IntBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+	protected float[] convertIntegerBytesToFloatArray(ImageDimensions sd, byte[] src, int srcOffset) throws IOException {
+		
+		float[] fArr = new float[sd.getX()*sd.getY()];
+		int cntLoc = 0;
+		
+		
+		ByteArrayInputStream bis = new ByteArrayInputStream(src);
+		
+		if (littleEndian) {
+			
+			try (LittleEndianDataInputStream dis = new LittleEndianDataInputStream (bis)) {
+				for (int y=0; y<sd.getY(); y++) {
+					  for (int x=0; x<sd.getX(); x++) {  
+						  fArr[cntLoc++] = dis.readFloat();
+					  }
+				}
+				return fArr;
+			}
+			
+		} else {
 
-		int[] crntChnlBytes = new int[sizeXY];
-		
-		int indOut = 0;
-		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int s = DataTools.bytesToInt( src, indIn, bytesPerPixel, littleEndian);
-			crntChnlBytes[indOut++] = s;
+			try (DataInputStream dis = new DataInputStream(bis) ) {
+				for (int y=0; y<sd.getY(); y++) {
+					  for (int x=0; x<sd.getX(); x++) {
+						  
+						  float f = dis.readFloat();
+						  fArr[cntLoc++] = f;
+					  }
+				}
+				return fArr;
+			}
 		}
-		
-		return VoxelBufferInt.wrap(crntChnlBytes);
+	}
+
+	@Override
+	protected int bytesPerPixel() {
+		return 4;
 	}
 
 }

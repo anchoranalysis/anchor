@@ -86,7 +86,10 @@ class SharedObjectsOutputter {
 		BoundOutputManagerRouteErrors outputManager,
 		boolean suppressSubfolders
 	) throws OutputWriteFailedException {
-		assert(outputManager.getOutputWriteSettings().hasBeenInit());	
+		
+		if(!outputManager.getOutputWriteSettings().hasBeenInit()) {
+			throw new OutputWriteFailedException("OutputManager's settings have not yet been initialized");
+		}
 
 		SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
 		factory.cfg().outputSubsetWithException();

@@ -172,8 +172,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		rmv(pxlMarkMemoList, oldMark);
 		
 		memoList.remove(indexOldMark);
-		
-		// TODO, shouldn't this be memoList
+
 		add(memoList, newMark );
 	}
 	

@@ -34,60 +34,51 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 import loci.common.DataTools;
 
-public class ConvertToByteFrom16BitUnsigned extends ConvertToByte {
+public class ByteFrom32BitUnsignedInt extends ConvertToByte {
 
-	private int bytesPerPixel;
+	private double convertRatio;
+	private int bytesPerPixel = 4;
 	private int sizeXY;
 	private int sizeBytes;
 	
+	private int effectiveBitsPerPixel;
 	private boolean littleEndian;
-	private int maxTotalBits;
-	
-	public ConvertToByteFrom16BitUnsigned(boolean littleEndian, int maxTotalBits) {
+
+	public ByteFrom32BitUnsignedInt(int effectiveBitsPerPixel, boolean littleEndian) {
 		super();
+		this.effectiveBitsPerPixel = effectiveBitsPerPixel;
 		this.littleEndian = littleEndian;
-		this.maxTotalBits = maxTotalBits;
-	}		
+	}
 	
 	@Override
-	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-		bytesPerPixel = 2 * numChnlsPerByteArray;
+	protected void setupBefore( ImageDimensions sd, int numChnlsPerByteArray ) {
+
+		convertRatio = calculateConvertRatio();
+		
   		sizeXY = sd.getX() * sd.getY();
   		sizeBytes = sizeXY * bytesPerPixel;
 	}
 	
+
 	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
-		// we assign a default that maps from 16-bit to 8-bit
-		ApplyScaling applyScaling = new ApplyScaling(
-			ConvertHelper.twoToPower(8-maxTotalBits),
-			0
-		);
-		  
+	protected VoxelBuffer<ByteBuffer> convertSingleChnl( byte[] src, int channelRelative ) {
 		byte[] crntChnlBytes = new byte[sizeXY];
 		
 		int indOut = 0;
 		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int s = (int) DataTools.bytesToShort( src, indIn + (channelRelative*2), 2, littleEndian);
-			
-			// Make unsigned
-			if (s<0) {
-				s+= 65536;
-			}
-			
-			if (applyScaling!=null) {
-				s = applyScaling.apply(s);
-			}
-			
-			if (s>255) {
-				s = 255;
-			}
-			if (s<0) {
-				s = 0;
-			}
-			
-			crntChnlBytes[indOut++] = (byte)( s );
+			int i = DataTools.bytesToInt( src, indIn, littleEndian);
+			crntChnlBytes[indOut++] = (byte) (i*convertRatio);
 		}
 		return VoxelBufferByte.wrap( crntChnlBytes );
+	}
+	
+	private double calculateConvertRatio() {
+		if (effectiveBitsPerPixel==32) {
+			return 1.0;
+		} else {
+			return ConvertHelper.twoToPower(
+				-1*(effectiveBitsPerPixel-8)
+			);
+		}		
 	}
 }

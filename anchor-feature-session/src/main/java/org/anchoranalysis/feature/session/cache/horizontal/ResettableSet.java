@@ -59,7 +59,6 @@ class ResettableSet<T extends ResettableCalculation> {
 	 * @return an existing CachedCalculation if found, otherwise target if added
 	 */
 	public T findOrAdd( T target, Logger logger ) {
-		assert(target!=null);
 		
 		T existing = map.get(target);
 		

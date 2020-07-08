@@ -29,8 +29,6 @@ package org.anchoranalysis.image.binary;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -141,7 +139,7 @@ public class BinaryChnl {
 		return chnl.countEqualTo( binaryValues.getOnInt() );
 	}
 	
-	public BinaryChnl scaleXY(double ratioX, double ratioY, Interpolator interpolator) throws OperationFailedException {
+	public BinaryChnl scaleXY(double ratioX, double ratioY, Interpolator interpolator) {
 
 		if (ratioX==1.0 && ratioY==1.0) {
 			// Nothing to do
@@ -167,17 +165,13 @@ public class BinaryChnl {
 		chnl.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
 	}
 	
-	private void applyThreshold(BinaryChnl binaryChnl) throws OperationFailedException {
+	private void applyThreshold(BinaryChnl binaryChnl) {
 		int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
 		
-		try {
-			VoxelBoxThresholder.thresholdForLevel(
-				binaryChnl.getVoxelBox(),
-				thresholdVal,
-				binaryChnl.getBinaryValues().createByte()
-			);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		VoxelBoxThresholder.thresholdForLevel(
+			binaryChnl.getVoxelBox(),
+			thresholdVal,
+			binaryChnl.getBinaryValues().createByte()
+		);
 	}
 }

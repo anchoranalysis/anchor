@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.sequence;
+package org.anchoranalysis.bean.permute.property;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -60,8 +60,8 @@ public class SequenceInteger extends AnchorBean<SequenceInteger> {
 		}
 	}
 	
-	public IntegerSequenceIterator iterator() {
-		return new IntegerSequenceIterator(start,end,increment);
+	public SequenceIntegerIterator iterator() {
+		return new SequenceIntegerIterator(start,end,increment);
 	}
 
 	public int getStart() {

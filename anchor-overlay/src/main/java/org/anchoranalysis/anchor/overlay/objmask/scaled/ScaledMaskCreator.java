@@ -39,7 +39,7 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
  * @author Owen Feehan
  *
  */
-public abstract class ScaledMaskCreator {
+public interface ScaledMaskCreator {
 	
 	/**
 	 * Creates a scaled-version of the mask
@@ -53,7 +53,7 @@ public abstract class ScaledMaskCreator {
 	 * @return the scaled object-mask
 	 * @throws CreateException
 	 */
-	public abstract ObjectWithProperties createScaledMask(
+	ObjectWithProperties createScaledMask(
 		OverlayWriter overlayWriter,
 		ObjectWithProperties omUnscaled,
 		double scaleFactor,

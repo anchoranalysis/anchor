@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
  * The default strategy for finding children by always directly taking (or creating a child-cache) as necessary.
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class DefaultFindChildStrategy extends FindChildStrategy {
+public class DefaultFindChildStrategy implements FindChildStrategy {
 
 	public static final FindChildStrategy instance = new DefaultFindChildStrategy();
 	
