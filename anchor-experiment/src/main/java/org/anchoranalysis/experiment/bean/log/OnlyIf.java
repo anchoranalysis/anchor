@@ -48,7 +48,7 @@ public class OnlyIf extends LoggingDestination {
 	// START BEAN PROPERTIES
 	/** The logger to use if conditions are fulfilled */
 	@BeanField @Getter @Setter
-	private LoggingDestination logger;
+	private LoggingDestination log;
 	
 	/** The conditions that must be fulfilled */
 	@BeanField  @Getter @Setter
@@ -63,7 +63,7 @@ public class OnlyIf extends LoggingDestination {
 		boolean detailedLogging
 	) {
 		if (requireArguments.hasAllRequiredArguments(arguments.isDebugEnabled())) {
-			return logger.create(outputManager, errorReporter, arguments, detailedLogging);
+			return log.create(outputManager, errorReporter, arguments, detailedLogging);
 		} else {
 			return new StatefulNullMessageLogger();
 		}

@@ -38,10 +38,13 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BBoxIntersection extends AddCriteriaPair {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	// END BEAN PROPERTIES
 	
@@ -58,25 +61,6 @@ public class BBoxIntersection extends AddCriteriaPair {
 		}
 		
 		return bbox1.intersection().existsWith(bbox2);
-	}
-
-	@Override
-	public boolean paramsEquals(Object other) {
-		
-		if( !(other instanceof BBoxIntersection)) {
-			return false;
-		}
-		
-		BBoxIntersection otherCast = (BBoxIntersection) other;
-		return suppressZ == otherCast.suppressZ;
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
 	}
 
 	@Override

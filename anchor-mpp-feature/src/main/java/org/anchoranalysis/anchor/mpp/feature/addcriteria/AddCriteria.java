@@ -3,7 +3,6 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.params.IParamsEquals;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*-
@@ -41,7 +40,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
  *
  * @param <T> add-criteria
  */
-public interface AddCriteria<T> extends IParamsEquals, OrderedFeatureList<FeatureInputPairMemo> {
+public interface AddCriteria<T> extends OrderedFeatureList<FeatureInputPairMemo> {
 	
 	Optional<T> generateEdge( PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D ) throws CreateException;
 }

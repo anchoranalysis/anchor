@@ -32,8 +32,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.MPPBean;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -48,7 +48,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
  *
  * @param <T> the type of object that is modified
  */
-public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements ICompatibleWith {
+public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements CompatibleWithMark {
 
 	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty

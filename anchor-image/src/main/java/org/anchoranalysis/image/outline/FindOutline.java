@@ -61,7 +61,7 @@ public class FindOutline {
 	
 	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) {
 		// We create a new image for output
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
 		BinaryChnl chnlOutBinary = new BinaryChnl(chnlOut, chnl.getBinaryValues());
 		
 		// Gets outline

@@ -1,7 +1,5 @@
 package org.anchoranalysis.anchor.mpp.mark;
 
-import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
-
 /*
  * #%L
  * anchor-mpp
@@ -30,7 +28,7 @@ import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 
 import org.anchoranalysis.bean.AnchorBean;
 
-public abstract class MarkDistance extends AnchorBean<MarkDistance> implements ICompatibleWith {
+public abstract class MarkDistance extends AnchorBean<MarkDistance> implements CompatibleWithMark {
 
 	public abstract double distance( Mark mark1, Mark mark2 ) throws UnsupportedMarkTypeException;
 }

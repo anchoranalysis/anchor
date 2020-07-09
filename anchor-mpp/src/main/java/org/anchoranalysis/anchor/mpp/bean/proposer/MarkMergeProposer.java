@@ -30,8 +30,8 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
 import java.util.List;
 import java.util.Optional;
 
+import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
 
 @GroupingRoot
-public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer> implements ICompatibleWith {
+public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer> implements CompatibleWithMark {
 	
 	// Returns a merged mark or NULL
 	public abstract Optional<Mark> propose( PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context ) throws ProposalAbnormalFailureException;

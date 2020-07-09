@@ -186,11 +186,7 @@ public class TestLoaderImageIO {
 		
 		ObjectCollection objsSaved = openObjsFromTestPath(path2);
 		
-		if ( !objsWritten.equalsDeep(objsSaved) ) {
-			return false;
-		}
-		
-		return true;
+		return objsWritten.equalsDeep(objsSaved);
 	}
 	
 	private static Channel extractChnl( Stack stack ) {

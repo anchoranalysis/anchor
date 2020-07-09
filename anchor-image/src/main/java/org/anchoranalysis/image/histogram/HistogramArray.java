@@ -4,9 +4,6 @@ import static java.lang.Math.toIntExact;
 import java.util.Arrays;
 import java.util.function.LongUnaryOperator;
 
-import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
-import org.anchoranalysis.bean.shared.relation.LessThanBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 
 /*
@@ -40,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.apache.commons.lang.ArrayUtils;
 
-public class HistogramArray extends Histogram {
+public class HistogramArray implements Histogram {
 
 	private int[] arr;
 	
@@ -378,28 +375,6 @@ public class HistogramArray extends Histogram {
 		return sum;
 	}
 	
-	// The value split becomes part of the higher histogram
-	public HistogramsAfterSplit splitAt( int split ) {
-		HistogramsAfterSplit out = new HistogramsAfterSplit();
-		
-		Histogram hLower = threshold(
-			new RelationToConstant(
-				new LessThanBean(),
-				split
-			)
-		);
-		Histogram hHigher = threshold(
-			new RelationToConstant(
-				new GreaterThanBean(),
-				(double) split-1
-			)
-		);
-		
-		out.add( hLower );
-		out.add( hHigher );
-		return out;
-	}
-	
 	// Thresholds (generates a new histogram, existing object is unchanged)
 	@Override
 	public Histogram threshold(RelationToThreshold relationToThreshold) {
@@ -468,30 +443,27 @@ public class HistogramArray extends Histogram {
 			int bVal = getCount(b);
 			
 			// Skip if there's nothing there
-			if (bVal==0) {
-				continue;
-			}
-			
-			// If there's more or just enough remaining than we have, we transfer the entire bin
-			if( remaining >= bVal) {
-				out.incrValBy(b, bVal);
-				remaining = remaining - bVal;
-				
-				if (remaining==0) {
+			if (bVal!=0) {
+		
+				// If there's more or just enough remaining than we have, we transfer the entire bin
+				if( remaining >= bVal) {
+					out.incrValBy(b, bVal);
+					remaining = remaining - bVal;
+					
+					if (remaining==0) {
+						break;
+					}
+					
+				} else {
+					out.incrValBy(b, remaining );
 					break;
 				}
-				
-			} else {
-				out.incrValBy(b, remaining );
-				break;
 			}
 			
 		}
 		return out;
 	}
-	
-	
-	
+		
 	public Histogram extractPixelsFromLeft( long numPixels ) {
 		
 		Histogram out = new HistogramArray(getMaxBin());

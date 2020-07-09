@@ -39,12 +39,15 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Copies the bytes from a IFormatReader to a list of channels, converting if necessary
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CopyConvert {
 	
 	/**

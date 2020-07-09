@@ -106,7 +106,7 @@ public class PxlMarkHistogram extends PxlMarkWithPartition<Histogram> {
 		}
 	}
 	
-	private void initForSlice(
+	private void initForSlice(		// NOSONAR
 		int z,
 		Mark mark,
 		BoundingBox bbox,

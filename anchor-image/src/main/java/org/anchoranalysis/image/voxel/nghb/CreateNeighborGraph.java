@@ -39,6 +39,8 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 
  * Creates an undirected graph where each vertex is an object, and edge exists if the objects neighbour
@@ -47,16 +49,12 @@ import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
  *
  * @param <V> vertex-type
  */
+@RequiredArgsConstructor
 public class CreateNeighborGraph<V> {
 
 	// If we have a partition of objects, we don't need to check if objects-intersect as it's not possible by definition (a partition)
 	// However, if we have objects that can potentially overlap, we define them 'neighbours' only if objects are adjacent, but don't overlap. In this case, we need to checl
-	private boolean preventObjIntersection;
-		
-	public CreateNeighborGraph(boolean preventObjIntersection) {
-		super();
-		this.preventObjIntersection = preventObjIntersection;
-	}
+	private final boolean preventObjectIntersection;
 	
 	/**
 	 * Creates an edge from two neighbouring vertices
@@ -142,7 +140,7 @@ public class CreateNeighborGraph<V> {
 			vertexToObjMask,
 			new ObjectCollectionRTree(objs),
 			createAndAddEdge(graph, edgeFromVertices),
-			preventObjIntersection,
+			preventObjectIntersection,
 			bigNghb,
 			testBothDirs
 		);

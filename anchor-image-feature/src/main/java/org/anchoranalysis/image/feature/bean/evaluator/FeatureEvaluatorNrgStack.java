@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChan
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 /**
- * TODO make more generic than FeatureObjMaskParams
+ * 
  * @author Owen Feehan
  *
  * @param <T> feature-calculation parameters

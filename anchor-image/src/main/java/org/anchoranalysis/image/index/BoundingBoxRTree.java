@@ -48,10 +48,7 @@ public class BoundingBoxRTree {
 	
 	private float[] singlePointExtent = new float[]{1,1,1};
 	
-	// TODO. How does this affect our memory profile?  Should we restrict it when we can
-	private static final int DEFAULT_MAX_ENTRIES = 10000;
-	
-	public BoundingBoxRTree( int maxEntriesSuggested ) {
+	public BoundingBoxRTree(int maxEntriesSuggested) {
 		// We insist that maxEntries is at least twice the minimum num items
 		int minEntries = 1;
 		int maxEntries = Math.max(maxEntriesSuggested,minEntries*2);
@@ -59,9 +56,8 @@ public class BoundingBoxRTree {
 		rTree = new RTree<>( maxEntries, minEntries, 3);
 	}
 	
-	public BoundingBoxRTree( List<BoundingBox> bboxList ) {
-		
-		rTree = new RTree<>(DEFAULT_MAX_ENTRIES, 1, 3);
+	public BoundingBoxRTree(List<BoundingBox> bboxList, int maxEntriesSuggested) {
+		this(maxEntriesSuggested);
 		
 		for( int i=0; i<bboxList.size(); i++ ) {
 			add(

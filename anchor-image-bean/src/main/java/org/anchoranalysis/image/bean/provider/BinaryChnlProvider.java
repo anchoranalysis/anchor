@@ -49,7 +49,11 @@ public abstract class BinaryChnlProvider extends BeanImgStackProvider<BinaryChnl
 
 	private static Channel createChnlFromBinary( BinaryChnl binaryImgChnl, BinaryValues bvOut ) {
 		ObjectCollection omc = expressAsObj(binaryImgChnl);
-		return BinaryChnlFromObjs.createFromObjs( omc, binaryImgChnl.getDimensions(), bvOut ).getChnl();
+		return BinaryChnlFromObjs.createFromObjs(
+			omc,
+			binaryImgChnl.getDimensions(),
+			bvOut
+		).getChannel();
 	}
 		
 	private static ObjectCollection expressAsObj( BinaryChnl binaryImgChnl ) {

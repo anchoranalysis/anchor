@@ -126,23 +126,4 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 			return Optional.empty();
 		}
 	}
-
-
-	@Override
-	public boolean paramsEquals(Object other) {
-
-		if (!(other instanceof AddCriteriaNRGElemPair)) {
-			return false;
-		}
-		
-		AddCriteriaNRGElemPair obj = (AddCriteriaNRGElemPair) other;
-		
-		if (!nrgElemPairList.equals(obj.nrgElemPairList)) {
-			return false;
-		}
-		
-		return pairAddCriteria.paramsEquals(obj.pairAddCriteria);
-	}
-
-	
 }

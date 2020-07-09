@@ -39,10 +39,13 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class AddCriteriaOr extends AddCriteriaPair {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<AddCriteriaPair> list = new ArrayList<>();
 	// END BEAN PROPERTIES
 
@@ -61,40 +64,8 @@ public class AddCriteriaOr extends AddCriteriaPair {
 		return false;
 	}
 
-	public List<AddCriteriaPair> getList() {
-		return list;
-	}
-
-	public void setList(List<AddCriteriaPair> list) {
-		this.list = list;
-	}
-
-	@Override
-	public boolean paramsEquals(Object other) {
-
-		if (!(other instanceof AddCriteriaOr)) {
-			return false;
-		}
-		
-		AddCriteriaOr obj = (AddCriteriaOr) other;
-		
-		if (list.size()!=obj.list.size()) {
-			return false;
-		}
-		
-		for( int i=0; i<list.size(); i++ ) {
-			if (!list.get(i).paramsEquals(obj.list.get(i))) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
 	@Override
 	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() throws CreateException {
 		return OrderedFeatureListCombine.combine(list);
 	}
-	
-	
 }

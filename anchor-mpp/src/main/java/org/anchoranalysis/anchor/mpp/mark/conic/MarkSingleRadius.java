@@ -41,7 +41,15 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-/** Base-class for a conic that has a single radius (circle, sphere etc.) */
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/** 
+ * Base-class for a conic that has a single radius (circle, sphere etc.)
+ *
+ **/
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 public abstract class MarkSingleRadius extends MarkAbstractPosition implements Serializable {
 
 	/**
@@ -52,32 +60,28 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
 	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 	private static final byte FLAG_SUBMARK_SHELL = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_SHELL );
-		
+	
+	/** Added to the radius in every dimension when determining bounds */
+	private static final double ADDED_TO_RADIUS = 0.5;
+	
+	private static final double SPHERE_EXTRA_RAD = 2;
+	
 	// START mark state
+	@Getter
 	private double radius;
 	// END mark state
 	
     private double radiusSq;
     private double radiusExtraSq;
     
-    private static final double SPHERE_EXTRA_RAD = 2;
-    
+    @Getter
 	private Bound boundRadius;
-	
-	/**
-	 * Default constructor
-	 */
-    protected MarkSingleRadius() {
-    	// NOTHING TO DO    	
-    }
-    
 
     /**
      * Constructor with a bound on the radius
      * @param bonudRadius
      */
     protected MarkSingleRadius( Bound boundRadius ) {
-    	super();
     	this.boundRadius = boundRadius;
     }
     
@@ -114,10 +118,9 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
     
 	@Override
 	public BoundingBox bbox( ImageDimensions bndScene, int regionID ) {
-		// TODO should we have the extra 0.5 here?
 		return BoundingBoxCalculator.bboxFromBounds(
 			getPos(),
-			radiusForRegion(regionID) + 0.5,
+			radiusForRegion(regionID) + ADDED_TO_RADIUS,
 			numDims()==3,
 			bndScene
 		);
@@ -176,7 +179,6 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 		}
 		
 		MarkSingleRadius trgt = (MarkSingleRadius) mark;
-		
 		return radius==trgt.radius;
 	}
 	    
@@ -191,10 +193,6 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
     	this.radiusExtraSq = squared(radius + SPHERE_EXTRA_RAD);
 	}
 	
-	public double getRadius() {
-		return radius;
-	}
-	
 	protected double radiusForRegion( int regionID ) {
 		return regionID==GlobalRegionIdentifiers.SUBMARK_INSIDE ? radius : radius + SPHERE_EXTRA_RAD; 
 	}
@@ -202,16 +200,4 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	protected double radiusForRegionSquared( int regionID ) {
 		return regionID==GlobalRegionIdentifiers.SUBMARK_INSIDE ? radiusSq : radiusExtraSq; 
 	}
-	
-	public Bound getBoundRadius() {
-		return boundRadius;
-	}
-	
-	public void setBoundRadius(Bound boundRadius) {
-		this.boundRadius = boundRadius;
-	}
-
-
-
-
 }

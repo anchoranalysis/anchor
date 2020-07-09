@@ -39,7 +39,6 @@ public class ChannelFactoryInt implements ChannelFactorySingleType {
 	
 	@Override
 	public Channel createEmptyInitialised(ImageDimensions dim) {
-		assert(dim!=null);
 		VoxelBoxInt vb = new VoxelBoxInt( PixelsFromIntBufferArr.createInitialised(dim.getExtent()) );
 		return create(vb, dim.getRes() );
 	}

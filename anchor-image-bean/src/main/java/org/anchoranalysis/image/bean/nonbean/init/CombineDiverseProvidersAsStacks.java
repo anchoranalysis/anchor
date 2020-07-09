@@ -106,7 +106,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
 	private static Stack stackFromBinary( BinaryChnl sourceObject ) {
 		
-		Channel chnlNew = FACTORY.createEmptyInitialised( sourceObject.getChnl().getDimensions() );
+		Channel chnlNew = FACTORY.createEmptyInitialised( sourceObject.getDimensions() );
 		
 		BinaryVoxelBox<ByteBuffer> bvb = sourceObject.binaryVoxelBox();
 		

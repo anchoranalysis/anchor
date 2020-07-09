@@ -30,7 +30,6 @@ package org.anchoranalysis.anchor.plot.index;
 import java.util.Iterator;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.plot.index.GraphIndexBase;
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GraphInstance;
 import org.anchoranalysis.core.error.CreateException;

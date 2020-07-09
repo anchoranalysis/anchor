@@ -74,7 +74,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	@Override
 	public void init(BinaryChnl binaryImage) throws InitException {
 		this.binaryImage = binaryImage;
-		this.binaryImageChnl = binaryImage.getChnl();
+		this.binaryImageChnl = binaryImage.getChannel();
 		
 		dim = binaryImage.getDimensions();
 		
@@ -255,10 +255,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		}
 	}
 	
-	private void addPointsForSlice(
+	private void addPointsForSlice(		// NOSONAR
 		Point3i crntExtentPnt,
 		ReadableTuple3i crnrPnt,
-		Extent e,
+		Extent extent,
 		ByteBuffer buffer,
 		ByteBuffer bbBinaryImage,
 		BinaryValuesByte bvb,
@@ -268,15 +268,15 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	) {
 		byte flags = rm.flags();
 		
-		for (crntExtentPnt.setY(0); crntExtentPnt.getY()<e.getY(); crntExtentPnt.incrementY()) {
+		for (crntExtentPnt.setY(0); crntExtentPnt.getY()<extent.getY(); crntExtentPnt.incrementY()) {
 			int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
 			
-			for (crntExtentPnt.setX(0); crntExtentPnt.getX()<e.getX(); crntExtentPnt.incrementX()) {
+			for (crntExtentPnt.setX(0); crntExtentPnt.getX()<extent.getX(); crntExtentPnt.incrementX()) {
 				
 				int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
 						
-				int globOffset = e.offset(xGlobal, yGlobal);
-				byte posCheck = buffer.get( e.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
+				int globOffset = extent.offset(xGlobal, yGlobal);
+				byte posCheck = buffer.get( extent.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
 				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
 					
 					Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );

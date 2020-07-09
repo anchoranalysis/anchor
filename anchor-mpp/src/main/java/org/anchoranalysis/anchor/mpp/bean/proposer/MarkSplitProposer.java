@@ -30,15 +30,15 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
-import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 
 @GroupingRoot
-public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer> implements ICompatibleWith {
+public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer> implements CompatibleWithMark {
 
 	public abstract Optional<PairPxlMarkMemo> propose(
 		PxlMarkMemo mark,

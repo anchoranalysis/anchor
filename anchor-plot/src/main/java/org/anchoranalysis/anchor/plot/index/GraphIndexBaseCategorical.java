@@ -61,7 +61,7 @@ public abstract class GraphIndexBaseCategorical<T,S extends CategoryDataset> ext
 		String[] seriesNames,
 		GetForSeries<T,String> labelGetter,
 		GetForSeries<T,Paint> colorGetter
-	) throws InitException {
+	) {
 		super(graphName, seriesNames);
 		this.colorGetter = colorGetter;
 		this.labelGetter = labelGetter;

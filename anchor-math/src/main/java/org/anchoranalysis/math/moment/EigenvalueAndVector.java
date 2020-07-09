@@ -28,34 +28,19 @@ package org.anchoranalysis.math.moment;
 
 
 import cern.colt.matrix.DoubleMatrix1D;
+import lombok.Value;
 
 
-// 2 returns the highest, 1 returns the middle and 0
+/**
+ * An eigen-value and its corresponding eigen-vector.
+ *  
+ * @author Owen Feehan
+  */
+@Value
 public class EigenvalueAndVector implements Comparable<EigenvalueAndVector> {
-	private double eigenvalue;
-	private DoubleMatrix1D eigenvector;
 	
-	public EigenvalueAndVector(double eigenvalue, DoubleMatrix1D eigenvector) {
-		super();
-		this.eigenvalue = eigenvalue;
-		this.eigenvector = eigenvector;
-	}
-
-	public double getEigenvalue() {
-		return eigenvalue;
-	}
-
-	public void setEigenvalue(double eigenValue) {
-		this.eigenvalue = eigenValue;
-	}
-
-	public DoubleMatrix1D getEigenvector() {
-		return eigenvector;
-	}
-
-	public void setEigenvector(DoubleMatrix1D eigenvector) {
-		this.eigenvector = eigenvector;
-	}
+	private final double eigenvalue;
+	private final DoubleMatrix1D eigenvector;
 
 	@Override
 	public int compareTo(EigenvalueAndVector o) {

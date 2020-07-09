@@ -60,7 +60,7 @@ public class PointsFromBinaryChnl {
 				skipAfterSuccessiveEmptySlices,
 				bbox.cornerMin(),
 				bbox.calcCornerMax(),
-				chnl.getChnl().getVoxelBox().asByte(),
+				chnl.getChannel().getVoxelBox().asByte(),
 				chnl.getBinaryValues().createByte(),
 				startZ,
 				listOut

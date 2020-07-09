@@ -114,20 +114,12 @@ class EdgeAdder<V> {
 		V vertexWith,
 		ObjectMask omDilated
 	) {
-		
 		List<Integer> indicesIntersects = rTree.intersectsWithAsIndices( omDilated.getBoundingBox() );
-		
 		for( int j : indicesIntersects) {
 			
 			// We enforce an ordering, so as not to do the same pair twice (or the identity case)
-			if (testBothDirs) {
-				if (j==ignoreIndex) {
-					continue;
-				}
-			} else {
-				if (j>=ignoreIndex) {
-					continue;
-				}				
+			if (doSkipIndex(j, ignoreIndex)) {
+				continue;			
 			}
 			
 			V vertexOther = verticesAsList.get(j);
@@ -140,6 +132,19 @@ class EdgeAdder<V> {
 				verticesAsList.get(j)
 			);
 		}		
+	}
+	
+	private boolean doSkipIndex(int index, int ignoreIndex) {
+		if (testBothDirs) {
+			if (index==ignoreIndex) {
+				return true;
+			}
+		} else {
+			if (index>=ignoreIndex) {
+				return true;
+			}				
+		}
+		return false;
 	}
 	
 	private void maybeAddEdge(
