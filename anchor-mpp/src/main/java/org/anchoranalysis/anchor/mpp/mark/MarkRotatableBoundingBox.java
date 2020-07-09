@@ -30,12 +30,10 @@ import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtili
 import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.flagForRegion;
 import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -203,9 +201,10 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	}
 	
 	private List<Point3i> rotateAddPos( Point3d[] points ) {
-		return Arrays.stream(points).map(
+		return FunctionalUtilities.mapToList(
+			points,
 			pnt -> PointConverter.intFromDouble( rotateAddPos(pnt) )	
-		).collect( Collectors.toList() );
+		);
 	}
 		
 	/** Rotates a position and adds the current position afterwards */

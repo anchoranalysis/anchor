@@ -1,6 +1,7 @@
 package org.anchoranalysis.core.functional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*-
  * #%L
@@ -31,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -259,8 +263,8 @@ public class FunctionalUtilities {
 	 * 
 	 * @param <S> parameter-type for function
 	 * @param <T> return-type for function
-	 * @param <E> checked-exception that can be thrown by funcion
-	 * @param param the parameter to apply to the funcion
+	 * @param <E> checked-exception that can be thrown by function
+	 * @param param the parameter to apply to the function
 	 * @param function the function
 	 * @return the return-value of the function
 	 * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@link function}
@@ -285,5 +289,82 @@ public class FunctionalUtilities {
 		} catch (Exception exc) {
 			throw new ConvertedToRuntimeException(exc);
 		}
+	}
+	
+	/**
+	 * Maps a collection to a list with each element derived from a corresponding element in the original collection.
+	 * <p>
+	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
+	 * below (although very idiomatic) occurs frequently.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  collection the collection to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 */
+	public static <S,T> List<T> mapToList(Collection<S> collection, Function<S,T> mapFunction) {
+		return collection.stream()
+				.map(mapFunction)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Maps an array to a list with each element derived from a corresponding element in the original array.
+	 * <p>
+	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
+	 * below (although very idiomatic) occurs frequently.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  array the array to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 */
+	public static <S,T> List<T> mapToList(S[] array, Function<S,T> mapFunction) {
+		return Arrays.stream(array)
+				.map(mapFunction)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Filters a collection and maps the result to a list
+	 * <p>
+	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
+	 * below (although idiomatic) occurs in multiple places.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  predicate predicate to first filter the input collection before mapping
+	 * @param  collection the collection to be filtered
+	 * @return a list with only the elements that pass the filter
+	 */
+	public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
+		return collection.stream()
+				.filter(predicate)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Like {@link #mapToList} but tolerates exceptions in the mapping function.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  <E> exception that can be thrown by {code mapFunction}
+	 * @param  collection the collection to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 * @throws E if the exception is thrown during mapping
+	 */
+	public static <S,T,E extends Exception> List<T> mapToList(
+		Collection<S> collection,
+		Class<? extends Exception> throwableClass,
+		FunctionWithException<S,T,E> mapFunction
+	) throws E {
+		return mapWithException(
+			collection.stream(),
+			throwableClass,
+			mapFunction
+		).collect( Collectors.toList() );
 	}
 }

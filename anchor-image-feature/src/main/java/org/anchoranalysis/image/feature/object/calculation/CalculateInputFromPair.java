@@ -30,8 +30,8 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -48,6 +48,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
 
 	public enum Extract {
@@ -56,18 +57,7 @@ public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingl
 		MERGED
 	}
 	
-	private Extract extract;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param merged iff-true the merged object of the pair is used (and the parameter first is ignored)
-	 * 	@param firstOrSecond iff-true the first object of the pair is used for creating params, otherwise the second object 
-	 */
-	public CalculateInputFromPair(Extract extract) {
-		super();
-		this.extract = extract;
-	}
+	private final Extract extract;
 
 	@Override
 	protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
@@ -86,25 +76,4 @@ public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingl
 		
 		return extract==Extract.FIRST ? input.getFirst() : input.getSecond();
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateInputFromPair rhs = (CalculateInputFromPair) obj;
-		return new EqualsBuilder()
-             .append(extract, rhs.extract)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(extract)
-			.toHashCode();
-	}
-
 }

@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalUtilities;
@@ -110,7 +108,7 @@ public class SpecificPathList extends FileProvider {
 	}
 	
 	private static List<String> stringFromPaths( List<Path> paths ) {
-		return paths.stream().map(Path::toString).collect(Collectors.toList());
+		return FunctionalUtilities.mapToList(paths, Path::toString);
 	}
 	
 	private static Collection<File> matchingFilesForList(List<String> listPaths, ProgressReporter progressReporter ) {

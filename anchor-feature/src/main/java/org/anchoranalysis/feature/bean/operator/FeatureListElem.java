@@ -29,9 +29,8 @@ package org.anchoranalysis.feature.bean.operator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -67,11 +66,10 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	 * @return
 	 */
 	protected String descriptionForList(String operatorDscr) {
-		List<String> featureDscrs = list.stream()
-				.map( Feature::getDscrLong)
-				.collect( Collectors.toList() );
-		
-		return String.join(operatorDscr, featureDscrs);
+		return String.join(
+			operatorDscr,
+			FunctionalUtilities.mapToList(list, Feature::getDscrLong)
+		);
 	}
 	
 	public void setList(List<Feature<T>> list) {

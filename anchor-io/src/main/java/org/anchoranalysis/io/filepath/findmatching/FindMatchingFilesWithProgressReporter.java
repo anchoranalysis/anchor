@@ -33,33 +33,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter.TraversalResult;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles {
 	
-	private boolean recursive;
-	private ProgressReporter progressReporter;
+	/** Recursive whether to recursively iterate through directories */
+	private final boolean recursive;
 	
-	/**
-	 * Constructor
-	 *  
-	 * @param recursive whether to recursively iterate through directories
-	 * @param acceptDirectoryErrors if true, directory access errors are logged and iteration continues. if false, an error is thrown and the experiment ends.
-	 * @param progressReporter the progress reporter
-	 * @param logger the logger
-	 */
-	public FindMatchingFilesWithProgressReporter(boolean recursive, ProgressReporter progressReporter ) {
-		super();
-		this.recursive = recursive;
-		this.progressReporter = progressReporter;
-	}
-	
+	/** The progress reporter */
+	private final ProgressReporter progressReporter;
+		
 	@Override
 	public Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, Logger logger ) throws FindFilesException {
 		
@@ -121,10 +112,9 @@ public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles 
 	}
 	
 	private static List<Path> filterLeafDirectories( List<Path> leafDirectories, Predicate<Path> dirMatcher ) {
-		return leafDirectories.stream().filter(dirMatcher).collect( Collectors.toList() );
+		return FunctionalUtilities.filterToList(leafDirectories, dirMatcher);
 	}
-	
-	
+		
 	private static void filesFromFolderSearch( List<Path> filesOut, Predicate<Path> matcher, List<File> listOut ) {
 		for( Path p : filesOut) {
 			if (matcher.test(p)) {
