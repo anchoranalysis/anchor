@@ -101,7 +101,7 @@ public class BarChart<T> extends GraphIndexBaseCategorical<T,DefaultCategoryData
 		GetForSeries<T,Double> yValGetter,
 		GetForSeries<T,Paint> colorGetter,
 		boolean stacked
-	) throws InitException {
+	) {
 		super(graphName, seriesNames, labelGetter, colorGetter);
 
 		this.yValGetter = yValGetter;

@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GetForSeries;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -54,7 +53,7 @@ public class BoxPlot<T> extends GraphIndexBaseCategorical<T,DefaultBoxAndWhisker
 	
     // colorGetter can be NULL to indicate that we do not use custom colors
 	public BoxPlot( String graphName, String[] seriesNames, GetForSeries<T,String> labelGetter,
-			GetForSeries<T,BoxAndWhiskerItem> boxAndWhiskerItemGetter, GetForSeries<T,Paint> colorGetter ) throws InitException {
+			GetForSeries<T,BoxAndWhiskerItem> boxAndWhiskerItemGetter, GetForSeries<T,Paint> colorGetter ) {
 		
 		super(graphName, seriesNames, labelGetter, colorGetter);
 
