@@ -29,7 +29,7 @@ import java.util.List;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  *
  * @param <T> bean-type
  */
-public abstract class FeatureRelatedBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
+public abstract class FeatureRelatedBean<T> extends InitializableBean<T,SharedFeaturesInitParams> {
 
 	private SharedFeaturesInitParams soFeature;
 	

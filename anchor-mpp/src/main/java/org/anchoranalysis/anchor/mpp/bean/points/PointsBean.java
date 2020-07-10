@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
  *
  * @param <T> bean-type
  */
-public abstract class PointsBean<T> extends InitializableBeanSimple<T,PointsInitParams> {
+public abstract class PointsBean<T> extends InitializableBean<T,PointsInitParams> {
 
 	protected PointsBean() {
 		super(

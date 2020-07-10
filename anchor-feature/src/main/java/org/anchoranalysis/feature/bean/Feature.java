@@ -31,10 +31,8 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.init.InitializableBean;
-import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -64,31 +62,25 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	@BeanField @AllowEmpty @Getter @Setter
 	private String customName = "";
 	// END BEAN PROPERTIES
-
-	private Logger logger;
-	private boolean hasBeenInit = false;
-	private FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
 	protected Feature() {
-		super( new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class) );
+		super(
+			new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class),
+			new FeatureDefiner<>()
+		);
 	}
 	
 	protected Feature( PropertyInitializer<FeatureInitParams> propertyInitializer) {
-		super(propertyInitializer);
+		super(
+			propertyInitializer,
+			new FeatureDefiner<>()
+		);
 	}
-		
-	/**
-	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
-	 * 
-	 * @param params parameters used for initialization that are simply passed to beforeCalc()
-	 * @param logger the logger, saved and made available to the feature
-	 */
-	public void init(
-		FeatureInitParams params,
-		Logger logger
-	) throws InitException {
-		hasBeenInit = true;
-		this.logger = logger;
+	
+	/** Called after initialization. An empty implementation is provided, to be overridden as needed in the sub-classes. */
+	@Override
+	public void onInit(FeatureInitParams params) throws InitException {
+		super.onInit(params);
 		beforeCalc();
 	}
 	
@@ -102,9 +94,8 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	@Override
 	public final String getBeanDscr() {
 		String paramDscr = getParamDscr();
-
 		if (!paramDscr.isEmpty()) {
-			return String.format("%s(%s)", getBeanName(), getParamDscr());
+			return String.format("%s(%s)", getBeanName(), paramDscr);
 		} else {
 			return getBeanName();
 		}
@@ -136,11 +127,15 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	}
 
 	public String getDscrWithCustomName() {
-		return !getCustomName().isEmpty() ? getCustomName()	+ ":  " + getBeanDscr()	: getBeanDscr();
+		if (!getCustomName().isEmpty()) {
+			return String.format("%s: %s", getCustomName(), getBeanDscr());
+		} else {
+			return getBeanDscr();
+		}
 	}
 
 	public double calcCheckInit(SessionInput<T> input) throws FeatureCalcException {
-		if (!hasBeenInit) {
+		if (!isInitialized()) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
 					this.toString()));
@@ -216,14 +211,5 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	@SuppressWarnings("unchecked")
 	public <S extends T> Feature<S> downcast() {
 		return (Feature<S>) this;
-	}
-	
-	@Override
-	public PropertyDefiner getPropertyDefiner() {
-		return featureDefiner;
-	}
-	
-	protected Logger getLogger() {
-		return logger;
 	}
 }

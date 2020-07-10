@@ -181,7 +181,7 @@ public class PropertyInitializer<P> {
 
 	private Optional<PropertyDefiner> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
 		
-		if (propertyValue instanceof InitializableBean ) {
+		if (propertyValue instanceof InitializableBean) {
 			
 			InitializableBean<?,?> initBean = (InitializableBean<?,?>) propertyValue;
 			PropertyDefiner pd = initBean.getPropertyDefiner();

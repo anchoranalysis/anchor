@@ -44,7 +44,7 @@ public class FilePathProviderReference extends FilePathProvider {
 	
 	@Override
 	public Path create() throws CreateException {
-		assert( isHasBeenInit() );
+		assert( isInitialized() );
 				
 		if (filePath==null) {
 			try {

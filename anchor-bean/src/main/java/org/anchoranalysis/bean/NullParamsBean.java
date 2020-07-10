@@ -26,7 +26,7 @@ package org.anchoranalysis.bean;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.NullInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
@@ -39,7 +39,7 @@ import org.anchoranalysis.core.log.Logger;
  *
  * @param <T> bean-type
  */
-public abstract class NullParamsBean<T> extends InitializableBeanSimple<T,NullInitParams> {
+public abstract class NullParamsBean<T> extends InitializableBean<T,NullInitParams> {
 
 	protected NullParamsBean() {
 		super( new PropertyInitializer<NullInitParams>(NullInitParams.class), new SimplePropertyDefiner<NullInitParams>(NullInitParams.class) );

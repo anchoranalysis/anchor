@@ -26,13 +26,13 @@ package org.anchoranalysis.bean.shared.params;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.InitException;
 
-public abstract class ParamsBean<T> extends InitializableBeanSimple<T,KeyValueParamsInitParams> {
+public abstract class ParamsBean<T> extends InitializableBean<T,KeyValueParamsInitParams> {
 
 	private KeyValueParamsInitParams soParams;
 	
