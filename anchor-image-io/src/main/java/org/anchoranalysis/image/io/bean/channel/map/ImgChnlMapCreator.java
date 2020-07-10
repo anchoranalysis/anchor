@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.chnl.map;
-
-import org.anchoranalysis.bean.AnchorBean;
+package org.anchoranalysis.image.io.bean.channel.map;
 
 /*
  * #%L
- * anchor-io
+ * anchor-image-io
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -28,44 +26,12 @@ import org.anchoranalysis.bean.AnchorBean;
  * #L%
  */
 
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
+import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
-import org.anchoranalysis.bean.annotation.BeanField;
+public abstract class ImgChnlMapCreator extends AnchorBean<ImgChnlMapCreator> {
 
-public class ImgChnlMapEntry extends AnchorBean<ImgChnlMapEntry> {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index;
-	
-	@BeanField
-	private String name;
-	// END BEAN PROPERTIES
-	
-	public ImgChnlMapEntry() {
-		
-	}
-		
-	public ImgChnlMapEntry(String name, int index) {
-		super();
-		this.index = index;
-		this.name = name;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-
-
+	public abstract ImgChnlMap createMap( OpenedRaster openedRaster ) throws CreateException;
 }

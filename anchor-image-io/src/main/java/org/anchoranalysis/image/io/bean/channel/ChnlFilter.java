@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.io.bean.chnl;
+package org.anchoranalysis.image.io.bean.channel;
 
 import org.anchoranalysis.bean.AnchorBean;
 
@@ -44,16 +44,19 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Applies a filter to a particular channel
 // Uses a ChnlProvider initialised with a stack called "input_chnl"
 public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private String chnlName;
+	@BeanField @Getter @Setter
+	private String channelName;
 	
-	@BeanField
-	private ChnlProvider chnl;
+	@BeanField @Getter @Setter
+	private ChnlProvider channel;
 	// END BEAN PROPERTIES
 	
 	private ChnlGetter chnlCollection;
@@ -73,11 +76,11 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 	) throws GetOperationFailedException {
 		
 		try {
-			if( !name.equals(chnlName) ) {
+			if( !name.equals(channelName) ) {
 				return chnlCollection.getChnl(name, t, progressReporter);
 			}
 			
-			ChnlProvider chnlProviderDup = chnl.duplicateBean();
+			ChnlProvider chnlProviderDup = channel.duplicateBean();
 			
 			Channel chnlIn = chnlCollection.getChnl(name, t, progressReporter);
 			
@@ -93,25 +96,8 @@ public class ChnlFilter extends AnchorBean<ChnlFilter> implements ChnlGetter {
 		}
 	}
 
-	public String getChnlName() {
-		return chnlName;
-	}
-
-	public void setChnlName(String chnlName) {
-		this.chnlName = chnlName;
-	}
-
 	@Override
 	public boolean hasChnl(String chnlName) {
 		return chnlCollection.hasChnl(chnlName);
 	}
-
-	public ChnlProvider getChnl() {
-		return chnl;
-	}
-
-	public void setChnl(ChnlProvider chnl) {
-		this.chnl = chnl;
-	}
-	
 }

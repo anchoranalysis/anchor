@@ -1,8 +1,10 @@
-package org.anchoranalysis.image.io.bean.chnl.map;
+package org.anchoranalysis.image.io.bean.channel.map;
+
+import org.anchoranalysis.bean.AnchorBean;
 
 /*
  * #%L
- * anchor-image-io
+ * anchor-io
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,12 +28,21 @@ package org.anchoranalysis.image.io.bean.chnl.map;
  * #L%
  */
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
-public abstract class ImgChnlMapCreator extends AnchorBean<ImgChnlMapCreator> {
+import org.anchoranalysis.bean.annotation.BeanField;
 
-	public abstract ImgChnlMap createMap( OpenedRaster openedRaster ) throws CreateException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+public class ImgChnlMapEntry extends AnchorBean<ImgChnlMapEntry> {
+	
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
+	private String name;
+	
+	@BeanField @Getter @Setter
+	private int index;
+	// END BEAN PROPERTIES
 }

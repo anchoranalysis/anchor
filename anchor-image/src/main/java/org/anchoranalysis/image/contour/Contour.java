@@ -34,6 +34,8 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 
+import lombok.Getter;
+
 /**
  * A path of successively-neighbouring points along the edge of an object
  * 
@@ -42,13 +44,10 @@ import org.anchoranalysis.core.geometry.PointConverter;
  */
 public class Contour {
 
+	@Getter
 	private List<Point3f> points = new ArrayList<>();
 	
 	private static double maxDistToDefinedConnected = 2;
-	
-	public List<Point3f> getPoints() {
-		return points;
-	}
 	
 	public List<Point3i> pointsDiscrete() {
 		return PointConverter.convert3i( getPoints(), false);
@@ -87,8 +86,7 @@ public class Contour {
 		
 		return connectedToLastPointOf(c);
 	}
-	
-	
+		
 	public boolean connectedToFirstPointOf( Contour c ) {
 		return getLastPoint().distance(c.getFirstPoint()) < maxDistToDefinedConnected;
 	}
