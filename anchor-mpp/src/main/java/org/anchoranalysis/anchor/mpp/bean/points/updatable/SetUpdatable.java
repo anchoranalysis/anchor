@@ -37,9 +37,9 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -161,7 +161,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	@Override
-	public void add(MemoForIndex marksExisting, PxlMarkMemo newMark) throws UpdateMarkSetException {
+	public void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark) throws UpdateMarkSetException {
 		rmvPntsInMark( newMark );
 	}
 	
@@ -176,10 +176,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	}
 	
 
-	public void rmvPntsInMark(PxlMarkMemo newMark) {
+	public void rmvPntsInMark(VoxelizedMarkMemo newMark) {
 		
 		// We add any points in our new mark to the set
-		PxlMark pxlMark = newMark.doOperation();
+		VoxelizedMark pxlMark = newMark.voxelized();
 		
 		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
 		
@@ -209,21 +209,21 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	@Override
-	public void exchange(MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark,
-			int indexOldMark, PxlMarkMemo newMark) {
+	public void exchange(MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo oldMark,
+			int indexOldMark, VoxelizedMarkMemo newMark) {
 		
 		addPntsInMark( pxlMarkMemoList, oldMark );
 		rmvPntsInMark( newMark );
 	}
 	
 	
-	public void addPntsInMark(MemoForIndex marksExisting, PxlMarkMemo markToAdd) {
+	public void addPntsInMark(MemoForIndex marksExisting, VoxelizedMarkMemo markToAdd) {
 		// We add any points in our new mark to the set, but only if there's not already a neighbour covering them
 		
 		// So our first step is to identify any overlapping marks
-		List<PxlMarkMemo> neighbours = findNeighbours(marksExisting, markToAdd);
+		List<VoxelizedMarkMemo> neighbours = findNeighbours(marksExisting, markToAdd);
 		
-		PxlMark pxlMark = markToAdd.doOperation();
+		VoxelizedMark pxlMark = markToAdd.voxelized();
 		
 		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
 		
@@ -264,7 +264,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		BinaryValuesByte bvb,
 		int zGlobal,
 		RegionMembership rm,
-		List<PxlMarkMemo> neighbours
+		List<VoxelizedMarkMemo> neighbours
 	) {
 		byte flags = rm.flags();
 		
@@ -291,13 +291,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 	}
 
-	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) {
+	private List<VoxelizedMarkMemo> findNeighbours( MemoForIndex all, VoxelizedMarkMemo source) {
 		
-		ArrayList<PxlMarkMemo> list = new ArrayList<>();
+		ArrayList<VoxelizedMarkMemo> list = new ArrayList<>();
 			
 		for (int i=0; i<all.size(); i++) {
 			
-			PxlMarkMemo pmm = all.getMemoForIndex(i);
+			VoxelizedMarkMemo pmm = all.getMemoForIndex(i);
 			if (pmm!=source && OverlapUtilities.overlapWith(source,pmm,regionID)>0) {
 				// We check if there's any overlap
 				list.add(pmm);
@@ -306,9 +306,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		return list;
 	}
 	
-	private static boolean isPointInList( List<PxlMarkMemo> all, Point3d point) {
+	private static boolean isPointInList( List<VoxelizedMarkMemo> all, Point3d point) {
 		
-		for( PxlMarkMemo memo : all ) {
+		for( VoxelizedMarkMemo memo : all ) {
 			
 			RegionMembership rm = memo.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 			byte flags = rm.flags();
@@ -324,7 +324,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	@Override
-	public void rmv(MemoForIndex marksExisting, PxlMarkMemo mark) throws UpdateMarkSetException {
+	public void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark) throws UpdateMarkSetException {
 		addPntsInMark(marksExisting, mark);
 	}
 

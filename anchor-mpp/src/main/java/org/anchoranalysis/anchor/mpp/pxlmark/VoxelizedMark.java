@@ -29,57 +29,33 @@ package org.anchoranalysis.anchor.mpp.pxlmark;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-// A voxelated mark, localised at certain position
-public abstract class PxlMark {
-
-	private ObjectMask objMask;
-	private ObjectMask objMaskMIP;		// null until we ned it
+/**
+ * A voxelized representation of a Mark i.e. a mark turned into voxels.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public interface VoxelizedMark {
 	
-	public abstract void initForMark( Mark mark, NRGStack stack, RegionMap regionMap );
+	BoundedVoxelBox<ByteBuffer> getVoxelBox();
 	
-	public BoundedVoxelBox<ByteBuffer> getVoxelBox() {
-		return objMask.getVoxelBoxBounded();
-	}
+	BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP();
 	
-	public BoundingBox getBoundingBox() {
-		return objMask.getBoundingBox();
-	}
+	BoundingBox getBoundingBox();
 	
-	public BoundingBox getBoundingBoxMIP() {
-		return objMaskMIP.getBoundingBox();
-	}
-
-	public ObjectMask getObjMask() {
-		return objMask;
-	}
+	BoundingBox getBoundingBoxMIP();
 	
-	public ObjectMask getObjMaskMIP() {
-		return objMaskMIP;
-	}
-
-	protected void setObjMask(ObjectMask objMask) {
-		this.objMask = objMask;
-	}
+	VoxelizedMark duplicate();
 	
-	protected void setObjMaskMIP(ObjectMask objMask) {
-		this.objMaskMIP = objMask;
-	}
-
-	public abstract PxlMark duplicate();
+	VoxelStatistics statisticsForAllSlices( int chnlID, int regionID );
 	
-	public abstract VoxelStatistics statisticsForAllSlices( int chnlID, int regionID );
+	VoxelStatistics statisticsForAllSlicesMaskSlice( int chnlID, int regionID, int maskChnlID );
 	
-	public abstract VoxelStatistics statisticsForAllSlicesMaskSlice( int chnlID, int regionID, int maskChnlID );
+	VoxelStatistics statisticsFor( int chnlID, int regionID, int sliceID );
 	
-	public abstract VoxelStatistics statisticsFor( int chnlID, int regionID, int sliceID );
-	
-	public abstract void cleanUp();
+	void cleanUp();
 }

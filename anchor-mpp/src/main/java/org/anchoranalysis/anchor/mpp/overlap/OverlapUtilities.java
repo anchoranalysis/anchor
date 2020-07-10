@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import lombok.AccessLevel;
@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OverlapUtilities {
 	
-	public static double overlapWith( PxlMarkMemo pmm1, PxlMarkMemo pmm2, int regionID ) {
+	public static double overlapWith( VoxelizedMarkMemo pmm1, VoxelizedMarkMemo pmm2, int regionID ) {
 
 		Mark mark1 = pmm1.getMark();
 		Mark mark2 = pmm2.getMark();
@@ -55,14 +55,14 @@ public class OverlapUtilities {
 		// between the two bounding box
 		byte flag = RegionMembershipUtilities.flagForRegion(regionID);
 		return new CountIntersectingPixelsRegionMembership(flag).countIntersectingPixels(
-			pmm1.doOperation().getVoxelBox(),
-			pmm2.doOperation().getVoxelBox()
+			pmm1.voxelized().getVoxelBox(),
+			pmm2.voxelized().getVoxelBox()
 		);
 	}
 	
 	
 	/**
-	 * Counts the number of overlapping voxels between two {@link PxlMarkMemo}
+	 * Counts the number of overlapping voxels between two {@link VoxelizedMarkMemo}
 	 * 
 	 * @param pmm1
 	 * @param pmm2
@@ -72,8 +72,8 @@ public class OverlapUtilities {
 	 * @return the total number of overlapping boxels
 	 */
 	public static double overlapWithMaskGlobal(
-		PxlMarkMemo pmm1,
-		PxlMarkMemo pmm2,
+		VoxelizedMarkMemo pmm1,
+		VoxelizedMarkMemo pmm2,
 		int regionID,
 		VoxelBox<ByteBuffer> globalMask,
 		byte onGlobalMask
@@ -90,8 +90,8 @@ public class OverlapUtilities {
 		// Otherwise we do it the slow way by seeing if any pixels intersect between the two bounding box
 		byte flag = RegionMembershipUtilities.flagForRegion(regionID);
 		return new CountIntersectingPixelsRegionMembershipMask(flag).countIntersectingPixelsMaskGlobal(
-			pmm1.doOperation().getVoxelBox(),
-			pmm2.doOperation().getVoxelBox(),
+			pmm1.voxelized().getVoxelBox(),
+			pmm2.voxelized().getVoxelBox(),
 			globalMask,
 			onGlobalMask
 		);

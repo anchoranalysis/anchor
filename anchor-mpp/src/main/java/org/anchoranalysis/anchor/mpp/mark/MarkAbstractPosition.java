@@ -31,7 +31,6 @@ import java.io.Serializable;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
@@ -40,6 +39,9 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 public abstract class MarkAbstractPosition extends Mark implements Serializable {
@@ -50,6 +52,7 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	private static final long serialVersionUID = -6976277985708631268L;
 	
 	// START mark state
+	@Getter @Setter
 	private Point3d pos;
 	// END mark state
 	
@@ -85,15 +88,6 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 	@Override
 	public Point3d centerPoint() {
 		return getPos();
-	}
-	
-	public Point3d getPos() {
-		return pos;
-	}
-
-	public void setPos(Point3d pos) {
-		this.pos = pos;
-		clearCacheID();
 	}
 	
 	// Checks if two marks are equal by comparing all attributes
@@ -139,20 +133,6 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 			op.addDoubleAsString("Pos Z", pos.getZ());
 		}
 		return op;
-	}
-	
-	@Override
-	public void assignFrom( Mark srcMark ) throws OptionalOperationUnsupportedException {
-		
-		if (!(srcMark instanceof MarkAbstractPosition)) {
-			throw new OptionalOperationUnsupportedException("srcMark must be of type MarkAbstractPosition");
-		}
-		
-		MarkAbstractPosition srcMarkAbstractPos = (MarkAbstractPosition) srcMark;
-		this.pos = srcMarkAbstractPos.getPos();
-		
-		// As the cacheID might be cleared by previous sets
-		super.assignFrom( srcMark );
 	}
 	
 	/** Calculates a relative-point from pntGlobal to pntBase */

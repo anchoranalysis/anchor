@@ -34,7 +34,6 @@ import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
 import org.anchoranalysis.anchor.overlay.id.Identifiable;
-import org.anchoranalysis.core.cache.IHasCacheableID;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -51,31 +50,26 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public abstract class Mark implements Serializable, IHasCacheableID, Identifiable {
+public abstract class Mark implements Serializable, Identifiable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3272456193681334471L;
-
-	public Mark( Mark src ) {
-		// We do not deep copy
-		this.id = src.id;
-		if (src.cacheID!=null) {
-			this.cacheID = src.cacheID;
-		} else {
-			src.cacheID=null;
-		}
-	}
-	
-	// null == not cacheable
-	// If set, it means that any other mark with the same cacheID has
-	//  the exact same state, as far as feature calculation is concerned
-	private Integer cacheID = null;
 	
 	// START mark state
 	private int id = -1;
 	// END mark state
+
+	/**
+	 * Copy constructor
+	 * 
+	 * @param source source to copy from
+	 */
+	public Mark( Mark source ) {
+		// We do not deep copy
+		this.id = source.id;
+	}
 	
 	// It is permissible to mutate the point during calculation
 	public abstract byte evalPntInside( Point3d pt );
@@ -85,39 +79,6 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 	public abstract int numRegions();
 	
 	public abstract String getName();
-	
-	@Override
-	public void assignCacheID( int id ) {
-		this.cacheID = Integer.valueOf(id);
-	}
-	
-	@Override
-	public boolean hasCacheID() {
-		return cacheID!=null;
-	}
-	
-	public String getCacheIDAsString() {
-		return cacheID!=null ? Integer.toString(cacheID) : "null";
-	}
-	
-	@Override
-	public void clearCacheID() {
-		this.cacheID = null;
-	}
-	
-	@Override
-	public int getCacheID() {
-		return cacheID;
-	}
-		
-	public void assignFrom( Mark srcMark ) throws OptionalOperationUnsupportedException {
-		// We deliberately don't copy the ID		
-		if (srcMark.cacheID!=null) {
-			this.cacheID = srcMark.cacheID;
-		} else {
-			this.cacheID = null;
-		}
-	}
 		
 	/** An alternative "quick" metric for overlap for a mark*/
 	public Optional<QuickOverlapCalculation> quickOverlap() {
@@ -275,11 +236,6 @@ public abstract class Mark implements Serializable, IHasCacheableID, Identifiabl
 			"ID",
 			Integer.toString( getId() )
 		);
-		nvc.add(
-			"CacheID",
-			cacheID!=null ? Integer.toString( cacheID ) : "null"
-		);
-		
 		if (res==null) {
 			return nvc;
 		}

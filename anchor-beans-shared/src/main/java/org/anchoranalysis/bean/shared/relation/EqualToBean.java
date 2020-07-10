@@ -3,6 +3,8 @@ package org.anchoranalysis.bean.shared.relation;
 import org.anchoranalysis.core.relation.EqualTo;
 import org.anchoranalysis.core.relation.RelationToValue;
 
+import lombok.EqualsAndHashCode;
+
 /*
  * #%L
  * anchor-beans-shared
@@ -29,7 +31,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
  * #L%
  */
 
-
+@EqualsAndHashCode(callSuper=true)
 public class EqualToBean extends RelationBean {
 
 	@Override

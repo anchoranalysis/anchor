@@ -7,7 +7,7 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*-
  * #%L
@@ -132,16 +132,16 @@ public final class CfgNRGPixelized  {
 		return cfgNRG.getNrgScheme();
 	}
 	
-	public void add( PxlMarkMemo newPxlMark, NRGStack stack ) throws FeatureCalcException {
+	public void add( VoxelizedMarkMemo newPxlMark, NRGStack stack ) throws FeatureCalcException {
 		cfgNRG.add(memoMarks, newPxlMark, stack);
 	}
 	
 	public void rmv( int index, NRGStack stack ) throws FeatureCalcException {
-		PxlMarkMemo memoRmv = getMemoForIndex(index);
+		VoxelizedMarkMemo memoRmv = getMemoForIndex(index);
 		cfgNRG.rmv(memoMarks, index, memoRmv, stack );
 	}
 	
-	public void rmv(PxlMarkMemo memoRmv, NRGStack stack) throws FeatureCalcException {
+	public void rmv(VoxelizedMarkMemo memoRmv, NRGStack stack) throws FeatureCalcException {
 		cfgNRG.rmv(memoMarks, memoRmv, stack);
 	}
 
@@ -156,7 +156,7 @@ public final class CfgNRGPixelized  {
 	
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
-	public void exchange( int index, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws FeatureCalcException {
+	public void exchange( int index, VoxelizedMarkMemo newMark, NRGStackWithParams nrgStack ) throws FeatureCalcException {
 		cfgNRG.exchange(memoMarks, index, newMark, nrgStack );
 	}
 
@@ -170,19 +170,19 @@ public final class CfgNRGPixelized  {
 	}
 	
 	// Adds the particular memo to the updatable pair-list
-	public void addToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, PxlMarkMemo memo ) throws UpdateMarkSetException {
+	public void addToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, VoxelizedMarkMemo memo ) throws UpdateMarkSetException {
 		updatablePairList.add(memoMarks, memo );
 	}
 	
 	// Removes a memo from the updatable pair-list
 	public void rmvFromUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, Mark mark ) throws UpdateMarkSetException {
-		PxlMarkMemo memo = getMemoForMark( mark );
+		VoxelizedMarkMemo memo = getMemoForMark( mark );
 		updatablePairList.rmv(memoMarks, memo);
 	}
 	
 	// Exchanges one mark with another on the updatable pair list
-	public void exchangeOnUpdatablePairList(ListUpdatableMarkSetCollection updatablePairList, Mark markExst, PxlMarkMemo memoNew) throws UpdateMarkSetException {
-		PxlMarkMemo memoExst = getMemoForMark( markExst );
+	public void exchangeOnUpdatablePairList(ListUpdatableMarkSetCollection updatablePairList, Mark markExst, VoxelizedMarkMemo memoNew) throws UpdateMarkSetException {
+		VoxelizedMarkMemo memoExst = getMemoForMark( markExst );
 		updatablePairList.exchange(memoMarks, memoExst, getCfg().indexOf(markExst), memoNew );
 	}
 	
@@ -193,12 +193,12 @@ public final class CfgNRGPixelized  {
 		return list;
 	}
 	
-	public PxlMarkMemo getMemoForMark(Mark mark ) {
+	public VoxelizedMarkMemo getMemoForMark(Mark mark ) {
 		return memoMarks.getMemoForMark(cfgNRG.getCfg(), mark );
 	}
 	
-	public PxlMarkMemo getMemoForIndex(int index ) {
-		PxlMarkMemo pmm = memoMarks.getMemoForIndex(index);
+	public VoxelizedMarkMemo getMemoForIndex(int index ) {
+		VoxelizedMarkMemo pmm = memoMarks.getMemoForIndex(index);
 		assert(pmm!=null);
 		return pmm;
 	}

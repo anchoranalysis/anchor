@@ -6,9 +6,9 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.cache.LRUCache;
+
 
 /*
  * #%L
@@ -40,7 +40,6 @@ import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -57,14 +56,13 @@ public class NRGSchemeWithSharedFeatures {
 	private NRGScheme nrgScheme;
 	private SharedFeatureMulti sharedFeatures;
 	
-	private LRUCache<Integer,NRGTotal> indCache;
 	private CalcElemIndTotalOperation operationIndCalc;
 	private Logger logger;
 	
 	// Caches NRG value by index
 	private class CalcElemIndTotalOperation implements FunctionWithException<Integer,NRGTotal,FeatureCalcException> {
 
-		private PxlMarkMemo pmm;
+		private VoxelizedMarkMemo pmm;
 		private NRGStack raster;
 		private KeyValueParams kvp;
 		
@@ -72,7 +70,7 @@ public class NRGSchemeWithSharedFeatures {
 			super();
 		}
 
-		public void update( PxlMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
+		public void update( VoxelizedMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
 			this.pmm = pmm;
 			this.raster = raster;
 						
@@ -116,7 +114,6 @@ public class NRGSchemeWithSharedFeatures {
 		this.logger = logger;
 		
 		operationIndCalc = new CalcElemIndTotalOperation();
-		indCache = new LRUCache<>(nrgSchemeIndCacheSize, operationIndCalc); 
 	}
 	
 	public NRGTotal calcElemAllTotal( MemoCollection pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
@@ -139,19 +136,8 @@ public class NRGSchemeWithSharedFeatures {
 
 	}
 	
-	public NRGTotal calcElemIndTotal( PxlMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
-		
+	public NRGTotal calcElemIndTotal( VoxelizedMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
 		operationIndCalc.update(pmm, raster);
-		
-		// We go via the cache if we can
-		if (pmm.getMark().hasCacheID()) {
-			try {
-				return indCache.get( pmm.getMark().getCacheID() );
-			} catch (GetOperationFailedException e) {
-				throw new FeatureCalcException(e);
-			} 
-		}
-		
 		return operationIndCalc.calc();
 	}
 

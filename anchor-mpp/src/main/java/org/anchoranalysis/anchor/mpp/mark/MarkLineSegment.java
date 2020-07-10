@@ -2,6 +2,7 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 
+
 /*-
  * #%L
  * anchor-mpp
@@ -78,7 +79,6 @@ public class MarkLineSegment extends Mark {
 		return FLAG_SUBMARK_NONE;
 	}
 	
-	
 	@Override
 	public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
 		return BoundingBoxFromPoints.forTwoPoints( distCalcToLine.getStartPoint(), distCalcToLine.getEndPoint() );
@@ -87,16 +87,21 @@ public class MarkLineSegment extends Mark {
 	@Override
 	public Mark duplicate() {
 		MarkLineSegment out = new MarkLineSegment();
-		out.setPoints( distCalcToLine.getStartPoint(), distCalcToLine.getEndPoint() );
+		out.setPoints(
+			distCalcToLine.getStartPoint(),
+			distCalcToLine.getEndPoint()
+		);
 		return out;
 	}
 
 	@Override
 	public double volume( int regionID ) {
 		// The Line Length
-		return distCalcToLine.getStartPoint().distance( distCalcToLine.getEndPoint() );
+		return distCalcToLine.getStartPoint().distance(
+			distCalcToLine.getEndPoint()
+		);
 	}
-
+	
 	@Override
 	public String toString() {
 		return String.format("%s-%s", distCalcToLine.getStartPoint().toString(), distCalcToLine.getEndPoint().toString() );
@@ -136,7 +141,6 @@ public class MarkLineSegment extends Mark {
 
 	public void setPoints(Point3d startPoint, Point3d endPoint) {
 		distCalcToLine.setPoints(startPoint, endPoint);
-		clearCacheID();
 	}
 
 	public Point3d getStartPoint() {

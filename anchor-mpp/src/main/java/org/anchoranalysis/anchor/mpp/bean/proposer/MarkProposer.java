@@ -6,7 +6,7 @@ import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 
 // Proposes a mark
@@ -15,7 +15,7 @@ public abstract class MarkProposer extends ProposerBean<MarkProposer> implements
 
 	// The inputMark's attributes become changed in accordance to the internal rules of the proposer
 	public abstract boolean propose(
-		PxlMarkMemo inputMark,
+		VoxelizedMarkMemo inputMark,
 		ProposerContext context
 	) throws ProposalAbnormalFailureException;
 	

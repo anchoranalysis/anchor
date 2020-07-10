@@ -42,16 +42,18 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
-// Converts a configuration to a set of object masks, using a simple ObjMaskWriter for
-//   all objects
+import lombok.AllArgsConstructor;
+
+/**
+ * Converts a configuration to a set of object-masks, using a simple {@link ObjMaskWriter} for all objects.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor
 public class SimpleOverlayWriter extends OverlayWriter {
 
-	private ObjMaskWriter objMaskWriter;
-	
-	public SimpleOverlayWriter(ObjMaskWriter objMaskWriter ) {
-		super();
-		this.objMaskWriter = objMaskWriter;
-	}
+	private final ObjMaskWriter objMaskWriter;
 
 	@Override
 	public void writePrecalculatedOverlays(
@@ -65,7 +67,6 @@ public class SimpleOverlayWriter extends OverlayWriter {
 	) throws OperationFailedException {
 		
 		for( int i=0; i<precalculatedMasks.size(); i++ ) {
-			
 			PrecalcOverlay pre = precalculatedMasks.get(i);
 			
 			pre.writePrecalculatedMask(
@@ -77,23 +78,23 @@ public class SimpleOverlayWriter extends OverlayWriter {
 				bboxContainer
 			);
 		}
-		
-		
 	}
 
 	@Override
-	public void writeOverlaysIfIntersects(ColoredOverlayCollection oc,
-			RGBStack stack, IDGetter<Overlay> idGetter, List<BoundingBox> intersectList)
-			throws OperationFailedException {
+	public void writeOverlaysIfIntersects(
+		ColoredOverlayCollection oc,
+		RGBStack stack,
+		IDGetter<Overlay> idGetter,
+		List<BoundingBox> intersectList
+	) throws OperationFailedException {
 
-		ImageDimensions dim = stack.getDimensions();
 		ColoredOverlayCollection intersectOverlays = oc.subsetWhereBBoxIntersects(
-			dim,
+			stack.getDimensions(),
 			this,
 			intersectList
 		);
 		
-		writeOverlays( intersectOverlays, stack, idGetter );
+		writeOverlays(intersectOverlays, stack, idGetter);
 	}
 
 	@Override
@@ -102,7 +103,6 @@ public class SimpleOverlayWriter extends OverlayWriter {
 	}
 	
 	private static IDGetter<ObjectWithProperties> createMaskIDGetter( ColoredOverlayCollection oc, IDGetter<Overlay> idGetter) {
-		return new IDGetterMaskFromOverlay( idGetter, oc, true );
+		return new IDGetterMaskFromOverlay(idGetter, oc, true);
 	}
-
 }

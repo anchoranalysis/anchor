@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class ArbitraryPointCommon extends AddCriteriaPair {
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 			
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
 		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);

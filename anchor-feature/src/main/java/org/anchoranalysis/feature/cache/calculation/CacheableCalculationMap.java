@@ -60,5 +60,4 @@ public abstract class CacheableCalculationMap<
 
 	@Override
 	public abstract int hashCode();
-	
 }

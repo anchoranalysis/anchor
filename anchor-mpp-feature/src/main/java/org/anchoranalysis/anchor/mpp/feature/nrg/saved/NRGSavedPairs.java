@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.Logger;
@@ -109,7 +109,7 @@ public class NRGSavedPairs implements UpdatableMarkSet {
 	}
 	
 	@Override
-	public void add( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void add( MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark ) throws UpdateMarkSetException {
 		
 		this.pairCollection.add(pxlMarkMemoList, newMark);
 		this.nrgTotal += totalNRGForMark( newMark.getMark() );
@@ -118,7 +118,7 @@ public class NRGSavedPairs implements UpdatableMarkSet {
 	
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
+	public void rmv( MemoForIndex marksExisting, VoxelizedMarkMemo mark ) throws UpdateMarkSetException {
 		
 		// We calculate it's individual contribution
 		this.nrgTotal -= totalNRGForMark(mark.getMark());
@@ -128,7 +128,7 @@ public class NRGSavedPairs implements UpdatableMarkSet {
 	
 	// exchanges one mark with another
 	@Override
-	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void exchange( MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo oldMark, int indexOldMark, VoxelizedMarkMemo newMark ) throws UpdateMarkSetException {
 		
 		// We get a total for how the old mark interacts with the other marks
 		double oldPairTotal = totalNRGForMark(oldMark.getMark());

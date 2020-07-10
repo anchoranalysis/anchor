@@ -31,7 +31,7 @@ import java.io.Serializable;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 public class CfgWithNRGTotal implements Serializable {
 
@@ -89,7 +89,7 @@ public class CfgWithNRGTotal implements Serializable {
 		return nrgScheme;
 	}
 	
-	public void add( PxlMarkMemo newPxlMarkMemo ) {
+	public void add( VoxelizedMarkMemo newPxlMarkMemo ) {
 		Cfg newCfg = this.cfg.shallowCopy();
 		newCfg.add(newPxlMarkMemo.getMark());
 		// We adopt the new configuration
@@ -112,7 +112,7 @@ public class CfgWithNRGTotal implements Serializable {
 	
 	// calculates a new energy and configuration based upon a mark at a particular index
 	//   changing into new mark
-	public void exchange( int index, PxlMarkMemo newMark ) {
+	public void exchange( int index, VoxelizedMarkMemo newMark ) {
 		
 		// We shallow copy the existing configuration
 		Cfg newCfg = this.cfg.shallowCopy();

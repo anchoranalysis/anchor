@@ -1,6 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -35,5 +35,5 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class PxlListOperationFromMark extends AnchorBean<PxlListOperationFromMark> {
 
-	public abstract double doOperation( PxlMarkMemo pxlMarkMemo, ImageDimensions dim ) throws OperationFailedException;
+	public abstract double doOperation( VoxelizedMarkMemo pxlMarkMemo, ImageDimensions dim ) throws OperationFailedException;
 }

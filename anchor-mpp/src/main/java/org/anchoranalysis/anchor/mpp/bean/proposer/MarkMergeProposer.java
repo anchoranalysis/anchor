@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
 
@@ -42,7 +42,7 @@ import org.anchoranalysis.core.geometry.Point3f;
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer> implements CompatibleWithMark {
 	
 	// Returns a merged mark or NULL
-	public abstract Optional<Mark> propose( PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context ) throws ProposalAbnormalFailureException;
+	public abstract Optional<Mark> propose( VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ProposerContext context ) throws ProposalAbnormalFailureException;
 	
 	// A debug method for optionally associating points with the last proposal made
 	public Optional<List<Point3f>> getLastPnts1() {

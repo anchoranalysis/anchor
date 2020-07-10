@@ -34,14 +34,14 @@ import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 
 @GroupingRoot
 public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer> implements CompatibleWithMark {
 
 	public abstract Optional<PairPxlMarkMemo> propose(
-		PxlMarkMemo mark,
+		VoxelizedMarkMemo mark,
 		ProposerContext context,
 		CfgGen cfgGen
 	) throws ProposalAbnormalFailureException;

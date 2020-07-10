@@ -27,14 +27,14 @@ package org.anchoranalysis.anchor.mpp.pair;
  */
 
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 public class PairPxlMarkMemo {
 
-	private final PxlMarkMemo source;
-	private final PxlMarkMemo destination;
+	private final VoxelizedMarkMemo source;
+	private final VoxelizedMarkMemo destination;
 	
-	public PairPxlMarkMemo(PxlMarkMemo source, PxlMarkMemo destination ) {
+	public PairPxlMarkMemo(VoxelizedMarkMemo source, VoxelizedMarkMemo destination ) {
 		super();
 		
 		if (source.getMark().getId() < destination.getMark().getId()) {
@@ -68,11 +68,11 @@ public class PairPxlMarkMemo {
 		return (source.getMark().getId() * 3) + destination.getMark().getId();
   	}
 
-	public PxlMarkMemo getSource() {
+	public VoxelizedMarkMemo getSource() {
 		return source;
 	}
 
-	public PxlMarkMemo getDestination() {
+	public VoxelizedMarkMemo getDestination() {
 		return destination;
 	}
 

@@ -2,9 +2,8 @@ package org.anchoranalysis.anchor.mpp.pxlmark.memo;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMarkHistogram;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMarkFactory;
 
 /*
  * #%L
@@ -35,20 +34,17 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMarkHistogram;
 
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.histogram.Histogram;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /** 
- * Memoization of retrieving a PxlMark from a mark
+ * Memoization of retrieving a {@VoxelizedMark} from a mark
  * 
  * <p>This is avoid repeated expensive operations (rasterization of a mark).</p>
+ * 
+ * TODO switch from inheritance to delegation.
  */
-@AllArgsConstructor
-public class PxlMarkMemo extends CachedOperation<PxlMark,AnchorNeverOccursException> {
+public class VoxelizedMarkMemo {
 
 	// START REQUIRED ARGUMENTS
 	private Mark mark;
@@ -56,47 +52,70 @@ public class PxlMarkMemo extends CachedOperation<PxlMark,AnchorNeverOccursExcept
 	
 	@Getter
 	private final RegionMap regionMap;
-	
-	private final PixelPartFactory<Histogram> factoryHistogram;
 	// END REQUIRED ARGUMENTS
 	
-	public PxlMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap, PixelPartFactory<Histogram> factoryHistogram, PxlMark result ) {
-		super(result);
-		this.mark = mark;
-		this.stack = stack;
-		this.factoryHistogram = factoryHistogram;
-		this.regionMap = regionMap;
+	private CachedOperation<VoxelizedMark,AnchorNeverOccursException> op;
+	
+	public VoxelizedMarkMemo(Mark mark, NRGStack stack, RegionMap regionMap) {
+		this(mark, stack, regionMap, null);
 	}
 	
-	// calculation
-	@Override
-	protected PxlMark execute() {
-		return new PxlMarkHistogram(mark, stack, regionMap, factoryHistogram);
+	public VoxelizedMarkMemo(
+		Mark mark,
+		NRGStack stack,
+		RegionMap regionMap,
+		VoxelizedMark result
+	) {
+		this.mark = mark;
+		this.stack = stack;
+		this.regionMap = regionMap;
+		this.op = new CachedOperation<VoxelizedMark,AnchorNeverOccursException>(result) {
+			@Override
+			protected VoxelizedMark execute() {
+				return VoxelizedMarkFactory.create(mark, stack, regionMap);
+			}
+		};
 	}
-
+	
 	// The associated mark
 	public Mark getMark() {
 		return mark;
 	}
 	
-	// Duplicates the current mark memo, resetting the calculation state
-	public PxlMarkMemo duplicateFresh() {
-		return PxlMarkMemoFactory.create(this.mark.duplicate(), stack, regionMap);
+	/**
+	 * A voxelized-respentation of the mark
+	 * 
+	 * @return
+	 */
+	public VoxelizedMark voxelized() {
+		return op.doOperation();
 	}
 	
-	// Copies one into the other
-	public void assignFrom( PxlMarkMemo pmm ) throws OptionalOperationUnsupportedException {
-
-		super.assignFrom( pmm );
-		
-		if (pmm.mark!=this.mark) {
-			this.mark.assignFrom(pmm.mark);
-		}
-		this.stack = pmm.stack;
+	public void reset() {
+		op.reset();
+	}
+	
+	/**
+	 * Assigns a new mark to replace the existing mark.
+	 * 
+	 * @param mark
+	 */
+	public void assignFrom(Mark mark) {
+		this.mark = mark;
+		reset();
+	}
+	
+	// Duplicates the current mark memo, resetting the calculation state
+	public VoxelizedMarkMemo duplicateFresh() {
+		return PxlMarkMemoFactory.create(
+			this.mark.duplicate(),
+			stack,
+			regionMap
+		);
 	}
 
 	public void cleanUp() {
-		PxlMark pm = getResult();
+		VoxelizedMark pm = op.getResult();
 		if (pm!=null) {
 			pm.cleanUp();
 		}

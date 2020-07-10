@@ -35,7 +35,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -46,6 +45,7 @@ import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
+import lombok.Getter;
 
 import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.*;
 import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.*;
@@ -79,6 +79,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	private double shellRad = 0.1;
 	private double innerCoreDist = 0.4;
 
+	@Getter
 	private Point3d radii;
 	private Orientation orientation = new Orientation3DEulerAngles();
 	// END mark state
@@ -336,7 +337,6 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		this.orientation = orientation;
 		this.radii = radii;
 		updateAfterMarkChange();
-		clearCacheID();
 		assert shellInt > 0;
 	}
 	
@@ -395,31 +395,10 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		return 3;
 	}
 
-	public Point3d getRadii() {
-		return radii;
-	}
-
-	@Override
-	public void assignFrom(Mark srcMark) throws OptionalOperationUnsupportedException {
-		
-		if (!(srcMark instanceof MarkEllipsoid)) {
-			throw new OptionalOperationUnsupportedException("srcMark must be of type MarkEllipse");
-		}
-		
-		MarkEllipsoid srcMarkEll = (MarkEllipsoid) srcMark;
-		shellRad = srcMarkEll.shellRad;
-		innerCoreDist = srcMarkEll.innerCoreDist;
-		setMarksExplicit( new Point3d(srcMark.centerPoint()), srcMarkEll.orientation.duplicate(), new Point3d(srcMarkEll.getRadii()) );
-		
-		// As the cacheID might be cleared by previous sets
-		super.assignFrom( srcMark);
-	}
-
 	@Override
 	public void setMarksExplicit(Point3d pos, Orientation orientation) {
 		setMarksExplicit(pos, orientation, radii);
 	}
-
 
 	@Override
 	public OverlayProperties generateProperties(ImageResolution sr) {
