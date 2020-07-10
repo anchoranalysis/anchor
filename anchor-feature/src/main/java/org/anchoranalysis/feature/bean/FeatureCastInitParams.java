@@ -61,10 +61,10 @@ public abstract class FeatureCastInitParams<S extends FeatureInitParams, T exten
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(FeatureInitParams params, FeatureBase<T> parentFeature, Logger logger) throws InitException {
+	public void init(FeatureInitParams params, Logger logger) throws InitException {
 		if (castInitParamsType.isAssignableFrom(params.getClass())) {
 			S paramsCast = (S) params;
-			super.init(params, parentFeature, logger);
+			super.init(params, logger);
 			beforeCalcCast( paramsCast );
 		} else {
 			throw new InitException(

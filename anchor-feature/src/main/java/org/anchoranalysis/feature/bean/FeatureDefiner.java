@@ -43,15 +43,14 @@ class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 	@Override
 	public void doInitFor(Object propertyValue, Object params, Object parent, Logger logger) throws InitException {
 		
-		if (parent!=null && !(parent instanceof FeatureBase)) {
-			throw new InitException("A feature may only have another FeatureBase as a bean-parent");
+		if (parent!=null && !(parent instanceof Feature)) {
+			throw new InitException("A feature may only have another feature as a bean-parent");
 		}
 
 		if (propertyValue instanceof Feature) {
 			Feature<T> propertyValueCast = (Feature<T>) propertyValue;
 			propertyValueCast.init(
 				(FeatureInitParams) params,
-				(FeatureBase<T>) parent,
 				logger
 			);
 		}

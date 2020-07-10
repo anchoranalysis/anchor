@@ -30,6 +30,8 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.init.InitializableBean;
+import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -38,12 +40,11 @@ import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.calc.InitializableFeature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.AccessLevel;
+import com.google.common.base.Preconditions;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -56,8 +57,7 @@ import lombok.Setter;
  *
  * @param <T> input-type 
  */
-@NoArgsConstructor(access=AccessLevel.PROTECTED)
-public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements InitializableFeature<T> {
+public abstract class Feature<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
 	// START BEAN PROPERTIES
 	/** An optional additional name that be associated with the feature (defaults to an empty string) */
@@ -67,10 +67,37 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 
 	private Logger logger;
 	private boolean hasBeenInit = false;
+	private FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
 	
-	protected Feature(PropertyInitializer<FeatureInitParams> propertyInitializer) {
+	protected Feature() {
+		super( new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class) );
+	}
+	
+	protected Feature( PropertyInitializer<FeatureInitParams> propertyInitializer) {
 		super(propertyInitializer);
 	}
+		
+	/**
+	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
+	 * 
+	 * @param params parameters used for initialization that are simply passed to beforeCalc()
+	 * @param logger the logger, saved and made available to the feature
+	 */
+	public void init(
+		FeatureInitParams params,
+		Logger logger
+	) throws InitException {
+		hasBeenInit = true;
+		this.logger = logger;
+		beforeCalc();
+	}
+	
+	/**
+	 * The class corresponding to feature input-type (i.e. the {@code T} template parameter).
+	 * 
+	 * @return
+	 */
+	public abstract Class<? extends FeatureInput> inputType();
 	
 	@Override
 	public final String getBeanDscr() {
@@ -94,15 +121,14 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * @return a duplicated (deep copy of bean attributes) feature, identical to current feature, but with the specified custom-name
 	 */
 	public Feature<T> duplicateChangeName(String customName) {
+		Preconditions.checkNotNull(customName);
 		Feature<T> duplicated = duplicateBean();
 		duplicated.setCustomName(customName);
 		return duplicated;
 	}
 
-	@Override
 	public String getFriendlyName() {
-
-		if (getCustomName() != null && !getCustomName().isEmpty()) {
+		if (!getCustomName().isEmpty()) {
 			return getCustomName();
 		} else {
 			return getDscrLong();
@@ -110,9 +136,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	}
 
 	public String getDscrWithCustomName() {
-		return getCustomName() != null && !getCustomName().isEmpty() ? getCustomName()
-				+ ":  " + getBeanDscr()
-				: getBeanDscr();
+		return !getCustomName().isEmpty() ? getCustomName()	+ ":  " + getBeanDscr()	: getBeanDscr();
 	}
 
 	public double calcCheckInit(SessionInput<T> input) throws FeatureCalcException {
@@ -135,23 +159,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 
 	protected void duplicateHelper(Feature<FeatureInput> out) {
 		out.customName = customName;
-	}
-	
-	/**
-	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
-	 * 
-	 * @param params parameters used for initialization that are simply passed to beforeCalc()
-	 * @param logger the logger, saved and made available to the feature
-	 */
-	@Override
-	public void init(
-		FeatureInitParams params,
-		FeatureBase<T> parentFeature,
-		Logger logger
-	) throws InitException {
-		hasBeenInit = true;
-		this.logger = logger;
-		beforeCalc();
 	}
 	
 	/**
@@ -199,10 +206,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	public void beforeCalc() throws InitException {
 		// Does nothing. To be overridden in children if needed.
 	}
-
-	protected Logger getLogger() {
-		return logger;
-	}
 		
 	@Override
 	public String toString() {
@@ -213,5 +216,14 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	@SuppressWarnings("unchecked")
 	public <S extends T> Feature<S> downcast() {
 		return (Feature<S>) this;
+	}
+	
+	@Override
+	public PropertyDefiner getPropertyDefiner() {
+		return featureDefiner;
+	}
+	
+	protected Logger getLogger() {
+		return logger;
 	}
 }
