@@ -52,7 +52,7 @@ public class FeatureListProviderKeyValueParams<T extends FeatureInput> extends F
 	public FeatureList<T> create() throws CreateException {
 		
 		try {
-			KeyValueParams kpv = getSharedObjects().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
+			KeyValueParams kpv = getInitializationParameters().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
 			
 			return FeatureListFactory.mapFrom(
 				kpv.keySet(),

@@ -56,7 +56,7 @@ public class BinarySegmentationReference extends BinarySegmentation {
 	public void onInit(ImageInitParams so) throws InitException {
 		super.onInit(so);
 		try {
-			proxy = getSharedObjects().getBinarySgmnSet().getException(id);
+			proxy = getInitializationParameters().getBinarySgmnSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}

@@ -33,146 +33,48 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterOverlay;
-import org.anchoranalysis.image.bean.arrangeraster.ArrangeRasterTile;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.StackProviderGenerateString;
-import org.anchoranalysis.image.io.generator.raster.StringRasterGenerator;
+import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.stack.Stack;
+
+import lombok.Getter;
+import lombok.Setter;
 
 // A short-cut provider for tiling a number of stack providers with labels
 public class StackProviderTileWithLabels extends StackProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<StackProviderWithLabel> list = new ArrayList<>();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int numCols = 3;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	boolean createShort;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	boolean scaleLabel = true;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	boolean expandLabelZ = false;		// Repeats the label in the z-dimension to match the stackProvider
 	// END BEAN PROPERTIES
-		
-	public static StackProviderArrangeRaster createStackProvider(
-		List<StackProviderWithLabel> list,
-		int numCols,
-		boolean createShort,
-		boolean scaleLabel,
-		boolean expandLabelZ
-	) {
-		
-		StackProviderArrangeRaster spar = new StackProviderArrangeRaster();
-		spar.setCreateShort(createShort);
-		spar.setForceRGB(true);	// Makes everything an RGB output
-		spar.setList( new ArrayList<StackProvider>() );
-		
-		// Add stack providers
-		for( StackProviderWithLabel spwl : list ) {
-			spar.getList().add( spwl.getStackProvider() );
-			spar.getList().add(
-				addGenerateString(spwl, createShort, scaleLabel, expandLabelZ)
-			);
-		}
-		
-		ArrangeRasterTile art = new ArrangeRasterTile();
-		art.setNumCols( numCols );
-		art.setNumRows( (int) Math.ceil( ((double) list.size()) / numCols) );
-		
-		ArrangeRasterOverlay arOverlay = new ArrangeRasterOverlay();
-		arOverlay.setHorizontalAlign("left");
-		arOverlay.setVerticalAlign("top");
-		arOverlay.setzAlign("repeat");
-		
-		art.setCellDefault(arOverlay);
-		
-		spar.setArrangeRaster(art);
-		
-		return spar;
-	}
-	
-	private static StackProviderGenerateString addGenerateString(
-		StackProviderWithLabel spwl,
-		boolean createShort,
-		boolean scaleLabel,
-		boolean expandLabelZ
-	) {
-		StackProviderGenerateString spgs = new StackProviderGenerateString();
-		
-		StringRasterGenerator srg = new StringRasterGenerator( spwl.getLabel() );
-		srg.setText( spwl.getLabel() );
-		srg.setWidth(-1);
-		srg.setHeight(-1);
-		srg.setPadding(3);
-		
-		spgs.setStringRasterGenerator(srg);
-		spgs.setCreateShort(createShort);
-		if (scaleLabel) {
-			spgs.setInstensityProvider( spwl.getStackProvider() );
-		}
-		if (expandLabelZ) {
-			spgs.setRepeatZProvider( spwl.getStackProvider() );
-		}
-		return spgs;
-	}
 
 	@Override
 	public Stack create() throws CreateException {
-		StackProviderArrangeRaster arrangeRaster = createStackProvider(list, numCols, createShort, scaleLabel, expandLabelZ);
+		StackProviderArrangeRaster arrangeRaster = TileRasters.createStackProvider(
+			list,
+			numCols,
+			createShort,
+			scaleLabel,
+			expandLabelZ
+		);
 		try {
-			arrangeRaster.initRecursive(getSharedObjects(), getLogger() );
+			arrangeRaster.initRecursive(getInitializationParameters(), getLogger() );
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}
 		return arrangeRaster.create();
 	}
-
-	public List<StackProviderWithLabel> getList() {
-		return list;
-	}
-
-	public void setList(List<StackProviderWithLabel> list) {
-		this.list = list;
-	}
-
-	public int getNumCols() {
-		return numCols;
-	}
-
-	public void setNumCols(int numCols) {
-		this.numCols = numCols;
-	}
-
-	public void setCreateShort(boolean createShort) {
-		this.createShort = createShort;
-	}
-
-	public boolean isCreateShort() {
-		return createShort;
-	}
-
-	public boolean isScaleLabel() {
-		return scaleLabel;
-	}
-
-	public void setScaleLabel(boolean scaleLabel) {
-		this.scaleLabel = scaleLabel;
-	}
-
-	public boolean isExpandLabelZ() {
-		return expandLabelZ;
-	}
-
-	public void setExpandLabelZ(boolean expandLabelZ) {
-		this.expandLabelZ = expandLabelZ;
-	}
-
-	
 }

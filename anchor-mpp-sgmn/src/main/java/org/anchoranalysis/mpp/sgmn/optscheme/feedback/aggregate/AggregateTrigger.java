@@ -37,7 +37,7 @@ import lombok.Getter;
  */
 
 
-class AggregateTrigger<S,T extends IAggregateReceiver<S>>  {
+class AggregateTrigger<S,T extends AggregateReceiver<S>>  {
 	
 	@Getter
 	private T periodReceiver;

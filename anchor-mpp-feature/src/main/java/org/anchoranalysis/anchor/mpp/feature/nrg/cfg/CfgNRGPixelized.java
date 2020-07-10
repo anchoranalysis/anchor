@@ -42,6 +42,8 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -52,28 +54,28 @@ import lombok.Getter;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor(access=AccessLevel.PRIVATE)
 public final class CfgNRGPixelized  {
     
 	@Getter
     private CfgNRG cfgNRG;
 	
-    private Logger logger;
-	
 	/** A cached version of the calculations for each energy component in the associated {@link NRGScheme} */
     private MemoCollection memoMarks;
+    	
+    private Logger logger;
     
-    public CfgNRGPixelized( CfgNRG cfgNRG, NRGStackWithParams nrgStack, SharedFeatureMulti sharedFeatures, Logger logger ) throws InitException, FeatureCalcException {
+    public CfgNRGPixelized(
+    	CfgNRG cfgNRG,
+    	NRGStackWithParams nrgStack,
+    	SharedFeatureMulti sharedFeatures,
+    	Logger logger
+    ) throws InitException, FeatureCalcException {
     	this(
     		cfgNRG,
     		createMemoCollection(cfgNRG, nrgStack, sharedFeatures, logger),
     		logger
     	);
-    }
-    
-    private CfgNRGPixelized( CfgNRG cfgNRG, MemoCollection memoMarks, Logger logger ) {
-    	this.cfgNRG = cfgNRG;
-    	this.memoMarks = memoMarks;
-    	this.logger = logger;
     }
    
     // Copy constructor - we do shallow copying of configuration
@@ -97,33 +99,7 @@ public final class CfgNRGPixelized  {
 	public Cfg getCfg() {
 		return cfgNRG.getCfg();
 	}
-	
-	// The initial calculation of the NRG, thereafter it can be updated
-	private static MemoCollection createMemoCollection(
-		CfgNRG cfgNRG,
-		NRGStackWithParams nrgStack,
-		SharedFeatureMulti sharedFeatures,
-		Logger logger
-	) throws InitException, FeatureCalcException {
-
-		cfgNRG.init();
 		
-		MemoCollection memo = new MemoCollection(
-			cfgNRG.getCalcMarkInd(),
-			nrgStack.getNrgStack(),
-			cfgNRG.getCfg(),
-			cfgNRG.getNrgScheme()
-		);
-		
-		cfgNRG.getCalcMarkPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
-		
-		// Some nrg components need to be calculated in terms of interactions
-		//  this we need to track in an intelligent way
-		cfgNRG.updateTotal( memo, nrgStack.getNrgStack() );
-		
-		return memo;
-	}
-	
 	public void clean() {
 		memoMarks.clean();
 	}
@@ -171,19 +147,19 @@ public final class CfgNRGPixelized  {
 	
 	// Adds the particular memo to the updatable pair-list
 	public void addToUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, VoxelizedMarkMemo memo ) throws UpdateMarkSetException {
-		updatablePairList.add(memoMarks, memo );
+		updatablePairList.add(memoMarks, memo);
 	}
 	
 	// Removes a memo from the updatable pair-list
 	public void rmvFromUpdatablePairList( ListUpdatableMarkSetCollection updatablePairList, Mark mark ) throws UpdateMarkSetException {
-		VoxelizedMarkMemo memo = getMemoForMark( mark );
+		VoxelizedMarkMemo memo = getMemoForMark(mark);
 		updatablePairList.rmv(memoMarks, memo);
 	}
 	
 	// Exchanges one mark with another on the updatable pair list
 	public void exchangeOnUpdatablePairList(ListUpdatableMarkSetCollection updatablePairList, Mark markExst, VoxelizedMarkMemo memoNew) throws UpdateMarkSetException {
 		VoxelizedMarkMemo memoExst = getMemoForMark( markExst );
-		updatablePairList.exchange(memoMarks, memoExst, getCfg().indexOf(markExst), memoNew );
+		updatablePairList.exchange(memoMarks, memoExst, getCfg().indexOf(markExst), memoNew);
 	}
 	
 	
@@ -194,13 +170,14 @@ public final class CfgNRGPixelized  {
 	}
 	
 	public VoxelizedMarkMemo getMemoForMark(Mark mark ) {
-		return memoMarks.getMemoForMark(cfgNRG.getCfg(), mark );
+		return memoMarks.getMemoForMark(
+			cfgNRG.getCfg(),
+			mark
+		);
 	}
 	
 	public VoxelizedMarkMemo getMemoForIndex(int index ) {
-		VoxelizedMarkMemo pmm = memoMarks.getMemoForIndex(index);
-		assert(pmm!=null);
-		return pmm;
+		return memoMarks.getMemoForIndex(index);
 	}
 		
 	@Override
@@ -219,5 +196,31 @@ public final class CfgNRGPixelized  {
 		s.append( newLine );
 		
 		return s.toString();
+	}
+	
+	// The initial calculation of the NRG, thereafter it can be updated
+	private static MemoCollection createMemoCollection(
+		CfgNRG cfgNRG,
+		NRGStackWithParams nrgStack,
+		SharedFeatureMulti sharedFeatures,
+		Logger logger
+	) throws InitException, FeatureCalcException {
+
+		cfgNRG.init();
+		
+		MemoCollection memo = new MemoCollection(
+			cfgNRG.getCalcMarkInd(),
+			nrgStack.getNrgStack(),
+			cfgNRG.getCfg(),
+			cfgNRG.getNrgScheme()
+		);
+		
+		cfgNRG.getCalcMarkPair().initUpdatableMarkSet(memo, nrgStack, logger, sharedFeatures);
+		
+		// Some nrg components need to be calculated in terms of interactions
+		//  this we need to track in an intelligent way
+		cfgNRG.updateTotal( memo, nrgStack.getNrgStack() );
+		
+		return memo;
 	}
 }

@@ -44,9 +44,7 @@ public abstract class NullParamsBean<T> extends InitializableBean<T,NullInitPara
 	protected NullParamsBean() {
 		super( new PropertyInitializer<NullInitParams>(NullInitParams.class), new SimplePropertyDefiner<NullInitParams>(NullInitParams.class) );
 	}
-	
-	
-	
+
 	@Override
 	public final void onInit(NullInitParams so) throws InitException {
 		onInit();
@@ -60,8 +58,7 @@ public abstract class NullParamsBean<T> extends InitializableBean<T,NullInitPara
 		// NOTHING TO DO. This method exists so it can be overrided as needed in sub-classes.
 	}
 
-	public void initRecursive(Logger logger)
-			throws InitException {
+	public void initRecursive(Logger logger) throws InitException {
 		super.initRecursive(NullInitParams.instance(), logger);
 	}
 }

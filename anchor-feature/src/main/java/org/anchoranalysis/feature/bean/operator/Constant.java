@@ -31,13 +31,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 public class Constant<T extends FeatureInput> extends Feature<T> {
 
 	// START BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter @Setter
 	private double value;
 	// END BEAN PARAMETERS
 
@@ -76,17 +79,8 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 		return getParamDscr();
 	}
 
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
 	@Override
 	public Class<? extends FeatureInput> inputType() {
 		return FeatureInput.class;
 	}
-
 }

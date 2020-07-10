@@ -1,5 +1,7 @@
 package org.anchoranalysis.bean.init;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -34,6 +36,7 @@ import org.anchoranalysis.bean.init.params.ParamsInitializer;
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
 
 import lombok.Getter;
@@ -54,8 +57,7 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	private final PropertyDefiner propertyDefiner;
 	
 	/** Has the bean been initialized yet? */
-	@Getter
-	private boolean initialized = false;
+	private Optional<P> initializationParameters = Optional.empty();
 	
 	/** the logger */
 	private Logger logger;
@@ -68,13 +70,13 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	// Dummy method, that children can optionally override
 	@Override
 	public void init(P params, Logger logger) throws InitException {
-		this.initialized = true;
+		this.initializationParameters = Optional.of(params);
 		this.logger = logger;
 		onInit(params);
 	}
 	
 	/** Called after initialization. An empty impelmentation is provided, to be overridden as needed in the sub-classes. */
-	public void onInit(P params) throws InitException {
+	public void onInit(P paramsInit) throws InitException {
 		// Empty implementation to be replaced in sub-classes
 	}
 		
@@ -94,17 +96,21 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	
 	/**
 	 * Inits this object, and all children objects, so long as they have P
-	 * Once a Bean doesn't have P, the children are not evaluated
+	 * Once a Bean doesn't have {@code P}, the children are not evaluated
 	 * 
-	 * @param params init-params
-	 * @param logger logger
+	 * @param  params init-params
+	 * @param  logger logger
 	 * @throws InitException if the initialization fails
 	 */
 	public void initRecursive( P params, Logger logger ) throws InitException {
 		propertyInitializer.setParam(params);
 		HelperInit.initRecursive( this, propertyInitializer, logger );
 	}
-
+	
+	public boolean isInitialized() {
+		return initializationParameters.isPresent();
+	}
+	
 	protected PropertyInitializer<P> getPropertyInitializer() {
 		return propertyInitializer;
 	}
@@ -112,5 +118,11 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	/** The logger */
 	protected Logger getLogger() {
 		return logger;
+	}
+
+	protected P getInitializationParameters() {
+		return initializationParameters.orElseThrow( ()->
+			new AnchorFriendlyRuntimeException("No initialization-params as the been has not been initialized")
+		);
 	}
 }

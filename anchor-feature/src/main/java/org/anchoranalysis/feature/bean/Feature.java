@@ -79,8 +79,8 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	
 	/** Called after initialization. An empty implementation is provided, to be overridden as needed in the sub-classes. */
 	@Override
-	public void onInit(FeatureInitParams params) throws InitException {
-		super.onInit(params);
+	public void onInit(FeatureInitParams paramsInit) throws InitException {
+		super.onInit(paramsInit);
 		beforeCalc();
 	}
 	

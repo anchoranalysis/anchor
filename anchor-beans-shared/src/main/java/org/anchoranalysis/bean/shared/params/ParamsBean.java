@@ -1,5 +1,9 @@
 package org.anchoranalysis.bean.shared.params;
 
+
+
+
+
 /*
  * #%L
  * anchor-beans-shared
@@ -30,23 +34,13 @@ import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.core.error.InitException;
 
 public abstract class ParamsBean<T> extends InitializableBean<T,KeyValueParamsInitParams> {
-
-	private KeyValueParamsInitParams soParams;
 	
 	protected ParamsBean() {
-		super( new PropertyInitializer<KeyValueParamsInitParams>(KeyValueParamsInitParams.class), new SimplePropertyDefiner<KeyValueParamsInitParams>(KeyValueParamsInitParams.class) );
-	}
-	
-	@Override
-	public void onInit(KeyValueParamsInitParams soParams) throws InitException {
-		super.onInit(soParams);
-		this.soParams = soParams;
-	}
-
-	protected KeyValueParamsInitParams getSharedObjects() {
-		return soParams;
+		super(
+			new PropertyInitializer<>(KeyValueParamsInitParams.class),
+			new SimplePropertyDefiner<>(KeyValueParamsInitParams.class)
+		);
 	}
 }

@@ -87,7 +87,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			}
 			
 			// Init
-			FeatureInitParamsShared paramsInit = new FeatureInitParamsShared( getSharedObjects() );
+			FeatureInitParamsShared paramsInit = new FeatureInitParamsShared( getInitializationParameters() );
 			paramsInit.setKeyValueParams(
 				Optional.of(
 					createKeyValueParams()
@@ -120,7 +120,9 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			logger
 		);
 		generator.setParamsInit(paramsInit);
-		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet() );
+		generator.setSharedFeatures(
+			getInitializationParameters().getFeature().getSharedFeatureSet()
+		);
 		generator.setIterableElement(objsCollection);
 		return generator;
 	}

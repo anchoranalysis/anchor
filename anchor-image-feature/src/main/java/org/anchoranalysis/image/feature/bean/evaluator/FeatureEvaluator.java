@@ -56,7 +56,7 @@ public abstract class FeatureEvaluator<T extends FeatureInput> extends FeatureRe
 			
 			return FeatureSession.with(
 				feature,
-				getSharedObjects().getSharedFeatureSet(),
+				getInitializationParameters().getSharedFeatureSet(),
 				getLogger()
 			);
 			

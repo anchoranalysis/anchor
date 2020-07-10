@@ -37,11 +37,11 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
-import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderTileWithLabels;
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -128,7 +128,7 @@ public class AssignmentGenerator extends RasterGenerator {
 		listProvider.add( new StackProviderWithLabel(stackLeft, nameLeft) );
 		listProvider.add( new StackProviderWithLabel(stackRight, nameRight) );
 		
-		return StackProviderTileWithLabels.createStackProvider(
+		return TileRasters.createStackProvider(
 			listProvider,
 			2,
 			false,
