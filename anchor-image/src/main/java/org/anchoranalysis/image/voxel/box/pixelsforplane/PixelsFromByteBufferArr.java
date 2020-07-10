@@ -33,6 +33,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
+import com.google.common.base.Preconditions;
+
 public class PixelsFromByteBufferArr implements PixelsForPlane<ByteBuffer> {
 
 	private final VoxelBuffer<ByteBuffer>[] buffer;
@@ -73,7 +75,7 @@ public class PixelsFromByteBufferArr implements PixelsForPlane<ByteBuffer> {
 
 	@Override
 	public VoxelBuffer<ByteBuffer> getPixelsForPlane(int z) {
-		assert(z>=0);
+		Preconditions.checkArgument(z>=0);
 		VoxelBuffer<ByteBuffer> buf = buffer[z];
 		buf.buffer().clear();
 		return buf; 
