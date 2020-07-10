@@ -34,34 +34,42 @@ import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class CSVComparer {
 
-	private CSVComparer() {}
+	/** The separator for the csv file (a regular expression for split function) */
+	private String regExSeperator;
+	
+	/** Whether the first line of the CSV file headers */
+	private boolean firstLineHeaders;
+	
+	/** Ignore the first number of columns (left most) when measuring equality */
+	private int ignoreFirstNumColumns;
+	
+	/** If true, all lines in the CSV file are sorted before comparison. If false, the order remains unchanged. */
+	private boolean sortLines;
+	
+	/** An exception is thrown if the CSV file has zero rows */
+	private boolean rejectZeroRows;
 	
 	/**
 	 * Are two CSV files equal?
 	 * 
 	 * @param path1 path to first file to compare, without any lines having been already read
 	 * @param path2 path to second file to compare, without any lines having been already read
-	 * @param ignoreFirstNumColumns ignore the first number of columns (left most) when measuring equality
- 	 * @param sortLines if true, all lines in the CSV file are sorted before comparison. if false, the order remains unchanged.
- 	 * @param rejectZeroRows throws an exception if the CSV file has zero rows
- 	 * @param messageStream if non-equal, additional explanation messages are printed here 
+ 	 * @param messageStream if CSV files aren't equal, additional explanation messages are printed here 
 	 * @throws CSVReaderException if something goes wrong
 	 */
-	public static boolean areCsvFilesEqual(
+	public boolean areCsvFilesEqual(
 		Path path1,
 		Path path2,
-		String regExSeperator,
-		boolean firstLineHeaders,		
-		int ignoreFirstNumColumns,
-		boolean sortLines,
-		boolean rejectZeroRows,
 		PrintStream messageStream
 	) throws CSVReaderException {
 		
-		OpenedCSVFile file1 = openCsvFromFilePath(path1, regExSeperator, firstLineHeaders);
-		OpenedCSVFile file2 = openCsvFromFilePath(path2, regExSeperator, firstLineHeaders);
+		OpenedCSVFile file1 = openCsvFromFilePath(path1);
+		OpenedCSVFile file2 = openCsvFromFilePath(path2);
 		
 		if (firstLineHeaders && !checkHeadersIdentical(file1, file2, messageStream)) {
 			return false;
@@ -93,15 +101,11 @@ public class CSVComparer {
 	 * Opens a CSV file from an absolute filePath
 	 * 
 	 * @param filePath absolute file-path
-	 * @param regExSeperator the seperator for the csv file (a regular expression for split function)
-	 * @param firstLineHeaders are their headers?
 	 * @return a CSVFile object, but without any rows having been read
 	 * @throws CSVReaderException 
 	 */
-	private static OpenedCSVFile openCsvFromFilePath( Path filePath, String regExSeperator, boolean firstLineHeaders ) throws CSVReaderException {
-	
+	private OpenedCSVFile openCsvFromFilePath( Path filePath) throws CSVReaderException {
 		CSVReader csvReader = new CSVReader(regExSeperator, firstLineHeaders);
 		return csvReader.read(filePath);
 	}
-
 }
