@@ -34,6 +34,9 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+
 /**
  * A bean that must be initialized with some parameters before being used
  * 
@@ -42,14 +45,10 @@ import org.anchoranalysis.core.log.Logger;
  * @param <B> bean-type
  * @param <P> init-param type
  */
+@AllArgsConstructor(access=AccessLevel.PROTECTED)
 public abstract class InitializableBean<B,P extends BeanInitParams> extends AnchorBean<B> {
 
 	private PropertyInitializer<P> propertyInitializer; 
-	
-	protected InitializableBean(PropertyInitializer<P> propertyInitializer) {
-		super();
-		this.propertyInitializer = propertyInitializer;
-	}
 	
 	/**
 	 * 
@@ -62,7 +61,6 @@ public abstract class InitializableBean<B,P extends BeanInitParams> extends Anch
 	public void initRecursiveWithInitializer( PropertyInitializer<?> pi, Logger logger ) throws InitException {
 		HelperInit.initRecursive(this, pi, logger);
 	}
-
 	
 	/**
 	 * Inits this object, and all children objects, so long as they have P
