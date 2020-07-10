@@ -1,8 +1,8 @@
 package org.anchoranalysis.feature.input.descriptor;
 
 import org.anchoranalysis.feature.input.FeatureInputParams;
-
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /*-
@@ -36,16 +36,11 @@ import lombok.NoArgsConstructor;
  * @author Owen Feehan
  *
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class FeatureInputParamsDescriptor extends FeatureInputDescriptor {
+@NoArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper = false)
+public class FeatureInputParamsDescriptor implements FeatureInputDescriptor {
 
 	public static final FeatureInputParamsDescriptor INSTANCE = new FeatureInputParamsDescriptor();
-	
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
-	}
-	
+		
 	@Override
 	public Class<? extends FeatureInputParams> inputClass() {
 		return FeatureInputParams.class;

@@ -36,6 +36,6 @@ public abstract class FeatureAllMemo extends Feature<FeatureInputAllMemo> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputAllMemoDescriptor.instance;
+		return FeatureInputAllMemoDescriptor.INSTANCE;
 	}
 }

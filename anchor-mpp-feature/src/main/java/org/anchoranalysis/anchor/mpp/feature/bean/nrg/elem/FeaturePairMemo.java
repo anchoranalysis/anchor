@@ -36,6 +36,6 @@ public abstract class FeaturePairMemo extends Feature<FeatureInputPairMemo> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairMemoDescriptor.instance;
+		return FeatureInputPairMemoDescriptor.INSTANCE;
 	}
 }

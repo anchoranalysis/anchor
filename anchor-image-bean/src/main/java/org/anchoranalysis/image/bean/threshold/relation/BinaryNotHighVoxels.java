@@ -30,6 +30,8 @@ import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * Selects anything that is NOT "high" pixels from a binary mask
  * 
@@ -40,6 +42,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper = true)
 public class BinaryNotHighVoxels extends BinaryVoxelsBase {
 
 	@Override

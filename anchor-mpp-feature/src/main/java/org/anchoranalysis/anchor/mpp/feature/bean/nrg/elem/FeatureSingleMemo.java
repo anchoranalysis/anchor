@@ -41,6 +41,6 @@ public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> 
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleMemoDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.INSTANCE;
 	}
 }

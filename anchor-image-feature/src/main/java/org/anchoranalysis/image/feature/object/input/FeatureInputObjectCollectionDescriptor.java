@@ -29,18 +29,15 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class FeatureInputObjectCollectionDescriptor extends FeatureInputDescriptor {
+@NoArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper = false)
+public class FeatureInputObjectCollectionDescriptor implements FeatureInputDescriptor {
 
-	public static final FeatureInputObjectCollectionDescriptor instance = new FeatureInputObjectCollectionDescriptor();
+	public static final FeatureInputObjectCollectionDescriptor INSTANCE = new FeatureInputObjectCollectionDescriptor();
 	
-	private FeatureInputObjectCollectionDescriptor() {}
-	
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
-	}
-
 	@Override
 	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputObjectCollection.class;

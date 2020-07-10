@@ -43,6 +43,6 @@ public abstract class FeatureCfg extends Feature<FeatureInputCfg> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputCfgDescriptor.instance;
+		return FeatureInputCfgDescriptor.INSTANCE;
 	}
 }

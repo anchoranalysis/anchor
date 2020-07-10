@@ -35,7 +35,7 @@ public abstract class FeatureStack extends Feature<FeatureInputStack> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputStackDescriptor.instance;
+		return FeatureInputStackDescriptor.INSTANCE;
 	}
 
 }

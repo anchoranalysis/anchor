@@ -35,7 +35,7 @@ public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairObjectsDescriptor.instance;
+		return FeatureInputPairObjectsDescriptor.INSTANCE;
 	}
 
 }

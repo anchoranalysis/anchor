@@ -50,7 +50,7 @@ public abstract class FeatureObjectCollection extends Feature<FeatureInputObject
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputObjectCollectionDescriptor.instance;
+		return FeatureInputObjectCollectionDescriptor.INSTANCE;
 	}
 	
 }

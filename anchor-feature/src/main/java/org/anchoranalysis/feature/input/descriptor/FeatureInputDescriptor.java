@@ -32,14 +32,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 
 /** Defines the type of inputs the feature accepts */
-public abstract class FeatureInputDescriptor {
-
+public interface FeatureInputDescriptor {
+	
 	/**
-	 * Are these parameters compatible with everything else?
+	 * Parameters-type
 	 * 
 	 * @return
 	 */
-	public abstract boolean isCompatibleWithEverything();
+	Class<? extends FeatureInput> inputClass();
 	
 	/** 
 	 * Can these parameters be used with a particular feature?
@@ -47,16 +47,9 @@ public abstract class FeatureInputDescriptor {
 	 * @param paramTypeClass the class of input
 	 * @return true iff the feature-input is compatible with {@code paramTypeClass} 
 	 *  */
-	public boolean isCompatibleWith(Class<? extends FeatureInput> paramTypeClass) {
+	default boolean isCompatibleWith(Class<? extends FeatureInput> paramTypeClass) {
 		return inputClass().isAssignableFrom( paramTypeClass );
 	}
-	
-	/**
-	 * Parameters-type
-	 * 
-	 * @return
-	 */
-	public abstract Class<? extends FeatureInput> inputClass();
 
 	/**
 	 * Prefer to keep descriptor whose input-class is a sub-class rather than a super-class
@@ -64,29 +57,15 @@ public abstract class FeatureInputDescriptor {
 	 * @param dscr
 	 * @return the favoured descriptor of the two, or Optional.empty() if there is no favourite
 	 */
-	public Optional<FeatureInputDescriptor> preferToBidirectional( FeatureInputDescriptor dscr ) {
+	default Optional<FeatureInputDescriptor> preferToBidirectional( Class<? extends FeatureInput> classFirst, FeatureInputDescriptor dscr ) {
 		if (isCompatibleWith(dscr.inputClass())) {
 			return Optional.of(dscr);
 		}
 		
-		if (dscr.isCompatibleWith(this.inputClass())) {
+		if (dscr.isCompatibleWith(classFirst)) {
 			return Optional.of(this);
 		}
 		
 		return Optional.empty();
-	}
-
-	@Override
-	public int hashCode() {
-		return 31;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		return (getClass() == obj.getClass());
 	}
 }

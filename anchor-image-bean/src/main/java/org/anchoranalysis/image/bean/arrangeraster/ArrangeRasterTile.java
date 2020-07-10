@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.IArrangeRaster;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -75,7 +75,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 		// We can make this more efficient by using a lookup table for the cells
 		// But as there should be relatively few exceptions, we just always loop
 		//   through the list
-		private IArrangeRaster createArrangeRasterForItem(int rowPos, int colPos) {
+		private ArrangeRaster createArrangeRasterForItem(int rowPos, int colPos) {
 		
 			if (cells!=null) {
 				for (ArrangeRasterCell cell : cells) {

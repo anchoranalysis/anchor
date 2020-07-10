@@ -51,10 +51,11 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class CreateNeighborGraph<V> {
-
-	// If we have a partition of objects, we don't need to check if objects-intersect as it's not possible by definition (a partition)
-	// However, if we have objects that can potentially overlap, we define them 'neighbours' only if objects are adjacent, but don't overlap. In this case, we need to checl
-	private final boolean preventObjectIntersection;
+		
+	/** iff TRUE outputs an undirected graph, otherwise directed */
+	private boolean undirected = true;
+	
+	private final EdgeAdderParameters edgeAdderParams;
 	
 	/**
 	 * Creates an edge from two neighbouring vertices
@@ -66,41 +67,8 @@ public class CreateNeighborGraph<V> {
 	 */
 	@FunctionalInterface
 	public interface EdgeFromVertices<V,E> {
-		E createEdge( V v1, V v2, int numNghbPixels );
+		E createEdge( V v1, V v2, int numberNeighboringPixels );
 	}
-	
-	/**
-	 * Creates a graph with numPixels as the edge type
-	 * 
-	 * @param vertices
-	 * @param vertexToObjMask
-	 * @param edgeFromVertices
-	 * @param sceneExtent
-	 * @param do3D
-	 * @param bigNghb
-	 * @param undirected
-	 * @param testBothDirs
-	 * @return
-	 * @throws CreateException
-	 */
-	public GraphWithEdgeTypes<V,Integer> createGraphWithNumPixels(
-			List<V> vertices,
-			Function<V,ObjectMask> vertexToObjMask,
-			Extent sceneExtent,
-			boolean do3D
-		) throws CreateException {
-		return createGraph(
-			vertices,
-			vertexToObjMask,
-			(v1, v2, numPixels) -> numPixels,
-			sceneExtent,
-			do3D,
-			false,
-			true,
-			false
-		);
-	}
-	
 	
 	/**
 	 * Create the graph for a given list of vertices
@@ -111,9 +79,6 @@ public class CreateNeighborGraph<V> {
 	 * @param sceneExtent
 	 * @param do3D
 	 * @param <E> edge-type of graph
-	 * @param bigNghb iff TRUE uses bigNghb for dilation
-	 * @param undirected iff TRUE outputs an undirected graph, otherwise directed
-	 * @param testBothDirs iff TRUE each combination of neighbours is tested only once, otherwise twice
 	 * @return the newly created graph
 	 * @throws CreateException
 	 */
@@ -122,10 +87,7 @@ public class CreateNeighborGraph<V> {
 		Function<V,ObjectMask> vertexToObjMask,
 		EdgeFromVertices<V,E> edgeFromVertices,
 		Extent sceneExtent,
-		boolean do3D,
-		boolean bigNghb,
-		boolean undirected,
-		boolean testBothDirs
+		boolean do3D
 	) throws CreateException {
 		
 		// Graph of neighbouring objects, with the number of common pixels as an edge
@@ -140,9 +102,7 @@ public class CreateNeighborGraph<V> {
 			vertexToObjMask,
 			new ObjectCollectionRTree(objs),
 			createAndAddEdge(graph, edgeFromVertices),
-			preventObjectIntersection,
-			bigNghb,
-			testBothDirs
+			edgeAdderParams
 		);
 		
 		for( int i=0; i<objs.size(); i++) {

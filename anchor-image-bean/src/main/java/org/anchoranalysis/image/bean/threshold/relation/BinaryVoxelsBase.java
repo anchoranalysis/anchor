@@ -28,21 +28,10 @@ package org.anchoranalysis.image.bean.threshold.relation;
 
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = false)
 public abstract class BinaryVoxelsBase extends RelationToThreshold {
-
-	@Override
-	public int hashCode() {
-		return 51;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		return (getClass() == obj.getClass());
-	}
 
 	// This is sufficient for all base-classes, as we can rely on them not being further parameterized
 	@Override

@@ -36,6 +36,6 @@ public abstract class FeaturePairObjects extends Feature<FeatureInputPairObjects
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairObjectsDescriptor.instance;
+		return FeatureInputPairObjectsDescriptor.INSTANCE;
 	}
 }

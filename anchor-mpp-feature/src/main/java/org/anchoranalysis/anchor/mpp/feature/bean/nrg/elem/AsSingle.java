@@ -69,7 +69,7 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInpu
 	//   as the item we pass to
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairMemoDescriptor.instance;
+		return FeatureInputPairMemoDescriptor.INSTANCE;
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
 	
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputResultsDescriptor.instance;
+		return FeatureInputResultsDescriptor.INSTANCE;
 	}
 
 }

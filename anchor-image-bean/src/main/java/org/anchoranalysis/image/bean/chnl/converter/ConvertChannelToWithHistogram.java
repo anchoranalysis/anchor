@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.arrangeraster;
+package org.anchoranalysis.image.bean.chnl.converter;
 
 /*
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,12 +26,11 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
  * #L%
  */
 
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 
-import java.util.Iterator;
+public abstract class ConvertChannelToWithHistogram extends AnchorBean<ConvertChannelToWithHistogram> {
 
-import org.anchoranalysis.image.stack.rgb.RGBStack;
-
-public interface IArrangeRaster {
-
-	BBoxSetOnPlane createBBoxSetOnPlane( Iterator<RGBStack> rasterIterator ) throws ArrangeRasterException;
+	public abstract ChnlConverterAttached<Histogram,?> createConverter();
 }

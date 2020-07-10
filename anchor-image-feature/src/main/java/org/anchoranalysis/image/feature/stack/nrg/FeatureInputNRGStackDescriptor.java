@@ -30,19 +30,15 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
  */
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class FeatureInputNRGStackDescriptor extends FeatureInputDescriptor {
+@NoArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper = false)
+public class FeatureInputNRGStackDescriptor implements FeatureInputDescriptor {
 
-	public static final FeatureInputNRGStackDescriptor instance = new FeatureInputNRGStackDescriptor();
+	public static final FeatureInputNRGStackDescriptor INSTANCE = new FeatureInputNRGStackDescriptor();
 	
-	private FeatureInputNRGStackDescriptor() {}
-	
-	// TODO it's not really compatible with Params that don't have an NRG stack. We should refine this interface
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return true;
-	}
-
 	@Override
 	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputNRG.class;

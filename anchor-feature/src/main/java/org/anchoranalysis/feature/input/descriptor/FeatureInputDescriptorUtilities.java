@@ -47,19 +47,11 @@ public class FeatureInputDescriptorUtilities {
 	
 	public static FeatureInputDescriptor paramTypeForTwo( FeatureInputDescriptor c1, FeatureInputDescriptor c2 ) {
 		
-		if (c1.isCompatibleWithEverything()) {
-			return c2;
-		}
-		
-		if (c2.isCompatibleWithEverything()) {
-			return c1;
-		}
-		
 		if (c1.equals(c2)) {
 			return c1;
 		}
 		
-		Optional<FeatureInputDescriptor> preferred = c1.preferToBidirectional(c2);
+		Optional<FeatureInputDescriptor> preferred = c1.preferToBidirectional(c1.inputClass(), c2);
 		if (!preferred.isPresent()) {
 			throw new AnchorFriendlyRuntimeException("item1 and item2 must accept the same paramType, or be compatible.");
 		}
@@ -97,16 +89,12 @@ public class FeatureInputDescriptorUtilities {
 			
 			FeatureInputDescriptor paramType = f.inputDescriptor();
 			
-			if (paramType.isCompatibleWithEverything()) {
-				continue;
-			}
-			
 			if (chosenParamType==null) {
 				chosenParamType = paramType;
 			} else {
 				if (!chosenParamType.equals(paramType)) {
 					
-					Optional<FeatureInputDescriptor> preferred = paramType.preferToBidirectional(chosenParamType);
+					Optional<FeatureInputDescriptor> preferred = paramType.preferToBidirectional(paramType.inputClass(), chosenParamType);
 					if (!preferred.isPresent()) {
 						// We don't know which parameter to prefer
 						throw new AnchorFriendlyRuntimeException(

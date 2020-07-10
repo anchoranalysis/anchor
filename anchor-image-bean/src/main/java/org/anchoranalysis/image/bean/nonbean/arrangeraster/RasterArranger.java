@@ -45,7 +45,7 @@ public class RasterArranger {
 	private BBoxSetOnPlane bboxSetOnPlane;
 	private ImageDimensions dim;
 	
-	public void init( IArrangeRaster arrangeRaster, List<RGBStack> list ) throws InitException {
+	public void init( ArrangeRaster arrangeRaster, List<RGBStack> list ) throws InitException {
 
 		Iterator<RGBStack> rasterIterator = list.iterator();
 		try {

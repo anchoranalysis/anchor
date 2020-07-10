@@ -38,7 +38,7 @@ public abstract class FeatureMark extends Feature<FeatureInputMark> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputMarkDescriptor.instance;
+		return FeatureInputMarkDescriptor.INSTANCE;
 	}
 
 }

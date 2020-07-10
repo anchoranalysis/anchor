@@ -52,6 +52,6 @@ public abstract class FeatureNRGStack<T extends FeatureInputNRG> extends Feature
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputNRGStackDescriptor.instance;
+		return FeatureInputNRGStackDescriptor.INSTANCE;
 	}
 }

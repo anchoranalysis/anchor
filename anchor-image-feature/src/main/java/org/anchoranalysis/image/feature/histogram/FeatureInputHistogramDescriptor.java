@@ -29,21 +29,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class FeatureInputHistogramDescriptor extends FeatureInputDescriptor {
+@NoArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper = false)
+public class FeatureInputHistogramDescriptor implements FeatureInputDescriptor {
 
-	public static final FeatureInputHistogramDescriptor instance = new FeatureInputHistogramDescriptor();
-	
-	private FeatureInputHistogramDescriptor() {}
-	
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
-	}
+	public static final FeatureInputHistogramDescriptor INSTANCE = new FeatureInputHistogramDescriptor();
 
 	@Override
 	public Class<? extends FeatureInput> inputClass() {
 		return FeatureInputHistogram.class;
 	}
-
 }

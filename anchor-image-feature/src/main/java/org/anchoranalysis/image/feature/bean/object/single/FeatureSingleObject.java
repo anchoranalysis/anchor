@@ -35,6 +35,6 @@ public abstract class FeatureSingleObject extends Feature<FeatureInputSingleObje
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleObjectDescriptor.instance;
+		return FeatureInputSingleObjectDescriptor.INSTANCE;
 	}
 }

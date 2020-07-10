@@ -30,6 +30,8 @@ import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * Selects only the "low" pixels from a binary mask
  * 
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper = true)
 public class BinaryLowVoxels extends BinaryVoxelsBase {
 
 	@Override

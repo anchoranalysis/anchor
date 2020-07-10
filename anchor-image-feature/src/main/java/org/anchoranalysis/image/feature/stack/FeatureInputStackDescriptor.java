@@ -30,17 +30,15 @@ package org.anchoranalysis.image.feature.stack;
 
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-public class FeatureInputStackDescriptor extends FeatureInputDescriptor {
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-	public static final FeatureInputStackDescriptor instance = new FeatureInputStackDescriptor();
-	
-	private FeatureInputStackDescriptor() {}
-	
-	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
-	}
+@NoArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper = false)
+public class FeatureInputStackDescriptor implements FeatureInputDescriptor {
 
+	public static final FeatureInputStackDescriptor INSTANCE = new FeatureInputStackDescriptor();
+	
 	@Override
 	public Class<? extends FeatureInputStack> inputClass() {
 		return FeatureInputStack.class;
