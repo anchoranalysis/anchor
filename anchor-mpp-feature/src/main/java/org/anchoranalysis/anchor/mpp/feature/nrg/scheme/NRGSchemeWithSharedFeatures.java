@@ -106,8 +106,7 @@ public class NRGSchemeWithSharedFeatures {
 		
 	}
 		
-	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,
-			SharedFeatureMulti sharedFeatures, int nrgSchemeIndCacheSize, Logger logger ) {
+	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,	SharedFeatureMulti sharedFeatures, Logger logger ) {
 		super();
 		this.nrgScheme = nrgScheme;
 		this.sharedFeatures = sharedFeatures;
