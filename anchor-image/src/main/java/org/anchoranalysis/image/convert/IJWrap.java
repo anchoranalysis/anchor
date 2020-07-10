@@ -30,6 +30,7 @@ package org.anchoranalysis.image.convert;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -58,7 +59,10 @@ import ij.process.ByteProcessor;
 import ij.process.ColorProcessor;
 import ij.process.ImageProcessor;
 import ij.process.ShortProcessor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class IJWrap {
 
 	private static final String IMAGEJ_UNIT_MICRON = "micron";
@@ -67,10 +71,8 @@ public class IJWrap {
 	/** A multiplication-factor to convert microns to meters */
 	private static final int MICRONS_TO_METERS = 1000000;
 	
-	private static VoxelDataType dataTypeByte = VoxelDataTypeUnsignedByte.INSTANCE;
-	private static VoxelDataType dataTypeShort = VoxelDataTypeUnsignedShort.INSTANCE;
-	
-	private IJWrap() {}
+	private static final VoxelDataType DATA_TYPE_BYTE = VoxelDataTypeUnsignedByte.INSTANCE;
+	private static final VoxelDataType DATA_TYPE_SHORT = VoxelDataTypeUnsignedShort.INSTANCE;
 	
 	public static Channel chnlFromImageStackByte( ImageStack imageStack, ImageResolution res, ChannelFactorySingleType factory ) {
 		
@@ -143,11 +145,19 @@ public class IJWrap {
 	
 	public static ImageProcessor imageProcessor( VoxelBoxWrapper vb, int z ) {
 		
-		assert( vb.any().extent().getVolumeXY()==vb.any().getPixelsForPlane(z).buffer().capacity() );
+		if( vb.any().extent().getVolumeXY()!=vb.any().getPixelsForPlane(z).buffer().capacity() ) {
+			throw new AnchorFriendlyRuntimeException(
+				String.format(
+					"Extent volume (%d) and buffer-capacity (%d) are not equal",
+					vb.any().extent().getVolumeXY(),
+					vb.any().getPixelsForPlane(z).buffer().capacity()
+				)
+			);
+		}
 		
-		if (vb.getVoxelDataType().equals(dataTypeByte)) {
+		if (vb.getVoxelDataType().equals(DATA_TYPE_BYTE)) {
 			return imageProcessorByte( vb.asByte().getPlaneAccess(), z);
-		} else if (vb.getVoxelDataType().equals(dataTypeShort)) {
+		} else if (vb.getVoxelDataType().equals(DATA_TYPE_SHORT)) {
 			return imageProcessorShort( vb.asShort().getPlaneAccess(), z);
 		} else {
 			throw new IncorrectVoxelDataTypeException("Only byte or short data types are supported");
@@ -162,7 +172,6 @@ public class IJWrap {
 	
 	public static ImageProcessor imageProcessorShort( PixelsForPlane<ShortBuffer> planeAccess, int z ) {
 		Extent e = planeAccess.extent();
-		assert( e.getVolumeXY()==planeAccess.getPixelsForPlane(z).buffer().array().length );
 		return new ShortProcessor( e.getX(), e.getY(), planeAccess.getPixelsForPlane(z).buffer().array(), null);
 	}
 
@@ -208,32 +217,38 @@ public class IJWrap {
 		return imp;
 	}
 	
-	private static void maybeCorrectComposite( Stack stack, ImagePlus imp ) {
-		
-		// Avoids IMP being set to composite mode, if it's a single channel stack
-		if (stack.getNumChnl()==1 && imp instanceof CompositeImage) {
-			((CompositeImage)imp).setMode(IJ.GRAYSCALE);
-		}		
-	}
-	
-	public static ImagePlus createImagePlus( ImageStack stack, ImageDimensions sd, int numChnl, int numFrames, boolean makeComposite ) {
+	public static ImagePlus createImagePlus(
+		ImageStack stack,
+		ImageDimensions dim,
+		int numChnl,
+		int numFrames,
+		boolean makeComposite
+	) {
 		
 		// If we're making an RGB then we need to convert our stack
 		ImagePlus imp = null;
 		if (makeComposite) {
-			imp = createCompositeImagePlus( stack, numChnl, sd.getZ(), numFrames, IMAGEJ_IMAGE_NAME );
+			imp = createCompositeImagePlus( stack, numChnl, dim.getZ(), numFrames, IMAGEJ_IMAGE_NAME );
 		} else {
-			imp = createNonCompositeImagePlus( stack, 1, sd.getZ(), numFrames, IMAGEJ_IMAGE_NAME );
+			imp = createNonCompositeImagePlus( stack, 1, dim.getZ(), numFrames, IMAGEJ_IMAGE_NAME );
 		}
 		
 		imp.getCalibration().setXUnit(IMAGEJ_UNIT_MICRON);
 		imp.getCalibration().setYUnit(IMAGEJ_UNIT_MICRON);
 		imp.getCalibration().setZUnit(IMAGEJ_UNIT_MICRON);
-		imp.getCalibration().pixelWidth = sd.getRes().getX() * MICRONS_TO_METERS;
-		imp.getCalibration().pixelHeight = sd.getRes().getY() * MICRONS_TO_METERS;
-		imp.getCalibration().pixelDepth = sd.getRes().getZ() * MICRONS_TO_METERS;
+		imp.getCalibration().pixelWidth = dim.getRes().getX() * MICRONS_TO_METERS;
+		imp.getCalibration().pixelHeight = dim.getRes().getY() * MICRONS_TO_METERS;
+		imp.getCalibration().pixelDepth = dim.getRes().getZ() * MICRONS_TO_METERS;
 		
-		assert( imp.getNSlices()==sd.getZ() );
+		if( imp.getNSlices()!=dim.getZ() ) {
+			throw new AnchorFriendlyRuntimeException(
+				String.format(
+					"Number of slices in imagePlus (%d) is not equal to z-slices in scene (%d)",
+					imp.getNSlices(),
+					dim.getZ()
+				)
+			);
+		}
 		
 		return imp;
 	}
@@ -266,6 +281,16 @@ public class IJWrap {
 		return stackNew;
 	}
 	
+	public static VoxelBuffer<ByteBuffer> voxelBufferFromImageProcessorByte( ImageProcessor ip ) {
+		byte[] arr = (byte[]) ip.getPixels();
+		return VoxelBufferByte.wrap(arr);
+	}
+	
+	public static VoxelBuffer<ShortBuffer> voxelBufferFromImageProcessorShort( ImageProcessor ip ) {
+		short[] arr = (short[]) ip.getPixels();
+		return VoxelBufferShort.wrap(arr);
+	}
+
 	private static Channel chnlFromImagePlusByte( ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory ) {
 		
 		Channel chnlOut = factory.createEmptyUninitialised( sd );
@@ -278,6 +303,14 @@ public class IJWrap {
 			vbOut.setPixelsForPlane(z, VoxelBufferByte.wrap(arr));
 		}
 		return chnlOut;
+	}
+		
+	private static void maybeCorrectComposite( Stack stack, ImagePlus imp ) {
+		
+		// Avoids IMP being set to composite mode, if it's a single channel stack
+		if (stack.getNumChnl()==1 && imp instanceof CompositeImage) {
+			((CompositeImage)imp).setMode(IJ.GRAYSCALE);
+		}		
 	}
 	
 	private static Channel chnlFromImagePlusShort( ImagePlus imagePlus, ImageDimensions sd, ChannelFactorySingleType factory ) {
@@ -294,8 +327,7 @@ public class IJWrap {
 		}
 		return chnlOut;
 	}
-	
-	
+		
 	private static ImagePlus createCompositeImagePlus( ImageStack stackNew, int numChnl, int numSlices, int numFrames, String imageName ) {
 		ImagePlus impNC = createNonCompositeImagePlus( stackNew, numChnl, numSlices, numFrames, imageName);
 		assert( impNC.getNSlices()==numSlices );
@@ -305,8 +337,7 @@ public class IJWrap {
 		impOut.setDimensions(numChnl, numSlices, numFrames);
 		return impOut;
 	}
-	
-	
+		
 	// Create an interleaved stack of images
 	private static ImageStack createInterleavedStack( Extent e, Stack stack) {
 		
@@ -325,8 +356,7 @@ public class IJWrap {
 		
 		return stackNew;
 	}
-	
-	
+		
 	private static void copyImageStackIntoVoxelBoxByte( ImageStack stack, VoxelBox<ByteBuffer> vbOut ) {
 		for( int z=0; z<vbOut.extent().getZ(); z++) {
 			ImageProcessor ip = stack.getProcessor(z+1);
@@ -340,18 +370,6 @@ public class IJWrap {
 			vbOut.setPixelsForPlane(z, voxelBufferFromImageProcessorShort(ip) );
 		}
 	}
-	
-	public static VoxelBuffer<ByteBuffer> voxelBufferFromImageProcessorByte( ImageProcessor ip ) {
-		byte[] arr = (byte[]) ip.getPixels();
-		return VoxelBufferByte.wrap(arr);
-	}
-	
-	public static VoxelBuffer<ShortBuffer> voxelBufferFromImageProcessorShort( ImageProcessor ip ) {
-		short[] arr = (short[]) ip.getPixels();
-		return VoxelBufferShort.wrap(arr);
-	}
-	
-	
 	
 	// Create a stack composed entirely of a single channel
 	private static ImageStack createStackForVoxelBox( VoxelBoxWrapper voxelBox ) {

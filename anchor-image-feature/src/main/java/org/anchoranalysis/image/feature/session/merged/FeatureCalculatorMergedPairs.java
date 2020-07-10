@@ -67,8 +67,6 @@ import lombok.RequiredArgsConstructor;
  * <li>The entire results are cached (as a function of the input) for first/second, as the same inputs reappear multiple times.</li>
  * </div>
  * 
- * <p>TODO a further type of caching (of the results of internal feature calculations for the same inputs)</p>
- * 
  * @author Owen Feehan
  *
  */

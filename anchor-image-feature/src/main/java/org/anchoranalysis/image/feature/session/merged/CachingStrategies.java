@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.session.merged;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -30,7 +32,6 @@ import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
@@ -44,7 +45,7 @@ class CachingStrategies {
 	private CachingStrategies() {}
 	
 	/** Cache and re-use inputs */
-	public static BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cacheAndReuse() {
+	public static <T extends FeatureInput> BoundReplaceStrategy<T,CacheAndReuseStrategy<T>> cacheAndReuse() {
 		return new BoundReplaceStrategy<>(CacheAndReuseStrategy::new);
 	}
 	
