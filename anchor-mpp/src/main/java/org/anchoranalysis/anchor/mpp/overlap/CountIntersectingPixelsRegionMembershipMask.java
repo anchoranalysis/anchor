@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.intersecting.IntersectionBBox;
@@ -125,8 +126,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 				bufferOther,
 				bufferMaskGlobal,
 				bbox,
-				src.getBoundingBox().cornerMin().getX(),
-				src.getBoundingBox().cornerMin().getY(),
+				src.getBoundingBox().cornerMin(),
 				eGlobalMask,
 				onMaskGlobal
 			);
@@ -140,8 +140,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		ByteBuffer buffer2,
 		ByteBuffer bufferMaskGlobal,
 		IntersectionBBox bbox,
-		int xGlobalRel,
-		int yGlobalRel,
+		Point3i pointGlobalRel,
 		Extent extentGlobal,
 		byte onMaskGlobal
 	) {
@@ -149,11 +148,11 @@ class CountIntersectingPixelsRegionMembershipMask {
 		int cnt = 0;
 		for (int y=bbox.y().min(); y<bbox.y().max(); y++) {
 			int yOther = y + bbox.y().rel();
-			int yGlobal = y + yGlobalRel;
+			int yGlobal = y + pointGlobalRel.getY();
 			
 			for (int x=bbox.x().min(); x<bbox.x().max(); x++) {
 				int xOther = x + bbox.x().rel();
-				int xGlobal = x + xGlobalRel;
+				int xGlobal = x + pointGlobalRel.getX();
 				
 				byte globalMask = bufferMaskGlobal.get( extentGlobal.offset(xGlobal, yGlobal) );
 				if (globalMask==onMaskGlobal) {

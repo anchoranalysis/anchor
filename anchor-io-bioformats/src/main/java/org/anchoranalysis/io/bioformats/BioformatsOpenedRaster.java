@@ -49,6 +49,7 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertToFactory;
 import org.anchoranalysis.io.bioformats.copyconvert.CopyConvert;
+import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -58,20 +59,20 @@ import loci.formats.meta.IMetadata;
 
 public class BioformatsOpenedRaster extends OpenedRaster {
 
-	private IFormatReader reader;
-	private ReadOptions readOptions;
+	private final IFormatReader reader;
+	private final ReadOptions readOptions;
 	
-	private IMetadata lociMetadata;
+	private final IMetadata lociMetadata;
 	
-	private int numChnl;
-	private int sizeT;
-	private boolean rgb;
-	private int bitsPerPixel;
+	private final int numChnl;
+	private final int sizeT;
+	private final boolean rgb;
+	private final int bitsPerPixel;
 	
-	private static Log log = LogFactory.getLog(BioformatsOpenedRaster.class);
+	private final Optional<List<String>> channelNames;
 	
-	private Optional<List<String>> channelNames;
-	
+	private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
+		
 	/**
 	 * 
 	 * @param reader
@@ -83,18 +84,15 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 		IMetadata lociMetadata,
 		ReadOptions readOptions
 	) {
-	super();
+		super();
 		this.reader = reader;
+		this.lociMetadata = lociMetadata;
 		this.readOptions = readOptions;
 		   
-		this.sizeT = readOptions.sizeT(reader);
-		this.rgb = readOptions.isRGB(reader);
-		this.bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
-
-		this.lociMetadata = lociMetadata;
-		
-		// Our total num channels
-		this.numChnl = readOptions.sizeC(reader);
+		sizeT = readOptions.sizeT(reader);
+		rgb = readOptions.isRGB(reader);
+		bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
+		numChnl = readOptions.sizeC(reader);
 		
 		channelNames = readOptions.determineChannelNames(reader);
 	}
@@ -165,11 +163,11 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	) throws RasterIOException {
 
 		try {
-			log.debug(
+			LOG.debug(
 				String.format("Opening series %d as %s",seriesIndex, dataType)
 			);
 			
-			log.debug(
+			LOG.debug(
 				String.format("Size T = %d; Size C = %d", sizeT, numChnl)
 			);
 			
@@ -194,7 +192,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 				readOptions
 			);
 			
-			log.debug(
+			LOG.debug(
 				String.format("Finished opening series %d as %s with z=%d, t=%d", seriesIndex, dataType, reader.getSizeZ(), reader.getSizeT() )
 			);
 			
@@ -244,9 +242,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			reader,
 			listChnls,
 			progressReporter,
-			dim,
-			numChnl,
-			sizeT,
+			new ImageFileShape(dim, numChnl, sizeT),
 			convertTo,
 			readOptions
 		);

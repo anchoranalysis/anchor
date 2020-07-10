@@ -33,7 +33,6 @@ import java.util.List;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.io.bioformats.DestChnlForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
@@ -43,7 +42,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Copies the bytes from a IFormatReader to a list of channels, converting if necessary
+ * Copies the bytes from a {@link IFormatReader} to a list of channels, converting if necessary.
+ * 
  * @author Owen Feehan
  *
  */
@@ -57,9 +57,9 @@ public class CopyConvert {
 	 * @param reader the source of the copy
 	 * @param dest the destination of the copy
 	 * @param progressReporter
-	 * @param dim
-	 * @param numChnl
-	 * @param numFrames
+	 * @param imageDimensions
+	 * @param numberChannels
+	 * @param numberFrames
 	 * @param bitsPerPixel
 	 * @param numChnlsPerByteArray
 	 * @throws FormatException
@@ -69,38 +69,37 @@ public class CopyConvert {
 		IFormatReader reader,
 		List<Channel> dest,
 		ProgressReporter progressReporter,
-		ImageDimensions dim,
-		int numChnl,
-		int numFrames,
+		ImageFileShape targetShape,
 		ConvertTo<?> convertTo,
 		ReadOptions readOptions
-	) throws FormatException, IOException
-	{
+	) throws FormatException, IOException {
 		int numChnlsPerByteArray = readOptions.chnlsPerByteArray(reader);
 		
-		int numByteArraysPerIteration = calcByteArraysPerIter(numChnl, numChnlsPerByteArray);
+		int numByteArraysPerIteration = calcByteArraysPerIter(
+			targetShape.getNumberChannels(),
+			numChnlsPerByteArray
+		);
 		
 		try( ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter)) {
 			
-			pri.setMax(numFrames*dim.getZ()*numChnl);
+			pri.setMax( targetShape.totalNumberSlices() );
 			pri.open();
 						
-			iterateDimOrder(
+			IterateOverSlices.iterateDimOrder(
 				reader.getDimensionOrder(),
-				numFrames,
+				targetShape,
 				numByteArraysPerIteration,
-				dim,
 				(t, z, c, readerIndex) -> {
 					
 					/** Selects a destination channel for a particular relative channel */
 					DestChnlForIndex destC = channelRelative -> dest.get(
-						destIndex(c + channelRelative, t, numChnl)
+						destIndex(c + channelRelative, t, targetShape.getNumberChannels())
 					);
 					
 					byte[] b = reader.openBytes(readerIndex);
 					
 					convertTo.copyAllChnls(
-						dim,
+						targetShape.getImageDimensions(),
 						b,
 						destC,
 						z,
@@ -126,105 +125,5 @@ public class CopyConvert {
 	
 	private static int destIndex(int c, int t, int numChnlsPerFrame) {
 		return (t*numChnlsPerFrame) + c ;
-	}
-	
-	@FunctionalInterface
-	private interface ApplyIterationToChnl {
-		void apply( int t, int z, int c, int chnlIndex ) throws IOException, FormatException;
-	}
-	
-	/**
-	 * Iterates through all the frames, channels, z-slices in whatever order the reader
-	 *   recommends
-	 *   
-	 * @param dimOrder
-	 * @param numFrames
-	 * @param numChnl
-	 * @param dim
-	 * @param numChnlsPerByteArray
-	 * @param chnlIteration called for each unique z-slice from each channel and each frame
-	 * @throws IOException
-	 * @throws FormatException
-	 */
-	private static void iterateDimOrder(
-		String dimOrder,
-		int numFrames,
-		int numByteArrays,
-		ImageDimensions dim,
-		ApplyIterationToChnl chnlIteration
-	) throws IOException, FormatException {
-		
-		if (dimOrder.equalsIgnoreCase("XYCZT")) {
-			applyXYCZT(dim, numByteArrays, numFrames, chnlIteration);
-			
-		} else if (dimOrder.equalsIgnoreCase("XYZCT")) {
-			applyXYZCT(dim, numByteArrays, numFrames, chnlIteration);
-					
-		} else if (dimOrder.equalsIgnoreCase("XYZTC")) {
-			applyXYZTC(dim, numByteArrays, numFrames, chnlIteration);
-			
-		} else if (dimOrder.equalsIgnoreCase("XYCTZ")) {
-			applyXYCTZ(dim, numByteArrays, numFrames, chnlIteration);
-			
-		} else if (dimOrder.equalsIgnoreCase("XYTCZ")) {
-			applyXYTCZ(dim, numByteArrays, numFrames, chnlIteration);
-		} else {
-			throw new IOException( String.format("dimOrder '%s' not supported", dimOrder) );
-		}
-	}
-	
-	private static void applyXYCZT(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
-		int chnlIndex = 0;
-		for( int t=0; t<numFrames; t++) {
-			for (int z=0; z<dim.getZ(); z++) {
-				for (int c=0; c<numByteArrays; c++ ) {
-					chnlIteration.apply(t, z, c, chnlIndex++);
-				}
-			}
-		}		
-	}
-	
-	private static void applyXYZCT(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
-		int chnlIndex = 0;
-		for( int t=0; t<numFrames; t++) {
-			for (int c=0; c<numByteArrays; c++ ) {
-				for (int z=0; z<dim.getZ(); z++) {
-					chnlIteration.apply(t, z, c, chnlIndex++);
-				}
-			}
-		}	
-	}
-	
-	private static void applyXYZTC(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
-		int chnlIndex = 0;
-		for (int c=0; c<numByteArrays; c++ ) {
-			for( int t=0; t<numFrames; t++) {
-				for (int z=0; z<dim.getZ(); z++) {
-					chnlIteration.apply(t, z, c, chnlIndex++);
-				}
-			}
-		}
-	}
-	
-	private static void applyXYCTZ(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
-		int chnlIndex = 0;
-		for (int z=0; z<dim.getZ(); z++) {
-			for( int t=0; t<numFrames; t++) {	
-				for (int c=0; c<numByteArrays; c++ ) {
-					chnlIteration.apply(t, z, c, chnlIndex++);
-				}
-			}
-		}
-	}
-		
-	private static void applyXYTCZ(ImageDimensions dim, int numByteArrays, int numFrames, ApplyIterationToChnl chnlIteration) throws IOException, FormatException {
-		int chnlIndex = 0;
-		for (int z=0; z<dim.getZ(); z++) {
-			for (int c=0; c<numByteArrays; c++ ) {
-				for( int t=0; t<numFrames; t++) {	
-					chnlIteration.apply(t, z, c, chnlIndex++);
-				}
-			}
-		}			
 	}
 }

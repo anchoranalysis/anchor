@@ -95,8 +95,7 @@ public class CSVComparer {
 			return false;
 		}		
 	}
-	
-	
+		
 	/**
 	 * Opens a CSV file from an absolute filePath
 	 * 

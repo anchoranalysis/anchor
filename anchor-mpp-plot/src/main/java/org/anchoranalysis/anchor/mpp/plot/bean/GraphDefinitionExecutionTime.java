@@ -78,7 +78,10 @@ public class GraphDefinitionExecutionTime extends GraphDefinition<ExecutionTimeI
 	@Override
 	public GraphInstance create(Iterator<ExecutionTimeItem> items,
 			Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits) throws CreateException {
-		return delegate.create(items, domainLimits, rangeLimits);
+		return delegate.createWithRangeLimits(
+			items,
+			rangeLimits
+		);
 	}
 
 	@Override

@@ -45,6 +45,9 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 
  * A line graph with 1 or more series, with an index on the x-axis and a container with
@@ -54,13 +57,22 @@ import org.jfree.data.xy.XYSeriesCollection;
  */
 public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset> {
 
+	@Getter @Setter
 	private int numPoints = 1000;
+	
+	@Getter @Setter
 	private int minMaxIgnoreBeforeIndex = 0;
+	
+	@Getter @Setter
 	private boolean ignoreRangeAxisOutside = false;
 	
+	@Getter @Setter
 	private YValGetter<T> yValGetter;
 
+	@Getter @Setter
 	private double yAxisUpperMargin = 0;
+	
+	@Getter @Setter
 	private double yAxisLowerMargin = 0;
 	
 	private AxisLimits domainAxisLimits;
@@ -79,7 +91,7 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
 	
 	public LinePlot( String graphName, String[] seriesNames, YValGetter<T> yValGetter ) {
 		super(graphName, seriesNames);
-			this.yValGetter = yValGetter;
+		this.yValGetter = yValGetter;
 	}
 	
 	@Override
@@ -116,8 +128,6 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
      */
     @Override
     protected JFreeChart createChart(XYDataset dataset, String title, Optional<AxisLimits> rangeLimits) {
-        
-    	assert( getGraphColorScheme() != null);
     	
     	 // create the chart...
         final JFreeChart chart = ChartFactory.createXYLineChart(
@@ -171,83 +181,28 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
         
     }
 
-    @Override
 	public GraphInstance create( Iterator<T> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException {
 
 		// Let's setup our limits before we do the creation
 		this.domainAxisLimits = duplicateOrCreate(domainLimits);
 		this.rangeAxisLimits  = duplicateOrCreate(rangeLimits);
 		
-		return super.create(itr, domainLimits, rangeLimits);
-	}
-    
-    private static AxisLimits duplicateOrCreate( Optional<AxisLimits> limits ) {
-    	 return limits.map(AxisLimits::duplicate).orElse( new AxisLimits() );
-    }
-	
-	public int getNumPoints() {
-		return numPoints;
-	}
-
-
-	public void setNumPoints(int numPoints) {
-		this.numPoints = numPoints;
-	}
-
-
-	public int getMinMaxIgnoreBeforeIndex() {
-		return minMaxIgnoreBeforeIndex;
-	}
-
-
-	public void setMinMaxIgnoreBeforeIndex(int minMaxIgnoreBeforeIndex) {
-		this.minMaxIgnoreBeforeIndex = minMaxIgnoreBeforeIndex;
-	}
-
-	public YValGetter<T> getyValGetter() {
-		return yValGetter;
-	}
-
-
-	public void setyValGetter(YValGetter<T> yValGetter) {
-		this.yValGetter = yValGetter;
-	}
-
-
-	public double getyAxisUpperMargin() {
-		return yAxisUpperMargin;
-	}
-
-
-	public void setyAxisUpperMargin(double yAxisUpperMargin) {
-		this.yAxisUpperMargin = yAxisUpperMargin;
+		return super.createWithRangeLimits(
+			itr,
+			rangeLimits
+		);
 	}
 
 	public void setYAxisMargins(double margins) {
-		setyAxisUpperMargin(margins);
-		setyAxisLowerMargin(margins);
+		setYAxisUpperMargin(margins);
+		setYAxisLowerMargin(margins);
 	}
 
-
-	public double getyAxisLowerMargin() {
-		return yAxisLowerMargin;
+	@Override
+	protected Optional<AxisLimits> rangeLimitsIfEmpty(XYDataset dataset) {
+		return Optional.empty();
 	}
-
-
-	public void setyAxisLowerMargin(double yAxisLowerMargin) {
-		this.yAxisLowerMargin = yAxisLowerMargin;
-	}
-
-
-	public boolean isIgnoreRangeAxisOutside() {
-		return ignoreRangeAxisOutside;
-	}
-
-
-	public void setIgnoreRangeAxisOutside(boolean ignoreRangeAxisOutside) {
-		this.ignoreRangeAxisOutside = ignoreRangeAxisOutside;
-	}
-
+	
 	private XYSeries[] createXYSeriesArray() {
 		XYSeries[] arr = new XYSeries[getNumSeries()];
     	for (int s=0; s<getNumSeries(); s++) {
@@ -255,9 +210,8 @@ public class LinePlot<T extends IIndexGetter> extends GraphIndexBase<T,XYDataset
     	}
     	return arr;
 	}
-
-	@Override
-	protected Optional<AxisLimits> rangeLimitsIfEmpty(XYDataset dataset) {
-		return Optional.empty();
-	}
+	    
+    private static AxisLimits duplicateOrCreate( Optional<AxisLimits> limits ) {
+    	 return limits.map(AxisLimits::duplicate).orElse( new AxisLimits() );
+    }
 }
