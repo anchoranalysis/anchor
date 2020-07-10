@@ -34,8 +34,7 @@ import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -81,7 +80,7 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	}
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputDescriptorUtilities.paramTypeForList(list);
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputType.determineInputType(list);
 	}
 }

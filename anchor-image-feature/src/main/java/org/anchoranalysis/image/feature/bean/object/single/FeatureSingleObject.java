@@ -27,14 +27,13 @@ package org.anchoranalysis.image.feature.bean.object.single;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDescriptor;
 
 public abstract class FeatureSingleObject extends Feature<FeatureInputSingleObject> {
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleObjectDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputSingleObject.class;
 	}
 }

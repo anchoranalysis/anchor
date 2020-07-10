@@ -27,15 +27,13 @@ package org.anchoranalysis.image.feature.bean.stack;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 
 public abstract class FeatureStack extends Feature<FeatureInputStack> {
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputStackDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputStack.class;
 	}
-
 }

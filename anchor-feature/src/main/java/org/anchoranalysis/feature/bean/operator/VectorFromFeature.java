@@ -1,6 +1,7 @@
 package org.anchoranalysis.feature.bean.operator;
 
 import java.util.Arrays;
+import java.util.List;
 
 /*
  * #%L
@@ -37,8 +38,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -72,12 +72,18 @@ public class VectorFromFeature<T extends FeatureInput> extends FeatureBase<T> {
 	/** A list of the features for all dimensions */
 	public FeatureList<T> allFeatures() {
 		return new FeatureList<>(
-			Arrays.asList(x,y,z)
+			featuresAsList()
 		);
 	}
 	
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputDescriptorUtilities.paramTypeForThree(x,y,z);
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputType.determineInputType(
+			featuresAsList()
+		);
+	}
+	
+	private List<Feature<T>> featuresAsList() {
+		return Arrays.asList(x,y,z);
 	}
 }

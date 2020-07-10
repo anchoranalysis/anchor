@@ -30,37 +30,23 @@ package org.anchoranalysis.feature.bean.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class FeatureDoubleElem<T extends FeatureInput> extends Feature<T> {
 
 	// START BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter @Setter
 	private Feature<T> item1 = null;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Feature<T> item2 = null;
 	// END BEAN PARAMETERS
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputDescriptorUtilities.paramTypeForTwo(item1, item2);
-	}
-	
-	public Feature<T> getItem1() {
-		return item1;
-	}
-
-	public void setItem1(Feature<T> item1) {
-		this.item1 = item1;
-	}
-
-	public Feature<T> getItem2() {
-		return item2;
-	}
-
-	public void setItem2(Feature<T> item2) {
-		this.item2 = item2;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputType.prefer(item1, item2);
 	}
 }

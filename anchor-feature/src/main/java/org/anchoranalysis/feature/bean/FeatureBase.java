@@ -31,8 +31,14 @@ import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
+/**
+ * Base-class for beans that use a {@link FeatureInput} and are initialized by {@link FeatureInitParams}.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input type
+ */
 public abstract class FeatureBase<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
 	private FeatureDefiner<T> featureDefiner = new FeatureDefiner<>();
@@ -41,9 +47,7 @@ public abstract class FeatureBase<T extends FeatureInput> extends InitializableB
 		super( new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class) );
 	}
 	
-	protected FeatureBase(
-		PropertyInitializer<FeatureInitParams> propertyInitializer
-	) {
+	protected FeatureBase( PropertyInitializer<FeatureInitParams> propertyInitializer) {
 		super(propertyInitializer);
 	}
 	
@@ -51,6 +55,11 @@ public abstract class FeatureBase<T extends FeatureInput> extends InitializableB
 	public PropertyDefiner getPropertyDefiner() {
 		return featureDefiner;
 	}
-		
-	public abstract FeatureInputDescriptor inputDescriptor();
+	
+	/**
+	 * The class corresponding to feature input-type (i.e. the {@code T} template parameter).
+	 * 
+	 * @return
+	 */
+	public abstract Class<? extends FeatureInput> inputType();
 }

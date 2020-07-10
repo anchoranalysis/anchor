@@ -1,7 +1,6 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemoDescriptor;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
@@ -36,7 +35,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Extracts one of the memos from the pair, and processes as a {@link FeatureSingleMemo}
@@ -68,8 +67,8 @@ public class AsSingle extends FeatureSingleElem<FeatureInputPairMemo,FeatureInpu
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairMemoDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputPairMemo.class;
 	}
 
 	@Override

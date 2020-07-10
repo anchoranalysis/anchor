@@ -41,7 +41,9 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.InitializableFeature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -54,6 +56,7 @@ import lombok.Setter;
  *
  * @param <T> input-type 
  */
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements InitializableFeature<T> {
 
 	// START BEAN PROPERTIES
@@ -63,12 +66,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	// END BEAN PROPERTIES
 
 	private Logger logger;
-
 	private boolean hasBeenInit = false;
-
-	protected Feature() {
-		super();
-	}
 	
 	protected Feature(PropertyInitializer<FeatureInitParams> propertyInitializer) {
 		super(propertyInitializer);
@@ -151,13 +149,11 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 		FeatureBase<T> parentFeature,
 		Logger logger
 	) throws InitException {
-				
 		hasBeenInit = true;
 		this.logger = logger;
 		beforeCalc();
 	}
 	
-
 	/**
 	 * Returns a list of Features that exist as bean-properties of this feature,
 	 * either directly or in lists.
@@ -169,8 +165,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * @return
 	 * @throws BeanMisconfiguredException
 	 */
-	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)
-			throws BeanMisconfiguredException {
+	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)	throws BeanMisconfiguredException {
 
 		FeatureList<FeatureInput> out = FeatureListFactory.wrapReuse(
 			findChildrenOfClass( getOrCreateBeanFields(), Feature.class )
@@ -208,17 +203,10 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	protected Logger getLogger() {
 		return logger;
 	}
-	
-	
+		
 	@Override
 	public String toString() {
 		return getFriendlyName();
-	}
-	
-	/** Upcasts the feature to FeatureCalcParams */
-	@SuppressWarnings("unchecked")
-	public Feature<FeatureInput> upcast() {
-		return (Feature<FeatureInput>) this;
 	}
 	
 	/** Downcasts the feature  */

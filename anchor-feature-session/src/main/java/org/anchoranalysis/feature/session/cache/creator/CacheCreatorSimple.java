@@ -36,6 +36,7 @@ import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -79,7 +80,10 @@ public class CacheCreatorSimple implements CacheCreator {
 	@SuppressWarnings("unchecked")
 	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<? extends FeatureInput> inputType) {
 		return namedFeatures.filterAndMap(
-			f -> f.inputDescriptor().isCompatibleWith(inputType),
+			f -> FeatureInputType.isCompatibleWith(
+				f.inputType(),
+				inputType
+			),
 			f -> (Feature<T>) f
 		);
 	}

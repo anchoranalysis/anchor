@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemoDescriptor;
+
 
 /*-
  * #%L
@@ -30,12 +30,12 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemoDescr
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureAllMemo extends Feature<FeatureInputAllMemo> {
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputAllMemoDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputAllMemo.class;
 	}
 }
