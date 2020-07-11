@@ -42,16 +42,17 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class SingleObjTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
 
-	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
-
-	private NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
+	// START REQUIRED ARGUMENTS
+	private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
+	// END REQUIRED ARGUMENTS
 	
-	public SingleObjTableSession(NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore) {
-		this.namedFeatureStore = namedFeatureStore;
-	}
-
+	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
+		
 	@Override
 	public void start(
 		ImageInitParams soImage,
@@ -62,7 +63,10 @@ public class SingleObjTableSession implements FeatureTableCalculator<FeatureInpu
 		try {
 			session = FeatureSession.with(
 				namedFeatureStore.listFeatures(),
-				InitParamsHelper.createInitParams(soImage,nrgStack),
+				InitParamsHelper.createInitParams(
+					Optional.of(soImage.getSharedObjects()),
+					nrgStack
+				),
 				soImage.getFeature().getSharedFeatureSet(),
 				logger
 			);

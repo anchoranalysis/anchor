@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.shared;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-feature
@@ -35,6 +37,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
@@ -63,8 +66,8 @@ public class SharedFeaturesInitParams implements BeanInitParams {
 		);
 	}
 	
-	public static SharedFeaturesInitParams create( SharedObjects so ) {
-		return new SharedFeaturesInitParams(so);
+	public static SharedFeaturesInitParams create( SharedObjects sharedObjects ) {
+		return new SharedFeaturesInitParams(sharedObjects);
 	}
 	
 	
@@ -74,9 +77,12 @@ public class SharedFeaturesInitParams implements BeanInitParams {
 	 * @param logger
 	 * @return
 	 */
-	public static SharedFeaturesInitParams create( Logger logger ) {
-		SharedObjects so = new SharedObjects(logger);
-		return create(so);
+	public static SharedFeaturesInitParams create(Logger logger, Path modelDirectory) {
+		return create(
+			new SharedObjects(
+				new CommonContext(logger, modelDirectory)
+			)
+		);
 	}
 	
 	public NamedProviderStore<FeatureList<FeatureInput>> getFeatureListSet() {

@@ -31,7 +31,13 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import org.anchoranalysis.core.functional.OptionalUtilities;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Additional paramaters that provide context for many beans that provide input-functions
@@ -44,40 +50,32 @@ public class InputContextParams {
 	/**
 	 * A list of paths referring to specific inputs;
 	 */
-	private List<Path> inputPaths;
+	@Getter @Setter
+	private Optional<List<Path>> inputPaths;
 	
-	/** Iff non-NULL, a directory which can be used by beans to find input */
-	private Path inputDir = null;
+	/** If defined, a directory which can be used by beans to find input */
+	@Getter
+	private Optional<Path> inputDir;
 	
 	/** A glob that can be used by beans to filter input */
+	@Getter @Setter
 	private String inputFilterGlob = "*";
 	
 	/** A list of extensions that can be used filter inputs */
+	@Getter @Setter
 	private Set<String> inputFilterExtensions = fallBackFilterExtensions();
 	
-	/** If non-null, then debug-mode is activated */
-	private DebugModeParams debugModeParams;
-	
-	public boolean hasInputDir() {
-		return inputDir!=null;
-	}
-
-	public Path getInputDir() {
-		return inputDir;
-	}
+	/** Parameters for debug-mode (only defined if we are in debug mode) */
+	@Getter @Setter
+	private Optional<DebugModeParams> debugModeParams;
 
 	// This should always be ab absolute path, never a relative one
-	public void setInputDir(Path inputDir) throws IOException {
-		
-		if (inputDir!=null) {
-			checkAbsolutePath(inputDir);
-		}
-		
+	public void setInputDir(Optional<Path> inputDir) throws IOException {
+		OptionalUtilities.ifPresent(
+			inputDir,
+			InputContextParams::checkAbsolutePath
+		);
 		this.inputDir = inputDir;
-	}
-
-	public void setInputFilterGlob(String inputFilterGlob) {
-		this.inputFilterGlob = inputFilterGlob;
 	}
 	
 	private static void checkAbsolutePath(Path inputDir) throws IOException {
@@ -90,45 +88,8 @@ public class InputContextParams {
 	
 	// If no filter extensions are provided from anywhere else, this is a convenient set of defaults
 	private Set<String> fallBackFilterExtensions() {
-		return new HashSet<>(Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp"));
+		return new HashSet<>(
+			Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp")
+		);
 	}
-
-	public Set<String> getInputFilterExtensions() {
-		return inputFilterExtensions;
-	}
-
-	public void setInputFilterExtensions(Set<String> inputFilterExtensions) {
-		this.inputFilterExtensions = inputFilterExtensions;
-	}
-	
-
-	public boolean hasInputPaths() {
-		return inputPaths!=null;
-	}
-	
-	public boolean isDebugModeActivated() {
-		return debugModeParams!=null;
-	}
-
-	public void setDebugModeParams(DebugModeParams debugModeParams) {
-		this.debugModeParams = debugModeParams;
-	}
-	
-	public DebugModeParams getDebugModeParams() {
-		return debugModeParams;
-	}
-	
-	public String getInputFilterGlob() {
-		return inputFilterGlob;
-	}
-
-	public List<Path> getInputPaths() {
-		return inputPaths;
-	}
-
-	public void setInputPaths(List<Path> inputPaths) {
-		this.inputPaths = inputPaths;
-	}
-
-
 }

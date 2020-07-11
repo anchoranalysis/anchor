@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.name.store;
 
+
+
 /*
  * #%L
  * anchor-bean
@@ -30,8 +32,8 @@ package org.anchoranalysis.core.name.store;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anchoranalysis.core.log.Logger;
-
+import org.anchoranalysis.core.log.CommonContext;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -47,7 +49,9 @@ import lombok.RequiredArgsConstructor;
 public class SharedObjects {
 	
 	// START REQUIRED ARGUMENTS
-	private final Logger logger;
+	/** Logger and other common configuration */
+	@Getter
+	private final CommonContext context;
 	// END REQUIRED ARGUMENTS
 	
 	/**
@@ -67,7 +71,7 @@ public class SharedObjects {
 		return (NamedProviderStore<T>) setStores.computeIfAbsent(
 			key,
 			cls -> new LazyEvaluationStore<>(
-				logger,
+				context.getLogger(),
 				cls.getSimpleName()
 			)
 		);

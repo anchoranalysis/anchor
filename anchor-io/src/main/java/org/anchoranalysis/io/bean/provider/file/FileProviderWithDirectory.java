@@ -55,8 +55,9 @@ public abstract class FileProviderWithDirectory extends FileProvider {
 
 	/** Like getDirectory as Path but converts any relative path to absolute one */
 	public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {
-		Path path = getDirectoryAsPath(inputContext);
-		return makeAbsolutePathIfNecessary(path);
+		return makeAbsolutePathIfNecessary(
+			getDirectoryAsPath(inputContext)
+		);
 	}
 	
 	/**

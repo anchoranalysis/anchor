@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.bean.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -37,7 +36,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class Constant<T extends FeatureInput> extends Feature<T> {
+public class Constant<T extends FeatureInput> extends FeatureOperator<T> {
 
 	// START BEAN PARAMETERS
 	@BeanField @Getter @Setter
@@ -77,10 +76,5 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 	@Override
 	public String getDscrLong() {
 		return getParamDscr();
-	}
-
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInput.class;
 	}
 }

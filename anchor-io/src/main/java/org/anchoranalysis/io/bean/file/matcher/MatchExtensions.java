@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.apache.commons.io.FilenameUtils;
 
@@ -63,7 +64,7 @@ public class MatchExtensions extends FileMatcher {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
+	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) throws AnchorIOException {
 				
 		Set<String> fileExtensions = fileExtensions(inputContext);
 		

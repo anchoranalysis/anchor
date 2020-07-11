@@ -62,7 +62,7 @@ public class OnlyIf extends LoggingDestination {
 		ExperimentExecutionArguments arguments,
 		boolean detailedLogging
 	) {
-		if (requireArguments.hasAllRequiredArguments(arguments.isDebugEnabled())) {
+		if (requireArguments.hasAllRequiredArguments(arguments.isDebugModeEnabled())) {
 			return log.create(outputManager, errorReporter, arguments, detailedLogging);
 		} else {
 			return new StatefulNullMessageLogger();

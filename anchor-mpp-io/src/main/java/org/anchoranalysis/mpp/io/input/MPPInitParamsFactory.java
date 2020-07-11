@@ -38,20 +38,24 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
-public class MPPInitParamsFactory {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private MPPInitParamsFactory() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class MPPInitParamsFactory {
 		
-	public static MPPInitParams create(	BoundIOContext context, Optional<Define> define, Optional<? extends InputForMPPBean> input ) throws CreateException {
+	public static MPPInitParams create(
+		BoundIOContext context,
+		Optional<Define> define,
+		Optional<? extends InputForMPPBean> input
+	) throws CreateException {
 		
-		SharedObjects so = new SharedObjects( context.getLogger() );
-		
-		ImageInitParams soImage = ImageInitParamsFactory.create( so, context.getModelDirectory() );
+		SharedObjects so = new SharedObjects(context.common());
+		ImageInitParams soImage = new ImageInitParams(so);
 		MPPInitParams soMPP = new MPPInitParams(soImage, so);
 		
 		if (input.isPresent()) {

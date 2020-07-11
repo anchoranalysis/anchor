@@ -81,7 +81,7 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	@Override
 	public void onInit(FeatureInitParams paramsInit) throws InitException {
 		super.onInit(paramsInit);
-		beforeCalc();
+		beforeCalc(paramsInit);
 	}
 	
 	/**
@@ -197,8 +197,9 @@ public abstract class Feature<T extends FeatureInput> extends InitializableBean<
 	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 	}
 
-	/** Dummy method, that children can optionally override */
-	public void beforeCalc() throws InitException {
+	/** Dummy method, that children can optionally override 
+	 * @param paramsInit initialization parameters */
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
 		// Does nothing. To be overridden in children if needed.
 	}
 		

@@ -84,11 +84,12 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		DisplayStack background,
 		Path annotationPath,
 		ColorSetGenerator colorSetGenerator,
+		Path modelDirectory,
 		Logger logger,
 		boolean debugMode
 	) throws CreateException {
 		
-		SharedFeaturesInitParams so = SharedFeaturesInitParams.create(logger);
+		SharedFeaturesInitParams so = SharedFeaturesInitParams.create(logger, modelDirectory);
 		try {
 			featureEvaluator.initRecursive( so, logger );
 		} catch (InitException e) {

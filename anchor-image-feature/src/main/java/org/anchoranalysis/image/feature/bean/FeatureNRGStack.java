@@ -27,8 +27,6 @@ package org.anchoranalysis.image.feature.bean;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 
@@ -40,14 +38,6 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
  * @param <T> feature input-type
  */
 public abstract class FeatureNRGStack<T extends FeatureInputNRG> extends Feature<T> {
-
-
-	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		return calcForInput( input.get() );
-	}
-	
-	public abstract double calcForInput( FeatureInputNRG params ) throws FeatureCalcException;
 
 	@Override
 	public Class<? extends FeatureInput> inputType() {

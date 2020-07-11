@@ -60,5 +60,4 @@ class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 	public String describeAcceptedClasses() {
 		return FeatureInitParams.class.getSimpleName();
 	}
-	
 }

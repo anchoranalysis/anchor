@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -49,6 +50,13 @@ public interface BoundIOContext {
 	boolean isDebugEnabled();
 	
 	Logger getLogger();
+	
+	default CommonContext common() {
+		return new CommonContext(
+			getLogger(),
+			getModelDirectory()
+		);
+	}
 	
 	default ErrorReporter getErrorReporter() {
 		return getLogger().errorReporter();

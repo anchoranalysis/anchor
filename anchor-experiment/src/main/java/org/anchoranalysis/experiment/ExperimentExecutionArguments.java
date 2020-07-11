@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /*
  * #%L
@@ -40,49 +44,54 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class ExperimentExecutionArguments {
 	
 	/**
-	 * If non-NULL then debug-mode is enabled
+	 * If defined, parameters for debug-mode.
 	 */
-	private DebugModeParams debugModeParams;
+	private Optional<DebugModeParams> debugModeParams = Optional.empty();
 	
 	/**
 	 * A list of paths referring to specific inputs;
 	 */
-	private List<Path> inputPaths;
+	private Optional<List<Path>> inputPaths = Optional.empty();
 	
 	/**
 	 * A directory indicating where inputs can be located
 	 */
-	private Path inputDirectory;
+	private Optional<Path> inputDirectory = Optional.empty();
 
 	/**
 	 * A directory indicating where inputs can be located
 	 */
+	@Getter @Setter
 	private Optional<Path> outputDirectory = Optional.empty();
 	
 	
 	/**
 	 * A directory indicating where models can be located
 	 */
-	private Path modelDirectory;
+	private Optional<Path> modelDirectory = Optional.empty();
 	
 	
 	/**
 	 * If non-null, a glob that is applied on inputDirectory
 	 */
-	private String inputFilterGlob;
+	@Setter
+	private Optional<String> inputFilterGlob = Optional.empty();
 		
 	
 	/**
-	 * If non-null, a set of extension filters that can be applied on inputDirectory 
+	 * If defined, a set of extension filters that can be applied on inputDirectory 
 	 * 
-	 * <p>An empty set implies, no check is applied</p>
+	 * <p>A defined but empty set implies no check is applied</p>
+	 * <p>An Optional.empty() implies no extension filters exist.
 	 */
-	private Set<String> inputFilterExtensions;
+	@Getter @Setter
+	private Optional<Set<String>> inputFilterExtensions = Optional.empty();
 	
 	
 	/**
 	 * A name to describe the ongoing task
 	 */
+	@Getter @Setter
 	private Optional<String> taskName = Optional.empty();
 
 
@@ -92,48 +101,32 @@ public class ExperimentExecutionArguments {
 		InputContextParams out = new InputContextParams();
 		out.setDebugModeParams(debugModeParams);
 		out.setInputDir(inputDirectory);
-		if (inputFilterGlob!=null) {
-			out.setInputFilterGlob(inputFilterGlob);
-		}
-		if (inputFilterExtensions!=null) {
-			out.setInputFilterExtensions(inputFilterExtensions);
-		}
 		out.setInputPaths(inputPaths);
+		inputFilterGlob.ifPresent(out::setInputFilterGlob);
+		inputFilterExtensions.ifPresent(out::setInputFilterExtensions);
 		return out;
 	}
 	
 	public FilePathPrefixerParams createParamsContext() throws FilePathPrefixerException {
 		return new FilePathPrefixerParams(
-			isDebugModeActivated(),
+			isDebugModeEnabled(),
 			outputDirectory
 		);
 	}
 	
-	public Path getInputDirectory() {
+	public Optional<Path> getInputDirectory() {
 		return inputDirectory;
 	}
 	
 	// The path will be converted to an absolute path, if it hasn't been already, based upon the current working directory
-	public void setInputDirectory(Path inputDirectory) {
-		
-		if (inputDirectory==null) {
-			this.inputDirectory = null;
-			return;
-		}
-		
-		if (!inputDirectory.isAbsolute()) {
-			this.inputDirectory = inputDirectory.toAbsolutePath().normalize();
-		} else {
-			this.inputDirectory = inputDirectory.normalize();	
-		}
-	}
-	
-	private boolean isDebugModeActivated() {
-		return debugModeParams!=null;
-	}
-	
-	public boolean hasInputDirectory() {
-		return inputDirectory!=null;
+	public void setInputDirectory(Optional<Path> inputDirectory) {
+		this.inputDirectory = inputDirectory.map( dir->{
+			if (!dir.isAbsolute()) {
+				return dir.toAbsolutePath().normalize();
+			} else {
+				return dir.normalize();	
+			}		
+		});
 	}
 	
 	/** 
@@ -142,62 +135,36 @@ public class ExperimentExecutionArguments {
 	 * @param debugContains either NULL (no debugContains specified) or a string used for filtering items during debug
 	 */
 	public void activateDebugMode( String debugContains ) {
-		debugModeParams = new DebugModeParams(debugContains);
+		debugModeParams = Optional.of(
+			new DebugModeParams(debugContains)
+		);
 	}
 	
-	public boolean isDebugEnabled() {
-		return debugModeParams!=null;
-	}
-		
-	public Optional<Path> getOutputDirectory() {
-		return outputDirectory;
+	public boolean isDebugModeEnabled() {
+		return debugModeParams.isPresent();
 	}
 	
 	public boolean hasInputFilterExtensions() {
-		return inputFilterExtensions!=null;
-	}
-
-	public void setOutputDirectory(Optional<Path> outputDirectory) {
-		this.outputDirectory = outputDirectory;
-	}
-
-	public String getInputFilterGlob() {
-		return inputFilterGlob;
-	}
-
-	public void setInputFilterGlob(String inputFilterGlob) {
-		this.inputFilterGlob = inputFilterGlob;
-	}
-
-	public Set<String> getInputFilterExtensions() {
-		return inputFilterExtensions;
-	}
-
-	public void setInputFilterExtensions(Set<String> inputFilterExtensions) {
-		this.inputFilterExtensions = inputFilterExtensions;
-	}
-
-	public List<Path> getInputPaths() {
-		return inputPaths;
-	}
-
-	public void setInputPaths(List<Path> inputPaths) {
-		this.inputPaths = inputPaths;
-	}
-	
-	public Optional<String> getTaskName() {
-		return taskName;
-	}
-
-	public void setTaskName(Optional<String> taskName) {
-		this.taskName = taskName;
+		return inputFilterExtensions.isPresent();
 	}
 
 	public Path getModelDirectory() {
-		return modelDirectory;
+		return modelDirectory.orElseThrow( ()->
+			new AnchorFriendlyRuntimeException("Model-directory is required but absent")
+		);
 	}
 
 	public void setModelDirectory(Path modelDirectory) {
-		this.modelDirectory = modelDirectory;
+		this.modelDirectory = Optional.of(modelDirectory);
+	}
+
+	public List<Path> getInputPaths() {
+		return inputPaths.orElseThrow( ()->
+			new AnchorFriendlyRuntimeException("Input-paths are required but absent")
+		);
+	}
+
+	public void setInputPaths(List<Path> inputPaths) {
+		this.inputPaths = Optional.of(inputPaths);
 	}
 }

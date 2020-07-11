@@ -33,6 +33,9 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.params.InputContextParams;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * A FileProviderWithDirectory where the directory is specified a String BeanField
  * @author Owen Feehan
@@ -45,7 +48,7 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
 	 * 
 	 *  If empty, first the bean will try to use any input-dir set in the input context if it exists, or otherwise use the current working-directory
 	 * */
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String directory = "";
 	// END BEAN FIELDS
 
@@ -59,21 +62,10 @@ public abstract class FileProviderWithDirectoryString extends FileProviderWithDi
 		if (!directory.isEmpty()) {
 			return Paths.get(directory);	
 		} else {
-			if (inputContext.hasInputDir()) {
-				return inputContext.getInputDir();
-			} else {
-				// The current working directory
-				return Paths.get(".");
-			}
+			// The current working directory
+			return inputContext.getInputDir().orElseGet( ()->
+				Paths.get(".")
+			);
 		}
 	}
-	
-	public String getDirectory() {
-		return directory;
-	}
-
-	public void setDirectory(String directory) {
-		this.directory = directory;
-	}
-
 }

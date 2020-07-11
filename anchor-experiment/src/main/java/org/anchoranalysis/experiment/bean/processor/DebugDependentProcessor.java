@@ -69,7 +69,7 @@ public class DebugDependentProcessor<T extends InputFromManager,S> extends JobPr
 		
 		assert( rootOutputManager.getDelegate().getOutputWriteSettings().hasBeenInit());
 		
-		JobProcessor<T,S> processor = createProcessor( paramsExperiment.getExperimentArguments().isDebugEnabled() );
+		JobProcessor<T,S> processor = createProcessor( paramsExperiment.getExperimentArguments().isDebugModeEnabled() );
 		return processor.execute(rootOutputManager, inputObjects, paramsExperiment);
 	}
 	

@@ -28,21 +28,21 @@ package org.anchoranalysis.feature.bean.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class Reference<T extends FeatureInput> extends Feature<T> {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+public class Reference<T extends FeatureInput> extends FeatureOperator<T> {
 
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id;
 	// END BEAN
-	
-	public Reference() {
-		super();
-	}
 	
 	public Reference( String id ) {
 		super();
@@ -56,25 +56,8 @@ public class Reference<T extends FeatureInput> extends Feature<T> {
 		return input.bySymbol().calcFeatureByID(rslvdID, input);
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	@Override
 	public String getDscrLong() {
 		return "_" + id;
 	}
-
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInput.class;
-	}
-
-
-
-
 }

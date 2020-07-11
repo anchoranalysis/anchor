@@ -64,7 +64,7 @@ class BoundContextSpecify implements BoundIOContext {
 
 	@Override
 	public boolean isDebugEnabled() {
-		return experimentArguments.isDebugEnabled();
+		return experimentArguments.isDebugModeEnabled();
 	}
 	
 	@Override

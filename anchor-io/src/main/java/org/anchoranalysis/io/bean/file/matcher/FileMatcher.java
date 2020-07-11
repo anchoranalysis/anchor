@@ -108,7 +108,7 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 		}
 	}
 	
-	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext );
+	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext ) throws AnchorIOException;
 	
 	private FindMatchingFiles createMatchingFiles(ProgressReporter progressReporter, boolean recursive ) {
 		return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
