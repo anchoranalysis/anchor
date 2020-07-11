@@ -30,6 +30,7 @@ package org.anchoranalysis.image.object.ops;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.BinaryChnlInverter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -39,13 +40,15 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 
 /** 
  * Merges one or more {@link ObjectMask}s into a single mask
  **/
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjectMaskMerger {
-	
-	private ObjectMaskMerger() {}
 	
 	/**
 	 * Merges two objects together
@@ -62,15 +65,11 @@ public class ObjectMaskMerger {
 	 * @param first first-object to merge
 	 * @param second second-object to merge
 	 * @return first and second merged together
+	 * @throws AnchorFriendlyRuntimeException if incompatible binary-values exist in the objects for merging
 	 */
 	public static ObjectMask merge( ObjectMask first, ObjectMask second ) {
-
-		// If we don't have identical binary values, we invert the second one
-		if (!second.getBinaryValues().equals(first.getBinaryValues())) {
-			// We assume it's always 255/0 or 0/255
-			assert (second.getBinaryValues().createInverted().equals(first.getBinaryValues()));
-			second = BinaryChnlInverter.invertObjMaskDuplicate(second);
-		}
+		
+		second = invertSecondIfNecessary(first, second);
 		
 		BoundingBox bbox = first.getBoundingBox().union().with(second.getBoundingBox() );
 		
@@ -84,7 +83,6 @@ public class ObjectMaskMerger {
 		copyPixelsCheckMask(second, out, bbox);
 		return out;
 	}
-		
 	
 	/**
 	 * Merges all the bounding boxes of a collection of objects.
@@ -163,5 +161,28 @@ public class ObjectMaskMerger {
 			omSrc.getVoxelBox(),
 			omSrc.getBinaryValuesByte()
 		);
+	}
+	
+	/** 
+	 * Inverts the binary-values of the second mask if necessary to match the first
+	 * 
+	 * @param first first-object to merge
+	 * @param second second-object to merge
+	 * @return the second object, possibly inverted (if this gives it identical binary-values to the first)
+	 * @throws AnchorFriendlyRuntimeException if the binary-values aren't identical, before or after inversion
+	 */
+	private static ObjectMask invertSecondIfNecessary(ObjectMask first, ObjectMask second) {
+		// If we don't have identical binary values, we invert the second one
+		if (!second.getBinaryValues().equals(first.getBinaryValues())) {
+			
+			if (second.getBinaryValues().createInverted().equals(first.getBinaryValues())) {
+				return BinaryChnlInverter.invertObjMaskDuplicate(second);
+			} else {
+				throw new AnchorFriendlyRuntimeException("The two objects to be merged have binary-values that are impossible to merge");
+			}
+			
+		} else {
+			return second;
+		}
 	}
 }

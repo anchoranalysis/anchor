@@ -42,13 +42,13 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
  */
 public class AssignmentMaskIntersection implements Assignment {
 
-	private ObjectMask omLeft;
-	private ObjectMask omRight;
+	private final ObjectMask omLeft;
+	private final ObjectMask omRight;
 	
-	private int numIntersectingPixels;
-	private int numUnionPixels;
-	private int sizeLeft;
-	private int sizeRight;
+	private final int numIntersectingPixels;
+	private final int numUnionPixels;
+	private final int sizeLeft;
+	private final int sizeRight;
 	
 	public AssignmentMaskIntersection(ObjectMask omLeft, ObjectMask omRight) {
 		super();
