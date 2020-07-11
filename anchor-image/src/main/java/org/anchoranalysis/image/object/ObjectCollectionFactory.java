@@ -43,15 +43,17 @@ import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.functional.IntFunctionWithException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Creates {@link ObjectCollection} using various utility and helper methods
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjectCollectionFactory {
-
-	private ObjectCollectionFactory() {}
 	
 	
 	/**
