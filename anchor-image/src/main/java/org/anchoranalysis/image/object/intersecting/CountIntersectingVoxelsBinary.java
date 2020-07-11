@@ -1,8 +1,8 @@
-package org.anchoranalysis.anchor.mpp.overlap;
+package org.anchoranalysis.image.object.intersecting;
 
 /*-
  * #%L
- * anchor-mpp
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -28,32 +28,32 @@ package org.anchoranalysis.anchor.mpp.overlap;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-import org.anchoranalysis.image.object.intersecting.CountIntersectingPixels;
-import org.anchoranalysis.image.object.intersecting.IntersectionBBox;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
 /**
- * Counts the number of intersecting pixels where each buffer is encoded as region-membership
+ * Counts the number of intersecting voxels where each buffer is encoded as Binary-Values
  * 
  * @author Owen Feehan
  *
  */
-class CountIntersectingPixelsRegionMembership extends CountIntersectingPixels {
+public class CountIntersectingVoxelsBinary extends CountIntersectingVoxels {
 
-	private byte regionMembershipFlag;
+	private byte byteOn1;
+	private byte byteOn2;
 	
-	public CountIntersectingPixelsRegionMembership(byte regionMembershipFlag) {
+	public CountIntersectingVoxelsBinary(BinaryValuesByte bvb1, BinaryValuesByte bvb2) {
 		super();
-		this.regionMembershipFlag = regionMembershipFlag;
+		this.byteOn1 = bvb1.getOnByte();
+		this.byteOn2 = bvb2.getOnByte();
 	}
 	
 	@Override
-	protected int countIntersectingPixels(
+	protected int countIntersectingVoxels(
 		ByteBuffer buffer1,
 		ByteBuffer buffer2,
 		IntersectionBBox bbox
 	) {
-		
+
 		int cnt = 0;
 		for (int y=bbox.y().min(); y<bbox.y().max(); y++) {
 			int yOther = y + bbox.y().rel();
@@ -64,15 +64,12 @@ class CountIntersectingPixelsRegionMembership extends CountIntersectingPixels {
 				byte posCheck = buffer1.get( bbox.e1().offset(x, y) );
 				byte posCheckOther = buffer2.get( bbox.e2().offset(xOther, yOther) );
 				
-				if ( isPixelInRegion(posCheck) && isPixelInRegion(posCheckOther) ) {
+				if ( posCheck==byteOn1  && posCheckOther==byteOn2 ) {
 					cnt++;
 				}
 			}
 		}
 		return cnt;
 	}
-	
-	private boolean isPixelInRegion( byte pixelVal ) {
-		return RegionMembershipUtilities.isMemberFlagAnd(pixelVal, regionMembershipFlag);
-	}
+
 }

@@ -42,7 +42,7 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 		if (mip) {
 			om = om.maxIntensityProjection();
 		}
-		return om.numVoxelsOn();		
+		return om.numberVoxelsOn();		
 	}
 	
 	// Public, as it's needed by Mockito in test verifications

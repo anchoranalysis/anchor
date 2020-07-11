@@ -179,7 +179,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 			
 			ObjectMask om = itr.next();
 			
-			if (om.numVoxelsOn()==0) {
+			if (om.numberVoxelsOn()==0) {
 				itr.remove();
 			}
 		}

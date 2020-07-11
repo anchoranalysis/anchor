@@ -70,17 +70,14 @@ import one.util.streamex.StreamEx;
  */
 class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectCollection> {
 
+	private final NRGStackWithParams nrgStack;
+	private final Logger logger;
+	private final FeatureList<FeatureInputSingleObject> features;
+	
 	private TableCSVGenerator<ResultsVectorCollection> delegate;
-	
-	private ObjectCollection objs;
-	
-	private FeatureList<FeatureInputSingleObject> features;
-	
+	private ObjectCollection objects;
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
 	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
-	
-	private NRGStackWithParams nrgStack;
-	private Logger logger;
 	
 	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, Logger logger ) {
 		super("objMaskFeatures");
@@ -111,7 +108,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			rvc = new ResultsVectorCollection();
-			for( ObjectMask om : objs ) {
+			for( ObjectMask om : objects ) {
 				rvc.add( 
 					session.calcSuppressErrors(
 						createParams(om, nrgStack),
@@ -129,12 +126,12 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 
 	@Override
 	public ObjectCollection getIterableElement() {
-		return objs;
+		return objects;
 	}
 
 	@Override
 	public void setIterableElement(ObjectCollection element) {
-		this.objs = element;
+		this.objects = element;
 	}
 	
 	// Puts in some extra descriptive features at the start

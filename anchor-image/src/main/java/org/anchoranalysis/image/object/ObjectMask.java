@@ -46,8 +46,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.intersecting.CountIntersectingPixelsBinary;
-import org.anchoranalysis.image.object.intersecting.DetermineWhetherIntersectingPixelsBinary;
+import org.anchoranalysis.image.object.intersecting.CountIntersectingVoxelsBinary;
+import org.anchoranalysis.image.object.intersecting.DetermineWhetherIntersectingVoxelsBinary;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -183,7 +183,7 @@ public class ObjectMask {
 	}
 
 	/** The number of "ON" voxels on the mask */
-	public int numVoxelsOn() {
+	public int numberVoxelsOn() {
 		return delegate.getVoxelBox().countEqual( bv.getOnInt() );
 	}
 
@@ -234,21 +234,21 @@ public class ObjectMask {
 		return bvb.equals(other.bvb);
 	}
 
-	public int countIntersectingPixels(ObjectMask other) {
-		return new CountIntersectingPixelsBinary(
+	public int countIntersectingVoxels(ObjectMask other) {
+		return new CountIntersectingVoxelsBinary(
 			getBinaryValuesByte(),
 			other.getBinaryValuesByte()
-		).countIntersectingPixels(
+		).countIntersectingVoxels(
 			delegate,
 			other.delegate
 		);
 	}
 	
-	public boolean hasIntersectingPixels(ObjectMask other) {
-		return new DetermineWhetherIntersectingPixelsBinary(
+	public boolean hasIntersectingVoxels(ObjectMask other) {
+		return new DetermineWhetherIntersectingVoxelsBinary(
 			getBinaryValuesByte(),
 			other.getBinaryValuesByte()		
-		).hasIntersectingPixels(delegate, other.delegate);
+		).hasIntersectingVoxels(delegate, other.delegate);
 	}
 
 	// Scales an objMask making sure to create a duplicate first
@@ -679,6 +679,6 @@ public class ObjectMask {
 	 **/
 	@Override
 	public String toString() {
-		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numVoxelsOn() );
+		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numberVoxelsOn() );
 	}
 }

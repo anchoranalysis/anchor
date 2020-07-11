@@ -37,21 +37,20 @@ import org.anchoranalysis.image.object.intersecting.IntersectionBBox;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AllArgsConstructor;
+
 /**
  * Counts the number of intersecting-pixels where bytes are encoded as region memberships
  * 
  * @author Owen Feehan
  *
  */
-class CountIntersectingPixelsRegionMembershipMask {
+@AllArgsConstructor
+class CountIntersectingVoxelsRegionMembershipMask {
 	
-	private byte regionMembershipFlag;
+	private final byte regionMembershipFlag;
 	
-	public CountIntersectingPixelsRegionMembershipMask(byte regionMembershipFlag) {
-		this.regionMembershipFlag = regionMembershipFlag;
-	}
-	
-	public int countIntersectingPixelsMaskGlobal(
+	public int countIntersectingVoxelsMaskGlobal(
 		BoundedVoxelBox<ByteBuffer> src,
 		BoundedVoxelBox<ByteBuffer> other,
 		VoxelBox<ByteBuffer> maskGlobal,
@@ -78,7 +77,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 			return 0;
 		}
 		
-		return countIntersectingPixelsFromBBoxMaskGlobal(
+		return countIntersectingVoxelsFromBBoxMaskGlobal(
 			src,
 			other,
 			bboxIntersect.get(),
@@ -89,7 +88,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 	
 	// count intersecting pixels, but only includes a pixel ifs marked as onMaskGlobal in the mask
 	//   voxel buffer
-	private int countIntersectingPixelsFromBBoxMaskGlobal(
+	private int countIntersectingVoxelsFromBBoxMaskGlobal(
 		BoundedVoxelBox<ByteBuffer> src,
 		BoundedVoxelBox<ByteBuffer> other,
 		BoundingBox bboxIntersect,
@@ -121,7 +120,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 			buffer.clear();
 			bufferOther.clear();
 			
-			cnt += countIntersectingPixelsOnGlobalMask(
+			cnt += countIntersectingVoxelsOnGlobalMask(
 				buffer,
 				bufferOther,
 				bufferMaskGlobal,
@@ -135,7 +134,7 @@ class CountIntersectingPixelsRegionMembershipMask {
 		return cnt;		
 	}
 	
-	private int countIntersectingPixelsOnGlobalMask(
+	private int countIntersectingVoxelsOnGlobalMask(
 		ByteBuffer buffer1,
 		ByteBuffer buffer2,
 		ByteBuffer bufferMaskGlobal,

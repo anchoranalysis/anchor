@@ -101,11 +101,11 @@ public class AssignmentObjMaskFactory {
 		
 	}
 	
-	private ObjectCollection maybeProject(ObjectCollection objs) {
+	private ObjectCollection maybeProject(ObjectCollection objects) {
 		if (useMIP) {
-			return objs.stream().map(ObjectMask::maxIntensityProjection);
+			return objects.stream().map(ObjectMask::maxIntensityProjection);
 		} else {
-			return objs;
+			return objects;
 		}
 	}
 		

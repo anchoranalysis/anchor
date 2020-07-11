@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 
-public abstract class CountIntersectingPixels {
+public abstract class CountIntersectingVoxels {
 	
 	/**
 	 * Calculates the number of intersecting pixels between two voxel boxes
@@ -43,7 +43,7 @@ public abstract class CountIntersectingPixels {
 	 * @param onMaskOther a region membership mask or a binary-high value depending on region-membership
 	 * @return
 	 */
-	public int countIntersectingPixels(
+	public int countIntersectingVoxels(
 		BoundedVoxelBox<ByteBuffer> src,
 		BoundedVoxelBox<ByteBuffer> other
 	) {
@@ -58,11 +58,11 @@ public abstract class CountIntersectingPixels {
 			return 0;
 		}
 		
-		return countIntersectingPixelsFromBBox( src, other, bboxIntersect.get() );
+		return countIntersectingVoxelsFromBBox( src, other, bboxIntersect.get() );
 	}
 	
 	// count intersecting pixels
-	private int countIntersectingPixelsFromBBox(
+	private int countIntersectingVoxelsFromBBox(
 		BoundedVoxelBox<ByteBuffer> src,
 		BoundedVoxelBox<ByteBuffer> other,
 		BoundingBox bboxIntersect
@@ -83,7 +83,7 @@ public abstract class CountIntersectingPixels {
 			int zOther = z + bbox.z().rel();
 			ByteBuffer bufferOther = other.getVoxelBox().getPixelsForPlane(zOther).buffer();
 							
-			cnt += countIntersectingPixels(
+			cnt += countIntersectingVoxels(
 				buffer,
 				bufferOther,
 				bbox
@@ -93,7 +93,7 @@ public abstract class CountIntersectingPixels {
 		return cnt;		
 	}
 	
-	protected abstract int countIntersectingPixels(
+	protected abstract int countIntersectingVoxels(
 		ByteBuffer buffer1,
 		ByteBuffer buffer2,
 		IntersectionBBox bbox

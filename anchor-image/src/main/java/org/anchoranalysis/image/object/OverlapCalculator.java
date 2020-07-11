@@ -40,13 +40,13 @@ public class OverlapCalculator {
 	
 	public static double calcOverlapRatio( ObjectMask objA, ObjectMask objB, ObjectMask objMerged ) {
 		
-		int intersectingPixels = objA.countIntersectingPixels(objB);
-		if (intersectingPixels==0) {
+		int intersectingVoxels = objA.countIntersectingVoxels(objB);
+		if (intersectingVoxels==0) {
 			return 0;
 		}
 		
-		int vol = objMerged.numVoxelsOn();
+		int vol = objMerged.numberVoxelsOn();
 		
-		return ((double) intersectingPixels) / vol;
+		return ((double) intersectingVoxels) / vol;
 	}
 }

@@ -134,7 +134,7 @@ class EdgeAdder<V> {
 		V vertexOther
 	) {
 		// Check that they don't overlap
-		if (params.isPreventObjectIntersection() && om.hasIntersectingPixels(omOther)) {
+		if (params.isPreventObjectIntersection() && om.hasIntersectingVoxels(omOther)) {
 			return;
 		}
 			
@@ -146,6 +146,6 @@ class EdgeAdder<V> {
 	}
 	
 	private static int numBorderPixels( ObjectMask om1Dilated, ObjectMask om2 ) {
-		return om1Dilated.countIntersectingPixels(om2);
+		return om1Dilated.countIntersectingVoxels(om2);
 	}
 }
