@@ -31,6 +31,11 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode
 public abstract class Tuple3i implements ReadableTuple3i {
 
 	/**
@@ -38,8 +43,13 @@ public abstract class Tuple3i implements ReadableTuple3i {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Getter @Setter
 	protected int x = 0;
+	
+	@Getter @Setter
 	protected int y = 0;
+	
+	@Getter @Setter
 	protected int z = 0;
 	
 	public final void add( ReadableTuple3i pnt ) {
@@ -119,33 +129,6 @@ public abstract class Tuple3i implements ReadableTuple3i {
 			Math.max(z, val)
 		);
 	}
-
-	@Override
-	public final int getX() {
-		return x;
-	}
-
-	public final void setX(int x) {
-		this.x = x;
-	}
-
-	@Override
-	public final int getY() {
-		return y;
-	}
-
-	public final void setY(int y) {
-		this.y = y;
-	}
-
-	@Override
-	public final int getZ() {
-		return z;
-	}
-
-	public final void setZ(int z) {
-		this.z = z;
-	}
 		
 	public final int getValueByDimension(int dimIndex) {
 		if (dimIndex==0) {
@@ -224,31 +207,5 @@ public abstract class Tuple3i implements ReadableTuple3i {
 	@Override
 	public String toString() {
 		return String.format("[%d,%d,%d]",x,y,z);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
-		result = prime * result + z;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Tuple3i other = (Tuple3i) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return (z == other.z);
 	}
 }

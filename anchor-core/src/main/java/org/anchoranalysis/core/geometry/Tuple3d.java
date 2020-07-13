@@ -33,6 +33,10 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+@EqualsAndHashCode
 public abstract class Tuple3d implements Serializable {
 
 	/**
@@ -40,8 +44,13 @@ public abstract class Tuple3d implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 		
+	@Getter
 	protected double x = 0.0;
+	
+	@Getter
 	protected double y = 0.0;
+	
+	@Getter
 	protected double z = 0.0;
 	
 	public final void add( Tuple3d pnt ) {
@@ -114,30 +123,6 @@ public abstract class Tuple3d implements Serializable {
 	public final void incrementZ(double val) {
 		this.z += val;
 	}
-		
-	public final double getX() {
-		return x;
-	}
-	
-	public final void setX(double x) {
-		this.x = x;
-	}
-
-	public final double getY() {
-		return y;
-	}
-
-	public final void setY(double y) {
-		this.y = y;
-	}
-
-	public final double getZ() {
-		return z;
-	}
-
-	public final void setZ(double z) {
-		this.z = z;
-	}
 	
 	public final double getValueByDimension(int dimIndex) {
 		if (dimIndex==0) {
@@ -202,35 +187,15 @@ public abstract class Tuple3d implements Serializable {
 		this.z = (double) z;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(z);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
+	public void setX(double x) {
+		this.x = x;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Tuple3d other = (Tuple3d) obj;
-		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
-			return false;
-		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
-			return false;
-		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
-			return false;
-		return true;
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
 	}
 }

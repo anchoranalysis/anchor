@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.geometry;
 
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-core
@@ -25,17 +27,13 @@ package org.anchoranalysis.core.geometry;
  * THE SOFTWARE.
  * #L%
  */
-
+@NoArgsConstructor
 public final class Point3d extends Tuple3d {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public Point3d() {
-		super();
-	}
 	
 	public Point3d( Point3f pnt) {
 		this.x = pnt.getX();

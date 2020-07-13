@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.geometry;
 
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-core
@@ -26,17 +28,13 @@ package org.anchoranalysis.core.geometry;
  * #L%
  */
 
-
+@NoArgsConstructor
 public final class Vector3d extends Tuple3d {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public Vector3d() {
-		// Initializes with zeroes
-	}
 	
 	public Vector3d( Tuple3d tuple ) {
 		this.x = tuple.x;

@@ -28,20 +28,29 @@ package org.anchoranalysis.core.geometry;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
-public class Tuple3f implements Serializable {
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode
+public abstract class Tuple3f implements Serializable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Getter @Setter
 	protected float x = 0.0f;
+	
+	@Getter @Setter
 	protected float y = 0.0f;
+	
+	@Getter @Setter
 	protected float z = 0.0f;
 		
 	public final float getValueByDimension(int dimIndex) {
@@ -96,65 +105,9 @@ public class Tuple3f implements Serializable {
 	public final double distance( Point3f pnt ) {
 		return Math.sqrt( distanceSquared(pnt) );
 	}
-
-	public final float getX() {
-		return x;
-	}
-
-	public final void setX(float x) {
-		this.x = x;
-	}
-
-	public final float getY() {
-		return y;
-	}
-
-	public final void setY(float y) {
-		this.y = y;
-	}
-
-	public final float getZ() {
-		return z;
-	}
-
-	public final void setZ(float z) {
-		this.z = z;
-	}
 	
 	@Override
 	public String toString() {
 		return String.format("[%f,%f,%f]",x,y,z);
-	}
-	
-	
-	@Override
-	public boolean equals( Object obj ) {
-		if (this == obj) {
-			return true;
-		}
-	    if (!(obj instanceof Tuple3f)) {
-	        return false;
-	    }
-	    Tuple3f objCast = (Tuple3f) obj;
-	    
-	    if (!FloatUtilities.areEqual(x, objCast.x)) {
-	    	return false;
-	    }
-	    
-	    if (!FloatUtilities.areEqual(y, objCast.y)) {
-	    	return false;
-	    }
-	    
-	    return FloatUtilities.areEqual(z, objCast.z);
-	}
-		
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(x);
-		result = prime * result + Float.floatToIntBits(y);
-		result = prime * result + Float.floatToIntBits(z);
-		return result;
 	}
 }
