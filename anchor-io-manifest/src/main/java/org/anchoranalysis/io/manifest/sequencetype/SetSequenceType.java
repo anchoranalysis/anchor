@@ -30,7 +30,7 @@ package org.anchoranalysis.io.manifest.sequencetype;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import org.anchoranalysis.core.index.container.IOrderProvider;
+import org.anchoranalysis.core.index.container.OrderProvider;
 
 public class SetSequenceType extends SequenceType {
 
@@ -98,7 +98,7 @@ public class SetSequenceType extends SequenceType {
 	}
 
 	@Override
-	public IOrderProvider createOrderProvider() {
+	public OrderProvider createOrderProvider() {
 
 		OrderProviderHashMap map = new OrderProviderHashMap();
 		map.addStringSet(set);

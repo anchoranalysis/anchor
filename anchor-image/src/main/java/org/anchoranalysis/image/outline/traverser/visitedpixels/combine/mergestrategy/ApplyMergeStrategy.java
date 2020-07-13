@@ -34,7 +34,7 @@ import org.anchoranalysis.image.outline.traverser.visitedpixels.ReverseUtilities
 
 class ApplyMergeStrategy extends MergeStrategy {
 
-	private static boolean REPLACE_WITH_LOOPS = true;
+	private static final boolean REPLACE_WITH_LOOPS = true;
 	
 	// If true, we merge from the left-side on keep. If false, rather the right
 	private boolean keepLeft;

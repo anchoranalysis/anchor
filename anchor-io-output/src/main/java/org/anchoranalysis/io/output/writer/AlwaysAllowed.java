@@ -31,11 +31,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -57,7 +55,7 @@ public class AlwaysAllowed implements Writer {
 	// END REQUIRED ARGUMENTS
 	
 	@Override
-	public Optional<BoundOutputManager> bindAsSubFolder(
+	public Optional<BoundOutputManager> bindAsSubdirectory(
 		String outputName,
 		ManifestFolderDescription manifestDescription,
 		Optional<FolderWriteWithPath> folder
@@ -65,30 +63,15 @@ public class AlwaysAllowed implements Writer {
 		
 		preop.exec();
 		
-		// We construct a sub-folder for the desired outputName
-		Path folderOut = bom.outFilePath(outputName);
-		
-		// We only change the writeOperationRecorder if we actually pass a folder
-		IWriteOperationRecorder recorderNew = bom.writeFolderToOperationRecorder(
-			folderOut,
-			manifestDescription,
-			folder
-		);
-		
-		FilePathPrefix fpp = new FilePathPrefix( folderOut );
-		return Optional.of(
-			new BoundOutputManager(
-				bom.getOutputManager(),
-				fpp,
-				bom.getOutputWriteSettings(),
-				recorderNew,
-				bom.getLazyDirectoryFactory(),
-				Optional.of(preop)
+		return Optional.of( 
+			bom.deriveSubdirectory(
+				outputName,
+				manifestDescription,
+				folder
 			)
 		);
 	}
-	
-	
+		
 	@Override
 	public void writeSubfolder( String outputName, Operation<? extends WritableItem,OutputWriteFailedException> collectionGenerator ) throws OutputWriteFailedException {
 		

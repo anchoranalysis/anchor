@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -42,29 +42,33 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class SingleObjTableSession extends FeatureTableCalculator<FeatureInputSingleObject> {
+import lombok.RequiredArgsConstructor;
 
-	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
+@RequiredArgsConstructor
+public class SingleObjTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
 
-	private NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
+	// START REQUIRED ARGUMENTS
+	private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
+	// END REQUIRED ARGUMENTS
 	
-	public SingleObjTableSession(NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore) {
-		this.namedFeatureStore = namedFeatureStore;
-	}
-
+	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
+		
 	@Override
 	public void start(
 		ImageInitParams soImage,
 		Optional<NRGStackWithParams> nrgStack,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws InitException {
 		
 		try {
 			session = FeatureSession.with(
 				namedFeatureStore.listFeatures(),
-				InitParamsHelper.createInitParams(soImage,nrgStack),
+				InitParamsHelper.createInitParams(
+					Optional.of(soImage.getSharedObjects()),
+					nrgStack
+				),
 				soImage.getFeature().getSharedFeatureSet(),
-				logErrorReporter
+				logger
 			);
 		} catch (FeatureCalcException e) {
 			throw new InitException(e);

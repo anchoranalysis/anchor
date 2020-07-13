@@ -26,12 +26,12 @@ package org.anchoranalysis.bean;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.NullInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * 
@@ -39,14 +39,12 @@ import org.anchoranalysis.core.log.LogErrorReporter;
  *
  * @param <T> bean-type
  */
-public abstract class NullParamsBean<T> extends InitializableBeanSimple<T,NullInitParams> {
+public abstract class NullParamsBean<T> extends InitializableBean<T,NullInitParams> {
 
 	protected NullParamsBean() {
 		super( new PropertyInitializer<NullInitParams>(NullInitParams.class), new SimplePropertyDefiner<NullInitParams>(NullInitParams.class) );
 	}
-	
-	
-	
+
 	@Override
 	public final void onInit(NullInitParams so) throws InitException {
 		onInit();
@@ -60,8 +58,7 @@ public abstract class NullParamsBean<T> extends InitializableBeanSimple<T,NullIn
 		// NOTHING TO DO. This method exists so it can be overrided as needed in sub-classes.
 	}
 
-	public void initRecursive(LogErrorReporter logger)
-			throws InitException {
+	public void initRecursive(Logger logger) throws InitException {
 		super.initRecursive(NullInitParams.instance(), logger);
 	}
 }

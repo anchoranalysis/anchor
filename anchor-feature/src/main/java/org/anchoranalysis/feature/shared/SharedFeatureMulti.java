@@ -41,7 +41,7 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -78,8 +78,8 @@ public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>,
 		
 		 NameValueSet<Feature<S>> out = new  NameValueSet<>();
 		 
-		 for(FeatureInputDescriptor descriptor : (Set<FeatureInputDescriptor>) mapByDescriptor.keySet()) {
-			 if (descriptor.isCompatibleWith(inputType)) {
+		 for(Class<? extends FeatureInput> descriptor : (Set<Class<? extends FeatureInput>>) mapByDescriptor.keySet()) {
+			 if (FeatureInputType.isCompatibleWith(descriptor, inputType)) {
 				 transferToSet(
 					(Collection<NameValue<Feature<S>>>) mapByDescriptor.get(descriptor),
 					out
@@ -121,7 +121,7 @@ public class SharedFeatureMulti implements NamedProvider<Feature<FeatureInput>>,
 	
 	private void addNoDuplicate(NameValue<Feature<FeatureInput>> nv) {
 		mapByKey.add(nv);
-		mapByDescriptor.put(nv.getValue().inputDescriptor(), nv);
+		mapByDescriptor.put(nv.getValue().inputType(), nv);
 		setFeatures.add(nv.getValue());
 	}
 	

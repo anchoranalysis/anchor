@@ -30,11 +30,12 @@ package org.anchoranalysis.anchor.mpp.mark;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.apache.commons.collections.ListUtils;
+
+import lombok.Getter;
 
 public abstract class MarkAbstractPointList extends Mark {
 
@@ -43,19 +44,17 @@ public abstract class MarkAbstractPointList extends Mark {
 	 */
 	private static final long serialVersionUID = 6520431317406007141L;
 
-	// START BEAN PROPERTIES
+	@Getter
 	private List<Point3d> points;
-	// END BEAN PROPERTIES
 
+	@Getter
 	private Point3d min;		// Contains the minimum x, y of all the points in the polygon
+	
+	@Getter
 	private Point3d max;		// Contains the maximum x, y of all the points in the polygon
 	
 	public MarkAbstractPointList() {
 		points = new ArrayList<>();
-	}
-	
-	public List<Point3d> getPoints() {
-		return points;
 	}
 	
 	protected void doDuplicate(MarkAbstractPointList markNew) {
@@ -77,7 +76,7 @@ public abstract class MarkAbstractPointList extends Mark {
 
 	@Override
 	public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
-		// FOR NOW WE IGNORE THE SHELL RADIUS
+		// TODO FOR NOW WE IGNORE THE SHELL RADIUS
 		return new BoundingBox(min, max);
 	}
 	
@@ -117,14 +116,6 @@ public abstract class MarkAbstractPointList extends Mark {
 		}
 		return max;
 	}
-
-	protected Point3d getMin() {
-		return min;
-	}
-
-	protected Point3d getMax() {
-		return max;
-	}
 	
 	protected BoundingBox bbox() {
 		return new BoundingBox( getMin(), getMax() );
@@ -156,22 +147,4 @@ public abstract class MarkAbstractPointList extends Mark {
 			return false;
 		}
 	}
-
-	@Override
-	public void assignFrom(Mark srcMark) throws OptionalOperationUnsupportedException {
-		super.assignFrom(srcMark);
-		
-		if (!(srcMark instanceof MarkAbstractPointList)) {
-			throw new OptionalOperationUnsupportedException("srcMark must be of type MarkEllipse");
-		}
-		
-		MarkAbstractPointList srcMarkCast = (MarkAbstractPointList) srcMark;
-		points.clear();
-		points.addAll( srcMarkCast.getPoints() );
-		updateAfterPointsChange();	
-	}
-
-	
-	
-
 }

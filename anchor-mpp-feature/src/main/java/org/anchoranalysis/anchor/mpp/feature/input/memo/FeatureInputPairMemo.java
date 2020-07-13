@@ -28,7 +28,7 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -37,12 +37,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class FeatureInputPairMemo extends FeatureInputNRG {
 
-	private PxlMarkMemo obj1;
-	private PxlMarkMemo obj2;
+	private VoxelizedMarkMemo obj1;
+	private VoxelizedMarkMemo obj2;
 	
 	public FeatureInputPairMemo(
-		PxlMarkMemo obj1,
-		PxlMarkMemo obj2,
+		VoxelizedMarkMemo obj1,
+		VoxelizedMarkMemo obj2,
 		NRGStackWithParams nrgStack
 	) {
 		super(
@@ -51,16 +51,16 @@ public class FeatureInputPairMemo extends FeatureInputNRG {
 		this.obj1 = obj1;
 		this.obj2 = obj2;
 	}
-	public PxlMarkMemo getObj1() {
+	public VoxelizedMarkMemo getObj1() {
 		return obj1;
 	}
-	public void setObj1(PxlMarkMemo obj1) {
+	public void setObj1(VoxelizedMarkMemo obj1) {
 		this.obj1 = obj1;
 	}
-	public PxlMarkMemo getObj2() {
+	public VoxelizedMarkMemo getObj2() {
 		return obj2;
 	}
-	public void setObj2(PxlMarkMemo obj2) {
+	public void setObj2(VoxelizedMarkMemo obj2) {
 		this.obj2 = obj2;
 	}
 }

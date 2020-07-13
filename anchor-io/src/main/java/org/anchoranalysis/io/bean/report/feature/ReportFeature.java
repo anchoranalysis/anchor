@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
@@ -38,5 +38,5 @@ public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 	
 	public abstract String genTitleStr() throws OperationFailedException;
 	
-	public abstract String genFeatureStrFor( T obj, LogErrorReporter logger ) throws OperationFailedException;
+	public abstract String genFeatureStrFor( T obj, Logger logger ) throws OperationFailedException;
 }

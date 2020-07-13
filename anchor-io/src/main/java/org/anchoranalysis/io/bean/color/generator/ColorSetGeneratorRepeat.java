@@ -43,9 +43,9 @@ public class ColorSetGeneratorRepeat extends ColorSetGenerator {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ColorList genColors(int num_colors) throws OperationFailedException {
+	public ColorList genColors(int numColors) throws OperationFailedException {
 
-		ColorList cl = colorSetGenerator.genColors(num_colors);
+		ColorList cl = colorSetGenerator.genColors(numColors);
 		
 		ColorList out = new ColorList();
 		for( int i=0; i<times; i++ ) {

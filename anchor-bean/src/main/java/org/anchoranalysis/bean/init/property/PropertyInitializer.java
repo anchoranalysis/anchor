@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.NullInitParams;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * Tries to initialize a bean's property with particular (or derived) parameters
@@ -100,7 +100,7 @@ public class PropertyInitializer<P> {
 	 * @return true if some kind of initialization occurred with this property, false otherwise
 	 * @throws InitException
 	 */
-	public boolean applyInitializationIfPossibleTo( Object propertyValue, Object parent, LogErrorReporter logger ) throws InitException {
+	public boolean applyInitializationIfPossibleTo( Object propertyValue, Object parent, Logger logger ) throws InitException {
 		
 		assert(param!=null);
 		
@@ -129,13 +129,8 @@ public class PropertyInitializer<P> {
 	 * @return
 	 * @throws InitException
 	 */
-	private boolean initIdenticalParamTypes(Object propertyValue, Object parent, LogErrorReporter logger) throws InitException {
-		if (param!=null) {
-			if (initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), param)) {
-				return true;
-			}
-		}
-		return false;
+	private boolean initIdenticalParamTypes(Object propertyValue, Object parent, Logger logger) throws InitException {
+		return param!=null && initMatchingPropertiesWith(propertyValue, parent, logger, param.getClass(), param);
 	}
 	
 	
@@ -150,7 +145,7 @@ public class PropertyInitializer<P> {
 	 * @return
 	 * @throws InitException
 	 */
-	private boolean initExtractedParams(Object propertyValue, Object parent, LogErrorReporter logger) throws InitException {
+	private boolean initExtractedParams(Object propertyValue, Object parent, Logger logger) throws InitException {
 		
 		for( ExtractFromParam<P,?> extract : extracters) {
 			
@@ -172,7 +167,7 @@ public class PropertyInitializer<P> {
 	private boolean initMatchingPropertiesWith(
 		Object propertyValue,
 		Object parent,
-		LogErrorReporter logger,
+		Logger logger,
 		Class<?> propertyClassToMatch,
 		Object paramToInitWith
 	) throws InitException {
@@ -186,7 +181,7 @@ public class PropertyInitializer<P> {
 
 	private Optional<PropertyDefiner> findPropertyThatDefines( Object propertyValue, Class<?> paramType ) {
 		
-		if (propertyValue instanceof InitializableBean ) {
+		if (propertyValue instanceof InitializableBean) {
 			
 			InitializableBean<?,?> initBean = (InitializableBean<?,?>) propertyValue;
 			PropertyDefiner pd = initBean.getPropertyDefiner();

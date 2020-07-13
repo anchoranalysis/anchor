@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.util.TreeSet;
 
-import org.anchoranalysis.core.index.container.IOrderProvider;
+import org.anchoranalysis.core.index.container.OrderProvider;
 
 public class ChangeSequenceType extends SequenceType {
 
@@ -118,7 +118,7 @@ public class ChangeSequenceType extends SequenceType {
 	
 
 	@Override
-	public IOrderProvider createOrderProvider() {
+	public OrderProvider createOrderProvider() {
 		OrderProviderHashMap map = new OrderProviderHashMap();
 		map.addIntegerSet(indexSet);
 		return map;

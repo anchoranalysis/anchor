@@ -34,9 +34,11 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BinaryChnlInverter {
-	
-	private BinaryChnlInverter() {}
 	
 	public static ObjectMask invertObjMaskDuplicate( ObjectMask om ) {
 		BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();

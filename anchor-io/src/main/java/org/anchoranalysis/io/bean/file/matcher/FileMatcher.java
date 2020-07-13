@@ -38,7 +38,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.findmatching.FindFilesException;
 import org.anchoranalysis.io.filepath.findmatching.FindMatchingFiles;
 import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithProgressReporter;
-import org.anchoranalysis.io.filepath.findmatching.FindMatchingFilesWithoutProgressReporter;
 import org.anchoranalysis.io.filepath.findmatching.PathMatchConstraints;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -70,6 +69,10 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 		int maxDirDepth,
 		InputManagerParams params
 	) throws AnchorIOException {
+		
+		if (dir.toString().isEmpty()) {
+			throw new AnchorIOException("The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
+		}
 		
 		if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
 			throw new AnchorIOException( String.format("Directory '%s' does not exist", dir) );
@@ -105,13 +108,9 @@ public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 		}
 	}
 	
-	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext );
+	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext ) throws AnchorIOException;
 	
-	private FindMatchingFiles createMatchingFiles( ProgressReporter progressReporter, boolean recursive ) {
-		if (progressReporter==null) {
-			return new FindMatchingFilesWithoutProgressReporter();
-		} else {
-			return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
-		}
+	private FindMatchingFiles createMatchingFiles(ProgressReporter progressReporter, boolean recursive ) {
+		return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
 	}
 }

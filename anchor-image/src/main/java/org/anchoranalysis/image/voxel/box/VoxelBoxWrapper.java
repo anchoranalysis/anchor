@@ -172,7 +172,7 @@ public class VoxelBoxWrapper {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void transferPixelsForPlane(int z, VoxelBoxWrapper src, int zSrc, boolean duplicate ) {
 		if (getVoxelDataType().equals(src.getVoxelDataType())) {
-			((VoxelBox) voxelBox).transferPixelsForPlane(z, (VoxelBox) src.any(), zSrc, duplicate );
+			voxelBox.transferPixelsForPlane(z, (VoxelBox) src.any(), zSrc, duplicate );
 		} else {
 			throw new IncorrectVoxelDataTypeException("Voxel types are different");
 		}

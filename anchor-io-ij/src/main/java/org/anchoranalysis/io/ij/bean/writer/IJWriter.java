@@ -28,7 +28,6 @@ package org.anchoranalysis.io.ij.bean.writer;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -87,29 +86,23 @@ public abstract class IJWriter extends RasterWriter {
 		boolean makeRGB
 	) throws RasterIOException {
 		
-		try {
-			
-			log.debug( String.format("Writing image %s", filePath) );
-			
-			ImageDimensions sd = stack.getChnl(0).getDimensions();
-			
-			ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB );
-			
-			writeImagePlus(
-				imp,
-				filePath,
-				(stack.getChnl(0).getDimensions().getZ() > 1)
-			);
-			
-			imp.close();
-			
-			assert( imp.getNSlices()==sd.getZ() );
-			
-			log.debug( String.format("Finished writing image %s", filePath) );
-			
-		} catch (CreateException e) {
-			throw new RasterIOException(e);
-		}
+		log.debug( String.format("Writing image %s", filePath) );
+		
+		ImageDimensions sd = stack.getChnl(0).getDimensions();
+		
+		ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB );
+		
+		writeImagePlus(
+			imp,
+			filePath,
+			(stack.getChnl(0).getDimensions().getZ() > 1)
+		);
+		
+		imp.close();
+		
+		assert( imp.getNSlices()==sd.getZ() );
+		
+		log.debug( String.format("Finished writing image %s", filePath) );
 	}
 	
 	private void writeImagePlus( ImagePlus imp, Path filePath, boolean asStack ) throws RasterIOException {

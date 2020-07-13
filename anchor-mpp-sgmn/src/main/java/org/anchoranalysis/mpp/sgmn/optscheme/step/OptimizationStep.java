@@ -141,7 +141,7 @@ public class OptimizationStep<S,T> {
 			return false;
 		}
 		return funcScore.applyAsDouble( state.getCrnt().get() ) 
-				> funcScore.applyAsDouble( state.getBest().get() );
+				> funcScore.applyAsDouble( state.getBest().get() );		// NOSONAR
 	}
 	
 	private void markChanged( KernelWithID<S> kid ) {
@@ -187,7 +187,7 @@ public class OptimizationStep<S,T> {
 		TransformationContext context
 	) throws OperationFailedException {
 		
-		return new Reporting<U>(
+		return new Reporting<>(
 			iter,
 			state.transform( stateReporter.primaryReport(), context),
 			OptionalUtilities.map(

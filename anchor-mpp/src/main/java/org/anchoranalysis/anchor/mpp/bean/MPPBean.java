@@ -32,30 +32,21 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
-public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams> {
-
-	private MPPInitParams soMPP;
+public abstract class MPPBean<T> extends InitializableBean<T,MPPInitParams> {
 	
 	protected MPPBean() {
 		super(
 			initializerForMPPBeans(),
 			new SimplePropertyDefiner<>(MPPInitParams.class)
 		);
-	}
-	
-	@Override
-	public void onInit(MPPInitParams soMPP) throws InitException {
-		super.onInit(soMPP);
-		this.soMPP = soMPP;
 	}
 
 	/**
@@ -72,10 +63,6 @@ public abstract class MPPBean<T> extends InitializableBeanSimple<T,MPPInitParams
 			paramExtracters()
 		);
 	}	
-
-	public MPPInitParams getSharedObjects() {
-		return soMPP;
-	}
 	
 	private static List<ExtractFromParam<MPPInitParams,?>> paramExtracters() {
 		return Arrays.asList(

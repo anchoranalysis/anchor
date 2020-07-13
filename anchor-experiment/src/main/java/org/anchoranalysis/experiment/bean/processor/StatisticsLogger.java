@@ -29,7 +29,7 @@ package org.anchoranalysis.experiment.bean.processor;
 
 import java.util.function.DoubleSupplier;
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
@@ -37,11 +37,11 @@ class StatisticsLogger {
 
 	private static final String JOB_WORD = "job";
 	
-	private LogReporter logReporter;
+	private MessageLogger logger;
 		
-	public StatisticsLogger(LogReporter logReporter) {
+	public StatisticsLogger(MessageLogger logger) {
 		super();
-		this.logReporter = logReporter;
+		this.logger = logger;
 	}
 
 	/**
@@ -76,7 +76,7 @@ class StatisticsLogger {
 			
 			long numNotCompleted = stats.numNotCompleted();
 			if (numNotCompleted>0) {
-				logReporter.logFormatted("%s were never submitted.", maybePluralizeJobs(numNotCompleted) );
+				logger.logFormatted("%s were never submitted.", maybePluralizeJobs(numNotCompleted) );
 			}
 		}
 	}
@@ -122,7 +122,7 @@ class StatisticsLogger {
 				execTimeSeconds
 			);
 		}
-		logReporter.log(msg);
+		logger.log(msg);
 	}
 	
 	private String maybeIncludeAverage( boolean moreThanOneJob ) {

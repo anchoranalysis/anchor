@@ -30,9 +30,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -106,9 +106,10 @@ public class AssignmentOverlapFromPairs implements Assignment {
 	
 	@Override
 	public List<ObjectMask> getListPaired( boolean left ) {
-		return listPairs.stream().map( om->
-			om.getMultiplex( left )
-		).collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(
+			listPairs,
+			om -> om.getMultiplex( left )
+		);
 	}
 
 	@Override

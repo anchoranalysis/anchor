@@ -36,12 +36,12 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferInt;
 
 public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	
-	public VoxelBoxInt(IPixelsForPlane<IntBuffer> pixelsForPlane) {
+	public VoxelBoxInt(PixelsForPlane<IntBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
 			VoxelBoxFactory.getInt()

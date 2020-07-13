@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implements AddCriteria<Pair<Mark>> {
 
 	@Override
-	public Optional<Pair<Mark>> generateEdge(PxlMarkMemo mark1, PxlMarkMemo mark2, NRGStackWithParams nrgStack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws CreateException {
+	public Optional<Pair<Mark>> generateEdge(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, NRGStackWithParams nrgStack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws CreateException {
 
 		try {
 			if ( includeMarks(mark1, mark2, nrgStack.getDimensions(), session, do3D) ) {
@@ -58,7 +58,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implem
 		return Optional.empty();
 	}
 
-	public abstract boolean includeMarks( PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D ) throws IncludeMarksFailureException;
+	public abstract boolean includeMarks( VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D ) throws IncludeMarksFailureException;
 	
 	@Override
 	public String getBeanDscr() {

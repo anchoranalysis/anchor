@@ -34,12 +34,11 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public interface AnnotationReader<T extends Annotation> {
 
-	// 
 	/**
 	 * Reads an annotation if it can, returns NULL otherwise
 	 * @param path a path representing the annotation (or we derive another path from this path)
 	 * @return the annotation or NULL if it doesn't exist in a suitable state
-	 * @throws AnchorIOException TODO
+	 * @throws AnchorIOException
 	 */
 	Optional<T> read( Path path ) throws AnchorIOException;
 }

@@ -26,7 +26,7 @@ package org.anchoranalysis.core.memory;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 
 public class MemoryUtilities {
 	
@@ -41,13 +41,13 @@ public class MemoryUtilities {
 		return totalMemory - freeMemory;
 	}
 	
-	public static void logMemoryUsage( String id, LogReporter logReporter ) {
+	public static void logMemoryUsage( String id, MessageLogger logger ) {
 		Runtime runtime = java.lang.Runtime.getRuntime();
 		long totalMemory = runtime.totalMemory();
 		long freeMemory = runtime.freeMemory();
 		long memory = totalMemory - freeMemory;
 		
-		logReporter.logFormatted("Total used memory (%s): %d MB (out of %d MB)", id, memory/1000000, totalMemory/1000000);
+		logger.logFormatted("Total used memory (%s): %d MB (out of %d MB)", id, memory/1000000, totalMemory/1000000);
 	}
 	
 	public static long memoryUsageMB() {

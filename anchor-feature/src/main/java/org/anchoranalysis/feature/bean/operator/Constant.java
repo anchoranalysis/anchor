@@ -28,19 +28,18 @@ package org.anchoranalysis.feature.bean.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-public class Constant<T extends FeatureInput> extends Feature<T> {
+public class Constant<T extends FeatureInput> extends FeatureOperator<T> {
 
 	// START BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter @Setter
 	private double value;
 	// END BEAN PARAMETERS
 
@@ -78,18 +77,4 @@ public class Constant<T extends FeatureInput> extends Feature<T> {
 	public String getDscrLong() {
 		return getParamDscr();
 	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.INSTANCE;
-	}
-
 }

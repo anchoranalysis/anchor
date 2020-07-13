@@ -29,16 +29,22 @@ package org.anchoranalysis.image.voxel.box;
 import java.nio.Buffer;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-class SubrangeVoxelAccess<BufferType extends Buffer> implements IPixelsForPlane<BufferType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> buffer-type
+ */
+class SubrangeVoxelAccess<T extends Buffer> implements PixelsForPlane<T> {
 
 	private int zRel;
 	private Extent extent;
-	private BoundedVoxelBox<BufferType> src;
+	private BoundedVoxelBox<T> src;
 	
-	public SubrangeVoxelAccess(int zRel, Extent extent,	BoundedVoxelBox<BufferType> src) {
+	public SubrangeVoxelAccess(int zRel, Extent extent,	BoundedVoxelBox<T> src) {
 		super();
 		this.zRel = zRel;
 		this.extent = extent;
@@ -46,12 +52,12 @@ class SubrangeVoxelAccess<BufferType extends Buffer> implements IPixelsForPlane<
 	}
 
 	@Override
-	public void setPixelsForPlane(int z, VoxelBuffer<BufferType> pixels) {
+	public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
 		src.getVoxelBox().setPixelsForPlane(z+zRel, pixels);
 	}
 
 	@Override
-	public VoxelBuffer<BufferType> getPixelsForPlane(int z) {
+	public VoxelBuffer<T> getPixelsForPlane(int z) {
 		return src.getVoxelBox().getPixelsForPlane(z+zRel);
 	}
 

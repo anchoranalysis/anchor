@@ -71,11 +71,9 @@ public abstract class GraphIndexBase<T,S extends Dataset> {
 
 		numSeries = seriesNames.length;
 	}
-
 	
-	public GraphInstance create(
+	public GraphInstance createWithRangeLimits(
 		Iterator<T> itr,
-		Optional<AxisLimits> proposedDomainLimits,
 		Optional<AxisLimits> proposedRangeLimits
 	) throws CreateException {
 

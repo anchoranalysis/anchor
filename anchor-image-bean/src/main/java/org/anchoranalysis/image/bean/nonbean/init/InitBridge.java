@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * A bridge that performs initialization of objects
@@ -51,7 +51,7 @@ class InitBridge<
 > implements FunctionWithException<S,T,OperationFailedException> {
 
 	private PropertyInitializer<?> pi;
-	private LogErrorReporter logger;
+	private Logger logger;
 	private FunctionWithException<S, T, CreateException> beanBridge;
 	
 	/**
@@ -63,7 +63,7 @@ class InitBridge<
 	 */
 	public InitBridge(
 		PropertyInitializer<?> pi,
-		LogErrorReporter logger,
+		Logger logger,
 		FunctionWithException<S, T, CreateException> beanBridge
 	) {
 		super();

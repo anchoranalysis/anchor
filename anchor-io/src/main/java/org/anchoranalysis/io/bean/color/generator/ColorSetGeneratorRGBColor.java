@@ -40,10 +40,10 @@ public class ColorSetGeneratorRGBColor extends ColorSetGenerator {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ColorList genColors(int num_colors) throws OperationFailedException {
+	public ColorList genColors(int numColors) throws OperationFailedException {
 
 		ColorList out = new ColorList();
-		for( int i=0; i<num_colors; i++) {
+		for( int i=0; i<numColors; i++) {
 			out.add(rgbColor.rgbColor());
 		}
 		return out;

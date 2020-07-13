@@ -87,11 +87,11 @@ public class QuadraticEquationSolver {
 			throw new OperationFailedException( String.format("Complex roots returned: common=%f",common) );
 		}
 		
-		double common_sqrt = Math.sqrt( common );
+		double commonSqrt = Math.sqrt( common );
 		double div = 2 * a;
 		
-		double root1 = (-b + common_sqrt)/div;
-		double root2 = (-b - common_sqrt)/div;
+		double root1 = (-b + commonSqrt)/div;
+		double root2 = (-b - commonSqrt)/div;
 		
 		return new QuadraticRoots(root1, root2);
 	}

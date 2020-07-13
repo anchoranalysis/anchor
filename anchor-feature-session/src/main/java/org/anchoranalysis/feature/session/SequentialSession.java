@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -53,8 +53,6 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * <p>All feature use the same InitParams, but successively different {#FeatureCalcParams} sequentially.</p>
  * 
  * <p>Caching is applied only within each call to {{@link #calc(FeatureInput)} but among successive calls</p>.
- * 
- * TODO after MergeSession is fixed, considering making all constructors package-private and renaming back to SequentialSession
  * 
  * @author Owen Feehan
  * @param T input-type for feature
@@ -80,7 +78,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * 
 	 * @param feature the feature that will be calculated in the session
 	 */
-	public SequentialSession(Feature<T> feature) {
+	SequentialSession(Feature<T> feature) {
 		this( FeatureListFactory.from(feature) );
 	}
 	
@@ -116,7 +114,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 	 * @param sharedFeatures		A list of features that are shared between the features we are calculating (and thus also init-ed)
 	 * @throws InitException
 	 */
-	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException{
+	public void start( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger ) throws InitException{
 		
 		if (isStarted) {
 			throw new InitException("Session has already been started.");
@@ -261,7 +259,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 		}
 	}
 		
-	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, LogErrorReporter logger ) throws InitException {
+	private void setupCacheAndInit( FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger ) throws InitException {
 		assert(featureInitParams!=null);
 		FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
 		listFeatures.initRecursive(featureInitParamsDup, logger);

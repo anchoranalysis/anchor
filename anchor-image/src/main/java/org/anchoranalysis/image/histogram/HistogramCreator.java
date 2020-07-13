@@ -28,7 +28,7 @@ package org.anchoranalysis.image.histogram;
 
 
 // Creates a histogram of max size 255
-public abstract class HistogramCreator {
+public interface HistogramCreator {
 
-	public abstract Histogram create();
+	Histogram create();
 }

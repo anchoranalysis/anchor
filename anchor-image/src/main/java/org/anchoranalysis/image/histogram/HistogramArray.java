@@ -4,9 +4,6 @@ import static java.lang.Math.toIntExact;
 import java.util.Arrays;
 import java.util.function.LongUnaryOperator;
 
-import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
-import org.anchoranalysis.bean.shared.relation.LessThanBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 
 /*
@@ -40,13 +37,24 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.apache.commons.lang.ArrayUtils;
 
-public class HistogramArray extends Histogram {
+import lombok.Getter;
+
+public class HistogramArray implements Histogram {
 
 	private int[] arr;
 	
-	// By default the minimum bin value is always 0
-	private int minBinVal;	// inclusive
-	private int maxBinVal;	// inclusive
+	/**
+	 * Minimum bin-value (by default 0) inclusive
+	 */
+	@Getter
+	private int minBin;
+	
+	/**
+	 * Maximum bin-value inclusive
+	 */
+	@Getter
+	private int maxBin;
+	
 	private long countTotal = 0;
 	
 	public HistogramArray( int maxBinVal ) {
@@ -56,13 +64,13 @@ public class HistogramArray extends Histogram {
 	public HistogramArray( int minBinVal, int maxBinVal ) {
 		arr = new int[maxBinVal-minBinVal+1];
 		countTotal = 0;
-		this.maxBinVal = maxBinVal;
-		this.minBinVal = minBinVal;
+		this.maxBin = maxBinVal;
+		this.minBin = minBinVal;
 	}
 	
 	@Override
 	public HistogramArray duplicate() {
-		HistogramArray out = new HistogramArray(minBinVal,maxBinVal);
+		HistogramArray out = new HistogramArray(minBin,maxBin);
 		out.arr = ArrayUtils.clone(arr);
 		out.countTotal = countTotal;
 		return out;
@@ -70,7 +78,7 @@ public class HistogramArray extends Histogram {
 	
 	public void reset() {
 		countTotal = 0;
-		for( int i=minBinVal;i<=maxBinVal;i++) {
+		for( int i=minBin;i<=maxBin;i++) {
 			arrSet(i,0);
 		}
 	}
@@ -78,7 +86,7 @@ public class HistogramArray extends Histogram {
 	public void zeroVal( int val ) {
 		int indx = index(val);
 		countTotal -= arr[ indx ];
-		arr[ indx ] = 0;
+		arr[indx] = 0;
 	}
 	
 	public void transferVal( int srcVal, int destVal ) {
@@ -114,7 +122,7 @@ public class HistogramArray extends Histogram {
 		}
 		// Now chop off the unneeded values and set a new minimum
 		chopArrBefore( index(threshold) );
-		this.minBinVal = threshold;
+		this.minBin = threshold;
 	}
 	
 	public boolean isEmpty() {
@@ -151,7 +159,7 @@ public class HistogramArray extends Histogram {
 		
 		long sum = 0;
 		
-		for( int i=minBinVal; i<=maxBinVal; i++) {
+		for( int i=minBin; i<=maxBin; i++) {
 			sum += arrGetLong(i)*i;
 			assert(sum>=0);
 		}
@@ -163,20 +171,19 @@ public class HistogramArray extends Histogram {
 		checkAtLeastOneItemExists();
 		
 		long sum = 0;
-		long c = 0;
-		
+		long count = 0;
 
-		int startMin = Math.max(val, minBinVal);
+		int startMin = Math.max(val, minBin);
 				
-		for( int i=startMin; i<=maxBinVal; i++) {
+		for( int i=startMin; i<=maxBin; i++) {
 			long num = arrGetLong(i);
 			sum += i*num;
-			c += num;
+			count += num;
 			assert(sum>=0);
-			assert(c>=0);
+			assert(count>=0);
 		}
 		
-		return ((double) sum)/c;
+		return ((double) sum)/count;
 	}
 	
 	public double meanNonZero() throws OperationFailedException {
@@ -184,7 +191,7 @@ public class HistogramArray extends Histogram {
 		
 		long sum = 0;
 		
-		for( int i=minBinVal; i<=maxBinVal; i++) {
+		for( int i=minBin; i<=maxBin; i++) {
 			sum += i*arrGetLong(i);
 			
 		}
@@ -201,7 +208,7 @@ public class HistogramArray extends Histogram {
 		
 		int sum = 0;
 		
-		for( int i=minBinVal; i<=maxBinVal; i++) {
+		for( int i=minBin; i<=maxBin; i++) {
 			
 			int indx = index(i);
 			
@@ -220,7 +227,7 @@ public class HistogramArray extends Histogram {
 		double pos = quantile * countTotal;
 		
 		long sum = 0;
-		for( int i=minBinVal; i<=maxBinVal; i++) {
+		for( int i=minBin; i<=maxBin; i++) {
 			sum += arrGet(i);
 			
 			if (sum>pos) {
@@ -238,10 +245,10 @@ public class HistogramArray extends Histogram {
 		
 		double pos = quantile * cntMinusZero;
 		
-		int startMin = Math.max(1, minBinVal);
+		int startMin = Math.max(1, minBin);
 		
 		long sum = 0;
-		for( int i=startMin; i<=maxBinVal; i++) {
+		for( int i=startMin; i<=maxBin; i++) {
 			sum += arrGet(i);
 			
 			if (sum>pos) {
@@ -253,9 +260,9 @@ public class HistogramArray extends Histogram {
 	
 	public boolean hasAboveZero() {
 
-		int startMin = Math.max(1, minBinVal);
+		int startMin = Math.max(1, minBin);
 		
-		for( int i=startMin; i<=maxBinVal; i++) {
+		for( int i=startMin; i<=maxBin; i++) {
 			if (arrGet(i)>0) {
 				return true;
 			}
@@ -265,10 +272,10 @@ public class HistogramArray extends Histogram {
 	
 	public double percentGreaterEqualTo( int intensity ) {
 		
-		int startMin = Math.max(intensity, minBinVal);
+		int startMin = Math.max(intensity, minBin);
 		
 		long sum = 0;
-		for( int i=startMin; i<=maxBinVal; i++) {
+		for( int i=startMin; i<=maxBin; i++) {
 			sum += arrGet(i);
 		}
 		
@@ -287,7 +294,7 @@ public class HistogramArray extends Histogram {
 		int maxIndex = -1;
 		int maxValue = -1;
 		
-		for( int i=startVal; i<=maxBinVal; i++) {
+		for( int i=startVal; i<=maxBin; i++) {
 			int val = arrGet(i);
 			if (val>maxValue) {
 				maxValue = val;
@@ -302,7 +309,7 @@ public class HistogramArray extends Histogram {
 	public int calcMax() throws OperationFailedException {
 		checkAtLeastOneItemExists();
 		
-		for( int i=maxBinVal; i>=minBinVal ;i--) {
+		for( int i=maxBin; i>=minBin ;i--) {
 			if (arrGet(i)>0) {
 				return i;
 			}
@@ -315,7 +322,7 @@ public class HistogramArray extends Histogram {
 	public int calcMin() throws OperationFailedException {
 		checkAtLeastOneItemExists();
 		
-		for (int i=minBinVal; i<=maxBinVal; i++) {
+		for (int i=minBin; i<=maxBin; i++) {
 			if (arrGet(i)>0) {
 				return i;
 			}			
@@ -344,7 +351,7 @@ public class HistogramArray extends Histogram {
 		
 		int num = 0;
 		
-		for (int i=minBinVal; i<=maxBinVal; i++) {
+		for (int i=minBin; i<=maxBin; i++) {
 			if (arrGet(i)>0) {
 				num++; 
 			}
@@ -367,7 +374,7 @@ public class HistogramArray extends Histogram {
 		
 		long sum = 0;
 		
-		for (int i=minBinVal; i<=maxBinVal; i++) {
+		for (int i=minBin; i<=maxBin; i++) {
 			
 			if (relation.isRelationToValueTrue(i, threshold)) {
 				sum += arrGetLong(i);
@@ -378,28 +385,6 @@ public class HistogramArray extends Histogram {
 		return sum;
 	}
 	
-	// The value split becomes part of the higher histogram
-	public HistogramsAfterSplit splitAt( int split ) {
-		HistogramsAfterSplit out = new HistogramsAfterSplit();
-		
-		Histogram hLower = threshold(
-			new RelationToConstant(
-				new LessThanBean(),
-				split
-			)
-		);
-		Histogram hHigher = threshold(
-			new RelationToConstant(
-				new GreaterThanBean(),
-				(double) split-1
-			)
-		);
-		
-		out.add( hLower );
-		out.add( hHigher );
-		return out;
-	}
-	
 	// Thresholds (generates a new histogram, existing object is unchanged)
 	@Override
 	public Histogram threshold(RelationToThreshold relationToThreshold) {
@@ -407,9 +392,9 @@ public class HistogramArray extends Histogram {
 		RelationToValue relation = relationToThreshold.relation();
 		double threshold = relationToThreshold.threshold();
 		
-		HistogramArray out = new HistogramArray(maxBinVal);
+		HistogramArray out = new HistogramArray(maxBin);
 		out.countTotal = 0;
-		for (int i=minBinVal; i<=maxBinVal; i++) {
+		for (int i=minBin; i<=maxBin; i++) {
 			
 			if (relation.isRelationToValueTrue(i, threshold)) {
 				int s = arrGet(i);
@@ -424,7 +409,7 @@ public class HistogramArray extends Histogram {
 	// Doesn't show zero values
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (int t=minBinVal; t<=maxBinVal; t++) {
+		for (int t=minBin; t<=maxBin; t++) {
 			int cnt = arrGet(t);
 			if (cnt!=0) {
 				sb.append( String.format("%d: %d%n", t, cnt) );
@@ -437,18 +422,10 @@ public class HistogramArray extends Histogram {
 	@Override
 	public String csvString() {
 		StringBuilder sb = new StringBuilder();
-		for (int t=minBinVal; t<=maxBinVal; t++) {
+		for (int t=minBin; t<=maxBin; t++) {
 			sb.append( String.format("%d, %d%n", t, arrGet(t)) );
 		}
 		return sb.toString();
-	}
-
-	public int getMaxBin() {
-		return maxBinVal;
-	}
-	
-	public int getMinBin() {
-		return minBinVal;
 	}
 
 	@Override
@@ -468,30 +445,19 @@ public class HistogramArray extends Histogram {
 			int bVal = getCount(b);
 			
 			// Skip if there's nothing there
-			if (bVal==0) {
-				continue;
-			}
-			
-			// If there's more or just enough remaining than we have, we transfer the entire bin
-			if( remaining >= bVal) {
-				out.incrValBy(b, bVal);
-				remaining = remaining - bVal;
+			if (bVal!=0) {
+		
+				remaining = extractBin(out, b, bVal, remaining);
 				
 				if (remaining==0) {
 					break;
 				}
-				
-			} else {
-				out.incrValBy(b, remaining );
-				break;
 			}
 			
 		}
 		return out;
 	}
-	
-	
-	
+		
 	public Histogram extractPixelsFromLeft( long numPixels ) {
 		
 		Histogram out = new HistogramArray(getMaxBin());
@@ -504,24 +470,13 @@ public class HistogramArray extends Histogram {
 			int bVal = getCount(b);
 			
 			// Skip if there's nothing there
-			if (bVal==0) {
-				continue;
-			}
-			
-			// If there's more or just enough remaining than we have, we transfer the entire bin
-			if( remaining >= bVal) {
-				out.incrValBy(b, bVal);
-				remaining = remaining - bVal;
+			if (bVal!=0) {
+				remaining = extractBin(out, b, bVal, remaining);
 				
 				if (remaining==0) {
 					break;
-				}
-				
-			} else {
-				out.incrValBy(b, toIntExact(remaining) );
-				break;
+				}	
 			}
-			
 		}
 		return out;
 	}
@@ -538,7 +493,7 @@ public class HistogramArray extends Histogram {
 		
 		double sum = 0;
 		
-		for( int i=minBinVal; i<=maxBinVal; i++) {
+		for( int i=minBin; i<=maxBin; i++) {
 			double iSub = (i-subtractVal);
 			sum += arrGetLong(i) * Math.pow( iSub , power);
 		}
@@ -550,7 +505,7 @@ public class HistogramArray extends Histogram {
 		
 		long sum = 0;
 		
-		for (int i=minBinVal; i<=maxBinVal; i++) {
+		for (int i=minBin; i<=maxBin; i++) {
 			long add = arrGetLong(i) * func.applyAsLong( (long) i);
 			assert(add>=0);
 			sum += add;
@@ -562,7 +517,7 @@ public class HistogramArray extends Histogram {
 
 	// The index in the array the value is stored at
 	private int index( int val ) {
-		return val - minBinVal;
+		return val - minBin;
 	}
 	
 	// Sets a count for a value
@@ -590,6 +545,30 @@ public class HistogramArray extends Histogram {
 	private void checkAtLeastOneItemExists() throws OperationFailedException {
 		if (isEmpty()) {
 			throw new OperationFailedException("There are no items in the histogram so this operation cannot occur");
+		}
+	}
+	
+	/**
+	 * Places a particular bin in a destination histogram.
+	 * <p>
+	 * Either the whole bin is transferred or only some of the bin so that {@code remaining >= 0).
+	 * 
+	 * @param destination the destination histogram
+	 * @param bin the bin-value
+	 * @param countForBin the count
+	 * @param remaining the count remaining that can still be transferred
+	 * @return an updated value for remaining after subtracting the transferred count
+	 */
+	private static long extractBin(Histogram destination, int bin, int countForBin, long remaining) {
+		// If there's more or just enough remaining than we have, we transfer the entire bin
+		if( remaining >= countForBin) {
+			
+			destination.incrValBy(bin, countForBin);
+			return remaining - countForBin;
+		} else {
+			// Otherwise partially transfer the bin
+			destination.incrValBy(bin, remaining );
+			return 0;
 		}
 	}
 }

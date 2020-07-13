@@ -70,7 +70,7 @@ public class IterableGeneratorWriter {
 		);
 	}
 	
-	private static Writer extractWriter(BoundOutputManager outputManager, boolean checkIfAllowed) throws OutputWriteFailedException {
+	private static Writer extractWriter(BoundOutputManager outputManager, boolean checkIfAllowed) {
 		if (checkIfAllowed) {
 			return outputManager.getWriterCheckIfAllowed();
 		} else {

@@ -33,32 +33,29 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class UnitValueDistanceVoxels extends UnitValueDistance {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double value;
 	// END BEAN PROPERTIES
-
-	public UnitValueDistanceVoxels() {
-		
-	}
 	
 	public UnitValueDistanceVoxels( double value ) {
 		this.value = value;
 	}
 
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
 	@Override
-	public double rslv(Optional<ImageResolution> res, DirectionVector dirVector) {
+	public double resolve(Optional<ImageResolution> res, DirectionVector dirVector) {
 		return value;
 	}
-
 }

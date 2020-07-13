@@ -37,14 +37,17 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.FileWriteIndex;
 import org.anchoranalysis.io.manifest.match.Match;
-import org.anchoranalysis.io.manifest.operationrecorder.IWriteOperationRecorder;
+import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // A folder contains a list of subfolders, contained files varies by implementation
-public abstract class FolderWrite implements SequencedFolder, IWriteOperationRecorder, Serializable {
+public abstract class FolderWrite implements SequencedFolder, WriteOperationRecorder, Serializable {
 
 	/**
 	 * 
@@ -52,12 +55,15 @@ public abstract class FolderWrite implements SequencedFolder, IWriteOperationRec
 	private static final long serialVersionUID = 1L;
 
 	// Not Optional as it needs to be serialized
-	private @Nullable FolderWrite parentFolder;
+	@Nullable 
+	private FolderWrite parentFolder;
 	
 	private ArrayList<FolderWrite> folders = new ArrayList<>();
 
 	private static Log log = LogFactory.getLog(FolderWrite.class);
 
+	// Not Optional as it needs to be serialized
+	@Nullable @Getter @Setter
 	private ManifestFolderDescription manifestFolderDescription;
 	
 	public FolderWrite() {
@@ -70,14 +76,6 @@ public abstract class FolderWrite implements SequencedFolder, IWriteOperationRec
 		super();
 		log.debug( "New Folder Write: " + parentFolder.getRelativePath() );
 		this.parentFolder = parentFolder;
-	}
-	
-	public ManifestFolderDescription getManifestFolderDescription() {
-		return manifestFolderDescription;
-	}
-
-	public void setManifestFolderDescription(ManifestFolderDescription manifestFolderDescription) {
-		this.manifestFolderDescription = manifestFolderDescription;
 	}
 	
 	public abstract Path getRelativePath();
@@ -120,7 +118,7 @@ public abstract class FolderWrite implements SequencedFolder, IWriteOperationRec
 	}
 	
 	@Override
-	public synchronized IWriteOperationRecorder writeFolder( Path relativeFolderPath, ManifestFolderDescription manifestFolderDescription, FolderWriteWithPath folder ) {
+	public synchronized WriteOperationRecorder writeFolder( Path relativeFolderPath, ManifestFolderDescription manifestFolderDescription, FolderWriteWithPath folder ) {
 		folder.setParentFolder( Optional.of(this) );
 		folder.setPath( relativeFolderPath );
 		folder.setManifestFolderDescription(manifestFolderDescription);

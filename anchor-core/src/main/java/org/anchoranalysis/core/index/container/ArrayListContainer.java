@@ -37,7 +37,7 @@ import org.anchoranalysis.core.index.IIndexGetter;
 import org.anchoranalysis.core.index.SimpleIndex;
 import org.anchoranalysis.core.index.container.BoundChangeEvent.BoundType;
 
-public class ArrayListContainer<T extends IIndexGetter & Comparable<IIndexGetter>> implements IBoundedIndexContainer<T> {
+public class ArrayListContainer<T extends IIndexGetter & Comparable<IIndexGetter>> implements BoundedIndexContainer<T> {
 
 	// The sorted elements
 	private ArrayList<T> elements = new ArrayList<>();

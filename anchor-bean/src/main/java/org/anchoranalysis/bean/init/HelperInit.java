@@ -37,7 +37,7 @@ import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 class HelperInit {
 
@@ -55,7 +55,7 @@ class HelperInit {
 	 * @param parent an optional-bean parent to use, otherwise NULL
 	 * @throws InitException
 	 */
-	public static void initRecursive( AnchorBean<?> bean, PropertyInitializer<?> pi, LogErrorReporter logger ) throws InitException {
+	public static void initRecursive( AnchorBean<?> bean, PropertyInitializer<?> pi, Logger logger ) throws InitException {
 		
 		List<BeanAndParent> everything = new ArrayList<>();
 		everything.add( new BeanAndParent(bean, null) );
@@ -77,7 +77,7 @@ class HelperInit {
 
 	}
 	
-	private static void maybeInitChildren( BeanAndParent bean, List<BeanAndParent> listInit, String beanNameFollowingFrom, PropertyInitializer<?> pi, LogErrorReporter logger ) throws InitException {
+	private static void maybeInitChildren( BeanAndParent bean, List<BeanAndParent> listInit, String beanNameFollowingFrom, PropertyInitializer<?> pi, Logger logger ) throws InitException {
 		
 		try {
 			boolean didInitChild = pi.applyInitializationIfPossibleTo(bean.getBean(), bean.parentBean(), logger); 

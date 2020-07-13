@@ -35,6 +35,6 @@ import org.anchoranalysis.bean.init.InitializableBean;
  * @author Owen Feehan
  *
  */
-public abstract class BeanInitParams {
+public interface BeanInitParams {
 
 }

@@ -34,7 +34,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lombok.EqualsAndHashCode;
+
 // http://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
+@EqualsAndHashCode(callSuper=false)
 class RandomSet<E> extends AbstractSet<E> {
 
     private List<E> dta = new ArrayList<>();

@@ -28,7 +28,7 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * An object that can be Found or Not-Found
@@ -42,12 +42,12 @@ public interface Findable<T> {
 	 * Returns the found object (or empty() if it's not found..... and in this case logs a message describing what went wrong)
 	 * 
 	 * @param name
-	 * @param logErrorReporter
+	 * @param logger
 	 * 
 	 * @return true if successful, false if not-found
 	 */
 	Optional<T> getFoundOrLog(
 		String name,
-		LogErrorReporter logErrorReporter		
+		Logger logger		
 	);
 }

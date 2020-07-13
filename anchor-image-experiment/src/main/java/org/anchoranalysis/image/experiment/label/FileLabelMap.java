@@ -45,7 +45,7 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
  */
 public class FileLabelMap<T> {
 	
-	private Map<T,String> map = new HashMap<T,String>();
+	private Map<T,String> map = new HashMap<>();
 	
 	public void add( T fileId, String label ) {
 		map.put( fileId, label );

@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.mpp.mark;
 
+import java.io.Serializable;
+
 /*-
  * #%L
  * anchor-mpp
@@ -28,14 +30,35 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 import org.anchoranalysis.core.geometry.Point3d;
 
-class DistCalcToLine {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+class DistCalcToLine implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Getter
 	private Point3d startPoint;
+	
+	@Getter
 	private Point3d endPoint;
+	
+	@Getter
 	private Point3d directionVector;
 	
-	public DistCalcToLine() {
-		super();
+	/**
+	 * Copy constructor
+	 * 
+	 * @param src
+	 */
+	public DistCalcToLine( DistCalcToLine src ) {
+		this.startPoint = new Point3d(src.startPoint);
+		this.endPoint = new Point3d(src.endPoint);
+		this.directionVector = new Point3d(src.directionVector);
 	}
 	
 	public void setPoints( Point3d startPoint, Point3d endPoint ) {
@@ -65,17 +88,5 @@ class DistCalcToLine {
 		
 		double num = (distanceSquared2to1 * distanceSquared1to0) - Math.pow(dotProduct, 2);
 		return num / distanceSquared2to1;
-	}
-
-	public Point3d getStartPoint() {
-		return startPoint;
-	}
-
-	public Point3d getEndPoint() {
-		return endPoint;
-	}
-
-	public Point3d getDirectionVector() {
-		return directionVector;
 	}
 }

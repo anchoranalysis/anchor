@@ -30,7 +30,7 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-class PeriodTrigger<S,T extends IPeriodReceiver<S>> {
+class PeriodTrigger<S,T extends PeriodReceiver<S>> {
 	
 	private T periodReceiver;
 

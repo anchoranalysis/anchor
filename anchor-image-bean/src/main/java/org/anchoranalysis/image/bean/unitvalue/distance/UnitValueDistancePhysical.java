@@ -38,19 +38,27 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Measures either area or volume (depending if the do3D flag is employed)
 public class UnitValueDistancePhysical extends UnitValueDistance {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double value;
 	
-	@BeanField @AllowEmpty
-	private String unitType = "";
+	@BeanField @AllowEmpty @Getter @Setter
+	private String unitType;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double rslv(Optional<ImageResolution> res, DirectionVector dirVector) throws OperationFailedException {
+	public double resolve(Optional<ImageResolution> res, DirectionVector dirVector) throws OperationFailedException {
 		
 		if (!res.isPresent()) {
 			throw new OperationFailedException("An image-resolution is missing, so cannot calculate physical distances");
@@ -66,21 +74,4 @@ public class UnitValueDistancePhysical extends UnitValueDistance {
 			dirVector
 		);
 	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	public String getUnitType() {
-		return unitType;
-	}
-
-	public void setUnitType(String unitType) {
-		this.unitType = unitType;
-	}
-
 }

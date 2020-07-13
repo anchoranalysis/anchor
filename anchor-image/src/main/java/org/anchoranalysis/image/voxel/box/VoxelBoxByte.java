@@ -36,14 +36,14 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferByte;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityByteBuffer;
 
 public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 
-	public VoxelBoxByte(IPixelsForPlane<ByteBuffer> pixelsForPlane) {
+	public VoxelBoxByte(PixelsForPlane<ByteBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
 			VoxelBoxFactory.getByte()
@@ -51,7 +51,7 @@ public final class VoxelBoxByte extends VoxelBox<ByteBuffer> {
 	}
 	
 	
-	public static int ceilOfMaxPixel( IPixelsForPlane<?> planeAccess ) {
+	public static int ceilOfMaxPixel( PixelsForPlane<?> planeAccess ) {
 		int max = 0;
 		boolean first = true;
 		

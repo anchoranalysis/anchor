@@ -143,6 +143,28 @@ class DefaultBeanFactoryHelperInit {
 	            }
 	        }
 		}
+		
+		 /**
+	     * Sets a property on the given bean using Common Beanutils.
+	     *
+	     * @param bean the bean
+	     * @param propName the name of the property
+	     * @param value the property's value
+	     * @throws ConfigurationRuntimeException if the property is not writeable or
+	     * an error occurred
+	     */
+	    private void initProperty(Object bean, String propName, Object value) {
+	        if (!PropertyUtils.isWriteable(bean, propName)) {
+	            throw new ConfigurationRuntimeException("Property " + propName
+	                    + " cannot be set on " + bean.getClass().getName());
+	        }
+
+	        try {
+	            BeanUtils.setProperty(bean, propName, value);
+	        } catch (IllegalAccessException | InvocationTargetException iaex) {
+	            throw new ConfigurationRuntimeException(iaex);
+	        }
+	    }
 	}
 
 	private DefaultBeanFactoryHelperInit() {
@@ -155,28 +177,6 @@ class DefaultBeanFactoryHelperInit {
         Map<String, Object> nestedBeans = data.getNestedBeanDeclarations();
         if (nestedBeans != null) {
         	new InitNested(nestedBeans, parameter).initBean(bean);
-        }
-    }
-		
-	  /**
-     * Sets a property on the given bean using Common Beanutils.
-     *
-     * @param bean the bean
-     * @param propName the name of the property
-     * @param value the property's value
-     * @throws ConfigurationRuntimeException if the property is not writeable or
-     * an error occurred
-     */
-    private static void initProperty(Object bean, String propName, Object value) {
-        if (!PropertyUtils.isWriteable(bean, propName)) {
-            throw new ConfigurationRuntimeException("Property " + propName
-                    + " cannot be set on " + bean.getClass().getName());
-        }
-
-        try {
-            BeanUtils.setProperty(bean, propName, value);
-        } catch (IllegalAccessException | InvocationTargetException iaex) {
-            throw new ConfigurationRuntimeException(iaex);
         }
     }
 	

@@ -36,6 +36,8 @@ import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Adds edges if objects neighbour each other
  * 
@@ -43,66 +45,43 @@ import org.anchoranalysis.image.object.morph.MorphologicalDilation;
  *
  * @param <V> vertice-type
  */
+@RequiredArgsConstructor
 class EdgeAdder<V> {
 	
-	private List<V> verticesAsList;
-	private Function<V,ObjectMask> vertexToObjMask;
-	private ObjectCollectionRTree rTree;
-	private AddEdge<V> addEdge;
-	private boolean preventObjIntersection;
-	private boolean bigNghb;
-	private boolean testBothDirs;
+	// START REQUIRED ARGUMENTS
+	/** a list of vertices */
+	private final List<V> verticesAsList;
+	
+	/** how to convert a individual vertice to an object mask */
+	private final Function<V,ObjectMask> vertexToObjMask;
+	
+	/** the rTree underpinning the vertices (or rather their derived object-masks) */
+	private final ObjectCollectionRTree rTree;
+	private final AddEdge<V> addEdge;
+	
+	/** avoids any edge if any two objects have a common pixel */
+	private final EdgeAdderParameters params;
+	// END REQUIRED ARGUMENTS
 
 	@FunctionalInterface
 	public static interface AddEdge<V> {
 		void addEdge( V src, V dest, int numBorderPixels );
 	}
 	
-	/**
-	 * Adds edges by checking if a Vertex intersects with another Vertex
-	 * 
-	 * This is done always by finding an ObjMask representation of each vertex
-	 * 
-	 * @param verticesAsList a list of vertices
-	 * @param vertexToObjMask how to convert a individual vertice to an object mask
-	 * @param rTree the rTree underpinning the vertices (or rather their derived object-masks)
-	 * @param graph
-	 * @param preventObjIntersection avoids any edge if any two objects have a common pixel
-	 * @param undirected iff FALSE edges are considered in both directions independently
-	 */
-	public EdgeAdder(
-		List<V> verticesAsList,
-		Function<V,ObjectMask> vertexToObjMask,
-		ObjectCollectionRTree rTree,
-		AddEdge<V> addEdge,
-		boolean preventObjIntersection,
-		boolean bigNghb,
-		boolean testBothDirs
-	) {
-		super();
-		this.preventObjIntersection = preventObjIntersection;
-		this.verticesAsList = verticesAsList;
-		this.vertexToObjMask = vertexToObjMask;
-		this.rTree = rTree;
-		this.addEdge = addEdge;
-		this.bigNghb = bigNghb;
-		this.testBothDirs = testBothDirs;
-	}
-	
 	public void addEdgesFor(
 		int ignoreIndex,
 		ObjectMask om,
 		V vertexWith,
-		Extent sceneExtnt,
+		Extent sceneExtent,
 		boolean do3D
 	) throws CreateException {
 		
 		ObjectMask omDilated = MorphologicalDilation.createDilatedObjMask(
 			om,
-			Optional.of(sceneExtnt),
-			do3D && sceneExtnt.getZ()>1,
+			Optional.of(sceneExtent),
+			do3D && sceneExtent.getZ()>1,
 			1,
-			bigNghb
+			params.isBigNghb()
 		);
 		
 		addWithDilatedMask( ignoreIndex, om, vertexWith, omDilated );
@@ -114,20 +93,12 @@ class EdgeAdder<V> {
 		V vertexWith,
 		ObjectMask omDilated
 	) {
-		
 		List<Integer> indicesIntersects = rTree.intersectsWithAsIndices( omDilated.getBoundingBox() );
-		
 		for( int j : indicesIntersects) {
 			
 			// We enforce an ordering, so as not to do the same pair twice (or the identity case)
-			if (testBothDirs) {
-				if (j==ignoreIndex) {
-					continue;
-				}
-			} else {
-				if (j>=ignoreIndex) {
-					continue;
-				}				
+			if (doSkipIndex(j, ignoreIndex)) {
+				continue;			
 			}
 			
 			V vertexOther = verticesAsList.get(j);
@@ -142,6 +113,19 @@ class EdgeAdder<V> {
 		}		
 	}
 	
+	private boolean doSkipIndex(int index, int ignoreIndex) {
+		if (params.isTestBothDirections()) {
+			if (index==ignoreIndex) {
+				return true;
+			}
+		} else {
+			if (index>=ignoreIndex) {
+				return true;
+			}				
+		}
+		return false;
+	}
+	
 	private void maybeAddEdge(
 		ObjectMask om,
 		ObjectMask omDilated,
@@ -150,7 +134,7 @@ class EdgeAdder<V> {
 		V vertexOther
 	) {
 		// Check that they don't overlap
-		if (preventObjIntersection && om.hasIntersectingPixels(omOther)) {
+		if (params.isPreventObjectIntersection() && om.hasIntersectingVoxels(omOther)) {
 			return;
 		}
 			
@@ -162,6 +146,6 @@ class EdgeAdder<V> {
 	}
 	
 	private static int numBorderPixels( ObjectMask om1Dilated, ObjectMask om2 ) {
-		return om1Dilated.countIntersectingPixels(om2);
+		return om1Dilated.countIntersectingVoxels(om2);
 	}
 }

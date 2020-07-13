@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.bean.input;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-io
@@ -26,10 +28,13 @@ package org.anchoranalysis.io.bean.input;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Parameters passed to an InputManager to generate input-objects
@@ -37,43 +42,27 @@ import org.anchoranalysis.io.params.InputContextParams;
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class InputManagerParams {
 
-	private InputContextParams inputContext;
-	
-	private ProgressReporter progressReporter;
-	
-	private LogErrorReporter logger;
+	@Getter
+	private final InputContextParams inputContext;
 
-	public InputManagerParams(InputContextParams inputContext, ProgressReporter progressReporter,
-			LogErrorReporter logger) {
-		super();
-		this.inputContext = inputContext;
-		this.progressReporter = progressReporter;
-		this.logger = logger;
-	}
+	@Getter
+	private final ProgressReporter progressReporter;
+	
+	@Getter
+	private final Logger logger;
 	
 	public InputManagerParams withProgressReporter( ProgressReporter progressReporterToAssign ) {
 		return new InputManagerParams(inputContext, progressReporterToAssign, logger);
 	}
-
-	public InputContextParams getInputContext() {
-		return inputContext;
-	}
-
-	public ProgressReporter getProgressReporter() {
-		return progressReporter;
-	}
-
-	public LogErrorReporter getLogger() {
-		return logger;
-	}
-
+	
 	public boolean isDebugModeActivated() {
-		return inputContext.isDebugModeActivated();
+		return inputContext.getDebugModeParams().isPresent();
 	}
 
-	public DebugModeParams getDebugModeParams() {
+	public Optional<DebugModeParams> getDebugModeParams() {
 		return inputContext.getDebugModeParams();
 	}
 }

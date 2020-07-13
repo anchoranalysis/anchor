@@ -2,8 +2,7 @@ package org.anchoranalysis.anchor.mpp.pxlmark.memo;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
-import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryHistogram;
+
 
 /*-
  * #%L
@@ -32,18 +31,15 @@ import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryHistogram
  */
 
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.histogram.Histogram;
 
 // We more explicitly manage the creation and deletiion of PxlMarkMemo as they can take up a large amount of memory
 public class PxlMarkMemoFactory {
-
-	private static PixelPartFactory<Histogram> factoryHistogram = new PixelPartFactoryHistogram();
 	
 	private PxlMarkMemoFactory() {
 		// ONLY ALLOWED AS STATIC
 	}
 	
-	public static PxlMarkMemo create(Mark mark, NRGStack stack, RegionMap regionMap) {
-		return new PxlMarkMemo(mark, stack, regionMap, factoryHistogram);
+	public static VoxelizedMarkMemo create(Mark mark, NRGStack stack, RegionMap regionMap) {
+		return new VoxelizedMarkMemo(mark, stack, regionMap);
 	}
 }

@@ -34,8 +34,7 @@ import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
-import org.anchoranalysis.core.index.container.IOrderProvider;
-import org.anchoranalysis.io.bean.deserializer.Deserializer;
+import org.anchoranalysis.core.index.container.OrderProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.bundle.Bundle;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
@@ -46,28 +45,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable> implemen
 
 	private LRUCache<Integer,Map<Integer,T>> cache;
 	private BundleParameters bundleParameters;
-	private IOrderProvider orderProvider;
-	
-	public static class BundleDeserializers<T extends Serializable> {
-		private Deserializer<Bundle<T>> deserializerBundle;
-		private Deserializer<BundleParameters> deserializerBundleParameters;
-		
-		public BundleDeserializers(Deserializer<Bundle<T>> deserializerBundle,
-				Deserializer<BundleParameters> deserializerBundleParameters) {
-			super();
-			this.deserializerBundle = deserializerBundle;
-			this.deserializerBundleParameters = deserializerBundleParameters;
-		}
-
-		public Deserializer<Bundle<T>> getDeserializerBundle() {
-			return deserializerBundle;
-		}
-
-		public Deserializer<BundleParameters> getDeserializerBundleParameters() {
-			return deserializerBundleParameters;
-		}
-	
-	}
+	private OrderProvider orderProvider;
 	
 	public DeserializedObjectFromFolderBundle(FolderWrite folderWrite, final BundleDeserializers<T> deserializers, int cacheSize ) throws DeserializationFailedException {
 		super();

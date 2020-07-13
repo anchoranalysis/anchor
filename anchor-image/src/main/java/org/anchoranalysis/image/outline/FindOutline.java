@@ -29,7 +29,6 @@ package org.anchoranalysis.image.outline;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
@@ -62,7 +61,7 @@ public class FindOutline {
 	
 	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) {
 		// We create a new image for output
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getChnl().getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
 		BinaryChnl chnlOutBinary = new BinaryChnl(chnlOut, chnl.getBinaryValues());
 		
 		// Gets outline
@@ -72,7 +71,7 @@ public class FindOutline {
 	}
 	
 	/** Outline using multiple erosions to create a deeper outline */
-	public static ObjectMask outline(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws CreateException {
+	public static ObjectMask outline(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) {
 		
 		ObjectMask maskIn = mask.duplicate();
 				

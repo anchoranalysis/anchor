@@ -45,47 +45,57 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 // An input stack
+@NoArgsConstructor
 public class MultiInputManager extends MultiInputManagerBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private InputManager<? extends ProvidesStackInput> input;
 	
-	@BeanField @DefaultInstance
+	@BeanField @DefaultInstance @Getter @Setter
 	private RasterReader rasterReader;	// For reading appended files
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendStack = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendCfg = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotation = new ArrayList<>();		// Uses both accepted and rejected
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationAcceptedOnly = new ArrayList<>();		// Uses both accepted only
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationRejectedOnly = new ArrayList<>();		// Uses both accepted rejectedonly
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendObjMaskCollection = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendKeyValueParams = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendHistogram = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendFilePath = new ArrayList<>();
 	// END BEAN PROPERTIES
 
+	public MultiInputManager(String inputName, InputManager<? extends ProvidesStackInput> input) {
+		this.inputName = inputName;
+		this.input = input;
+	}
+	
 	@Override
 	public List<MultiInput> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
@@ -107,11 +117,8 @@ public class MultiInputManager extends MultiInputManagerBase {
 	}
 	
 	private void appendFromLists( MultiInput inputObject, boolean doDebug ) {
-		
 		appendStack( listAppendStack, inputObject, doDebug, rasterReader );
-		
 		appendFromCfgLists( inputObject, doDebug );
-				
 		appendObjMaskCollection(listAppendObjMaskCollection, inputObject, doDebug );
 		appendKeyValueParams( listAppendKeyValueParams, inputObject, doDebug );
 		appendHistogram( listAppendHistogram, inputObject, doDebug );
@@ -127,109 +134,5 @@ public class MultiInputManager extends MultiInputManagerBase {
 		appendCfgFromAnnotation( listAppendCfgFromAnnotation, inputObject, true, true, doDebug );
 		appendCfgFromAnnotation( listAppendCfgFromAnnotationAcceptedOnly, inputObject, true, false, doDebug );
 		appendCfgFromAnnotation( listAppendCfgFromAnnotationRejectedOnly, inputObject, false, true, doDebug );
-	}
-			
-	public InputManager<? extends ProvidesStackInput> getInput() {
-		return input;
-	}
-
-	public void setInput(InputManager<? extends ProvidesStackInput> input) {
-		this.input = input;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendStack() {
-		return listAppendStack;
-	}
-
-	public void setListAppendStack(
-			List<NamedBean<FilePathGenerator>> listAppendStack) {
-		this.listAppendStack = listAppendStack;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendCfg() {
-		return listAppendCfg;
-	}
-
-	public void setListAppendCfg(List<NamedBean<FilePathGenerator>> listAppendCfg) {
-		this.listAppendCfg = listAppendCfg;
-	}
-
-	public String getInputName() {
-		return inputName;
-	}
-
-	public void setInputName(String inputName) {
-		this.inputName = inputName;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendObjMaskCollection() {
-		return listAppendObjMaskCollection;
-	}
-
-	public void setListAppendObjMaskCollection(
-			List<NamedBean<FilePathGenerator>> listAppendObjMaskCollection) {
-		this.listAppendObjMaskCollection = listAppendObjMaskCollection;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendCfgFromAnnotation() {
-		return listAppendCfgFromAnnotation;
-	}
-
-	public void setListAppendCfgFromAnnotation(
-			List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotation) {
-		this.listAppendCfgFromAnnotation = listAppendCfgFromAnnotation;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendKeyValueParams() {
-		return listAppendKeyValueParams;
-	}
-
-	public void setListAppendKeyValueParams(
-			List<NamedBean<FilePathGenerator>> listAppendKeyValueParams) {
-		this.listAppendKeyValueParams = listAppendKeyValueParams;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendCfgFromAnnotationAcceptedOnly() {
-		return listAppendCfgFromAnnotationAcceptedOnly;
-	}
-
-	public void setListAppendCfgFromAnnotationAcceptedOnly(
-			List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationAcceptedOnly) {
-		this.listAppendCfgFromAnnotationAcceptedOnly = listAppendCfgFromAnnotationAcceptedOnly;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendCfgFromAnnotationRejectedOnly() {
-		return listAppendCfgFromAnnotationRejectedOnly;
-	}
-
-	public void setListAppendCfgFromAnnotationRejectedOnly(
-			List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationRejectedOnly) {
-		this.listAppendCfgFromAnnotationRejectedOnly = listAppendCfgFromAnnotationRejectedOnly;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendHistogram() {
-		return listAppendHistogram;
-	}
-
-	public void setListAppendHistogram(
-			List<NamedBean<FilePathGenerator>> listAppendHistogram) {
-		this.listAppendHistogram = listAppendHistogram;
-	}
-
-	public RasterReader getRasterReader() {
-		return rasterReader;
-	}
-
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
-	}
-
-	public List<NamedBean<FilePathGenerator>> getListAppendFilePath() {
-		return listAppendFilePath;
-	}
-
-	public void setListAppendFilePath(
-			List<NamedBean<FilePathGenerator>> listAppendFilePath) {
-		this.listAppendFilePath = listAppendFilePath;
 	}
 }

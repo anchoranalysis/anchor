@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.io.IReplaceTask;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -126,16 +126,16 @@ public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorB
 		ParametersExperiment paramsExperiment
 	) throws ExperimentExecutionException;
 		
-	protected Optional<LogReporter> logReporterForMonitor(ParametersExperiment paramsExperiment) {
+	protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {
 		return OptionalUtilities.createFromFlag(
 			paramsExperiment.isDetailedLogging(),
-			paramsExperiment::getLogReporterExperiment
+			paramsExperiment::getLoggerExperiment
 		);
 	}
 		
 	private static void logStats( TaskStatistics stats, ParametersExperiment paramsExperiment ) {
 		StatisticsLogger statisticsLogger = new StatisticsLogger(
-			paramsExperiment.getLogReporterExperiment()
+			paramsExperiment.getLoggerExperiment()
 		);
 		statisticsLogger.logTextualMessage(stats);		
 	}

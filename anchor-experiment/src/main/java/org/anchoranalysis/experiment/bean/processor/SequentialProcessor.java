@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -64,10 +64,10 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 			inputObjects,
 			sharedState,
 			paramsExperiment,
-			logReporterForMonitor(paramsExperiment)
+			loggerForMonitor(paramsExperiment)
 		);
 		
-		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.context() );
+		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.getContext() );
 		
 		return stats;
 	}
@@ -76,13 +76,13 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 		List<T> inputObjects,
 		S sharedState,
 		ParametersExperiment paramsExperiment,
-		Optional<LogReporter> logReporterMonitor
-	) throws ExperimentExecutionException {
+		Optional<MessageLogger> loggerMonitor
+	) {
 		
 		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<>(
 			obj -> executeJobAndLog( obj, sharedState, paramsExperiment ),
 			T::descriptiveName,
-			logReporterMonitor,
+			loggerMonitor,
 			false
 		);
 		
@@ -91,8 +91,8 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 	
 	private boolean executeJobAndLog( T inputObj, S sharedState, ParametersExperiment paramsExperiment ) {
 		
-		LogReporter logReporter = paramsExperiment.getLogReporterExperiment();
-		ErrorReporter errorReporter = new ErrorReporterIntoLog(logReporter);
+		MessageLogger logger = paramsExperiment.getLoggerExperiment();
+		ErrorReporter errorReporter = new ErrorReporterIntoLog(logger);
 
 		try {
 			ParametersUnbound<T,S> paramsUnbound = new ParametersUnbound<>(

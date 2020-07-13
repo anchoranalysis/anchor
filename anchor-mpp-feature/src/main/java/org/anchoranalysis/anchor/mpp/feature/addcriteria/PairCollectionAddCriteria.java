@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -47,7 +47,7 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -85,7 +85,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	
 	private boolean hasInit = false;
 	private NRGStackWithParams nrgStack;
-	private LogErrorReporter logger;
+	private Logger logger;
 	private SharedFeatureMulti sharedFeatures;
 	
 	public PairCollectionAddCriteria( Class<?> pairTypeClass ) {
@@ -116,7 +116,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, Logger logger, SharedFeatureMulti sharedFeatures ) throws InitException {
 		this.logger = logger;
 		this.sharedFeatures = sharedFeatures;
 		
@@ -151,7 +151,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void add( MemoForIndex marksExisting, VoxelizedMarkMemo newMark ) throws UpdateMarkSetException {
 		checkInit();
 		try {
 			this.graph.addVertex( newMark.getMark() );
@@ -162,7 +162,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	}
 	
 	@Override
-	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void exchange( MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo oldMark, int indexOldMark, VoxelizedMarkMemo newMark ) throws UpdateMarkSetException {
 		checkInit();
 		
 		// We need to make a copy of the list, so we can perform the removal operation after the add
@@ -172,13 +172,12 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		rmv(pxlMarkMemoList, oldMark);
 		
 		memoList.remove(indexOldMark);
-		
-		// TODO, shouldn't this be memoList
+
 		add(memoList, newMark );
 	}
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
+	public void rmv( MemoForIndex marksExisting, VoxelizedMarkMemo mark ) throws UpdateMarkSetException {
 		checkInit();
 		this.graph.removeVertex(mark.getMark());
 	}
@@ -272,11 +271,11 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		// Some nrg components need to be calculated individually
 		for( int i=0; i< marks.size(); i++ ) {
 			
-			PxlMarkMemo srcMark = marks.getMemoForIndex(i); 
+			VoxelizedMarkMemo srcMark = marks.getMemoForIndex(i); 
 				
 			for( int j=0; j<i; j++ ) {
 				
-				PxlMarkMemo destMark = marks.getMemoForIndex(j);
+				VoxelizedMarkMemo destMark = marks.getMemoForIndex(j);
 				
 				addCriteria.generateEdge(
 					srcMark,
@@ -291,7 +290,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		}
 	}
 	
-	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, PxlMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
+	private void calcPairsForMark( MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark, NRGStackWithParams nrgStack ) throws CreateException {
 		
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session;
 		
@@ -312,7 +311,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		// We calculate how the new mark interacts with all the other marks
 		for( int i=0; i<pxlMarkMemoList.size(); i++) {
 
-			PxlMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
+			VoxelizedMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
 			if (!otherMark.getMark().equals( newMark.getMark() )) {
 				addCriteria.generateEdge(
 					otherMark,

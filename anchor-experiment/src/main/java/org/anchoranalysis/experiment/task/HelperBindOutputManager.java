@@ -90,7 +90,7 @@ class HelperBindOutputManager {
 		ParametersExperiment params
 	) throws BindFailedException, JobExecutionException {
 		try {
-			BoundOutputManager boundOutput = params.getOutputManager().bindFile( 
+			BoundOutputManager boundOutput = params.getOutputManager().deriveFromInput( 
 				input,
 				params.getExperimentIdentifier(),
 				manifestTask,

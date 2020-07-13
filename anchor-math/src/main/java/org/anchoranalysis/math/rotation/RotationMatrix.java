@@ -32,6 +32,8 @@ import java.io.Serializable;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3d;
 
+import com.google.common.base.Preconditions;
+
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -43,20 +45,19 @@ public class RotationMatrix implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private DoubleMatrix2D delegate;
+	private DoubleMatrix2D matrix;
 	
 	public RotationMatrix( int numDim ) {
-		delegate = DoubleFactory2D.dense.make(numDim, numDim);
+		matrix = DoubleFactory2D.dense.make(numDim, numDim);
 	}
 	
 	public RotationMatrix( DoubleMatrix2D matrix ) {
-		assert matrix!=null;
-		this.delegate = matrix;
+		this.matrix = matrix;
 	}
 
 	public Point3d calcRotatedPoint( Point3d pntIn ) {
 
-		if (delegate.rows()==3) {
+		if (matrix.rows()==3) {
 			double[] dIn = new double[3];
 			dIn[0] = pntIn.getX();
 			dIn[1] = pntIn.getY();
@@ -64,7 +65,7 @@ public class RotationMatrix implements Serializable {
 			
 			double[] rot = calcRotatedPoint(dIn);
 			return new Point3d( rot[0], rot[1], rot[2]);
-		} else if (delegate.rows()==2) {
+		} else if (matrix.rows()==2) {
 			double[] dIn = new double[2];
 			dIn[0] = pntIn.getX();
 			dIn[1] = pntIn.getY();
@@ -77,8 +78,7 @@ public class RotationMatrix implements Serializable {
 	}
 	
 	public double[] calcRotatedPoint( double[] pntIn ) {
-		
-		assert pntIn.length == delegate.rows();
+		Preconditions.checkArgument(pntIn.length == matrix.rows());
 		
 		int numDim = pntIn.length;
 		
@@ -89,7 +89,7 @@ public class RotationMatrix implements Serializable {
 			matIn.set(i, 0, pntIn[i] );
 		}
 		
-		DoubleMatrix2D matOut = delegate.zMult(matIn, null);
+		DoubleMatrix2D matOut = matrix.zMult(matIn, null);
 		
 		double[] pntOut = new double[numDim];
 		for (int i=0; i<numDim; i++) {
@@ -119,36 +119,36 @@ public class RotationMatrix implements Serializable {
 	}
 	
 	public RotationMatrix mult( RotationMatrix other ) {
-		return new RotationMatrix( delegate.zMult(other.delegate, null) );
+		return new RotationMatrix( matrix.zMult(other.matrix, null) );
 	}
 	
 	public Point3d column( int colNum ) {
-		DoubleMatrix1D vector = delegate.viewColumn(colNum);
+		DoubleMatrix1D vector = matrix.viewColumn(colNum);
 		return new Point3d( vector.get(0), vector.get(1), vector.get(2) );
 	}
 	
 	public int getNumDim() {
-		return delegate.columns();
+		return matrix.columns();
 	}
 	
 	public DoubleMatrix2D getMatrix() {
-		return delegate;
+		return matrix;
 	}
 	
 	public void multConstant( double value ) {
-		delegate.assign( Functions.mult(value) );
+		matrix.assign( Functions.mult(value) );
 	}
 	
 	public RotationMatrix transpose() {
-		return new RotationMatrix( delegate.viewDice().copy() );
+		return new RotationMatrix( matrix.viewDice().copy() );
 	}
 	
 	public RotationMatrix duplicate() {
-		return new RotationMatrix( delegate.copy() );
+		return new RotationMatrix( matrix.copy() );
 	}
 
 	@Override
 	public String toString() {
-		return delegate.toString();
+		return matrix.toString();
 	}
 }

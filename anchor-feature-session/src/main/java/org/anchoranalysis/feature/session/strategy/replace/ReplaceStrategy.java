@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public abstract class ReplaceStrategy<T extends FeatureInput> {
+public interface ReplaceStrategy<T extends FeatureInput> {
 
-	public abstract SessionInput<T> createOrReuse(T input) throws FeatureCalcException;
+	SessionInput<T> createOrReuse(T input) throws FeatureCalcException;
 }

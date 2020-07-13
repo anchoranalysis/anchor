@@ -41,7 +41,7 @@ import org.anchoranalysis.bean.AnchorBean;
  * @author Owen Feehan
  *
  */
-public abstract class PermutationSetter {
+public interface PermutationSetter {
 	
-	public abstract void setPermutation( AnchorBean<?> bean, Object val ) throws PermutationSetterException;
+	void setPermutation( AnchorBean<?> bean, Object val ) throws PermutationSetterException;
 }

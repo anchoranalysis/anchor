@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public abstract class FindChildStrategy {
+public interface FindChildStrategy {
 
 	/**
 	 * Selects a child-cache given a parent and a child-name
@@ -51,7 +51,7 @@ public abstract class FindChildStrategy {
 	 * @param input input to be used for calculations on the child-cache
 	 * @return an existing or newly created child-cache depending on the strategy.
 	 */
-	public abstract <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+	<V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
 		FeatureSessionCache<?> parentCache,
 		CacheCreator factory,
 		ChildCacheName childCacheName,
@@ -63,8 +63,8 @@ public abstract class FindChildStrategy {
 	 * 
 	 * @return the strategy
 	 */
-	public abstract FindChildStrategy strategyForGrandchild();
+	FindChildStrategy strategyForGrandchild();
 	
 	/** If set, these particular-caches are exceptionall NOT invalidated during the typical invalidation operation on their parent. If not-set, there are no exceptions. */
-	public abstract Optional<Set<ChildCacheName>> cachesToAvoidInvalidating();
+	Optional<Set<ChildCacheName>> cachesToAvoidInvalidating();
 }

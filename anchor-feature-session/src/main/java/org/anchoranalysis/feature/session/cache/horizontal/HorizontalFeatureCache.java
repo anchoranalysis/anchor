@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.session.cache.horizontal;
 import java.util.Collection;
 import java.util.Set;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -86,7 +86,7 @@ public class HorizontalFeatureCache<T extends FeatureInput> implements FeatureSe
 
 	@Override
 	public void init(FeatureInitParams featureInitParams,
-			LogErrorReporter logger) {
+			Logger logger) {
 		delegate.init(featureInitParams, logger);
 	}
 

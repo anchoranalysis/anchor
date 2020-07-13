@@ -55,7 +55,7 @@ public class CheckIfAllowed implements Writer {
 	// END REQUIRED ARGUMENTS
 
 	@Override
-	public Optional<BoundOutputManager> bindAsSubFolder(
+	public Optional<BoundOutputManager> bindAsSubdirectory(
 		String outputName,
 		ManifestFolderDescription manifestDescription,
 		Optional<FolderWriteWithPath> folder
@@ -67,7 +67,7 @@ public class CheckIfAllowed implements Writer {
 
 		preop.exec();
 		
-		return writer.bindAsSubFolder(outputName, manifestDescription, folder);
+		return writer.bindAsSubdirectory(outputName, manifestDescription, folder);
 	}
 
 	@Override

@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -51,11 +50,9 @@ public class WriterRouterErrors {
 		this.errorReporter = errorReporter;
 	}
 
-	public Optional<BoundOutputManagerRouteErrors> bindAsSubFolder(String outputName,
-			ManifestFolderDescription manifestDescription,
-			Optional<FolderWriteWithPath> folder) {
+	public Optional<BoundOutputManagerRouteErrors> bindAsSubdirectory(String outputName, ManifestFolderDescription manifestDescription) {
 		try {
-			return delegate.bindAsSubFolder(outputName, manifestDescription, folder).map( output ->
+			return delegate.bindAsSubdirectory(outputName, manifestDescription, Optional.empty()).map( output ->
 				new BoundOutputManagerRouteErrors(
 					output,
 					errorReporter
@@ -116,7 +113,7 @@ public class WriterRouterErrors {
 		String outputName,
 		String extension,
 		Optional<ManifestDescription> manifestDescription
-	) throws OutputWriteFailedException {
+	) {
 		return writeGenerateFilename(outputName, extension, manifestDescription, "", "", "");
 	}
 	
@@ -127,7 +124,7 @@ public class WriterRouterErrors {
 		String outputNamePrefix,
 		String outputNameSuffix,
 		String index
-	) throws OutputWriteFailedException {
+	) {
 		return delegate.writeGenerateFilename(
 			outputName,
 			extension,

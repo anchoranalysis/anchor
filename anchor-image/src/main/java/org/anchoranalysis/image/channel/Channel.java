@@ -35,7 +35,6 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
@@ -43,6 +42,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+
+import lombok.Getter;
 
 /**
  * A channel from an image
@@ -61,7 +62,9 @@ public class Channel {
 	
 	private static final ChannelFactory FACTORY = ChannelFactory.instance();
 	
-	private ImageDimensions dim;
+	@Getter
+	private ImageDimensions dimensions;
+	
 	private VoxelBox<? extends Buffer> delegate;
 		
 	/**
@@ -71,7 +74,7 @@ public class Channel {
 	 * @param res
 	 */
 	public Channel( VoxelBox<? extends Buffer> voxelBox, ImageResolution res ) {
-		this.dim = new ImageDimensions(
+		this.dimensions = new ImageDimensions(
 			voxelBox.extent(),
 			res
 		);
@@ -117,8 +120,6 @@ public class Channel {
 		ImageDimensions sdNew = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
-		assert(ba.extent().getX()==x);
-		assert(ba.extent().getY()==y);
 		assert(ba.extent().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
 		return FACTORY.create( ba, sdNew.getRes() );
 	}
@@ -157,32 +158,27 @@ public class Channel {
 	public int countEqualTo( int value ) {
 		return delegate.countEqual(value);
 	}
-	
-	public ImageDimensions getDimensions() {
-		return dim;
-	}
 
 	public void updateResolution(ImageResolution res) {
-		dim = dim.duplicateChangeRes(res);
+		dimensions = dimensions.duplicateChangeRes(res);
 	}
 
 	public VoxelDataType getVoxelDataType() {
 		return delegate.dataType();
 	}
-	
+
+	/** Display a histogram of voxel-intensities as the string-representation */
 	@Override
 	public String toString() {
-		Histogram h;
 		try {
-			h = HistogramFactory.create(this);
+			return HistogramFactory.create(this).toString();
 		} catch (CreateException e) {
 			return String.format("Error: %s",e);
 		}
-		return h.toString();
 	}
 	
 	public boolean equalsDeep( Channel other) {
-		return dim.equals(other.dim) && delegate.equalsDeep( other.delegate );
+		return dimensions.equals(other.dimensions) && delegate.equalsDeep( other.delegate );
 	}
 	
 	/** 

@@ -30,9 +30,8 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
 import java.io.Serializable;
 
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
-import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.manifest.deserializer.folder.DeserializedObjectFromFolderBundle.BundleDeserializers;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 /**
@@ -56,12 +55,9 @@ public abstract class DeserializeFromFolderBundle<T,S extends Serializable> impl
 	
 	@Override
 	public LoadContainer<T> create() throws DeserializationFailedException {
-		
-		assert( folder.getManifestFolderDescription().getSequenceType() != null );
-		
 		DeserializedObjectFromFolderBundle<S> deserializeFromBundle = new DeserializedObjectFromFolderBundle<>( folder, deserializers, CACHE_SIZE );
 
-		IBoundedIndexContainer<T> boundedContainer = new BoundsFromSequenceType<>(
+		BoundedIndexContainer<T> boundedContainer = new BoundsFromSequenceType<>(
 			createCntr(deserializeFromBundle),
 			deserializeFromBundle.getBundleParameters().getSequenceType() 
 		);

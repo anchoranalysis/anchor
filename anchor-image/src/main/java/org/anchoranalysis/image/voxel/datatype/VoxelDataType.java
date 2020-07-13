@@ -61,11 +61,7 @@ public abstract class VoxelDataType {
 			return false;
 		}
 		
-		if (numBits()!=objC.numBits()) {
-			return false;
-		}
-		
-		return true;
+		return numBits()==objC.numBits();
 	}
 	
 	@Override

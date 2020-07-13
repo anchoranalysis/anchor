@@ -83,7 +83,11 @@ public class StackCollectionOutputter {
 		String secondLevelOutputKey,
 		boolean suppressSubfolders
 	) throws OutputWriteFailedException {
-		assert(outputManager.getOutputWriteSettings().hasBeenInit());		
+		
+		if(!outputManager.getOutputWriteSettings().hasBeenInit()) {
+			throw new OutputWriteFailedException("OutputManager's settings have not yet been initialized");
+		}
+	
 		StackCollectionOutputter.outputWithException(
 			stackSubset(stacks, secondLevelOutputKey, outputManager ),
 			outputManager.getDelegate(),

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
-	private List<Overlay> delegate = new ArrayList<Overlay>();
+	private List<Overlay> delegate = new ArrayList<>();
 
 	@Override
 	public Iterator<Overlay> iterator() {
@@ -68,7 +68,7 @@ public class OverlayCollection implements Iterable<Overlay> {
 	}
 	
 	public Set<Integer> integerSet() {
-		HashSet<Integer> set = new HashSet<Integer>();
+		HashSet<Integer> set = new HashSet<>();
 		for( Overlay ol : delegate ) {
 			set.add( ol.getId() );
 		}

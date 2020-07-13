@@ -30,10 +30,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjectCollectionProviderOne extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
@@ -45,12 +48,4 @@ public abstract class ObjectCollectionProviderOne extends ObjectCollectionProvid
 	}
 	
 	protected abstract ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException;
-	
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
 }

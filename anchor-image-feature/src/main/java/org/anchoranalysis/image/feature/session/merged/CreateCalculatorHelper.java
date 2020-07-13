@@ -30,7 +30,7 @@ package org.anchoranalysis.image.feature.session.merged;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -56,14 +56,23 @@ class CreateCalculatorHelper {
 
 	// Prefixes that are ignored
 	private final Optional<NRGStackWithParams> nrgStack;
-	private final LogErrorReporter logger;
-		
+	private final Logger logger;
+
+	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> create(
+		FeatureList<T> features,
+		ImageInitParams soImage,
+		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
+	) throws InitException {
+		return wrapWithNrg(
+			createWithoutNrg(features, soImage, replacePolicyFactory)
+		);		
+	}
+	
 	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createCached(
 		FeatureList<T> features,
 		ImageInitParams soImage,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
 	) throws InitException {
-		
 		return wrapWithNrg( 
 			new FeatureCalculatorCachedMulti<>(
 				createWithoutNrg(features, soImage, replacePolicyFactory )
@@ -103,16 +112,6 @@ class CreateCalculatorHelper {
 		);		
 	}
 	
-	public <T extends FeatureInputNRG> FeatureCalculatorMulti<T> create(
-		FeatureList<T> features,
-		ImageInitParams soImage,
-		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
-	) throws InitException {
-		return wrapWithNrg(
-			createWithoutNrg(features, soImage, replacePolicyFactory)
-		);		
-	}
-	
 	private <T extends FeatureInputNRG> FeatureCalculatorMulti<T> createWithoutNrg(
 		FeatureList<T> features,
 		ImageInitParams soImage,
@@ -145,7 +144,7 @@ class CreateCalculatorHelper {
 	
 	private FeatureInitParams createInitParams(ImageInitParams soImage) {
 		return InitParamsHelper.createInitParams(
-			soImage,
+			Optional.of( soImage.getSharedObjects() ),
 			nrgStack
 		);
 	}

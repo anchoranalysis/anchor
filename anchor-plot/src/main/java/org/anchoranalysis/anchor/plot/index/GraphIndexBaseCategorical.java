@@ -30,7 +30,6 @@ import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.anchoranalysis.anchor.plot.index.GraphIndexBase;
 import org.anchoranalysis.anchor.plot.GetForSeries;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -62,7 +61,7 @@ public abstract class GraphIndexBaseCategorical<T,S extends CategoryDataset> ext
 		String[] seriesNames,
 		GetForSeries<T,String> labelGetter,
 		GetForSeries<T,Paint> colorGetter
-	) throws InitException {
+	) {
 		super(graphName, seriesNames);
 		this.colorGetter = colorGetter;
 		this.labelGetter = labelGetter;

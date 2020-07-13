@@ -34,20 +34,16 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=false)
-public abstract class FeatureInputNRG extends FeatureInputParams {
+@AllArgsConstructor @EqualsAndHashCode
+public abstract class FeatureInputNRG implements FeatureInputParams {
 
 	private Optional<NRGStackWithParams> nrgStack;
 	
 	public FeatureInputNRG() {
-		this.nrgStack = Optional.empty();
-	}
-	
-	public FeatureInputNRG(Optional<NRGStackWithParams> nrgStack) {
-		super();
-		this.nrgStack = nrgStack;
+		this( Optional.empty() );
 	}
 
 	@Override

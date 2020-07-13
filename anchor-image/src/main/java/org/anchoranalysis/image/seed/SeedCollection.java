@@ -81,7 +81,7 @@ public class SeedCollection implements Iterable<Seed> {
 			Seed s = delegate.get(i);
 			ObjectMask omS = s.createMask();
 				
-			if (!omS.hasIntersectingPixels(omContaining)) {
+			if (!omS.hasIntersectingVoxels(omContaining)) {
 				return false;
 			}
 		}
@@ -103,7 +103,7 @@ public class SeedCollection implements Iterable<Seed> {
 				
 				ObjectMask omT = t.createMask();
 				
-				if (omS.hasIntersectingPixels(omT)) {
+				if (omS.hasIntersectingVoxels(omT)) {
 					return true;
 				}
 			}
@@ -122,6 +122,10 @@ public class SeedCollection implements Iterable<Seed> {
 			}
 		}
 		return true;
+	}
+
+	public boolean isEmpty() {
+		return delegate.isEmpty();
 	}
 
 }

@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
 public class CreateFromEntireChnlFactory {
 			
 	public static ObjectMask createObjMask( BinaryChnl binaryImgChnl ) {
-		Channel chnl = binaryImgChnl.getChnl();
+		Channel chnl = binaryImgChnl.getChannel();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte(); 
 		

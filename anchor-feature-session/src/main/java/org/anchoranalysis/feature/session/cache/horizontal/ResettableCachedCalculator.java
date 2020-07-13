@@ -26,7 +26,7 @@ package org.anchoranalysis.feature.session.cache.horizontal;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -45,7 +45,7 @@ class ResettableCachedCalculator<T extends FeatureInput> implements FeatureSessi
 	private ResettableSet<FeatureCalculation<?,T>> setCalculation = new ResettableSet<>(false);
 	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCalculationMap = new ResettableSet<>(false);
 	
-	private LogErrorReporter logger;
+	private Logger logger;
 	private SharedFeatureSet<T> sharedFeatures;
 	
 	public ResettableCachedCalculator(SharedFeatureSet<T> sharedFeatures) {
@@ -53,7 +53,7 @@ class ResettableCachedCalculator<T extends FeatureInput> implements FeatureSessi
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	public void init( LogErrorReporter logger ) {
+	public void init( Logger logger ) {
 		this.logger = logger;
 	}
 	
@@ -62,7 +62,7 @@ class ResettableCachedCalculator<T extends FeatureInput> implements FeatureSessi
 			throws FeatureCalcException {
 		double val = feature.calcCheckInit(input);
 		if (Double.isNaN(val)) {
-			logger.getLogReporter().logFormatted("WARNING: NaN returned from feature %s", feature.getFriendlyName() );
+			logger.messageLogger().logFormatted("WARNING: NaN returned from feature %s", feature.getFriendlyName() );
 		}
 		return val;
 	}

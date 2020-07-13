@@ -48,21 +48,21 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 	@Override
 	public Feature<FeatureInput> create() throws CreateException {
 		if (feature==null) {
-			if (getSharedObjects().getSharedFeatureSet()==null) {
+			if (getInitializationParameters().getSharedFeatureSet()==null) {
 				throw new CreateException("sharedFeatureSet is null");
 			}
 			
 			if (featureListRef!=null && !featureListRef.isEmpty()) {
 				// We request this to make sure it's evaluated and added to the pso.getSharedFeatureSet()
 				try {
-					getSharedObjects().getFeatureListSet().getException(featureListRef);
+					getInitializationParameters().getFeatureListSet().getException(featureListRef);
 				} catch (NamedProviderGetException e) {
 					throw new CreateException(e.summarize());
 				}
 			}
 			
 			try {
-				this.feature = getSharedObjects().getSharedFeatureSet().getException(id);
+				this.feature = getInitializationParameters().getSharedFeatureSet().getException(id);
 			} catch (NamedProviderGetException e) {
 				throw new CreateException(e.summarize());
 			}		

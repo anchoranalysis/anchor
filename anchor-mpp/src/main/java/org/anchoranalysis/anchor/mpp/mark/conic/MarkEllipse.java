@@ -28,14 +28,15 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -52,6 +53,8 @@ import com.google.common.base.Preconditions;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
+import lombok.Getter;
+import lombok.Setter;
 
 import static org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities.*;
 import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.*;
@@ -73,12 +76,16 @@ public class MarkEllipse extends MarkConic implements Serializable {
 	private static final byte FLAG_SUBMARK_REGION2 = flagForRegion( SUBMARK_SHELL, SUBMARK_SHELL_OUTSIDE);
 	private static final byte FLAG_SUBMARK_REGION3 = flagForRegion( SUBMARK_OUTSIDE );
 	
-	// START Configurable parameters	
+	// START Configurable parameters
+	@Getter @Setter
 	private double shellRad = 0.2;
 	// END configurable parameters
 
 	// START mark state
+	@Getter
 	private Point2d radii;
+	
+	@Getter
 	private Orientation orientation = new Orientation2D();
 	// END mark state
 	
@@ -256,7 +263,6 @@ public class MarkEllipse extends MarkConic implements Serializable {
 		this.orientation = orientation;
 		this.radii = radii;
 		updateAfterMarkChange();
-		clearCacheID();
 	}
 	
 	@Override
@@ -284,21 +290,14 @@ public class MarkEllipse extends MarkConic implements Serializable {
             
 		return BoundingBoxCalculator.bboxFromBounds( getPos(), bboxMatrix, false, bndScene );
 	}
-
-	// Does a quick test to see if we can reject the possibility
-	// of overlap
-	//   true -> no overlap
-	//   false -> maybe overlap, maybe not
-	@SuppressWarnings("static-access")
-	@Override
-	public boolean quickTestNoOverlap( Mark m, int regionID ) {
-		
+	
+	private transient QuickOverlapCalculation quickOverlap = (Mark mark, int regionID ) -> {
 		// No quick tests unless it's the same type of class
-		if (!(m instanceof MarkEllipse)) {
+		if (!(mark instanceof MarkEllipse)) {
 			return false;
 		}
 		
-		MarkEllipse trgtMark = (MarkEllipse) m;
+		MarkEllipse trgtMark = (MarkEllipse) mark;
 		
 		DoubleMatrix1D relPos = twoElementMatrix(
 			trgtMark.getPos().getX() - getPos().getX(),
@@ -306,52 +305,32 @@ public class MarkEllipse extends MarkConic implements Serializable {
 		);
 		
 		DoubleMatrix1D relPosSq = relPos.copy();
-		relPosSq.assign( Functions.functions.square );	// NOSONAR
+		relPosSq.assign( Functions.square );	// NOSONAR
 		double dist = relPosSq.zSum();
 		
 		// Definitely outside
 		return dist > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0);
+	};
+
+	@Override
+	public Optional<QuickOverlapCalculation> quickOverlap() {
+		return Optional.of(quickOverlap);
 	}
 	
 	private double getMaximumRadius() {
 		return ellipsoidCalculator.getMaximumRadius();
 	}
 
-	public double getShellRad() {
-		return shellRad;
-	}
-
-	public void setShellRad(double shellRad) {
-		this.shellRad = shellRad;
-		clearCacheID();
-	}
-
 	public void setMarks(Point2d radii, Orientation orientation ) {
 		this.orientation = orientation;
 		this.radii = radii;
-		clearCacheID();
 		updateAfterMarkChange();
-	}
-	
-	@Override
-	public void assignFrom( Mark srcMark ) throws OptionalOperationUnsupportedException {
-		
-		if (!(srcMark instanceof MarkEllipse)) {
-			throw new OptionalOperationUnsupportedException("srcMark must be of type MarkEllipse");
-		}
-		
-		MarkEllipse srcMarkEll = (MarkEllipse) srcMark;
-		setMarks( srcMarkEll.getRadii(), srcMarkEll.getOrientation() );
-		
-		// As the cacheID might be cleared by previous sets
-		super.assignFrom( srcMark);
 	}
 	
 	public void scaleRadii( double multFactor ) {
 		this.radii.setX( this.radii.getX() * multFactor );
 		this.radii.setY( this.radii.getY() * multFactor );
 		updateAfterMarkChange();
-		clearCacheID();
 	}
 	
 	// NB objects are scaled in pre-rotated position i.e. when aligned to axes
@@ -362,7 +341,6 @@ public class MarkEllipse extends MarkConic implements Serializable {
 		this.radii.setX( this.radii.getX() * multFactor );
 		this.radii.setY( this.radii.getY() * multFactor );
 		updateAfterMarkChange();
-		clearCacheID();
 	}
 
 	@Override
@@ -409,14 +387,6 @@ public class MarkEllipse extends MarkConic implements Serializable {
 		op.addDoubleAsString("Shell Radius (pixels)", shellRad );
 		
 		return op;
-	}
-
-	public Orientation getOrientation() {
-		return orientation;
-	}
-
-	public Point2d getRadii() {
-		return radii;
 	}
 
 	@Override
@@ -476,5 +446,4 @@ public class MarkEllipse extends MarkConic implements Serializable {
 	private static double applyEndPoint( double[] endPoint1, double[] endPoint2, int dimIndex, double toAdd, DoubleBinaryOperator func ) {
 		return func.applyAsDouble(endPoint1[dimIndex], endPoint2[dimIndex]) + toAdd;
 	}
-
 }

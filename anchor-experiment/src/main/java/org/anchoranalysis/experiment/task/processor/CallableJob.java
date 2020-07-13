@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.Task;
@@ -62,7 +62,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<Optio
 	 * @param taskState
 	 * @param taskDescription
 	 * @param monitor
-	 * @param logReporterMonitor the logReporter used for the monitor
+	 * @param loggerMonitor the logger used for the monitor
 	 */
 	public CallableJob(
 		Task<T,S> task,
@@ -70,7 +70,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<Optio
 		JobState taskState,
 		JobDescription taskDescription,
 		ConcurrentJobMonitor monitor,
-		Optional<LogReporter> logReporterMonitor,
+		Optional<MessageLogger> loggerMonitor,
 		int showOngoingJobsLessThan
 	) {
 		super();
@@ -80,7 +80,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<Optio
 		this.jobDescription = taskDescription;
 		this.logger = new JobStartStopLogger(
 			"Job",
-			logReporterMonitor,
+			loggerMonitor,
 			monitor,
 			false,
 			showOngoingJobsLessThan
@@ -110,7 +110,7 @@ public class CallableJob<T extends InputFromManager,S> implements Callable<Optio
 			// If executeTask is called with supressException==FALSE then we arrive here fairly, easily, and record the error in the experiment-log just
 			//  in case, even though it's probably already in the task log.
 			
-			ErrorReporterIntoLog errorReporter = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLogReporterExperiment() );
+			ErrorReporterIntoLog errorReporter = new ErrorReporterIntoLog( paramsUnbound.getParametersExperiment().getLoggerExperiment() );
 			errorReporter.recordError(CallableJob.class, e);
 				
 			jobState.markAsCompleted(false);

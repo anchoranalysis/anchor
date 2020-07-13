@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value @EqualsAndHashCode(callSuper=false)
-public class FeatureInputResults extends FeatureInput {
+public class FeatureInputResults implements FeatureInput {
 	ResultsVectorCollection resultsVectorCollection;
 	FeatureNameMapToIndex featureNameIndex;
 }

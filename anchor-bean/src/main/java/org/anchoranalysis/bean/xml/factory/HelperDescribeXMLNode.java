@@ -30,7 +30,10 @@ package org.anchoranalysis.bean.xml.factory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.apache.commons.configuration.tree.ConfigurationNode;
 
 import lombok.AccessLevel;
@@ -76,13 +79,18 @@ class HelperDescribeXmlNode {
 	 * @param sb string-builder
 	 * @return a string in the format [ATTRIBUTE1_DESCRIPTION, ATTRIBUTE2_DESCRIPTION, ATTRIBUTE3_DESCRIPTION]
 	 */
-	private static void describeAttributes( Collection<ConfigurationNode> nodes, StringBuilder sb ) {
+	private static void describeAttributes( Collection<ConfigurationNode> nodes, Predicate<ConfigurationNode> predicate, StringBuilder sb ) {
+
+		List<ConfigurationNode> nodesFiltered = FunctionalUtilities.filterToList(nodes, predicate);
+		
 		// We show nothing if it's empty
-		if (nodes.isEmpty()) {
+		if (nodesFiltered.isEmpty()) {
 			return;
 		}
 		sb.append(" ");
-		String attributeDesc = nodes.stream().map( HelperDescribeXmlNode::describeAttributeKeyValue ).collect( Collectors.joining(", ", "[", "]") );
+		String attributeDesc = nodesFiltered.stream().map( HelperDescribeXmlNode::describeAttributeKeyValue ).collect(
+			Collectors.joining(", ", "[", "]")
+		);
 		sb.append( attributeDesc );
 	}
 	
@@ -99,12 +107,10 @@ class HelperDescribeXmlNode {
 		sb.append( node.getName() );
 		
 		// Regular attributes
-		List<ConfigurationNode> regularAttributes = node.getAttributes().stream().filter( HelperDescribeXmlNode::isRegularAttribute ).collect(Collectors.toList());
-		describeAttributes(regularAttributes,sb);
+		describeAttributes(node.getAttributes(), HelperDescribeXmlNode::isRegularAttribute, sb);
 
 		// Config attributes
-		List<ConfigurationNode> configAttributes = node.getAttributes().stream().filter( HelperDescribeXmlNode::isConfigAttribute ).collect(Collectors.toList());
-		describeAttributes(configAttributes,sb);
+		describeAttributes(node.getAttributes(), HelperDescribeXmlNode::isConfigAttribute, sb);
 		
 		return sb.toString();
 	}

@@ -52,11 +52,11 @@ public class MaxIntensityProjectionPair {
 		bufferMIP2 = intensityProjectionFor(buffer2, rmFlags2);
 	}
 	
-	public int countIntersectingPixels() {
+	public int countIntersectingVoxels() {
 		// Relies on the binary voxel buffer ON being 255
-		return new CountIntersectingPixelsRegionMembership(
+		return new CountIntersectingVoxelsRegionMembership(
 			(byte) 1
-		).countIntersectingPixels(bufferMIP1, bufferMIP2);
+		).countIntersectingVoxels(bufferMIP1, bufferMIP2);
 	}
 	
 	public int minArea() {

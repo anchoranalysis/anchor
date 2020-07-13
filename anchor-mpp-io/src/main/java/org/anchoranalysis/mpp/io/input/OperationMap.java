@@ -42,10 +42,6 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 public class OperationMap<T> implements MultiInputSubMap<T> {
 
 	private Map<String,Operation<T,OperationFailedException>> map = new HashMap<>();
-
-	public Map<String, Operation<T,OperationFailedException>> getMap() {
-		return map;
-	}
 	
 	@Override
 	public void add( String name, Operation<T,OperationFailedException> op ) {
@@ -68,5 +64,9 @@ public class OperationMap<T> implements MultiInputSubMap<T> {
 			);
 		}
 		return ret;
+	}
+	
+	public Map<String, Operation<T,OperationFailedException>> getMap() {
+		return map;
 	}
 }

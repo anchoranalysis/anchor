@@ -167,7 +167,7 @@ public class ConnectedComponentUnitFindTest {
 		boolean encounteredAlreadyTheException = false;
 		
 		for( ObjectMask obj : objs ) {
-			int numVoxels = obj.numVoxelsOn();
+			int numVoxels = obj.numberVoxelsOn();
 			if (numVoxels==target) {
 				continue;
 			} else {

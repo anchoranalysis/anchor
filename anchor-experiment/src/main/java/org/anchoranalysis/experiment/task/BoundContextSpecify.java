@@ -29,9 +29,9 @@ package org.anchoranalysis.experiment.task;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -40,21 +40,21 @@ class BoundContextSpecify implements BoundIOContext {
 	private ExperimentExecutionArguments experimentArguments;
 	private BoundOutputManagerRouteErrors outputManager;
 	
-	private StatefulLogReporter logReporter;
-	private LogErrorReporter logger;	// Always related to the above two fields
+	private StatefulMessageLogger messageLogger;
+	private Logger logger;	// Always related to the above two fields
 	
 	public BoundContextSpecify(
 		ExperimentExecutionArguments experimentArguments,
 		BoundOutputManagerRouteErrors outputManager,
-		StatefulLogReporter logReporter,
+		StatefulMessageLogger logger,
 		ErrorReporter errorReporter
 	) {
 		super();
 		this.experimentArguments = experimentArguments;
 		this.outputManager = outputManager;
 		
-		this.logReporter = logReporter;
-		this.logger = new LogErrorReporter(logReporter, errorReporter);
+		this.messageLogger = logger;
+		this.logger = new Logger(logger, errorReporter);
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ class BoundContextSpecify implements BoundIOContext {
 
 	@Override
 	public boolean isDebugEnabled() {
-		return experimentArguments.isDebugEnabled();
+		return experimentArguments.isDebugModeEnabled();
 	}
 	
 	@Override
@@ -73,13 +73,13 @@ class BoundContextSpecify implements BoundIOContext {
 	}
 	
 	@Override
-	public LogErrorReporter getLogger() {
+	public Logger getLogger() {
 		return logger;
 	}
 
-	/** Exposed as {@link StatefulLogReporter} rather than as {@link LogReporter} that is found in {@link LogErrorReporter} */
-	public StatefulLogReporter getStatefulLogReporter() {
-		return logReporter;
+	/** Exposed as {@link StatefulMessageLogger} rather than as {@link MessageLogger} that is found in {@link Logger} */
+	public StatefulMessageLogger getStatefulLogReporter() {
+		return messageLogger;
 	}
 
 	public ExperimentExecutionArguments getExperimentArguments() {

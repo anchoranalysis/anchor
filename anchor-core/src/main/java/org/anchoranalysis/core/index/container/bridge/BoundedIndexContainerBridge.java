@@ -30,7 +30,7 @@ package org.anchoranalysis.core.index.container.bridge;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.container.BoundChangeListener;
-import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 /**
  * Bridges calls from hidden-type to external-type.
@@ -42,11 +42,11 @@ import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
  */
-public abstract class BoundedIndexContainerBridge<H,S,E extends Exception> implements IBoundedIndexContainer<S> {
+public abstract class BoundedIndexContainerBridge<H,S,E extends Exception> implements BoundedIndexContainer<S> {
 
-	private IBoundedIndexContainer<H> delegate;
+	private BoundedIndexContainer<H> delegate;
 	
-	public BoundedIndexContainerBridge(IBoundedIndexContainer<H> source) {
+	public BoundedIndexContainerBridge(BoundedIndexContainer<H> source) {
 		super();
 		this.delegate = source;
 	}

@@ -37,9 +37,9 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
@@ -54,14 +54,14 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	}
 
 	@Override
-	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures ) throws InitException {
+	public void initUpdatableMarkSet( MemoForIndex marks, NRGStackWithParams stack, Logger logger, SharedFeatureMulti sharedFeatures ) throws InitException {
 		for (UpdatableMarkSet item : delegate) {
 			item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);
 		}
 	}
 	
 	@Override
-	public void add( MemoForIndex marksExisting, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void add( MemoForIndex marksExisting, VoxelizedMarkMemo newMark ) throws UpdateMarkSetException {
 		for (UpdatableMarkSet item : delegate) {
 			item.add(marksExisting, newMark);
 		}
@@ -71,7 +71,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	// Modifies marksExisting
 	private void add( MemoList marksExisting, MemoForIndex listToAdd ) throws UpdateMarkSetException {
 		for (int i=0; i<listToAdd.size(); i++) {
-			PxlMarkMemo item = listToAdd.getMemoForIndex(i);
+			VoxelizedMarkMemo item = listToAdd.getMemoForIndex(i);
 			add( marksExisting, item );
 			marksExisting.add( item );
 		}
@@ -109,14 +109,14 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 	}
 	
 	@Override
-	public void exchange( MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark, int indexOldMark, PxlMarkMemo newMark ) throws UpdateMarkSetException {
+	public void exchange( MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo oldMark, int indexOldMark, VoxelizedMarkMemo newMark ) throws UpdateMarkSetException {
 		for (UpdatableMarkSet item : delegate) {
 			item.exchange(pxlMarkMemoList, oldMark, indexOldMark, newMark);
 		}
 	}
 	
 	@Override
-	public void rmv( MemoForIndex marksExisting, PxlMarkMemo mark ) throws UpdateMarkSetException {
+	public void rmv( MemoForIndex marksExisting, VoxelizedMarkMemo mark ) throws UpdateMarkSetException {
 		for (UpdatableMarkSet item : delegate) {
 			item.rmv(marksExisting, mark);
 		}

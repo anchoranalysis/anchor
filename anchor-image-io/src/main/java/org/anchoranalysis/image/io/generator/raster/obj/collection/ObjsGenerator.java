@@ -36,6 +36,8 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
+import lombok.AllArgsConstructor;
+
 
 /**
  * Base class for generators that accept a set of objects as input
@@ -43,18 +45,14 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public abstract class ObjsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {
 	
-	private ObjectCollection objs;
-	private ImageDimensions dim;
+	private ObjectCollection objects;
+	private final ImageDimensions dim;
 	
 	public ObjsGenerator(ImageDimensions dim) {
 		this.dim = dim;
-	}
-	
-	public ObjsGenerator(ObjectCollection objs, ImageDimensions dim) {
-		this(dim);
-		this.objs = objs;
 	}
 
 	@Override
@@ -71,13 +69,13 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 
 	@Override
 	public ObjectCollection getIterableElement() {
-		return objs;
+		return objects;
 	}
 
 	@Override
 	public void setIterableElement(ObjectCollection element)
 			throws SetOperationFailedException {
-		this.objs = element;
+		this.objects = element;
 	}
 
 	@Override
@@ -90,6 +88,6 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 	}
 
 	protected ObjectCollection getObjs() {
-		return objs;
+		return objects;
 	}
 }

@@ -43,8 +43,7 @@ public class FeatureListStoreUtilities {
 		NamedProvider<FeatureList<FeatureInput>> featureListProvider,
 		SharedFeatureMulti out
 	) {
-		
-		for( String key : featureListProvider.keys()) {
+		for(String key : featureListProvider.keys()) {
 			try {
 				out.addNoDuplicate(
 					featureListProvider.getException(key)
@@ -53,7 +52,6 @@ public class FeatureListStoreUtilities {
 				assert false;
 			}
 		}
-		
 	}
 	
 	/**
@@ -109,7 +107,7 @@ public class FeatureListStoreUtilities {
 		}
 	}
 	
-	private static String featureDescription( Feature<?> feature, boolean paramsOnlyInDescription ) {
+	private static String featureDescription(Feature<?> feature, boolean paramsOnlyInDescription) {
 		if (paramsOnlyInDescription) {
 			return feature.getParamDscr();
 		} else {

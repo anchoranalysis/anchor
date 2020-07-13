@@ -37,14 +37,14 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferShort;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityShortBuffer;
 
 
 public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	
-	public VoxelBoxShort(IPixelsForPlane<ShortBuffer> pixelsForPlane) {
+	public VoxelBoxShort(PixelsForPlane<ShortBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
 			VoxelBoxFactory.getShort()

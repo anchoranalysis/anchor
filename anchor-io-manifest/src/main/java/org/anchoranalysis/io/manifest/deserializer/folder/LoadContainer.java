@@ -26,12 +26,12 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * #L%
  */
 
-import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 public class LoadContainer<T> {
 
 	// What do we need to create a frame generically
-	private IBoundedIndexContainer<T> cntr;
+	private BoundedIndexContainer<T> cntr;
 	
 	// If true, then it takes a long time to load a state when requested (use of Bundles, expensive deserialization etc.)
 	// If false, then it assumes it does not take a long time to load a state when requested (quick deserialization, in memory, etc.)
@@ -43,10 +43,10 @@ public class LoadContainer<T> {
 	public void setExpensiveLoad(boolean expensiveLoad) {
 		this.expensiveLoad = expensiveLoad;
 	}
-	public IBoundedIndexContainer<T> getCntr() {
+	public BoundedIndexContainer<T> getCntr() {
 		return cntr;
 	}
-	public void setCntr(IBoundedIndexContainer<T> cntr) {
+	public void setCntr(BoundedIndexContainer<T> cntr) {
 		this.cntr = cntr;
 	}
 }

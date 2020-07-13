@@ -33,13 +33,13 @@ import org.anchoranalysis.core.color.RGBColor;
 public class HSBColorSetGenerator extends ColorSetGenerator {
 
 	@Override
-	public ColorList genColors( int num_colors ) {
+	public ColorList genColors( int numColors ) {
 	
 		ColorList lst = new ColorList();
 		
-		for (int i =0; i<num_colors; i++) {
+		for (int i =0; i<numColors; i++) {
 
-			float h = ((float) i) /num_colors;
+			float h = ((float) i) /numColors;
 			float s = (float) 0.5;
 			float v = (float) 0.5;
 			

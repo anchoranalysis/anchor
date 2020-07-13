@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class LogUtilities {
 	
-	public static LogErrorReporter createNullErrorReporter() {
-		return new LogErrorReporter( new NullLogReporter() );
+	public static Logger createNullErrorReporter() {
+		return new Logger( new NullMessageLogger() );
 	}
 }

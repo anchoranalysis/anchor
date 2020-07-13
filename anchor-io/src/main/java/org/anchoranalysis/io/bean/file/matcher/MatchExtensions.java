@@ -32,8 +32,12 @@ import java.util.function.Predicate;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.apache.commons.io.FilenameUtils;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 /**
@@ -47,7 +51,7 @@ import org.apache.commons.io.FilenameUtils;
 public class MatchExtensions extends FileMatcher {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FileMatcher matcher;
 	
 	/** 
@@ -55,20 +59,20 @@ public class MatchExtensions extends FileMatcher {
 	 * <p>If an empty set is passed then, no check occurs, and no extension is checked</p> 
 	 * <p>If null, then a default set is populated from the inputContext</p>
 	 */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private Set<String> extensions;
 	// END BEAN PROPERTIES
 
 	@Override
-	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
+	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) throws AnchorIOException {
 				
 		Set<String> fileExtensions = fileExtensions(inputContext);
 		
 		if (matcher!=null) {
 			Predicate<Path> firstPred = matcher.createMatcherFile(dir, inputContext);
-			return p -> firstPred.test(p) && matchesAnyExtension(p, fileExtensions);
+			return path -> firstPred.test(path) && matchesAnyExtension(path, fileExtensions);
 		} else {
-			return p -> matchesAnyExtension(p, fileExtensions);
+			return path -> matchesAnyExtension(path, fileExtensions);
 		}
 	}
 	
@@ -81,9 +85,9 @@ public class MatchExtensions extends FileMatcher {
 		}
 		
 		// Extract extension from path
-		String ext = FilenameUtils.getExtension( path.toString() ).toLowerCase();
-		
-		return fileExtensions.contains(ext);
+		return fileExtensions.contains(
+			FilenameUtils.getExtension( path.toString() ).toLowerCase()
+		);
 	}
 	
 	private Set<String> fileExtensions(InputContextParams inputContext) {
@@ -92,21 +96,5 @@ public class MatchExtensions extends FileMatcher {
 		} else {
 			return inputContext.getInputFilterExtensions();
 		}
-	}
-
-	public Set<String> getExtensions() {
-		return extensions;
-	}
-
-	public void setExtensions(Set<String> extensions) {
-		this.extensions = extensions;
-	}
-
-	public FileMatcher getMatcher() {
-		return matcher;
-	}
-
-	public void setMatcher(FileMatcher matcher) {
-		this.matcher = matcher;
 	}
 }

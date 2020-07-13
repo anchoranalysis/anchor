@@ -82,7 +82,7 @@ class FileList implements Serializable {
 		fw.setOutputName(outputName);
 		fw.setFileName( outfilePath.toString() );
 		fw.setManifestDescription(manifestDescription);
-		fw.setIndex( new String(index) );
+		fw.setIndex(index);
 		add( fw );
 	}
 	

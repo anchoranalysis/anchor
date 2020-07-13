@@ -102,7 +102,7 @@ public final class Point3i extends Tuple3i {
 		pntDup.subtract(toSubtract);
 		return pntDup;
 	}
-	
+		
 	/** Performs a scale without changing any values in an existing point */
 	public static Point3i immutableScale(ReadableTuple3i pnt, int factor) {
 		Point3i pntDup = new Point3i(pnt);

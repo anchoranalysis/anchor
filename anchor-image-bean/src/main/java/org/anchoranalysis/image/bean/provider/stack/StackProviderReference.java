@@ -32,18 +32,19 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class StackProviderReference extends StackProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id = "";
 	// END BEAN PROPERTIES
 	
 	private Stack stack;
-
-	public StackProviderReference() {
-		
-	}
 	
 	public StackProviderReference( String id ) {
 		this.id = id;
@@ -51,25 +52,13 @@ public class StackProviderReference extends StackProvider {
 	
 	@Override
 	public Stack create() throws CreateException {
-		
 		if(stack==null) {
 			try {
-				this.stack = getSharedObjects().getStackCollection().getException(id);
+				this.stack = getInitializationParameters().getStackCollection().getException(id);
 			} catch (NamedProviderGetException e) {
 				throw new CreateException(e);
 			}		
 		}
-		
 		return stack;
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
 }

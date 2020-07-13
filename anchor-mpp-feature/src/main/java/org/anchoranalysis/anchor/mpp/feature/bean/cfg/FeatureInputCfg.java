@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 
-public class FeatureInputCfg extends FeatureInputWithRes {
+public class FeatureInputCfg implements FeatureInputWithRes {
 
 	private Cfg cfg;
 	private Optional<ImageDimensions> dim;

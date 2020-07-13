@@ -61,8 +61,7 @@ public class FileOutput {
 	public PrintWriter getWriter() {
 		return this.out;
 	}
-	
-		
+			
 	public void end() {
 		if (out!=null) {
 			out.close();

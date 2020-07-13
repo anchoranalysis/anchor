@@ -32,7 +32,7 @@ import javax.swing.event.EventListenerList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.container.BoundChangeEvent.BoundType;
 
-public class SingleContainer<T> implements IBoundedIndexContainer<T> {
+public class SingleContainer<T> implements BoundedIndexContainer<T> {
 
 	private T item = null;
 	private int index;

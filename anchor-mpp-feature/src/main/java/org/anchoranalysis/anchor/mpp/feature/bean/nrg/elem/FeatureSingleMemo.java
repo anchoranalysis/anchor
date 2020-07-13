@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
+
 
 /*-
  * #%L
@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDe
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> {
 
@@ -40,7 +40,7 @@ public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> 
 	public abstract double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleMemoDescriptor.instance;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputSingleMemo.class;
 	}
 }

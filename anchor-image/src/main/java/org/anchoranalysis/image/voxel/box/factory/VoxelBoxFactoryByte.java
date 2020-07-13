@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxByte;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromByteBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -42,7 +42,7 @@ final class VoxelBoxFactoryByte implements VoxelBoxFactoryTypeBound<ByteBuffer> 
 	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedByte.INSTANCE;
 	
 	@Override
-	public VoxelBox<ByteBuffer> create(IPixelsForPlane<ByteBuffer> pixelsForPlane) {
+	public VoxelBox<ByteBuffer> create(PixelsForPlane<ByteBuffer> pixelsForPlane) {
 		return new VoxelBoxByte(pixelsForPlane);
 	}
 

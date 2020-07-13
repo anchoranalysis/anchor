@@ -39,6 +39,9 @@ import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Allows everything to be outputted except a particular list
@@ -49,11 +52,11 @@ import org.anchoranalysis.io.output.bean.allowed.SpecificOutputDisallowed;
 public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private StringSet except;
 	
 	/** Ignores all these strings in the second-level (for respect keys) */
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
 	// END BEAN PROPERTIES
  
@@ -87,21 +90,4 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 		}
 		return map;
 	}
-
-	public StringSet getExcept() {
-		return except;
-	}
-
-	public void setExcept(StringSet except) {
-		this.except = except;
-	}
-
-	public List<NamedBean<StringSet>> getExceptSecondLevel() {
-		return exceptSecondLevel;
-	}
-
-	public void setExceptSecondLevel(List<NamedBean<StringSet>> exceptSecondLevel) {
-		this.exceptSecondLevel = exceptSecondLevel;
-	}
-
 }

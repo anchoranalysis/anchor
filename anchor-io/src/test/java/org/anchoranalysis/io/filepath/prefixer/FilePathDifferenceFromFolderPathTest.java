@@ -28,217 +28,118 @@ package org.anchoranalysis.io.filepath.prefixer;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.junit.Test;
 
 public class FilePathDifferenceFromFolderPathTest {
-
-	private Path resolve( String path ) {
-		// We treat it as a UNIX path so the tests will work on all platforms
-		return Paths.get( FilePathToUnixStyleConverter.toStringUnixStyle(path) );
-	}
-	
-	// START NORMAL-BEHAVIOUR
 	
 	@Test
 	public void testFolderAbsoluteWindowsFolder() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("c:\\somebase\\"),
-			resolve("c:\\somebase\\someDir1\\someDir2\\someFile1.txt")
+		test(
+			"c:\\somebase\\",
+			"c:\\somebase\\someDir1\\someDir2\\someFile1.txt",
+			"someDir1\\someDir2",
+			"someFile1.txt"
 		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1\\someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testFolderAbsoluteWindowsNonFolderBase() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("c:\\somebase\\base_"),
-			resolve("c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
+		test(
+			"c:\\somebase\\base_",
+			"c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt"
 		);			
 	}
 	
 	@Test
 	public void testFolderAbsoluteUnixFolder() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("/somebase/"),
-			resolve("/somebase/someDir1/someDir2/someFile1.txt")
+		test(
+			"/somebase/",
+			"/somebase/someDir1/someDir2/someFile1.txt",
+			"someDir1/someDir2",
+			"someFile1.txt"
 		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1/someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testFolderAbsoluteUnixNonFolderBase() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("/somebase/extra_"),
-			resolve("/somebase/someDir1/someDir2/someFile1.txt")
+		test(
+			"/somebase/extra_",
+			"/somebase/someDir1/someDir2/someFile1.txt"
 		);			
 		
 	}
 
 	@Test
 	public void testFolderRelativeWindowsFolder() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("..\\somebase\\"),
-			resolve("..\\somebase\\someDir1\\someDir2\\someFile1.txt")
+		test(
+			"..\\somebase\\",
+			"..\\somebase\\someDir1\\someDir2\\someFile1.txt",
+			"someDir1\\someDir2",
+			"someFile1.txt"
 		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1\\someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testFolderRelativeWindowsNonFolderBase() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("..\\somebase\\base_"),
-			resolve("..\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
+		test(
+			"..\\somebase\\base_",
+			"..\\somebase\\base_someDir1\\someDir2\\someFile1.txt"
 		);			
 	}
 	
 	@Test
 	public void testFolderRelativeUnixFolder() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("../somebase/"),
-			resolve("../somebase/someDir1/someDir2/someFile1.txt")
+		test(
+			"../somebase/",
+			"../somebase/someDir1/someDir2/someFile1.txt",
+			"someDir1/someDir2",
+			"someFile1.txt"
 		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1/someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testFolderRelativeUnixNonFolderBase() throws AnchorIOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.init(
-			resolve("../somebase/extra_"),
-			resolve("../somebase/someDir1/someDir2/someFile1.txt")
-		);			
-		
-	}
-	
-	// END NORMAL-BEHAVIOUR	
-	
-	
-	
-	// START DIRECT
-	
-	@Test
-	public void testFolderAbsoluteWindowsFolderDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("c:\\somebase\\"),
-			resolve("c:\\somebase\\someDir1\\someDir2\\someFile1.txt")
-		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1\\someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testFolderAbsoluteWindowsNonFolderBaseDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("c:\\somebase\\base_"),
-			resolve("c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
+		test(
+			"../somebase/extra_",
+			"../somebase/someDir1/someDir2/someFile1.txt"
 		);			
 	}
 	
-	@Test
-	public void testFolderAbsoluteUnixFolderDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("/somebase/"),
-			resolve("/somebase/someDir1/someDir2/someFile1.txt")
-		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1/someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
+	private void test(
+		String baseFolderPath,
+		String filePath,
+		String expectedFolder,
+		String expectedFilename
+	) throws AnchorIOException {
+		PathDifferenceFromBase fdd = test(baseFolderPath, filePath);
+		assertTrue(
+			fdd.getFolder().equals(
+				Optional.of(
+					resolve(expectedFolder)
+				)
+			)
+		);
+		assertTrue( fdd.getFilename().equals(expectedFilename) );
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void testFolderAbsoluteUnixNonFolderBaseDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("/somebase/extra_"),
-			resolve("/somebase/someDir1/someDir2/someFile1.txt")
-		);			
-		
-	}
-
-	@Test
-	public void testFolderRelativeWindowsFolderDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("..\\somebase\\"),
-			resolve("..\\somebase\\someDir1\\someDir2\\someFile1.txt")
-		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1\\someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
+	private PathDifferenceFromBase test(
+		String baseFolderPath,
+		String filePath
+	) throws AnchorIOException {
+		return PathDifferenceFromBase.differenceFrom(
+			resolve(baseFolderPath),
+			resolve(filePath)
+		);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void testFolderRelativeWindowsNonFolderBaseDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("..\\somebase\\base_"),
-			resolve("..\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
-		);			
+	private Path resolve( String path ) {
+		// We treat it as a UNIX path so the tests will work on all platforms
+		return Paths.get( FilePathToUnixStyleConverter.toStringUnixStyle(path) );
 	}
-	
-	@Test
-	public void testFolderRelativeUnixFolderDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("../somebase/"),
-			resolve("../somebase/someDir1/someDir2/someFile1.txt")
-		);			
-		
-		assertTrue( fdd.getFolder().equals( resolve("someDir1/someDir2") ) );
-		assertTrue( fdd.getFilename().equals("someFile1.txt") );
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testFolderRelativeUnixNonFolderBaseDirect() throws IOException {
-		
-		FilePathDifferenceFromFolderPath fdd = new FilePathDifferenceFromFolderPath();
-		fdd.initDirect(
-			resolve("../somebase/extra_"),
-			resolve("../somebase/someDir1/someDir2/someFile1.txt")
-		);			
-		
-	}
-	
-	// END DIRECT
-	
 }

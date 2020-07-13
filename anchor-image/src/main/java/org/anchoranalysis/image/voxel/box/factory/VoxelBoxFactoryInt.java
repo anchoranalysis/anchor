@@ -32,7 +32,7 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxInt;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsFromIntBufferArr;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
@@ -43,7 +43,7 @@ final class VoxelBoxFactoryInt implements VoxelBoxFactoryTypeBound<IntBuffer> {
 	
 	@Override
 	public VoxelBox<IntBuffer> create(
-			IPixelsForPlane<IntBuffer> pixelsForPlane) {
+			PixelsForPlane<IntBuffer> pixelsForPlane) {
 		return new VoxelBoxInt(pixelsForPlane);
 	}
 

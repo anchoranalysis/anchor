@@ -81,7 +81,7 @@ class CombinedCalculator {
 		this.features = features;
 		this.include = include;
 		
-		calculatorImage = features.createImageSession(cc, soImage, CachingStrategies.noCache());
+		calculatorImage = features.createImageSession(cc, soImage, CachingStrategies.cacheAndReuse());
 		
 		BoundReplaceStrategy<FeatureInputSingleObject,CacheAndReuseStrategy<FeatureInputSingleObject>> cachingStrategyFirstSecond
 			= CachingStrategies.cacheAndReuse();
@@ -104,9 +104,7 @@ class CombinedCalculator {
 		);
 		
 		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
-		
-		// TODO these are identical and do not need to be repeatedly calculated
-		// Prefer rather to cache the first result and reuse
+		// These are identical and are cached in the background, to avoid being repeatedly calculated. 
 		helper.calcAndInsert(new FeatureInputStack(), calculatorImage );
 		
 		// First features

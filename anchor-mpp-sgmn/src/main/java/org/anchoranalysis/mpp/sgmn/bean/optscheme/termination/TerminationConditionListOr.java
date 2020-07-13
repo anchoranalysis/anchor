@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 
 // An OR list of termination conditions
 public class TerminationConditionListOr extends TerminationCondition {
@@ -60,10 +60,10 @@ public class TerminationConditionListOr extends TerminationCondition {
 	}
 	
 	@Override
-	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter) {
+	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
 		
 		for (TerminationCondition tc : this.list) {
-			if (!tc.continueIterations(crntIter, score, size, logReporter)) {
+			if (!tc.continueIterations(crntIter, score, size, logger)) {
 				return false;
 			}
 		}

@@ -42,16 +42,18 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 public class IfElseWriter extends ObjMaskWriter {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjMaskWriter trueWriter;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjMaskWriter falseWriter;
 	// END BEAN PROPERTIES
 	
@@ -67,22 +69,6 @@ public class IfElseWriter extends ObjMaskWriter {
 		this.condition = Optional.of(condition);
 		this.trueWriter = trueWriter;
 		this.falseWriter = falseWriter;
-	}
-
-	public ObjMaskWriter getTrueWriter() {
-		return trueWriter;
-	}
-
-	public void setTrueWriter(ObjMaskWriter trueWriter) {
-		this.trueWriter = (ObjMaskWriter) trueWriter;
-	}
-
-	public ObjMaskWriter getFalseWriter() {
-		return falseWriter;
-	}
-
-	public void setFalseWriter(ObjMaskWriter falseWriter) {
-		this.falseWriter = (ObjMaskWriter) falseWriter;
 	}
 
 	@Override

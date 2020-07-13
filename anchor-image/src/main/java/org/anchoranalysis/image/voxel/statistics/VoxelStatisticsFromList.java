@@ -100,7 +100,6 @@ public class VoxelStatisticsFromList implements VoxelStatistics {
 
 	@Override
 	public double quantile(double quantile) {
-		// TODO Currently unsupported, we need to worry about sorted lists
 		throw new UnsupportedOperationException();
 	}
 

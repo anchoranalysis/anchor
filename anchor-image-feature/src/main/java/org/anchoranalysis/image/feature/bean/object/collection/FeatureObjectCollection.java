@@ -29,28 +29,22 @@ package org.anchoranalysis.image.feature.bean.object.collection;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
-import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollectionDescriptor;
 
 public abstract class FeatureObjectCollection extends Feature<FeatureInputObjectCollection> {
 
 	@Override
 	public double calc( SessionInput<FeatureInputObjectCollection> input ) throws FeatureCalcException {
-		
-		if (input.get() instanceof FeatureInputObjectCollection) {
-			return calc( (FeatureInputObjectCollection) input.get() );
-		} else {
-			throw new FeatureCalcException("Requires " + FeatureInputObjectCollection.class.getSimpleName() );
-		}
+		return calc( input.get() );
 	}
 	
 	// Calculates an NRG element for a set of pixels
 	public abstract double calc( FeatureInputObjectCollection params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputObjectCollectionDescriptor.instance;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputObjectCollection.class;
 	}
 	
 }

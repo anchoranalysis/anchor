@@ -92,8 +92,6 @@
 		    <version>2.3</version>
 		</dependency>
 
-	    
-	    <!--  TODO: CHECK THIS LICENSE -->
 		<dependency>
 	      <groupId>ome</groupId>
 	      <artifactId>mdbtools-java</artifactId>
@@ -102,7 +100,7 @@
 		
 		
 	    <!-- STOP: license-compatible parts of bioformats -->
-	  
+ 
 	    
 	    <dependency>
 		    <groupId>com.github.jai-imageio</groupId>

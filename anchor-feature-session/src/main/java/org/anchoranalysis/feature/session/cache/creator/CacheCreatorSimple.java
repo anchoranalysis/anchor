@@ -29,13 +29,14 @@ package org.anchoranalysis.feature.session.cache.creator;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheFactory;
 import org.anchoranalysis.feature.session.cache.horizontal.HorizontalFeatureCacheFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -46,12 +47,12 @@ public class CacheCreatorSimple implements CacheCreator {
 	private FeatureList<? extends FeatureInput> namedFeatures;
 	private SharedFeatureMulti sharedFeatures;
 	private FeatureInitParams featureInitParams;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	private static FeatureSessionCacheFactory factory = new HorizontalFeatureCacheFactory();
 	
 	public CacheCreatorSimple(FeatureList<? extends FeatureInput> namedFeatures,
-			SharedFeatureMulti sharedFeatures, FeatureInitParams featureInitParams, LogErrorReporter logger) {
+			SharedFeatureMulti sharedFeatures, FeatureInitParams featureInitParams, Logger logger) {
 		super();
 		this.namedFeatures = namedFeatures;
 		this.sharedFeatures = sharedFeatures;
@@ -79,7 +80,10 @@ public class CacheCreatorSimple implements CacheCreator {
 	@SuppressWarnings("unchecked")
 	private <T extends FeatureInput> FeatureList<T> filterFeatureList(Class<? extends FeatureInput> inputType) {
 		return namedFeatures.filterAndMap(
-			f -> f.inputDescriptor().isCompatibleWith(inputType),
+			f -> FeatureInputType.isCompatibleWith(
+				f.inputType(),
+				inputType
+			),
 			f -> (Feature<T>) f
 		);
 	}
@@ -88,15 +92,15 @@ public class CacheCreatorSimple implements CacheCreator {
 		FeatureList<T> namedFeatures,
 		Class<? extends FeatureInput> inputType,
 		FeatureInitParams featureInitParams,
-		LogErrorReporter logger			
+		Logger logger			
 	) {
 		SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 		
 		try {
 			sharedFeaturesSet.initRecursive(featureInitParams, logger);
 		} catch (InitException e) {
-			logger.getErrorReporter().recordError(CacheCreatorSimple.class, "An error occurred initializing shared-features, proceeding anyway.");
-			logger.getErrorReporter().recordError(CacheCreatorSimple.class, e);
+			logger.errorReporter().recordError(CacheCreatorSimple.class, "An error occurred initializing shared-features, proceeding anyway.");
+			logger.errorReporter().recordError(CacheCreatorSimple.class, e);
 		}
 		
 		FeatureSessionCache<T> cache = factory.create(namedFeatures, sharedFeaturesSet);

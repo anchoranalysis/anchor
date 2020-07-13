@@ -1,6 +1,5 @@
 package org.anchoranalysis.anchor.plot.bean.colorscheme;
 
-import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 
 /*-
  * #%L

@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
@@ -52,7 +52,7 @@ public class MonitoredSequentialExecutor<T> {
 	
 	private Predicate<T> execFunc;
 	private Function<T,String> dscrFunc;	
-	private Optional<LogReporter> logger;
+	private Optional<MessageLogger> logger;
 	private boolean showHashSeperators;
 		
 	/**
@@ -63,7 +63,7 @@ public class MonitoredSequentialExecutor<T> {
 	 * @param logger reports before and after an input on the current status (disabled if empty())
 	 * @param showHashSeperators indicates if lines of hashes should be placed before and after each log message (adds emphasis)
 	 */
-	public MonitoredSequentialExecutor(Predicate<T> execFunc, Function<T,String> dscrFunc, Optional<LogReporter> logger, boolean showHashSeperators ) {
+	public MonitoredSequentialExecutor(Predicate<T> execFunc, Function<T,String> dscrFunc, Optional<MessageLogger> logger, boolean showHashSeperators ) {
 		super();
 		this.execFunc = execFunc;
 		this.dscrFunc = dscrFunc;
@@ -77,7 +77,7 @@ public class MonitoredSequentialExecutor<T> {
 	 * @param inputs a collection of strings that uniquely determine each input
 	 * @throws ExperimentExecutionException
 	 */
-	public TaskStatistics executeEachWithMonitor( String logPrefix, List<T> inputs ) throws ExperimentExecutionException {
+	public TaskStatistics executeEachWithMonitor( String logPrefix, List<T> inputs ) {
 		
 		ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputs.size());
 		

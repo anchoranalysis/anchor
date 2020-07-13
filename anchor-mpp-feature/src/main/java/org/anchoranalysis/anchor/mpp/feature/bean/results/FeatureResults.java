@@ -30,9 +30,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResultsDescriptor;
 
 
 /**
@@ -51,11 +50,11 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureInputResults params ) throws FeatureCalcException;
+	public abstract double calc( FeatureInputResults input ) throws FeatureCalcException;
 	
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputResultsDescriptor.instance;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputResults.class;
 	}
 
 }

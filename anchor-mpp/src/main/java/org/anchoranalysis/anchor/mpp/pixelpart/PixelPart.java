@@ -36,17 +36,17 @@ import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
  *
  * @param <T> part-type
  */
-public abstract class PixelPart<T> {
+public interface PixelPart<T> {
 	
 	// Should only be used read-only, if we want to maintain integrity with the combined list
-	public abstract T getSlice( int sliceID );
+	T getSlice( int sliceID );
 	
-	public abstract void addForSlice( int sliceID, int val );
+	void addForSlice( int sliceID, int val );
 
 	// Should only be used read-only
-	public abstract T getCombined();
+	T getCombined();
 	
-	public abstract void cleanUp( PixelPartFactory<T> factory );
+	void cleanUp( PixelPartFactory<T> factory );
 	
-	public abstract int numSlices();
+	int numSlices();
 }

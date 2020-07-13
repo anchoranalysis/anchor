@@ -3,7 +3,7 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -38,15 +38,18 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BBoxIntersection extends AddCriteriaPair {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 	
 		
 		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
@@ -58,25 +61,6 @@ public class BBoxIntersection extends AddCriteriaPair {
 		}
 		
 		return bbox1.intersection().existsWith(bbox2);
-	}
-
-	@Override
-	public boolean paramsEquals(Object other) {
-		
-		if( !(other instanceof BBoxIntersection)) {
-			return false;
-		}
-		
-		BBoxIntersection otherCast = (BBoxIntersection) other;
-		return suppressZ == otherCast.suppressZ;
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
 	}
 
 	@Override

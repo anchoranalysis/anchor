@@ -1,7 +1,7 @@
 package org.anchoranalysis.core.error.reporter;
 
 import org.anchoranalysis.core.error.friendly.IFriendlyException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
- * Records errors, by writing them into a logReporter
+ * Records errors, by writing them into a logger
  * 
  * Does some formatting (and sometimes adds a stacktrace) depending on context and exception-type
  * 
@@ -42,13 +42,13 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  */
 public class ErrorReporterIntoLog implements ErrorReporter {
 	
-	private LogReporter logReporter;
+	private MessageLogger logger;
 
 	private static final String START_BANNER = "------------ BEGIN ERROR ------------" + System.lineSeparator();
 	private static final String END_BANNER =  System.lineSeparator() + "------------ END ERROR ------------";
 	
-	public ErrorReporterIntoLog(LogReporter logReporter) {
-		this.logReporter = logReporter;
+	public ErrorReporterIntoLog(MessageLogger logger) {
+		this.logger = logger;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ErrorReporterIntoLog implements ErrorReporter {
 			try {
 				logWithBanner( exc.toString() + System.lineSeparator() +  ExceptionUtils.getFullStackTrace(exc), classOriginating );
 			} catch (Exception e) {
-				logReporter.log("An error occurred while writing an error: " + e.toString());
+				logger.log("An error occurred while writing an error: " + e.toString());
 			}
 		}
 	}
@@ -73,16 +73,16 @@ public class ErrorReporterIntoLog implements ErrorReporter {
 		try {
 			logWithBanner( errorMsg, classOriginating );
 		} catch (Exception e) {
-			logReporter.log("An error occurred while writing an error: " + e.toString() );
+			logger.log("An error occurred while writing an error: " + e.toString() );
 		}
 	}
 	
 	private void logWithBanner( String logMessage ) {
-		logReporter.log( START_BANNER + logMessage + END_BANNER );
+		logger.log( START_BANNER + logMessage + END_BANNER );
 	}
 	
 	private void logWithBanner( String logMessage, Class<?> classOriginating ) {
-		logReporter.log( START_BANNER + logMessage + classMessage(classOriginating) + END_BANNER );
+		logger.log( START_BANNER + logMessage + classMessage(classOriginating) + END_BANNER );
 	}
 	
 	private static String classMessage( Class<?> c ) {

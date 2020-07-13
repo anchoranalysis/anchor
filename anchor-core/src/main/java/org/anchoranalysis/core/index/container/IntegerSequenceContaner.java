@@ -29,7 +29,7 @@ package org.anchoranalysis.core.index.container;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /* Contains a sequence of integers from 0 until size-1 (inclusive) */
-public class IntegerSequenceContaner implements IBoundedIndexContainer<Integer> {
+public class IntegerSequenceContaner implements BoundedIndexContainer<Integer> {
 
 	private int size;
 	

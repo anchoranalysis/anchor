@@ -38,11 +38,11 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * @author Owen Feehan
  *
  */
-public abstract class FeatureInputParams extends FeatureInputWithRes {
+public interface FeatureInputParams extends FeatureInputWithRes {
 	
-	public abstract Optional<KeyValueParams> getParamsOptional();
+	Optional<KeyValueParams> getParamsOptional();
 	
-	public KeyValueParams getParamsRequired() throws FeatureCalcException {
+	default KeyValueParams getParamsRequired() throws FeatureCalcException {
 		return getParamsOptional().orElseThrow(
 			() -> new FeatureCalcException("Params are required for this input")	
 		);

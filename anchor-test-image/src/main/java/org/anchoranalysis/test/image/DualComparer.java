@@ -30,14 +30,12 @@ package org.anchoranalysis.test.image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Path;
-
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
-import org.w3c.dom.Document;
+import lombok.Getter;
 
 /**
  * Allows for comparison of objects that exist on different test loaders
@@ -47,11 +45,14 @@ import org.w3c.dom.Document;
  */
 public class DualComparer {
 
-	private TestLoader loader1;
-	private TestLoader loader2;
+	@Getter
+	private final TestLoader loader1;
 	
-	private TestLoaderImageIO loaderImg1;
-	private TestLoaderImageIO loaderImg2;
+	@Getter
+	private final TestLoader loader2;
+	
+	private final TestLoaderImageIO loaderImg1;
+	private final TestLoaderImageIO loaderImg2;
 	
 	public DualComparer(TestLoader loader1, TestLoader loader2) {
 		super();
@@ -60,8 +61,7 @@ public class DualComparer {
 		this.loaderImg1 = new TestLoaderImageIO(loader1);
 		this.loaderImg2 = new TestLoaderImageIO(loader2);
 	}
-	
-	
+		
 	/**
 	 * Compare two images that have an identical path, but in two different test loaders
 	 * 
@@ -69,11 +69,10 @@ public class DualComparer {
 	 * @return TRUE if the images are equal (every pixel is identical, and data-types are the same)
 	 * @throws FileNotFoundException if one or both of the files cannot be found
 	 */
-	public boolean compareTwoImages( String path ) throws FileNotFoundException {
+	public boolean compareTwoImages(String path) throws FileNotFoundException {
 		return TestLoaderImageIO.compareTwoImages( loaderImg1, path, loaderImg2, path );
 	}
-	
-	
+		
 	/**
 	 * Compare two XML documents. They are compared by their DOM trees, but they need to be identical
 	 * for equality.
@@ -81,32 +80,13 @@ public class DualComparer {
 	 * @param path path to compare
 	 * @return TRUE if the xml-documents are equal, fALSE otherwise
 	 */
-	public boolean compareTwoXmlDocuments( String path ) {
-		Document doc1 = loader1.openXmlFromTestPath(path);
-		Document doc2 = loader2.openXmlFromTestPath(path);
-		return TestLoader.areXmlEqual(doc1, doc2);
+	public boolean compareTwoXmlDocuments(String path) {
+		return TestLoader.areXmlEqual(
+			loader1.openXmlFromTestPath(path),
+			loader2.openXmlFromTestPath(path)
+		);
 	}
-	
-
-	
-	
-	/**
-	 * Compare two CSV files. They need to be exactly identical.
-	 * 
-	 * @param path path to compare
-	 * @param regExSeperator seperator (reg ex for split function())
-	 * @param firstLineHeaders does the first line have headers?
-	 * @param rejectZeroRows throws an exception if either of the CSV files have zero rows
-	 * @param messageStream if non-equal, additional explanation messages are printed here
-	 * @return TRUE if the csv-files are identical, FALSE otherwise
-	 * @throws CSVReaderException if something goes wrong with csv I/O
-	 */
-	public boolean compareTwoCsvFiles( String path, String regExSeperator, boolean firstLineHeaders, boolean rejectZeroRows, PrintStream messageStream ) throws CSVReaderException {
-		return compareTwoCsvFiles(path, regExSeperator, firstLineHeaders, 0, false, rejectZeroRows, messageStream );
-	}
-	
-	
-	
+		
 	/**
 	 * Compare two CSV files, ignoring the first numFirstColumnsToIgnore. They need to be exactly identical,
 	 *   apart from these ignored columns.
@@ -123,24 +103,12 @@ public class DualComparer {
 	 */
 	public boolean compareTwoCsvFiles(
 		String path,
-		String regExSeperator,
-		boolean firstLineHeaders,
-		int numFirstColumnsToIgnore,
-		boolean sortLines,
-		boolean rejectZeroRows,
+		CSVComparer comparer,
 		PrintStream messageStream
 	) throws CSVReaderException {
-		
-		Path csvPath1 = loaderImg1.getTestLoader().resolveTestPath(path);
-		Path csvPath2 = loaderImg2.getTestLoader().resolveTestPath(path);
-		return CSVComparer.areCsvFilesEqual(
-			csvPath1,
-			csvPath2,
-			regExSeperator,
-			firstLineHeaders,			
-			numFirstColumnsToIgnore,
-			sortLines,
-			rejectZeroRows,
+		return comparer.areCsvFilesEqual(
+			loaderImg1.getTestLoader().resolveTestPath(path),
+			loaderImg2.getTestLoader().resolveTestPath(path),
 			messageStream
 		);
 	}
@@ -151,17 +119,9 @@ public class DualComparer {
 	 * @param path path to compare
 	 * @throws IOException if something goes wrong with I/O
 	 */
-	public boolean compareTwoObjs( String path ) throws IOException {
+	public boolean compareTwoObjs(String path) throws IOException {
 		ObjectCollection objs1 = loaderImg1.openObjsFromTestPath(path);
 		ObjectCollection objs2 = loaderImg2.openObjsFromTestPath(path);
 		return objs1.equalsDeep(objs2);
-	}
-	
-	public TestLoader getLoader1() {
-		return loader1;
-	}
-
-	public TestLoader getLoader2() {
-		return loader2;
 	}
 }

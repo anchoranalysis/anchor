@@ -47,8 +47,6 @@ public class ProposerFailureDescription implements Serializable {
 	
 	
 	public static ProposerFailureDescription createRoot() {
-		//root = new ErrorNodeImpl(null, ocf, "root");
-		
 		ProposerFailureDescription out = new ProposerFailureDescription();
 		ErrorNodeImpl rootImpl = new ErrorNodeImpl(null, "root");
 		out.root = rootImpl;

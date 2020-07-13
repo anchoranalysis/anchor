@@ -1,5 +1,8 @@
 package org.anchoranalysis.anchor.mpp.bean.regionmap;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-image
@@ -28,11 +31,10 @@ package org.anchoranalysis.anchor.mpp.bean.regionmap;
 
 
 //8-bit region membership
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class RegionMembershipUtilities {
 	
-	private RegionMembershipUtilities() {
-		
-	}
+	private static final byte FLAG_NO_REGION = 0;
 	
 	public static boolean isMemberFlagAnd( byte membership, byte flag ) {
 		return (membership & flag) == flag;
@@ -48,7 +50,7 @@ public class RegionMembershipUtilities {
 	}
 	
 	public static byte flagForNoRegion() {
-		return 0;
+		return FLAG_NO_REGION;
 	}
 	
 	public static byte flagForRegion( int index ) {

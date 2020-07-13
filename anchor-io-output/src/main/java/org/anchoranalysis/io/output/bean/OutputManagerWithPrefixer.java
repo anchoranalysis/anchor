@@ -34,30 +34,40 @@ import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.ExperimentFileFolder;
+import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.LazyDirectoryFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class OutputManagerWithPrefixer extends OutputManager {
 
+	private static final ManifestFolderDescription MANIFEST_FOLDER_ROOT = new ManifestFolderDescription(
+		"root",
+		"experiment",
+		new SetSequenceType()
+	);
+	
 	// BEAN PROPERTIES
-	@BeanField
-	private FilePathPrefixer filePathPrefixer = null;
+	@BeanField @Getter @Setter
+	private FilePathPrefixer filePathPrefixer;
 	
 	/**  
+	 * Whether to silently first delete any existing output at the intended path, or rather throw an error.
+	 * 
 	 * If true, if an existing output folder (at intended path) is deleted
 	 * If false, an error is thrown if the folder already exists
 	 */
-	@BeanField
-	private boolean delExistingFolder = true;
+	@BeanField @Getter @Setter
+	private boolean silentlyDeleteExisting = false;
 
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 	// END BEAN PROPERTIES
 		
@@ -74,10 +84,9 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		// Calculate a prefix from the incoming file, and create a file path generator
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefix( input, expIdentifier, context );
 		
-		FilePathDifferenceFromFolderPath fpd = new FilePathDifferenceFromFolderPath();
-		
+		PathDifferenceFromBase fpd;
 		try {
-			fpd.init(
+			fpd = PathDifferenceFromBase.differenceFrom(
 				this.filePathPrefixer.rootFolderPrefix(expIdentifier, context).getCombinedPrefix(),
 				fpp.getCombinedPrefix()
 			);
@@ -86,7 +95,7 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		}
 			
 		experimentalManifestRecorder.ifPresent(
-			mr -> writeManifestExperimentFolder(mr, fpd.getRemainderCombined())
+			mr -> writeRootFolderInManifest(mr, fpd.combined())
 		);
 
 		manifestRecorder.ifPresent(
@@ -96,67 +105,31 @@ public abstract class OutputManagerWithPrefixer extends OutputManager {
 		return fpp;
 	}
 	
-	private static void writeManifestExperimentFolder( ManifestRecorder manifestRecorderExperiment, Path rootPath ) {
-		manifestRecorderExperiment.getRootFolder().writeFolder(
-			rootPath,
-			new ManifestFolderDescription(), 
-			new ExperimentFileFolder()
-		);	
-	}
-	
 	@Override
 	public BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws BindFailedException {
 
 		try {
 			FilePathPrefix prefix = filePathPrefixer.rootFolderPrefix( expIdentifier, context );
-			
 			writeOperationRecorder.init(prefix.getFolderPath());
+			
 			return new BoundOutputManager(
 				this,
 				prefix,
 				getOutputWriteSettings(),
 				writeOperationRecorder.getRootFolder(),
-				lazyDirectoryFactory(),
-				Optional.empty()
+				silentlyDeleteExisting
 			);
 
 		} catch (FilePathPrefixerException e) {
 			throw new BindFailedException(e);
 		}
 	}
-	
-	private LazyDirectoryFactory lazyDirectoryFactory() {
-		return new LazyDirectoryFactory(delExistingFolder);
+		
+	private static void writeRootFolderInManifest( ManifestRecorder manifestRecorderExperiment, Path rootPath ) {
+		manifestRecorderExperiment.getRootFolder().writeFolder(
+			rootPath,
+			MANIFEST_FOLDER_ROOT, 
+			new ExperimentFileFolder()
+		);	
 	}
-
-	
-	// START BEAN getters and setters
-	public FilePathPrefixer getFilePathPrefixer() {
-		return filePathPrefixer;
-	}
-
-
-	public void setFilePathPrefixer(FilePathPrefixer filePathPrefixer) {
-		this.filePathPrefixer = filePathPrefixer;
-	}
-	
-
-	public boolean isDelExistingFolder() {
-		return delExistingFolder;
-	}
-
-
-	public void setDelExistingFolder(boolean delExistingFolder) {
-		this.delExistingFolder = delExistingFolder;
-	}
-	
-	
-	public OutputWriteSettings getOutputWriteSettings() {
-		return outputWriteSettings;
-	}
-
-	public void setOutputWriteSettings(OutputWriteSettings outputWriteSettings) {
-		this.outputWriteSettings = outputWriteSettings;
-	}	
-	// END BEAN getters and setters
 }

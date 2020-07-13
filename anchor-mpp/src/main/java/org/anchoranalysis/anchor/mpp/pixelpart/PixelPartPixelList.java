@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
-public class PixelPartPixelList extends PixelPart<VoxelIntensityList> {
+public class PixelPartPixelList implements PixelPart<VoxelIntensityList> {
 
 	private VoxelIntensityList combined;
 	private List<VoxelIntensityList> list;

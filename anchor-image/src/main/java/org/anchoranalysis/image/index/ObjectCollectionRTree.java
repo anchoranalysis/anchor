@@ -43,16 +43,16 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjectCollectionRTree {
 
 	private BoundingBoxRTree delegate;
-	private ObjectCollection objs;
+	private ObjectCollection objects;
 	
-	public ObjectCollectionRTree( ObjectCollection objs ) {
-		this.objs = objs;
-		delegate = new BoundingBoxRTree( objs.size() );
+	public ObjectCollectionRTree( ObjectCollection objects ) {
+		this.objects = objects;
+		delegate = new BoundingBoxRTree( objects.size() );
 		
-		for( int i=0; i<objs.size(); i++ ) {
+		for( int i=0; i<objects.size(); i++ ) {
 			delegate.add(
 				i,
-				objs.get(i).getBoundingBox()
+				objects.get(i).getBoundingBox()
 			);
 		}
 	}
@@ -60,7 +60,7 @@ public class ObjectCollectionRTree {
 	public ObjectCollection contains( Point3i pnt ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		return objs.stream().filterSubset(
+		return objects.stream().filterSubset(
 			om->om.contains(pnt),
 			delegate.contains(pnt)
 		);
@@ -69,14 +69,14 @@ public class ObjectCollectionRTree {
 	public ObjectCollection intersectsWith( ObjectMask om ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
-		return objs.stream().filterSubset(
-			omInd->omInd.hasIntersectingPixels(om),
+		return objects.stream().filterSubset(
+			omInd->omInd.hasIntersectingVoxels(om),
 			delegate.intersectsWith( om.getBoundingBox() )
 		);
 	}
 	
 	public ObjectCollection intersectsWith( BoundingBox bbox ) {
-		return objs.createSubset(
+		return objects.createSubset(
 			delegate.intersectsWith(bbox)
 		);
 	}

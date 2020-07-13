@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 
 /**
  * A map of image channels to indices. 

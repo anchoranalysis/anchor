@@ -36,17 +36,13 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class KeyValueParamsGenerator extends SerializedGenerator {
 
 	private KeyValueParams params;
 	private String manifestFunction;
-		
-	public KeyValueParamsGenerator(KeyValueParams params, String manifestFunction) {
-		super();
-		this.params = params;
-		assert(params!=null);
-		this.manifestFunction = manifestFunction;
-	}
 
 	@Override
 	public void writeToFile(OutputWriteSettings outputWriteSettings,
@@ -69,5 +65,4 @@ public class KeyValueParamsGenerator extends SerializedGenerator {
 			new ManifestDescription("keyvalueparams",manifestFunction)
 		);
 	}
-
 }

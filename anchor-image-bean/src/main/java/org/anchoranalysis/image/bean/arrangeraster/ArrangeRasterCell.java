@@ -31,13 +31,13 @@ import org.anchoranalysis.bean.AnchorBean;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.IArrangeRaster;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 
 public class ArrangeRasterCell extends AnchorBean<ArrangeRasterCell> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private IArrangeRaster arrangeRaster;
+	private ArrangeRaster arrangeRaster;
 	
 	@BeanField @NonNegative
 	private int row;
@@ -46,10 +46,10 @@ public class ArrangeRasterCell extends AnchorBean<ArrangeRasterCell> {
 	private int col;
 	// END BEAN PROPERTIES
 	
-	public IArrangeRaster getArrangeRaster() {
+	public ArrangeRaster getArrangeRaster() {
 		return arrangeRaster;
 	}
-	public void setArrangeRaster(IArrangeRaster arrangeRaster) {
+	public void setArrangeRaster(ArrangeRaster arrangeRaster) {
 		this.arrangeRaster = arrangeRaster;
 	}
 	public int getRow() {

@@ -31,7 +31,6 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -72,12 +71,7 @@ public class ThresholderGlobal extends Thresholder {
 		
 		int thresholdVal = calculateLevel.calculateLevel(hist);
 		assert(thresholdVal>=0);
-		
-		try {
-			return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, mask, false);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}		
+		return VoxelBoxThresholder.thresholdForLevel(inputBuffer, thresholdVal, bvOut, mask, false);
 	}
 
 	private Histogram histogramBuffer(VoxelBoxWrapper inputBuffer, Optional<Histogram> histogram, Optional<ObjectMask> mask) {

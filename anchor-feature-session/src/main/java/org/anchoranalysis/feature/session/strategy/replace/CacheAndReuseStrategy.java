@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <T> feature-input
  */
-public class CacheAndReuseStrategy<T extends FeatureInput> extends ReplaceStrategy<T> {
+public class CacheAndReuseStrategy<T extends FeatureInput> implements ReplaceStrategy<T> {
 
 	private static final int CACHE_SIZE = 200;
 	

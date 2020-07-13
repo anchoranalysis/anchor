@@ -28,7 +28,7 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import lombok.EqualsAndHashCode;
@@ -36,9 +36,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class FeatureInputSingleMemo extends FeatureInputNRG {
 
-	private PxlMarkMemo pxlPartMemo;
+	private VoxelizedMarkMemo pxlPartMemo;
 	
-	public FeatureInputSingleMemo(PxlMarkMemo pxlPartMemo, NRGStackWithParams nrgStack) {
+	public FeatureInputSingleMemo(VoxelizedMarkMemo pxlPartMemo, NRGStackWithParams nrgStack) {
 		this(
 			pxlPartMemo,
 			Optional.of(nrgStack)
@@ -46,18 +46,18 @@ public class FeatureInputSingleMemo extends FeatureInputNRG {
 	}
 	
 	public FeatureInputSingleMemo(
-		PxlMarkMemo pxlPartMemo,
+		VoxelizedMarkMemo pxlPartMemo,
 		Optional<NRGStackWithParams> nrgStack
 	) {
 		super(nrgStack);
 		this.pxlPartMemo = pxlPartMemo;
 	}
 
-	public PxlMarkMemo getPxlPartMemo() {
+	public VoxelizedMarkMemo getPxlPartMemo() {
 		return pxlPartMemo;
 	}
 
-	public void setPxlPartMemo(PxlMarkMemo pxlPartMemo) {
+	public void setPxlPartMemo(VoxelizedMarkMemo pxlPartMemo) {
 		this.pxlPartMemo = pxlPartMemo;
 	}
 }

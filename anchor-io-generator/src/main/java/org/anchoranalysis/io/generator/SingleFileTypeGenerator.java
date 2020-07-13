@@ -42,9 +42,6 @@ public abstract class SingleFileTypeGenerator implements Generator {
 	// We delegate to a much simpler method, for single file generators
 	@Override	
 	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
-		
-		assert( outputManager.getOutputWriteSettings()!=null );
-		
 		writeInternal(
 			outputNameStyle.getPhysicalName(),
 			outputNameStyle.getOutputName(),

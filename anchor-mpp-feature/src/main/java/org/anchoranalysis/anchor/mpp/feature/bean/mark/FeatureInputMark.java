@@ -37,8 +37,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=false)
-public class FeatureInputMark extends FeatureInputParams {
+@EqualsAndHashCode
+public class FeatureInputMark implements FeatureInputParams {
 
 	private Mark mark;
 	private Optional<ImageDimensions> dim;

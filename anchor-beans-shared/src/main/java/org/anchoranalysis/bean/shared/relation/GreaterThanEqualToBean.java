@@ -4,6 +4,8 @@ import org.anchoranalysis.core.relation.GreaterThan;
 import org.anchoranalysis.core.relation.GreaterThanEqualTo;
 import org.anchoranalysis.core.relation.RelationToValue;
 
+import lombok.EqualsAndHashCode;
+
 /*
  * #%L
  * anchor-beans-shared
@@ -30,7 +32,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
  * #L%
  */
 
-
+@EqualsAndHashCode(callSuper=true)
 public class GreaterThanEqualToBean extends RelationBean {
 
 	@Override

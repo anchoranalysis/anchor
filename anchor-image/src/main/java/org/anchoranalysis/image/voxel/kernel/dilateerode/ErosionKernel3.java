@@ -91,7 +91,6 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 				return false;
 			}
 		}
-		x--;
 		ind--;
 		
 		
@@ -119,7 +118,6 @@ public final class ErosionKernel3 extends BinaryKernelMorph3Extent {
 				return false;
 			}
 		}
-		y--;
 		ind -= xLength;
 		
 		

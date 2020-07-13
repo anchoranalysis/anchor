@@ -94,7 +94,7 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequen
 			iterableGenerator.setIterableElement( element );
 			
 			// We delay the initialisation of subFolder until the first iteration and we have a valid generator
-			if (firstAdd==true) {
+			if (firstAdd) {
 				
 				initOnFirstAdd();
 				firstAdd = false;

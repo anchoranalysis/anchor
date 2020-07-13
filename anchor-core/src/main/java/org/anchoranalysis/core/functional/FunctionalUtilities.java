@@ -1,6 +1,7 @@
 package org.anchoranalysis.core.functional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*-
  * #%L
@@ -31,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -66,10 +70,10 @@ public class FunctionalUtilities {
 	/**
 	 * Performs a map on a stream, but accepts a function that can throw a checked-exception
 	 * 
-	 * <p>This uses some internal reflection trickery to suppress the checked exception, and then rethrow it.</p>
-	 * 
-	 * <p>As a side-effect, any runtime exceptions that are thrown during the function, will be rethrown
-	 * wrapped inside a {@link ConvertedToRuntimeException}</p>
+	 * This uses some internal reflection trickery to suppress the checked exception, and then rethrow it.
+	 * <p>
+	 * As a side-effect, any runtime exceptions that are thrown during the function, will be rethrown
+	 * wrapped inside a {@link ConvertedToRuntimeException}.
 	 * 
 	 * @param  <S> input-type to map
 	 * @param  <T> output-type of map
@@ -87,6 +91,37 @@ public class FunctionalUtilities {
 	) throws E {
 		try {
 			return stream.map( item-> 
+				suppressCheckedException(item, mapFunction)
+			);
+			
+		} catch (ConvertedToRuntimeException e) {
+			return throwException(e, throwableClass);
+		}
+	}
+	
+	/**
+	 * Performs a {@code mapToInt} on a stream, but accepts a function that can throw a checked-exception.
+	 * <p>
+	 * This uses some internal reflection trickery to suppress the checked exception, and then rethrow it.
+	 * <p>
+	 * As a side-effect, any runtime exceptions that are thrown during the function, will be rethrown
+	 * wrapped inside a {@link ConvertedToRuntimeException}.
+	 * 
+	 * @param  <S> input-type to map
+	 * @param  <E> exception that can be thrown by {code mapFunction}
+	 * @param  stream the stream to apply the map on
+	 * @param  throwableClass the class of {@code E}
+	 * @param  mapFunction the function to use for mapping
+	 * @return the output of the flatMap
+	 * @throws E if the exception is thrown during mapping
+	 */
+	public static <S,E extends Exception> IntStream mapToIntWithException(
+		Stream<S> stream,
+		Class<? extends Exception> throwableClass,
+		ToIntFunctionWithException<S,E> mapFunction
+	) throws E {
+		try {
+			return stream.mapToInt( item-> 
 				suppressCheckedException(item, mapFunction)
 			);
 			
@@ -235,6 +270,83 @@ public class FunctionalUtilities {
 		}
 	}
 	
+	/**
+	 * Maps a collection to a list with each element derived from a corresponding element in the original collection.
+	 * <p>
+	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
+	 * below (although very idiomatic) occurs frequently.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  collection the collection to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 */
+	public static <S,T> List<T> mapToList(Collection<S> collection, Function<S,T> mapFunction) {
+		return collection.stream()
+				.map(mapFunction)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Maps an array to a list with each element derived from a corresponding element in the original array.
+	 * <p>
+	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
+	 * below (although very idiomatic) occurs frequently.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  array the array to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 */
+	public static <S,T> List<T> mapToList(S[] array, Function<S,T> mapFunction) {
+		return Arrays.stream(array)
+				.map(mapFunction)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Filters a collection and maps the result to a list
+	 * <p>
+	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
+	 * below (although idiomatic) occurs in multiple places.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  predicate predicate to first filter the input collection before mapping
+	 * @param  collection the collection to be filtered
+	 * @return a list with only the elements that pass the filter
+	 */
+	public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
+		return collection.stream()
+				.filter(predicate)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Like {@link #mapToList} but tolerates exceptions in the mapping function.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  <E> exception that can be thrown by {code mapFunction}
+	 * @param  collection the collection to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 * @throws E if the exception is thrown during mapping
+	 */
+	public static <S,T,E extends Exception> List<T> mapToList(
+		Collection<S> collection,
+		Class<? extends Exception> throwableClass,
+		FunctionWithException<S,T,E> mapFunction
+	) throws E {
+		return mapWithException(
+			collection.stream(),
+			throwableClass,
+			mapFunction
+		).collect( Collectors.toList() );
+	}
+		
 	@SuppressWarnings("unchecked")
 	/**
 	 * Rethrows either the cause of a run-time exception (as a checked exception) or the run-time exception itself, depending if the cause matches the expected type. 
@@ -259,8 +371,8 @@ public class FunctionalUtilities {
 	 * 
 	 * @param <S> parameter-type for function
 	 * @param <T> return-type for function
-	 * @param <E> checked-exception that can be thrown by funcion
-	 * @param param the parameter to apply to the funcion
+	 * @param <E> checked-exception that can be thrown by function
+	 * @param param the parameter to apply to the function
 	 * @param function the function
 	 * @return the return-value of the function
 	 * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@link function}
@@ -276,6 +388,19 @@ public class FunctionalUtilities {
 		}
 	}
 	
+	/** Like @link(#suppressCheckedException) but instead accepts {@link ToIntFunctionWithException} functions */
+	private static <S,E extends Exception> int suppressCheckedException(
+		S param,
+		ToIntFunctionWithException<S,E> function
+	) {
+		try {
+			return function.apply(param);
+		} catch (Exception exc) {
+			throw new ConvertedToRuntimeException(exc);
+		}
+	}
+	
+	/** Like @link(#suppressCheckedException) but instead accepts {@link IntFunctionWithException} functions */
 	private static <T,E extends Exception> T suppressCheckedException(
 		int param,
 		IntFunctionWithException<T,E> function

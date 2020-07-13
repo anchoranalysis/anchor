@@ -1,5 +1,7 @@
 package org.anchoranalysis.feature.shared;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-feature
@@ -35,7 +37,8 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.CommonContext;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -43,19 +46,11 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.FeatureListStoreUtilities;
 
-public class SharedFeaturesInitParams extends BeanInitParams {
+public class SharedFeaturesInitParams implements BeanInitParams {
 
-	// START: InitParams
 	private KeyValueParamsInitParams soParams;
-	// END: InitParams
-	
-	// START: Stores
 	private NamedProviderStore<FeatureList<FeatureInput>> storeFeatureList;
-	// END: Stores
-	
-	// START: Single Items
 	private SharedFeatureMulti sharedFeatureSet;
-	// END: Single Items
 
 	private SharedFeaturesInitParams(SharedObjects so) {
 		super();
@@ -71,20 +66,23 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 		);
 	}
 	
-	public static SharedFeaturesInitParams create( SharedObjects so ) {
-		return new SharedFeaturesInitParams(so);
+	public static SharedFeaturesInitParams create( SharedObjects sharedObjects ) {
+		return new SharedFeaturesInitParams(sharedObjects);
 	}
 	
 	
 	/**
 	 * Creates empty params
 	 * 
-	 * @param logErrorReporter
+	 * @param logger
 	 * @return
 	 */
-	public static SharedFeaturesInitParams create( LogErrorReporter logErrorReporter ) {
-		SharedObjects so = new SharedObjects(logErrorReporter);
-		return create(so);
+	public static SharedFeaturesInitParams create(Logger logger, Path modelDirectory) {
+		return create(
+			new SharedObjects(
+				new CommonContext(logger, modelDirectory)
+			)
+		);
 	}
 	
 	public NamedProviderStore<FeatureList<FeatureInput>> getFeatureListSet() {
@@ -93,21 +91,21 @@ public class SharedFeaturesInitParams extends BeanInitParams {
 	
 	public void populate(
 		List<NamedBean<FeatureListProvider<FeatureInput>>> namedFeatureListCreator,
-		LogErrorReporter logger
+		Logger logger
 	) throws OperationFailedException {
 		
 		assert( getFeatureListSet()!=null );
 		try {
 			for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
 				namedBean.getItem().initRecursive(this, logger);
-				addFeatureList(namedBean, logger);
+				addFeatureList(namedBean);
 			}
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb, LogErrorReporter logger ) throws OperationFailedException {
+	private void addFeatureList( NamedBean<FeatureListProvider<FeatureInput>> nb) throws OperationFailedException {
 		
 		try {
 			FeatureList<FeatureInput> fl = nb.getItem().create();

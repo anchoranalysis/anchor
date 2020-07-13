@@ -33,7 +33,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -67,13 +67,11 @@ import lombok.RequiredArgsConstructor;
  * <li>The entire results are cached (as a function of the input) for first/second, as the same inputs reappear multiple times.</li>
  * </div>
  * 
- * <p>TODO a further type of caching (of the results of internal feature calculations for the same inputs)</p>
- * 
  * @author Owen Feehan
  *
  */
 @RequiredArgsConstructor
-public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<FeatureInputPairObjects> {
+public class FeatureCalculatorMergedPairs implements FeatureTableCalculator<FeatureInputPairObjects> {
 
 	// START REQUIRED ARGUMENTS
 	private final MergedPairsFeatures features;
@@ -95,12 +93,12 @@ public class FeatureCalculatorMergedPairs extends FeatureTableCalculator<Feature
 	public void start(
 		ImageInitParams soImage,
 		Optional<NRGStackWithParams> nrgStack,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws InitException {
 		
 		calculator = new CombinedCalculator(
 			features,
-			new CreateCalculatorHelper(nrgStack,logErrorReporter),
+			new CreateCalculatorHelper(nrgStack,logger),
 			include,			
 			soImage
 		);

@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class FeatureInputHistogram extends FeatureInputWithRes {
+public class FeatureInputHistogram implements FeatureInputWithRes {
 
 	private Histogram histogram;
 	private Optional<ImageResolution> res;

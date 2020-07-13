@@ -27,8 +27,8 @@ package org.anchoranalysis.feature.calc;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.FeatureBase;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public interface InitializableFeature<T extends FeatureInput> {
 
-	void init( FeatureInitParams params, FeatureBase<T> parentFeature, LogErrorReporter logger) throws InitException;
+	void init( FeatureInitParams params, Feature<T> parentFeature, Logger logger) throws InitException;
 	
 	/**
 	 * A friendly name that can be displayed to user describing the Feature. Should always prioritise the CustomName

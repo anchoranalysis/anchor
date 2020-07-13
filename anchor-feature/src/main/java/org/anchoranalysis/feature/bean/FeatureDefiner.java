@@ -28,11 +28,11 @@ package org.anchoranalysis.feature.bean;
 
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
+class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 
 	@Override
 	public boolean accepts( Class<?> paramType ) {
@@ -41,19 +41,16 @@ class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void doInitFor(Object propertyValue, Object params, Object parent, LogErrorReporter logger) throws InitException {
+	public void doInitFor(Object propertyValue, Object params, Object parent, Logger logger) throws InitException {
 		
-		if (parent!=null) {
-			if (!(parent instanceof FeatureBase)) {
-				throw new InitException("A feature may only have another FeatureBase as a bean-parent");
-			}
+		if (parent!=null && !(parent instanceof Feature)) {
+			throw new InitException("A feature may only have another feature as a bean-parent");
 		}
 
 		if (propertyValue instanceof Feature) {
 			Feature<T> propertyValueCast = (Feature<T>) propertyValue;
 			propertyValueCast.init(
 				(FeatureInitParams) params,
-				(FeatureBase<T>) parent,
 				logger
 			);
 		}
@@ -63,5 +60,4 @@ class FeatureDefiner<T extends FeatureInput> extends PropertyDefiner {
 	public String describeAcceptedClasses() {
 		return FeatureInitParams.class.getSimpleName();
 	}
-	
 }

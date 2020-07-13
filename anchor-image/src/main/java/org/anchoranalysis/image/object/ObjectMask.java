@@ -46,8 +46,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.intersecting.CountIntersectingPixelsBinary;
-import org.anchoranalysis.image.object.intersecting.DetermineWhetherIntersectingPixelsBinary;
+import org.anchoranalysis.image.object.intersecting.CountIntersectingVoxelsBinary;
+import org.anchoranalysis.image.object.intersecting.DetermineWhetherIntersectingVoxelsBinary;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -183,7 +183,7 @@ public class ObjectMask {
 	}
 
 	/** The number of "ON" voxels on the mask */
-	public int numVoxelsOn() {
+	public int numberVoxelsOn() {
 		return delegate.getVoxelBox().countEqual( bv.getOnInt() );
 	}
 
@@ -231,28 +231,24 @@ public class ObjectMask {
 		if(!bv.equals(other.bv)) {
 			return false;
 		}
-		if(!bvb.equals(other.bvb)) {
-			return false;
-		}
-		// DOES NOT CHECK factory
-		return true;
+		return bvb.equals(other.bvb);
 	}
 
-	public int countIntersectingPixels(ObjectMask other) {
-		return new CountIntersectingPixelsBinary(
+	public int countIntersectingVoxels(ObjectMask other) {
+		return new CountIntersectingVoxelsBinary(
 			getBinaryValuesByte(),
 			other.getBinaryValuesByte()
-		).countIntersectingPixels(
+		).countIntersectingVoxels(
 			delegate,
 			other.delegate
 		);
 	}
 	
-	public boolean hasIntersectingPixels(ObjectMask other) {
-		return new DetermineWhetherIntersectingPixelsBinary(
+	public boolean hasIntersectingVoxels(ObjectMask other) {
+		return new DetermineWhetherIntersectingVoxelsBinary(
 			getBinaryValuesByte(),
 			other.getBinaryValuesByte()		
-		).hasIntersectingPixels(delegate, other.delegate);
+		).hasIntersectingVoxels(delegate, other.delegate);
 	}
 
 	// Scales an objMask making sure to create a duplicate first
@@ -267,12 +263,12 @@ public class ObjectMask {
 				
 				// We threshold to make sure it's still binary
 				int thresholdVal = (bv.getOnInt() + bv.getOffInt()) /2;
-				
-				try {
-					VoxelBoxThresholder.thresholdForLevel(boxNew.getVoxelBox(), thresholdVal, bv.createByte());
-				} catch (CreateException e) {
-					throw new OperationFailedException("Cannot convert binary values into bytes");
-				}
+
+				VoxelBoxThresholder.thresholdForLevel(
+					boxNew.getVoxelBox(),
+					thresholdVal,
+					bv.createByte()
+				);
 			}
 			
 			return new ObjectMask(boxNew, bv);
@@ -303,13 +299,11 @@ public class ObjectMask {
 				// We threshold to make sure it's still binary
 				int thresholdVal = (bv.getOnInt() + bv.getOffInt()) /2;
 				
-				try {
-					VoxelBoxThresholder.thresholdForLevel(scaled.getVoxelBox(), thresholdVal, bv.createByte());
-				} catch (CreateException e) {
-					throw new AnchorFriendlyRuntimeException("Cannot convert binary values into bytes");
-				}
-
-				
+				VoxelBoxThresholder.thresholdForLevel(
+					scaled.getVoxelBox(),
+					thresholdVal,
+					bv.createByte()
+				);
 			}
 			return new ObjectMask(scaled, bv);
 			
@@ -412,7 +406,7 @@ public class ObjectMask {
 	public Optional<ObjectMask> intersect( ObjectMask other, ImageDimensions dim ) {
 		
 		// we combine the two masks
-		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dim.getExtnt() );
+		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dim.getExtent() );
 		
 		if (!bboxIntersect.isPresent()) {
 			return Optional.empty();
@@ -685,6 +679,6 @@ public class ObjectMask {
 	 **/
 	@Override
 	public String toString() {
-		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numVoxelsOn() );
+		return String.format("Obj%s(cog=%s,numPixels=%d)", super.hashCode(), centerOfGravity().toString(), numberVoxelsOn() );
 	}
 }

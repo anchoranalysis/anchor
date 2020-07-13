@@ -6,7 +6,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.nrg.NRGPair;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*-
  * #%L
@@ -80,8 +80,8 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 	// Returns NULL if to reject an edge
 	@Override
 	public Optional<NRGPair> generateEdge(
-		PxlMarkMemo mark1,
-		PxlMarkMemo mark2,
+		VoxelizedMarkMemo mark1,
+		VoxelizedMarkMemo mark2,
 		NRGStackWithParams nrgStack,
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
 		boolean do3D
@@ -126,23 +126,4 @@ public class AddCriteriaNRGElemPair implements AddCriteria<NRGPair> {
 			return Optional.empty();
 		}
 	}
-
-
-	@Override
-	public boolean paramsEquals(Object other) {
-
-		if (!(other instanceof AddCriteriaNRGElemPair)) {
-			return false;
-		}
-		
-		AddCriteriaNRGElemPair obj = (AddCriteriaNRGElemPair) other;
-		
-		if (!nrgElemPairList.equals(obj.nrgElemPairList)) {
-			return false;
-		}
-		
-		return pairAddCriteria.paramsEquals(obj.pairAddCriteria);
-	}
-
-	
 }

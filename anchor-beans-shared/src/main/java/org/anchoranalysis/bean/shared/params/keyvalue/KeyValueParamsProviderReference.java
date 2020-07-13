@@ -54,7 +54,7 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 
 	@Override
 	public KeyValueParams create() {
-		assert( getSharedObjects()!=null );	// Otherwise init() has never been called
+		assert( getInitializationParameters()!=null );	// Otherwise init() has never been called
 		return params;
 	}
 

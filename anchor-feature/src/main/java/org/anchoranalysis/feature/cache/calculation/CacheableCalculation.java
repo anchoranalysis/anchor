@@ -34,19 +34,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Caches the result of a calculation, until reset() is called
- * 
- * Implements an equivalence-relation via IParamsEquals.paramsEquals that checks
- * that the 'parameters' of a CachedCalculation are identical
- * 
- * This allows the user to search through a collection of CachedCalculation to
- *   find one with identical parameters and re-use it
- * 
- * The implementation of paramsEquals does a deep-search through fields
- *  of the class and does a equals() call.  All fields are considered apart
- *  from those marked 'transient'.
- * 
- * IMPORTANT NOTE: It is therefore important to make sure to put 'transient' on
- * all fields, which should not be equality-checked, when designing the classes.
+ * <p>
+ * Implements an equivalence-relation via {@code equals()} that checks
+ * if two cacheable-calculations are identical. This allows the user to search
+ * through a collection of {@link CacheableCalculation} to find one with identical parameters and re-use it.
+ * <p>
+ *  
+ * IMPORTANT NOTE: It is therefore important to make sure every class has a well-defined
+ * {@code equals()} and {@code hashCode()}.
  * 
  * @author Owen Feehan
  *
@@ -110,12 +105,9 @@ public abstract class CacheableCalculation<S, T extends FeatureInput, E extends 
 	
 	/** A check that if params are already set, any new inputs must be identical */
 	private boolean checkParamsMatchesInput( T input ) {
-		if (hasCachedCalculation()) {
-			if (input!=null && !input.equals(this.input)) {
-				throw new AnchorFriendlyRuntimeException("This feature already has been used, its cache is already set to different params");
-			}
+		if (hasCachedCalculation() && input!=null && !input.equals(this.input)) {
+			throw new AnchorFriendlyRuntimeException("This feature already has been used, its cache is already set to different params");
 		}
 		return true;
 	}
-
 }

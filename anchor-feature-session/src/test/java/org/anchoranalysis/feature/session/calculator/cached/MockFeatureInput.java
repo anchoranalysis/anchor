@@ -31,7 +31,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /** An input with well defined equals() and hash-code() */
-class MockFeatureInput extends FeatureInput {
+class MockFeatureInput implements FeatureInput {
 	
 	private String id;
 	

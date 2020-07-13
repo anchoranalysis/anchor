@@ -94,7 +94,7 @@ public abstract class ChannelConverter<T extends Buffer> {
 		if (changeExisting==ConversionPolicy.CHANGE_EXISTING_CHANNEL) {
 			chnlOut = chnlIn;
 			// We need to create a new voxel buffer
-			voxelBoxOut = voxelBoxFactory.create( chnlIn.getDimensions().getExtnt() );
+			voxelBoxOut = voxelBoxFactory.create( chnlIn.getDimensions().getExtent() );
 		} else {
 			chnlOut = ChannelFactory.instance().createEmptyUninitialised( chnlIn.getDimensions(), dataTypeTarget );
 			voxelBoxOut = (VoxelBox<T>) chnlOut.getVoxelBox().match(dataTypeTarget);

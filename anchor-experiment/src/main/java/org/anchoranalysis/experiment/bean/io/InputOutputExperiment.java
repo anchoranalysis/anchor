@@ -31,11 +31,11 @@ import java.io.IOException;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
-import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
+import org.anchoranalysis.experiment.bean.log.LoggingDestination;
+import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
 import org.anchoranalysis.experiment.io.IReplaceOutputManager;
@@ -48,6 +48,9 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 
  * @author Owen Feehan
@@ -58,14 +61,14 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 public class InputOutputExperiment<T extends InputFromManager,S> extends OutputExperiment implements IReplaceInputManager, IReplaceOutputManager, IReplaceTask<T,S> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private InputManager<T> inputManager = null;
+	@BeanField @Getter @Setter
+	private InputManager<T> input;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private JobProcessor<T,S> taskProcessor;
 	
-	@BeanField
-	private LogReporterBean logReporterTask = new ConsoleLogReporterBean();
+	@BeanField @Getter @Setter
+	private LoggingDestination logTask = new ToConsole();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -76,12 +79,12 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 				new InputManagerParams(
 					params.getExperimentArguments().createInputContext(),
 					ProgressReporterNull.get(),
-					new LogErrorReporter(params.getLogReporterExperiment())
+					new Logger(params.getLoggerExperiment())
 				)
 			);
 			checkCompabilityInputObjects(inputObjects);
 			
-			params.setLogReporterTaskCreator(logReporterTask);
+			params.setLoggerTaskCreator(logTask);
 						
 			taskProcessor.executeLogStats(
 				params.getOutputManager(),
@@ -94,16 +97,6 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 		}			
 	}
 	
-	private void checkCompabilityInputObjects(List<T> inputObjects) throws ExperimentExecutionException {
-		for( T input : inputObjects ) {
-			if (!taskProcessor.isInputObjectCompatibleWith(input.getClass())) {
-				throw new ExperimentExecutionException(
-					String.format("Input has an incompatible class for the associated task: %s", input.getClass().toString() )
-				);
-			}
-		}
-	}
-	
 	@Override
 	public boolean useDetailedLogging() {
 
@@ -114,28 +107,11 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 		
 		return super.useDetailedLogging();
 	}
-
-	public InputManager<T> getInput() {
-		return inputManager;
-	}
-
-
-	public void setInput(InputManager<T> input) {
-		this.inputManager = input;
-	}
-	
-	public JobProcessor<T,S> getTaskProcessor() {
-		return taskProcessor;
-	}
-
-	public void setTaskProcessor(JobProcessor<T,S> taskProcessor) {
-		this.taskProcessor = taskProcessor;
-	}	
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException {
-		this.inputManager = (InputManager<T>) inputManager;
+		this.input = (InputManager<T>) inputManager;
 	}
 	
 	@Override
@@ -146,14 +122,15 @@ public class InputOutputExperiment<T extends InputFromManager,S> extends OutputE
 	@Override
 	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
 		this.taskProcessor.replaceTask(taskToReplace);
-		
 	}
-
-	public LogReporterBean getLogReporterTask() {
-		return logReporterTask;
-	}
-
-	public void setLogReporterTask(LogReporterBean logReporterTask) {
-		this.logReporterTask = logReporterTask;
+	
+	private void checkCompabilityInputObjects(List<T> inputObjects) throws ExperimentExecutionException {
+		for( T obj : inputObjects ) {
+			if (!taskProcessor.isInputObjectCompatibleWith(obj.getClass())) {
+				throw new ExperimentExecutionException(
+					String.format("Input has an incompatible class for the associated task: %s", obj.getClass().toString() )
+				);
+			}
+		}
 	}
 }

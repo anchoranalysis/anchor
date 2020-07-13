@@ -48,13 +48,13 @@ public class AggregateTriggerBank<T> {
 		this.extractScoreSize = extractScoreSize;
 	}
 	
-	public AggregateTrigger<T,AggregateReceiverList<T>> obtain( int period, IAggregateReceiver<T> receiver, PeriodTriggerBank<T> periodTriggerBank ) {
+	public AggregateTrigger<T,AggregateReceiverList<T>> obtain( int period, AggregateReceiver<T> receiver, PeriodTriggerBank<T> periodTriggerBank ) {
 
 		AggregateTrigger<T,AggregateReceiverList<T>> exst = map.get(period);
 		
 		// If we don't already have a trigger for this specific period, we create one
 		if (exst==null) {
-			AggregateReceiverList<T> listNew = new AggregateReceiverList<T>();
+			AggregateReceiverList<T> listNew = new AggregateReceiverList<>();
 			exst = new AggregateTrigger<>(listNew, period, periodTriggerBank, extractScoreSize );
 			list.add(exst);
 		}

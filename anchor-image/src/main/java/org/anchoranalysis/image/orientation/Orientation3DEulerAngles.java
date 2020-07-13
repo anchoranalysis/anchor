@@ -31,9 +31,11 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
 // Conventions taken from http://mathworld.wolfram.com/EulerAngles.html
+@RequiredArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class Orientation3DEulerAngles extends Orientation {
 
 	/**
@@ -41,122 +43,55 @@ public class Orientation3DEulerAngles extends Orientation {
 	 */
 	private static final long serialVersionUID = -850189653607136128L;
 
-	private double rotXRadians;	// Alpha
-	private double rotYRadians;	// Beta
-	private double rotZRadians;	// Gamma
+	/** Rotation around X-dimension (in radians). Alpha. */
+	private final double rotationX;
+	
+	/** Rotation around Y-dimension (in radians). Beta. */
+	private final double rotationY;
+	
+	/** Rotation around Z-dimension (in radians). Gamma. */
+	private final double rotationZ;
 	
 	public Orientation3DEulerAngles() {
 		this(0.0, 0.0, 0.0);
 	}
-		
-	public Orientation3DEulerAngles(double rotXRadians, double rotYRadians,
-			double rotZRadians) {
-		super();
-		this.rotXRadians = rotXRadians;
-		this.rotYRadians = rotYRadians;
-		this.rotZRadians = rotZRadians;
-	}
 
 	@Override
 	public Orientation3DEulerAngles duplicate() {
-		
-		Orientation3DEulerAngles copy = new Orientation3DEulerAngles();
-		copy.rotXRadians = this.rotXRadians;
-		copy.rotYRadians = this.rotYRadians;
-		copy.rotZRadians = this.rotZRadians;
-		return copy;
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		
-		if (other == null) { return false; }
-		if (other == this) { return true; }
-		
-		if (!(other instanceof Orientation3DEulerAngles)) {
-			return false;
-		}
-		
-		Orientation3DEulerAngles otherCast = (Orientation3DEulerAngles) other;
-		
-		if (rotXRadians != otherCast.rotXRadians) {
-			return false;
-		}
-		
-		if (rotYRadians != otherCast.rotYRadians) {
-			return false;
-		}
-		
-		if (rotZRadians != otherCast.rotZRadians) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(rotXRadians)
-				.append(rotYRadians)
-				.append(rotZRadians)
-				.toHashCode();
-	}
-
-	public double getRotXRadians() {
-		return rotXRadians;
-	}
-
-	public void setRotXRadians(double rotXRadians) {
-		this.rotXRadians = rotXRadians;
-	}
-
-	public double getRotYRadians() {
-		return rotYRadians;
-	}
-
-	public void setRotYRadians(double rotYRadians) {
-		this.rotYRadians = rotYRadians;
-	}
-
-	public double getRotZRadians() {
-		return rotZRadians;
-	}
-
-	public void setRotZRadians(double rotZRadians) {
-		this.rotZRadians = rotZRadians;
+		return new Orientation3DEulerAngles(rotationX, rotationY, rotationZ);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%3.3f, %3.3f, %3.3f", rotXRadians, rotYRadians, rotZRadians);
+		return String.format("%3.3f, %3.3f, %3.3f", rotationX, rotationY, rotationZ);
 	}
 	
 	@Override
 	public RotationMatrix createRotationMatrix() {
-		return new RotationMatrix3DFromRadianCreator(rotXRadians, rotYRadians, rotZRadians).createRotationMatrix();	
+		return new RotationMatrix3DFromRadianCreator(rotationX, rotationY, rotationZ).createRotationMatrix();	
 	}
 
 	@Override
 	public Orientation negative() {
-		Orientation3DEulerAngles dup = duplicate();
-		dup.rotZRadians += Math.PI;
-		dup.rotZRadians = dup.rotZRadians % (2*Math.PI);
-		return dup;
+		return new Orientation3DEulerAngles(
+			rotationX,
+			rotationY,
+			(rotationZ + Math.PI) % (2*Math.PI)
+		);
 	}
 
 	@Override
 	public void addProperties(NameValueSet<String> nvc) {
-		addProperty(nvc, "X", rotXRadians);
-		addProperty(nvc, "Y", rotYRadians);
-		addProperty(nvc, "Z", rotZRadians);
+		addProperty(nvc, "X", rotationX);
+		addProperty(nvc, "Y", rotationY);
+		addProperty(nvc, "Z", rotationZ);
 	}
 	
 	private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
 		nvc.add(
 			new SimpleNameValue<>(
 				String.format("Orientation Angle %s (radians)", dimension),
-				String.format("%1.2f", rotXRadians)
+				String.format("%1.2f", radians)
 			)
 		);
 	}

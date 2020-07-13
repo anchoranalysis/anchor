@@ -29,12 +29,11 @@ import java.util.List;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**
@@ -44,27 +43,15 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  *
  * @param <T> bean-type
  */
-public abstract class FeatureRelatedBean<T> extends InitializableBeanSimple<T,SharedFeaturesInitParams> {
+public abstract class FeatureRelatedBean<T> extends InitializableBean<T,SharedFeaturesInitParams> {
 
-	private SharedFeaturesInitParams soFeature;
-	
 	protected FeatureRelatedBean() {
 		super(
 			new PropertyInitializer<>( SharedFeaturesInitParams.class, paramExtracters() ),
 			new SimplePropertyDefiner<SharedFeaturesInitParams>(SharedFeaturesInitParams.class)
 		);
 	}
-	
-	@Override
-	public void onInit(SharedFeaturesInitParams soFeature) throws InitException {
-		super.onInit(soFeature);
-		this.soFeature = soFeature;
-	}
 
-	public SharedFeaturesInitParams getSharedObjects() {
-		return soFeature;
-	}
-	
 	private static List<ExtractFromParam<SharedFeaturesInitParams,?>> paramExtracters() {
 		return Arrays.asList(
 			new ExtractFromParam<>(

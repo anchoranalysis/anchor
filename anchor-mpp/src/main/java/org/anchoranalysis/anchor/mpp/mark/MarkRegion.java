@@ -1,6 +1,6 @@
 package org.anchoranalysis.anchor.mpp.mark;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -36,5 +36,5 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class MarkRegion extends AnchorBean<MarkRegion> implements GenerateUniqueParameterization {
 
-	public abstract VoxelStatistics createStatisticsFor( PxlMarkMemo pmm, ImageDimensions dim ) throws CreateException;
+	public abstract VoxelStatistics createStatisticsFor( VoxelizedMarkMemo pmm, ImageDimensions dim ) throws CreateException;
 }

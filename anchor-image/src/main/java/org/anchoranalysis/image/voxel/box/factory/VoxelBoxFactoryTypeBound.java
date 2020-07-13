@@ -31,7 +31,7 @@ import java.nio.Buffer;
 
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  */
 public interface VoxelBoxFactoryTypeBound<T extends Buffer> {
 	
-	VoxelBox<T> create( IPixelsForPlane<T> pixelsForPlane );
+	VoxelBox<T> create( PixelsForPlane<T> pixelsForPlane );
 	
 	VoxelBox<T> create( Extent e );
 	

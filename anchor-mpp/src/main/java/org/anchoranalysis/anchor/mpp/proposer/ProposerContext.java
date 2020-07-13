@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -97,7 +97,7 @@ public class ProposerContext {
 		return nrgStack.getNrgStack().getDimensions();
 	}
 	
-	public PxlMarkMemo create(Mark mark) {
+	public VoxelizedMarkMemo create(Mark mark) {
 		return PxlMarkMemoFactory.create(mark, nrgStack.getNrgStack(), regionMap);
 	}
 

@@ -35,8 +35,15 @@ import org.anchoranalysis.anchor.plot.GraphInstance;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 
-// The sub classes don't have any BeanFields as a rule
-public abstract class GraphDefinition<ItemType> extends AnchorBean<GraphDefinition<ItemType>> {
+/**
+ * 
+ * The sub classes don't have any BeanFields as a rule
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> item-type
+ */
+public abstract class GraphDefinition<T> extends AnchorBean<GraphDefinition<T>> {
 
 	/**
 	 * Creates a graph
@@ -47,9 +54,9 @@ public abstract class GraphDefinition<ItemType> extends AnchorBean<GraphDefiniti
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract GraphInstance create( Iterator<ItemType> items, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException;
+	public abstract GraphInstance create( Iterator<T> items, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException;
 	
-	public abstract boolean isItemAccepted( ItemType item );
+	public abstract boolean isItemAccepted( T item );
 	
 	public abstract String getTitle();
 	

@@ -42,7 +42,7 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
@@ -51,7 +51,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 
 // A wrapper around SharedObjects which types certain MPP entities
-public class MPPInitParams extends BeanInitParams {
+public class MPPInitParams implements BeanInitParams {
 
 	// START: InitParams
 	private ImageInitParams soImage;
@@ -145,7 +145,7 @@ public class MPPInitParams extends BeanInitParams {
 		return getMarkBoundsSet().getException("primary");
 	}
 
-	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
+	public void populate( PropertyInitializer<?> pi, Define define, Logger logger ) throws OperationFailedException {
 		
 		PopulateStoreFromDefine<MPPInitParams> populater = new PopulateStoreFromDefine<>(define, pi, logger);
 		populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());

@@ -31,11 +31,10 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  * #L%
  */
 
-import org.anchoranalysis.bean.init.InitializableBeanSimple;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 /**
@@ -44,25 +43,13 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
  *
  * @param <T> bean-type
  */
-public abstract class PointsBean<T> extends InitializableBeanSimple<T,PointsInitParams> {
+public abstract class PointsBean<T> extends InitializableBean<T,PointsInitParams> {
 
 	protected PointsBean() {
 		super(
 			new PropertyInitializer<>(PointsInitParams.class, paramExtracters()),
 			new SimplePropertyDefiner<PointsInitParams>(PointsInitParams.class)
 		);
-	}
-	
-	private PointsInitParams so;
-	
-	@Override
-	public void onInit(PointsInitParams so) throws InitException {
-		super.onInit(so);
-		this.so = so;
-	}
-	
-	protected PointsInitParams getSharedObjects() {
-		return so;
 	}
 	
 	private static List<ExtractFromParam<PointsInitParams,?>> paramExtracters() {

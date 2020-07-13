@@ -28,14 +28,13 @@ package org.anchoranalysis.image.feature.bean.object.pair;
 
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjectsDescriptor;
 
 public abstract class FeaturePairObjects extends Feature<FeatureInputPairObjects> {
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputPairObjectsDescriptor.instance;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputPairObjects.class;
 	}
 }

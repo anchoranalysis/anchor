@@ -32,7 +32,6 @@ package org.anchoranalysis.image.voxel.box.thresholder;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -54,7 +53,7 @@ public class VoxelBoxThresholder {
 		VoxelBox<ByteBuffer> inputBuffer,
 		int level,
 		BinaryValuesByte bvOut
-	) throws CreateException {
+	) {
 		// We know that as the inputType is byte, it will be performed in place
 		thresholdForLevel(
 			VoxelBoxWrapper.wrap(inputBuffer),
@@ -72,8 +71,7 @@ public class VoxelBoxThresholder {
 		BinaryValuesByte bvOut,
 		Optional<ObjectMask> mask,
 		boolean alwaysDuplicate
-	) throws CreateException {
-	
+	) {
 		VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty( alwaysDuplicate );
 		
 		if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {

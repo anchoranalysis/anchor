@@ -30,8 +30,10 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.CommonContext;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 
 /**
  * Certain parameters that are exposed after any file-system binding for inputs and outputs has occurred.
@@ -47,14 +49,21 @@ public interface BoundIOContext {
 		
 	boolean isDebugEnabled();
 	
-	LogErrorReporter getLogger();
+	Logger getLogger();
 	
-	default ErrorReporter getErrorReporter() {
-		return getLogger().getErrorReporter();
+	default CommonContext common() {
+		return new CommonContext(
+			getLogger(),
+			getModelDirectory()
+		);
 	}
 	
-	default LogReporter getLogReporter() {
-		return getLogger().getLogReporter();
+	default ErrorReporter getErrorReporter() {
+		return getLogger().errorReporter();
+	}
+	
+	default MessageLogger getLogReporter() {
+		return getLogger().messageLogger();
 	}
 	
 	/**
@@ -63,8 +72,8 @@ public interface BoundIOContext {
 	 * @param subDirectoryName subdirectory name
 	 * @return newly created context
 	 */
-	default BoundIOContext subdirectory(String subDirectoryName) {
-		return new RedirectIntoSubdirectory(this, subDirectoryName);
+	default BoundIOContext subdirectory(String subDirectoryName, ManifestFolderDescription manifestFolderDescription) {
+		return new RedirectIntoSubdirectory(this, subDirectoryName, manifestFolderDescription);
 	}
 	
 	/**
@@ -73,7 +82,9 @@ public interface BoundIOContext {
 	 * @param subDirectoryName if defined, a new context is created that writes into a sub-directory of this name
 	 * @return either a newly created context, or the existing context
 	 */
-	default BoundIOContext maybeSubdirectory(Optional<String> subDirectoryName) {
-		return subDirectoryName.map(this::subdirectory).orElse(this);
+	default BoundIOContext maybeSubdirectory(Optional<String> subDirectoryName, ManifestFolderDescription manifestFolderDescription) {
+		return subDirectoryName.map(name->
+			subdirectory(name, manifestFolderDescription)
+		).orElse(this);
 	}
 }

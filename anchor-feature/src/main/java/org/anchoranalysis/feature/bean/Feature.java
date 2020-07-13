@@ -30,16 +30,17 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.calc.InitializableFeature;
 import org.anchoranalysis.feature.input.FeatureInput;
+
+import com.google.common.base.Preconditions;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,32 +55,47 @@ import lombok.Setter;
  *
  * @param <T> input-type 
  */
-public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> implements InitializableFeature<T> {
+public abstract class Feature<T extends FeatureInput> extends InitializableBean<Feature<T>,FeatureInitParams> {
 
 	// START BEAN PROPERTIES
 	/** An optional additional name that be associated with the feature (defaults to an empty string) */
 	@BeanField @AllowEmpty @Getter @Setter
 	private String customName = "";
 	// END BEAN PROPERTIES
-
-	private LogErrorReporter logger;
-
-	private boolean hasBeenInit = false;
-
+	
 	protected Feature() {
-		super();
+		super(
+			new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class),
+			new FeatureDefiner<>()
+		);
 	}
 	
-	protected Feature(PropertyInitializer<FeatureInitParams> propertyInitializer) {
-		super(propertyInitializer);
+	protected Feature( PropertyInitializer<FeatureInitParams> propertyInitializer) {
+		super(
+			propertyInitializer,
+			new FeatureDefiner<>()
+		);
 	}
+	
+	/** Called after initialization. An empty implementation is provided, to be overridden as needed in the sub-classes. */
+	@Override
+	public void onInit(FeatureInitParams paramsInit) throws InitException {
+		super.onInit(paramsInit);
+		beforeCalc(paramsInit);
+	}
+	
+	/**
+	 * The class corresponding to feature input-type (i.e. the {@code T} template parameter).
+	 * 
+	 * @return
+	 */
+	public abstract Class<? extends FeatureInput> inputType();
 	
 	@Override
 	public final String getBeanDscr() {
 		String paramDscr = getParamDscr();
-
 		if (!paramDscr.isEmpty()) {
-			return String.format("%s(%s)", getBeanName(), getParamDscr());
+			return String.format("%s(%s)", getBeanName(), paramDscr);
 		} else {
 			return getBeanName();
 		}
@@ -96,15 +112,14 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * @return a duplicated (deep copy of bean attributes) feature, identical to current feature, but with the specified custom-name
 	 */
 	public Feature<T> duplicateChangeName(String customName) {
+		Preconditions.checkNotNull(customName);
 		Feature<T> duplicated = duplicateBean();
 		duplicated.setCustomName(customName);
 		return duplicated;
 	}
 
-	@Override
 	public String getFriendlyName() {
-
-		if (getCustomName() != null && !getCustomName().isEmpty()) {
+		if (!getCustomName().isEmpty()) {
 			return getCustomName();
 		} else {
 			return getDscrLong();
@@ -112,13 +127,15 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	}
 
 	public String getDscrWithCustomName() {
-		return getCustomName() != null && !getCustomName().isEmpty() ? getCustomName()
-				+ ":  " + getBeanDscr()
-				: getBeanDscr();
+		if (!getCustomName().isEmpty()) {
+			return String.format("%s: %s", getCustomName(), getBeanDscr());
+		} else {
+			return getBeanDscr();
+		}
 	}
 
 	public double calcCheckInit(SessionInput<T> input) throws FeatureCalcException {
-		if (!hasBeenInit) {
+		if (!isInitialized()) {
 			throw new FeatureCalcException(String.format(
 					"The feature (%s) has not been initialized",
 					this.toString()));
@@ -140,25 +157,6 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	}
 	
 	/**
-	 * Initializes the bean with important parameters needed for calculation.  Must be called (one-time) before feature calculations.
-	 * 
-	 * @param params parameters used for initialization that are simply passed to beforeCalc()
-	 * @param logger the logger, saved and made available to the feature
-	 */
-	@Override
-	public void init(
-		FeatureInitParams params,
-		FeatureBase<T> parentFeature,
-		LogErrorReporter logger
-	) throws InitException {
-				
-		hasBeenInit = true;
-		this.logger = logger;
-		beforeCalc();
-	}
-	
-
-	/**
 	 * Returns a list of Features that exist as bean-properties of this feature,
 	 * either directly or in lists.
 	 * 
@@ -169,8 +167,7 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	 * @return
 	 * @throws BeanMisconfiguredException
 	 */
-	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)
-			throws BeanMisconfiguredException {
+	public final FeatureList<FeatureInput> createListChildFeatures(boolean includeAdditionallyUsed)	throws BeanMisconfiguredException {
 
 		FeatureList<FeatureInput> out = FeatureListFactory.wrapReuse(
 			findChildrenOfClass( getOrCreateBeanFields(), Feature.class )
@@ -200,25 +197,15 @@ public abstract class Feature<T extends FeatureInput> extends FeatureBase<T> imp
 	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 	}
 
-	/** Dummy method, that children can optionally override */
-	public void beforeCalc() throws InitException {
+	/** Dummy method, that children can optionally override 
+	 * @param paramsInit initialization parameters */
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
 		// Does nothing. To be overridden in children if needed.
 	}
-
-	protected LogErrorReporter getLogger() {
-		return logger;
-	}
-	
-	
+		
 	@Override
 	public String toString() {
 		return getFriendlyName();
-	}
-	
-	/** Upcasts the feature to FeatureCalcParams */
-	@SuppressWarnings("unchecked")
-	public Feature<FeatureInput> upcast() {
-		return (Feature<FeatureInput>) this;
 	}
 	
 	/** Downcasts the feature  */

@@ -38,16 +38,25 @@ import org.anchoranalysis.core.functional.Operation;
  */
 public abstract class CachedOperation<R,E extends Exception> implements Operation<R,E> {
 
-	private R result = null;
-	private boolean done = false;
+	private R result;
+	private boolean done;
 	
+	/**
+	 * Constructor - with no result calculated yet
+	 */
 	public CachedOperation() {
-		
+		result = null;
+		done = false;
 	}
 	
+	/**
+	 * Constructor - with result calculated (if not null)
+	 * <p>
+	 * @param result if non-null the result of the cached operation.
+	 */
 	public CachedOperation(R result) {
 		this.result = result;
-		this.done = true;
+		this.done = result != null;
 	}
 	
 	@Override
@@ -76,7 +85,7 @@ public abstract class CachedOperation<R,E extends Exception> implements Operatio
 	
 	protected abstract R execute() throws E;
 
-	protected R getResult() {
+	public R getResult() {
 		return result;
 	}
 

@@ -121,7 +121,7 @@ public final class ImageDimensions implements Serializable {
 		return extent.offset(x, y, z);
 	}
 
-	public Extent getExtnt() {
+	public Extent getExtent() {
 		return extent;
 	}
 	

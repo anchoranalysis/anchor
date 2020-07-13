@@ -31,29 +31,27 @@ import java.io.Serializable;
 
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class ManifestFolderDescription implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9161070529853431830L;
+
+	// START REQUIRED ARGUMENTS
+	@Getter
+	private final ManifestDescription fileDescription;
 	
-	private ManifestDescription fileDescription;
-	private SequenceType sequenceType;
-
-	public ManifestDescription getFileDescription() {
-		return fileDescription;
-	}
-
-	public void setFileDescription(ManifestDescription fileDescription) {
-		this.fileDescription = fileDescription;
-	}
-
-	public SequenceType getSequenceType() {
-		return sequenceType;
-	}
-
-	public void setSequenceType(SequenceType sequenceType) {
+	@Getter
+	private final SequenceType sequenceType;
+	// END REQUIRED ARGUMENTS
+	
+	public ManifestFolderDescription(String type, String function, SequenceType sequenceType) {
+		this.fileDescription = new ManifestDescription(type, function);
 		this.sequenceType = sequenceType;
 	}
 }

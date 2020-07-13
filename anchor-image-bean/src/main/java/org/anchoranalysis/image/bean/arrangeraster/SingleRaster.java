@@ -48,7 +48,7 @@ public class SingleRaster extends ArrangeRasterBean {
 		
 		RGBStack stack = rasterIterator.next();
 
-		Extent extent = stack.getChnl(0).getDimensions().getExtnt();
+		Extent extent = stack.getChnl(0).getDimensions().getExtent();
 		
 		return new BBoxSetOnPlane(
 			extent,

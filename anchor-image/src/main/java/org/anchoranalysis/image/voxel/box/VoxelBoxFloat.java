@@ -35,12 +35,12 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferFloat;
 
 public final class VoxelBoxFloat extends VoxelBox<FloatBuffer> {
 	
-	public VoxelBoxFloat(IPixelsForPlane<FloatBuffer> pixelsForPlane) {
+	public VoxelBoxFloat(PixelsForPlane<FloatBuffer> pixelsForPlane) {
 		super(
 			pixelsForPlane,
 			VoxelBoxFactory.getFloat()

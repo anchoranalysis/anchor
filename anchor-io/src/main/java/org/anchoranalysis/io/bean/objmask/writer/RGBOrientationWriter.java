@@ -45,13 +45,16 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class RGBOrientationWriter extends ObjMaskWriter {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double xDiv = 1;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean drawReverseLine = false;
 	// END BEAN PROPERTIES
 	
@@ -170,23 +173,4 @@ public class RGBOrientationWriter extends ObjMaskWriter {
 			y += yIncr;
 		}
 	}
-	
-	public double getxDiv() {
-		return xDiv;
-	}
-
-	public void setxDiv(double xDiv) {
-		this.xDiv = xDiv;
-	}
-
-	public boolean isDrawReverseLine() {
-		return drawReverseLine;
-	}
-
-	public void setDrawReverseLine(boolean drawReverseLine) {
-		this.drawReverseLine = drawReverseLine;
-	}
-
-
-
 }

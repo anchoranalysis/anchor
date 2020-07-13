@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
-public class BoundedIndexContainerFromList<T> implements IBoundedIndexContainer<T> {
+public class BoundedIndexContainerFromList<T> implements BoundedIndexContainer<T> {
 
 	private List<T> list;
 	

@@ -59,7 +59,7 @@ public class GraphDefinitionBarNRGBreakdown extends GraphDefinition<NRGGraphItem
 
 	@Override
 	public GraphInstance create( Iterator<NRGGraphItem> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException {
-		return delegate.create( itr, domainLimits, rangeLimits );
+		return delegate.createWithRangeLimits( itr, rangeLimits );
 	}
 
 	@Override

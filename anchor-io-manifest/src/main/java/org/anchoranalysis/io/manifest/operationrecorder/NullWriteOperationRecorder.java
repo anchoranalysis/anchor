@@ -32,7 +32,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 
-public class NullWriteOperationRecorder implements IWriteOperationRecorder {
+public class NullWriteOperationRecorder implements WriteOperationRecorder {
 
 	@Override
 	public void write(
@@ -45,7 +45,7 @@ public class NullWriteOperationRecorder implements IWriteOperationRecorder {
 	}
 
 	@Override
-	public IWriteOperationRecorder writeFolder(Path relativeFolderPath,
+	public WriteOperationRecorder writeFolder(Path relativeFolderPath,
 			ManifestFolderDescription manifestDescription,
 			FolderWriteWithPath folderWrite) {
 		return this;

@@ -37,8 +37,8 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 public class MeanIntensityByteBuffer extends MeanIntensityBuffer<ByteBuffer> {
 
 	/** Simple constructor since no preprocessing is necessary. */
-	public MeanIntensityByteBuffer( Extent srcExtnt ) {
-		super( VoxelBoxFactory.getByte(), srcExtnt );
+	public MeanIntensityByteBuffer( Extent srcExtent ) {
+		super( VoxelBoxFactory.getByte(), srcExtent );
 	}
 	
 	@Override

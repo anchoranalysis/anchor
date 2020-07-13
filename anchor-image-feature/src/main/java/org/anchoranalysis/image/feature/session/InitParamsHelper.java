@@ -2,6 +2,8 @@ package org.anchoranalysis.image.feature.session;
 
 import java.util.Optional;
 
+import org.anchoranalysis.core.name.store.SharedObjects;
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -31,8 +33,6 @@ import java.util.Optional;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -40,20 +40,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class InitParamsHelper {
 	
-	public static FeatureInitParams createInitParams( ImageInitParams so, Optional<NRGStackWithParams> nrgStack ) {
+	public static FeatureInitParams createInitParams( Optional<SharedObjects> sharedObjects, Optional<NRGStackWithParams> nrgStack ) {
 		
 		Optional<KeyValueParams> kvp = nrgStack.map(NRGStackWithParams::getParams);
 				
-		FeatureInitParams params;
-		if (so!=null) {
-			params = new FeatureInitParamsShared(so);
-			params.setKeyValueParams(kvp);
-		} else {
-			params = new FeatureInitParams(kvp);
-		}
-		params.setNrgStack(
-			nrgStack.map(NRGStackWithParams::getNrgStack)
+		return new FeatureInitParams(
+			kvp,
+			nrgStack.map(NRGStackWithParams::getNrgStack),
+			sharedObjects
 		);
-		return params;
 	}
 }

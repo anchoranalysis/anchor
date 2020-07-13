@@ -204,27 +204,29 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		);
 	}
 	
-	public int countIntersectingPixels( ObjectMask om ) {
+	public int countIntersectingVoxels(ObjectMask object) {
 		
 		int cnt = 0;
 		for( ObjectMask s : this ) {
-			cnt += s.countIntersectingPixels(om);
+			cnt += s.countIntersectingVoxels(object);
 		}
 		return cnt;
 	}
 	
-	public ObjectCollection findObjsWithIntersectingBBox( ObjectMask om ) {
-		return stream().filter( omItr->
-			omItr.getBoundingBox().intersection().existsWith(om.getBoundingBox())
+	public ObjectCollection findObjectsWithIntersectingBBox(ObjectMask objectToIntersectWith) {
+		return stream().filter(object->
+			object.getBoundingBox().intersection().existsWith(
+				objectToIntersectWith.getBoundingBox()
+			)
 		);
 	}
 	
 	public boolean objectsAreAllInside( Extent e ) {
-		for( ObjectMask om : this ) {
-			if(!e.contains( om.getBoundingBox().cornerMin()) ) {
+		for( ObjectMask object : this ) {
+			if(!e.contains(object.getBoundingBox().cornerMin())) {
 				return false;
 			}
-			if (!e.contains( om.getBoundingBox().calcCornerMax()) ) {
+			if (!e.contains(object.getBoundingBox().calcCornerMax())) {
 				return false;
 			}
 		}

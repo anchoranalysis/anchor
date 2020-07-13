@@ -32,7 +32,7 @@ import org.anchoranalysis.core.axis.AxisType;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -70,23 +70,20 @@ import one.util.streamex.StreamEx;
  */
 class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectCollection> {
 
+	private final NRGStackWithParams nrgStack;
+	private final Logger logger;
+	private final FeatureList<FeatureInputSingleObject> features;
+	
 	private TableCSVGenerator<ResultsVectorCollection> delegate;
-	
-	private ObjectCollection objs;
-	
-	private FeatureList<FeatureInputSingleObject> features;
-	
+	private ObjectCollection objects;
 	private FeatureInitParams paramsInit;	// Optional initialization parameters
 	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
 	
-	private NRGStackWithParams nrgStack;
-	private LogErrorReporter logErrorReporter;
-	
-	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) {
+	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, Logger logger ) {
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
-		this.logErrorReporter = logErrorReporter;
-		this.features = createFullFeatureList( features, logErrorReporter );
+		this.logger = logger;
+		this.features = createFullFeatureList( features);
 		
 		delegate = new FeatureListCSVGeneratorVertical( "objMaskFeatures", features.createNames() );
 	}
@@ -106,16 +103,16 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 				features,
 				paramsInit,
 				sharedFeatures,
-				logErrorReporter
+				logger
 			);
 			
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			rvc = new ResultsVectorCollection();
-			for( ObjectMask om : objs ) {
+			for( ObjectMask om : objects ) {
 				rvc.add( 
 					session.calcSuppressErrors(
 						createParams(om, nrgStack),
-						logErrorReporter.getErrorReporter()
+						logger.errorReporter()
 					)
 				);
 			}
@@ -129,16 +126,16 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 
 	@Override
 	public ObjectCollection getIterableElement() {
-		return objs;
+		return objects;
 	}
 
 	@Override
 	public void setIterableElement(ObjectCollection element) {
-		this.objs = element;
+		this.objects = element;
 	}
 	
 	// Puts in some extra descriptive features at the start
-	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features, LogErrorReporter logger ) {
+	private FeatureList<FeatureInputSingleObject> createFullFeatureList( FeatureList<FeatureInputSingleObject> features) {
 		
 		StreamEx<Feature<FeatureInputSingleObject>> stream = StreamEx.of(
 			addFeaturesForAxis(AxisType.X)

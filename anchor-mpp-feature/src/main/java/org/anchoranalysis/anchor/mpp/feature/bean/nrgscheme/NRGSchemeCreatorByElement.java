@@ -30,8 +30,6 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
@@ -104,19 +102,19 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	}
 	
 	private List<NamedBean<Feature<FeatureInputStack>>> buildImageFeatures() throws CreateException {
-		return FunctionalUtilities.mapWithException(
-			listImageFeatures.stream(),
+		return FunctionalUtilities.mapToList(
+			listImageFeatures,
 			CreateException.class,
 			ni-> sumList(
 				ni.getValue().create(),
 				ni.getName()
 			)
-		).collect( Collectors.toList() );
+		);
 	}
 	
 	private NamedBean<Feature<FeatureInputStack>> sumList(FeatureList<FeatureInputStack> fl, String name) {
 		Sum<FeatureInputStack> feature = new Sum<>( fl );
-		return new NamedBean<Feature<FeatureInputStack>>(
+		return new NamedBean<>(
 			nameForFeature( feature, name ),
 			feature
 		);

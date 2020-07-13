@@ -45,8 +45,8 @@ public class MarkPointList extends MarkAbstractPointList {
 	 */
 	private static final long serialVersionUID = 1718294470056379145L;
 
-	private static byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
-	private static byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
+	private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
+	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 	
 	private Set<Point3d> set;	// A set that makes it quick to check if a point is on the list
 	

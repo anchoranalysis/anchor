@@ -59,6 +59,6 @@ public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
 			getDimensions(),
 			BinaryValues.getDefault()
 		);
-		return new ChnlGenerator(chnl.getChnl(), "maskCollection").generate();
+		return new ChnlGenerator(chnl.getChannel(), "maskCollection").generate();
 	}
 }

@@ -71,7 +71,7 @@ public class FilePathGeneratorRegEx extends FilePathGenerator {
 			throw new AnchorIOException("Cannot match against the regular expression", e);
 		}
 		
-		String outStr = new String(outPath);
+		String outStr = outPath;
 		
 		// We loop through each possible group, and replace if its found, counting down, so that we don't mistake
 		// 11 for 1 (for example)

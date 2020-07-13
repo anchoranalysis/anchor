@@ -27,7 +27,7 @@ package org.anchoranalysis.core.functional;
  */
 
 /**
- * Like {@java.util.Predicate} but can also thrown an exception.
+ * Like {@java.util.Predicate} but can also throw an exception.
  * 
  * @author Owen Feehan
  *
@@ -38,7 +38,7 @@ package org.anchoranalysis.core.functional;
 public interface PredicateWithException<T, E extends Exception> {
 
 	/**
-	 * Bridges an element to another element.
+	 * Applies a predicate like with {@link Predicate#apply).
 	 * 
 	 * @param source object to be tested
 	 * @return true if predicate is satisfied, false otherwise

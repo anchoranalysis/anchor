@@ -30,47 +30,24 @@ package org.anchoranalysis.image.feature.object.calculation;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSingleObject> {
 
-	private boolean mip=false;
-	
-	public CalculateNumVoxels(boolean mip) {
-		super();
-		this.mip = mip;
-	}
-	
+	private final boolean mip;
+		
 	public static double calc(ObjectMask om, boolean mip) {
-		if (mip==true) {
+		if (mip) {
 			om = om.maxIntensityProjection();
 		}
-		return om.numVoxelsOn();		
+		return om.numberVoxelsOn();		
 	}
 	
-
 	// Public, as it's needed by Mockito in test verifications
 	@Override
 	public Double execute(FeatureInputSingleObject params) {
 		return calc( params.getObjectMask(), mip );
 	}
-	
-	@Override
-	public boolean equals(final Object obj){
-		if(obj instanceof CalculateNumVoxels){
-			final CalculateNumVoxels other = (CalculateNumVoxels) obj;
-			return new EqualsBuilder()
-	            .append(mip, other.mip)
-	            .isEquals();
-	    } else {
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(mip).toHashCode();
-	}
-
 }

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -57,41 +57,43 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 
-// A wrapper around SharedObjects which types certain Image entities
-public class ImageInitParams extends BeanInitParams {
+import lombok.Getter;
 
+// A wrapper around SharedObjects which types certain Image entities
+public class ImageInitParams implements BeanInitParams {
+
+	@Getter
+	private final SharedObjects sharedObjects;
+	
 	// START: InitParams
-	private KeyValueParamsInitParams soParams;
-	private SharedFeaturesInitParams soFeature;
+	private final KeyValueParamsInitParams soParams;
+	private final SharedFeaturesInitParams soFeature;
 	// END: InitParams
 	
 	// START: Stores
-	private NamedProviderStore<Stack> storeStack;
-	private NamedProviderStore<Histogram> storeHistogram;
-	private NamedProviderStore<ObjectCollection> storeObjMaskCollection;
-	private NamedProviderStore<Channel> storeChnl;
-	private NamedProviderStore<BinaryChnl> storeBinaryChnl;
-	private NamedProviderStore<BinarySegmentation> storeBinarySgmn;
+	private final NamedProviderStore<Stack> storeStack;
+	private final NamedProviderStore<Histogram> storeHistogram;
+	private final NamedProviderStore<ObjectCollection> storeObjMaskCollection;
+	private final NamedProviderStore<Channel> storeChnl;
+	private final NamedProviderStore<BinaryChnl> storeBinaryChnl;
+	private final NamedProviderStore<BinarySegmentation> storeBinarySgmn;
 	// END: Stores
-		
-	// START: Single Items
-	private Path modelDir;
-	// END: Single Items
 	
 	private FunctionWithException<StackProvider,Stack,OperationFailedException> stackProviderBridge;
-
-	public ImageInitParams(SharedObjects so, Path modelDir) {
+	
+	
+	public ImageInitParams(SharedObjects sharedObjects) {
 		super();
-		this.soParams = KeyValueParamsInitParams.create(so);
-		this.soFeature = SharedFeaturesInitParams.create(so);
+		this.sharedObjects = sharedObjects;
+		this.soParams = KeyValueParamsInitParams.create(sharedObjects);
+		this.soFeature = SharedFeaturesInitParams.create(sharedObjects);
 		
-		storeStack = so.getOrCreate(Stack.class);
-		storeHistogram = so.getOrCreate(Histogram.class);
-		storeObjMaskCollection = so.getOrCreate(ObjectCollection.class);
-		storeChnl = so.getOrCreate(Channel.class);
-		storeBinaryChnl = so.getOrCreate(BinaryChnl.class);
-		storeBinarySgmn = so.getOrCreate(BinarySegmentation.class);
-		this.modelDir = modelDir;
+		storeStack = sharedObjects.getOrCreate(Stack.class);
+		storeHistogram = sharedObjects.getOrCreate(Histogram.class);
+		storeObjMaskCollection = sharedObjects.getOrCreate(ObjectCollection.class);
+		storeChnl = sharedObjects.getOrCreate(Channel.class);
+		storeBinaryChnl = sharedObjects.getOrCreate(BinaryChnl.class);
+		storeBinarySgmn = sharedObjects.getOrCreate(BinarySegmentation.class);
 	}
 	
 	public NamedProviderStore<Stack> getStackCollection() {
@@ -126,7 +128,7 @@ public class ImageInitParams extends BeanInitParams {
 		return soFeature;
 	}
 	
-	public void populate( PropertyInitializer<?> pi, Define define, LogErrorReporter logger ) throws OperationFailedException {
+	public void populate( PropertyInitializer<?> pi, Define define, Logger logger ) throws OperationFailedException {
 		
 		soFeature.populate(
 			define.getList(FeatureListProvider.class),
@@ -191,7 +193,7 @@ public class ImageInitParams extends BeanInitParams {
 		);
 	}
 
-	public Path getModelDir() {
-		return modelDir;
+	public Path getModelDirectory() {
+		return sharedObjects.getContext().getModelDirectory();
 	}
 }

@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -70,7 +70,7 @@ public class FeatureSession {
 	 */
 	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
 		Feature<T> feature,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 		return with(
 			feature,
@@ -94,7 +94,7 @@ public class FeatureSession {
 	public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
 		Feature<T> feature,
 		SharedFeatureMulti sharedFeatures,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 		return with(
 			feature,
@@ -109,7 +109,7 @@ public class FeatureSession {
 		Feature<T> feature,
 		FeatureInitParams initParams,
 		SharedFeatureMulti sharedFeatures,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 		SequentialSession<T> session = new SequentialSession<>(feature); 
 		startSession(
@@ -132,7 +132,7 @@ public class FeatureSession {
 	 */
 	public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
 		FeatureList<T> features,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 		return with(
 			features,
@@ -147,7 +147,7 @@ public class FeatureSession {
 		FeatureList<T> features,
 		FeatureInitParams initParams,
 		SharedFeatureMulti sharedFeatures,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 		return with(
 			features,
@@ -162,7 +162,7 @@ public class FeatureSession {
 		FeatureList<T> features,
 		FeatureInitParams initParams,
 		Optional<SharedFeatureMulti> sharedFeatures,
-		LogErrorReporter logger,
+		Logger logger,
 		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory
 	) throws FeatureCalcException {
 		SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory); 
@@ -179,7 +179,7 @@ public class FeatureSession {
 		SequentialSession<T> session,
 		FeatureInitParams initParams,
 		SharedFeatureMulti sharedFeatures,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 		try {
 			session.start( initParams, sharedFeatures, logger );

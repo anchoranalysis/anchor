@@ -30,6 +30,8 @@ import org.anchoranalysis.core.relation.GreaterThan;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * Selects only the "high" pixels from a binary mask
  * 
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper = true)
 public class BinaryHighVoxels extends BinaryVoxelsBase {
 
 	@Override

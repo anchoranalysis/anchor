@@ -34,6 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Selects a number of features of shared-features matching against a regular-expression
  * 
@@ -43,31 +46,20 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class FeatureListProviderSelectFromShared<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
-	private RegEx match = null;
+	@BeanField @OptionalBean @Getter @Setter
+	private RegEx match;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public FeatureList<T> create() throws CreateException {
 		try {
 			return FeatureListFactory.mapFromFiltered(
-				getSharedObjects().getFeatureListSet().keys(),
+				getInitializationParameters().getFeatureListSet().keys(),
 				key -> match==null || match.hasMatch(key),	
-				key -> getSharedObjects().getSharedFeatureSet().getException(key).downcast()
+				key -> getInitializationParameters().getSharedFeatureSet().getException(key).downcast()
 			);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 	}
-
-	public RegEx getMatch() {
-		return match;
-	}
-
-	public void setMatch(RegEx match) {
-		this.match = match;
-	}
-
-
-
 }

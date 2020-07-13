@@ -33,13 +33,19 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-public abstract class VoxelBuffer<BufferType extends Buffer> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> nuffer-type
+ */
+public abstract class VoxelBuffer<T extends Buffer> {
 
 	public abstract VoxelDataType dataType();
 	
-	public abstract BufferType buffer();
+	public abstract T buffer();
 	
-	public abstract VoxelBuffer<BufferType> duplicate();
+	public abstract VoxelBuffer<T> duplicate();
 	
 	// Gets the underlying buffer-item converted to an int
 	public abstract int getInt( int index );
@@ -50,7 +56,7 @@ public abstract class VoxelBuffer<BufferType extends Buffer> {
 	
 	public abstract int size();
 	
-	public void transferFrom( int destIndex, VoxelBuffer<BufferType> src ) {
+	public void transferFrom( int destIndex, VoxelBuffer<T> src ) {
 		transferFrom( destIndex, src, destIndex );
 	}
 
@@ -66,5 +72,5 @@ public abstract class VoxelBuffer<BufferType extends Buffer> {
 		return h.toString();
 	}
 	
-	public abstract void transferFrom( int destIndex, VoxelBuffer<BufferType> src, int srcIndex );
+	public abstract void transferFrom( int destIndex, VoxelBuffer<T> src, int srcIndex );
 }

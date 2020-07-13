@@ -42,7 +42,8 @@ public abstract class Overlay implements Identifiable {
 	
 	/**
 	 * A bounding-box around the overlay
-	 * @param overlayWriter TODO
+	 * 
+	 * @param overlayWriter
 	 * @param dim	The dimensions of the containing-scene
 	 * 
 	 * @return the bounding-box

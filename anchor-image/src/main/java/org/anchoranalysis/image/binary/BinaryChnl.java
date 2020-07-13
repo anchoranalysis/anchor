@@ -29,8 +29,6 @@ package org.anchoranalysis.image.binary;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -50,22 +48,31 @@ import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import com.google.common.base.Preconditions;
+
+import lombok.Getter;
+import lombok.Setter;
+
 // An image that supporting certain binary operations
 public class BinaryChnl {
 
-	private Channel chnl;
+	@Getter @Setter
+	private Channel channel;
 
+	@Getter
 	private final BinaryValues binaryValues;
 	
-	public BinaryChnl(Channel chnl, BinaryValues binaryValuesIn) {
+	private final BinaryValuesByte binaryValuesByte;
+	
+	public BinaryChnl(Channel channel, BinaryValues binaryValues) {
 		super();
-		this.chnl = chnl;
+		this.channel = channel;
+		this.binaryValues = binaryValues;
+		this.binaryValuesByte = binaryValues.createByte();
 		
-		if (!chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+		if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			throw new IncorrectVoxelDataTypeException("Only unsigned 8-bit data type is supported for BinaryChnl");
 		}
-		
-		this.binaryValues = binaryValuesIn;
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
@@ -73,17 +80,21 @@ public class BinaryChnl {
 	}
 	
 	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {
-		this.chnl = factory.create(vb.getVoxelBox(), res);
+		this.channel = factory.create(
+			vb.getVoxelBox(),
+			res
+		);
 		this.binaryValues = vb.getBinaryValues();
+		this.binaryValuesByte = binaryValues.createByte();
 	}
 
 	public ImageDimensions getDimensions() {
-		return chnl.getDimensions();
+		return channel.getDimensions();
 	}
 	
 	public VoxelBox<ByteBuffer> getVoxelBox() {
 		try {
-			return chnl.getVoxelBox().asByte();
+			return channel.getVoxelBox().asByte();
 		} catch (IncorrectVoxelDataTypeException e) {
 			throw new IncorrectVoxelDataTypeException("Associated imgChnl does contain have unsigned 8-bit data (byte)");
 		}
@@ -93,62 +104,48 @@ public class BinaryChnl {
 		return new BinaryVoxelBoxByte( getVoxelBox(), binaryValues);
 	}
 
-	
-	// Creates a new object each time, this is probably in efficient
-	// TODO restructure
-	// We use the assert to avoid throwing a new exception, but this must be wrong
 	public boolean isPointOn( Point3i pnt ) {
-		
-		BinaryValuesByte bvb = binaryValues.createByte();
-		
 		ByteBuffer bb = getVoxelBox().getPixelsForPlane(pnt.getZ()).buffer();
 		
 		int offset = getVoxelBox().extent().offset( pnt.getX(), pnt.getY() );
-		return bb.get(offset)==bvb.getOnByte();
-	}
-	
-	public BinaryValues getBinaryValues() {
-		return binaryValues;
+		
+		return bb.get(offset)==binaryValuesByte.getOnByte();
 	}
 
 	public BinaryChnl duplicate() {
-		return new BinaryChnl( chnl.duplicate(), binaryValues );
-	}
-
-	public Channel getChnl() {
-		return chnl;
-	}
-
-	public void setChnl(Channel chnl) {
-		this.chnl = chnl;
+		return new BinaryChnl( channel.duplicate(), binaryValues );
 	}
 	
 	// Creates a mask from the binaryChnl
 	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) {
-		assert( chnl.getDimensions().contains(bbox) );
-		return new ObjectMask( bbox, chnl.getVoxelBox().asByte().region(bbox, reuseIfPossible), binaryValues);
+		Preconditions.checkArgument(channel.getDimensions().contains(bbox));
+		return new ObjectMask(
+			bbox,
+			channel.getVoxelBox().asByte().region(bbox, reuseIfPossible),
+			binaryValues
+		);
 	}
 
 	public BinaryChnl maxIntensityProj() {
-		return new BinaryChnl(chnl.maxIntensityProjection(), binaryValues);
+		return new BinaryChnl(channel.maxIntensityProjection(), binaryValues);
 	}
 	
 	public boolean hasHighValues() {
-		return chnl.hasEqualTo( binaryValues.getOnInt() );
+		return channel.hasEqualTo( binaryValues.getOnInt() );
 	}
 	
 	public int countHighValues() {
-		return chnl.countEqualTo( binaryValues.getOnInt() );
+		return channel.countEqualTo( binaryValues.getOnInt() );
 	}
 	
-	public BinaryChnl scaleXY(double ratioX, double ratioY, Interpolator interpolator) throws OperationFailedException {
+	public BinaryChnl scaleXY(double ratioX, double ratioY, Interpolator interpolator) {
 
 		if (ratioX==1.0 && ratioY==1.0) {
 			// Nothing to do
 			return this;
 		}
 		
-		Channel scaled = this.chnl.scaleXY(ratioX, ratioY, interpolator);
+		Channel scaled = this.channel.scaleXY(ratioX, ratioY, interpolator);
 		
 		BinaryChnl binaryChnl = new BinaryChnl(scaled, binaryValues);
 		
@@ -159,25 +156,21 @@ public class BinaryChnl {
 	}
 
 	public BinaryChnl extractSlice(int z) {
-		return new BinaryChnl( chnl.extractSlice(z), binaryValues );
+		return new BinaryChnl( channel.extractSlice(z), binaryValues );
 	}
 
 	public void replaceBy(BinaryVoxelBox<ByteBuffer>  bvb)
 			throws IncorrectImageSizeException {
-		chnl.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
+		channel.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
 	}
 	
-	private void applyThreshold(BinaryChnl binaryChnl) throws OperationFailedException {
+	private void applyThreshold(BinaryChnl binaryChnl) {
 		int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
 		
-		try {
-			VoxelBoxThresholder.thresholdForLevel(
-				binaryChnl.getVoxelBox(),
-				thresholdVal,
-				binaryChnl.getBinaryValues().createByte()
-			);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		VoxelBoxThresholder.thresholdForLevel(
+			binaryChnl.getVoxelBox(),
+			thresholdVal,
+			binaryChnl.getBinaryValues().createByte()
+		);
 	}
 }

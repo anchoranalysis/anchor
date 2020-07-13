@@ -40,12 +40,12 @@ import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
  * @author Owen Feehan
  *
  */
-public class DualWriterOperationRecorder implements IWriteOperationRecorder {
+public class DualWriterOperationRecorder implements WriteOperationRecorder {
 
-	private IWriteOperationRecorder recorder1;
-	private IWriteOperationRecorder recorder2;
+	private WriteOperationRecorder recorder1;
+	private WriteOperationRecorder recorder2;
 	
-	public DualWriterOperationRecorder(IWriteOperationRecorder recorder1, IWriteOperationRecorder recorder2) {
+	public DualWriterOperationRecorder(WriteOperationRecorder recorder1, WriteOperationRecorder recorder2) {
 		super();
 		this.recorder1 = recorder1;
 		this.recorder2 = recorder2;
@@ -58,10 +58,10 @@ public class DualWriterOperationRecorder implements IWriteOperationRecorder {
 	}
 
 	@Override
-	public IWriteOperationRecorder writeFolder(Path relativeFolderPath, ManifestFolderDescription manifestDescription,
+	public WriteOperationRecorder writeFolder(Path relativeFolderPath, ManifestFolderDescription manifestDescription,
 			FolderWriteWithPath folderWrite) {
-		IWriteOperationRecorder folder1 = recorder1.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
-		IWriteOperationRecorder folder2 = recorder2.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
+		WriteOperationRecorder folder1 = recorder1.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
+		WriteOperationRecorder folder2 = recorder2.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
 		return new DualWriterOperationRecorder(folder1, folder2);
 	}
 

@@ -46,9 +46,11 @@ import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.DilationKernel3ZOnly;
 
-public class MorphologicalDilation {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private MorphologicalDilation() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class MorphologicalDilation {
 	
 	/**
 	 * 
@@ -114,8 +116,6 @@ public class MorphologicalDilation {
 		Optional<AcceptIterationConditon> acceptConditions,
 		boolean bigNghb
 	) throws CreateException {
-
-		assert( (zOnly&&do3D)==zOnly );
 		
 		BinaryKernel kernelDilation = createDilationKernel(
 			bvb.getBinaryValues().createByte(),

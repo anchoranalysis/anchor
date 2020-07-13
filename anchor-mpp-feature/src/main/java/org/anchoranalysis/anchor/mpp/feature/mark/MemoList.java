@@ -31,60 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = false)
 public class MemoList implements MemoForIndex {
 
-	private List<PxlMarkMemo> delegate = new ArrayList<PxlMarkMemo>();
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (super.equals(obj)) {
-			return true;
-		}
-		
-		MemoList objCast = (MemoList) obj;
-		
-		if (objCast==null) {
-			return false;
-		}
-		
-		if (size()!=objCast.size()) {
-			return false;
-		}
-		
-		for (int i=0; i<size(); i++) {
-			if (!get(i).equals(objCast.get(i))) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-
-		HashCodeBuilder builder = new HashCodeBuilder();
-		builder.append( size() );
-		for (int i=0; i<size(); i++) {
-			builder.append( get(i).hashCode() );
-		}
-		return builder.hashCode();
-	}	
-	
-	public boolean hasCacheIDs() {
-		
-		for(PxlMarkMemo pmm : delegate) {
-			if (!pmm.getMark().hasCacheID()) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
+	private List<VoxelizedMarkMemo> delegate = new ArrayList<>();
 	
 	public void addAll( MemoForIndex src ) {
 		
@@ -94,7 +48,7 @@ public class MemoList implements MemoForIndex {
 	}
 	
 	@Override
-	public PxlMarkMemo getMemoForIndex(int index) {
+	public VoxelizedMarkMemo getMemoForIndex(int index) {
 		return get(index);
 	}
 
@@ -102,19 +56,19 @@ public class MemoList implements MemoForIndex {
 		return delegate.size();
 	}
 
-	public PxlMarkMemo get(int index) {
+	public VoxelizedMarkMemo get(int index) {
 		return delegate.get(index);
 	}
 
-	public boolean add(PxlMarkMemo e) {
+	public boolean add(VoxelizedMarkMemo e) {
 		return delegate.add(e);
 	}
 
-	public PxlMarkMemo remove(int index) {
+	public VoxelizedMarkMemo remove(int index) {
 		return delegate.remove(index);
 	}
 
-	public boolean remove(PxlMarkMemo o) {
+	public boolean remove(VoxelizedMarkMemo o) {
 		return delegate.remove(o);
 	}
 }

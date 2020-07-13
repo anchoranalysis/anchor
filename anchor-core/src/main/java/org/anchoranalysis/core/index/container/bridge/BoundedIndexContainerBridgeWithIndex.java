@@ -29,7 +29,7 @@ package org.anchoranalysis.core.index.container.bridge;
  */
 
 import org.anchoranalysis.core.bridge.BridgeElementWithIndex;
-import org.anchoranalysis.core.index.container.IBoundedIndexContainer;
+import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 /**
  * Bridges calls from hidden-type to external-type. Uses an IObjectBridgeIndex for the bridging.
@@ -46,7 +46,7 @@ public class BoundedIndexContainerBridgeWithIndex<H,S,E extends Exception> exten
 	
 	private BridgeElementWithIndex<H, S,E> bridge;
 	
-	public BoundedIndexContainerBridgeWithIndex(IBoundedIndexContainer<H> source, BridgeElementWithIndex<H, S,E> bridge) {
+	public BoundedIndexContainerBridgeWithIndex(BoundedIndexContainer<H> source, BridgeElementWithIndex<H, S,E> bridge) {
 		super(source);
 		this.bridge = bridge;
 	}

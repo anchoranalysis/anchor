@@ -59,7 +59,7 @@ public class FeatureCSVWriter {
 		List<String> allHeaders = new ArrayList<>( Arrays.asList(firstHeaderNames) );
 		allHeaders.addAll( featureNames.asList() );
 		
-		if (!outputManager.isOutputAllowed(outputName) || featureNames==null) {
+		if (!outputManager.isOutputAllowed(outputName)) {
 			return Optional.of(
 				new FeatureCSVWriter(null)
 			);
@@ -73,10 +73,6 @@ public class FeatureCSVWriter {
 	}
 	
 	public void addResultsVector( StringLabelsForCsvRow identifier, ResultsVector resultsFromFeatures) {
-
-		
-		assert(resultsFromFeatures!=null);
-		
 		if (writer==null) {
 			return;
 		}

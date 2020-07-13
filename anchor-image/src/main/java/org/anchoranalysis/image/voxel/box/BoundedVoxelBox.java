@@ -42,6 +42,8 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A a voxel buffer representing an object
  *  i.e. a region bounded in space
@@ -107,7 +109,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * @return a new voxel-box with the replacement voxels but identical bounding-box
 	 */
 	public BoundedVoxelBox<T> replaceVoxels(VoxelBox<T> voxelBoxToAssign) {
-		assert( voxelBoxToAssign.extent().equals( extent() ));
+		Preconditions.checkArgument( voxelBoxToAssign.extent().equals( extent() ));
 		return new BoundedVoxelBox<>(boundingBox, voxelBoxToAssign);
 	}
 	

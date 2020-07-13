@@ -32,94 +32,91 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 
-public abstract class Histogram {
+public interface Histogram {
 
-	public abstract Histogram duplicate();
+	Histogram duplicate();
 	
-	public abstract void reset();
+	void reset();
 
-	public abstract void zeroVal( int val );
+	void zeroVal( int val );
 	
-	public abstract void transferVal( int srcVal, int destVal );
+	void transferVal( int srcVal, int destVal );
 	
-	public abstract void incrVal( int val );
+	void incrVal( int val );
 	
-	public abstract void incrValBy( int val, int increase );
+	void incrValBy( int val, int increase );
 	
-	public abstract void incrValBy( int val, long increase );
+	void incrValBy( int val, long increase );
 	
-	public abstract boolean isEmpty();
+	boolean isEmpty();
 	
-	public abstract int getCount( int val );
+	int getCount( int val );
 	
-	public abstract int size();
+	int size();
 	
-	public abstract void addHistogram( Histogram other ) throws OperationFailedException;
+	void addHistogram( Histogram other ) throws OperationFailedException;
 	
-	public abstract double mean() throws OperationFailedException;
+	double mean() throws OperationFailedException;
 	
 	/** calculates the mean after raising each histogram value to a power i.e. mean of histogramVal^power */
-	public abstract double mean( double power ) throws OperationFailedException;
+	double mean( double power ) throws OperationFailedException;
 	
 	/** calculates the mean of (histogramVal - subtractVal)^power */
-	public abstract double mean( double power, double subtractVal ) throws OperationFailedException;
+	double mean( double power, double subtractVal ) throws OperationFailedException;
 			
-	public abstract double meanGreaterEqualTo( int val ) throws OperationFailedException;
+	double meanGreaterEqualTo( int val ) throws OperationFailedException;
 			
-	public abstract double meanNonZero() throws OperationFailedException;
+	double meanNonZero() throws OperationFailedException;
 	
-	public abstract long sumNonZero();
+	long sumNonZero();
 	
-	public abstract void scaleBy( double factor );
+	void scaleBy( double factor );
 			
-	public abstract int quantile( double quantile ) throws OperationFailedException;
+	int quantile( double quantile ) throws OperationFailedException;
 			
-	public abstract int quantileAboveZero( double quantile ) throws OperationFailedException;
+	int quantileAboveZero( double quantile ) throws OperationFailedException;
 	
-	public abstract boolean hasAboveZero();
+	boolean hasAboveZero();
 	
-	public abstract double percentGreaterEqualTo( int intensity );
+	double percentGreaterEqualTo( int intensity );
 	
-	public int calcMode() throws OperationFailedException {
+	default int calcMode() throws OperationFailedException {
 		return calcMode(0);
 	}
 	
 	// Should only be called on a histogram with at least one item
-	public abstract int calcMode( int startIndex ) throws OperationFailedException;
+	int calcMode( int startIndex ) throws OperationFailedException;
 
 	// Should only be called on a histogram with at least one item
-	public abstract int calcMax() throws OperationFailedException;
+	int calcMax() throws OperationFailedException;
 
 	// Should only be called on a histogram with at least one item
-	public abstract int calcMin() throws OperationFailedException;
+	int calcMin() throws OperationFailedException;
 
-	public abstract long calcSum();
+	long calcSum();
 	
-	public abstract long calcSumSquares();
+	long calcSumSquares();
 	
-	public abstract long calcSumCubes();
+	long calcSumCubes();
 	
-	public abstract void removeBelowThreshold( int threshold );
+	void removeBelowThreshold( int threshold );
 	
-	public abstract int calcNumNonZero();
+	int calcNumNonZero();
 	
-	public abstract double stdDev() throws OperationFailedException;
+	double stdDev() throws OperationFailedException;
 		
-	public double variance() {
+	default double variance() {
 		return new VarianceCalculator( calcSum(), calcSumSquares(),  getTotalCount() ).variance();
 	}
 	
-	public abstract long countThreshold(RelationToThreshold relationToThreshold);
-	
-	// The value split becomes part of the higher histogram
-	public abstract HistogramsAfterSplit splitAt( int split );	
+	long countThreshold(RelationToThreshold relationToThreshold);
 	
 	// Thresholds (generates a new histogram, existing object is unchanged)
-	public abstract Histogram threshold(RelationToThreshold relationToThreshold);
+	Histogram threshold(RelationToThreshold relationToThreshold);
 	
-	public abstract String toString();
+	String toString();
 	
-	public String csvString() {
+	default String csvString() {
 		StringBuilder sb = new StringBuilder();
 		for (int t=0; t<=getMaxBin(); t++) {
 			sb.append( String.format("%d, %d%n", t, getCount(t)) );
@@ -127,13 +124,13 @@ public abstract class Histogram {
 		return sb.toString();
 	}
 
-	public abstract int getMaxBin();
+	int getMaxBin();
 	
-	public abstract int getMinBin();
+	int getMinBin();
 
-	public abstract long getTotalCount();
+	long getTotalCount();
 	
-	public abstract Histogram extractPixelsFromRight( long numPixels );
+	Histogram extractPixelsFromRight( long numPixels );
 	
-	public abstract Histogram extractPixelsFromLeft( long numPixels );
+	Histogram extractPixelsFromLeft( long numPixels );
 }

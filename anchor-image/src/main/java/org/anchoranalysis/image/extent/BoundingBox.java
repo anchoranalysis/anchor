@@ -89,7 +89,7 @@ public final class BoundingBox implements Serializable {
 		checkMaxMoreThanMin(min, max);
 	}
 	
-	// Extnt is the number of pixels need to represent this bounding box
+	// Extent is the number of pixels need to represent this bounding box
 	public BoundingBox(ReadableTuple3i crnrMin, Extent extent) {
 		this.cornerMin = new Point3i(crnrMin);
 		this.extent = extent;
@@ -174,11 +174,7 @@ public final class BoundingBox implements Serializable {
 		if (cornerMin.getZ()==0) {
 			return true;
 		}
-		if (crnrMax.getZ()==(sd.getZ()-1)) {
-			return true;
-		}
-		
-		return false;
+		return crnrMax.getZ()==(sd.getZ()-1);
 	}
 	
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
@@ -205,7 +201,7 @@ public final class BoundingBox implements Serializable {
 		return out;
 	}
 	
-	public BoundingBox clipTo( Extent e ) {
+	public BoundingBox clipTo(Extent extent) {
 		
 		Point3i min = new Point3i(cornerMin);
 		Point3i max = new Point3i(calcCornerMax());
@@ -220,14 +216,14 @@ public final class BoundingBox implements Serializable {
 			min.setZ(0);
 		}
 		
-		if (max.getX()>=e.getX()) {
-			max.setX(e.getX() - 1);
+		if (max.getX()>=extent.getX()) {
+			max.setX(extent.getX() - 1);
 		}
-		if (max.getY()>=e.getY()) {
-			max.setY(e.getY() - 1);
+		if (max.getY()>=extent.getY()) {
+			max.setY(extent.getY() - 1);
 		}
-		if (max.getZ()>=e.getZ()) {
-			max.setZ(e.getZ() - 1);
+		if (max.getZ()>=extent.getZ()) {
+			max.setZ(extent.getZ() - 1);
 		}
 		
 		return new BoundingBox(min, max);

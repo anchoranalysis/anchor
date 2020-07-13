@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy
  *
  * @param <T> feature input-type
  */
-public class CheckCacheForSpecificChildren extends FindChildStrategy {
+public class CheckCacheForSpecificChildren implements FindChildStrategy {
 	
 	private Class<?> cacheInputType;
 	private CacheTransferSourceCollection source;
@@ -71,11 +71,8 @@ public class CheckCacheForSpecificChildren extends FindChildStrategy {
 	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(FeatureSessionCache<?> parentCache,
 			CacheCreator factory, ChildCacheName childName, V input) throws FeatureCalcException {
 		
-		if (cacheInputType.isAssignableFrom(input.getClass())) {
-			
-			if (source.contains(childName)) {
-				return useSessionFromSource(childName, input, factory);
-			}
+		if (cacheInputType.isAssignableFrom(input.getClass()) && source.contains(childName)) {
+			return useSessionFromSource(childName, input, factory);
 		}
 		
 		return parentCache.childCacheFor(childName, input.getClass(), factory);

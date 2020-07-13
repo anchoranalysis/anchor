@@ -37,7 +37,7 @@ import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 
@@ -52,12 +52,12 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
 
 	private HashMap<String,	WrapOperationAsCached<T,OperationFailedException>> map = new HashMap<>();
 	
-	private LogErrorReporter logErrorReporter;
+	private Logger logger;
 	private String storeDisplayName;
 	
-	public LazyEvaluationStore(LogErrorReporter logErrorReporter, String storeDisplayName) {
+	public LazyEvaluationStore(Logger logger, String storeDisplayName) {
 		super();
-		this.logErrorReporter = logErrorReporter;
+		this.logger = logger;
 		this.storeDisplayName = storeDisplayName;
 	}
 
@@ -101,7 +101,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
 	public void add(String name, Operation<T,OperationFailedException> getter) throws OperationFailedException {
 		map.put(
 			name,
-			new ProfiledCachedGetter<>(getter,name,storeDisplayName,logErrorReporter)
+			new ProfiledCachedGetter<>(getter,name,storeDisplayName,logger)
 		);
 		
 	}

@@ -26,7 +26,7 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 
 public class TriggerTerminationCondition extends TerminationCondition {
 	
@@ -35,7 +35,7 @@ public class TriggerTerminationCondition extends TerminationCondition {
 	// We don't bother with synchronize
 
 	@Override
-	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter) {
+	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
 		return !triggered;
 	}
 	

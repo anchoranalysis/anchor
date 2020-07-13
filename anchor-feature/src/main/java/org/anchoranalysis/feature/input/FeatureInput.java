@@ -35,5 +35,5 @@ package org.anchoranalysis.feature.input;
  * @author Owen Feehan
  *
  */
-public abstract class FeatureInput {
+public interface FeatureInput {
 }

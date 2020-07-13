@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.saved.NRGSavedPairs;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -143,7 +143,7 @@ public class CfgNRG implements Serializable {
 	}
 
 	
-	public void add( MemoCollection wrapperInd, PxlMarkMemo newPxlMarkMemo, NRGStack stack) throws FeatureCalcException {
+	public void add( MemoCollection wrapperInd, VoxelizedMarkMemo newPxlMarkMemo, NRGStack stack) throws FeatureCalcException {
 		
 		delegate.add(newPxlMarkMemo);
 		
@@ -160,7 +160,7 @@ public class CfgNRG implements Serializable {
 		updateTotal( wrapperInd, stack );
 	}
 		
-	public void rmv(  MemoCollection wrapperInd, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
+	public void rmv(  MemoCollection wrapperInd, VoxelizedMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
 		
 		int index = wrapperInd.getIndexForMemo(memoRmv);
 		assert(index!=-1);
@@ -170,7 +170,7 @@ public class CfgNRG implements Serializable {
 	
 	
 
-	public void rmv( MemoCollection wrapperInd, int index, PxlMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
+	public void rmv( MemoCollection wrapperInd, int index, VoxelizedMarkMemo memoRmv, NRGStack stack ) throws FeatureCalcException {
 		try {
 			getCalcMarkPair().rmv( wrapperInd, memoRmv );
 			wrapperInd.rmv( getCalcMarkInd(), index);
@@ -187,8 +187,8 @@ public class CfgNRG implements Serializable {
 	
 	public void rmvTwo( MemoCollection wrapperInd, int index1, int index2, NRGStack nrgStack ) throws FeatureCalcException {
 		
-		PxlMarkMemo memoRmv1 = wrapperInd.getMemoForIndex(index1);
-		PxlMarkMemo memoRmv2 = wrapperInd.getMemoForIndex(index2);
+		VoxelizedMarkMemo memoRmv1 = wrapperInd.getMemoForIndex(index1);
+		VoxelizedMarkMemo memoRmv2 = wrapperInd.getMemoForIndex(index2);
 		
 		wrapperInd.rmvTwo( getCalcMarkInd(), index1, index2);
 				
@@ -221,7 +221,7 @@ public class CfgNRG implements Serializable {
 	public void exchange(
 		MemoCollection wrapperInd,
 		int index,
-		PxlMarkMemo newMark,
+		VoxelizedMarkMemo newMark,
 		NRGStackWithParams nrgStack
 	) throws FeatureCalcException {
 
@@ -230,7 +230,7 @@ public class CfgNRG implements Serializable {
 		delegate.exchange(index, newMark);
 		
 		// We do the exchange on the calcMarkInd first, as our calcMarkPair is expressed relative
-		PxlMarkMemo newPxlMarkMemo = wrapperInd.exchange(
+		VoxelizedMarkMemo newPxlMarkMemo = wrapperInd.exchange(
 			getCalcMarkInd(),
 			index,
 			newMark,
@@ -238,7 +238,7 @@ public class CfgNRG implements Serializable {
 			delegate.getNrgScheme()
 		);
 		try {
-			PxlMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark( getCfg(), oldMark );
+			VoxelizedMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark( getCfg(), oldMark );
 			getCalcMarkPair().exchange( wrapperInd, oldPxlMarkMemo, index, newPxlMarkMemo );
 		} catch (UpdateMarkSetException e) {
 			throw new FeatureCalcException(e);
@@ -258,8 +258,7 @@ public class CfgNRG implements Serializable {
 		delegate.rmv(index);
 	}
 
-	public void exchange(int index, PxlMarkMemo newMark)
-			throws FeatureCalcException {
+	public void exchange(int index, VoxelizedMarkMemo newMark) {
 		delegate.exchange(index, newMark);
 	}
 

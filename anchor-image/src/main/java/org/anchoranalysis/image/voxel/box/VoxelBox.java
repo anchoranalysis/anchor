@@ -41,7 +41,7 @@ import org.anchoranalysis.image.interpolator.InterpolateUtilities;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -56,16 +56,16 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  */
 public abstract class VoxelBox<T extends Buffer> {
 
-	private final IPixelsForPlane<T> planeAccess;
+	private final PixelsForPlane<T> planeAccess;
 	private final VoxelBoxFactoryTypeBound<T> factory;
 	
-	public VoxelBox(IPixelsForPlane<T> pixelsForPlane, VoxelBoxFactoryTypeBound<T> factory) {
+	public VoxelBox(PixelsForPlane<T> pixelsForPlane, VoxelBoxFactoryTypeBound<T> factory) {
 		super();
 		this.planeAccess = pixelsForPlane;
 		this.factory = factory;
 	}
 
-	public IPixelsForPlane<T> getPlaneAccess() {
+	public PixelsForPlane<T> getPlaneAccess() {
 		return planeAccess;
 	}
 	

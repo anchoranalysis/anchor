@@ -26,8 +26,8 @@ package org.anchoranalysis.test.image.obj;
  * #L%
  */
 
-public abstract class VoxelPattern {
+public interface VoxelPattern {
 	
-	public abstract boolean isPixelOn( int x, int y, int z );
+	boolean isPixelOn( int x, int y, int z );
 	
 }

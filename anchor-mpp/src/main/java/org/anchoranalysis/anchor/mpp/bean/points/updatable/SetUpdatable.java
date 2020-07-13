@@ -37,16 +37,16 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -74,7 +74,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	@Override
 	public void init(BinaryChnl binaryImage) throws InitException {
 		this.binaryImage = binaryImage;
-		this.binaryImageChnl = binaryImage.getChnl();
+		this.binaryImageChnl = binaryImage.getChannel();
 		
 		dim = binaryImage.getDimensions();
 		
@@ -111,13 +111,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
 	@Override
-	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, LogErrorReporter logger, SharedFeatureMulti sharedFeatures) throws InitException {
+	public void initUpdatableMarkSet(MemoForIndex marks, NRGStackWithParams nrgStack, Logger logger, SharedFeatureMulti sharedFeatures) throws InitException {
 		// NOTHING TO DO
 	}
 		
 	private void addEntireScene( BinaryValuesByte bvb ) {
 		
-		Extent e = binaryImageChnl.getDimensions().getExtnt();
+		Extent e = binaryImageChnl.getDimensions().getExtent();
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
@@ -161,14 +161,14 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	@Override
-	public void add(MemoForIndex marksExisting, PxlMarkMemo newMark) throws UpdateMarkSetException {
+	public void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark) throws UpdateMarkSetException {
 		rmvPntsInMark( newMark );
 	}
 	
-	private void rmvPnt( ReadableTuple3i crntExtntPnt,  ReadableTuple3i crnrPnt ) {
-		int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
-		int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
-		int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
+	private void rmvPnt( ReadableTuple3i crntExtentPnt,  ReadableTuple3i crnrPnt ) {
+		int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
+		int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
+		int zGlobal = crnrPnt.getZ() + crntExtentPnt.getZ();
 		
 		Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
 		
@@ -176,12 +176,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	}
 	
 
-	public void rmvPntsInMark(PxlMarkMemo newMark) {
+	public void rmvPntsInMark(VoxelizedMarkMemo newMark) {
 		
 		// We add any points in our new mark to the set
-		PxlMark pxlMark = newMark.doOperation();
+		VoxelizedMark pxlMark = newMark.voxelized();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox( regionID ).cornerMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
@@ -189,18 +189,18 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
 		Extent e = voxelBox.extent();
 		
-		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
+		Point3i crntExtentPnt = new Point3i();
+		for (crntExtentPnt.setZ(0); crntExtentPnt.getZ()<e.getZ(); crntExtentPnt.incrementZ()) {
 			
-			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtntPnt.getZ());
+			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtentPnt.getZ());
 			
-			for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
-				for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
+			for (crntExtentPnt.setY(0); crntExtentPnt.getY()<e.getY(); crntExtentPnt.incrementY()) {
+				for (crntExtentPnt.setX(0); crntExtentPnt.getX()<e.getX(); crntExtentPnt.incrementX()) {
 
-					byte membership = fb.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
+					byte membership = fb.get( e.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
 					
 					if ( !rm.isMemberFlag(membership, flags) ) {
-						rmvPnt( crntExtntPnt, crnrPnt );
+						rmvPnt( crntExtentPnt, crnrPnt );
 					}
 				}
 			}
@@ -209,23 +209,23 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	@Override
-	public void exchange(MemoForIndex pxlMarkMemoList, PxlMarkMemo oldMark,
-			int indexOldMark, PxlMarkMemo newMark) {
+	public void exchange(MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo oldMark,
+			int indexOldMark, VoxelizedMarkMemo newMark) {
 		
 		addPntsInMark( pxlMarkMemoList, oldMark );
 		rmvPntsInMark( newMark );
 	}
 	
 	
-	public void addPntsInMark(MemoForIndex marksExisting, PxlMarkMemo markToAdd) {
+	public void addPntsInMark(MemoForIndex marksExisting, VoxelizedMarkMemo markToAdd) {
 		// We add any points in our new mark to the set, but only if there's not already a neighbour covering them
 		
 		// So our first step is to identify any overlapping marks
-		List<PxlMarkMemo> neighbours = findNeighbours(marksExisting, markToAdd);
+		List<VoxelizedMarkMemo> neighbours = findNeighbours(marksExisting, markToAdd);
 		
-		PxlMark pxlMark = markToAdd.doOperation();
+		VoxelizedMark pxlMark = markToAdd.voxelized();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox(regionID).cornerMin();
+		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 		
@@ -236,16 +236,16 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
-		Point3i crntExtntPnt = new Point3i();
-		for (crntExtntPnt.setZ(0); crntExtntPnt.getZ()<e.getZ(); crntExtntPnt.incrementZ()) {
+		Point3i crntExtentPnt = new Point3i();
+		for (crntExtentPnt.setZ(0); crntExtentPnt.getZ()<e.getZ(); crntExtentPnt.incrementZ()) {
 			
-			int zGlobal = crnrPnt.getZ() + crntExtntPnt.getZ();
+			int zGlobal = crnrPnt.getZ() + crntExtentPnt.getZ();
 			
 			addPointsForSlice(
-				crntExtntPnt,
+				crntExtentPnt,
 				crnrPnt,
 				e,
-				voxelBox.getPixelsForPlane(crntExtntPnt.getZ()),
+				voxelBox.getPixelsForPlane(crntExtentPnt.getZ()),
 				vbBinary.getPixelsForPlane(zGlobal).buffer(),
 				bvb,
 				zGlobal,
@@ -255,28 +255,28 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		}
 	}
 	
-	private void addPointsForSlice(
-		Point3i crntExtntPnt,
+	private void addPointsForSlice(		// NOSONAR
+		Point3i crntExtentPnt,
 		ReadableTuple3i crnrPnt,
-		Extent e,
+		Extent extent,
 		ByteBuffer buffer,
 		ByteBuffer bbBinaryImage,
 		BinaryValuesByte bvb,
 		int zGlobal,
 		RegionMembership rm,
-		List<PxlMarkMemo> neighbours
+		List<VoxelizedMarkMemo> neighbours
 	) {
 		byte flags = rm.flags();
 		
-		for (crntExtntPnt.setY(0); crntExtntPnt.getY()<e.getY(); crntExtntPnt.incrementY()) {
-			int yGlobal = crnrPnt.getY() + crntExtntPnt.getY();
+		for (crntExtentPnt.setY(0); crntExtentPnt.getY()<extent.getY(); crntExtentPnt.incrementY()) {
+			int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
 			
-			for (crntExtntPnt.setX(0); crntExtntPnt.getX()<e.getX(); crntExtntPnt.incrementX()) {
+			for (crntExtentPnt.setX(0); crntExtentPnt.getX()<extent.getX(); crntExtentPnt.incrementX()) {
 				
-				int xGlobal = crnrPnt.getX() + crntExtntPnt.getX();
+				int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
 						
-				int globOffset = e.offset(xGlobal, yGlobal);
-				byte posCheck = buffer.get( e.offset(crntExtntPnt.getX(), crntExtntPnt.getY()));
+				int globOffset = extent.offset(xGlobal, yGlobal);
+				byte posCheck = buffer.get( extent.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
 				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
 					
 					Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
@@ -291,13 +291,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 	}
 
-	private List<PxlMarkMemo> findNeighbours( MemoForIndex all, PxlMarkMemo source) {
+	private List<VoxelizedMarkMemo> findNeighbours( MemoForIndex all, VoxelizedMarkMemo source) {
 		
-		ArrayList<PxlMarkMemo> list = new ArrayList<>();
+		ArrayList<VoxelizedMarkMemo> list = new ArrayList<>();
 			
 		for (int i=0; i<all.size(); i++) {
 			
-			PxlMarkMemo pmm = all.getMemoForIndex(i);
+			VoxelizedMarkMemo pmm = all.getMemoForIndex(i);
 			if (pmm!=source && OverlapUtilities.overlapWith(source,pmm,regionID)>0) {
 				// We check if there's any overlap
 				list.add(pmm);
@@ -306,9 +306,9 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		return list;
 	}
 	
-	private static boolean isPointInList( List<PxlMarkMemo> all, Point3d point) {
+	private static boolean isPointInList( List<VoxelizedMarkMemo> all, Point3d point) {
 		
-		for( PxlMarkMemo memo : all ) {
+		for( VoxelizedMarkMemo memo : all ) {
 			
 			RegionMembership rm = memo.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 			byte flags = rm.flags();
@@ -324,7 +324,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	@Override
-	public void rmv(MemoForIndex marksExisting, PxlMarkMemo mark) throws UpdateMarkSetException {
+	public void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark) throws UpdateMarkSetException {
 		addPntsInMark(marksExisting, mark);
 	}
 

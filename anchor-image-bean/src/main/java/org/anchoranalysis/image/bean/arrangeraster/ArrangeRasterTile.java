@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.IArrangeRaster;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -60,11 +60,11 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	private ArrangeRasterBean cellDefault = new SingleRaster();
 	// END BEAN PROPERTIES
 
-	private class TableCreator implements TableItemArrangement.ITableCreator<BBoxSetOnPlane> {
+	private class CreateTable implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
 		
 		private Iterator<RGBStack> rasterIterator;
 		
-		public TableCreator(Iterator<RGBStack> rasterIterator) {
+		public CreateTable(Iterator<RGBStack> rasterIterator) {
 			super();
 			this.rasterIterator = rasterIterator;
 		}
@@ -75,7 +75,7 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 		// We can make this more efficient by using a lookup table for the cells
 		// But as there should be relatively few exceptions, we just always loop
 		//   through the list
-		private IArrangeRaster createArrangeRasterForItem(int rowPos, int colPos) {
+		private ArrangeRaster createArrangeRasterForItem(int rowPos, int colPos) {
 		
 			if (cells!=null) {
 				for (ArrangeRasterCell cell : cells) {
@@ -146,10 +146,10 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 				int colWidth = maxWidthHeight.getMaxWidthForCol( colPos );
 				
 				int rowX = maxWidthHeight.sumWidthBeforeCol(colPos);
-				int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos);; 
+				int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos); 
 				
-				int x = rowX + ((colWidth - bboxSet.getExtnt().getX()) / 2);	// We center
-				int y = rowY + ((rowHeight - bboxSet.getExtnt().getY()) / 2);	// We center
+				int x = rowX + ((colWidth - bboxSet.getExtent().getX()) / 2);	// We center
+				int y = rowY + ((rowHeight - bboxSet.getExtent().getY()) / 2);	// We center
 				
 				addShifted( bboxSet, set, x, y );
 			}
@@ -162,9 +162,9 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 	public BBoxSetOnPlane createBBoxSetOnPlane( final Iterator<RGBStack> rasterIterator ) throws ArrangeRasterException {
 	
 		try {
-			TableItemArrangement<BBoxSetOnPlane> table = new TableItemArrangement<>( new TableCreator(rasterIterator), numRows, numCols );
+			TableItemArrangement<BBoxSetOnPlane> table = new TableItemArrangement<>( new CreateTable(rasterIterator), numRows, numCols );
 			
-			MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table, numRows, numCols);
+			MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table);
 			
 			return createSet(table, maxWidthHeight );
 			

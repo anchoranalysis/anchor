@@ -36,37 +36,40 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+
+import lombok.Getter;
+import lombok.Setter;
 
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private StackProvider stackProviderNRG;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String outputName = "objsFeatureList";
 	// END BEAN PROPERTIES
 
@@ -87,10 +90,13 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			}
 			
 			// Init
-			FeatureInitParamsShared paramsInit = new FeatureInitParamsShared( getSharedObjects() );
-			paramsInit.setKeyValueParams(
+			FeatureInitParams paramsInit = new FeatureInitParams(
 				Optional.of(
 					createKeyValueParams()
+				),
+				Optional.empty(),
+				Optional.of(
+					getInitializationParameters().getSharedObjects()
 				)
 			);
 			
@@ -108,19 +114,21 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	}
 	
 	private ObjMaskFeatureListCSVGenerator createGenerator(
-		FeatureInitParamsShared paramsInit,
+		FeatureInitParams paramsInit,
 		NRGStackWithParams nrgStack,
 		ObjectCollection objsCollection,
 		FeatureList<FeatureInputSingleObject> features,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) {
 		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
 			features,
 			nrgStack,
-			logErrorReporter
+			logger
 		);
 		generator.setParamsInit(paramsInit);
-		generator.setSharedFeatures( getSharedObjects().getFeature().getSharedFeatureSet() );
+		generator.setSharedFeatures(
+			getInitializationParameters().getFeature().getSharedFeatureSet()
+		);
 		generator.setIterableElement(objsCollection);
 		return generator;
 	}
@@ -132,55 +140,4 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			return new KeyValueParams();
 		}
 	}
-	
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-
-	public List<FeatureProvider<FeatureInputSingleObject>> getListFeatureProvider() {
-		return listFeatureProvider;
-	}
-
-
-	public void setListFeatureProvider(List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider) {
-		this.listFeatureProvider = listFeatureProvider;
-	}
-
-
-	public StackProvider getStackProviderNRG() {
-		return stackProviderNRG;
-	}
-
-
-	public void setStackProviderNRG(StackProvider stackProviderNRG) {
-		this.stackProviderNRG = stackProviderNRG;
-	}
-
-
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-
-	public void setKeyValueParamsProvider(
-			KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
-
-	public String getOutputName() {
-		return outputName;
-	}
-
-
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
-
 }

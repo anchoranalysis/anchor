@@ -65,20 +65,15 @@ public abstract class OverlayWriter {
 	 * @throws OperationFailedException
 	 */
 	public void writeOverlays( ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter ) throws OperationFailedException {
-		writeOverlays(oc, stack, idGetter, 1.0);
-	}
-	
-	private void writeOverlays( ColoredOverlayCollection oc, RGBStack stack, IDGetter<Overlay> idGetter, double zMultFactor ) throws OperationFailedException {
 		writeOverlays(
 			oc,
 			stack.getDimensions(),
 			stack,
 			idGetter,
-			new BoundingBox(stack.getDimensions().getExtnt()),
-			1.0
+			new BoundingBox(stack.getDimensions().getExtent())
 		);
 	}
-
+	
 	//
 	// It's a two step process
 	//   First we generate ObjMasks for the configuration
@@ -86,7 +81,7 @@ public abstract class OverlayWriter {
 	//
 	//   We split the steps in two, so that they can be potentially cached
 	//
-	private void writeOverlays( ColoredOverlayCollection oc, ImageDimensions dim, RGBStack background, IDGetter<Overlay> idGetter, BoundingBox bboxContainer, double zoomFactor ) throws OperationFailedException {
+	private void writeOverlays( ColoredOverlayCollection oc, ImageDimensions dim, RGBStack background, IDGetter<Overlay> idGetter, BoundingBox bboxContainer) throws OperationFailedException {
 		
 		try {
 			List<PrecalcOverlay> masksPreprocessed = precalculate( oc, this, dim, BinaryValues.getDefault().createByte() );
@@ -109,7 +104,7 @@ public abstract class OverlayWriter {
 		
 		List<PrecalcOverlay> listOut = new ArrayList<>();
 		
-		IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<Overlay>();
+		IDGetterIter<Overlay> colorIDGetter = new IDGetterIter<>();
 		
 		for( int i=0; i< coc.size(); i++ ) {
 			

@@ -40,8 +40,8 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 	 */
 	private static final long serialVersionUID = -2043844259526872933L;
 
-	private static byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
-	private static byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
+	private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
+	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 	
 	// Applied the same in all 3 dimensions, maybe we need to change this
 	private double distThresh = 0.7;

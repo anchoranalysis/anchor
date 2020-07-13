@@ -29,10 +29,10 @@ package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.io.Serializable;
 
-import org.anchoranalysis.core.index.container.IBoundedRangeIncomplete;
-import org.anchoranalysis.core.index.container.IOrderProvider;
+import org.anchoranalysis.core.index.container.BoundedRangeIncomplete;
+import org.anchoranalysis.core.index.container.OrderProvider;
 
-public abstract class SequenceType implements IBoundedRangeIncomplete, Serializable {
+public abstract class SequenceType implements BoundedRangeIncomplete, Serializable {
 
 	/**
 	 * 
@@ -48,5 +48,5 @@ public abstract class SequenceType implements IBoundedRangeIncomplete, Serializa
 	// String for index
 	public abstract String indexStr( int index );
 	
-	public abstract IOrderProvider createOrderProvider();
+	public abstract OrderProvider createOrderProvider();
 }

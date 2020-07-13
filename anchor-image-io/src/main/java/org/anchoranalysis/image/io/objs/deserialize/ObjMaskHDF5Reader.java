@@ -58,7 +58,7 @@ class ObjMaskHDF5Reader {
 		return reader.getAttr(path, attr);
 	}
 	
-	private static Extent extractExtnt( MDByteArray mdb ) {
+	private static Extent extractExtent( MDByteArray mdb ) {
 		int[] dims = mdb.dimensions();
 		return new Extent( dims[0], dims[1], dims[2] );
 	}
@@ -77,7 +77,7 @@ class ObjMaskHDF5Reader {
 	 * @return
 	 */
 	private VoxelBox<ByteBuffer> createVoxelBox( MDByteArray mdb ) {
-		Extent e = extractExtnt(mdb);
+		Extent e = extractExtent(mdb);
 		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
 		
 		for( int z=0; z<e.getZ(); z++) {

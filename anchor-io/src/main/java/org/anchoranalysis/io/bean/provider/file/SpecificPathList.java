@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalUtilities;
@@ -42,6 +40,10 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * A specific list of paths which form the input.
@@ -51,21 +53,18 @@ import org.anchoranalysis.io.params.InputContextParams;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class SpecificPathList extends FileProvider {
 
 	// START BEAN PROPERTIES
 	/** If specified, this forms the list of paths which is provided as input. If not, then the input-context is asked. If still not, then the fallback. */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<String> listPaths;
 	
 	/** If no paths can be found either from listPaths or the input-context, then the fallback is called if exists, otherwise an error is thrown */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FileProvider fallback;
 	// END BEAN PROPERTIES
-	
-	public SpecificPathList() {
-		
-	}
 	
 	public SpecificPathList( List<String> listPaths ) {
 		this.listPaths = listPaths;
@@ -88,7 +87,6 @@ public class SpecificPathList extends FileProvider {
 				selectedPaths.get(),
 				params.getProgressReporter()
 			);
-			
 		} else if (fallback!=null) {
 			return fallback.create(params);
 		} else {
@@ -97,20 +95,17 @@ public class SpecificPathList extends FileProvider {
 	}
 	
 	private Optional<List<String>> selectListPaths(InputContextParams inputContext) {
-		
 		if (listPaths!=null) {
 			return Optional.of(listPaths);
-		} else if (inputContext.hasInputPaths()) {
-			return Optional.of(
-				stringFromPaths(inputContext.getInputPaths())
-			);
 		} else {
-			return Optional.empty();
+			return inputContext.getInputPaths().map(
+				SpecificPathList::stringFromPaths	
+			);
 		}
 	}
 	
 	private static List<String> stringFromPaths( List<Path> paths ) {
-		return paths.stream().map(Path::toString).collect(Collectors.toList());
+		return FunctionalUtilities.mapToList(paths, Path::toString);
 	}
 	
 	private static Collection<File> matchingFilesForList(List<String> listPaths, ProgressReporter progressReporter ) {
@@ -120,21 +115,4 @@ public class SpecificPathList extends FileProvider {
 			File::new
 		);
 	}
-
-	public List<String> getListPaths() {
-		return listPaths;
-	}
-
-	public void setListPaths(List<String> listPaths) {
-		this.listPaths = listPaths;
-	}
-
-	public FileProvider getFallback() {
-		return fallback;
-	}
-
-	public void setFallback(FileProvider fallback) {
-		this.fallback = fallback;
-	}
-
 }

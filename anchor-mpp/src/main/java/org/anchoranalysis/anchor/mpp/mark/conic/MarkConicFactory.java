@@ -35,6 +35,8 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
+import com.google.common.base.Preconditions;
+
 public class MarkConicFactory {
 	
 	private MarkConicFactory() {}
@@ -48,13 +50,14 @@ public class MarkConicFactory {
 	}
 	
 	public static Mark createMarkFromPoint(Point3d pnt, int size, boolean do3D) {
-		assert(size>0);
+		Preconditions.checkArgument(size>0);
+		Preconditions.checkArgument(do3D || pnt.getZ()==0);
+		
 		if (do3D) {
 			MarkEllipsoid me = new MarkEllipsoid();
 			me.setMarksExplicit(pnt, new Orientation3DEulerAngles(), new Point3d(size,size,size) );
 			return me;
 		} else {
-			assert( pnt.getZ()==0 );
 			MarkEllipse me = new MarkEllipse();
 			me.setMarksExplicit(pnt, new Orientation2D(), new Point2d(size,size) );
 			return me;

@@ -84,7 +84,7 @@ public class DualState<T> {
 	}
 	
 	public <S> DualState<S> transform( StateTransformer<T,S> func, TransformationContext context ) throws OperationFailedException {
-		return new DualState<S>(
+		return new DualState<>(
 			transformOptional(crnt, func, context),
 			transformOptional(best, func, context)
 		);
