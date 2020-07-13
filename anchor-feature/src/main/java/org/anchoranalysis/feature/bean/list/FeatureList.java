@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureInitParams;

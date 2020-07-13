@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;

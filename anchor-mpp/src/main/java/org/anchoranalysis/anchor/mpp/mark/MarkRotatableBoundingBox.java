@@ -33,7 +33,7 @@ import static org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers.SUBMARK
 import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -201,7 +201,7 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	}
 	
 	private List<Point3i> rotateAddPos( Point3d[] points ) {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			points,
 			pnt -> PointConverter.intFromDouble( rotateAddPos(pnt) )	
 		);

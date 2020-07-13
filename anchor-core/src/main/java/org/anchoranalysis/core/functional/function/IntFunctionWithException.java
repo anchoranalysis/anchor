@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L
@@ -27,25 +27,22 @@ package org.anchoranalysis.core.functional;
  */
 
 /**
- * Like {@java.util.BiFunction} but can also thrown an exception.
+ * Like {@java.util.IntFunction} but can also thrown an exception.
  * 
  * @author Owen Feehan
  *
- * @param <S> first parameter-type
- * @param <T> second parameter-type
- * @param <V> return-type
+ * @param <T> return-type
  * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface BiFunctionWithException<S, T, V, E extends Exception> {
+public interface IntFunctionWithException<T, E extends Exception> {
 
 	/**
 	 * Calls the function
 	 * 
-	 * @param first first parameter
-	 * @param second second parameter
+	 * @param parameter parameter object
 	 * @return return-value
 	 * @throws E an exception that may be thrown
 	 */
-	V apply( S first, T second ) throws E;
+	T apply(int parameter) throws E;
 }

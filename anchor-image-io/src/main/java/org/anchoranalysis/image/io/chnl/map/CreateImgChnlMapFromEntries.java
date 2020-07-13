@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.chnl.map;
 import java.util.List;
 
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 
 public class CreateImgChnlMapFromEntries implements FunctionWithException<

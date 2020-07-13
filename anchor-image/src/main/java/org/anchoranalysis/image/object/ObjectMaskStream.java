@@ -35,9 +35,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
-import org.anchoranalysis.core.functional.PredicateWithException;
+
+import org.anchoranalysis.core.functional.StreamWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.PredicateWithException;
 import org.anchoranalysis.image.extent.BoundingBox;
 
 /**
@@ -164,7 +165,7 @@ public final class ObjectMaskStream {
 		FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc
 	) throws E {
 		return new ObjectCollection(
-			FunctionalUtilities.flatMapWithException(
+			StreamWithException.flatMapWithException(
 				delegate.streamStandardJava(),
 				throwableClass,
 				element -> mapFunc.apply(element).asList()

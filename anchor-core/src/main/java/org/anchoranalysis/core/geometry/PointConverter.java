@@ -29,8 +29,8 @@ package org.anchoranalysis.core.geometry;
 
 import java.util.List;
 import java.util.function.Function;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
 
+import org.anchoranalysis.core.functional.FunctionalList;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -147,7 +147,7 @@ public class PointConverter {
 	// END lists of points
 		
 	private static <S,T> List<S> convert( List<T> points, Function<T,S> mapFunction ) {
-		return FunctionalUtilities.mapToList(points, mapFunction);
+		return FunctionalList.mapToList(points, mapFunction);
 	}
 			
 	private static int roundInt( double value ) {

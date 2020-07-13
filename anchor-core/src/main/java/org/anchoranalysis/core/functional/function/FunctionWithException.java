@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L

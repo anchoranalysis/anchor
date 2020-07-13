@@ -30,7 +30,7 @@ package org.anchoranalysis.io.generator;
 
 import java.util.Optional;
 
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;

@@ -41,7 +41,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -102,7 +102,7 @@ public class NRGSchemeCreatorByElement extends NRGSchemeCreator {
 	}
 	
 	private List<NamedBean<Feature<FeatureInputStack>>> buildImageFeatures() throws CreateException {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			listImageFeatures,
 			CreateException.class,
 			ni-> sumList(

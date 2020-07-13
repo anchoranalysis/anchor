@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L
@@ -27,21 +27,22 @@ package org.anchoranalysis.core.functional;
  */
 
 /**
- * Like {@java.util.Supplier} but can also throw an exception.
+ * Like {@java.util.Predicate} but can also throw an exception.
  * 
  * @author Owen Feehan
  *
- * @param <T> type of object to supply
- * @param <E> exception-type if supplying fails
+ * @param <T> type of object to test
+ * @param <E> exception-type if testing fails
  */
 @FunctionalInterface
-public interface SupplierWithException<T, E extends Exception> {
+public interface PredicateWithException<T, E extends Exception> {
 
 	/**
-	 * Applies a supplier like with {@link java.util.Supplier#get).
+	 * Applies a predicate like with {@link Predicate#apply).
 	 * 
-	 * @return the supplied object.
+	 * @param source object to be tested
+	 * @return true if predicate is satisfied, false otherwise
 	 * @throws E an exception that may be thrown
 	 */
-	T get() throws E;
+	boolean test( T source ) throws E;
 }

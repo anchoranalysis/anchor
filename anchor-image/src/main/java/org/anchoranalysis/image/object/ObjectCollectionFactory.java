@@ -37,10 +37,10 @@ import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.anchoranalysis.core.functional.BiFunctionWithException;
-import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
-import org.anchoranalysis.core.functional.IntFunctionWithException;
+import org.anchoranalysis.core.functional.StreamWithException;
+import org.anchoranalysis.core.functional.function.BiFunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.IntFunctionWithException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 import lombok.AccessLevel;
@@ -232,7 +232,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <E extends Exception> ObjectCollection mapFromRange(int startInclusive, int endExclusive, Class<? extends Exception> throwableClass, IntFunctionWithException<ObjectMask,E> mapFunc ) throws E {
 		return new ObjectCollection(
-			FunctionalUtilities.mapIntStreamWithException(
+			StreamWithException.mapIntStreamWithException(
 				IntStream.range(startInclusive, endExclusive),
 				throwableClass,
 				mapFunc
@@ -268,7 +268,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <E extends Exception> ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, Class<? extends Exception> throwableClass, IntFunctionWithException<ObjectCollection,E> mapFunc) throws E {
 		return new ObjectCollection(
-			FunctionalUtilities.mapIntStreamWithException(
+			StreamWithException.mapIntStreamWithException(
 				IntStream.range(startInclusive, endExclusive),
 				throwableClass,
 				mapFunc
@@ -374,7 +374,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <T,E extends Exception> ObjectCollection flatMapFromCollection( Stream<T> stream, Class<? extends Exception> throwableClass, FunctionWithException<T,Collection<? extends ObjectMask>,E> mapFunc) throws E {
 		return new ObjectCollection(
-			FunctionalUtilities.flatMapWithException(
+			StreamWithException.flatMapWithException(
 				stream,
 				throwableClass,
 				mapFunc

@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.apache.commons.configuration.tree.ConfigurationNode;
 
 import lombok.AccessLevel;
@@ -81,7 +81,7 @@ class HelperDescribeXmlNode {
 	 */
 	private static void describeAttributes( Collection<ConfigurationNode> nodes, Predicate<ConfigurationNode> predicate, StringBuilder sb ) {
 
-		List<ConfigurationNode> nodesFiltered = FunctionalUtilities.filterToList(nodes, predicate);
+		List<ConfigurationNode> nodesFiltered = FunctionalList.filterToList(nodes, predicate);
 		
 		// We show nothing if it's empty
 		if (nodesFiltered.isEmpty()) {

@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 
 public class BeanStoreAdder {

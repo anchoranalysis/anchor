@@ -33,7 +33,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterIncrement;
@@ -112,7 +113,7 @@ public class FindMatchingFilesWithProgressReporter implements FindMatchingFiles 
 	}
 	
 	private static List<Path> filterLeafDirectories( List<Path> leafDirectories, Predicate<Path> dirMatcher ) {
-		return FunctionalUtilities.filterToList(leafDirectories, dirMatcher);
+		return FunctionalList.filterToList(leafDirectories, dirMatcher);
 	}
 		
 	private static void filesFromFolderSearch( List<Path> filesOut, Predicate<Path> matcher, List<File> listOut ) {

@@ -30,7 +30,7 @@ package org.anchoranalysis.feature.bean.operator;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -67,7 +67,7 @@ public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T>
 	protected String descriptionForList(String operatorDscr) {
 		return String.join(
 			operatorDscr,
-			FunctionalUtilities.mapToList(list, Feature::getDscrLong)
+			FunctionalList.mapToList(list, Feature::getDscrLong)
 		);
 	}
 	

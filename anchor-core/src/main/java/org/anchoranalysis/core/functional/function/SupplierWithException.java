@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L
@@ -27,22 +27,21 @@ package org.anchoranalysis.core.functional;
  */
 
 /**
- * Like {@java.util.ToIntFunction} but can also thrown an exception.
+ * Like {@java.util.Supplier} but can also throw an exception.
  * 
  * @author Owen Feehan
  *
- * @param <S> argument-type
- * @param <E> exception-type that can be thrown
+ * @param <T> type of object to supply
+ * @param <E> exception-type if supplying fails
  */
 @FunctionalInterface
-public interface ToIntFunctionWithException<S, E extends Exception> {
+public interface SupplierWithException<T, E extends Exception> {
 
 	/**
-	 * Calls the function
+	 * Applies a supplier like with {@link java.util.Supplier#get).
 	 * 
-	 * @param parameter parameter object
-	 * @return return-value
+	 * @return the supplied object.
 	 * @throws E an exception that may be thrown
 	 */
-	int apply(S parameter) throws E;
+	T get() throws E;
 }

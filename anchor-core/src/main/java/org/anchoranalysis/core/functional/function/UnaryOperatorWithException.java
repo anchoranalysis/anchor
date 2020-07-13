@@ -1,10 +1,10 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,22 +27,14 @@ package org.anchoranalysis.core.functional;
  */
 
 /**
- * Like {@java.util.Predicate} but can also throw an exception.
+ * Like a {@UnaryOperator} but allows an exception to be thrown
  * 
  * @author Owen Feehan
  *
- * @param <T> type of object to test
- * @param <E> exception-type if testing fails
+ * @param <T> input and output-type of operator
+ * @param <E> type of exception that may be thrown if something goes wrong
  */
 @FunctionalInterface
-public interface PredicateWithException<T, E extends Exception> {
-
-	/**
-	 * Applies a predicate like with {@link Predicate#apply).
-	 * 
-	 * @param source object to be tested
-	 * @return true if predicate is satisfied, false otherwise
-	 * @throws E an exception that may be thrown
-	 */
-	boolean test( T source ) throws E;
+public interface UnaryOperatorWithException<T,E extends Exception> {
+	T apply( T in ) throws E;
 }

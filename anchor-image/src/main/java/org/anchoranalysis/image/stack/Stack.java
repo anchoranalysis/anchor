@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.UnaryOperatorWithException;
+import org.anchoranalysis.core.functional.function.UnaryOperatorWithException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;

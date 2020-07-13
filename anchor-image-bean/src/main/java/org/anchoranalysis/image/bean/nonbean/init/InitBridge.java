@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.init.property.PropertyInitializer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 
 /**

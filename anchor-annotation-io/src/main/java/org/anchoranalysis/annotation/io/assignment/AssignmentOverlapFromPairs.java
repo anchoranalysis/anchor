@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -106,7 +106,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 	
 	@Override
 	public List<ObjectMask> getListPaired( boolean left ) {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			listPairs,
 			om -> om.getMultiplex( left )
 		);

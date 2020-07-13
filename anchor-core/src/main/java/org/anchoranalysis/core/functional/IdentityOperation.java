@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional;
 
+import lombok.AllArgsConstructor;
+
 /*
  * #%L
  * anchor-core
@@ -28,19 +30,13 @@ package org.anchoranalysis.core.functional;
 
 
 
-
+@AllArgsConstructor
 public class IdentityOperation<T,E extends Exception> implements Operation<T,E> {
 
-	private T obj;
-			
-	public IdentityOperation(T obj) {
-		super();
-		this.obj = obj;
-	}
+	private final T obj;
 
 	@Override
 	public T doOperation() throws E {
 		return obj;
 	}
-	
 }

@@ -31,8 +31,8 @@ import java.util.Optional;
 
 import java.util.Set;
 
-import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 
 import lombok.RequiredArgsConstructor;
 

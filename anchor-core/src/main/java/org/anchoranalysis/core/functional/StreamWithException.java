@@ -1,7 +1,7 @@
 package org.anchoranalysis.core.functional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
+
 
 /*-
  * #%L
@@ -30,22 +30,22 @@ import java.util.Arrays;
  */
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.IntFunctionWithException;
+import org.anchoranalysis.core.functional.function.ToIntFunctionWithException;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/** 
+ * Map operations for streams that can handle exceptions
+ **/
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class FunctionalUtilities {
+public class StreamWithException {
 	
 	/** An exception that wraps another exception, but exposes itself as a RuntimeException */
 	public static class ConvertedToRuntimeException extends AnchorFriendlyRuntimeException {
@@ -131,87 +131,6 @@ public class FunctionalUtilities {
 	}
 	
 	/**
-	 * Maps a list to new list, updating a progress-reporter for every element
-	 * 
-	 * @param <S> input-type to map
-	 * @param <T> output-type of map
-	 * @param <E> exception that can be thrown by {@link mapFunction}
-	 * @param list the list to map
-	 * @param progressReporter the progress-reporter to update
-	 * @param mapFunction the function to use for mapping
-	 * @return a newly-created list with the result of each mapped item
-	 * @throws E if the exception is thrown during mapping 
-	 */
-	public static <S,T,E extends Exception> List<T> mapListWithProgress(
-		List<S> list,
-		ProgressReporter progressReporter,
-		FunctionWithException<S,T,E> mapFunction
-	) throws E {
-		List<T> listOut = new ArrayList<>();
-		
-		progressReporter.setMin( 0 );
-		progressReporter.setMax( list.size() );
-		progressReporter.open();
-		
-		try {
-			for(int i=0; i<list.size(); i++) {
-				
-				S item = list.get(i);
-					
-				listOut.add(
-					mapFunction.apply(item)
-				);
-				
-				progressReporter.update(i+1);
-			}
-			return listOut;
-			
-		} finally {
-			progressReporter.close();
-		}
-	}
-	
-	
-	/**
-	 * Maps a list to a new list, including only certain items, updating a progress-reporter for every element
-	 * 
-	 * <p>Items where the mapping returns {@link Optional.empty()} are not included in the outputted list.</p>
-	 * 
-	 * @param <S> input-type to map
-	 * @param <T> output-type of map
-	 * @param <E> exception that can be thrown by {@link mapFunction}
-	 * @param list the list to map
-	 * @param progressReporter the progress-reporter to update
-	 * @param mapFunction the function to use for mapping
-	 * @return a newly-created list with the result of each mapped item
-	 * @throws E if the exception is thrown during mapping 
-	 */
-	public static <S,T,E extends Exception> List<T> mapListOptionalWithProgress(
-		List<S> list,
-		ProgressReporter progressReporter,
-		FunctionWithException<S,Optional<T>,E> mapFunction
-	) throws E {
-		List<T> listOut = new ArrayList<>();
-		
-		progressReporter.setMin( 0 );
-		progressReporter.setMax( list.size() );
-		progressReporter.open();
-		
-		try {
-			for(int i=0; i<list.size(); i++) {
-				
-				S item = list.get(i);
-				mapFunction.apply(item).ifPresent(listOut::add);
-				progressReporter.update(i+1);
-			}
-			return listOut;
-			
-		} finally {
-			progressReporter.close();
-		}
-	}
-	
-	/**
 	 * Creates a new feature-list by mapping integers (from a range) each to an optional feature accepting a checked-exception
 	 * <p>
 	 * This uses some internal reflection trickery to suppress the checked exception, and then rethrow it.
@@ -268,83 +187,6 @@ public class FunctionalUtilities {
 		} catch (ConvertedToRuntimeException e) {
 			return throwException(e, throwableClass);
 		}
-	}
-	
-	/**
-	 * Maps a collection to a list with each element derived from a corresponding element in the original collection.
-	 * <p>
-	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
-	 * below (although very idiomatic) occurs frequently.
-	 * 
-	 * @param  <S> parameter-type for function
-	 * @param  <T> return-type for function
-	 * @param  collection the collection to be mapped
-	 * @param  mapFunction function to do the mapping
-	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
-	 */
-	public static <S,T> List<T> mapToList(Collection<S> collection, Function<S,T> mapFunction) {
-		return collection.stream()
-				.map(mapFunction)
-				.collect( Collectors.toList() );
-	}
-	
-	/**
-	 * Maps an array to a list with each element derived from a corresponding element in the original array.
-	 * <p>
-	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
-	 * below (although very idiomatic) occurs frequently.
-	 * 
-	 * @param  <S> parameter-type for function
-	 * @param  <T> return-type for function
-	 * @param  array the array to be mapped
-	 * @param  mapFunction function to do the mapping
-	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
-	 */
-	public static <S,T> List<T> mapToList(S[] array, Function<S,T> mapFunction) {
-		return Arrays.stream(array)
-				.map(mapFunction)
-				.collect( Collectors.toList() );
-	}
-	
-	/**
-	 * Filters a collection and maps the result to a list
-	 * <p>
-	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
-	 * below (although idiomatic) occurs in multiple places.
-	 * 
-	 * @param  <S> parameter-type for function
-	 * @param  <T> return-type for function
-	 * @param  predicate predicate to first filter the input collection before mapping
-	 * @param  collection the collection to be filtered
-	 * @return a list with only the elements that pass the filter
-	 */
-	public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
-		return collection.stream()
-				.filter(predicate)
-				.collect( Collectors.toList() );
-	}
-	
-	/**
-	 * Like {@link #mapToList} but tolerates exceptions in the mapping function.
-	 * 
-	 * @param  <S> parameter-type for function
-	 * @param  <T> return-type for function
-	 * @param  <E> exception that can be thrown by {code mapFunction}
-	 * @param  collection the collection to be mapped
-	 * @param  mapFunction function to do the mapping
-	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
-	 * @throws E if the exception is thrown during mapping
-	 */
-	public static <S,T,E extends Exception> List<T> mapToList(
-		Collection<S> collection,
-		Class<? extends Exception> throwableClass,
-		FunctionWithException<S,T,E> mapFunction
-	) throws E {
-		return mapWithException(
-			collection.stream(),
-			throwableClass,
-			mapFunction
-		).collect( Collectors.toList() );
 	}
 		
 	@SuppressWarnings("unchecked")

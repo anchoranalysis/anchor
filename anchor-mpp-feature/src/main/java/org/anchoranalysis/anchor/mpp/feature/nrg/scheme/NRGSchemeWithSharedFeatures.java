@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;

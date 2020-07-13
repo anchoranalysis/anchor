@@ -37,9 +37,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
-import org.anchoranalysis.core.functional.IntFunctionWithException;
+import org.anchoranalysis.core.functional.StreamWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.IntFunctionWithException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -131,7 +131,7 @@ public class FeatureListFactory {
 	 */
 	public static <T extends FeatureInput> FeatureList<T> fromProviders(Collection<FeatureProvider<T>> providers) throws CreateException {
 		return new FeatureList<>(
-			FunctionalUtilities.mapWithException(
+			StreamWithException.mapWithException(
 				providers.stream(),
 				CreateException.class,
 				FeatureProvider::create
@@ -269,7 +269,7 @@ public class FeatureListFactory {
 		IntFunctionWithException<Optional<Feature<T>>,E> mapFunc
 	) throws E {
 		FeatureList<T> out = new FeatureList<>();
-		FunctionalUtilities.mapIntStreamWithException(
+		StreamWithException.mapIntStreamWithException(
 			IntStream.range(startInclusive, endExclusive),
 			throwableClass,
 			mapFunc

@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

@@ -1,10 +1,10 @@
-package org.anchoranalysis.core.functional;
+package org.anchoranalysis.core.functional.function;
 
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,22 @@ package org.anchoranalysis.core.functional;
  */
 
 /**
- * Like a {@UnaryOperator} but allows an exception to be thrown
+ * Like {@java.util.ToIntFunction} but can also thrown an exception.
  * 
  * @author Owen Feehan
  *
- * @param <T> input and output-type of operator
- * @param <E> type of exception that may be thrown if something goes wrong
+ * @param <S> argument-type
+ * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface UnaryOperatorWithException<T,E extends Exception> {
-	T apply( T in ) throws E;
+public interface ToIntFunctionWithException<S, E extends Exception> {
+
+	/**
+	 * Calls the function
+	 * 
+	 * @param parameter parameter object
+	 * @return return-value
+	 * @throws E an exception that may be thrown
+	 */
+	int apply(S parameter) throws E;
 }
