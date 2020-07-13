@@ -30,11 +30,13 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Extent;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@EqualsAndHashCode(callSuper=false)
+@NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class SizeXY extends AnchorBean<SizeXY>{
 
 	// START BEAN PROPERTIES
@@ -54,11 +56,6 @@ public class SizeXY extends AnchorBean<SizeXY>{
 	 */
 	public SizeXY(Extent extent) {
 		this( extent.getX(), extent.getY() );
-	}
-	
-	public SizeXY(int width, int height) {
-		this.width = width;
-		this.height = height;
 	}
 	
 	public Extent asExtent() {
