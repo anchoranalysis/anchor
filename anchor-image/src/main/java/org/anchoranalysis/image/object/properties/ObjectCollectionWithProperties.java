@@ -57,8 +57,14 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
 		delegate = omc.stream().mapToList( ObjectWithProperties::new );
 	}
 	
-	public boolean add(ObjectWithProperties e) {
-		return delegate.add(e);
+	public boolean add(ObjectMask object) {
+		return delegate.add(
+			new ObjectWithProperties(object)	
+		);
+	}
+	
+	public boolean add(ObjectWithProperties object) {
+		return delegate.add(object);
 	}
 
 	public ObjectWithProperties get(int index) {
