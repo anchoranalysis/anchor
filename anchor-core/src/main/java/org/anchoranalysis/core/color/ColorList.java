@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.color;
 
+import java.awt.Color;
+
 /*
  * #%L
  * anchor-core
@@ -39,6 +41,10 @@ public class ColorList extends ArrayList<RGBColor> implements ColorIndex {
 
 	public ColorList() {
 		super();
+	}
+	
+	public ColorList( Color color ) {
+		this( new RGBColor(color) );
 	}
 	
 	public ColorList( RGBColor color ) {

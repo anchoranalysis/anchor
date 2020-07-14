@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.annotation.AnnotationWithCfg;
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
+import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
@@ -149,7 +149,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		
 		AssignmentOverlapFromPairs assignment;
 		try {
-			assignment = new AssignmentObjMaskFactory(featureEvaluator,useMIP).createAssignment(
+			assignment = new AssignmentObjectFactory(featureEvaluator,useMIP).createAssignment(
 				annotationObjs,
 				compareObjs,
 				maxCost,

@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.object.properties;
+package org.anchoranalysis.image.io.bean.seed;
 
 /*-
  * #%L
- * anchor-image
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,19 +26,31 @@ package org.anchoranalysis.image.object.properties;
  * #L%
  */
 
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
+import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-public class IDGetterObjMaskWithProperties implements IDGetter<ObjectWithProperties> {
 
-	private String propertyName;
+public class ObjectOutputter extends SeedCollectionOutputter {
+
 	
-	public IDGetterObjMaskWithProperties(String propertyName) {
-		super();
-		this.propertyName = propertyName;
+
+	// START BEAN PROPERTIES
+	
+	// END BEAN PROPERTIES
+	
+	public void output( SeedCollection seeds, ImageResolution res, BoundOutputManagerRouteErrors outputManager ) {
+		
+		IterableGeneratorWriter.writeSubfolder(
+			outputManager,
+			"seeds",
+			"seeds",
+			() -> new ObjWithBoundingBoxGenerator( res ),
+			seeds.createMasks().asList(),
+			true
+		);
 	}
 
-	@Override
-	public int getID(ObjectWithProperties m, int iter) {
-		return (Integer) m.getProperty(propertyName);
-	}
 }

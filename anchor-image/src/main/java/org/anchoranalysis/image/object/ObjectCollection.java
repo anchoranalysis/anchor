@@ -241,7 +241,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return get(0).getBinaryValues();
 	}
 	
-	/** Deep copy, including duplicating ObjMasks */
+	/** Deep copy, including duplicating object-masks */
 	public ObjectCollection duplicate() {
 		return stream().map(ObjectMask::duplicate);
 	}

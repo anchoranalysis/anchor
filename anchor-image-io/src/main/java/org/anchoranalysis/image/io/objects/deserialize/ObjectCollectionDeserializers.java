@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.feature.objmask;
+package org.anchoranalysis.image.io.objects.deserialize;
 
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -26,20 +26,14 @@ package org.anchoranalysis.image.feature.objmask;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.io.bean.deserializer.Deserializer;
 
-/** 
- * Creates some basic objects for tests.
- * 
- * <p>Currently unused, but keep as it will likely be useful in the future</p>
- * */
-public class ObjMaskFixture {
+/** Entry point to deserializers */
+public class ObjectCollectionDeserializers {
 	
-	public static ObjectMask createSmallCornerObj() {
-		return new ObjectMask(
-			new BoundingBox( new Extent(2,3,1) )
-		);
-	}
+	private ObjectCollectionDeserializers() {}
+	
+	public static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING = new ReadObjectsFromTIFFDirectoryCorrectMissing();
+	public static final Deserializer<ObjectCollection> HDF5 = new ReadObjectsFromHDF5();
 }

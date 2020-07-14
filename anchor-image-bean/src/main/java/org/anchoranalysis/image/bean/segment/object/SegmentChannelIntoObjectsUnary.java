@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.segmentation.object;
+package org.anchoranalysis.image.bean.segment.object;
 
 /*-
  * #%L
@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.segmentation.object;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -38,23 +38,29 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class ObjectSegmentationOne extends ObjectSegmentation {
+/**
+ * A base-class for segmentations that takes another object-segmentation algorithm as a parameter.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoObjects {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectSegmentation sgmn;
+	private SegmentChannelIntoObjects segment;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
-			throws SgmnFailedException {
-		return sgmn(chnl, mask, seeds, sgmn);
+	public ObjectCollection segment(Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+			throws SegmentationFailedException {
+		return segment(channel, mask, seeds, segment);
 	}
 	
-	protected abstract ObjectCollection sgmn(
+	protected abstract ObjectCollection segment(
 		Channel chnl,
 		Optional<ObjectMask> object,
 		Optional<SeedCollection> seeds,
-		ObjectSegmentation sgmn
-	) throws SgmnFailedException;
+		SegmentChannelIntoObjects upstreamSegmentation
+	) throws SegmentationFailedException;
 }

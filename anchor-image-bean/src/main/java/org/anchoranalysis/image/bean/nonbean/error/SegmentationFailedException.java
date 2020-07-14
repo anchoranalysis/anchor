@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.segmentation.binary;
+package org.anchoranalysis.image.bean.nonbean.error;
 
 /*
  * #%L
@@ -26,21 +26,24 @@ package org.anchoranalysis.image.bean.segmentation.binary;
  * #L%
  */
 
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-import java.nio.ByteBuffer;
-import java.util.Optional;
+public class SegmentationFailedException extends AnchorFriendlyCheckedException {
 
-import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.SegmentationBean;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5014516097016484634L;
 
-@GroupingRoot
-public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
-		
-	// Returns a BinaryVoxelBox associated with the input buffer or perhaps an newly created buffer of identical size
-	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySegmentationParameters params, Optional<ObjectMask> mask ) throws SgmnFailedException;
+	public SegmentationFailedException( String message ) {
+		super( message );
+	}
+	
+	public SegmentationFailedException( String message, Throwable cause ) {
+		super( cause );
+	}
+	
+	public SegmentationFailedException( Throwable cause ) {
+		super( cause );
+	}
 }

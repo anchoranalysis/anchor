@@ -33,7 +33,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-class ReadObjsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
+class ReadObjectsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
 
 	private static final String OBJECT_DIRECTORY_NAME = "objMaskCollection";
 	
@@ -43,7 +43,7 @@ class ReadObjsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectColl
 		if (isMissingButLooksLikeCollection(path) ) {
 			return ObjectCollectionFactory.empty();
 		} else {
-			return new ReadObjsFromTIFFDirectory().deserialize(path);
+			return new ReadObjectsFromTIFFDirectory().deserialize(path);
 		}
 	}
 	

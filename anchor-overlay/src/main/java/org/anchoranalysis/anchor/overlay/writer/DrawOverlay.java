@@ -43,7 +43,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.object.properties.IDGetterObjMaskWithProperties;
+import org.anchoranalysis.image.object.properties.IDGetterObjectWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
@@ -101,7 +101,7 @@ public abstract class DrawOverlay {
 				ObjectDrawAttributesFactory.createFromOverlays(
 					overlays,
 					idGetter,
-					new IDGetterObjMaskWithProperties("colorID")
+					new IDGetterObjectWithProperties("colorID")
 				),
 				bboxContainer
 			);

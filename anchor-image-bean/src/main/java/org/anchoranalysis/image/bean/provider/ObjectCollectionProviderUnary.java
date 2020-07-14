@@ -1,10 +1,10 @@
-package org.anchoranalysis.mpp.io.bean.report.feature;
+package org.anchoranalysis.image.bean.provider;
 
-/*
+/*-
  * #%L
- * anchor-mpp-io
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,32 +26,32 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
  * #L%
  */
 
-
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 
-public class ReportFeatureOnObjMask extends ReportFeatureOnObjMaskBase<FeatureInputSingleObject> {
+import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * Base class for {@link ObjectCollectionProvider} that take a {@code objects} bean-field of same type as provided.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProvider {
+
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objects;
+	// END BEAN PROPERTIES
+	
 	@Override
-	protected double calcFeatureOn(ObjectCollection objects, FeatureCalculatorSingle<FeatureInputSingleObject> session)
-			throws FeatureCalcException {
-		return session.calc(
-			new FeatureInputSingleObject(
-				extractObjFromCollection(objects)
-			)
+	public ObjectCollection create() throws CreateException {
+		return createFromObjects(
+			objects.create()
 		);
 	}
 	
-	private ObjectMask extractObjFromCollection( ObjectCollection objects ) throws FeatureCalcException {
-		if (objects.size()==0) {
-			throw new FeatureCalcException("No object found");
-		}
-		if (objects.size()>1) {
-			throw new FeatureCalcException("More than one object found");
-		}
-		return objects.get(0);
-	}
+	protected abstract ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException;
 }

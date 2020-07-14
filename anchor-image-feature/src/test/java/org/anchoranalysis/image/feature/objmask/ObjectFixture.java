@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
+package org.anchoranalysis.image.feature.objmask;
 
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
@@ -26,26 +26,20 @@ package org.anchoranalysis.image.bean.provider;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.object.ObjectMask;
 
-import lombok.Getter;
-import lombok.Setter;
-
-public abstract class ObjectCollectionProviderOne extends ObjectCollectionProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objects;
-	// END BEAN PROPERTIES
+/** 
+ * Creates some basic objects for tests.
+ * 
+ * <p>Currently unused, but keep as it will likely be useful in the future</p>
+ * */
+public class ObjectFixture {
 	
-	@Override
-	public ObjectCollection create() throws CreateException {
-		return createFromObjects(
-			objects.create()
+	public static ObjectMask createSmallCornerObj() {
+		return new ObjectMask(
+			new BoundingBox( new Extent(2,3,1) )
 		);
 	}
-	
-	protected abstract ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException;
 }

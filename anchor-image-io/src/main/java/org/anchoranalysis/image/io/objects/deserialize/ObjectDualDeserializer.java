@@ -44,29 +44,33 @@ import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
+import lombok.AllArgsConstructor;
+
 
 /**
- * Deserializes an ObjMask stored in two parts
- *   1. A serialized BoundingBox somename.ser  (this filename is expected)
- *   2. A raster mask somename.tif
- *
+ * Deserializes an {@link ObjectMask] stored in two parts (a raster-mask and a serialized bounding-box)
+ * <p>
+ * Specifically, it expects:
+ * <ol>
+ * <li>A serialized {@link BoundingBox} <pre.somename.ser</pre>  (this filename is expected) in Java serialization form.
+ * <li>An unsigned-8 bit raster mask <pre>somename.tif</pre> corresponding to this bounding-box, using 255 as ON and 0 as on.
+ * </ol>
+ * @author Owen Feehan
  */
-class ObjMaskDualDeserializer implements Deserializer<ObjectMask> {
+@AllArgsConstructor
+class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
-	private ObjectInputStreamDeserializer<BoundingBox> bboxDeserializer = new ObjectInputStreamDeserializer<>();
-	private RasterReader rasterReader;
+	private static final ObjectInputStreamDeserializer<BoundingBox> BOUNDING_BOX_DESERIALIZER =
+		new ObjectInputStreamDeserializer<>();
 	
-	public ObjMaskDualDeserializer(RasterReader rasterReader) {
-		super();
-		this.rasterReader = rasterReader;
-	}
+	private final RasterReader rasterReader;
 
 	@Override
 	public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
 		
 		Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
 		
-		BoundingBox bbox = bboxDeserializer.deserialize(filePath);
+		BoundingBox bbox = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
 		
 		try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
 			Stack stack = or.openCheckType(0, ProgressReporterNull.get(), VoxelDataTypeUnsignedByte.INSTANCE ).get(0);
@@ -90,29 +94,32 @@ class ObjMaskDualDeserializer implements Deserializer<ObjectMask> {
 		}
 	}
 	
-	private static String errorMessageMismatchingDims(BoundingBox bbox, ImageDimensions sd, Path filePath) {
+	private static String errorMessageMismatchingDims(BoundingBox bbox, ImageDimensions dimensions, Path filePath) {
 		return String.format(
 			"Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
 			bbox.extent(),
-			sd.getExtent(),
+			dimensions.getExtent(),
 			filePath
 		);
 	}
-	
-	
-	private static Path changeExtension( Path path, String oldExt, String newExt ) throws DeserializationFailedException {
 		
-		String oldExtUpcase = oldExt.toUpperCase();
+	private static Path changeExtension(Path path, String oldExtension, String newExtension) throws DeserializationFailedException {
 		
-		if (!path.toString().endsWith("." + oldExt) && !path.toString().endsWith("." + oldExtUpcase)) {
-			throw new DeserializationFailedException("Files must have ." + oldExt + " extension");
+		String oldExtensionUpperCase = oldExtension.toUpperCase();
+		
+		if (!path.toString().endsWith("." + oldExtension) && !path.toString().endsWith("." + oldExtensionUpperCase)) {
+			throw new DeserializationFailedException("Files must have ." + oldExtension + " extension");
 		}
 		
-		// Changes extension into newExt
-		String pathS = path.toString();
-		pathS = pathS.substring(0, pathS.length()-3);
-		pathS = pathS.concat(newExt);
-		return Paths.get(pathS);
+		// Change old extension into new extension
+		return Paths.get(
+			changeExtension(path.toString(), oldExtension, newExtension)
+		);
 	}
-
+	
+	private static String changeExtension(String path, String oldExtension, String newExtension) {
+		path = path.substring(0, path.length()-oldExtension.length());
+		path = path.concat(newExtension);
+		return path;
+	}
 }

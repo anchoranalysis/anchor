@@ -1,8 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.error;
+package org.anchoranalysis.mpp.io.bean.report.feature;
 
 /*
  * #%L
- * anchor-image-bean
+ * anchor-mpp-io
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -26,24 +26,21 @@ package org.anchoranalysis.image.bean.nonbean.error;
  * #L%
  */
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
-public class SgmnFailedException extends AnchorFriendlyCheckedException {
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5014516097016484634L;
+public class ReportFeatureOnObjectCollection extends ReportFeatureOnObjectsBase<FeatureInputObjectCollection> {
 
-	public SgmnFailedException( String message ) {
-		super( message );
-	}
-	
-	public SgmnFailedException( String message, Throwable cause ) {
-		super( cause );
-	}
-	
-	public SgmnFailedException( Throwable cause ) {
-		super( cause );
+	@Override
+	protected double calcFeatureOn(
+		ObjectCollection objects,
+		FeatureCalculatorSingle<FeatureInputObjectCollection> session
+	) throws FeatureCalcException {
+		return session.calc(
+			new FeatureInputObjectCollection(objects)
+		);
 	}
 }

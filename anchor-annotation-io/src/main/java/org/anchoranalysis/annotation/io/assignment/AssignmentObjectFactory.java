@@ -41,23 +41,20 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
-public class AssignmentObjMaskFactory {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public class AssignmentObjectFactory {
 	
-	private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
-	private boolean useMIP;
+	// START REQUIRED ARGUMENTS
+	private final FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
+	private final boolean useMIP;
+	// END REQUIRED ARGUMENTS
 	
 	// Remember the cost matrix, in case we need it later
+	@Getter
 	private ObjectCollectionDistanceMatrix cost;
-	
-	public AssignmentObjMaskFactory(FeatureEvaluator<FeatureInputPairObjects> featureEvaluator, boolean useMIP ) {
-		super();
-		this.featureEvaluator = featureEvaluator;
-		this.useMIP = useMIP;
-	}
-	
-	public ObjectCollectionDistanceMatrix getCost() {
-		return cost;
-	}
 
 	public AssignmentOverlapFromPairs createAssignment(
 		ObjectCollection leftObjs,

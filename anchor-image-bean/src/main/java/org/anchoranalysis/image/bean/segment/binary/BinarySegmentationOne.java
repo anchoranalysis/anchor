@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.segmentation.binary;
+package org.anchoranalysis.image.bean.segment.binary;
 
 /*-
  * #%L
@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -48,7 +48,7 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
 	
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySegmentationParameters params, Optional<ObjectMask> mask)
-			throws SgmnFailedException {
+			throws SegmentationFailedException {
 		return sgmnFromSgmn(voxelBox, params, mask, sgmn);
 	}
 	
@@ -57,5 +57,5 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
 		BinarySegmentationParameters params,
 		Optional<ObjectMask> object,
 		BinarySegmentation sgmn
-	) throws SgmnFailedException;
+	) throws SegmentationFailedException;
 }

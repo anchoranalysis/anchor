@@ -41,9 +41,9 @@ import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 
-class ReadObjsFromHDF5 implements Deserializer<ObjectCollection> {
+class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 
-	private ObjMaskHDF5Reader objReader = new ObjMaskHDF5Reader();
+	private static final ObjectMaskHDF5Reader OBJECT_READER = new ObjectMaskHDF5Reader();
 	
 	@Override
 	public ObjectCollection deserialize(Path path) throws DeserializationFailedException {
@@ -84,7 +84,7 @@ class ReadObjsFromHDF5 implements Deserializer<ObjectCollection> {
 		// First check the number of objects expected
 		// if the the rootPath exists in the HDF5, if not, it's an indication that there's no
 		// objects present
-		int numObjs = ObjMaskHDF5Reader.extractIntAttr(reader.uint32(), "/", GeneratorHDF5.NUM_OBJS_ATTR_NAME);
+		int numObjs = ObjectMaskHDF5Reader.extractIntAttr(reader.uint32(), "/", GeneratorHDF5.NUM_OBJS_ATTR_NAME);
 		if (numObjs==0) {
 			return ObjectCollectionFactory.empty();
 		}
@@ -109,7 +109,7 @@ class ReadObjsFromHDF5 implements Deserializer<ObjectCollection> {
 		List<String> groups = reader.object().getAllGroupMembers( rootPath );
 		return ObjectCollectionFactory.mapFrom(
 			groups,
-			groupName->	objReader.apply(reader, rootPath + groupName)
+			groupName->	OBJECT_READER.apply(reader, rootPath + groupName)
 		);
 	}
 }

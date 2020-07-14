@@ -60,6 +60,8 @@ import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.Getter;
+import lombok.Setter;
 import one.util.streamex.StreamEx;
 
 /**
@@ -68,18 +70,23 @@ import one.util.streamex.StreamEx;
  *
  * @param <T> feature calculation params
  */
-class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectCollection> {
+class ObjectFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectCollection> {
 
 	private final NRGStackWithParams nrgStack;
 	private final Logger logger;
 	private final FeatureList<FeatureInputSingleObject> features;
 	
 	private TableCSVGenerator<ResultsVectorCollection> delegate;
-	private ObjectCollection objects;
-	private FeatureInitParams paramsInit;	// Optional initialization parameters
-	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
 	
-	public ObjMaskFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, Logger logger ) {
+	@Getter @Setter
+	private FeatureInitParams paramsInit;	// Optional initialization parameters
+	
+	@Getter @Setter
+	private SharedFeatureMulti sharedFeatures = new SharedFeatureMulti();
+
+	private ObjectCollection element;	// Iteration element
+	
+	public ObjectFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, Logger logger ) {
 		super("objMaskFeatures");
 		this.nrgStack = nrgStack;
 		this.logger = logger;
@@ -108,7 +115,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			rvc = new ResultsVectorCollection();
-			for( ObjectMask objectMask : objects ) {
+			for( ObjectMask objectMask : element ) {
 				rvc.add( 
 					session.calcSuppressErrors(
 						createParams(objectMask, nrgStack),
@@ -126,12 +133,12 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 
 	@Override
 	public ObjectCollection getIterableElement() {
-		return objects;
+		return element;
 	}
 
 	@Override
 	public void setIterableElement(ObjectCollection element) {
-		this.objects = element;
+		this.element = element;
 	}
 	
 	// Puts in some extra descriptive features at the start
@@ -150,7 +157,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			createNumVoxels()
 		);
 		stream.append(
-			features.asList().stream().map(ObjMaskFeatureListCSVGenerator::duplicateSetCustomNameIfMissing)	
+			features.asList().stream().map(ObjectFeatureListCSVGenerator::duplicateSetCustomNameIfMissing)	
 		);
 	
 		return FeatureListFactory.fromStream(stream);
@@ -190,22 +197,6 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 	
 	private static Feature<FeatureInputSingleObject> convertToPhysical( Feature<FeatureInputSingleObject> feature, DirectionVector dir ) {
 		return new ConvertToPhysicalDistance<>(feature, UnitSuffix.MICRO, dir);
-	}
-	
-	public FeatureInitParams getParamsInit() {
-		return paramsInit;
-	}
-
-	public void setParamsInit(FeatureInitParams paramsInit) {
-		this.paramsInit = paramsInit;
-	}
-
-	public SharedFeatureMulti getSharedFeatures() {
-		return sharedFeatures;
-	}
-
-	public void setSharedFeatures(SharedFeatureMulti sharedFeatures) {
-		this.sharedFeatures = sharedFeatures;
 	}
 	
 	private static FeatureInputSingleObject createParams(ObjectMask object, NRGStackWithParams nrgStack) {

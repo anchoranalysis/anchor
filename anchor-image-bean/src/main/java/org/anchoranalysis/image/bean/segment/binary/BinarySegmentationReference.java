@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.segmentation.binary;
+package org.anchoranalysis.image.bean.segment.binary;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -67,7 +67,7 @@ public class BinarySegmentationReference extends BinarySegmentation {
 		VoxelBoxWrapper voxelBox,
 		BinarySegmentationParameters params,
 		Optional<ObjectMask> mask
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 		return proxy.sgmn(voxelBox, params, mask);
 	}
 }

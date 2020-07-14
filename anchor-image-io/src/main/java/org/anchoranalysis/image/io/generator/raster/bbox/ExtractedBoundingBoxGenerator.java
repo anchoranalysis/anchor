@@ -41,48 +41,25 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ExtractedBBoxGenerator extends RasterGenerator implements IterableObjectGenerator<BoundingBox,Stack> {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-	private Stack stack = null;
-	private String manifestFunction;
+@RequiredArgsConstructor
+public class ExtractedBoundingBoxGenerator extends RasterGenerator implements IterableObjectGenerator<BoundingBox,Stack> {
+
+	// START REQUIRED ARGUMENTS
+	private final Stack stack;
+	private final String manifestFunction;
+	// END REQUIRED ARGUMENTS
+	
 	private BoundingBox bbox;
+	
+	@Getter @Setter
 	private int paddingXY = 0;
+	
+	@Getter @Setter
 	private int paddingZ = 0;
-	
-	/**
-	 * 
-	 * @param stack
-	 * @param manifestFunction
-	 * @param factory must match the type of the input stack
-	 * @throws CreateException
-	 */
-	public ExtractedBBoxGenerator(Stack stack, String manifestFunction) {
-		super();
-		//
-		this.stack = stack;
-		this.manifestFunction = manifestFunction;
-	}
-	
-	private Stack createExtract( Stack stackIn ) throws CreateException {
-		Stack stackOut = new Stack();
-		
-		for( Channel chnlIn : stackIn ) {
-			
-			VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
-			
-			VoxelBox<?> vbExtracted = vbIn.region(bbox,false);
-			
-			Channel chnlExtracted = ChannelFactory.instance().create( vbExtracted, stackIn.getDimensions().getRes() );
-			try {
-				stackOut.addChnl(chnlExtracted);
-			} catch (IncorrectImageSizeException e) {
-				throw new CreateException(e);
-			}
-		}
-		
-		return stackOut;
-	}
-	
 
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
@@ -124,20 +101,27 @@ public class ExtractedBBoxGenerator extends RasterGenerator implements IterableO
 	public boolean isRGB() {
 		return stack.getNumChnl()==3;
 	}
-
-	public int getPaddingXY() {
-		return paddingXY;
-	}
-
-	public void setPaddingXY(int paddingXY) {
-		this.paddingXY = paddingXY;
-	}
-
-	public int getPaddingZ() {
-		return paddingZ;
-	}
-
-	public void setPaddingZ(int paddingZ) {
-		this.paddingZ = paddingZ;
+	
+	private Stack createExtract( Stack stackIn ) throws CreateException {
+		Stack stackOut = new Stack();
+		
+		for( Channel chnlIn : stackIn ) {
+			
+			VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
+			
+			VoxelBox<?> vbExtracted = vbIn.region(bbox,false);
+			
+			Channel chnlExtracted = ChannelFactory.instance().create(
+				vbExtracted,
+				stackIn.getDimensions().getRes()
+			);
+			try {
+				stackOut.addChnl(chnlExtracted);
+			} catch (IncorrectImageSizeException e) {
+				throw new CreateException(e);
+			}
+		}
+		
+		return stackOut;
 	}
 }

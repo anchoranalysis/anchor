@@ -117,14 +117,14 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		}
 	}
 	
-	private ObjMaskFeatureListCSVGenerator createGenerator(
+	private ObjectFeatureListCSVGenerator createGenerator(
 		FeatureInitParams paramsInit,
 		NRGStackWithParams nrgStack,
 		ObjectCollection objects,
 		FeatureList<FeatureInputSingleObject> features,
 		Logger logger
 	) {
-		ObjMaskFeatureListCSVGenerator generator = new ObjMaskFeatureListCSVGenerator(
+		ObjectFeatureListCSVGenerator generator = new ObjectFeatureListCSVGenerator(
 			features,
 			nrgStack,
 			logger

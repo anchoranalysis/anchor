@@ -29,12 +29,12 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -42,23 +42,19 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectMask,Stack> {
+import lombok.RequiredArgsConstructor;
 
-	private ExtractedBBoxGenerator chnlGenerator;
-	private DrawObjectsGenerator rgbObjMaskGenerator;
+@RequiredArgsConstructor
+public class ExtractedObjectGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectMask,Stack> {
+
+	// START REQUIRED ARGUMENTS
+	private final DrawObjectsGenerator rgbObjMaskGenerator;
+	private final IterableObjectGenerator<BoundingBox,Stack> chnlGenerator;
+	private final String manifestFunction;
+	private final boolean mip;
+	// END REQUIRED ARGUMENTS
 	
 	private ObjectMask element;
-	private String manifestFunction;
-	private boolean mip;
-	
-	public ExtractedBBoxOnRGBObjMaskGenerator(DrawObjectsGenerator rgbObjMaskGenerator, ExtractedBBoxGenerator chnlGenerator, String manifestFunction,  boolean mip ) {
-		super();
-		this.rgbObjMaskGenerator = rgbObjMaskGenerator;
-		this.chnlGenerator = chnlGenerator;
-		this.manifestFunction = manifestFunction;
-		this.mip = mip;
-	}
-
 	
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
@@ -67,9 +63,13 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 			throw new OutputWriteFailedException("no mutable element set");
 		}
 		
-		chnlGenerator.setIterableElement(element.getBoundingBox());
+		try {
+			chnlGenerator.setIterableElement(element.getBoundingBox());
+		} catch (SetOperationFailedException e) {
+			throw new OutputWriteFailedException(e);
+		}
 
-		Stack chnlExtracted = chnlGenerator.generate();
+		Stack chnlExtracted = chnlGenerator.getGenerator().generate();
 		
 		if (mip) {
 			chnlExtracted = chnlExtracted.maxIntensityProj();
@@ -93,16 +93,12 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 		}
 		
 		// We create a version that is relative to the extracted section
-		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
-		objects.add(
-			new ObjectWithProperties(
-				new ObjectMask(
-					new BoundingBox(object.getVoxelBox().extent()),
-					object.binaryVoxelBox()
-				)
+		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties(
+			new ObjectMask(
+				new BoundingBox(object.getVoxelBox().extent()),
+				object.binaryVoxelBox()
 			)
 		);
-		
 		rgbObjMaskGenerator.setIterableElement( objects );
 		
 		return rgbObjMaskGenerator.generate();
@@ -134,5 +130,4 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 	public boolean isRGB() {
 		return rgbObjMaskGenerator.isRGB();
 	}
-
 }

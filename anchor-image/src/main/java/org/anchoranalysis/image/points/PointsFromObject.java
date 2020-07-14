@@ -37,22 +37,25 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 
-public class PointsFromObjMask {
-	
-	private PointsFromObjMask() {}
+import lombok.AccessLevel;
+
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class PointsFromObject {
 	
 	/**
 	 * A list of points from the entire object-mask
 	 * 
-	 * @param objects
+	 * @param object
 	 * @return
 	 * @throws CreateException
 	 */
-	public static List<Point3i> pntsFromMask( ObjectMask objects ) {
+	public static List<Point3i> fromAsInteger( ObjectMask object ) {
 		List<Point3i> points = new ArrayList<>();
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-			objects.binaryVoxelBox(),
-			objects.getBoundingBox().cornerMin(),
+			object.binaryVoxelBox(),
+			object.getBoundingBox().cornerMin(),
 			points
 		);
 		return points;
@@ -64,14 +67,14 @@ public class PointsFromObjMask {
 	 * @param object
 	 * @return
 	 */
-	public static List<Point3d> pntsFromMaskDouble( ObjectMask object ) {
-		List<Point3d> pts = new ArrayList<>();
+	public static List<Point3d> fromAsDouble( ObjectMask object ) {
+		List<Point3d> points = new ArrayList<>();
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3DDouble(
 			object.binaryVoxelBox(),
 			object.getBoundingBox().cornerMin(),
-			pts
+			points
 		);
-		return pts;
+		return points;
 	}
 	
 	/**

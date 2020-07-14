@@ -39,7 +39,7 @@ import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.IHDF5IntReader;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 
-class ObjMaskHDF5Reader {
+class ObjectMaskHDF5Reader {
 	
 	public ObjectMask apply( IHDF5Reader reader, String datasetPath ) {
 		

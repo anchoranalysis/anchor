@@ -34,7 +34,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class SeedObjMask implements Seed {
+public class SeedObjectMask implements Seed {
 	
 	private ObjectMask object;
 
@@ -53,7 +53,7 @@ public class SeedObjMask implements Seed {
 
 	@Override
 	public Seed duplicate() {
-		return new SeedObjMask(object.duplicate());
+		return new SeedObjectMask(object.duplicate());
 	}
 
 	@Override
@@ -68,8 +68,8 @@ public class SeedObjMask implements Seed {
 	
 	@Override
 	public boolean equalsDeep(Seed other) {
-		if (other instanceof SeedObjMask) {
-			SeedObjMask otherCast = (SeedObjMask) other;
+		if (other instanceof SeedObjectMask) {
+			SeedObjectMask otherCast = (SeedObjectMask) other;
 			return object.equalsDeep(otherCast.object);
 		} else {
 			return false;

@@ -50,9 +50,9 @@ import lombok.NoArgsConstructor;
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class ExtendObjsInto3DMask {
+public class ExtendObjectsInto3DMask {
 	
-	public static ObjectCollection extendObjs( ObjectCollection objects2D, BinaryVoxelBox<ByteBuffer> mask3D) {
+	public static ObjectCollection extendObjects( ObjectCollection objects2D, BinaryVoxelBox<ByteBuffer> mask3D) {
 		return objects2D.stream().map( om->
 			extendObj( om, mask3D )
 		);

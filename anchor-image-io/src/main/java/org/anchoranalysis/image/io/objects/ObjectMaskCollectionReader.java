@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.io.objects;
 
-import static org.anchoranalysis.image.io.objects.deserialize.ObjMaskCollectionDeserializers.*;
+import static org.anchoranalysis.image.io.objects.deserialize.ObjectCollectionDeserializers.*;
 
 /*
  * #%L

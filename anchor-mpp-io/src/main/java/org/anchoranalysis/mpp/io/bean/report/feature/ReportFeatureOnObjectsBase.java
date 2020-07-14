@@ -42,7 +42,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
+public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
 	
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

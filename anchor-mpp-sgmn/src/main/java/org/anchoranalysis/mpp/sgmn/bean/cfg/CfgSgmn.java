@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -58,5 +58,5 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 		NamedProvider<ObjectCollection> objects,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
-	) throws SgmnFailedException;
+	) throws SegmentationFailedException;
 }

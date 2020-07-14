@@ -1,10 +1,10 @@
-package org.anchoranalysis.image.bean.segmentation.object;
+package org.anchoranalysis.image.bean.segment;
 
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,14 @@ package org.anchoranalysis.image.bean.segmentation.object;
  * #L%
  */
 
-import java.util.Optional;
+import org.anchoranalysis.image.bean.ImageBean;
 
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.segmentation.SegmentationBean;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.seed.SeedCollection;
-
-public abstract class ObjectSegmentation extends SegmentationBean<ObjectSegmentation> {
-
-	public abstract ObjectCollection sgmn( Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds ) throws SgmnFailedException;
+/**
+ * Performs some kind of segmentation
+ *  
+ * @author Owen Feehan
+ *
+ * @param <T> bean-type
+ */
+public abstract class SegmentationBean<T> extends ImageBean<T> {
 }
