@@ -57,7 +57,7 @@ public class UnitValueVolumeVoxels extends UnitValueVolume {
 	}
 
 	@Override
-	public double rslv(Optional<ImageResolution> res) {
+	public double resolveToVoxels(Optional<ImageResolution> resolution) {
 		return value;
 	}
 

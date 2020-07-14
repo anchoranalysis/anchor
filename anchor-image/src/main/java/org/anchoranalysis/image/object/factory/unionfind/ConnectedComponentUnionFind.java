@@ -74,14 +74,14 @@ public class ConnectedComponentUnionFind {
 	 * @throws OperationFailedException
 	 */
 	public ObjectCollection deriveConnectedByte(BinaryVoxelBox<ByteBuffer> voxels) throws OperationFailedException {
-		ObjectCollection omc = new ObjectCollection();
+		ObjectCollection objects = new ObjectCollection();
 		visitRegion(
 			voxels,
-			omc,
+			objects,
 			minNumberVoxels,
 			new ReadWriteByte()
 		);
-		return omc;
+		return objects;
 	}
 	
 	/**
@@ -92,19 +92,19 @@ public class ConnectedComponentUnionFind {
 	 * @throws OperationFailedException
 	 */
 	public ObjectCollection deriveConnectedInt(BinaryVoxelBox<IntBuffer> voxels) throws OperationFailedException {
-		ObjectCollection omc = ObjectCollectionFactory.empty();
+		ObjectCollection objects = ObjectCollectionFactory.empty();
 		visitRegion(
 			voxels,
-			omc,
+			objects,
 			minNumberVoxels,
 			new ReadWriteInt()
 		);
-		return omc;
+		return objects;
 	}
 	
 	private <T extends Buffer> void visitRegion(
 		BinaryVoxelBox<T> visited,
-		ObjectCollection omc,
+		ObjectCollection objects,
 		int minNumberVoxels,
 		BufferReadWrite<T> bufferReaderWriter
 	) throws OperationFailedException {
@@ -126,7 +126,7 @@ public class ConnectedComponentUnionFind {
 			maxBigIDAdded,
 			unionIndex,
 			indexBuffer,
-			omc,
+			objects,
 			minNumberVoxels
 		);
 	}
@@ -220,7 +220,7 @@ public class ConnectedComponentUnionFind {
 		Map<Integer,Integer> mapIDOrdered,
 		VoxelBox<IntBuffer> indexBuffer,
 		int minNumberVoxels,
-		ObjectCollection omc
+		ObjectCollection objects
 	) throws OperationFailedException {
 		
 		for( int smallID : mapIDOrdered.values()) {
@@ -228,7 +228,7 @@ public class ConnectedComponentUnionFind {
 			PointRangeWithCount bboxWithCnt = bboxArr[smallID-1];
 			
 			if (bboxWithCnt.getCount()>=minNumberVoxels) {
-				omc.add(
+				objects.add(
 					indexBuffer.equalMask(
 						bboxWithCnt.deriveBoundingBox(),
 						smallID
@@ -236,14 +236,14 @@ public class ConnectedComponentUnionFind {
 				);
 			}
 		}
-		return omc;
+		return objects;
 	}
 	
 	private static void processIndexBuffer(
 		int maxBigIDAdded,
 		UnionFind<Integer> unionIndex,
 		VoxelBox<IntBuffer> indexBuffer,
-		ObjectCollection omc,
+		ObjectCollection objects,
 		int minNumberVoxels
 	) throws OperationFailedException {
 		Set<Integer> primaryIDs = setFromUnionFind( maxBigIDAdded, unionIndex );
@@ -264,7 +264,7 @@ public class ConnectedComponentUnionFind {
 			mapIDOrdered,
 			indexBuffer,
 			minNumberVoxels,
-			omc
+			objects
 		);
 	}
 	

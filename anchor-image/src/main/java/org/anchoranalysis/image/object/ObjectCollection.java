@@ -81,12 +81,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		);
 	}
 	
-	public boolean add(ObjectMask e) {
-		return delegate.add(e);
+	public boolean add(ObjectMask object) {
+		return delegate.add(object);
 	}
 
-	public boolean addAll(ObjectCollection objs) {
-		return addAll(objs.delegate);
+	public boolean addAll(ObjectCollection objects) {
+		return addAll(objects.delegate);
 	}
 	
 	public boolean addAll(Collection<? extends ObjectMask> c) {
@@ -116,13 +116,13 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * <p>This is more expensive equality check than with {@link #equalsDeep}, but is useful for comparing objects that were instantiated in different places.</p>
 	 * <p>Both collections must have identical ordering.</p>
 	 */	
-	public boolean equalsDeep(ObjectCollection othr) {
-		if (size()!=othr.size()) {
+	public boolean equalsDeep(ObjectCollection other) {
+		if (size()!=other.size()) {
 			return false;
 		}
 		
 		for( int i=0; i<size(); i++) {
-			if (!get(i).equalsDeep(othr.get(i))) {
+			if (!get(i).equalsDeep(other.get(i))) {
 				return false;
 			}
 		}
@@ -290,7 +290,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * 
 	 * @return the stream
 	 */
-	Stream<ObjectMask> streamStandardJava() {
+	public Stream<ObjectMask> streamStandardJava() {
 		return delegate.stream();
 	}
 	

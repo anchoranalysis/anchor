@@ -35,10 +35,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjectSegmentationOne extends ObjectSegmentation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectSegmentation sgmn;
 	// END BEAN PROPERTIES
 	
@@ -50,16 +53,8 @@ public abstract class ObjectSegmentationOne extends ObjectSegmentation {
 	
 	protected abstract ObjectCollection sgmn(
 		Channel chnl,
-		Optional<ObjectMask> objMask,
+		Optional<ObjectMask> object,
 		Optional<SeedCollection> seeds,
 		ObjectSegmentation sgmn
 	) throws SgmnFailedException;
-	
-	public ObjectSegmentation getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjectSegmentation sgmn) {
-		this.sgmn = sgmn;
-	}
 }

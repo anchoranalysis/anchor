@@ -236,13 +236,13 @@ public class ApplyKernel {
 	}
 	
 	
-	public static int applyForCountOnMask( BinaryKernel kernel, VoxelBox<ByteBuffer> in, ObjectMask om ) {
+	public static int applyForCountOnMask( BinaryKernel kernel, VoxelBox<ByteBuffer> in, ObjectMask object ) {
 		
 		int localSlicesSize = 3;
 		 
 		int cnt = 0;
 		
-		BoundingBox bbox = om.getBoundingBox();
+		BoundingBox bbox = object.getBoundingBox();
 		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
@@ -250,7 +250,7 @@ public class ApplyKernel {
 		
 		kernel.init(in);
 		
-		BinaryValuesByte bvb = om.getBinaryValues().createByte();
+		BinaryValuesByte bvb = object.getBinaryValues().createByte();
 		
 		Point3i pnt = new Point3i();
 		for (pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrementZ()) {
@@ -264,7 +264,7 @@ public class ApplyKernel {
 			
 			int ind = 0;
 			
-			ByteBuffer bufMask = om.getVoxelBox().getPixelsForPlane(pnt.getZ() - crnrMin.getZ()).buffer();
+			ByteBuffer bufMask = object.getVoxelBox().getPixelsForPlane(pnt.getZ() - crnrMin.getZ()).buffer();
 			
 			for (pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrementY()) {
 				for (pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrementX()) {

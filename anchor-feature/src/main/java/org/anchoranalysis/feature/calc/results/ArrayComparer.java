@@ -28,29 +28,29 @@ package org.anchoranalysis.feature.calc.results;
 
 class ArrayComparer {
 	
-	public boolean compareArrays( Object[] objs1, Object[] objs2 ) {
-		if (objs1==null) {
-			return (objs2.length==0);
+	public boolean compareArrays( Object[] objects1, Object[] objects2 ) {
+		if (objects1==null) {
+			return (objects2.length==0);
 		}
 		
-		if (objs2==null) {
-			return (objs1.length==0);
+		if (objects2==null) {
+			return (objects1.length==0);
 		}
 		
-		if (objs1.length!=objs2.length) {
+		if (objects1.length!=objects2.length) {
 			return false;
 		}
 		
-		for( int i=0; i<objs1.length; i++) {
+		for( int i=0; i<objects1.length; i++) {
 			
-			if (!compareItem(objs1[i], objs2[i])) {
+			if (!compareItem(objects1[i], objects2[i])) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	protected boolean compareItem( Object obj1, Object obj2 ) {
-		return obj1.equals(obj2);
+	protected boolean compareItem( Object object1, Object object2 ) {
+		return object1.equals(object2);
 	}
 }

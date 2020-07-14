@@ -65,13 +65,16 @@ public class ObjsAsUniqueValueGenerator extends ObjsGenerator {
 
 		VoxelBox<?> vbOutput = outChnl.getVoxelBox().any();
 		
-		if (getObjs().size()>254) {
-			throw new OutputWriteFailedException( String.format("Collection has %d objs. A max of 254 is allowed", getObjs().size()));
+		if (getObjects().size()>254) {
+			throw new OutputWriteFailedException(
+				String.format("Collection has %d objects. A max of 254 is allowed", getObjects().size())
+			);
 		}
 		
 		int val = 1;
-		for( ObjectMask om : getObjs() ) {
-			vbOutput.setPixelsCheckMask(om, val++);
+		
+		for( ObjectMask object : getObjects() ) {
+			vbOutput.setPixelsCheckMask(object, val++);
 		}
 		
 		return new ChnlGenerator(outChnl, "maskCollection").generate();

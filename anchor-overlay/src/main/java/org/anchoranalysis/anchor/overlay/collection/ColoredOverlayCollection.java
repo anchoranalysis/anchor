@@ -32,50 +32,49 @@ import java.util.List;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public class ColoredOverlayCollection implements Iterable<Overlay> {
 
-	private OverlayCollection delegate;
+	@Getter
+	private OverlayCollection overlays;
 	private ColorList colors;
 
 	public ColoredOverlayCollection() {
-		delegate = new OverlayCollection();
+		overlays = new OverlayCollection();
 		colors = new ColorList();
-	}
-	
-	public ColoredOverlayCollection(OverlayCollection overlayCollection, ColorList colors) {
-		super();
-		this.delegate = overlayCollection;
-		this.colors = colors;
 	}
 	
 	public boolean add(Overlay e, RGBColor color) {
 		colors.add(color);
-		return delegate.add(e);
+		return overlays.add(e);
 	}
 
 	@Override
 	public Iterator<Overlay> iterator() {
-		return delegate.iterator();
+		return overlays.iterator();
 	}
 
 	public int size() {
-		return delegate.size();
+		return overlays.size();
 	}
 
 	public Overlay remove(int index) {
 		colors.remove(index);
-		return delegate.remove(index);
+		return overlays.remove(index);
 	}
 
 	public Overlay get(int index) {
-		return delegate.get(index);
+		return overlays.get(index);
 	}
 	
 	public RGBColor getColor(int index) {
@@ -86,9 +85,9 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\n");
-		for( int i=0; i<delegate.size(); i++ ) {
+		for( int i=0; i<overlays.size(); i++ ) {
 			RGBColor col = colors.get(i);
-			Overlay ol = delegate.get(i);
+			Overlay ol = overlays.get(i);
 			sb.append( String.format("col=%s\tol=%s%n", col, ol) );
 		}
 		sb.append("}\n");
@@ -121,7 +120,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 	}
 	
 	// TODO - make more efficient using RTrees
-	public ColoredOverlayCollection subsetWhereBBoxIntersects( ImageDimensions bndScene, OverlayWriter maskWriter, List<BoundingBox> intersectList ) {
+	public ColoredOverlayCollection subsetWhereBBoxIntersects( ImageDimensions bndScene, DrawOverlay maskWriter, List<BoundingBox> intersectList ) {
 		
 		ColoredOverlayCollection out = new ColoredOverlayCollection();
 		
@@ -165,21 +164,15 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 	}
 
 	public OverlayCollection withoutColor() {
-		return delegate;
+		return overlays;
 	}
 
-	public List<BoundingBox> bboxList(OverlayWriter maskWriter,
+	public List<BoundingBox> bboxList(DrawOverlay maskWriter,
 			ImageDimensions dim) {
-		return delegate.bboxList(maskWriter, dim);
+		return overlays.bboxList(maskWriter, dim);
 	}
 
 	public Set<Overlay> createSet() {
-		return delegate.createSet();
+		return overlays.createSet();
 	}
-
-	public OverlayCollection getOverlayCollection() {
-		return delegate;
-	}
-	
-	
 }

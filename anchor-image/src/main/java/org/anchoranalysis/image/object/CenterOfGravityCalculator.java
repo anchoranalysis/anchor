@@ -41,16 +41,16 @@ final class CenterOfGravityCalculator {
 	 * Calculates the center of gravity of an object-mask treating all pixels of equal weight.
 	 * 
 	 * <p>Specifically this is the mean of the position coordinates in each dimension</p>
-	 * @param om
+	 * @param object
 	 * @return the center-of-gravity or (NaN, NaN, NaN) if there are no pixels.
 	 */
-	public static Point3d calcCenterOfGravity( ObjectMask om ) {
+	public static Point3d calcCenterOfGravity( ObjectMask object ) {
 		
-		VoxelBox<ByteBuffer> vb = om.getVoxelBox();
+		VoxelBox<ByteBuffer> vb = object.getVoxelBox();
 
 		int cnt = 0;
 		Point3d sum = new Point3d();
-		byte onByte = om.getBinaryValuesByte().getOnByte();
+		byte onByte = object.getBinaryValuesByte().getOnByte();
 		
 		for( int z=0; z<vb.extent().getZ(); z++ ) {
 			
@@ -75,7 +75,7 @@ final class CenterOfGravityCalculator {
 		}
 
 		sum.divideBy(cnt);
-		sum.add(om.getBoundingBox().cornerMin());
+		sum.add(object.getBoundingBox().cornerMin());
 		return sum;
 	}
 	
@@ -83,17 +83,17 @@ final class CenterOfGravityCalculator {
 	/**
 	 * Like {@link #calcCenterOfGravity} but for a specific axis.
 	 * 
-	 * @param om the object whose center-of-gravity is to be calculated on one axis.
+	 * @param object the object whose center-of-gravity is to be calculated on one axis.
 	 * @param axisType which axis
 	 * @return the cog for that axis, or NaN if there are no points.
 	 */
-	public static double calcCenterOfGravityForAxis( ObjectMask om, AxisType axisType ) {
+	public static double calcCenterOfGravityForAxis( ObjectMask object, AxisType axisType ) {
 		
-		VoxelBox<ByteBuffer> vb = om.getVoxelBox();
+		VoxelBox<ByteBuffer> vb = object.getVoxelBox();
 
 		int cnt = 0;
 		double sum = 0.0;
-		byte onByte = om.getBinaryValuesByte().getOnByte();
+		byte onByte = object.getBinaryValuesByte().getOnByte();
 		
 		for( int z=0; z<vb.extent().getZ(); z++ ) {
 			
@@ -117,7 +117,7 @@ final class CenterOfGravityCalculator {
 			return Double.NaN;
 		}
 		
-		return (sum / cnt) + om.getBoundingBox().cornerMin().getValueByDimension(axisType);
+		return (sum / cnt) + object.getBoundingBox().cornerMin().getValueByDimension(axisType);
 	}
 		
 	private static Point3d emptyPoint() {

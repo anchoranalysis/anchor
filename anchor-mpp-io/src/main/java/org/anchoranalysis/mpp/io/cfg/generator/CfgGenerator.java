@@ -4,8 +4,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
-
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 
 /*
  * #%L
@@ -40,15 +39,15 @@ import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 
 public class CfgGenerator extends CfgGeneratorBase {
 	
-	public CfgGenerator(ObjMaskWriter maskWriter, IDGetter<Overlay> idGetter ) {
+	public CfgGenerator(DrawObject maskWriter, IDGetter<Overlay> idGetter ) {
 		this(maskWriter, null, idGetter);
 	}
 	
-	public CfgGenerator(ObjMaskWriter maskWriter, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter ) {
+	public CfgGenerator(DrawObject maskWriter, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter ) {
 		this( maskWriter, cws, idGetter, RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE) );
 	}
 	
-	public CfgGenerator(ObjMaskWriter maskWriter, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership ) {
+	public CfgGenerator(DrawObject maskWriter, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership ) {
 		super(
 			new SimpleOverlayWriter(maskWriter),
 			cws,

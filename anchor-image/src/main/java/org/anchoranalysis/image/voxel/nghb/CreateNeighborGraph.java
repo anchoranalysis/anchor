@@ -74,7 +74,7 @@ public class CreateNeighborGraph<V> {
 	 * Create the graph for a given list of vertices
 	 * 
 	 * @param vertices vertices to construct graph from
-	 * @param vertexToObjMask converts the vertex to an object-mask (called repeatedly so should be low-cost)
+	 * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be low-cost)
 	 * @param edgeFromVertices creates an edge for two vertices (and the number of neighbouring pixels)
 	 * @param sceneExtent
 	 * @param do3D
@@ -84,7 +84,7 @@ public class CreateNeighborGraph<V> {
 	 */
 	public <E> GraphWithEdgeTypes<V,E> createGraph(
 		List<V> vertices,
-		Function<V,ObjectMask> vertexToObjMask,
+		Function<V,ObjectMask> vertexToObject,
 		EdgeFromVertices<V,E> edgeFromVertices,
 		Extent sceneExtent,
 		boolean do3D
@@ -94,25 +94,25 @@ public class CreateNeighborGraph<V> {
 		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<>(undirected);
 		
 		// Objects from each vertex
-		ObjectCollection objs = ObjectCollectionFactory.mapFrom(vertices, vertexToObjMask::apply);
-		checkObjsInScene(objs, sceneExtent);
+		ObjectCollection objects = ObjectCollectionFactory.mapFrom(vertices, vertexToObject::apply);
+		checkObjectsInScene(objects, sceneExtent);
 				
 		EdgeAdder<V> edgeAdder = new EdgeAdder<>(
 			vertices,
-			vertexToObjMask,
-			new ObjectCollectionRTree(objs),
+			vertexToObject,
+			new ObjectCollectionRTree(objects),
 			createAndAddEdge(graph, edgeFromVertices),
 			edgeAdderParams
 		);
 		
-		for( int i=0; i<objs.size(); i++) {
+		for( int i=0; i<objects.size(); i++) {
 			
 			V vertexWith = vertices.get(i);
 			graph.addVertex( vertexWith );
 			
 			edgeAdder.addEdgesFor(
 				i,
-				objs.get(i),
+				objects.get(i),
 				vertexWith,
 				sceneExtent,
 				do3D
@@ -122,13 +122,13 @@ public class CreateNeighborGraph<V> {
 		return graph;
 	}
 	
-	private static void checkObjsInScene( ObjectCollection objs, Extent sceneExtent ) throws CreateException {
-		for( ObjectMask om : objs ) {
-			if (!sceneExtent.contains(om.getBoundingBox())) {
+	private static void checkObjectsInScene( ObjectCollection objects, Extent sceneExtent ) throws CreateException {
+		for( ObjectMask objectMask : objects ) {
+			if (!sceneExtent.contains(objectMask.getBoundingBox())) {
 				throw new CreateException(
 					String.format(
 						"Object is not contained (fully or partially) inside scene extent: %s is not in %s",
-						om.getBoundingBox(),
+						objectMask.getBoundingBox(),
 						sceneExtent
 					)
 				);
@@ -140,10 +140,10 @@ public class CreateNeighborGraph<V> {
 		GraphWithEdgeTypes<V,E> graph,
 		EdgeFromVertices<V,E> edgeFromVertices
 	) {
-		return (v1, v2, numPixels) -> graph.addEdge(
-			v1,
-			v2,
-			edgeFromVertices.createEdge(v1, v2, numPixels)
+		return (vertex1, vertex2, numPixels) -> graph.addEdge(
+			vertex1,
+			vertex2,
+			edgeFromVertices.createEdge(vertex1, vertex2, numPixels)
 		);
 	}
 }

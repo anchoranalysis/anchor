@@ -146,7 +146,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	// Only copies pixels if part of an ObjMask, otherwise we set a null pixel
 	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBox<T> destVoxelBox,
-			BoundingBox destBox, VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV ) {
+			BoundingBox destBox, VoxelBox<ByteBuffer> objectMaskBuffer, BinaryValuesByte maskBV ) {
 		
 		checkExtentMatch(sourceBox, destBox);
 		
@@ -160,7 +160,7 @@ public abstract class VoxelBox<T extends Buffer> {
 			T srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
 			T destArr = destVoxelBox.getPlaneAccess().getPixelsForPlane(z + relPos.getZ()).buffer();
 
-			ByteBuffer maskBuffer = objMaskBuffer.getPixelsForPlane(z-srcStart.getZ()).buffer();
+			ByteBuffer maskBuffer = objectMaskBuffer.getPixelsForPlane(z-srcStart.getZ()).buffer();
 			
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
 				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
@@ -182,17 +182,17 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * 
 	 * See {@link #setPixelsCheckMask} for details
 	 * 
-	 * @param om the object-mask to restrict which values in the buffer are written to
+	 * @param object the object-mask to restrict which values in the buffer are written to
 	 * @param value value to be set in matched pixels
 	 * @return the number of pixels successfully "set"
 	 */
-	public int setPixelsCheckMask( ObjectMask om, int value ) {
+	public int setPixelsCheckMask( ObjectMask object, int value ) {
 		return setPixelsCheckMask(
-			om.getBoundingBox(),
-			om.getVoxelBox(),
-			new BoundingBox(om.getBoundingBox().extent()),
+			object.getBoundingBox(),
+			object.getVoxelBox(),
+			new BoundingBox(object.getBoundingBox().extent()),
 			value,
-			om.getBinaryValuesByte().getOnByte()
+			object.getBinaryValuesByte().getOnByte()
 		);
 	}
 	
@@ -202,16 +202,16 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * 
 	 * See {@ #setPixelsCheckMask(BoundingBox, VoxelBox, BoundingBox, int, byte) for details
 	 * 
-	 * @param om the object-mask to restrict which values in the buffer are written to
+	 * @param object the object-mask to restrict which values in the buffer are written to
 	 * @param value value to be set in matched pixels
 	 * @param maskMatchValue what's an "On" value for the mask to match against?
 	 * @return the number of pixels successfully "set"
 	 */
-	public int setPixelsCheckMask( ObjectMask om, int value, byte maskMatchValue ) {
+	public int setPixelsCheckMask( ObjectMask object, int value, byte maskMatchValue ) {
 		return setPixelsCheckMask(
-			om.getBoundingBox(),
-			om.getVoxelBox(),
-			new BoundingBox(om.getBoundingBox().extent()),
+			object.getBoundingBox(),
+			object.getVoxelBox(),
+			new BoundingBox(object.getBoundingBox().extent()),
 			value,
 			maskMatchValue
 		);
@@ -224,7 +224,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	 * <p>Bounding boxes can be used to restrict regions in both the source and destination, but must be equal in volume.</p>
 	 * 
 	 * @param bboxToBeAssigned which part of the buffer to write to
-	 * @param objMaskBuffer the byte-buffer for the mask
+	 * @param objectMaskBuffer the byte-buffer for the mask
 	 * @param bboxMask which part of the mask to consider as input
 	 * @param value value to be set in matched pixels
 	 * @param maskMatchValue what's an "On" value for the mask to match against?
@@ -232,7 +232,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	 */
 	public int setPixelsCheckMask(
 		BoundingBox bboxToBeAssigned,
-		VoxelBox<ByteBuffer> objMaskBuffer,
+		VoxelBox<ByteBuffer> objectMaskBuffer,
 		BoundingBox bboxMask,
 		int value,
 		byte maskMatchValue
@@ -242,14 +242,14 @@ public abstract class VoxelBox<T extends Buffer> {
 		Extent eIntersectingBox = bboxMask.extent();
 		
 		Extent eAssignBuffer = this.extent();
-		Extent eMaskBuffer = objMaskBuffer.extent();
+		Extent eMaskBuffer = objectMaskBuffer.extent();
 		
 		int cnt = 0;
 		
 		for (int z=0; z<eIntersectingBox.getZ(); z++) {
 			
 			VoxelBuffer<?> pixels = getPlaneAccess().getPixelsForPlane(z + bboxToBeAssigned.cornerMin().getZ());
-			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z + bboxMask.cornerMin().getZ()).buffer();
+			ByteBuffer pixelsMask = objectMaskBuffer.getPixelsForPlane(z + bboxMask.cornerMin().getZ()).buffer();
 			
 			for (int y=0; y<eIntersectingBox.getY(); y++) {
 				for (int x=0; x<eIntersectingBox.getX(); x++) {
@@ -281,16 +281,16 @@ public abstract class VoxelBox<T extends Buffer> {
 	
 	public ObjectMask equalMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjectMask om = new ObjectMask(bbox);
+		ObjectMask object = new ObjectMask(bbox);
 		
 		ReadableTuple3i pntMax = bbox.calcCornerMax();
 		
-		byte maskOut = om.getBinaryValuesByte().getOnByte();
+		byte maskOut = object.getBinaryValuesByte().getOnByte();
 		
 		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
 			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
@@ -309,22 +309,22 @@ public abstract class VoxelBox<T extends Buffer> {
 			}
 		}
 		
-		return om;
+		return object;
 	}
 	
 	
 	public ObjectMask greaterThanMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjectMask om = new ObjectMask(bbox);
+		ObjectMask object = new ObjectMask(bbox);
 		
 		ReadableTuple3i pntMax = bbox.calcCornerMax();
 		
-		byte maskOut = om.getBinaryValuesByte().getOnByte();
+		byte maskOut = object.getBinaryValuesByte().getOnByte();
 		
 		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
 			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
@@ -343,7 +343,7 @@ public abstract class VoxelBox<T extends Buffer> {
 			}
 		}
 		
-		return om;
+		return object;
 	}
 	
 	
@@ -458,24 +458,24 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	public int countEqualMask( int equalVal, ObjectMask om ) {
+	public int countEqualMask( int equalVal, ObjectMask object ) {
 		
-		ReadableTuple3i srcStart = om.getBoundingBox().cornerMin();
-		ReadableTuple3i srcEnd = om.getBoundingBox().calcCornerMax();
+		ReadableTuple3i srcStart = object.getBoundingBox().cornerMin();
+		ReadableTuple3i srcEnd = object.getBoundingBox().calcCornerMax();
 
 		int count = 0;
 		
-		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
+		byte maskOnVal = object.getBinaryValuesByte().getOnByte();
 		
 		for (int z=srcStart.getZ(); z<=srcEnd.getZ(); z++ ) {
 			
 			T srcArr = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer maskBuffer = om.getVoxelBox().getPixelsForPlane(z-srcStart.getZ()).buffer();
+			ByteBuffer maskBuffer = object.getVoxelBox().getPixelsForPlane(z-srcStart.getZ()).buffer();
 			
 			for (int y=srcStart.getY(); y<=srcEnd.getY(); y++) {
 				for (int x=srcStart.getX(); x<=srcEnd.getX(); x++) {
 
-					int maskIndex = om.getVoxelBox().extent().offset(x-srcStart.getX(), y-srcStart.getY());
+					int maskIndex = object.getVoxelBox().extent().offset(x-srcStart.getX(), y-srcStart.getY());
 					
 					if (maskBuffer.get(maskIndex)==maskOnVal) {
 					

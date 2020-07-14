@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.object;
 
+import java.util.Arrays;
+
 /*-
  * #%L
  * anchor-image
@@ -37,7 +39,7 @@ import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.anchoranalysis.core.functional.StreamWithException;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.BiFunctionWithException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.functional.function.IntFunctionWithException;
@@ -69,40 +71,36 @@ public class ObjectCollectionFactory {
 	/**
 	 * Creates a new collection with elements from the parameter-list
 	 * 
-	 * @param obj object-mask to add to collection
+	 * @param object object-mask to add to collection
 	 */
 	@SafeVarargs
-	public static ObjectCollection from( ObjectMask ...obj ) {
+	public static ObjectCollection from( ObjectMask ...object ) {
 		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : obj ) {
-			out.add(om);
-		}
+		Arrays.stream(object).forEach(out::add);
 		return out;
 	}
 	
 	/**
 	 * Creates a new collection with elements copied from existing collections
 	 * 
-	 * @param objs existing collections to copy from
+	 * @param objects existing collections to copy from
 	 */
 	@SafeVarargs
-	public static ObjectCollection from( ObjectCollection ...objs) {
+	public static ObjectCollection from( ObjectCollection ...objects) {
 		ObjectCollection out = new ObjectCollection();
-		for( ObjectCollection collection : objs) {
-			out.addAll(collection);	
-		}
+		Arrays.stream(objects).forEach(out::addAll);
 		return out;
 	}
 	
 	/**
 	 * Creates a new collection with elements copied from existing collections (if they exist)
 	 * 
-	 * @param objs existing collections to copy from
+	 * @param objects existing collections to copy from
 	 */
 	@SafeVarargs
-	public static ObjectCollection from( Optional<ObjectCollection> ...objs) {
+	public static ObjectCollection from( Optional<ObjectCollection> ...objects) {
 		ObjectCollection out = new ObjectCollection();
-		for( Optional<ObjectCollection> collection : objs) {
+		for( Optional<ObjectCollection> collection : objects) {
 			collection.ifPresent(out::addAll);
 		}
 		return out;
@@ -116,9 +114,7 @@ public class ObjectCollectionFactory {
 	@SafeVarargs
 	public static ObjectCollection from( Collection<ObjectMask> ...collection) {
 		ObjectCollection out = new ObjectCollection();
-		for( Collection<ObjectMask> item : collection) {
-			out.addAll(item);	
-		}
+		Arrays.stream(collection).forEach(out::addAll);
 		return out;
 	}
 	
@@ -232,7 +228,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <E extends Exception> ObjectCollection mapFromRange(int startInclusive, int endExclusive, Class<? extends Exception> throwableClass, IntFunctionWithException<ObjectMask,E> mapFunc ) throws E {
 		return new ObjectCollection(
-			StreamWithException.mapIntStreamWithException(
+			CheckedStream.mapIntStreamWithException(
 				IntStream.range(startInclusive, endExclusive),
 				throwableClass,
 				mapFunc
@@ -268,7 +264,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <E extends Exception> ObjectCollection flatMapFromRange(int startInclusive, int endExclusive, Class<? extends Exception> throwableClass, IntFunctionWithException<ObjectCollection,E> mapFunc) throws E {
 		return new ObjectCollection(
-			StreamWithException.mapIntStreamWithException(
+			CheckedStream.mapIntStreamWithException(
 				IntStream.range(startInclusive, endExclusive),
 				throwableClass,
 				mapFunc
@@ -374,7 +370,7 @@ public class ObjectCollectionFactory {
 	 */
 	public static <T,E extends Exception> ObjectCollection flatMapFromCollection( Stream<T> stream, Class<? extends Exception> throwableClass, FunctionWithException<T,Collection<? extends ObjectMask>,E> mapFunc) throws E {
 		return new ObjectCollection(
-			StreamWithException.flatMapWithException(
+			CheckedStream.flatMapWithException(
 				stream,
 				throwableClass,
 				mapFunc

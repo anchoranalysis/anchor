@@ -87,7 +87,7 @@ public class FunctionalList {
 		Class<? extends Exception> throwableClass,
 		FunctionWithException<S,T,E> mapFunction
 	) throws E {
-		return StreamWithException.mapWithException(
+		return CheckedStream.mapWithException(
 			collection.stream(),
 			throwableClass,
 			mapFunction

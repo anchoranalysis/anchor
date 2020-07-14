@@ -33,7 +33,6 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -44,6 +43,7 @@ import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
 
 public class TestLoaderImageIO {
 
@@ -182,11 +182,11 @@ public class TestLoaderImageIO {
 			);
 		}
 		
-		ObjectCollection objsWritten = openObjsFromTestPath(path1);
+		ObjectCollection objectsWritten = openObjsFromTestPath(path1);
 		
-		ObjectCollection objsSaved = openObjsFromTestPath(path2);
+		ObjectCollection objectsSaved = openObjsFromTestPath(path2);
 		
-		return objsWritten.equalsDeep(objsSaved);
+		return objectsWritten.equalsDeep(objectsSaved);
 	}
 	
 	private static Channel extractChnl( Stack stack ) {

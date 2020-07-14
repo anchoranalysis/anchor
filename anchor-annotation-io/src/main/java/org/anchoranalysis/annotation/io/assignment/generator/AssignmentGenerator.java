@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
 import org.anchoranalysis.image.io.bean.stack.arrange.StackProviderWithLabel;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -50,11 +50,14 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.io.bean.objmask.writer.IfElseWriter;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
-import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
+import org.anchoranalysis.io.bean.object.writer.Filled;
+import org.anchoranalysis.io.bean.object.writer.IfElse;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class AssignmentGenerator extends RasterGenerator {
 	
@@ -62,10 +65,16 @@ public class AssignmentGenerator extends RasterGenerator {
 	private Assignment assignment;
 	private StackGenerator delegate;
 	private boolean mipOutline;
-	private int outlineWidth = 1;
+	
 	private ColorPool colorPool;
 	
+	@Getter @Setter
+	private int outlineWidth = 1;
+	
+	@Getter @Setter
 	private String leftName = "annotation";
+	
+	@Getter @Setter
 	private String rightName = "result";
 	
 	/**
@@ -79,11 +88,11 @@ public class AssignmentGenerator extends RasterGenerator {
 	 * @param replaceMatchesWithSolids if TRUE, then any matching objects are displayed as solids, rather than outlines. if FALSE, all objects are displayed as outlines.
 	 */
 	AssignmentGenerator(
-			DisplayStack background,
-			Assignment assignment,
-			ColorPool colorPool,
-			boolean mipOutline
-		) {
+		DisplayStack background,
+		Assignment assignment,
+		ColorPool colorPool,
+		boolean mipOutline
+	) {
 		super();
 		this.background = background;
 		this.assignment = assignment;
@@ -150,53 +159,49 @@ public class AssignmentGenerator extends RasterGenerator {
 	}
 	
 	private Stack createRGBOutlineStack(List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
-		
-		ObjectCollection omc = ObjectCollectionFactory.from(matchedObjs, otherObjs);
-
 		return createGenerator(
 			otherObjs,
 			colorPool.createColors(otherObjs.size()),
-			omc
+			ObjectCollectionFactory.from(matchedObjs, otherObjs)
 		).generate();
 	}
 
 	
-	private RGBObjMaskGenerator createGenerator( List<ObjectMask> otherObjs, ColorList cols, ObjectCollection omc ) {
+	private DrawObjectsGenerator createGenerator( List<ObjectMask> otherObjs, ColorList cols, ObjectCollection objects ) {
 		
-		ObjMaskWriter outlineWriter = createOutlineWriter();
+		DrawObject outlineWriter = createOutlineWriter();
 		
 		if (colorPool.isDifferentColorsForMatches()) {
-			ObjMaskWriter objMaskWriter = createConditionalWriter(
+			DrawObject conditionalWriter = createConditionalWriter(
 				otherObjs,
 				outlineWriter
 			);
-			return createGenerator( objMaskWriter, cols, omc );
+			return createGenerator( conditionalWriter, cols, objects );
 		} else {
-			return createGenerator( outlineWriter, cols, omc );
+			return createGenerator( outlineWriter, cols, objects );
 		}
 	}
 	
-	private RGBObjMaskGenerator createGenerator( ObjMaskWriter objMaskWriter, ColorList cols, ObjectCollection omc ) {
-		return new RGBObjMaskGenerator(
-			objMaskWriter,
-			new ObjectCollectionWithProperties(omc),
-			background,
+	private DrawObjectsGenerator createGenerator( DrawObject drawObject, ColorList cols, ObjectCollection objects ) {
+		return new DrawObjectsGenerator(
+			drawObject,
+			new ObjectCollectionWithProperties(objects),
+			Optional.of(background),
 			cols
 		);
 	}
-	
-	
-	private ObjMaskWriter createConditionalWriter( List<ObjectMask> otherObjs, ObjMaskWriter writer ) {
-		return new IfElseWriter(
+		
+	private DrawObject createConditionalWriter( List<ObjectMask> otherObjs, DrawObject writer ) {
+		return new IfElse(
 			(ObjectWithProperties mask, RGBStack stack, int id) ->
 				otherObjs.contains(mask.getMask()),
 			writer,
-			new RGBSolidWriter()
+			new Filled()
 		);
 	}
 	
-	private ObjMaskWriter createOutlineWriter() {
-		return new RGBOutlineWriter(outlineWidth,mipOutline);
+	private DrawObject createOutlineWriter() {
+		return new Outline(outlineWidth,mipOutline);
 	}
 	
 	@Override
@@ -205,29 +210,4 @@ public class AssignmentGenerator extends RasterGenerator {
 			new ManifestDescription("raster", "assignment")
 		);
 	}
-
-	public int getOutlineWidth() {
-		return outlineWidth;
-	}
-
-	public void setOutlineWidth(int outlineWidth) {
-		this.outlineWidth = outlineWidth;
-	}
-
-	public String getLeftName() {
-		return leftName;
-	}
-
-	public void setLeftName(String annotationName) {
-		this.leftName = annotationName;
-	}
-
-	public String getRightName() {
-		return rightName;
-	}
-
-	public void setRightName(String resultName) {
-		this.rightName = resultName;
-	}
-
 }

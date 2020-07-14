@@ -59,6 +59,10 @@ public class FeatureInputPairObjects extends FeatureInputNRG {
 		this(first, second, Optional.empty() );
 	}
 	
+	public FeatureInputPairObjects(ObjectMask first, ObjectMask second, NRGStackWithParams nrgStack) {
+		this(first, second, Optional.of(nrgStack) );
+	}
+	
 	public FeatureInputPairObjects(ObjectMask first, ObjectMask second, Optional<NRGStackWithParams> nrgStack) {
 		this(first, second, nrgStack, Optional.empty() );
 	}

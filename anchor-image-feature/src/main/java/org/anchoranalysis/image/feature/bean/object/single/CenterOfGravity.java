@@ -59,7 +59,7 @@ public class CenterOfGravity extends FeatureSingleObject {
 		
 		FeatureInputSingleObject params = input.get();
 		
-		double val = params.getObjectMask().centerOfGravity(
+		double val = params.getObject().centerOfGravity(
 			axisType()
 		);
 		

@@ -31,7 +31,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -54,8 +54,8 @@ public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
 
 	@Override
 	public Stack generate() throws OutputWriteFailedException {
-		BinaryChnl chnl = BinaryChnlFromObjs.createFromObjs(
-			getObjs(),
+		BinaryChnl chnl = BinaryChnlFromObjects.createFromObjects(
+			getObjects(),
 			getDimensions(),
 			BinaryValues.getDefault()
 		);

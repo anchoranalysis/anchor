@@ -120,8 +120,8 @@ public class DualComparer {
 	 * @throws IOException if something goes wrong with I/O
 	 */
 	public boolean compareTwoObjs(String path) throws IOException {
-		ObjectCollection objs1 = loaderImg1.openObjsFromTestPath(path);
-		ObjectCollection objs2 = loaderImg2.openObjsFromTestPath(path);
-		return objs1.equalsDeep(objs2);
+		ObjectCollection objects1 = loaderImg1.openObjsFromTestPath(path);
+		ObjectCollection objects2 = loaderImg2.openObjsFromTestPath(path);
+		return objects1.equalsDeep(objects2);
 	}
 }

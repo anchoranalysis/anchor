@@ -26,9 +26,7 @@ package org.anchoranalysis.anchor.overlay.writer;
  * #L%
  */
 
-import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -49,12 +47,10 @@ public abstract class PrecalcOverlay {
 	private final ObjectWithProperties first; 	
 
 	public abstract void writePrecalculatedMask(
-		RGBStack stack,
-		IDGetter<ObjectWithProperties> idGetter,
-		IDGetter<ObjectWithProperties> colorIDGetter,
-		int iter,
-		ColorIndex colorIndex,
-		BoundingBox bboxContainer
+		RGBStack background,
+		ObjectDrawAttributes attributes,
+		int iteration,
+		BoundingBox restrictTo
 	) throws OperationFailedException;
 	
 }

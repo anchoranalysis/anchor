@@ -74,12 +74,12 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 	public <S> S processInput(
 		BoundIOContext context,
 		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectCollection>> objs,
+		Optional<NamedProvider<ObjectCollection>> objects,
 		Optional<KeyValueParams> keyValueParams,
 		OperationWithNRGStack<MPPInitParams,S> operation
 	) throws OperationFailedException {
 		try {
-			MPPInitParams initParams = super.createInitParams(context, stacks, objs, keyValueParams);
+			MPPInitParams initParams = super.createInitParams(context, stacks, objects, keyValueParams);
 			return processWithNRGStack(initParams, initParams.getImage(), initParams, operation, context);
 			
 		} catch (CreateException e) {

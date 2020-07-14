@@ -41,20 +41,20 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
 	private LocalSlices localSlicesRequireHigh;
 	private BinaryValuesByte bvRequireHigh;
-	private ObjectMask om;
+	private ObjectMask object;
 	
 	public OutlineKernel3NghbMatchValue(
 		boolean outsideAtThreshold,
 		boolean useZ,
-		ObjectMask om,
+		ObjectMask object,
 		BinaryVoxelBox<ByteBuffer> vbRequireHigh,
 		boolean ignoreAtThreshold
 	) {
 		this(
-			om.getBinaryValuesByte(),
+			object.getBinaryValuesByte(),
 			outsideAtThreshold,
 			useZ,
-			om,
+			object,
 			vbRequireHigh,
 			ignoreAtThreshold
 		);
@@ -65,20 +65,20 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		BinaryValuesByte bv,
 		boolean outsideAtThreshold,
 		boolean useZ,
-		ObjectMask om,
+		ObjectMask object,
 		BinaryVoxelBox<ByteBuffer> vbRequireHigh,
 		boolean ignoreAtThreshold
 	) {
 		super(bv, outsideAtThreshold, useZ, ignoreAtThreshold);
 		this.vbRequireHigh = vbRequireHigh;
-		this.om = om;
+		this.object = object;
 		this.bvRequireHigh = vbRequireHigh.getBinaryValues().createByte();
 	}
 
 	@Override
 	public void notifyZChange(LocalSlices inSlices, int z) {
 		super.notifyZChange(inSlices, z);
-		localSlicesRequireHigh = new LocalSlices(z + om.getBoundingBox().cornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
+		localSlicesRequireHigh = new LocalSlices(z + object.getBoundingBox().cornerMin().getZ(),3, vbRequireHigh.getVoxelBox());
 	}
 	
 	/**
@@ -192,13 +192,13 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 			return outsideAtThreshold;
 		}
 		
-		int x1 = pnt.getX() + om.getBoundingBox().cornerMin().getX() + xShift;
+		int x1 = pnt.getX() + object.getBoundingBox().cornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
-		int y1 = pnt.getY() + om.getBoundingBox().cornerMin().getY() + yShift; 
+		int y1 = pnt.getY() + object.getBoundingBox().cornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;

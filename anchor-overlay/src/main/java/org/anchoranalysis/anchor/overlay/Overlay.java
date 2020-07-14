@@ -1,7 +1,7 @@
 package org.anchoranalysis.anchor.overlay;
 
 import org.anchoranalysis.anchor.overlay.id.Identifiable;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 
 /*-
  * #%L
@@ -48,10 +48,10 @@ public abstract class Overlay implements Identifiable {
 	 * 
 	 * @return the bounding-box
 	 */
-	public abstract BoundingBox bbox( OverlayWriter overlayWriter, ImageDimensions dim );
+	public abstract BoundingBox bbox( DrawOverlay overlayWriter, ImageDimensions dim );
 	
 	public abstract ObjectWithProperties createScaledMask(
-		OverlayWriter overlayWriter,
+		DrawOverlay overlayWriter,
 		double zoomFactorNew,
 		ObjectWithProperties om,
 		Overlay ol,
@@ -60,8 +60,8 @@ public abstract class Overlay implements Identifiable {
 		BinaryValuesByte bvOut
 	) throws CreateException;
 	
-	public abstract ObjectWithProperties createObjMask(
-		OverlayWriter overlayWriter,
+	public abstract ObjectWithProperties createObject(
+		DrawOverlay overlayWriter,
 		ImageDimensions dimEntireImage,
 		BinaryValuesByte bvOut
 	) throws CreateException;
@@ -73,7 +73,7 @@ public abstract class Overlay implements Identifiable {
 	 * @param pnt
 	 * @return
 	 */
-	public abstract boolean isPointInside( OverlayWriter overlayWriter, Point3i pnt );
+	public abstract boolean isPointInside( DrawOverlay overlayWriter, Point3i pnt );
 
 	@Override
 	public abstract boolean equals(Object obj);

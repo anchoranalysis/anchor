@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.io.objs.ObjectMaskCollectionWriter;
+import org.anchoranalysis.image.io.objects.ObjectMaskCollectionWriter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
@@ -42,6 +42,8 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
+
+import lombok.AllArgsConstructor;
 
 
 /**
@@ -53,19 +55,12 @@ import org.anchoranalysis.mpp.io.output.StackOutputKeys;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 class SubsetOutputterFactory {
 	
 	private MPPInitParams soMPP;
 	private BoundOutputManagerRouteErrors outputManager;
 	private boolean suppressSubfolders;
-	
-	public SubsetOutputterFactory(MPPInitParams soMPP, BoundOutputManagerRouteErrors outputManager,
-			boolean suppressSubfolders) {
-		super();
-		this.soMPP = soMPP;
-		this.outputManager = outputManager;
-		this.suppressSubfolders = suppressSubfolders;
-	}
 	
 	public SubsetOutputter<Cfg> cfg() {
 		return create(
@@ -87,11 +82,11 @@ class SubsetOutputterFactory {
 		);
 	}
 	
-	public SubsetOutputter<ObjectCollection> objMask() {
+	public SubsetOutputter<ObjectCollection> objects() {
 		return create(
 			soMPP.getImage().getObjMaskCollection(),
 			ObjectMaskCollectionWriter.generator(),
-			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.OBJS),
+			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.OBJECTS),
 			"objMaskCollection"
 		);
 	}

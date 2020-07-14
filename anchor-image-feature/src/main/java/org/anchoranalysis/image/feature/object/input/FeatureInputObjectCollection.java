@@ -33,26 +33,20 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 @EqualsAndHashCode(callSuper=true)
 public class FeatureInputObjectCollection extends FeatureInputNRG {
 
-	private ObjectCollection objMaskCollection;
+	@Getter
+	private final ObjectCollection objects;
 	
-	public FeatureInputObjectCollection(ObjectCollection objMaskCollection) {
-		this.objMaskCollection = objMaskCollection;
+	public FeatureInputObjectCollection(ObjectCollection objects) {
+		this.objects = objects;
 	}
 	
-	public FeatureInputObjectCollection(ObjectCollection objMaskCollection, Optional<NRGStackWithParams> nrgStack) {
+	public FeatureInputObjectCollection(ObjectCollection objects, Optional<NRGStackWithParams> nrgStack) {
 		super(nrgStack);
-		this.objMaskCollection = objMaskCollection;
-	}
-
-	public ObjectCollection getObjMaskCollection() {
-		return objMaskCollection;
-	}
-
-	public void setObjMaskCollection(ObjectCollection objMaskCollection) {
-		this.objMaskCollection = objMaskCollection;
+		this.objects = objects;
 	}
 }

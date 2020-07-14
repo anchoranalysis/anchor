@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
@@ -45,13 +45,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectMask,Stack> {
 
 	private ExtractedBBoxGenerator chnlGenerator;
-	private RGBObjMaskGenerator rgbObjMaskGenerator;
+	private DrawObjectsGenerator rgbObjMaskGenerator;
 	
 	private ObjectMask element;
 	private String manifestFunction;
 	private boolean mip;
 	
-	public ExtractedBBoxOnRGBObjMaskGenerator(RGBObjMaskGenerator rgbObjMaskGenerator, ExtractedBBoxGenerator chnlGenerator, String manifestFunction,  boolean mip ) {
+	public ExtractedBBoxOnRGBObjMaskGenerator(DrawObjectsGenerator rgbObjMaskGenerator, ExtractedBBoxGenerator chnlGenerator, String manifestFunction,  boolean mip ) {
 		super();
 		this.rgbObjMaskGenerator = rgbObjMaskGenerator;
 		this.chnlGenerator = chnlGenerator;
@@ -77,24 +77,33 @@ public class ExtractedBBoxOnRGBObjMaskGenerator extends RasterGenerator implemen
 		
 		// We apply the generator
 		try {
-			rgbObjMaskGenerator.setBackground( DisplayStack.create(chnlExtracted) );
+			rgbObjMaskGenerator.setBackground(
+				Optional.of(
+					DisplayStack.create(chnlExtracted)
+				)
+			);
 		} catch (CreateException e) {
 			throw new OutputWriteFailedException(e);
 		}
 
-		ObjectMask om = this.getIterableElement();
+		ObjectMask object = this.getIterableElement();
 		
 		if (mip) {
-			om = om.flattenZ();
+			object = object.flattenZ();
 		}
 		
 		// We create a version that is relative to the extracted section
-		ObjectMask omLocal = new ObjectMask( new BoundingBox(om.getVoxelBox().extent()), om.binaryVoxelBox() );
+		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
+		objects.add(
+			new ObjectWithProperties(
+				new ObjectMask(
+					new BoundingBox(object.getVoxelBox().extent()),
+					object.binaryVoxelBox()
+				)
+			)
+		);
 		
-		ObjectCollectionWithProperties objs = new ObjectCollectionWithProperties();
-		objs.add( new ObjectWithProperties( omLocal ));
-		
-		rgbObjMaskGenerator.setIterableElement( objs );
+		rgbObjMaskGenerator.setIterableElement( objects );
 		
 		return rgbObjMaskGenerator.generate();
 	}

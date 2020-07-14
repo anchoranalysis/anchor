@@ -48,8 +48,8 @@ public class UnitValueVolumePhysical extends UnitValueVolume {
 	// END VALUE
 	
 	@Override
-	public double rslv(Optional<ImageResolution> res) throws UnitValueException {
-		if (!res.isPresent()) {
+	public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
+		if (!resolution.isPresent()) {
 			throw new UnitValueException("An image resolution is required to calculate physical-volume but it is missing");
 		}
 		
@@ -57,7 +57,7 @@ public class UnitValueVolumePhysical extends UnitValueVolume {
 		
 		double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
 		
-		return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, res.get());
+		return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, resolution.get());
 	}
 
 	public double getValue() {

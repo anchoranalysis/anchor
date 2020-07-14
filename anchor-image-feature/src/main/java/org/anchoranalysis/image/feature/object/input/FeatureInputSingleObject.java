@@ -32,6 +32,7 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectMask;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * An input representing a single object-mask (with maybe an NRG-stack associated)
@@ -45,37 +46,30 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class FeatureInputSingleObject extends FeatureInputNRG {
 
-	private ObjectMask objMask;
+	@Getter
+	private ObjectMask object;
 	
-	public FeatureInputSingleObject(ObjectMask objMask) {
+	public FeatureInputSingleObject(ObjectMask object) {
 		this(
-			objMask,
+			object,
 			Optional.empty()
 		);
 	}
 	
-	public FeatureInputSingleObject(ObjectMask objMask, NRGStackWithParams nrgStack) {
+	public FeatureInputSingleObject(ObjectMask object, NRGStackWithParams nrgStack) {
 		this(
-			objMask,
+			object,
 			Optional.of(nrgStack)
 		);
 	}
 	
-	public FeatureInputSingleObject(ObjectMask objMask, Optional<NRGStackWithParams> nrgStack) {
+	public FeatureInputSingleObject(ObjectMask object, Optional<NRGStackWithParams> nrgStack) {
 		super(nrgStack);
-		this.objMask = objMask;
-	}
-
-	public ObjectMask getObjectMask() {
-		return objMask;
-	}
-
-	public void setObjMask(ObjectMask objMask) {
-		this.objMask = objMask;
+		this.object = object;
 	}
 	
 	@Override
 	public String toString() {
-		return objMask.toString();
+		return object.toString();
 	}
 }

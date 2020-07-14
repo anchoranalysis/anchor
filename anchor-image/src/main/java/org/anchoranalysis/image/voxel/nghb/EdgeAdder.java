@@ -70,30 +70,30 @@ class EdgeAdder<V> {
 	
 	public void addEdgesFor(
 		int ignoreIndex,
-		ObjectMask om,
+		ObjectMask object,
 		V vertexWith,
 		Extent sceneExtent,
 		boolean do3D
 	) throws CreateException {
 		
-		ObjectMask omDilated = MorphologicalDilation.createDilatedObjMask(
-			om,
+		ObjectMask dilated = MorphologicalDilation.createDilatedObject(
+			object,
 			Optional.of(sceneExtent),
 			do3D && sceneExtent.getZ()>1,
 			1,
 			params.isBigNghb()
 		);
 		
-		addWithDilatedMask( ignoreIndex, om, vertexWith, omDilated );
+		addWithDilatedMask(ignoreIndex, object, vertexWith, dilated);
 	}
 	
 	private void addWithDilatedMask(
 		int ignoreIndex,
-		ObjectMask om,
+		ObjectMask object,
 		V vertexWith,
-		ObjectMask omDilated
+		ObjectMask dilated
 	) {
-		List<Integer> indicesIntersects = rTree.intersectsWithAsIndices( omDilated.getBoundingBox() );
+		List<Integer> indicesIntersects = rTree.intersectsWithAsIndices( dilated.getBoundingBox() );
 		for( int j : indicesIntersects) {
 			
 			// We enforce an ordering, so as not to do the same pair twice (or the identity case)
@@ -104,8 +104,8 @@ class EdgeAdder<V> {
 			V vertexOther = verticesAsList.get(j);
 			
 			maybeAddEdge(
-				om,
-				omDilated,
+				object,
+				dilated,
 				vertexToObjMask.apply(vertexOther),
 				vertexWith,
 				verticesAsList.get(j)
@@ -127,25 +127,25 @@ class EdgeAdder<V> {
 	}
 	
 	private void maybeAddEdge(
-		ObjectMask om,
-		ObjectMask omDilated,
-		ObjectMask omOther,
+		ObjectMask object,
+		ObjectMask dilated,
+		ObjectMask other,
 		V vertexWith,
 		V vertexOther
 	) {
 		// Check that they don't overlap
-		if (params.isPreventObjectIntersection() && om.hasIntersectingVoxels(omOther)) {
+		if (params.isPreventObjectIntersection() && object.hasIntersectingVoxels(other)) {
 			return;
 		}
 			
 		// How many border pixels shared between the two?
-		int numBorderPixels = numBorderPixels(omDilated, omOther); 
+		int numBorderPixels = numBorderPixels(dilated, other); 
 		if( numBorderPixels>0 ) {
 			addEdge.addEdge(vertexWith,vertexOther,numBorderPixels);
 		}
 	}
 	
-	private static int numBorderPixels( ObjectMask om1Dilated, ObjectMask om2 ) {
-		return om1Dilated.countIntersectingVoxels(om2);
+	private static int numBorderPixels( ObjectMask object1Dilated, ObjectMask object2 ) {
+		return object1Dilated.countIntersectingVoxels(object2);
 	}
 }

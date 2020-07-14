@@ -36,10 +36,13 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class BinarySegmentationOne extends BinarySegmentation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinarySegmentation sgmn;
 	// END BEAN PROPERTIES
 	
@@ -52,15 +55,7 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
 	protected abstract BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySegmentationParameters params,
-		Optional<ObjectMask> objMask,
+		Optional<ObjectMask> object,
 		BinarySegmentation sgmn
 	) throws SgmnFailedException;
-
-	public BinarySegmentation getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(BinarySegmentation sgmn) {
-		this.sgmn = sgmn;
-	}
 }

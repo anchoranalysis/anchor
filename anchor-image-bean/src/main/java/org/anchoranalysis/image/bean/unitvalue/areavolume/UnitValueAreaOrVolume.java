@@ -34,6 +34,12 @@ import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
 
-	// Value in pixels or voxels
-	public abstract double rslv( Optional<ImageResolution> res ) throws UnitValueException;
+	/**
+	 * Resolves a measurement of area/volume (in whatever units) to units corresponding to the image pixels/voxels.
+	 * 
+	 * @param resolution
+	 * @return the resolved-value (pixels for area, voxels for volume).
+	 * @throws UnitValueException
+	 */
+	public abstract double resolveToVoxels( Optional<ImageResolution> resolution ) throws UnitValueException;
 }

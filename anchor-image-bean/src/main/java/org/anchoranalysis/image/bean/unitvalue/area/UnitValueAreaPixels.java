@@ -47,7 +47,7 @@ public class UnitValueAreaPixels extends UnitValueArea {
 	}
 
 	@Override
-	public double rslv(Optional<ImageResolution> res) {
+	public double resolveToVoxels(Optional<ImageResolution> resolution) {
 		return getValue();
 	}
 

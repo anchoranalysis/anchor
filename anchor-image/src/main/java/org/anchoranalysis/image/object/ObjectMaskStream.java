@@ -31,12 +31,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.core.functional.StreamWithException;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.functional.function.PredicateWithException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -65,11 +67,13 @@ public final class ObjectMaskStream {
 	 * @return a newly created object-collection
 	 * @throws E if an exception is thrown by the mapping function.
 	 */
-	public <E extends Exception> ObjectCollection map(FunctionWithException<ObjectMask,ObjectMask,E> mapFunc) throws E {
+	public <E extends Exception> ObjectCollection map(
+		FunctionWithException<ObjectMask,ObjectMask,E> mapFunc
+	) throws E {
 		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : delegate) {
+		for( ObjectMask object : delegate) {
 			out.add(
-				mapFunc.apply(om)
+				mapFunc.apply(object)
 			);
 		}
 		return out;
@@ -100,7 +104,9 @@ public final class ObjectMaskStream {
 	 * @return a newly created list contained the mapped objects
 	 * @throws E if an exception occurs during mapping
 	 */
-	public <T,E extends Exception> List<T> mapToList(FunctionWithException<ObjectMask,T,E> mapFunc) throws E {
+	public <T,E extends Exception> List<T> mapToList(
+		FunctionWithException<ObjectMask,T,E> mapFunc
+	) throws E {
 		List<T> out = new ArrayList<>();
 		for( ObjectMask obj : delegate) {
 			out.add(
@@ -135,6 +141,29 @@ public final class ObjectMaskStream {
 	
 	
 	/**
+	 * Creates a new {@link SortedSet} after mapping each item to another type
+	 * <p>
+	 * This is an <i>immutable</i> operation.
+	 *
+	 * @param <T> destination type for the mapping
+	 * @param <E> exception that can be thrown during mapping
+	 * @param mapFunc performs mapping
+	 * @return a newly created tree-set contained the mapped objects
+	 * @throws E if an exception occurs during mapping
+	 */
+	public <T,E extends Exception> SortedSet<T> mapToSortedSet(
+		FunctionWithException<ObjectMask,T,E> mapFunc
+	) throws E {
+		SortedSet<T> out = new TreeSet<>();
+		for( ObjectMask obj : delegate) {
+			out.add(
+				mapFunc.apply(obj)
+			);
+		}
+		return out;
+	}
+	
+	/**
 	 * Creates a new {@link ObjectCollection} after mapping each item to several others
 	 * <p>
 	 * This is an <i>immutable</i> operation.
@@ -142,7 +171,9 @@ public final class ObjectMaskStream {
 	 * @param  mapFunc performs flat-mapping
 	 * @return a newly created object-collection
 	 */
-	public ObjectCollection flatMap(Function<ObjectMask,ObjectCollection> mapFunc) {
+	public ObjectCollection flatMap(
+		Function<ObjectMask,ObjectCollection> mapFunc
+	) {
 		return new ObjectCollection(
 			delegate.streamStandardJava().flatMap( element -> 
 				mapFunc.apply(element).streamStandardJava()
@@ -165,7 +196,7 @@ public final class ObjectMaskStream {
 		FunctionWithException<ObjectMask,ObjectCollection,E> mapFunc
 	) throws E {
 		return new ObjectCollection(
-			StreamWithException.flatMapWithException(
+			CheckedStream.flatMapWithException(
 				delegate.streamStandardJava(),
 				throwableClass,
 				element -> mapFunc.apply(element).asList()
@@ -194,11 +225,14 @@ public final class ObjectMaskStream {
 	 * 
 	 * @param  <E> exception-type that can be thrown by the predicate
 	 * @param  predicate iff true object is included, otherwise excluded
-	 * @param  objsRejected iff true, any object rejected by the filter is added to this collection
+	 * @param  objectsRejected iff true, any object rejected by the filter is added to this collection
 	 * @return a newly created object-collection, a filtered version of all objects
 	 * @throws E if thrown by the predicate
 	 */
-	public <E extends Exception> ObjectCollection filter(PredicateWithException<ObjectMask,E> predicate, Optional<ObjectCollection> objsRejected) throws E {
+	public <E extends Exception> ObjectCollection filter(
+		PredicateWithException<ObjectMask,E> predicate,
+		Optional<ObjectCollection> objectsRejected
+	) throws E {
 		
 		ObjectCollection out = new ObjectCollection();
 		
@@ -207,8 +241,8 @@ public final class ObjectMaskStream {
 			if (predicate.test(current)) {
 				out.add(current);
 			} else {
-				if (objsRejected.isPresent()) {
-					objsRejected.get().add(current);
+				if (objectsRejected.isPresent()) {
+					objectsRejected.get().add(current);
 				}
 			}
 		}

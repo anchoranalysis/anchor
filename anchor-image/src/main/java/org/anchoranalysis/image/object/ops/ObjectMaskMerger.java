@@ -87,79 +87,71 @@ public class ObjectMaskMerger {
 	/**
 	 * Merges all the bounding boxes of a collection of objects.
 	 * 
-	 * @param objs objects whose bounding-boxes are merged
+	 * @param objects objects whose bounding-boxes are merged
 	 * @return a bounding-box just large enough to include all the bounding-boxes of the objects
-	 * @throws OperationFailedException if the {@code objs} parameter is empty
+	 * @throws OperationFailedException if the {@code objects} parameter is empty
 	 */
-	public static BoundingBox mergeBoundingBoxes( ObjectCollection objs ) throws OperationFailedException {
+	public static BoundingBox mergeBoundingBoxes( ObjectCollection objects ) throws OperationFailedException {
 		
-		if (objs.isEmpty()) {
+		if (objects.isEmpty()) {
 			throw new OperationFailedException("At least one object must exist in the collection");
 		}
 		
-		BoundingBox bbox = null;
-		
-		for( ObjectMask om : objs ) {
-			if (bbox==null) {
-				bbox = om.getBoundingBox();
-			} else {
-				bbox = bbox.union().with(om.getBoundingBox());
-			}
-		}
-		
-		return bbox;
+		return objects.streamStandardJava().map(ObjectMask::getBoundingBox).reduce(		// NOSONAR
+			(boundingBox, other) -> boundingBox.union().with(other)
+		).get();
 	}
 	
 	/**
 	 * Merges all the objects together that are found in a collection
 	 * 
-	 * @param objs objects to be merged
+	 * @param objects objects to be merged
 	 * @return a newly created merged version of all the objects, with a bounding-box just big enough to include all the existing mask bounding-boxes
 	 * @throws OperationFailedException if any two objects with different binary-values are merged.
 	 */
-	public static ObjectMask merge( ObjectCollection objs ) throws OperationFailedException {
+	public static ObjectMask merge( ObjectCollection objects ) throws OperationFailedException {
 		
-		if (objs.size()==0) {
+		if (objects.size()==0) {
 			throw new OperationFailedException("There must be at least one object");
 		}
 		
-		if (objs.size()==1) {
-			return objs.get(0).duplicate();	// So we are always guaranteed to have a new object
+		if (objects.size()==1) {
+			return objects.get(0).duplicate();	// So we are always guaranteed to have a new object
 		}
 		
-		BoundingBox bbox = mergeBoundingBoxes(objs);
+		BoundingBox bbox = mergeBoundingBoxes(objects);
 		
-		ObjectMask omOut = new ObjectMask( bbox, VoxelBoxFactory.getByte().create(bbox.extent()) );
+		ObjectMask objectOut = new ObjectMask( bbox, VoxelBoxFactory.getByte().create(bbox.extent()) );
 		
 		BinaryValues bv = null;
-		for( ObjectMask om : objs ) {
+		for( ObjectMask objectMask : objects ) {
 			
 			if (bv!=null) {
-				if (!om.getBinaryValues().equals(bv)) {
+				if (!objectMask.getBinaryValues().equals(bv)) {
 					throw new OperationFailedException("Cannot merge. Incompatible binary values among object-collection");
 				}
 			} else {
-				bv = om.getBinaryValues();
+				bv = objectMask.getBinaryValues();
 			}
 			
-			copyPixelsCheckMask( om, omOut, bbox );
+			copyPixelsCheckMask( objectMask, objectOut, bbox );
 		}
 		
-		return omOut;
+		return objectOut;
 	}
 	
 
-	private static void copyPixelsCheckMask( ObjectMask omSrc, ObjectMask omDest, BoundingBox bbox ) {
+	private static void copyPixelsCheckMask( ObjectMask source, ObjectMask destination, BoundingBox bbox ) {
 		
-		Point3i pntDest = omSrc.getBoundingBox().relPosTo( bbox );
-		Extent e = omSrc.getBoundingBox().extent();
+		Point3i pntDest = source.getBoundingBox().relPosTo( bbox );
+		Extent e = source.getBoundingBox().extent();
 		
-		omSrc.getVoxelBox().copyPixelsToCheckMask(
+		source.getVoxelBox().copyPixelsToCheckMask(
 			new BoundingBox(e),
-			omDest.getVoxelBox(),
+			destination.getVoxelBox(),
 			new BoundingBox(pntDest, e),
-			omSrc.getVoxelBox(),
-			omSrc.getBinaryValuesByte()
+			source.getVoxelBox(),
+			source.getBinaryValuesByte()
 		);
 	}
 	

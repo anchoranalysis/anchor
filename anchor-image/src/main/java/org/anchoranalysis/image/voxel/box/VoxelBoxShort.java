@@ -70,16 +70,16 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	@Override
 	public ObjectMask equalMask( BoundingBox bbox, int equalVal ) {
 		
-		ObjectMask om = new ObjectMask(bbox );
+		ObjectMask object = new ObjectMask(bbox );
 		
 		ReadableTuple3i pntMax = bbox.calcCornerMax();
 		
-		byte maskOnVal = om.getBinaryValuesByte().getOnByte();
+		byte maskOnVal = object.getBinaryValuesByte().getOnByte();
 		
 		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ShortBuffer pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelOut = om.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
+			ByteBuffer pixelOut = object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
 			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
@@ -97,7 +97,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			}
 		}
 		
-		return om;
+		return object;
 	}
 	
 	@Override
@@ -179,7 +179,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 	public void addPixelsCheckMask(ObjectMask mask, int value) {
 		
 		BoundingBox bbox = mask.getBoundingBox();
-		VoxelBox<ByteBuffer> objMaskBuffer = mask.getVoxelBox();
+		VoxelBox<ByteBuffer> objectBuffer = mask.getVoxelBox();
 		
 		byte maskOnByte = mask.getBinaryValuesByte().getOnByte();
 				
@@ -187,7 +187,7 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
 			
 			ShortBuffer pixels = getPlaneAccess().getPixelsForPlane(z).buffer();
-			ByteBuffer pixelsMask = objMaskBuffer.getPixelsForPlane(z-bbox.cornerMin().getZ()).buffer();
+			ByteBuffer pixelsMask = objectBuffer.getPixelsForPlane(z-bbox.cornerMin().getZ()).buffer();
 			
 			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
 				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {

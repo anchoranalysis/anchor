@@ -40,10 +40,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String backgroundStackName = ImgStackIdentifiers.INPUT_IMAGE;
 	// END BEAN PROPERTIES
 	
@@ -51,17 +54,9 @@ public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 	public abstract ExperimentState createExperimentState();
 	
 	public abstract Cfg sgmn(
-		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjectCollection> objMaskCollection,
+		NamedImgStackCollection stacks,
+		NamedProvider<ObjectCollection> objects,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException;
-
-	public String getBackgroundStackName() {
-		return backgroundStackName;
-	}
-
-	public void setBackgroundStackName(String backgroundStackName) {
-		this.backgroundStackName = backgroundStackName;
-	}
 }

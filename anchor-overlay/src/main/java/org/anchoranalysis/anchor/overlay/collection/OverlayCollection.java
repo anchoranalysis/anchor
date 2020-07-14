@@ -32,16 +32,28 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
-	private List<Overlay> delegate = new ArrayList<>();
+	private List<Overlay> delegate;
 
+	public OverlayCollection() {
+		delegate = new ArrayList<>();
+	}
+	
+	public OverlayCollection(Stream<Overlay> stream) {
+		delegate = stream.collect( Collectors.toList() );
+	}
+
+	
 	@Override
 	public Iterator<Overlay> iterator() {
 		return delegate.iterator();
@@ -75,7 +87,7 @@ public class OverlayCollection implements Iterable<Overlay> {
 		return set;
 	}
 	
-	public List<BoundingBox> bboxList( OverlayWriter maskWriter, ImageDimensions dim ) {
+	public List<BoundingBox> bboxList( DrawOverlay maskWriter, ImageDimensions dim ) {
 		
 		List<BoundingBox> out = new ArrayList<>();
 		

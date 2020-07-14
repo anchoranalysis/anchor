@@ -74,14 +74,13 @@ public class SeedCollection implements Iterable<Seed> {
 		return delegate.size();
 	}
 	
-	public boolean doSeedsIntersectWithContainingMask( ObjectMask omContaining ) {
+	public boolean doSeedsIntersectWithContainingMask( ObjectMask objectContaining ) {
 		
 		for( int i=0; i<delegate.size(); i++) {
-			
-			Seed s = delegate.get(i);
-			ObjectMask omS = s.createMask();
+
+			ObjectMask object = delegate.get(i).createMask();
 				
-			if (!omS.hasIntersectingVoxels(omContaining)) {
+			if (!object.hasIntersectingVoxels(objectContaining)) {
 				return false;
 			}
 		}
@@ -95,15 +94,15 @@ public class SeedCollection implements Iterable<Seed> {
 			
 			Seed s = delegate.get(i);
 			
-			ObjectMask omS = s.createMask();
+			ObjectMask objectS = s.createMask();
 			
 			for( int j=0; j<i; j++) {
 				
 				Seed t = delegate.get(j);
 				
-				ObjectMask omT = t.createMask();
+				ObjectMask objectT = t.createMask();
 				
-				if (omS.hasIntersectingVoxels(omT)) {
+				if (objectS.hasIntersectingVoxels(objectT)) {
 					return true;
 				}
 			}
@@ -115,9 +114,9 @@ public class SeedCollection implements Iterable<Seed> {
 	public boolean verifySeedsAreInside( Extent e ) {
 		for (Seed seed : this) {
 			
-			ObjectMask om = seed.createMask();
+			ObjectMask object = seed.createMask();
 			
-			if (!e.contains(om.getBoundingBox())) {
+			if (!e.contains(object.getBoundingBox())) {
 				return false;
 			}
 		}

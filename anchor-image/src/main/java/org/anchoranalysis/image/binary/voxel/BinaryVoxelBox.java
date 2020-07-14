@@ -92,31 +92,31 @@ public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowS
 
 	public void copyPixelsToCheckMask(BoundingBox sourceBox,
 			VoxelBox<T> destVoxelBox, BoundingBox destBox,
-			VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV) {
+			VoxelBox<ByteBuffer> objectMaskBuffer, BinaryValuesByte maskBV) {
 		voxelBox.copyPixelsToCheckMask(sourceBox, destVoxelBox, destBox,
-				objMaskBuffer, maskBV);
+				objectMaskBuffer, maskBV);
 	}
 
-	public void setPixelsCheckMaskOn(ObjectMask om) {
-		voxelBox.setPixelsCheckMask(om, binaryValues.getOnInt() );
+	public void setPixelsCheckMaskOn(ObjectMask object) {
+		voxelBox.setPixelsCheckMask(object, binaryValues.getOnInt() );
 	}
 	
-	public void setPixelsCheckMaskOff(ObjectMask om) {
-		voxelBox.setPixelsCheckMask(om, binaryValues.getOffInt() );
+	public void setPixelsCheckMaskOff(ObjectMask object) {
+		voxelBox.setPixelsCheckMask(object, binaryValues.getOffInt() );
 	}
 	
 	public abstract BinaryVoxelBox<T> duplicate();
 	
 	public abstract BinaryVoxelBox<T> extractSlice(int z) throws CreateException;
 
-	public void setPixelsCheckMask(ObjectMask om, int value, byte maskMatchValue) {
-		voxelBox.setPixelsCheckMask(om, value, maskMatchValue);
+	public void setPixelsCheckMask(ObjectMask object, int value, byte maskMatchValue) {
+		voxelBox.setPixelsCheckMask(object, value, maskMatchValue);
 	}
 
 	public void setPixelsCheckMask(BoundingBox bboxToBeAssigned,
-			VoxelBox<ByteBuffer> objMaskBuffer, BoundingBox bboxMask, int value,
+			VoxelBox<ByteBuffer> objectBuffer, BoundingBox bboxMask, int value,
 			byte maskMatchValue) {
-		voxelBox.setPixelsCheckMask(bboxToBeAssigned, objMaskBuffer,
+		voxelBox.setPixelsCheckMask(bboxToBeAssigned, objectBuffer,
 				bboxMask, value, maskMatchValue);
 	}
 

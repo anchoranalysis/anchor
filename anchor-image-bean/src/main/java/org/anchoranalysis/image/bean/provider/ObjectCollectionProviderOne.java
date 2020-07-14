@@ -37,15 +37,15 @@ public abstract class ObjectCollectionProviderOne extends ObjectCollectionProvid
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public ObjectCollection create() throws CreateException {
-		return createFromObjs(
-			objs.create()
+		return createFromObjects(
+			objects.create()
 		);
 	}
 	
-	protected abstract ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException;
+	protected abstract ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException;
 }

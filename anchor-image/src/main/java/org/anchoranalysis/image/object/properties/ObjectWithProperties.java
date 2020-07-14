@@ -38,29 +38,30 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * An {@link ObjectMask} with associated key-value properties.
  * 
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public class ObjectWithProperties {
 
-	private final Map<String,Object> properties;
+	@Getter
 	private final ObjectMask mask;
+	
+	@Getter
+	private final Map<String,Object> properties;
 	
 	public ObjectWithProperties(BoundingBox bbox ) {
 		this(new ObjectMask(bbox));
 	}
 	
-	public ObjectWithProperties(ObjectMask objMask) {
-		mask = objMask;
-		properties = new HashMap<>();
-	}
-			
-	public ObjectWithProperties(ObjectMask objMask, Map<String,Object> properties) {
-		mask = objMask;
-		this.properties = properties;
+	public ObjectWithProperties(ObjectMask object) {
+		this(object, new HashMap<>());
 	}
 	
 	public void setProperty(String name, Object value) {
@@ -120,15 +121,7 @@ public class ObjectWithProperties {
 		return mask.toString();
 	}
 
-	public ObjectMask getMask() {
-		return mask;
-	}
-
 	public BinaryValuesByte getBinaryValues() {
 		return mask.getBinaryValuesByte();
-	}
-
-	public Map<String, Object> getProperties() {
-		return properties;
 	}
 }

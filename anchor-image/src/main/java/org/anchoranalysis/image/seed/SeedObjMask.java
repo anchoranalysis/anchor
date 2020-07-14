@@ -31,18 +31,16 @@ import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class SeedObjMask implements Seed {
 	
-	private ObjectMask om;
-	
-	public SeedObjMask(ObjectMask om) {
-		super();
-		this.om = om;
-	}
+	private ObjectMask object;
 
 	@Override
 	public void scaleXY(double scale) throws OperationFailedException {
-		om = om.scale(
+		object = object.scale(
 			new ScaleFactor(scale),
 			InterpolatorFactory.getInstance().noInterpolation()
 		);
@@ -50,29 +48,29 @@ public class SeedObjMask implements Seed {
 
 	@Override
 	public void flattenZ() {
-		om = om.flattenZ();
+		object = object.flattenZ();
 	}
 
 	@Override
 	public Seed duplicate() {
-		return new SeedObjMask(om.duplicate());
+		return new SeedObjMask(object.duplicate());
 	}
 
 	@Override
 	public void growToZ(int sz) {
-		om = om.growToZ(sz);
+		object = object.growToZ(sz);
 	}
 
 	@Override
 	public ObjectMask createMask() {
-		return om;
+		return object;
 	}
 	
 	@Override
 	public boolean equalsDeep(Seed other) {
 		if (other instanceof SeedObjMask) {
 			SeedObjMask otherCast = (SeedObjMask) other;
-			return om.equalsDeep(otherCast.om);
+			return object.equalsDeep(otherCast.object);
 		} else {
 			return false;
 		}

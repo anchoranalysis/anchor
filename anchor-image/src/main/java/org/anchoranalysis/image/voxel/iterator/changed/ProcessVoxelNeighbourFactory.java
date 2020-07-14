@@ -58,14 +58,14 @@ public class ProcessVoxelNeighbourFactory {
 		);
 	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask om, ProcessChangedPointAbsoluteMasked<T> process) {
-		return new WithinMask<>(process, om);
+	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask object, ProcessChangedPointAbsoluteMasked<T> process) {
+		return new WithinMask<>(process, object);
 	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask om, ProcessVoxelNeighbourAbsolute<T> process) {
+	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask object, ProcessVoxelNeighbourAbsolute<T> process) {
 		return new WithinMask<>(
 			new WrapAbsoluteAsMasked<>(process),
-			om
+			object
 		);
 	}
 		

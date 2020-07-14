@@ -105,9 +105,10 @@ public class HistogramFactory {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjectMask om = new ObjectMask( mask.binaryVoxelBox() );
-		
-		Histogram h = createWithMask(vb, om);
+		Histogram h = createWithMask(
+			vb,
+			new ObjectMask( mask.binaryVoxelBox() )
+		);
 		try {
 			total.addHistogram(h);
 		} catch (OperationFailedException e) {
@@ -118,15 +119,15 @@ public class HistogramFactory {
 	}
 
 	
-	public static Histogram create( Channel chnl, ObjectMask obj ) {
+	public static Histogram create( Channel chnl, ObjectMask object ) {
 		return create(
 			chnl,
-			ObjectCollectionFactory.from(obj)
+			ObjectCollectionFactory.from(object)
 		);
 	}
 	
-	public static Histogram create( Channel chnl, ObjectCollection objs ) {
-		return createWithMasks( chnl.getVoxelBox(), objs );
+	public static Histogram create( Channel chnl, ObjectCollection objects ) {
+		return createWithMasks( chnl.getVoxelBox(), objects );
 	}
 	
 	public static Histogram create( VoxelBuffer<?> inputBuffer ) {
@@ -140,14 +141,14 @@ public class HistogramFactory {
 		return create(inputBuffer, Optional.empty());
 	}
 	
-	public static Histogram create( VoxelBoxWrapper inputBuffer, Optional<ObjectMask> mask ) {
+	public static Histogram create( VoxelBoxWrapper inputBuffer, Optional<ObjectMask> object ) {
 		
 		if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
 			throw new IncorrectVoxelDataTypeException( String.format("Data type %s is not supported", inputBuffer.getVoxelDataType()) );
 		}
 		
-		if (mask.isPresent()) {
-			return createWithMask(inputBuffer.any(), mask.get());
+		if (object.isPresent()) {
+			return createWithMask(inputBuffer.any(), object.get());
 		} else {
 			return create(inputBuffer.any());
 		}
@@ -157,22 +158,22 @@ public class HistogramFactory {
 		return dataType.equals(VoxelDataTypeUnsignedByte.INSTANCE) || dataType.equals(VoxelDataTypeUnsignedShort.INSTANCE); 
 	}
 	
-	private static Histogram createWithMask( VoxelBox<?> inputBuffer, ObjectMask objMask ) {
+	private static Histogram createWithMask( VoxelBox<?> inputBuffer, ObjectMask object ) {
 		
 		Histogram hist = new HistogramArray( (int) inputBuffer.dataType().maxValue() );
 		
 		Extent e = inputBuffer.extent();
-		Extent eMask = objMask.getBoundingBox().extent();
+		Extent eMask = object.getBoundingBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
+		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
 		
-		byte maskOnVal = objMask.getBinaryValuesByte().getOnByte();
+		byte maskOnVal = object.getBinaryValuesByte().getOnByte();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = inputBuffer.getPixelsForPlane(z);
-			ByteBuffer bbMask = objMask.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
 			
 			for (int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
 				for (int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
@@ -193,14 +194,14 @@ public class HistogramFactory {
 	}
 	
 	
-	private static Histogram createWithMasks( VoxelBoxWrapper vb, ObjectCollection objs ) {
+	private static Histogram createWithMasks( VoxelBoxWrapper vb, ObjectCollection objects ) {
 		
 		Histogram total = new HistogramArray( (int) vb.getVoxelDataType().maxValue() );
 		
-		for( ObjectMask om : objs ) {
-			Histogram h = createWithMask( vb.any(), om);
+		for( ObjectMask objectMask : objects ) {
+			Histogram histogram = createWithMask( vb.any(), objectMask);
 			try {
-				total.addHistogram(h);
+				total.addHistogram(histogram);
 			} catch (OperationFailedException e) {
 				assert false;
 			}
@@ -228,8 +229,8 @@ public class HistogramFactory {
 	}
 	
 	
-	public static Histogram createHistogramIgnoreZero( Channel chnl, ObjectMask objMask, boolean ignoreZero ) {
-		Histogram hist = create(chnl, objMask);
+	public static Histogram createHistogramIgnoreZero( Channel chnl, ObjectMask object, boolean ignoreZero ) {
+		Histogram hist = create(chnl, object);
 		if (ignoreZero) {
 			hist.zeroVal(0);
 		}

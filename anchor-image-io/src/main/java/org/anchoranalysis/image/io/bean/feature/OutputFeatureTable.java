@@ -56,9 +56,10 @@ import lombok.Setter;
 // Doesn't change the objects, just uses a generator to output a feature list as a CSV
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
+	private static final String OUTPUT_NAME_OBJECTS_FEATURE_LIST = "objectsFeatureList";
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @Getter @Setter
 	private List<FeatureProvider<FeatureInputSingleObject>> listFeatureProvider = new ArrayList<>();
@@ -68,20 +69,17 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	
 	@BeanField @OptionalBean @Getter @Setter
 	private KeyValueParamsProvider keyValueParamsProvider;
-	
-	@BeanField @Getter @Setter
-	private String outputName = "objsFeatureList";
 	// END BEAN PROPERTIES
 
 	public void output(	BoundIOContext context ) throws IOException {
 		
 		// Early exit if we're not allowed output anything anyway
-		if (!context.getOutputManager().isOutputAllowed(getOutputName())) {
+		if (!context.getOutputManager().isOutputAllowed(OUTPUT_NAME_OBJECTS_FEATURE_LIST)) {
 			return;
 		}
 		
 		try {
-			ObjectCollection objsCollection = objs.create();
+			ObjectCollection objectCollection = objects.create();
 			
 			FeatureList<FeatureInputSingleObject> features = FeatureListFactory.fromProviders(listFeatureProvider);
 			
@@ -104,8 +102,14 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 			final NRGStackWithParams nrgStack = stackProviderNRG!=null ? new NRGStackWithParams( stackProviderNRG.create() ) : null;
 				
 			context.getOutputManager().getWriterCheckIfAllowed().write(
-				outputName,
-				() -> createGenerator(paramsInit, nrgStack, objsCollection, features, context.getLogger() )
+				OUTPUT_NAME_OBJECTS_FEATURE_LIST,
+				() -> createGenerator(
+					paramsInit,
+					nrgStack,
+					objectCollection,
+					features,
+					context.getLogger()
+				)
 			);
 			
 		} catch (CreateException e) {
@@ -116,7 +120,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 	private ObjMaskFeatureListCSVGenerator createGenerator(
 		FeatureInitParams paramsInit,
 		NRGStackWithParams nrgStack,
-		ObjectCollection objsCollection,
+		ObjectCollection objects,
 		FeatureList<FeatureInputSingleObject> features,
 		Logger logger
 	) {
@@ -129,7 +133,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 		generator.setSharedFeatures(
 			getInitializationParameters().getFeature().getSharedFeatureSet()
 		);
-		generator.setIterableElement(objsCollection);
+		generator.setIterableElement(objects);
 		return generator;
 	}
 	

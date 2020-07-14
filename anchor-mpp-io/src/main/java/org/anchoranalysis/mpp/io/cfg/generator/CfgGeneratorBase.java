@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.collection.ColoredOverlayCollection;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
@@ -50,12 +50,12 @@ public abstract class CfgGeneratorBase extends RasterGenerator implements Iterab
 
 	private String manifestDescriptionFunction = "cfg";
 	
-	private OverlayWriter writer;
+	private DrawOverlay writer;
 	private ColoredCfgWithDisplayStack cws;
 	private IDGetter<Overlay> idGetter;
 	private RegionMembershipWithFlags regionMembership;
 	
-	public CfgGeneratorBase(OverlayWriter writer, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership ) {
+	public CfgGeneratorBase(DrawOverlay writer, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership ) {
 		super();
 		this.writer = writer;
 		this.cws = cws;

@@ -40,8 +40,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BinaryChnlInverter {
 	
-	public static ObjectMask invertObjMaskDuplicate( ObjectMask om ) {
-		BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();
+	public static ObjectMask invertObjMaskDuplicate( ObjectMask object ) {
+		BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
 		bvb.invert();
 		return new ObjectMask(bvb);
 	}

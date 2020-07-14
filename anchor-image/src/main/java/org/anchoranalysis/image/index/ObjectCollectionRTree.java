@@ -66,12 +66,12 @@ public class ObjectCollectionRTree {
 		);
 	}
 		
-	public ObjectCollection intersectsWith( ObjectMask om ) {
+	public ObjectCollection intersectsWith( ObjectMask object ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
 		return objects.stream().filterSubset(
-			omInd->omInd.hasIntersectingVoxels(om),
-			delegate.intersectsWith( om.getBoundingBox() )
+			omInd->omInd.hasIntersectingVoxels(object),
+			delegate.intersectsWith( object.getBoundingBox() )
 		);
 	}
 	

@@ -41,9 +41,9 @@ import org.anchoranalysis.image.object.factory.unionfind.ConnectedComponentUnion
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import org.anchoranalysis.image.voxel.iterator.ObjMaskFixture;
+import org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture;
 
-import static org.anchoranalysis.image.voxel.iterator.ObjMaskFixture.*;
+import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -70,7 +70,7 @@ public class ConnectedComponentUnitFindTest {
 
 		testObjs(
 			deriveInt(false),
-			ObjMaskFixture.OBJ_NUM_VOXELS_2D
+			ObjectMaskFixture.OBJECT_NUM_VOXELS_2D
 		);
 	}
 	
@@ -78,7 +78,7 @@ public class ConnectedComponentUnitFindTest {
 	public void testInt2d() throws OperationFailedException, CreateException {
 		testObjs(
 			deriveByte(false),
-			ObjMaskFixture.OBJ_NUM_VOXELS_2D
+			ObjectMaskFixture.OBJECT_NUM_VOXELS_2D
 		);
 	}
 	
@@ -87,7 +87,7 @@ public class ConnectedComponentUnitFindTest {
 
 		testObjs(
 			deriveInt(true),
-			ObjMaskFixture.OBJ_NUM_VOXELS_3D
+			ObjectMaskFixture.OBJECT_NUM_VOXELS_3D
 		);
 	}
 	
@@ -95,7 +95,7 @@ public class ConnectedComponentUnitFindTest {
 	public void testInt3d() throws OperationFailedException, CreateException {
 		testObjs(
 			deriveByte(true),
-			ObjMaskFixture.OBJ_NUM_VOXELS_3D
+			ObjectMaskFixture.OBJECT_NUM_VOXELS_3D
 		);
 	}
 	
@@ -111,14 +111,14 @@ public class ConnectedComponentUnitFindTest {
 		);
 	}
 	
-	private void testObjs(ObjectCollection objs, int expectedSingleObjSize ) throws CreateException, OperationFailedException {
-		assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJS+1, objs.size() );
-		assertTrue("size of all objects except one", allSizesEqualExceptOne(objs, expectedSingleObjSize) );
+	private void testObjs(ObjectCollection objects, int expectedSingleObjectSize ) throws CreateException, OperationFailedException {
+		assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJS+1, objects.size() );
+		assertTrue("size of all objects except one", allSizesEqualExceptOne(objects, expectedSingleObjectSize) );
 	}
 		
 	private <T extends Buffer> BinaryVoxelBox<T> createBufferWithObjs( VoxelDataType bufferDataType, boolean do3D ) throws CreateException {
 		
-		ObjMaskFixture fixture = new ObjMaskFixture(do3D);
+		ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
 		
 		Extent extent = new Extent(
 			NUM_OBJS * (WIDTH + DISTANCE_BETWEEN),
@@ -129,14 +129,14 @@ public class ConnectedComponentUnitFindTest {
 		@SuppressWarnings("unchecked")
 		BinaryVoxelBox<T> bvb = (BinaryVoxelBox<T>) BinaryVoxelBoxFactory.instance().create(extent, bufferDataType, BinaryValues.getDefault());
 		
-		ObjectCollection objs = createObjs(fixture);
-		for(ObjectMask om : objs) {
-			bvb.setPixelsCheckMaskOn(om);
-		}
+		ObjectCollection objects = createObjects(fixture);
+		objects.forEach( om->
+			bvb.setPixelsCheckMaskOn(om)
+		);
 		return bvb;
 	}
 	
-	private ObjectCollection createObjs(ObjMaskFixture fixture) {
+	private ObjectCollection createObjects(ObjectMaskFixture fixture) {
 		Point3i running = new Point3i();
 		return ObjectCollectionFactory.from(
 			generateObjectsAndIncrementRunning(NUM_NON_OVERLAPPING_OBJS, DISTANCE_BETWEEN, running, fixture),
@@ -144,7 +144,7 @@ public class ConnectedComponentUnitFindTest {
 		);
 	}
 
-	private static ObjectCollection generateObjectsAndIncrementRunning(int numObjs, int shift, Point3i running, ObjMaskFixture fixture) {
+	private static ObjectCollection generateObjectsAndIncrementRunning(int numObjs, int shift, Point3i running, ObjectMaskFixture fixture) {
 		return ObjectCollectionFactory.fromRepeated(
 			numObjs,
 			() -> {
@@ -159,15 +159,15 @@ public class ConnectedComponentUnitFindTest {
 	/** 
 	 * Checks that all objects have a number of voxels exactly equal to target, except one which is allowed to be greater.
 	 * 
-	 * @param objs objects to check
+	 * @param objects objects to check
 	 * @parma target size that all objects apart from one should be equal to
 	 * */
-	private static boolean allSizesEqualExceptOne( ObjectCollection objs, int target ) {
+	private static boolean allSizesEqualExceptOne( ObjectCollection objects, int target ) {
 		
 		boolean encounteredAlreadyTheException = false;
 		
-		for( ObjectMask obj : objs ) {
-			int numVoxels = obj.numberVoxelsOn();
+		for( ObjectMask objectMask : objects ) {
+			int numVoxels = objectMask.numberVoxelsOn();
 			if (numVoxels==target) {
 				continue;
 			} else {

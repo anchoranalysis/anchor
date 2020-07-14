@@ -61,10 +61,10 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 	private final IndexByChnl<Histogram> partitionList;
 	
 	@Getter
-	private ObjectMask objMask;
+	private ObjectMask object;
 	
 	@Getter
-	private ObjectMask objMaskMIP;		// null until we need it
+	private ObjectMask objectFlattened;		// null until we need it
 	
 	public VoxelizedMarkHistogram(Mark mark, NRGStack stack, RegionMap regionMap) {
 		partitionList = new IndexByChnl<>();
@@ -84,22 +84,22 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		
 	@Override
 	public BoundedVoxelBox<ByteBuffer> getVoxelBox() {
-		return objMask.getVoxelBoxBounded();
+		return object.getVoxelBoxBounded();
 	}
 	
 	@Override
 	public BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP() {
-		return objMaskMIP.getVoxelBoxBounded();
+		return objectFlattened.getVoxelBoxBounded();
 	}
 	
 	@Override
 	public BoundingBox getBoundingBox() {
-		return objMask.getBoundingBox();
+		return object.getBoundingBox();
 	}
 	
 	@Override
 	public BoundingBox getBoundingBoxMIP() {
-		return objMaskMIP.getBoundingBox();
+		return objectFlattened.getBoundingBox();
 	}
 		
 	@Override
@@ -147,13 +147,13 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
-		objMask = new ObjectMask(bbox);
-		objMaskMIP = new ObjectMask(bbox.flattenZ());
+		object = new ObjectMask(bbox);
+		objectFlattened = new ObjectMask(bbox.flattenZ());
 		
 		Extent localExtent = bbox.extent();
 		partitionList.init( FACTORY, stack.getNumChnl(), regionMap.numRegions(), localExtent.getZ() );
 		
-		ByteBuffer bufferMIP = getObjMaskMIP().getVoxelBox().getPixelsForPlane(0).buffer();
+		ByteBuffer bufferMIP = getObjectFlattened().getVoxelBox().getPixelsForPlane(0).buffer();
 		
 		for (int z=bbox.cornerMin().getZ(); z<=crnrMax.getZ(); z++) {
 
@@ -192,7 +192,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		
 		List<RegionMembershipWithFlags> listRegionMembership = regionMap.createListMembershipWithFlags();
 		
-		ByteBuffer buffer = getObjMask().getVoxelBox().getPixelsForPlane(zLocal).buffer();
+		ByteBuffer buffer = getObject().getVoxelBox().getPixelsForPlane(zLocal).buffer();
 		
 		for (int y=bbox.cornerMin().getY(); y<=crnrMax.getY(); y++) {
 			ptRunning.setY( y + 0.5 );

@@ -50,7 +50,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 
 	private List<ObjectMask> listUnassignedLeft = new ArrayList<>();
 	private List<ObjectMask> listUnassignedRight = new ArrayList<>();
-	private List<PairObjMask> listPairs = new ArrayList<>();
+	private List<ObjectMaskPair> listPairs = new ArrayList<>();
 	
 	/** The headers needed to create statistics */
 	@Override
@@ -127,7 +127,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 	
 	public double sumOverlapFromPaired() {
 		double sum = 0.0;
-		for( PairObjMask om : listPairs) {
+		for( ObjectMaskPair om : listPairs) {
 			sum += om.getOverlapRatio();
 		}
 		return sum;
@@ -143,7 +143,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 	
 	private DoubleStream pairsOverlapStream() {
 		return listPairs.stream().mapToDouble(
-			PairObjMask::getOverlapRatio
+			ObjectMaskPair::getOverlapRatio
 		);
 	}
 	
@@ -155,24 +155,24 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		return listUnassignedRight;
 	}
 
-	public void addLeftObj( ObjectMask om ) {
-		listUnassignedLeft.add(om);
+	public void addLeftObject( ObjectMask object ) {
+		listUnassignedLeft.add(object);
 	}
 
-	public void addLeftObjs( ObjectCollection om ) {
-		listUnassignedLeft.addAll(om.asList());
+	public void addLeftObjects( ObjectCollection objects ) {
+		listUnassignedLeft.addAll(objects.asList());
 	}
 	
-	public void addRightObj( ObjectMask om ) {
-		listUnassignedRight.add(om);
+	public void addRightObject( ObjectMask object ) {
+		listUnassignedRight.add(object);
 	}
 	
-	public void addRightObjs( ObjectCollection om ) {
-		listUnassignedRight.addAll(om.asList());
+	public void addRightObjects( ObjectCollection objects ) {
+		listUnassignedRight.addAll(objects.asList());
 	}
 	
-	public void addPair( ObjectMask om1, ObjectMask om2, double overlapRatio ) {
-		listPairs.add( new PairObjMask(om1, om2, overlapRatio) );
+	public void addPair( ObjectMask object1, ObjectMask object2, double overlapRatio ) {
+		listPairs.add( new ObjectMaskPair(object1, object2, overlapRatio) );
 	}
 	
 	public double percentLeftMatched() { 
@@ -225,17 +225,16 @@ public class AssignmentOverlapFromPairs implements Assignment {
 	private static void removeTouchingBorderXYObjMask( ImageDimensions sd, List<ObjectMask> list ) {
 		Iterator<ObjectMask> itr = list.iterator();
 		while( itr.hasNext() ) {
-			ObjectMask om = itr.next();
-			if (om.getBoundingBox().atBorderXY(sd)) {
+			if (itr.next().getBoundingBox().atBorderXY(sd)) {
 				itr.remove();
 			}
 		}
 	}
 	
-	private static void removeTouchingBorderXYPairObjMask( ImageDimensions sd, List<PairObjMask> list ) {
-		Iterator<PairObjMask> itr = list.iterator();
+	private static void removeTouchingBorderXYPairObjMask( ImageDimensions sd, List<ObjectMaskPair> list ) {
+		Iterator<ObjectMaskPair> itr = list.iterator();
 		while( itr.hasNext() ) {
-			PairObjMask pom = itr.next();
+			ObjectMaskPair pom = itr.next();
 			if (pom.atBorderXY(sd)) {
 				itr.remove();
 			}

@@ -2,8 +2,8 @@ package org.anchoranalysis.anchor.mpp.overlay;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.overlay.objmask.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 
 /*-
  * #%L
@@ -47,7 +47,7 @@ class FromMark implements ScaledMaskCreator {
 
 	@Override
 	public ObjectWithProperties createScaledMask(
-		OverlayWriter overlayWriter,
+		DrawOverlay overlayWriter,
 		ObjectWithProperties omUnscaled,
 		double scaleFactor,
 		Object originalObject,

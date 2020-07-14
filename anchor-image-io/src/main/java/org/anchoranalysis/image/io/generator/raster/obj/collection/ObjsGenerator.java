@@ -87,7 +87,7 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 		return dim;
 	}
 
-	protected ObjectCollection getObjs() {
+	protected ObjectCollection getObjects() {
 		return objects;
 	}
 }

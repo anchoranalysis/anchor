@@ -1,5 +1,8 @@
 package org.anchoranalysis.mpp.io.output;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-mpp-sgmn
@@ -25,13 +28,11 @@ package org.anchoranalysis.mpp.io.output;
  * THE SOFTWARE.
  * #L%
  */
-
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class StackOutputKeys {
 
 	public static final String STACK = "stack";
 	public static final String CFG = "cfg";
 	public static final String HISTOGRAM = "hist";
-	public static final String OBJS = "objs";
-	
-	private StackOutputKeys() {}
+	public static final String OBJECTS = "objs";
 }

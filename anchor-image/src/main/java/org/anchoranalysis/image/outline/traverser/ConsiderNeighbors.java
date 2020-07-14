@@ -1,0 +1,138 @@
+package org.anchoranalysis.image.outline.traverser;
+
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+import java.nio.ByteBuffer;
+import java.util.List;
+
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+class ConsiderNeighbors {
+
+	private final ObjectMask objectOutline;
+	private final int dist;
+	private final List<Point3iWithDist> localQueue;
+	private final ConsiderVisit icv;
+	private final Point3i pnt;
+		
+	public void considerNeighbors( boolean useZ, boolean nghb8 ) {
+
+		// Look for any neighbouring pixels and call them recursively
+		considerAndQueue( 1, 0, 0 );
+		
+		considerAndQueue( -1, 0, 0 );
+		considerAndQueue( 0, 1, 0 );
+		considerAndQueue( 0, -1, 0 );
+		
+		if (useZ) {
+			considerAndQueue( 0, 0, -1 );
+			considerAndQueue( 0, 0, 1 );	
+		}
+		
+		if (nghb8) {
+			considerAndQueue( -1, -1, 0 );
+			considerAndQueue( -1, 1, 0 );
+			considerAndQueue( 1, -1, 0 );
+			considerAndQueue( 1, 1, 0 );
+			
+			if (useZ) {
+				considerAndQueue( -1, -1, -1 );
+				considerAndQueue( -1, 1, -1 );
+				considerAndQueue( 1, -1, -1 );
+				considerAndQueue( 1, 1, -1 );
+				
+				considerAndQueue( -1,-1, 1 );
+				considerAndQueue( -1, 1, 1 );
+				considerAndQueue( 1, -1, 1 );
+				considerAndQueue( 1, 1, 1 );
+			}
+		}
+	}
+	
+	private void considerAndQueue( int xShift, int yShift, int zShift ) {
+		considerVisitAndQueueNghbPoint(
+			icv,
+			new Point3i(
+				pnt.getX()+xShift,
+				pnt.getY()+yShift,
+				pnt.getZ()+zShift
+			),
+			dist,
+			localQueue
+		);
+	}
+	
+	private boolean considerVisitAndQueueNghbPoint( ConsiderVisit considerVisit, Point3i pnt, int dist, List<Point3iWithDist> pnts ) {
+		
+		int distNew = dist + 1;
+		
+		if( considerVisitMarkRaster(considerVisit, pnt, distNew, objectOutline ) ) {
+			pnts.add( new Point3iWithDist(pnt, distNew) );
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean considerVisitMarkRaster(
+		ConsiderVisit considerVisit,
+		Point3i point,
+		int distance,
+		ObjectMask outline
+	) {
+		
+		VoxelBox<ByteBuffer> vb = outline.getVoxelBox();
+		BinaryValuesByte bvb = outline.getBinaryValuesByte();
+		
+		if ( !vb.extent().contains(point) ) {
+			return false;
+		}
+
+		ByteBuffer bb = vb.getPixelsForPlane( point.getZ() ).buffer();
+		int offset = vb.extent().offset( point.getX(), point.getY() );
+		
+		// Check if the buffer allows us to read the pixel
+		if (bb.get(offset)==bvb.getOffByte()) {
+			return false;
+		}
+		
+		// We do the check after first verifying that visiting the pixel is possible from the buffer
+		if ( !considerVisit.considerVisit(point,distance) ) {
+			return false;
+		}
+
+		bb.put( offset, bvb.getOffByte() );
+		
+		return true;
+	}
+}

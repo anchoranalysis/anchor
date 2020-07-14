@@ -50,9 +50,9 @@ public class UnitValueAreaPhysical extends UnitValueArea {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double rslv(Optional<ImageResolution> res) throws UnitValueException {
+	public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
 		
-		if (!res.isPresent()) {
+		if (!resolution.isPresent()) {
 			throw new UnitValueException("An image resolution is required to calculate physical-area but it is missing");
 		}
 		
@@ -60,7 +60,7 @@ public class UnitValueAreaPhysical extends UnitValueArea {
 		
 		double valueAsBase = SpatialConversionUtilities.convertFromUnits(getValue(), unitPrefix);
 		
-		return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, res.get());
+		return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, resolution.get());
 	}
 
 	public String getPrefix() {

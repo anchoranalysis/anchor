@@ -62,20 +62,28 @@ import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.apache.commons.lang3.tuple.Pair;
 
-// Allows comparison of an annotation with multiple other entities
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * Allows comparison of an annotation with multiple other entities
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 	
-	@BeanField @NonEmpty
+	@BeanField @NonEmpty @Getter @Setter
 	private List<NamedBean<Comparer>> listComparers = new ArrayList<>();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean useMIP = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double maxCost = 1.0;
 	// END BEAN PROPERTIES
 	
@@ -135,8 +143,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 	) throws CreateException {
 		// Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow happening, so we prevent it from interfereing
 		//  with the rest of the analysis as a workaround
-		removeObjsWithNoPixels( annotationObjs );
-		removeObjsWithNoPixels( compareObjs );
+		removeObjectsWithNoPixels( annotationObjs );
+		removeObjectsWithNoPixels( compareObjs );
 				
 		
 		AssignmentOverlapFromPairs assignment;
@@ -172,54 +180,16 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		}		
 	}
 	
-	private static void removeObjsWithNoPixels( ObjectCollection objs ) {
+	private static void removeObjectsWithNoPixels( ObjectCollection objects ) {
 		
-		Iterator<ObjectMask> itr = objs.iterator();
+		Iterator<ObjectMask> itr = objects.iterator();
 		while( itr.hasNext() ) {
 			
-			ObjectMask om = itr.next();
+			ObjectMask object = itr.next();
 			
-			if (om.numberVoxelsOn()==0) {
+			if (object.numberVoxelsOn()==0) {
 				itr.remove();
 			}
 		}
 	}
-	
-	public FeatureEvaluator<FeatureInputPairObjects> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputPairObjects> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-	public List<NamedBean<Comparer>> getListComparers() {
-		return listComparers;
-	}
-
-	public void setListComparers(List<NamedBean<Comparer>> listComparers) {
-		this.listComparers = listComparers;
-	}
-
-
-	public boolean isUseMIP() {
-		return useMIP;
-	}
-
-
-	public void setUseMIP(boolean useMIP) {
-		this.useMIP = useMIP;
-	}
-
-
-	public double getMaxCost() {
-		return maxCost;
-	}
-
-
-	public void setMaxCost(double maxCost) {
-		this.maxCost = maxCost;
-	}
-
-
 }

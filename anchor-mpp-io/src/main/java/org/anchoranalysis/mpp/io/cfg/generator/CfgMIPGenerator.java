@@ -4,8 +4,8 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 
 /*
  * #%L
@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.objmask.writer.MIPWriter;
+import org.anchoranalysis.io.bean.object.writer.Flatten;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 
 public class CfgMIPGenerator extends CfgGeneratorBase {
@@ -47,12 +47,12 @@ public class CfgMIPGenerator extends CfgGeneratorBase {
 	private DisplayStack cachedBackground;
 	private DisplayStack cachedBackgroundMIP;
 	
-	public CfgMIPGenerator(ObjMaskWriter maskWriter, IDGetter<Overlay> idGetter ) {
+	public CfgMIPGenerator(DrawObject maskWriter, IDGetter<Overlay> idGetter ) {
 		this(maskWriter, null, idGetter, RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE) );
 	}
 	
 	public CfgMIPGenerator(
-		ObjMaskWriter maskWriter,
+		DrawObject maskWriter,
 		ColoredCfgWithDisplayStack cws,
 		IDGetter<Overlay> idGetter,
 		RegionMembershipWithFlags regionMembership
@@ -76,9 +76,9 @@ public class CfgMIPGenerator extends CfgGeneratorBase {
 		return cachedBackgroundMIP;
 	}
 	
-	private static OverlayWriter createWriter(ObjMaskWriter maskWriter) {
+	private static DrawOverlay createWriter(DrawObject maskWriter) {
 		return new SimpleOverlayWriter(
-			new MIPWriter(maskWriter)
+			new Flatten(maskWriter)
 		);
 	}
 }

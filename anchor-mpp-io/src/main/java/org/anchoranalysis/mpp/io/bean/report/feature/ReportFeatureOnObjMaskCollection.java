@@ -35,10 +35,12 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public class ReportFeatureOnObjMaskCollection extends ReportFeatureOnObjMaskBase<FeatureInputObjectCollection> {
 
 	@Override
-	protected double calcFeatureOn(ObjectCollection objs, FeatureCalculatorSingle<FeatureInputObjectCollection> session)
-			throws FeatureCalcException {
+	protected double calcFeatureOn(
+		ObjectCollection objects,
+		FeatureCalculatorSingle<FeatureInputObjectCollection> session
+	) throws FeatureCalcException {
 		return session.calc(
-			new FeatureInputObjectCollection(objs)
+			new FeatureInputObjectCollection(objects)
 		);
 	}
 }

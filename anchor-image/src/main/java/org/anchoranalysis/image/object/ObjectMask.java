@@ -35,6 +35,7 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -251,7 +252,7 @@ public class ObjectMask {
 		).hasIntersectingVoxels(delegate, other.delegate);
 	}
 
-	// Scales an objMask making sure to create a duplicate first
+	// Scales an object-mask making sure to create a duplicate first
 	public ObjectMask scaleNew(ScaleFactor factor, Interpolator interpolator) throws OperationFailedException {
 		
 		if ((bv.getOnInt()==255 && bv.getOffInt()==0) || (bv.getOnInt()==0 && bv.getOffInt()==255)) {
@@ -338,8 +339,10 @@ public class ObjectMask {
 	public boolean checkIfConnected() throws OperationFailedException {
 
 		try {
-			ObjectCollection objs = CONNECTED_COMPONENT_CREATOR.createConnectedComponents(this.binaryVoxelBox().duplicate());
-			return objs.size()<=1;
+			ObjectCollection objects = CONNECTED_COMPONENT_CREATOR.createConnectedComponents(
+				this.binaryVoxelBox().duplicate()
+			);
+			return objects.size()<=1;
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -434,18 +437,16 @@ public class ObjectMask {
 			other.getBinaryValuesByte().getOffByte()
 		);
 		
-		ObjectMask om = new ObjectMask(
+		ObjectMask object = new ObjectMask(
 			bboxIntersect.get(),
 			new BinaryVoxelBoxByte(vbMaskOut, bvOut)
 		);
-		
-		
+				
 		// If there no pixels left that haven't been set, then the intersection mask is zero
-		if (om.hasPixelsGreaterThan(0)) {
-			return Optional.of(om);
-		} else {
-			return Optional.empty();
-		}
+		return OptionalUtilities.createFromFlag(
+			object.hasPixelsGreaterThan(0),
+			() -> object
+		);
 	}
 	
 	/**

@@ -38,30 +38,37 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.VisitedPixels;
 
+import lombok.AllArgsConstructor;
+
+/**
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor
 public class OutlineTraverser {
 
-	private ObjectMask omOutline;
-	private IConsiderVisit visitCondition;
-	private boolean useZ;
-	private boolean nghb8;
-			
 	/**
-	 * 
-	 * NOTE omOutline is MODIFIED. It has each voxel removed after being visited.
-	 * 
-	 * @param omOutline the object-mask whose outline is traversed (this object-mask is modified to remove visited pixels)
-	 * @param visitCondition predicate determining whether to visit a particular pixel or not
-	 * @param useZ whether to traverse in Z?
-	 * @param nghb8 whether to use bigger neighbourhoods (8 instead of 4, 12 instead of 6 etc.)
+	 * The object-mask whose outline is traversed (this object-mask is modified to remove visited pixels)
+	 * <p>
+	 * Note this object is actively MODIFIED during execution. Each voxel is removed after being visited.
 	 */
-	public OutlineTraverser(ObjectMask omOutline, IConsiderVisit visitCondition, boolean useZ, boolean nghb8) {
-		super();
-		this.omOutline = omOutline;
-		this.visitCondition = visitCondition;
-		this.useZ = useZ;
-		this.nghb8 = nghb8;
-	}
+	private final ObjectMask outline;
 	
+	/**
+	 * Predicate determining whether to visit a particular pixel or not
+	 */
+	private final ConsiderVisit visitCondition;
+	
+	/**
+	 * Whether to traverse in Z?
+	 */
+	private final boolean useZ;
+	
+	/**
+	 * Whether to use bigger neighbourhoods (8 instead of 4, 12 instead of 6 etc.)
+	 */
+	private final boolean nghb8;
 	
 	/**
 	 * Root point is arbitrarily chosen from object
@@ -71,7 +78,7 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( List<Point3i> listOut ) throws OperationFailedException {
 		OptionalUtilities.ifPresent(
-			omOutline.findArbitraryOnVoxel(),
+			outline.findArbitraryOnVoxel(),
 			rootPoint->	applyGlobal( rootPoint, listOut )
 		);
 	}
@@ -84,11 +91,12 @@ public class OutlineTraverser {
 	 */
 	public void applyGlobal( Point3i root, List<Point3i> listOut ) throws OperationFailedException {
 
-		ReadableTuple3i crnrMin = omOutline.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrMin = outline.getBoundingBox().cornerMin();
 		Point3i rootRel = BoundingBox.relPosTo(root, crnrMin);
 
-		ContiguousPixelPath listOutRel = applyLocal(rootRel);
-		listOut.addAll( listOutRel.addShift(crnrMin) );
+		listOut.addAll(
+			applyLocal(rootRel).addShift(crnrMin)
+		);
 	}
 	
 	private ContiguousPixelPath applyLocal( Point3i rootRel ) throws OperationFailedException {
@@ -96,7 +104,7 @@ public class OutlineTraverser {
 		VisitedPixels visitedPixels = new VisitedPixels();
 		PriorityQueueVisit queue = new PriorityQueueVisit();
 		
-		if(ConsiderNghb.considerVisitMarkRaster(visitCondition, rootRel, 0, omOutline)) {
+		if(ConsiderNeighbors.considerVisitMarkRaster(visitCondition, rootRel, 0, outline)) {
 			queue.add( new Point3iWithDist(rootRel, 0) );
 		}
 	
@@ -146,14 +154,14 @@ public class OutlineTraverser {
 
 		List<Point3iWithDist> out = new ArrayList<>(); 
 		
-		ConsiderNghb consider = new ConsiderNghb(
-			omOutline,
+		ConsiderNeighbors consider = new ConsiderNeighbors(
+			outline,
 			dist,
 			out,
 			visitCondition,
 			pnt
 		);
-		consider.considerNghbs(useZ, nghb8);
+		consider.considerNeighbors(useZ, nghb8);
 		return out;
 	}
 }

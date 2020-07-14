@@ -89,7 +89,7 @@ public class MPPInitParamsFactory {
 		BoundIOContext context,
 		Optional<Define> define,
 		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectCollection>> objs,
+		Optional<NamedProvider<ObjectCollection>> objects,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		
@@ -106,8 +106,8 @@ public class MPPInitParamsFactory {
 				soImage.copyStackCollectionFrom(stacks.get());
 			}
 			
-			if (objs.isPresent()) {
-				soMPP.getImage().copyObjMaskCollectionFrom(objs.get());
+			if (objects.isPresent()) {
+				soMPP.getImage().copyObjMaskCollectionFrom(objects.get());
 			}
 			
 			if (keyValueParams.isPresent()) {

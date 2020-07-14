@@ -36,7 +36,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class ObjectMatcher extends NullParamsBean<ObjectMatcher> {
 
-	// order of List<ObjWithMatches> must be the same as order of the sourceObjs
-	public abstract List<MatchedObject> findMatch( ObjectCollection sourceObjs ) throws OperationFailedException;
+	// order of List<MatchedObject> must be the same as order of the source-objects
+	public abstract List<MatchedObject> findMatch( ObjectCollection sourceObjects ) throws OperationFailedException;
 
 }

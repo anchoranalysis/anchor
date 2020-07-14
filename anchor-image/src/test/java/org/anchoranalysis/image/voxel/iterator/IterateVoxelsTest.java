@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.iterator;
  */
 
 import static org.junit.Assert.*;
-import static org.anchoranalysis.image.voxel.iterator.ObjMaskFixture.*;
+import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
 
 import java.util.function.Consumer;
 import java.util.Optional;
@@ -45,8 +45,8 @@ public class IterateVoxelsTest {
 	/** END: Constants for object sizes and locations */
 	
 	/** START: Constants for expected results */
-	private static final int EXPECTED_SINGLE_NUM_VOXELS_2D = OBJ_NUM_VOXELS_2D;
-	private static final int EXPECTED_INTERSECTION_NUM_VOXELS_2D = OBJ_NUM_VOXELS_2D - ((Y_MASK_2-Y_MASK_1)*WIDTH);
+	private static final int EXPECTED_SINGLE_NUM_VOXELS_2D = OBJECT_NUM_VOXELS_2D;
+	private static final int EXPECTED_INTERSECTION_NUM_VOXELS_2D = OBJECT_NUM_VOXELS_2D - ((Y_MASK_2-Y_MASK_1)*WIDTH);
 	private static final int EXPECTED_INTERSECTION_CENTER_X = 39;
 	private static final int EXPECTED_INTERSECTION_CENTER_Y = 57;
 	/** END: Constants for expected results */
@@ -79,15 +79,20 @@ public class IterateVoxelsTest {
 		);
 	}
 	
-	private void testTwoMasks( boolean do3D, int expectedSingleNumVoxels, int expectedIntersectionNumVoxels, Point3i expectedIntersectionCenter ) {
+	private void testTwoMasks(
+		boolean do3D,
+		int expectedSingleNumberVoxels,
+		int expectedIntersectionNumVoxels,
+		Point3i expectedIntersectionCenter
+	) {
 		
-		ObjMaskFixture objsFixture = new ObjMaskFixture(do3D);
+		ObjectMaskFixture objectsFixture = new ObjectMaskFixture(do3D);
 		
-		ObjectMask mask1 = objsFixture.filledMask(20, Y_MASK_1);
-		ObjectMask mask2 = objsFixture.filledMask(20, Y_MASK_2);	// Overlaps with mask1 but not entirely
+		ObjectMask mask1 = objectsFixture.filledMask(20, Y_MASK_1);
+		ObjectMask mask2 = objectsFixture.filledMask(20, Y_MASK_2);	// Overlaps with mask1 but not entirely
 		
-		testSingleMask("mask1", expectedSingleNumVoxels, mask1);
-		testSingleMask("mask2", expectedSingleNumVoxels, mask2);
+		testSingleMask("mask1", expectedSingleNumberVoxels, mask1);
+		testSingleMask("mask2", expectedSingleNumberVoxels, mask2);
 		testIntersectionMasks(
 			"intersection",
 			expectedIntersectionNumVoxels,

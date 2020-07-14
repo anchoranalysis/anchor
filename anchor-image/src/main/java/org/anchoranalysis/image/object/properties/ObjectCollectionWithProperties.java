@@ -49,12 +49,12 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
 		delegate = new ArrayList<>();
 	}
 
-	public ObjectCollectionWithProperties( ObjectMask om ) {
-		this( ObjectCollectionFactory.from(om) );
+	public ObjectCollectionWithProperties( ObjectMask object ) {
+		this( ObjectCollectionFactory.from(object) );
 	}
 	
-	public ObjectCollectionWithProperties( ObjectCollection omc ) {
-		delegate = omc.stream().mapToList( ObjectWithProperties::new );
+	public ObjectCollectionWithProperties( ObjectCollection objects ) {
+		delegate = objects.stream().mapToList( ObjectWithProperties::new );
 	}
 	
 	public boolean add(ObjectMask object) {

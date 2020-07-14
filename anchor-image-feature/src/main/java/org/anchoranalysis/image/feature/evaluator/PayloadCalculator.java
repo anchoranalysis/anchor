@@ -32,5 +32,5 @@ import org.anchoranalysis.image.object.ObjectMask;
 @FunctionalInterface
 public interface PayloadCalculator {
 
-	double calc( ObjectMask om ) throws FeatureCalcException;
+	double calc( ObjectMask object ) throws FeatureCalcException;
 }

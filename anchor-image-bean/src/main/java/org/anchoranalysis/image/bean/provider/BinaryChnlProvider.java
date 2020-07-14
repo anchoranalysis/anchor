@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
@@ -48,15 +48,15 @@ public abstract class BinaryChnlProvider extends BeanImgStackProvider<BinaryChnl
 	}
 
 	private static Channel createChnlFromBinary( BinaryChnl binaryImgChnl, BinaryValues bvOut ) {
-		ObjectCollection omc = expressAsObj(binaryImgChnl);
-		return BinaryChnlFromObjs.createFromObjs(
-			omc,
+		ObjectCollection objects = expressAsObjects(binaryImgChnl);
+		return BinaryChnlFromObjects.createFromObjects(
+			objects,
 			binaryImgChnl.getDimensions(),
 			bvOut
 		).getChannel();
 	}
 		
-	private static ObjectCollection expressAsObj( BinaryChnl binaryImgChnl ) {
+	private static ObjectCollection expressAsObjects( BinaryChnl binaryImgChnl ) {
 		return ObjectCollectionFactory.from(binaryImgChnl);
 	}
 }

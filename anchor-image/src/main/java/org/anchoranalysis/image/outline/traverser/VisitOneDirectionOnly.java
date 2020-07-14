@@ -39,14 +39,14 @@ import org.anchoranalysis.core.geometry.Point3i;
  * @return
  */
 
-class VisitOneDirectionOnly implements IConsiderVisit {
+class VisitOneDirectionOnly implements ConsiderVisit {
 
-	private IConsiderVisit visitCondition;
+	private ConsiderVisit visitCondition;
 	
 	// Tracks if we've already found a direction to traverse alreadyFoundSingleDirection
 	private boolean alreadyFoundSingleDirection = false;
 	
-	public VisitOneDirectionOnly(IConsiderVisit visitCondition) {
+	public VisitOneDirectionOnly(ConsiderVisit visitCondition) {
 		super();
 		this.visitCondition = visitCondition;
 	}		

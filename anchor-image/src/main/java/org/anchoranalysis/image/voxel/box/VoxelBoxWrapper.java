@@ -153,11 +153,11 @@ public class VoxelBoxWrapper {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBoxWrapper destVoxelBox, BoundingBox destBox, VoxelBox<ByteBuffer> objMaskBuffer, BinaryValuesByte maskBV) {
+	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBoxWrapper destVoxelBox, BoundingBox destBox, VoxelBox<ByteBuffer> objectMaskBuffer, BinaryValuesByte maskBV) {
 		
 		// If the wrapper has the same type, we allow the operation
 		if (destVoxelBox.getVoxelDataType().equals(getVoxelDataType())) {
-			voxelBox.copyPixelsToCheckMask(sourceBox, (VoxelBox) destVoxelBox.match(voxelDataType), destBox, objMaskBuffer, maskBV);
+			voxelBox.copyPixelsToCheckMask(sourceBox, (VoxelBox) destVoxelBox.match(voxelDataType), destBox, objectMaskBuffer, maskBV);
 		}
 	}
 	

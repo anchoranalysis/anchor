@@ -38,12 +38,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.accept.AcceptIterationConditon;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class MorphologicalErosion {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private MorphologicalErosion() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class MorphologicalErosion {
 	
-	public static ObjectMask createErodedObjMask(
-		ObjectMask om,
+	public static ObjectMask createErodedObject(
+		ObjectMask object,
 		Optional<Extent> extent,
 		boolean do3D,
 		int iterations,
@@ -51,7 +53,7 @@ public class MorphologicalErosion {
 		Optional<AcceptIterationConditon> acceptConditionsDilation // NB applied on an inverted-version of the binary buffer!!!
 	) throws CreateException {
 		
-		ObjectMask omOut;
+		ObjectMask objectOut;
 		
 		// TODO
 		// We can make this more efficient, then remaking a mask needlessly
@@ -60,15 +62,15 @@ public class MorphologicalErosion {
 			// If we want to treat the outside of the image as if it's at a threshold, then
 			//  we put an extra 1-pixel border around the object-mask, so that there's always
 			//  whitespace around the object-mask, so long as it exists in the image scene
-			BoundingBox bbox = om.getVoxelBoxBounded().dilate(do3D,extent);
-			omOut = om.regionIntersecting(bbox);
+			BoundingBox bbox = object.getVoxelBoxBounded().dilate(do3D,extent);
+			objectOut = object.regionIntersecting(bbox);
 			
 		} else {
-			omOut = om.duplicate();
+			objectOut = object.duplicate();
 		}
 		
 		BinaryVoxelBox<ByteBuffer> eroded = erode(
-			omOut.binaryVoxelBox(),
+			objectOut.binaryVoxelBox(),
 			do3D,
 			iterations,
 			Optional.empty(),
@@ -76,7 +78,7 @@ public class MorphologicalErosion {
 			outsideAtThreshold,
 			acceptConditionsDilation
 		);
-		return omOut.replaceVoxels(eroded.getVoxelBox());
+		return objectOut.replaceVoxels(eroded.getVoxelBox());
 	}
 	
 	/**

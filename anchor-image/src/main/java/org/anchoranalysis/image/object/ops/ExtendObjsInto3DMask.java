@@ -52,16 +52,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ExtendObjsInto3DMask {
 	
-	public static ObjectCollection extendObjs( ObjectCollection objs2D, BinaryVoxelBox<ByteBuffer> mask3D) {
-		return objs2D.stream().map( om->
+	public static ObjectCollection extendObjs( ObjectCollection objects2D, BinaryVoxelBox<ByteBuffer> mask3D) {
+		return objects2D.stream().map( om->
 			extendObj( om, mask3D )
 		);
 	}
 	
-	private static ObjectMask extendObj( ObjectMask obj2D, BinaryVoxelBox<ByteBuffer> voxelBox3D ) {
+	private static ObjectMask extendObj( ObjectMask object2D, BinaryVoxelBox<ByteBuffer> voxelBox3D ) {
 		return new ObjectMask( 
 			extendObj(
-				obj2D.getVoxelBoxBounded(),
+				object2D.getVoxelBoxBounded(),
 				voxelBox3D
 			)
 		);

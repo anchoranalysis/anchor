@@ -92,7 +92,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 		stack().addToStore(
 			new WrapStackAsTimeSequenceStore(soImage.getStackCollection())
 		);
-		objs().addToStore( soImage.getObjMaskCollection() );
+		objects().addToStore( soImage.getObjMaskCollection() );
 		keyValueParams().addToStore( soImage.getParams().getNamedKeyValueParamsCollection() );
 		filePath().addToStore( soImage.getParams().getNamedFilePathCollection() );
 		histogram().addToStore( soImage.getHistogramCollection() );
@@ -126,7 +126,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 		return mapCfg;
 	}
 
-	public MultiInputSubMap<ObjectCollection> objs() {
+	public MultiInputSubMap<ObjectCollection> objects() {
 		return mapObjMaskCollection;
 	}
 

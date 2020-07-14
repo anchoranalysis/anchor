@@ -108,10 +108,10 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 			
 			// We calculate a results vector for each object, across all features in memory. This is more efficient
 			rvc = new ResultsVectorCollection();
-			for( ObjectMask om : objects ) {
+			for( ObjectMask objectMask : objects ) {
 				rvc.add( 
 					session.calcSuppressErrors(
-						createParams(om, nrgStack),
+						createParams(objectMask, nrgStack),
 						logger.errorReporter()
 					)
 				);
@@ -208,7 +208,7 @@ class ObjMaskFeatureListCSVGenerator extends CSVGenerator implements IterableGen
 		this.sharedFeatures = sharedFeatures;
 	}
 	
-	private static FeatureInputSingleObject createParams(ObjectMask om, NRGStackWithParams nrgStack) {
-		return new FeatureInputSingleObject(om, nrgStack);
+	private static FeatureInputSingleObject createParams(ObjectMask object, NRGStackWithParams nrgStack) {
+		return new FeatureInputSingleObject(object, nrgStack);
 	}
 }

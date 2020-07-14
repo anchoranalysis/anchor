@@ -228,17 +228,17 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		return cfgOut;
 	}
 	
-	public boolean equalsDeep( Cfg othr ) {
+	public boolean equalsDeep( Cfg other ) {
 
 		// Size
-		if (size()!=othr.size()) {
+		if (size()!=other.size()) {
 			return false;
 		}
 		
 		int i = 0;
 		for (Mark m : this) {
 	
-			if (!m.equalsDeep(  othr.get(i++) )) {
+			if (!m.equalsDeep(  other.get(i++) )) {
 				return false;
 			}
 		}

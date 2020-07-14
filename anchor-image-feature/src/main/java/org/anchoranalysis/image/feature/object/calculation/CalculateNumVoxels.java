@@ -38,16 +38,16 @@ public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSi
 
 	private final boolean mip;
 		
-	public static double calc(ObjectMask om, boolean mip) {
+	public static double calc(ObjectMask object, boolean mip) {
 		if (mip) {
-			om = om.maxIntensityProjection();
+			object = object.maxIntensityProjection();
 		}
-		return om.numberVoxelsOn();		
+		return object.numberVoxelsOn();		
 	}
 	
 	// Public, as it's needed by Mockito in test verifications
 	@Override
 	public Double execute(FeatureInputSingleObject params) {
-		return calc( params.getObjectMask(), mip );
+		return calc( params.getObject(), mip );
 	}
 }

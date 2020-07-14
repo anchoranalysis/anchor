@@ -80,14 +80,14 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 	protected MPPInitParams createInitParams(
 		BoundIOContext context,
 		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectCollection>> objs,
+		Optional<NamedProvider<ObjectCollection>> objects,
 		Optional<KeyValueParams> keyValueParams
 	) throws CreateException {
 		return MPPInitParamsFactory.createFromExistingCollections(
 			context,
 			Optional.ofNullable(define),
 			stacks,
-			objs,
+			objects,
 			keyValueParams
 		);
 	}

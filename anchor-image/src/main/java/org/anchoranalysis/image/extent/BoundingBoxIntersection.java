@@ -54,9 +54,9 @@ public final class BoundingBoxIntersection {
 	/** Does this bounding box intersection with any of the others in the list? */
 	public boolean existsWithAny( List<BoundingBox> others ) {
 		
-		for (BoundingBox othr : others) {
+		for (BoundingBox other : others) {
 			
-			if (existsWith(othr)) {
+			if (existsWith(other)) {
 				return true;
 			}
 		}
@@ -64,13 +64,13 @@ public final class BoundingBoxIntersection {
 		return false;
 	}
 	
-	public Optional<BoundingBox> with( BoundingBox othr) {
-		return with(othr, true);
+	public Optional<BoundingBox> with( BoundingBox other) {
+		return with(other, true);
 	}
 	
 	/** Find the intersection and clip to a a containing extent */
-	public Optional<BoundingBox> withInside( BoundingBox othr, Extent containingExtent) {
-		return with(othr).map( boundingBox ->
+	public Optional<BoundingBox> withInside( BoundingBox other, Extent containingExtent) {
+		return with(other).map( boundingBox ->
 		boundingBox.clipTo(containingExtent)
 		);
 	}

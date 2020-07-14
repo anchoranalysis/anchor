@@ -46,32 +46,34 @@ public abstract class ReportFeatureOnObjMaskBase<T extends FeatureInput> extends
 	
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public String genFeatureStrFor(MPPInitParams so, Logger logger)
 			throws OperationFailedException {
 		try {
-			objs.initRecursive( so.getImage(), logger );
+			objects.initRecursive( so.getImage(), logger );
 			super.init(so, logger);
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
 		
 		try {
-			ObjectCollection objsCollection = objs.create();
-						
 			FeatureCalculatorSingle<T> session = super.createAndStartSession();
-			double val = calcFeatureOn( objsCollection, session );
-			return Double.toString(val);
+			return Double.toString(
+				calcFeatureOn( objects.create(), session )
+			);
 			
 		} catch (FeatureCalcException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	protected abstract double calcFeatureOn( ObjectCollection objs, FeatureCalculatorSingle<T> session ) throws FeatureCalcException;
+	protected abstract double calcFeatureOn(
+		ObjectCollection objects,
+		FeatureCalculatorSingle<T> session
+	) throws FeatureCalcException;
 	
 	@Override
 	public boolean isNumeric() {

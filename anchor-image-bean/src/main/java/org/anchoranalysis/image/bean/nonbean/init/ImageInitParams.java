@@ -159,9 +159,7 @@ public class ImageInitParams implements BeanInitParams {
 		try {
 			for (String id : stackCollectionSource.keys()) {
 				Stack stack = stackCollectionSource.getException(id);
-				if (stack!=null) {
-					addToStackCollection(id,stack);
-				}
+				addToStackCollection(id,stack);
 			}
 		} catch (NamedProviderGetException e) {
 			throw new OperationFailedException(e.summarize());
@@ -172,10 +170,12 @@ public class ImageInitParams implements BeanInitParams {
 
 		try {
 			for (String id : collectionSource.keys()) {
-				ObjectCollection objs = collectionSource.getException(id);
-				if (objs!=null) {
-					addToObjMaskCollection(id, new IdentityOperation<>(objs) );
-				}
+				addToObjMaskCollection(
+					id,
+					new IdentityOperation<>(
+						collectionSource.getException(id)
+					)
+				);
 			}
 		} catch (NamedProviderGetException e) {
 			throw new OperationFailedException(e.summarize());

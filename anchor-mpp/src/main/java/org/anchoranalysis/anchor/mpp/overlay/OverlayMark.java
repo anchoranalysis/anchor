@@ -4,9 +4,9 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.anchor.overlay.objmask.scaled.FromMask;
-import org.anchoranalysis.anchor.overlay.objmask.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.object.scaled.FromMask;
+import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 
 /*-
  * #%L
@@ -70,7 +70,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public BoundingBox bbox(OverlayWriter overlayWriter, ImageDimensions dim) {
+	public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
 		return mark.bbox(
 			dim,
 			regionMembership.getRegionID()
@@ -79,7 +79,7 @@ public class OverlayMark extends Overlay {
 
 	@Override
 	public ObjectWithProperties createScaledMask(
-			OverlayWriter overlayWriter, double zoomFactorNew,
+			DrawOverlay overlayWriter, double zoomFactorNew,
 			ObjectWithProperties om, Overlay ol, ImageDimensions sdUnscaled,
 			ImageDimensions sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
@@ -94,7 +94,7 @@ public class OverlayMark extends Overlay {
 	}
 
 	@Override
-	public ObjectWithProperties createObjMask(OverlayWriter overlayWriter, ImageDimensions dimEntireImage,
+	public ObjectWithProperties createObject(DrawOverlay overlayWriter, ImageDimensions dimEntireImage,
 			BinaryValuesByte bvOut) throws CreateException {
 		return mark.calcMask(
 			dimEntireImage,
@@ -109,7 +109,7 @@ public class OverlayMark extends Overlay {
 	}
 	
 	@Override
-	public boolean isPointInside( OverlayWriter overlayWriter, Point3i pnt ) {
+	public boolean isPointInside( DrawOverlay overlayWriter, Point3i pnt ) {
 		
 		Point3d pntD = PointConverter.doubleFromInt(pnt);
 		
