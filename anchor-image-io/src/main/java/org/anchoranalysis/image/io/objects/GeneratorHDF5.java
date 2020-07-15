@@ -37,6 +37,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Writes an object-mask-collection to a HDF5 file
@@ -44,23 +45,22 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGenerator<ObjectCollection> {
-
+	
 	// Name of the attribute in the root of the HDF5 that stores the number of objects
-	public static final String NUM_OBJS_ATTR_NAME = "numberObjects";
+	public static final String NUM_OBJECTS_ATTR_NAME = "numberObjects";
+
+	// START REQUIRED ARGUMENTS
+	private final boolean compressed;
+	// END REQUIRED ARGUMENTS
 	
 	private ObjectCollection item;
-	private boolean compressed;
 
-	public static void writeObjsToFile( ObjectCollection objects, Path filePath) {
+	public static void writeObjectsToFile( ObjectCollection objects, Path filePath) {
 		GeneratorHDF5 generator = new GeneratorHDF5(true);
 		generator.setIterableElement(objects);
 		generator.writeToFile( new OutputWriteSettings(), filePath);
-	}
-	
-	public GeneratorHDF5(boolean compressed) {
-		super();
-		this.compressed = compressed;
 	}
 
 	@Override
@@ -71,23 +71,21 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	@Override
 	public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath) {
 		// Write a HDF file
-		writeObjMaskCollection( getIterableElement(), filePath );
+		writeObjects( getIterableElement(), filePath );
 	}
 	
-	private void writeObjMaskCollection( ObjectCollection objects, Path filePath ) {
+	private void writeObjects( ObjectCollection objects, Path filePath ) {
 
 		IHDF5Writer writer = HDF5Factory.open( filePath.toString() );
 		
-		addObjsSizeAttr(writer, objects);
+		addObjectsSizeAttribute(writer, objects);
 		
 		try {
 			for( int i=0; i<objects.size(); i++ ) {
 				
-				String datasetId = PathUtilities.pathForObj(i);
-				
 				new ObjectMaskHDF5Writer(
 					objects.get(i),
-					datasetId,
+					HDF5PathHelper.pathForObject(i),
 					writer,
 					compressed
 				).apply();
@@ -101,8 +99,8 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	
 	// Adds an attribute with the total number of objects, so it can be quickly queried
 	//  from the HDF5 without parsing all the datasets
-	private void addObjsSizeAttr(IHDF5Writer writer, ObjectCollection objects) {
-		writer.uint32().setAttr("/", NUM_OBJS_ATTR_NAME, objects.size() );		
+	private void addObjectsSizeAttribute(IHDF5Writer writer, ObjectCollection objects) {
+		writer.uint32().setAttr("/", NUM_OBJECTS_ATTR_NAME, objects.size() );		
 	}
 
 	@Override
@@ -113,7 +111,7 @@ public class GeneratorHDF5 extends SingleFileTypeGenerator implements IterableGe
 	@Override
 	public Optional<ManifestDescription> createManifestDescription() {
 		return Optional.of(
-			new ManifestDescription("hdf5", "objMaskCollection")
+			new ManifestDescription("hdf5", ObjectCollectionWriter.MANIFEST_DESCRIPTION)
 		);
 	}
 	

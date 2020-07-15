@@ -102,7 +102,7 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 			
 			S result = operation.process(initParams, nrgStack);
 			
-			outputSharedObjs(mppParams, nrgStack, context);
+			outputSharedObjects(mppParams, nrgStack, context);
 			
 			return result;
 			
@@ -113,9 +113,9 @@ public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 	
 	
 	// General objects can be outputted
-	private void outputSharedObjs(MPPInitParams initParams, NRGStackWithParams nrgStack, BoundIOContext context) throws OutputWriteFailedException {
+	private void outputSharedObjects(MPPInitParams initParams, NRGStackWithParams nrgStack, BoundIOContext context) throws OutputWriteFailedException {
 		
-		super.outputSharedObjs(initParams, context);
+		super.outputSharedObjects(initParams, context);
 		
 		NRGStackWriter.writeNRGStack(
 			nrgStack,

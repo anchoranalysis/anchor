@@ -107,7 +107,7 @@ public class MPPInitParamsFactory {
 			}
 			
 			if (objects.isPresent()) {
-				soMPP.getImage().copyObjMaskCollectionFrom(objects.get());
+				soMPP.getImage().copyObjectsFrom(objects.get());
 			}
 			
 			if (keyValueParams.isPresent()) {

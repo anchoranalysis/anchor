@@ -331,7 +331,7 @@ public class ObjectMask {
 	/**
 	 * Determines if an object-mask is connected.
 	 * 
-	 * TODO this is not particular efficient. We can avoid making the ObjMaskCollection
+	 * TODO this is not particular efficient. We can avoid making the object-collection.
 	 * 
 	 * @return
 	 * @throws OperationFailedException 

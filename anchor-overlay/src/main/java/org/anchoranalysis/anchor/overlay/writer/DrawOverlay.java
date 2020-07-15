@@ -78,7 +78,7 @@ public abstract class DrawOverlay {
 	
 	//
 	// It's a two step process
-	//   First we generate ObjMasks for the configuration
+	//   First we generate object-mask for the configuration
 	//   Then these are written to the RGBMask
 	//
 	//   We split the steps in two, so that they can be potentially cached

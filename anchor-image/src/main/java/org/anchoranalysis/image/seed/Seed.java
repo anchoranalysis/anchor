@@ -29,8 +29,12 @@ package org.anchoranalysis.image.seed;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.object.ObjectMask;
 
-// A seed provides an ObjMask of pixels that exclusively
-//   belong to a particular object
+/**
+ * A seed provides an voxels that exclusively belong to a particular object, and can be used as a starting hint for segmentation.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public interface Seed {
 
 	ObjectMask createMask();

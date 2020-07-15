@@ -72,11 +72,11 @@ public class ObjectCollectionDistanceMatrix {
 		return distanceMatrix[indx1][indx2];
 	}
 
-	public int sizeObjs1() {
+	public int sizeObjects1() {
 		return objects1.size();
 	}
 	
-	public int sizeObjs2() {
+	public int sizeObjects2() {
 		return objects2.size();
 	}
 }

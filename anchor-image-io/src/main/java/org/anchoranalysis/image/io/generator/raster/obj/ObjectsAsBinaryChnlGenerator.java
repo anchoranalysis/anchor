@@ -45,23 +45,24 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Writes an object-mask as a channel
  * @author Owen Feehan
  *
  */
-public class ObjAsBinaryChnlGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
+@RequiredArgsConstructor
+public class ObjectsAsBinaryChnlGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
 	
-	private int maskVal;
-	private ImageResolution res;
+	// START REQUIRED ARGUMENTS
+	private final int maskVal;
+	private final ImageResolution res;
+	// END REQUIRED ARGUMENTS
+	
 	private ObjectMask mask;
-	
-	public ObjAsBinaryChnlGenerator(int maskVal, ImageResolution res) {
-		this.maskVal = maskVal;
-		this.res = res;
-	}
 
-	public ObjAsBinaryChnlGenerator(ObjectMask mask, int maskVal, ImageResolution dim) {
+	public ObjectsAsBinaryChnlGenerator(ObjectMask mask, int maskVal, ImageResolution dim) {
 		this.mask = mask;
 		this.maskVal = maskVal;
 		this.res = dim;

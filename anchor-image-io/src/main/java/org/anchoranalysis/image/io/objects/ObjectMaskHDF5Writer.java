@@ -37,37 +37,33 @@ import org.anchoranalysis.image.object.ObjectMask;
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
+import lombok.AllArgsConstructor;
 
 /**
  * Writes an ObjectMask to a path within a HDF5 file
- *   The mask is written as a 3D array of 255 and 0 bytes
- *   The corner-position of the bounding box is added as attributes: x, y, z
+ * <p>
+ * The mask is written as a 3D array of 255 and 0 bytes
+ * <p>
+ * The corner-position of the bounding box is added as attributes: x, y, z
  *   
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 class ObjectMaskHDF5Writer {
 
-	private ObjectMask obj;
-	private String pathHDF5;
-	private IHDF5Writer writer;
-	private boolean compression;
+	/** The object-mask to write */
+	private final ObjectMask object;
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param objectMask object-mask to write
-	 * @param pathHDF5 the path in the HDF5 file to write it to
-	 * @param writer an opened-writer for the HDF5 file
-	 */
-	public ObjectMaskHDF5Writer(ObjectMask objectMask, String pathHDF5, IHDF5Writer writer, boolean compression) {
-		super();
-		this.obj = objectMask;
-		this.pathHDF5 = pathHDF5;
-		this.writer = writer;
-		this.compression = compression;
-	}
-
+	/** The path in the HDF5 file to write it to */
+	private final String pathHDF5;
+	
+	/** An opened-writer for the HDF5 file */
+	private final IHDF5Writer writer;
+	
+	/** Whether to use compression or not */
+	private final boolean compression;
+	
 	private HDF5IntStorageFeatures compressionLevel() {
 		if (compression) {
 			return HDF5IntStorageFeatures.INT_DEFLATE_UNSIGNED;
@@ -80,22 +76,22 @@ class ObjectMaskHDF5Writer {
 		
 		writer.uint8().writeMDArray(
 			pathHDF5,
-			byteArray( obj.binaryVoxelBox() ),
+			byteArray( object.binaryVoxelBox() ),
 			compressionLevel()
 		);
 		
-		addCrnr();
+		addCorner();
 	}
 	
-	private void addCrnr() {
-		addAttr("x", ReadableTuple3i::getX );
-		addAttr("y", ReadableTuple3i::getY );
-		addAttr("z", ReadableTuple3i::getZ );
+	private void addCorner() {
+		addAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::getX );
+		addAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::getY );
+		addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::getZ );
 	}
 	
-	private void addAttr( String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
+	private void addAttribute( String attrName, ToIntFunction<ReadableTuple3i> extrVal) {
 		
-		Integer crnrVal = extrVal.applyAsInt( obj.getBoundingBox().cornerMin() );
+		Integer crnrVal = extrVal.applyAsInt( object.getBoundingBox().cornerMin() );
 		writer.uint32().setAttr(
 			pathHDF5,
 			attrName,
@@ -105,24 +101,24 @@ class ObjectMaskHDF5Writer {
 		
 	private static MDByteArray byteArray( BinaryVoxelBox<ByteBuffer> bvb ) {
 
-		Extent e = bvb.extent();
+		Extent extent = bvb.extent();
 		
-		MDByteArray md = new MDByteArray( dimsFromExtent(e) );
+		MDByteArray md = new MDByteArray( dimensionsFromExtent(extent) );
 		
-		for( int z=0; z<e.getZ(); z++) {
+		for( int z=0; z<extent.getZ(); z++) {
 		
 			ByteBuffer bb = bvb.getPixelsForPlane(z).buffer();
 						
-			for( int y=0; y<e.getY(); y++) {
-				for( int x=0; x<e.getX(); x++) {
-					md.set(bb.get(e.offset(x, y)), x, y, z);
+			for( int y=0; y<extent.getY(); y++) {
+				for( int x=0; x<extent.getX(); x++) {
+					md.set(bb.get(extent.offset(x, y)), x, y, z);
 				}
 			}
 		}
 		return md;
 	}
 	
-	private static int[] dimsFromExtent( Extent e ) {
-		return new int[]{ e.getX(), e.getY(), e.getZ() };
+	private static int[] dimensionsFromExtent( Extent extent ) {
+		return new int[]{ extent.getX(), extent.getY(), extent.getZ() };
 	}
 }

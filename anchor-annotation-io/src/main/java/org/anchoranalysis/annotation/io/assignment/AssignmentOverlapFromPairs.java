@@ -99,16 +99,16 @@ public class AssignmentOverlapFromPairs implements Assignment {
 	}
 	
 	public void removeTouchingBorderXY( ImageDimensions sd ) {
-		removeTouchingBorderXYObjMask( sd, listUnassignedLeft );
-		removeTouchingBorderXYObjMask( sd, listUnassignedRight );
-		removeTouchingBorderXYPairObjMask( sd, listPairs );
+		removeTouchingBorderXYObjects( sd, listUnassignedLeft );
+		removeTouchingBorderXYObjects( sd, listUnassignedRight );
+		removeTouchingBorderXYPairObjects( sd, listPairs );
 	}
 	
 	@Override
 	public List<ObjectMask> getListPaired( boolean left ) {
 		return FunctionalList.mapToList(
 			listPairs,
-			om -> om.getMultiplex( left )
+			object -> object.getMultiplex( left )
 		);
 	}
 
@@ -222,7 +222,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		return listPairs.size() + listUnassignedRight.size();
 	}
 		
-	private static void removeTouchingBorderXYObjMask( ImageDimensions sd, List<ObjectMask> list ) {
+	private static void removeTouchingBorderXYObjects( ImageDimensions sd, List<ObjectMask> list ) {
 		Iterator<ObjectMask> itr = list.iterator();
 		while( itr.hasNext() ) {
 			if (itr.next().getBoundingBox().atBorderXY(sd)) {
@@ -231,7 +231,7 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		}
 	}
 	
-	private static void removeTouchingBorderXYPairObjMask( ImageDimensions sd, List<ObjectMaskPair> list ) {
+	private static void removeTouchingBorderXYPairObjects( ImageDimensions sd, List<ObjectMaskPair> list ) {
 		Iterator<ObjectMaskPair> itr = list.iterator();
 		while( itr.hasNext() ) {
 			ObjectMaskPair pom = itr.next();

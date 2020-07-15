@@ -41,7 +41,7 @@ public abstract class AnnotationWithCfg implements Annotation {
 	
 	protected abstract int getRegionID();
 	
-	public ObjectCollection convertToObjs( ImageDimensions dim ) {
+	public ObjectCollection convertToObjects( ImageDimensions dim ) {
 		return getCfg().calcMask(
 			dim,
 			getRegionMap().membershipWithFlagsForIndex(getRegionID()),

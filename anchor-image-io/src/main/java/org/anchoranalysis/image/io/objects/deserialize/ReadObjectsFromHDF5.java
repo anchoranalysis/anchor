@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.anchoranalysis.image.io.objects.GeneratorHDF5;
-import org.anchoranalysis.image.io.objects.PathUtilities;
+import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
@@ -50,7 +50,7 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 
 		try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
 
-			return readObjs(reader, PathUtilities.OBJS_ROOT_PATH );
+			return readObjects(reader, HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS );
 		
 		} catch (HDF5FileNotFoundException e) {
 			throw new DeserializationFailedException(
@@ -61,7 +61,7 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 				String.format(
 					"An error occurred while reading HDF5 at %s with rootPath=%s",
 					path,
-					PathUtilities.OBJS_ROOT_PATH
+					HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS
 				),
 				e
 			);
@@ -77,25 +77,25 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 	 * @throws DeserializationFailedException 
 	 * @throws AnchorIOException 
 	 */
-	private ObjectCollection readObjs(IHDF5Reader reader, String rootPath) throws DeserializationFailedException {
+	private ObjectCollection readObjects(IHDF5Reader reader, String rootPath) throws DeserializationFailedException {
 
 		assert( rootPath.endsWith("/") );
 				
 		// First check the number of objects expected
 		// if the the rootPath exists in the HDF5, if not, it's an indication that there's no
 		// objects present
-		int numObjs = ObjectMaskHDF5Reader.extractIntAttr(reader.uint32(), "/", GeneratorHDF5.NUM_OBJS_ATTR_NAME);
-		if (numObjs==0) {
+		int numberObjects = ObjectMaskHDF5Reader.extractIntAttr(reader.uint32(), "/", GeneratorHDF5.NUM_OBJECTS_ATTR_NAME);
+		if (numberObjects==0) {
 			return ObjectCollectionFactory.empty();
 		}
 		
-		ObjectCollection out = readObjsNoCheck(reader, rootPath);
+		ObjectCollection out = readObjectsNoCheck(reader, rootPath);
 				
-		if (out.size()!=numObjs) {
+		if (out.size()!=numberObjects) {
 			throw new DeserializationFailedException(
 				String.format(
 					"An error occurred deserializing HDF5, where %d objects were expected but %d were read.",
-					numObjs,
+					numberObjects,
 					out.size()
 				)	
 			);
@@ -104,7 +104,7 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 	}
 
 	/** Reads the objects without doing any check on the total number of objects expected or received */
-	private ObjectCollection readObjsNoCheck(IHDF5Reader reader, String rootPath) {
+	private ObjectCollection readObjectsNoCheck(IHDF5Reader reader, String rootPath) {
 
 		List<String> groups = reader.object().getAllGroupMembers( rootPath );
 		return ObjectCollectionFactory.mapFrom(

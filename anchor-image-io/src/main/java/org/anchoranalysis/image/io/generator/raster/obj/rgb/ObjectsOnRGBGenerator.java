@@ -55,6 +55,8 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public abstract class ObjectsOnRGBGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectCollectionWithProperties,Stack> {
 
+	private static final ManifestDescription MANIFEST_DESCRIPTION = new ManifestDescription("raster", "rgbObjects");
+	
 	// START REQUIRED ARGUMENTS
 	private final DrawObject drawObject;
 	private final ObjectDrawAttributes attributes;
@@ -113,11 +115,13 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator implements I
 
 	@Override
 	public void start() throws OutputWriteFailedException {
+		// NOTHING TO DO
 	}
 
 
 	@Override
 	public void end() throws OutputWriteFailedException {
+		// NOTHING TO DO
 	}
 
 	@Override
@@ -127,9 +131,7 @@ public abstract class ObjectsOnRGBGenerator extends RasterGenerator implements I
 
 	@Override
 	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", "rgbObjMask")
-		);
+		return Optional.of(MANIFEST_DESCRIPTION);
 	}
 	
 	protected abstract RGBStack generateBackground(DisplayStack background) throws CreateException;

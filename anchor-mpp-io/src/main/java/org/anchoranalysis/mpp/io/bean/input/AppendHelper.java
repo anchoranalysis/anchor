@@ -38,7 +38,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
-import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
+import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -58,14 +58,14 @@ class AppendHelper {
 	
 	// We assume all the input files are single channel images
 	public static void appendStack(
-		List<NamedBean<FilePathGenerator>> listAppendStack,
+		List<NamedBean<FilePathGenerator>> listPaths,
 		final MultiInput inputObject,
 		boolean debugMode,
 		final RasterReader rasterReader
 	) {
 		append(
 			inputObject,				
-			listAppendStack,
+			listPaths,
 			MultiInput::stack,
 			outPath -> {
 				try {
@@ -79,39 +79,35 @@ class AppendHelper {
 	}
 
 	public static void appendHistogram(
-		List<NamedBean<FilePathGenerator>> list,
+		List<NamedBean<FilePathGenerator>> listPaths,
 		MultiInput inputObject,
 		boolean debugMode
 	) {
-		
 		append(
 			inputObject,				
-			list,
+			listPaths,
 			MultiInput::histogram,
 			HistogramCSVReader::readHistogramFromFile,
 			debugMode
 		);
 	}
-	
-	
+		
 	public static void appendFilePath(
-		List<NamedBean<FilePathGenerator>> list,
+		List<NamedBean<FilePathGenerator>> listPaths,
 		MultiInput inputObject,
 		boolean debugMode
 	) {
-		
 		append(
 			inputObject,				
-			list,
+			listPaths,
 			MultiInput::filePath,
 			outPath -> outPath,
 			debugMode
 		);
-
 	}
 	
 	public static void appendKeyValueParams(
-		List<NamedBean<FilePathGenerator>> list,
+		List<NamedBean<FilePathGenerator>> listPaths,
 		final MultiInput inputObject,
 		boolean debugMode
 	) {
@@ -119,7 +115,7 @@ class AppendHelper {
 		// Delayed-calculation of the appending path as it can be a bit expensive when multiplied by so many items		
 		append(
 			inputObject,				
-			list,
+			listPaths,
 			MultiInput::keyValueParams,
 			KeyValueParams::readFromFile,
 			debugMode
@@ -127,14 +123,13 @@ class AppendHelper {
 	}
 	
 	public static void appendCfg(
-		List<NamedBean<FilePathGenerator>> listAppendCfg,
+		List<NamedBean<FilePathGenerator>> listPaths,
 		final MultiInput inputObject,
 		boolean debugMode
 	) {
-		
 		append(
 			inputObject,				
-			listAppendCfg,
+			listPaths,
 			MultiInput::cfg,
 			DeserializerHelper::deserializeCfg,
 			debugMode
@@ -142,7 +137,7 @@ class AppendHelper {
 	}
 	
 	public static void appendCfgFromAnnotation(
-		List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotation,
+		List<NamedBean<FilePathGenerator>> listPaths,
 		MultiInput inputObject,
 		boolean includeAccepted,
 		boolean includeRejected,
@@ -151,7 +146,7 @@ class AppendHelper {
 		
 		append(
 			inputObject,				
-			listAppendCfgFromAnnotation,
+			listPaths,
 			MultiInput::cfg,
 			outPath -> DeserializerHelper.deserializeCfgFromAnnotation(
 				outPath,
@@ -162,16 +157,16 @@ class AppendHelper {
 		);
 	}
 	
-	public static void appendObjMaskCollection(
-		List<NamedBean<FilePathGenerator>> listAppendCfg,
+	public static void appendObjects(
+		List<NamedBean<FilePathGenerator>> listPaths,
 		MultiInput inputObject,
 		boolean debugMode 
 	) {
 		append(
 			inputObject,
-			listAppendCfg,
+			listPaths,
 			MultiInput::objects,
-			ObjectMaskCollectionReader::createFromPath,
+			ObjectCollectionReader::createFromPath,
 			debugMode
 		);
 	}

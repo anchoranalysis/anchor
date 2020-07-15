@@ -62,7 +62,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 				0
 			);
 			
-			super.outputSharedObjs(initParams, context);
+			super.outputSharedObjects(initParams, context);
 			
 		} catch (CreateException | OutputWriteFailedException e) {
 			throw new OperationFailedException(e);
@@ -79,7 +79,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 			
 			operation.process(initParams.getImage());
 			
-			super.outputSharedObjs(initParams, context);
+			super.outputSharedObjects(initParams, context);
 			
 		} catch (CreateException | OutputWriteFailedException e) {
 			throw new OperationFailedException(e);
@@ -96,7 +96,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 				
 				operation.process(initParams);
 				
-				super.outputSharedObjs(initParams, context);
+				super.outputSharedObjects(initParams, context);
 				
 			} catch (CreateException | OutputWriteFailedException e) {
 				throw new OperationFailedException(e);

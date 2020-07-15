@@ -45,7 +45,7 @@ import org.junit.Test;
 
 public class DefineMPPTest {
 
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 	
 	@Before
     public void setUp() {

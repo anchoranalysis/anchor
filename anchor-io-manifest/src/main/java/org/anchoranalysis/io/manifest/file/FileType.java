@@ -31,40 +31,17 @@ import java.io.Serializable;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
+@Value @AllArgsConstructor 
 public class FileType implements Serializable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1822279428811663437L;
+
 	private ManifestDescription manifestDescription;
 	private String fileExtension;
-	
-	public FileType() {
-		
-	}
-	
-	public FileType(ManifestDescription manifestDescription,
-			String fileExtension) {
-		super();
-		this.manifestDescription = manifestDescription;
-		this.fileExtension = fileExtension;
-	}
-
-	public ManifestDescription getManifestDescription() {
-		return manifestDescription;
-	}
-
-	public void setManifestDescription(ManifestDescription manifestDescription) {
-		this.manifestDescription = manifestDescription;
-	}
-
-	public String getFileExtension() {
-		return fileExtension;
-	}
-
-	public void setFileExtension(String fileExtension) {
-		this.fileExtension = fileExtension;
-	}
 }

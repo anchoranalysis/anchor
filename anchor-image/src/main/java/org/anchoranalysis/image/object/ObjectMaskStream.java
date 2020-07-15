@@ -88,8 +88,8 @@ public final class ObjectMaskStream {
 	 * @return a newly created object-collection
 	 */
 	public ObjectCollection mapBoundingBox(UnaryOperator<BoundingBox> mapFunc) {
-		return map( om->
-			om.mapBoundingBox(mapFunc)
+		return map( object ->
+			object.mapBoundingBox(mapFunc)
 		);
 	}
 	

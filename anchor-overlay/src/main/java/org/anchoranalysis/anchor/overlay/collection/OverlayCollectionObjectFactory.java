@@ -38,11 +38,11 @@ public class OverlayCollectionObjectFactory {
 	/** Creates objects from whatever Overlays are found in the collection **/
 	public static ObjectCollection objectsFromOverlays( OverlayCollection overlays ) {
 
-		// Extract mask from any overlays that are OverlayObjMask
+		// Extract mask from any overlays that are object-mask overlays
 		return ObjectCollectionFactory.filterAndMapFrom(
 			overlays.asList(),
 			overlay->overlay instanceof OverlayObjectMask,
-			overlay-> ((OverlayObjectMask) overlay).getObjMask().getMask()
+			overlay-> ((OverlayObjectMask) overlay).getObject().getMask()
 		);
 	}
 }

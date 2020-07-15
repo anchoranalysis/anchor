@@ -72,7 +72,7 @@ class WriteGroupResults {
 	
 	private static final String MANIFEST_FUNCTION_FEATURES_GROUP = "groupedFeatureResults";
 	
-	private static final ManifestDescription MANIFEST_PARAMS = new ManifestDescription("paramsXML", "aggregateObjMask");
+	private static final ManifestDescription MANIFEST_DESCRIPTION = new ManifestDescription("paramsXML", "aggregateObjects");
 	
 	public static void writeResultsForSingleGroup(
 		Optional<MultiName> groupName,
@@ -212,7 +212,7 @@ class WriteGroupResults {
 			Optional<Path> fileOutPath = context.getOutputManager().getWriterCheckIfAllowed().writeGenerateFilename(
 				OUTPUT_NAME_PARAMS,
 				"xml",
-				Optional.of(MANIFEST_PARAMS)
+				Optional.of(MANIFEST_DESCRIPTION)
 			);
 			if(fileOutPath.isPresent()) {
 				paramsOut.writeToFile(fileOutPath.get());

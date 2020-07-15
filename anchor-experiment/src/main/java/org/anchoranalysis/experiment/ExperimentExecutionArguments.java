@@ -13,6 +13,7 @@ import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
@@ -40,7 +41,7 @@ import lombok.Setter;
  * THE SOFTWARE.
  * #L%
  */
-
+@NoArgsConstructor
 public class ExperimentExecutionArguments {
 	
 	/**
@@ -94,6 +95,9 @@ public class ExperimentExecutionArguments {
 	@Getter @Setter
 	private Optional<String> taskName = Optional.empty();
 
+	public ExperimentExecutionArguments(Path modelDirectory) {
+		this.modelDirectory = Optional.of(modelDirectory);
+	}
 
 	/** Creates an input-context, reusing parameters from the experiment-execution 
 	 * @throws IOException */

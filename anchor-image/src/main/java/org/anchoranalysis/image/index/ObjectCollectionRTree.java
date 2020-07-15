@@ -61,7 +61,7 @@ public class ObjectCollectionRTree {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
 		return objects.stream().filterSubset(
-			om->om.contains(pnt),
+			object -> object.contains(pnt),
 			delegate.contains(pnt)
 		);
 	}

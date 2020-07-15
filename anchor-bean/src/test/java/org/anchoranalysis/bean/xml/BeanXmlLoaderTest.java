@@ -38,7 +38,7 @@ import org.junit.Test;
 
 public class BeanXmlLoaderTest {
 
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
 	@Test
 	public void testLoadBean() throws BeanXmlException {

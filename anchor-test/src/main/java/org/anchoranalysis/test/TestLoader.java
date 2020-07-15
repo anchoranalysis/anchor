@@ -94,7 +94,7 @@ public class TestLoader {
 	 * 
 	 * @return a testLoader associated with MAVEN_WORKING_DIR/src/test/resources/
 	 */
-	public static TestLoader createFromMavenWorkingDir() {
+	public static TestLoader createFromMavenWorkingDirectory() {
 		return new TestLoader("src/test/resources");
 	}
 	
@@ -102,11 +102,11 @@ public class TestLoader {
 	/**
 	 * Creates a new test-data loader finding "src/test/resources/PLUS_SOMETHING" using the Maven working directory
 	 * 
-	 * @param toAppendToMavenWorkingDir appended to maven working dir to determine final directory
+	 * @param toAppendToDirectory appended to maven working dir to determine final directory
 	 * @return a testLoader associated with the MAVEN_WORKING_DIR/src/test/resources/PLUS_SOMETHING
 	 */
-	public static TestLoader createFromMavenWorkingDir( String toAppendToMavenWorkingDir) {
-		Path path = Paths.get("src/test/resources").resolve(toAppendToMavenWorkingDir);
+	public static TestLoader createFromMavenWorkingDirectory( String toAppendToDirectory) {
+		Path path = Paths.get("src/test/resources").resolve(toAppendToDirectory);
 		return new TestLoader(path.toString());
 	}
 		

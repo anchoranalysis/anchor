@@ -72,6 +72,8 @@ import one.util.streamex.StreamEx;
  */
 class ObjectFeatureListCSVGenerator extends CSVGenerator implements IterableGenerator<ObjectCollection> {
 
+	private static final String MANIFEST_FUNCTION = "objectFeatures";
+	
 	private final NRGStackWithParams nrgStack;
 	private final Logger logger;
 	private final FeatureList<FeatureInputSingleObject> features;
@@ -87,12 +89,12 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator implements IterableGene
 	private ObjectCollection element;	// Iteration element
 	
 	public ObjectFeatureListCSVGenerator( FeatureList<FeatureInputSingleObject> features, NRGStackWithParams nrgStack, Logger logger ) {
-		super("objMaskFeatures");
+		super(MANIFEST_FUNCTION);
 		this.nrgStack = nrgStack;
 		this.logger = logger;
 		this.features = createFullFeatureList( features);
 		
-		delegate = new FeatureListCSVGeneratorVertical( "objMaskFeatures", features.createNames() );
+		delegate = new FeatureListCSVGeneratorVertical(MANIFEST_FUNCTION, features.createNames() );
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class MultiInputManager extends MultiInputManagerBase {
 	private RasterReader rasterReader;	// For reading appended files
 	
 	@BeanField @OptionalBean @Getter @Setter
-	private List<NamedBean<FilePathGenerator>> listAppendStack = new ArrayList<>();
+	private List<NamedBean<FilePathGenerator>> appendStack = new ArrayList<>();
 	
 	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendCfg = new ArrayList<>();
@@ -78,14 +78,15 @@ public class MultiInputManager extends MultiInputManagerBase {
 	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendCfgFromAnnotationRejectedOnly = new ArrayList<>();		// Uses both accepted rejectedonly
 	
+	/** Appends object-collections to the multi-input */
 	@BeanField @OptionalBean @Getter @Setter
-	private List<NamedBean<FilePathGenerator>> listAppendObjMaskCollection = new ArrayList<>();
+	private List<NamedBean<FilePathGenerator>> appendObjects = new ArrayList<>();
 	
 	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendKeyValueParams = new ArrayList<>();
 	
 	@BeanField @OptionalBean @Getter @Setter
-	private List<NamedBean<FilePathGenerator>> listAppendHistogram = new ArrayList<>();
+	private List<NamedBean<FilePathGenerator>> appendHistogram = new ArrayList<>();
 	
 	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FilePathGenerator>> listAppendFilePath = new ArrayList<>();
@@ -117,15 +118,15 @@ public class MultiInputManager extends MultiInputManagerBase {
 	}
 	
 	private void appendFromLists( MultiInput inputObject, boolean doDebug ) {
-		appendStack( listAppendStack, inputObject, doDebug, rasterReader );
-		appendFromCfgLists( inputObject, doDebug );
-		appendObjMaskCollection(listAppendObjMaskCollection, inputObject, doDebug );
+		appendStack( appendStack, inputObject, doDebug, rasterReader );
+		appendFromVariousCfgSources( inputObject, doDebug );
+		appendObjects(appendObjects, inputObject, doDebug );
 		appendKeyValueParams( listAppendKeyValueParams, inputObject, doDebug );
-		appendHistogram( listAppendHistogram, inputObject, doDebug );
+		appendHistogram( appendHistogram, inputObject, doDebug );
 		appendFilePath( listAppendFilePath, inputObject, doDebug );
 	}
 	
-	private void appendFromCfgLists( MultiInput inputObject, boolean doDebug ) {
+	private void appendFromVariousCfgSources( MultiInput inputObject, boolean doDebug ) {
 		appendCfg(
 			listAppendCfg,
 			inputObject,

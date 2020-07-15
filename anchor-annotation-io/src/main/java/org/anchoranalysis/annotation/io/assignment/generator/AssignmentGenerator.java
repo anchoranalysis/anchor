@@ -158,22 +158,22 @@ public class AssignmentGenerator extends RasterGenerator {
 		}
 	}
 	
-	private Stack createRGBOutlineStack(List<ObjectMask> matchedObjs, ColorPool colorPool, final List<ObjectMask> otherObjs ) throws OutputWriteFailedException, OperationFailedException {
+	private Stack createRGBOutlineStack(List<ObjectMask> matchedObjects, ColorPool colorPool, final List<ObjectMask> otherObjects ) throws OutputWriteFailedException, OperationFailedException {
 		return createGenerator(
-			otherObjs,
-			colorPool.createColors(otherObjs.size()),
-			ObjectCollectionFactory.from(matchedObjs, otherObjs)
+			otherObjects,
+			colorPool.createColors(otherObjects.size()),
+			ObjectCollectionFactory.from(matchedObjects, otherObjects)
 		).generate();
 	}
 
 	
-	private DrawObjectsGenerator createGenerator( List<ObjectMask> otherObjs, ColorList cols, ObjectCollection objects ) {
+	private DrawObjectsGenerator createGenerator( List<ObjectMask> otherObjects, ColorList cols, ObjectCollection objects ) {
 		
 		DrawObject outlineWriter = createOutlineWriter();
 		
 		if (colorPool.isDifferentColorsForMatches()) {
 			DrawObject conditionalWriter = createConditionalWriter(
-				otherObjs,
+				otherObjects,
 				outlineWriter
 			);
 			return createGenerator( conditionalWriter, cols, objects );
@@ -191,10 +191,10 @@ public class AssignmentGenerator extends RasterGenerator {
 		);
 	}
 		
-	private DrawObject createConditionalWriter( List<ObjectMask> otherObjs, DrawObject writer ) {
+	private DrawObject createConditionalWriter( List<ObjectMask> otherObjects, DrawObject writer ) {
 		return new IfElse(
 			(ObjectWithProperties mask, RGBStack stack, int id) ->
-				otherObjs.contains(mask.getMask()),
+				otherObjects.contains(mask.getMask()),
 			writer,
 			new Filled()
 		);

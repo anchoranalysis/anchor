@@ -168,7 +168,7 @@ public class ObjectMaskMerger {
 		if (!second.getBinaryValues().equals(first.getBinaryValues())) {
 			
 			if (second.getBinaryValues().createInverted().equals(first.getBinaryValues())) {
-				return BinaryChnlInverter.invertObjMaskDuplicate(second);
+				return BinaryChnlInverter.invertObjectDuplicate(second);
 			} else {
 				throw new AnchorFriendlyRuntimeException("The two objects to be merged have binary-values that are impossible to merge");
 			}

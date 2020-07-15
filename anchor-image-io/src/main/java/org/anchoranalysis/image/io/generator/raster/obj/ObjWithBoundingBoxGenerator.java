@@ -40,7 +40,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 /**
  * 
- * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator} but also outputs a serialized bounding box.
+ * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjectsAsBinaryChnlGenerator} but also outputs a serialized bounding box.
  * 
  * @author Owen Feehan
  *
@@ -49,7 +49,7 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 	
 	public ObjWithBoundingBoxGenerator(ImageResolution res ) {
 		this(
-			new ObjAsBinaryChnlGenerator(
+			new ObjectsAsBinaryChnlGenerator(
 				BinaryValuesByte.getDefault().getOnByte(),
 				res
 			)
@@ -59,7 +59,7 @@ public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<O
 	private ObjWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
 		super(
 			generator,
-			// We create an iterable bridge from ObjMask to BoundingBox
+			// We create an iterable bridge from object-mask to BoundingBox
 			new IterableGeneratorBridge<>(
 				new ObjectOutputStreamGenerator<>(
 					Optional.of("BoundingBox")

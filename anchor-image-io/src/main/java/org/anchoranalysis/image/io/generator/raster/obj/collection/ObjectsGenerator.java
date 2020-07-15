@@ -37,6 +37,8 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -45,16 +47,16 @@ import lombok.AllArgsConstructor;
  * @author Owen Feehan
  *
  */
-@AllArgsConstructor
-public abstract class ObjsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {
+@AllArgsConstructor @RequiredArgsConstructor
+public abstract class ObjectsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {
+
+	// START REQUIRED ARGUMENTS
+	@Getter
+	private final ImageDimensions dimensions;
+	// END REQUIRED ARGUMENTS
 	
 	private ObjectCollection objects;
-	private final ImageDimensions dim;
 	
-	public ObjsGenerator(ImageDimensions dim) {
-		this.dim = dim;
-	}
-
 	@Override
 	public Optional<ManifestDescription> createManifestDescription() {
 		return Optional.of(
@@ -81,10 +83,6 @@ public abstract class ObjsGenerator extends RasterGenerator implements IterableG
 	@Override
 	public Generator getGenerator() {
 		return this;
-	}
-
-	public ImageDimensions getDimensions() {
-		return dim;
 	}
 
 	protected ObjectCollection getObjects() {

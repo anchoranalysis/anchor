@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class ExtractedObjectGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectMask,Stack> {
 
 	// START REQUIRED ARGUMENTS
-	private final DrawObjectsGenerator rgbObjMaskGenerator;
+	private final DrawObjectsGenerator rgbObectGenerator;
 	private final IterableObjectGenerator<BoundingBox,Stack> chnlGenerator;
 	private final String manifestFunction;
 	private final boolean mip;
@@ -77,7 +77,7 @@ public class ExtractedObjectGenerator extends RasterGenerator implements Iterabl
 		
 		// We apply the generator
 		try {
-			rgbObjMaskGenerator.setBackground(
+			rgbObectGenerator.setBackground(
 				Optional.of(
 					DisplayStack.create(chnlExtracted)
 				)
@@ -99,9 +99,9 @@ public class ExtractedObjectGenerator extends RasterGenerator implements Iterabl
 				object.binaryVoxelBox()
 			)
 		);
-		rgbObjMaskGenerator.setIterableElement( objects );
+		rgbObectGenerator.setIterableElement( objects );
 		
-		return rgbObjMaskGenerator.generate();
+		return rgbObectGenerator.generate();
 	}
 
 	@Override
@@ -128,6 +128,6 @@ public class ExtractedObjectGenerator extends RasterGenerator implements Iterabl
 
 	@Override
 	public boolean isRGB() {
-		return rgbObjMaskGenerator.isRGB();
+		return rgbObectGenerator.isRGB();
 	}
 }

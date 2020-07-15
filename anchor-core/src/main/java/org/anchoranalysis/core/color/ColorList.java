@@ -30,6 +30,7 @@ import java.awt.Color;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class ColorList extends ArrayList<RGBColor> implements ColorIndex {
@@ -47,8 +48,13 @@ public class ColorList extends ArrayList<RGBColor> implements ColorIndex {
 		this( new RGBColor(color) );
 	}
 	
+	public ColorList( RGBColor ...colors ) {
+		this();
+		Arrays.stream(colors).forEach(this::add);
+	}
+	
 	public ColorList( RGBColor color ) {
-		addWithIndex(color);
+		add(color);
 	}
 	
 	@Override

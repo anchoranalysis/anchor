@@ -35,7 +35,7 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 class ReadObjectsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectCollection> {
 
-	private static final String OBJECT_DIRECTORY_NAME = "objMaskCollection";
+	private static final String OBJECT_DIRECTORY_NAME = "objects";
 	
 	@Override
 	public ObjectCollection deserialize(Path path) throws DeserializationFailedException {

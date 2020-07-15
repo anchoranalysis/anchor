@@ -66,15 +66,14 @@ public class ProbMapObjectCollection implements ProbMap {
 			return Optional.empty();
 		}
 		
-		// We want to pick an ObjMaskCollection sampling, by picking one of the obj masks
-		//   weighing by the number of on pixels
+		// We want to sample objects (weighted by the number of ON pixels)
 		int index = probWeights.sample(re);
 		
 		assert(index>=0);
 		
 		ObjectMask object = objects.get(index);
 		return Optional.of(
-			sampleFromObjMask(object,re)
+			sampleFromObject(object,re)
 		);
 	}
 
@@ -92,7 +91,7 @@ public class ProbMapObjectCollection implements ProbMap {
 		);
 	}
 
-	private Point3d sampleFromObjMask( ObjectMask object, RandomNumberGenerator re ) {
+	private Point3d sampleFromObject( ObjectMask object, RandomNumberGenerator re ) {
 
 		// Now we keep picking a pixel at random from the object mask until we find one that is
 		//  on.  Could be very inefficient for low-density bounding boxes? So we should make sure

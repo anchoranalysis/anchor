@@ -44,16 +44,16 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  *
  */
-public class ObjsAsUniqueValueGenerator extends ObjsGenerator {
+public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
 	
 	private static ChannelFactoryByte factory = new ChannelFactoryByte();
 	
-	public ObjsAsUniqueValueGenerator(ImageDimensions dim) {
+	public ObjectsAsUniqueValueGenerator(ImageDimensions dim) {
 		super(dim);
 	}
 
-	public ObjsAsUniqueValueGenerator(ObjectCollection masks, ImageDimensions dim) {
-		super(masks, dim);
+	public ObjectsAsUniqueValueGenerator(ImageDimensions dim, ObjectCollection masks) {
+		super(dim, masks);
 	}
 	
 	@Override

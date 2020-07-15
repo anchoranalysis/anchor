@@ -51,9 +51,9 @@ import org.junit.Test;
 
 public class ConnectedComponentUnitFindTest {
 
-	private static final int NUM_NON_OVERLAPPING_OBJS = 5;
-	private static final int NUM_OVERLAPPING_OBJS = 3;
-	private static final int NUM_OBJS = NUM_NON_OVERLAPPING_OBJS + NUM_OVERLAPPING_OBJS;
+	private static final int NUM_NON_OVERLAPPING_OBJECTS = 5;
+	private static final int NUM_OVERLAPPING_OBJECTS = 3;
+	private static final int NUM_OBJECTS = NUM_NON_OVERLAPPING_OBJECTS + NUM_OVERLAPPING_OBJECTS;
 	
 	/** Used as a positive between non-overlapping objects, or as a negative shift between overlapping objects */
 	private static final int DISTANCE_BETWEEN = 10;
@@ -67,8 +67,7 @@ public class ConnectedComponentUnitFindTest {
 	
 	@Test
 	public void testByte2d() throws OperationFailedException, CreateException {
-
-		testObjs(
+		testObjects(
 			deriveInt(false),
 			ObjectMaskFixture.OBJECT_NUM_VOXELS_2D
 		);
@@ -76,7 +75,7 @@ public class ConnectedComponentUnitFindTest {
 	
 	@Test
 	public void testInt2d() throws OperationFailedException, CreateException {
-		testObjs(
+		testObjects(
 			deriveByte(false),
 			ObjectMaskFixture.OBJECT_NUM_VOXELS_2D
 		);
@@ -85,7 +84,7 @@ public class ConnectedComponentUnitFindTest {
 	@Test
 	public void testByte3d() throws OperationFailedException, CreateException {
 
-		testObjs(
+		testObjects(
 			deriveInt(true),
 			ObjectMaskFixture.OBJECT_NUM_VOXELS_3D
 		);
@@ -93,7 +92,7 @@ public class ConnectedComponentUnitFindTest {
 	
 	@Test
 	public void testInt3d() throws OperationFailedException, CreateException {
-		testObjs(
+		testObjects(
 			deriveByte(true),
 			ObjectMaskFixture.OBJECT_NUM_VOXELS_3D
 		);
@@ -101,52 +100,49 @@ public class ConnectedComponentUnitFindTest {
 	
 	private ObjectCollection deriveInt(boolean do3D) throws OperationFailedException, CreateException {
 		return cc.deriveConnectedInt(
-			createBufferWithObjs(VoxelDataTypeUnsignedInt.INSTANCE, do3D)	
+			createBufferWithObjects(VoxelDataTypeUnsignedInt.INSTANCE, do3D)	
 		);
 	}
 	
 	private ObjectCollection deriveByte(boolean do3D) throws OperationFailedException, CreateException {
 		return cc.deriveConnectedByte(
-			createBufferWithObjs(VoxelDataTypeUnsignedByte.INSTANCE, do3D)	
+			createBufferWithObjects(VoxelDataTypeUnsignedByte.INSTANCE, do3D)	
 		);
 	}
 	
-	private void testObjs(ObjectCollection objects, int expectedSingleObjectSize ) throws CreateException, OperationFailedException {
-		assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJS+1, objects.size() );
+	private void testObjects(ObjectCollection objects, int expectedSingleObjectSize ) throws CreateException, OperationFailedException {
+		assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJECTS+1, objects.size() );
 		assertTrue("size of all objects except one", allSizesEqualExceptOne(objects, expectedSingleObjectSize) );
 	}
 		
-	private <T extends Buffer> BinaryVoxelBox<T> createBufferWithObjs( VoxelDataType bufferDataType, boolean do3D ) throws CreateException {
+	private <T extends Buffer> BinaryVoxelBox<T> createBufferWithObjects( VoxelDataType bufferDataType, boolean do3D ) throws CreateException {
 		
 		ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
 		
 		Extent extent = new Extent(
-			NUM_OBJS * (WIDTH + DISTANCE_BETWEEN),
-			NUM_OBJS * (HEIGHT + DISTANCE_BETWEEN),
+			NUM_OBJECTS * (WIDTH + DISTANCE_BETWEEN),
+			NUM_OBJECTS * (HEIGHT + DISTANCE_BETWEEN),
 			DEPTH
 		);
 		
 		@SuppressWarnings("unchecked")
 		BinaryVoxelBox<T> bvb = (BinaryVoxelBox<T>) BinaryVoxelBoxFactory.instance().create(extent, bufferDataType, BinaryValues.getDefault());
 		
-		ObjectCollection objects = createObjects(fixture);
-		objects.forEach( om->
-			bvb.setPixelsCheckMaskOn(om)
-		);
+		createObjects(fixture).forEach(bvb::setPixelsCheckMaskOn);
 		return bvb;
 	}
 	
 	private ObjectCollection createObjects(ObjectMaskFixture fixture) {
 		Point3i running = new Point3i();
 		return ObjectCollectionFactory.from(
-			generateObjectsAndIncrementRunning(NUM_NON_OVERLAPPING_OBJS, DISTANCE_BETWEEN, running, fixture),
-			generateObjectsAndIncrementRunning(NUM_OVERLAPPING_OBJS, -DISTANCE_BETWEEN, running, fixture)		
+			generateObjectsAndIncrementRunning(NUM_NON_OVERLAPPING_OBJECTS, DISTANCE_BETWEEN, running, fixture),
+			generateObjectsAndIncrementRunning(NUM_OVERLAPPING_OBJECTS, -DISTANCE_BETWEEN, running, fixture)		
 		);
 	}
 
-	private static ObjectCollection generateObjectsAndIncrementRunning(int numObjs, int shift, Point3i running, ObjectMaskFixture fixture) {
+	private static ObjectCollection generateObjectsAndIncrementRunning(int numberObjects, int shift, Point3i running, ObjectMaskFixture fixture) {
 		return ObjectCollectionFactory.fromRepeated(
-			numObjs,
+			numberObjects,
 			() -> {
 				ObjectMask mask = fixture.filledMask(running.getX(), running.getY()); 
 				running.incrementX(WIDTH + shift);

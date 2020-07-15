@@ -30,6 +30,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.log.Logger;
 
+import lombok.Value;
+
 /**
  * A positive-result when an object is found
  * 
@@ -37,26 +39,14 @@ import org.anchoranalysis.core.log.Logger;
  *
  * @param <T>
  */
+@Value
 public class Found<T> implements Findable<T> {
 
-	private T obj;
-
-	/**
-	 * The found object.
-	 * 
-	 * @param obj
-	 */
-	public Found(T obj) {
-		super();
-		this.obj = obj;
-	}
-
-	public T getObj() {
-		return obj;
-	}
+	/** The found object */
+	private T object;
 
 	@Override
 	public Optional<T> getFoundOrLog(String name, Logger logger) {
-		return Optional.of(obj);
+		return Optional.of(object);
 	}
 }

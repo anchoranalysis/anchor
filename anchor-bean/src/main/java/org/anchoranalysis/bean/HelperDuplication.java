@@ -74,9 +74,9 @@ class HelperDuplication {
 	}
 
 	private static Object duplicateCollection( Collection<?> collection, String propertyName, AnchorBean<?> parentBean ) {
-		 Stream<Optional<Object>> stream = collection.stream().map( obj ->
+		 Stream<Optional<Object>> stream = collection.stream().map( object ->
 		 	duplicatePropertyValue(
-		 		Optional.ofNullable(obj),
+		 		Optional.ofNullable(object),
 		 		propertyName,
 		 		false,
 		 		parentBean

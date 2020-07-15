@@ -39,6 +39,7 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -98,14 +99,14 @@ public class Channel {
 		return ChannelFactory.instance().create( delegate.extractSlice(z), getDimensions().getRes() );
 	}
 	
-	public Channel scaleXY( double ratioX, double ratioY) {
-		return scaleXY(ratioX, ratioY, DEFAULT_INTERPOLATOR);
+	public Channel scaleXY( ScaleFactor scaleFactor) {
+		return scaleXY(scaleFactor, DEFAULT_INTERPOLATOR);
 	}
-	
-	public Channel scaleXY( double ratioX, double ratioY, Interpolator interpolator ) {
+		
+	public Channel scaleXY( ScaleFactor scaleFactor, Interpolator interpolator ) {
 		// We round as sometimes we get values which, for example, are 7.999999, intended to be 8, due to how we use our ScaleFactors
-		int newSizeX = (int) Math.round(ratioX * getDimensions().getX());
-		int newSizeY = (int) Math.round(ratioY * getDimensions().getY());
+		int newSizeX = (int) Math.round(scaleFactor.getX() * getDimensions().getX());
+		int newSizeY = (int) Math.round(scaleFactor.getY() * getDimensions().getY());
 		return resizeXY( newSizeX, newSizeY, interpolator ); 
 	}
 	

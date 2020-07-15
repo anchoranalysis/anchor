@@ -41,6 +41,8 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Items are evaluated only when they are first needed. The value is thereafter stored.
  * 
@@ -48,18 +50,15 @@ import org.anchoranalysis.core.name.store.cachedgetter.ProfiledCachedGetter;
  *
  * @param <T> item-type in the store
  */
+@RequiredArgsConstructor
 public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
 
+	// START REQUIRED ARGUMENTS
+	private final Logger logger;
+	private final String storeDisplayName;
+	// END REQUIRED ARGUMENTS
+	
 	private HashMap<String,	WrapOperationAsCached<T,OperationFailedException>> map = new HashMap<>();
-	
-	private Logger logger;
-	private String storeDisplayName;
-	
-	public LazyEvaluationStore(Logger logger, String storeDisplayName) {
-		super();
-		this.logger = logger;
-		this.storeDisplayName = storeDisplayName;
-	}
 
 	@Override
 	public T getException(String key) throws NamedProviderGetException {

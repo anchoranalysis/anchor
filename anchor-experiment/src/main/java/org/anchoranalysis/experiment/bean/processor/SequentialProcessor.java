@@ -80,7 +80,7 @@ public class SequentialProcessor<T extends InputFromManager,S> extends JobProces
 	) {
 		
 		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<>(
-			obj -> executeJobAndLog( obj, sharedState, paramsExperiment ),
+			object -> executeJobAndLog( object, sharedState, paramsExperiment ),
 			T::descriptiveName,
 			loggerMonitor,
 			false

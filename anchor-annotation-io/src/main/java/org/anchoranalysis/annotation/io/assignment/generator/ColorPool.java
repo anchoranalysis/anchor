@@ -44,7 +44,7 @@ public class ColorPool {
 		this.differentColorsForMatches = differentColorsForMatches;
 	}
 			
-	public ColorList createColors( int numOtherObjs ) throws OperationFailedException {
+	public ColorList createColors( int numberOtherObjects ) throws OperationFailedException {
 		
 		ColorList cols = new ColorList();
 		
@@ -57,10 +57,10 @@ public class ColorPool {
 			);
 			
 			// Unmatched
-			cols.addAll( colorSetGeneratorUnpaired.genColors(numOtherObjs) );
+			cols.addAll( colorSetGeneratorUnpaired.genColors(numberOtherObjects) );
 		} else {
 			// Treat all as unmatched
-			cols.addAll( colorSetGeneratorUnpaired.genColors(numPaired + numOtherObjs) );
+			cols.addAll( colorSetGeneratorUnpaired.genColors(numPaired + numberOtherObjects) );
 		}
 
 		return cols;

@@ -26,9 +26,6 @@ package org.anchoranalysis.annotation.io.assignment;
  * #L%
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -57,30 +54,30 @@ public class AssignmentObjectFactory {
 	private ObjectCollectionDistanceMatrix cost;
 
 	public AssignmentOverlapFromPairs createAssignment(
-		ObjectCollection leftObjs,
-		ObjectCollection rightObjs,
+		ObjectCollection left,
+		ObjectCollection right,
 		double maxAcceptedCost,
 		ImageDimensions dim
 	) throws FeatureCalcException {
 
 		// Empty annotations
-		if (leftObjs.size()==0) {
-			// N.B. Also sensibly handles the case where annotationObjs and resultObjs are both empty
+		if (left.isEmpty()) {
+			// N.B. Also sensibly handles the case where annotation-objects and result-objects are both empty
 			AssignmentOverlapFromPairs out = new AssignmentOverlapFromPairs();
-			out.addRightObjects(rightObjs);
+			out.addRightObjects(right);
 			return out;
 		}
 		
 		// Empty result objects
-		if (rightObjs.size()==0) {
+		if (right.isEmpty()) {
 			AssignmentOverlapFromPairs out = new AssignmentOverlapFromPairs();
-			out.addLeftObjects(leftObjs);
+			out.addLeftObjects(left);
 			return out;
 		}
 		
 		cost = createCostMatrix(
-			maybeProject(leftObjs),
-			maybeProject(rightObjs),
+			maybeProject(left),
+			maybeProject(right),
 			dim
 		);
 		
@@ -89,11 +86,15 @@ public class AssignmentObjectFactory {
 		HungarianAlgorithm ha = new HungarianAlgorithm(cost.getDistanceMatrix());
 		int[] assign = ha.execute();
 		
-		AssignmentOverlapFromPairs ass = createAssignment(cost, assign, maxAcceptedCost);
-		if (ass.rightSize()!=rightObjs.size()) {
+		AssignmentOverlapFromPairs assignment = new CreateAssignmentFromDistanceMatrix(
+			cost,
+			assign,
+			maxAcceptedCost
+		).createAssignment();
+		if (assignment.rightSize()!=right.size()) {
 			throw new FeatureCalcException("assignment.rightSize() does not equal the number of the right objects. This should never happen!");
 		}
-		return ass;
+		return assignment;
 		
 	}
 	
@@ -124,12 +125,12 @@ public class AssignmentObjectFactory {
 				
 				ObjectMask objR = result.get(j);
 	
-				double costObjs = session.calc(
+				double costObjects = session.calc(
 					new FeatureInputPairObjects(objA,objR,nrgStack)
 				);
-				outArr[i][j] = costObjs;
+				outArr[i][j] = costObjects;
 				
-				if (Double.isNaN(costObjs)) {
+				if (Double.isNaN(costObjects)) {
 					throw new FeatureCalcException("Cost is NaN");
 				}
 			}
@@ -140,45 +141,5 @@ public class AssignmentObjectFactory {
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-	
-	private static AssignmentOverlapFromPairs createAssignment( ObjectCollectionDistanceMatrix costMatrix, int[] assign, double maxAcceptedCost) {
-		
-		AssignmentOverlapFromPairs assignment = new AssignmentOverlapFromPairs();
-		
-		ObjectCollection leftObjs = costMatrix.getObjects1();
-		ObjectCollection rightObjs = costMatrix.getObjects2();
-		
-		Set<Integer> setAnnotationObjs = new HashSet<>();
-		for( int i=0; i<leftObjs.size(); i++) {
-			setAnnotationObjs.add(i);
-		}
-		
-		Set<Integer> setResultObjs = new HashSet<>();
-		for( int i=0; i<rightObjs.size(); i++) {
-			setResultObjs.add(i);
-		}
-		
-		for( int i=0; i<assign.length; i++) {
-			int ref = assign[i];
-			if( ref!=-1) {
-				double cost = costMatrix.getDistance(i,ref); 
-				if(cost < maxAcceptedCost) {
-					assignment.addPair(leftObjs.get(i), rightObjs.get(ref), 1.0 - cost );
-					setAnnotationObjs.remove(i);
-					setResultObjs.remove(ref);
-				}
-			}
-		}
-		
-		for( int i : setAnnotationObjs) {
-			assignment.addLeftObject( leftObjs.get(i) );
-		}
-		
-		for( int i : setResultObjs) {
-			assignment.addRightObject( rightObjs.get(i) );
-		}
-		
-		return assignment;
 	}
 }

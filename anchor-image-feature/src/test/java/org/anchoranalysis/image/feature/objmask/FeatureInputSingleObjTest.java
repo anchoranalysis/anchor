@@ -71,7 +71,7 @@ public class FeatureInputSingleObjTest {
 	}
 	
 	@Test
-	public void testEquals_DifferentObjs() {
+	public void testEquals_DifferentObjects() {
 
 		NRGStackWithParams nrgStack = Mockito.mock(NRGStackWithParams.class);
 		

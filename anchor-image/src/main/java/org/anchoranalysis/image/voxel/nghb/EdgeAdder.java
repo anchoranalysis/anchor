@@ -53,7 +53,7 @@ class EdgeAdder<V> {
 	private final List<V> verticesAsList;
 	
 	/** how to convert a individual vertice to an object mask */
-	private final Function<V,ObjectMask> vertexToObjMask;
+	private final Function<V,ObjectMask> vertexToObject;
 	
 	/** the rTree underpinning the vertices (or rather their derived object-masks) */
 	private final ObjectCollectionRTree rTree;
@@ -106,7 +106,7 @@ class EdgeAdder<V> {
 			maybeAddEdge(
 				object,
 				dilated,
-				vertexToObjMask.apply(vertexOther),
+				vertexToObject.apply(vertexOther),
 				vertexWith,
 				verticesAsList.get(j)
 			);

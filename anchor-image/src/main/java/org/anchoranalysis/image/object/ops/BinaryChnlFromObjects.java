@@ -50,7 +50,7 @@ public class BinaryChnlFromObjects {
 	
 	/** We look for space IN objects, and create channel to display it */
 	public static BinaryChnl createFromObjects( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) {
-		return createChnlObjMaskCollectionHelper(
+		return createChannelObjectCollectionHelper(
 			masks,
 			sd,
 			outVal,
@@ -62,7 +62,7 @@ public class BinaryChnlFromObjects {
 
 	/** We look for space NOT in the objects, and create channel to display it */
 	public static BinaryChnl createFromNotObjects( ObjectCollection objects, ImageDimensions sd, BinaryValues outVal ) {
-		return createChnlObjMaskCollectionHelper(
+		return createChannelObjectCollectionHelper(
 			objects,
 			sd,
 			outVal,
@@ -72,12 +72,12 @@ public class BinaryChnlFromObjects {
 	}
 	
 	// We look for the values that are NOT on the masks
-	private static BinaryChnl createChnlObjMaskCollectionHelper(
+	private static BinaryChnl createChannelObjectCollectionHelper(
 		ObjectCollection masks,
 		ImageDimensions dim,
 		BinaryValues outVal,
 		int initialState,
-		byte objState
+		byte objectState
 	) {
 		
 		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
@@ -87,13 +87,13 @@ public class BinaryChnlFromObjects {
 			vbNew.setAllPixelsTo( initialState );
 		}
 		
-		writeChnlObjMaskCollection( vbNew, masks, objState );
+		writeChannelObjectCollection( vbNew, masks, objectState );
 		
 		return new BinaryChnl(chnlNew, outVal);
 	}
 		
 	// nullVal is assumed to be 0
-	private static void writeChnlObjMaskCollection( VoxelBox<ByteBuffer> vb, ObjectCollection masks, byte outVal ) {
+	private static void writeChannelObjectCollection( VoxelBox<ByteBuffer> vb, ObjectCollection masks, byte outVal ) {
 		
 		for (ObjectMask object : masks) {
 			writeObjectToVoxelBox(object, vb, outVal);

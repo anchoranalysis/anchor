@@ -53,8 +53,8 @@ import lombok.NoArgsConstructor;
 public class ExtendObjectsInto3DMask {
 	
 	public static ObjectCollection extendObjects( ObjectCollection objects2D, BinaryVoxelBox<ByteBuffer> mask3D) {
-		return objects2D.stream().map( om->
-			extendObj( om, mask3D )
+		return objects2D.stream().map( object->
+			extendObj( object, mask3D )
 		);
 	}
 	

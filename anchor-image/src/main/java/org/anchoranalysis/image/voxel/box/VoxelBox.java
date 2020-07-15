@@ -144,7 +144,7 @@ public abstract class VoxelBox<T extends Buffer> {
 	}
 	
 	
-	// Only copies pixels if part of an ObjMask, otherwise we set a null pixel
+	// Only copies pixels if part of an object, otherwise we set a null pixel
 	public void copyPixelsToCheckMask(BoundingBox sourceBox, VoxelBox<T> destVoxelBox,
 			BoundingBox destBox, VoxelBox<ByteBuffer> objectMaskBuffer, BinaryValuesByte maskBV ) {
 		

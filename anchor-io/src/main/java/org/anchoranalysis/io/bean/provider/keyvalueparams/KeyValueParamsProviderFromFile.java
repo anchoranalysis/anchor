@@ -42,10 +42,13 @@ import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FileProvider fileProvider;
 	// END BEAN PROPERTIES
 
@@ -77,13 +80,4 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 			throw new CreateException("Cannot find files", e);
 		}
 	}
-
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
-
-	public void setFileProvider(FileProvider fileProvider) {
-		this.fileProvider = fileProvider;
-	}
-
 }

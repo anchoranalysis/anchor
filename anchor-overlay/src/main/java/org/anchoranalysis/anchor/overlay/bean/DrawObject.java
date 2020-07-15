@@ -80,8 +80,8 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
 		}
 	}
 	
-	// Does computational preprocessing (so it can be cached). Outputs a collection of ObjMasks that are later re used
-	public abstract PrecalcOverlay precalculate( ObjectWithProperties object, ImageDimensions dim ) throws CreateException;
+	// Does computational preprocessing (so it can be cached). Outputs a collection of object-masks that are later re used
+	public abstract PrecalcOverlay precalculate(ObjectWithProperties object, ImageDimensions dimensions) throws CreateException;
 		
 	public void write(
 		ObjectCollectionWithProperties masks,

@@ -43,15 +43,16 @@ class ObjectMaskHDF5Reader {
 	
 	public ObjectMask apply( IHDF5Reader reader, String datasetPath ) {
 		
-		MDByteArray mdb = reader.uint8().readMDArray(datasetPath);
+		VoxelBox<ByteBuffer> voxelBox = createVoxelBox(
+			reader.uint8().readMDArray(datasetPath)
+		);
 		
-		Point3i crnrPnt = crnrPoint( reader.uint32(), datasetPath );
+		BoundingBox bbox = new BoundingBox(
+			cornerPoint( reader.uint32(), datasetPath ),
+			voxelBox.extent()
+		);
 		
-		VoxelBox<ByteBuffer> vb = createVoxelBox(mdb);
-		
-		BoundingBox bbox = new BoundingBox(crnrPnt, vb.extent() );
-		
-		return new ObjectMask(bbox, vb);
+		return new ObjectMask(bbox,	voxelBox);
 	}
 	
 	public static int extractIntAttr( IHDF5IntReader reader, String path, String attr) {
@@ -97,7 +98,7 @@ class ObjectMaskHDF5Reader {
 		return vb;
 	}
 	
-	private static Point3i crnrPoint( IHDF5IntReader reader, String path ) {
+	private static Point3i cornerPoint( IHDF5IntReader reader, String path ) {
 		return new Point3i(
 			extractIntAttr( reader, path, "x"),
 			extractIntAttr( reader, path, "y"),

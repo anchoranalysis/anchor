@@ -42,14 +42,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  *
  */
-public class ObjsMergedAsBinaryChnlGenerator extends ObjsGenerator {
+public class ObjectsMergedAsBinaryChnlGenerator extends ObjectsGenerator {
 	
-	public ObjsMergedAsBinaryChnlGenerator(ImageDimensions dim) {
+	public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dim) {
 		super(dim);
 	}
 
-	public ObjsMergedAsBinaryChnlGenerator(ObjectCollection masks, ImageDimensions dim) {
-		super(masks, dim);
+	public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dim, ObjectCollection masks) {
+		super(dim, masks);
 	}
 
 	@Override

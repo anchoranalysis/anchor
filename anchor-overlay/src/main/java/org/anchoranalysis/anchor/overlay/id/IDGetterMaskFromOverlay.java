@@ -40,7 +40,7 @@ public class IDGetterMaskFromOverlay implements IDGetter<ObjectWithProperties> {
 	// If switched on, we always do a modulus of the iteration
 	//   with the cfg size to determine the mark to reference
 	//
-	// This is, for example, useful when ObjMasks are doubled
+	// This is, for example, useful when object-masks are doubled
 	//   to include both inside and shell areas, as we can 
 	//   still reference the underlying marks
 	private boolean modIter;

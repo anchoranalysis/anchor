@@ -37,7 +37,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Base class for evaluating FeatureObjMaskPair in terms of another feature that operations on elements (first, second, merged etc.)
+ * Base class for evaluating {@link FeaturePairObjects} in terms of another feature that operations on elements (first, second, merged etc.)
  * 
  * @author Owen Feehan
  *

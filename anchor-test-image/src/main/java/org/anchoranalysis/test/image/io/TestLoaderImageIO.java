@@ -43,7 +43,7 @@ import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
+import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 
 public class TestLoaderImageIO {
 
@@ -136,9 +136,9 @@ public class TestLoaderImageIO {
 		return stackWritten.equals(stackSaved);		
 	}
 	
-	public ObjectCollection openObjsFromTestPath( String testFolderPath ) {
+	public ObjectCollection openObjectsFromTestPath( String testFolderPath ) {
 		Path filePath = delegate.resolveTestPath( testFolderPath);
-		return openObjsFromFilePath(filePath);
+		return openObjectsFromFilePath(filePath);
 	}
 	
 	/**
@@ -148,13 +148,13 @@ public class TestLoaderImageIO {
 	 * @return an object mask collection
 	 * @throws TestDataLoadException if data cannot be loaded
 	 */
-	public ObjectCollection openObjsFromFilePath( Path folderPath ) {
+	public ObjectCollection openObjectsFromFilePath( Path folderPath ) {
 
 		ConfigureBioformatsLogging.instance().makeSureConfigured();
 		TestReaderWriterUtilities.ensureRasterReader();
 		
 		try {
-			return ObjectMaskCollectionReader.createFromPath(folderPath);
+			return ObjectCollectionReader.createFromPath(folderPath);
 		} catch (DeserializationFailedException e) {
 			throw new TestDataLoadException(e);
 		}
@@ -168,7 +168,7 @@ public class TestLoaderImageIO {
 	 * @param path2 second-path
 	 * @return TRUE if the object-mask-collection are equal (every object-pixel is identical)
 	 */
-	public boolean compareTwoObjMaskCollection( String path1, String path2 ) {
+	public boolean compareTwoObjectCollections( String path1, String path2 ) {
 		
 		if (!getTestLoader().doesPathExist(path1) ) {
 			throw new TestDataLoadException(
@@ -182,9 +182,9 @@ public class TestLoaderImageIO {
 			);
 		}
 		
-		ObjectCollection objectsWritten = openObjsFromTestPath(path1);
+		ObjectCollection objectsWritten = openObjectsFromTestPath(path1);
 		
-		ObjectCollection objectsSaved = openObjsFromTestPath(path2);
+		ObjectCollection objectsSaved = openObjectsFromTestPath(path2);
 		
 		return objectsWritten.equalsDeep(objectsSaved);
 	}

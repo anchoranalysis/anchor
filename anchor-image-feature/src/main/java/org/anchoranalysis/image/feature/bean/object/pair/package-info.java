@@ -1,5 +1,4 @@
-/** Evaluating FeatureObjMaskPair in terms of the order of the elements
- * (first object, second order etc.) */
+/** Evaluating {@link org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects} and derived classes */
 package org.anchoranalysis.image.feature.bean.object.pair;
 /*-
  * #%L

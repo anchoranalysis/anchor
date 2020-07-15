@@ -199,8 +199,8 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	 * @return a new collection with scaled-masks
 	 */
 	public ObjectCollection scale(ScaleFactor factor, Interpolator interpolator) {
-		return stream().map( om->
-			om.scale(factor, interpolator)
+		return stream().map( object ->
+			object.scale(factor, interpolator)
 		);
 	}
 	
@@ -246,7 +246,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 		return stream().map(ObjectMask::duplicate);
 	}
 	
-	/** Shallow copy of ObjMasks */
+	/** Shallow copy of objects */
 	public ObjectCollection duplicateShallow() {
 		return new ObjectCollection(streamStandardJava());
 	}
@@ -300,8 +300,8 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 	}
 	
 	/** Descriptive string representation of an object-mask */
-	private static String objectToString( ObjectMask obj, int index, boolean includeIndex ) {
-		String cog = obj.centerOfGravity().toString();
+	private static String objectToString( ObjectMask object, int index, boolean includeIndex ) {
+		String cog = object.centerOfGravity().toString();
 		if (includeIndex) {
 			return index + " " + cog;
 		} else {

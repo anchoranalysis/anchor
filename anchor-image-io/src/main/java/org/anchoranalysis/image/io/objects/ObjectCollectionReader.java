@@ -48,7 +48,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class ObjectMaskCollectionReader {
+public class ObjectCollectionReader {
 
 	private static final String HDF5_EXTENSION = ".h5";
 	
@@ -63,7 +63,7 @@ public class ObjectMaskCollectionReader {
 	 * <li>Otherwise, the path is assumed to be a directory, and this is read as a TIFF-directory with serialized bounding-boxes.
 	 * </ol>
 	 * <p>
-	 * In the case of 3, if the path does not exist, but it is the subpath of an <pre>"ObjMaskCollection/"</pre> directory which does
+	 * In the case of 3, if the path does not exist, but it is the subpath of an {@link ObjectCollection} directory which does
 	 *  then a special case occurs. An empty {@code ObjectCollection} is returned.
 	 *   
 	 * @param path path or (or path missing a <pre>.h5</pre> extension) used to search for an object-collection using the rules above

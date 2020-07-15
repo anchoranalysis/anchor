@@ -85,8 +85,8 @@ public class IterateVoxels {
 	public static void callEachPoint( Optional<ObjectMask> mask, SlidingBuffer<?> buffer, ProcessVoxel process ) {
 		
 		buffer.seek(
-			mask.map( om->
-				om.getBoundingBox().cornerMin().getZ()
+			mask.map( object ->
+				object.getBoundingBox().cornerMin().getZ()
 			).orElse(0)
 		);
 		

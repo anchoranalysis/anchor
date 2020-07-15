@@ -51,7 +51,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 	private StackWithMap stackWithMap;
 	
 	private OperationMap<Cfg> mapCfg = new OperationMap<>();
-	private OperationMap<ObjectCollection> mapObjMaskCollection = new OperationMap<>();
+	private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
 	private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
 	private OperationMap<Histogram> mapHistogram = new OperationMap<>();
 	private OperationMap<Path> mapFilePath = new OperationMap<>();
@@ -92,7 +92,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 		stack().addToStore(
 			new WrapStackAsTimeSequenceStore(soImage.getStackCollection())
 		);
-		objects().addToStore( soImage.getObjMaskCollection() );
+		objects().addToStore( soImage.getObjectCollection() );
 		keyValueParams().addToStore( soImage.getParams().getNamedKeyValueParamsCollection() );
 		filePath().addToStore( soImage.getParams().getNamedFilePathCollection() );
 		histogram().addToStore( soImage.getHistogramCollection() );
@@ -116,7 +116,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 		// This probably isn't necessary, as the MultiInput object should get garbage-collected ASAP
 		//   but just in case
 		mapCfg = null;
-		mapObjMaskCollection = null;
+		mapObjects = null;
 		mapKeyValueParams = null;
 		mapHistogram = null;
 		mapFilePath = null;
@@ -127,7 +127,7 @@ public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
 	}
 
 	public MultiInputSubMap<ObjectCollection> objects() {
-		return mapObjMaskCollection;
+		return mapObjects;
 	}
 
 	public MultiInputSubMap<KeyValueParams> keyValueParams() {

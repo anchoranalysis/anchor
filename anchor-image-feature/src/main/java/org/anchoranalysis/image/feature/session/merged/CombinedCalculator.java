@@ -125,7 +125,7 @@ class CombinedCalculator {
 			);
 		}
 		
-		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
+		// Merged.
 		if (include.includeMerged()) {
 			helper.calcAndInsert(
 				input,

@@ -73,7 +73,7 @@ public class ImageInitParams implements BeanInitParams {
 	// START: Stores
 	private final NamedProviderStore<Stack> storeStack;
 	private final NamedProviderStore<Histogram> storeHistogram;
-	private final NamedProviderStore<ObjectCollection> storeObjMaskCollection;
+	private final NamedProviderStore<ObjectCollection> storeObjects;
 	private final NamedProviderStore<Channel> storeChnl;
 	private final NamedProviderStore<BinaryChnl> storeBinaryChnl;
 	private final NamedProviderStore<BinarySegmentation> storeBinarySgmn;
@@ -90,7 +90,7 @@ public class ImageInitParams implements BeanInitParams {
 		
 		storeStack = sharedObjects.getOrCreate(Stack.class);
 		storeHistogram = sharedObjects.getOrCreate(Histogram.class);
-		storeObjMaskCollection = sharedObjects.getOrCreate(ObjectCollection.class);
+		storeObjects = sharedObjects.getOrCreate(ObjectCollection.class);
 		storeChnl = sharedObjects.getOrCreate(Channel.class);
 		storeBinaryChnl = sharedObjects.getOrCreate(BinaryChnl.class);
 		storeBinarySgmn = sharedObjects.getOrCreate(BinarySegmentation.class);
@@ -104,8 +104,8 @@ public class ImageInitParams implements BeanInitParams {
 		return storeHistogram;
 	}
 	
-	public NamedProviderStore<ObjectCollection> getObjMaskCollection() {
-		return storeObjMaskCollection;
+	public NamedProviderStore<ObjectCollection> getObjectCollection() {
+		return storeObjects;
 	}
 	
 	public NamedProviderStore<Channel> getChnlCollection() {
@@ -140,7 +140,7 @@ public class ImageInitParams implements BeanInitParams {
 		populate.copyInit(BinarySegmentation.class, getBinarySgmnSet());
 		populate.copyProvider(BinaryChnlProvider.class, getBinaryImageCollection());
 		populate.copyProvider(ChnlProvider.class, getChnlCollection());
-		populate.copyProvider(ObjectCollectionProvider.class, getObjMaskCollection());
+		populate.copyProvider(ObjectCollectionProvider.class, getObjectCollection());
 		populate.copyProvider(HistogramProvider.class, getHistogramCollection());
 		
 		stackProviderBridge = populate.copyProvider(StackProvider.class, getStackCollection());
@@ -166,11 +166,11 @@ public class ImageInitParams implements BeanInitParams {
 		}
 	}
 	
-	public void copyObjMaskCollectionFrom( NamedProvider<ObjectCollection> collectionSource ) throws OperationFailedException {
+	public void copyObjectsFrom( NamedProvider<ObjectCollection> collectionSource ) throws OperationFailedException {
 
 		try {
 			for (String id : collectionSource.keys()) {
-				addToObjMaskCollection(
+				addToObjects(
 					id,
 					new IdentityOperation<>(
 						collectionSource.getException(id)
@@ -182,8 +182,8 @@ public class ImageInitParams implements BeanInitParams {
 		}
 	}
 	
-	public void addToObjMaskCollection(String identifier, Operation<ObjectCollection,OperationFailedException> opObjMaskCollection) throws OperationFailedException {
-		getObjMaskCollection().add(identifier, opObjMaskCollection);
+	public void addToObjects(String identifier, Operation<ObjectCollection,OperationFailedException> opObjects) throws OperationFailedException {
+		getObjectCollection().add(identifier, opObjects);
 	}
 	
 	public void addToKeyValueParamsCollection( String identifier, KeyValueParams params ) throws OperationFailedException {

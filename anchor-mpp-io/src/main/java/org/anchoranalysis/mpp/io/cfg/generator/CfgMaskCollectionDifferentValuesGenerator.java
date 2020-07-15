@@ -36,7 +36,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.collection.ObjsAsUniqueValueGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.collection.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.Generator;
@@ -46,12 +46,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator implements IterableGenerator<Cfg> {
 
-	private ObjsAsUniqueValueGenerator delegate;
+	private ObjectsAsUniqueValueGenerator delegate;
 	private Cfg cfg;
 	private RegionMembershipWithFlags rm;
 	
 	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dim, RegionMembershipWithFlags rm ) {
-		delegate = new ObjsAsUniqueValueGenerator(dim);
+		delegate = new ObjectsAsUniqueValueGenerator(dim);
 		this.rm = rm;
 	}
 	

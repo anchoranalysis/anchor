@@ -43,6 +43,7 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
@@ -138,14 +139,14 @@ public class BinaryChnl {
 		return channel.countEqualTo( binaryValues.getOnInt() );
 	}
 	
-	public BinaryChnl scaleXY(double ratioX, double ratioY, Interpolator interpolator) {
+	public BinaryChnl scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
 
-		if (ratioX==1.0 && ratioY==1.0) {
+		if (scaleFactor.isNoScale()) {
 			// Nothing to do
 			return this;
 		}
 		
-		Channel scaled = this.channel.scaleXY(ratioX, ratioY, interpolator);
+		Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
 		
 		BinaryChnl binaryChnl = new BinaryChnl(scaled, binaryValues);
 		

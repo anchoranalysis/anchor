@@ -84,7 +84,7 @@ public class RegionMap extends AnchorBean<RegionMap> {
 		return listOut;
 	}
 
-	// See {@link ch.ethz.biol.cell.mpp.nrg.feature.ind.AsObjMask} for an example of where equals is needed on this class
+	// See {@link org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask} for an example of where equals is needed on this class
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) { return false; }

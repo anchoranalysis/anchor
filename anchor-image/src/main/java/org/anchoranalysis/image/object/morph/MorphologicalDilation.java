@@ -53,12 +53,13 @@ import lombok.NoArgsConstructor;
 public class MorphologicalDilation {
 	
 	/**
+	 * Dilates an object-mask, growing the bounding-box as necessary.
 	 * 
-	 * @param object
-	 * @param extent if non-NULL ensures the object stays within certain bounds
-	 * @param do3D
-	 * @param iterations
-	 * @return
+	 * @param object the object to dilate
+	 * @param extent if present, restricts the obejct to remain within certain bounds
+	 * @param do3D whether to perform dilation in 3D or 2D
+	 * @param iterations number of dilations to perform
+	 * @return a newly created object-mask with bounding-box grown in relevant directions by {@code iterations}
 	 * @throws CreateException
 	 */
 	public static ObjectMask createDilatedObject(

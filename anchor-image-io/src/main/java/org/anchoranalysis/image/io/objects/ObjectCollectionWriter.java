@@ -1,13 +1,10 @@
 package org.anchoranalysis.image.io.objects;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,12 +26,18 @@ import lombok.NoArgsConstructor;
  * #L%
  */
 
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.io.generator.IterableGenerator;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class PathUtilities {
+public class ObjectCollectionWriter {
 	
-	public static final String OBJS_ROOT_PATH = "/ObjMaskCollection/";	// NOSONAR
+	public static final String MANIFEST_DESCRIPTION = "objects";
 	
-	public static String pathForObj( int index ) {
-		return String.format("ObjMaskCollection/%08d", index);
+	public static IterableGenerator<ObjectCollection> generator() {
+		return new GeneratorHDF5(true);
 	}
 }

@@ -30,13 +30,21 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.test.LoggingFixture;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BoundIOContextFixture {
-
-	private BoundIOContextFixture() {}
+	
+	public static BoundIOContext withSuppressedLogger( Path modelDir ) {
+		BoundIOContext out = withSuppressedLogger();
+		when(out.getModelDirectory()).thenReturn(modelDir);
+		return out;
+	}
 	
 	public static BoundIOContext withSuppressedLogger() {
 		return withLogger(
@@ -45,16 +53,11 @@ public class BoundIOContextFixture {
 	}
 	
 	public static BoundIOContext withLogger(Logger logger) {
-		BoundIOContext out = mock(BoundIOContext.class);
+		BoundIOContext out = spy(BoundIOContext.class);
 		when(out.getLogger()).thenReturn(logger);
 		when(out.getLogReporter()).thenReturn(logger.messageLogger());
 		when(out.getErrorReporter()).thenReturn(logger.errorReporter());
 		return out;
 	}
-	
-	public static BoundIOContext withSuppressedLogger( Path modelDir ) {
-		BoundIOContext out = withSuppressedLogger();
-		when(out.getModelDirectory()).thenReturn(modelDir);
-		return out;
-	}
+
 }

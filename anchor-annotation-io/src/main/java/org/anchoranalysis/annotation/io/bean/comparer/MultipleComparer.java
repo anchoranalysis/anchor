@@ -108,50 +108,48 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 		
 		for( NamedBean<Comparer> ni : listComparers ) {
 			
-			ObjectCollection annotationObjs = annotation.convertToObjs(
+			ObjectCollection annotationObjects = annotation.convertToObjects(
 				background.getDimensions()
 			);
 			
-			Findable<ObjectCollection> compareObjs = ni.getValue().createObjs(annotationPath, background.getDimensions(), debugMode);
+			Findable<ObjectCollection> compareObjects = ni.getValue().createObjects(annotationPath, background.getDimensions(), debugMode);
 			
-			Optional<ObjectCollection> foundObjs = compareObjs.getFoundOrLog(ni.getName(), logger);
+			Optional<ObjectCollection> foundObjects = compareObjects.getFoundOrLog(ni.getName(), logger);
 			
-			if (!foundObjs.isPresent()) {
-				continue;
+			if (foundObjects.isPresent()) {
+				out.add(
+					compare(
+						annotationObjects,
+						foundObjects.get(),
+						background,
+						ni.getName(),
+						colorSetGenerator
+					)
+				);	
 			}
-			
-			out.add(
-				compare(
-					annotationObjs,
-					foundObjs.get(),
-					background,
-					ni.getName(),
-					colorSetGenerator
-				)
-			);
 		}
 		
 		return out;
 	}
 	
 	private SimpleNameValue<Stack> compare(
-		ObjectCollection annotationObjs,
-		ObjectCollection compareObjs,
+		ObjectCollection annotationObjects,
+		ObjectCollection compareObjects,
 		DisplayStack background,
 		String rightName,
 		ColorSetGenerator colorSetGenerator
 	) throws CreateException {
 		// Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow happening, so we prevent it from interfereing
 		//  with the rest of the analysis as a workaround
-		removeObjectsWithNoPixels( annotationObjs );
-		removeObjectsWithNoPixels( compareObjs );
+		removeObjectsWithNoPixels( annotationObjects );
+		removeObjectsWithNoPixels( compareObjects );
 				
 		
 		AssignmentOverlapFromPairs assignment;
 		try {
 			assignment = new AssignmentObjectFactory(featureEvaluator,useMIP).createAssignment(
-				annotationObjs,
-				compareObjs,
+				annotationObjects,
+				compareObjects,
 				maxCost,
 				background.getDimensions()
 			);

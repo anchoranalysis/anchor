@@ -44,16 +44,19 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private Define define;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressSubfolders = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressOutputExceptions = false;
 	// END BEAN PROPERTIES
 	
@@ -93,7 +96,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 	}
 	
 	// General objects can be outputted
-	protected void outputSharedObjs(ImageInitParams initParams, BoundIOContext context) throws OutputWriteFailedException {
+	protected void outputSharedObjects(ImageInitParams initParams, BoundIOContext context) throws OutputWriteFailedException {
 		if (suppressOutputExceptions) {
 			SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
 		} else {
@@ -101,38 +104,14 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 		}
 	}
 	
-	protected void outputSharedObjs(MPPInitParams initParams, BoundIOContext context) throws OutputWriteFailedException {
+	protected void outputSharedObjects(MPPInitParams initParams, BoundIOContext context) throws OutputWriteFailedException {
 		
-		outputSharedObjs(initParams.getImage(), context);
+		outputSharedObjects(initParams.getImage(), context);
 		
 		if (suppressOutputExceptions) {
 			SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
 		} else {
 			SharedObjectsOutputter.outputWithException(initParams, context.getOutputManager(), suppressSubfolders);
 		}
-	}
-	
-	public Define getDefine() {
-		return define;
-	}
-
-	public void setDefine(Define define) {
-		this.define = define;
-	}
-
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
-
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
-
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
-
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
 	}
 }

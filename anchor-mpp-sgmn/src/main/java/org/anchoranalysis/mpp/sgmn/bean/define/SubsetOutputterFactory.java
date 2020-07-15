@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.io.objects.ObjectMaskCollectionWriter;
+import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
@@ -42,15 +42,16 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
+import org.anchoranalysis.mpp.sgmn.define.OutputterDirectories;
 
 import lombok.AllArgsConstructor;
 
 
 /**
  * This class will expect for the following second-level output keys:
- * cfg
- * hist
- * objs
+ * {@link StackOutputKeys.CFG}
+ * {@link StackOutputKeys.HISTOGRAM}
+ * {@link StackOutputKeys.OBJECTS}
  * 
  * @author Owen Feehan
  *
@@ -69,7 +70,7 @@ class SubsetOutputterFactory {
 				Optional.of("cfg")
 			),
 			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.CFG),
-			"cfgCollection"
+			OutputterDirectories.CFG
 		);
 	}
 
@@ -78,16 +79,16 @@ class SubsetOutputterFactory {
 			soMPP.getImage().getHistogramCollection(),
 			new HistogramCSVGenerator(),
 			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.HISTOGRAM),
-			"histogramCollection"
+			OutputterDirectories.HISTOGRAM
 		);
 	}
 	
 	public SubsetOutputter<ObjectCollection> objects() {
 		return create(
-			soMPP.getImage().getObjMaskCollection(),
-			ObjectMaskCollectionWriter.generator(),
+			soMPP.getImage().getObjectCollection(),
+			ObjectCollectionWriter.generator(),
 			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.OBJECTS),
-			"objMaskCollection"
+			OutputterDirectories.OBJECT
 		);
 	}
 	

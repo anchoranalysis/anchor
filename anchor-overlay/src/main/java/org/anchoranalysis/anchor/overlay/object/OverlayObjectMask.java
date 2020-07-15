@@ -41,26 +41,29 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
+import lombok.Getter;
+
 public class OverlayObjectMask extends Overlay {
 
-	private static ScaledMaskCreator scaledMaskCreator = new FromMask();
+	private static final ScaledMaskCreator SCALED_MASK_CREATOR = new FromMask();
 	
-	private final ObjectWithProperties objects;
+	@Getter
+	private final ObjectWithProperties object;
 	
 	/** ID associated with object */
-	private int id;
+	private final int id;
 	
-	public OverlayObjectMask( ObjectMask objects, int id ) {
+	public OverlayObjectMask( ObjectMask object, int id ) {
 		super();
-		this.objects = new ObjectWithProperties( objects );
-		this.objects.getProperties().put("id", id);
+		this.object = new ObjectWithProperties( object );
+		this.object.getProperties().put("id", id);
 		this.id = id;
 	}
 
 	// Assumes object mask is always inside the dim. TODO verify that is valid.
 	@Override
 	public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
-		return objects.getBoundingBox();
+		return object.getBoundingBox();
 	}
 
 	@Override
@@ -69,7 +72,7 @@ public class OverlayObjectMask extends Overlay {
 			ObjectWithProperties om, Overlay ol, ImageDimensions sdUnscaled,
 			ImageDimensions sdScaled, BinaryValuesByte bvOut) throws CreateException {
 		
-		return scaledMaskCreator.createScaledMask(
+		return SCALED_MASK_CREATOR.createScaledMask(
 			overlayWriter,
 			om,
 			zoomFactorNew,
@@ -86,7 +89,7 @@ public class OverlayObjectMask extends Overlay {
 		ImageDimensions dimEntireImage,
 		BinaryValuesByte bvOut
 	) throws CreateException {
-		return objects;
+		return object;
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public class OverlayObjectMask extends Overlay {
 	
 	@Override
 	public boolean isPointInside( DrawOverlay overlayWriter, Point3i pnt ) {
-		return objects.getMask().contains(pnt);
+		return object.getMask().contains(pnt);
 	}
 
 	// We delegate uniqueness-check to the mask
@@ -104,7 +107,7 @@ public class OverlayObjectMask extends Overlay {
 	public boolean equals(Object arg0) {
 		if (arg0 instanceof OverlayObjectMask) {
 			OverlayObjectMask objCast = (OverlayObjectMask) arg0;
-			return this.objects.getMask().equals(objCast.objects.getMask());	
+			return this.object.getMask().equals(objCast.object.getMask());	
 		} else {
 			return false;
 		}
@@ -113,7 +116,7 @@ public class OverlayObjectMask extends Overlay {
 
 	@Override
 	public int hashCode() {
-		return objects.getMask().hashCode();
+		return object.getMask().hashCode();
 	}
 
 	@Override
@@ -122,9 +125,5 @@ public class OverlayObjectMask extends Overlay {
 		OverlayProperties out = new OverlayProperties();
 		out.add("id", id);
 		return out;
-	}
-
-	public ObjectWithProperties getObjMask() {
-		return objects;
 	}
 }
