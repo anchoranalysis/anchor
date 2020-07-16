@@ -39,6 +39,8 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Owen Feehan
@@ -47,9 +49,9 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEvaluator<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private StackProvider stackProviderNRG;
+    @BeanField @OptionalBean @Getter @Setter private StackProvider stackProviderNRG;
 
-    @BeanField @OptionalBean private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -94,21 +96,5 @@ public class FeatureEvaluatorNrgStack<T extends FeatureInput> extends FeatureEva
         } else {
             return new KeyValueParams();
         }
-    }
-
-    public StackProvider getStackProviderNRG() {
-        return stackProviderNRG;
-    }
-
-    public void setStackProviderNRG(StackProvider stackProviderNRG) {
-        this.stackProviderNRG = stackProviderNRG;
-    }
-
-    public KeyValueParamsProvider getKeyValueParamsProvider() {
-        return keyValueParamsProvider;
-    }
-
-    public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-        this.keyValueParamsProvider = keyValueParamsProvider;
     }
 }

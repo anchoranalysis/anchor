@@ -31,18 +31,23 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * The dimensions of an image (in voxels), together with the image resolution
  *
  * <p>This class is IMMUTABLE.
  */
+@EqualsAndHashCode
 public final class ImageDimensions implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
     private final ImageResolution res;
+    
+    @Getter
     private final Extent extent;
 
     /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
@@ -102,20 +107,12 @@ public final class ImageDimensions implements Serializable {
         return extent.offset(x, y, z);
     }
 
-    public Extent getExtent() {
-        return extent;
-    }
-
     public boolean contains(Point3d point) {
         return extent.contains(point);
     }
 
     public boolean contains(Point3i point) {
         return extent.contains(point);
-    }
-
-    public boolean equals(ImageDimensions obj) {
-        return extent.equals(obj.extent);
     }
 
     public final int offset(Point3i point) {
@@ -137,29 +134,5 @@ public final class ImageDimensions implements Serializable {
     @Override
     public String toString() {
         return extent.toString();
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((extent == null) ? 0 : extent.hashCode());
-        result = prime * result + ((res == null) ? 0 : res.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ImageDimensions other = (ImageDimensions) obj;
-        if (extent == null) {
-            if (other.extent != null) return false;
-        } else if (!extent.equals(other.extent)) return false;
-        if (res == null) {
-            if (other.res != null) return false;
-        } else if (!res.equals(other.res)) return false;
-        return true;
     }
 }

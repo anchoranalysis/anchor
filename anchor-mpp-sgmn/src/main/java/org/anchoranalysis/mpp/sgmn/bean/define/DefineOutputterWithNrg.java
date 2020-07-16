@@ -37,15 +37,16 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class DefineOutputterWithNrg extends DefineOutputter {
 
     // START BEAN PROPERTIES
-    @BeanField
-    private StackProvider nrgStackProvider =
+    @BeanField @Getter @Setter private StackProvider nrgStackProvider =
             new StackProviderReference(ImgStackIdentifiers.NRG_STACK);
 
-    @BeanField @OptionalBean private KeyValueParamsProvider nrgParamsProvider;
+    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider nrgParamsProvider;
     // END BEAN PROPERTIES
 
     protected NRGStackWithParams createNRGStack(ImageInitParams so, Logger logger)
@@ -61,21 +62,5 @@ public abstract class DefineOutputterWithNrg extends DefineOutputter {
             stack.setParams(nrgParamsProvider.create());
         }
         return stack;
-    }
-
-    public StackProvider getNrgStackProvider() {
-        return nrgStackProvider;
-    }
-
-    public void setNrgStackProvider(StackProvider nrgStackProvider) {
-        this.nrgStackProvider = nrgStackProvider;
-    }
-
-    public KeyValueParamsProvider getNrgParamsProvider() {
-        return nrgParamsProvider;
-    }
-
-    public void setNrgParamsProvider(KeyValueParamsProvider nrgParamsProvider) {
-        this.nrgParamsProvider = nrgParamsProvider;
     }
 }

@@ -31,7 +31,12 @@ import java.util.function.Predicate;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.params.InputContextParams;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor @AllArgsConstructor
 public class MatchGlob extends FileMatcher {
 
     // START BEAN FIELDS
@@ -39,14 +44,8 @@ public class MatchGlob extends FileMatcher {
      * The string describing a glob e.g. "*.jpg". If empty, then the inputFilterGlob from
      * inputContext is used
      */
-    @BeanField @AllowEmpty private String glob = "";
+    @BeanField @AllowEmpty @Getter @Setter private String glob = "";
     // END BEAN FIELDS
-
-    public MatchGlob() {}
-
-    public MatchGlob(String glob) {
-        this.glob = glob;
-    }
 
     @Override
     protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
@@ -59,13 +58,5 @@ public class MatchGlob extends FileMatcher {
         } else {
             return inputContext.getInputFilterGlob();
         }
-    }
-
-    public String getGlob() {
-        return glob;
-    }
-
-    public void setGlob(String glob) {
-        this.glob = glob;
     }
 }
