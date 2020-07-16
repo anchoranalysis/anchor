@@ -122,12 +122,12 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 	}
 	
 	public ColorIndex genDefaultColorIndex( int cols ) throws OperationFailedException {
-		return new ColorIndexModulo( getDefaultColorSetGenerator().genColors( cols ) );
+		return new ColorIndexModulo( getDefaultColorSetGenerator().generateColors( cols ) );
 	}
 	
 	public ColorIndex genPrependedDefaultColorIndex( int cols, RGBColor color ) throws OperationFailedException {
 		PrependColorSetGenerator prependedColIndex = new PrependColorSetGenerator( getDefaultColorSetGenerator(), color);
-		return prependedColIndex.genColors( cols );
+		return prependedColIndex.generateColors( cols );
 	}
 
 	

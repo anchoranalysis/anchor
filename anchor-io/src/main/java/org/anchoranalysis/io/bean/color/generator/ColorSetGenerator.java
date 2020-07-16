@@ -35,6 +35,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 // The IInitProposerSharedObjects is optional, it's not guaranteed to be called in all situations that genColors is used
 public abstract class ColorSetGenerator extends AnchorBean<ColorSetGenerator> {
 
-	public abstract ColorList genColors( int numColors ) throws OperationFailedException;
+	public abstract ColorList generateColors( int numberColors ) throws OperationFailedException;
 
 }

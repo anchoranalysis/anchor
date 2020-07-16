@@ -48,7 +48,7 @@ public class HashedColorSet implements ColorIndex {
 	// Constructor
 	public HashedColorSet(ColorSetGenerator colorSetGnrtr, int uniqueCols ) throws OperationFailedException {
 		super();
-		this.colorList = colorSetGnrtr.genColors( uniqueCols );
+		this.colorList = colorSetGnrtr.generateColors( uniqueCols );
 	}
 
 	

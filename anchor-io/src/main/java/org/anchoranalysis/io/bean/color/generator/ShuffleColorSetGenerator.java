@@ -48,8 +48,8 @@ public class ShuffleColorSetGenerator extends ColorSetGenerator {
 	}
 	
 	@Override
-	public ColorList genColors(int numColors) throws OperationFailedException {
-		ColorList lst = source.genColors(numColors);
+	public ColorList generateColors(int numberColors) throws OperationFailedException {
+		ColorList lst = source.generateColors(numberColors);
 		lst.shuffle();
 		return lst;
 	}

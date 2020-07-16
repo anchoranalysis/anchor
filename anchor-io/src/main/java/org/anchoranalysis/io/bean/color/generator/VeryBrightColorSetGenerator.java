@@ -77,12 +77,12 @@ public class VeryBrightColorSetGenerator extends ColorSetGenerator {
 	}
 
 	@Override
-	public ColorList genColors(int numColors) {
+	public ColorList generateColors(int numberColors) {
 
 		int hexCodesSize = hexCodes.length;
 		
 		ColorList out = new ColorList();
-		for( int i=0; i<numColors; i++) {
+		for( int i=0; i<numberColors; i++) {
 			int hexCodeIndex = i % hexCodesSize;
 			out.add( hex2Rgb(hexCodes[hexCodeIndex]));
 		}

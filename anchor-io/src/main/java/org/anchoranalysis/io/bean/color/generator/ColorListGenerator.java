@@ -44,7 +44,7 @@ public class ColorListGenerator extends ColorSetGenerator {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ColorList genColors(int numColors) throws OperationFailedException {
+	public ColorList generateColors(int numberColors) throws OperationFailedException {
 		
 		try {
 			ColorList out = new ColorList();
@@ -52,7 +52,7 @@ public class ColorListGenerator extends ColorSetGenerator {
 				out.add( item.duplicateBean().rgbColor() );
 			}
 			
-			while ( out.size()<numColors ) {
+			while ( out.size()<numberColors ) {
 				out.add( list.get( list.size()-1 ).duplicateBean().rgbColor() );
 			}
 			

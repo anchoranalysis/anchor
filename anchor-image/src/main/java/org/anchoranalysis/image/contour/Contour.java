@@ -78,21 +78,21 @@ public class Contour {
 		return points.get( points.size() -1 );
 	}
 	
-	public boolean connectedTo( Contour c ) {
+	public boolean connectedTo( Contour contour ) {
 		
-		if (connectedToFirstPointOf(c)) {
+		if (connectedToFirstPointOf(contour)) {
 			return true;
 		}
 		
-		return connectedToLastPointOf(c);
+		return connectedToLastPointOf(contour);
 	}
 		
-	public boolean connectedToFirstPointOf( Contour c ) {
-		return getLastPoint().distance(c.getFirstPoint()) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
+	public boolean connectedToFirstPointOf( Contour contour ) {
+		return getLastPoint().distance(contour.getFirstPoint()) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
 	}
 
-	public boolean connectedToLastPointOf( Contour c ) {
-		return getFirstPoint().distance(c.getLastPoint()) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
+	public boolean connectedToLastPointOf( Contour contour ) {
+		return getFirstPoint().distance(contour.getLastPoint()) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
 	}
 
 	public String summaryStr() {

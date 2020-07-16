@@ -52,15 +52,15 @@ public class ColorPool {
 			
 			// Matched					
 			cols.addAllScaled(
-				colorSetGeneratorPaired.genColors( numPaired ),
+				colorSetGeneratorPaired.generateColors( numPaired ),
 				0.5
 			);
 			
 			// Unmatched
-			cols.addAll( colorSetGeneratorUnpaired.genColors(numberOtherObjects) );
+			cols.addAll( colorSetGeneratorUnpaired.generateColors(numberOtherObjects) );
 		} else {
 			// Treat all as unmatched
-			cols.addAll( colorSetGeneratorUnpaired.genColors(numPaired + numberOtherObjects) );
+			cols.addAll( colorSetGeneratorUnpaired.generateColors(numPaired + numberOtherObjects) );
 		}
 
 		return cols;
