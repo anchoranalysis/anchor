@@ -36,6 +36,11 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class EllipseBounds extends EllipseBoundsWithoutRotation {
 
 	/**
@@ -44,14 +49,9 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
 	private static final long serialVersionUID = 5833714580114414447L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Bound rotationAngle;
 	// END BEAN PROPERTIES
-	
-	public EllipseBounds() {
-		super();
-		rotationAngle = null;
-	}
 
 	// Constructor
 	public EllipseBounds(Bound radiusBnd) {
@@ -70,16 +70,10 @@ public class EllipseBounds extends EllipseBoundsWithoutRotation {
 		return String.format("%s, radius=(%s), rotation=(%s)", getBeanName(), getRadius().toString(), rotationAngle.toString() );
 	}
 
-	public Bound getRotationAngle() {
-		return rotationAngle;
-	}
-
-	public void setRotationAngle(Bound rotationAngle) {
-		this.rotationAngle = rotationAngle;
-	}
-
 	@Override
-	public Orientation randomOrientation(RandomNumberGenerator re, ImageResolution res) {
-		return new Orientation2D ( getRotationAngle().resolve(res, false).randOpen(re) );
+	public Orientation randomOrientation(RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+		return new Orientation2D(
+			getRotationAngle().resolve(res, false).randOpen(randomNumberGenerator)
+		);
 	}
 }

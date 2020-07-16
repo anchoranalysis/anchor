@@ -38,5 +38,5 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class OrientationProposer extends MPPBean<OrientationProposer> implements CompatibleWithMark {
 
-	public abstract Optional<Orientation> propose( Mark mark, ImageDimensions dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException;
+	public abstract Optional<Orientation> propose( Mark mark, ImageDimensions dim, RandomNumberGenerator randomNumberGenerator ) throws ProposalAbnormalFailureException;
 }

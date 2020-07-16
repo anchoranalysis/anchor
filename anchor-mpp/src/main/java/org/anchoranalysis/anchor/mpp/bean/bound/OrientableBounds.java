@@ -37,5 +37,5 @@ public abstract class OrientableBounds extends MarkBounds {
 	 */
 	private static final long serialVersionUID = -7378361406755456211L;
 
-	public abstract Orientation randomOrientation(RandomNumberGenerator re, ImageResolution res);
+	public abstract Orientation randomOrientation(RandomNumberGenerator randomNumberGenerator, ImageResolution res);
 }

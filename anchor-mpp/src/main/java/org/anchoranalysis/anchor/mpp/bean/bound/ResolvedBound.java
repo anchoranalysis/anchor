@@ -73,10 +73,9 @@ public class ResolvedBound extends AnchorBean<ResolvedBound> implements Serializ
 		this.max = this.max * multFactor;
 	}
 	
-	// A random value between the bounds (open interval)
-	public double randOpen( RandomNumberGenerator re ) {
-		double diff = max - min;
-		return min + (re.nextDouble() * diff );
+	/** A random value between the bounds (open interval) */
+	public double randOpen( RandomNumberGenerator randomNumberGenerator ) {
+		return randomNumberGenerator.sampleDoubleFromRange(min,max);
 	}
 	
 	@Override

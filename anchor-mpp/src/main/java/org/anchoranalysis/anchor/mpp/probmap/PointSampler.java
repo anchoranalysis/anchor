@@ -34,7 +34,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public interface PointSampler {
 
-	Optional<Point3d> sample( RandomNumberGenerator re );
+	Optional<Point3d> sample( RandomNumberGenerator randomNumberGenerator );
 	
 	public abstract ImageDimensions getDimensions();
 }

@@ -45,18 +45,18 @@ public class RadiiRandomizer {
 	
 	public static Point3d randomizeRadii(
 		Bound bound,
-		RandomNumberGenerator re,
+		RandomNumberGenerator randomNumberGenerator,
 		ImageResolution sr,
 		boolean do3D
 	) {
 		return new Point3d(
-			randomizeRadius(bound,re,sr),
-			randomizeRadius(bound,re,sr),
-			do3D ? randomizeRadius(bound,re,sr) : 0
+			randomizeRadius(bound,randomNumberGenerator,sr),
+			randomizeRadius(bound,randomNumberGenerator,sr),
+			do3D ? randomizeRadius(bound,randomNumberGenerator,sr) : 0
 		);
 	}
 	
-	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator re, ImageResolution sr ) {
-		return radiusBound.resolve(sr, true).randOpen( re );
+	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator randomNumberGenerator, ImageResolution sr ) {
+		return radiusBound.resolve(sr, true).randOpen( randomNumberGenerator );
 	}
 }

@@ -230,7 +230,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 	//  it's more efficient to sample from this, than to always insist upon uniqueness, as this involves
 	//  creating a HashMap each query (due to the implementation)
 	@Override
-	public T sampleRandomPairNonUniform( RandomNumberGenerator re ) {
+	public T sampleRandomPairNonUniform( RandomNumberGenerator randomNumberGenerator ) {
 		
 		int count = this.graph.edgeSetWithPossibleDuplicates().size();
 		
@@ -239,7 +239,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
 		}
 		
 		// Pick an element from the existing configuration
-		int index = (int) (re.nextDouble() * count);
+		int index = randomNumberGenerator.sampleIntFromRange(count);
 		
 		int i =0;
 		for( EdgeTypeWithVertices<Mark,T> di : getPairsWithPossibleDuplicates()) {

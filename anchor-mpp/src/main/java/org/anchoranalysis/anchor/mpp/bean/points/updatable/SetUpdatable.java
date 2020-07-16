@@ -58,10 +58,13 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class SetUpdatable extends UpdatablePointsContainer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEAN PROPERTIES
 	
@@ -86,14 +89,13 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	// Randomise location
     @Override
-	public Optional<Point3d> sample( RandomNumberGenerator re ) {
+	public Optional<Point3d> sample( RandomNumberGenerator randomNumberGenerator ) {
 	
     	if (setPoints.isEmpty()) {
     		return Optional.empty();
     	}
     	
-    	int randomIndex = (int) (re.nextDouble() * setPoints.size());
-    	Point3d point = setPoints.get(randomIndex);
+    	Point3d point = sampleFromSet(setPoints, randomNumberGenerator);
     	
 		assert( point.getX() >= 0 );
 		assert( point.getY() >= 0 );
@@ -332,12 +334,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	public int size() {
 		return setPoints.size();
 	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+		
+	private static <T> T sampleFromSet( RandomSet<T> set, RandomNumberGenerator randomNumberGenerator ) {
+		return set.get(
+			randomNumberGenerator.sampleIntFromRange(set.size())	
+		);
 	}
 }

@@ -152,16 +152,16 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		marks.remove( minIndex );
 	}
 
-	public final int randomIndex( RandomNumberGenerator re ) {
-		return (int) (re.nextDouble() * size());
+	public final int randomIndex( RandomNumberGenerator randomNumberGenerator ) {
+		return randomNumberGenerator.sampleIntFromRange(size());
 	}
 	
 	public Mark get(int index) {
 		return marks.get(index);
 	}
 
-	public final Mark randomMark( RandomNumberGenerator re ) {
-		return marks.get( randomIndex(re) );
+	public final Mark randomMark( RandomNumberGenerator randomNumberGenerator ) {
+		return marks.get( randomIndex(randomNumberGenerator) );
 	}
 	
 	public final void exchange( int index, Mark newMark ) {

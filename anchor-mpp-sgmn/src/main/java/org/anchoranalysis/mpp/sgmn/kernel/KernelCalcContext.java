@@ -44,14 +44,18 @@ public class KernelCalcContext {
 		CfgGenContext cfgGenContext,
 		NRGStackWithParams nrgStack,
 		NRGSchemeWithSharedFeatures nrgScheme,
-		RandomNumberGenerator re,
+		RandomNumberGenerator randomNumberGenerator,
 		ErrorNode errorNode
 	) {
-		super();
 		this.nrgScheme = nrgScheme;
 		this.cfgGenContext = cfgGenContext;
 		
-		this.proposerContext = new ProposerContext(re, nrgStack, nrgScheme.getRegionMap(), errorNode); 
+		this.proposerContext = new ProposerContext(
+			randomNumberGenerator,
+			nrgStack,
+			nrgScheme.getRegionMap(),
+			errorNode
+		); 
 	}
 	
 	public ProposerContext proposer() {

@@ -38,36 +38,31 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTermination
 import org.anchoranalysis.mpp.sgmn.kernel.CfgGenContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public class OptSchemeContext {
 
-	private String experimentDescription;
-	private NRGSchemeWithSharedFeatures nrgScheme;
-	private DualStack dualStack;
-	private TriggerTerminationCondition triggerTerminationCondition;
-	private BoundIOContext context;
-	private RandomNumberGenerator re;
-	private CfgGen cfgGen;
+	@Getter
+	private final String experimentDescription;
 	
-	public OptSchemeContext(
-		String experimentDescription,
-		NRGSchemeWithSharedFeatures nrgScheme,
-		DualStack dualStack,
-		TriggerTerminationCondition triggerTerminationCondition,
-		BoundIOContext context,
-		RandomNumberGenerator re,
-		CfgGen cfgGen
-	) {
-		super();
-		this.experimentDescription = experimentDescription;
-		this.nrgScheme = nrgScheme;
-		this.dualStack = dualStack;
-		this.triggerTerminationCondition = triggerTerminationCondition;
-		this.context = context;
-		this.re = re;
-		this.cfgGen = cfgGen;
-	}
+	@Getter
+	private final NRGSchemeWithSharedFeatures nrgScheme;
 	
+	@Getter
+	private final DualStack dualStack;
 	
+	@Getter
+	private final TriggerTerminationCondition triggerTerminationCondition;
+		
+	private final BoundIOContext context;
+	
+	private final RandomNumberGenerator randomNumberGenerator;
+		
+	@Getter
+	private final CfgGen cfgGen;
+		
 	public CfgGenContext cfgGenContext() {
 		return new CfgGenContext(
 			cfgGen
@@ -80,22 +75,9 @@ public class OptSchemeContext {
 			cfgGenContext,
 			dualStack.getNrgStack(),
 			nrgScheme,
-			re,
+			randomNumberGenerator,
 			ErrorNodeNull.instance()
 		);
-	}
-	
-	public String getExperimentDescription() {
-		return experimentDescription;
-	}
-	public NRGSchemeWithSharedFeatures getNrgScheme() {
-		return nrgScheme;
-	}
-	public DualStack getDualStack() {
-		return dualStack;
-	}
-	public TriggerTerminationCondition getTriggerTerminationCondition() {
-		return triggerTerminationCondition;
 	}
 
 	public Logger getLogger() {
@@ -103,10 +85,6 @@ public class OptSchemeContext {
 	}
 	public BoundOutputManagerRouteErrors getOutputManager() {
 		return context.getOutputManager();
-	}
-
-	public CfgGen getCfgGen() {
-		return cfgGen;
 	}
 
 	public boolean isDebugEnabled() {

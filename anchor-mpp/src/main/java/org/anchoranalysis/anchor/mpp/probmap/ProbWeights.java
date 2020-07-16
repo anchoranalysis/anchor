@@ -59,12 +59,12 @@ public class ProbWeights {
 		return listWeightsCum.get( listWeightsCum.size()-1 );
 	}
 	
-	public int sample(RandomNumberGenerator re) {
+	public int sample(RandomNumberGenerator randomNumberGenerator) {
 		
 		double tot = getTotal();
 		
 		// Our returned value
-		double val = re.nextDouble() * tot;
+		double val = randomNumberGenerator.sampleDoubleZeroAndOne() * tot;
 		
 		// TODO REPLACE WITH SOMETHING MORE EFFICIENT than looping through the cumulative values
 		//   e.g. some kind of balanced binary search tree

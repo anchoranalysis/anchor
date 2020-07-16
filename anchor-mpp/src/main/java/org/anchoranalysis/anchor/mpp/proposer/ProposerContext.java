@@ -86,7 +86,7 @@ public class ProposerContext {
 	
 	/** Samples an integer uniformally between [0..maxVal) */
 	public int sampleInteger(int maxValExclusive) {
-		return (int) (randomNumberGenerator.nextDouble() * maxValExclusive);
+		return (int) (randomNumberGenerator.sampleDoubleZeroAndOne() * maxValExclusive);
 	}
 	
 	public RandomNumberGenerator getRandomNumberGenerator() {

@@ -34,6 +34,9 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Creates a randomly-generated orientation in 2D by uniformally sampling a scalar rotation angle
  * 
@@ -42,24 +45,16 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 public class RotationBounds2D extends RotationBounds {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Bound rotationAngle = new BoundUnitless(0, 2 * Math.PI);
 	// END BEAN PROPERTIES
 
 	@Override
-	public Orientation randomOrientation(RandomNumberGenerator re, ImageResolution res) {
-		return new Orientation2D( getRotationAngle().resolve(res, false).randOpen(re) );
+	public Orientation randomOrientation(RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+		return new Orientation2D( getRotationAngle().resolve(res, false).randOpen(randomNumberGenerator) );
 	}	
 	@Override
 	public String getBeanDscr() {
 		return String.format("%s, rotation=(%s)", getBeanName(), rotationAngle.toString() );
-	}
-
-	public Bound getRotationAngle() {
-		return rotationAngle;
-	}
-
-	public void setRotationAngle(Bound rotationAngle) {
-		this.rotationAngle = rotationAngle;
 	}
 }

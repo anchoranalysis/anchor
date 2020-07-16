@@ -38,6 +38,9 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Creates a randomly-generated orientation in 3D based upon Euler Angles
  * 
@@ -49,22 +52,22 @@ public class RotationBounds3D extends RotationBounds {
 	private static final Bound DEFAULT_BOUND = new BoundUnitless(0, 2 * Math.PI);
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Bound rotationX = DEFAULT_BOUND;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Bound rotationY = DEFAULT_BOUND;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Bound rotationZ = DEFAULT_BOUND;
 	// END BEAN PROPERTIES
 
 	@Override
-	public Orientation randomOrientation(RandomNumberGenerator re, ImageResolution res) {
+	public Orientation randomOrientation(RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
 		return new Orientation3DEulerAngles(
-			randomizeRot(rotationX, re, res),
-			randomizeRot(rotationY, re, res),
-			randomizeRot(rotationZ, re, res)
+			randomizeRot(rotationX, randomNumberGenerator, res),
+			randomizeRot(rotationY, randomNumberGenerator, res),
+			randomizeRot(rotationZ, randomNumberGenerator, res)
 		);
 	}
 	
@@ -73,31 +76,7 @@ public class RotationBounds3D extends RotationBounds {
 		return String.format("%s, rotation=(%f,%f,%f)", getBeanName(), getRotationX(), getRotationY(), rotationZ );
 	}
 	
-	private static double randomizeRot(Bound bound, RandomNumberGenerator re, ImageResolution res) {
-		return bound.resolve(res, true).randOpen(re);
-	}
-	
-	public Bound getRotationX() {
-		return rotationX;
-	}
-
-	public void setRotationX(Bound rotationX) {
-		this.rotationX = rotationX;
-	}
-
-	public Bound getRotationY() {
-		return rotationY;
-	}
-
-	public void setRotationY(Bound rotationY) {
-		this.rotationY = rotationY;
-	}
-
-	public Bound getRotationZ() {
-		return rotationZ;
-	}
-
-	public void setRotationZ(Bound rotationZ) {
-		this.rotationZ = rotationZ;
+	private static double randomizeRot(Bound bound, RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+		return bound.resolve(res, true).randOpen(randomNumberGenerator);
 	}
 }

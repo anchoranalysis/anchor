@@ -40,23 +40,18 @@ public class RandomNumberGeneratorMersenne implements RandomNumberGenerator {
 	}
 
 	@Override
-	public int nextInt() {
-		return randomEngine.nextInt();
-	}
-
-	@Override
-	public double nextDouble() {
+	public double sampleDoubleZeroAndOne() {
 		return randomEngine.nextDouble();
 	}
 
 	@Override
-	public Poisson generatePossion(double param) {
+	public Poisson generatePoisson(double param) {
 		return new Poisson(param, randomEngine);
 	}
 
 	@Override
-	public Normal generateNormal(double mean, double sd) {
-		return new Normal(mean,sd,randomEngine);
+	public Normal generateNormal(double mean, double standardDeviation) {
+		return new Normal(mean,standardDeviation,randomEngine);
 	}
 		
 	private static RandomEngine createTwister( boolean fixedSeed ) {
