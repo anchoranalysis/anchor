@@ -52,11 +52,11 @@ class PathWithClosest {
 		return path.removeRight(size()-closest-1);
 	}
 	
-	public int distFromLeft() {
+	public int distanceFromLeft() {
 		return closest;
 	}
 	
-	public int distFromRight() {
+	public int distanceFromRight() {
 		return size() - closest - 1;
 	}
 	
@@ -65,7 +65,7 @@ class PathWithClosest {
 	}
 		
 	private static int indexClosest(ContiguousPixelPath path, Point3i mergePoint) {
-		return DistanceToContiguousPath.distMaxToClosestPoint(path, mergePoint).getIndex();
+		return DistanceToContiguousPath.maxDistanceToClosestPoint(path, mergePoint).getIndex();
 	}
 
 	public List<Point3i> points() {

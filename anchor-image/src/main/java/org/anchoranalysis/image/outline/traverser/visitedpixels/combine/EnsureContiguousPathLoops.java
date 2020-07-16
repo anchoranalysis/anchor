@@ -32,6 +32,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
 /** Makes sure the head() and tail() of a ContiguousPath are neighbours */
 class EnsureContiguousPathLoops {
 	
@@ -56,22 +61,18 @@ class EnsureContiguousPathLoops {
 	 * @author feehano
 	 *
 	 */
+	@Accessors(fluent=true) @AllArgsConstructor @RequiredArgsConstructor
 	private static class IndexOffsets {
 
-		private int left = -1;
-		private int right = -1;
-		private int size;
+		// START REQUIRED ARGUMENTS
+		private final int size;
+		// END REQUIRED ARGUMENTS
 		
-		public IndexOffsets(int size) {
-			this.size = size;
-		}
-
-		public IndexOffsets(int size, int left, int right) {
-			super();
-			this.size = size;
-			this.left = left;
-			this.right = right;
-		}
+		@Getter
+		private int left = -1;
+		
+		@Getter
+		private int right = -1;
 		
 		/**
 		 * Explictly updates the left and right index
@@ -86,21 +87,13 @@ class EnsureContiguousPathLoops {
 		
 		/**
 		 * Updates left and right indexes to be a particular distance from both ends of the path
-		 * @param dist
+		 * @param distance
 		 */
-		public void updateDistFromSides( int dist ) {
+		public void updateDistanceFromSides( int distance ) {
 			update(
-				Math.min( size, dist ),
-				Math.max( size - dist, 0 )
+				Math.min( size, distance ),
+				Math.max( size - distance, 0 )
 			);
-		}
-
-		public int left() {
-			return left;
-		}
-
-		public int right() {
-			return right;
 		}
 		
 		/** The index relative to the right-side of the paht */
@@ -164,7 +157,7 @@ class EnsureContiguousPathLoops {
 				if (cost<minCost) {
 					minCostIndexes.update(i, j);
 					minCost = cost;
-					boundIndexes.updateDistFromSides(cost);
+					boundIndexes.updateDistanceFromSides(cost);
 				}
 				
 			}

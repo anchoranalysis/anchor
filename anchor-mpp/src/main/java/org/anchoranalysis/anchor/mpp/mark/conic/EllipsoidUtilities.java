@@ -46,7 +46,7 @@ public class EllipsoidUtilities {
 		Point3d yRot = rotMatrix.calcRotatedPoint( new Point3d(0,mark.getRadii().getY(),0) );
 		Point3d zRot = rotMatrix.calcRotatedPoint( new Point3d(0,0,mark.getRadii().getZ()) );
 		
-		double zRel = res.getZRelRes();
+		double zRel = res.getZRelativeResolution();
 		// We adjust each point for the z contribution
 		xRot.setZ( xRot.getZ() * zRel );
 		yRot.setZ( yRot.getZ() * zRel );

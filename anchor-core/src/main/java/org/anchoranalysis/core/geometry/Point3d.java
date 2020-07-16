@@ -74,6 +74,12 @@ public final class Point3d extends Tuple3d {
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
+	/**
+	 * Square of Euclidean distance from this point to another
+	 * 
+	 * @param other the other point
+	 * @return the distance-squared
+	 */
 	public double distanceSquared( Point3i point ) {
 		double sx = this.x - point.x;
 		double sy = this.y - point.y;
@@ -81,10 +87,25 @@ public final class Point3d extends Tuple3d {
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
-	public double distance( Point3d point ) {
+	/**
+	 * Euclidean distance from this point to another
+	 * 
+	 * @param other the other point
+	 * @return the distance
+	 */
+	public double distance( Point3d other ) {
 		return Math.sqrt(
-			distanceSquared(point)
+			distanceSquared(other)
 		);
+	}
+	
+	/**
+	 * Creates a new point with identical x and y, but with z set to 0
+	 * 
+	 * @return the new point
+	 */
+	public Point3d dropZ() {
+		return new Point3d(x, y, 0);
 	}
 
 	/**

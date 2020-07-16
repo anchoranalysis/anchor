@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.CombineToOnePath;
-import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.FindMinDistance;
+import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.FindMinimumDistance;
 
 /** All pixels that have been visited so far */
 public class VisitedPixels {
@@ -59,9 +59,9 @@ public class VisitedPixels {
 		addNewPath(point, null);
 	}
 	
-	/** The distMax of a point to the closest contiguous-path */
-	public int distMaxToHeadTail(Point3i point) {
-		return FindMinDistance.minDistMaxToHeadTail(point, paths);
+	/** The maximum-distance of a point to the closest contiguous-path */
+	public int distanceMaxToHeadTail(Point3i point) {
+		return FindMinimumDistance.minDistanceMaxToHeadTail(point, paths);
 	}
 		
 	/** Combines all the contiguous paths to a single-path 

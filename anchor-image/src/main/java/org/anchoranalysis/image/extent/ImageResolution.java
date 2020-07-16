@@ -170,28 +170,28 @@ public final class ImageResolution implements Serializable {
 	}
 	
 	
-	public double distSqZRel( Point3i point1, Point3i point2 ) {
+	public double distanceSquaredZRelative( Point3i point1, Point3i point2 ) {
 		
 		int sx = point1.getX() - point2.getX();
 		int sy = point1.getY() - point2.getY();
 		int sz = point1.getZ() - point2.getZ();
 		
-		double szAdj = getZRelRes() * sz;
+		double szAdj = getZRelativeResolution() * sz;
 		
 		return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(szAdj, 2); 
 	}
 	
-	public double distZRel( Point3d point1, Point3d point2 ) {
-		return Math.sqrt( distSqZRel(point1, point2) );
+	public double distanceZRelative( Point3d point1, Point3d point2 ) {
+		return Math.sqrt( distanceSquaredZRelative(point1, point2) );
 	}
 	
-	public double distSqZRel( Point3d point1, Point3d point2 ) {
+	public double distanceSquaredZRelative( Point3d point1, Point3d point2 ) {
 		
 		double sx = point1.getX() - point2.getX();
 		double sy = point1.getY() - point2.getY();
 		double sz = point1.getZ() - point2.getZ();
 		
-		sz = sz * getZRelRes();
+		sz = sz * getZRelativeResolution();
 		
 		return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(sz, 2); 
 	}
@@ -207,7 +207,7 @@ public final class ImageResolution implements Serializable {
 	}
 	
 	// Assumes X and Y has constant res, and gives the relative resolution of Z
-	public double getZRelRes() {
+	public double getZRelativeResolution() {
 		return getZ() / getX();
 	}
 

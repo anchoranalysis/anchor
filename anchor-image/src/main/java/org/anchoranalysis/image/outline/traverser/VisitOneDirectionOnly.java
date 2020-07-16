@@ -28,32 +28,25 @@ package org.anchoranalysis.image.outline.traverser;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Condition where we visit the first pixel we are allowed to visit,
  *   and then prevent any more visits
  * 
  * The first time it visits a pixel, then it toggles alreadyFoundSingleDirection
- * 
- * @param point
- * @param dist
- * @return
  */
-
+@RequiredArgsConstructor
 class VisitOneDirectionOnly implements ConsiderVisit {
 
-	private ConsiderVisit visitCondition;
+	private final ConsiderVisit visitCondition;
 	
 	// Tracks if we've already found a direction to traverse alreadyFoundSingleDirection
 	private boolean alreadyFoundSingleDirection = false;
 	
-	public VisitOneDirectionOnly(ConsiderVisit visitCondition) {
-		super();
-		this.visitCondition = visitCondition;
-	}		
-	
 	@Override
-	public boolean considerVisit(Point3i point, int dist) {
-		boolean canVisit = visitCondition.considerVisit(point, dist);
+	public boolean considerVisit(Point3i point, int distance) {
+		boolean canVisit = visitCondition.considerVisit(point, distance);
 		if (canVisit) {
 			if (!alreadyFoundSingleDirection) {
 				alreadyFoundSingleDirection = true;

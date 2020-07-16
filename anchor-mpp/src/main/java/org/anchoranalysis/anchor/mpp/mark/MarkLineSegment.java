@@ -50,10 +50,10 @@ public class MarkLineSegment extends Mark {
 	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 
 	// START mark state
-	private double distToLineForInside = 0.5;
+	private double distanceToLineForInside = 0.5;
 	// END mark state
 	
-	private transient DistCalcToLine distCalcToLine = new DistCalcToLine();
+	private transient DistanceCalculatorToLine distanceCalcToLine = new DistanceCalculatorToLine();
 	
 	public MarkLineSegment(Point3i startPoint, Point3i endPoint) {
 		this();
@@ -72,7 +72,7 @@ public class MarkLineSegment extends Mark {
 		// And it thus depends on the number of dimensions
 		// In future we calculate this in a better way
 		
-		if (distCalcToLine.distToLine(pt)<distToLineForInside) {
+		if (distanceCalcToLine.distanceToLine(pt)<distanceToLineForInside) {
 			return FLAG_SUBMARK_INSIDE;
 		}
 		
@@ -81,15 +81,15 @@ public class MarkLineSegment extends Mark {
 	
 	@Override
 	public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
-		return BoundingBoxFromPoints.forTwoPoints( distCalcToLine.getStartPoint(), distCalcToLine.getEndPoint() );
+		return BoundingBoxFromPoints.forTwoPoints( distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint() );
 	}
 
 	@Override
 	public Mark duplicate() {
 		MarkLineSegment out = new MarkLineSegment();
 		out.setPoints(
-			distCalcToLine.getStartPoint(),
-			distCalcToLine.getEndPoint()
+			distanceCalcToLine.getStartPoint(),
+			distanceCalcToLine.getEndPoint()
 		);
 		return out;
 	}
@@ -97,14 +97,14 @@ public class MarkLineSegment extends Mark {
 	@Override
 	public double volume( int regionID ) {
 		// The Line Length
-		return distCalcToLine.getStartPoint().distance(
-			distCalcToLine.getEndPoint()
+		return distanceCalcToLine.getStartPoint().distance(
+			distanceCalcToLine.getEndPoint()
 		);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("%s-%s", distCalcToLine.getStartPoint().toString(), distCalcToLine.getEndPoint().toString() );
+		return String.format("%s-%s", distanceCalcToLine.getStartPoint().toString(), distanceCalcToLine.getEndPoint().toString() );
 	}
 
 	@Override
@@ -119,15 +119,15 @@ public class MarkLineSegment extends Mark {
 
 	@Override
 	public void scale(double multFactor) {
-		MarkAbstractPosition.scaleXYPoint( distCalcToLine.getStartPoint(), multFactor);
-		MarkAbstractPosition.scaleXYPoint( distCalcToLine.getEndPoint(), multFactor);
+		MarkAbstractPosition.scaleXYPoint( distanceCalcToLine.getStartPoint(), multFactor);
+		MarkAbstractPosition.scaleXYPoint( distanceCalcToLine.getEndPoint(), multFactor);
 		
 	}
 
 	@Override
 	public Point3d centerPoint() {
-		Point3d point = new Point3d( distCalcToLine.getStartPoint() );
-		point.add( distCalcToLine.getEndPoint() );
+		Point3d point = new Point3d( distanceCalcToLine.getStartPoint() );
+		point.add( distanceCalcToLine.getEndPoint() );
 		point.scale( 0.5 );
 		return point;
 	}
@@ -140,20 +140,20 @@ public class MarkLineSegment extends Mark {
 	}
 
 	public void setPoints(Point3d startPoint, Point3d endPoint) {
-		distCalcToLine.setPoints(startPoint, endPoint);
+		distanceCalcToLine.setPoints(startPoint, endPoint);
 	}
 
 	public Point3d getStartPoint() {
-		return distCalcToLine.getStartPoint();
+		return distanceCalcToLine.getStartPoint();
 	}
 
 
 	public Point3d getEndPoint() {
-		return distCalcToLine.getEndPoint();
+		return distanceCalcToLine.getEndPoint();
 	}
 
 	public Point3d getDirectionVector() {
-		return distCalcToLine.getDirectionVector();
+		return distanceCalcToLine.getDirectionVector();
 	}
 
 	@Override

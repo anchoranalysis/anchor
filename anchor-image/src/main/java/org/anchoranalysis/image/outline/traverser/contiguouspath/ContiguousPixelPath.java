@@ -88,14 +88,14 @@ public class ContiguousPixelPath {
 		// In an effort to keep the outline as connected as possible, we consider the head and tail
 		//  of the list, and add the point to the end which minimal distance
 		
-		int distHead = point.distanceMax(head()); 
-		int distTail = point.distanceMax(tail());
+		int distanceHead = point.distanceMax(head()); 
+		int distanceTail = point.distanceMax(tail());
 		
-		if (distHead==1) {
+		if (distanceHead==1) {
 			// If close to head than tail
 			list.add(0, point);
 			return true;
-		} else if (distTail==1) {
+		} else if (distanceTail==1) {
 			// If close to tail than head
 			list.add(point);
 			return true;

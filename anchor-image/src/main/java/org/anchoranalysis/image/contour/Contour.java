@@ -47,14 +47,14 @@ public class Contour {
 	@Getter
 	private List<Point3f> points = new ArrayList<>();
 	
-	private static double maxDistToDefinedConnected = 2;
+	private static final double MAX_DISTANCE_TO_DEFINED_CONNECTED = 2;
 	
 	public List<Point3i> pointsDiscrete() {
 		return PointConverter.convert3i( getPoints(), false);
 	}
 	
 	public boolean isClosed() {
-		return points.get(0).distance( points.get(points.size()-1) ) < maxDistToDefinedConnected;
+		return points.get(0).distance( points.get(points.size()-1) ) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
 	}
 	
 	public boolean hasPoint( Point3f pointC ) {
@@ -88,11 +88,11 @@ public class Contour {
 	}
 		
 	public boolean connectedToFirstPointOf( Contour c ) {
-		return getLastPoint().distance(c.getFirstPoint()) < maxDistToDefinedConnected;
+		return getLastPoint().distance(c.getFirstPoint()) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
 	}
 
 	public boolean connectedToLastPointOf( Contour c ) {
-		return getFirstPoint().distance(c.getLastPoint()) < maxDistToDefinedConnected;
+		return getFirstPoint().distance(c.getLastPoint()) < MAX_DISTANCE_TO_DEFINED_CONNECTED;
 	}
 
 	public String summaryStr() {

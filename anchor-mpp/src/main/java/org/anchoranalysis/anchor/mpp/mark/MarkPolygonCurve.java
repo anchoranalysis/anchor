@@ -44,55 +44,55 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 	
 	// Applied the same in all 3 dimensions, maybe we need to change this
-	private double distThresh = 0.7;
+	private double distanceThreshold = 0.7;
 	
-	private transient DistCalcToLine dctl = new DistCalcToLine();
+	private transient DistanceCalculatorToLine distanceCalculator = new DistanceCalculatorToLine();
 	
 	@Override
 	public byte evalPointInside(Point3d point) {
 	
-		if (distToPolygonLocal(point)<distThresh) {
+		if (distanceToPolygonLocal(point)<distanceThreshold) {
 			return FLAG_SUBMARK_INSIDE;
 		}
 		return FLAG_SUBMARK_NONE;
 	}
 
-	private double distToPolygonSegmentLocal( Point3d point, Point3d pointFirst, Point3d pointSecond ) {
+	private double distanceToPolygonSegmentLocal( Point3d point, Point3d pointFirst, Point3d pointSecond ) {
 		
-		if (point.getX()<(pointFirst.getX()-distThresh)) {
+		if (point.getX()<(pointFirst.getX()-distanceThreshold)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (point.getY()<(pointFirst.getY()-distThresh)) {
+		if (point.getY()<(pointFirst.getY()-distanceThreshold)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (point.getZ()<(pointFirst.getZ()-distThresh)) {
+		if (point.getZ()<(pointFirst.getZ()-distanceThreshold)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (point.getX()>(pointSecond.getX()+distThresh)) {
+		if (point.getX()>(pointSecond.getX()+distanceThreshold)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (point.getY()>(pointSecond.getY()+distThresh)) {
+		if (point.getY()>(pointSecond.getY()+distanceThreshold)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (point.getZ()>(pointSecond.getZ()+distThresh)) {
+		if (point.getZ()>(pointSecond.getZ()+distanceThreshold)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		dctl.setPoints(pointFirst, pointSecond);
+		distanceCalculator.setPoints(pointFirst, pointSecond);
 		
-		return dctl.distToLine(point);
+		return distanceCalculator.distanceToLine(point);
 	}
 	
 	// Distance to polygon - only local (i.e. assumes that we only care about returning small values in circumstances
 	//  very close to the line segment in question, otherwise we don't care
-	private double distToPolygonLocal( Point3d point ) {
+	private double distanceToPolygonLocal( Point3d point ) {
 		
-		// If a point is inside the bounding box of two points +- the distThresh , we calculate the distance to
+		// If a point is inside the bounding box of two points +- the distanceThreshold, we calculate the distance to
 		// it.  And we take the minimum overall
 		
 		double min = Double.POSITIVE_INFINITY;
@@ -102,8 +102,8 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 			Point3d pointFirst = getPoints().get(i);
 			Point3d pointSecond = getPoints().get(i+1);
 			
-			double dist = distToPolygonSegmentLocal(point, pointFirst,pointSecond);
-			min = Math.min( min, dist );
+			double distance = distanceToPolygonSegmentLocal(point, pointFirst,pointSecond);
+			min = Math.min( min, distance );
 		}
 		
 		return min;

@@ -40,8 +40,8 @@ import lombok.AllArgsConstructor;
 class ConsiderNeighbors {
 
 	private final ObjectMask objectOutline;
-	private final int dist;
-	private final List<Point3iWithDist> localQueue;
+	private final int distance;
+	private final List<Point3iWithDistance> localQueue;
 	private final ConsiderVisit icv;
 	private final Point3i point;
 		
@@ -87,17 +87,22 @@ class ConsiderNeighbors {
 				point.getY()+yShift,
 				point.getZ()+zShift
 			),
-			dist,
+			distance,
 			localQueue
 		);
 	}
 	
-	private boolean considerVisitAndQueueNghbPoint( ConsiderVisit considerVisit, Point3i point, int dist, List<Point3iWithDist> points ) {
+	private boolean considerVisitAndQueueNghbPoint(
+		ConsiderVisit considerVisit,
+		Point3i point,
+		int distance,
+		List<Point3iWithDistance> points
+	) {
 		
-		int distNew = dist + 1;
+		int distanceNew = distance + 1;
 		
-		if( considerVisitMarkRaster(considerVisit, point, distNew, objectOutline ) ) {
-			points.add( new Point3iWithDist(point, distNew) );
+		if( considerVisitMarkRaster(considerVisit, point, distanceNew, objectOutline ) ) {
+			points.add( new Point3iWithDistance(point, distanceNew) );
 			return true;
 		}
 		

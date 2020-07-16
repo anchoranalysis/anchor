@@ -33,28 +33,33 @@ import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixel
 import org.anchoranalysis.image.outline.traverser.contiguouspath.DistanceIndex;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.DistanceToContiguousPath;
 
-public class FindMinDistance {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private FindMinDistance() {}
+/**
+ * TODO naming is too complicated in functions with lots of min/max
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class FindMinimumDistance {
 	
-	/** The distMax of a point to the closest contiguous-path */
-	public static int minDistMaxToHeadTail(Point3i point, List<ContiguousPixelPath> paths ) {
-		
-		int distMin = Integer.MAX_VALUE;
-		
+	/** The maximum-distance of a point to the closest contiguous-path */
+	public static int minDistanceMaxToHeadTail(Point3i point, List<ContiguousPixelPath> paths ) {
+	
 		// Finds the minimum distance to any of the paths
-		for( ContiguousPixelPath path : paths ) {
-			int dist = DistanceToContiguousPath.distMaxToHeadTail(path, point);
-			if (dist < distMin) {
-				distMin = dist;
-			}
-		}
-		
-		return distMin;
+		return paths.stream().mapToInt( path->
+			DistanceToContiguousPath.maxDistanceToHeadTail(path, point)
+		).min().orElse( Integer.MAX_VALUE );
 	}
 	
 	/** The index of whichever of the ContiguousPixelPaths has the nearest point */
-	public static DistanceIndexTwice indexDistMaxToClosestPoint(Point3i point, List<ContiguousPixelPath> paths, int avoidIndex ) {
+	public static DistanceIndexTwice indexDistanceMaxToClosestPoint(
+		Point3i point,
+		List<ContiguousPixelPath> paths,
+		int avoidIndex
+	) {
 
 		// The -1 is arbitrary
 		DistanceIndex minDistance = new DistanceIndex(Integer.MAX_VALUE, -1);
@@ -69,9 +74,9 @@ public class FindMinDistance {
 			
 			ContiguousPixelPath path = paths.get(i);
 			
-			DistanceIndex dist = DistanceToContiguousPath.distMaxToClosestPoint(path, point);
-			if (dist.getDistance() < minDistance.getDistance()) {
-				minDistance = dist;
+			DistanceIndex distance = DistanceToContiguousPath.maxDistanceToClosestPoint(path, point);
+			if (distance.getDistance() < minDistance.getDistance()) {
+				minDistance = distance;
 				indexWithMin = i;
 			}
 		}

@@ -47,24 +47,24 @@ public class BoundingBoxDistance {
 		ReadableTuple3i box2CrnrMin = box2.cornerMin();
 		ReadableTuple3i box2CrnrMax = box2.calcCornerMax();
 		
-		int xDist = minDist(
+		int xDistance = minDistance(
 			box1CrnrMin.getX(),
 			box1CrnrMax.getX(),
 			box2CrnrMin.getX(),
 			box2CrnrMax.getX()
 		);
 		
-		int yDist = minDist(
+		int yDistance = minDistance(
 			box1CrnrMin.getY(),
 			box1CrnrMax.getY(),
 			box2CrnrMin.getY(),
 			box2CrnrMax.getY()
 		);
 		
-		int zDist = 0;
+		int zDistance = 0;
 		
 		if (includeZ) {
-			zDist = minDist(
+			zDistance = minDistance(
 				box1CrnrMin.getZ(),
 				box1CrnrMax.getZ(),
 				box2CrnrMin.getZ(),
@@ -72,11 +72,11 @@ public class BoundingBoxDistance {
 			);
 		}
 		
-		return Math.sqrt( Math.pow(xDist,2) + Math.pow(yDist,2) + Math.pow(zDist,2));
+		return Math.sqrt( Math.pow(xDistance,2) + Math.pow(yDistance,2) + Math.pow(zDistance,2));
 	}
 	
 	// We have already guaranteed no intersection
-	private static int minDist( int box1Min, int box1Max, int box2Min, int box2Max ) {
+	private static int minDistance( int box1Min, int box1Max, int box2Min, int box2Max ) {
 		
 		// Consider intersections
 		if( (box2Min >= box1Min) && (box2Min <= box1Max)) {

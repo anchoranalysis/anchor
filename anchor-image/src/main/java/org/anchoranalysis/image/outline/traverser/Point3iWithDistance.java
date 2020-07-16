@@ -32,13 +32,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-class Point3iWithDist {
+class Point3iWithDistance {
 
 	@Getter
 	private final Point3i point;
 	
 	@Getter
-	private final int dist;
+	private final int distance;
 	
 	// If non-null, this is a point that is a neighbour but
 	//   is disallowed from being on the same contiguous path
@@ -47,7 +47,7 @@ class Point3iWithDist {
 	
 	@Override
 	public String toString() {
-		return String.format("%s--%d",point.toString(),dist);
+		return String.format("%s--%d",point.toString(),distance);
 	}
 
 	public boolean isForceNewPath() {

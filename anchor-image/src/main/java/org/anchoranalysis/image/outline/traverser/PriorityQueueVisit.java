@@ -35,16 +35,16 @@ import org.anchoranalysis.image.outline.traverser.visitedpixels.VisitedPixels;
 /** A priority-queue of what pixels to visit next */
 class PriorityQueueVisit {
 	
-	private List<Point3iWithDist> next;
+	private List<Point3iWithDistance> next;
 	
 	public PriorityQueueVisit() {
 		next = new ArrayList<>();
 	}
 	
-	public Point3iWithDist pop( VisitedPixels visitedPixels ) {
+	public Point3iWithDistance pop( VisitedPixels visitedPixels ) {
 		// Find point which is closest to the end of the visited pixels
 		// We prioritise visits in this order to keep the chain as connected as possible
-		int index = findIndexWithMinDist(next, visitedPixels);
+		int index = findIndexWithMinDistance(next, visitedPixels);
 		if (index==-1) {
 			// Special circumstance that can only occur when there's a single point
 			assert(next.size()==1);
@@ -53,20 +53,20 @@ class PriorityQueueVisit {
 		return next.remove(index);
 	}
 
-	public void addAll(List<Point3iWithDist> list) {
-		for( Point3iWithDist point : list ) {
+	public void addAll(List<Point3iWithDistance> list) {
+		for( Point3iWithDistance point : list ) {
 			add(point);
 		}
 	}
 	
-	public void addAllWithConn(List<Point3iWithDist> list, Point3i connPoint) {
-		for( Point3iWithDist point : list ) {
+	public void addAllWithConn(List<Point3iWithDistance> list, Point3i connPoint) {
+		for( Point3iWithDistance point : list ) {
 			point.markAsNewPath(connPoint);
 			add(point);
 		}
 	}
 	
-	public boolean add(Point3iWithDist arg0) {
+	public boolean add(Point3iWithDistance arg0) {
 		return next.add(arg0);
 	}
 	
@@ -74,20 +74,20 @@ class PriorityQueueVisit {
 		return next.isEmpty();
 	}
 	
-	private static int findIndexWithMinDist( List<Point3iWithDist> next, VisitedPixels visitedPixels ) {
+	private static int findIndexWithMinDistance( List<Point3iWithDistance> next, VisitedPixels visitedPixels ) {
 		
-		int distMin = Integer.MAX_VALUE;
+		int distanceMin = Integer.MAX_VALUE;
 		int index = -1;
 		
 		for( int i=0; i<next.size(); i++ ) {
 			
-			Point3iWithDist point = next.get(i);
+			Point3iWithDistance point = next.get(i);
 			
-			int dist =  visitedPixels.distMaxToHeadTail(point.getPoint());
+			int distance =  visitedPixels.distanceMaxToHeadTail(point.getPoint());
 			
-			if (dist < distMin) {
+			if (distance < distanceMin) {
 				index = i;
-				distMin = dist;
+				distanceMin = distance;
 			}
 		}
 		

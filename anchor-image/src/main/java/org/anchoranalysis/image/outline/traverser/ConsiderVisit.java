@@ -30,5 +30,5 @@ import org.anchoranalysis.core.geometry.Point3i;
 
 @FunctionalInterface
 public interface ConsiderVisit {
-	 public boolean considerVisit( Point3i point, int dist );
+	 public boolean considerVisit( Point3i point, int distance );
 }

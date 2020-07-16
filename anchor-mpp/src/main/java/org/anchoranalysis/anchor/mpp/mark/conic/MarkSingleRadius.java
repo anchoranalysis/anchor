@@ -135,11 +135,11 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 	@Override
 	public final byte evalPointInside( Point3d pt ) {
 		
-		double dist = getPos().distanceSquared(pt);
+		double distance = getPos().distanceSquared(pt);
 		
-		if (dist<=radiusSq) {
+		if (distance<=radiusSq) {
 			return FLAG_SUBMARK_INSIDE;
-		} else if (dist<=(radiusExtraSq)) {
+		} else if (distance<=(radiusExtraSq)) {
 			return FLAG_SUBMARK_SHELL;
 		}
 		

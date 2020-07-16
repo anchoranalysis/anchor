@@ -68,10 +68,10 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	//  fits more nicely with the rotation matrices (at the cost of some extra computation).
 	
 	/** Add to orientation to get the left-point and bottom-point (without rotation) */ 
-	private Point3d distToLeftBottom;
+	private Point3d distanceToLeftBottom;
 	
 	/** Add to orientation to get the right-point and top-point (without rotation) */
-	private Point3d distToRightTop;
+	private Point3d distanceToRightTop;
 	
 	private Orientation2D orientation;
 	// END mark state
@@ -94,30 +94,30 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 		
 		Point3d pointRot = rotMatrixInv.calcRotatedPoint(point);
 		
-		if (pointRot.getX() < distToLeftBottom.getX() || pointRot.getX() >= distToRightTop.getX()) {
+		if (pointRot.getX() < distanceToLeftBottom.getX() || pointRot.getX() >= distanceToRightTop.getX()) {
 			return FLAG_SUBMARK_NONE;
 		}
 		
-		if (pointRot.getY() < distToLeftBottom.getY() || pointRot.getY() >= distToRightTop.getY()) {
+		if (pointRot.getY() < distanceToLeftBottom.getY() || pointRot.getY() >= distanceToRightTop.getY()) {
 			return FLAG_SUBMARK_NONE;
 		}
 
 		return FLAG_SUBMARK_REGION0;
 	}
 	
-	public void update( Point2d distToLeftBottom, Point2d distToRightTop, Orientation2D orientation ) {
+	public void update( Point2d distanceToLeftBottom, Point2d distanceToRightTop, Orientation2D orientation ) {
 
 		update(
-			convert3d(distToLeftBottom),
-			convert3d(distToRightTop),
+			convert3d(distanceToLeftBottom),
+			convert3d(distanceToRightTop),
 			orientation
 		);
 	}
 		
 	/** Internal version with Point3d */
-	private void update( Point3d distToLeftBottom, Point3d distToRightTop, Orientation2D orientation ) {
-		this.distToLeftBottom = distToLeftBottom;
-		this.distToRightTop = distToRightTop;
+	private void update( Point3d distanceToLeftBottom, Point3d distanceToRightTop, Orientation2D orientation ) {
+		this.distanceToLeftBottom = distanceToLeftBottom;
+		this.distanceToRightTop = distanceToRightTop;
 		this.orientation = orientation;
 		
 		this.rotMatrix = orientation.createRotationMatrix();
@@ -152,8 +152,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	@Override
 	public double volume(int regionID) {
 		// The volume is invariant to rotation
-		double width = distToRightTop.getX() - distToLeftBottom.getX();
-		double height = distToRightTop.getY() - distToLeftBottom.getY();
+		double width = distanceToRightTop.getX() - distanceToLeftBottom.getX();
+		double height = distanceToRightTop.getY() - distanceToLeftBottom.getY();
 		return width * height;
 	}
 
@@ -161,8 +161,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	public Mark duplicate() {
 		MarkRotatableBoundingBox out = new MarkRotatableBoundingBox();
 		out.update(
-			distToLeftBottom,
-			distToRightTop,
+			distanceToLeftBottom,
+			distanceToRightTop,
 			orientation.duplicate()
 		);
 		return out;
@@ -194,8 +194,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 
 	private Point3d cornerPoint( boolean x, boolean y ) {
 		return new Point3d(
-			x ? distToLeftBottom.getX() : distToRightTop.getX(),
-			y ? distToLeftBottom.getY() : distToRightTop.getY(),
+			x ? distanceToLeftBottom.getX() : distanceToRightTop.getX(),
+			y ? distanceToLeftBottom.getY() : distanceToRightTop.getY(),
 			0
 		);
 	}

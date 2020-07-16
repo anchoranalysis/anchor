@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 
@@ -54,6 +55,22 @@ public class FunctionalList {
 	
 	
 	/**
+	 * Flat-maps a collection to a list where in the original collection can produce many elements in the outging list.
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  collection the collection to be mapped
+	 * @param  mapFunction function to do the mapping
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 */
+	public static <S,T> List<T> flatMapToList(Collection<S> collection, Function<S,Stream<T>> mapFunction) {
+		return collection.stream()
+				.flatMap(mapFunction)
+				.collect( Collectors.toList() );
+	}
+	
+	
+	/**
 	 * Maps an array to a list with each element derived from a corresponding element in the original array.
 	 * <p>
 	 * This function's purpose is mostly an convenience utility to make source-code easier to read, as the paradigm
@@ -70,6 +87,7 @@ public class FunctionalList {
 				.map(mapFunction)
 				.collect( Collectors.toList() );
 	}
+
 	
 	/**
 	 * Like {@link #mapToList(Object[], Function)} but tolerates exceptions in the mapping function.

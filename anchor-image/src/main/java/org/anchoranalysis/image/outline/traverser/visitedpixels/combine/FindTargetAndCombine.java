@@ -76,7 +76,7 @@ class FindTargetAndCombine {
 	private MergeTarget findTarget( MergeTarget src ) {
 		
 		// Find the closest segment to the tail() of p1. The choice of tail (as opposed to head) is arbitrary.
-		DistanceIndexTwice indexCombine = FindMinDistance.indexDistMaxToClosestPoint(
+		DistanceIndexTwice indexCombine = FindMinimumDistance.indexDistanceMaxToClosestPoint(
 			src.getPath().tail(),
 			paths,
 			src.getIndexPath()

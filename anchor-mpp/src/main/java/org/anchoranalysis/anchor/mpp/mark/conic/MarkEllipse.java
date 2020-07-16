@@ -304,12 +304,12 @@ public class MarkEllipse extends MarkConic implements Serializable {
 			trgtMark.getPos().getY() - getPos().getY()
 		);
 		
-		DoubleMatrix1D relPosSq = relPos.copy();
-		relPosSq.assign( Functions.square );	// NOSONAR
-		double dist = relPosSq.zSum();
+		DoubleMatrix1D relPosSquared = relPos.copy();
+		relPosSquared.assign( Functions.square );	// NOSONAR
+		double distance = relPosSquared.zSum();
 		
 		// Definitely outside
-		return dist > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0);
+		return distance > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0);
 	};
 
 	@Override

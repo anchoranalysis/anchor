@@ -42,14 +42,14 @@ class FindMergeStrategy {
 	 */
 	public static MergeStrategy apply(PathWithClosest keep, PathWithClosest merge) {
 		
-		int lostLeftKeep = keep.distFromLeft();
-		int lostRightKeep = keep.distFromRight();
+		int lostLeftKeep = keep.distanceFromLeft();
+		int lostRightKeep = keep.distanceFromRight();
 		
-		int lostLeftMerge = merge.distFromLeft();
-		int lostRightMerge = merge.distFromRight();
+		int lostLeftMerge = merge.distanceFromLeft();
+		int lostRightMerge = merge.distanceFromRight();
 		
 		// We consider every combination of merging, minimizing the total lost pixels
-		int[] dists = new int[] {
+		int[] distances = new int[] {
 			lostLeftKeep + lostLeftMerge,					// left, left
 			lostLeftKeep + lostRightMerge,					// left, right
 			lostRightKeep + lostLeftMerge,					// right, left
@@ -57,8 +57,8 @@ class FindMergeStrategy {
 			merge.size()									// we throw away merge altogether
 		};
 		
-		int minIndex = findIndexMinimum(dists);
-		int cost = dists[minIndex];
+		int minIndex = findIndexMinimum(distances);
+		int cost = distances[minIndex];
 		
 		return createStrategy(minIndex, cost );
 	}

@@ -72,16 +72,16 @@ public class PointsListNeighborUtilities {
 		if (point1.equals(point2)) {
 			return false;
 		}
-		if (distSingleDim(point1.getX(), point2.getX())) {
+		if (distanceSingleDim(point1.getX(), point2.getX())) {
 			return false;
 		}
-		if (distSingleDim(point1.getY(), point2.getY())) {
+		if (distanceSingleDim(point1.getY(), point2.getY())) {
 			return false;
 		}
-		return (!distSingleDim(point1.getZ(), point2.getZ()));
+		return (!distanceSingleDim(point1.getZ(), point2.getZ()));
 	}
 	
-	private static boolean distSingleDim( int x, int y ) {
+	private static boolean distanceSingleDim( int x, int y ) {
 		return Math.abs( x - y ) > 1;
 	}
 }

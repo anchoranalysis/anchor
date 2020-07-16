@@ -77,7 +77,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	
 	// START Mark State	
 	private double shellRad = 0.1;
-	private double innerCoreDist = 0.4;
+	private double innerCoreDistance = 0.4;
 
 	@Getter
 	private Point3d radii;
@@ -116,7 +116,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		this.radii = new Point3d( src.radii );
 		
 		this.shellRad = src.shellRad;
-		this.innerCoreDist = src.innerCoreDist;
+		this.innerCoreDistance = src.innerCoreDistance;
         
         ellipsoidCalculator = new EllipsoidMatrixCalculator(src.ellipsoidCalculator);
         
@@ -239,7 +239,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		this.shellInt = 1.0 - this.shellRad;
 		this.shellExt = 1.0 + this.shellRad;
 		this.shellExtOut = 1.0 + (this.shellRad*2);
-		this.shellInnerCore = 1.0 - innerCoreDist;
+		this.shellInnerCore = 1.0 - innerCoreDistance;
 		
 		this.shellIntSq = squared(shellInt);
 		this.shellExtSq = squared(shellExt);
@@ -298,12 +298,12 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 			trgtMark.getPos().getZ() - getPos().getZ()
 		);
 		
-		DoubleMatrix1D relPosSq = relPos.copy();
-		relPosSq.assign( Functions.functions.square );	// NOSONAR
-		double dist = relPosSq.zSum();
+		DoubleMatrix1D relPosSquared = relPos.copy();
+		relPosSquared.assign( Functions.functions.square );	// NOSONAR
+		double distance = relPosSquared.zSum();
 		
 		// Definitely outside
-		return dist > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0);
+		return distance > Math.pow( getMaximumRadius(regionID) + trgtMark.getMaximumRadius(regionID), 2.0);
 	};
 
 	@Override
@@ -416,7 +416,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 		}
 		orientation.addProperties(op.getNameValueSet());
 		op.addDoubleAsString("Shell Radius Ratio", shellRad);
-		op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDist);
+		op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);
 		return op;
 	}
 

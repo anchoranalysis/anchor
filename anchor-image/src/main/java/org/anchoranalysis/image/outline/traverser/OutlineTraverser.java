@@ -105,7 +105,7 @@ public class OutlineTraverser {
 		PriorityQueueVisit queue = new PriorityQueueVisit();
 		
 		if(ConsiderNeighbors.considerVisitMarkRaster(visitCondition, rootRel, 0, outline)) {
-			queue.add( new Point3iWithDist(rootRel, 0) );
+			queue.add( new Point3iWithDistance(rootRel, 0) );
 		}
 	
 		processQueue( queue, visitedPixels );
@@ -119,7 +119,7 @@ public class OutlineTraverser {
 		
 		while(true) {
 			
-			Point3iWithDist point = queue.pop(visitedPixels);
+			Point3iWithDistance point = queue.pop(visitedPixels);
 			
 			visit( point, queue, visitedPixels );
 			
@@ -130,14 +130,14 @@ public class OutlineTraverser {
 		}
 	}
 		
-	private void visit( Point3iWithDist pointWithDist, PriorityQueueVisit queue, VisitedPixels visitedPixels ) {
+	private void visit( Point3iWithDistance pointWithDistance, PriorityQueueVisit queue, VisitedPixels visitedPixels ) {
 		
-		Point3i point = pointWithDist.getPoint();
+		Point3i point = pointWithDistance.getPoint();
 
-		List<Point3iWithDist> localQueue = considerNghbs( point,	pointWithDist.getDist() );
+		List<Point3iWithDistance> localQueue = considerNghbs( point, pointWithDistance.getDistance() );
 				
-		if (pointWithDist.isForceNewPath()) {
-			visitedPixels.addNewPath(point, pointWithDist.getConnPoint() );
+		if (pointWithDistance.isForceNewPath()) {
+			visitedPixels.addNewPath(point, pointWithDistance.getConnPoint() );
 		} else {
 			visitedPixels.addVisitedPoint(point);
 		}
@@ -150,13 +150,13 @@ public class OutlineTraverser {
 		}
 	}
 		
-	private List<Point3iWithDist> considerNghbs( Point3i point, int dist ) {
+	private List<Point3iWithDistance> considerNghbs( Point3i point, int distance ) {
 
-		List<Point3iWithDist> out = new ArrayList<>(); 
+		List<Point3iWithDistance> out = new ArrayList<>(); 
 		
 		ConsiderNeighbors consider = new ConsiderNeighbors(
 			outline,
-			dist,
+			distance,
 			out,
 			visitCondition,
 			point

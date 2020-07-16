@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-class DistCalcToLine implements Serializable {
+class DistanceCalculatorToLine implements Serializable {
 	
 	/**
 	 * 
@@ -55,7 +55,7 @@ class DistCalcToLine implements Serializable {
 	 * 
 	 * @param src
 	 */
-	public DistCalcToLine( DistCalcToLine src ) {
+	public DistanceCalculatorToLine( DistanceCalculatorToLine src ) {
 		this.startPoint = new Point3d(src.startPoint);
 		this.endPoint = new Point3d(src.endPoint);
 		this.directionVector = new Point3d(src.directionVector);
@@ -70,7 +70,7 @@ class DistCalcToLine implements Serializable {
 		this.directionVector.subtract( startPoint );
 	}
 
-	public double distToLine( Point3d pt ) {
+	public double distanceToLine( Point3d pt ) {
 		// http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 		
 		double distanceSquared2to1 = endPoint.distanceSquared(startPoint);
