@@ -2,6 +2,8 @@ package org.anchoranalysis.image.voxel.nghb;
 
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
+import lombok.AllArgsConstructor;
+
 /*
  * #%L
  * anchor-image
@@ -36,16 +38,13 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public final class BigNghb implements Nghb {
 	
-	private final boolean includeCentrePoint;
+	private final boolean includeCenterPoint;
 	
 	public BigNghb() {
-		this.includeCentrePoint = false;
-	}
-	
-	public BigNghb( boolean includeCentrePoint ) {
-		this.includeCentrePoint = includeCentrePoint;
+		this.includeCenterPoint = false;
 	}
 	
 	/**
@@ -67,7 +66,7 @@ public final class BigNghb implements Nghb {
 				
 				for (int y=-1; y<=1; y++) {
 					for (int x=-1; x<=1; x++) {
-						if (includeCentrePoint || x!=0 || y!=0 || z!=0) {
+						if (includeCenterPoint || x!=0 || y!=0 || z!=0) {
 							process.processPoint( x, y );
 						}
 					}
@@ -82,7 +81,7 @@ public final class BigNghb implements Nghb {
 			
 			for (int y=-1; y<=1; y++) {
 				for (int x=-1; x<=1; x++) {
-					if (includeCentrePoint || x!=0 || y!=0 ) {
+					if (includeCenterPoint || x!=0 || y!=0 ) {
 						process.processPoint(x, y );
 					}
 				}

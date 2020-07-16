@@ -32,8 +32,10 @@ import java.nio.Buffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.Getter;
+
 /**
- * Contains the ByteBuffer for the current slice, the current slice minus 1, and the current slice plus 1
+ * Contains the {@link ByteBuffer} for the current slice, the current slice minus 1, and the current slice plus 1
  * 
  * Can then be shifted (incremented) across all z-slices
  *
@@ -41,49 +43,55 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  */
 public final class SlidingBuffer<T extends Buffer> {
 
-	private final VoxelBox<T> vb;
+	@Getter
+	private final VoxelBox<T> voxelBox;
 	
-	private VoxelBuffer<T> centre;
+	@Getter
+	private VoxelBuffer<T> center;
+	
+	@Getter
 	private VoxelBuffer<T> plusOne;
+	
+	@Getter
 	private VoxelBuffer<T> minusOne;
 	
-	private int sliceNum = -1;
+	private int sliceNumber = -1;
 	
-	public SlidingBuffer(VoxelBox<T> vb) {
+	public SlidingBuffer(VoxelBox<T> voxelBox) {
 		super();
-		this.vb = vb;
+		this.voxelBox = voxelBox;
 		seek(0);	// We start off on slice 0 always
 	}
 	
 	/** Seeks a particular slice */
 	public void seek(int sliceIndexToSeek) {
 		
-		if (sliceIndexToSeek==sliceNum) {
+		if (sliceIndexToSeek==sliceNumber) {
 			return;
 		}
 		
-		sliceNum = sliceIndexToSeek;
+		sliceNumber = sliceIndexToSeek;
 		minusOne = null;
-		centre = vb.getPixelsForPlane(sliceNum);
+		center = voxelBox.getPixelsForPlane(sliceNumber);
 		
-		if ((sliceNum-1) >= 0) {
-			minusOne = vb.getPixelsForPlane(sliceNum-1);
+		if ((sliceNumber-1) >= 0) {
+			minusOne = voxelBox.getPixelsForPlane(sliceNumber-1);
 		}
 		
-		if ((sliceNum+1) < vb.extent().getZ()) {
-			plusOne = vb.getPixelsForPlane(sliceNum+1);
+		if ((sliceNumber+1) < voxelBox.extent().getZ()) {
+			plusOne = voxelBox.getPixelsForPlane(sliceNumber+1);
 		}
 	}
 	
 	/** Increments the slice number by one */
 	public void shift() {
-		minusOne = centre;
-		centre = plusOne;
+		minusOne = center;
+		center = plusOne;
 		
-		sliceNum++;
+		sliceNumber++;
 		
-		if ((sliceNum+1)<vb.extent().getZ()) {
-			plusOne = vb.getPixelsForPlane(sliceNum+1);
+		if ((sliceNumber+1)<voxelBox.extent().getZ()) {
+			plusOne = voxelBox.getPixelsForPlane(sliceNumber+1);
 		} else {
 			plusOne = null;
 		}
@@ -94,39 +102,15 @@ public final class SlidingBuffer<T extends Buffer> {
 		case 1:
 			return plusOne;
 		case 0:
-			return centre;
+			return center;
 		case -1:
 			return minusOne;
 		default:
-			return vb.getPixelsForPlane(sliceNum+rel);
+			return voxelBox.getPixelsForPlane(sliceNumber+rel);
 		}
 	}
 	
-	public VoxelBox<T> getVoxelBox() {
-		return vb;
-	}
-	
 	public Extent extent() {
-		return vb.extent();
+		return voxelBox.extent();
 	}
-	
-	public VoxelBuffer<T> getCentre() {
-		return centre;
-	}
-	public void setCentre(VoxelBuffer<T> centre) {
-		this.centre = centre;
-	}
-	public VoxelBuffer<T> getPlusOne() {
-		return plusOne;
-	}
-	public void setPlusOne(VoxelBuffer<T> plusOne) {
-		this.plusOne = plusOne;
-	}
-	public VoxelBuffer<T> getMinusOne() {
-		return minusOne;
-	}
-	public void setMinusOne(VoxelBuffer<T> minusOne) {
-		this.minusOne = minusOne;
-	}
-	
 }

@@ -54,7 +54,7 @@ import static org.anchoranalysis.anchor.mpp.mark.conic.TensorUtilities.*;
 //
 //  3 sub-marks
 //
-//  Sub-Mark 0:  Centre Ellipsoid
+//  Sub-Mark 0:  Center Ellipsoid
 //  Sub-Mark 1:  Ellipsoid with shell
 //
 public class MarkEllipsoid extends MarkConic implements Serializable {
