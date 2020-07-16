@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,64 +24,66 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.image.io.generator.raster;
+
+import java.util.Optional;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class MIPGenerator extends RasterGenerator implements IterableObjectGenerator<Stack,Stack> {
+public class MIPGenerator extends RasterGenerator implements IterableObjectGenerator<Stack, Stack> {
 
-	private StackGenerator delegate;
-	
-	public MIPGenerator( boolean padIfNec, String manifestFunction) {
-		delegate = new StackGenerator( padIfNec, manifestFunction);
-	}
-	
-	public MIPGenerator( Stack element, boolean padIfNec, String manifestFunction) {
-		delegate = new StackGenerator( element, padIfNec, manifestFunction );
-	}
-	
-	@Override
-	public boolean isRGB() {
-		return delegate.isRGB();
-	}
-	
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		
-		Stack stack = delegate.getIterableElement();
-		return stack.maxIntensityProj();
-	}
+    private StackGenerator delegate;
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return delegate.createManifestDescription();
-	}
+    public MIPGenerator(boolean padIfNec, String manifestFunction) {
+        delegate = new StackGenerator(padIfNec, manifestFunction);
+    }
 
-	@Override
-	public Stack getIterableElement() {
-		return delegate.getIterableElement();
-	}
+    public MIPGenerator(Stack element, boolean padIfNec, String manifestFunction) {
+        delegate = new StackGenerator(element, padIfNec, manifestFunction);
+    }
 
-	@Override
-	public void setIterableElement(Stack element) {
-		delegate.setIterableElement(element);
-	}
+    @Override
+    public boolean isRGB() {
+        return delegate.isRGB();
+    }
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		delegate.start();
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		delegate.end();
-	}
+        Stack stack = delegate.getIterableElement();
+        return stack.maxIntensityProj();
+    }
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return delegate.createManifestDescription();
+    }
 
+    @Override
+    public Stack getIterableElement() {
+        return delegate.getIterableElement();
+    }
+
+    @Override
+    public void setIterableElement(Stack element) {
+        delegate.setIterableElement(element);
+    }
+
+    @Override
+    public void start() throws OutputWriteFailedException {
+        delegate.start();
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        delegate.end();
+    }
+
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return this;
+    }
 }

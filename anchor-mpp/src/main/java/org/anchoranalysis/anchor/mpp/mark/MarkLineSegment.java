@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
-
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,6 +24,10 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.mark;
+
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
@@ -36,133 +35,124 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
-import lombok.NoArgsConstructor;
-
 @NoArgsConstructor
 public class MarkLineSegment extends Mark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6436383113190855927L;
-	
-	private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
-	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
+    /** */
+    private static final long serialVersionUID = 6436383113190855927L;
 
-	// START mark state
-	private double distToLineForInside = 0.5;
-	// END mark state
-	
-	private transient DistCalcToLine distCalcToLine = new DistCalcToLine();
-	
-	public MarkLineSegment(Point3i startPoint, Point3i endPoint) {
-		this();
-		setPoints(startPoint, endPoint);
-	}
-	
-	// This isn't very efficient for lines, as we can analytically determine
-	//   which pixels are inside
-	// We assume this is only ever called for points within the bounding box, otherwise
-	//  we need to do a check and reject all others
-	@Override
-	public byte evalPntInside(Point3d pt) {
-		
-		// TODO
-		// This should be half the distance from one corner of a pixel/voxel to another
-		// And it thus depends on the number of dimensions
-		// In future we calculate this in a better way
-		
-		if (distCalcToLine.distToLine(pt)<distToLineForInside) {
-			return FLAG_SUBMARK_INSIDE;
-		}
-		
-		return FLAG_SUBMARK_NONE;
-	}
-	
-	@Override
-	public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
-		return BoundingBoxFromPoints.forTwoPoints( distCalcToLine.getStartPoint(), distCalcToLine.getEndPoint() );
-	}
+    private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
+    private static final byte FLAG_SUBMARK_INSIDE =
+            RegionMembershipUtilities.flagForRegion(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-	@Override
-	public Mark duplicate() {
-		MarkLineSegment out = new MarkLineSegment();
-		out.setPoints(
-			distCalcToLine.getStartPoint(),
-			distCalcToLine.getEndPoint()
-		);
-		return out;
-	}
+    // START mark state
+    private double distanceToLineForInside = 0.5;
+    // END mark state
 
-	@Override
-	public double volume( int regionID ) {
-		// The Line Length
-		return distCalcToLine.getStartPoint().distance(
-			distCalcToLine.getEndPoint()
-		);
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("%s-%s", distCalcToLine.getStartPoint().toString(), distCalcToLine.getEndPoint().toString() );
-	}
+    private transient DistanceCalculatorToLine distanceCalcToLine = new DistanceCalculatorToLine();
 
-	@Override
-	public int numDims() {
-		return 3;
-	}
+    public MarkLineSegment(Point3i startPoint, Point3i endPoint) {
+        this();
+        setPoints(startPoint, endPoint);
+    }
 
-	@Override
-	public String getName() {
-		return "markLineSegment";
-	}
+    // This isn't very efficient for lines, as we can analytically determine
+    //   which pixels are inside
+    // We assume this is only ever called for points within the bounding box, otherwise
+    //  we need to do a check and reject all others
+    @Override
+    public byte evalPointInside(Point3d pt) {
 
-	@Override
-	public void scale(double multFactor) {
-		MarkAbstractPosition.scaleXYPnt( distCalcToLine.getStartPoint(), multFactor);
-		MarkAbstractPosition.scaleXYPnt( distCalcToLine.getEndPoint(), multFactor);
-		
-	}
+        // TODO
+        // This should be half the distance from one corner of a pixel/voxel to another
+        // And it thus depends on the number of dimensions
+        // In future we calculate this in a better way
 
-	@Override
-	public Point3d centerPoint() {
-		Point3d pnt = new Point3d( distCalcToLine.getStartPoint() );
-		pnt.add( distCalcToLine.getEndPoint() );
-		pnt.scale( 0.5 );
-		return pnt;
-	}
-	
-	public void setPoints(Point3i startPoint, Point3i endPoint) {
-		setPoints(
-			PointConverter.doubleFromInt(startPoint),
-			PointConverter.doubleFromInt(endPoint)
-		);
-	}
+        if (distanceCalcToLine.distanceToLine(pt) < distanceToLineForInside) {
+            return FLAG_SUBMARK_INSIDE;
+        }
 
-	public void setPoints(Point3d startPoint, Point3d endPoint) {
-		distCalcToLine.setPoints(startPoint, endPoint);
-	}
+        return FLAG_SUBMARK_NONE;
+    }
 
-	public Point3d getStartPoint() {
-		return distCalcToLine.getStartPoint();
-	}
+    @Override
+    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+        return BoundingBoxFromPoints.forTwoPoints(
+                distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint());
+    }
 
+    @Override
+    public Mark duplicate() {
+        MarkLineSegment out = new MarkLineSegment();
+        out.setPoints(distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint());
+        return out;
+    }
 
-	public Point3d getEndPoint() {
-		return distCalcToLine.getEndPoint();
-	}
+    @Override
+    public double volume(int regionID) {
+        // The Line Length
+        return distanceCalcToLine.getStartPoint().distance(distanceCalcToLine.getEndPoint());
+    }
 
-	public Point3d getDirectionVector() {
-		return distCalcToLine.getDirectionVector();
-	}
+    @Override
+    public String toString() {
+        return String.format(
+                "%s-%s",
+                distanceCalcToLine.getStartPoint().toString(),
+                distanceCalcToLine.getEndPoint().toString());
+    }
 
-	@Override
-	public int numRegions() {
-		return 1;
-	}
-	
-	@Override
-	public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-		return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
-	}
+    @Override
+    public int numDims() {
+        return 3;
+    }
+
+    @Override
+    public String getName() {
+        return "markLineSegment";
+    }
+
+    @Override
+    public void scale(double multFactor) {
+        MarkAbstractPosition.scaleXYPoint(distanceCalcToLine.getStartPoint(), multFactor);
+        MarkAbstractPosition.scaleXYPoint(distanceCalcToLine.getEndPoint(), multFactor);
+    }
+
+    @Override
+    public Point3d centerPoint() {
+        Point3d point = new Point3d(distanceCalcToLine.getStartPoint());
+        point.add(distanceCalcToLine.getEndPoint());
+        point.scale(0.5);
+        return point;
+    }
+
+    public void setPoints(Point3i startPoint, Point3i endPoint) {
+        setPoints(PointConverter.doubleFromInt(startPoint), PointConverter.doubleFromInt(endPoint));
+    }
+
+    public void setPoints(Point3d startPoint, Point3d endPoint) {
+        distanceCalcToLine.setPoints(startPoint, endPoint);
+    }
+
+    public Point3d getStartPoint() {
+        return distanceCalcToLine.getStartPoint();
+    }
+
+    public Point3d getEndPoint() {
+        return distanceCalcToLine.getEndPoint();
+    }
+
+    public Point3d getDirectionVector() {
+        return distanceCalcToLine.getDirectionVector();
+    }
+
+    @Override
+    public int numRegions() {
+        return 1;
+    }
+
+    @Override
+    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
+        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    }
 }

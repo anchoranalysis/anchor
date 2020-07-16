@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.plot.execution;
-
 /*-
  * #%L
  * anchor-mpp-plot
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.mpp.plot.execution;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,117 +24,116 @@ package org.anchoranalysis.anchor.mpp.plot.execution;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.plot.execution;
+
 import org.anchoranalysis.core.arithmetic.DoubleUtilities;
 
 public class KernelExecutionTime {
 
-	private double executionTime;
-	private double acceptedTime;
-	private double rejectedTime;
-	private double proposedTime;
-	private double notProposedTime;
-	
-	private long executionCnt;
-	private long acceptedCnt;
-	private long rejectedCnt;
-	private long proposedCnt;
-	private long notProposedCnt;
-	
-	private String kernelName;
-	
-	public KernelExecutionTime( String kernelName ) {
-		super();
-		this.kernelName = kernelName;
-	}
+    private double executionTime;
+    private double acceptedTime;
+    private double rejectedTime;
+    private double proposedTime;
+    private double notProposedTime;
 
-	
-	public double meanExecutionTime() {
-		return DoubleUtilities.divideByZeroReplace(getExecutionTime(), getExecutionCnt(), 0);
-	}
+    private long executionCnt;
+    private long acceptedCnt;
+    private long rejectedCnt;
+    private long proposedCnt;
+    private long notProposedCnt;
 
+    private String kernelName;
 
-	public double getExecutionTime() {
-		return executionTime;
-	}
+    public KernelExecutionTime(String kernelName) {
+        super();
+        this.kernelName = kernelName;
+    }
 
-	public double getAcceptedTime() {
-		return acceptedTime;
-	}
+    public double meanExecutionTime() {
+        return DoubleUtilities.divideByZeroReplace(getExecutionTime(), getExecutionCnt(), 0);
+    }
 
-	public void setAcceptedTime(double acceptedTime) {
-		this.acceptedTime = acceptedTime;
-	}
+    public double getExecutionTime() {
+        return executionTime;
+    }
 
-	public double getRejectedTime() {
-		return rejectedTime;
-	}
+    public double getAcceptedTime() {
+        return acceptedTime;
+    }
 
-	public void setRejectedTime(double rejectedTime) {
-		this.rejectedTime = rejectedTime;
-	}
+    public void setAcceptedTime(double acceptedTime) {
+        this.acceptedTime = acceptedTime;
+    }
 
-	public double getProposedTime() {
-		return proposedTime;
-	}
+    public double getRejectedTime() {
+        return rejectedTime;
+    }
 
-	public void setProposedTime(double proposedTime) {
-		this.proposedTime = proposedTime;
-	}
+    public void setRejectedTime(double rejectedTime) {
+        this.rejectedTime = rejectedTime;
+    }
 
-	public double getNotProposedTime() {
-		return notProposedTime;
-	}
+    public double getProposedTime() {
+        return proposedTime;
+    }
 
-	public void setNotProposedTime(double notProposedTime) {
-		this.notProposedTime = notProposedTime;
-	}
+    public void setProposedTime(double proposedTime) {
+        this.proposedTime = proposedTime;
+    }
 
-	public void setExecutionTime(double executionTime) {
-		this.executionTime = executionTime;
-	}
+    public double getNotProposedTime() {
+        return notProposedTime;
+    }
 
-	public long getExecutionCnt() {
-		return executionCnt;
-	}
+    public void setNotProposedTime(double notProposedTime) {
+        this.notProposedTime = notProposedTime;
+    }
 
-	public void setExecutionCnt(long executedCnt) {
-		this.executionCnt = executedCnt;
-	}
+    public void setExecutionTime(double executionTime) {
+        this.executionTime = executionTime;
+    }
 
-	public long getAcceptedCnt() {
-		return acceptedCnt;
-	}
+    public long getExecutionCnt() {
+        return executionCnt;
+    }
 
-	public void setAcceptedCnt(long acceptedCnt) {
-		this.acceptedCnt = acceptedCnt;
-	}
+    public void setExecutionCnt(long executedCnt) {
+        this.executionCnt = executedCnt;
+    }
 
-	public long getRejectedCnt() {
-		return rejectedCnt;
-	}
+    public long getAcceptedCnt() {
+        return acceptedCnt;
+    }
 
-	public void setRejectedCnt(long rejectedCnt) {
-		this.rejectedCnt = rejectedCnt;
-	}
+    public void setAcceptedCnt(long acceptedCnt) {
+        this.acceptedCnt = acceptedCnt;
+    }
 
-	public long getProposedCnt() {
-		return proposedCnt;
-	}
+    public long getRejectedCnt() {
+        return rejectedCnt;
+    }
 
-	public void setProposedCnt(long proposedCnt) {
-		this.proposedCnt = proposedCnt;
-	}
+    public void setRejectedCnt(long rejectedCnt) {
+        this.rejectedCnt = rejectedCnt;
+    }
 
-	public long getNotProposedCnt() {
-		return notProposedCnt;
-	}
+    public long getProposedCnt() {
+        return proposedCnt;
+    }
 
-	public void setNotProposedCnt(long notProposedCnt) {
-		this.notProposedCnt = notProposedCnt;
-	}
+    public void setProposedCnt(long proposedCnt) {
+        this.proposedCnt = proposedCnt;
+    }
 
+    public long getNotProposedCnt() {
+        return notProposedCnt;
+    }
 
-	public String getKernelName() {
-		return kernelName;
-	}
+    public void setNotProposedCnt(long notProposedCnt) {
+        this.notProposedCnt = notProposedCnt;
+    }
+
+    public String getKernelName() {
+        return kernelName;
+    }
 }

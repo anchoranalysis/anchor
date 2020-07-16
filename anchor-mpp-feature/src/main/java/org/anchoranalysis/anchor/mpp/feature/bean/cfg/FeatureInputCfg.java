@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,9 @@ package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
  * #L%
  */
 
-import java.util.Optional;
+package org.anchoranalysis.anchor.mpp.feature.bean.cfg;
 
+import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -35,29 +34,29 @@ import org.anchoranalysis.image.extent.ImageResolution;
 
 public class FeatureInputCfg implements FeatureInputWithRes {
 
-	private Cfg cfg;
-	private Optional<ImageDimensions> dim;
-	
-	public FeatureInputCfg(Cfg cfg, Optional<ImageDimensions> dim) {
-		super();
-		this.cfg = cfg;
-		this.dim = dim;
-	}
+    private Cfg cfg;
+    private Optional<ImageDimensions> dim;
 
-	@Override
-	public Optional<ImageResolution> getResOptional() {
-		return dim.map( ImageDimensions::getRes );
-	}
+    public FeatureInputCfg(Cfg cfg, Optional<ImageDimensions> dim) {
+        super();
+        this.cfg = cfg;
+        this.dim = dim;
+    }
 
-	public Cfg getCfg() {
-		return cfg;
-	}
+    @Override
+    public Optional<ImageResolution> getResOptional() {
+        return dim.map(ImageDimensions::getRes);
+    }
 
-	public void setCfg(Cfg cfg) {
-		this.cfg = cfg;
-	}
+    public Cfg getCfg() {
+        return cfg;
+    }
 
-	public Optional<ImageDimensions> getDimensions() {
-		return dim;
-	}
+    public void setCfg(Cfg cfg) {
+        this.cfg = cfg;
+    }
+
+    public Optional<ImageDimensions> getDimensions() {
+        return dim;
+    }
 }

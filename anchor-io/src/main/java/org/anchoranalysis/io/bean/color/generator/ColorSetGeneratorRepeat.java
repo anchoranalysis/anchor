@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.color.generator;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.bean.color.generator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,50 +24,32 @@ package org.anchoranalysis.io.bean.color.generator;
  * #L%
  */
 
+package org.anchoranalysis.io.bean.color.generator;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.OperationFailedException;
 
-
 public class ColorSetGeneratorRepeat extends ColorSetGenerator {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ColorSetGenerator colorSetGenerator;
-	
-	@BeanField
-	private int times=2;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ColorSetGenerator colorSetGenerator;
 
-	@Override
-	public ColorList genColors(int numColors) throws OperationFailedException {
+    @BeanField @Getter @Setter private int times = 2;
+    // END BEAN PROPERTIES
 
-		ColorList cl = colorSetGenerator.genColors(numColors);
-		
-		ColorList out = new ColorList();
-		for( int i=0; i<times; i++ ) {
-			out.addAll(cl);
-		}
-		
-		return out;
-	}
+    @Override
+    public ColorList generateColors(int numberColors) throws OperationFailedException {
 
-	public ColorSetGenerator getColorSetGenerator() {
-		return colorSetGenerator;
-	}
+        ColorList cl = colorSetGenerator.generateColors(numberColors);
 
-	public void setColorSetGenerator(ColorSetGenerator colorSetGenerator) {
-		this.colorSetGenerator = colorSetGenerator;
-	}
+        ColorList out = new ColorList();
+        for (int i = 0; i < times; i++) {
+            out.addAll(cl);
+        }
 
-	public int getTimes() {
-		return times;
-	}
-
-	public void setTimes(int times) {
-		this.times = times;
-	}
-
-	
+        return out;
+    }
 }

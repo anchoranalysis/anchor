@@ -12,10 +12,10 @@ package org.anchoranalysis.core.error.friendly;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,28 +26,31 @@ package org.anchoranalysis.core.error.friendly;
  * #L%
  */
 
-
 /**
- * A run-time exception to throw in situations which should never occur, instead of <pre>assert false</pre>
- * 
- * <p>If this is somehow thrown, it's an indication there is a logical error in the code.</p>
- * 
- * <p>This makes for more readable code and type-safety rather than <pre>assert false</pre> or other miscellaneous exceptions.
- * 
- * @author Owen Feehan
+ * A run-time exception to throw in situations which should never occur, instead of
  *
+ * <pre>assert false</pre>
+ *
+ * <p>If this is somehow thrown, it's an indication there is a logical error in the code.
+ *
+ * <p>This makes for more readable code and type-safety rather than
+ *
+ * <pre>assert false</pre>
+ *
+ * or other miscellaneous exceptions.
+ *
+ * @author Owen Feehan
  */
 public class AnchorImpossibleSituationException extends AnchorFriendlyRuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public AnchorImpossibleSituationException() {
-		super("This situation should never occur in properly functioning code, as it is should be logically impossible to reach.");
-		
-		// As a further warnig, and assert is triggered.
-		assert(false);
-	}
+    public AnchorImpossibleSituationException() {
+        super(
+                "This situation should never occur in properly functioning code, as it is should be logically impossible to reach.");
+
+        // As a further warnig, and assert is triggered.
+        assert (false);
+    }
 }

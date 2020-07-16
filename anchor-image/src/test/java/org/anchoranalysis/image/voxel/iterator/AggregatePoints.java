@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.iterator;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.iterator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,31 +24,32 @@ package org.anchoranalysis.image.voxel.iterator;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.iterator;
+
 import org.anchoranalysis.core.arithmetic.RunningSumPoint;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 
 /**
  * Aggregates points as they are successively processed
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class AggregatePoints implements ProcessVoxel {
 
-	private RunningSumPoint runningSum = new RunningSumPoint();
-	
-	@Override
-	public void process(Point3i pnt) {
-		runningSum.increment(pnt);
-	}
+    private RunningSumPoint runningSum = new RunningSumPoint();
 
-	public int count() {
-		return runningSum.getCountXY();
-	}
+    @Override
+    public void process(Point3i point) {
+        runningSum.increment(point);
+    }
 
-	/** The center-of-gravity of all points-processed (discretized) */
-	public Point3i center() {
-		return PointConverter.intFromDouble( runningSum.mean() );
-	}
+    public int count() {
+        return runningSum.getCountXY();
+    }
+
+    /** The center-of-gravity of all points-processed (discretized) */
+    public Point3i center() {
+        return PointConverter.intFromDouble(runningSum.mean());
+    }
 }

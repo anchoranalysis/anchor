@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.kernel;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.kernel;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,54 +24,54 @@ package org.anchoranalysis.image.voxel.kernel;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.kernel;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public abstract class Kernel {
 
-	private int size;
-	private int sizeHalf;
+    private int size;
+    private int sizeHalf;
 
-	// Only use odd sizes
-	public Kernel(int size) {
-		super();
-		this.size = size;
-		this.sizeHalf = (size-1) / 2;
-	}
+    // Only use odd sizes
+    public Kernel(int size) {
+        super();
+        this.size = size;
+        this.sizeHalf = (size - 1) / 2;
+    }
 
-	public int getSize() {
-		return size;
-	}
+    public int getSize() {
+        return size;
+    }
 
-	public void setSize(int size) {
-		this.size = size;
-	}
+    public void setSize(int size) {
+        this.size = size;
+    }
 
-	public int getSizeHalf() {
-		return sizeHalf;
-	}
-	
-	public int getYMin( Point3i pnt ) {
-		return Math.max( pnt.getY() - getSizeHalf(), 0 );
-	}
-	
-	public int getYMax( Point3i pnt, Extent extent ) {
-		return Math.min( pnt.getY() + getSizeHalf(), extent.getY() - 1 );
-	}
+    public int getSizeHalf() {
+        return sizeHalf;
+    }
 
-	public int getXMin( Point3i pnt ) {
-		return Math.max( pnt.getX() - getSizeHalf(), 0 );
-	}
-	
-	public int getXMax( Point3i pnt, Extent extent ) {
-		return Math.min( pnt.getX() + getSizeHalf(), extent.getX() - 1 );
-	}
-	
-	public abstract void init( VoxelBox<ByteBuffer> in );
-	
-	public abstract void notifyZChange( LocalSlices inSlices, int z );
+    public int getYMin(Point3i point) {
+        return Math.max(point.getY() - getSizeHalf(), 0);
+    }
+
+    public int getYMax(Point3i point, Extent extent) {
+        return Math.min(point.getY() + getSizeHalf(), extent.getY() - 1);
+    }
+
+    public int getXMin(Point3i point) {
+        return Math.max(point.getX() - getSizeHalf(), 0);
+    }
+
+    public int getXMax(Point3i point, Extent extent) {
+        return Math.min(point.getX() + getSizeHalf(), extent.getX() - 1);
+    }
+
+    public abstract void init(VoxelBox<ByteBuffer> in);
+
+    public abstract void notifyZChange(LocalSlices inSlices, int z);
 }

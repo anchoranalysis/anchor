@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath.prefixer;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.filepath.prefixer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,40 +24,41 @@ package org.anchoranalysis.io.filepath.prefixer;
  * #L%
  */
 
+package org.anchoranalysis.io.filepath.prefixer;
+
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 
 public class FilePathPrefixerParams {
 
-	private boolean debugMode;
-	
-	/**
-	 * A directory indicating where inputs can be located
-	 */
-	private final Optional<Path> outputDirectory;
+    private boolean debugMode;
 
-	public FilePathPrefixerParams(boolean debugMode, Optional<Path> outputDirectory) throws FilePathPrefixerException {
-		super();
-		this.debugMode = debugMode;
-		this.outputDirectory = outputDirectory;
-		checkAbsolutePath();
-	}
+    /** A directory indicating where inputs can be located */
+    private final Optional<Path> outputDirectory;
 
-	public boolean isDebugMode() {
-		return debugMode;
-	}
+    public FilePathPrefixerParams(boolean debugMode, Optional<Path> outputDirectory)
+            throws FilePathPrefixerException {
+        super();
+        this.debugMode = debugMode;
+        this.outputDirectory = outputDirectory;
+        checkAbsolutePath();
+    }
 
-	public Optional<Path> getOutputDirectory() {
-		return outputDirectory;
-	}
-		
-	private void checkAbsolutePath() throws FilePathPrefixerException {
-		if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
-			throw new FilePathPrefixerException(
-				String.format("An non-absolute path was passed to FilePathPrefixerParams of %s", outputDirectory.get())
-			);
-		}
-	}
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public Optional<Path> getOutputDirectory() {
+        return outputDirectory;
+    }
+
+    private void checkAbsolutePath() throws FilePathPrefixerException {
+        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
+            throw new FilePathPrefixerException(
+                    String.format(
+                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
+                            outputDirectory.get()));
+        }
+    }
 }

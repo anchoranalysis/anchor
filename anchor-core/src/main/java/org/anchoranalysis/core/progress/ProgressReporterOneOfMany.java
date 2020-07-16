@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.progress;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.core.progress;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,69 +24,70 @@ package org.anchoranalysis.core.progress;
  * #L%
  */
 
+package org.anchoranalysis.core.progress;
 
 public class ProgressReporterOneOfMany implements ProgressReporter {
 
-	private int min;
-	private int max;
-	private ProgressReporterMultiple progressReporterParent;
+    private int min;
+    private int max;
+    private ProgressReporterMultiple progressReporterParent;
 
-	private int range;
-	
-	public ProgressReporterOneOfMany( ProgressReporterMultiple progressReporterParent ) {
-		this(progressReporterParent,0,1);
-	}
-	
-	public ProgressReporterOneOfMany( ProgressReporterMultiple progressReporterParent, int min, int max) {
-		super();
-		this.progressReporterParent = progressReporterParent;
-		this.min = min;
-		this.max = max;
-		updateRange();
-	}
-	
-	private void updateRange() {
-		this.range = max - min;
-	}
-	
-	@Override
-	public void open() {
-		// NOTHING TO DO
-	}
-	
-	@Override
-	public void update( int val ) {
-		
-		int valRec = val - min;
-		double progress = (((double) valRec) / range) * 100;
-		progressReporterParent.update( progress );
-	}
-	
-	@Override
-	public void close() {
-		progressReporterParent.update( 100.0 );
-	}
+    private int range;
 
-	@Override
-	public int getMin() {
-		return min;
-	}
+    public ProgressReporterOneOfMany(ProgressReporterMultiple progressReporterParent) {
+        this(progressReporterParent, 0, 1);
+    }
 
-	@Override
-	public void setMin(int min) {
-		this.min = min;
-		updateRange();
-	}
+    public ProgressReporterOneOfMany(
+            ProgressReporterMultiple progressReporterParent, int min, int max) {
+        super();
+        this.progressReporterParent = progressReporterParent;
+        this.min = min;
+        this.max = max;
+        updateRange();
+    }
 
-	@Override
-	public int getMax() {
-		return max;
-	}
+    private void updateRange() {
+        this.range = max - min;
+    }
 
-	@Override
-	public void setMax(int max) {
-		this.max = max;
-		updateRange();
-	}
+    @Override
+    public void open() {
+        // NOTHING TO DO
+    }
 
+    @Override
+    public void update(int val) {
+
+        int valRec = val - min;
+        double progress = (((double) valRec) / range) * 100;
+        progressReporterParent.update(progress);
+    }
+
+    @Override
+    public void close() {
+        progressReporterParent.update(100.0);
+    }
+
+    @Override
+    public int getMin() {
+        return min;
+    }
+
+    @Override
+    public void setMin(int min) {
+        this.min = min;
+        updateRange();
+    }
+
+    @Override
+    public int getMax() {
+        return max;
+    }
+
+    @Override
+    public void setMax(int max) {
+        this.max = max;
+        updateRange();
+    }
 }

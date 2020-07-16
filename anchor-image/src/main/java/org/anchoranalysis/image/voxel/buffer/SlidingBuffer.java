@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.buffer;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.buffer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,107 +24,87 @@ package org.anchoranalysis.image.voxel.buffer;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
-
+import lombok.Getter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 /**
- * Contains the ByteBuffer for the current slice, the current slice minus 1, and the current slice plus 1
- * 
- * Can then be shifted (incremented) across all z-slices
+ * Contains the {@link ByteBuffer} for the current slice, the current slice minus 1, and the current
+ * slice plus 1
+ *
+ * <p>Can then be shifted (incremented) across all z-slices
  *
  * @param <T> buffer-type
  */
 public final class SlidingBuffer<T extends Buffer> {
 
-	private final VoxelBox<T> vb;
-	
-	private VoxelBuffer<T> centre;
-	private VoxelBuffer<T> plusOne;
-	private VoxelBuffer<T> minusOne;
-	
-	private int sliceNum = -1;
-	
-	public SlidingBuffer(VoxelBox<T> vb) {
-		super();
-		this.vb = vb;
-		seek(0);	// We start off on slice 0 always
-	}
-	
-	/** Seeks a particular slice */
-	public void seek(int sliceIndexToSeek) {
-		
-		if (sliceIndexToSeek==sliceNum) {
-			return;
-		}
-		
-		sliceNum = sliceIndexToSeek;
-		minusOne = null;
-		centre = vb.getPixelsForPlane(sliceNum);
-		
-		if ((sliceNum-1) >= 0) {
-			minusOne = vb.getPixelsForPlane(sliceNum-1);
-		}
-		
-		if ((sliceNum+1) < vb.extent().getZ()) {
-			plusOne = vb.getPixelsForPlane(sliceNum+1);
-		}
-	}
-	
-	/** Increments the slice number by one */
-	public void shift() {
-		minusOne = centre;
-		centre = plusOne;
-		
-		sliceNum++;
-		
-		if ((sliceNum+1)<vb.extent().getZ()) {
-			plusOne = vb.getPixelsForPlane(sliceNum+1);
-		} else {
-			plusOne = null;
-		}
-	}
+    @Getter private final VoxelBox<T> voxelBox;
 
-	public VoxelBuffer<T> bufferRel( int rel ) {
-		switch( rel ) {
-		case 1:
-			return plusOne;
-		case 0:
-			return centre;
-		case -1:
-			return minusOne;
-		default:
-			return vb.getPixelsForPlane(sliceNum+rel);
-		}
-	}
-	
-	public VoxelBox<T> getVoxelBox() {
-		return vb;
-	}
-	
-	public Extent extent() {
-		return vb.extent();
-	}
-	
-	public VoxelBuffer<T> getCentre() {
-		return centre;
-	}
-	public void setCentre(VoxelBuffer<T> centre) {
-		this.centre = centre;
-	}
-	public VoxelBuffer<T> getPlusOne() {
-		return plusOne;
-	}
-	public void setPlusOne(VoxelBuffer<T> plusOne) {
-		this.plusOne = plusOne;
-	}
-	public VoxelBuffer<T> getMinusOne() {
-		return minusOne;
-	}
-	public void setMinusOne(VoxelBuffer<T> minusOne) {
-		this.minusOne = minusOne;
-	}
-	
+    @Getter private VoxelBuffer<T> center;
+
+    @Getter private VoxelBuffer<T> plusOne;
+
+    @Getter private VoxelBuffer<T> minusOne;
+
+    private int sliceNumber = -1;
+
+    public SlidingBuffer(VoxelBox<T> voxelBox) {
+        super();
+        this.voxelBox = voxelBox;
+        seek(0); // We start off on slice 0 always
+    }
+
+    /** Seeks a particular slice */
+    public void seek(int sliceIndexToSeek) {
+
+        if (sliceIndexToSeek == sliceNumber) {
+            return;
+        }
+
+        sliceNumber = sliceIndexToSeek;
+        minusOne = null;
+        center = voxelBox.getPixelsForPlane(sliceNumber);
+
+        if ((sliceNumber - 1) >= 0) {
+            minusOne = voxelBox.getPixelsForPlane(sliceNumber - 1);
+        }
+
+        if ((sliceNumber + 1) < voxelBox.extent().getZ()) {
+            plusOne = voxelBox.getPixelsForPlane(sliceNumber + 1);
+        }
+    }
+
+    /** Increments the slice number by one */
+    public void shift() {
+        minusOne = center;
+        center = plusOne;
+
+        sliceNumber++;
+
+        if ((sliceNumber + 1) < voxelBox.extent().getZ()) {
+            plusOne = voxelBox.getPixelsForPlane(sliceNumber + 1);
+        } else {
+            plusOne = null;
+        }
+    }
+
+    public VoxelBuffer<T> bufferRel(int rel) {
+        switch (rel) {
+            case 1:
+                return plusOne;
+            case 0:
+                return center;
+            case -1:
+                return minusOne;
+            default:
+                return voxelBox.getPixelsForPlane(sliceNumber + rel);
+        }
+    }
+
+    public Extent extent() {
+        return voxelBox.extent();
+    }
 }

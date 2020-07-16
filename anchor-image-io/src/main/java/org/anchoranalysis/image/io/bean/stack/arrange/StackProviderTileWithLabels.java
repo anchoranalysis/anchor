@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.stack.arrange;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.io.bean.stack.arrange;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,12 @@ package org.anchoranalysis.image.io.bean.stack.arrange;
  * #L%
  */
 
+package org.anchoranalysis.image.io.bean.stack.arrange;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -38,43 +38,32 @@ import org.anchoranalysis.image.bean.provider.stack.StackProviderArrangeRaster;
 import org.anchoranalysis.image.io.stack.TileRasters;
 import org.anchoranalysis.image.stack.Stack;
 
-import lombok.Getter;
-import lombok.Setter;
-
 // A short-cut provider for tiling a number of stack providers with labels
 public class StackProviderTileWithLabels extends StackProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private List<StackProviderWithLabel> list = new ArrayList<>();
-	
-	@BeanField @Getter @Setter
-	private int numCols = 3;
-	
-	@BeanField @Getter @Setter
-	boolean createShort;
-	
-	@BeanField @Getter @Setter
-	boolean scaleLabel = true;
-	
-	@BeanField @Getter @Setter
-	boolean expandLabelZ = false;		// Repeats the label in the z-dimension to match the stackProvider
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private List<StackProviderWithLabel> list = new ArrayList<>();
 
-	@Override
-	public Stack create() throws CreateException {
-		StackProviderArrangeRaster arrangeRaster = TileRasters.createStackProvider(
-			list,
-			numCols,
-			createShort,
-			scaleLabel,
-			expandLabelZ
-		);
-		try {
-			arrangeRaster.initRecursive(getInitializationParameters(), getLogger() );
-		} catch (InitException e) {
-			throw new CreateException(e);
-		}
-		return arrangeRaster.create();
-	}
+    @BeanField @Getter @Setter private int numCols = 3;
+
+    @BeanField @Getter @Setter boolean createShort;
+
+    @BeanField @Getter @Setter boolean scaleLabel = true;
+
+    @BeanField @Getter @Setter
+    boolean expandLabelZ = false; // Repeats the label in the z-dimension to match the stackProvider
+    // END BEAN PROPERTIES
+
+    @Override
+    public Stack create() throws CreateException {
+        StackProviderArrangeRaster arrangeRaster =
+                TileRasters.createStackProvider(
+                        list, numCols, createShort, scaleLabel, expandLabelZ);
+        try {
+            arrangeRaster.initRecursive(getInitializationParameters(), getLogger());
+        } catch (InitException e) {
+            throw new CreateException(e);
+        }
+        return arrangeRaster.create();
+    }
 }

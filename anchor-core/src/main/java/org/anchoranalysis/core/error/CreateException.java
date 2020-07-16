@@ -16,10 +16,10 @@ import org.anchoranalysis.core.error.friendly.IFriendlyException;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,32 +32,30 @@ import org.anchoranalysis.core.error.friendly.IFriendlyException;
 
 public class CreateException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1842384434578361294L;
+    /** */
+    private static final long serialVersionUID = 1842384434578361294L;
 
-	public CreateException(String string) {
-		super(string);
-	}
+    public CreateException(String string) {
+        super(string);
+    }
 
-	public CreateException(Throwable exc) {
-		super( exc );
-	}
+    public CreateException(Throwable exc) {
+        super(exc);
+    }
 
-	public CreateException(String message, IFriendlyException cause) {
-		super( friendly(message, cause) );
-	}
-	
-	public CreateException(String message, AnchorCombinableException cause) {
-		super( combine(message, cause) );
-	}
-	
-	private static String friendly( String message, IFriendlyException cause ) {
-		return String.format("%s: %s", message, cause.friendlyMessageHierarchy() );
-	}
-	
-	private static String combine( String message, AnchorCombinableException cause ) {
-		return String.format("%s: %s", message, cause.summarize() );
-	}
+    public CreateException(String message, IFriendlyException cause) {
+        super(friendly(message, cause));
+    }
+
+    public CreateException(String message, AnchorCombinableException cause) {
+        super(combine(message, cause));
+    }
+
+    private static String friendly(String message, IFriendlyException cause) {
+        return String.format("%s: %s", message, cause.friendlyMessageHierarchy());
+    }
+
+    private static String combine(String message, AnchorCombinableException cause) {
+        return String.format("%s: %s", message, cause.summarize());
+    }
 }

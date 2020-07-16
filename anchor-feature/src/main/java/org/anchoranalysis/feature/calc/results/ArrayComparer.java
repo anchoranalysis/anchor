@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.calc.results;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.calc.results;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,31 +24,33 @@ package org.anchoranalysis.feature.calc.results;
  * #L%
  */
 
-class ArrayComparer {
-	
-	public boolean compareArrays( Object[] objs1, Object[] objs2 ) {
-		if (objs1==null) {
-			return (objs2.length==0);
-		}
-		
-		if (objs2==null) {
-			return (objs1.length==0);
-		}
-		
-		if (objs1.length!=objs2.length) {
-			return false;
-		}
-		
-		for( int i=0; i<objs1.length; i++) {
-			
-			if (!compareItem(objs1[i], objs2[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
+package org.anchoranalysis.feature.calc.results;
 
-	protected boolean compareItem( Object obj1, Object obj2 ) {
-		return obj1.equals(obj2);
-	}
+class ArrayComparer {
+
+    public boolean compareArrays(Object[] objects1, Object[] objects2) {
+        if (objects1 == null) {
+            return (objects2.length == 0);
+        }
+
+        if (objects2 == null) {
+            return (objects1.length == 0);
+        }
+
+        if (objects1.length != objects2.length) {
+            return false;
+        }
+
+        for (int i = 0; i < objects1.length; i++) {
+
+            if (!compareItem(objects1[i], objects2[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected boolean compareItem(Object object1, Object object2) {
+        return object1.equals(object2);
+    }
 }

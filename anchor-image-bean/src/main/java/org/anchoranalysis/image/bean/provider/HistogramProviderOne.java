@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.bean.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,30 +24,24 @@ package org.anchoranalysis.image.bean.provider;
  * #L%
  */
 
+package org.anchoranalysis.image.bean.provider;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class HistogramProviderOne extends HistogramProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private HistogramProvider histogramProvider;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Histogram create() throws CreateException {
-		Histogram hist = histogramProvider.create();
-		return createFromHistogram(hist);
-	}
-	
-	protected abstract Histogram createFromHistogram( Histogram hist ) throws CreateException;
-	
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
+    // END BEAN PROPERTIES
 
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
-	}
+    @Override
+    public Histogram create() throws CreateException {
+        return createFromHistogram(histogramProvider.create());
+    }
+
+    protected abstract Histogram createFromHistogram(Histogram hist) throws CreateException;
 }

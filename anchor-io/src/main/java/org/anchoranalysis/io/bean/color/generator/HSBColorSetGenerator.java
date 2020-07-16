@@ -1,13 +1,8 @@
-package org.anchoranalysis.io.bean.color.generator;
-
-import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.color.RGBColor;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import org.anchoranalysis.core.color.RGBColor;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,24 +24,28 @@ import org.anchoranalysis.core.color.RGBColor;
  * #L%
  */
 
+package org.anchoranalysis.io.bean.color.generator;
+
+import org.anchoranalysis.core.color.ColorList;
+import org.anchoranalysis.core.color.RGBColor;
 
 public class HSBColorSetGenerator extends ColorSetGenerator {
 
-	@Override
-	public ColorList genColors( int numColors ) {
-	
-		ColorList lst = new ColorList();
-		
-		for (int i =0; i<numColors; i++) {
+    @Override
+    public ColorList generateColors(int numberColors) {
 
-			float h = ((float) i) /numColors;
-			float s = (float) 0.5;
-			float v = (float) 0.5;
-			
-			int rgb = java.awt.Color.HSBtoRGB(h, s, v);
-			lst.add( new RGBColor(rgb) );
-		}
-		
-		return lst;
-	}
+        ColorList lst = new ColorList();
+
+        for (int i = 0; i < numberColors; i++) {
+
+            float h = ((float) i) / numberColors;
+            float s = (float) 0.5;
+            float v = (float) 0.5;
+
+            int rgb = java.awt.Color.HSBtoRGB(h, s, v);
+            lst.add(new RGBColor(rgb));
+        }
+
+        return lst;
+    }
 }

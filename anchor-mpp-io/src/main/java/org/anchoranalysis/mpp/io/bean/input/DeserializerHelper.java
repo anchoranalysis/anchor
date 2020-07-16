@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.io.bean.input;
-
 /*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.io.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,45 +24,48 @@ package org.anchoranalysis.mpp.io.bean.input;
  * #L%
  */
 
-import java.nio.file.Path;
+package org.anchoranalysis.mpp.io.bean.input;
 
+import java.nio.file.Path;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DeserializerHelper {
 
-	private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();
-	private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation = new XStreamDeserializer<>();
-	
-	public static Cfg deserializeCfg( Path path ) throws DeserializationFailedException {
-		return deserializerCfg.deserialize( path );
-	}
-	
-	public static Cfg deserializeCfgFromAnnotation( Path outPath, boolean includeAccepted, boolean includeRejected ) throws DeserializationFailedException {
-		MarkAnnotation ann = deserializerAnnotation.deserialize( outPath );
-		if (!ann.isFinished()) {
-			throw new DeserializationFailedException("Annotation was never finished");
-		}
-		if (!ann.isAccepted()) {
-			throw new DeserializationFailedException("Annotation was never accepted");
-		}
-		
-		Cfg cfgOut = new Cfg();
-		
-		if (includeAccepted) {
-			cfgOut.addAll(ann.getCfg());
-		}
-		
-		if (includeRejected && ann.getCfgReject()!=null) {
-			cfgOut.addAll(ann.getCfgReject());
-		}
-		
-		return cfgOut;
-	}
+    private static XStreamDeserializer<Cfg> deserializerCfg = new XStreamDeserializer<>();
+    private static XStreamDeserializer<MarkAnnotation> deserializerAnnotation =
+            new XStreamDeserializer<>();
+
+    public static Cfg deserializeCfg(Path path) throws DeserializationFailedException {
+        return deserializerCfg.deserialize(path);
+    }
+
+    public static Cfg deserializeCfgFromAnnotation(
+            Path outPath, boolean includeAccepted, boolean includeRejected)
+            throws DeserializationFailedException {
+        MarkAnnotation ann = deserializerAnnotation.deserialize(outPath);
+        if (!ann.isFinished()) {
+            throw new DeserializationFailedException("Annotation was never finished");
+        }
+        if (!ann.isAccepted()) {
+            throw new DeserializationFailedException("Annotation was never accepted");
+        }
+
+        Cfg cfgOut = new Cfg();
+
+        if (includeAccepted) {
+            cfgOut.addAll(ann.getCfg());
+        }
+
+        if (includeRejected && ann.getCfgReject() != null) {
+            cfgOut.addAll(ann.getCfgReject());
+        }
+
+        return cfgOut;
+    }
 }

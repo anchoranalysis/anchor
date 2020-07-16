@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,71 +24,60 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 
+import java.util.List;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 
 class FindTargetAndCombine {
 
-	private List<ContiguousPixelPath> paths;
-	
-	public FindTargetAndCombine(List<ContiguousPixelPath> paths) {
-		super();
-		this.paths = paths;
-	}
-	
-	/** Tries to combine the first path from the list with another (closest by distance).
-	 * 
-	 *  Returns TRUE when a successful combination occurs, FALSE otherwise
-	 */
-	public boolean combineAnyTwoPaths() {
-		
-		if (paths.size()==1) {
-			// Nothing to do
-			return false;
-		}
+    private List<ContiguousPixelPath> paths;
 
-		// We merge this path with another
-		return mergePath(
-			new MergeTarget(paths.get(0), 0, 0)
-		);
-	}
-	
-	private boolean mergePath( MergeTarget mergeSrc ) {
+    public FindTargetAndCombine(List<ContiguousPixelPath> paths) {
+        super();
+        this.paths = paths;
+    }
 
-		MergeTarget mergeTarget = findTarget( mergeSrc );
-		
-		// Find insertion point into the current list
-		int removedPixels = CombineWithTarget.combineAndRemove(
-			paths,
-			mergeSrc,
-			mergeTarget
-		);
-		
-		// Check that we never removed more than a certain number of pixels in order to merge
-		assert(removedPixels < 10);
-		
-		return true;
-	}
-	
-	private MergeTarget findTarget( MergeTarget src ) {
-		
-		// Find the closest segment to the tail() of p1. The choice of tail (as opposed to head) is arbitrary.
-		DistanceIndexTwice indexCombine = FindMinDistance.indexDistMaxToClosestPoint(
-			src.getPath().tail(),
-			paths,
-			src.getIndexPath()
-		);
-		
-		ContiguousPixelPath p2 = paths.get(indexCombine.getIndexHighest());
+    /**
+     * Tries to combine the first path from the list with another (closest by distance).
+     *
+     * <p>Returns TRUE when a successful combination occurs, FALSE otherwise
+     */
+    public boolean combineAnyTwoPaths() {
 
-		// Figure out whether to combine from the left-side, or combine from the right-side
-		return new MergeTarget(
-			p2,
-			indexCombine.getIndexHighest(),
-			indexCombine.getIndexLowest()
-		);
-	}
-	
-	
+        if (paths.size() == 1) {
+            // Nothing to do
+            return false;
+        }
+
+        // We merge this path with another
+        return mergePath(new MergeTarget(paths.get(0), 0, 0));
+    }
+
+    private boolean mergePath(MergeTarget mergeSrc) {
+
+        MergeTarget mergeTarget = findTarget(mergeSrc);
+
+        // Find insertion point into the current list
+        int removedPixels = CombineWithTarget.combineAndRemove(paths, mergeSrc, mergeTarget);
+
+        // Check that we never removed more than a certain number of pixels in order to merge
+        assert (removedPixels < 10);
+
+        return true;
+    }
+
+    private MergeTarget findTarget(MergeTarget src) {
+
+        // Find the closest segment to the tail() of p1. The choice of tail (as opposed to head) is
+        // arbitrary.
+        DistanceIndexTwice indexCombine =
+                FindMinimumDistance.indexDistanceMaxToClosestPoint(
+                        src.getPath().tail(), paths, src.getIndexPath());
+
+        ContiguousPixelPath p2 = paths.get(indexCombine.getIndexHighest());
+
+        // Figure out whether to combine from the left-side, or combine from the right-side
+        return new MergeTarget(p2, indexCombine.getIndexHighest(), indexCombine.getIndexLowest());
+    }
 }

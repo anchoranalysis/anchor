@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,12 @@ package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
  * #L%
  */
 
+package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
@@ -41,50 +39,50 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 // So values larger than 255 are clipped
 public final class VoxelBoxConverterToShortNoScaling implements VoxelBoxConverter<ShortBuffer> {
 
-	@Override
-	public VoxelBuffer<ShortBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
+    @Override
+    public VoxelBuffer<ShortBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
 
-		ShortBuffer bufferOut = ShortBuffer.allocate( bufferIn.buffer().capacity() );
-		
-		while( bufferIn.buffer().hasRemaining() ) {
-			float f = bufferIn.buffer().get();
-			if (f>VoxelDataTypeUnsignedShort.MAX_VALUE_INT) {
-				f= VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
-			}
-			if (f<0) {
-				f = 0;
-			}
-			bufferOut.put( (short) f );
-		}
-		
-		return VoxelBufferShort.wrap(bufferOut);
-	}
+        ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
 
-	@Override
-	public VoxelBuffer<ShortBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
+        while (bufferIn.buffer().hasRemaining()) {
+            float f = bufferIn.buffer().get();
+            if (f > VoxelDataTypeUnsignedShort.MAX_VALUE_INT) {
+                f = VoxelDataTypeUnsignedShort.MAX_VALUE_INT;
+            }
+            if (f < 0) {
+                f = 0;
+            }
+            bufferOut.put((short) f);
+        }
 
-		ShortBuffer bufferOut = ShortBuffer.allocate( bufferIn.buffer().capacity() );
-		
-		while( bufferIn.buffer().hasRemaining() ) {
-			bufferOut.put( (byte) ByteConverter.unsignedIntToShort(bufferIn.buffer().get()) );
-		}
-		
-		return VoxelBufferShort.wrap(bufferOut);
-	}
+        return VoxelBufferShort.wrap(bufferOut);
+    }
 
-	@Override
-	public VoxelBuffer<ShortBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
-		return bufferIn.duplicate();
-	}
+    @Override
+    public VoxelBuffer<ShortBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
-	@Override
-	public VoxelBuffer<ShortBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
-		ShortBuffer bufferOut = ShortBuffer.allocate( bufferIn.buffer().capacity() );
-		
-		while( bufferIn.buffer().hasRemaining() ) {
-			bufferOut.put( (byte) ByteConverter.unsignedByteToShort(bufferIn.buffer().get()) );
-		}
-		
-		return VoxelBufferShort.wrap(bufferOut);		
-	}
+        ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
+
+        while (bufferIn.buffer().hasRemaining()) {
+            bufferOut.put((byte) ByteConverter.unsignedIntToShort(bufferIn.buffer().get()));
+        }
+
+        return VoxelBufferShort.wrap(bufferOut);
+    }
+
+    @Override
+    public VoxelBuffer<ShortBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
+        return bufferIn.duplicate();
+    }
+
+    @Override
+    public VoxelBuffer<ShortBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
+        ShortBuffer bufferOut = ShortBuffer.allocate(bufferIn.buffer().capacity());
+
+        while (bufferIn.buffer().hasRemaining()) {
+            bufferOut.put((byte) ByteConverter.unsignedByteToShort(bufferIn.buffer().get()));
+        }
+
+        return VoxelBufferShort.wrap(bufferOut);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.interpolator;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.interpolator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.image.interpolator;
  * #L%
  */
 
+package org.anchoranalysis.image.interpolator;
 
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
@@ -33,10 +32,9 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 public class InterpolatorImgLib2Linear extends InterpolatorImgLib2 {
 
-	public InterpolatorImgLib2Linear() {
-		super(
-			new NLinearInterpolatorFactory<UnsignedByteType>(),
-			new NLinearInterpolatorFactory<UnsignedShortType>()
-		);
-	}
+    public InterpolatorImgLib2Linear() {
+        super(
+                new NLinearInterpolatorFactory<UnsignedByteType>(),
+                new NLinearInterpolatorFactory<UnsignedShortType>());
+    }
 }

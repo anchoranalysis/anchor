@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.io.csv.writer;
-
-/*
+/*-
  * #%L
  * anchor-feature-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.io.csv.writer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.feature.io.csv.writer;
  * #L%
  */
 
+package org.anchoranalysis.feature.io.csv.writer;
 
 import java.nio.file.Path;
 import java.util.List;
-
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -38,54 +36,49 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-
 /**
  * Generates a CSV file like a table
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> rows-object type
  */
 public abstract class TableCSVGenerator<T> extends CSVGenerator implements IterableGenerator<T> {
 
-	private List<String> headerNames;
-	
-	private T element;
-	
-	public TableCSVGenerator( String manifestFunction, List<String> headerNames ) {
-		super(manifestFunction);
-		this.headerNames = headerNames;
-	}
+    private List<String> headerNames;
 
-	@Override
-	public T getIterableElement() {
-		return element;
-	}
+    private T element;
 
-	@Override
-	public void setIterableElement(T element) {
-		this.element = element;
-	}
+    public TableCSVGenerator(String manifestFunction, List<String> headerNames) {
+        super(manifestFunction);
+        this.headerNames = headerNames;
+    }
 
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
+    @Override
+    public T getIterableElement() {
+        return element;
+    }
 
-	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings,
-			Path filePath) throws OutputWriteFailedException {
-		
-		try (CSVWriter writer = CSVWriter.create(filePath)) {
-			writeRowsAndColumns( writer, element, headerNames );
-		} catch (AnchorIOException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
-	
-	protected abstract void writeRowsAndColumns(
-		CSVWriter writer,
-		T rows,
-		List<String> headerNames
-	) throws OutputWriteFailedException;
+    @Override
+    public void setIterableElement(T element) {
+        this.element = element;
+    }
+
+    @Override
+    public Generator getGenerator() {
+        return this;
+    }
+
+    @Override
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
+
+        try (CSVWriter writer = CSVWriter.create(filePath)) {
+            writeRowsAndColumns(writer, element, headerNames);
+        } catch (AnchorIOException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
+    protected abstract void writeRowsAndColumns(CSVWriter writer, T rows, List<String> headerNames)
+            throws OutputWriteFailedException;
 }

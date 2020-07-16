@@ -1,9 +1,5 @@
 package org.anchoranalysis.core.collection;
 
-
-
-import java.util.Comparator;
-
 /*
  * #%L
  * anchor-core
@@ -16,10 +12,10 @@ import java.util.Comparator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,48 +26,45 @@ import java.util.Comparator;
  * #L%
  */
 
-
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.functional.Operation;
 
 /**
  * A tree map that creates a new item, if it doesn't already exist, after a GET operation
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <K> key-type
  * @param <V> value-type
  */
-public class MapCreate<K,V> {
-	
-	// We use a tree-map to retain a deterministic order in the keys, as outputting in alphabetic order is nice
-	private Map<K,V> map;
-	private Operation<V,AnchorNeverOccursException> opCreateNew;
-	
-	public MapCreate(Operation<V,AnchorNeverOccursException> opCreateNew) {
-		this.map = new TreeMap<>();
-		this.opCreateNew = opCreateNew;
-	}
-	
-	public MapCreate(Operation<V,AnchorNeverOccursException> opCreateNew, Comparator<K> comparator) {
-		super();
-		this.map = new TreeMap<>(comparator);
-		this.opCreateNew = opCreateNew;
-	}
-	
-	public synchronized V getOrCreateNew( K key ) {
-		return map.computeIfAbsent(
-			key,
-			k -> opCreateNew.doOperation()
-		);
-	}
+public class MapCreate<K, V> {
 
-	public Set<Entry<K, V>> entrySet() {
-		return map.entrySet();
-	}
+    // We use a tree-map to retain a deterministic order in the keys, as outputting in alphabetic
+    // order is nice
+    private Map<K, V> map;
+    private Operation<V, AnchorNeverOccursException> opCreateNew;
+
+    public MapCreate(Operation<V, AnchorNeverOccursException> opCreateNew) {
+        this.map = new TreeMap<>();
+        this.opCreateNew = opCreateNew;
+    }
+
+    public MapCreate(
+            Operation<V, AnchorNeverOccursException> opCreateNew, Comparator<K> comparator) {
+        super();
+        this.map = new TreeMap<>(comparator);
+        this.opCreateNew = opCreateNew;
+    }
+
+    public synchronized V getOrCreateNew(K key) {
+        return map.computeIfAbsent(key, k -> opCreateNew.doOperation());
+    }
+
+    public Set<Entry<K, V>> entrySet() {
+        return map.entrySet();
+    }
 }

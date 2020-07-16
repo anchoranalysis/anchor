@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plot;
-
-/*
+/*-
  * #%L
  * anchor-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.plot;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,64 +24,62 @@ package org.anchoranalysis.anchor.plot;
  * #L%
  */
 
+package org.anchoranalysis.anchor.plot;
 
 public class AxisLimits {
-	
-	// Inclusive
-	private double axisMin = Double.POSITIVE_INFINITY;
-	
-	// Inclusive
-	private double axisMax = Double.NEGATIVE_INFINITY;
 
-	
-	public AxisLimits() {
-		
-	}
-	
-	public AxisLimits( double min, double max) {
-		this.axisMin = min;
-		this.axisMax = max;
-	}
+    // Inclusive
+    private double axisMin = Double.POSITIVE_INFINITY;
 
-	public AxisLimits duplicate() {
-		AxisLimits newObj = new AxisLimits();
-		newObj.axisMin = this.axisMin;
-		newObj.axisMax = this.axisMax;
-		return newObj;
-	}
-	
-	public double getAxisMin() {
-		return axisMin;
-	}
+    // Inclusive
+    private double axisMax = Double.NEGATIVE_INFINITY;
 
-	public void setAxisMin(double axisMin) {
-		this.axisMin = axisMin;
-	}
-	
-	public void setAxisMin(int axisMin) {
-		this.axisMin = axisMin;
-	}
+    public AxisLimits() {}
 
-	public double getAxisMax() {
-		return axisMax;
-	}
+    public AxisLimits(double min, double max) {
+        this.axisMin = min;
+        this.axisMax = max;
+    }
 
-	public void setAxisMax(double axisMax) {
-		this.axisMax = axisMax;
-	}
-	
-	public void setAxisMax(int axisMax) {
-		this.axisMax = axisMax;
-	}
-	
-	public void addIgnoreInfinity( double value ) {
-		if (Double.isFinite(value)) {
-			add(value);
-		}
-	}
-	
-	public void add( double value ) {
-		this.axisMax = Math.max( axisMax, value );
-		this.axisMin = Math.min( axisMin, value );
-	}
+    public AxisLimits duplicate() {
+        AxisLimits newObj = new AxisLimits();
+        newObj.axisMin = this.axisMin;
+        newObj.axisMax = this.axisMax;
+        return newObj;
+    }
+
+    public double getAxisMin() {
+        return axisMin;
+    }
+
+    public void setAxisMin(double axisMin) {
+        this.axisMin = axisMin;
+    }
+
+    public void setAxisMin(int axisMin) {
+        this.axisMin = axisMin;
+    }
+
+    public double getAxisMax() {
+        return axisMax;
+    }
+
+    public void setAxisMax(double axisMax) {
+        this.axisMax = axisMax;
+    }
+
+    public void setAxisMax(int axisMax) {
+        this.axisMax = axisMax;
+    }
+
+    public void addIgnoreInfinity(double value) {
+        if (Double.isFinite(value)) {
+            add(value);
+        }
+    }
+
+    public void add(double value) {
+        this.axisMax = Math.max(axisMax, value);
+        this.axisMin = Math.min(axisMin, value);
+    }
 }

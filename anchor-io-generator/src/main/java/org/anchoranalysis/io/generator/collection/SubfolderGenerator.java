@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.collection;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.generator.collection;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.io.generator.collection;
  * #L%
  */
 
+package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
 import java.util.Optional;
-
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -42,70 +40,68 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T>
  * @param <S> collection-type
  */
-public class SubfolderGenerator<T,S extends Collection<T>> implements Generator, IterableGenerator<S> {
+public class SubfolderGenerator<T, S extends Collection<T>>
+        implements Generator, IterableGenerator<S> {
 
-	private S element;
-	
-	private IterableGenerator<T> generator;
-	private String collectionOutputName;
-	
-	public SubfolderGenerator(IterableGenerator<T> generator, String collectionOutputName) {
-		super();
-		this.generator = generator;
-		this.collectionOutputName = collectionOutputName;
-	}
+    private S element;
 
-	@Override
-	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
-		
-		String filePhysicalName = outputNameStyle.getPhysicalName();
-		IterableGeneratorWriter.writeSubfolder(
-			outputManager,
-			filePhysicalName,
-			collectionOutputName,
-			generator,
-			element,
-			false
-		);
-	}
+    private IterableGenerator<T> generator;
+    private String collectionOutputName;
 
-	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager) throws OutputWriteFailedException {
+    public SubfolderGenerator(IterableGenerator<T> generator, String collectionOutputName) {
+        super();
+        this.generator = generator;
+        this.collectionOutputName = collectionOutputName;
+    }
 
-		String filePhysicalName = outputNameStyle.getPhysicalName(index);
-	
-		IterableGeneratorWriter.writeSubfolder(outputManager, filePhysicalName, collectionOutputName, generator, element, false);
-		return 1;
-	}
+    @Override
+    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+            throws OutputWriteFailedException {
 
-	@Override
-	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
-		return generator.getGenerator().getFileTypes(outputWriteSettings);
-	}
+        String filePhysicalName = outputNameStyle.getPhysicalName();
+        IterableGeneratorWriter.writeSubfolder(
+                outputManager, filePhysicalName, collectionOutputName, generator, element, false);
+    }
 
-	@Override
-	public S getIterableElement() {
-		return element;
-	}
+    @Override
+    public int write(
+            IndexableOutputNameStyle outputNameStyle,
+            String index,
+            BoundOutputManager outputManager)
+            throws OutputWriteFailedException {
 
-	@Override
-	public void setIterableElement(S element)
-			throws SetOperationFailedException {
-		this.element = element;
-	}
+        String filePhysicalName = outputNameStyle.getPhysicalName(index);
 
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
-	
-	public static ManifestDescription createManifestDescription(String type) {
-		return new ManifestDescription("subfolder", type);
-	}
+        IterableGeneratorWriter.writeSubfolder(
+                outputManager, filePhysicalName, collectionOutputName, generator, element, false);
+        return 1;
+    }
+
+    @Override
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
+        return generator.getGenerator().getFileTypes(outputWriteSettings);
+    }
+
+    @Override
+    public S getIterableElement() {
+        return element;
+    }
+
+    @Override
+    public void setIterableElement(S element) throws SetOperationFailedException {
+        this.element = element;
+    }
+
+    @Override
+    public Generator getGenerator() {
+        return this;
+    }
+
+    public static ManifestDescription createManifestDescription(String type) {
+        return new ManifestDescription("subfolder", type);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.manifest.deserializer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,30 +24,30 @@ package org.anchoranalysis.io.manifest.deserializer;
  * #L%
  */
 
+package org.anchoranalysis.io.manifest.deserializer;
 
 import java.io.File;
-
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 
 public class CachedManifestDeserializer implements ManifestDeserializer {
-	
-	private LRUCache<File,ManifestRecorder> cachedItems;
-	
-	// Cache, last-used gets deleted when the cacheSize is reached
-	public CachedManifestDeserializer(final ManifestDeserializer delegate, int cacheSize) {
-		super();
-		cachedItems = new LRUCache<>(cacheSize, delegate::deserializeManifest);
-	}
 
-	@Override
-	public ManifestRecorder deserializeManifest(File file) throws DeserializationFailedException {
-		try {
-			return cachedItems.get(file);
-		} catch (GetOperationFailedException e) {
-			throw new DeserializationFailedException(e);
-		}
-	}
+    private LRUCache<File, ManifestRecorder> cachedItems;
+
+    // Cache, last-used gets deleted when the cacheSize is reached
+    public CachedManifestDeserializer(final ManifestDeserializer delegate, int cacheSize) {
+        super();
+        cachedItems = new LRUCache<>(cacheSize, delegate::deserializeManifest);
+    }
+
+    @Override
+    public ManifestRecorder deserializeManifest(File file) throws DeserializationFailedException {
+        try {
+            return cachedItems.get(file);
+        } catch (GetOperationFailedException e) {
+            throw new DeserializationFailedException(e);
+        }
+    }
 }

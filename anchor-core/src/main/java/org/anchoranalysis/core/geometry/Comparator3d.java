@@ -12,10 +12,10 @@ package org.anchoranalysis.core.geometry;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,33 +26,31 @@ package org.anchoranalysis.core.geometry;
  * #L%
  */
 
-
 import java.util.Comparator;
 
-public final class Comparator3d<T extends Tuple3d> implements Comparator<T>{
+public final class Comparator3d<T extends Tuple3d> implements Comparator<T> {
 
-	@Override
-	public int compare(T arg0, T arg1) {
+    @Override
+    public int compare(T arg0, T arg1) {
 
-		// First order by X
-		int cmpX = Double.compare(arg0.getX(), arg1.getX());
-		if (cmpX!=0) {
-			return cmpX;
-		}
-		
-		// Then ordered by Y
-		int cmpY = Double.compare(arg0.getY(), arg1.getY());
-		if (cmpY!=0) {
-			return cmpY;
-		}
-		
-		// Then ordered by X
-		int cmpZ = Double.compare(arg0.getZ(), arg1.getZ());
-		if (cmpZ!=0) {
-			return cmpZ;
-		}
-		
-		return 0;
-	}
+        // First order by X
+        int cmpX = Double.compare(arg0.getX(), arg1.getX());
+        if (cmpX != 0) {
+            return cmpX;
+        }
 
+        // Then ordered by Y
+        int cmpY = Double.compare(arg0.getY(), arg1.getY());
+        if (cmpY != 0) {
+            return cmpY;
+        }
+
+        // Then ordered by X
+        int cmpZ = Double.compare(arg0.getZ(), arg1.getZ());
+        if (cmpZ != 0) {
+            return cmpZ;
+        }
+
+        return 0;
+    }
 }

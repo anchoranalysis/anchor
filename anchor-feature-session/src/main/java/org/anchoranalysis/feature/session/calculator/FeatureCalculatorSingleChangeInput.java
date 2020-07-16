@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.session.calculator;
-
-
-
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ package org.anchoranalysis.feature.session.calculator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,8 +24,9 @@ package org.anchoranalysis.feature.session.calculator;
  * #L%
  */
 
-import java.util.function.Consumer;
+package org.anchoranalysis.feature.session.calculator;
 
+import java.util.function.Consumer;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -38,32 +35,34 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Likes a SequentialSession but automatically changes parameters before calculation
  *
  * @author Owen Feehan
- *
  * @param <T> feature-input
  */
-public class FeatureCalculatorSingleChangeInput<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
+public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
+        implements FeatureCalculatorSingle<T> {
 
-	private FeatureCalculatorSingle<T> calculator;
-	private Consumer<T> funcToApplyChange;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param calculator delegate which is called after an input is changed
-	 * @param funcToApplyChange a function that is applied to change the input before being passed to the delegate
-	 */
-	public FeatureCalculatorSingleChangeInput(FeatureCalculatorSingle<T> calculator, Consumer<T> funcToApplyChange) {
-		this.calculator = calculator;
-		this.funcToApplyChange = funcToApplyChange;
-	}
+    private FeatureCalculatorSingle<T> calculator;
+    private Consumer<T> funcToApplyChange;
 
-	public double calc(T input) throws FeatureCalcException {
-		funcToApplyChange.accept(input);
-		return calculator.calc(input);
-	}
+    /**
+     * Constructor
+     *
+     * @param calculator delegate which is called after an input is changed
+     * @param funcToApplyChange a function that is applied to change the input before being passed
+     *     to the delegate
+     */
+    public FeatureCalculatorSingleChangeInput(
+            FeatureCalculatorSingle<T> calculator, Consumer<T> funcToApplyChange) {
+        this.calculator = calculator;
+        this.funcToApplyChange = funcToApplyChange;
+    }
 
-	public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
-		funcToApplyChange.accept(input);
-		return calculator.calcSuppressErrors(input,	errorReporter);
-	}
+    public double calc(T input) throws FeatureCalcException {
+        funcToApplyChange.accept(input);
+        return calculator.calc(input);
+    }
+
+    public double calcSuppressErrors(T input, ErrorReporter errorReporter) {
+        funcToApplyChange.accept(input);
+        return calculator.calcSuppressErrors(input, errorReporter);
+    }
 }

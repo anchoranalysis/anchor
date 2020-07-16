@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,59 +24,60 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
  * #L%
  */
 
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-class PeriodTrigger<S,T extends PeriodReceiver<S>> {
-	
-	private T periodReceiver;
+class PeriodTrigger<S, T extends PeriodReceiver<S>> {
 
-	// How often we output in practice
-	private int aggInterval;
-	
-	// Running counter of iterations
-	private int counter=0;
-	
-	private boolean nextStart = false;
-	
-	// Constructor		
-	public PeriodTrigger(T periodReceiver, int aggInterval) {
-		super();
-		this.periodReceiver = periodReceiver;
-		this.aggInterval = aggInterval;
-	}
+    private T periodReceiver;
 
-	public void reset() {
-		this.counter = 0;
-		nextStart = true;
-	}
-	
-	public void incr( Reporting<S> reporting ) throws OperationFailedException {
-		
-		try {
-			
-			if (nextStart) {
-				periodReceiver.periodStart( reporting );
-				nextStart = false;
-			}
-			
-			counter++;
-			
-			if (counter==aggInterval) {
-				periodReceiver.periodEnd( reporting );
-				reset();
-			}
-		} catch (PeriodReceiverException e) {
-			throw new OperationFailedException(e);
-		}
-	}
+    // How often we output in practice
+    private int aggInterval;
 
-	protected int getAggInterval() {
-		return aggInterval;
-	}
+    // Running counter of iterations
+    private int counter = 0;
 
-	public T getPeriodReceiver() {
-		return periodReceiver;
-	}
+    private boolean nextStart = false;
+
+    // Constructor
+    public PeriodTrigger(T periodReceiver, int aggInterval) {
+        super();
+        this.periodReceiver = periodReceiver;
+        this.aggInterval = aggInterval;
+    }
+
+    public void reset() {
+        this.counter = 0;
+        nextStart = true;
+    }
+
+    public void incr(Reporting<S> reporting) throws OperationFailedException {
+
+        try {
+
+            if (nextStart) {
+                periodReceiver.periodStart(reporting);
+                nextStart = false;
+            }
+
+            counter++;
+
+            if (counter == aggInterval) {
+                periodReceiver.periodEnd(reporting);
+                reset();
+            }
+        } catch (PeriodReceiverException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    protected int getAggInterval() {
+        return aggInterval;
+    }
+
+    public T getPeriodReceiver() {
+        return periodReceiver;
+    }
 }

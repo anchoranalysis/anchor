@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.object.single;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.feature.bean.object.single;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,67 +24,50 @@ package org.anchoranalysis.image.feature.bean.object.single;
  * #L%
  */
 
+package org.anchoranalysis.image.feature.bean.object.single;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
+@NoArgsConstructor
 public class CenterOfGravity extends FeatureSingleObject {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String axis = "x";
-	
-	@BeanField
-	private double emptyValue = 0;
-	// END BEAN PROPERTIES
-	
-	/** Standard bean constructor */
-	public CenterOfGravity() {}
-	
-	/**
-	 * Constructor - create for a specific axis
-	 * 
-	 * @param axis axis
-	 */
-	public CenterOfGravity( AxisType axis ) {
-		this.axis = axis.toString().toLowerCase();
-	}
-	
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input) {
-		
-		FeatureInputSingleObject params = input.get();
-		
-		double val = params.getObjectMask().centerOfGravity(
-			axisType()
-		);
-		
-		if (Double.isNaN(val)) {
-			return emptyValue;
-		}
-		
-		return val;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String axis = "x";
 
-	public String getAxis() {
-		return axis;
-	}
+    @BeanField @Getter @Setter private double emptyValue = 0;
+    // END BEAN PROPERTIES
 
-	public void setAxis(String axis) {
-		this.axis = axis;
-	}
+    /**
+     * Constructor - create for a specific axis
+     *
+     * @param axis axis
+     */
+    public CenterOfGravity(AxisType axis) {
+        this.axis = axis.toString().toLowerCase();
+    }
 
-	public double getEmptyValue() {
-		return emptyValue;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleObject> input) {
 
-	public void setEmptyValue(double emptyValue) {
-		this.emptyValue = emptyValue;
-	}
-	
-	private AxisType axisType() {
-		return AxisTypeConverter.createFromString(axis);
-	}
+        FeatureInputSingleObject params = input.get();
+
+        double val = params.getObject().centerOfGravity(axisType());
+
+        if (Double.isNaN(val)) {
+            return emptyValue;
+        }
+
+        return val;
+    }
+
+    private AxisType axisType() {
+        return AxisTypeConverter.createFromString(axis);
+    }
 }

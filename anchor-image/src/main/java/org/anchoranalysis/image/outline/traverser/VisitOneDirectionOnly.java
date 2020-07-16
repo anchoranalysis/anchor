@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.outline.traverser;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,44 +24,38 @@ package org.anchoranalysis.image.outline.traverser;
  * #L%
  */
 
+package org.anchoranalysis.image.outline.traverser;
+
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 
 /**
- * Condition where we visit the first pixel we are allowed to visit,
- *   and then prevent any more visits
- * 
- * The first time it visits a pixel, then it toggles alreadyFoundSingleDirection
- * 
- * @param pnt
- * @param dist
- * @return
+ * Condition where we visit the first pixel we are allowed to visit, and then prevent any more
+ * visits
+ *
+ * <p>The first time it visits a pixel, then it toggles alreadyFoundSingleDirection
  */
+@RequiredArgsConstructor
+class VisitOneDirectionOnly implements ConsiderVisit {
 
-class VisitOneDirectionOnly implements IConsiderVisit {
+    private final ConsiderVisit visitCondition;
 
-	private IConsiderVisit visitCondition;
-	
-	// Tracks if we've already found a direction to traverse alreadyFoundSingleDirection
-	private boolean alreadyFoundSingleDirection = false;
-	
-	public VisitOneDirectionOnly(IConsiderVisit visitCondition) {
-		super();
-		this.visitCondition = visitCondition;
-	}		
-	
-	@Override
-	public boolean considerVisit(Point3i pnt, int dist) {
-		boolean canVisit = visitCondition.considerVisit(pnt, dist);
-		if (canVisit) {
-			if (!alreadyFoundSingleDirection) {
-				alreadyFoundSingleDirection = true;
-				return true;
-			} else {
-				return false;
-			}
-			
-		} else {
-			return false;
-		}
-	}
+    // Tracks if we've already found a direction to traverse alreadyFoundSingleDirection
+    private boolean alreadyFoundSingleDirection = false;
+
+    @Override
+    public boolean considerVisit(Point3i point, int distance) {
+        boolean canVisit = visitCondition.considerVisit(point, distance);
+        if (canVisit) {
+            if (!alreadyFoundSingleDirection) {
+                alreadyFoundSingleDirection = true;
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.transformer;
-
 /*-
  * #%L
- * anchor-plugin-mpp-sgmn
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,52 +24,34 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  * #L%
  */
 
+package org.anchoranalysis.mpp.sgmn.transformer;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Combines a transformation from S->U with U->T
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <S> source type
  * @param <T> destination type
  * @param <U> intermediate type
  */
 public class Compose<S, T, U> extends StateTransformerBean<S, T> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StateTransformerBean<S, U> first;
-	
-	@BeanField
-	private StateTransformerBean<U, T> second;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public T transform(S in, TransformationContext context) throws OperationFailedException {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private StateTransformerBean<S, U> first;
 
-		U inter = first.transform(in, context);
-		
-		return second.transform(inter, context);
-	}
+    @BeanField @Getter @Setter private StateTransformerBean<U, T> second;
+    // END BEAN PROPERTIES
 
-	public StateTransformerBean<S, U> getFirst() {
-		return first;
-	}
+    @Override
+    public T transform(S in, TransformationContext context) throws OperationFailedException {
 
-	public void setFirst(StateTransformerBean<S, U> first) {
-		this.first = first;
-	}
+        U inter = first.transform(in, context);
 
-	public StateTransformerBean<U, T> getSecond() {
-		return second;
-	}
-
-	public void setSecond(StateTransformerBean<U, T> second) {
-		this.second = second;
-	}
-
-
-
+        return second.transform(inter, context);
+    }
 }

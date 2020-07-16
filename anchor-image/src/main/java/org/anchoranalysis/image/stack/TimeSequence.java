@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.stack;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,58 +24,57 @@ package org.anchoranalysis.image.stack;
  * #L%
  */
 
+package org.anchoranalysis.image.stack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class TimeSequence implements Iterable<Stack> {
 
-	private final List<Stack> list = new ArrayList<>();
+    private final List<Stack> list = new ArrayList<>();
 
-	public TimeSequence() {
-	}
-	
-	public TimeSequence(Stack s) {
-		add(s);
-	}
+    public TimeSequence() {}
 
-	public boolean add(Stack arg0) {
-		return list.add(arg0);
-	}
+    public TimeSequence(Stack s) {
+        add(s);
+    }
 
-	public Stack get(int arg0) {
-		return list.get(arg0);
-	}
+    public boolean add(Stack arg0) {
+        return list.add(arg0);
+    }
 
-	public boolean isEmpty() {
-		return list.isEmpty();
-	}
+    public Stack get(int arg0) {
+        return list.get(arg0);
+    }
 
-	public Iterator<Stack> iterator() {
-		return list.iterator();
-	}
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
 
-	public int size() {
-		return list.size();
-	}
-	
-	// Returns true if the data type of all channels is equal to
-	public boolean allChnlsHaveType( VoxelDataType chnlDataType ) {
-		
-		for (Stack stack : this) {
-			if (!stack.allChnlsHaveType(chnlDataType)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	// Assumes all dimensions are the same, but doesn't check
-	public ImageDimensions getDimensions() {
-		return list.get(0).getDimensions();
-	}
+    public Iterator<Stack> iterator() {
+        return list.iterator();
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    // Returns true if the data type of all channels is equal to
+    public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
+
+        for (Stack stack : this) {
+            if (!stack.allChnlsHaveType(chnlDataType)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Assumes all dimensions are the same, but doesn't check
+    public ImageDimensions getDimensions() {
+        return list.get(0).getDimensions();
+    }
 }

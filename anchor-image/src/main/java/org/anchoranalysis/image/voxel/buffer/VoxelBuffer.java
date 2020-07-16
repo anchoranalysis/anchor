@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.buffer;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.buffer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,51 +24,48 @@ package org.anchoranalysis.image.voxel.buffer;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> nuffer-type
  */
 public abstract class VoxelBuffer<T extends Buffer> {
 
-	public abstract VoxelDataType dataType();
-	
-	public abstract T buffer();
-	
-	public abstract VoxelBuffer<T> duplicate();
-	
-	// Gets the underlying buffer-item converted to an int
-	public abstract int getInt( int index );
+    public abstract VoxelDataType dataType();
 
-	public abstract void putInt( int index, int val );
-	
-	public abstract void putByte( int index, byte val );
-	
-	public abstract int size();
-	
-	public void transferFrom( int destIndex, VoxelBuffer<T> src ) {
-		transferFrom( destIndex, src, destIndex );
-	}
+    public abstract T buffer();
 
-	public void transferFromConvert(int destIndex, VoxelBuffer<?> src,
-			int srcIndex) {
-		int val = src.getInt(srcIndex);
-		putInt(destIndex, val);
-	}
-	
-	@Override
-	public String toString() {
-		Histogram h = HistogramFactory.create(this);
-		return h.toString();
-	}
-	
-	public abstract void transferFrom( int destIndex, VoxelBuffer<T> src, int srcIndex );
+    public abstract VoxelBuffer<T> duplicate();
+
+    // Gets the underlying buffer-item converted to an int
+    public abstract int getInt(int index);
+
+    public abstract void putInt(int index, int val);
+
+    public abstract void putByte(int index, byte val);
+
+    public abstract int size();
+
+    public void transferFrom(int destIndex, VoxelBuffer<T> src) {
+        transferFrom(destIndex, src, destIndex);
+    }
+
+    public void transferFromConvert(int destIndex, VoxelBuffer<?> src, int srcIndex) {
+        int val = src.getInt(srcIndex);
+        putInt(destIndex, val);
+    }
+
+    @Override
+    public String toString() {
+        Histogram h = HistogramFactory.create(this);
+        return h.toString();
+    }
+
+    public abstract void transferFrom(int destIndex, VoxelBuffer<T> src, int srcIndex);
 }

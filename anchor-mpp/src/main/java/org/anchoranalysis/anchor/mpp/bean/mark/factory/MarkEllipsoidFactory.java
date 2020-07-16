@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.mark.factory;
-
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,28 +24,24 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.bean.mark.factory;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class MarkEllipsoidFactory extends MarkFactory {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private double shellRad = 0.1;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Mark create() {
-		MarkEllipsoid mark = new MarkEllipsoid();
-		mark.setShellRad(shellRad);
-		return mark;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private double shellRad = 0.1;
+    // END BEAN PROPERTIES
 
-	public double getShellRad() {
-		return shellRad;
-	}
-
-	public void setShellRad(double shellRad) {
-		this.shellRad = shellRad;
-	}
+    @Override
+    public Mark create() {
+        MarkEllipsoid mark = new MarkEllipsoid();
+        mark.setShellRad(shellRad);
+        return mark;
+    }
 }

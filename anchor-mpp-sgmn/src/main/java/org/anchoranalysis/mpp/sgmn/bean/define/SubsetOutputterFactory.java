@@ -1,12 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.define;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,13 +24,16 @@ import java.util.Optional;
  * #L%
  */
 
-import java.util.function.Function;
+package org.anchoranalysis.mpp.sgmn.bean.define;
 
+import java.util.Optional;
+import java.util.function.Function;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.io.objs.ObjectMaskCollectionWriter;
+import org.anchoranalysis.image.io.objects.ObjectCollectionWriter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
@@ -42,74 +41,60 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
-
+import org.anchoranalysis.mpp.sgmn.define.OutputterDirectories;
 
 /**
- * This class will expect for the following second-level output keys:
- * cfg
- * hist
- * objs
- * 
- * @author Owen Feehan
+ * This class will expect for the following second-level output keys: {@link StackOutputKeys.CFG}
+ * {@link StackOutputKeys.HISTOGRAM} {@link StackOutputKeys.OBJECTS}
  *
+ * @author Owen Feehan
  */
+@AllArgsConstructor
 class SubsetOutputterFactory {
-	
-	private MPPInitParams soMPP;
-	private BoundOutputManagerRouteErrors outputManager;
-	private boolean suppressSubfolders;
-	
-	public SubsetOutputterFactory(MPPInitParams soMPP, BoundOutputManagerRouteErrors outputManager,
-			boolean suppressSubfolders) {
-		super();
-		this.soMPP = soMPP;
-		this.outputManager = outputManager;
-		this.suppressSubfolders = suppressSubfolders;
-	}
-	
-	public SubsetOutputter<Cfg> cfg() {
-		return create(
-			soMPP.getCfgCollection(),
-			new XStreamGenerator<Cfg>(
-				Optional.of("cfg")
-			),
-			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.CFG),
-			"cfgCollection"
-		);
-	}
 
-	public SubsetOutputter<Histogram> histogram() {
-		return create(
-			soMPP.getImage().getHistogramCollection(),
-			new HistogramCSVGenerator(),
-			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.HISTOGRAM),
-			"histogramCollection"
-		);
-	}
-	
-	public SubsetOutputter<ObjectCollection> objMask() {
-		return create(
-			soMPP.getImage().getObjMaskCollection(),
-			ObjectMaskCollectionWriter.generator(),
-			(BoundOutputManagerRouteErrors bom) -> bom.outputAllowedSecondLevel(StackOutputKeys.OBJS),
-			"objMaskCollection"
-		);
-	}
-	
-	private <T> SubsetOutputter<T> create(
-			NamedProviderStore<T> store,
-			IterableGenerator<T> generator,
-			Function<BoundOutputManagerRouteErrors,OutputAllowed> outputAllowedFunc,
-			String id
-		) {
-		return new SubsetOutputter<>(
-			store,
-			outputAllowedFunc.apply(outputManager),
-			generator,
-			outputManager.getDelegate(),
-			id,
-			"",
-			suppressSubfolders
-		);
-	}
+    private MPPInitParams soMPP;
+    private BoundOutputManagerRouteErrors outputManager;
+    private boolean suppressSubfolders;
+
+    public SubsetOutputter<Cfg> cfg() {
+        return create(
+                soMPP.getCfgCollection(),
+                new XStreamGenerator<Cfg>(Optional.of("cfg")),
+                (BoundOutputManagerRouteErrors bom) ->
+                        bom.outputAllowedSecondLevel(StackOutputKeys.CFG),
+                OutputterDirectories.CFG);
+    }
+
+    public SubsetOutputter<Histogram> histogram() {
+        return create(
+                soMPP.getImage().getHistogramCollection(),
+                new HistogramCSVGenerator(),
+                (BoundOutputManagerRouteErrors bom) ->
+                        bom.outputAllowedSecondLevel(StackOutputKeys.HISTOGRAM),
+                OutputterDirectories.HISTOGRAM);
+    }
+
+    public SubsetOutputter<ObjectCollection> objects() {
+        return create(
+                soMPP.getImage().getObjectCollection(),
+                ObjectCollectionWriter.generator(),
+                (BoundOutputManagerRouteErrors bom) ->
+                        bom.outputAllowedSecondLevel(StackOutputKeys.OBJECTS),
+                OutputterDirectories.OBJECT);
+    }
+
+    private <T> SubsetOutputter<T> create(
+            NamedProviderStore<T> store,
+            IterableGenerator<T> generator,
+            Function<BoundOutputManagerRouteErrors, OutputAllowed> outputAllowedFunc,
+            String id) {
+        return new SubsetOutputter<>(
+                store,
+                outputAllowedFunc.apply(outputManager),
+                generator,
+                outputManager.getDelegate(),
+                id,
+                "",
+                suppressSubfolders);
+    }
 }

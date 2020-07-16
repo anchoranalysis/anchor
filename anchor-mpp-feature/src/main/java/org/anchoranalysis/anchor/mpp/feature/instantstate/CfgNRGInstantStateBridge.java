@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.instantstate;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,49 +24,49 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.feature.instantstate;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.overlay.OverlayedInstantState;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 
 // Bridges CfgNRGInstantState to OverlayedInstantState
-public class CfgNRGInstantStateBridge implements FunctionWithException<CfgNRGInstantState, OverlayedInstantState, OperationFailedException> {
+public class CfgNRGInstantStateBridge
+        implements FunctionWithException<
+                CfgNRGInstantState, OverlayedInstantState, OperationFailedException> {
 
-	private RegionMembershipWithFlags regionMembership;
-		
-	public CfgNRGInstantStateBridge(RegionMembershipWithFlags regionMembership) {
-		super();
-		this.regionMembership = regionMembership;
-	}
+    private RegionMembershipWithFlags regionMembership;
 
-	@Override
-	public OverlayedInstantState apply(CfgNRGInstantState sourceObject) throws OperationFailedException {
-		
-		if (sourceObject==null) {
-			throw new OperationFailedException("The sourceObject is null. Invalid index");
-		}
-		
-		if (sourceObject.getCfgNRG()==null) {
-			return new OverlayedInstantState(sourceObject.getIndex(), new OverlayCollection() );
-		}
-		
-		Cfg cfg = sourceObject.getCfgNRG().getCfg();
-		
-		if (cfg==null) {
-			cfg = new Cfg();
-		}
-		
-		OverlayCollection oc = OverlayCollectionMarkFactory.createWithoutColor(
-			cfg,
-			regionMembership
-		);
-		
-		return new OverlayedInstantState(sourceObject.getIndex(), oc);
-	}
-	
-	
+    public CfgNRGInstantStateBridge(RegionMembershipWithFlags regionMembership) {
+        super();
+        this.regionMembership = regionMembership;
+    }
 
+    @Override
+    public OverlayedInstantState apply(CfgNRGInstantState sourceObject)
+            throws OperationFailedException {
+
+        if (sourceObject == null) {
+            throw new OperationFailedException("The sourceObject is null. Invalid index");
+        }
+
+        if (sourceObject.getCfgNRG() == null) {
+            return new OverlayedInstantState(sourceObject.getIndex(), new OverlayCollection());
+        }
+
+        Cfg cfg = sourceObject.getCfgNRG().getCfg();
+
+        if (cfg == null) {
+            cfg = new Cfg();
+        }
+
+        OverlayCollection oc =
+                OverlayCollectionMarkFactory.createWithoutColor(cfg, regionMembership);
+
+        return new OverlayedInstantState(sourceObject.getIndex(), oc);
+    }
 }

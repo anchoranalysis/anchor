@@ -1,14 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.cfg;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,11 +24,17 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * #L%
  */
 
+package org.anchoranalysis.mpp.sgmn.bean.cfg;
+
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -42,26 +42,17 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class CfgSgmn extends AnchorBean<CfgSgmn> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String backgroundStackName = ImgStackIdentifiers.INPUT_IMAGE;
-	// END BEAN PROPERTIES
-	
-	// Creates state for the experiment in general, that is not tied to any particular image
-	public abstract ExperimentState createExperimentState();
-	
-	public abstract Cfg sgmn(
-		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjectCollection> objMaskCollection,
-		Optional<KeyValueParams> keyValueParams,
-		BoundIOContext context
-	) throws SgmnFailedException;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String backgroundStackName = ImgStackIdentifiers.INPUT_IMAGE;
+    // END BEAN PROPERTIES
 
-	public String getBackgroundStackName() {
-		return backgroundStackName;
-	}
+    // Creates state for the experiment in general, that is not tied to any particular image
+    public abstract ExperimentState createExperimentState();
 
-	public void setBackgroundStackName(String backgroundStackName) {
-		this.backgroundStackName = backgroundStackName;
-	}
+    public abstract Cfg sgmn(
+            NamedImgStackCollection stacks,
+            NamedProvider<ObjectCollection> objects,
+            Optional<KeyValueParams> keyValueParams,
+            BoundIOContext context)
+            throws SegmentationFailedException;
 }

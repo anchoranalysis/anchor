@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.object.calculation;
-
-/*
+/*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.feature.object.calculation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,28 +24,30 @@ package org.anchoranalysis.image.feature.object.calculation;
  * #L%
  */
 
+package org.anchoranalysis.image.feature.object.calculation;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 
-@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
-public class CalculateNumVoxels extends FeatureCalculation<Double,FeatureInputSingleObject> {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class CalculateNumVoxels extends FeatureCalculation<Double, FeatureInputSingleObject> {
 
-	private final boolean mip;
-		
-	public static double calc(ObjectMask om, boolean mip) {
-		if (mip) {
-			om = om.maxIntensityProjection();
-		}
-		return om.numberVoxelsOn();		
-	}
-	
-	// Public, as it's needed by Mockito in test verifications
-	@Override
-	public Double execute(FeatureInputSingleObject params) {
-		return calc( params.getObjectMask(), mip );
-	}
+    private final boolean mip;
+
+    public static double calc(ObjectMask object, boolean mip) {
+        if (mip) {
+            object = object.maxIntensityProjection();
+        }
+        return object.numberVoxelsOn();
+    }
+
+    // Public, as it's needed by Mockito in test verifications
+    @Override
+    public Double execute(FeatureInputSingleObject params) {
+        return calc(params.getObject(), mip);
+    }
 }

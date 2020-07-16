@@ -1,13 +1,8 @@
-package org.anchoranalysis.feature.session.cache.horizontal;
-
-import java.util.ArrayList;
-
-
-/*
+/*-
  * #%L
- * anchor-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import java.util.ArrayList;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +24,10 @@ import java.util.ArrayList;
  * #L%
  */
 
+package org.anchoranalysis.feature.session.cache.horizontal;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -40,21 +36,22 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public class HorizontalFeatureCacheFactory implements FeatureSessionCacheFactory {
 
-	private FeatureSessionCacheFactory delegate;
-	private Collection<String> ignorePrefixes;
-		
-	public HorizontalFeatureCacheFactory() {
-		super();
-		this.delegate = new HorizontalCalculationCacheFactory();
-		this.ignorePrefixes = new ArrayList<>();
-	}
+    private FeatureSessionCacheFactory delegate;
+    private Collection<String> ignorePrefixes;
 
-	@Override
-	public <T extends FeatureInput> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
+    public HorizontalFeatureCacheFactory() {
+        super();
+        this.delegate = new HorizontalCalculationCacheFactory();
+        this.ignorePrefixes = new ArrayList<>();
+    }
 
-		FeatureSessionCache<T> cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
-		
-		return new HorizontalFeatureCache<>(cacheCalculation, namedFeatures, sharedFeatures, ignorePrefixes);
-	}
-	
+    @Override
+    public <T extends FeatureInput> FeatureSessionCache<T> create(
+            FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures) {
+
+        FeatureSessionCache<T> cacheCalculation = delegate.create(namedFeatures, sharedFeatures);
+
+        return new HorizontalFeatureCache<>(
+                cacheCalculation, namedFeatures, sharedFeatures, ignorePrefixes);
+    }
 }

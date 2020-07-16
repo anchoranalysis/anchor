@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.text;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.core.text;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,60 +24,59 @@ package org.anchoranalysis.core.text;
  * #L%
  */
 
+package org.anchoranalysis.core.text;
 
 import java.text.DecimalFormat;
 
 public class TypedValue {
-	
-	private String value;
-	private boolean isNumeric;
-	
-	
-	public TypedValue( String value ) {
-		this.value = value;
-		this.isNumeric = false;
-	}
-	
-	public TypedValue(int value) {
-		super();
-		this.value = Integer.toString(value);
-		this.isNumeric = true;
-	}
-	
-	public TypedValue(double value, int numDecimalPlaces) {
-		super();
-		if (Double.isNaN(value)) {
-			this.value = "NaN";
-			this.isNumeric = true;
-		} else {
-			DecimalFormat decimalFormat = new DecimalFormat();
-			decimalFormat.setMinimumFractionDigits(numDecimalPlaces);
-			decimalFormat.setGroupingUsed(false);
-			this.value = decimalFormat.format(value);
-			this.isNumeric = true;
-		}
-	}
-	
-	
-	public TypedValue(String value, boolean isNumeric) {
-		super();
-		this.value = value;
-		this.isNumeric = isNumeric;
-	}
 
-	public String getValue() {
-		return value;
-	}
+    private String value;
+    private boolean isNumeric;
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public TypedValue(String value) {
+        this.value = value;
+        this.isNumeric = false;
+    }
 
-	public boolean isNumeric() {
-		return isNumeric;
-	}
+    public TypedValue(int value) {
+        super();
+        this.value = Integer.toString(value);
+        this.isNumeric = true;
+    }
 
-	public void setNumeric(boolean isNumeric) {
-		this.isNumeric = isNumeric;
-	}
+    public TypedValue(double value, int numDecimalPlaces) {
+        super();
+        if (Double.isNaN(value)) {
+            this.value = "NaN";
+            this.isNumeric = true;
+        } else {
+            DecimalFormat decimalFormat = new DecimalFormat();
+            decimalFormat.setMinimumFractionDigits(numDecimalPlaces);
+            decimalFormat.setGroupingUsed(false);
+            this.value = decimalFormat.format(value);
+            this.isNumeric = true;
+        }
+    }
+
+    public TypedValue(String value, boolean isNumeric) {
+        super();
+        this.value = value;
+        this.isNumeric = isNumeric;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public boolean isNumeric() {
+        return isNumeric;
+    }
+
+    public void setNumeric(boolean isNumeric) {
+        this.isNumeric = isNumeric;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared;
-
-/*
+/*-
  * #%L
- * anchor-gui
+ * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.bean.shared;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.bean.shared;
  * #L%
  */
 
+package org.anchoranalysis.bean.shared;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,29 +33,26 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public class StringMap extends AnchorBean<StringMap> {
 
-	// START BEAN PROPERTIES
-	private List<StringMapItem> list;
-	// END BEAN PROPERTIES
-	
-	public Map<String,String> create() {
-		
-		HashMap<String,String> map = new HashMap<>();
-		
-		for( StringMapItem mapping : list ) {
-			map.put(
-				mapping.getSource(),
-				mapping.getTarget()
-			);
-		}
-		
-		return map;
-	}
+    // START BEAN PROPERTIES
+    private List<StringMapItem> list;
+    // END BEAN PROPERTIES
 
-	public List<StringMapItem> getList() {
-		return list;
-	}
+    public Map<String, String> create() {
 
-	public void setList(List<StringMapItem> list) {
-		this.list = list;
-	}
+        HashMap<String, String> map = new HashMap<>();
+
+        for (StringMapItem mapping : list) {
+            map.put(mapping.getSource(), mapping.getTarget());
+        }
+
+        return map;
+    }
+
+    public List<StringMapItem> getList() {
+        return list;
+    }
+
+    public void setList(List<StringMapItem> list) {
+        this.list = list;
+    }
 }

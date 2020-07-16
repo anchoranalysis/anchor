@@ -12,10 +12,10 @@ package org.anchoranalysis.core.index.container;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,33 +26,30 @@ package org.anchoranalysis.core.index.container;
  * #L%
  */
 
-
 import java.util.EventObject;
 
 public class BoundChangeEvent extends EventObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -563106449126106299L;
+    /** */
+    private static final long serialVersionUID = -563106449126106299L;
 
-	public enum BoundType {
-		MINIMUM,
-		MAXIMUM
-	}
-	
-	private BoundType boundType;
-	
-	public BoundChangeEvent(Object source, BoundType boundType ) {
-		super(source);
-		this.boundType = boundType;
-	}
+    public enum BoundType {
+        MINIMUM,
+        MAXIMUM
+    }
 
-	public BoundType getBoundType() {
-		return boundType;
-	}
+    private BoundType boundType;
 
-	public void setBoundType(BoundType boundType) {
-		this.boundType = boundType;
-	}
+    public BoundChangeEvent(Object source, BoundType boundType) {
+        super(source);
+        this.boundType = boundType;
+    }
+
+    public BoundType getBoundType() {
+        return boundType;
+    }
+
+    public void setBoundType(BoundType boundType) {
+        this.boundType = boundType;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.binary.logical;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.binary.logical;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,62 +24,59 @@ package org.anchoranalysis.image.binary.logical;
  * #L%
  */
 
-import java.nio.ByteBuffer;
+package org.anchoranalysis.image.binary.logical;
 
-import org.anchoranalysis.image.binary.BinaryChnl;
+import java.nio.ByteBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BinaryChnlAnd {
-	
-	public static void apply( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) {
-		apply(
-			chnlCrnt.getVoxelBox(),
-			chnlReceiver.getVoxelBox(),
-			chnlCrnt.getBinaryValues().createByte(),
-			chnlReceiver.getBinaryValues().createByte()
-		);
-	}
-	
-	public static void apply(
-		VoxelBox<ByteBuffer> voxelBoxCrnt,
-		VoxelBox<ByteBuffer> voxelBoxReceiver,
-		BinaryValuesByte bvbCrnt,
-		BinaryValuesByte bvbReceiver
-	) {
-		
-		Extent e = voxelBoxCrnt.extent();
-		
-		byte receiveOn = bvbReceiver.getOnByte();
-		
-		// All the on voxels in the receive, are put onto crnt
-		for( int z=0; z<e.getZ(); z++ ) {
-			
-			ByteBuffer bufSrc = voxelBoxCrnt.getPixelsForPlane(z).buffer();
-			ByteBuffer bufReceive = voxelBoxReceiver.getPixelsForPlane(z).buffer();
-			
-			int offset = 0;
-			for( int y=0; y<e.getY(); y++ ) {
-				for( int x=0; x<e.getX(); x++ ) {
-					
-					byte byteSrc = bufSrc.get(offset);
-					byte byteRec = bufReceive.get(offset);
-					
-					if (byteSrc==bvbCrnt.getOnByte() && byteRec==receiveOn) {
-						bufSrc.put(offset, bvbCrnt.getOnByte());
-					} else {
-						bufSrc.put(offset, bvbCrnt.getOffByte());
-					}
-					
-					offset++;
-				}
-			}
-		}
 
-	}
+    public static void apply(Mask chnlCrnt, Mask chnlReceiver) {
+        apply(
+                chnlCrnt.getVoxelBox(),
+                chnlReceiver.getVoxelBox(),
+                chnlCrnt.getBinaryValues().createByte(),
+                chnlReceiver.getBinaryValues().createByte());
+    }
+
+    public static void apply(
+            VoxelBox<ByteBuffer> voxelBoxCrnt,
+            VoxelBox<ByteBuffer> voxelBoxReceiver,
+            BinaryValuesByte bvbCrnt,
+            BinaryValuesByte bvbReceiver) {
+
+        Extent e = voxelBoxCrnt.extent();
+
+        byte receiveOn = bvbReceiver.getOnByte();
+
+        // All the on voxels in the receive, are put onto crnt
+        for (int z = 0; z < e.getZ(); z++) {
+
+            ByteBuffer bufSrc = voxelBoxCrnt.getPixelsForPlane(z).buffer();
+            ByteBuffer bufReceive = voxelBoxReceiver.getPixelsForPlane(z).buffer();
+
+            int offset = 0;
+            for (int y = 0; y < e.getY(); y++) {
+                for (int x = 0; x < e.getX(); x++) {
+
+                    byte byteSrc = bufSrc.get(offset);
+                    byte byteRec = bufReceive.get(offset);
+
+                    if (byteSrc == bvbCrnt.getOnByte() && byteRec == receiveOn) {
+                        bufSrc.put(offset, bvbCrnt.getOnByte());
+                    } else {
+                        bufSrc.put(offset, bvbCrnt.getOffByte());
+                    }
+
+                    offset++;
+                }
+            }
+        }
+    }
 }

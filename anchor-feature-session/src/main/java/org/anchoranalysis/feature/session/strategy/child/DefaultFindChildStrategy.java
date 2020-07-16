@@ -1,13 +1,8 @@
-package org.anchoranalysis.feature.session.strategy.child;
-
-import java.util.Optional;
-import java.util.Set;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import java.util.Set;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,43 +24,46 @@ import java.util.Set;
  * #L%
  */
 
+package org.anchoranalysis.feature.session.strategy.child;
+
+import java.util.Optional;
+import java.util.Set;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
- * The default strategy for finding children by always directly taking (or creating a child-cache) as necessary.
+ * The default strategy for finding children by always directly taking (or creating a child-cache)
+ * as necessary.
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultFindChildStrategy implements FindChildStrategy {
 
-	public static final FindChildStrategy instance = new DefaultFindChildStrategy();
-	
-	@Override
-	public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
-		FeatureSessionCache<?> parentCache,
-		CacheCreator factory,
-		ChildCacheName childName,
-		V input
-	) {
-		return parentCache.childCacheFor(childName, input.getClass(), factory);
-	}
+    public static final FindChildStrategy instance = new DefaultFindChildStrategy();
 
-	@Override
-	public FindChildStrategy strategyForGrandchild() {
-		return instance;
-	}
+    @Override
+    public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+            FeatureSessionCache<?> parentCache,
+            CacheCreator factory,
+            ChildCacheName childName,
+            V input) {
+        return parentCache.childCacheFor(childName, input.getClass(), factory);
+    }
 
-	public static FindChildStrategy instance() {
-		return instance;
-	}
+    @Override
+    public FindChildStrategy strategyForGrandchild() {
+        return instance;
+    }
 
-	@Override
-	public Optional<Set<ChildCacheName>> cachesToAvoidInvalidating() {
-		return Optional.empty();
-	}
+    public static FindChildStrategy instance() {
+        return instance;
+    }
+
+    @Override
+    public Optional<Set<ChildCacheName>> cachesToAvoidInvalidating() {
+        return Optional.empty();
+    }
 }

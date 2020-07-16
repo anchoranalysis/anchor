@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.physical.convert;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,11 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * #L%
  */
 
+package org.anchoranalysis.image.feature.bean.physical.convert;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
@@ -35,42 +38,31 @@ import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
-public abstract class FeatureConvertRes<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
+@NoArgsConstructor
+public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
+        extends FeatureSingleElemWithRes<T> {
 
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private String unitType;
-	// END BEAN PROPERTIES
-	
-	public FeatureConvertRes() {
-		
-	}
-	
-	public FeatureConvertRes( Feature<T> feature, UnitSuffix unitType ) {
-		super(feature);
-		this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String unitType;
+    // END BEAN PROPERTIES
 
-	@Override
-	protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
-		double valuePhysical = convertToPhysical( value, res );
-		return convertToUnits(valuePhysical);
-	}
-	
-	protected abstract double convertToPhysical( double value, ImageResolution res ) throws FeatureCalcException;
+    public FeatureConvertRes(Feature<T> feature, UnitSuffix unitType) {
+        super(feature);
+        this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
+    }
 
-	public String getUnitType() {
-		return unitType;
-	}
+    @Override
+    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
+        double valuePhysical = convertToPhysical(value, res);
+        return convertToUnits(valuePhysical);
+    }
 
-	public void setUnitType(String unitType) {
-		this.unitType = unitType;
-	}
-		
-	private double convertToUnits( double valuePhysical ) {
-		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
-		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
-	}
+    protected abstract double convertToPhysical(double value, ImageResolution res)
+            throws FeatureCalcException;
 
+    private double convertToUnits(double valuePhysical) {
+        SpatialConversionUtilities.UnitSuffix prefixType =
+                SpatialConversionUtilities.suffixFromMeterString(unitType);
+        return SpatialConversionUtilities.convertToUnits(valuePhysical, prefixType);
+    }
 }

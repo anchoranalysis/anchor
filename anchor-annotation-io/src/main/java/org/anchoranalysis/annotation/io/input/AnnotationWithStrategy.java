@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.input;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.annotation.io.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,13 @@ package org.anchoranalysis.annotation.io.input;
  * #L%
  */
 
+package org.anchoranalysis.annotation.io.input;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -42,67 +41,65 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
-/** 
- * 
+/**
  * An annotation that has been combined with it's strategy
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {
-	
-	private ProvidesStackInput input;
-	private T annotationStrategy;
-	private Path annotationPath;
-	
-	public AnnotationWithStrategy(
-		ProvidesStackInput input,
-		T strategy
-	) throws AnchorIOException {
-		this.input = input;
-		this.annotationStrategy = strategy;
-		this.annotationPath = annotationStrategy.annotationPathFor(input);
-	}
-	
-	public Optional<File> associatedFile() {
-		return input.pathForBinding().map(Path::toFile);
-	}
 
-	public T getStrategy() {
-		return annotationStrategy;
-	}
+    private ProvidesStackInput input;
+    private T annotationStrategy;
+    private Path annotationPath;
 
-	public Path getAnnotationPath() {
-		return annotationPath;
-	}
-	
-	/** A label to be used when aggregrating this annotation with others, or NULL if this makes no sense 
-	 * @throws AnchorIOException */
-	public Optional<String> labelForAggregation() throws AnchorIOException {
-		return annotationStrategy.annotationLabelFor(input);
-	}
-	
-	@Override
-	public String descriptiveName() {
-		return input.descriptiveName();
-	}
+    public AnnotationWithStrategy(ProvidesStackInput input, T strategy) throws AnchorIOException {
+        this.input = input;
+        this.annotationStrategy = strategy;
+        this.annotationPath = annotationStrategy.annotationPathFor(input);
+    }
 
-	@Override
-	public Optional<Path> pathForBinding() {
-		return input.pathForBinding();
-	}
-		
-	public List<File> deriveAssociatedFiles() {
-		return Arrays.asList( getAnnotationPath().toFile() );
-	}
+    public Optional<File> associatedFile() {
+        return input.pathForBinding().map(Path::toFile);
+    }
 
-	@Override
-	public void close(ErrorReporter errorReporter) {
-		input.close(errorReporter);
-	}
+    public T getStrategy() {
+        return annotationStrategy;
+    }
 
-	public OperationWithProgressReporter<NamedProvider<Stack>,CreateException> stacks() {
-		return new OperationCreateStackCollection(input);
-	}
-	
+    public Path getAnnotationPath() {
+        return annotationPath;
+    }
+
+    /**
+     * A label to be used when aggregrating this annotation with others, or NULL if this makes no
+     * sense
+     *
+     * @throws AnchorIOException
+     */
+    public Optional<String> labelForAggregation() throws AnchorIOException {
+        return annotationStrategy.annotationLabelFor(input);
+    }
+
+    @Override
+    public String descriptiveName() {
+        return input.descriptiveName();
+    }
+
+    @Override
+    public Optional<Path> pathForBinding() {
+        return input.pathForBinding();
+    }
+
+    public List<File> deriveAssociatedFiles() {
+        return Arrays.asList(getAnnotationPath().toFile());
+    }
+
+    @Override
+    public void close(ErrorReporter errorReporter) {
+        input.close(errorReporter);
+    }
+
+    public OperationWithProgressReporter<NamedProvider<Stack>, CreateException> stacks() {
+        return new OperationCreateStackCollection(input);
+    }
 }

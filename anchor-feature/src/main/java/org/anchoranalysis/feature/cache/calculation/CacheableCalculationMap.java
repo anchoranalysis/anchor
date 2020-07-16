@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.cache.calculation;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.cache.calculation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,38 +24,35 @@ package org.anchoranalysis.feature.cache.calculation;
  * #L%
  */
 
+package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Similar to a {@link CacheableCalculation} but stores several evaluations parameterised
- *   by a key
- * 
+ * Similar to a {@link CacheableCalculation} but stores several evaluations parameterised by a key
+ *
  * @author Owen Feehan
  * @param <S> result-type
  * @param <T> feature input-type
  * @param <U> key-type
  * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class CacheableCalculationMap<
-	S,
-	T extends FeatureInput,
-	U,
-	E extends Exception
-> implements ResettableCalculation {
-	/**
-	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
-	 *   a cached-result from previously.
-	 * 
-	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
-	 * @return the result of the calculation
-	 * @throws E if the calculation cannot finish, for whatever reason
-	 */
-	public abstract S getOrCalculate( T input, U key ) throws E;
+public abstract class CacheableCalculationMap<S, T extends FeatureInput, U, E extends Exception>
+        implements ResettableCalculation {
+    /**
+     * Executes the operation and returns a result, either by doing the calculation, or retrieving a
+     * cached-result from previously.
+     *
+     * @param If there is no cached-value, and the calculation occurs, these parameters are used.
+     *     Otherwise ignored.
+     * @return the result of the calculation
+     * @throws E if the calculation cannot finish, for whatever reason
+     */
+    public abstract S getOrCalculate(T input, U key) throws E;
 
-	@Override
-	public abstract boolean equals(Object other);
+    @Override
+    public abstract boolean equals(Object other);
 
-	@Override
-	public abstract int hashCode();
+    @Override
+    public abstract int hashCode();
 }

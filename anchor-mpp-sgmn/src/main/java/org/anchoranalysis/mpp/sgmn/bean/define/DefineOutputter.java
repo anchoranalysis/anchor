@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.define;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,11 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  * #L%
  */
 
-import java.util.Optional;
+package org.anchoranalysis.mpp.sgmn.bean.define;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,93 +47,54 @@ import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 
 public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
 
-	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
-	private Define define;
-	
-	@BeanField
-	private boolean suppressSubfolders = false;
-	
-	@BeanField
-	private boolean suppressOutputExceptions = false;
-	// END BEAN PROPERTIES
-	
-	protected MPPInitParams createInitParams(
-		InputForMPPBean input,
-		BoundIOContext context
-	) throws CreateException {
-		return MPPInitParamsFactory.create(
-			context,
-			Optional.ofNullable(define),
-			Optional.of(input)
-		);
-	}
-	
-	protected MPPInitParams createInitParams(BoundIOContext context) throws CreateException {
-		return MPPInitParamsFactory.create(
-			context,
-			Optional.ofNullable(define),
-			Optional.empty()
-		);
-	}
-	
+    // START BEAN PROPERTIES
+    @BeanField @OptionalBean @Getter @Setter private Define define;
 
-	protected MPPInitParams createInitParams(
-		BoundIOContext context,
-		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectCollection>> objs,
-		Optional<KeyValueParams> keyValueParams
-	) throws CreateException {
-		return MPPInitParamsFactory.createFromExistingCollections(
-			context,
-			Optional.ofNullable(define),
-			stacks,
-			objs,
-			keyValueParams
-		);
-	}
-	
-	// General objects can be outputted
-	protected void outputSharedObjs(ImageInitParams initParams, BoundIOContext context) throws OutputWriteFailedException {
-		if (suppressOutputExceptions) {
-			SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
-		} else {
-			SharedObjectsOutputter.outputWithException(initParams, suppressSubfolders, context);
-		}
-	}
-	
-	protected void outputSharedObjs(MPPInitParams initParams, BoundIOContext context) throws OutputWriteFailedException {
-		
-		outputSharedObjs(initParams.getImage(), context);
-		
-		if (suppressOutputExceptions) {
-			SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
-		} else {
-			SharedObjectsOutputter.outputWithException(initParams, context.getOutputManager(), suppressSubfolders);
-		}
-	}
-	
-	public Define getDefine() {
-		return define;
-	}
+    @BeanField @Getter @Setter private boolean suppressSubfolders = false;
 
-	public void setDefine(Define define) {
-		this.define = define;
-	}
+    @BeanField @Getter @Setter private boolean suppressOutputExceptions = false;
+    // END BEAN PROPERTIES
 
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
+    protected MPPInitParams createInitParams(InputForMPPBean input, BoundIOContext context)
+            throws CreateException {
+        return MPPInitParamsFactory.create(
+                context, Optional.ofNullable(define), Optional.of(input));
+    }
 
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
+    protected MPPInitParams createInitParams(BoundIOContext context) throws CreateException {
+        return MPPInitParamsFactory.create(context, Optional.ofNullable(define), Optional.empty());
+    }
 
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
+    protected MPPInitParams createInitParams(
+            BoundIOContext context,
+            Optional<NamedProvider<Stack>> stacks,
+            Optional<NamedProvider<ObjectCollection>> objects,
+            Optional<KeyValueParams> keyValueParams)
+            throws CreateException {
+        return MPPInitParamsFactory.createFromExistingCollections(
+                context, Optional.ofNullable(define), stacks, objects, keyValueParams);
+    }
 
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
-	}
+    // General objects can be outputted
+    protected void outputSharedObjects(ImageInitParams initParams, BoundIOContext context)
+            throws OutputWriteFailedException {
+        if (suppressOutputExceptions) {
+            SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
+        } else {
+            SharedObjectsOutputter.outputWithException(initParams, suppressSubfolders, context);
+        }
+    }
+
+    protected void outputSharedObjects(MPPInitParams initParams, BoundIOContext context)
+            throws OutputWriteFailedException {
+
+        outputSharedObjects(initParams.getImage(), context);
+
+        if (suppressOutputExceptions) {
+            SharedObjectsOutputter.output(initParams, suppressSubfolders, context);
+        } else {
+            SharedObjectsOutputter.outputWithException(
+                    initParams, context.getOutputManager(), suppressSubfolders);
+        }
+    }
 }

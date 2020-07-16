@@ -1,12 +1,8 @@
-package org.anchoranalysis.core.name.provider;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
- * anchor-image
+ * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,50 +24,49 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.core.name.provider;
 
+import java.util.Optional;
 import java.util.Set;
-
-import org.anchoranalysis.core.functional.FunctionWithException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
-
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <S> src-type
  * @param <T> destination-type
  */
 @RequiredArgsConstructor
-public class NamedProviderBridge<S,T> implements NamedProvider<T> {
+public class NamedProviderBridge<S, T> implements NamedProvider<T> {
 
-	private final NamedProvider<S> srcProvider;
-	private final FunctionWithException<S,T,? extends Exception> bridge;
-	private final boolean bridgeNulls;
-	
-	public NamedProviderBridge(NamedProvider<S> srcProvider, FunctionWithException<S,T,? extends Exception> bridge) {
-		this(srcProvider, bridge, true);
-	}
+    private final NamedProvider<S> srcProvider;
+    private final FunctionWithException<S, T, ? extends Exception> bridge;
+    private final boolean bridgeNulls;
 
-	@Override
-	public Optional<T> getOptional(String key) throws NamedProviderGetException {
-		Optional<S> srcVal = srcProvider.getOptional(key);
-		
-		if (!bridgeNulls && !srcVal.isPresent()) {
-			// Early exit if doNotBridgeNulls is witched on
-			return Optional.empty();
-		}
-		
-		try {
-			return OptionalUtilities.map(srcVal, bridge::apply);
-		} catch (Exception e) {
-			throw NamedProviderGetException.wrap(key, e);
-		}
-	}
+    public NamedProviderBridge(
+            NamedProvider<S> srcProvider, FunctionWithException<S, T, ? extends Exception> bridge) {
+        this(srcProvider, bridge, true);
+    }
 
-	@Override
-	public Set<String> keys() {
-		return srcProvider.keys();
-	}
+    @Override
+    public Optional<T> getOptional(String key) throws NamedProviderGetException {
+        Optional<S> srcVal = srcProvider.getOptional(key);
+
+        if (!bridgeNulls && !srcVal.isPresent()) {
+            // Early exit if doNotBridgeNulls is witched on
+            return Optional.empty();
+        }
+
+        try {
+            return OptionalUtilities.map(srcVal, bridge::apply);
+        } catch (Exception e) {
+            throw NamedProviderGetException.wrap(key, e);
+        }
+    }
+
+    @Override
+    public Set<String> keys() {
+        return srcProvider.keys();
+    }
 }

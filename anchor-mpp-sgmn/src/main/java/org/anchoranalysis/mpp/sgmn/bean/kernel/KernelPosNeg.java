@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.kernel;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,34 +24,22 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
  * #L%
  */
 
+package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public abstract class KernelPosNeg<T> extends KernelIndependent<T> {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double probPos = 0.5;
-	
-	@BeanField
-	private double probNeg = 0.5;
-	// END BEAN PROPERTIES
-	
-	public double getProbPos() {
-		return probPos;
-	}
-	public void setProbPos(double probPos) {
-		this.probPos = probPos;
-	}
-	public double getProbNeg() {
-		return probNeg;
-	}
-	public void setProbNeg(double probNeg) {
-		this.probNeg = probNeg;
-	}
-	
-	protected void duplicateHelper( KernelPosNeg<T> out ) {
-		out.probPos = probPos;
-		out.probNeg = probNeg;
-	}
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private double probPos = 0.5;
+
+    @BeanField @Getter @Setter private double probNeg = 0.5;
+    // END BEAN PROPERTIES
+
+    protected void duplicateHelper(KernelPosNeg<T> out) {
+        out.probPos = probPos;
+        out.probNeg = probNeg;
+    }
 }

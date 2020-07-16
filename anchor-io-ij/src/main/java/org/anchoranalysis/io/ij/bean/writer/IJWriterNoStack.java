@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.ij.bean.writer;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-ij
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.ij.bean.writer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,16 +24,17 @@ package org.anchoranalysis.io.ij.bean.writer;
  * #L%
  */
 
-import java.nio.file.Path;
+package org.anchoranalysis.io.ij.bean.writer;
 
+import java.nio.file.Path;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
 
 public abstract class IJWriterNoStack extends IJWriter {
 
-	@Override
-	public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB)
-			throws RasterIOException {
-		throw new RasterIOException("Writing as a time-series is unsupported for this format");
-	}
+    @Override
+    public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+        throw new RasterIOException("Writing as a time-series is unsupported for this format");
+    }
 }

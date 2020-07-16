@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.name.value;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.core.name.value;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,25 +24,25 @@ package org.anchoranalysis.core.name.value;
  * #L%
  */
 
+package org.anchoranalysis.core.name.value;
 
 /**
  * An object that has an associated textual name and value
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> value-type
  */
 public interface NameValue<T> {
 
-	/** The associated name */
-	String getName();
-	
-	/** @link getName() */
-	void setName(String name);
-	
-	/** The associated value */
-	T getValue();
-	
-	/** @link getValue() */
-	void setValue(T item);
+    /** The associated name */
+    String getName();
+
+    /** @link getName() */
+    void setName(String name);
+
+    /** The associated value */
+    T getValue();
+
+    /** @link getValue() */
+    void setValue(T item);
 }

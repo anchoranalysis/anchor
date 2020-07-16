@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.bean.permute.property;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,35 +24,26 @@ package org.anchoranalysis.bean.permute.property;
  * #L%
  */
 
+package org.anchoranalysis.bean.permute.property;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * Base class for permute-properties involving a sequence of numbers
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 public abstract class PermutePropertySequence<T> extends PermutePropertyWithPath<T> {
 
-	// START BEAN PROPERTIES
-	/**
-	 * Where the sequence starts
-	 */
-	@BeanField
-	private SequenceInteger sequence;
-	// END BEAN PROPERTIES
-	
-	protected SequenceIntegerIterator range() {
-		return sequence.iterator();
-	}
+    // START BEAN PROPERTIES
+    /** Where the sequence starts */
+    @BeanField @Getter @Setter private SequenceInteger sequence;
+    // END BEAN PROPERTIES
 
-	public SequenceInteger getSequence() {
-		return sequence;
-	}
-
-	public void setSequence(SequenceInteger sequence) {
-		this.sequence = sequence;
-	}
-
+    protected SequenceIntegerIterator range() {
+        return sequence.iterator();
+    }
 }

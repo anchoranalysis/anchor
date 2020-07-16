@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.overlay.collection;
-
-/*
+/*-
  * #%L
  * anchor-overlay
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.overlay.collection;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,123 +24,132 @@ package org.anchoranalysis.anchor.overlay.collection;
  * #L%
  */
 
+package org.anchoranalysis.anchor.overlay.collection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.writer.OverlayWriter;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
-	private List<Overlay> delegate = new ArrayList<>();
+    private List<Overlay> delegate;
 
-	@Override
-	public Iterator<Overlay> iterator() {
-		return delegate.iterator();
-	}
+    public OverlayCollection() {
+        delegate = new ArrayList<>();
+    }
 
-	public Overlay get(int index) {
-		return delegate.get(index);
-	}
+    public OverlayCollection(Stream<Overlay> stream) {
+        delegate = stream.collect(Collectors.toList());
+    }
 
-	public Overlay remove(int index) {
-		return delegate.remove(index);
-	}
+    @Override
+    public Iterator<Overlay> iterator() {
+        return delegate.iterator();
+    }
 
-	public int size() {
-		return delegate.size();
-	}
-	
-	public boolean add(Overlay e) {
-		return delegate.add(e);
-	}
+    public Overlay get(int index) {
+        return delegate.get(index);
+    }
 
-	public boolean addAll(OverlayCollection c) {
-		return delegate.addAll(c.delegate);
-	}
-	
-	public Set<Integer> integerSet() {
-		HashSet<Integer> set = new HashSet<>();
-		for( Overlay ol : delegate ) {
-			set.add( ol.getId() );
-		}
-		return set;
-	}
-	
-	public List<BoundingBox> bboxList( OverlayWriter maskWriter, ImageDimensions dim ) {
-		
-		List<BoundingBox> out = new ArrayList<>();
-		
-		for( Overlay ol : this ) {
-			BoundingBox bbox = ol.bbox(maskWriter, dim);
-			out.add(bbox);
-		}
-		return out;
-	}
-	
-	public OverlayCollection shallowCopy() {
-		
-		OverlayCollection out = new OverlayCollection();
-		
-		// We copy all the marks
-		out.delegate = new ArrayList<>( this.delegate.size() );
-		for( Overlay ol : this.delegate ) {
-			out.delegate.add( ol );
-		}
-		
-		return out;
-	}
+    public Overlay remove(int index) {
+        return delegate.remove(index);
+    }
 
-	// A hashmap of all the marks, using the Id as an index
-	public Set<Overlay> createSet() {
-		
-		HashSet<Overlay> out = new HashSet<>();
-	
-		for (Overlay overlay : this) {
-			out.add( overlay );
-		}
-		
-		return out;
-	}
-	
-	
-	public OverlayCollection createMerged( OverlayCollection toMerge ) {
-		
-		OverlayCollection mergedNew = shallowCopy();
-		
-		Set<Overlay> set = mergedNew.createSet();
-		
-		for (Overlay m : toMerge) {
-			if (!set.contains(m)) {
-				mergedNew.add( m );
-			}
-		}
-		
-		return mergedNew;
-	}
-	
-	
-	public OverlayCollection createSubset( IndicesSelection indices ) {
+    public int size() {
+        return delegate.size();
+    }
 
-		OverlayCollection out = new OverlayCollection();
-		
-		// This our current
-		for (Overlay ol : this) {
-			if (indices.contains(ol.getId())) {
-				out.add( ol );
-			}
-		}
-		
-		return out;
-	}
-	
-	public List<Overlay> asList() {
-		return delegate;
-	}
+    public boolean add(Overlay e) {
+        return delegate.add(e);
+    }
+
+    public boolean addAll(OverlayCollection c) {
+        return delegate.addAll(c.delegate);
+    }
+
+    public Set<Integer> integerSet() {
+        HashSet<Integer> set = new HashSet<>();
+        for (Overlay ol : delegate) {
+            set.add(ol.getId());
+        }
+        return set;
+    }
+
+    public List<BoundingBox> bboxList(DrawOverlay maskWriter, ImageDimensions dimensions) {
+
+        List<BoundingBox> out = new ArrayList<>();
+
+        for (Overlay ol : this) {
+            BoundingBox bbox = ol.bbox(maskWriter, dimensions);
+            out.add(bbox);
+        }
+        return out;
+    }
+
+    public OverlayCollection shallowCopy() {
+
+        OverlayCollection out = new OverlayCollection();
+
+        // We copy all the marks
+        out.delegate = new ArrayList<>(this.delegate.size());
+        for (Overlay ol : this.delegate) {
+            out.delegate.add(ol);
+        }
+
+        return out;
+    }
+
+    // A hashmap of all the marks, using the Id as an index
+    public Set<Overlay> createSet() {
+
+        HashSet<Overlay> out = new HashSet<>();
+
+        for (Overlay overlay : this) {
+            out.add(overlay);
+        }
+
+        return out;
+    }
+
+    public OverlayCollection createMerged(OverlayCollection toMerge) {
+
+        OverlayCollection mergedNew = shallowCopy();
+
+        Set<Overlay> set = mergedNew.createSet();
+
+        for (Overlay m : toMerge) {
+            if (!set.contains(m)) {
+                mergedNew.add(m);
+            }
+        }
+
+        return mergedNew;
+    }
+
+    public OverlayCollection createSubset(IndicesSelection indices) {
+
+        OverlayCollection out = new OverlayCollection();
+
+        // This our current
+        for (Overlay ol : this) {
+            if (indices.contains(ol.getId())) {
+                out.add(ol);
+            }
+        }
+
+        return out;
+    }
+
+    public List<Overlay> asList() {
+        return delegate;
+    }
 }

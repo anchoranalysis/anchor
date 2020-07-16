@@ -1,17 +1,8 @@
-package org.anchoranalysis.mpp.io.bean.report.feature;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-
-/*
+/*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +24,15 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * #L%
  */
 
+package org.anchoranalysis.mpp.io.bean.report.feature;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -45,63 +44,47 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private MarkProvider markProvider;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private MarkProvider markProvider;
+    // END BEAN PROPERTIES
 
-	@Override
-	public boolean isNumeric() {
-		return true;
-	}
-	
-	@Override
-	public String genFeatureStrFor(MPPInitParams so, Logger logger)
-			throws OperationFailedException {
+    @Override
+    public boolean isNumeric() {
+        return true;
+    }
 
-		// Maybe we should duplicate the providers?
-		try {
-			init( so, logger );
-			markProvider.initRecursive( so, logger );
-		} catch (InitException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		
-		Optional<Mark> mark;
-		try {
-			mark = markProvider.create();
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		if (!mark.isPresent()) {
-			return "no mark returned";
-		}
-					
-		try {
-			FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
-			
-			ImageDimensions dim = createImageDim();
-			
-			double val = session.calc(
-				new FeatureInputMark(
-					mark.get(),
-					Optional.of(dim)
-				)
-			);
-			return Double.toString(val);
-		} catch (FeatureCalcException | CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
+    @Override
+    public String genFeatureStringFor(MPPInitParams so, Logger logger)
+            throws OperationFailedException {
 
-	public MarkProvider getMarkProvider() {
-		return markProvider;
-	}
+        // Maybe we should duplicate the providers?
+        try {
+            init(so, logger);
+            markProvider.initRecursive(so, logger);
+        } catch (InitException e) {
+            throw new OperationFailedException(e);
+        }
 
-	public void setMarkProvider(MarkProvider markProvider) {
-		this.markProvider = markProvider;
-	}
+        Optional<Mark> mark;
+        try {
+            mark = markProvider.create();
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
 
+        if (!mark.isPresent()) {
+            return "no mark returned";
+        }
+
+        try {
+            FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
+
+            ImageDimensions dimensions = createImageDim();
+
+            double val = session.calc(new FeatureInputMark(mark.get(), Optional.of(dimensions)));
+            return Double.toString(val);
+        } catch (FeatureCalcException | CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 }

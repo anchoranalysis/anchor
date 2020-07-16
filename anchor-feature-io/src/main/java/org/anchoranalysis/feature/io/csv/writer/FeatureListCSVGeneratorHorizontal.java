@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.io.csv.writer;
-
-/*
+/*-
  * #%L
  * anchor-feature-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.io.csv.writer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.feature.io.csv.writer;
  * #L%
  */
 
+package org.anchoranalysis.feature.io.csv.writer;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
@@ -39,36 +37,37 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * CSV file where each Feature is a column (spanning horizontally)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FeatureListCSVGeneratorHorizontal extends TableCSVGenerator<ResultsVectorCollection> {
 
-	public FeatureListCSVGeneratorHorizontal(String manifestFunction, FeatureNameList featureNames) {
-		super(manifestFunction, featureNames.asList());
-	}
-	
-	public FeatureListCSVGeneratorHorizontal(String manifestFunction, FeatureNameList featureNames, ResultsVectorCollection results) {
-		this(manifestFunction, featureNames);
-		setIterableElement(results);
-	}
+    public FeatureListCSVGeneratorHorizontal(
+            String manifestFunction, FeatureNameList featureNames) {
+        super(manifestFunction, featureNames.asList());
+    }
 
-	@Override
-	protected void writeRowsAndColumns(CSVWriter writer,
-			ResultsVectorCollection featureValues, List<String> headerNames)
-			throws OutputWriteFailedException {
+    public FeatureListCSVGeneratorHorizontal(
+            String manifestFunction,
+            FeatureNameList featureNames,
+            ResultsVectorCollection results) {
+        this(manifestFunction, featureNames);
+        setIterableElement(results);
+    }
 
-		// We add a header line
-		writer.writeHeaders(headerNames);
-		
-		for( ResultsVector rv : featureValues) {
-				
-			List<TypedValue> csvRow = new ArrayList<>();
-			rv.addToTypeValueCollection(csvRow, 10);
-			writer.writeRow(csvRow);
-		}
-		
-	}
+    @Override
+    protected void writeRowsAndColumns(
+            CSVWriter writer, ResultsVectorCollection featureValues, List<String> headerNames)
+            throws OutputWriteFailedException {
 
+        // We add a header line
+        writer.writeHeaders(headerNames);
+
+        for (ResultsVector rv : featureValues) {
+
+            List<TypedValue> csvRow = new ArrayList<>();
+            rv.addToTypeValueCollection(csvRow, 10);
+            writer.writeRow(csvRow);
+        }
+    }
 }

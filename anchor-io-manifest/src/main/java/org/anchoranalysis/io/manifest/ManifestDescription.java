@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.manifest;
-
-import java.io.Serializable;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.io.Serializable;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,28 +24,30 @@ import java.io.Serializable;
  * #L%
  */
 
+package org.anchoranalysis.io.manifest;
+
+import java.io.Serializable;
+
 public class ManifestDescription implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	private final String type;
-	private final String function;
+    private final String type;
+    private final String function;
 
-	public ManifestDescription(String type, String function) {
-		super();
-		this.type = type;
-		this.function = function;
-		assert(!this.function.isEmpty());
-	}
-	
-	public String getFunction() {
-		return function;
-	}
+    public ManifestDescription(String type, String function) {
+        super();
+        this.type = type;
+        this.function = function;
+        assert (!this.function.isEmpty());
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getFunction() {
+        return function;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.strategy.replace;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.session.strategy.replace;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.session.strategy.replace;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.feature.session.strategy.replace;
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
@@ -36,45 +36,36 @@ import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
 
 /**
  * Always create a new session-input with no reuse or caching
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature-input type
  */
 public class AlwaysNew<T extends FeatureInput> implements ReplaceStrategy<T> {
 
-	private CacheCreator cacheCreator;
-	private FindChildStrategy findChildStrategy;
-	
-	/**
-	 * Constructor with default means of creating a session-input
-	 * 
-	 * @param createSessionInput
-	 */
-	public AlwaysNew(CacheCreator cacheCreator) {
-		this(
-			cacheCreator,
-			DefaultFindChildStrategy.instance()		
-		);
-	}
-	
-	/**
-	 * Constructor with custom means of creating a session-input
-	 * 
-	 * @param createSessionInput
-	 */
-	public AlwaysNew(CacheCreator cacheCreator, FindChildStrategy findChildStrategy) {
-		this.cacheCreator = cacheCreator;
-		this.findChildStrategy = findChildStrategy;
-	}
-	
-	@Override
-	public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
-		return new SessionInputSequential<>(
-			input,
-			cacheCreator,
-			findChildStrategy
-		);
-	}
+    private CacheCreator cacheCreator;
+    private FindChildStrategy findChildStrategy;
 
+    /**
+     * Constructor with default means of creating a session-input
+     *
+     * @param createSessionInput
+     */
+    public AlwaysNew(CacheCreator cacheCreator) {
+        this(cacheCreator, DefaultFindChildStrategy.instance());
+    }
+
+    /**
+     * Constructor with custom means of creating a session-input
+     *
+     * @param createSessionInput
+     */
+    public AlwaysNew(CacheCreator cacheCreator, FindChildStrategy findChildStrategy) {
+        this.cacheCreator = cacheCreator;
+        this.findChildStrategy = findChildStrategy;
+    }
+
+    @Override
+    public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
+        return new SessionInputSequential<>(input, cacheCreator, findChildStrategy);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark.points;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.mpp.mark.points;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,48 +24,44 @@ package org.anchoranalysis.anchor.mpp.mark.points;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.anchor.mpp.mark.points;
 
+import com.google.common.base.Preconditions;
+import java.util.List;
+import java.util.function.Function;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 
-import com.google.common.base.Preconditions;
-
 public class MarkPointListFactory {
 
-	private MarkPointListFactory() {}
-	
-	public static MarkPointList create( List<Point3d> pnts ) {
-		return create(pnts, -1);
-	}
-	
-	public static MarkPointList create( List<Point3d> pnts, int id ) {
-		MarkPointList mark = new MarkPointList();
-		mark.getPoints().addAll( pnts );
-		mark.setId(id);
-		mark.updateAfterPointsChange();
-		return mark;
-	}
-		
-	public static MarkPointList createMarkFromPoints3f( List<Point3f> pts ) {
-		MarkPointList markPts = new MarkPointList();
-		markPts.getPoints().addAll(
-			PointConverter.convert3fTo3d(pts)
-		);
-		markPts.updateAfterPointsChange();
-		return markPts;
-	}
-	
-	public static MarkPointList createMarkFromPoints3i( List<Point3i> pts ) {
-		Preconditions.checkArgument( !pts.isEmpty(), "are empty" );
-		MarkPointList markPts = new MarkPointList();
-		
-		for (Point3i p : pts) {
-			markPts.getPoints().add( PointConverter.doubleFromInt(p) );
-		}
-		markPts.updateAfterPointsChange();
-		return markPts;
-	}
+    private MarkPointListFactory() {}
+
+    public static MarkPointList create(List<Point3d> points) {
+        return create(points, -1);
+    }
+
+    public static MarkPointList create(List<Point3d> points, int id) {
+        MarkPointList mark = new MarkPointList();
+        mark.getPoints().addAll(points);
+        mark.setId(id);
+        mark.updateAfterPointsChange();
+        return mark;
+    }
+
+    public static MarkPointList createMarkFromPoints3f(List<Point3f> points) {
+        return createMarkFromPoints(points, PointConverter::doubleFromFloat);
+    }
+
+    public static MarkPointList createMarkFromPoints3i(List<Point3i> points) {
+        return createMarkFromPoints(points, PointConverter::doubleFromInt);
+    }
+
+    private static <T> MarkPointList createMarkFromPoints(
+            List<T> points, Function<T, Point3d> convert) {
+        Preconditions.checkArgument(!points.isEmpty(), "are empty");
+
+        return new MarkPointList(points.stream().map(convert));
+    }
 }

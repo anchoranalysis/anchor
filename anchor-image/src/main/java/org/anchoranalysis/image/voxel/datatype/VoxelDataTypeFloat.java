@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.datatype;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.datatype;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,25 +24,26 @@ package org.anchoranalysis.image.voxel.datatype;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.datatype;
 
 public class VoxelDataTypeFloat extends VoxelDataType {
 
-	public static final long MAX_VALUE = (long) Float.MAX_VALUE;
-	public static final long MIN_VALUE = (long) Float.MIN_VALUE;
-	
-	public static final VoxelDataTypeFloat INSTANCE = new VoxelDataTypeFloat();
-	
-	private VoxelDataTypeFloat() {
-		super(32,"float", MAX_VALUE, MIN_VALUE);
-	}
-	
-	@Override
-	public boolean isInteger() {
-		return false;
-	}
+    public static final long MAX_VALUE = (long) Float.MAX_VALUE;
+    public static final long MIN_VALUE = (long) Float.MIN_VALUE;
 
-	@Override
-	public boolean isUnsigned() {
-		return false;
-	}
+    public static final VoxelDataTypeFloat INSTANCE = new VoxelDataTypeFloat();
+
+    private VoxelDataTypeFloat() {
+        super(32, "float", MAX_VALUE, MIN_VALUE);
+    }
+
+    @Override
+    public boolean isInteger() {
+        return false;
+    }
+
+    @Override
+    public boolean isUnsigned() {
+        return false;
+    }
 }

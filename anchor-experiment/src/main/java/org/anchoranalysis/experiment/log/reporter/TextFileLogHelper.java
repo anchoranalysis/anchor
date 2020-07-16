@@ -1,12 +1,8 @@
-package org.anchoranalysis.experiment.log.reporter;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,25 +24,24 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.experiment.log.reporter;
+
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TextFileLogHelper {
-	
-	public static Optional<FileOutput> createOutput( BoundOutputManager bom, String outputName ) {
-		return FileOutputFromManager.create(
-			"txt",
-			Optional.of(
-				new ManifestDescription("textlog","messageLog")
-			),
-			bom,
-			outputName
-		);
-	}
+
+    public static Optional<FileOutput> createOutput(BoundOutputManager bom, String outputName) {
+        return FileOutputFromManager.create(
+                "txt",
+                Optional.of(new ManifestDescription("textlog", "messageLog")),
+                bom,
+                outputName);
+    }
 }

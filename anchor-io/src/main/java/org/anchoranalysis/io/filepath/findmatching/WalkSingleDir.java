@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath.findmatching;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.filepath.findmatching;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.filepath.findmatching;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.io.filepath.findmatching;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,24 +37,28 @@ import java.util.EnumSet;
 import java.util.List;
 
 class WalkSingleDir {
-	
-	private WalkSingleDir() {}
-	
-	public static void apply( Path dir, PathMatchConstraints constraints, List<File> listOut ) throws FindFilesException {
-		
-		try {
-			Files.walkFileTree(
-					dir,
-				EnumSet.of(FileVisitOption.FOLLOW_LINKS),
-				constraints.getMaxDirDepth(),
-				new AddFilesToList(listOut, constraints.getMatcherFile(), constraints.getMatcherDir())
-			);
-		} catch (AccessDeniedException e) {
-			throw new FindFilesException( String.format("Cannot access directory: %s",e.getFile()) );
-		} catch (FileSystemException e) {
-			throw new FindFilesException( String.format("An file-system error occurring accessing directory: %s", e.getFile()) );
-		} catch (IOException e) {
-			throw new FindFilesException( String.format("An IO error occurring accessing directory: %s", e.toString()) );
-		}
-	}
+
+    private WalkSingleDir() {}
+
+    public static void apply(Path dir, PathMatchConstraints constraints, List<File> listOut)
+            throws FindFilesException {
+
+        try {
+            Files.walkFileTree(
+                    dir,
+                    EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+                    constraints.getMaxDirDepth(),
+                    new AddFilesToList(
+                            listOut, constraints.getMatcherFile(), constraints.getMatcherDir()));
+        } catch (AccessDeniedException e) {
+            throw new FindFilesException(String.format("Cannot access directory: %s", e.getFile()));
+        } catch (FileSystemException e) {
+            throw new FindFilesException(
+                    String.format(
+                            "An file-system error occurring accessing directory: %s", e.getFile()));
+        } catch (IOException e) {
+            throw new FindFilesException(
+                    String.format("An IO error occurring accessing directory: %s", e.toString()));
+        }
+    }
 }

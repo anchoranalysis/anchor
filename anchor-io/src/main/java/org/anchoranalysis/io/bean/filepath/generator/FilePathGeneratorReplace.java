@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.generator;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,53 +24,37 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * #L%
  */
 
+package org.anchoranalysis.io.bean.filepath.generator;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Generates a file-path by replacing all occurrences of a string-pattern with another
- * 
- * Paths always use forward-slashes regardless of operating system.
  *
+ * <p>Paths always use forward-slashes regardless of operating system.
  */
 public class FilePathGeneratorReplace extends FilePathGenerator {
 
-	// START BEAN FIELDS
-	/** Regular expression to match against string */
-	@BeanField
-	private String regex;
-	
-	/** What to replace in the path */
-	@BeanField
-	private String replacement;
-	// END BEAN FIELDS
-	
-	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
-	
-		String outStr = Utilities.convertBackslashes(pathIn);
-		
-		String replaced = outStr.replaceAll(regex, replacement);
-		
-		return Paths.get( replaced );
-	}
+    // START BEAN FIELDS
+    /** Regular expression to match against string */
+    @BeanField @Getter @Setter private String regex;
 
-	public String getRegex() {
-		return regex;
-	}
+    /** What to replace in the path */
+    @BeanField @Getter @Setter private String replacement;
+    // END BEAN FIELDS
 
-	public void setRegex(String regex) {
-		this.regex = regex;
-	}
+    @Override
+    public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 
-	public String getReplacement() {
-		return replacement;
-	}
+        String outStr = Utilities.convertBackslashes(pathIn);
 
-	public void setReplacement(String replacement) {
-		this.replacement = replacement;
-	}
+        String replaced = outStr.replaceAll(regex, replacement);
+
+        return Paths.get(replaced);
+    }
 }

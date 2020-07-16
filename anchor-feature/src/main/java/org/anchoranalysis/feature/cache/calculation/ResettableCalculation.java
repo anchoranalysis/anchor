@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.cache.calculation;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.cache.calculation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,23 +24,21 @@ package org.anchoranalysis.feature.cache.calculation;
  * #L%
  */
 
-
-
+package org.anchoranalysis.feature.cache.calculation;
 
 /**
  * A calculation that be invalidated (resetted), removing any existing cached value.
- * 
- * <p>All resettable calculations must have a hashCode and equals implementation that checks
- *   that relevant parameters are equal.  They will be used in sets</p> 
- * 
- * @author Owen Feehan
  *
+ * <p>All resettable calculations must have a hashCode and equals implementation that checks that
+ * relevant parameters are equal. They will be used in sets
+ *
+ * @author Owen Feehan
  */
 public interface ResettableCalculation {
 
-	/**
-	 * Resets the cached-calculation, so the next call to doOperationWithParams() is guaranteed to
-	 *  calculation the operation, and store the value in the cache.
-	 */
-	abstract void invalidate();
+    /**
+     * Resets the cached-calculation, so the next call to doOperationWithParams() is guaranteed to
+     * calculation the operation, and store the value in the cache.
+     */
+    abstract void invalidate();
 }

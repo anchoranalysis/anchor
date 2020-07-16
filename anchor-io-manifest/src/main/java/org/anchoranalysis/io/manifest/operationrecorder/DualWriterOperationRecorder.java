@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.operationrecorder;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.manifest.operationrecorder;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,43 +24,51 @@ package org.anchoranalysis.io.manifest.operationrecorder;
  * #L%
  */
 
-import java.nio.file.Path;
+package org.anchoranalysis.io.manifest.operationrecorder;
 
+import java.nio.file.Path;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 
 /**
  * Allows two IWriteOperationRecorder function together as if they are one
- * 
- * <p>Every operation is applied to both.</p>
- * 
- * @author Owen Feehan
  *
+ * <p>Every operation is applied to both.
+ *
+ * @author Owen Feehan
  */
 public class DualWriterOperationRecorder implements WriteOperationRecorder {
 
-	private WriteOperationRecorder recorder1;
-	private WriteOperationRecorder recorder2;
-	
-	public DualWriterOperationRecorder(WriteOperationRecorder recorder1, WriteOperationRecorder recorder2) {
-		super();
-		this.recorder1 = recorder1;
-		this.recorder2 = recorder2;
-	}
+    private WriteOperationRecorder recorder1;
+    private WriteOperationRecorder recorder2;
 
-	@Override
-	public void write(String outputName, ManifestDescription manifestDescription, Path outFilePath, String index) {
-		recorder1.write(outputName, manifestDescription, outFilePath, index);
-		recorder2.write(outputName, manifestDescription, outFilePath, index);
-	}
+    public DualWriterOperationRecorder(
+            WriteOperationRecorder recorder1, WriteOperationRecorder recorder2) {
+        super();
+        this.recorder1 = recorder1;
+        this.recorder2 = recorder2;
+    }
 
-	@Override
-	public WriteOperationRecorder writeFolder(Path relativeFolderPath, ManifestFolderDescription manifestDescription,
-			FolderWriteWithPath folderWrite) {
-		WriteOperationRecorder folder1 = recorder1.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
-		WriteOperationRecorder folder2 = recorder2.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
-		return new DualWriterOperationRecorder(folder1, folder2);
-	}
+    @Override
+    public void write(
+            String outputName,
+            ManifestDescription manifestDescription,
+            Path outFilePath,
+            String index) {
+        recorder1.write(outputName, manifestDescription, outFilePath, index);
+        recorder2.write(outputName, manifestDescription, outFilePath, index);
+    }
 
+    @Override
+    public WriteOperationRecorder writeFolder(
+            Path relativeFolderPath,
+            ManifestFolderDescription manifestDescription,
+            FolderWriteWithPath folderWrite) {
+        WriteOperationRecorder folder1 =
+                recorder1.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
+        WriteOperationRecorder folder2 =
+                recorder2.writeFolder(relativeFolderPath, manifestDescription, folderWrite);
+        return new DualWriterOperationRecorder(folder1, folder2);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.xml.factory;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.bean.xml.factory;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,38 +24,36 @@ package org.anchoranalysis.bean.xml.factory;
  * #L%
  */
 
+package org.anchoranalysis.bean.xml.factory;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
-public class IndirectlyFromListBeanFactory<
-	T extends AnchorBean<T>,
-	S
-> extends AnchorBeanFactory {
-    
-	private FunctionWithException<List<T>,S,? extends Exception> bridge;
-	
-	public IndirectlyFromListBeanFactory( FunctionWithException<List<T>,S,? extends Exception> bridge ) {
-		this.bridge = bridge;
-	}
-	
+public class IndirectlyFromListBeanFactory<T extends AnchorBean<T>, S> extends AnchorBeanFactory {
+
+    private FunctionWithException<List<T>, S, ? extends Exception> bridge;
+
+    public IndirectlyFromListBeanFactory(
+            FunctionWithException<List<T>, S, ? extends Exception> bridge) {
+        this.bridge = bridge;
+    }
+
     // Creates the bean. Checks if already an instance exists.
-	@Override
-	@SuppressWarnings("rawtypes")
-	public synchronized Object createBean(Class beanClass, BeanDeclaration decl,
-        Object param) throws Exception
-    {
-    	XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
-    	SubnodeConfiguration subConfig = declXML.getConfiguration();
-    	
-    	List<T> list = new ArrayList<>(); 
-    	HelperListUtilities.addListOfBeansToCollection("mapEntryList.mapEntry", subConfig, list, param);
-	    return bridge.apply(list);
+    @Override
+    @SuppressWarnings("rawtypes")
+    public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
+            throws Exception {
+        XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
+        SubnodeConfiguration subConfig = declXML.getConfiguration();
+
+        List<T> list = new ArrayList<>();
+        HelperListUtilities.addListOfBeansToCollection(
+                "mapEntryList.mapEntry", subConfig, list, param);
+        return bridge.apply(list);
     }
 }

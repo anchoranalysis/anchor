@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.mark;
-
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriteria;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriter
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,24 +24,25 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriter
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.feature.mark;
+
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriteria;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 
-
 /**
  * A pair collection where the underlying type is a simple {@link Pair}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SimplePairCollection extends PairCollectionAddCriteria<Pair<Mark>> {
 
-	public SimplePairCollection() {
-		super( Pair.class );
-	}
+    public SimplePairCollection() {
+        super(Pair.class);
+    }
 
-	@Override
-	public String getBeanDscr() {
-		return getBeanName();
-	}
+    @Override
+    public String getBeanDscr() {
+        return getBeanName();
+    }
 }

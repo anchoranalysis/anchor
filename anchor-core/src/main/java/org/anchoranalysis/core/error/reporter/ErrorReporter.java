@@ -12,10 +12,10 @@ package org.anchoranalysis.core.error.reporter;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,22 +26,21 @@ package org.anchoranalysis.core.error.reporter;
  * #L%
  */
 
-
 public interface ErrorReporter {
 
-	/**
-	 * Reports an error that occurred as an exception
-	 * 
-	 * @param classOriginating a class in which the error originates (where it was thrown)
-	 * @param exc the error that occurred
-	 */
-	void recordError( Class<?> classOriginating, Throwable exc );
+    /**
+     * Reports an error that occurred as an exception
+     *
+     * @param classOriginating a class in which the error originates (where it was thrown)
+     * @param exc the error that occurred
+     */
+    void recordError(Class<?> classOriginating, Throwable exc);
 
-	/**
-	 * Reports an error that occurred as a string
-	 * 
-	 * @param classOriginating a class in which the error originates (where it was thrown)
-	 * @param errorMsg a message describing the error that occurred
-	 */
-	void recordError( Class<?> classOriginating, String errorMsg );
+    /**
+     * Reports an error that occurred as a string
+     *
+     * @param classOriginating a class in which the error originates (where it was thrown)
+     * @param errorMsg a message describing the error that occurred
+     */
+    void recordError(Class<?> classOriginating, String errorMsg);
 }

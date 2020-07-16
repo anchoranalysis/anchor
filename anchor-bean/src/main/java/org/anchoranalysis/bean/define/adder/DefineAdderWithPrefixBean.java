@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.define.adder;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.bean.define.adder;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,10 @@ package org.anchoranalysis.bean.define.adder;
  * #L%
  */
 
+package org.anchoranalysis.bean.define.adder;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -36,37 +38,28 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Adds a prefix
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {
 
-	// START BEAN PROPERTIES
-	/** A prefix that is placed before the name of every bean created */
-	@BeanField @AllowEmpty
-	private String prefix = "";
-	// END BEAN PROPERTIES
-		
-	protected void addWithName( Define define, String name, AnchorBean<?> item) throws BeanXmlException {
-		NamedBean<?> nb = new NamedBean<>( rslvName(name), item);
-		try {
-			define.add(nb);
-		} catch (OperationFailedException e) {
-			throw new BeanXmlException(e);
-		}
-	}
-	
-	/** Adds a prefix before the name */
-	protected String rslvName( String name ) {
-		return prefix + name;
-	}
-	
-	public String getPrefix() {
-		return prefix;
-	}
+    // START BEAN PROPERTIES
+    /** A prefix that is placed before the name of every bean created */
+    @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
+    // END BEAN PROPERTIES
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+    protected void addWithName(Define define, String name, AnchorBean<?> item)
+            throws BeanXmlException {
+        NamedBean<?> nb = new NamedBean<>(resolveName(name), item);
+        try {
+            define.add(nb);
+        } catch (OperationFailedException e) {
+            throw new BeanXmlException(e);
+        }
+    }
+
+    /** Adds a prefix before the name */
+    protected String resolveName(String name) {
+        return prefix + name;
+    }
 }

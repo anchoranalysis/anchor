@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.assignment;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.annotation.io.assignment;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,49 +24,50 @@ package org.anchoranalysis.annotation.io.assignment;
  * #L%
  */
 
+package org.anchoranalysis.annotation.io.assignment;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.core.text.TypedValue;
 
-/** 
- * Wraps a <pre>List<TypedValue></pre> to add floating point precision to doubles
- **/
+/**
+ * Wraps a
+ *
+ * <pre>List<TypedValue></pre>
+ *
+ * to add floating point precision to doubles
+ */
 class WrappedTypeValueList {
 
-	private final int numDecimalPlaces;
+    private final int numDecimalPlaces;
 
-	private final List<TypedValue> delegate = new ArrayList<>();
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param numDecimalPlaces the numer of decimals places to use when double values are added
-	 */
-	public WrappedTypeValueList(int numDecimalPlaces) {
-		super();
-		this.numDecimalPlaces = numDecimalPlaces;
-	}		
-			
-	/** Adds one or more integer values */
-	public void add(int ...val) {
-		for(int v : val) {
-			delegate.add(
-				new TypedValue(v)
-			);
-		}
-	}
-	
-	/** Adds one or more doubles, with two decimal places */
-	public void add(double ...val) {
-		for(double v : val) {
-			delegate.add(
-				new TypedValue(v, numDecimalPlaces)
-			);
-		}
-	}
+    private final List<TypedValue> delegate = new ArrayList<>();
 
-	public List<TypedValue> asList() {
-		return delegate;
-	}
+    /**
+     * Constructor
+     *
+     * @param numDecimalPlaces the numer of decimals places to use when double values are added
+     */
+    public WrappedTypeValueList(int numDecimalPlaces) {
+        super();
+        this.numDecimalPlaces = numDecimalPlaces;
+    }
+
+    /** Adds one or more integer values */
+    public void add(int... val) {
+        for (int v : val) {
+            delegate.add(new TypedValue(v));
+        }
+    }
+
+    /** Adds one or more doubles, with two decimal places */
+    public void add(double... val) {
+        for (double v : val) {
+            delegate.add(new TypedValue(v, numDecimalPlaces));
+        }
+    }
+
+    public List<TypedValue> asList() {
+        return delegate;
+    }
 }

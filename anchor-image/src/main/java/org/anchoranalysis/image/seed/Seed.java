@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.seed;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.seed;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,22 +24,28 @@ package org.anchoranalysis.image.seed;
  * #L%
  */
 
+package org.anchoranalysis.image.seed;
+
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.object.ObjectMask;
 
-// A seed provides an ObjMask of pixels that exclusively
-//   belong to a particular object
+/**
+ * A seed provides an voxels that exclusively belong to a particular object, and can be used as a
+ * starting hint for segmentation.
+ *
+ * @author Owen Feehan
+ */
 public interface Seed {
 
-	ObjectMask createMask();
+    ObjectMask createMask();
 
-	void scaleXY( double scale ) throws OperationFailedException;
-	
-	void flattenZ();
-	
-	void growToZ(int sz);
-	
-	Seed duplicate();
-	
-	boolean equalsDeep(Seed other);
+    void scaleXY(double scale) throws OperationFailedException;
+
+    void flattenZ();
+
+    void growToZ(int sz);
+
+    Seed duplicate();
+
+    boolean equalsDeep(Seed other);
 }

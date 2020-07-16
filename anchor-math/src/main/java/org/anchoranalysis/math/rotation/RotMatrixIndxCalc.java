@@ -1,10 +1,8 @@
-package org.anchoranalysis.math.rotation;
-
-/*
+/*-
  * #%L
- * anchor-core
+ * anchor-math
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.math.rotation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,21 +24,22 @@ package org.anchoranalysis.math.rotation;
  * #L%
  */
 
+package org.anchoranalysis.math.rotation;
 
-//Assigns values for a rotation about a particular axis (in radians)
-//axisShift= 0 for x-axis, 1 for y-axis, 2 for z-axis
+// Assigns values for a rotation about a particular axis (in radians)
+// axisShift= 0 for x-axis, 1 for y-axis, 2 for z-axis
 public class RotMatrixIndxCalc {
 
-	private int shift;
-	private int matNumDim;
-	
-	public RotMatrixIndxCalc(int shift, int matNumDim) {
-		super();
-		this.shift = shift;
-		this.matNumDim = matNumDim;
-	}
-	
-	public int calc( int orig ) {
-		return (orig+shift) % matNumDim;
-	}
+    private int shift;
+    private int matNumDim;
+
+    public RotMatrixIndxCalc(int shift, int matNumDim) {
+        super();
+        this.shift = shift;
+        this.matNumDim = matNumDim;
+    }
+
+    public int calc(int orig) {
+        return (orig + shift) % matNumDim;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,9 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
  * #L%
  */
 
+package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.FloatBuffer;
-
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToFloatNoScaling;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
@@ -36,11 +34,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 // Converts an existing channel to a float
 public class ChannelConverterToFloat extends ChannelConverter<FloatBuffer> {
 
-	public ChannelConverterToFloat() {
-		super(
-			VoxelDataTypeFloat.INSTANCE,
-			new VoxelBoxConverterToFloatNoScaling(),
-			VoxelBoxFactory.getFloat()
-		);
-	}
+    public ChannelConverterToFloat() {
+        super(
+                VoxelDataTypeFloat.INSTANCE,
+                new VoxelBoxConverterToFloatNoScaling(),
+                VoxelBoxFactory.getFloat());
+    }
 }

@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.index.container.bridge;
 
-
-
 /*-
  * #%L
  * anchor-core
@@ -14,10 +12,10 @@ package org.anchoranalysis.core.index.container.bridge;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,63 +32,64 @@ import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 /**
  * Bridges calls from hidden-type to external-type.
- * 
- * See {@link org.anchoranalysis.core.index.container.bridge.BoundedIndexContainerBridgeWithIndex}
- * 
- * @author Owen Feehan
  *
+ * <p>See {@link
+ * org.anchoranalysis.core.index.container.bridge.BoundedIndexContainerBridgeWithIndex}
+ *
+ * @author Owen Feehan
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
  */
-public abstract class BoundedIndexContainerBridge<H,S,E extends Exception> implements BoundedIndexContainer<S> {
+public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
+        implements BoundedIndexContainer<S> {
 
-	private BoundedIndexContainer<H> delegate;
-	
-	public BoundedIndexContainerBridge(BoundedIndexContainer<H> source) {
-		super();
-		this.delegate = source;
-	}
-	
-	@Override
-	public S get(int index) throws GetOperationFailedException {
-		
-		H internalState = delegate.get(index);
-		try {
-			return bridge(index, internalState);
-		} catch (Exception e) {
-			throw new GetOperationFailedException(e);
-		}
-	}
-	
-	protected abstract S bridge(int index, H internalState) throws E;
-	
-	@Override
-	public void addBoundChangeListener(BoundChangeListener cl) {
-		this.delegate.addBoundChangeListener(cl);
-	}
+    private BoundedIndexContainer<H> delegate;
 
-	@Override
-	public int nextIndex(int index) {
-		return this.delegate.nextIndex(index);
-	}
+    public BoundedIndexContainerBridge(BoundedIndexContainer<H> source) {
+        super();
+        this.delegate = source;
+    }
 
-	@Override
-	public int previousIndex(int index) {
-		return this.delegate.previousIndex(index);
-	}
+    @Override
+    public S get(int index) throws GetOperationFailedException {
 
-	@Override
-	public int getMinimumIndex() {
-		return this.delegate.getMinimumIndex();
-	}
+        H internalState = delegate.get(index);
+        try {
+            return bridge(index, internalState);
+        } catch (Exception e) {
+            throw new GetOperationFailedException(e);
+        }
+    }
 
-	@Override
-	public int getMaximumIndex() {
-		return this.delegate.getMaximumIndex();
-	}
+    protected abstract S bridge(int index, H internalState) throws E;
 
-	@Override
-	public int previousEqualIndex(int index) {
-		return this.delegate.previousEqualIndex(index);
-	}
+    @Override
+    public void addBoundChangeListener(BoundChangeListener cl) {
+        this.delegate.addBoundChangeListener(cl);
+    }
+
+    @Override
+    public int nextIndex(int index) {
+        return this.delegate.nextIndex(index);
+    }
+
+    @Override
+    public int previousIndex(int index) {
+        return this.delegate.previousIndex(index);
+    }
+
+    @Override
+    public int getMinimumIndex() {
+        return this.delegate.getMinimumIndex();
+    }
+
+    @Override
+    public int getMaximumIndex() {
+        return this.delegate.getMaximumIndex();
+    }
+
+    @Override
+    public int previousEqualIndex(int index) {
+        return this.delegate.previousEqualIndex(index);
+    }
 }

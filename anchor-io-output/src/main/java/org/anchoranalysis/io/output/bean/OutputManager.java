@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.output.bean;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-io-output
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +24,9 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.io.output.bean;
+
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
@@ -40,24 +39,30 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
 /*
  *  Responsible for making decisions on where output goes and what form it takes
- *  
+ *
  *  Is always associated with a particular infilePath through init()
  *   which may be changed as the program is executed.
  */
 public abstract class OutputManager extends AnchorBean<OutputManager> {
 
-	public abstract boolean isOutputAllowed( String outputName );
-	
-	/** A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key */ 
-	public abstract OutputAllowed outputAllowedSecondLevel( String key );
-	
-	public abstract BoundOutputManager bindRootFolder( String expIdentifier, ManifestRecorder writeOperationRecorder, FilePathPrefixerParams context ) throws BindFailedException;
-	
-	public abstract FilePathPrefix prefixForFile(
-		PathWithDescription input,
-		String expIdentifier,
-		Optional<ManifestRecorder> manifestRecorder,
-		Optional<ManifestRecorder> experimentalManifestRecorder,
-		FilePathPrefixerParams context
-	) throws FilePathPrefixerException;
+    public abstract boolean isOutputAllowed(String outputName);
+
+    /**
+     * A second-level of OutputAllowed for a particular key, or NULL if none is defined for this key
+     */
+    public abstract OutputAllowed outputAllowedSecondLevel(String key);
+
+    public abstract BoundOutputManager bindRootFolder(
+            String expIdentifier,
+            ManifestRecorder writeOperationRecorder,
+            FilePathPrefixerParams context)
+            throws BindFailedException;
+
+    public abstract FilePathPrefix prefixForFile(
+            PathWithDescription input,
+            String expIdentifier,
+            Optional<ManifestRecorder> manifestRecorder,
+            Optional<ManifestRecorder> experimentalManifestRecorder,
+            FilePathPrefixerParams context)
+            throws FilePathPrefixerException;
 }

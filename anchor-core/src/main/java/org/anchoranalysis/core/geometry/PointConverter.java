@@ -12,10 +12,10 @@ package org.anchoranalysis.core.geometry;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,135 +26,123 @@ package org.anchoranalysis.core.geometry;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.function.Function;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.FunctionalList;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointConverter {
-	
-	// START singular points
-	
-	public static Point2i intFromDouble(Point2d point) {
-		return new Point2i( (int) point.getX(), (int) point.getY() );
-	}
-	
-	public static Point3i intFromDouble(Point3d point) {
-		return new Point3i(
-			(int) point.getX(),
-			(int) point.getY(),
-			(int) point.getZ()
-		);
-	}
-	
-	public static Point3i intFromDoubleCeil(Point3d point) {
-		return new Point3i(
-			(int) Math.ceil(point.getX()),
-			(int) Math.ceil(point.getY()),
-			(int) Math.ceil(point.getZ())
-		);
-	}
-	
-	public static Point3i convertTo3d(Point2i point) {
-		return new Point3i(point.getX(), point.getY(), 0);
-	}
-	
-	public static Point2d doubleFromFloat(Point2f point) {
-		return new Point2d( point.getX(), point.getY() );
-	}
-	
-	public static Point3d doubleFromFloat(Point3f point) {
-		return new Point3d( point.getX(), point.getY(),	point.getZ() );
-	}
-	
-	public static Point3d doubleFromInt(Point2i point) {
-		return new Point3d( (double) point.getX(), (double) point.getY(), 0);
-	}
-	
-	public static Point3d doubleFromInt(ReadableTuple3i point) {
-		return new Point3d( (double) point.getX(), (double) point.getY(), (double) point.getZ() );
-	}
-	
-	public static Point3f floatFromInt(Point2i point) {
-		return new Point3f( (float) point.getX(), (float) point.getY(), 0);
-	}
-	
-	public static Point3f floatFromDouble(Point3d point) {
-		return new Point3f( (float) point.getX(), (float) point.getY(), (float) point.getZ() );
-	}
 
-	
-	public static Point3f floatFromInt(ReadableTuple3i point) {
-		return new Point3f( (float) point.getX(), (float) point.getY(), (float) point.getZ());
-	}
-	
-	public static Point3i intFromFloat(Point3f point, boolean round) {
-		if (round) {
-			return new Point3i(
-				roundInt(point.getX()),
-				roundInt(point.getY()),
-				roundInt(point.getZ())
-			);
-		} else {
-			return new Point3i(
-				ceilInt(point.getX()),
-				ceilInt(point.getY()),
-				ceilInt(point.getZ())
-			);
-			
-		}
-	}
+    // START singular points
 
-	// END singular points
-	
-	// START lists of points
-	
-	public static List<Point3f> convert3iTo3f( List<Point3i> points ) {
-		return convert( points, PointConverter::floatFromInt );
-	}
-	
-	public static List<Point3f> convert3dTo3f( List<Point3d> points ) {
-		return convert( points, PointConverter::floatFromDouble );
-	}
-	
-	public static List<Point3f> convert2iTo3f( List<Point2i> points ) {
-		return convert( points, PointConverter::floatFromInt );
-	}
-	
-	public static List<Point3d> convert2iTo3d( List<Point2i> points ) {
-		return convert( points, PointConverter::doubleFromInt );
-	}
-	
-	public static List<Point3d> convert3fTo3d( List<Point3f> points ) {
-		return convert( points, PointConverter::doubleFromFloat );
-	}
-	
-	public static List<Point3i> convert3i(List<Point3f> points, boolean round) {
-		return convert(
-			points,
-			pnt -> intFromFloat(pnt, round) 
-		);
-	}
-		
-	public static List<Point3i> convert3i( List<Point3d> points ) {
-		return convert( points, PointConverter::intFromDouble );
-	}
-	
-	// END lists of points
-		
-	private static <S,T> List<S> convert( List<T> points, Function<T,S> mapFunction ) {
-		return FunctionalUtilities.mapToList(points, mapFunction);
-	}
-			
-	private static int roundInt( double value ) {
-		return (int) Math.round(value);
-	}
-	
-	private static int ceilInt( double value ) {
-		return (int) Math.ceil(value);
-	}
+    public static Point2i intFromDouble(Point2d point) {
+        return new Point2i((int) point.getX(), (int) point.getY());
+    }
+
+    public static Point3i intFromDouble(Point3d point) {
+        return new Point3i((int) point.getX(), (int) point.getY(), (int) point.getZ());
+    }
+
+    public static Point3i intFromDoubleCeil(Point3d point) {
+        return new Point3i(
+                (int) Math.ceil(point.getX()),
+                (int) Math.ceil(point.getY()),
+                (int) Math.ceil(point.getZ()));
+    }
+
+    public static Point3i convertTo3d(Point2i point) {
+        return new Point3i(point.getX(), point.getY(), 0);
+    }
+
+    public static Point2d doubleFromFloat(Point2f point) {
+        return new Point2d(point.getX(), point.getY());
+    }
+
+    public static Point3d doubleFromFloat(Point3f point) {
+        return new Point3d(point.getX(), point.getY(), point.getZ());
+    }
+
+    public static Point3d doubleFromInt(Point2i point) {
+        return new Point3d((double) point.getX(), (double) point.getY(), 0);
+    }
+
+    public static Point3d doubleFromInt(ReadableTuple3i point) {
+        return new Point3d((double) point.getX(), (double) point.getY(), (double) point.getZ());
+    }
+
+    public static Point3f floatFromInt(Point2i point) {
+        return new Point3f((float) point.getX(), (float) point.getY(), 0);
+    }
+
+    public static Point3f floatFromDouble(Point3d point) {
+        return new Point3f((float) point.getX(), (float) point.getY(), (float) point.getZ());
+    }
+
+    public static Point3f floatFromInt(ReadableTuple3i point) {
+        return new Point3f((float) point.getX(), (float) point.getY(), (float) point.getZ());
+    }
+
+    /**
+     * Creates a new {@code Point3f} with X, Y values from the {@code Point3i} but setting Z to be 0
+     */
+    public static Point3f floatFromIntDropZ(ReadableTuple3i point) {
+        return new Point3f((float) point.getX(), (float) point.getY(), 0);
+    }
+
+    public static Point3i intFromFloat(Point3f point, boolean round) {
+        if (round) {
+            return new Point3i(
+                    roundInt(point.getX()), roundInt(point.getY()), roundInt(point.getZ()));
+        } else {
+            return new Point3i(ceilInt(point.getX()), ceilInt(point.getY()), ceilInt(point.getZ()));
+        }
+    }
+
+    // END singular points
+
+    // START lists of points
+
+    public static List<Point3f> convert3iTo3f(List<Point3i> points) {
+        return convert(points, PointConverter::floatFromInt);
+    }
+
+    public static List<Point3f> convert3dTo3f(List<Point3d> points) {
+        return convert(points, PointConverter::floatFromDouble);
+    }
+
+    public static List<Point3f> convert2iTo3f(List<Point2i> points) {
+        return convert(points, PointConverter::floatFromInt);
+    }
+
+    public static List<Point3d> convert2iTo3d(List<Point2i> points) {
+        return convert(points, PointConverter::doubleFromInt);
+    }
+
+    public static List<Point3d> convert3fTo3d(List<Point3f> points) {
+        return convert(points, PointConverter::doubleFromFloat);
+    }
+
+    public static List<Point3i> convert3i(List<Point3f> points, boolean round) {
+        return convert(points, point -> intFromFloat(point, round));
+    }
+
+    public static List<Point3i> convert3i(List<Point3d> points) {
+        return convert(points, PointConverter::intFromDouble);
+    }
+
+    // END lists of points
+
+    private static <S, T> List<S> convert(List<T> points, Function<T, S> mapFunction) {
+        return FunctionalList.mapToList(points, mapFunction);
+    }
+
+    private static int roundInt(double value) {
+        return (int) Math.round(value);
+    }
+
+    private static int ceilInt(double value) {
+        return (int) Math.ceil(value);
+    }
 }

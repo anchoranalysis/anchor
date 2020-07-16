@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.voxel.box.thresholder;
-
-
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ package org.anchoranalysis.image.voxel.box.thresholder;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,10 +24,10 @@ package org.anchoranalysis.image.voxel.box.thresholder;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.box.thresholder;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -41,48 +37,32 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
-
-/**
- * Performs threshold operation on a VoxelBox
-  */
+/** Performs threshold operation on a VoxelBox */
 public class VoxelBoxThresholder {
-	
-	private VoxelBoxThresholder() {}
-	
-	public static void thresholdForLevel(
-		VoxelBox<ByteBuffer> inputBuffer,
-		int level,
-		BinaryValuesByte bvOut
-	) {
-		// We know that as the inputType is byte, it will be performed in place
-		thresholdForLevel(
-			VoxelBoxWrapper.wrap(inputBuffer),
-			level,
-			bvOut,
-			Optional.empty(),
-			false
-		);
-	}
-		
-	// Perform inplace
-	public static BinaryVoxelBox<ByteBuffer> thresholdForLevel(
-		VoxelBoxWrapper inputBuffer,
-		int level,
-		BinaryValuesByte bvOut,
-		Optional<ObjectMask> mask,
-		boolean alwaysDuplicate
-	) {
-		VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty( alwaysDuplicate );
-		
-		if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-		
-			IterateVoxels.callEachPoint(
-				mask,
-				inputBuffer.asByte(),
-				new PointProcessor(level, boxOut, bvOut)
-			);
-		}
-		
-		return new BinaryVoxelBoxByte(boxOut, bvOut.createInt() );
-	}
+
+    private VoxelBoxThresholder() {}
+
+    public static void thresholdForLevel(
+            VoxelBox<ByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
+        // We know that as the inputType is byte, it will be performed in place
+        thresholdForLevel(VoxelBoxWrapper.wrap(inputBuffer), level, bvOut, Optional.empty(), false);
+    }
+
+    // Perform inplace
+    public static BinaryVoxelBox<ByteBuffer> thresholdForLevel(
+            VoxelBoxWrapper inputBuffer,
+            int level,
+            BinaryValuesByte bvOut,
+            Optional<ObjectMask> mask,
+            boolean alwaysDuplicate) {
+        VoxelBox<ByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
+
+        if (inputBuffer.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+
+            IterateVoxels.callEachPoint(
+                    mask, inputBuffer.asByte(), new PointProcessor(level, boxOut, bvOut));
+        }
+
+        return new BinaryVoxelBoxByte(boxOut, bvOut.createInt());
+    }
 }

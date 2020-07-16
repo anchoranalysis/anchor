@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.object.calculation;
-
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.feature.object.calculation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,54 +24,53 @@ package org.anchoranalysis.image.feature.object.calculation;
  * #L%
  */
 
+package org.anchoranalysis.image.feature.object.calculation;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-
 
 /**
  * Calculates a single-input from a pair
- * 
- * <div>
- * Three states are possible:
- * <ul>
- * <li>First</li>
- * <li>Second</li>
- * <li>Merged</li>
- * </div>
- * 
- * @author Owen Feehan
  *
+ * <p><div> Three states are possible:
+ *
+ * <ul>
+ *   <li>First
+ *   <li>Second
+ *   <li>Merged </div>
+ *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
-public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class CalculateInputFromPair
+        extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
 
-	public enum Extract {
-		FIRST,
-		SECOND,
-		MERGED
-	}
-	
-	private final Extract extract;
+    public enum Extract {
+        FIRST,
+        SECOND,
+        MERGED
+    }
 
-	@Override
-	protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
-		FeatureInputSingleObject paramsNew = new FeatureInputSingleObject(
-			extractObj(input)
-		);
-		paramsNew.setNrgStack( input.getNrgStackOptional() );
-		return paramsNew;
-	}
-	
-	private ObjectMask extractObj(FeatureInputPairObjects input) {
-		
-		if (extract==Extract.MERGED) {
-			return input.getMerged();
-		}
-		
-		return extract==Extract.FIRST ? input.getFirst() : input.getSecond();
-	}
+    private final Extract extract;
+
+    @Override
+    protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
+        FeatureInputSingleObject paramsNew = new FeatureInputSingleObject(extractObj(input));
+        paramsNew.setNrgStack(input.getNrgStackOptional());
+        return paramsNew;
+    }
+
+    private ObjectMask extractObj(FeatureInputPairObjects input) {
+
+        if (extract == Extract.MERGED) {
+            return input.getMerged();
+        }
+
+        return extract == Extract.FIRST ? input.getFirst() : input.getSecond();
+    }
 }

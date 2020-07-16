@@ -1,14 +1,8 @@
-package org.anchoranalysis.experiment.task;
-
-
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,8 +24,9 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.experiment.task;
 
-
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
@@ -50,199 +45,204 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.apache.commons.lang.time.StopWatch;
 
-
 /**
  * A task which performs some kind of processing on a specific input-object
- * 
- * We distinguish between ParametersUnbound which are parameters generally used for tasks in 
- *  an experiment and ParametersBound which is created in a further step, when several
- *  of these parameters are replaced with new more specific-objects for the specific task.
- *  
- *  e.g. we move from a logger and manifest for the experiment as a whole, to a logger
- *      and manifest for the task itself 
- * 
- * @author Owen Feehan
  *
+ * <p>We distinguish between ParametersUnbound which are parameters generally used for tasks in an
+ * experiment and ParametersBound which is created in a further step, when several of these
+ * parameters are replaced with new more specific-objects for the specific task.
+ *
+ * <p>e.g. we move from a logger and manifest for the experiment as a whole, to a logger and
+ * manifest for the task itself
+ *
+ * @author Owen Feehan
  * @param <T> input-object type
  * @param <S> shared-state type
  */
-public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T,S>> {
+public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
-	private static final String OUTPUT_NAME_MANIFEST = "manifest";
-	private static final String OUTPUT_NAME_EXECUTION_TIME = "executionTime";
-	
-	/** Is the execution-time of the task per-input expected to be very quick to execute? */
-	public abstract boolean hasVeryQuickPerInputExecution();
-	
-	// Return object is the shared state if it exists
-	public abstract S beforeAnyJobIsExecuted( BoundOutputManagerRouteErrors outputManager, ParametersExperiment params ) throws ExperimentExecutionException;
-	
-	public abstract void afterAllJobsAreExecuted( S sharedState, BoundIOContext context ) throws ExperimentExecutionException;
-	
-	// Runs the experiment on a particular file
-	public boolean executeJob(	ParametersUnbound<T,S> paramsUnbound ) throws JobExecutionException {
-		ManifestRecorder manifestTask = new ManifestRecorder();
-		
-		// Bind an outputManager for the task
-		BoundOutputManager outputManagerTask = HelperBindOutputManager.createOutputManagerForTask(
-			paramsUnbound.getInputObject(),
-			Optional.of(manifestTask),
-			paramsUnbound.getParametersExperiment()
-		);
-		assert(outputManagerTask.getOutputWriteSettings().hasBeenInit());	
-		
-		// Create other bound arguments
-		
-		InputBound<T,S> paramsBound = bindOtherParams( paramsUnbound, outputManagerTask, manifestTask );
-		return executeJobLogExceptions( paramsBound, paramsUnbound.isSuppressExceptions() );
-		
-	}
-	
-	/** Is an input-object compatible with this particular task? */
-	public boolean isInputObjectCompatibleWith( Class<? extends InputFromManager> inputObjectClass ) {
-		return inputTypesExpected().doesClassInheritFromAny(inputObjectClass);
-	}
-	
-	/** Highest class(es) that will function as a valid input.
-	 * 
-	 * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager)</p>
-	 **/
-	public abstract InputTypesExpected inputTypesExpected();
-		
-	public abstract void doJobOnInputObject( InputBound<T,S> params ) throws JobExecutionException;
-	
-	
-	/**
-	 * Creates other objects needed to have a fully bound set of parameters for the task
-	 * 
-	 * @param paramsUnbound parameters before being bound for a specific task
-	 * @param outputManagerTask a bound output manager for the task
-	 * @param manifestTask a bound manifest for the task
-	 * @return a complete ParametersBound object with all parameters set to objects bound for the specific task
-	 */
-	private InputBound<T,S> bindOtherParams( ParametersUnbound<T,S> paramsUnbound, BoundOutputManager outputManagerTask, ManifestRecorder manifestTask ) {
+    private static final String OUTPUT_NAME_MANIFEST = "manifest";
+    private static final String OUTPUT_NAME_EXECUTION_TIME = "executionTime";
 
-		// We create a new log reporter for this job only
-		StatefulMessageLogger loggerJob = createJobLog(
-			paramsUnbound.getParametersExperiment(),
-			outputManagerTask
-		);
-		
-		ErrorReporter errorReporterJob = new ErrorReporterIntoLog(loggerJob);
-		
-		// We initialise the output manager
-		BoundOutputManagerRouteErrors outputManagerTaskRouteErrors = new BoundOutputManagerRouteErrors(
-			outputManagerTask,
-			errorReporterJob
-		);
-		
-		// We create new parameters bound specifically to the job
-		return new InputBound<>(
-			paramsUnbound.getInputObject(),
-			paramsUnbound.getSharedState(),
-			manifestTask,
-			paramsUnbound.getParametersExperiment().isDetailedLogging(),
-			new BoundContextSpecify(
-				paramsUnbound.getParametersExperiment().getExperimentArguments(),
-				outputManagerTaskRouteErrors,
-				loggerJob,
-				errorReporterJob
-			)
-		);
-	}
-	
-	private StatefulMessageLogger createJobLog(ParametersExperiment params, BoundOutputManager outputManagerTask) {
-		return params.getLoggerTaskCreator().createWithLogFallback(
-			outputManagerTask,
-			params.getLoggerExperiment(),
-			params.getExperimentArguments(),
-			params.isDetailedLogging()
-		);
-	}
-	
-	private boolean executeJobLogExceptions(
-		InputBound<T,S> params,
-		boolean suppressExceptions
-	) throws JobExecutionException {
-		
-		StatefulMessageLogger loggerJob = params.getLogReporterJob();
-		
-		StopWatch stopWatchFile = new StopWatch();
-		stopWatchFile.start();
-		
-		boolean successfullyFinished = false;
-		try {
-			loggerJob.start();
-			
-			if (params.isDetailedLogging()) {
-				
-				params.getLogger().messageLogger().logFormatted(
-					"Output Folder has path: \t%s",
-					params.getOutputManager().getOutputFolderPath().toString()
-				);
-				
-				loggerJob.logFormatted("File processing started: %s", params.getInputObject().descriptiveName());
-			}
-			
-			executeJobAdditionalOutputs( params, stopWatchFile );
-			
-			successfullyFinished = true;
-			
-		} catch (Exception e) {
-			params.getLogger().errorReporter().recordError(Task.class, e);
-			loggerJob.log("This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
-			if (!suppressExceptions) {
-				throw new JobExecutionException("Job encountered a fatal error", e);	
-			}
-			
-		} finally {
-			
-			stopWatchFile.stop();
-			
-			if (params.isDetailedLogging()) {
-				loggerJob.logFormatted("File processing ended:   %s (time taken = %ds)", params.getInputObject().descriptiveName(), stopWatchFile.getTime()/1000);
-				MemoryUtilities.logMemoryUsage("End file processing", loggerJob );
-			}
-						
-			loggerJob.close(successfullyFinished);
-		}
-		return successfullyFinished;
-	}
-	
-	
-	private void executeJobAdditionalOutputs(
-		InputBound<T,S> params,
-		StopWatch stopWatchFile
-	) throws JobExecutionException {
+    /** Is the execution-time of the task per-input expected to be very quick to execute? */
+    public abstract boolean hasVeryQuickPerInputExecution();
 
-		try {
-			doJobOnInputObject( params );
-		} catch (ClassCastException e) {
-			throw new JobExecutionException("Could not cast one class to another. Have you used a compatible input-manager for the task?", e);
-		} finally {
-			// We close the input objects as soon as the task is completed, so as to free up file handles
-			// NB Deal with this in the future... if a task is never called, then close() might never be called on the InputObject
-			params.getInputObject().close( params.getLogger().errorReporter() );
-		}
-		
-		WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed(); 
-		writeIfAllowed.write(
-			OUTPUT_NAME_MANIFEST,
-			() -> new XStreamGenerator<Object>(
-				params.getManifest(),
-				Optional.empty())	// Don't put into the manifest
-		);
-		writeIfAllowed.write(
-			OUTPUT_NAME_MANIFEST,
-			() -> new ObjectOutputStreamGenerator<>(
-				params.getManifest(),
-				Optional.empty()	// Don't put into the manifest
-			)
-		);
-		// This is written after the manfiests are already written, so it won't exist in the manifest
-		writeIfAllowed.write(
-			OUTPUT_NAME_EXECUTION_TIME,
-			() -> new StringGenerator( Long.toString(stopWatchFile.getTime()) )
-		);
-	}
+    // Return object is the shared state if it exists
+    public abstract S beforeAnyJobIsExecuted(
+            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            throws ExperimentExecutionException;
+
+    public abstract void afterAllJobsAreExecuted(S sharedState, BoundIOContext context)
+            throws ExperimentExecutionException;
+
+    // Runs the experiment on a particular file
+    public boolean executeJob(ParametersUnbound<T, S> paramsUnbound) throws JobExecutionException {
+        ManifestRecorder manifestTask = new ManifestRecorder();
+
+        // Bind an outputManager for the task
+        BoundOutputManager outputManagerTask =
+                HelperBindOutputManager.createOutputManagerForTask(
+                        paramsUnbound.getInputObject(),
+                        Optional.of(manifestTask),
+                        paramsUnbound.getParametersExperiment());
+        assert (outputManagerTask.getOutputWriteSettings().hasBeenInit());
+
+        // Create other bound arguments
+
+        InputBound<T, S> paramsBound =
+                bindOtherParams(paramsUnbound, outputManagerTask, manifestTask);
+        return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
+    }
+
+    /** Is an input-object compatible with this particular task? */
+    public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
+        return inputTypesExpected().doesClassInheritFromAny(inputObjectClass);
+    }
+
+    /**
+     * Highest class(es) that will function as a valid input.
+     *
+     * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager)
+     */
+    public abstract InputTypesExpected inputTypesExpected();
+
+    public abstract void doJobOnInputObject(InputBound<T, S> params) throws JobExecutionException;
+
+    /**
+     * Creates other objects needed to have a fully bound set of parameters for the task
+     *
+     * @param paramsUnbound parameters before being bound for a specific task
+     * @param outputManagerTask a bound output manager for the task
+     * @param manifestTask a bound manifest for the task
+     * @return a complete ParametersBound object with all parameters set to objects bound for the
+     *     specific task
+     */
+    private InputBound<T, S> bindOtherParams(
+            ParametersUnbound<T, S> paramsUnbound,
+            BoundOutputManager outputManagerTask,
+            ManifestRecorder manifestTask) {
+
+        // We create a new log reporter for this job only
+        StatefulMessageLogger loggerJob =
+                createJobLog(paramsUnbound.getParametersExperiment(), outputManagerTask);
+
+        ErrorReporter errorReporterJob = new ErrorReporterIntoLog(loggerJob);
+
+        // We initialise the output manager
+        BoundOutputManagerRouteErrors outputManagerTaskRouteErrors =
+                new BoundOutputManagerRouteErrors(outputManagerTask, errorReporterJob);
+
+        // We create new parameters bound specifically to the job
+        return new InputBound<>(
+                paramsUnbound.getInputObject(),
+                paramsUnbound.getSharedState(),
+                manifestTask,
+                paramsUnbound.getParametersExperiment().isDetailedLogging(),
+                new BoundContextSpecify(
+                        paramsUnbound.getParametersExperiment().getExperimentArguments(),
+                        outputManagerTaskRouteErrors,
+                        loggerJob,
+                        errorReporterJob));
+    }
+
+    private StatefulMessageLogger createJobLog(
+            ParametersExperiment params, BoundOutputManager outputManagerTask) {
+        return params.getLoggerTaskCreator()
+                .createWithLogFallback(
+                        outputManagerTask,
+                        params.getLoggerExperiment(),
+                        params.getExperimentArguments(),
+                        params.isDetailedLogging());
+    }
+
+    private boolean executeJobLogExceptions(InputBound<T, S> params, boolean suppressExceptions)
+            throws JobExecutionException {
+
+        StatefulMessageLogger loggerJob = params.getLogReporterJob();
+
+        StopWatch stopWatchFile = new StopWatch();
+        stopWatchFile.start();
+
+        boolean successfullyFinished = false;
+        try {
+            loggerJob.start();
+
+            if (params.isDetailedLogging()) {
+
+                params.getLogger()
+                        .messageLogger()
+                        .logFormatted(
+                                "Output Folder has path: \t%s",
+                                params.getOutputManager().getOutputFolderPath().toString());
+
+                loggerJob.logFormatted(
+                        "File processing started: %s", params.getInputObject().descriptiveName());
+            }
+
+            executeJobAdditionalOutputs(params, stopWatchFile);
+
+            successfullyFinished = true;
+
+        } catch (Exception e) {
+            params.getLogger().errorReporter().recordError(Task.class, e);
+            loggerJob.log(
+                    "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
+            if (!suppressExceptions) {
+                throw new JobExecutionException("Job encountered a fatal error", e);
+            }
+
+        } finally {
+
+            stopWatchFile.stop();
+
+            if (params.isDetailedLogging()) {
+                loggerJob.logFormatted(
+                        "File processing ended:   %s (time taken = %ds)",
+                        params.getInputObject().descriptiveName(), stopWatchFile.getTime() / 1000);
+                MemoryUtilities.logMemoryUsage("End file processing", loggerJob);
+            }
+
+            loggerJob.close(successfullyFinished);
+        }
+        return successfullyFinished;
+    }
+
+    private void executeJobAdditionalOutputs(InputBound<T, S> params, StopWatch stopWatchFile)
+            throws JobExecutionException {
+
+        try {
+            doJobOnInputObject(params);
+        } catch (ClassCastException e) {
+            throw new JobExecutionException(
+                    "Could not cast one class to another. Have you used a compatible input-manager for the task?",
+                    e);
+        } finally {
+            // We close the input objects as soon as the task is completed, so as to free up file
+            // handles
+            // NB Deal with this in the future... if a task is never called, then close() might
+            // never be called on the InputObject
+            params.getInputObject().close(params.getLogger().errorReporter());
+        }
+
+        WriterRouterErrors writeIfAllowed = params.getOutputManager().getWriterCheckIfAllowed();
+        writeIfAllowed.write(
+                OUTPUT_NAME_MANIFEST,
+                () ->
+                        new XStreamGenerator<Object>(
+                                params.getManifest(),
+                                Optional.empty()) // Don't put into the manifest
+                );
+        writeIfAllowed.write(
+                OUTPUT_NAME_MANIFEST,
+                () ->
+                        new ObjectOutputStreamGenerator<>(
+                                params.getManifest(),
+                                Optional.empty() // Don't put into the manifest
+                                ));
+        // This is written after the manfiests are already written, so it won't exist in the
+        // manifest
+        writeIfAllowed.write(
+                OUTPUT_NAME_EXECUTION_TIME,
+                () -> new StringGenerator(Long.toString(stopWatchFile.getTime())));
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.folder;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,8 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * #L%
  */
 
+package org.anchoranalysis.io.manifest.deserializer.folder;
+
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -33,32 +33,30 @@ import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
-	
-	private SequencedFolder folder;
-	
-	public DeserializeFromFolder( SequencedFolder folder ) {
-		this.folder = folder;
-	}
-	
-	@Override
-	public LoadContainer<T> create() throws DeserializationFailedException {
-		
-		SequenceType sequenceType = folder.getAssociatedSequence();
-		ITypedGetFromIndex<T> cntr = createCtnr( folder );
-		
-		assert( sequenceType != null );
-		
-		LoadContainer<T> history = new LoadContainer<>();
-		
-		BoundedIndexContainer<T> boundedContainer = new BoundsFromSequenceType<>(
-			cntr,
-			sequenceType
-		);
-		
-		history.setCntr( boundedContainer );
-		history.setExpensiveLoad( false );
-		return history;
-	}
 
-	protected abstract ITypedGetFromIndex<T> createCtnr( SequencedFolder folder );
+    private SequencedFolder folder;
+
+    public DeserializeFromFolder(SequencedFolder folder) {
+        this.folder = folder;
+    }
+
+    @Override
+    public LoadContainer<T> create() throws DeserializationFailedException {
+
+        SequenceType sequenceType = folder.getAssociatedSequence();
+        ITypedGetFromIndex<T> cntr = createCtnr(folder);
+
+        assert (sequenceType != null);
+
+        LoadContainer<T> history = new LoadContainer<>();
+
+        BoundedIndexContainer<T> boundedContainer =
+                new BoundsFromSequenceType<>(cntr, sequenceType);
+
+        history.setCntr(boundedContainer);
+        history.setExpensiveLoad(false);
+        return history;
+    }
+
+    protected abstract ITypedGetFromIndex<T> createCtnr(SequencedFolder folder);
 }

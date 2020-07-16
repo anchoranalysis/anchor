@@ -1,13 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.BeanInstanceMap;
-
-/*
+/*-
  * #%L
- * anchor-beans-shared
+ * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import org.anchoranalysis.bean.BeanInstanceMap;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,64 +24,37 @@ import org.anchoranalysis.bean.BeanInstanceMap;
  * #L%
  */
 
+package org.anchoranalysis.bean.permute.property;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 
 public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int start = 0;
-	
-	// Last item, inclusive
-	@BeanField
-	private int end = 0;
-	
-	@BeanField
-	private int increment = 1;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int start = 0;
 
-	@Override
-	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
-		super.checkMisconfigured( defaultInstances );
-		if (end<start) {
-			throw new BeanMisconfiguredException(
-				String.format("end (%d) cannot be less than start (%d)",
-					start,
-					end
-				)
-			);
-		}
-	}
-	
-	public SequenceIntegerIterator iterator() {
-		return new SequenceIntegerIterator(start,end,increment);
-	}
+    // Last item, inclusive
+    @BeanField @Getter @Setter private int end = 0;
 
-	public int getStart() {
-		return start;
-	}
+    @BeanField @Getter @Setter private int increment = 1;
+    // END BEAN PROPERTIES
 
-	public void setStart(int start) {
-		this.start = start;
-	}
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        if (end < start) {
+            throw new BeanMisconfiguredException(
+                    String.format("end (%d) cannot be less than start (%d)", start, end));
+        }
+    }
 
-	public int getEnd() {
-		return end;
-	}
-
-	public void setEnd(int end) {
-		this.end = end;
-	}
-
-	public int getIncrement() {
-		return increment;
-	}
-
-	public void setIncrement(int increment) {
-		this.increment = increment;
-	}
-
-	
+    public SequenceIntegerIterator iterator() {
+        return new SequenceIntegerIterator(start, end, increment);
+    }
 }

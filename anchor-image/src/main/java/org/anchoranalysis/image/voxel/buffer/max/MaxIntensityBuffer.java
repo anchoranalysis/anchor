@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.buffer.max;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.buffer.max;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,48 +24,45 @@ package org.anchoranalysis.image.voxel.buffer.max;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 
 /**
  * The buffer used when making a maximum-intensity projection
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type of buffer used, both as input and result, of the maximum intesnity projection
  */
 public abstract class MaxIntensityBuffer<T extends Buffer> {
-	
-	/**
-	 * Target buffer, where the maximum-intensity pixels are stored
-	 */
-	private VoxelBox<T> target;
 
-	public MaxIntensityBuffer( Extent srcExtent, VoxelBoxFactoryTypeBound<T> factory ) {
-		target = factory.create( new Extent( srcExtent.getX(), srcExtent.getY(), 1 ));
-	}
-	
-	public void projectSlice(T pixels) {
-		
-		T flatBuffer = target.getPixelsForPlane(0).buffer();
-		
-		while( pixels.hasRemaining() ) {
-			addBuffer( pixels, flatBuffer );
-    	}
-	}
-	
-	/**
-	 * The target buffer
-	 * 
-	 * @return the result of the maximum-intensity projection
-	 */
-	public VoxelBox<T> getProjection() {
-		return target;
-	}
-	
-	protected abstract void addBuffer( T anySlice, T target );
+    /** Target buffer, where the maximum-intensity pixels are stored */
+    private VoxelBox<T> target;
+
+    public MaxIntensityBuffer(Extent srcExtent, VoxelBoxFactoryTypeBound<T> factory) {
+        target = factory.create(new Extent(srcExtent.getX(), srcExtent.getY(), 1));
+    }
+
+    public void projectSlice(T pixels) {
+
+        T flatBuffer = target.getPixelsForPlane(0).buffer();
+
+        while (pixels.hasRemaining()) {
+            addBuffer(pixels, flatBuffer);
+        }
+    }
+
+    /**
+     * The target buffer
+     *
+     * @return the result of the maximum-intensity projection
+     */
+    public VoxelBox<T> getProjection() {
+        return target;
+    }
+
+    protected abstract void addBuffer(T anySlice, T target);
 }

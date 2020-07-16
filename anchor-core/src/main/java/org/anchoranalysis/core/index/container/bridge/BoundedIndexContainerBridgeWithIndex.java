@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.index.container.bridge;
 
-
-
 /*-
  * #%L
  * anchor-core
@@ -14,10 +12,10 @@ package org.anchoranalysis.core.index.container.bridge;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,26 +31,28 @@ import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
 /**
  * Bridges calls from hidden-type to external-type. Uses an IObjectBridgeIndex for the bridging.
- * 
- * See {@link org.anchoranalysis.core.index.container.bridge.BoundedIndexContainerBridgeWithoutIndex}
- * 
- * @author Owen Feehan
  *
+ * <p>See {@link
+ * org.anchoranalysis.core.index.container.bridge.BoundedIndexContainerBridgeWithoutIndex}
+ *
+ * @author Owen Feehan
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
  * @param <E> exception that can be thrown during briging
  */
-public class BoundedIndexContainerBridgeWithIndex<H,S,E extends Exception> extends BoundedIndexContainerBridge<H,S,E> {
-	
-	private BridgeElementWithIndex<H, S,E> bridge;
-	
-	public BoundedIndexContainerBridgeWithIndex(BoundedIndexContainer<H> source, BridgeElementWithIndex<H, S,E> bridge) {
-		super(source);
-		this.bridge = bridge;
-	}
+public class BoundedIndexContainerBridgeWithIndex<H, S, E extends Exception>
+        extends BoundedIndexContainerBridge<H, S, E> {
 
-	@Override
-	protected S bridge(int index, H internalState) throws E {
-		return bridge.bridgeElement(index, internalState);
-	}
+    private BridgeElementWithIndex<H, S, E> bridge;
+
+    public BoundedIndexContainerBridgeWithIndex(
+            BoundedIndexContainer<H> source, BridgeElementWithIndex<H, S, E> bridge) {
+        super(source);
+        this.bridge = bridge;
+    }
+
+    @Override
+    protected S bridge(int index, H internalState) throws E {
+        return bridge.bridgeElement(index, internalState);
+    }
 }

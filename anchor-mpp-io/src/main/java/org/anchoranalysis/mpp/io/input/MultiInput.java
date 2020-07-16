@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.io.input;
-
-/*
+/*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.io.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.mpp.io.input;
  * #L%
  */
 
+package org.anchoranalysis.mpp.io.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -45,113 +43,110 @@ import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
 public class MultiInput extends ProvidesStackInput implements InputForMPPBean {
-	
-	public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
-	
-	private StackWithMap stackWithMap;
-	
-	private OperationMap<Cfg> mapCfg = new OperationMap<>();
-	private OperationMap<ObjectCollection> mapObjMaskCollection = new OperationMap<>();
-	private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
-	private OperationMap<Histogram> mapHistogram = new OperationMap<>();
-	private OperationMap<Path> mapFilePath = new OperationMap<>();
-	
-	public MultiInput( ProvidesStackInput mainInputObject ) {
-		this( DEFAULT_IMAGE_INPUT_NAME, mainInputObject );
-	}
-	
-	public MultiInput( String mainObjectName, ProvidesStackInput mainInputObject ) {
-		this.stackWithMap = new StackWithMap(mainObjectName, mainInputObject);
-	}
 
-	@Override
-	public void addToStore(NamedProviderStore<TimeSequence> stackCollection,
-			int seriesNum, ProgressReporter progressReporter)
-			throws OperationFailedException {
-		stackWithMap.addToStore(
-			stackCollection,
-			seriesNum,
-			progressReporter
-		);
-	}
+    public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
-	@Override
-	public void addToStoreWithName(
-		String name,
-		NamedProviderStore<TimeSequence> stackCollection,
-		int seriesNum,
-		ProgressReporter progressReporter
-	) throws OperationFailedException {
-		throw new OperationFailedException("Not supported");
-	}
-	
-	@Override
-	public void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage ) throws OperationFailedException {
-		
-		cfg().addToStore( soMPP.getCfgCollection() );
-		stack().addToStore(
-			new WrapStackAsTimeSequenceStore(soImage.getStackCollection())
-		);
-		objs().addToStore( soImage.getObjMaskCollection() );
-		keyValueParams().addToStore( soImage.getParams().getNamedKeyValueParamsCollection() );
-		filePath().addToStore( soImage.getParams().getNamedFilePathCollection() );
-		histogram().addToStore( soImage.getHistogramCollection() );
-	}
+    private StackWithMap stackWithMap;
 
-	@Override
-	public String descriptiveName() {
-		return stackWithMap.descriptiveName();
-	}
+    private OperationMap<Cfg> mapCfg = new OperationMap<>();
+    private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
+    private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
+    private OperationMap<Histogram> mapHistogram = new OperationMap<>();
+    private OperationMap<Path> mapFilePath = new OperationMap<>();
 
-	@Override
-	public Optional<Path> pathForBinding() {
-		return stackWithMap.pathForBinding();
-	}
+    public MultiInput(ProvidesStackInput mainInputObject) {
+        this(DEFAULT_IMAGE_INPUT_NAME, mainInputObject);
+    }
 
-	@Override
-	public void close(ErrorReporter errorReporter) {
-		stackWithMap.close(errorReporter);
-		
-		// We set all these objects to NULL so the garbage collector can free up memory
-		// This probably isn't necessary, as the MultiInput object should get garbage-collected ASAP
-		//   but just in case
-		mapCfg = null;
-		mapObjMaskCollection = null;
-		mapKeyValueParams = null;
-		mapHistogram = null;
-		mapFilePath = null;
-	}
+    public MultiInput(String mainObjectName, ProvidesStackInput mainInputObject) {
+        this.stackWithMap = new StackWithMap(mainObjectName, mainInputObject);
+    }
 
-	public MultiInputSubMap<Cfg> cfg() {
-		return mapCfg;
-	}
+    @Override
+    public void addToStore(
+            NamedProviderStore<TimeSequence> stackCollection,
+            int seriesNum,
+            ProgressReporter progressReporter)
+            throws OperationFailedException {
+        stackWithMap.addToStore(stackCollection, seriesNum, progressReporter);
+    }
 
-	public MultiInputSubMap<ObjectCollection> objs() {
-		return mapObjMaskCollection;
-	}
+    @Override
+    public void addToStoreWithName(
+            String name,
+            NamedProviderStore<TimeSequence> stackCollection,
+            int seriesNum,
+            ProgressReporter progressReporter)
+            throws OperationFailedException {
+        throw new OperationFailedException("Not supported");
+    }
 
-	public MultiInputSubMap<KeyValueParams> keyValueParams() {
-		return mapKeyValueParams;
-	}
+    @Override
+    public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+            throws OperationFailedException {
 
-	public MultiInputSubMap<Histogram> histogram() {
-		return mapHistogram;
-	}
+        cfg().addToStore(soMPP.getCfgCollection());
+        stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.getStackCollection()));
+        objects().addToStore(soImage.getObjectCollection());
+        keyValueParams().addToStore(soImage.getParams().getNamedKeyValueParamsCollection());
+        filePath().addToStore(soImage.getParams().getNamedFilePathCollection());
+        histogram().addToStore(soImage.getHistogramCollection());
+    }
 
-	public MultiInputSubMap<Path> filePath() {
-		return mapFilePath;
-	}
+    @Override
+    public String descriptiveName() {
+        return stackWithMap.descriptiveName();
+    }
 
-	public MultiInputSubMap<TimeSequence> stack() {
-		return stackWithMap;
-	}
+    @Override
+    public Optional<Path> pathForBinding() {
+        return stackWithMap.pathForBinding();
+    }
 
-	public String getMainObjectName() {
-		return stackWithMap.getMainObjectName();
-	}
+    @Override
+    public void close(ErrorReporter errorReporter) {
+        stackWithMap.close(errorReporter);
 
-	@Override
-	public int numFrames() throws OperationFailedException {
-		return stackWithMap.numFrames();
-	}
+        // We set all these objects to NULL so the garbage collector can free up memory
+        // This probably isn't necessary, as the MultiInput object should get garbage-collected ASAP
+        //   but just in case
+        mapCfg = null;
+        mapObjects = null;
+        mapKeyValueParams = null;
+        mapHistogram = null;
+        mapFilePath = null;
+    }
+
+    public MultiInputSubMap<Cfg> cfg() {
+        return mapCfg;
+    }
+
+    public MultiInputSubMap<ObjectCollection> objects() {
+        return mapObjects;
+    }
+
+    public MultiInputSubMap<KeyValueParams> keyValueParams() {
+        return mapKeyValueParams;
+    }
+
+    public MultiInputSubMap<Histogram> histogram() {
+        return mapHistogram;
+    }
+
+    public MultiInputSubMap<Path> filePath() {
+        return mapFilePath;
+    }
+
+    public MultiInputSubMap<TimeSequence> stack() {
+        return stackWithMap;
+    }
+
+    public String getMainObjectName() {
+        return stackWithMap.getMainObjectName();
+    }
+
+    @Override
+    public int numFrames() throws OperationFailedException {
+        return stackWithMap.numFrames();
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.session;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.session;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -38,17 +38,21 @@ import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.junit.Test;
 
 public class FeatureSessionTest {
-	
-	@Test
-	public void testCalculateSimpleListOfFeatures() throws InitException, FeatureCalcException {
-		
-		SequentialSession<FeatureInput> session = new SequentialSession<>(ConstantsInListFixture.create());
-		session.start( new FeatureInitParams(), new SharedFeatureMulti(), LoggingFixture.suppressedLogErrorReporter() );
-		
-		ResultsVector rv1 = session.calc( FeatureInputNull.instance() );
-		ConstantsInListFixture.checkResultVector(rv1);
-		
-		ResultsVector rv2 = session.calc( FeatureInputNull.instance() );
-		ConstantsInListFixture.checkResultVector(rv2);
-	}
+
+    @Test
+    public void testCalculateSimpleListOfFeatures() throws InitException, FeatureCalcException {
+
+        SequentialSession<FeatureInput> session =
+                new SequentialSession<>(ConstantsInListFixture.create());
+        session.start(
+                new FeatureInitParams(),
+                new SharedFeatureMulti(),
+                LoggingFixture.suppressedLogErrorReporter());
+
+        ResultsVector rv1 = session.calc(FeatureInputNull.instance());
+        ConstantsInListFixture.checkResultVector(rv1);
+
+        ResultsVector rv2 = session.calc(FeatureInputNull.instance());
+        ConstantsInListFixture.checkResultVector(rv2);
+    }
 }

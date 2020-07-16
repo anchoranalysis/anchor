@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.bean.input;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.annotation.io.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,13 +24,15 @@ package org.anchoranalysis.annotation.io.bean.input;
  * #L%
  */
 
+package org.anchoranalysis.annotation.io.bean.input;
 
 import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -41,63 +41,39 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy>
+        extends InputManager<AnnotationWithStrategy<S>> {
 
-public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private InputManager<T> input;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private InputManager<T> input;
+    @BeanField @Getter @Setter private S annotatorStrategy;
+    // END BEAN PROPERTIES
 
-	
-	@BeanField
-	private S annotatorStrategy;
-	// END BEAN PROPERTIES
+    @Override
+    public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
+            throws AnchorIOException {
 
-	
-	@Override
-	public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
-			throws AnchorIOException {
+        try (ProgressReporterMultiple prm =
+                new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
-			
-			List<T> inputs = input.inputObjects(params);
-		
-			prm.incrWorker();
-		
-			List<AnnotationWithStrategy<S>> outList = createListInput(
-				inputs,
-				new ProgressReporterOneOfMany(prm)
-			);
-			prm.incrWorker();
-			
-			return outList;
-		}
-	}
-	
-	private List<AnnotationWithStrategy<S>> createListInput( List<T> listInputObjects, ProgressReporter progressReporter ) throws AnchorIOException {
-		return FunctionalUtilities.mapListWithProgress(
-			listInputObjects,
-			progressReporter,
-			inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy)
-		);
-	}
-	
-	public InputManager<T> getInput() {
-		return input;
-	}
+            List<T> inputs = input.inputObjects(params);
 
-	public void setInput(InputManager<T> input) {
-		this.input = input;
-	}
+            prm.incrWorker();
 
+            List<AnnotationWithStrategy<S>> outList =
+                    createListInput(inputs, new ProgressReporterOneOfMany(prm));
+            prm.incrWorker();
 
-	public S getAnnotatorStrategy() {
-		return annotatorStrategy;
-	}
+            return outList;
+        }
+    }
 
-
-	public void setAnnotatorStrategy(S annotatorStrategy) {
-		this.annotatorStrategy = annotatorStrategy;
-	}
-
+    private List<AnnotationWithStrategy<S>> createListInput(
+            List<T> listInputObjects, ProgressReporter progressReporter) throws AnchorIOException {
+        return FunctionalProgress.mapList(
+                listInputObjects,
+                progressReporter,
+                inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy));
+    }
 }

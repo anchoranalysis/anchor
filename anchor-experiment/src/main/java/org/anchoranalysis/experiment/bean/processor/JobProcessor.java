@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.bean.processor;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.experiment.bean.processor;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,12 @@ package org.anchoranalysis.experiment.bean.processor;
  * #L%
  */
 
+package org.anchoranalysis.experiment.bean.processor;
+
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,102 +43,94 @@ import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-import lombok.Getter;
-import lombok.Setter;
-
-
 /**
  * Processes a job
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> input-object type
  * @param <S> shared-state type
  */
-public abstract class JobProcessor<T extends InputFromManager,S> extends AnchorBean<JobProcessor<T,S>> implements IReplaceTask<T, S> {
+public abstract class JobProcessor<T extends InputFromManager, S>
+        extends AnchorBean<JobProcessor<T, S>> implements IReplaceTask<T, S> {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private Task<T,S> task;
-		
-	@BeanField @Getter @Setter
-	private boolean suppressExceptions = true;
-	// END BEAN PROPERTIES
-	
-	/**
-	 * Executes the tasks, gathers statistics, and logs them
-	 * 
-	 * @param rootOutputManager
-	 * @param inputObjects
-	 * @param paramsExperiment
-	 * @return
-	 * @throws ExperimentExecutionException
-	 */
-	public void executeLogStats(
-		BoundOutputManagerRouteErrors rootOutputManager,
-		List<T> inputObjects,
-		ParametersExperiment paramsExperiment
-	) throws ExperimentExecutionException {
-		TaskStatistics stats = execute(rootOutputManager, inputObjects, paramsExperiment);
-		
-		if (paramsExperiment.isDetailedLogging()) {
-			logStats(stats, paramsExperiment);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private Task<T, S> task;
 
-		// This is a bit hacky. If the underlying task inherit from IReplaceTask then, rather than directly
-		//  replacing the task, we call this method. In effect, this allows skipping of the task that is replaced.
-		if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
-			((IReplaceTask<T,S>) this.task).replaceTask(taskToReplace);
-		} else {
-			// If not, then we replace the task directly
-			this.task = taskToReplace;
-		}
-	}
-	
-	/** Is an input-object compatible with this particular task? */
-	public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
-		return task.isInputObjectCompatibleWith(inputObjectClass);
-	}
-	
-	/** Is the execution-time of the task per-input expected to be very quick to execute? */
-	public boolean hasVeryQuickPerInputExecution() {
-		return task.hasVeryQuickPerInputExecution();
-	}
-	
-	/**
-	 * The job processor is expected to remove items from the inputObjects List as they are consumed
-	 * so as to allow garbage-collection of these items before all jobs are processed (as the list might
-	 * be quite large).
-	 * 
-	 * @param rootOutputManager
-	 * @param inputObjects
-	 * @param paramsExperiment
-	 * @return
-	 * @throws ExperimentExecutionException
-	 */
-	protected abstract TaskStatistics execute(
-		BoundOutputManagerRouteErrors rootOutputManager,
-		List<T> inputObjects,
-		ParametersExperiment paramsExperiment
-	) throws ExperimentExecutionException;
-		
-	protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {
-		return OptionalUtilities.createFromFlag(
-			paramsExperiment.isDetailedLogging(),
-			paramsExperiment::getLoggerExperiment
-		);
-	}
-		
-	private static void logStats( TaskStatistics stats, ParametersExperiment paramsExperiment ) {
-		StatisticsLogger statisticsLogger = new StatisticsLogger(
-			paramsExperiment.getLoggerExperiment()
-		);
-		statisticsLogger.logTextualMessage(stats);		
-	}
+    @BeanField @Getter @Setter private boolean suppressExceptions = true;
+    // END BEAN PROPERTIES
+
+    /**
+     * Executes the tasks, gathers statistics, and logs them
+     *
+     * @param rootOutputManager
+     * @param inputObjects
+     * @param paramsExperiment
+     * @return
+     * @throws ExperimentExecutionException
+     */
+    public void executeLogStats(
+            BoundOutputManagerRouteErrors rootOutputManager,
+            List<T> inputObjects,
+            ParametersExperiment paramsExperiment)
+            throws ExperimentExecutionException {
+        TaskStatistics stats = execute(rootOutputManager, inputObjects, paramsExperiment);
+
+        if (paramsExperiment.isDetailedLogging()) {
+            logStats(stats, paramsExperiment);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
+
+        // This is a bit hacky. If the underlying task inherit from IReplaceTask then, rather than
+        // directly
+        //  replacing the task, we call this method. In effect, this allows skipping of the task
+        // that is replaced.
+        if (IReplaceTask.class.isAssignableFrom(this.task.getClass())) {
+            ((IReplaceTask<T, S>) this.task).replaceTask(taskToReplace);
+        } else {
+            // If not, then we replace the task directly
+            this.task = taskToReplace;
+        }
+    }
+
+    /** Is an input-object compatible with this particular task? */
+    public boolean isInputObjectCompatibleWith(Class<? extends InputFromManager> inputObjectClass) {
+        return task.isInputObjectCompatibleWith(inputObjectClass);
+    }
+
+    /** Is the execution-time of the task per-input expected to be very quick to execute? */
+    public boolean hasVeryQuickPerInputExecution() {
+        return task.hasVeryQuickPerInputExecution();
+    }
+
+    /**
+     * The job processor is expected to remove items from the inputObjects List as they are consumed
+     * so as to allow garbage-collection of these items before all jobs are processed (as the list
+     * might be quite large).
+     *
+     * @param rootOutputManager
+     * @param inputObjects
+     * @param paramsExperiment
+     * @return
+     * @throws ExperimentExecutionException
+     */
+    protected abstract TaskStatistics execute(
+            BoundOutputManagerRouteErrors rootOutputManager,
+            List<T> inputObjects,
+            ParametersExperiment paramsExperiment)
+            throws ExperimentExecutionException;
+
+    protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {
+        return OptionalUtilities.createFromFlag(
+                paramsExperiment.isDetailedLogging(), paramsExperiment::getLoggerExperiment);
+    }
+
+    private static void logStats(TaskStatistics stats, ParametersExperiment paramsExperiment) {
+        StatisticsLogger statisticsLogger =
+                new StatisticsLogger(paramsExperiment.getLoggerExperiment());
+        statisticsLogger.logTextualMessage(stats);
+    }
 }
-

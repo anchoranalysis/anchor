@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.task;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.experiment.task;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,9 @@ package org.anchoranalysis.experiment.task;
  * #L%
  */
 
-import java.nio.file.Path;
+package org.anchoranalysis.experiment.task;
 
+import java.nio.file.Path;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
@@ -36,53 +35,55 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 class BoundContextSpecify implements BoundIOContext {
-	
-	private ExperimentExecutionArguments experimentArguments;
-	private BoundOutputManagerRouteErrors outputManager;
-	
-	private StatefulMessageLogger messageLogger;
-	private Logger logger;	// Always related to the above two fields
-	
-	public BoundContextSpecify(
-		ExperimentExecutionArguments experimentArguments,
-		BoundOutputManagerRouteErrors outputManager,
-		StatefulMessageLogger logger,
-		ErrorReporter errorReporter
-	) {
-		super();
-		this.experimentArguments = experimentArguments;
-		this.outputManager = outputManager;
-		
-		this.messageLogger = logger;
-		this.logger = new Logger(logger, errorReporter);
-	}
-	
-	@Override
-	public Path getModelDirectory() {
-		return experimentArguments.getModelDirectory();
-	}
 
-	@Override
-	public boolean isDebugEnabled() {
-		return experimentArguments.isDebugModeEnabled();
-	}
-	
-	@Override
-	public BoundOutputManagerRouteErrors getOutputManager() {
-		return outputManager;
-	}
-	
-	@Override
-	public Logger getLogger() {
-		return logger;
-	}
+    private ExperimentExecutionArguments experimentArguments;
+    private BoundOutputManagerRouteErrors outputManager;
 
-	/** Exposed as {@link StatefulMessageLogger} rather than as {@link MessageLogger} that is found in {@link Logger} */
-	public StatefulMessageLogger getStatefulLogReporter() {
-		return messageLogger;
-	}
+    private StatefulMessageLogger messageLogger;
+    private Logger logger; // Always related to the above two fields
 
-	public ExperimentExecutionArguments getExperimentArguments() {
-		return experimentArguments;
-	}
+    public BoundContextSpecify(
+            ExperimentExecutionArguments experimentArguments,
+            BoundOutputManagerRouteErrors outputManager,
+            StatefulMessageLogger logger,
+            ErrorReporter errorReporter) {
+        super();
+        this.experimentArguments = experimentArguments;
+        this.outputManager = outputManager;
+
+        this.messageLogger = logger;
+        this.logger = new Logger(logger, errorReporter);
+    }
+
+    @Override
+    public Path getModelDirectory() {
+        return experimentArguments.getModelDirectory();
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return experimentArguments.isDebugModeEnabled();
+    }
+
+    @Override
+    public BoundOutputManagerRouteErrors getOutputManager() {
+        return outputManager;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return logger;
+    }
+
+    /**
+     * Exposed as {@link StatefulMessageLogger} rather than as {@link MessageLogger} that is found
+     * in {@link Logger}
+     */
+    public StatefulMessageLogger getStatefulLogReporter() {
+        return messageLogger;
+    }
+
+    public ExperimentExecutionArguments getExperimentArguments() {
+        return experimentArguments;
+    }
 }

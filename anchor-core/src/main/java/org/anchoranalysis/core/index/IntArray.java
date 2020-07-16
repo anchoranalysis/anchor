@@ -12,10 +12,10 @@ package org.anchoranalysis.core.index;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,34 +26,31 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-
 import java.io.Serializable;
 
 // Wrapper for int[] array
 public class IntArray implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private int[] arr;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public IntArray() {
-		super();
-		this.arr = new int[]{};
-	}
-	
-	public IntArray(int[] arr) {
-		super();
-		this.arr = arr;
-	}
+    private int[] arr;
 
-	public int[] getArr() {
-		return arr;
-	}
+    public IntArray() {
+        super();
+        this.arr = new int[] {};
+    }
 
-	public void setArr(int[] arr) {
-		this.arr = arr;
-	}
+    public IntArray(int[] arr) {
+        super();
+        this.arr = arr;
+    }
+
+    public int[] getArr() {
+        return arr;
+    }
+
+    public void setArr(int[] arr) {
+        this.arr = arr;
+    }
 }

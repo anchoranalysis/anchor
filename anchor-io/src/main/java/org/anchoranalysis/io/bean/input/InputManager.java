@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.input;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,23 +24,21 @@ package org.anchoranalysis.io.bean.input;
  * #L%
  */
 
+package org.anchoranalysis.io.bean.input;
 
 import java.util.List;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Base class for describing the input to an experiment (i.e. which files etc. form the source of the
- *   experimenent)
- * 
- * @author Owen Feehan
+ * Base class for describing the input to an experiment (i.e. which files etc. form the source of
+ * the experimenent)
  *
+ * @author Owen Feehan
  * @param <T> input-type
  */
 public abstract class InputManager<T extends InputFromManager> extends AnchorBean<InputManager<T>> {
 
-	public abstract List<T> inputObjects(InputManagerParams params) throws AnchorIOException;
-
+    public abstract List<T> inputObjects(InputManagerParams params) throws AnchorIOException;
 }

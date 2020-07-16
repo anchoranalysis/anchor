@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,91 +24,93 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * #L%
  */
 
+package org.anchoranalysis.io.bioformats.bean.options;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import loci.formats.IFormatReader;
 
 public class Default extends ReadOptions {
 
+    // START BEAN FIELDS
+    // END BEAN FIELDS
 
-	
-	
-	// START BEAN FIELDS
-	// END BEAN FIELDS
-	
-	@Override
-	public int sizeT(IFormatReader reader) {
-		return reader.getSizeT();
-	}
-	
-	@Override
-	public int sizeZ(IFormatReader reader) {
-		return reader.getSizeZ();
-	}
-	
-	@Override
-	public int sizeC(IFormatReader reader) {
-		return reader.getSizeC();
-	}
-	
-	@Override
-	public boolean isRGB(IFormatReader reader) {
-		return reader.isRGB();
-	}
-	
-	@Override
-	public int effectiveBitsPerPixel(IFormatReader reader) {
-		Object bitDepth = reader.getMetadataValue("Acquisition Bit Depth");
-		if (bitDepth!=null) {
-			return Integer.valueOf( (String) bitDepth);
-		} else {
-			return reader.getBitsPerPixel();
-		}
-	}
-	
-	@Override
-	public int chnlsPerByteArray(IFormatReader reader) {
-		return reader.getRGBChannelCount();
-	}
+    @Override
+    public int sizeT(IFormatReader reader) {
+        return reader.getSizeT();
+    }
 
-	@Override
-	public Optional<List<String>> determineChannelNames(IFormatReader reader) {
-		
-		String formatName = reader.getFormat();
-		if (formatName.equals("Zeiss CZI")) {
-			Optional<List<String>> names = determineChannelNamesWithPrefix(reader, "Metadata DisplaySetting Channels Channel ShortName ");
-			
-			// We try again
-			if (!names.isPresent()) {
-				names = determineChannelNamesWithPrefix(reader, "Metadata Experiment ExperimentBlocks AcquisitionBlock MultiTrackSetup Track Channels Channel FluorescenceDye ShortName ");
-			}
-			
-			return names;
-		} else if (formatName.equals("Zeiss Vision Image (ZVI)")) {
-			return determineChannelNamesWithPrefix(reader, "Channel Name ");
-		}
-		return Optional.empty();
-	}
-	
+    @Override
+    public int sizeZ(IFormatReader reader) {
+        return reader.getSizeZ();
+    }
 
-	private static Optional<List<String>> determineChannelNamesWithPrefix( IFormatReader reader, String prefixString ) {
-		
-		int numChnl = reader.getSizeC();
-		
-		ArrayList<String> names = new ArrayList<>();
-		for( int i=0; i<numChnl; i++ ) {
-			Object o = reader.getMetadataValue(prefixString + i);
-			if (o==null) {
-				return Optional.empty();
-			}
-			if (!(o instanceof String)) {
-				return Optional.empty();
-			}
-			names.add( (String) o );
-		}
-		return Optional.of(names);
-	}
+    @Override
+    public int sizeC(IFormatReader reader) {
+        return reader.getSizeC();
+    }
 
+    @Override
+    public boolean isRGB(IFormatReader reader) {
+        return reader.isRGB();
+    }
+
+    @Override
+    public int effectiveBitsPerPixel(IFormatReader reader) {
+        Object bitDepth = reader.getMetadataValue("Acquisition Bit Depth");
+        if (bitDepth != null) {
+            return Integer.valueOf((String) bitDepth);
+        } else {
+            return reader.getBitsPerPixel();
+        }
+    }
+
+    @Override
+    public int chnlsPerByteArray(IFormatReader reader) {
+        return reader.getRGBChannelCount();
+    }
+
+    @Override
+    public Optional<List<String>> determineChannelNames(IFormatReader reader) {
+
+        String formatName = reader.getFormat();
+        if (formatName.equals("Zeiss CZI")) {
+            Optional<List<String>> names =
+                    determineChannelNamesWithPrefix(
+                            reader, "Metadata DisplaySetting Channels Channel ShortName ");
+
+            // We try again
+            if (!names.isPresent()) {
+                names =
+                        determineChannelNamesWithPrefix(
+                                reader,
+                                "Metadata Experiment ExperimentBlocks AcquisitionBlock MultiTrackSetup Track Channels Channel FluorescenceDye ShortName ");
+            }
+
+            return names;
+        } else if (formatName.equals("Zeiss Vision Image (ZVI)")) {
+            return determineChannelNamesWithPrefix(reader, "Channel Name ");
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<List<String>> determineChannelNamesWithPrefix(
+            IFormatReader reader, String prefixString) {
+
+        int numChnl = reader.getSizeC();
+
+        ArrayList<String> names = new ArrayList<>();
+        for (int i = 0; i < numChnl; i++) {
+            Object o = reader.getMetadataValue(prefixString + i);
+            if (o == null) {
+                return Optional.empty();
+            }
+            if (!(o instanceof String)) {
+                return Optional.empty();
+            }
+            names.add((String) o);
+        }
+        return Optional.of(names);
+    }
 }

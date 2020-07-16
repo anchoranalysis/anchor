@@ -1,16 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.addcriteria;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,39 +24,51 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-/** If one arbitrarily point overlaps between two MarkPointList then TRUE, otherwise FALSE
- * 
- *  This is useful for mutually exclusive sets of points, where iff one arbitrary point intersects with
- *    another set, then they must be identical.
- *  */
+/**
+ * If one arbitrarily point overlaps between two MarkPointList then TRUE, otherwise FALSE
+ *
+ * <p>This is useful for mutually exclusive sets of points, where iff one arbitrary point intersects
+ * with another set, then they must be identical.
+ */
 public class ArbitraryPointCommon extends AddCriteriaPair {
-	
-	@Override
-	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
-			
-		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
-		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
-		
-		// If their bounding boxes don't intersect, they cannot possibly have an overlapping point
-		if (!bbox1.intersection().existsWith(bbox2)) {
-			return false;
-		}
 
-		MarkPointList mark1Cast = (MarkPointList) mark1.getMark();
-		MarkPointList mark2Cast = (MarkPointList) mark2.getMark();
-		
-		// Check for intersection of an arbitrary point
-		return mark2Cast.getPoints().contains( mark1Cast.getPoints().get(0) );
-	}
+    @Override
+    public boolean includeMarks(
+            VoxelizedMarkMemo mark1,
+            VoxelizedMarkMemo mark2,
+            ImageDimensions dimensions,
+            Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
+            boolean do3D)
+            throws IncludeMarksFailureException {
 
-	@Override
-	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
-		return Optional.empty();
-	}
+        BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dimensions);
+        BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dimensions);
+
+        // If their bounding boxes don't intersect, they cannot possibly have an overlapping point
+        if (!bbox1.intersection().existsWith(bbox2)) {
+            return false;
+        }
+
+        MarkPointList mark1Cast = (MarkPointList) mark1.getMark();
+        MarkPointList mark2Cast = (MarkPointList) mark2.getMark();
+
+        // Check for intersection of an arbitrary point
+        return mark2Cast.getPoints().contains(mark1Cast.getPoints().get(0));
+    }
+
+    @Override
+    public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
+        return Optional.empty();
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.namestyle;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.io.namestyle;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,47 +24,46 @@ package org.anchoranalysis.io.namestyle;
  * #L%
  */
 
+package org.anchoranalysis.io.namestyle;
 
 public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4582344790084798682L;
-	
-	private String outputFormatString;
-	
-	public StringSuffixOutputNameStyle() {
-		// Here as the empty constructor is needed for deserialization
-	}
-	
-	public StringSuffixOutputNameStyle(String outputName, String outputFormatString) {
-		super(outputName);
-		this.outputFormatString = outputFormatString;
-	}
-	
-	private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
-		super(src);
-	}
-	
-	@Override
-	protected String nameFromOutputFormatString(String outputFormatString, String index) {
-		return String.format( outputFormatString, index );
-	}
+    /** */
+    private static final long serialVersionUID = 4582344790084798682L;
 
-	@Override
-	public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
-		// Number-of-digits is ignored and not relevant
-		return duplicate();
-	}
+    private String outputFormatString;
 
-	@Override
-	public IndexableOutputNameStyle duplicate() {
-		return new StringSuffixOutputNameStyle(this);
-	}
+    public StringSuffixOutputNameStyle() {
+        // Here as the empty constructor is needed for deserialization
+    }
 
-	@Override
-	protected String outputFormatString() {
-		return outputFormatString;
-	}
+    public StringSuffixOutputNameStyle(String outputName, String outputFormatString) {
+        super(outputName);
+        this.outputFormatString = outputFormatString;
+    }
+
+    private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
+        super(src);
+    }
+
+    @Override
+    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+        return String.format(outputFormatString, index);
+    }
+
+    @Override
+    public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
+        // Number-of-digits is ignored and not relevant
+        return duplicate();
+    }
+
+    @Override
+    public IndexableOutputNameStyle duplicate() {
+        return new StringSuffixOutputNameStyle(this);
+    }
+
+    @Override
+    protected String outputFormatString() {
+        return outputFormatString;
+    }
 }

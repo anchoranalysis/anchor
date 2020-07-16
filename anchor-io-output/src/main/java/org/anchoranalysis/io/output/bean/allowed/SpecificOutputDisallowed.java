@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.output.bean.allowed;
-
-import org.anchoranalysis.bean.StringSet;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import org.anchoranalysis.bean.StringSet;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,35 +24,25 @@ import org.anchoranalysis.bean.StringSet;
  * #L%
  */
 
+package org.anchoranalysis.io.output.bean.allowed;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class SpecificOutputDisallowed extends OutputAllowed {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StringSet outputsDisallowed;
-	// END BEAN PROPERTIES
-	
-	public SpecificOutputDisallowed() {
-		
-	}
-	
-	public SpecificOutputDisallowed( StringSet outputsDisallowed ) {
-		this.outputsDisallowed = outputsDisallowed;
-	}
-	
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return !outputsDisallowed.contains(outputName);
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private StringSet outputsDisallowed;
+    // END BEAN PROPERTIES
 
-	public StringSet getOutputsDisallowed() {
-		return outputsDisallowed;
-	}
-
-	public void setOutputsDisallowed(StringSet outputsDisallowed) {
-		this.outputsDisallowed = outputsDisallowed;
-	}
-
+    @Override
+    public boolean isOutputAllowed(String outputName) {
+        return !outputsDisallowed.contains(outputName);
+    }
 }

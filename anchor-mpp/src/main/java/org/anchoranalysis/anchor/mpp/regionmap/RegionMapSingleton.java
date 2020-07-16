@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.regionmap;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.mpp.regionmap;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,8 @@ package org.anchoranalysis.anchor.mpp.regionmap;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.regionmap;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipAnd;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
@@ -33,20 +33,28 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 // A Default RegionMap
 public class RegionMapSingleton {
 
-	private static RegionMap regionMap = null;
-	
-	private RegionMapSingleton() {}
-	
-	public static synchronized RegionMap instance() {
-		if (regionMap==null) {
-			regionMap = new RegionMap();
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_INSIDE) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_OUTSIDE) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE_INNER) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE) );
-		}
-		return regionMap;
-	}
+    private static RegionMap regionMap = null;
+
+    private RegionMapSingleton() {}
+
+    public static synchronized RegionMap instance() {
+        if (regionMap == null) {
+            regionMap = new RegionMap();
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_INSIDE));
+            regionMap.getList().add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL));
+            regionMap.getList().add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE));
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_OUTSIDE));
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE_INNER));
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE));
+        }
+        return regionMap;
+    }
 }

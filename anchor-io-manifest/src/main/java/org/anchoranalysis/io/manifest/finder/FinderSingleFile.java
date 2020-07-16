@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.manifest.finder;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,47 +24,51 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.io.manifest.finder;
+
+import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 
 public abstract class FinderSingleFile implements Finder {
 
-	private Optional<FileWrite> foundFile = Optional.empty();
-	
-	private ErrorReporter errorReporter;
-	
-	// A simple method to override in each finder that is based upon finding a single file
-	protected abstract Optional<FileWrite> findFile( ManifestRecorder manifestRecorder ) throws MultipleFilesException;
-	
-	public FinderSingleFile( ErrorReporter errorReporter ) {
-		this.errorReporter = errorReporter;
-	}
-	
-	@Override
-	public final boolean doFind( ManifestRecorder manifestRecorder ) {
-		
-		if (manifestRecorder==null) {
-			return false;
-		}
-		
-		try {
-			foundFile = findFile(manifestRecorder);
-			return exists();
-		} catch (MultipleFilesException e) {
-			if (errorReporter!=null) {
-				errorReporter.recordError(FinderSingleFile.class, e);
-			}
-			return false;
-		}
-	}
-	
-	@Override
-	public final boolean exists() {
-		return foundFile.isPresent();
-	}
+    private Optional<FileWrite> foundFile = Optional.empty();
 
-	protected FileWrite getFoundFile() {
-		return foundFile.get();
-	}
+    private ErrorReporter errorReporter;
+
+    // A simple method to override in each finder that is based upon finding a single file
+    protected abstract Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
+            throws MultipleFilesException;
+
+    public FinderSingleFile(ErrorReporter errorReporter) {
+        this.errorReporter = errorReporter;
+    }
+
+    @Override
+    public final boolean doFind(ManifestRecorder manifestRecorder) {
+
+        if (manifestRecorder == null) {
+            return false;
+        }
+
+        try {
+            foundFile = findFile(manifestRecorder);
+            return exists();
+        } catch (MultipleFilesException e) {
+            if (errorReporter != null) {
+                errorReporter.recordError(FinderSingleFile.class, e);
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public final boolean exists() {
+        return foundFile.isPresent();
+    }
+
+    protected FileWrite getFoundFile() {
+        return foundFile.get();
+    }
 }

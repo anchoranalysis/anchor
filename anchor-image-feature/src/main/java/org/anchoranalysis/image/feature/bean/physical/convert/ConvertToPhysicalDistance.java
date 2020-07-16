@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.physical.convert;
-
-/*
+/*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +24,11 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * #L%
  */
 
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
@@ -39,37 +41,35 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-// 
+//
 @NoArgsConstructor
 public class ConvertToPhysicalDistance<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
 
-	// START BEAN PROPERTIES
-	
-	/** Direction of the distance being converted, defaults to a unit vector along the X-axis */
-	@BeanField @Getter @Setter
-	private DirectionVectorBean directionVector = new DirectionVectorBean(1.0, 0, 0);
-	// END BEAN PROPERTIES
-	
-	private DirectionVector dv;
-	
-	public ConvertToPhysicalDistance( Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector ) {
-		super(feature, unitType);
-		this.directionVector = new DirectionVectorBean(directionVector);
-	}
-	
-	@Override
-	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-		super.beforeCalc(paramsInit);
-		dv = directionVector.createVector();
-	}
-	
-	@Override
-	protected double convertToPhysical(double value, ImageResolution res) throws FeatureCalcException {
-		// We use arbitrary direction as everything should be the same in a isometric XY plane
-		return ImageUnitConverter.convertToPhysicalDistance(value, res, dv );
-	}
+    // START BEAN PROPERTIES
+
+    /** Direction of the distance being converted, defaults to a unit vector along the X-axis */
+    @BeanField @Getter @Setter
+    private DirectionVectorBean directionVector = new DirectionVectorBean(1.0, 0, 0);
+    // END BEAN PROPERTIES
+
+    private DirectionVector dv;
+
+    public ConvertToPhysicalDistance(
+            Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector) {
+        super(feature, unitType);
+        this.directionVector = new DirectionVectorBean(directionVector);
+    }
+
+    @Override
+    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+        super.beforeCalc(paramsInit);
+        dv = directionVector.createVector();
+    }
+
+    @Override
+    protected double convertToPhysical(double value, ImageResolution res)
+            throws FeatureCalcException {
+        // We use arbitrary direction as everything should be the same in a isometric XY plane
+        return ImageUnitConverter.convertToPhysicalDistance(value, res, dv);
+    }
 }

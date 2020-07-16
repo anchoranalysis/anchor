@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.kernel.proposer;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.mpp.sgmn.kernel.proposer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,59 +24,58 @@ package org.anchoranalysis.mpp.sgmn.kernel.proposer;
  * #L%
  */
 
+package org.anchoranalysis.mpp.sgmn.kernel.proposer;
 
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 
-
 /**
  * A kernel with an associated weight.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type being modified by the kernel.
  */
 public class WeightedKernel<T> {
 
-	private Kernel<T> kernel = null;
-	
-	private double weight = 0;
-	
-	private String name;
-	
-	/** 
-	 * Constructor for single kernel factory
-	 * 
-	 * @param kernel the kernel
-	 * @param weight an associated weight (a positive floating-point number)
-	 **/
-	public WeightedKernel(Kernel<T> kernel, double weight) {
-		this.setKernel(kernel);
-		this.weight = weight;
-		this.name = kernel.getBeanName();
-	}
-	
-	public double getWeight() {
-		return this.weight;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("weight=%f, factory=%s", this.weight, this.kernel.toString() );
-	}
+    private Kernel<T> kernel = null;
 
-	public Kernel<T> getKernel() {
-		return kernel;
-	}
+    private double weight = 0;
 
-	public void setKernel(Kernel<T> kernel) {
-		this.kernel = kernel;
-	}
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * Constructor for single kernel factory
+     *
+     * @param kernel the kernel
+     * @param weight an associated weight (a positive floating-point number)
+     */
+    public WeightedKernel(Kernel<T> kernel, double weight) {
+        this.setKernel(kernel);
+        this.weight = weight;
+        this.name = kernel.getBeanName();
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public double getWeight() {
+        return this.weight;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("weight=%f, factory=%s", this.weight, this.kernel.toString());
+    }
+
+    public Kernel<T> getKernel() {
+        return kernel;
+    }
+
+    public void setKernel(Kernel<T> kernel) {
+        this.kernel = kernel;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

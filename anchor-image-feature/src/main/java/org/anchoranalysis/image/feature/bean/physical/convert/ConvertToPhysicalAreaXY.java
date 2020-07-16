@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.physical.convert;
-
-/*
+/*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * #L%
  */
 
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
@@ -35,9 +34,10 @@ import org.anchoranalysis.image.extent.ImageResolution;
 // converts a feature to a physical distance in a XY place that is isometric
 public class ConvertToPhysicalAreaXY<T extends FeatureInputWithRes> extends FeatureConvertRes<T> {
 
-	@Override
-	protected double convertToPhysical(double value, ImageResolution res) throws FeatureCalcException {
-		// We use arbitrary direction as everything should be the same in a isometric XY plane
-		return ImageUnitConverter.convertToPhysicalArea(value, res);
-	}
+    @Override
+    protected double convertToPhysical(double value, ImageResolution res)
+            throws FeatureCalcException {
+        // We use arbitrary direction as everything should be the same in a isometric XY plane
+        return ImageUnitConverter.convertToPhysicalArea(value, res);
+    }
 }

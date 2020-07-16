@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.annotation;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.bean.annotation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,20 +24,19 @@ package org.anchoranalysis.bean.annotation;
  * #L%
  */
 
+package org.anchoranalysis.bean.annotation;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates a default bean-instance for a value, which is used if user has
- *  not explicitly set another value
- *  
- *  A corresponding default must be set in the defaults passed to the initialize bean route
- *   in {\link org.anchoranalysis.bean.AnchorBean}
- *  
- * @author Owen Feehan
+ * Indicates a default bean-instance for a value, which is used if user has not explicitly set
+ * another value
  *
+ * <p>A corresponding default must be set in the defaults passed to the initialize bean route in
+ * {\link org.anchoranalysis.bean.AnchorBean}
+ *
+ * @author Owen Feehan
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DefaultInstance {
-
-}
+public @interface DefaultInstance {}

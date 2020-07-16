@@ -1,12 +1,8 @@
-package org.anchoranalysis.core.name.store;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
- * anchor-bean
+ * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,9 +24,10 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.core.name.store;
 
+import java.util.Optional;
 import java.util.Set;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.name.provider.NameValueSet;
@@ -38,33 +35,30 @@ import org.anchoranalysis.core.name.value.SimpleNameValue;
 
 /**
  * Evaluates items via their Getter as soon as they are added
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> item-type in the store
- *  */
+ */
 public class EagerEvaluationStore<T> implements NamedProviderStore<T> {
 
-	private NameValueSet<T> delegate = new NameValueSet<>();
+    private NameValueSet<T> delegate = new NameValueSet<>();
 
-	@Override
-	public Set<String> keys() {
-		return delegate.keys();
-	}
+    @Override
+    public Set<String> keys() {
+        return delegate.keys();
+    }
 
-	@Override
-	public void add(String name, Operation<T,OperationFailedException> getter) throws OperationFailedException {
+    @Override
+    public void add(String name, Operation<T, OperationFailedException> getter)
+            throws OperationFailedException {
 
-		SimpleNameValue<T> item = new SimpleNameValue<>(
-			name,
-			getter.doOperation()
-		);
-		
-		delegate.add(item);
-	}
+        SimpleNameValue<T> item = new SimpleNameValue<>(name, getter.doOperation());
 
-	@Override
-	public Optional<T> getOptional(String key) {
-		return delegate.getOptional(key);
-	}
+        delegate.add(item);
+    }
+
+    @Override
+    public Optional<T> getOptional(String key) {
+        return delegate.getOptional(key);
+    }
 }

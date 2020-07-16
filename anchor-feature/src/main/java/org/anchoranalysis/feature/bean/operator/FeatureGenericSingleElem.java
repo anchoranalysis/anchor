@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.operator;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.bean.operator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,22 +24,25 @@ package org.anchoranalysis.feature.bean.operator;
  * #L%
  */
 
+package org.anchoranalysis.feature.bean.operator;
+
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A single-element feature that accepts the most generic of parameters {#link {@link FeatureInput}}
- * 
+ *
  * @author Owen Feehan
  * @param T input-type
  */
-public abstract class FeatureGenericSingleElem<T extends FeatureInput> extends FeatureSingleElem<T, T> {
+public abstract class FeatureGenericSingleElem<T extends FeatureInput>
+        extends FeatureSingleElem<T, T> {
 
-	public FeatureGenericSingleElem() {
-		super();
-	}
+    public FeatureGenericSingleElem() {
+        super();
+    }
 
-	public FeatureGenericSingleElem(Feature<T> feature) {
-		super(feature);
-	}
+    public FeatureGenericSingleElem(Feature<T> feature) {
+        super(feature);
+    }
 }

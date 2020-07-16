@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.cache.horizontal;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.session.cache.horizontal;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.session.cache.horizontal;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -40,72 +40,71 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-class ResettableCachedCalculator<T extends FeatureInput> implements FeatureSessionCacheCalculator<T> {
+class ResettableCachedCalculator<T extends FeatureInput>
+        implements FeatureSessionCacheCalculator<T> {
 
-	private ResettableSet<FeatureCalculation<?,T>> setCalculation = new ResettableSet<>(false);
-	private ResettableSet<CacheableCalculationMap<?,T,?,FeatureCalcException>> setCalculationMap = new ResettableSet<>(false);
-	
-	private Logger logger;
-	private SharedFeatureSet<T> sharedFeatures;
-	
-	public ResettableCachedCalculator(SharedFeatureSet<T> sharedFeatures) {
-		super();
-		this.sharedFeatures = sharedFeatures;
-	}
-	
-	public void init( Logger logger ) {
-		this.logger = logger;
-	}
-	
-	@Override
-	public double calc(Feature<T> feature, SessionInput<T> input )
-			throws FeatureCalcException {
-		double val = feature.calcCheckInit(input);
-		if (Double.isNaN(val)) {
-			logger.messageLogger().logFormatted("WARNING: NaN returned from feature %s", feature.getFriendlyName() );
-		}
-		return val;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public <U> ResolvedCalculation<U,T> search(FeatureCalculation<U,T> calculation) {
-		return new ResolvedCalculation<>(
-			(CacheableCalculation<U,T,FeatureCalcException>) setCalculation.findOrAdd(calculation,null)
-		);
-	}
+    private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);
+    private ResettableSet<CacheableCalculationMap<?, T, ?, FeatureCalcException>>
+            setCalculationMap = new ResettableSet<>(false);
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <S, U> ResolvedCalculationMap<S,T,U> search(
-		CacheableCalculationMap<S,T,U,FeatureCalcException> calculation
-	) {
-		return new ResolvedCalculationMap<>( 
-			(CacheableCalculationMap<S,T,U,FeatureCalcException>) setCalculationMap.findOrAdd(calculation,null)
-		);
-	}
+    private Logger logger;
+    private SharedFeatureSet<T> sharedFeatures;
 
-	@Override
-	public double calcFeatureByID(String id, SessionInput<T> input)
-			throws FeatureCalcException {
-		try {
-			Feature<T> feature = sharedFeatures.getException(id);
-			return calc( feature, input );
-		} catch (NamedProviderGetException e) {
-			throw new FeatureCalcException(
-				String.format("Cannot locate feature with resolved-ID: %s", id ),
-				e.summarize()
-			);
-		}
-	}
-	
-	public void invalidate() {
-		setCalculation.invalidate();
-		setCalculationMap.invalidate();
-	}
+    public ResettableCachedCalculator(SharedFeatureSet<T> sharedFeatures) {
+        super();
+        this.sharedFeatures = sharedFeatures;
+    }
 
-	@Override
-	public String resolveFeatureID(String id) {
-		return id;
-	}
+    public void init(Logger logger) {
+        this.logger = logger;
+    }
+
+    @Override
+    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalcException {
+        double val = feature.calcCheckInit(input);
+        if (Double.isNaN(val)) {
+            logger.messageLogger()
+                    .logFormatted(
+                            "WARNING: NaN returned from feature %s", feature.getFriendlyName());
+        }
+        return val;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <U> ResolvedCalculation<U, T> search(FeatureCalculation<U, T> calculation) {
+        return new ResolvedCalculation<>(
+                (CacheableCalculation<U, T, FeatureCalcException>)
+                        setCalculation.findOrAdd(calculation, null));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <S, U> ResolvedCalculationMap<S, T, U> search(
+            CacheableCalculationMap<S, T, U, FeatureCalcException> calculation) {
+        return new ResolvedCalculationMap<>(
+                (CacheableCalculationMap<S, T, U, FeatureCalcException>)
+                        setCalculationMap.findOrAdd(calculation, null));
+    }
+
+    @Override
+    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalcException {
+        try {
+            Feature<T> feature = sharedFeatures.getException(id);
+            return calc(feature, input);
+        } catch (NamedProviderGetException e) {
+            throw new FeatureCalcException(
+                    String.format("Cannot locate feature with resolved-ID: %s", id), e.summarize());
+        }
+    }
+
+    public void invalidate() {
+        setCalculation.invalidate();
+        setCalculationMap.invalidate();
+    }
+
+    @Override
+    public String resolveFeatureID(String id) {
+        return id;
+    }
 }

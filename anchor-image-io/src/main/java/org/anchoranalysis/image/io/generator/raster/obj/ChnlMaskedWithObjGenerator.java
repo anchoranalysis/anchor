@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.obj;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.io.generator.raster.obj;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,10 @@ package org.anchoranalysis.image.io.generator.raster.obj;
  * #L%
  */
 
+package org.anchoranalysis.image.io.generator.raster.obj;
+
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.Channel;
@@ -44,117 +43,120 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-
 /**
  * Outputs a channel but with ONLY the pixels in a mask shown, and others set to 0.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public class ChnlMaskedWithObjGenerator extends RasterGenerator implements IterableGenerator<ObjectMask> {
+public class ChnlMaskedWithObjGenerator extends RasterGenerator
+        implements IterableGenerator<ObjectMask> {
 
-	private Channel srcChnl;
-	private ObjectMask mask = null;
-	
-	public ChnlMaskedWithObjGenerator(Channel srcChnl ) {
-		super();
-		this.srcChnl = srcChnl;
-	}
-	
-	public ChnlMaskedWithObjGenerator(ObjectMask mask, Channel srcChnl) {
-		this.mask = mask;
-		this.srcChnl = srcChnl;
-	}
+    private Channel srcChnl;
+    private ObjectMask mask = null;
 
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		
-		if (getIterableElement()==null) {
-			throw new OutputWriteFailedException("no mutable element set");
-		}
-		
-		Channel outChnl = createMaskedChnl( getIterableElement(), (Channel) srcChnl);
-		return new Stack( outChnl );
-	}
+    public ChnlMaskedWithObjGenerator(Channel srcChnl) {
+        super();
+        this.srcChnl = srcChnl;
+    }
 
-	@Override
-	public ObjectMask getIterableElement() {
-		return mask;
-	}
+    public ChnlMaskedWithObjGenerator(ObjectMask mask, Channel srcChnl) {
+        this.mask = mask;
+        this.srcChnl = srcChnl;
+    }
 
-	@Override
-	public void setIterableElement(ObjectMask element) {
-		mask = element;
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
 
-	@Override
-	public RasterGenerator getGenerator() {
-		return this;
-	}
+        if (getIterableElement() == null) {
+            throw new OutputWriteFailedException("no mutable element set");
+        }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", "maskChnl")
-		);
-	}
+        Channel outChnl = createMaskedChnl(getIterableElement(), (Channel) srcChnl);
+        return new Stack(outChnl);
+    }
 
-	@Override
-	public boolean isRGB() {
-		return false;
-	}
-	
-	/**
-	 * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the mask to 0
-	 * 
-	 * i.e. the new channel is a masked version of srcChnl
-	 * 
-	 * @param mask mask
-	 * @param srcChnl the channel to copy
-	 * @return the masked channel
-	 */
-	private static Channel createMaskedChnl( ObjectMask mask, Channel srcChnl) {
-		
-		BoundingBox bbox = mask.getBoundingBox();
-		
-		ImageDimensions newSd = new ImageDimensions(
-			bbox.extent(),
-			srcChnl.getDimensions().getRes()
-		);
-		
-		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
-		
-		byte maskOn = mask.getBinaryValuesByte().getOnByte();
-		
-		ReadableTuple3i maxGlobal = bbox.calcCornerMax();
-		Point3i pntGlobal = new Point3i();
-		Point3i pntLocal = new Point3i();
-		
-		VoxelBox<?> vbSrc = srcChnl.getVoxelBox().any(); 
-		VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
-		
-		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
-			
-			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
-			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pntGlobal.getZ());
-			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pntLocal.getZ());
-			
-			for (pntGlobal.setY(bbox.cornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
-			
-				for (pntGlobal.setX(bbox.cornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+    @Override
+    public ObjectMask getIterableElement() {
+        return mask;
+    }
 
-					if (maskIn.get()!=maskOn) {
-						continue;
-					}
-					
-					int indexGlobal = srcChnl.getDimensions().offset(pntGlobal.getX(), pntGlobal.getY());
-					pixelsOut.putInt(maskIn.position()-1, pixelsIn.getInt(indexGlobal) );
-				}
-			}
-		}
-		
-		return chnlNew;
-	}
+    @Override
+    public void setIterableElement(ObjectMask element) {
+        mask = element;
+    }
 
+    @Override
+    public RasterGenerator getGenerator() {
+        return this;
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", "maskChnl"));
+    }
+
+    @Override
+    public boolean isRGB() {
+        return false;
+    }
+
+    /**
+     * Creates a new channel, which copies voxels from srcChnl, but sets voxels outside the mask to
+     * 0
+     *
+     * <p>i.e. the new channel is a masked version of srcChnl
+     *
+     * @param mask mask
+     * @param srcChnl the channel to copy
+     * @return the masked channel
+     */
+    private static Channel createMaskedChnl(ObjectMask mask, Channel srcChnl) {
+
+        BoundingBox bbox = mask.getBoundingBox();
+
+        ImageDimensions newSd =
+                new ImageDimensions(bbox.extent(), srcChnl.getDimensions().getRes());
+
+        Channel chnlNew =
+                ChannelFactory.instance().createEmptyInitialised(newSd, srcChnl.getVoxelDataType());
+
+        byte maskOn = mask.getBinaryValuesByte().getOnByte();
+
+        ReadableTuple3i maxGlobal = bbox.calcCornerMax();
+        Point3i pointGlobal = new Point3i();
+        Point3i pointLocal = new Point3i();
+
+        VoxelBox<?> vbSrc = srcChnl.getVoxelBox().any();
+        VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
+
+        pointLocal.setZ(0);
+        for (pointGlobal.setZ(bbox.cornerMin().getZ());
+                pointGlobal.getZ() <= maxGlobal.getZ();
+                pointGlobal.incrementZ(), pointLocal.incrementZ()) {
+
+            ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
+            VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pointGlobal.getZ());
+            VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pointLocal.getZ());
+
+            for (pointGlobal.setY(bbox.cornerMin().getY());
+                    pointGlobal.getY() <= maxGlobal.getY();
+                    pointGlobal.incrementY()) {
+
+                for (pointGlobal.setX(bbox.cornerMin().getX());
+                        pointGlobal.getX() <= maxGlobal.getX();
+                        pointGlobal.incrementX()) {
+
+                    if (maskIn.get() != maskOn) {
+                        continue;
+                    }
+
+                    int indexGlobal =
+                            srcChnl.getDimensions().offset(pointGlobal.getX(), pointGlobal.getY());
+                    pixelsOut.putInt(maskIn.position() - 1, pixelsIn.getInt(indexGlobal));
+                }
+            }
+        }
+
+        return chnlNew;
+    }
 }

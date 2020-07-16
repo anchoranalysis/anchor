@@ -12,10 +12,10 @@ package org.anchoranalysis.core.index;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,32 +26,30 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-
-
-import org.anchoranalysis.core.functional.FunctionWithException;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 
-public class BoundedIndexBridge<T> implements FunctionWithException<Integer, T, GetOperationFailedException> {
-	
-	private BoundedIndexContainer<T> cntr;
-	
-	public BoundedIndexBridge(BoundedIndexContainer<T> cntr) {
-		super();
-		this.cntr = cntr;
-	}
+public class BoundedIndexBridge<T>
+        implements FunctionWithException<Integer, T, GetOperationFailedException> {
 
-	@Override
-	public T apply(Integer sourceObject) throws GetOperationFailedException {
-		int index = cntr.previousEqualIndex(sourceObject);
-		if (index==-1) {
-			throw new GetOperationFailedException("Cannot find a previousEqualIndex in the cntr");
-		}
-		return cntr.get( index );
-	}
+    private BoundedIndexContainer<T> cntr;
 
-	// Updates the cntr associated with the bridge
-	public void setCntr(BoundedIndexContainer<T> cntr) {
-		this.cntr = cntr;
-	}
+    public BoundedIndexBridge(BoundedIndexContainer<T> cntr) {
+        super();
+        this.cntr = cntr;
+    }
 
+    @Override
+    public T apply(Integer sourceObject) throws GetOperationFailedException {
+        int index = cntr.previousEqualIndex(sourceObject);
+        if (index == -1) {
+            throw new GetOperationFailedException("Cannot find a previousEqualIndex in the cntr");
+        }
+        return cntr.get(index);
+    }
+
+    // Updates the cntr associated with the bridge
+    public void setCntr(BoundedIndexContainer<T> cntr) {
+        this.cntr = cntr;
+    }
 }

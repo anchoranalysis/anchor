@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.bioformats;
-
-import static org.anchoranalysis.io.bioformats.MultiplexDataTypes.*;
-
-/*
+/*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import static org.anchoranalysis.io.bioformats.MultiplexDataTypes.*;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,12 +24,17 @@ import static org.anchoranalysis.io.bioformats.MultiplexDataTypes.*;
  * #L%
  */
 
+package org.anchoranalysis.io.bioformats;
+
+import static org.anchoranalysis.io.bioformats.MultiplexDataTypes.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import loci.formats.FormatException;
+import loci.formats.IFormatReader;
+import loci.formats.meta.IMetadata;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
@@ -53,199 +54,171 @@ import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import loci.formats.FormatException;
-import loci.formats.IFormatReader;
-import loci.formats.meta.IMetadata;
-
 public class BioformatsOpenedRaster extends OpenedRaster {
 
-	private final IFormatReader reader;
-	private final ReadOptions readOptions;
-	
-	private final IMetadata lociMetadata;
-	
-	private final int numChnl;
-	private final int sizeT;
-	private final boolean rgb;
-	private final int bitsPerPixel;
-	
-	private final Optional<List<String>> channelNames;
-	
-	private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
-		
-	/**
-	 * 
-	 * @param reader
-	 * @param lociMetadata
-	 * @param readOptions
-	 */
-	public BioformatsOpenedRaster(
-		IFormatReader reader,
-		IMetadata lociMetadata,
-		ReadOptions readOptions
-	) {
-		super();
-		this.reader = reader;
-		this.lociMetadata = lociMetadata;
-		this.readOptions = readOptions;
-		   
-		sizeT = readOptions.sizeT(reader);
-		rgb = readOptions.isRGB(reader);
-		bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
-		numChnl = readOptions.sizeC(reader);
-		
-		channelNames = readOptions.determineChannelNames(reader);
-	}
-		
-	@Override
-	public TimeSequence open(int seriesIndex, ProgressReporter progressReporter) throws RasterIOException {
-		
-		int pixelType = reader.getPixelType();
-		
-		VoxelDataType dataType = multiplexFormat(pixelType);
-		
-		return openAsType(
-			seriesIndex,
-			progressReporter,
-			dataType
-		);
-	}
-			
-	@Override
-	public int numSeries() {
-		return reader.getSeriesCount();
-	}
+    private final IFormatReader reader;
+    private final ReadOptions readOptions;
 
-	@Override
-	public int numFrames() {
-		return sizeT;
-	}
+    private final IMetadata lociMetadata;
 
-	/** Returns a list of channel-names or NULL if they are not available */
-	public Optional<List<String>> channelNames() {
-		return channelNames;
-	}
-	
-	public int numChnl() {
-		return numChnl;
-	}
-	
-	@Override
-	public int bitDepth() throws RasterIOException {
-		return bitsPerPixel;
-	}
-	
+    private final int numChnl;
+    private final int sizeT;
+    private final boolean rgb;
+    private final int bitsPerPixel;
 
-	@Override
-	public boolean isRGB() throws RasterIOException {
-		return rgb;
-	}
+    private final Optional<List<String>> channelNames;
 
-	@Override
-	public void close() throws RasterIOException {
-		try {
-			reader.close();
-		} catch (IOException e) {
-			throw new RasterIOException(e);
-		}
-	}
+    private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
 
-	@Override
-	public ImageDimensions dim(int seriesIndex) {
-		 return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
-	}
-	
-	/** Opens as a specific data-type */
-	private TimeSequence openAsType(
-		int seriesIndex,
-		ProgressReporter progressReporter,
-		VoxelDataType dataType
-	) throws RasterIOException {
+    /**
+     * @param reader
+     * @param lociMetadata
+     * @param readOptions
+     */
+    public BioformatsOpenedRaster(
+            IFormatReader reader, IMetadata lociMetadata, ReadOptions readOptions) {
+        super();
+        this.reader = reader;
+        this.lociMetadata = lociMetadata;
+        this.readOptions = readOptions;
 
-		try {
-			LOG.debug(
-				String.format("Opening series %d as %s",seriesIndex, dataType)
-			);
-			
-			LOG.debug(
-				String.format("Size T = %d; Size C = %d", sizeT, numChnl)
-			);
-			
-			reader.setSeries( seriesIndex );
-			
-			TimeSequence ts = new TimeSequence(); 
-			
-			ImageDimensions sd = dim( seriesIndex );
-			
-			// Assumes order of time first, and then channels
-			List<Channel> listAllChnls = createUninitialisedChnls(
-				sd,
-				ts,
-				multiplexVoxelDataType(dataType)
-			);
-			
-			copyBytesIntoChnls(
-				listAllChnls,
-				sd,
-				progressReporter,
-				dataType,
-				readOptions
-			);
-			
-			LOG.debug(
-				String.format("Finished opening series %d as %s with z=%d, t=%d", seriesIndex, dataType, reader.getSizeZ(), reader.getSizeT() )
-			);
-			
-			return ts;
-			
-		} catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
-			throw new RasterIOException(e);
-		}
-	}
+        sizeT = readOptions.sizeT(reader);
+        rgb = readOptions.isRGB(reader);
+        bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
+        numChnl = readOptions.sizeC(reader);
 
-	private List<Channel> createUninitialisedChnls( ImageDimensions dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
-		
-		/** A list of all channels i.e. aggregating the channels associated with each stack */
-		List<Channel> listAllChnls = new ArrayList<>();
-		
-		for( int t=0; t<sizeT; t++) {
-			Stack stack = new Stack();
-			for (int c=0; c<numChnl; c++) {
-				
-				Channel chnl = factory.createEmptyUninitialised(dim);
-				
-				stack.addChnl(chnl);
-				listAllChnls.add(chnl);
-			}
-			ts.add(stack);
-		}
-		
-		return listAllChnls;
-	}
-		
-	private void copyBytesIntoChnls(
-		List<Channel> listChnls,
-		ImageDimensions dim,
-		ProgressReporter progressReporter,
-		VoxelDataType dataType,
-		ReadOptions readOptions
-	) throws FormatException, IOException, CreateException {
+        channelNames = readOptions.determineChannelNames(reader);
+    }
 
-		// Determine what type to convert to
-		ConvertTo<?> convertTo = ConvertToFactory.create(
-			reader,
-			dataType,
-			readOptions.effectiveBitsPerPixel(reader)
-		);
-		
-		CopyConvert.copyAllFrames(
-			reader,
-			listChnls,
-			progressReporter,
-			new ImageFileShape(dim, numChnl, sizeT),
-			convertTo,
-			readOptions
-		);
-	}
+    @Override
+    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
+            throws RasterIOException {
 
+        int pixelType = reader.getPixelType();
+
+        VoxelDataType dataType = multiplexFormat(pixelType);
+
+        return openAsType(seriesIndex, progressReporter, dataType);
+    }
+
+    @Override
+    public int numSeries() {
+        return reader.getSeriesCount();
+    }
+
+    @Override
+    public int numFrames() {
+        return sizeT;
+    }
+
+    /** Returns a list of channel-names or NULL if they are not available */
+    public Optional<List<String>> channelNames() {
+        return channelNames;
+    }
+
+    public int numChnl() {
+        return numChnl;
+    }
+
+    @Override
+    public int bitDepth() throws RasterIOException {
+        return bitsPerPixel;
+    }
+
+    @Override
+    public boolean isRGB() throws RasterIOException {
+        return rgb;
+    }
+
+    @Override
+    public void close() throws RasterIOException {
+        try {
+            reader.close();
+        } catch (IOException e) {
+            throw new RasterIOException(e);
+        }
+    }
+
+    @Override
+    public ImageDimensions dim(int seriesIndex) {
+        return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
+    }
+
+    /** Opens as a specific data-type */
+    private TimeSequence openAsType(
+            int seriesIndex, ProgressReporter progressReporter, VoxelDataType dataType)
+            throws RasterIOException {
+
+        try {
+            LOG.debug(String.format("Opening series %d as %s", seriesIndex, dataType));
+
+            LOG.debug(String.format("Size T = %d; Size C = %d", sizeT, numChnl));
+
+            reader.setSeries(seriesIndex);
+
+            TimeSequence ts = new TimeSequence();
+
+            ImageDimensions sd = dim(seriesIndex);
+
+            // Assumes order of time first, and then channels
+            List<Channel> listAllChnls =
+                    createUninitialisedChnls(sd, ts, multiplexVoxelDataType(dataType));
+
+            copyBytesIntoChnls(listAllChnls, sd, progressReporter, dataType, readOptions);
+
+            LOG.debug(
+                    String.format(
+                            "Finished opening series %d as %s with z=%d, t=%d",
+                            seriesIndex, dataType, reader.getSizeZ(), reader.getSizeT()));
+
+            return ts;
+
+        } catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
+            throw new RasterIOException(e);
+        }
+    }
+
+    private List<Channel> createUninitialisedChnls(
+            ImageDimensions dimensions, TimeSequence ts, ChannelFactorySingleType factory)
+            throws IncorrectImageSizeException {
+
+        /** A list of all channels i.e. aggregating the channels associated with each stack */
+        List<Channel> listAllChnls = new ArrayList<>();
+
+        for (int t = 0; t < sizeT; t++) {
+            Stack stack = new Stack();
+            for (int c = 0; c < numChnl; c++) {
+
+                Channel chnl = factory.createEmptyUninitialised(dimensions);
+
+                stack.addChnl(chnl);
+                listAllChnls.add(chnl);
+            }
+            ts.add(stack);
+        }
+
+        return listAllChnls;
+    }
+
+    private void copyBytesIntoChnls(
+            List<Channel> listChnls,
+            ImageDimensions dimensions,
+            ProgressReporter progressReporter,
+            VoxelDataType dataType,
+            ReadOptions readOptions)
+            throws FormatException, IOException, CreateException {
+
+        // Determine what type to convert to
+        ConvertTo<?> convertTo =
+                ConvertToFactory.create(
+                        reader, dataType, readOptions.effectiveBitsPerPixel(reader));
+
+        CopyConvert.copyAllFrames(
+                reader,
+                listChnls,
+                progressReporter,
+                new ImageFileShape(dimensions, numChnl, sizeT),
+                convertTo,
+                readOptions);
+    }
 }

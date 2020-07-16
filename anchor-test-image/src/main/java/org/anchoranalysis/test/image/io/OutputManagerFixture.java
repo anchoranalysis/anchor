@@ -1,10 +1,8 @@
-package org.anchoranalysis.test.image.io;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-test-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.test.image.io;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.test.image.io;
  * #L%
  */
 
+package org.anchoranalysis.test.image.io;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -49,78 +47,77 @@ import org.anchoranalysis.test.LoggingFixture;
 
 public class OutputManagerFixture {
 
-	private OutputManagerFixture() {}
-	
-	// These operations must occur before creating TempBoundOutputManager
-	private static void globalSetup() {
-		TestReaderWriterUtilities.ensureRasterWriter();		
-	}
-	
-	public static BoundOutputManagerRouteErrors outputManagerForRouterErrors( Path pathTempFolder ) throws BindFailedException {
-		
-		ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().errorReporter();
+    private OutputManagerFixture() {}
 
-		return new BoundOutputManagerRouteErrors(
-			createBoundOutputManagerFor(pathTempFolder, errorReporter),
-			errorReporter
-		);
-	}
-	
-	public static BoundOutputManager outputManagerFor( Path pathTempFolder ) throws BindFailedException {
-		return createBoundOutputManagerFor(
-			pathTempFolder,
-			LoggingFixture.suppressedLogErrorReporter().errorReporter()
-		);
-	}
-	
-	private static BoundOutputManager createBoundOutputManagerFor( Path pathTempFolder, ErrorReporter errorReporter ) throws BindFailedException {
-		
-		globalSetup();
-				
-		OutputWriteSettings ows = new OutputWriteSettings();
-		
-		// We populate any defaults in OutputWriteSettings from our default bean factory
-		try {
-			ows.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
-		} catch (BeanMisconfiguredException e1) {
-			errorReporter.recordError(OutputManagerFixture.class, e1);
-		}
-		
-		OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
-		outputManager.setSilentlyDeleteExisting(true);
-		outputManager.setOutputWriteSettings( ows );
-		outputManager.setFilePathPrefixer( 
-			new FilePathPrefixerConstantPath(pathTempFolder)
-		);
-		
-		try {
-			return outputManager.bindRootFolder(
-				"debug",
-				new ManifestRecorder(),
-				new FilePathPrefixerParams(false, Optional.empty())
-			);
-		} catch (FilePathPrefixerException e) {
-			throw new BindFailedException(e);
-		}
-	}
+    // These operations must occur before creating TempBoundOutputManager
+    private static void globalSetup() {
+        TestReaderWriterUtilities.ensureRasterWriter();
+    }
 
-	private static class FilePathPrefixerConstantPath extends FilePathPrefixer {
-		
-		private FilePathPrefix prefix;
-		
-		public FilePathPrefixerConstantPath(Path path) {
-			prefix = new FilePathPrefix(path);
-		}
+    public static BoundOutputManagerRouteErrors outputManagerForRouterErrors(Path pathTempFolder)
+            throws BindFailedException {
 
-		@Override
-		public FilePathPrefix outFilePrefix(PathWithDescription input, String experimentIdentifier,	FilePathPrefixerParams context) {
-			return prefix;
-		}
+        ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().errorReporter();
 
-		@Override
-		public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) {
-			return prefix;
-		}
-	}
-	
+        return new BoundOutputManagerRouteErrors(
+                createBoundOutputManagerFor(pathTempFolder, errorReporter), errorReporter);
+    }
+
+    public static BoundOutputManager outputManagerFor(Path pathTempFolder)
+            throws BindFailedException {
+        return createBoundOutputManagerFor(
+                pathTempFolder, LoggingFixture.suppressedLogErrorReporter().errorReporter());
+    }
+
+    private static BoundOutputManager createBoundOutputManagerFor(
+            Path pathTempFolder, ErrorReporter errorReporter) throws BindFailedException {
+
+        globalSetup();
+
+        OutputWriteSettings ows = new OutputWriteSettings();
+
+        // We populate any defaults in OutputWriteSettings from our default bean factory
+        try {
+            ows.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
+        } catch (BeanMisconfiguredException e1) {
+            errorReporter.recordError(OutputManagerFixture.class, e1);
+        }
+
+        OutputManagerWithPrefixer outputManager = new OutputManagerPermissive();
+        outputManager.setSilentlyDeleteExisting(true);
+        outputManager.setOutputWriteSettings(ows);
+        outputManager.setFilePathPrefixer(new FilePathPrefixerConstantPath(pathTempFolder));
+
+        try {
+            return outputManager.bindRootFolder(
+                    "debug",
+                    new ManifestRecorder(),
+                    new FilePathPrefixerParams(false, Optional.empty()));
+        } catch (FilePathPrefixerException e) {
+            throw new BindFailedException(e);
+        }
+    }
+
+    private static class FilePathPrefixerConstantPath extends FilePathPrefixer {
+
+        private FilePathPrefix prefix;
+
+        public FilePathPrefixerConstantPath(Path path) {
+            prefix = new FilePathPrefix(path);
+        }
+
+        @Override
+        public FilePathPrefix outFilePrefix(
+                PathWithDescription input,
+                String experimentIdentifier,
+                FilePathPrefixerParams context) {
+            return prefix;
+        }
+
+        @Override
+        public FilePathPrefix rootFolderPrefix(
+                String experimentIdentifier, FilePathPrefixerParams context) {
+            return prefix;
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.progress;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.core.progress;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,37 +24,36 @@ package org.anchoranalysis.core.progress;
  * #L%
  */
 
+package org.anchoranalysis.core.progress;
 
 // Combines a number of sub progress reporters
 public class ProgressReporterMultiple implements AutoCloseable {
 
-	private ProgressReporter progressReporterParent;
-	private double part = 0.0;
-	private double cumPart = 0.0;
-	private int index = 0;
-	
-	public ProgressReporterMultiple( ProgressReporter progressReporterParent, int numChildren ) {
-		this.progressReporterParent = progressReporterParent;
-		this.part = 100.0/numChildren;
-		progressReporterParent.setMin(0);
-		progressReporterParent.setMax(100);
-	}
-	
-	public void incrWorker() {
-		index++;
-		this.cumPart = part * index;
-		progressReporterParent.update( (int) Math.floor(cumPart) );
-	}
-	
-	// Progress for the current worker
-	public void update( double progress ) {
-		progressReporterParent.update( (int) Math.floor(cumPart + (progress*part/100) ) );
-	}
-	
-	@Override
-	public void close() {
-		progressReporterParent.update(100);
-	}
+    private ProgressReporter progressReporterParent;
+    private double part = 0.0;
+    private double cumPart = 0.0;
+    private int index = 0;
 
-	
+    public ProgressReporterMultiple(ProgressReporter progressReporterParent, int numChildren) {
+        this.progressReporterParent = progressReporterParent;
+        this.part = 100.0 / numChildren;
+        progressReporterParent.setMin(0);
+        progressReporterParent.setMax(100);
+    }
+
+    public void incrWorker() {
+        index++;
+        this.cumPart = part * index;
+        progressReporterParent.update((int) Math.floor(cumPart));
+    }
+
+    // Progress for the current worker
+    public void update(double progress) {
+        progressReporterParent.update((int) Math.floor(cumPart + (progress * part / 100)));
+    }
+
+    @Override
+    public void close() {
+        progressReporterParent.update(100);
+    }
 }

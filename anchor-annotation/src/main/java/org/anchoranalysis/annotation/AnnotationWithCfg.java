@@ -1,13 +1,8 @@
-package org.anchoranalysis.annotation;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-
 /*-
  * #%L
  * anchor-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,24 +24,27 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * #L%
  */
 
+package org.anchoranalysis.annotation;
+
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class AnnotationWithCfg implements Annotation {
-	
-	public abstract Cfg getCfg();
-	
-	protected abstract RegionMap getRegionMap();
-	
-	protected abstract int getRegionID();
-	
-	public ObjectCollection convertToObjs( ImageDimensions dim ) {
-		return getCfg().calcMask(
-			dim,
-			getRegionMap().membershipWithFlagsForIndex(getRegionID()),
-			BinaryValuesByte.getDefault(),
-			null
-		).withoutProperties();
-	}
+
+    public abstract Cfg getCfg();
+
+    protected abstract RegionMap getRegionMap();
+
+    protected abstract int getRegionID();
+
+    public ObjectCollection convertToObjects(ImageDimensions dimensions) {
+        return getCfg().calcMask(
+                        dimensions,
+                        getRegionMap().membershipWithFlagsForIndex(getRegionID()),
+                        BinaryValuesByte.getDefault())
+                .withoutProperties();
+    }
 }

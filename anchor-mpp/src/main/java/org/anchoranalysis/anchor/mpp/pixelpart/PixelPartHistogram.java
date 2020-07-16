@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pixelpart;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.mpp.pixelpart;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,55 +24,55 @@ package org.anchoranalysis.anchor.mpp.pixelpart;
  * #L%
  */
 
+package org.anchoranalysis.anchor.mpp.pixelpart;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramCreator;
 
 public class PixelPartHistogram implements PixelPart<Histogram> {
 
-	private Histogram combined;
-	private List<Histogram> list;
-	
-	public PixelPartHistogram( int numSlices, HistogramCreator histogramFactory ) {
-		
-		combined = histogramFactory.create();
-		
-		list = new ArrayList<>();
-		for(int i=0; i<numSlices; i++) {
-			list.add( histogramFactory.create() );
-		}
-	}
-	
-	@Override
-	public Histogram getSlice(int sliceID) {
-		return list.get(sliceID);
-	}
+    private Histogram combined;
+    private List<Histogram> list;
 
-	@Override
-	public void addForSlice(int sliceID, int val) {
-		list.get(sliceID).incrVal(val);
-		combined.incrVal(val);
-	}
+    public PixelPartHistogram(int numSlices, HistogramCreator histogramFactory) {
 
-	@Override
-	public Histogram getCombined() {
-		return combined;
-	}
+        combined = histogramFactory.create();
 
-	@Override
-	public void cleanUp(PixelPartFactory<Histogram> factory) {
-		factory.addUnused( combined );
-		for (int i=0; i<list.size(); i++) {
-			factory.addUnused( list.get(i) );
-		}
-	}
+        list = new ArrayList<>();
+        for (int i = 0; i < numSlices; i++) {
+            list.add(histogramFactory.create());
+        }
+    }
 
-	@Override
-	public int numSlices() {
-		return list.size();
-	}
+    @Override
+    public Histogram getSlice(int sliceID) {
+        return list.get(sliceID);
+    }
+
+    @Override
+    public void addForSlice(int sliceID, int val) {
+        list.get(sliceID).incrVal(val);
+        combined.incrVal(val);
+    }
+
+    @Override
+    public Histogram getCombined() {
+        return combined;
+    }
+
+    @Override
+    public void cleanUp(PixelPartFactory<Histogram> factory) {
+        factory.addUnused(combined);
+        for (int i = 0; i < list.size(); i++) {
+            factory.addUnused(list.get(i));
+        }
+    }
+
+    @Override
+    public int numSlices() {
+        return list.size();
+    }
 }

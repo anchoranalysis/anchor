@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.stack;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,14 +24,14 @@ package org.anchoranalysis.image.stack;
  * #L%
  */
 
+package org.anchoranalysis.image.stack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.UnaryOperatorWithException;
+import org.anchoranalysis.core.functional.function.UnaryOperatorWithException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -45,214 +43,210 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * One ore more single-channel images that all have the same dimensions.
- * <p>
- * This is one of the fundamental image data structures in Anchor.
- * 
- * @author Owen Feehan
  *
+ * <p>This is one of the fundamental image data structures in Anchor.
+ *
+ * @author Owen Feehan
  */
 public class Stack implements Iterable<Channel> {
 
-	private final StackNotUniformSized delegate;
-	
-	public Stack() {
-		delegate = new StackNotUniformSized();
-	}
-	
-	public Stack( ImageDimensions sd, ChannelFactorySingleType factory, int numChnls ) {
-		delegate = new StackNotUniformSized();
-		for( int i=0; i<numChnls; i++) {
-			delegate.addChnl( factory.createEmptyInitialised(sd) );
-		}
-	}
-	
-	public Stack( Channel chnl ) {
-		delegate = new StackNotUniformSized( chnl );
-	}
-	
-	public Stack( Channel chnl0, Channel chnl1,  Channel chnl2 ) throws IncorrectImageSizeException {
-		super();
-		delegate = new StackNotUniformSized();
-		addChnl(chnl0);
-		addChnl(chnl1);
-		addChnl(chnl2);
-	}
-	
-	private Stack(StackNotUniformSized stack) {
-		delegate = stack;
-	}
-		
-	/** Copy constructor */
-	private Stack(Stack src) {
-		delegate = src.delegate.duplicate();
-	}
-	
-	/** 
-	 * Produces a new stack with a particular operation applied to each channel.
-	 * <p>
-	 * The function applied to the channel should ensure it produces uniform sizes.
-	 * 
-	 * @param mapping performs an operation on a channel and produces a modified channel (or a different one entirely)
-	 * @return a new stack (after any modification by {@code mapFunc}) preserving the channel order
-	 * @throws OperationFailedException if the channels produced have non-uniform sizes
-	 * */ 
-	public Stack mapChnl(UnaryOperatorWithException<Channel, OperationFailedException> mapping) throws OperationFailedException {
-		Stack out = new Stack();
-		for( Channel c : this ) {
-			try {
-				out.addChnl(
-					mapping.apply(c)
-				);
-			} catch (IncorrectImageSizeException e) {
-				throw new OperationFailedException(e);
-			}
-		}
-		return out;
-	}
-	
-	public Stack extractSlice(int z) {
-		// We know the sizes will be correct
-		return new Stack(
-			delegate.extractSlice(z)
-		);
-	}
+    private final StackNotUniformSized delegate;
 
-	public Stack maxIntensityProj() {
-		// We know the sizes will be correct
-		return new Stack(
-			delegate.maxIntensityProj()
-		);
-	}
-	
-	public void addBlankChnl()
-			throws OperationFailedException {
-			
-		if (getNumChnl()==0) {
-			throw new OperationFailedException("At least one channel must exist from which to guess dimensions");
-		}
-		
-		if (!delegate.isUniformSized()) {
-			throw new OperationFailedException("Other channels do not have the same dimensions. Cannot make a good guess of dimensions.");
-		}
-		
-		if (!delegate.isUniformTyped()) {
-			throw new OperationFailedException("Other channels do not have the same type.");
-		}
-		
-		Channel first = getChnl(0);
-		delegate.addChnl(
-			ChannelFactory.instance().createEmptyInitialised(
-				first.getDimensions(),
-				first.getVoxelDataType()
-			)
-		);
-		
-	}
+    public Stack() {
+        delegate = new StackNotUniformSized();
+    }
 
-	public final void addChnl(Channel chnl) throws IncorrectImageSizeException {
-		
-		// We ensure that this channel has the same size as the first
-		if (delegate.getNumChnl()>=1 && !chnl.getDimensions().equals(delegate.getChnl(0).getDimensions())) {
-			throw new IncorrectImageSizeException("Dimensions of channel do not match existing channel");
-		}
-		
-		delegate.addChnl(chnl);
-	}
+    public Stack(ImageDimensions sd, ChannelFactorySingleType factory, int numChnls) {
+        delegate = new StackNotUniformSized();
+        for (int i = 0; i < numChnls; i++) {
+            delegate.addChnl(factory.createEmptyInitialised(sd));
+        }
+    }
 
-	public final Channel getChnl(int index) {
-		return delegate.getChnl(index);
-	}
+    public Stack(Channel chnl) {
+        delegate = new StackNotUniformSized(chnl);
+    }
 
-	public final int getNumChnl() {
-		return delegate.getNumChnl();
-	}
+    public Stack(Channel chnl0, Channel chnl1, Channel chnl2) throws IncorrectImageSizeException {
+        super();
+        delegate = new StackNotUniformSized();
+        addChnl(chnl0);
+        addChnl(chnl1);
+        addChnl(chnl2);
+    }
 
-	public ImageDimensions getDimensions() {
-		return delegate.getChnl(0).getDimensions();
-	}
-	
-	public Stack duplicate() {
-		return new Stack(this);
-	}
-	
-	public Stack extractUpToThreeChnls() {
-		Stack out = new Stack();
-		int maxNum = Math.min(3, delegate.getNumChnl());
-		for (int i=0; i<maxNum; i++) {
-			try {
-				out.addChnl( delegate.getChnl(i) );
-			} catch (IncorrectImageSizeException e) {
-				throw new AnchorImpossibleSituationException();
-			}
-		}
-		return out;
-	}
+    private Stack(StackNotUniformSized stack) {
+        delegate = stack;
+    }
 
-	@Override
-	public Iterator<Channel> iterator() {
-		return delegate.iterator();
-	}
-	
-	public List<Channel> asListChnls() {
-		ArrayList<Channel> list = new ArrayList<>();
-		for(int i=0; i<delegate.getNumChnl(); i++) {
-			list.add( delegate.getChnl(i) );
-		}
-		return list;
-	}
-	
-	// Returns true if the data type of all channels is equal to
-	public boolean allChnlsHaveType( VoxelDataType chnlDataType ) {
-		
-		for (Channel chnl : this) {
-			if (!chnl.getVoxelDataType().equals(chnlDataType)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /** Copy constructor */
+    private Stack(Stack src) {
+        delegate = src.delegate.duplicate();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
+    /**
+     * Produces a new stack with a particular operation applied to each channel.
+     *
+     * <p>The function applied to the channel should ensure it produces uniform sizes.
+     *
+     * @param mapping performs an operation on a channel and produces a modified channel (or a
+     *     different one entirely)
+     * @return a new stack (after any modification by {@code mapFunc}) preserving the channel order
+     * @throws OperationFailedException if the channels produced have non-uniform sizes
+     */
+    public Stack mapChnl(UnaryOperatorWithException<Channel, OperationFailedException> mapping)
+            throws OperationFailedException {
+        Stack out = new Stack();
+        for (Channel c : this) {
+            try {
+                out.addChnl(mapping.apply(c));
+            } catch (IncorrectImageSizeException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+        return out;
+    }
 
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		
-		if (!(obj instanceof Stack)) {
-			return false;
-		}
-		
-		Stack objCast = (Stack) obj;
-					
-		if (getNumChnl()!=objCast.getNumChnl()) {
-			return false;
-		}
-		
-		for( int i=0; i<getNumChnl(); i++) {
-			if (!getChnl(i).equalsDeep(objCast.getChnl(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
+    public Stack extractSlice(int z) {
+        // We know the sizes will be correct
+        return new Stack(delegate.extractSlice(z));
+    }
 
-	@Override
-	public int hashCode() {
+    public Stack maxIntensityProj() {
+        // We know the sizes will be correct
+        return new Stack(delegate.maxIntensityProj());
+    }
 
-		HashCodeBuilder builder = new HashCodeBuilder()
-				.append(getNumChnl());
-		
-		for( int i=0; i<getNumChnl(); i++) {
-			builder.append( getChnl(i) );
-		}
-		
-		return builder.toHashCode();
-	}
-	
-	public void updateResolution(ImageResolution res) {
-		for( int i=0; i<getNumChnl(); i++) {
-			getChnl(i).updateResolution(res);
-		}
-	}
-	
+    public void addBlankChnl() throws OperationFailedException {
+
+        if (getNumChnl() == 0) {
+            throw new OperationFailedException(
+                    "At least one channel must exist from which to guess dimensions");
+        }
+
+        if (!delegate.isUniformSized()) {
+            throw new OperationFailedException(
+                    "Other channels do not have the same dimensions. Cannot make a good guess of dimensions.");
+        }
+
+        if (!delegate.isUniformTyped()) {
+            throw new OperationFailedException("Other channels do not have the same type.");
+        }
+
+        Channel first = getChnl(0);
+        delegate.addChnl(
+                ChannelFactory.instance()
+                        .createEmptyInitialised(first.getDimensions(), first.getVoxelDataType()));
+    }
+
+    public final void addChnl(Channel chnl) throws IncorrectImageSizeException {
+
+        // We ensure that this channel has the same size as the first
+        if (delegate.getNumChnl() >= 1
+                && !chnl.getDimensions().equals(delegate.getChnl(0).getDimensions())) {
+            throw new IncorrectImageSizeException(
+                    "Dimensions of channel do not match existing channel");
+        }
+
+        delegate.addChnl(chnl);
+    }
+
+    public final Channel getChnl(int index) {
+        return delegate.getChnl(index);
+    }
+
+    public final int getNumChnl() {
+        return delegate.getNumChnl();
+    }
+
+    public ImageDimensions getDimensions() {
+        return delegate.getChnl(0).getDimensions();
+    }
+
+    public Stack duplicate() {
+        return new Stack(this);
+    }
+
+    public Stack extractUpToThreeChnls() {
+        Stack out = new Stack();
+        int maxNum = Math.min(3, delegate.getNumChnl());
+        for (int i = 0; i < maxNum; i++) {
+            try {
+                out.addChnl(delegate.getChnl(i));
+            } catch (IncorrectImageSizeException e) {
+                throw new AnchorImpossibleSituationException();
+            }
+        }
+        return out;
+    }
+
+    @Override
+    public Iterator<Channel> iterator() {
+        return delegate.iterator();
+    }
+
+    public List<Channel> asListChnls() {
+        ArrayList<Channel> list = new ArrayList<>();
+        for (int i = 0; i < delegate.getNumChnl(); i++) {
+            list.add(delegate.getChnl(i));
+        }
+        return list;
+    }
+
+    // Returns true if the data type of all channels is equal to
+    public boolean allChnlsHaveType(VoxelDataType chnlDataType) {
+
+        for (Channel chnl : this) {
+            if (!chnl.getVoxelDataType().equals(chnlDataType)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Stack)) {
+            return false;
+        }
+
+        Stack objCast = (Stack) obj;
+
+        if (getNumChnl() != objCast.getNumChnl()) {
+            return false;
+        }
+
+        for (int i = 0; i < getNumChnl(); i++) {
+            if (!getChnl(i).equalsDeep(objCast.getChnl(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+
+        HashCodeBuilder builder = new HashCodeBuilder().append(getNumChnl());
+
+        for (int i = 0; i < getNumChnl(); i++) {
+            builder.append(getChnl(i));
+        }
+
+        return builder.toHashCode();
+    }
+
+    public void updateResolution(ImageResolution res) {
+        for (int i = 0; i < getNumChnl(); i++) {
+            getChnl(i).updateResolution(res);
+        }
+    }
 }

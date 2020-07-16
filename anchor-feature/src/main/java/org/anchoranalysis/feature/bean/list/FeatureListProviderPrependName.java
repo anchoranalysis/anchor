@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.list;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.feature.bean.list;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +24,10 @@ package org.anchoranalysis.feature.bean.list;
  * #L%
  */
 
+package org.anchoranalysis.feature.bean.list;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -34,53 +35,32 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Prepends a string to each feature in the list
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FeatureListProviderPrependName extends FeatureListProvider<FeatureInput> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FeatureListProvider<FeatureInput> item;
-	
-	@BeanField
-	private String prependString;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private FeatureListProvider<FeatureInput> item;
 
-	public static void setNewNameOnFeature( Feature<? extends FeatureInput> f, String existingName, String prependString ) {
-		f.setCustomName(
-			String.format("%s%s", prependString, existingName)
-		);
-	}
-	
-	@Override
-	public FeatureList<FeatureInput> create() throws CreateException {
+    @BeanField @Getter @Setter private String prependString;
+    // END BEAN PROPERTIES
 
-		FeatureList<FeatureInput> features = item.create();
-		
-		for( Feature<FeatureInput> f : features ) {
-			String existingName = f.getFriendlyName();
-			setNewNameOnFeature( f, existingName, prependString );
-			
-		}
-		
-		return features;
-	}
+    public static void setNewNameOnFeature(
+            Feature<? extends FeatureInput> f, String existingName, String prependString) {
+        f.setCustomName(String.format("%s%s", prependString, existingName));
+    }
 
-	public String getPrependString() {
-		return prependString;
-	}
+    @Override
+    public FeatureList<FeatureInput> create() throws CreateException {
 
-	public void setPrependString(String prependString) {
-		this.prependString = prependString;
-	}
+        FeatureList<FeatureInput> features = item.create();
 
-	public FeatureListProvider<FeatureInput> getItem() {
-		return item;
-	}
+        for (Feature<FeatureInput> f : features) {
+            String existingName = f.getFriendlyName();
+            setNewNameOnFeature(f, existingName, prependString);
+        }
 
-	public void setItem(FeatureListProvider<FeatureInput> item) {
-		this.item = item;
-	}
+        return features;
+    }
 }

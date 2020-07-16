@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.plot;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,44 +24,45 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.anchor.plot;
 
+import java.util.Optional;
 import org.jfree.chart.JFreeChart;
 
 public class GraphInstance {
 
-	private JFreeChart chart;
-	private boolean showVerticalAxisLines = true;
-	
-	private Optional<AxisLimits> rangeAxisLimits; 
-	
-	public GraphInstance(JFreeChart chart,  Optional<AxisLimits> rangeAxisLimits ) {
-		super();
-		this.chart = chart;
-		this.rangeAxisLimits = rangeAxisLimits;
-	}
+    private JFreeChart chart;
+    private boolean showVerticalAxisLines = true;
 
-	public JFreeChart getChart() {
-		return chart;
-	}
+    private Optional<AxisLimits> rangeAxisLimits;
 
-	public void setChart(JFreeChart chart) {
-		this.chart = chart;
-	}
+    public GraphInstance(JFreeChart chart, Optional<AxisLimits> rangeAxisLimits) {
+        super();
+        this.chart = chart;
+        this.rangeAxisLimits = rangeAxisLimits;
+    }
 
-	public boolean isShowVerticalAxisLines() {
-		return showVerticalAxisLines;
-	}
+    public JFreeChart getChart() {
+        return chart;
+    }
 
-	public void setShowVerticalAxisLines(boolean showVerticalAxisLines) {
-		this.showVerticalAxisLines = showVerticalAxisLines;
-	}
+    public void setChart(JFreeChart chart) {
+        this.chart = chart;
+    }
 
-	public Optional<AxisLimits> getRangeAxisLimits() {
-		return rangeAxisLimits;
-	}
+    public boolean isShowVerticalAxisLines() {
+        return showVerticalAxisLines;
+    }
 
-	public void setRangeAxisLimits(Optional<AxisLimits> rangeAxisLimits) {
-		this.rangeAxisLimits = rangeAxisLimits;
-	}
-	
+    public void setShowVerticalAxisLines(boolean showVerticalAxisLines) {
+        this.showVerticalAxisLines = showVerticalAxisLines;
+    }
+
+    public Optional<AxisLimits> getRangeAxisLimits() {
+        return rangeAxisLimits;
+    }
+
+    public void setRangeAxisLimits(Optional<AxisLimits> rangeAxisLimits) {
+        this.rangeAxisLimits = rangeAxisLimits;
+    }
 }

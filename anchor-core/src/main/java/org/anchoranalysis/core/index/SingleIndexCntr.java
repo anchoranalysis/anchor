@@ -1,6 +1,5 @@
 package org.anchoranalysis.core.index;
 
-
 /*
  * #%L
  * anchor-core
@@ -13,10 +12,10 @@ package org.anchoranalysis.core.index;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,33 +30,32 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Holds a single-index which is hashable and comparable
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @EqualsAndHashCode
 public abstract class SingleIndexCntr implements IIndexGetter, Comparable<IIndexGetter> {
 
-	private final int index;
-	
-	public SingleIndexCntr(int index) {
-		super();
-		this.index = index;
-	}
-	
-	@Override
-	public int getIndex() {
-		return this.index;
-	}
-	
-	@Override
-	public int compareTo(IIndexGetter arg0) {
-		if (this.getIndex() < arg0.getIndex()) {
-			return -1;
-		} else if (this.getIndex() > arg0.getIndex()) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
+    private final int index;
+
+    public SingleIndexCntr(int index) {
+        super();
+        this.index = index;
+    }
+
+    @Override
+    public int getIndex() {
+        return this.index;
+    }
+
+    @Override
+    public int compareTo(IIndexGetter arg0) {
+        if (this.getIndex() < arg0.getIndex()) {
+            return -1;
+        } else if (this.getIndex() > arg0.getIndex()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

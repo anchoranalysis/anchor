@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.iterator.changed;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.voxel.iterator.changed;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,39 +24,41 @@ package org.anchoranalysis.image.voxel.iterator.changed;
  * #L%
  */
 
+package org.anchoranalysis.image.voxel.iterator.changed;
+
 import java.nio.ByteBuffer;
 
-/** 
- * Wraps a {@link ProcessVoxelNeighbourAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
+/**
+ * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
  *
  * @param <T> result-type that can be collected after processing
- **/
+ */
 public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
 
-	private final ProcessVoxelNeighbourAbsolute<T> delegate;
-	
-	public WrapAbsoluteAsMasked(ProcessVoxelNeighbourAbsolute<T> delegate) {
-		super();
-		this.delegate = delegate;
-	}
+    private final ProcessVoxelNeighborAbsolute<T> delegate;
 
-	@Override
-	public void initSource(int sourceVal, int sourceOffsetXY) {
-		delegate.initSource(sourceVal, sourceOffsetXY);
-	}
-	
-	@Override
-	public void notifyChangeZ(int zChange, int z, ByteBuffer objectMaskBuffer) {
-		delegate.notifyChangeZ(zChange, z);
-	}
-	
-	@Override
-	public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
-		return delegate.processPoint(xChange, yChange, x1, y1);
-	}
+    public WrapAbsoluteAsMasked(ProcessVoxelNeighborAbsolute<T> delegate) {
+        super();
+        this.delegate = delegate;
+    }
 
-	@Override
-	public T collectResult() {
-		return delegate.collectResult();
-	}
+    @Override
+    public void initSource(int sourceVal, int sourceOffsetXY) {
+        delegate.initSource(sourceVal, sourceOffsetXY);
+    }
+
+    @Override
+    public void notifyChangeZ(int zChange, int z, ByteBuffer objectMaskBuffer) {
+        delegate.notifyChangeZ(zChange, z);
+    }
+
+    @Override
+    public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
+        return delegate.processPoint(xChange, yChange, x1, y1);
+    }
+
+    @Override
+    public T collectResult() {
+        return delegate.collectResult();
+    }
 }

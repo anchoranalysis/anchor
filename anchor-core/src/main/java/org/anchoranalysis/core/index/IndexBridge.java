@@ -12,10 +12,10 @@ package org.anchoranalysis.core.index;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,27 +26,25 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 
+public class IndexBridge<T>
+        implements FunctionWithException<Integer, T, GetOperationFailedException> {
 
-import org.anchoranalysis.core.functional.FunctionWithException;
+    private ITypedGetFromIndex<T> cntr;
 
-public class IndexBridge<T> implements FunctionWithException<Integer,T,GetOperationFailedException> {
-	
-	private ITypedGetFromIndex<T> cntr;
-	
-	public IndexBridge(ITypedGetFromIndex<T> cntr) {
-		super();
-		this.cntr = cntr;
-	}
+    public IndexBridge(ITypedGetFromIndex<T> cntr) {
+        super();
+        this.cntr = cntr;
+    }
 
-	@Override
-	public T apply(Integer sourceObject) throws GetOperationFailedException {
-		return cntr.get( sourceObject);
-	}
+    @Override
+    public T apply(Integer sourceObject) throws GetOperationFailedException {
+        return cntr.get(sourceObject);
+    }
 
-	// Updates the cntr associated with the bridge
-	public void setCntr(ITypedGetFromIndex<T> cntr) {
-		this.cntr = cntr;
-	}
-
+    // Updates the cntr associated with the bridge
+    public void setCntr(ITypedGetFromIndex<T> cntr) {
+        this.cntr = cntr;
+    }
 }
