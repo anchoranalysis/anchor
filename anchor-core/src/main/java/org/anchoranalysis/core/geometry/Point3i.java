@@ -68,15 +68,15 @@ public final class Point3i extends Tuple3i {
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
-	public double distance( Point3i pnt ) {
-		return Math.sqrt( distanceSquared(pnt) );
+	public double distance( Point3i point ) {
+		return Math.sqrt( distanceSquared(point) );
 	}
 	
 	/** The maximum distance across any axis */
-	public int distanceMax( Point3i pnt ) {
-		int sx = Math.abs(this.x - pnt.x);
-		int sy = Math.abs(this.y - pnt.y);
-		int sz = Math.abs(this.z - pnt.z);
+	public int distanceMax( Point3i point ) {
+		int sx = Math.abs(this.x - point.x);
+		int sy = Math.abs(this.y - point.y);
+		int sz = Math.abs(this.z - point.z);
 		return Math.max(sx, Math.max(sy, sz));
 	}
 	
@@ -91,22 +91,22 @@ public final class Point3i extends Tuple3i {
 	
 	/** Performs an addition without changing any values in an existing point */
 	public static Point3i immutableAdd(ReadableTuple3i point, ReadableTuple3i toAdd) {
-		Point3i pntDup = new Point3i(point);
-		pntDup.add(toAdd);
-		return pntDup;
+		Point3i pointDup = new Point3i(point);
+		pointDup.add(toAdd);
+		return pointDup;
 	}
 	
 	/** Performs a subtraction without changing any values in an existing point */
 	public static Point3i immutableSubtract(ReadableTuple3i point, ReadableTuple3i toSubtract) {
-		Point3i pntDup = new Point3i(point);
-		pntDup.subtract(toSubtract);
-		return pntDup;
+		Point3i pointDup = new Point3i(point);
+		pointDup.subtract(toSubtract);
+		return pointDup;
 	}
 		
 	/** Performs a scale without changing any values in an existing point */
 	public static Point3i immutableScale(ReadableTuple3i point, int factor) {
-		Point3i pntDup = new Point3i(point);
-		pntDup.scale(factor);
-		return pntDup;
+		Point3i pointDup = new Point3i(point);
+		pointDup.scale(factor);
+		return pointDup;
 	}
 }

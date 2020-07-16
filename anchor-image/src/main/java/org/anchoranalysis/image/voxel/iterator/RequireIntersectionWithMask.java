@@ -79,17 +79,17 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	}
 	
 	@Override
-	public void process(Point3i pnt) {
+	public void process(Point3i point) {
 		// We skip if our containing mask doesn't include it
-		if (isPointOnMask(pnt)) {
-			process.process(pnt);
+		if (isPointOnMask(point)) {
+			process.process(point);
 		}
 	}
 	
-	private boolean isPointOnMask(Point3i pnt) {
+	private boolean isPointOnMask(Point3i point) {
 		int offsetMask = extent.offset(
-			pnt.getX() - crnrMin.getX(),
-			pnt.getY() - crnrMin.getY()
+			point.getX() - crnrMin.getX(),
+			point.getY() - crnrMin.getY()
 		);
 		
 		// We skip if our containing mask doesn't include it

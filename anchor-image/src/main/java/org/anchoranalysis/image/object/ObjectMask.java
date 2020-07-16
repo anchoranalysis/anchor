@@ -478,28 +478,28 @@ public class ObjectMask {
 		return cntSetFirst+cntSetSecond;
 	}
 	
-	public boolean contains( Point3i pnt ) {
+	public boolean contains( Point3i point ) {
 		
-		if (!delegate.getBoundingBox().contains().point(pnt)) {
+		if (!delegate.getBoundingBox().contains().point(point)) {
 			return false;
 		}
 		
-		int xRel = pnt.getX() - delegate.getBoundingBox().cornerMin().getX();
-		int yRel = pnt.getY() - delegate.getBoundingBox().cornerMin().getY();
-		int zRel = pnt.getZ() - delegate.getBoundingBox().cornerMin().getZ();
+		int xRel = point.getX() - delegate.getBoundingBox().cornerMin().getX();
+		int yRel = point.getY() - delegate.getBoundingBox().cornerMin().getY();
+		int zRel = point.getZ() - delegate.getBoundingBox().cornerMin().getZ();
 		
 		return delegate.getVoxelBox().getVoxel(xRel, yRel, zRel)==bv.getOnInt();
 	}
 	
 	
-	public boolean containsIgnoreZ( Point3i pnt ) {
+	public boolean containsIgnoreZ( Point3i point ) {
 		
-		if (!delegate.getBoundingBox().contains().pointIgnoreZ(pnt)) {
+		if (!delegate.getBoundingBox().contains().pointIgnoreZ(point)) {
 			return false;
 		}
 		
-		int xRel = pnt.getX() - delegate.getBoundingBox().cornerMin().getX();
-		int yRel = pnt.getY() - delegate.getBoundingBox().cornerMin().getY();
+		int xRel = point.getX() - delegate.getBoundingBox().cornerMin().getX();
+		int yRel = point.getY() - delegate.getBoundingBox().cornerMin().getY();
 		
 		Extent e = delegate.getBoundingBox().extent();
 		for( int z=0; z<e.getZ(); z++) {
@@ -627,10 +627,10 @@ public class ObjectMask {
 	public Optional<Point3i> findArbitraryOnVoxel() {
 		
 		// First we try the center-of-gravity
-		Point3i pnt = getBoundingBox().centerOfGravity();
+		Point3i point = getBoundingBox().centerOfGravity();
 		
-		if (contains(pnt)) {
-			return Optional.of(pnt);
+		if (contains(point)) {
+			return Optional.of(point);
 		}
 		
 		// Second, if needed, we iterate until we find any "ON" value
@@ -662,10 +662,10 @@ public class ObjectMask {
 	 * @return a newly created object-mask with updated co-ordinates.
 	 */
 	public ObjectMask relMaskTo( BoundingBox bbox ) {
-		Point3i pnt = delegate.getBoundingBox().relPosTo(bbox);
+		Point3i point = delegate.getBoundingBox().relPosTo(bbox);
 		
 		return new ObjectMask(
-			new BoundingBox(pnt, delegate.extent()),
+			new BoundingBox(point, delegate.extent()),
 			delegate.getVoxelBox()
 		);
 	}

@@ -65,7 +65,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEAN PROPERTIES
 	
-	private RandomSet<Point3d> setPnts;
+	private RandomSet<Point3d> setPoints;
 	
 	private ImageDimensions dim;
 	private Mask binaryImage;
@@ -78,7 +78,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		dim = binaryImage.getDimensions();
 		
-		setPnts = new RandomSet<>();
+		setPoints = new RandomSet<>();
 		
 		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 		addEntireScene(bvb);
@@ -88,25 +88,25 @@ public class SetUpdatable extends UpdatablePointsContainer {
     @Override
 	public Optional<Point3d> sample( RandomNumberGenerator re ) {
 	
-    	if (setPnts.isEmpty()) {
+    	if (setPoints.isEmpty()) {
     		return Optional.empty();
     	}
     	
-    	int randomIndex = (int) (re.nextDouble() * setPnts.size());
-    	Point3d pnt = setPnts.get(randomIndex);
+    	int randomIndex = (int) (re.nextDouble() * setPoints.size());
+    	Point3d point = setPoints.get(randomIndex);
     	
-		assert( pnt.getX() >= 0 );
-		assert( pnt.getY() >= 0 );
-		assert( pnt.getZ() >= 0 );
+		assert( point.getX() >= 0 );
+		assert( point.getY() >= 0 );
+		assert( point.getZ() >= 0 );
 		
-		assert( pnt.getX() < getDimensions().getX() );
-		assert( pnt.getY() < getDimensions().getY() );
-		assert( pnt.getZ() < getDimensions().getZ() );
+		assert( point.getX() < getDimensions().getX() );
+		assert( point.getY() < getDimensions().getY() );
+		assert( point.getZ() < getDimensions().getZ() );
 		
 		// To hide our internal data from manipulation, even though this (presumably) adds
 		//  a bit of overhead
     	return Optional.of(
-    		new Point3d(pnt)
+    		new Point3d(point)
     	);
     }
 
@@ -141,7 +141,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		    			assert( pos.getX() < getDimensions().getX() );
 		    			assert( pos.getY() < getDimensions().getY() );
 		    			assert( pos.getZ() < getDimensions().getZ() );
-		    			setPnts.add(
+		    			setPoints.add(
 		    				PointConverter.doubleFromInt(pos)
 		    			);
 		    		}
@@ -150,8 +150,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
     	}
 	}
 	
-	public Set<Point3d> getSetPnts() {
-		return setPnts;
+	public Set<Point3d> getSetPoints() {
+		return setPoints;
 	}
 	
 	@Override
@@ -162,26 +162,26 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	@Override
 	public void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark) throws UpdateMarkSetException {
-		rmvPntsInMark( newMark );
+		rmvPointsInMark( newMark );
 	}
 	
-	private void rmvPnt( ReadableTuple3i crntExtentPnt,  ReadableTuple3i crnrPnt ) {
-		int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
-		int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
-		int zGlobal = crnrPnt.getZ() + crntExtentPnt.getZ();
+	private void rmvPoint( ReadableTuple3i crntExtentPoint,  ReadableTuple3i crnrPoint ) {
+		int xGlobal = crnrPoint.getX() + crntExtentPoint.getX();
+		int yGlobal = crnrPoint.getY() + crntExtentPoint.getY();
+		int zGlobal = crnrPoint.getZ() + crntExtentPoint.getZ();
 		
-		Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
+		Point3d pointGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
 		
-		setPnts.remove( pntGlobal );
+		setPoints.remove( pointGlobal );
 	}
 	
 
-	public void rmvPntsInMark(VoxelizedMarkMemo newMark) {
+	public void rmvPointsInMark(VoxelizedMarkMemo newMark) {
 		
 		// We add any points in our new mark to the set
 		VoxelizedMark pxlMark = newMark.voxelized();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrPoint = pxlMark.getBoundingBox().cornerMin();
 		
 		RegionMembership rm = newMark.getRegionMap().membershipForIndex(regionID);
 		byte flags = rm.flags();
@@ -189,18 +189,18 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		BoundedVoxelBox<ByteBuffer> voxelBox = pxlMark.getVoxelBox();
 		Extent e = voxelBox.extent();
 		
-		Point3i crntExtentPnt = new Point3i();
-		for (crntExtentPnt.setZ(0); crntExtentPnt.getZ()<e.getZ(); crntExtentPnt.incrementZ()) {
+		Point3i crntExtentPoint = new Point3i();
+		for (crntExtentPoint.setZ(0); crntExtentPoint.getZ()<e.getZ(); crntExtentPoint.incrementZ()) {
 			
-			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtentPnt.getZ());
+			ByteBuffer fb = voxelBox.getPixelsForPlane(crntExtentPoint.getZ());
 			
-			for (crntExtentPnt.setY(0); crntExtentPnt.getY()<e.getY(); crntExtentPnt.incrementY()) {
-				for (crntExtentPnt.setX(0); crntExtentPnt.getX()<e.getX(); crntExtentPnt.incrementX()) {
+			for (crntExtentPoint.setY(0); crntExtentPoint.getY()<e.getY(); crntExtentPoint.incrementY()) {
+				for (crntExtentPoint.setX(0); crntExtentPoint.getX()<e.getX(); crntExtentPoint.incrementX()) {
 
-					byte membership = fb.get( e.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
+					byte membership = fb.get( e.offset(crntExtentPoint.getX(), crntExtentPoint.getY()));
 					
 					if ( !rm.isMemberFlag(membership, flags) ) {
-						rmvPnt( crntExtentPnt, crnrPnt );
+						rmvPoint( crntExtentPoint, crnrPoint );
 					}
 				}
 			}
@@ -212,12 +212,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	public void exchange(MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo oldMark,
 			int indexOldMark, VoxelizedMarkMemo newMark) {
 		
-		addPntsInMark( pxlMarkMemoList, oldMark );
-		rmvPntsInMark( newMark );
+		addPointsInMark( pxlMarkMemoList, oldMark );
+		rmvPointsInMark( newMark );
 	}
 	
 	
-	public void addPntsInMark(MemoForIndex marksExisting, VoxelizedMarkMemo markToAdd) {
+	public void addPointsInMark(MemoForIndex marksExisting, VoxelizedMarkMemo markToAdd) {
 		// We add any points in our new mark to the set, but only if there's not already a neighbour covering them
 		
 		// So our first step is to identify any overlapping marks
@@ -225,7 +225,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelizedMark pxlMark = markToAdd.voxelized();
 		
-		ReadableTuple3i crnrPnt = pxlMark.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrPoint = pxlMark.getBoundingBox().cornerMin();
 		
 		RegionMembership rm = markToAdd.getRegionMap().membershipForIndex(regionID);
 		
@@ -236,16 +236,16 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 		VoxelBox<ByteBuffer> vbBinary = binaryImageChnl.getVoxelBox().asByte();
 		
-		Point3i crntExtentPnt = new Point3i();
-		for (crntExtentPnt.setZ(0); crntExtentPnt.getZ()<e.getZ(); crntExtentPnt.incrementZ()) {
+		Point3i crntExtentPoint = new Point3i();
+		for (crntExtentPoint.setZ(0); crntExtentPoint.getZ()<e.getZ(); crntExtentPoint.incrementZ()) {
 			
-			int zGlobal = crnrPnt.getZ() + crntExtentPnt.getZ();
+			int zGlobal = crnrPoint.getZ() + crntExtentPoint.getZ();
 			
 			addPointsForSlice(
-				crntExtentPnt,
-				crnrPnt,
+				crntExtentPoint,
+				crnrPoint,
 				e,
-				voxelBox.getPixelsForPlane(crntExtentPnt.getZ()),
+				voxelBox.getPixelsForPlane(crntExtentPoint.getZ()),
 				vbBinary.getPixelsForPlane(zGlobal).buffer(),
 				bvb,
 				zGlobal,
@@ -256,8 +256,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	}
 	
 	private void addPointsForSlice(		// NOSONAR
-		Point3i crntExtentPnt,
-		ReadableTuple3i crnrPnt,
+		Point3i crntExtentPoint,
+		ReadableTuple3i crnrPoint,
 		Extent extent,
 		ByteBuffer buffer,
 		ByteBuffer bbBinaryImage,
@@ -268,22 +268,22 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	) {
 		byte flags = rm.flags();
 		
-		for (crntExtentPnt.setY(0); crntExtentPnt.getY()<extent.getY(); crntExtentPnt.incrementY()) {
-			int yGlobal = crnrPnt.getY() + crntExtentPnt.getY();
+		for (crntExtentPoint.setY(0); crntExtentPoint.getY()<extent.getY(); crntExtentPoint.incrementY()) {
+			int yGlobal = crnrPoint.getY() + crntExtentPoint.getY();
 			
-			for (crntExtentPnt.setX(0); crntExtentPnt.getX()<extent.getX(); crntExtentPnt.incrementX()) {
+			for (crntExtentPoint.setX(0); crntExtentPoint.getX()<extent.getX(); crntExtentPoint.incrementX()) {
 				
-				int xGlobal = crnrPnt.getX() + crntExtentPnt.getX();
+				int xGlobal = crnrPoint.getX() + crntExtentPoint.getX();
 						
 				int globOffset = extent.offset(xGlobal, yGlobal);
-				byte posCheck = buffer.get( extent.offset(crntExtentPnt.getX(), crntExtentPnt.getY()));
+				byte posCheck = buffer.get( extent.offset(crntExtentPoint.getX(), crntExtentPoint.getY()));
 				if ( rm.isMemberFlag(posCheck, flags) && bbBinaryImage.get(globOffset)==bvb.getOnByte()) {
 					
-					Point3d pntGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
+					Point3d pointGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
 					
 					// Now we check to make sure the point isn't contained in any of its neighbours
-					if (!isPointInList(neighbours, pntGlobal)) {
-						setPnts.add(pntGlobal);	
+					if (!isPointInList(neighbours, pointGlobal)) {
+						setPoints.add(pointGlobal);	
 					}
 				}
 			}
@@ -313,7 +313,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 			RegionMembership rm = memo.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 			byte flags = rm.flags();
 			
-			byte membership = memo.getMark().evalPntInside(point);
+			byte membership = memo.getMark().evalPointInside(point);
 			if (rm.isMemberFlag(membership, flags)) {
 				return true;
 			}
@@ -325,12 +325,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	@Override
 	public void rmv(MemoForIndex marksExisting, VoxelizedMarkMemo mark) throws UpdateMarkSetException {
-		addPntsInMark(marksExisting, mark);
+		addPointsInMark(marksExisting, mark);
 	}
 
 	@Override
 	public int size() {
-		return setPnts.size();
+		return setPoints.size();
 	}
 
 	public int getRegionID() {

@@ -95,15 +95,15 @@ public abstract class Tuple3f implements Serializable {
 		}
 	}
 	
-	public float distanceSquared( Point3f pnt ) {
-		float sx = this.x - pnt.x;
-		float sy = this.y - pnt.y;
-		float sz = this.z - pnt.z;
+	public float distanceSquared( Point3f point ) {
+		float sx = this.x - point.x;
+		float sy = this.y - point.y;
+		float sz = this.z - point.z;
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
-	public final double distance( Point3f pnt ) {
-		return Math.sqrt( distanceSquared(pnt) );
+	public final double distance( Point3f point ) {
+		return Math.sqrt( distanceSquared(point) );
 	}
 	
 	@Override

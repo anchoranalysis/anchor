@@ -55,7 +55,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 	private ByteBuffer bbOM;
 	private byte maskOffVal;
 	
-	private int maskOffsetXYAtPnt;
+	private int maskOffsetXYAtPoint;
 	
 	public WithinMask(ProcessChangedPointAbsoluteMasked<T> process,	ObjectMask object) {
 		this.delegate = process;
@@ -70,7 +70,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		this.point = point;
 		
 		updateRel(point);
-		maskOffsetXYAtPnt = extent.offsetSlice(relativeToCorner);
+		maskOffsetXYAtPoint = extent.offsetSlice(relativeToCorner);
 		
 		delegate.initSource(sourceVal, sourceOffsetXY);
 	}
@@ -118,7 +118,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 			return;
 		}
 
-		int offset = maskOffsetXYAtPnt + xChange + (yChange*extent.getX());
+		int offset = maskOffsetXYAtPoint + xChange + (yChange*extent.getX());
 		
 		if (bbOM.get(offset)==maskOffVal) {
 			return;
@@ -132,7 +132,7 @@ final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
 		return delegate.collectResult();
 	}
 	
-	private void updateRel(Point3i pnt) {
-		relativeToCorner = Point3i.immutableSubtract(pnt, cornerMin);
+	private void updateRel(Point3i point) {
+		relativeToCorner = Point3i.immutableSubtract(point, cornerMin);
 	}
 }

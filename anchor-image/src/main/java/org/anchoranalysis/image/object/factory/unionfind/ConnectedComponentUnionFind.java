@@ -180,23 +180,23 @@ public class ConnectedComponentUnionFind {
 		return bboxArr;
 	}
 	
-	private static void addPntsAndAssignNewIDs(
+	private static void addPointsAndAssignNewIDs(
 		VoxelBox<IntBuffer> indexBuffer,
 		UnionFind<Integer> unionIndex,
 		Map<Integer,Integer> mapIDOrdered,
 		PointRangeWithCount[] bboxArr
 	) {
 		
-		Point3i pnt = new Point3i();
+		Point3i point = new Point3i();
 		Extent extent = indexBuffer.extent();
-		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrementZ()) {
+		for (point.setZ(0); point.getZ()<extent.getZ(); point.incrementZ()) {
 			
-			IntBuffer bbIndex = indexBuffer.getPixelsForPlane(pnt.getZ()).buffer();
+			IntBuffer bbIndex = indexBuffer.getPixelsForPlane(point.getZ()).buffer();
 			
 			int offset = 0;
 			
-			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrementY()) {
-				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrementX()) {
+			for (point.setY(0); point.getY()<extent.getY(); point.incrementY()) {
+				for (point.setX(0); point.getX()<extent.getX(); point.incrementX()) {
 					
 					int idBig = bbIndex.get(offset); 
 					if (idBig!=0) {
@@ -204,7 +204,7 @@ public class ConnectedComponentUnionFind {
 						Integer idSmall = mapIDOrdered.get( unionIndex.find(idBig) );
 						
 						PointRangeWithCount bbox = bboxArr[ idSmall-1 ];
-						bbox.add(pnt);
+						bbox.add(point);
 						
 						bbIndex.put(offset, idSmall);
 					}
@@ -252,7 +252,7 @@ public class ConnectedComponentUnionFind {
 		
 		PointRangeWithCount[] bboxArr = createBBoxArray( mapIDOrdered.size() );
 		
-		addPntsAndAssignNewIDs(
+		addPointsAndAssignNewIDs(
 			indexBuffer,
 			unionIndex,
 			mapIDOrdered,

@@ -98,8 +98,8 @@ public class OverlayObjectMask extends Overlay {
 	}
 	
 	@Override
-	public boolean isPointInside( DrawOverlay overlayWriter, Point3i pnt ) {
-		return object.getMask().contains(pnt);
+	public boolean isPointInside( DrawOverlay overlayWriter, Point3i point ) {
+		return object.getMask().contains(point);
 	}
 
 	// We delegate uniqueness-check to the mask

@@ -42,27 +42,27 @@ import org.anchoranalysis.image.extent.Extent;
 public class CountKernelNghbIgnoreOutsideScene extends CountKernelNghbBase {
 
 	private Extent extentScene;
-	private ReadableTuple3i addPnt;
+	private ReadableTuple3i addPoint;
 	
 	public CountKernelNghbIgnoreOutsideScene(
 		boolean useZ,
 		BinaryValuesByte bv,
 		boolean multipleMatchesPerVoxel,
 		Extent extentScene,		// The entire extent of the scene
-		ReadableTuple3i addPnt			// Added to a point before determining if it is inside or outside the scene.
+		ReadableTuple3i addPoint			// Added to a point before determining if it is inside or outside the scene.
 	) {
 		super(useZ, bv, multipleMatchesPerVoxel);
 		this.extentScene = extentScene;
-		this.addPnt = addPnt;
+		this.addPoint = addPoint;
 	}
 
 	@Override
-	protected boolean isNghbVoxelAccepted(Point3i pnt, int xShift, int yShift,
+	protected boolean isNghbVoxelAccepted(Point3i point, int xShift, int yShift,
 			int zShift, Extent extent) {
 		
-		int xNew = pnt.getX()+xShift+addPnt.getX();
-		int yNew = pnt.getY()+yShift+addPnt.getY();
-		int zNew = pnt.getZ()+zShift+addPnt.getZ();
+		int xNew = point.getX()+xShift+addPoint.getX();
+		int yNew = point.getY()+yShift+addPoint.getY();
+		int zNew = point.getZ()+zShift+addPoint.getZ();
 		
 		return extentScene.contains(xNew,yNew,zNew);
 	}

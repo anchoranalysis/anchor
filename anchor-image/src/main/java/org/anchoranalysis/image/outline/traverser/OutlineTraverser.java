@@ -119,9 +119,9 @@ public class OutlineTraverser {
 		
 		while(true) {
 			
-			Point3iWithDist pnt = queue.pop(visitedPixels);
+			Point3iWithDist point = queue.pop(visitedPixels);
 			
-			visit( pnt, queue, visitedPixels );
+			visit( point, queue, visitedPixels );
 			
 			// We go again, assuming next is not empty
 			if (queue.isEmpty()) {
@@ -130,27 +130,27 @@ public class OutlineTraverser {
 		}
 	}
 		
-	private void visit( Point3iWithDist pntWithDist, PriorityQueueVisit queue, VisitedPixels visitedPixels ) {
+	private void visit( Point3iWithDist pointWithDist, PriorityQueueVisit queue, VisitedPixels visitedPixels ) {
 		
-		Point3i pnt = pntWithDist.getPoint();
+		Point3i point = pointWithDist.getPoint();
 
-		List<Point3iWithDist> localQueue = considerNghbs( pnt,	pntWithDist.getDist() );
+		List<Point3iWithDist> localQueue = considerNghbs( point,	pointWithDist.getDist() );
 				
-		if (pntWithDist.isForceNewPath()) {
-			visitedPixels.addNewPath(pnt, pntWithDist.getConnPnt() );
+		if (pointWithDist.isForceNewPath()) {
+			visitedPixels.addNewPath(point, pointWithDist.getConnPoint() );
 		} else {
-			visitedPixels.addVisitedPnt(pnt);
+			visitedPixels.addVisitedPoint(point);
 		}
 		
 		// If there is more than one neighbour, we make sure that a new path is created when it is visited
 		if (localQueue.size()>1) {
-			queue.addAllWithConn( localQueue, pnt );
+			queue.addAllWithConn( localQueue, point );
 		} else {
 			queue.addAll( localQueue );
 		}
 	}
 		
-	private List<Point3iWithDist> considerNghbs( Point3i pnt, int dist ) {
+	private List<Point3iWithDist> considerNghbs( Point3i point, int dist ) {
 
 		List<Point3iWithDist> out = new ArrayList<>(); 
 		
@@ -159,7 +159,7 @@ public class OutlineTraverser {
 			dist,
 			out,
 			visitCondition,
-			pnt
+			point
 		);
 		consider.considerNeighbors(useZ, nghb8);
 		return out;

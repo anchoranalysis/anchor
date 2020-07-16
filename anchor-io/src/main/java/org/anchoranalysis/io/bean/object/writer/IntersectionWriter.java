@@ -71,11 +71,11 @@ class IntersectionWriter {
 	private static void writeOnEachSlice(RGBStack stack, RGBColor color, BoundingBox intersection, ObjectMask mask) {
 
 		ReadableTuple3i maxGlobal = intersection.calcCornerMax();
-		Point3i pntGlobal = new Point3i();
+		Point3i pointGlobal = new Point3i();
 				
-		for (pntGlobal.setZ(intersection.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ()) {
-			int relZ = pntGlobal.getZ() - mask.getBoundingBox().cornerMin().getZ();
-			stack.writeRGBMaskToSlice( mask, intersection, color, pntGlobal, relZ, maxGlobal);
+		for (pointGlobal.setZ(intersection.cornerMin().getZ()); pointGlobal.getZ() <=maxGlobal.getZ(); pointGlobal.incrementZ()) {
+			int relZ = pointGlobal.getZ() - mask.getBoundingBox().cornerMin().getZ();
+			stack.writeRGBMaskToSlice( mask, intersection, color, pointGlobal, relZ, maxGlobal);
 		}
 	}
 }

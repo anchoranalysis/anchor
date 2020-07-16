@@ -64,9 +64,9 @@ public final class RetrieveBufferForSlice<T extends Buffer> implements ProcessVo
 	}
 	
 	@Override
-	public void process(Point3i pnt) {
+	public void process(Point3i point) {
 		process.process(
-			pnt,
+			point,
 			bufferSlice,
 			offsetWithinSlice++
 		);

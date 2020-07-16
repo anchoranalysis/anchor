@@ -40,10 +40,10 @@ public final class Point3f extends Tuple3f {
 		// Initializes with [0, 0, 0]
 	}
 	
-	public Point3f( Point3f pnt) {
-		this.x = pnt.x;
-		this.y = pnt.y;
-		this.z = pnt.z;
+	public Point3f( Point3f point) {
+		this.x = point.x;
+		this.y = point.y;
+		this.z = point.z;
 	}
 	
 	public Point3f(float x, float y, float z) {

@@ -126,12 +126,12 @@ public class ObjectsAsBinaryChnlGenerator extends RasterGenerator implements Ite
 		byte maskVal = mask.getBinaryValuesByte().getOnByte();
 		byte chnlOutValByte = (byte) chnlOutVal;
 		
-		Point3i pntLocal = new Point3i();
+		Point3i pointLocal = new Point3i();
 		
-		for (pntLocal.setZ(0); pntLocal.getZ() < newSd.getZ(); pntLocal.incrementZ()) {
+		for (pointLocal.setZ(0); pointLocal.getZ() < newSd.getZ(); pointLocal.incrementZ()) {
 			
-			ByteBuffer pixelsIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
-			ByteBuffer pixelsOut = vbNew.getPlaneAccess().getPixelsForPlane(pntLocal.getZ()).buffer();
+			ByteBuffer pixelsIn = mask.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
+			ByteBuffer pixelsOut = vbNew.getPlaneAccess().getPixelsForPlane(pointLocal.getZ()).buffer();
 			
 			while (pixelsIn.hasRemaining()) {
 				

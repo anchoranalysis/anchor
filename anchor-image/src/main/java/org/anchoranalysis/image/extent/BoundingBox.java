@@ -231,15 +231,15 @@ public final class BoundingBox implements Serializable {
 	
 
 	
-	public Point3i closestPntOnBorder( Point3d pntIn ) {
+	public Point3i closestPointOnBorder( Point3d pointIn ) {
 		
 		ReadableTuple3i crnrMax = calcCornerMax();
 		
-		Point3i pntOut = new Point3i();
-		pntOut.setX( closestPntOnAxis(pntIn.getX(), cornerMin.getX(), crnrMax.getX()) );
-		pntOut.setY( closestPntOnAxis(pntIn.getY(), cornerMin.getY(), crnrMax.getY()) );
-		pntOut.setZ( closestPntOnAxis(pntIn.getZ(), cornerMin.getZ(), crnrMax.getZ()) );
-		return pntOut;
+		Point3i pointOut = new Point3i();
+		pointOut.setX( closestPointOnAxis(pointIn.getX(), cornerMin.getX(), crnrMax.getX()) );
+		pointOut.setY( closestPointOnAxis(pointIn.getY(), cornerMin.getY(), crnrMax.getY()) );
+		pointOut.setZ( closestPointOnAxis(pointIn.getZ(), cornerMin.getZ(), crnrMax.getZ()) );
+		return pointOut;
 	}
 	
 	public static Point3i relPosTo( Point3i relPoint, ReadableTuple3i srcPoint ) {
@@ -398,7 +398,7 @@ public final class BoundingBox implements Serializable {
 		return extractDim.applyAsDouble(cornerMin) + midPointInExtent;
 	}
 	
-	private static int closestPntOnAxis( double val, int axisMin, int axisMax) {
+	private static int closestPointOnAxis( double val, int axisMin, int axisMax) {
 		
 		if (val<axisMin) {
 			return axisMin;

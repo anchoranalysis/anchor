@@ -54,15 +54,15 @@ class PriorityQueueVisit {
 	}
 
 	public void addAll(List<Point3iWithDist> list) {
-		for( Point3iWithDist pnt : list ) {
-			add(pnt);
+		for( Point3iWithDist point : list ) {
+			add(point);
 		}
 	}
 	
-	public void addAllWithConn(List<Point3iWithDist> list, Point3i connPnt) {
-		for( Point3iWithDist pnt : list ) {
-			pnt.markAsNewPath(connPnt);
-			add(pnt);
+	public void addAllWithConn(List<Point3iWithDist> list, Point3i connPoint) {
+		for( Point3iWithDist point : list ) {
+			point.markAsNewPath(connPoint);
+			add(point);
 		}
 	}
 	
@@ -81,9 +81,9 @@ class PriorityQueueVisit {
 		
 		for( int i=0; i<next.size(); i++ ) {
 			
-			Point3iWithDist pnt = next.get(i);
+			Point3iWithDist point = next.get(i);
 			
-			int dist =  visitedPixels.distMaxToHeadTail(pnt.getPoint());
+			int dist =  visitedPixels.distMaxToHeadTail(point.getPoint());
 			
 			if (dist < distMin) {
 				index = i;

@@ -152,7 +152,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	
 	// Where is a point in relation to the current object
 	@Override
-	public final byte evalPntInside( Point3d pt ) {
+	public final byte evalPointInside( Point3d pt ) {
 		
 		// It is permissible to mutate the point during calculation
 		double x = pt.getX() - getPos().getX();

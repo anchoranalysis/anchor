@@ -144,7 +144,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
 	
 	// Where is a point in relation to the current object
 	@Override
-	public final byte evalPntInside( Point3d pt ) {
+	public final byte evalPointInside( Point3d pt ) {
 		
 		if (pt.distanceSquared(this.getPos()) > radiiShellMaxSq) {
 			return FLAG_SUBMARK_NONE;

@@ -47,9 +47,9 @@ public final class Point2d implements Serializable {
 		y = 0;
 	}
 	
-	public Point2d( Point2d pnt ) {
-		this.x = pnt.x;
-		this.y = pnt.y;
+	public Point2d( Point2d point ) {
+		this.x = point.x;
+		this.y = point.y;
 	}
 	
 	public Point2d(double x, double y) {
@@ -57,9 +57,9 @@ public final class Point2d implements Serializable {
 		this.y = y;
 	}
 	
-	public void add( Point2i pnt ) {
-		this.x = this.x + pnt.getX();
-		this.y = this.y + pnt.getY();
+	public void add( Point2i point ) {
+		this.x = this.x + point.getX();
+		this.y = this.y + point.getY();
 	}
 	
 	public void scale( double factor ) {
@@ -83,14 +83,14 @@ public final class Point2d implements Serializable {
 		this.y = y;
 	}
 
-	public double distanceSquared( Point2d pnt ) {
-		double sx = this.x - pnt.x;
-		double sy = this.y - pnt.y;
+	public double distanceSquared( Point2d point ) {
+		double sx = this.x - point.x;
+		double sy = this.y - point.y;
 		return (sx*sx) + (sy*sy);
 	}
 	
-	public double distance( Point2d pnt ) {
-		return Math.sqrt( distanceSquared(pnt) );
+	public double distance( Point2d point ) {
+		return Math.sqrt( distanceSquared(point) );
 	}
 	
 	@Override

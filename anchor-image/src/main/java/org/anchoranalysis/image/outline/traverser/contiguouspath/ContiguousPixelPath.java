@@ -42,32 +42,32 @@ public class ContiguousPixelPath {
 	private List<Point3i> list;
 	
 	@Getter
-	private Optional<Point3i> initialPnt;
+	private Optional<Point3i> initialPoint;
 	
 	@Getter
-	private Optional<Point3i> connPnt;
+	private Optional<Point3i> connPoint;
 	
 	/** With a single initial-point, and maybe a connection point */
-	public ContiguousPixelPath( Point3i initialPnt, Point3i connPnt ) {
-		this(Optional.of(connPnt));
-		this.initialPnt = Optional.of(initialPnt);
-		maybeAddPntToClosestEnd(initialPnt);
+	public ContiguousPixelPath( Point3i initialPoint, Point3i connPoint ) {
+		this(Optional.of(connPoint));
+		this.initialPoint = Optional.of(initialPoint);
+		maybeAddPointToClosestEnd(initialPoint);
 	}
 	
 	/** Without any connection-point */
 	public ContiguousPixelPath() {
 		this(Optional.empty());
-		initialPnt = Optional.empty();
+		initialPoint = Optional.empty();
 	}
 	
-	private ContiguousPixelPath( Optional<Point3i> connPnt ) {
-		this.connPnt = connPnt;
-		initialPnt = Optional.empty();
+	private ContiguousPixelPath( Optional<Point3i> connPoint ) {
+		this.connPoint = connPoint;
+		initialPoint = Optional.empty();
 		list = new ArrayList<>();
 	}
 	
 	public ContiguousPixelPath duplicate() {
-		ContiguousPixelPath out = new ContiguousPixelPath(connPnt);
+		ContiguousPixelPath out = new ContiguousPixelPath(connPoint);
 		out.list.addAll(list);
 		return out;
 	}
@@ -75,29 +75,29 @@ public class ContiguousPixelPath {
 	/**
 	 * Adds the point to the closest end of the path....  but only if it neighbours the head or the tail
 	 * 
-	 * @param pnt the point to add
+	 * @param point the point to add
 	 * @return TRUE if point was successfully added, FALSE if the point could not be added
 	 */
-	public boolean maybeAddPntToClosestEnd(Point3i pnt) {
+	public boolean maybeAddPointToClosestEnd(Point3i point) {
 		
 		if (list.isEmpty()) {
-			list.add(pnt);
+			list.add(point);
 			return true;
 		}
 		
 		// In an effort to keep the outline as connected as possible, we consider the head and tail
 		//  of the list, and add the point to the end which minimal distance
 		
-		int distHead = pnt.distanceMax(head()); 
-		int distTail = pnt.distanceMax(tail());
+		int distHead = point.distanceMax(head()); 
+		int distTail = point.distanceMax(tail());
 		
 		if (distHead==1) {
 			// If close to head than tail
-			list.add(0, pnt);
+			list.add(0, point);
 			return true;
 		} else if (distTail==1) {
 			// If close to tail than head
-			list.add(pnt);
+			list.add(point);
 			return true;
 		} else {
 			// This point can't be fit to either the head or the tail
@@ -165,8 +165,8 @@ public class ContiguousPixelPath {
 
 	/** Adds a shift to each point (modifying the existing points in memory), and returns them as a list */
 	public List<Point3i> addShift( ReadableTuple3i shift ) {
-		for( Point3i relPnt : list) {
-			relPnt.add( shift );
+		for( Point3i relPoint : list) {
+			relPoint.add( shift );
 		}
 		return list;
 	}
@@ -179,17 +179,17 @@ public class ContiguousPixelPath {
 	@Override
 	public String toString() {
 		return String.format(
-			"Path ( head=%s\ttail=%s\tsize=%d initialPnt=%s connPnt=%s )",
+			"Path ( head=%s\ttail=%s\tsize=%d initialPoint=%s connPoint=%s )",
 			head(),
 			tail(),
 			list.size(),
-			pntOrNull(initialPnt),
-			pntOrNull(connPnt)
+			pointOrNull(initialPoint),
+			pointOrNull(connPoint)
 		);
 	}
 	
-	private static String pntOrNull( Optional<Point3i> pnt ) {
-		return pnt.map(Point3i::toString).orElse("null");
+	private static String pointOrNull( Optional<Point3i> point ) {
+		return point.map(Point3i::toString).orElse("null");
 	}
 			
 	public Point3i tail() {
@@ -204,9 +204,9 @@ public class ContiguousPixelPath {
 		return new ArrayList<>( list.subList(from, to) );
 	}
 	
-	public Optional<Integer> indexInitialPnt() {
-		return initialPnt.map( pnt->
-			list.indexOf(pnt)
+	public Optional<Integer> indexInitialPoint() {
+		return initialPoint.map( point->
+			list.indexOf(point)
 		);
 	}
 }

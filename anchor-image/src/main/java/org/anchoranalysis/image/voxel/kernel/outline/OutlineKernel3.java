@@ -51,7 +51,7 @@ public class OutlineKernel3 extends OutlineKernel3Base {
 	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
 	 */
 	@Override
-	public boolean accptPos( int ind, Point3i pnt ) {
+	public boolean accptPos( int ind, Point3i point ) {
 
 		ByteBuffer inArrZ = inSlices.getLocal(0);
 		ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
@@ -59,8 +59,8 @@ public class OutlineKernel3 extends OutlineKernel3Base {
 		
 		int xLength = extent.getX();
 		
-		int x = pnt.getX();
-		int y = pnt.getY();
+		int x = point.getX();
+		int y = point.getY();
 		
 		if (bv.isOff(inArrZ.get(ind))) {
 			return false;

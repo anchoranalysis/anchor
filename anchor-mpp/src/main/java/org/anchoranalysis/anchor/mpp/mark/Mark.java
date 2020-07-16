@@ -72,7 +72,7 @@ public abstract class Mark implements Serializable, Identifiable {
 	}
 	
 	// It is permissible to mutate the point during calculation
-	public abstract byte evalPntInside( Point3d pt );
+	public abstract byte evalPointInside( Point3d pt );
 	
 	public abstract Mark duplicate();
 	
@@ -104,8 +104,8 @@ public abstract class Mark implements Serializable, Identifiable {
 	
 	public abstract BoundingBox bboxAllRegions( ImageDimensions bndScene );
 
-	protected byte evalPntInside( Point3i pt ) {
-		return this.evalPntInside(
+	protected byte evalPointInside( Point3i pt ) {
+		return this.evalPointInside(
 			PointConverter.doubleFromInt(pt)
 		); 
 	}
@@ -140,17 +140,17 @@ public abstract class Mark implements Serializable, Identifiable {
 		
 		ReadableTuple3i maxPos = bbox.calcCornerMax();
 		
-		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		for (point.setZ(bbox.cornerMin().getZ()); point.getZ()<=maxPos.getZ(); point.incrementZ()) {
 			
-			int zLocal = pnt.getZ() - bbox.cornerMin().getZ();
+			int zLocal = point.getZ() - bbox.cornerMin().getZ();
 			ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 
 			int cnt = 0;
-			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
+			for (point.setY(bbox.cornerMin().getY()); point.getY()<=maxPos.getY(); point.incrementY()) {
+				for (point.setX(bbox.cornerMin().getX()); point.getX()<=maxPos.getX(); point.incrementX()) {
 					
-					byte membership = evalPntInside(pnt);
+					byte membership = evalPointInside(point);
 					
 					if (rm.isMemberFlag(membership)) {
 						maskSlice.put(cnt, maskOn);
@@ -182,24 +182,24 @@ public abstract class Mark implements Serializable, Identifiable {
 		
 		ReadableTuple3i maxPos = bbox.calcCornerMax();
 		
-		Point3i pnt = new Point3i();
-		Point3d pntScaled = new Point3d();
-		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=maxPos.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		Point3d pointScaled = new Point3d();
+		for (point.setZ(bbox.cornerMin().getZ()); point.getZ()<=maxPos.getZ(); point.incrementZ()) {
 			
-			int zLocal = pnt.getZ() - bbox.cornerMin().getZ();
+			int zLocal = point.getZ() - bbox.cornerMin().getZ();
 			ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 
 			// Z co-ordinates are the same as we only scale in XY
-			pntScaled.setZ( pnt.getZ() );
+			pointScaled.setZ( point.getZ() );
 			
 			int cnt = 0;
-			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=maxPos.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=maxPos.getX(); pnt.incrementX()) {
+			for (point.setY(bbox.cornerMin().getY()); point.getY()<=maxPos.getY(); point.incrementY()) {
+				for (point.setX(bbox.cornerMin().getX()); point.getX()<=maxPos.getX(); point.incrementX()) {
 					
-					pntScaled.setX( ((double) pnt.getX()) / scaleFactor );
-					pntScaled.setY( ((double) pnt.getY()) / scaleFactor );
+					pointScaled.setX( ((double) point.getX()) / scaleFactor );
+					pointScaled.setY( ((double) point.getY()) / scaleFactor );
 					
-					byte membership = evalPntInside(pntScaled);
+					byte membership = evalPointInside(pointScaled);
 					
 					if (rm.isMemberFlag(membership)) {
 						maskSlice.put(cnt, maskOn);

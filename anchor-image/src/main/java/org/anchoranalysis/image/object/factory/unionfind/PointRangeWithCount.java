@@ -37,8 +37,8 @@ class PointRangeWithCount {
 	private PointRange pointRange = new PointRange();
 	private int count = 0;
 	
-	public void add( Point3i pnt ) {
-		pointRange.add(pnt);
+	public void add( Point3i point ) {
+		pointRange.add(point);
 		count++;
 	}
 

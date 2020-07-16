@@ -70,10 +70,10 @@ public abstract class Overlay implements Identifiable {
 	 * Is a point inside an overlay? (for a particular OverlayWriter).
 	 * 
 	 * @param overlayWriter
-	 * @param pnt
+	 * @param point
 	 * @return
 	 */
-	public abstract boolean isPointInside( DrawOverlay overlayWriter, Point3i pnt );
+	public abstract boolean isPointInside( DrawOverlay overlayWriter, Point3i point );
 
 	@Override
 	public abstract boolean equals(Object obj);

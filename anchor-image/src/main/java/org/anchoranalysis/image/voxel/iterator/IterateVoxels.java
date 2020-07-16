@@ -237,18 +237,18 @@ public class IterateVoxels {
 		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
-		Point3i pnt = new Point3i();
+		Point3i point = new Point3i();
 		
-		for(pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrementZ()) {
+		for(point.setZ(crnrMin.getZ()); point.getZ()<=crnrMax.getZ(); point.incrementZ()) {
 
-			process.notifyChangeZ(pnt.getZ());
+			process.notifyChangeZ(point.getZ());
 			
-			for(pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrementY()) {
+			for(point.setY(crnrMin.getY()); point.getY()<=crnrMax.getY(); point.incrementY()) {
 				
-				process.notifyChangeY(pnt.getY());
+				process.notifyChangeY(point.getY());
 				
-				for(pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrementX()) {
-					process.process(pnt);
+				for(point.setX(crnrMin.getX()); point.getX()<=crnrMax.getX(); point.incrementX()) {
+					process.process(point);
 				}
 			}
 		}
@@ -348,14 +348,14 @@ public class IterateVoxels {
 	/**
 	 * Iterate over each point in the neighbourhood of an existing point - also setting the source of a delegate
 	 * 
-	 * @param sourcePnt the point to iterate over its neighbourhood
+	 * @param sourcePoint the point to iterate over its neighbourhood
 	 * @param nghb a definition of what constitutes the neighbourhood
 	 * @param do3D whether to iterate in 2D or 3D
 	 * @param process is called for each voxel in the neighbourhood of the source-point.
 	 * @return the result after processing each point in the neighbourhood
 	 */
-	public static <T> T callEachPointInNghb( Point3i sourcePnt, Nghb nghb, boolean do3D, ProcessVoxelNeighbour<T> process, int sourceVal, int sourceOffsetXY) {
-		process.initSource(sourcePnt, sourceVal, sourceOffsetXY);
+	public static <T> T callEachPointInNghb( Point3i sourcePoint, Nghb nghb, boolean do3D, ProcessVoxelNeighbour<T> process, int sourceVal, int sourceOffsetXY) {
+		process.initSource(sourcePoint, sourceVal, sourceOffsetXY);
 		nghb.processAllPointsInNghb(do3D, process);
 		return process.collectResult();
 	}

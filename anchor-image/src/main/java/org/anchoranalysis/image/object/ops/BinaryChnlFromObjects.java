@@ -105,23 +105,23 @@ public class BinaryChnlFromObjects {
 		BoundingBox bbox = object.getBoundingBox();
 		
 		ReadableTuple3i maxGlobal = bbox.calcCornerMax();
-		Point3i pntGlobal = new Point3i();
-		Point3i pntLocal = new Point3i();
+		Point3i pointGlobal = new Point3i();
+		Point3i pointLocal = new Point3i();
 		
 		byte maskOn = object.getBinaryValuesByte().getOnByte();
 		
-		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
+		pointLocal.setZ(0);
+		for (pointGlobal.setZ(bbox.cornerMin().getZ()); pointGlobal.getZ() <=maxGlobal.getZ(); pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 			
-			ByteBuffer maskIn = object.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
+			ByteBuffer maskIn = object.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
 			
-			ByteBuffer pixelsOut = voxelBoxOut.getPlaneAccess().getPixelsForPlane(pntGlobal.getZ()).buffer();
+			ByteBuffer pixelsOut = voxelBoxOut.getPlaneAccess().getPixelsForPlane(pointGlobal.getZ()).buffer();
 			writeToBufferMasked(
 				maskIn,
 				pixelsOut,
 				voxelBoxOut.extent(),
 				bbox.cornerMin(),
-				pntGlobal,
+				pointGlobal,
 				maxGlobal,
 				maskOn,
 				outValByte
@@ -134,21 +134,21 @@ public class BinaryChnlFromObjects {
 		ByteBuffer pixelsOut,
 		Extent extentOut,
 		ReadableTuple3i crnrMin,
-		Point3i pntGlobal,
+		Point3i pointGlobal,
 		ReadableTuple3i maxGlobal,
 		byte maskOn,
 		byte outValByte
 	) {
 		
-		for (pntGlobal.setY(crnrMin.getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+		for (pointGlobal.setY(crnrMin.getY()); pointGlobal.getY() <= maxGlobal.getY(); pointGlobal.incrementY() ) {
 			
-			for (pntGlobal.setX(crnrMin.getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+			for (pointGlobal.setX(crnrMin.getX()); pointGlobal.getX() <= maxGlobal.getX(); pointGlobal.incrementX() ) {	
 
 				if (maskIn.get()!=maskOn) {
 					continue;
 				}
 				
-				int indexGlobal = extentOut.offset(pntGlobal.getX(), pntGlobal.getY());
+				int indexGlobal = extentOut.offset(pointGlobal.getX(), pointGlobal.getY());
 				pixelsOut.put(indexGlobal,outValByte);
 			}
 		}

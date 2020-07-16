@@ -51,10 +51,10 @@ public class MarkPointList extends MarkAbstractPointList {
 	private Set<Point3d> set;	// A set that makes it quick to check if a point is on the list
 	
 	@Override
-	public byte evalPntInside(Point3d pntIsInside) {
+	public byte evalPointInside(Point3d pointIsInside) {
 		
 		// FOR NOW WE IGNORE THE SHELL RADIUS
-		if( PointInSetQuery.anyCrnrInSet(pntIsInside, set) ) {
+		if( PointInSetQuery.anyCrnrInSet(pointIsInside, set) ) {
 			return FLAG_SUBMARK_INSIDE;
 		} else {
 			return FLAG_SUBMARK_NONE;	
@@ -90,8 +90,8 @@ public class MarkPointList extends MarkAbstractPointList {
 
 		for( int i=0; i<getPoints().size(); i++) {
 			
-			Point3d pnt = getPoints().get(i); 
-			pnt.scale(multFactor);
+			Point3d point = getPoints().get(i); 
+			point.scale(multFactor);
 		}
 	}
 

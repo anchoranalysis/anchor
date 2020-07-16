@@ -45,7 +45,7 @@ final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 	private final Extent extent;
 	private final ProcessVoxelNeighbourAbsolute<T> delegate;
 	
-	private Point3i pnt;
+	private Point3i point;
 	
 	public WithinExtent( Extent extent, ProcessVoxelNeighbourAbsolute<T> processAbsolutePoint ) {
 		this.extent = extent;
@@ -53,16 +53,16 @@ final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 	}
 
 	@Override
-	public void initSource(Point3i pnt, int sourceVal, int sourceOffsetXY) {
-		this.pnt = pnt;
+	public void initSource(Point3i point, int sourceVal, int sourceOffsetXY) {
+		this.point = point;
 		this.delegate.initSource(sourceVal, sourceOffsetXY);
 	}
 	
 	@Override
 	public void processPoint(int xChange, int yChange) {
 		
-		int x1 = pnt.getX() + xChange;
-		int y1 = pnt.getY() + yChange;
+		int x1 = point.getX() + xChange;
+		int y1 = point.getY() + yChange;
 		
 		if (x1 < 0 || x1 >=extent.getX() || y1 < 0 || y1 >= extent.getY()) {
 			return;
@@ -73,7 +73,7 @@ final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
 
 	@Override
 	public boolean notifyChangeZ(int zChange) {
-		int z1 = pnt.getZ() + zChange;
+		int z1 = point.getZ() + zChange;
 		
 		if (!extent.containsZ(z1)) {
 			return false;

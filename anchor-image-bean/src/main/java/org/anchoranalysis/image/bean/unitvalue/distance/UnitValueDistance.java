@@ -46,19 +46,19 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance> im
 
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
-	public double rslv( Optional<ImageResolution> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
+	public double rslv( Optional<ImageResolution> res, Point3d point1, Point3d point2 ) throws OperationFailedException {
 		return resolve(
 			res,
-			DirectionVector.createBetweenTwoPoints(pnt1, pnt2)
+			DirectionVector.createBetweenTwoPoints(point1, point2)
 		);
 	}
 	
 	// Uses the direction between two points to resolve the distance.
 	// NB the magnitude of the distance between these two points is not considered, only the direction
-	public double rslv( Optional<ImageResolution> res, Point3i pnt1, Point3i pnt2 ) throws OperationFailedException {
+	public double rslv( Optional<ImageResolution> res, Point3i point1, Point3i point2 ) throws OperationFailedException {
 		return resolve(
 			res,
-			DirectionVector.createBetweenTwoPoints(pnt1, pnt2)
+			DirectionVector.createBetweenTwoPoints(point1, point2)
 		);
 	}
 	

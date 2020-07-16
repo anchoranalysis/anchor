@@ -43,7 +43,7 @@ class CombineWithTarget {
 	 * @param paths
 	 * @param p1
 	 * @param p2
-	 * @param mergePnt
+	 * @param mergePoint
 	 * @param indexHighest
 	 * @return the number of pixels deleted through the combination
 	 */
@@ -73,9 +73,9 @@ class CombineWithTarget {
 	) {
 		ContiguousPixelPath p1 = mergeSrc.getPath();
 		ContiguousPixelPath p2 = mergeTarget.getPath();
-		Point3i mergePnt = mergeTarget.mergePnt();
+		Point3i mergePoint = mergeTarget.mergePoint();
 		
-		MergeCandidate cand = new MergeCandidate(p1, p2, mergePnt, mergePnt);
+		MergeCandidate cand = new MergeCandidate(p1, p2, mergePoint, mergePoint);
 		
 		// We always keep the larger one
 		if (mergeSrc.getPath().size()>mergeTarget.getPath().size()) {

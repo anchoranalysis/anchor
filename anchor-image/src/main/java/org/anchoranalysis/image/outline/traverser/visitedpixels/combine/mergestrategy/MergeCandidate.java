@@ -38,10 +38,10 @@ public class MergeCandidate {
 	private PathWithClosest keep;
 	private PathWithClosest merge;
 	
-	public MergeCandidate(ContiguousPixelPath toKeep, ContiguousPixelPath toMerge, Point3i toKeepPnt, Point3i toMergePnt) {
+	public MergeCandidate(ContiguousPixelPath toKeep, ContiguousPixelPath toMerge, Point3i toKeepPoint, Point3i toMergePoint) {
 		this(
-			new PathWithClosest(toKeep,toKeepPnt),
-			new PathWithClosest(toMerge,toMergePnt)
+			new PathWithClosest(toKeep,toKeepPoint),
+			new PathWithClosest(toMerge,toMergePoint)
 		);
 	}
 	

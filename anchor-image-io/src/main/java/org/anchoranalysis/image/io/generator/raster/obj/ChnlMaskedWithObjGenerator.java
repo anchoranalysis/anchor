@@ -127,28 +127,28 @@ public class ChnlMaskedWithObjGenerator extends RasterGenerator implements Itera
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
 		ReadableTuple3i maxGlobal = bbox.calcCornerMax();
-		Point3i pntGlobal = new Point3i();
-		Point3i pntLocal = new Point3i();
+		Point3i pointGlobal = new Point3i();
+		Point3i pointLocal = new Point3i();
 		
 		VoxelBox<?> vbSrc = srcChnl.getVoxelBox().any(); 
 		VoxelBox<?> vbNew = chnlNew.getVoxelBox().any();
 		
-		pntLocal.setZ(0);
-		for (pntGlobal.setZ(bbox.cornerMin().getZ()); pntGlobal.getZ() <=maxGlobal.getZ(); pntGlobal.incrementZ(), pntLocal.incrementZ()) {
+		pointLocal.setZ(0);
+		for (pointGlobal.setZ(bbox.cornerMin().getZ()); pointGlobal.getZ() <=maxGlobal.getZ(); pointGlobal.incrementZ(), pointLocal.incrementZ()) {
 			
-			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pntLocal.getZ()).buffer();
-			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pntGlobal.getZ());
-			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pntLocal.getZ());
+			ByteBuffer maskIn = mask.getVoxelBox().getPixelsForPlane(pointLocal.getZ()).buffer();
+			VoxelBuffer<?> pixelsIn = vbSrc.getPixelsForPlane(pointGlobal.getZ());
+			VoxelBuffer<?> pixelsOut = vbNew.getPixelsForPlane(pointLocal.getZ());
 			
-			for (pntGlobal.setY(bbox.cornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+			for (pointGlobal.setY(bbox.cornerMin().getY()); pointGlobal.getY() <= maxGlobal.getY(); pointGlobal.incrementY() ) {
 			
-				for (pntGlobal.setX(bbox.cornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+				for (pointGlobal.setX(bbox.cornerMin().getX()); pointGlobal.getX() <= maxGlobal.getX(); pointGlobal.incrementX() ) {	
 
 					if (maskIn.get()!=maskOn) {
 						continue;
 					}
 					
-					int indexGlobal = srcChnl.getDimensions().offset(pntGlobal.getX(), pntGlobal.getY());
+					int indexGlobal = srcChnl.getDimensions().offset(pointGlobal.getX(), pointGlobal.getY());
 					pixelsOut.putInt(maskIn.position()-1, pixelsIn.getInt(indexGlobal) );
 				}
 			}

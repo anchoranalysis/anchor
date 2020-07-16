@@ -40,7 +40,7 @@ class MergeTarget {
 	
 	private ContiguousPixelPath path;
 	private int indexPath;
-	private Point3i mergePnt;
+	private Point3i mergePoint;
 	private int mergeIndex;
 	
 	public MergeTarget(ContiguousPixelPath path, int indexPath, int mergeIndex) {
@@ -58,16 +58,16 @@ class MergeTarget {
 		return indexPath;
 	}
 	
-	public Point3i mergePnt() {
+	public Point3i mergePoint() {
 		return path.get(mergeIndex);
 	}
 
 	@Override
 	public String toString() {
 		return String.format(
-			"path=%s pnt=%s indexPath=%d%n",
+			"path=%s point=%s indexPath=%d%n",
 			path,
-			mergePnt,
+			mergePoint,
 			indexPath
 		);
 	}

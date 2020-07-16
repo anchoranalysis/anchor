@@ -39,13 +39,13 @@ public class MarkPointListFactory {
 
 	private MarkPointListFactory() {}
 	
-	public static MarkPointList create( List<Point3d> pnts ) {
-		return create(pnts, -1);
+	public static MarkPointList create( List<Point3d> points ) {
+		return create(points, -1);
 	}
 	
-	public static MarkPointList create( List<Point3d> pnts, int id ) {
+	public static MarkPointList create( List<Point3d> points, int id ) {
 		MarkPointList mark = new MarkPointList();
-		mark.getPoints().addAll( pnts );
+		mark.getPoints().addAll( points );
 		mark.setId(id);
 		mark.updateAfterPointsChange();
 		return mark;

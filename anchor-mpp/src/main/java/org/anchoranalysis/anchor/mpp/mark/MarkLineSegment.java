@@ -65,7 +65,7 @@ public class MarkLineSegment extends Mark {
 	// We assume this is only ever called for points within the bounding box, otherwise
 	//  we need to do a check and reject all others
 	@Override
-	public byte evalPntInside(Point3d pt) {
+	public byte evalPointInside(Point3d pt) {
 		
 		// TODO
 		// This should be half the distance from one corner of a pixel/voxel to another
@@ -119,17 +119,17 @@ public class MarkLineSegment extends Mark {
 
 	@Override
 	public void scale(double multFactor) {
-		MarkAbstractPosition.scaleXYPnt( distCalcToLine.getStartPoint(), multFactor);
-		MarkAbstractPosition.scaleXYPnt( distCalcToLine.getEndPoint(), multFactor);
+		MarkAbstractPosition.scaleXYPoint( distCalcToLine.getStartPoint(), multFactor);
+		MarkAbstractPosition.scaleXYPoint( distCalcToLine.getEndPoint(), multFactor);
 		
 	}
 
 	@Override
 	public Point3d centerPoint() {
-		Point3d pnt = new Point3d( distCalcToLine.getStartPoint() );
-		pnt.add( distCalcToLine.getEndPoint() );
-		pnt.scale( 0.5 );
-		return pnt;
+		Point3d point = new Point3d( distCalcToLine.getStartPoint() );
+		point.add( distCalcToLine.getEndPoint() );
+		point.scale( 0.5 );
+		return point;
 	}
 	
 	public void setPoints(Point3i startPoint, Point3i endPoint) {

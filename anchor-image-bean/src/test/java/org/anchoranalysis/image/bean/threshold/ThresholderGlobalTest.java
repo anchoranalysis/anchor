@@ -135,9 +135,9 @@ public class ThresholderGlobalTest {
 		IterateVoxels.callEachPoint(
 			vb,
 			bbox,
-			(Point3i pnt, ByteBuffer buffer, int offset) -> buffer.put(
+			(Point3i point, ByteBuffer buffer, int offset) -> buffer.put(
 				offset,
-				(byte) ((pnt.getY() % 50 + pnt.getX() % 50) + addToPixels)
+				(byte) ((point.getY() % 50 + point.getX() % 50) + addToPixels)
 			) 
 		);
 	}

@@ -28,28 +28,22 @@ package org.anchoranalysis.image.outline.traverser;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 class Point3iWithDist {
 
-	private Point3i point;
-	private int dist;
+	@Getter
+	private final Point3i point;
+	
+	@Getter
+	private final int dist;
 	
 	// If non-null, this is a point that is a neighbour but
 	//   is disallowed from being on the same contiguous path
-	private Point3i connPnt = null;
-	
-	public Point3iWithDist(Point3i point, int dist) {
-		super();
-		this.point = point;
-		this.dist = dist;
-	}
-
-	public Point3i getPoint() {
-		return point;
-	}
-
-	public int getDist() {
-		return dist;
-	}
+	@Getter
+	private Point3i connPoint = null;
 	
 	@Override
 	public String toString() {
@@ -57,16 +51,10 @@ class Point3iWithDist {
 	}
 
 	public boolean isForceNewPath() {
-		return connPnt!=null;
+		return connPoint!=null;
 	}
 
-	public void markAsNewPath(Point3i connPnt ) {
-		this.connPnt = connPnt;
+	public void markAsNewPath(Point3i connPoint ) {
+		this.connPoint = connPoint;
 	}
-
-	public Point3i getConnPnt() {
-		return connPnt;
-	}
-	
-	
 }

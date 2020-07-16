@@ -43,5 +43,5 @@ public interface ProcessVoxel {
 	/** Notifies the processor that there has been a change in z-coordinate */
 	default void notifyChangeZ(int z) {}
 	
-	void process(Point3i pnt);
+	void process(Point3i point);
 }

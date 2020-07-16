@@ -125,24 +125,24 @@ public final class ImageDimensions implements Serializable {
 		return extent;
 	}
 	
-	public boolean contains( Point3d pnt ) {
-		return extent.contains(pnt);
+	public boolean contains( Point3d point ) {
+		return extent.contains(point);
 	}
 	
-	public boolean contains( Point3i pnt ) {
-		return extent.contains(pnt);
+	public boolean contains( Point3i point ) {
+		return extent.contains(point);
 	}
 	
 	public boolean equals( ImageDimensions obj ) {
 		return extent.equals(obj.extent);
 	}
 
-	public final int offset(Point3i pnt) {
-		return extent.offset(pnt);
+	public final int offset(Point3i point) {
+		return extent.offset(point);
 	}
 	
-	public final int offsetSlice(Point3i pnt) {
-		return extent.offsetSlice(pnt);
+	public final int offsetSlice(Point3i point) {
+		return extent.offsetSlice(point);
 	}
 
 	public ImageResolution getRes() {

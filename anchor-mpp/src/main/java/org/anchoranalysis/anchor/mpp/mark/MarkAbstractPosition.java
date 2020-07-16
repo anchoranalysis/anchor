@@ -77,12 +77,12 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
     
     @Override
 	public void scale( double multFactor ) {
-    	scaleXYPnt(this.pos,multFactor);
+    	scaleXYPoint(this.pos,multFactor);
     }
     
-    public static void scaleXYPnt( Point3d pnt, double multFactor ) {
-    	pnt.setX( pnt.getX() * multFactor ); 
-    	pnt.setY( pnt.getY() * multFactor );
+    public static void scaleXYPoint( Point3d point, double multFactor ) {
+    	point.setX( point.getX() * multFactor ); 
+    	point.setY( point.getY() * multFactor );
     }
     
 	@Override
@@ -135,10 +135,10 @@ public abstract class MarkAbstractPosition extends Mark implements Serializable 
 		return op;
 	}
 	
-	/** Calculates a relative-point from pntGlobal to pntBase */
-	private static Point3i calcRelativePoint(Point3d pntGlobal, ReadableTuple3i pntBase) {
-		Point3i pntOut = PointConverter.intFromDouble(pntGlobal);
-		pntOut.subtract(pntBase);
-		return pntOut;
+	/** Calculates a relative-point from pointGlobal to pointBase */
+	private static Point3i calcRelativePoint(Point3d pointGlobal, ReadableTuple3i pointBase) {
+		Point3i pointOut = PointConverter.intFromDouble(pointGlobal);
+		pointOut.subtract(pointBase);
+		return pointOut;
 	}
 }

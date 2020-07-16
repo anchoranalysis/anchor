@@ -112,10 +112,10 @@ public class Mask {
 		return new BinaryVoxelBoxByte( getVoxelBox(), binaryValues);
 	}
 
-	public boolean isPointOn( Point3i pnt ) {
-		ByteBuffer bb = getVoxelBox().getPixelsForPlane(pnt.getZ()).buffer();
+	public boolean isPointOn( Point3i point ) {
+		ByteBuffer bb = getVoxelBox().getPixelsForPlane(point.getZ()).buffer();
 		
-		int offset = getVoxelBox().extent().offset( pnt.getX(), pnt.getY() );
+		int offset = getVoxelBox().extent().offset( point.getX(), point.getY() );
 		
 		return bb.get(offset)==binaryValuesByte.getOnByte();
 	}

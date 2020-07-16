@@ -39,9 +39,9 @@ class PathWithClosest {
 	private ContiguousPixelPath path;
 	private int closest;
 	
-	public PathWithClosest(ContiguousPixelPath path, Point3i mergePnt ) {
+	public PathWithClosest(ContiguousPixelPath path, Point3i mergePoint ) {
 		this.path = path;
-		closest = indexClosest(path,mergePnt);
+		closest = indexClosest(path,mergePoint);
 	}
 	
 	public Optional<LoopablePoints> removeLeft() {
@@ -64,8 +64,8 @@ class PathWithClosest {
 		return path.size();
 	}
 		
-	private static int indexClosest(ContiguousPixelPath path, Point3i mergePnt) {
-		return DistanceToContiguousPath.distMaxToClosestPoint(path, mergePnt).getIndex();
+	private static int indexClosest(ContiguousPixelPath path, Point3i mergePoint) {
+		return DistanceToContiguousPath.distMaxToClosestPoint(path, mergePoint).getIndex();
 	}
 
 	public List<Point3i> points() {

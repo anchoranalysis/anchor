@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Point3i;
  * 
  * The first time it visits a pixel, then it toggles alreadyFoundSingleDirection
  * 
- * @param pnt
+ * @param point
  * @param dist
  * @return
  */
@@ -52,8 +52,8 @@ class VisitOneDirectionOnly implements ConsiderVisit {
 	}		
 	
 	@Override
-	public boolean considerVisit(Point3i pnt, int dist) {
-		boolean canVisit = visitCondition.considerVisit(pnt, dist);
+	public boolean considerVisit(Point3i point, int dist) {
+		boolean canVisit = visitCondition.considerVisit(point, dist);
 		if (canVisit) {
 			if (!alreadyFoundSingleDirection) {
 				alreadyFoundSingleDirection = true;

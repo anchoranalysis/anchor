@@ -57,12 +57,12 @@ public class ObjectCollectionRTree {
 		}
 	}
 	
-	public ObjectCollection contains( Point3i pnt ) {
+	public ObjectCollection contains( Point3i point ) {
 		// We do an additional check to make sure the point is inside the object,
 		//  as points can be inside the Bounding Box but not inside the object
 		return objects.stream().filterSubset(
-			object -> object.contains(pnt),
-			delegate.contains(pnt)
+			object -> object.contains(point),
+			delegate.contains(point)
 		);
 	}
 		

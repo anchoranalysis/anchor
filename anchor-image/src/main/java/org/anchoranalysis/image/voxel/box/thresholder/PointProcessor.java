@@ -57,7 +57,7 @@ final class PointProcessor implements ProcessVoxelSliceBuffer<ByteBuffer> {
 	}
 	
 	@Override
-	public void process(Point3i pnt, ByteBuffer buffer, int offset) {
+	public void process(Point3i point, ByteBuffer buffer, int offset) {
 		int val = ByteConverter.unsignedByteToInt( buffer.get(offset) );
 		
 		bbOut.put(

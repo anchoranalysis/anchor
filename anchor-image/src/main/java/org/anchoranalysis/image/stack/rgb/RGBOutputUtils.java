@@ -37,8 +37,8 @@ public class RGBOutputUtils {
 	
 	private RGBOutputUtils() {}
 	
-	public static void writeRGBColorToByteArr( RGBColor c, Point3i pnt, ImageDimensions sd, ByteBuffer red, ByteBuffer blue, ByteBuffer green ) {
-		int index = sd.offset(pnt.getX(), pnt.getY(), 0);
+	public static void writeRGBColorToByteArr( RGBColor c, Point3i point, ImageDimensions sd, ByteBuffer red, ByteBuffer blue, ByteBuffer green ) {
+		int index = sd.offset(point.getX(), point.getY(), 0);
 		red.put(index, (byte) c.getRed());
 		green.put(index, (byte) c.getGreen());
 		blue.put(index, (byte) c.getBlue());

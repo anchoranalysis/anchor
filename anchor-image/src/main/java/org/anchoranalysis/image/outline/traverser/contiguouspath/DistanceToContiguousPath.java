@@ -33,7 +33,7 @@ public class DistanceToContiguousPath {
 	private DistanceToContiguousPath() {}
 	
 	/** The distMax of a point to the closest point on the path */
-	public static DistanceIndex distMaxToClosestPoint(ContiguousPixelPath path, Point3i pnt ) {
+	public static DistanceIndex distMaxToClosestPoint(ContiguousPixelPath path, Point3i point ) {
 		
 		int indexMin = -1;
 		int distMin = Integer.MAX_VALUE;
@@ -41,9 +41,9 @@ public class DistanceToContiguousPath {
 		// Finds the minimum distance to any of the paths
 		for( int i=0; i<path.size(); i++ ) {
 			
-			Point3i pnt2 = path.get(i);
+			Point3i point2 = path.get(i);
 			
-			int dist = pnt.distanceMax(pnt2);
+			int dist = point.distanceMax(point2);
 			if (dist < distMin) {
 				distMin = dist;
 				indexMin = i;
@@ -53,10 +53,10 @@ public class DistanceToContiguousPath {
 		return new DistanceIndex(distMin,indexMin);
 	}
 		
-	public static int distMaxToHeadTail(ContiguousPixelPath path, Point3i pnt) {
+	public static int distMaxToHeadTail(ContiguousPixelPath path, Point3i point) {
 		return Math.min(
-			pnt.distanceMax(path.head()),
-			pnt.distanceMax(path.tail())
+			point.distanceMax(path.head()),
+			point.distanceMax(path.tail())
 		);
 	}
 }

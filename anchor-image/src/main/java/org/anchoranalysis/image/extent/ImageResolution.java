@@ -135,24 +135,11 @@ public final class ImageResolution implements Serializable {
 		}
 	}
 	
-	public double distanceSq( Point3i pnt1, Point3i pnt2 ) {
+	public double distanceSq( Point3i point1, Point3i point2 ) {
 		
-		double sx = (double) pnt1.getX() - pnt2.getX();
-		double sy = (double) pnt1.getY() - pnt2.getY();
-		double sz = (double) pnt1.getZ() - pnt2.getZ();
-		
-		sx *= getX();
-		sy *= getY();
-		sz *= getZ();
-		
-		return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(sz, 2); 
-	}
-	
-	public double distanceSq( Point3d pnt1, Point3d pnt2 ) {
-		
-		double sx = pnt1.getX() - pnt2.getX();
-		double sy = pnt1.getY() - pnt2.getY();
-		double sz = pnt1.getZ() - pnt2.getZ();
+		double sx = (double) point1.getX() - point2.getX();
+		double sy = (double) point1.getY() - point2.getY();
+		double sz = (double) point1.getZ() - point2.getZ();
 		
 		sx *= getX();
 		sy *= getY();
@@ -161,35 +148,48 @@ public final class ImageResolution implements Serializable {
 		return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(sz, 2); 
 	}
 	
-	public double distance( Point3d pnt1, Point3d pnt2 ) {
-		return Math.sqrt( distanceSq(pnt1, pnt2) );
-	}
-	
-	public double distance( Point3i pnt1, Point3i pnt2 ) {
-		return Math.sqrt( distanceSq(pnt1, pnt2) );
-	}
-	
-	
-	public double distSqZRel( Point3i pnt1, Point3i pnt2 ) {
+	public double distanceSq( Point3d point1, Point3d point2 ) {
 		
-		int sx = pnt1.getX() - pnt2.getX();
-		int sy = pnt1.getY() - pnt2.getY();
-		int sz = pnt1.getZ() - pnt2.getZ();
+		double sx = point1.getX() - point2.getX();
+		double sy = point1.getY() - point2.getY();
+		double sz = point1.getZ() - point2.getZ();
+		
+		sx *= getX();
+		sy *= getY();
+		sz *= getZ();
+		
+		return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(sz, 2); 
+	}
+	
+	public double distance( Point3d point1, Point3d point2 ) {
+		return Math.sqrt( distanceSq(point1, point2) );
+	}
+	
+	public double distance( Point3i point1, Point3i point2 ) {
+		return Math.sqrt( distanceSq(point1, point2) );
+	}
+	
+	
+	public double distSqZRel( Point3i point1, Point3i point2 ) {
+		
+		int sx = point1.getX() - point2.getX();
+		int sy = point1.getY() - point2.getY();
+		int sz = point1.getZ() - point2.getZ();
 		
 		double szAdj = getZRelRes() * sz;
 		
 		return Math.pow(sx, 2) + Math.pow(sy, 2) + Math.pow(szAdj, 2); 
 	}
 	
-	public double distZRel( Point3d pnt1, Point3d pnt2 ) {
-		return Math.sqrt( distSqZRel(pnt1, pnt2) );
+	public double distZRel( Point3d point1, Point3d point2 ) {
+		return Math.sqrt( distSqZRel(point1, point2) );
 	}
 	
-	public double distSqZRel( Point3d pnt1, Point3d pnt2 ) {
+	public double distSqZRel( Point3d point1, Point3d point2 ) {
 		
-		double sx = pnt1.getX() - pnt2.getX();
-		double sy = pnt1.getY() - pnt2.getY();
-		double sz = pnt1.getZ() - pnt2.getZ();
+		double sx = point1.getX() - point2.getX();
+		double sy = point1.getY() - point2.getY();
+		double sz = point1.getZ() - point2.getZ();
 		
 		sz = sz * getZRelRes();
 		

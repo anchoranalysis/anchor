@@ -41,56 +41,56 @@ public class LoopablePoints {
 	// This is a point that previously connected with the loop, but which we repeat
 	//   after we do a loop, so that the end point is identical to the end of the previous
 	//   points
-	private Point3i connectingPnt;
-	private List<Point3i> pnts;
+	private Point3i connectingPoint;
+	private List<Point3i> points;
 	
-	public LoopablePoints(List<Point3i> pnts, Point3i connectingPnt) {
+	public LoopablePoints(List<Point3i> points, Point3i connectingPoint) {
 		super();
-		this.pnts = pnts;
-		this.connectingPnt = connectingPnt;
+		this.points = points;
+		this.connectingPoint = connectingPoint;
 	}
 		
 	public List<Point3i> loopPointsLeft() {
 		List<Point3i> out = new ArrayList<>();
 		
-		out.add(connectingPnt);
+		out.add(connectingPoint);
 		
-		if (pnts.size()==1) {
+		if (points.size()==1) {
 			// Special behaviour for a single-point as it doesn't need reversing
-			out.addAll(pnts);
+			out.addAll(points);
 		} else {
-			out.addAll( ReverseUtilities.reversedList(pnts) );
+			out.addAll( ReverseUtilities.reversedList(points) );
 			out.remove( out.size() - 1 );	// Remove last item to prevent duplication
-			out.addAll(pnts);
+			out.addAll(points);
 		}
 		
 		return out;
 	}
 	
 	public List<Point3i> loopPointsRight() {
-		List<Point3i> out = new ArrayList<>( pnts );
+		List<Point3i> out = new ArrayList<>( points );
 		
-		if (pnts.size()==1) {
+		if (points.size()==1) {
 			// Special behaviour for a single-point as it doesn't need reversing
 		} else {
 			out.remove( out.size() - 1 );	// Remove last item to prevent duplication
-			out.addAll( ReverseUtilities.reversedList(pnts) );
+			out.addAll( ReverseUtilities.reversedList(points) );
 		}
 				
-		out.add(connectingPnt);
+		out.add(connectingPoint);
 		return out;
 	}
 
 	public int size() {
-		return pnts.size();
+		return points.size();
 	}
 
 	public List<Point3i> points() {
-		return pnts;
+		return points;
 	}
 
 	@Override
 	public String toString() {
-		return pnts.toString();
+		return points.toString();
 	}
 }

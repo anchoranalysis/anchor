@@ -66,7 +66,7 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	}
 	
 	@Override
-	protected boolean isNghbVoxelAccepted( Point3i pnt, int xShift, int yShift, int zShift, Extent extent ) {
+	protected boolean isNghbVoxelAccepted( Point3i point, int xShift, int yShift, int zShift, Extent extent ) {
 		
 		ByteBuffer inArr = localSlicesRequireHigh.getLocal(zShift);
 		
@@ -74,13 +74,13 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 			return false;
 		}
 		
-		int x1 = pnt.getX() + objectRequireHigh.getBoundingBox().cornerMin().getX() + xShift;
+		int x1 = point.getX() + objectRequireHigh.getBoundingBox().cornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return false;
 		}
 		
-		int y1 = pnt.getY() + objectRequireHigh.getBoundingBox().cornerMin().getY() + yShift; 
+		int y1 = point.getY() + objectRequireHigh.getBoundingBox().cornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return false;

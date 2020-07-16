@@ -112,11 +112,11 @@ public class DirectionVector {
 		}
 	}
 	
-	public static DirectionVector createBetweenTwoPoints( Point3d pnt1, Point3d pnt2 ) {
+	public static DirectionVector createBetweenTwoPoints( Point3d point1, Point3d point2 ) {
 		
-		double sx = pnt2.getX() - pnt1.getX();
-		double sy = pnt2.getY() - pnt1.getY();
-		double sz = pnt2.getZ() - pnt1.getZ();
+		double sx = point2.getX() - point1.getX();
+		double sy = point2.getY() - point1.getY();
+		double sz = point2.getZ() - point1.getZ();
 		
 		double norm = Math.sqrt( Math.pow(sx,2.0) + Math.pow(sy,2.0) + Math.pow(sz,2.0) );
 		
@@ -127,11 +127,11 @@ public class DirectionVector {
 		return out;
 	}
 	
-	public static DirectionVector createBetweenTwoPoints( Point3i pnt1, Point3i pnt2 ) {
+	public static DirectionVector createBetweenTwoPoints( Point3i point1, Point3i point2 ) {
 		
-		double sx = (double) pnt2.getX() - pnt1.getX();
-		double sy = (double) pnt2.getY() - pnt1.getY();
-		double sz = (double) pnt2.getZ() - pnt1.getZ();
+		double sx = (double) point2.getX() - point1.getX();
+		double sy = (double) point2.getY() - point1.getY();
+		double sz = (double) point2.getZ() - point1.getZ();
 		
 		double norm = Math.sqrt( Math.pow(sx,2.0) + Math.pow(sy,2.0) + Math.pow(sz,2.0) );
 		

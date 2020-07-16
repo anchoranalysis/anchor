@@ -67,30 +67,30 @@ public class BoundingBoxRTree {
 		} 
 	}
 	
-	public List<Integer> contains( Point3i pnt ) {
-		singlePoint[0] = (float) pnt.getX();
-		singlePoint[1] = (float) pnt.getY();
-		singlePoint[2] = (float) pnt.getZ();
+	public List<Integer> contains( Point3i point ) {
+		singlePoint[0] = (float) point.getX();
+		singlePoint[1] = (float) point.getY();
+		singlePoint[2] = (float) point.getZ();
 
 		return rTree.search(singlePoint, singlePointExtent);
 	}
 	
 	public List<Integer> intersectsWith( BoundingBox bbox ) {
 		
-		float[] coords = minPnt(bbox);
+		float[] coords = minPoint(bbox);
 		float[] dimensions = extent( bbox );
 		
 		return rTree.search(coords, dimensions);
 	}
 	
 	public void add( int i, BoundingBox bbox ) {
-		float[] coords = minPnt( bbox );
+		float[] coords = minPoint( bbox );
 		float[] dimensions = extent( bbox );
 		
 		rTree.insert(coords, dimensions, i );
 	}
 	
-	private static float[] minPnt( BoundingBox bbox ) {
+	private static float[] minPoint( BoundingBox bbox ) {
 		return new float[] {
 			bbox.cornerMin().getX(),
 			bbox.cornerMin().getY(),

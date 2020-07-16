@@ -109,11 +109,11 @@ public class OverlayMark extends Overlay {
 	}
 	
 	@Override
-	public boolean isPointInside( DrawOverlay overlayWriter, Point3i pnt ) {
+	public boolean isPointInside( DrawOverlay overlayWriter, Point3i point ) {
 		
-		Point3d pntD = PointConverter.doubleFromInt(pnt);
+		Point3d pointD = PointConverter.doubleFromInt(point);
 		
-		byte membership = mark.evalPntInside(pntD);
+		byte membership = mark.evalPointInside(pointD);
 		return (regionMembership.isMemberFlag(membership));
 	}
 

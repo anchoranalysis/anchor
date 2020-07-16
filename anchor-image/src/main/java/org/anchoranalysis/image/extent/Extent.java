@@ -188,18 +188,18 @@ public final class Extent implements Serializable {
 	
 	// Calculates an offset of an x and y point in terms of this extent
 	//  we should cal
-	public final int offset( Point3i pnt ) {
-		return offset(pnt.getX(), pnt.getY(), pnt.getZ());
+	public final int offset( Point3i point ) {
+		return offset(point.getX(), point.getY(), point.getZ());
 	}
 	
 	// Calculates an offset of an x and y point in terms of this extent
-	public final int offset( Point2i pnt ) {
-		return offset(pnt.getX(), pnt.getY(), 0);
+	public final int offset( Point2i point ) {
+		return offset(point.getX(), point.getY(), 0);
 	}
 	
 	// Calculates an offset of an x and y point in terms of this extent
-	public final int offsetSlice( Point3i pnt ) {
-		return offset(pnt.getX(), pnt.getY(), 0);
+	public final int offsetSlice( Point3i point ) {
+		return offset(point.getX(), point.getY(), 0);
 	}
 	
 	public Extent ex() {

@@ -41,8 +41,8 @@ class AggregatePoints implements ProcessVoxel {
 	private RunningSumPoint runningSum = new RunningSumPoint();
 	
 	@Override
-	public void process(Point3i pnt) {
-		runningSum.increment(pnt);
+	public void process(Point3i point) {
+		runningSum.increment(point);
 	}
 
 	public int count() {

@@ -68,20 +68,20 @@ public class ApplyKernel {
 		
 		kernel.init(in);
 		
-		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		for (point.setZ(0); point.getZ()<extent.getZ(); point.incrementZ()) {
 
-			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
-			ByteBuffer outArr = out.getPixelsForPlane(pnt.getZ()).buffer();
+			LocalSlices localSlices = new LocalSlices(point.getZ(),localSlicesSize, in);
+			ByteBuffer outArr = out.getPixelsForPlane(point.getZ()).buffer();
 			
 			int ind = 0;
 			
-			kernel.notifyZChange(localSlices, pnt.getZ());
+			kernel.notifyZChange(localSlices, point.getZ());
 			
-			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrementY()) {
-				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrementX()) {
+			for (point.setY(0); point.getY()<extent.getY(); point.incrementY()) {
+				for (point.setX(0); point.getX()<extent.getX(); point.incrementX()) {
 					
-					if( kernel.accptPos(ind, pnt) ) {
+					if( kernel.accptPos(ind, point) ) {
 						outArr.put(ind,outBinary.getOnByte());
 					} else {
 						outArr.put(ind,outBinary.getOffByte());
@@ -136,17 +136,17 @@ public class ApplyKernel {
 		
 		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
-		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pointMax.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		for (point.setZ(bbox.cornerMin().getZ()); point.getZ()<=pointMax.getZ(); point.incrementZ()) {
 
-			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
-			kernel.notifyZChange(localSlices, pnt.getZ());
+			LocalSlices localSlices = new LocalSlices(point.getZ(),localSlicesSize, vb);
+			kernel.notifyZChange(localSlices, point.getZ());
 			
-			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pointMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pointMax.getX(); pnt.incrementX()) {
+			for (point.setY(bbox.cornerMin().getY()); point.getY()<=pointMax.getY(); point.incrementY()) {
+				for (point.setX(bbox.cornerMin().getX()); point.getX()<=pointMax.getX(); point.incrementX()) {
 					
-					int ind = extent.offset(pnt.getX(), pnt.getY());
-					cnt += kernel.countAtPos(ind, pnt);
+					int ind = extent.offset(point.getX(), point.getY());
+					cnt += kernel.countAtPos(ind, point);
 				}
 			}
 		}
@@ -181,17 +181,17 @@ public class ApplyKernel {
 		
 		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
-		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pointMax.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		for (point.setZ(bbox.cornerMin().getZ()); point.getZ()<=pointMax.getZ(); point.incrementZ()) {
 
-			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
-			kernel.notifyZChange(localSlices, pnt.getZ());
+			LocalSlices localSlices = new LocalSlices(point.getZ(),localSlicesSize, vb);
+			kernel.notifyZChange(localSlices, point.getZ());
 			
-			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pointMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pointMax.getX(); pnt.incrementX()) {
+			for (point.setY(bbox.cornerMin().getY()); point.getY()<=pointMax.getY(); point.incrementY()) {
+				for (point.setX(bbox.cornerMin().getX()); point.getX()<=pointMax.getX(); point.incrementX()) {
 					
-					int ind = extent.offsetSlice(pnt);
-					if (kernel.countAtPos(ind, pnt)>0) {
+					int ind = extent.offsetSlice(point);
+					if (kernel.countAtPos(ind, point)>0) {
 						return true;
 					}
 				}
@@ -212,18 +212,18 @@ public class ApplyKernel {
 		
 		kernel.init(in);
 		
-		Point3i pnt = new Point3i();
-		for (pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		for (point.setZ(0); point.getZ()<extent.getZ(); point.incrementZ()) {
 
-			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, in);
-			kernel.notifyZChange(localSlices, pnt.getZ());
+			LocalSlices localSlices = new LocalSlices(point.getZ(),localSlicesSize, in);
+			kernel.notifyZChange(localSlices, point.getZ());
 			
 			int ind = 0;
 			
-			for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrementY()) {
-				for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrementX()) {
+			for (point.setY(0); point.getY()<extent.getY(); point.incrementY()) {
+				for (point.setX(0); point.getX()<extent.getX(); point.incrementX()) {
 					
-					if( kernel.accptPos(ind, pnt) ) {
+					if( kernel.accptPos(ind, point) ) {
 						cnt++;
 					}
 					
@@ -252,26 +252,26 @@ public class ApplyKernel {
 		
 		BinaryValuesByte bvb = object.getBinaryValues().createByte();
 		
-		Point3i pnt = new Point3i();
-		for (pnt.setZ(crnrMin.getZ()); pnt.getZ()<=crnrMax.getZ(); pnt.incrementZ()) {
+		Point3i point = new Point3i();
+		for (point.setZ(crnrMin.getZ()); point.getZ()<=crnrMax.getZ(); point.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(
-				pnt.getZ(),
+				point.getZ(),
 				localSlicesSize,
 				in
 			);
-			kernel.notifyZChange(localSlices, pnt.getZ());
+			kernel.notifyZChange(localSlices, point.getZ());
 			
 			int ind = 0;
 			
-			ByteBuffer bufMask = object.getVoxelBox().getPixelsForPlane(pnt.getZ() - crnrMin.getZ()).buffer();
+			ByteBuffer bufMask = object.getVoxelBox().getPixelsForPlane(point.getZ() - crnrMin.getZ()).buffer();
 			
-			for (pnt.setY(crnrMin.getY()); pnt.getY()<=crnrMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(crnrMin.getX()); pnt.getX()<=crnrMax.getX(); pnt.incrementX()) {
+			for (point.setY(crnrMin.getY()); point.getY()<=crnrMax.getY(); point.incrementY()) {
+				for (point.setX(crnrMin.getX()); point.getX()<=crnrMax.getX(); point.incrementX()) {
 					
-					int indKernel = extent.offset(pnt.getX(), pnt.getY());
+					int indKernel = extent.offset(point.getX(), point.getY());
 
-					if(bufMask.get(ind)==bvb.getOnByte() && kernel.accptPos(indKernel, pnt) ) {
+					if(bufMask.get(ind)==bvb.getOnByte() && kernel.accptPos(indKernel, point) ) {
 						cnt++;
 					}
 					

@@ -56,7 +56,7 @@ public class AndKernel extends BinaryKernel {
 	}
 
 	@Override
-	public boolean accptPos(int ind, Point3i pnt) {
-		return kernel1.accptPos(ind, pnt) && kernel2.accptPos(ind, pnt);
+	public boolean accptPos(int ind, Point3i point) {
+		return kernel1.accptPos(ind, point) && kernel2.accptPos(ind, point);
 	}
 }

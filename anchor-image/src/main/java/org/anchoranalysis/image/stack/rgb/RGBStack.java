@@ -131,8 +131,8 @@ public class RGBStack {
 	}
 	
 	// Only supports 8-bit
-	public void writeRGBMaskToSlice( ObjectMask mask, BoundingBox bbox, RGBColor c, Point3i pntGlobal, int zLocal, ReadableTuple3i maxGlobal) {
-		Preconditions.checkArgument( pntGlobal.getZ()>=0 );
+	public void writeRGBMaskToSlice( ObjectMask mask, BoundingBox bbox, RGBColor c, Point3i pointGlobal, int zLocal, ReadableTuple3i maxGlobal) {
+		Preconditions.checkArgument( pointGlobal.getZ()>=0 );
 		Preconditions.checkArgument( chnls.getNumChnl()==3 );
 		Preconditions.checkArgument( chnls.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE) );
 		
@@ -140,19 +140,19 @@ public class RGBStack {
 		
 		ByteBuffer inArr = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 		
-		ByteBuffer red = extractBuffer(0, pntGlobal.getZ());
-		ByteBuffer green = extractBuffer(1, pntGlobal.getZ());
-		ByteBuffer blue = extractBuffer(2, pntGlobal.getZ());
+		ByteBuffer red = extractBuffer(0, pointGlobal.getZ());
+		ByteBuffer green = extractBuffer(1, pointGlobal.getZ());
+		ByteBuffer blue = extractBuffer(2, pointGlobal.getZ());
 		
 		Extent eMask = mask.getBoundingBox().extent();
 		
- 		for (pntGlobal.setY(bbox.cornerMin().getY()); pntGlobal.getY() <= maxGlobal.getY(); pntGlobal.incrementY() ) {
+ 		for (pointGlobal.setY(bbox.cornerMin().getY()); pointGlobal.getY() <= maxGlobal.getY(); pointGlobal.incrementY() ) {
 		
-			for (pntGlobal.setX(bbox.cornerMin().getX()); pntGlobal.getX() <= maxGlobal.getX(); pntGlobal.incrementX() ) {	
+			for (pointGlobal.setX(bbox.cornerMin().getX()); pointGlobal.getX() <= maxGlobal.getX(); pointGlobal.incrementX() ) {	
 				
 				int maskOffset = eMask.offset(
-					pntGlobal.getX() - mask.getBoundingBox().cornerMin().getX(),
-					pntGlobal.getY() - mask.getBoundingBox().cornerMin().getY()
+					pointGlobal.getX() - mask.getBoundingBox().cornerMin().getX(),
+					pointGlobal.getY() - mask.getBoundingBox().cornerMin().getY()
 				);
 				
 				if (inArr.get(maskOffset)!=maskOn ) {
@@ -161,7 +161,7 @@ public class RGBStack {
 
 				RGBOutputUtils.writeRGBColorToByteArr(
 					c,
-					pntGlobal,
+					pointGlobal,
 					chnls.getChnl(0).getDimensions(),
 					red, blue,
 					green

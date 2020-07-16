@@ -50,10 +50,10 @@ public class ConditionalKernel extends BinaryKernel {
 	}
 
 	@Override
-	public boolean accptPos( int ind, Point3i pnt ) {
+	public boolean accptPos( int ind, Point3i point ) {
 
-		byte valByte = vbIntensity.getPixelsForPlane(pnt.getZ()).buffer().get(
-			vbIntensity.extent().offsetSlice(pnt)
+		byte valByte = vbIntensity.getPixelsForPlane(point.getZ()).buffer().get(
+			vbIntensity.extent().offsetSlice(point)
 		);
 		int val = ByteConverter.unsignedByteToInt(valByte);
 		
@@ -61,7 +61,7 @@ public class ConditionalKernel extends BinaryKernel {
 			return false;
 		}
 		
-		return kernel.accptPos(ind, pnt);
+		return kernel.accptPos(ind, point);
 	}
 
 	@Override

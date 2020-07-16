@@ -45,12 +45,12 @@ public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer> 
 	public abstract Optional<Mark> propose( VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ProposerContext context ) throws ProposalAbnormalFailureException;
 	
 	// A debug method for optionally associating points with the last proposal made
-	public Optional<List<Point3f>> getLastPnts1() {
+	public Optional<List<Point3f>> getLastPoints1() {
 		return Optional.empty();
 	}
 	
 	// A debug method for optionally associating points with the last proposal made
-	public Optional<List<Point3f>> getLastPnts2() {
+	public Optional<List<Point3f>> getLastPoints2() {
 		return Optional.empty();
 	}
 }

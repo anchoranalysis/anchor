@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ProbMapUtilities {
 	
-	public static Point3d getUniformRandomPnt( RandomNumberGenerator re, ImageDimensions bndScene ) {
+	public static Point3d getUniformRandomPoint( RandomNumberGenerator re, ImageDimensions bndScene ) {
     	// Generate each point
     	Point3d pos = new Point3d();
     	pos.setX( re.nextDouble() * (bndScene.getX()-1) );
@@ -49,8 +49,8 @@ public class ProbMapUtilities {
     	return pos;
     }
     
-    public static boolean accptPosBinary( VoxelBox<ByteBuffer> vb, Point3d pnt ) {
-    	return accptPosBinary(vb, (int) pnt.getX(), (int) pnt.getY(), (int) pnt.getZ());
+    public static boolean accptPosBinary( VoxelBox<ByteBuffer> vb, Point3d point ) {
+    	return accptPosBinary(vb, (int) point.getX(), (int) point.getY(), (int) point.getZ());
     }
     
     public static boolean accptPosBinary( VoxelBox<ByteBuffer> vb, int x, int y, int z) {

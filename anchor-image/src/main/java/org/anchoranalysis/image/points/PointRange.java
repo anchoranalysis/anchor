@@ -43,8 +43,8 @@ public final class PointRange {
 	private Point3i max;
 	private Point3i min;
 		
-	public void add(Point3i pnt) {
-		add(pnt.getX(), pnt.getY(), pnt.getZ());
+	public void add(Point3i point) {
+		add(point.getX(), point.getY(), point.getZ());
 	}
 	
 	public void add(int x, int y, int z) {

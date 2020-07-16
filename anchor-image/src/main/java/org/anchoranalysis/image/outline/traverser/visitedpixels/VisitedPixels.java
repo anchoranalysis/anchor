@@ -41,27 +41,27 @@ public class VisitedPixels {
 	private List<ContiguousPixelPath> paths = new ArrayList<>();
 	
 	/** Adds a new path with a point */
-	public void addNewPath( Point3i pnt, Point3i connPnt ) {
-		ContiguousPixelPath path = new ContiguousPixelPath(pnt, connPnt);
+	public void addNewPath( Point3i point, Point3i connPoint ) {
+		ContiguousPixelPath path = new ContiguousPixelPath(point, connPoint);
 		paths.add(path);
 	}
 	
 	/** Adds a visited-point to an existing path, or else makes a new one */
-	public void addVisitedPnt(Point3i pnt) {
+	public void addVisitedPoint(Point3i point) {
 		for( ContiguousPixelPath path : paths ) {
-			if (path.maybeAddPntToClosestEnd(pnt)) {
+			if (path.maybeAddPointToClosestEnd(point)) {
 				return;
 			}
 		}
 		
 		// No existing path can handle the point, so we make a new one
 		//  we are not aware of any connection point in this case
-		addNewPath(pnt, null);
+		addNewPath(point, null);
 	}
 	
 	/** The distMax of a point to the closest contiguous-path */
-	public int distMaxToHeadTail(Point3i pnt) {
-		return FindMinDistance.minDistMaxToHeadTail(pnt, paths);
+	public int distMaxToHeadTail(Point3i point) {
+		return FindMinDistance.minDistMaxToHeadTail(point, paths);
 	}
 		
 	/** Combines all the contiguous paths to a single-path 

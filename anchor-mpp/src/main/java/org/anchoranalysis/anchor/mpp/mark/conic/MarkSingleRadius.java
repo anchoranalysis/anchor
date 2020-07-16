@@ -133,7 +133,7 @@ public abstract class MarkSingleRadius extends MarkAbstractPosition implements S
 		
 	// Where is a point in relation to the current object
 	@Override
-	public final byte evalPntInside( Point3d pt ) {
+	public final byte evalPointInside( Point3d pt ) {
 		
 		double dist = getPos().distanceSquared(pt);
 		

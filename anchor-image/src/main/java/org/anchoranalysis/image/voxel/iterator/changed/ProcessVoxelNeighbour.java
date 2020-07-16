@@ -44,11 +44,11 @@ public interface ProcessVoxelNeighbour<T> {
 	 * 
 	 * <p>This must be called before any calls to {@link processPoint}</p>.
 	 * 
-	 * @param pntSource the source point in global coordinates
+	 * @param pointSource the source point in global coordinates
 	 * @param sourceVal the value of the source pixel (in the associated sliding buffer)
 	 * @param sourceOffsetXY the offset of the source pixel in XY (in the associated sliding buffer)
 	 */
-	void initSource(Point3i pntSource, int sourceVal, int sourceOffsetXY);
+	void initSource(Point3i pointSource, int sourceVal, int sourceOffsetXY);
 	
 	/** 
 	 * Notifies the processor that there has been a change in z-coordinate

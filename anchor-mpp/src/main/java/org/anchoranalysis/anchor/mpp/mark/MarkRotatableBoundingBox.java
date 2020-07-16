@@ -86,19 +86,19 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	}
 	
 	@Override
-	public byte evalPntInside(Point3d pt) {
+	public byte evalPointInside(Point3d pt) {
 
 		// See if after rotating a point back, it lies with on our box
-		Point3d pnt = new Point3d(pt);
-		pnt.subtract( getPos() );
+		Point3d point = new Point3d(pt);
+		point.subtract( getPos() );
 		
-		Point3d pntRot = rotMatrixInv.calcRotatedPoint(pnt);
+		Point3d pointRot = rotMatrixInv.calcRotatedPoint(point);
 		
-		if (pntRot.getX() < distToLeftBottom.getX() || pntRot.getX() >= distToRightTop.getX()) {
+		if (pointRot.getX() < distToLeftBottom.getX() || pointRot.getX() >= distToRightTop.getX()) {
 			return FLAG_SUBMARK_NONE;
 		}
 		
-		if (pntRot.getY() < distToLeftBottom.getY() || pntRot.getY() >= distToRightTop.getY()) {
+		if (pointRot.getY() < distToLeftBottom.getY() || pointRot.getY() >= distToRightTop.getY()) {
 			return FLAG_SUBMARK_NONE;
 		}
 
@@ -188,8 +188,8 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 		return 2;
 	}
 	
-	private static Point3d convert3d( Point2d pnt ) {
-		return new Point3d(pnt.getX(), pnt.getY(), 0);
+	private static Point3d convert3d( Point2d point ) {
+		return new Point3d(point.getX(), point.getY(), 0);
 	}
 
 	private Point3d cornerPoint( boolean x, boolean y ) {
@@ -203,13 +203,13 @@ public class MarkRotatableBoundingBox extends MarkAbstractPosition {
 	private List<Point3i> rotateAddPos( Point3d[] points ) {
 		return FunctionalList.mapToList(
 			points,
-			pnt -> PointConverter.intFromDouble( rotateAddPos(pnt) )	
+			point -> PointConverter.intFromDouble( rotateAddPos(point) )	
 		);
 	}
 		
 	/** Rotates a position and adds the current position afterwards */
-	private Point3d rotateAddPos( Point3d pnt ) {
-		Point3d out = rotMatrix.calcRotatedPoint(pnt);
+	private Point3d rotateAddPos( Point3d point ) {
+		Point3d out = rotMatrix.calcRotatedPoint(point);
 		out.add( getPos() );
 		return out;
 	}

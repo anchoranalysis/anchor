@@ -34,5 +34,5 @@ public abstract class BinaryKernel extends Kernel {
 		super(size);
 	}
 
-	public abstract boolean accptPos( int ind, Point3i pnt );	
+	public abstract boolean accptPos( int ind, Point3i point );	
 }

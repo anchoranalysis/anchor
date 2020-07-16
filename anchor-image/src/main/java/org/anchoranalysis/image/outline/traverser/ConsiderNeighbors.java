@@ -43,7 +43,7 @@ class ConsiderNeighbors {
 	private final int dist;
 	private final List<Point3iWithDist> localQueue;
 	private final ConsiderVisit icv;
-	private final Point3i pnt;
+	private final Point3i point;
 		
 	public void considerNeighbors( boolean useZ, boolean nghb8 ) {
 
@@ -83,21 +83,21 @@ class ConsiderNeighbors {
 		considerVisitAndQueueNghbPoint(
 			icv,
 			new Point3i(
-				pnt.getX()+xShift,
-				pnt.getY()+yShift,
-				pnt.getZ()+zShift
+				point.getX()+xShift,
+				point.getY()+yShift,
+				point.getZ()+zShift
 			),
 			dist,
 			localQueue
 		);
 	}
 	
-	private boolean considerVisitAndQueueNghbPoint( ConsiderVisit considerVisit, Point3i pnt, int dist, List<Point3iWithDist> pnts ) {
+	private boolean considerVisitAndQueueNghbPoint( ConsiderVisit considerVisit, Point3i point, int dist, List<Point3iWithDist> points ) {
 		
 		int distNew = dist + 1;
 		
-		if( considerVisitMarkRaster(considerVisit, pnt, distNew, objectOutline ) ) {
-			pnts.add( new Point3iWithDist(pnt, distNew) );
+		if( considerVisitMarkRaster(considerVisit, point, distNew, objectOutline ) ) {
+			points.add( new Point3iWithDist(point, distNew) );
 			return true;
 		}
 		

@@ -42,11 +42,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CreateFromPointsFactory {
 	
-	public static ObjectMask create( List<Point3i> pnts ) throws CreateException {
+	public static ObjectMask create( List<Point3i> points ) throws CreateException {
 		
 		BoundingBox bbox;
 		try {
-			bbox = BoundingBoxFromPoints.forList(pnts);
+			bbox = BoundingBoxFromPoints.forList(points);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
@@ -55,7 +55,7 @@ public class CreateFromPointsFactory {
 		
 		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
-		for (Point3i p : pnts) {
+		for (Point3i p : points) {
 			
 			int x = p.getX() - bbox.cornerMin().getX();
 			int y = p.getY() - bbox.cornerMin().getY();

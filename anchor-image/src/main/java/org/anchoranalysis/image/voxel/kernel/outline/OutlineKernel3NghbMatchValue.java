@@ -88,7 +88,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
 	 */
 	@Override
-	public boolean accptPos( int ind, Point3i pnt ) {
+	public boolean accptPos( int ind, Point3i point ) {
 
 		ByteBuffer inArrZ = inSlices.getLocal(0);
 		ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
@@ -100,8 +100,8 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 				
 		int xLength = extent.getX();
 		
-		int x = pnt.getX();
-		int y = pnt.getY();
+		int x = point.getX();
+		int y = point.getY();
 		
 		if (bv.isOff(inArrZ.get(ind))) {
 			return false;
@@ -112,11 +112,11 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		ind--;
 		if (x>=0) {
 			if (bv.isOff(inArrZ.get(ind))) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,-1,0);
+				return checkIfRequireHighIsTrue(inArrR,point,-1,0);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,-1,0);
+				return checkIfRequireHighIsTrue(inArrR,point,-1,0);
 			}
 		}
 		
@@ -124,11 +124,11 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		ind += 2;
 		if (x<extent.getX()) {
 			if (bv.isOff(inArrZ.get(ind))) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,+1,0);
+				return checkIfRequireHighIsTrue(inArrR,point,+1,0);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,+1,0);
+				return checkIfRequireHighIsTrue(inArrR,point,+1,0);
 			}
 		}
 		ind--;
@@ -139,11 +139,11 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		ind -= xLength;
 		if (y>=0) {
 			if (bv.isOff(inArrZ.get(ind))) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,0,-1);
+				return checkIfRequireHighIsTrue(inArrR,point,0,-1);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,0,-1);
+				return checkIfRequireHighIsTrue(inArrR,point,0,-1);
 			}
 		}
 		
@@ -151,11 +151,11 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		ind += (2*xLength);
 		if (y<(extent.getY())) {
 			if (bv.isOff(inArrZ.get(ind))) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,0,+1);
+				return checkIfRequireHighIsTrue(inArrR,point,0,+1);
 			}
 		} else {
 			if (!ignoreAtThreshold && !outsideAtThreshold) {
-				return checkIfRequireHighIsTrue(inArrR,pnt,0,+1);
+				return checkIfRequireHighIsTrue(inArrR,point,0,+1);
 			}
 		}
 		ind -= xLength;
@@ -164,21 +164,21 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 			
 			if (inArrZLess1!=null) {
 				if (bv.isOff(inArrZLess1.get(ind))) {
-					return checkIfRequireHighIsTrue(inArrRLess1,pnt,0,0);
+					return checkIfRequireHighIsTrue(inArrRLess1,point,0,0);
 				}
 			} else {
 				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					return checkIfRequireHighIsTrue(inArrRLess1,pnt,0,0);
+					return checkIfRequireHighIsTrue(inArrRLess1,point,0,0);
 				}
 			}
 			
 			if (inArrZPlus1!=null) {
 				if (bv.isOff(inArrZPlus1.get(ind))) {
-					return checkIfRequireHighIsTrue(inArrRPlus1,pnt,0,0);
+					return checkIfRequireHighIsTrue(inArrRPlus1,point,0,0);
 				}
 			} else {
 				if (!ignoreAtThreshold && !outsideAtThreshold) {
-					return checkIfRequireHighIsTrue(inArrRPlus1,pnt,0,0);
+					return checkIfRequireHighIsTrue(inArrRPlus1,point,0,0);
 				}
 			}
 		}
@@ -186,19 +186,19 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 		return false;
 	}
 	
-	private boolean checkIfRequireHighIsTrue( ByteBuffer inArr, Point3i pnt, int xShift, int yShift ) {
+	private boolean checkIfRequireHighIsTrue( ByteBuffer inArr, Point3i point, int xShift, int yShift ) {
 		
 		if (inArr==null) {
 			return outsideAtThreshold;
 		}
 		
-		int x1 = pnt.getX() + object.getBoundingBox().cornerMin().getX() + xShift;
+		int x1 = point.getX() + object.getBoundingBox().cornerMin().getX() + xShift;
 		
 		if (!vbRequireHigh.extent().containsX(x1)) {
 			return outsideAtThreshold;
 		}
 		
-		int y1 = pnt.getY() + object.getBoundingBox().cornerMin().getY() + yShift; 
+		int y1 = point.getY() + object.getBoundingBox().cornerMin().getY() + yShift; 
 
 		if (!vbRequireHigh.extent().containsY(y1)) {
 			return outsideAtThreshold;

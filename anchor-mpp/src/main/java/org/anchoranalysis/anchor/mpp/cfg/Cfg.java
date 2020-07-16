@@ -210,7 +210,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		}
 	}
 	
-	public Cfg marksAt(Point3d pnt, RegionMap regionMap, int regionID) {
+	public Cfg marksAt(Point3d point, RegionMap regionMap, int regionID) {
 		
 		Cfg cfgOut = new Cfg();
 		
@@ -220,7 +220,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		// We cycle through each item in the configuration
 		for (Mark m : this) {
 			
-			byte membership = m.evalPntInside(pnt);
+			byte membership = m.evalPointInside(point);
 			if (rm.isMemberFlag(membership,flags)) {
 				cfgOut.add( m );
 			}

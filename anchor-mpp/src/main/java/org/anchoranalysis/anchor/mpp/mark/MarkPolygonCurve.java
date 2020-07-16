@@ -49,48 +49,48 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 	private transient DistCalcToLine dctl = new DistCalcToLine();
 	
 	@Override
-	public byte evalPntInside(Point3d pnt) {
+	public byte evalPointInside(Point3d point) {
 	
-		if (distToPolygonLocal(pnt)<distThresh) {
+		if (distToPolygonLocal(point)<distThresh) {
 			return FLAG_SUBMARK_INSIDE;
 		}
 		return FLAG_SUBMARK_NONE;
 	}
 
-	private double distToPolygonSegmentLocal( Point3d pnt, Point3d pntFirst, Point3d pntSecond ) {
+	private double distToPolygonSegmentLocal( Point3d point, Point3d pointFirst, Point3d pointSecond ) {
 		
-		if (pnt.getX()<(pntFirst.getX()-distThresh)) {
+		if (point.getX()<(pointFirst.getX()-distThresh)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (pnt.getY()<(pntFirst.getY()-distThresh)) {
+		if (point.getY()<(pointFirst.getY()-distThresh)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (pnt.getZ()<(pntFirst.getZ()-distThresh)) {
+		if (point.getZ()<(pointFirst.getZ()-distThresh)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (pnt.getX()>(pntSecond.getX()+distThresh)) {
+		if (point.getX()>(pointSecond.getX()+distThresh)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (pnt.getY()>(pntSecond.getY()+distThresh)) {
+		if (point.getY()>(pointSecond.getY()+distThresh)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		if (pnt.getZ()>(pntSecond.getZ()+distThresh)) {
+		if (point.getZ()>(pointSecond.getZ()+distThresh)) {
 			return Double.POSITIVE_INFINITY;
 		}
 		
-		dctl.setPoints(pntFirst, pntSecond);
+		dctl.setPoints(pointFirst, pointSecond);
 		
-		return dctl.distToLine(pnt);
+		return dctl.distToLine(point);
 	}
 	
 	// Distance to polygon - only local (i.e. assumes that we only care about returning small values in circumstances
 	//  very close to the line segment in question, otherwise we don't care
-	private double distToPolygonLocal( Point3d pnt ) {
+	private double distToPolygonLocal( Point3d point ) {
 		
 		// If a point is inside the bounding box of two points +- the distThresh , we calculate the distance to
 		// it.  And we take the minimum overall
@@ -99,10 +99,10 @@ public class MarkPolygonCurve extends MarkAbstractPointList {
 		
 		int numPtsMinus1 = getPoints().size() - 1;
 		for (int i=0; i<numPtsMinus1; i++) {
-			Point3d pntFirst = getPoints().get(i);
-			Point3d pntSecond = getPoints().get(i+1);
+			Point3d pointFirst = getPoints().get(i);
+			Point3d pointSecond = getPoints().get(i+1);
 			
-			double dist = distToPolygonSegmentLocal(pnt, pntFirst,pntSecond);
+			double dist = distToPolygonSegmentLocal(point, pointFirst,pointSecond);
 			min = Math.min( min, dist );
 		}
 		

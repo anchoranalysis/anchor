@@ -57,9 +57,9 @@ public class Contour {
 		return points.get(0).distance( points.get(points.size()-1) ) < maxDistToDefinedConnected;
 	}
 	
-	public boolean hasPoint( Point3f pntC ) {
-		for (Point3f pnt : getPoints()) {
-			if (pnt.equals(pntC)) {
+	public boolean hasPoint( Point3f pointC ) {
+		for (Point3f point : getPoints()) {
+			if (point.equals(pointC)) {
 				return true;
 			}
 		}

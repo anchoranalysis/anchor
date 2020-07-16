@@ -80,28 +80,28 @@ public class ExtendObjectsInto3DMask {
 		);
 		
 		ReadableTuple3i max = newBBox.calcCornerMax();
-		Point3i pnt = new Point3i();
+		Point3i point = new Point3i();
 
 		BinaryValuesByte bv = mask3D.getBinaryValues().createByte();
 
 		ByteBuffer bufferIn2D = obj2D.getVoxelBox().getPixelsForPlane(0).buffer();
 		
-		for (pnt.setZ(0); pnt.getZ() <=max.getZ(); pnt.incrementZ()) {
+		for (point.setZ(0); point.getZ() <=max.getZ(); point.incrementZ()) {
 			
-			ByteBuffer bufferMask3D =  mask3D.getVoxelBox().getPlaneAccess().getPixelsForPlane(pnt.getZ()).buffer();
-			ByteBuffer bufferOut3D = newMask.getVoxelBox().getPixelsForPlane(pnt.getZ()).buffer();
+			ByteBuffer bufferMask3D =  mask3D.getVoxelBox().getPlaneAccess().getPixelsForPlane(point.getZ()).buffer();
+			ByteBuffer bufferOut3D = newMask.getVoxelBox().getPixelsForPlane(point.getZ()).buffer();
 		
 			int ind = 0;
 			
-			for (pnt.setY(newBBox.cornerMin().getY()); pnt.getY() <= max.getY(); pnt.incrementY() ) {
+			for (point.setY(newBBox.cornerMin().getY()); point.getY() <= max.getY(); point.incrementY() ) {
 			
-				for (pnt.setX(newBBox.cornerMin().getX()); pnt.getX() <= max.getX(); pnt.incrementX(), ind++ ) {	
+				for (point.setX(newBBox.cornerMin().getX()); point.getX() <= max.getX(); point.incrementX(), ind++ ) {	
 					
 					if (bufferIn2D.get(ind)!=bv.getOnByte() ) {
 						continue;
 					}
 						
-					int indexGlobal = mask3D.extent().offset( pnt.getX(), pnt.getY());
+					int indexGlobal = mask3D.extent().offset( point.getX(), point.getY());
 					bufferOut3D.put(
 						ind,
 						bufferMask3D.get(indexGlobal)==bv.getOnByte() ? bv.getOnByte() : bv.getOffByte()

@@ -83,7 +83,7 @@ public class MaxDensityKernel3 extends BinaryKernel {
 	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
 	 */
 	@Override
-	public boolean accptPos( int ind, Point3i pnt ) {
+	public boolean accptPos( int ind, Point3i point ) {
 
 		int cnt = 0;
 		
@@ -93,8 +93,8 @@ public class MaxDensityKernel3 extends BinaryKernel {
 		
 		int xLength = extent.getX();
 		
-		int x = pnt.getX();
-		int y = pnt.getY();
+		int x = point.getX();
+		int y = point.getY();
 		
 		if (bv.isOn(inArrZ.get(ind))) {
 			cnt++;

@@ -45,17 +45,17 @@ public class BoundingBoxFromPoints {
 	/**
 	 * Create from a list of points
 	 * 
-	 * @param pnts the list
+	 * @param points the list
 	 * @return a bounding-box minimally spanning all points
 	 * @throws OperationFailedException if there are zero points
 	 */
-	public static BoundingBox forList( List<Point3i> pnts ) throws OperationFailedException {
-		if (pnts.isEmpty()) {
+	public static BoundingBox forList( List<Point3i> points ) throws OperationFailedException {
+		if (points.isEmpty()) {
 			throw new OperationFailedException("Points list must contain at least one item");
 		}
 		
 		PointRange range = new PointRange();
-		pnts.forEach(range::add);
+		points.forEach(range::add);
 		
 		return range.deriveBoundingBox();
 	}
@@ -65,30 +65,30 @@ public class BoundingBoxFromPoints {
 	 * 
 	 * <p>By unordered, it means that no one point must have a value higher than another</p>
 	 * 
-	 * @param pnt1 first-point (arbitrary order)
-	 * @param pnt2 second-point (arbitrary order)
+	 * @param point1 first-point (arbitrary order)
+	 * @param point2 second-point (arbitrary order)
 	 * @return a bounding-box minally spanning the two points
 	 */
-	public static BoundingBox forTwoPoints( Point3d pnt1, Point3d pnt2) {
-		Point3d min = calcMin( pnt1, pnt2 );
-		Point3d max = calcMax( pnt1, pnt2 );
+	public static BoundingBox forTwoPoints( Point3d point1, Point3d point2) {
+		Point3d min = calcMin( point1, point2 );
+		Point3d max = calcMax( point1, point2 );
 		return new BoundingBox(min,max);
 	}
 	
 	
-	private static Point3d calcMin( Point3d pnt1, Point3d pnt2 ) {
-		Point3d pnt = new Point3d();
-		pnt.setX( Math.min( pnt1.getX(), pnt2.getX() ));
-		pnt.setY( Math.min( pnt1.getY(), pnt2.getY() ));
-		pnt.setZ( Math.min( pnt1.getZ(), pnt2.getZ() ));
-		return pnt;
+	private static Point3d calcMin( Point3d point1, Point3d point2 ) {
+		Point3d point = new Point3d();
+		point.setX( Math.min( point1.getX(), point2.getX() ));
+		point.setY( Math.min( point1.getY(), point2.getY() ));
+		point.setZ( Math.min( point1.getZ(), point2.getZ() ));
+		return point;
 	}
 	
-	private static Point3d calcMax( Point3d pnt1, Point3d pnt2 ) {
-		Point3d pnt = new Point3d();
-		pnt.setX( Math.max( pnt1.getX(), pnt2.getX() ));
-		pnt.setY( Math.max( pnt1.getY(), pnt2.getY() ));
-		pnt.setZ( Math.max( pnt1.getZ(), pnt2.getZ() ));
-		return pnt;
+	private static Point3d calcMax( Point3d point1, Point3d point2 ) {
+		Point3d point = new Point3d();
+		point.setX( Math.max( point1.getX(), point2.getX() ));
+		point.setY( Math.max( point1.getY(), point2.getY() ));
+		point.setZ( Math.max( point1.getZ(), point2.getZ() ));
+		return point;
 	}
 }

@@ -102,10 +102,10 @@ public class Midpoint extends DrawObject {
 		};
 	}
 	
-	public static void writeRelPoint( Point3i pnt, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
-		if (bboxContainer.contains().point(pnt)) {
+	public static void writeRelPoint( Point3i point, RGBColor color, RGBStack stack, BoundingBox bboxContainer ) {
+		if (bboxContainer.contains().point(point)) {
 			stack.writeRGBPoint(
-				Point3i.immutableSubtract(pnt, bboxContainer.cornerMin()),
+				Point3i.immutableSubtract(point, bboxContainer.cornerMin()),
 				color
 			);
 		}
@@ -147,11 +147,11 @@ public class Midpoint extends DrawObject {
 		midpoint.decrementY( extraLength );
 	}
 		
-	private static Point3i maybeSuppressZ( Point3i pnt, boolean suppressZ ) {
+	private static Point3i maybeSuppressZ( Point3i point, boolean suppressZ ) {
 		if (suppressZ) {
-			pnt.setZ(0);
+			point.setZ(0);
 		}
-		return pnt;
+		return point;
 	}
 	
 	private static Point3i calcMidpoint3D(ObjectWithProperties mask) {

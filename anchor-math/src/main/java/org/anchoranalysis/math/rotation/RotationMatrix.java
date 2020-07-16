@@ -55,20 +55,20 @@ public class RotationMatrix implements Serializable {
 		this.matrix = matrix;
 	}
 
-	public Point3d calcRotatedPoint( Point3d pntIn ) {
+	public Point3d calcRotatedPoint( Point3d pointIn ) {
 
 		if (matrix.rows()==3) {
 			double[] dIn = new double[3];
-			dIn[0] = pntIn.getX();
-			dIn[1] = pntIn.getY();
-			dIn[2] = pntIn.getZ();
+			dIn[0] = pointIn.getX();
+			dIn[1] = pointIn.getY();
+			dIn[2] = pointIn.getZ();
 			
 			double[] rot = calcRotatedPoint(dIn);
 			return new Point3d( rot[0], rot[1], rot[2]);
 		} else if (matrix.rows()==2) {
 			double[] dIn = new double[2];
-			dIn[0] = pntIn.getX();
-			dIn[1] = pntIn.getY();
+			dIn[0] = pointIn.getX();
+			dIn[1] = pointIn.getY();
 			
 			double[] rot = calcRotatedPoint(dIn);
 			return new Point3d( rot[0], rot[1], 0);			
@@ -77,25 +77,25 @@ public class RotationMatrix implements Serializable {
 		}
 	}
 	
-	public double[] calcRotatedPoint( double[] pntIn ) {
-		Preconditions.checkArgument(pntIn.length == matrix.rows());
+	public double[] calcRotatedPoint( double[] pointIn ) {
+		Preconditions.checkArgument(pointIn.length == matrix.rows());
 		
-		int numDim = pntIn.length;
+		int numDim = pointIn.length;
 		
 		DoubleFactory2D factory = DoubleFactory2D.dense;
 		DoubleMatrix2D matIn = factory.make(numDim,1);
 		
 		for (int i=0; i<numDim; i++) {
-			matIn.set(i, 0, pntIn[i] );
+			matIn.set(i, 0, pointIn[i] );
 		}
 		
 		DoubleMatrix2D matOut = matrix.zMult(matIn, null);
 		
-		double[] pntOut = new double[numDim];
+		double[] pointOut = new double[numDim];
 		for (int i=0; i<numDim; i++) {
-			pntOut[i] = matOut.get(i, 0); 
+			pointOut[i] = matOut.get(i, 0); 
 		}
-		return pntOut;
+		return pointOut;
 	}
 	
 	public static RotationMatrix createFrom3Vecs( DoubleMatrix1D vec1,  DoubleMatrix1D vec2, DoubleMatrix1D vec3 ) {

@@ -136,7 +136,7 @@ public class PointConverter {
 	public static List<Point3i> convert3i(List<Point3f> points, boolean round) {
 		return convert(
 			points,
-			pnt -> intFromFloat(pnt, round) 
+			point -> intFromFloat(point, round) 
 		);
 	}
 		

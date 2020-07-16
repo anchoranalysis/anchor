@@ -35,10 +35,10 @@ public final class Point3d extends Tuple3d {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public Point3d( Point3f pnt) {
-		this.x = pnt.getX();
-		this.y = pnt.getY();
-		this.z = pnt.getZ();
+	public Point3d( Point3f point) {
+		this.x = point.getX();
+		this.y = point.getY();
+		this.z = point.getZ();
 	}
 	
 	public Point3d( Vector3d point) {
@@ -61,10 +61,10 @@ public final class Point3d extends Tuple3d {
 	
 	public static Point3d midPointBetween(Point3d point1, Point3d point2) {
 		// We create a new object of 1x1x1 between the two merged seeds
-		Point3d pntNew = new Point3d(point1);
-		pntNew.add( point2 );
-		pntNew.scale(0.5);
-		return pntNew;
+		Point3d pointNew = new Point3d(point1);
+		pointNew.add( point2 );
+		pointNew.scale(0.5);
+		return pointNew;
 	}
 	
 	public double distanceSquared( Point3d point ) {
@@ -163,22 +163,22 @@ public final class Point3d extends Tuple3d {
 	
 	/** Performs an addition without changing any values in an existing point */
 	public static Point3d immutableAdd(Tuple3d point, Tuple3d toAdd) {
-		Point3d pntDup = new Point3d(point);
-		pntDup.add(toAdd);
-		return pntDup;
+		Point3d pointDup = new Point3d(point);
+		pointDup.add(toAdd);
+		return pointDup;
 	}
 	
 	/** Performs a subtraction without changing any values in an existing point */
 	public static Point3d immutableSubtract(Tuple3d point, Tuple3d toSubtract) {
-		Point3d pntDup = new Point3d(point);
-		pntDup.subtract(toSubtract);
-		return pntDup;
+		Point3d pointDup = new Point3d(point);
+		pointDup.subtract(toSubtract);
+		return pointDup;
 	}
 	
 	/** Performs a scale without changing any values in an existing point */
 	public static Point3d immutableScale(Tuple3d point, int factor) {
-		Point3d pntDup = new Point3d(point);
-		pntDup.scale(factor);
-		return pntDup;
+		Point3d pointDup = new Point3d(point);
+		pointDup.scale(factor);
+		return pointDup;
 	}
 }

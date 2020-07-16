@@ -46,8 +46,8 @@ final class ProcessVoxelSlide implements ProcessVoxel {
 	}
 	
 	@Override
-	public void process(Point3i pnt) {
-		process.process(pnt);
+	public void process(Point3i point) {
+		process.process(point);
 	}
 
 	@Override

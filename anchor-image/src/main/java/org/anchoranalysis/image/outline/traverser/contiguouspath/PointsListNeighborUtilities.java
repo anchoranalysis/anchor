@@ -68,17 +68,17 @@ public class PointsListNeighborUtilities {
 		return true;
 	}
 	
-	public static boolean arePointsNghb( Point3i pnt1, Point3i pnt2 ) {
-		if (pnt1.equals(pnt2)) {
+	public static boolean arePointsNghb( Point3i point1, Point3i point2 ) {
+		if (point1.equals(point2)) {
 			return false;
 		}
-		if (distSingleDim(pnt1.getX(), pnt2.getX())) {
+		if (distSingleDim(point1.getX(), point2.getX())) {
 			return false;
 		}
-		if (distSingleDim(pnt1.getY(), pnt2.getY())) {
+		if (distSingleDim(point1.getY(), point2.getY())) {
 			return false;
 		}
-		return (!distSingleDim(pnt1.getZ(), pnt2.getZ()));
+		return (!distSingleDim(point1.getZ(), point2.getZ()));
 	}
 	
 	private static boolean distSingleDim( int x, int y ) {

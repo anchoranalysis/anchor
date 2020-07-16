@@ -35,5 +35,5 @@ public abstract class CountKernel extends Kernel {
 		super(size);
 	}
 
-	public abstract int countAtPos( int ind, Point3i pnt );	
+	public abstract int countAtPos( int ind, Point3i point );	
 }

@@ -113,7 +113,6 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		}
 	}
 	
-	
 	@Override
 	public void setPixelsTo( BoundingBox bbox, int val ) {
 
@@ -141,7 +140,6 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		return buffer.get()==operand;
 	}
 
-
 	@Override
 	public void multiplyBy(double val) {
 		
@@ -154,12 +152,10 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			ShortBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
 			while( buffer.hasRemaining() ) {
-				
 				int mult = (int) (ByteConverter.unsignedShortToInt( buffer.get() ) * val);
 				buffer.put( buffer.position()-1, (short) mult );
 			}
 		}
-		
 	}
 	
 	@Override
@@ -203,21 +199,17 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 				}
 			}
 		}
-		
 	}
-	
 	
 	@Override
 	public void scalePixelsCheckMask(ObjectMask mask, double value) {
 		throw new IllegalArgumentException("Currently unsupported method");
 	}
-	
 
 	@Override
 	public boolean isEqualTo(ShortBuffer buffer1, ShortBuffer buffer2) {
 		return buffer1.get()==buffer2.get();
 	}
-
 	
 	@Override
 	public void subtractFrom(int val) {
@@ -238,8 +230,6 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 			throws OperationFailedException {
 		throw new OperationFailedException("unsupported operation");
 	}
-	
-
 
 	@Override
 	public VoxelBox<ShortBuffer> maxIntensityProj() {
@@ -262,6 +252,5 @@ public final class VoxelBoxShort extends VoxelBox<ShortBuffer> {
 		}
 		
 		return mi.getFlatBuffer();
-
 	}
 }

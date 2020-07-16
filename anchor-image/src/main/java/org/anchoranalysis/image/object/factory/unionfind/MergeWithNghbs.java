@@ -118,8 +118,8 @@ final class MergeWithNghbs {
 			
 	// Calculates the minimum label of the neighbours, making sure to merge any different values
 	//   -1 indicates that there is no indexed neighbour
-	public int calcMinNghbLabel( Point3i pnt, int exstVal, int indxBuffer) {
-		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, exstVal, indxBuffer);
+	public int calcMinNghbLabel( Point3i point, int exstVal, int indxBuffer) {
+		return IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, exstVal, indxBuffer);
 	}
 
 	public void shift() {

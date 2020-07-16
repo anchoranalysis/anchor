@@ -131,7 +131,7 @@ class EnsureContiguousPathLoops {
 		public IndexOffsets apply() {
 						
 			for( int i=0; i<boundIndexes.left(); i++) {
-				Point3i pntLeft = path.get(i);
+				Point3i pointLeft = path.get(i);
 				
 				for( int j=boundIndexes.right(); j<path.size(); j++) {
 					
@@ -139,7 +139,7 @@ class EnsureContiguousPathLoops {
 						continue;
 					}
 
-					maybeUpdate(i, j, pntLeft, path.get(j) );
+					maybeUpdate(i, j, pointLeft, path.get(j) );
 				}
 			}
 			
@@ -152,9 +152,9 @@ class EnsureContiguousPathLoops {
 			return minCostIndexes;
 		}
 		
-		private void maybeUpdate( int i, int j, Point3i pntLeft, Point3i pntRight ) {
+		private void maybeUpdate( int i, int j, Point3i pointLeft, Point3i pointRight ) {
 
-			if (PointsListNeighborUtilities.arePointsNghb(pntLeft, pntRight)) {
+			if (PointsListNeighborUtilities.arePointsNghb(pointLeft, pointRight)) {
 				
 				// Then it's possible we make these two points the head and tail of 
 				//   the list. This would cost us a certain number of pixels, that

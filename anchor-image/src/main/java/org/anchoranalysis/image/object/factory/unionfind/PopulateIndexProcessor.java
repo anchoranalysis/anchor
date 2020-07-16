@@ -70,11 +70,11 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
 	}		
 	
 	@Override
-	public void process(Point3i pnt, T buffer, int offsetSlice) {
+	public void process(Point3i point, T buffer, int offsetSlice) {
 		if (bufferReaderWriter.isBufferOn(buffer,offsetSlice,bv,bvb) && bbIndex.get(offsetSlice)==0) {
 			
 			int nghbLab = mergeWithNgbs.calcMinNghbLabel(
-				pnt,
+				point,
 				0,
 				offsetSlice
 			);

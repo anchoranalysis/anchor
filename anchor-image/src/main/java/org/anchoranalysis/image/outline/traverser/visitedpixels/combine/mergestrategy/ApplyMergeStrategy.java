@@ -75,15 +75,15 @@ class ApplyMergeStrategy extends MergeStrategy {
 	
 	/**
 	 * Maybe reverses a list of points
-	 * @param pnts
+	 * @param points
 	 * @param reverseFlag iff TRUE, the points are reversed.
 	 * @return
 	 */
-	private static List<Point3i> maybeReverse( List<Point3i> pnts, boolean reverseFlag ) {
+	private static List<Point3i> maybeReverse( List<Point3i> points, boolean reverseFlag ) {
 		if (reverseFlag) {
-			return ReverseUtilities.reversedList(pnts);
+			return ReverseUtilities.reversedList(points);
 		} else {
-			return pnts;
+			return points;
 		}
 	}
 	

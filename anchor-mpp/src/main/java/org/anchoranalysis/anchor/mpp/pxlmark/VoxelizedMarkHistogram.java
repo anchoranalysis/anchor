@@ -208,7 +208,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 				int localOffset = localExtent.offset(xLocal, yLocal);
 				int globalOffset = sd.offset(x, y);
 				
-				byte membership = mark.evalPntInside( new Point3d(ptRunning) );
+				byte membership = mark.evalPointInside( new Point3d(ptRunning) );
 				
 				buffer.put( localOffset, membership );
 				bufferMIP.put(localOffset, membershipMIP(membership, bufferMIP, localOffset) );

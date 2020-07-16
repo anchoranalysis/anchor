@@ -62,17 +62,17 @@ public class DensityKernel extends BinaryKernel {
 		this.minDensityRatio = minDensityRatio;
 	}
 
-	private Density calcDensity( VoxelBox<ByteBuffer> in, LocalSlices inSlices, Point3i pnt) {
+	private Density calcDensity( VoxelBox<ByteBuffer> in, LocalSlices inSlices, Point3i point) {
 
 		// We count the number of on pixels inside a kernel
 			
 		Density density = new Density();
 		
-		int yMin = getYMin(pnt);
-		int yMax = getYMax(pnt, in.extent());
+		int yMin = getYMin(point);
+		int yMax = getYMax(point, in.extent());
 		
-		int xMin = getXMin(pnt);
-		int xMax = getXMax(pnt, in.extent());
+		int xMin = getXMin(point);
+		int xMax = getXMax(point, in.extent());
 		
 		for (int z=(-1*getSizeHalf()); z<=getSizeHalf(); z++) {
 			
@@ -103,11 +103,11 @@ public class DensityKernel extends BinaryKernel {
 	
 	
 	@Override
-	public boolean accptPos(int ind, Point3i pnt) {
+	public boolean accptPos(int ind, Point3i point) {
 		
 		// We count the number of on pixels inside a kernel
 		
-		Density density = calcDensity( in, inSlices, pnt );		
+		Density density = calcDensity( in, inSlices, point );		
 		
 		double ratio = density.ratioSize2D( getSize() );
 		

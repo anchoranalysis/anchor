@@ -41,25 +41,25 @@ public class MarkConicFactory {
 	
 	private MarkConicFactory() {}
 	
-	public static Mark createMarkFromPoint(Point3i pnt, int size, boolean do3D) {
+	public static Mark createMarkFromPoint(Point3i point, int size, boolean do3D) {
 		return createMarkFromPoint(
-			PointConverter.doubleFromInt(pnt),
+			PointConverter.doubleFromInt(point),
 			size,
 			do3D
 		);
 	}
 	
-	public static Mark createMarkFromPoint(Point3d pnt, int size, boolean do3D) {
+	public static Mark createMarkFromPoint(Point3d point, int size, boolean do3D) {
 		Preconditions.checkArgument(size>0);
-		Preconditions.checkArgument(do3D || pnt.getZ()==0);
+		Preconditions.checkArgument(do3D || point.getZ()==0);
 		
 		if (do3D) {
 			MarkEllipsoid me = new MarkEllipsoid();
-			me.setMarksExplicit(pnt, new Orientation3DEulerAngles(), new Point3d(size,size,size) );
+			me.setMarksExplicit(point, new Orientation3DEulerAngles(), new Point3d(size,size,size) );
 			return me;
 		} else {
 			MarkEllipse me = new MarkEllipse();
-			me.setMarksExplicit(pnt, new Orientation2D(), new Point2d(size,size) );
+			me.setMarksExplicit(point, new Orientation2D(), new Point2d(size,size) );
 			return me;
 		}
 	}

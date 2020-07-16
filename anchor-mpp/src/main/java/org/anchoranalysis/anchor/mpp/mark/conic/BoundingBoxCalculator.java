@@ -79,31 +79,31 @@ public class BoundingBoxCalculator {
 		return new BoundingBox( minPt, maxPt );		
 	}
 	
-	private static Point3i subTwoPointsClip( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D, ImageDimensions sd ) {
-		Point3i pnt = subTwoPoints(pnt1, pnt2, do3D);
-		return PointClipper.clip(pnt, sd);
+	private static Point3i subTwoPointsClip( Point3d point1, DoubleMatrix1D point2, boolean do3D, ImageDimensions sd ) {
+		Point3i point = subTwoPoints(point1, point2, do3D);
+		return PointClipper.clip(point, sd);
 	}
 	
-	private static Point3i addTwoPointsClip( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D, ImageDimensions sd ) {
-		Point3i pnt = addTwoPoints(pnt1, pnt2, do3D);
-		return PointClipper.clip(pnt, sd);
+	private static Point3i addTwoPointsClip( Point3d point1, DoubleMatrix1D point2, boolean do3D, ImageDimensions sd ) {
+		Point3i point = addTwoPoints(point1, point2, do3D);
+		return PointClipper.clip(point, sd);
 	}
 	
 	/** Creates a new point that is the subtraction of one point from another (a Point3d minus a DoubleMatrix1D) */
-	private static Point3i subTwoPoints( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D ) {
+	private static Point3i subTwoPoints( Point3d point1, DoubleMatrix1D point2, boolean do3D ) {
 		Point3i out = new Point3i();
-		out.setX( floorDiff( pnt1.getX(), pnt2.get(0) ) );
-		out.setY( floorDiff( pnt1.getY(), pnt2.get(1) ) );
-		out.setZ( do3D ? floorDiff( pnt1.getZ(), pnt2.get(2) ) : 0 );
+		out.setX( floorDiff( point1.getX(), point2.get(0) ) );
+		out.setY( floorDiff( point1.getY(), point2.get(1) ) );
+		out.setZ( do3D ? floorDiff( point1.getZ(), point2.get(2) ) : 0 );
 		return out;
 	}
 	
 	/** Creates a new point that is the sum of two existing point (one a Point3d, and one a DoubleMatrix1D) */
-	private static Point3i addTwoPoints( Point3d pnt1, DoubleMatrix1D pnt2, boolean do3D ) {
+	private static Point3i addTwoPoints( Point3d point1, DoubleMatrix1D point2, boolean do3D ) {
 		Point3i out = new Point3i();
-		out.setX( ceilSum( pnt1.getX(), pnt2.get(0)) );
-		out.setY( ceilSum( pnt1.getY(), pnt2.get(1)) );
-		out.setZ( do3D ? ceilSum( pnt1.getZ(), pnt2.get(2)) : 0);
+		out.setX( ceilSum( point1.getX(), point2.get(0)) );
+		out.setY( ceilSum( point1.getY(), point2.get(1)) );
+		out.setZ( do3D ? ceilSum( point1.getZ(), point2.get(2)) : 0);
 		return out;
 	}
 	
