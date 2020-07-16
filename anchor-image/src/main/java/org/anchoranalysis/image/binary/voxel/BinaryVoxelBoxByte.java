@@ -44,24 +44,24 @@ public class BinaryVoxelBoxByte extends BinaryVoxelBox<ByteBuffer> {
 	}
 	
 	@Override
-	public boolean isHigh(int x, int y, int z) {
+	public boolean isOn(int x, int y, int z) {
 		int offset = getVoxelBox().extent().offset(x, y);
 		return getVoxelBox().getPixelsForPlane(z).buffer().get(offset) != bvb.getOffByte();
 	}
 
 	@Override
-	public boolean isLow(int x, int y, int z) {
-		return !isHigh(x, y, z);
+	public boolean isOff(int x, int y, int z) {
+		return !isOn(x, y, z);
 	}
 	
 	@Override
-	public void setHigh(int x, int y, int z) {
+	public void setOn(int x, int y, int z) {
 		int offset = getVoxelBox().extent().offset(x, y);
 		getVoxelBox().getPixelsForPlane(z).buffer().put(offset, bvb.getOnByte() );
 	}
 
 	@Override
-	public void setLow(int x, int y, int z) {
+	public void setOff(int x, int y, int z) {
 		int offset = getVoxelBox().extent().offset(x, y);
 		getVoxelBox().getPixelsForPlane(z).buffer().put(offset, bvb.getOffByte() );
 	}

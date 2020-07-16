@@ -670,13 +670,13 @@ public class ObjectMask {
 		);
 	}
 	
-	/** Sets a point (expressed in global co-ordinates) to be HIGH */
-	public void setHigh(Point3i pointGlobal) {
+	/** Sets a point (expressed in global co-ordinates) to be ON */
+	public void setOn(Point3i pointGlobal) {
 		setVoxel(pointGlobal, bv.getOnInt());
 	}
 	
-	/** Sets a point (expressed in global co-ordinates) to be HIGH */
-	public void setLow(Point3i pointGlobal) {
+	/** Sets a point (expressed in global co-ordinates) to be OFF */
+	public void setOff(Point3i pointGlobal) {
 		setVoxel(pointGlobal, bv.getOffInt());
 	}
 	

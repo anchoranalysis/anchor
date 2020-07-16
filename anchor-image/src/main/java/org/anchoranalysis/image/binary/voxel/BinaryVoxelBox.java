@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  *
  * @param <T> buffer-type
  */
-public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryHighLowSetter {
+public abstract class BinaryVoxelBox<T extends Buffer> implements BinaryOnOffSetter {
 
 	private VoxelBox<T> voxelBox;
 	

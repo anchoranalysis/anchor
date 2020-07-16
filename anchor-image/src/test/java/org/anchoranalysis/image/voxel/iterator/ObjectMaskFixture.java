@@ -88,10 +88,10 @@ public class ObjectMaskFixture {
 		int heightMinusOne = e.getY() - 1;
 		
 		for( int z=0; z<e.getZ(); z++) {
-			bvb.setLow(0, 0, z);
-			bvb.setLow(widthMinusOne, 0, z);
-			bvb.setLow(0, heightMinusOne, z);
-			bvb.setLow(widthMinusOne, heightMinusOne, z);
+			bvb.setOff(0, 0, z);
+			bvb.setOff(widthMinusOne, 0, z);
+			bvb.setOff(0, heightMinusOne, z);
+			bvb.setOff(widthMinusOne, heightMinusOne, z);
 		}
 	}
 }

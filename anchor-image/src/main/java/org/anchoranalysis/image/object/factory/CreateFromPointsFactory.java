@@ -51,7 +51,7 @@ public class CreateFromPointsFactory {
 		}
 		
 		ObjectMask mask = new ObjectMask(bbox);
-		points.forEach(mask::setHigh);
+		points.forEach(mask::setOn);
 		return mask;
 	}
 }

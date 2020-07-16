@@ -29,29 +29,29 @@ import org.anchoranalysis.core.geometry.Point3i;
  */
 
 
-public interface BinaryHighLowSetter {
+public interface BinaryOnOffSetter {
 	
-	boolean isHigh( int x, int y, int z );
+	boolean isOn( int x, int y, int z );
 	
-	boolean isLow( int x, int y, int z );
+	boolean isOff( int x, int y, int z );
 	
-	void setHigh( int x, int y, int z );
+	void setOn( int x, int y, int z );
 	
-	void setLow( int x, int y, int z );
+	void setOff( int x, int y, int z );
 	
-	default void setHigh(Point3i point) {
-		setHigh( point.getX(), point.getY(), point.getZ() );
+	default void setOn(Point3i point) {
+		setOn( point.getX(), point.getY(), point.getZ() );
 	}
 	
-	default void setLow(Point3i point) {
-		setLow( point.getX(), point.getY(), point.getZ() );
+	default void setOff(Point3i point) {
+		setOff( point.getX(), point.getY(), point.getZ() );
 	}
 	
-	default boolean isHigh(Point3i point) {
-		return isHigh( point.getX(), point.getY(), point.getZ() );
+	default boolean isOn(Point3i point) {
+		return isOn( point.getX(), point.getY(), point.getZ() );
 	}
 	
-	default boolean isLow(Point3i point) {
-		return isLow( point.getX(), point.getY(), point.getZ() );
+	default boolean isOff(Point3i point) {
+		return isOff( point.getX(), point.getY(), point.getZ() );
 	}
 }
