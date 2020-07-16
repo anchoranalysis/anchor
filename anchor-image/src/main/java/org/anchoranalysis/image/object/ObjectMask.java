@@ -670,6 +670,26 @@ public class ObjectMask {
 		);
 	}
 	
+	/** Sets a point (expressed in global co-ordinates) to be HIGH */
+	public void setHigh(Point3i pointGlobal) {
+		setVoxel(pointGlobal, bv.getOnInt());
+	}
+	
+	/** Sets a point (expressed in global co-ordinates) to be HIGH */
+	public void setLow(Point3i pointGlobal) {
+		setVoxel(pointGlobal, bv.getOffInt());
+	}
+	
+	private void setVoxel(Point3i pointGlobal, int val) {
+		Point3i cornerMin = delegate.getBoundingBox().cornerMin();
+		delegate.getVoxelBox().setVoxel(
+			pointGlobal.getX() - cornerMin.getX(),
+			pointGlobal.getX() - cornerMin.getY(),
+			pointGlobal.getX() - cornerMin.getZ(),
+			val
+		);
+	}
+	
 	/** 
 	 * A string representation of the object-mask showing:
 	 * 

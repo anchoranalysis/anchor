@@ -27,6 +27,7 @@ package org.anchoranalysis.anchor.mpp.mark.points;
  */
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -51,23 +52,19 @@ public class MarkPointListFactory {
 		return mark;
 	}
 		
-	public static MarkPointList createMarkFromPoints3f( List<Point3f> pts ) {
-		MarkPointList markPts = new MarkPointList();
-		markPts.getPoints().addAll(
-			PointConverter.convert3fTo3d(pts)
-		);
-		markPts.updateAfterPointsChange();
-		return markPts;
+	public static MarkPointList createMarkFromPoints3f( List<Point3f> points ) {
+		return createMarkFromPoints(points, PointConverter::doubleFromFloat);
 	}
 	
-	public static MarkPointList createMarkFromPoints3i( List<Point3i> pts ) {
-		Preconditions.checkArgument( !pts.isEmpty(), "are empty" );
-		MarkPointList markPts = new MarkPointList();
+	public static MarkPointList createMarkFromPoints3i( List<Point3i> points ) {
+		return createMarkFromPoints(points, PointConverter::doubleFromInt);	
+	}
+	
+	private static <T> MarkPointList createMarkFromPoints( List<T> points, Function<T,Point3d> convert ) {
+		Preconditions.checkArgument( !points.isEmpty(), "are empty" );
 		
-		for (Point3i p : pts) {
-			markPts.getPoints().add( PointConverter.doubleFromInt(p) );
-		}
-		markPts.updateAfterPointsChange();
-		return markPts;
+		return new MarkPointList(
+			points.stream().map(convert)	
+		);
 	}
 }

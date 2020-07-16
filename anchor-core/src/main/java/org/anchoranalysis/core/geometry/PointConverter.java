@@ -92,6 +92,15 @@ public class PointConverter {
 		return new Point3f( (float) point.getX(), (float) point.getY(), (float) point.getZ());
 	}
 	
+	/** Creates a new {@code Point3f} with X, Y values from the {@code Point3i} but setting Z to be 0 */
+	public static Point3f floatFromIntDropZ(ReadableTuple3i point) {
+		return new Point3f(
+			(float) point.getX(),
+			(float) point.getY(),
+			0
+		);
+	}
+	
 	public static Point3i intFromFloat(Point3f point, boolean round) {
 		if (round) {
 			return new Point3i(

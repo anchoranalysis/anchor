@@ -3,6 +3,7 @@ package org.anchoranalysis.core.functional;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -50,6 +51,23 @@ public class FunctionalList {
 	public static <S,T> List<T> mapToList(Collection<S> collection, Function<S,T> mapFunction) {
 		return collection.stream()
 				.map(mapFunction)
+				.collect( Collectors.toList() );
+	}
+	
+	/**
+	 * Maps a collection to a list with each element in the original collection maybe producing an element in the output
+	 * 
+	 * @param  <S> parameter-type for function
+	 * @param  <T> return-type for function
+	 * @param  collection the collection to be mapped
+	 * @param  mapFunction function to do the mapping to an Optional (the item is included in the output if the optional is defined)
+	 * @return a list with the same size and same order, but using derived elements that are a result of the mapping
+	 */
+	public static <S,T> List<T> mapToListOptional(Collection<S> collection, Function<S,Optional<T>> mapFunction) {
+		return collection.stream()
+				.map(mapFunction)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
 				.collect( Collectors.toList() );
 	}
 	

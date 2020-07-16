@@ -28,6 +28,7 @@ package org.anchoranalysis.anchor.mpp.mark.points;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
@@ -49,6 +50,14 @@ public class MarkPointList extends MarkAbstractPointList {
 	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 	
 	private Set<Point3d> set;	// A set that makes it quick to check if a point is on the list
+	
+	public MarkPointList() {
+		super();
+	}
+
+	public MarkPointList(Stream<Point3d> stream) {
+		super(stream);
+	}	
 	
 	@Override
 	public byte evalPointInside(Point3d pointIsInside) {

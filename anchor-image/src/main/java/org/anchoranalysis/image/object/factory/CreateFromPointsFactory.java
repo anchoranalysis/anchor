@@ -26,7 +26,6 @@ package org.anchoranalysis.image.object.factory;
  * #L%
  */
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -52,19 +51,7 @@ public class CreateFromPointsFactory {
 		}
 		
 		ObjectMask mask = new ObjectMask(bbox);
-		
-		byte maskOn = mask.getBinaryValuesByte().getOnByte();
-		
-		for (Point3i p : points) {
-			
-			int x = p.getX() - bbox.cornerMin().getX();
-			int y = p.getY() - bbox.cornerMin().getY();
-			int z = p.getZ() - bbox.cornerMin().getZ();
-			
-			ByteBuffer buffer = mask.getVoxelBox().getPixelsForPlane(z).buffer();
-			buffer.put( mask.getBoundingBox().extent().offset(x,y), maskOn );
-		}
-		
+		points.forEach(mask::setHigh);
 		return mask;
 	}
 }

@@ -29,6 +29,8 @@ package org.anchoranalysis.anchor.mpp.mark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -57,11 +59,14 @@ public abstract class MarkAbstractPointList extends Mark {
 		points = new ArrayList<>();
 	}
 	
+	public MarkAbstractPointList(Stream<Point3d> stream) {
+		points = stream.collect(Collectors.toList());
+		updateAfterPointsChange();
+	}
+	
 	protected void doDuplicate(MarkAbstractPointList markNew) {
 		markNew.points = new ArrayList<>();
-		for (Point3d p : getPoints() ) {
-			markNew.points.add(p);
-		}
+		getPoints().forEach(markNew.points::add);
 		markNew.setId( getId() );
 		markNew.updateAfterPointsChange();		
 	}
@@ -82,36 +87,44 @@ public abstract class MarkAbstractPointList extends Mark {
 	
 	
 	private static Point3d calcMin( List<Point3d> points ) {
-		Point3d min = new Point3d(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY);
-		for (Point3d p : points) {
-			if (p.getX() < min.getX()) {
-				min.setX( p.getX() );
+		Point3d min = new Point3d(
+			Double.POSITIVE_INFINITY,
+			Double.POSITIVE_INFINITY,
+			Double.POSITIVE_INFINITY
+		);
+		for (Point3d point : points) {
+			if (point.getX() < min.getX()) {
+				min.setX( point.getX() );
 			}
 			
-			if (p.getY() < min.getY()) {
-				min.setY( p.getY() );
+			if (point.getY() < min.getY()) {
+				min.setY( point.getY() );
 			}
 			
-			if (p.getZ() < min.getZ()) {
-				min.setZ( p.getZ() );
+			if (point.getZ() < min.getZ()) {
+				min.setZ( point.getZ() );
 			}
 		}
 		return min;
 	}
 	
 	private static Point3d calcMax( List<Point3d> points ) {
-		Point3d max = new Point3d(Double.NEGATIVE_INFINITY,Double.NEGATIVE_INFINITY,Double.NEGATIVE_INFINITY);
-		for (Point3d p : points) {
-			if (p.getX() > max.getX()) {
-				max.setX( p.getX() );
+		Point3d max = new Point3d(
+			Double.NEGATIVE_INFINITY,
+			Double.NEGATIVE_INFINITY,
+			Double.NEGATIVE_INFINITY
+		);
+		for (Point3d point : points) {
+			if (point.getX() > max.getX()) {
+				max.setX( point.getX() );
 			}
 			
-			if (p.getY() > max.getY()) {
-				max.setY( p.getY() );
+			if (point.getY() > max.getY()) {
+				max.setY( point.getY() );
 			}
 			
-			if (p.getZ() > max.getZ()) {
-				max.setZ( p.getZ() );
+			if (point.getZ() > max.getZ()) {
+				max.setZ( point.getZ() );
 			}
 		}
 		return max;

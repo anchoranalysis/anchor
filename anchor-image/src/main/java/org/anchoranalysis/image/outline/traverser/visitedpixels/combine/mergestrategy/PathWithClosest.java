@@ -34,9 +34,13 @@ import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixel
 import org.anchoranalysis.image.outline.traverser.contiguouspath.DistanceToContiguousPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
 
+import lombok.Getter;
+
 class PathWithClosest {
 	
+	@Getter
 	private ContiguousPixelPath path;
+	
 	private int closest;
 	
 	public PathWithClosest(ContiguousPixelPath path, Point3i mergePoint ) {
@@ -72,16 +76,12 @@ class PathWithClosest {
 		return path.points();
 	}
 
-	public ContiguousPixelPath getPath() {
-		return path;
+	public void insertBefore(List<Point3i> points) {
+		path.insertBefore(points);
+		closest += points.size();
 	}
 
-	public void insertBefore(List<Point3i> pts) {
-		path.insertBefore(pts);
-		closest += pts.size();
-	}
-
-	public void insertAfter(List<Point3i> pts) {
-		path.insertAfter(pts);
+	public void insertAfter(List<Point3i> points) {
+		path.insertAfter(points);
 	}
 }

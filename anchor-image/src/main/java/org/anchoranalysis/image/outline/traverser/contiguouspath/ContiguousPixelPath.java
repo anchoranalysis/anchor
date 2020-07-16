@@ -146,13 +146,13 @@ public class ContiguousPixelPath {
 	}
 	
 	/** Inserts points before existing path. Does not check if they are neighbours. */
-	public void insertBefore( List<Point3i> pts ) {
-		list.addAll(0, pts);
+	public void insertBefore( List<Point3i> points ) {
+		list.addAll(0, points);
 	}
 	
 	/** Inserts points at end of existing path. Does not check if they are neighbours. */
-	public void insertAfter( List<Point3i> pts ) {
-		list.addAll(pts);
+	public void insertAfter( List<Point3i> points ) {
+		list.addAll(points);
 	}
 	
 	public Point3i get(int index) {
