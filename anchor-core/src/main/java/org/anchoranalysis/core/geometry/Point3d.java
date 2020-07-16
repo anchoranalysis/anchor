@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.geometry;
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /*-
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
  * THE SOFTWARE.
  * #L%
  */
-@NoArgsConstructor
+@NoArgsConstructor @EqualsAndHashCode(callSuper = true)
 public final class Point3d extends Tuple3d {
 
 	/**
@@ -166,20 +167,6 @@ public final class Point3d extends Tuple3d {
 	
 	public double l2norm() {
 		return Math.sqrt( (x*x) + (y*y) + (z*z) );
-	}
-
-	@Override
-	public boolean equals(Object obj) { // NOSONAR
-		
-		if (this == obj) {
-			return true;
-		}
-		
-		if( obj instanceof Point3d ) {
-			return super.equals(obj);
-		} else {
-			return false;
-		}
 	}
 	
 	/** Performs an addition without changing any values in an existing point */

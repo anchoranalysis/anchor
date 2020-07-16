@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.geometry;
 
+import lombok.EqualsAndHashCode;
+
 /*
  * #%L
  * anchor-core
@@ -26,7 +28,7 @@ package org.anchoranalysis.core.geometry;
  * #L%
  */
 
-
+@EqualsAndHashCode(callSuper = true)
 public final class Point3i extends Tuple3i {
 	
 	/**
@@ -34,6 +36,9 @@ public final class Point3i extends Tuple3i {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor - creates the points with a 0 in each dimension
+	 */
 	public Point3i() {
 		// Initializes wit zeroes
 	}
@@ -48,17 +53,6 @@ public final class Point3i extends Tuple3i {
 		this.x = point.getX();
 		this.y = point.getY();
 		this.z = point.getZ();
-	}
-
-	@Override
-	public boolean equals( Object obj ) { // NOSONAR
-		if (this == obj) {
-			return true;
-		}
-	    if (!(obj instanceof Point3i)) {
-	        return false;
-	    }
-	    return super.equals(obj);
 	}
 	
 	public int distanceSquared( Point3i point ) {

@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.geometry;
 
+import lombok.EqualsAndHashCode;
+
 /*
  * #%L
  * anchor-core
@@ -28,7 +30,7 @@ package org.anchoranalysis.core.geometry;
 
 
 
-
+@EqualsAndHashCode(callSuper = true)
 public final class Point3f extends Tuple3f {
 	
 	/**
@@ -51,20 +53,4 @@ public final class Point3f extends Tuple3f {
 		this.y = y;
 		this.z = z;
 	}
-	
-	
-	@Override
-	public boolean equals(Object obj) { // NOSONAR
-		
-		if (this == obj) {
-			return true;
-		}
-		
-		if( obj instanceof Point3f ) {
-			return super.equals(obj);
-		} else {
-			return false;
-		}
-	}
-
 }

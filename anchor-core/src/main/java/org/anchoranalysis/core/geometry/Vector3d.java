@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.geometry;
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /*
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
  * #L%
  */
 
-@NoArgsConstructor
+@NoArgsConstructor @EqualsAndHashCode(callSuper = true)
 public final class Vector3d extends Tuple3d {
 
 	/**
@@ -67,16 +68,5 @@ public final class Vector3d extends Tuple3d {
 		out.y = u.getZ()*v.getX() - u.getX()*v.getZ();
 		out.z = u.getX()*v.getY() - u.getY()*v.getX();
 		return out;
-	}
-	
-	@Override
-	public boolean equals( Object obj ) { // NOSONAR
-		if (this == obj) {
-			return true;
-		}
-	    if (!(obj instanceof Vector3d)) {
-	        return false;
-	    }
-	    return super.equals(obj);
 	}
 }
