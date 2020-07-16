@@ -254,7 +254,7 @@ public final class BoundingBox implements Serializable {
 	/** 
 	 * A new bounding-box using relative position coordinates to another box
 	 * 
-	 * @param other the other box, against whom we consider our co-ordinates relatively
+	 * @param other the other box, against whom we consider our coordinates relatively
 	 * @return a newly created bounding box with relative coordinates
 	 */
 	public BoundingBox relPosToBox( BoundingBox other ) {

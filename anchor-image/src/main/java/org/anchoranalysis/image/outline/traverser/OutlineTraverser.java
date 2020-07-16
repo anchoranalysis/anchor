@@ -85,7 +85,7 @@ public class OutlineTraverser {
 	
 	/**
 	 * 
-	 * @param root this root point should exist on the omOutline (in absolute scene co-ordinates)
+	 * @param root this root point should exist on the omOutline (in absolute scene coordinates)
 	 * @param listOut
 	 * @throws TraverseOutlineException
 	 */

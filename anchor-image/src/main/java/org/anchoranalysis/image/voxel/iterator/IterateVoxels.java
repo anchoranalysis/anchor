@@ -58,7 +58,7 @@ public class IterateVoxels {
 	 * 
 	 * @param firstMask the first-mask that is used as a condition on what voxels to iterate
 	 * @param secondMask an optional second-mask that can be a further condition
-	 * @param process is called for each voxel with that satisfies the conditions using GLOBAL co-ordinates for each voxel.
+	 * @param process is called for each voxel with that satisfies the conditions using GLOBAL coordinates for each voxel.
 	 **/
 	public static void overMasks( ObjectMask firstMask, Optional<ObjectMask> secondMask, ProcessVoxel process ) {
 		if (secondMask.isPresent()) {

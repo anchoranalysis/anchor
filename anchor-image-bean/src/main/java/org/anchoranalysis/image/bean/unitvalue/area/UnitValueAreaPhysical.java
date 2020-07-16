@@ -37,7 +37,7 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
- * Area expressed in physical co-ordinates
+ * Area expressed in physical coordinates
  * 
  * @author Owen Feehan
  *

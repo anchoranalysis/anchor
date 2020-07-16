@@ -80,7 +80,7 @@ public class ObjectMask {
 	private final BinaryValuesByte bvb;
 	
 	/**
-	 * Constructor - creates an object-mask assuming co-ordinates at the origin (i.e. corner is 0,0,0)
+	 * Constructor - creates an object-mask assuming coordinates at the origin (i.e. corner is 0,0,0)
 	 * 
 	 * <p>Default binary-values of (OFF=0, ON=255) are used.</p>
 	 * 
@@ -603,7 +603,7 @@ public class ObjectMask {
 	 * 
 	 * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never reused like sometimes in {@link region}.</p.
 	 * 
-	 * @param bbox bounding-box in absolute co-ordinates, that must at least partially intersect with the current mask bounds.
+	 * @param bbox bounding-box in absolute coordinates, that must at least partially intersect with the current mask bounds.
 	 * @return a newly created mask containing partially some parts of the existing mask as well as OFF voxels for any other region.
 	 * @throws CreateException if the boxes do not intersect
 	 */
@@ -658,8 +658,8 @@ public class ObjectMask {
 	 * 
 	 * <p>This is an IMMUTABLE operation.</p>
 	 * 
-	 * @param bbox box used as a reference point, against which new relative co-ordinates are calculated.
-	 * @return a newly created object-mask with updated co-ordinates.
+	 * @param bbox box used as a reference point, against which new relative coordinates are calculated.
+	 * @return a newly created object-mask with updated coordinates.
 	 */
 	public ObjectMask relMaskTo( BoundingBox bbox ) {
 		Point3i point = delegate.getBoundingBox().relPosTo(bbox);
@@ -670,12 +670,12 @@ public class ObjectMask {
 		);
 	}
 	
-	/** Sets a point (expressed in global co-ordinates) to be ON */
+	/** Sets a point (expressed in global coordinates) to be ON */
 	public void setOn(Point3i pointGlobal) {
 		setVoxel(pointGlobal, bv.getOnInt());
 	}
 	
-	/** Sets a point (expressed in global co-ordinates) to be OFF */
+	/** Sets a point (expressed in global coordinates) to be OFF */
 	public void setOff(Point3i pointGlobal) {
 		setVoxel(pointGlobal, bv.getOffInt());
 	}

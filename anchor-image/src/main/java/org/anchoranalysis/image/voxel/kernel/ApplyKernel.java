@@ -114,7 +114,7 @@ public class ApplyKernel {
 	 * 
 	 * @param kernel the kernel to be applied
 	 * @param vb the voxel-box to iterate over
-	 * @param bbox a bounding-box (co-ordinates relative to vb) that restricts where iteration occurs. Must be containted within vb.
+	 * @param bbox a bounding-box (coordinates relative to vb) that restricts where iteration occurs. Must be containted within vb.
 	 * @return the sum of the count value returned by the kernel over all iterated voxels
 	 * @throws OperationFailedException 
 	 */
@@ -161,7 +161,7 @@ public class ApplyKernel {
 	 * 
 	 * @param kernel the kernel to be applied
 	 * @param vb the voxel-box to iterate over
-	 * @param bbox a bounding-box (co-ordinates relative to vb) that restricts where iteration occurs. Must be containted within vb.
+	 * @param bbox a bounding-box (coordinates relative to vb) that restricts where iteration occurs. Must be containted within vb.
 	 * @return TRUE if a positive-value is encountered, 0 if it never is encountered
 	 * @throws OperationFailedException 
 	 */

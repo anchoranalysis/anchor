@@ -404,7 +404,7 @@ public class BoundedVoxelBox<T extends Buffer> {
 	 * 
 	 * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never reused like sometimes in {@link region}.</p.
 	 *   
-	 * @param bbox bounding-box in absolute co-ordinates, that must at least partially intersect with the current bounds.
+	 * @param bbox bounding-box in absolute coordinates, that must at least partially intersect with the current bounds.
 	 * @param voxelValueForRest a voxel-value for the parts of the buffer not covered by the intersection.
 	 * @return a newly created voxel-box containing partially some parts of the existing voxels and other regions.
 	 * @throws CreateException if the boxes do not intersect

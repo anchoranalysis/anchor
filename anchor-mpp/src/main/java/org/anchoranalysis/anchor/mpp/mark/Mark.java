@@ -189,7 +189,7 @@ public abstract class Mark implements Serializable, Identifiable {
 			int zLocal = point.getZ() - bbox.cornerMin().getZ();
 			ByteBuffer maskSlice = mask.getVoxelBox().getPixelsForPlane(zLocal).buffer();
 
-			// Z co-ordinates are the same as we only scale in XY
+			// Z coordinates are the same as we only scale in XY
 			pointScaled.setZ( point.getZ() );
 			
 			int cnt = 0;
