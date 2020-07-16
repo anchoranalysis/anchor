@@ -42,13 +42,12 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class ObjectMaskFixture {
 
-	private ImageDimensions dim;
-	
-	public ObjectMaskFixture(ImageDimensions dim ) {
-		this.dim = dim;
-	}
+	private final ImageDimensions dimensions;
 	
 	public ObjectMask create1() {
 		Extent extent = new Extent(20,34,11);
@@ -71,7 +70,7 @@ public class ObjectMaskFixture {
 	private ObjectMask createAt( Point3i cornerMin, Extent extent, VoxelPattern pattern ) {
 		BoundingBox bbox = new BoundingBox(cornerMin, extent);
 		
-		assertTrue( dim.contains(bbox) );
+		assertTrue( dimensions.contains(bbox) );
 		
 		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(extent);
 		BinaryValues bv =  BinaryValues.getDefault();

@@ -43,14 +43,14 @@ import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 public class ProbMapObjectCollection implements ProbMap {
 
 	private final ObjectCollection objects;
-	private final ImageDimensions dim;
+	private final ImageDimensions dimensions;
 	
 	private final ProbWeights probWeights;
 	
 	public ProbMapObjectCollection(ObjectCollection objects, ImageDimensions dim) {
 		super();
 		this.objects = objects;
-		this.dim = dim;
+		this.dimensions = dim;
 		
 		
 		probWeights = new ProbWeights();
@@ -79,14 +79,14 @@ public class ProbMapObjectCollection implements ProbMap {
 
 	@Override
 	public ImageDimensions getDimensions() {
-		return dim;
+		return dimensions;
 	}
 
 	@Override
 	public Mask visualization() throws OptionalOperationUnsupportedException {
 		return BinaryChnlFromObjects.createFromObjects(
 			objects,
-			dim,
+			dimensions,
 			BinaryValues.getDefault()
 		);
 	}

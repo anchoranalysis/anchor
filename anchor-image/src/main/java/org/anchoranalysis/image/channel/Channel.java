@@ -118,11 +118,11 @@ public class Channel {
 		
 		assert( FACTORY!=null );
 		
-		ImageDimensions sdNew = getDimensions().scaleXYTo(x,y);
+		ImageDimensions dimensionsScaled = getDimensions().scaleXYTo(x,y);
 		
 		VoxelBox<? extends Buffer> ba = delegate.resizeXY(x, y, interpolator);
 		assert(ba.extent().getVolumeXY()==ba.getPixelsForPlane(0).buffer().capacity());
-		return FACTORY.create( ba, sdNew.getRes() );
+		return FACTORY.create( ba, dimensionsScaled.getRes() );
 	}
 	
 	public Channel maxIntensityProjection() {

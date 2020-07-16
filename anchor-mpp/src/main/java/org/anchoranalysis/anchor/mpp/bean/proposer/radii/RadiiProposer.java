@@ -41,5 +41,10 @@ import org.anchoranalysis.image.orientation.Orientation;
 public abstract class RadiiProposer extends MPPBean<RadiiProposer> implements CompatibleWithMark {
 	
 	// When we have no bounds, we should create bounds from the boundCalculator
-	public abstract Optional<Point3d> propose(Point3d pos, RandomNumberGenerator randomNumberGenerator, ImageDimensions dim, Orientation orientation) throws ProposalAbnormalFailureException;
+	public abstract Optional<Point3d> propose(
+		Point3d pos,
+		RandomNumberGenerator randomNumberGenerator,
+		ImageDimensions dimensions,
+		Orientation orientation
+	) throws ProposalAbnormalFailureException;
 }

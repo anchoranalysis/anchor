@@ -66,8 +66,8 @@ public class NRGStackWithParams {
 		this.params = new KeyValueParams();
 	}
 	
-	public NRGStackWithParams( ImageDimensions dim ) {
-		this.nrgStack = new NRGStack(dim);
+	public NRGStackWithParams( ImageDimensions dimensions ) {
+		this.nrgStack = new NRGStack(dimensions);
 		this.params = new KeyValueParams();
 	}
 

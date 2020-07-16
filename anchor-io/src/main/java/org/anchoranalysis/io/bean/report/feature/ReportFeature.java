@@ -38,5 +38,5 @@ public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 	
 	public abstract String genTitleStr() throws OperationFailedException;
 	
-	public abstract String genFeatureStrFor( T obj, Logger logger ) throws OperationFailedException;
+	public abstract String genFeatureStringFor( T obj, Logger logger ) throws OperationFailedException;
 }

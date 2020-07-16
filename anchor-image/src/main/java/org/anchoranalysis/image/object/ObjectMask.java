@@ -403,13 +403,13 @@ public class ObjectMask {
 	 * Intersects this object-mask with another
 	 * 
 	 * @param other the other object-mask to intersect with
-	 * @param dim dimensions to constrain any intersection
+	 * @param dimensions dimensions to constrain any intersection
 	 * @return a new mask of the intersection iff it exists
 	 */
-	public Optional<ObjectMask> intersect( ObjectMask other, ImageDimensions dim ) {
+	public Optional<ObjectMask> intersect( ObjectMask other, ImageDimensions dimensions ) {
 		
 		// we combine the two masks
-		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dim.getExtent() );
+		Optional<BoundingBox> bboxIntersect = getBoundingBox().intersection().withInside( other.getBoundingBox(), dimensions.getExtent() );
 		
 		if (!bboxIntersect.isPresent()) {
 			return Optional.empty();

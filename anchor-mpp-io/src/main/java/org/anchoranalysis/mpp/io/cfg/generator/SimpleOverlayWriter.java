@@ -57,7 +57,7 @@ public class SimpleOverlayWriter extends DrawOverlay {
 	@Override
 	public void writePrecalculatedOverlays(
 		List<PrecalcOverlay> precalculatedMasks,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		RGBStack background,
 		ObjectDrawAttributes attributes,
 		BoundingBox restrictTo

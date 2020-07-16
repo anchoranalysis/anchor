@@ -98,10 +98,10 @@ public class AssignmentOverlapFromPairs implements Assignment {
 		return elements.asList();	
 	}
 	
-	public void removeTouchingBorderXY( ImageDimensions sd ) {
-		removeTouchingBorderXYObjects( sd, listUnassignedLeft );
-		removeTouchingBorderXYObjects( sd, listUnassignedRight );
-		removeTouchingBorderXYPairObjects( sd, listPairs );
+	public void removeTouchingBorderXY( ImageDimensions dimensions ) {
+		removeTouchingBorderXYObjects( dimensions, listUnassignedLeft );
+		removeTouchingBorderXYObjects( dimensions, listUnassignedRight );
+		removeTouchingBorderXYPairObjects( dimensions, listPairs );
 	}
 	
 	@Override

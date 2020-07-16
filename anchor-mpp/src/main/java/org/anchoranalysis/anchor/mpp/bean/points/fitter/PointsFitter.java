@@ -40,6 +40,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 @GroupingRoot
 public abstract class PointsFitter extends PointsBean<PointsFitter> implements CompatibleWithMark {
 	
-	public abstract void fit( List<Point3f> points, Mark mark, ImageDimensions dim ) throws PointsFitterException, InsufficientPointsException;
+	public abstract void fit( List<Point3f> points, Mark mark, ImageDimensions dimensions ) throws PointsFitterException, InsufficientPointsException;
 	
 }

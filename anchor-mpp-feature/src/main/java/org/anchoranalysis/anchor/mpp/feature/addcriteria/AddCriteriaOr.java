@@ -50,13 +50,13 @@ public class AddCriteriaOr extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 
 	@Override
-	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dimensions, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 	
 		for( int i=0; i<list.size(); i++) {
 	
 			AddCriteriaPair acp = list.get(i);
 			
-			if (acp.includeMarks(mark1, mark2, dim, session, do3D )) {
+			if (acp.includeMarks(mark1, mark2, dimensions, session, do3D )) {
 				return true;
 			}
 		}

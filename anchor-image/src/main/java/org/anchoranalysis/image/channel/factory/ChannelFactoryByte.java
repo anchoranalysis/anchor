@@ -57,11 +57,11 @@ public class ChannelFactoryByte implements ChannelFactorySingleType {
 	}
 
 	@Override
-	public Channel createEmptyUninitialised(ImageDimensions dim) {
-		PixelsFromByteBufferArr pixels = PixelsFromByteBufferArr.createEmpty( dim.getExtent() );
+	public Channel createEmptyUninitialised(ImageDimensions dimensions) {
+		PixelsFromByteBufferArr pixels = PixelsFromByteBufferArr.createEmpty( dimensions.getExtent() );
 
 		VoxelBox<ByteBuffer> vb = FACTORY.create(pixels);
-		return create(vb, dim.getRes() );
+		return create(vb, dimensions.getRes() );
 	}
 
 	@Override

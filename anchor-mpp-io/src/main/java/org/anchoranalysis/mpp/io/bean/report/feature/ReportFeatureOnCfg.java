@@ -56,8 +56,7 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 	}
 
 	@Override
-	public String genFeatureStrFor(MPPInitParams so, Logger logger)
-			throws OperationFailedException {
+	public String genFeatureStringFor(MPPInitParams so, Logger logger)	throws OperationFailedException {
 
 		// Maybe we should duplicate the providers?
 		try {
@@ -70,14 +69,14 @@ public class ReportFeatureOnCfg extends ReportFeatureForMPP<FeatureInputCfg> {
 		try {
 			Cfg cfg = cfgProvider.create();
 			
-			ImageDimensions dim = createImageDim();
+			ImageDimensions dimensions = createImageDim();
 			
 			FeatureCalculatorSingle<FeatureInputCfg> session = createAndStartSession();
 			
 			double val = session.calc(
 				new FeatureInputCfg(
 					cfg,
-					Optional.of(dim)
+					Optional.of(dimensions)
 				)
 			);
 			return Double.toString(val);

@@ -46,10 +46,10 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class ArbitraryPointCommon extends AddCriteriaPair {
 	
 	@Override
-	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dimensions, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 			
-		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
-		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
+		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dimensions);
+		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dimensions);
 		
 		// If their bounding boxes don't intersect, they cannot possibly have an overlapping point
 		if (!bbox1.intersection().existsWith(bbox2)) {

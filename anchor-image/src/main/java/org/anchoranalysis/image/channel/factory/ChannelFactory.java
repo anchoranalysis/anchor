@@ -62,14 +62,14 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 		return instance;
 	}
 	
-	public Channel createEmptyInitialised(ImageDimensions dim, VoxelDataType chnlDataType ) {
+	public Channel createEmptyInitialised(ImageDimensions dimensions, VoxelDataType chnlDataType ) {
 		ChannelFactorySingleType factory = get(chnlDataType);
-		return factory.createEmptyInitialised(dim);
+		return factory.createEmptyInitialised(dimensions);
 	}
 
-	public Channel createEmptyUninitialised(ImageDimensions dim, VoxelDataType chnlDataType) {
+	public Channel createEmptyUninitialised(ImageDimensions dimensions, VoxelDataType chnlDataType) {
 		ChannelFactorySingleType factory = get(chnlDataType);
-		return factory.createEmptyUninitialised(dim);
+		return factory.createEmptyUninitialised(dimensions);
 	}
 
 	public Channel create(VoxelBox<? extends Buffer> voxelBox, ImageResolution res ) {

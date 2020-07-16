@@ -41,6 +41,9 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Modifies an Object by applying a kernel
  * 
@@ -51,7 +54,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements CompatibleWithMark {
 
 	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	// This is only decorative. Currently it has no use.
 	private String name = "";
 	// END BEAN PROPERTIES
@@ -71,7 +74,7 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
 		KernelCalcContext context
 	) throws KernelCalcNRGException;
 	
-	public abstract double calcAccptProb( int exstSize, int propSize, double poissonIntens, ImageDimensions sceneSize, double densityRatio );
+	public abstract double calcAccptProb( int exstSize, int propSize, double poissonIntens, ImageDimensions dimensions, double densityRatio );
 	
 	public abstract String dscrLast();
 	
@@ -83,7 +86,11 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
 	 * @param nrgNew accepted energy
 	 * @throws UpdateMarkSetException
 	 */
-	public abstract void updateAfterAccpt( ListUpdatableMarkSetCollection updatableMarkSetCollection, T nrgExst, T nrgNew ) throws UpdateMarkSetException;
+	public abstract void updateAfterAccpt(
+		ListUpdatableMarkSetCollection updatableMarkSetCollection,
+		T nrgExst,
+		T nrgNew
+	) throws UpdateMarkSetException;
 	
 	// Returns an array of Mark IDs that were changed in the last calcNRGForProp for the kernel
 	// Guaranteed only to be called, if calcNRGForProp did not return NULL
@@ -96,12 +103,4 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
 	 * @param cfgNRG
 	 */
 	public abstract void informLatestState( T cfgNRG );
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

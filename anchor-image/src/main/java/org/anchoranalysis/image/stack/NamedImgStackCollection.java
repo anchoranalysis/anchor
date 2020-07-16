@@ -110,7 +110,10 @@ public class NamedImgStackCollection implements NamedProviderStore<Stack> {
 	}
 
 	/** Applies an operation on each stack in the collection and returns a new derived collection */
-	public NamedImgStackCollection applyOperation( ImageDimensions dim, UnaryOperator<Stack> stackOperation ) throws OperationFailedException {
+	public NamedImgStackCollection applyOperation(
+		ImageDimensions dimensions,
+		UnaryOperator<Stack> stackOperation
+	) throws OperationFailedException {
 		
 		NamedImgStackCollection out = new NamedImgStackCollection();
 		
@@ -118,13 +121,13 @@ public class NamedImgStackCollection implements NamedProviderStore<Stack> {
 			for( String key : keys() ) {
 				Stack img = getException(key);
 				
-				if (!img.getDimensions().equals(dim) ) {
+				if (!img.getDimensions().equals(dimensions) ) {
 					throw new OperationFailedException(
 						String.format(
 							"The image-dimensions of %s (%s) does not match what is expected (%s)",
 							key,
 							img.getDimensions(),
-							dim
+							dimensions
 						)
 					);
 				}

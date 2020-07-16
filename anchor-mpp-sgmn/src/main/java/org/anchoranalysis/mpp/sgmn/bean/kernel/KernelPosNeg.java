@@ -29,29 +29,19 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class KernelPosNeg<T> extends KernelIndependent<T> {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double probPos = 0.5;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double probNeg = 0.5;
 	// END BEAN PROPERTIES
-	
-	public double getProbPos() {
-		return probPos;
-	}
-	public void setProbPos(double probPos) {
-		this.probPos = probPos;
-	}
-	public double getProbNeg() {
-		return probNeg;
-	}
-	public void setProbNeg(double probNeg) {
-		this.probNeg = probNeg;
-	}
-	
+		
 	protected void duplicateHelper( KernelPosNeg<T> out ) {
 		out.probPos = probPos;
 		out.probNeg = probNeg;

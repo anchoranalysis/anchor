@@ -42,9 +42,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  */
 public interface ChannelFactorySingleType {
 	
-	Channel createEmptyInitialised( ImageDimensions dim );
+	Channel createEmptyInitialised( ImageDimensions dimensions );
 
-	Channel createEmptyUninitialised(ImageDimensions dim);
+	Channel createEmptyUninitialised(ImageDimensions dimensions);
 	
 	default Channel create( VoxelBox<? extends Buffer> bufferAccess, ImageResolution res ) {
 		return new Channel( bufferAccess, res);

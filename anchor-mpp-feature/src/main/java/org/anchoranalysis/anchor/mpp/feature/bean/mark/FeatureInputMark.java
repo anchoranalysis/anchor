@@ -40,20 +40,20 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class FeatureInputMark implements FeatureInputParams {
 
-	private Mark mark;
-	private Optional<ImageDimensions> dim;
-	private Optional<KeyValueParams> params;
+	private final Mark mark;
+	private final Optional<ImageDimensions> dimensions;
+	private final Optional<KeyValueParams> params;
 		
-	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dim) {
+	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dimensions) {
 		this.mark = mark;
-		this.dim = dim;
+		this.dimensions = dimensions;
 		this.params = Optional.empty();
 	}
 	
-	public FeatureInputMark(Mark mark, ImageDimensions dim, KeyValueParams params) {
+	public FeatureInputMark(Mark mark, ImageDimensions dimensions, KeyValueParams params) {
 		this(
 			mark,
-			Optional.of(dim),
+			Optional.of(dimensions),
 			Optional.of(params)
 		);
 	}
@@ -61,7 +61,7 @@ public class FeatureInputMark implements FeatureInputParams {
 	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dim, Optional<KeyValueParams> params) {
 		super();
 		this.mark = mark;
-		this.dim = dim;
+		this.dimensions = dim;
 		this.params = params;
 	}
 
@@ -69,13 +69,9 @@ public class FeatureInputMark implements FeatureInputParams {
 		return mark;
 	}
 
-	public void setMark(Mark mark) {
-		this.mark = mark;
-	}
-
 	@Override
 	public Optional<ImageResolution> getResOptional() {
-		return dim.map( ImageDimensions::getRes );
+		return dimensions.map( ImageDimensions::getRes );
 	}
 
 	@Override
@@ -84,11 +80,11 @@ public class FeatureInputMark implements FeatureInputParams {
 	}
 	
 	public Optional<ImageDimensions> getDimensionsOptional() {
-		return dim;
+		return dimensions;
 	}
 	
 	public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
-		return dim.orElseThrow(
+		return dimensions.orElseThrow(
 			() -> new FeatureCalcException("Dimensions are required in the input for this operation")
 		);
 	}

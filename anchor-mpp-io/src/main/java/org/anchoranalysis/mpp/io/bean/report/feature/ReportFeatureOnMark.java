@@ -43,10 +43,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private MarkProvider markProvider;
 	// END BEAN PROPERTIES
 
@@ -56,7 +59,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 	}
 	
 	@Override
-	public String genFeatureStrFor(MPPInitParams so, Logger logger)
+	public String genFeatureStringFor(MPPInitParams so, Logger logger)
 			throws OperationFailedException {
 
 		// Maybe we should duplicate the providers?
@@ -82,12 +85,12 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 		try {
 			FeatureCalculatorSingle<FeatureInputMark> session = createAndStartSession();
 			
-			ImageDimensions dim = createImageDim();
+			ImageDimensions dimensions = createImageDim();
 			
 			double val = session.calc(
 				new FeatureInputMark(
 					mark.get(),
-					Optional.of(dim)
+					Optional.of(dimensions)
 				)
 			);
 			return Double.toString(val);
@@ -95,13 +98,4 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
 			throw new OperationFailedException(e);
 		}
 	}
-
-	public MarkProvider getMarkProvider() {
-		return markProvider;
-	}
-
-	public void setMarkProvider(MarkProvider markProvider) {
-		this.markProvider = markProvider;
-	}
-
 }

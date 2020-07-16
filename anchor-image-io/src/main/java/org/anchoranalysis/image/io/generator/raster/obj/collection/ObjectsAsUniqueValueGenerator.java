@@ -48,12 +48,12 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsGenerator {
 	
 	private static ChannelFactoryByte factory = new ChannelFactoryByte();
 	
-	public ObjectsAsUniqueValueGenerator(ImageDimensions dim) {
-		super(dim);
+	public ObjectsAsUniqueValueGenerator(ImageDimensions dimensions) {
+		super(dimensions);
 	}
 
-	public ObjectsAsUniqueValueGenerator(ImageDimensions dim, ObjectCollection masks) {
-		super(dim, masks);
+	public ObjectsAsUniqueValueGenerator(ImageDimensions dimensions, ObjectCollection masks) {
+		super(dimensions, masks);
 	}
 	
 	@Override

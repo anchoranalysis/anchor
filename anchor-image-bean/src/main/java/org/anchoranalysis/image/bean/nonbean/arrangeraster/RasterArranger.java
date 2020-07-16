@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class RasterArranger {
 	
 	private BBoxSetOnPlane bboxSetOnPlane;
-	private ImageDimensions dim;
+	private ImageDimensions dimensions;
 	
 	public void init( ArrangeRaster arrangeRaster, List<RGBStack> list ) throws InitException {
 
@@ -58,13 +58,13 @@ public class RasterArranger {
 			throw new InitException("rasterIterator has more items than can be accomodated");
 		}
 
-		dim = new ImageDimensions(
+		dimensions = new ImageDimensions(
 			bboxSetOnPlane.getExtent()
 		);
 	}
 	
 	public RGBStack createStack( List<RGBStack> list, ChannelFactorySingleType chnlfactory ) {
-		RGBStack stackOut =  new RGBStack( dim, chnlfactory );
+		RGBStack stackOut =  new RGBStack( dimensions, chnlfactory );
 		ppltStack( list, stackOut.asStack() );
 		return stackOut;
 	}

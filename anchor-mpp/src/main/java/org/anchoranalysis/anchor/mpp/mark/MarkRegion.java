@@ -36,5 +36,5 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class MarkRegion extends AnchorBean<MarkRegion> implements GenerateUniqueParameterization {
 
-	public abstract VoxelStatistics createStatisticsFor( VoxelizedMarkMemo pmm, ImageDimensions dim ) throws CreateException;
+	public abstract VoxelStatistics createStatisticsFor( VoxelizedMarkMemo memo, ImageDimensions dimensions ) throws CreateException;
 }

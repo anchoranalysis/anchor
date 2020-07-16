@@ -70,7 +70,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	private RandomSet<Point3d> setPoints;
 	
-	private ImageDimensions dim;
+	private ImageDimensions dimensions;
 	private Mask binaryImage;
 	private Channel binaryImageChnl;
 	
@@ -79,7 +79,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		this.binaryImage = binaryImage;
 		this.binaryImageChnl = binaryImage.getChannel();
 		
-		dim = binaryImage.getDimensions();
+		dimensions = binaryImage.getDimensions();
 		
 		setPoints = new RandomSet<>();
 		
@@ -158,7 +158,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	@Override
 	public ImageDimensions getDimensions() {
-		return dim;
+		return dimensions;
 	}
 	
 	

@@ -203,7 +203,11 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 		}
 	}
 
-	private List<Channel> createUninitialisedChnls( ImageDimensions dim, TimeSequence ts, ChannelFactorySingleType factory ) throws IncorrectImageSizeException {
+	private List<Channel> createUninitialisedChnls(
+		ImageDimensions dimensions,
+		TimeSequence ts,
+		ChannelFactorySingleType factory
+	) throws IncorrectImageSizeException {
 		
 		/** A list of all channels i.e. aggregating the channels associated with each stack */
 		List<Channel> listAllChnls = new ArrayList<>();
@@ -212,7 +216,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			Stack stack = new Stack();
 			for (int c=0; c<numChnl; c++) {
 				
-				Channel chnl = factory.createEmptyUninitialised(dim);
+				Channel chnl = factory.createEmptyUninitialised(dimensions);
 				
 				stack.addChnl(chnl);
 				listAllChnls.add(chnl);
@@ -225,7 +229,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 		
 	private void copyBytesIntoChnls(
 		List<Channel> listChnls,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		ProgressReporter progressReporter,
 		VoxelDataType dataType,
 		ReadOptions readOptions
@@ -242,7 +246,7 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			reader,
 			listChnls,
 			progressReporter,
-			new ImageFileShape(dim, numChnl, sizeT),
+			new ImageFileShape(dimensions, numChnl, sizeT),
 			convertTo,
 			readOptions
 		);

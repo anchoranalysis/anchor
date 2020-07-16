@@ -44,11 +44,11 @@ public abstract class Overlay implements Identifiable {
 	 * A bounding-box around the overlay
 	 * 
 	 * @param overlayWriter
-	 * @param dim	The dimensions of the containing-scene
+	 * @param dimensions	The dimensions of the containing-scene
 	 * 
 	 * @return the bounding-box
 	 */
-	public abstract BoundingBox bbox( DrawOverlay overlayWriter, ImageDimensions dim );
+	public abstract BoundingBox bbox( DrawOverlay overlayWriter, ImageDimensions dimensions );
 	
 	public abstract ObjectWithProperties createScaledMask(
 		DrawOverlay overlayWriter,

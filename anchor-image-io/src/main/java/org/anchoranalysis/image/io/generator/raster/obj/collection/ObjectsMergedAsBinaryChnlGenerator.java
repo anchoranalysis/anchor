@@ -18,12 +18,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public class ObjectsMergedAsBinaryChnlGenerator extends ObjectsGenerator {
 	
-	public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dim) {
-		super(dim);
+	public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dimensions) {
+		super(dimensions);
 	}
 
-	public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dim, ObjectCollection masks) {
-		super(dim, masks);
+	public ObjectsMergedAsBinaryChnlGenerator(ImageDimensions dimensions, ObjectCollection masks) {
+		super(dimensions, masks);
 	}
 
 	@Override

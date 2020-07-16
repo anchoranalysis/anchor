@@ -49,11 +49,11 @@ public class BBoxIntersection extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dimensions, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 	
 		
-		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dim);
-		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dim);
+		BoundingBox bbox1 = mark1.getMark().bboxAllRegions(dimensions);
+		BoundingBox bbox2 = mark2.getMark().bboxAllRegions(dimensions);
 		
 		if (suppressZ) {
 			bbox1 = bbox1.flattenZ();

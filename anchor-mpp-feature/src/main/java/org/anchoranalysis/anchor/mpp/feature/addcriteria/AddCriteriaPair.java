@@ -58,7 +58,13 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair> implem
 		return Optional.empty();
 	}
 
-	public abstract boolean includeMarks( VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D ) throws IncludeMarksFailureException;
+	public abstract boolean includeMarks(
+		VoxelizedMarkMemo mark1,
+		VoxelizedMarkMemo mark2,
+		ImageDimensions dimensions,
+		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
+		boolean do3D
+	) throws IncludeMarksFailureException;
 	
 	@Override
 	public String getBeanDscr() {

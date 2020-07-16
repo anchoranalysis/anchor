@@ -50,13 +50,17 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator i
 	private Cfg cfg;
 	private RegionMembershipWithFlags rm;
 	
-	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dim, RegionMembershipWithFlags rm ) {
-		delegate = new ObjectsAsUniqueValueGenerator(dim);
+	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dimensions, RegionMembershipWithFlags rm ) {
+		delegate = new ObjectsAsUniqueValueGenerator(dimensions);
 		this.rm = rm;
 	}
 	
-	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dim, RegionMembershipWithFlags rm, Cfg cfg ) {
-		this( dim, rm );
+	public CfgMaskCollectionDifferentValuesGenerator(
+		ImageDimensions dimensions,
+		RegionMembershipWithFlags rm,
+		Cfg cfg
+	) {
+		this( dimensions, rm );
 		this.cfg = cfg;
 	}
 	
@@ -71,8 +75,7 @@ public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator i
 		ObjectCollectionWithProperties masks = cfg.calcMask(
 			delegate.getDimensions(),
 			this.rm,
-			BinaryValuesByte.getDefault(),
-			null
+			BinaryValuesByte.getDefault()
 		);
 		try {
 			delegate.setIterableElement(masks.withoutProperties());

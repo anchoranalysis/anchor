@@ -44,13 +44,12 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import lombok.Getter;
 
 /// A particular configuration of marks
 public final class Cfg implements Iterable<Mark>, Serializable {
@@ -60,6 +59,7 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	 */
 	private static final long serialVersionUID = 2398855316191681489L;
 	
+	@Getter
 	private final List<Mark> marks;
 
 	public Cfg() {
@@ -76,9 +76,9 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		this.marks = marks;
 	}
 	
-	public Cfg( Mark m ) {
+	public Cfg( Mark mark ) {
 		this();
-		add( m );
+		add( mark );
 	}
 	
 	public Cfg shallowCopy() {
@@ -175,9 +175,8 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 	
 	public ObjectCollectionWithProperties calcMask(
 		ImageDimensions bndScene,
-		RegionMembershipWithFlags rm,
-		BinaryValuesByte bvOut,
-		IDGetter<Mark> colorIDGetter
+		RegionMembershipWithFlags regionMembership,
+		BinaryValuesByte bvOut
 	) {
 		
 		ObjectCollectionWithProperties maskCollection = new ObjectCollectionWithProperties();
@@ -185,19 +184,13 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 		for (int i=0; i<marks.size(); i++) {
 			Mark mark = marks.get(i);
 			
-			if (rm.getRegionID() >= mark.numRegions()) {
+			if (regionMembership.getRegionID() >= mark.numRegions()) {
 				continue;
 			}
-			
-			ObjectWithProperties mask = Cfg.calcMaskWithColor(
-				mark,
-				bndScene,
-				rm,
-				bvOut,
-				colorIDGetter,
-				i
+
+			maskCollection.add(
+				mark.calcMask(bndScene, regionMembership, bvOut)
 			);
-			maskCollection.add( mask );
 		}
 		
 		return maskCollection;
@@ -319,24 +312,5 @@ public final class Cfg implements Iterable<Mark>, Serializable {
 
 	public Mark set(int index, Mark element) {
 		return marks.set(index, element);
-	}
-
-	public List<Mark> getMarks() {
-		return marks;
-	}
-	
-	private static ObjectWithProperties calcMaskWithColor(
-		Mark mark,
-		ImageDimensions bndScene,
-		RegionMembershipWithFlags rm,
-		BinaryValuesByte bvOut,
-		IDGetter<Mark> colorIDGetter,
-		int iter
-	) {
-		ObjectWithProperties mask = mark.calcMask(bndScene, rm, bvOut );
-		if (colorIDGetter!=null) {
-			mask.setProperty("colorID", colorIDGetter.getID(mark, iter));
-		}
-		return mask;
 	}
 }

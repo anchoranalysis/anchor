@@ -39,7 +39,7 @@ public abstract class Comparer extends AnchorBean<Comparer> {
 
 	public abstract Findable<ObjectCollection> createObjects(
 		Path filePathSource,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		boolean debugMode
 	) throws CreateException;
 }

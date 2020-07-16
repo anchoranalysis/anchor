@@ -67,36 +67,36 @@ public class ArrangeRasterOverlay extends ArrangeRasterBean {
 		return getBeanName();
 	}
 
-	private int calcHorizontalPos( BBoxSetOnPlane bboxSet, ImageDimensions dim ) {
+	private int calcHorizontalPos( BBoxSetOnPlane bboxSet, ImageDimensions dimensions ) {
 
 		if (horizontalAlign.equalsIgnoreCase("left")) {
 			return 0;
 		} else if (horizontalAlign.equalsIgnoreCase("right")) {
-			return bboxSet.getExtent().getX() - dim.getX();
+			return bboxSet.getExtent().getX() - dimensions.getX();
 		} else {
-			return(bboxSet.getExtent().getX() - dim.getX()) / 2;
+			return(bboxSet.getExtent().getX() - dimensions.getX()) / 2;
 		}
 	}
 	
-	private int calcVerticalPos( BBoxSetOnPlane bboxSet, ImageDimensions dim ) {
+	private int calcVerticalPos( BBoxSetOnPlane bboxSet, ImageDimensions dimensions ) {
 
 		if (verticalAlign.equalsIgnoreCase("top")) {
 			return 0;
 		} else if (verticalAlign.equalsIgnoreCase("bottom")) {
-			return bboxSet.getExtent().getY() - dim.getY();
+			return bboxSet.getExtent().getY() - dimensions.getY();
 		} else {
-			return(bboxSet.getExtent().getY() - dim.getY()) / 2;
+			return(bboxSet.getExtent().getY() - dimensions.getY()) / 2;
 		}
 	}
 	
-	private int calcZPos( BBoxSetOnPlane bboxSet, ImageDimensions dim ) {
+	private int calcZPos( BBoxSetOnPlane bboxSet, ImageDimensions dimensions ) {
 
 		if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
 			return 0;
 		} else if (zAlign.equalsIgnoreCase("top")) {
-			return bboxSet.getExtent().getZ() - dim.getZ();
+			return bboxSet.getExtent().getZ() - dimensions.getZ();
 		} else {
-			return(bboxSet.getExtent().getZ() - dim.getZ()) / 2;
+			return(bboxSet.getExtent().getZ() - dimensions.getZ()) / 2;
 		}
 	}
 	

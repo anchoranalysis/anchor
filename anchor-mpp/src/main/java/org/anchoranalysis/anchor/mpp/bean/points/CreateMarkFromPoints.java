@@ -47,22 +47,24 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
 	// START BEAN PROPERTIES
-	// NOTE no init occurs of pointsFitter	
-	@BeanField @SkipInit
+	@BeanField @SkipInit @Getter @Setter
 	private MarkProvider markProvider;
 	
 	// NOTE no init occurs of pointsFitter
-	@BeanField @SkipInit
+	@BeanField @SkipInit @Getter @Setter
 	private PointsFitter pointsFitter;
 	
 	// Below this we don't bother outputting a feature, instead output featureElse
-	@BeanField
+	@BeanField @Getter @Setter
 	private int minNumPoints = 20;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean throwExceptionForInsufficientPoints = false;
 	// END BEAN PROPERTIES
 	
@@ -70,11 +72,11 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 	 * Extract points from a cfg, creates a new mark from markProvider and then fits this mark the extracted points
 	 * 
 	 * @param cfg a cfg containing MarkPointLists as points
-	 * @param dim
+	 * @param dimensions
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	public Optional<Mark> fitMarkToPointsFromCfg( Cfg cfg, ImageDimensions dim ) throws OperationFailedException {
+	public Optional<Mark> fitMarkToPointsFromCfg( Cfg cfg, ImageDimensions dimensions ) throws OperationFailedException {
 		
 		try {
 			Mark mark = markProvider.create().orElseThrow( ()->
@@ -87,7 +89,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 				return fitPoints(
 					mark,
 					points,
-					dim
+					dimensions
 				);
 				
 			} else {
@@ -99,9 +101,9 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 		}
 	}
 	
-	private Optional<Mark> fitPoints( Mark mark, List<Point3f> points, ImageDimensions dim ) throws OperationFailedException {
+	private Optional<Mark> fitPoints( Mark mark, List<Point3f> points, ImageDimensions dimensions ) throws OperationFailedException {
 		try {
-			pointsFitter.fit(points, mark, dim );
+			pointsFitter.fit(points, mark, dimensions );
 			return Optional.of(mark);
 		} catch (InsufficientPointsException e ) {
 			return maybeThrowInsufficientPointsException(points);
@@ -153,39 +155,5 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 		points.addAll(
 			PointConverter.convert3dTo3f( mark.getPoints() )
 		);
-	}
-	
-	public PointsFitter getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitter pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-
-	public MarkProvider getMarkProvider() {
-		return markProvider;
-	}
-
-	public void setMarkProvider(MarkProvider markProvider) {
-		this.markProvider = markProvider;
-	}
-
-	public int getMinNumPoints() {
-		return minNumPoints;
-	}
-
-	public void setMinNumPoints(int minNumPoints) {
-		this.minNumPoints = minNumPoints;
-	}
-
-
-	public boolean isThrowExceptionForInsufficientPoints() {
-		return throwExceptionForInsufficientPoints;
-	}
-
-
-	public void setThrowExceptionForInsufficientPoints(boolean throwExceptionForInsufficientPoints) {
-		this.throwExceptionForInsufficientPoints = throwExceptionForInsufficientPoints;
 	}
 }

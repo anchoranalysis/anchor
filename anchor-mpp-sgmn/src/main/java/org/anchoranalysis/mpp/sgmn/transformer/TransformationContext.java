@@ -31,34 +31,19 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
+@AllArgsConstructor @Value
 public class TransformationContext {
 
-	private ImageDimensions dim;
-	private KernelCalcContext kernelCalcContext;
-	private Logger logger;
-	
-	public TransformationContext(ImageDimensions dim, KernelCalcContext kernelCalcContext, Logger logger) {
-		super();
-		this.dim = dim;
-		this.kernelCalcContext = kernelCalcContext;
-		this.logger = logger;
-	}
-
-	public ImageDimensions getDimensions() {
-		return dim;
-	}
-
-	public KernelCalcContext getKernelCalcContext() {
-		return kernelCalcContext;
-	}
-
-	public Logger getLogger() {
-		return logger;
-	}
+	private final ImageDimensions dimensions;
+	private final KernelCalcContext kernelCalcContext;
+	private final Logger logger;
 
 	public TransformationContext replaceError(ErrorNode errorNode) {
 		return new TransformationContext(
-			dim,
+			dimensions,
 			kernelCalcContext.replaceError(errorNode),
 			logger
 		);

@@ -39,21 +39,24 @@ import org.anchoranalysis.image.stack.Stack;
 // If the NRGStack is empty, then dimensions can be set
 public class NRGStack {
 
-	// Only one of the two variables should be non-null at any given time
-	private Stack delegate;
-	private ImageDimensions dim;
+	// Always one of the following two variables should be non-null and the other should be null.
+	private final Stack delegate;
+	private final ImageDimensions dimensions;
 	
-	public NRGStack( ImageDimensions dim ) {
-		this.dim = dim;
+	public NRGStack( ImageDimensions dimensions ) {
+		this.dimensions = dimensions;
+		this.delegate = null;
 	}
 	
 	public NRGStack( Channel chnl ) {
 		super();
-		delegate = new Stack(chnl);
+		this.dimensions = null;
+		this.delegate = new Stack(chnl);
 	}
 	
 	public NRGStack( Stack stackIn ) {
-		delegate = stackIn;
+		this.dimensions = null;
+		this.delegate = stackIn;
 	}
 
 	public final int getNumChnl() {
@@ -66,7 +69,7 @@ public class NRGStack {
 
 	public ImageDimensions getDimensions() {
 		if (delegate==null) {
-			return dim;
+			return dimensions;
 		}
 		
 		return delegate.getDimensions();

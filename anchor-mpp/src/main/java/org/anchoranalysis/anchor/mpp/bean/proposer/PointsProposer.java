@@ -43,7 +43,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class PointsProposer extends NullParamsBean<PointsProposer> implements CompatibleWithMark {
 
-	public abstract Optional<List<Point3i>> propose( Point3d point, Mark mark, ImageDimensions dim, RandomNumberGenerator randomNumberGenerator, ErrorNode errorNode ) throws ProposalAbnormalFailureException;
+	public abstract Optional<List<Point3i>> propose( Point3d point, Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator, ErrorNode errorNode ) throws ProposalAbnormalFailureException;
 	
 	public abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed);
 }
