@@ -67,7 +67,7 @@ class HelperBindOutputManager {
 
     private static PathWithDescription derivePathWithDescription(InputFromManager input) {
         assert (input.pathForBinding().isPresent());
-        return new PathWithDescription(input.pathForBinding().get(), input.descriptiveName());
+        return new PathWithDescription(input.pathForBinding().get(), input.descriptiveName());	// NOSONAR
     }
 
     private static BoundOutputManager createWithBindingPath(
@@ -86,7 +86,7 @@ class HelperBindOutputManager {
                                     params.getExperimentArguments().createParamsContext());
             if (params.getExperimentalManifest().isPresent()) {
                 ManifestClashChecker.throwExceptionIfClashes(
-                        params.getExperimentalManifest().get(), boundOutput, input.getPath());
+                        params.getExperimentalManifest().get(), boundOutput, input.getPath());	// NOSONAR
             }
             return boundOutput;
         } catch (FilePathPrefixerException e) {

@@ -64,7 +64,7 @@ public class PermutationSetterUtilities {
      * @return an AnchorBean corresponding to this particular field on this particular object
      *     (exceptionally handling lists)
      */
-    public static AnchorBean<?> beanFor(Field field, AnchorBean<?> currentBean)
+    public static AnchorBean<?> beanFor(Field field, AnchorBean<?> currentBean)		// NOSONAR
             throws PermutationSetterException {
 
         try {

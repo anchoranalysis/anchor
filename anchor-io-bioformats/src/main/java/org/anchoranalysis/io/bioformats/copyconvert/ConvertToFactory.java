@@ -28,6 +28,9 @@ package org.anchoranalysis.io.bioformats.copyconvert;
 
 import loci.formats.FormatTools;
 import loci.formats.IFormatReader;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
@@ -50,11 +53,10 @@ import org.anchoranalysis.io.bioformats.copyconvert.toshort.ConvertToShort;
 import org.anchoranalysis.io.bioformats.copyconvert.toshort.ShortFromSignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.toshort.ShortFromUnsignedShort;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ConvertToFactory {
 
-    private ConvertToFactory() {}
-
-    public static ConvertTo<?> create(
+    public static ConvertTo<?> create(		// NOSONAR
             IFormatReader reader, VoxelDataType targetDataType, int effectiveBitsPerPixel)
             throws CreateException {
 

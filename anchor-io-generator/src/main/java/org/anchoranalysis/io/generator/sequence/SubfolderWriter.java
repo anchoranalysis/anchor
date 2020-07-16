@@ -121,12 +121,12 @@ public class SubfolderWriter implements SequenceWriter {
         }
 
         if (checkIfAllowed) {
-            this.subFolderOutputManager
+            this.subFolderOutputManager		// NOSONAR
                     .get()
                     .getWriterCheckIfAllowed()
                     .write(outputNameStyle, generator, index);
         } else {
-            this.subFolderOutputManager
+            this.subFolderOutputManager		// NOSONAR
                     .get()
                     .getWriterAlwaysAllowed()
                     .write(outputNameStyle, generator, index);

@@ -74,6 +74,6 @@ public abstract class ProvidesStackInput implements InputFromManager {
                 new WrapStackAsTimeSequenceStore(store),
                 0,
                 ProgressReporterNull.get());
-        return store.getAsOperation(TEMP_STACK_NAME).get().doOperation(ProgressReporterNull.get());
+        return store.getAsOperation(TEMP_STACK_NAME).get().doOperation(ProgressReporterNull.get());		// NOSONAR
     }
 }

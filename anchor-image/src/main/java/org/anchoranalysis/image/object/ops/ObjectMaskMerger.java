@@ -87,7 +87,7 @@ public class ObjectMaskMerger {
             throw new OperationFailedException("At least one object must exist in the collection");
         }
 
-        return objects.streamStandardJava()
+        return objects.streamStandardJava()		// NOSONAR
                 .map(ObjectMask::getBoundingBox)
                 .reduce( // NOSONAR
                         (boundingBox, other) -> boundingBox.union().with(other))

@@ -38,7 +38,7 @@ public class PermutePropertyDoubleSet extends PermutePropertyWithPath<Double> {
 
     @Override
     public Iterator<Double> propertyValues() {
-        return values.set().stream().mapToDouble(Double::parseDouble).iterator();
+        return values.set().stream().mapToDouble(Double::parseDouble).iterator();	// NOSONAR
     }
 
     public StringSet getValues() {
