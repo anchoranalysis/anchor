@@ -52,10 +52,12 @@ public class SubfolderWriter implements SequenceWriter {
 	private String subfolderName;
 	
 	public SubfolderWriter(
-			BoundOutputManager outputManager,
-			String subfolderName,			
-			IndexableOutputNameStyle outputNameStyle,
-			ManifestDescription folderManifestDescription, boolean checkIfAllowed) {
+		BoundOutputManager outputManager,
+		String subfolderName,			
+		IndexableOutputNameStyle outputNameStyle,
+		ManifestDescription folderManifestDescription,
+		boolean checkIfAllowed
+	) {
 		super();
 		this.parentOutputManager = outputManager;
 		this.outputNameStyle = outputNameStyle;

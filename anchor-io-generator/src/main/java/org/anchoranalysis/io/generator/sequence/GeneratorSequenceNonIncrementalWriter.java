@@ -29,6 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -38,6 +39,9 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequenceNonIncremental<T> {
@@ -52,19 +56,35 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequen
 	
 	private boolean firstAdd = true;
 	
+	@Getter @Setter
 	private boolean suppressSubfolder;
 
 	// Automatically create a ManifestDescription for the folder from the Generator
-	public GeneratorSequenceNonIncrementalWriter( BoundOutputManager outputManager, String subfolderName, IndexableOutputNameStyle outputNameStyle, IterableGenerator<T> iterableGenerator, boolean checkIfAllowed ) {
+	public GeneratorSequenceNonIncrementalWriter(
+		BoundOutputManager outputManager,
+		String subfolderName,
+		IndexableOutputNameStyle outputNameStyle,
+		IterableGenerator<T> iterableGenerator,
+		boolean checkIfAllowed
+	) {
 		this( outputManager, subfolderName, outputNameStyle, iterableGenerator, checkIfAllowed, null);
 	}
 	
 	// User-specified ManifestDescription for the folder
-	public GeneratorSequenceNonIncrementalWriter( BoundOutputManager outputManager, String subfolderName, IndexableOutputNameStyle outputNameStyle, IterableGenerator<T> iterableGenerator, boolean checkIfAllowed, ManifestDescription folderManifestDescription ) {
-		super();
+	public GeneratorSequenceNonIncrementalWriter(
+		BoundOutputManager outputManager,
+		String subfolderName,
+		IndexableOutputNameStyle outputNameStyle,
+		IterableGenerator<T> iterableGenerator,
+		boolean checkIfAllowed,
+		ManifestDescription folderManifestDescription
+	) {
 
+		if (!outputManager.getOutputWriteSettings().hasBeenInit()) {
+			throw new AnchorFriendlyRuntimeException("outputManager has not yet been initialized");
+		}
+		
 		this.sequenceWriter = new SubfolderWriter( outputManager, subfolderName, outputNameStyle, folderManifestDescription, checkIfAllowed );
-		assert(outputManager.getOutputWriteSettings().hasBeenInit());
 		this.parentOutputManager = outputManager;
 		this.iterableGenerator = iterableGenerator;
 	}
@@ -129,12 +149,4 @@ public class GeneratorSequenceNonIncrementalWriter<T> implements GeneratorSequen
 	public Optional<BoundOutputManager> getSubFolderOutputManager() {
 		return sequenceWriter.getOutputManagerForFiles();
 	}
-		
-	public boolean isSuppressSubfolder() {
-		return suppressSubfolder;
-	}
-
-	public void setSuppressSubfolder(boolean suppressSubfolder) {
-		this.suppressSubfolder = suppressSubfolder;
-	}	
 }
