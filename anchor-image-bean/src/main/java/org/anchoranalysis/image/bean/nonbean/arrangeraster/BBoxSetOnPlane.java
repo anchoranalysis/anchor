@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.arrangeraster;
-
-/*
+/*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,51 +23,50 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 
 // Describes a set of bounding boxes on top of a plane
 public class BBoxSetOnPlane implements Iterable<BoundingBox> {
 
-	private Extent extent;
-	
-	private List<BoundingBox> list = new ArrayList<>();
-	
-	public BBoxSetOnPlane(Extent extent) {
-		super();
-		this.extent = extent;
-	}
-	
-	public BBoxSetOnPlane(Extent extent, BoundingBox bbox) {
-		this(extent);
-		add(bbox);
-	}
-	
-	public void add(BoundingBox obj) {
-		list.add(obj);
-	}
-	
-	public BoundingBox get(int index) {
-		return list.get(index);
-	}
+    private Extent extent;
 
-	public Iterator<BoundingBox> bboxIterator() {
-		return list.iterator();
-	}
+    private List<BoundingBox> list = new ArrayList<>();
 
-	@Override
-	public Iterator<BoundingBox> iterator() {
-		return bboxIterator();
-	}
+    public BBoxSetOnPlane(Extent extent) {
+        super();
+        this.extent = extent;
+    }
 
-	public Extent getExtent() {
-		return extent;
-	}
-	
+    public BBoxSetOnPlane(Extent extent, BoundingBox bbox) {
+        this(extent);
+        add(bbox);
+    }
+
+    public void add(BoundingBox obj) {
+        list.add(obj);
+    }
+
+    public BoundingBox get(int index) {
+        return list.get(index);
+    }
+
+    public Iterator<BoundingBox> bboxIterator() {
+        return list.iterator();
+    }
+
+    @Override
+    public Iterator<BoundingBox> iterator() {
+        return bboxIterator();
+    }
+
+    public Extent getExtent() {
+        return extent;
+    }
 }

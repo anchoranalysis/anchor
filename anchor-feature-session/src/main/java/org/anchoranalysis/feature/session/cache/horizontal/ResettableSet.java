@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.cache.horizontal;
-
-/*
+/*-
  * #%L
- * anchor-feature
+ * anchor-feature-session
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,87 +23,82 @@ package org.anchoranalysis.feature.session.cache.horizontal;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.session.cache.horizontal;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.calculation.ResettableCalculation;
 
 class ResettableSet<T extends ResettableCalculation> {
 
-	/**
-	 * A map for finding identical objects
-	 */
-	private Map<T,T> map = new HashMap<>();
+    /** A map for finding identical objects */
+    private Map<T, T> map = new HashMap<>();
 
-	/**
-	 * Do we log cache events or not?
-	 */
-	private boolean doLogging = false;
-	
-	public ResettableSet(boolean doLogging) {
-		super();
-		this.doLogging = doLogging;
-	}
+    /** Do we log cache events or not? */
+    private boolean doLogging = false;
 
-	/**
-	 * Finds an existing object if its parameters match, otherwise adds target
-	 * to the list.
-	 * 
-	 * @param target
-	 * @param logger if non-NULL logging messages are written out indicating if the object was added or not
-	 * @return an existing CachedCalculation if found, otherwise target if added
-	 */
-	public T findOrAdd( T target, Logger logger ) {
-		
-		T existing = map.get(target);
-		
-		if (existing==null) {
-			
-			if (doLogging && logger!=null) {
-				logger.messageLogger().logFormatted("Cache-addding: %s (%d)", target, target.hashCode() );
-			}
-			
-			map.put(target, target);
-			
-			return target;
-			
-		} else {
-			
-			// Reusing an existing item
-			if (doLogging && logger!=null) {
-				logger.messageLogger().logFormatted("Cache-reusing: %s (%d)", existing, existing.hashCode() );
-			}
-			
-			return existing;
-		}
-		
-	}
-	
-	public void invalidate() {
-		for (T cachedCalculation : map.values()) {
-			cachedCalculation.invalidate();
-		}
-	}
-	
-	public int size() {
-		return map.size();
-	}
-	
-	public String describe() {
-		StringBuilder sb = new StringBuilder();
-		for( T item  : map.values()) {
-			sb.append(
-				String.format("%s: %s%n", System.identityHashCode(item), item.toString())
-			);
-		}
-		return sb.toString();
-	}
+    public ResettableSet(boolean doLogging) {
+        super();
+        this.doLogging = doLogging;
+    }
 
-	@Override
-	public String toString() {
-		return describe();
-	}
+    /**
+     * Finds an existing object if its parameters match, otherwise adds target to the list.
+     *
+     * @param target
+     * @param logger if non-NULL logging messages are written out indicating if the object was added
+     *     or not
+     * @return an existing CachedCalculation if found, otherwise target if added
+     */
+    public T findOrAdd(T target, Logger logger) {
+
+        T existing = map.get(target);
+
+        if (existing == null) {
+
+            if (doLogging && logger != null) {
+                logger.messageLogger()
+                        .logFormatted("Cache-addding: %s (%d)", target, target.hashCode());
+            }
+
+            map.put(target, target);
+
+            return target;
+
+        } else {
+
+            // Reusing an existing item
+            if (doLogging && logger != null) {
+                logger.messageLogger()
+                        .logFormatted("Cache-reusing: %s (%d)", existing, existing.hashCode());
+            }
+
+            return existing;
+        }
+    }
+
+    public void invalidate() {
+        for (T cachedCalculation : map.values()) {
+            cachedCalculation.invalidate();
+        }
+    }
+
+    public int size() {
+        return map.size();
+    }
+
+    public String describe() {
+        StringBuilder sb = new StringBuilder();
+        for (T item : map.values()) {
+            sb.append(String.format("%s: %s%n", System.identityHashCode(item), item.toString()));
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return describe();
+    }
 }

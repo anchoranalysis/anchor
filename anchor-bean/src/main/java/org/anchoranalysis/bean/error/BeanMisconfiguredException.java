@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.error;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,34 +23,31 @@ package org.anchoranalysis.bean.error;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.error;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 /**
  * If a Bean is misconfigured
- * 
- * <p>e.g. missing a value that is required
- *   or with a value that violates the constraints of the bean-field</p>
- * 
- * <p>There should always be a sensible message, even if we nest another
- * exception.</p>
- * 
- * @author Owen Feehan
  *
+ * <p>e.g. missing a value that is required or with a value that violates the constraints of the
+ * bean-field
+ *
+ * <p>There should always be a sensible message, even if we nest another exception.
+ *
+ * @author Owen Feehan
  */
 public class BeanMisconfiguredException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6966810405755062033L;
+    /** */
+    private static final long serialVersionUID = -6966810405755062033L;
 
-	public BeanMisconfiguredException(String string) {
-		super(string);
-	}
+    public BeanMisconfiguredException(String string) {
+        super(string);
+    }
 
-	public BeanMisconfiguredException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-	}
+    public BeanMisconfiguredException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
 }

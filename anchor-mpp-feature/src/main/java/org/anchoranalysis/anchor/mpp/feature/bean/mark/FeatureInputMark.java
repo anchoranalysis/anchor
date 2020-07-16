@@ -1,14 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.mark;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-
 /*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,63 +23,65 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
+import java.util.Optional;
+import lombok.EqualsAndHashCode;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
-import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class FeatureInputMark implements FeatureInputParams {
 
-	private final Mark mark;
-	private final Optional<ImageDimensions> dimensions;
-	private final Optional<KeyValueParams> params;
-		
-	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dimensions) {
-		this.mark = mark;
-		this.dimensions = dimensions;
-		this.params = Optional.empty();
-	}
-	
-	public FeatureInputMark(Mark mark, ImageDimensions dimensions, KeyValueParams params) {
-		this(
-			mark,
-			Optional.of(dimensions),
-			Optional.of(params)
-		);
-	}
-	
-	public FeatureInputMark(Mark mark, Optional<ImageDimensions> dim, Optional<KeyValueParams> params) {
-		super();
-		this.mark = mark;
-		this.dimensions = dim;
-		this.params = params;
-	}
+    private final Mark mark;
+    private final Optional<ImageDimensions> dimensions;
+    private final Optional<KeyValueParams> params;
 
-	public Mark getMark() {
-		return mark;
-	}
+    public FeatureInputMark(Mark mark, Optional<ImageDimensions> dimensions) {
+        this.mark = mark;
+        this.dimensions = dimensions;
+        this.params = Optional.empty();
+    }
 
-	@Override
-	public Optional<ImageResolution> getResOptional() {
-		return dimensions.map( ImageDimensions::getRes );
-	}
+    public FeatureInputMark(Mark mark, ImageDimensions dimensions, KeyValueParams params) {
+        this(mark, Optional.of(dimensions), Optional.of(params));
+    }
 
-	@Override
-	public Optional<KeyValueParams> getParamsOptional() {
-		return params;
-	}
-	
-	public Optional<ImageDimensions> getDimensionsOptional() {
-		return dimensions;
-	}
-	
-	public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
-		return dimensions.orElseThrow(
-			() -> new FeatureCalcException("Dimensions are required in the input for this operation")
-		);
-	}
+    public FeatureInputMark(
+            Mark mark, Optional<ImageDimensions> dim, Optional<KeyValueParams> params) {
+        super();
+        this.mark = mark;
+        this.dimensions = dim;
+        this.params = params;
+    }
+
+    public Mark getMark() {
+        return mark;
+    }
+
+    @Override
+    public Optional<ImageResolution> getResOptional() {
+        return dimensions.map(ImageDimensions::getRes);
+    }
+
+    @Override
+    public Optional<KeyValueParams> getParamsOptional() {
+        return params;
+    }
+
+    public Optional<ImageDimensions> getDimensionsOptional() {
+        return dimensions;
+    }
+
+    public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
+        return dimensions.orElseThrow(
+                () ->
+                        new FeatureCalcException(
+                                "Dimensions are required in the input for this operation"));
+    }
 }

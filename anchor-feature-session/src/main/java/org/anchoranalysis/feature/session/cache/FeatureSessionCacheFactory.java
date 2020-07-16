@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.session.cache;
-
-
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +23,8 @@ package org.anchoranalysis.feature.session.cache;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.session.cache;
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
@@ -34,5 +32,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public interface FeatureSessionCacheFactory {
-	<T extends FeatureInput> FeatureSessionCache<T> create(FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures);
+    <T extends FeatureInput> FeatureSessionCache<T> create(
+            FeatureList<T> namedFeatures, SharedFeatureSet<T> sharedFeatures);
 }

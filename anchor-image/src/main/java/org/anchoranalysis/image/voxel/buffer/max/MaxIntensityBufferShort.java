@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.buffer.max;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +23,27 @@ package org.anchoranalysis.image.voxel.buffer.max;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.ShortBuffer;
-
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class MaxIntensityBufferShort extends MaxIntensityBuffer<ShortBuffer> {
-	
-	public MaxIntensityBufferShort( Extent srcExtent ) {
-		super( srcExtent, VoxelBoxFactory.getShort() );
-	}
-	
-	@Override
-	protected void addBuffer( ShortBuffer pixels, ShortBuffer flatBuffer ) {
-		short inPixel = pixels.get();
-		short flatPixel = flatBuffer.get();
-		if( ByteConverter.unsignedShortToInt(inPixel)> ByteConverter.unsignedShortToInt( flatPixel ) ) {
-			flatBuffer.put( flatBuffer.position()-1, inPixel );
-		}		
-	}
+
+    public MaxIntensityBufferShort(Extent srcExtent) {
+        super(srcExtent, VoxelBoxFactory.getShort());
+    }
+
+    @Override
+    protected void addBuffer(ShortBuffer pixels, ShortBuffer flatBuffer) {
+        short inPixel = pixels.get();
+        short flatPixel = flatBuffer.get();
+        if (ByteConverter.unsignedShortToInt(inPixel)
+                > ByteConverter.unsignedShortToInt(flatPixel)) {
+            flatBuffer.put(flatBuffer.position() - 1, inPixel);
+        }
+    }
 }

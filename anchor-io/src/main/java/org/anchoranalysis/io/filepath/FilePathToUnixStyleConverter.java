@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +23,41 @@ package org.anchoranalysis.io.filepath;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.filepath;
 
 import java.nio.file.Path;
-import org.apache.commons.io.FilenameUtils;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Conversion to Unix-style separators
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FilePathToUnixStyleConverter {
 
-	/**
-	 * Converts a path to a string using Unix-style separators (forward-slashes)
-	 * @param path with either Windows-style (blackslashes) or Unix-style separators (forward slashes)
-	 * @return identical path but with Unix-style separators
-	 */
-	public static String toStringUnixStyle( Path path ) {
-		return toStringUnixStyle( path.toString() );
-	}
-	
-	/**
-	 * Converts a path to a string using Unix-style separators (forward-slashes)
-	 * 
-	 * @param path with either Windows-style (blackslashes) or Unix-style separators (forward slashes)
-	 * @return identical path but with Unix-style separators
-	 */
-	public static String toStringUnixStyle( String path ) {
-		return FilenameUtils.separatorsToUnix(path);
-	}
+    /**
+     * Converts a path to a string using Unix-style separators (forward-slashes)
+     *
+     * @param path with either Windows-style (blackslashes) or Unix-style separators (forward
+     *     slashes)
+     * @return identical path but with Unix-style separators
+     */
+    public static String toStringUnixStyle(Path path) {
+        return toStringUnixStyle(path.toString());
+    }
+
+    /**
+     * Converts a path to a string using Unix-style separators (forward-slashes)
+     *
+     * @param path with either Windows-style (blackslashes) or Unix-style separators (forward
+     *     slashes)
+     * @return identical path but with Unix-style separators
+     */
+    public static String toStringUnixStyle(String path) {
+        return FilenameUtils.separatorsToUnix(path);
+    }
 }

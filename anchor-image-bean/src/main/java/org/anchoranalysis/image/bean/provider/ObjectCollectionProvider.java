@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
@@ -33,8 +33,9 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 @GroupingRoot
-public abstract class ObjectCollectionProvider extends ImageBean<ObjectCollectionProvider> implements Provider<ObjectCollection> {
+public abstract class ObjectCollectionProvider extends ImageBean<ObjectCollectionProvider>
+        implements Provider<ObjectCollection> {
 
-	@Override
-	public abstract ObjectCollection create() throws CreateException;
+    @Override
+    public abstract ObjectCollection create() throws CreateException;
 }

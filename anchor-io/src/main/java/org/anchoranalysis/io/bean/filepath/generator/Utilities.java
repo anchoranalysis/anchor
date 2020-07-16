@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.generator;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,18 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.filepath.generator;
 
 import java.nio.file.Path;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class Utilities {
-	
-	/** Converts backslashes to forward slashes in a path, and returns as a string */
-	public static String convertBackslashes( Path pathIn ) {
-		return pathIn.toString().replace('\\', '/');
-	}
+
+    /** Converts backslashes to forward slashes in a path, and returns as a string */
+    public static String convertBackslashes(Path pathIn) {
+        return pathIn.toString().replace('\\', '/');
+    }
 }

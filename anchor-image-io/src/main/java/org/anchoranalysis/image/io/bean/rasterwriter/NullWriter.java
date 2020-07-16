@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.rasterwriter;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,34 +23,36 @@ package org.anchoranalysis.image.io.bean.rasterwriter;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.rasterwriter;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
 import org.anchoranalysis.image.stack.Stack;
 
 public class NullWriter extends RasterWriter {
 
-	@Override
-	public String dfltExt() {
-		return "tif";
-	}
+    @Override
+    public String dfltExt() {
+        return "tif";
+    }
 
-	@Override
-	public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException {
-		// NOTHING TO DO
-	}
+    @Override
+    public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+        // NOTHING TO DO
+    }
 
-	@Override
-	public void writeStackShort(Stack stack, Path filePath,	boolean makeRGB) throws RasterIOException {
-		// NOTHING TO DO
-	}
+    @Override
+    public void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+        // NOTHING TO DO
+    }
 
-	@Override
-	public void writeStackByte(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
-		// NOTHING TO DO
-	}
-
+    @Override
+    public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+        // NOTHING TO DO
+    }
 }

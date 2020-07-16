@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.generator;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.filepath.generator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,49 +38,50 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 
 /**
  * Generates an outstring of the form
- * 
- * group1/group2/group3
- * 
- * etc. for as many groups as are found in the regular expression
- * 
- * @author Owen Feehan
  *
+ * <p>group1/group2/group3
+ *
+ * <p>etc. for as many groups as are found in the regular expression
+ *
+ * @author Owen Feehan
  */
 public class FilePathGeneratorRegExBean extends FilePathGenerator {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private RegEx regEx;
-	// END BEAN PROPERTIES
-	
+    // START BEAN PROPERTIES
+    @BeanField private RegEx regEx;
+    // END BEAN PROPERTIES
 
-	
-	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
-		
-		String pathInStr = FilePathToUnixStyleConverter.toStringUnixStyle(pathIn);
-		
-		String[] components = regEx.match(pathInStr).orElseThrow( ()->
-			new AnchorIOException( String.format("RegEx string '%s' does not match '%s'", regEx, pathInStr ))
-		);
-		
-		return Paths.get( createOutString(components) );
-	}
-	
-	// String in the form g1/g2/g3 for group 1, 2, 3 etc.
-	private String createOutString( String[] components ) {
-		StringJoiner sj = new StringJoiner("/");
-		for( int i=0; i<components.length; i++) {
-			sj.add( components[i] );
-		}
-		return sj.toString();		
-	}
+    @Override
+    public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 
-	public RegEx getRegEx() {
-		return regEx;
-	}
+        String pathInStr = FilePathToUnixStyleConverter.toStringUnixStyle(pathIn);
 
-	public void setRegEx(RegEx regEx) {
-		this.regEx = regEx;
-	}
+        String[] components =
+                regEx.match(pathInStr)
+                        .orElseThrow(
+                                () ->
+                                        new AnchorIOException(
+                                                String.format(
+                                                        "RegEx string '%s' does not match '%s'",
+                                                        regEx, pathInStr)));
+
+        return Paths.get(createOutString(components));
+    }
+
+    // String in the form g1/g2/g3 for group 1, 2, 3 etc.
+    private String createOutString(String[] components) {
+        StringJoiner sj = new StringJoiner("/");
+        for (int i = 0; i < components.length; i++) {
+            sj.add(components[i]);
+        }
+        return sj.toString();
+    }
+
+    public RegEx getRegEx() {
+        return regEx;
+    }
+
+    public void setRegEx(RegEx regEx) {
+        this.regEx = regEx;
+    }
 }

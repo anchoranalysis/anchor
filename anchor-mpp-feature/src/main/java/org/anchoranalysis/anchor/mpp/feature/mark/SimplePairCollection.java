@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.mark;
-
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriteria;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,25 +23,26 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriter
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.PairCollectionAddCriteria;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 
-
 /**
  * A pair collection where the underlying type is a simple {@link Pair}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SimplePairCollection extends PairCollectionAddCriteria<Pair<Mark>> {
 
-	public SimplePairCollection() {
-		super( Pair.class );
-	}
+    public SimplePairCollection() {
+        super(Pair.class);
+    }
 
-	@Override
-	public String getBeanDscr() {
-		return getBeanName();
-	}
+    @Override
+    public String getBeanDscr() {
+        return getBeanName();
+    }
 }

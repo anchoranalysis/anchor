@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.generator;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,12 @@ package org.anchoranalysis.image.io.bean.generator;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.generator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -49,129 +47,125 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Combines a number of generators of Raster images by tiling their outputs together
- * <p>
- * The order of generators is left to right, then top to bottom
- * 
- * @author Owen Feehan
  *
+ * <p>The order of generators is left to right, then top to bottom
+ *
+ * @author Owen Feehan
  * @param <T> iteration-type
  */
 public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ArrangeRasterBean arrangeRaster;
-	
-	// A list of all generators to be tiled (left to right, then top to bottom)
-	@BeanField
-	private List<IterableObjectGenerator<T,Stack>> generatorList =	new ArrayList<>();
-	// END BEAN PROPERTIES
-	
-	private class Generator extends RasterGenerator implements IterableObjectGenerator<T, Stack> {
+    // START BEAN PROPERTIES
+    @BeanField private ArrangeRasterBean arrangeRaster;
 
-		@Override
-		public Stack generate() throws OutputWriteFailedException {
-			
-			List<RGBStack> generated = generateAll();
-			
-			RasterArranger rasterArranger = new RasterArranger();
-			
-			try {
-				rasterArranger.init(arrangeRaster,generated);
-			} catch (InitException e) {
-				throw new OutputWriteFailedException(e);
-			}
-					
-			// We get an ImgStack<ImgChnl> for each generator
-			//
-			// Then we tile them
-			//
-			// We assume iterable generators always produce images of the same size
-			//   and base our measurements on the first call to generate
-			return rasterArranger.createStack(generated,new ChannelFactoryByte()).asStack();
-		}
+    // A list of all generators to be tiled (left to right, then top to bottom)
+    @BeanField private List<IterableObjectGenerator<T, Stack>> generatorList = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-		@Override
-		public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-			return generatorList.get(0).getGenerator().getFileExtension(outputWriteSettings);
-		}
+    private class Generator extends RasterGenerator implements IterableObjectGenerator<T, Stack> {
 
-		@Override
-		public Optional<ManifestDescription> createManifestDescription() {
-			return Optional.of(
-				new ManifestDescription("raster", "combinedNRG")
-			);
-		}
+        @Override
+        public Stack generate() throws OutputWriteFailedException {
 
-		@Override
-		public void start() throws OutputWriteFailedException {
-			
-			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
-				generator.start();
-			}
-		}
+            List<RGBStack> generated = generateAll();
 
-		@Override
-		public void end() throws OutputWriteFailedException {
-			
-			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
-				generator.end();
-			}
-		}
+            RasterArranger rasterArranger = new RasterArranger();
 
-		@Override
-		public T getIterableElement() {
-			return generatorList.get(0).getIterableElement();
-		}
+            try {
+                rasterArranger.init(arrangeRaster, generated);
+            } catch (InitException e) {
+                throw new OutputWriteFailedException(e);
+            }
 
-		@Override
-		public void setIterableElement(T element) throws SetOperationFailedException {
-			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
-				generator.setIterableElement(element);
-			}
-		}
+            // We get an ImgStack<ImgChnl> for each generator
+            //
+            // Then we tile them
+            //
+            // We assume iterable generators always produce images of the same size
+            //   and base our measurements on the first call to generate
+            return rasterArranger.createStack(generated, new ChannelFactoryByte()).asStack();
+        }
 
-		@Override
-		public ObjectGenerator<Stack> getGenerator() {
-			return this;
-		}
+        @Override
+        public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+            return generatorList.get(0).getGenerator().getFileExtension(outputWriteSettings);
+        }
 
-		@Override
-		public boolean isRGB() {
-			return true;
-		}
+        @Override
+        public Optional<ManifestDescription> createManifestDescription() {
+            return Optional.of(new ManifestDescription("raster", "combinedNRG"));
+        }
 
-		private List<RGBStack>  generateAll() throws OutputWriteFailedException {
-			List<RGBStack>  listOut = new ArrayList<>();
-			for (IterableObjectGenerator<T,Stack> generator : generatorList) {
-				Stack stackOut = generator.getGenerator().generate();
-				listOut.add( new RGBStack(stackOut) );
-			}
-			return listOut;
-		}
-	}
-	public CombineRasterGenerator() {
-		super();
-	}
+        @Override
+        public void start() throws OutputWriteFailedException {
 
-	public void add( IterableObjectGenerator<T,Stack> generator ) {
-		generatorList.add( generator );
-	}
-	
-	public IterableObjectGenerator<T, Stack> createGenerator() {
-		return new Generator();
-	}
+            for (IterableObjectGenerator<T, Stack> generator : generatorList) {
+                generator.start();
+            }
+        }
 
-	@Override
-	public String getBeanDscr() {
-		return getBeanName();
-	}
-	
-	public ArrangeRasterBean getArrangeRaster() {
-		return arrangeRaster;
-	}
+        @Override
+        public void end() throws OutputWriteFailedException {
 
-	public void setArrangeRaster(ArrangeRasterBean arrangeRaster) {
-		this.arrangeRaster = arrangeRaster;
-	}
+            for (IterableObjectGenerator<T, Stack> generator : generatorList) {
+                generator.end();
+            }
+        }
+
+        @Override
+        public T getIterableElement() {
+            return generatorList.get(0).getIterableElement();
+        }
+
+        @Override
+        public void setIterableElement(T element) throws SetOperationFailedException {
+            for (IterableObjectGenerator<T, Stack> generator : generatorList) {
+                generator.setIterableElement(element);
+            }
+        }
+
+        @Override
+        public ObjectGenerator<Stack> getGenerator() {
+            return this;
+        }
+
+        @Override
+        public boolean isRGB() {
+            return true;
+        }
+
+        private List<RGBStack> generateAll() throws OutputWriteFailedException {
+            List<RGBStack> listOut = new ArrayList<>();
+            for (IterableObjectGenerator<T, Stack> generator : generatorList) {
+                Stack stackOut = generator.getGenerator().generate();
+                listOut.add(new RGBStack(stackOut));
+            }
+            return listOut;
+        }
+    }
+
+    public CombineRasterGenerator() {
+        super();
+    }
+
+    public void add(IterableObjectGenerator<T, Stack> generator) {
+        generatorList.add(generator);
+    }
+
+    public IterableObjectGenerator<T, Stack> createGenerator() {
+        return new Generator();
+    }
+
+    @Override
+    public String getBeanDscr() {
+        return getBeanName();
+    }
+
+    public ArrangeRasterBean getArrangeRaster() {
+        return arrangeRaster;
+    }
+
+    public void setArrangeRaster(ArrangeRasterBean arrangeRaster) {
+        this.arrangeRaster = arrangeRaster;
+    }
 }

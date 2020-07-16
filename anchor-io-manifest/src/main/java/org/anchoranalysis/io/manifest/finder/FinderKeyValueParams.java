@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.finder;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,12 @@ package org.anchoranalysis.io.manifest.finder;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.finder;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -40,40 +38,37 @@ import org.anchoranalysis.io.manifest.match.FileWriteManifestMatch;
 import org.anchoranalysis.io.manifest.match.ManifestDescriptionFunctionMatch;
 
 public class FinderKeyValueParams extends FinderSingleFile {
-	
-	private String manifestFunction;
-	
-	public FinderKeyValueParams(String manifestFunction, ErrorReporter errorReporter) {
-		super(errorReporter);
-		this.manifestFunction = manifestFunction;
-	}
-	
-	public KeyValueParams get() throws GetOperationFailedException {
-		assert( exists() );
-	
-		try {
-			return KeyValueParams.readFromFile( getFoundFile().calcPath() );
-		} catch (IOException e) {
-			throw new GetOperationFailedException(e);
-		}
-	}
 
+    private String manifestFunction;
 
-	@Override
-	protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
-			throws MultipleFilesException {
-		List<FileWrite> files = FinderUtilities.findListFile( manifestRecorder,
-			new FileWriteManifestMatch(
-				new ManifestDescriptionFunctionMatch(manifestFunction)
-			)
-		);
-		
-		if (files.isEmpty()) {
-			return Optional.empty();
-		}
-		
-		return Optional.of(
-			files.get(0)
-		);
-	}
+    public FinderKeyValueParams(String manifestFunction, ErrorReporter errorReporter) {
+        super(errorReporter);
+        this.manifestFunction = manifestFunction;
+    }
+
+    public KeyValueParams get() throws GetOperationFailedException {
+        assert (exists());
+
+        try {
+            return KeyValueParams.readFromFile(getFoundFile().calcPath());
+        } catch (IOException e) {
+            throw new GetOperationFailedException(e);
+        }
+    }
+
+    @Override
+    protected Optional<FileWrite> findFile(ManifestRecorder manifestRecorder)
+            throws MultipleFilesException {
+        List<FileWrite> files =
+                FinderUtilities.findListFile(
+                        manifestRecorder,
+                        new FileWriteManifestMatch(
+                                new ManifestDescriptionFunctionMatch(manifestFunction)));
+
+        if (files.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(files.get(0));
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.objects.deserialize;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +23,18 @@ package org.anchoranalysis.image.io.objects.deserialize;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.objects.deserialize;
 
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 
 /** Entry point to deserializers */
 public class ObjectCollectionDeserializers {
-	
-	private ObjectCollectionDeserializers() {}
-	
-	public static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING = new ReadObjectsFromTIFFDirectoryCorrectMissing();
-	public static final Deserializer<ObjectCollection> HDF5 = new ReadObjectsFromHDF5();
+
+    private ObjectCollectionDeserializers() {}
+
+    public static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING =
+            new ReadObjectsFromTIFFDirectoryCorrectMissing();
+    public static final Deserializer<ObjectCollection> HDF5 = new ReadObjectsFromHDF5();
 }

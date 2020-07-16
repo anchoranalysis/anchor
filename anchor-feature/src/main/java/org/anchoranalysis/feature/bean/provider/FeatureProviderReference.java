@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.provider;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.feature.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -35,56 +34,53 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String id = "";
-	
-	@BeanField
-	private String featureListRef = "";
-	// END BEAN PROPERTIES
-	
-	private Feature<FeatureInput> feature;
-	
-	@Override
-	public Feature<FeatureInput> create() throws CreateException {
-		if (feature==null) {
-			if (getInitializationParameters().getSharedFeatureSet()==null) {
-				throw new CreateException("sharedFeatureSet is null");
-			}
-			
-			if (featureListRef!=null && !featureListRef.isEmpty()) {
-				// We request this to make sure it's evaluated and added to the pso.getSharedFeatureSet()
-				try {
-					getInitializationParameters().getFeatureListSet().getException(featureListRef);
-				} catch (NamedProviderGetException e) {
-					throw new CreateException(e.summarize());
-				}
-			}
-			
-			try {
-				this.feature = getInitializationParameters().getSharedFeatureSet().getException(id);
-			} catch (NamedProviderGetException e) {
-				throw new CreateException(e.summarize());
-			}		
-		}
-		return feature;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String id = "";
 
-	public String getId() {
-		return id;
-	}
+    @BeanField private String featureListRef = "";
+    // END BEAN PROPERTIES
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private Feature<FeatureInput> feature;
 
-	public String getFeatureListRef() {
-		return featureListRef;
-	}
+    @Override
+    public Feature<FeatureInput> create() throws CreateException {
+        if (feature == null) {
+            if (getInitializationParameters().getSharedFeatureSet() == null) {
+                throw new CreateException("sharedFeatureSet is null");
+            }
 
-	public void setFeatureListRef(String featureListRef) {
-		this.featureListRef = featureListRef;
-	}
+            if (featureListRef != null && !featureListRef.isEmpty()) {
+                // We request this to make sure it's evaluated and added to the
+                // pso.getSharedFeatureSet()
+                try {
+                    getInitializationParameters().getFeatureListSet().getException(featureListRef);
+                } catch (NamedProviderGetException e) {
+                    throw new CreateException(e.summarize());
+                }
+            }
 
+            try {
+                this.feature = getInitializationParameters().getSharedFeatureSet().getException(id);
+            } catch (NamedProviderGetException e) {
+                throw new CreateException(e.summarize());
+            }
+        }
+        return feature;
+    }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFeatureListRef() {
+        return featureListRef;
+    }
+
+    public void setFeatureListRef(String featureListRef) {
+        this.featureListRef = featureListRef;
+    }
 }

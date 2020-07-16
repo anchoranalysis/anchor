@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.bbox;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,13 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster.bbox;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -41,87 +43,78 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 @RequiredArgsConstructor
-public class ExtractedBoundingBoxGenerator extends RasterGenerator implements IterableObjectGenerator<BoundingBox,Stack> {
+public class ExtractedBoundingBoxGenerator extends RasterGenerator
+        implements IterableObjectGenerator<BoundingBox, Stack> {
 
-	// START REQUIRED ARGUMENTS
-	private final Stack stack;
-	private final String manifestFunction;
-	// END REQUIRED ARGUMENTS
-	
-	private BoundingBox bbox;
-	
-	@Getter @Setter
-	private int paddingXY = 0;
-	
-	@Getter @Setter
-	private int paddingZ = 0;
+    // START REQUIRED ARGUMENTS
+    private final Stack stack;
+    private final String manifestFunction;
+    // END REQUIRED ARGUMENTS
 
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		
-		if (getIterableElement()==null) {
-			throw new OutputWriteFailedException("no mutable element set");
-		}
+    private BoundingBox bbox;
 
-		try {
-			return createExtract(stack);
-		} catch (CreateException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
+    @Getter @Setter private int paddingXY = 0;
 
-	@Override
-	public BoundingBox getIterableElement() {
-		return bbox;
-	}
+    @Getter @Setter private int paddingZ = 0;
 
-	@Override
-	public void setIterableElement(BoundingBox element) {
-		this.bbox = element;
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
+        if (getIterableElement() == null) {
+            throw new OutputWriteFailedException("no mutable element set");
+        }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", manifestFunction)
-		);
-	}
+        try {
+            return createExtract(stack);
+        } catch (CreateException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
 
-	@Override
-	public boolean isRGB() {
-		return stack.getNumChnl()==3;
-	}
-	
-	private Stack createExtract( Stack stackIn ) throws CreateException {
-		Stack stackOut = new Stack();
-		
-		for( Channel chnlIn : stackIn ) {
-			
-			VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
-			
-			VoxelBox<?> vbExtracted = vbIn.region(bbox,false);
-			
-			Channel chnlExtracted = ChannelFactory.instance().create(
-				vbExtracted,
-				stackIn.getDimensions().getRes()
-			);
-			try {
-				stackOut.addChnl(chnlExtracted);
-			} catch (IncorrectImageSizeException e) {
-				throw new CreateException(e);
-			}
-		}
-		
-		return stackOut;
-	}
+    @Override
+    public BoundingBox getIterableElement() {
+        return bbox;
+    }
+
+    @Override
+    public void setIterableElement(BoundingBox element) {
+        this.bbox = element;
+    }
+
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return this;
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", manifestFunction));
+    }
+
+    @Override
+    public boolean isRGB() {
+        return stack.getNumChnl() == 3;
+    }
+
+    private Stack createExtract(Stack stackIn) throws CreateException {
+        Stack stackOut = new Stack();
+
+        for (Channel chnlIn : stackIn) {
+
+            VoxelBox<?> vbIn = chnlIn.getVoxelBox().any();
+
+            VoxelBox<?> vbExtracted = vbIn.region(bbox, false);
+
+            Channel chnlExtracted =
+                    ChannelFactory.instance().create(vbExtracted, stackIn.getDimensions().getRes());
+            try {
+                stackOut.addChnl(chnlExtracted);
+            } catch (IncorrectImageSizeException e) {
+                throw new CreateException(e);
+            }
+        }
+
+        return stackOut;
+    }
 }

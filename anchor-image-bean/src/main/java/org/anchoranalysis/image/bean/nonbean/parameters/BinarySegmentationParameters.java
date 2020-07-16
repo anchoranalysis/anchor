@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.parameters;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,41 +23,44 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.nonbean.parameters;
 
+import java.util.Optional;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /** Parameters that are optionally associated with BinarySgmn */
 public class BinarySegmentationParameters {
 
-	private Optional<Histogram> histogram;
-	private Optional<ImageResolution> res;
-	
-	public BinarySegmentationParameters() {
-		this.res = Optional.empty();
-		this.histogram = Optional.empty();
-	}
-	
-	public BinarySegmentationParameters(ImageResolution res) {
-		this(res, Optional.empty());
-	}
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param res image-resolution
-	 * @param histogram a histogram describing the intensity-values of the entire channel
-	 */
-	public BinarySegmentationParameters(ImageResolution res, Optional<Histogram> histogram) {
-		this.res = Optional.of(res);
-		this.histogram = histogram;
-	}
+    private Optional<Histogram> histogram;
+    private Optional<ImageResolution> res;
 
-	public Optional<Histogram> getIntensityHistogram() {
-		return histogram;
-	}
+    public BinarySegmentationParameters() {
+        this.res = Optional.empty();
+        this.histogram = Optional.empty();
+    }
 
-	public Optional<ImageResolution> getRes() {
-		return res;
-	}
+    public BinarySegmentationParameters(ImageResolution res) {
+        this(res, Optional.empty());
+    }
+
+    /**
+     * Constructor
+     *
+     * @param res image-resolution
+     * @param histogram a histogram describing the intensity-values of the entire channel
+     */
+    public BinarySegmentationParameters(ImageResolution res, Optional<Histogram> histogram) {
+        this.res = Optional.of(res);
+        this.histogram = histogram;
+    }
+
+    public Optional<Histogram> getIntensityHistogram() {
+        return histogram;
+    }
+
+    public Optional<ImageResolution> getRes() {
+        return res;
+    }
 }

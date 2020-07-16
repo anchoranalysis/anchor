@@ -1,15 +1,8 @@
-package org.anchoranalysis.mpp.io.cfg.generator;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-
-/*
+/*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +23,12 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.cfg.generator;
 
-
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -44,76 +41,70 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator implements IterableGenerator<Cfg> {
+public class CfgMaskCollectionDifferentValuesGenerator extends RasterGenerator
+        implements IterableGenerator<Cfg> {
 
-	private ObjectsAsUniqueValueGenerator delegate;
-	private Cfg cfg;
-	private RegionMembershipWithFlags rm;
-	
-	public CfgMaskCollectionDifferentValuesGenerator( ImageDimensions dimensions, RegionMembershipWithFlags rm ) {
-		delegate = new ObjectsAsUniqueValueGenerator(dimensions);
-		this.rm = rm;
-	}
-	
-	public CfgMaskCollectionDifferentValuesGenerator(
-		ImageDimensions dimensions,
-		RegionMembershipWithFlags rm,
-		Cfg cfg
-	) {
-		this( dimensions, rm );
-		this.cfg = cfg;
-	}
-	
-	@Override
-	public boolean isRGB() {
-		return delegate.isRGB();
-	}
+    private ObjectsAsUniqueValueGenerator delegate;
+    private Cfg cfg;
+    private RegionMembershipWithFlags rm;
 
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
+    public CfgMaskCollectionDifferentValuesGenerator(
+            ImageDimensions dimensions, RegionMembershipWithFlags rm) {
+        delegate = new ObjectsAsUniqueValueGenerator(dimensions);
+        this.rm = rm;
+    }
 
-		ObjectCollectionWithProperties masks = cfg.calcMask(
-			delegate.getDimensions(),
-			this.rm,
-			BinaryValuesByte.getDefault()
-		);
-		try {
-			delegate.setIterableElement(masks.withoutProperties());
-		} catch (SetOperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		}
-		return delegate.generate();
-	}
+    public CfgMaskCollectionDifferentValuesGenerator(
+            ImageDimensions dimensions, RegionMembershipWithFlags rm, Cfg cfg) {
+        this(dimensions, rm);
+        this.cfg = cfg;
+    }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return delegate.createManifestDescription();
-	}
+    @Override
+    public boolean isRGB() {
+        return delegate.isRGB();
+    }
 
-	@Override
-	public Cfg getIterableElement() {
-		return cfg;
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
 
-	@Override
-	public void setIterableElement(Cfg element)
-			throws SetOperationFailedException {
-		this.cfg = element;
-	}
+        ObjectCollectionWithProperties masks =
+                cfg.calcMask(delegate.getDimensions(), this.rm, BinaryValuesByte.getDefault());
+        try {
+            delegate.setIterableElement(masks.withoutProperties());
+        } catch (SetOperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
+        return delegate.generate();
+    }
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		delegate.start();
-	}
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return delegate.createManifestDescription();
+    }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		delegate.end();
-	}
+    @Override
+    public Cfg getIterableElement() {
+        return cfg;
+    }
 
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
+    @Override
+    public void setIterableElement(Cfg element) throws SetOperationFailedException {
+        this.cfg = element;
+    }
 
+    @Override
+    public void start() throws OutputWriteFailedException {
+        delegate.start();
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        delegate.end();
+    }
+
+    @Override
+    public Generator getGenerator() {
+        return this;
+    }
 }

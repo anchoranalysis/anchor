@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.experiment.seed;
-
-/*
+/*-
  * #%L
  * anchor-image-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.image.experiment.seed;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.experiment.seed;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class SeedFinderException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5014516097016484634L;
+    /** */
+    private static final long serialVersionUID = -5014516097016484634L;
 
-	public SeedFinderException(String string) {
-		super(string);
-	}
+    public SeedFinderException(String string) {
+        super(string);
+    }
 
-	public SeedFinderException(Throwable exc ) {
-		super( exc );
-	}
+    public SeedFinderException(Throwable exc) {
+        super(exc);
+    }
 }

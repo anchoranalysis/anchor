@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.wholeimage;
-
 /*-
  * #%L
  * anchor-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,21 @@ package org.anchoranalysis.annotation.wholeimage;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.wholeimage;
 
 import org.anchoranalysis.annotation.Annotation;
 
 public class WholeImageLabelAnnotation implements Annotation {
 
-	private String label;
-	
-	public WholeImageLabelAnnotation(String label) {
-		super();
-		this.label = label;
-	}
+    private String label;
 
-	public String getLabel() {
-		return label;
-	}
+    public WholeImageLabelAnnotation(String label) {
+        super();
+        this.label = label;
+    }
 
+    public String getLabel() {
+        return label;
+    }
 }

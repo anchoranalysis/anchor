@@ -1,14 +1,8 @@
-package org.anchoranalysis.annotation.io.bean.comparer;
-
-import java.nio.file.Path;
-
-import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +23,11 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.bean.comparer;
 
+import java.nio.file.Path;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -37,9 +35,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class Comparer extends AnchorBean<Comparer> {
 
-	public abstract Findable<ObjectCollection> createObjects(
-		Path filePathSource,
-		ImageDimensions dimensions,
-		boolean debugMode
-	) throws CreateException;
+    public abstract Findable<ObjectCollection> createObjects(
+            Path filePathSource, ImageDimensions dimensions, boolean debugMode)
+            throws CreateException;
 }

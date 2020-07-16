@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.transformer;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,17 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.transformer;
 
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
  * Transforms one type into another
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <S> source-type for transformation
  * @param <T> destination-type for transformation
  */
-public abstract class StateTransformerBean<S,T> extends AnchorBean<StateTransformerBean<S,T>> implements StateTransformer<S, T> {
-
-}
+public abstract class StateTransformerBean<S, T> extends AnchorBean<StateTransformerBean<S, T>>
+        implements StateTransformer<S, T> {}

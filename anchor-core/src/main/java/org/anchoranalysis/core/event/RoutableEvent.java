@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.event;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.event;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,35 +27,28 @@ package org.anchoranalysis.core.event;
  * #L%
  */
 
-
 import java.util.EventObject;
 
 public class RoutableEvent<T extends EventObject> extends EventObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4810991820699526243L;
-	/**
-	 * 
-	 */
-	private transient IRoutableEventSourceObject routableSource;
-	private T event;
-	
-	public RoutableEvent( IRoutableEventSourceObject routableSource, T event ) {
-		super(routableSource);
-		this.routableSource = routableSource;
-		this.event = event;
-	}
+    /** */
+    private static final long serialVersionUID = 4810991820699526243L;
+    /** */
+    private transient IRoutableEventSourceObject routableSource;
 
-	public IRoutableEventSourceObject getRoutableSource() {
-		return routableSource;
-	}
+    private T event;
 
-	public T getEvent() {
-		return event;
-	}
+    public RoutableEvent(IRoutableEventSourceObject routableSource, T event) {
+        super(routableSource);
+        this.routableSource = routableSource;
+        this.event = event;
+    }
 
+    public IRoutableEventSourceObject getRoutableSource() {
+        return routableSource;
+    }
 
-
+    public T getEvent() {
+        return event;
+    }
 }

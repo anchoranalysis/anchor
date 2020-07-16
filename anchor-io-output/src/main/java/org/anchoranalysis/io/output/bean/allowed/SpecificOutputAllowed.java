@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.output.bean.allowed;
-
-import org.anchoranalysis.bean.StringSet;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,28 +23,28 @@ import org.anchoranalysis.bean.StringSet;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.output.bean.allowed;
 
-
+import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class SpecificOutputAllowed extends OutputAllowed {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StringSet outputsAllowed;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return outputsAllowed.contains(outputName);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private StringSet outputsAllowed;
+    // END BEAN PROPERTIES
 
-	public StringSet getOutputsAllowed() {
-		return outputsAllowed;
-	}
+    @Override
+    public boolean isOutputAllowed(String outputName) {
+        return outputsAllowed.contains(outputName);
+    }
 
-	public void setOutputsAllowed(StringSet outputsAllowed) {
-		this.outputsAllowed = outputsAllowed;
-	}
+    public StringSet getOutputsAllowed() {
+        return outputsAllowed;
+    }
 
+    public void setOutputsAllowed(StringSet outputsAllowed) {
+        this.outputsAllowed = outputsAllowed;
+    }
 }

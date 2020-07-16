@@ -1,13 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
-
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +23,18 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
 
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public interface AggregateReceiver<T> {
 
-	default void aggStart( OptimizationFeedbackInitParams<T> initParams, Aggregator agg ) throws AggregatorException {}
-	
-	default void aggEnd( Aggregator agg ) throws AggregatorException {}
-	
-	void aggReport( Reporting<T> reporting, Aggregator agg ) throws AggregatorException;
+    default void aggStart(OptimizationFeedbackInitParams<T> initParams, Aggregator agg)
+            throws AggregatorException {}
+
+    default void aggEnd(Aggregator agg) throws AggregatorException {}
+
+    void aggReport(Reporting<T> reporting, Aggregator agg) throws AggregatorException;
 }

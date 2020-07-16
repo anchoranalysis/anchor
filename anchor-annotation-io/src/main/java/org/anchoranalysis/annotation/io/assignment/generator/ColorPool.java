@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.assignment.generator;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.annotation.io.assignment.generator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.assignment.generator;
 
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -32,41 +32,42 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
 public class ColorPool {
 
-	private int numPaired;
-	private ColorSetGenerator colorSetGeneratorPaired;
-	private ColorSetGenerator colorSetGeneratorUnpaired;
-	private boolean differentColorsForMatches;
-	
-	public ColorPool(int numPaired, ColorSetGenerator colorSetGeneratorPaired, ColorSetGenerator colorSetGeneratorUnpaired, boolean differentColorsForMatches) {
-		this.numPaired = numPaired;
-		this.colorSetGeneratorPaired = colorSetGeneratorPaired;
-		this.colorSetGeneratorUnpaired = colorSetGeneratorUnpaired;
-		this.differentColorsForMatches = differentColorsForMatches;
-	}
-			
-	public ColorList createColors( int numberOtherObjects ) throws OperationFailedException {
-		
-		ColorList cols = new ColorList();
-		
-		if (differentColorsForMatches) {
-			
-			// Matched					
-			cols.addAllScaled(
-				colorSetGeneratorPaired.generateColors( numPaired ),
-				0.5
-			);
-			
-			// Unmatched
-			cols.addAll( colorSetGeneratorUnpaired.generateColors(numberOtherObjects) );
-		} else {
-			// Treat all as unmatched
-			cols.addAll( colorSetGeneratorUnpaired.generateColors(numPaired + numberOtherObjects) );
-		}
+    private int numPaired;
+    private ColorSetGenerator colorSetGeneratorPaired;
+    private ColorSetGenerator colorSetGeneratorUnpaired;
+    private boolean differentColorsForMatches;
 
-		return cols;
-	}
+    public ColorPool(
+            int numPaired,
+            ColorSetGenerator colorSetGeneratorPaired,
+            ColorSetGenerator colorSetGeneratorUnpaired,
+            boolean differentColorsForMatches) {
+        this.numPaired = numPaired;
+        this.colorSetGeneratorPaired = colorSetGeneratorPaired;
+        this.colorSetGeneratorUnpaired = colorSetGeneratorUnpaired;
+        this.differentColorsForMatches = differentColorsForMatches;
+    }
 
-	public boolean isDifferentColorsForMatches() {
-		return differentColorsForMatches;
-	}
+    public ColorList createColors(int numberOtherObjects) throws OperationFailedException {
+
+        ColorList cols = new ColorList();
+
+        if (differentColorsForMatches) {
+
+            // Matched
+            cols.addAllScaled(colorSetGeneratorPaired.generateColors(numPaired), 0.5);
+
+            // Unmatched
+            cols.addAll(colorSetGeneratorUnpaired.generateColors(numberOtherObjects));
+        } else {
+            // Treat all as unmatched
+            cols.addAll(colorSetGeneratorUnpaired.generateColors(numPaired + numberOtherObjects));
+        }
+
+        return cols;
+    }
+
+    public boolean isDifferentColorsForMatches() {
+        return differentColorsForMatches;
+    }
 }

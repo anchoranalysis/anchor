@@ -1,15 +1,8 @@
-package org.anchoranalysis.feature.input;
-
-import java.util.Optional;
-
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,21 +23,24 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.input;
 
+import java.util.Optional;
+import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 /**
  * A feature-input that is associated with particular key-value parameters
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface FeatureInputParams extends FeatureInputWithRes {
-	
-	Optional<KeyValueParams> getParamsOptional();
-	
-	default KeyValueParams getParamsRequired() throws FeatureCalcException {
-		return getParamsOptional().orElseThrow(
-			() -> new FeatureCalcException("Params are required for this input")	
-		);
-	}
+
+    Optional<KeyValueParams> getParamsOptional();
+
+    default KeyValueParams getParamsRequired() throws FeatureCalcException {
+        return getParamsOptional()
+                .orElseThrow(() -> new FeatureCalcException("Params are required for this input"));
+    }
 }

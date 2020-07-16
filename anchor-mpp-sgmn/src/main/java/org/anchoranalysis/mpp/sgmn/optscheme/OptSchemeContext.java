@@ -1,13 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme;
-
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,66 +23,61 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNodeNull;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.sgmn.kernel.CfgGenContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 @AllArgsConstructor
 public class OptSchemeContext {
 
-	@Getter
-	private final String experimentDescription;
-	
-	@Getter
-	private final NRGSchemeWithSharedFeatures nrgScheme;
-	
-	@Getter
-	private final DualStack dualStack;
-	
-	@Getter
-	private final TriggerTerminationCondition triggerTerminationCondition;
-		
-	private final BoundIOContext context;
-	
-	private final RandomNumberGenerator randomNumberGenerator;
-		
-	@Getter
-	private final CfgGen cfgGen;
-		
-	public CfgGenContext cfgGenContext() {
-		return new CfgGenContext(
-			cfgGen
-		);
-	}
-	
-	
-	public KernelCalcContext calcContext( CfgGenContext cfgGenContext ) {
-		return new KernelCalcContext(
-			cfgGenContext,
-			dualStack.getNrgStack(),
-			nrgScheme,
-			randomNumberGenerator,
-			ErrorNodeNull.instance()
-		);
-	}
+    @Getter private final String experimentDescription;
 
-	public Logger getLogger() {
-		return context.getLogger();
-	}
-	public BoundOutputManagerRouteErrors getOutputManager() {
-		return context.getOutputManager();
-	}
+    @Getter private final NRGSchemeWithSharedFeatures nrgScheme;
 
-	public boolean isDebugEnabled() {
-		return context.isDebugEnabled();
-	}
+    @Getter private final DualStack dualStack;
+
+    @Getter private final TriggerTerminationCondition triggerTerminationCondition;
+
+    private final BoundIOContext context;
+
+    private final RandomNumberGenerator randomNumberGenerator;
+
+    @Getter private final CfgGen cfgGen;
+
+    public CfgGenContext cfgGenContext() {
+        return new CfgGenContext(cfgGen);
+    }
+
+    public KernelCalcContext calcContext(CfgGenContext cfgGenContext) {
+        return new KernelCalcContext(
+                cfgGenContext,
+                dualStack.getNrgStack(),
+                nrgScheme,
+                randomNumberGenerator,
+                ErrorNodeNull.instance());
+    }
+
+    public Logger getLogger() {
+        return context.getLogger();
+    }
+
+    public BoundOutputManagerRouteErrors getOutputManager() {
+        return context.getOutputManager();
+    }
+
+    public boolean isDebugEnabled() {
+        return context.isDebugEnabled();
+    }
 }

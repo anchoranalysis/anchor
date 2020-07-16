@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.segment.binary;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.image.bean.segment.binary;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.segment.binary;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -41,31 +39,33 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class BinarySegmentationThreshold extends BinarySegmentation {
-	
-	// START PARAMETERS
-	@BeanField
-	private Thresholder thresholder;
-	// END PARAMETERS
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SegmentationFailedException {
-		try {
-			return thresholder.threshold(
-				voxelBox,
-				BinaryValuesByte.getDefault(),
-				mask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
-				mask
-			);
-		} catch (OperationFailedException e) {
-			throw new SegmentationFailedException(e);
-		}
-	}
-	
-	public Thresholder getThresholder() {
-		return thresholder;
-	}
 
-	public void setThresholder(Thresholder thresholder) {
-		this.thresholder = thresholder;
-	}
+    // START PARAMETERS
+    @BeanField private Thresholder thresholder;
+    // END PARAMETERS
+
+    @Override
+    public BinaryVoxelBox<ByteBuffer> sgmn(
+            VoxelBoxWrapper voxelBox,
+            BinarySegmentationParameters params,
+            Optional<ObjectMask> mask)
+            throws SegmentationFailedException {
+        try {
+            return thresholder.threshold(
+                    voxelBox,
+                    BinaryValuesByte.getDefault(),
+                    mask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
+                    mask);
+        } catch (OperationFailedException e) {
+            throw new SegmentationFailedException(e);
+        }
+    }
+
+    public Thresholder getThresholder() {
+        return thresholder;
+    }
+
+    public void setThresholder(Thresholder thresholder) {
+        this.thresholder = thresholder;
+    }
 }

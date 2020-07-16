@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.object.input;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +23,28 @@ package org.anchoranalysis.image.feature.object.input;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.object.input;
 
 import java.util.Optional;
-
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class FeatureInputObjectCollection extends FeatureInputNRG {
 
-	@Getter
-	private final ObjectCollection objects;
-	
-	public FeatureInputObjectCollection(ObjectCollection objects) {
-		this.objects = objects;
-	}
-	
-	public FeatureInputObjectCollection(ObjectCollection objects, Optional<NRGStackWithParams> nrgStack) {
-		super(nrgStack);
-		this.objects = objects;
-	}
+    @Getter private final ObjectCollection objects;
+
+    public FeatureInputObjectCollection(ObjectCollection objects) {
+        this.objects = objects;
+    }
+
+    public FeatureInputObjectCollection(
+            ObjectCollection objects, Optional<NRGStackWithParams> nrgStack) {
+        super(nrgStack);
+        this.objects = objects;
+    }
 }

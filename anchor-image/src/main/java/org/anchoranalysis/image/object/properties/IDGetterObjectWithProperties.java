@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.object.properties;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +23,19 @@ package org.anchoranalysis.image.object.properties;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.core.idgetter.IDGetter;
+/* (C)2020 */
+package org.anchoranalysis.image.object.properties;
 
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.idgetter.IDGetter;
 
 @AllArgsConstructor
 public class IDGetterObjectWithProperties implements IDGetter<ObjectWithProperties> {
 
-	private final String propertyName;
+    private final String propertyName;
 
-	@Override
-	public int getID(ObjectWithProperties m, int iter) {
-		return (Integer) m.getProperty(propertyName);
-	}
+    @Override
+    public int getID(ObjectWithProperties m, int iter) {
+        return (Integer) m.getProperty(propertyName);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.datatype;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +23,17 @@ package org.anchoranalysis.image.voxel.datatype;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.datatype;
 
 public class VoxelDataTypeSignedShort extends VoxelDataTypeSigned {
 
-	public static final long MIN_VALUE = -32768;
-	public static final long MAX_VALUE = 32767;
-	
-	public static final VoxelDataTypeSignedShort instance = new VoxelDataTypeSignedShort();
-	
-	private VoxelDataTypeSignedShort() {
-		super(16, "signed16", MAX_VALUE, MIN_VALUE);
-	}
+    public static final long MIN_VALUE = -32768;
+    public static final long MAX_VALUE = 32767;
+
+    public static final VoxelDataTypeSignedShort instance = new VoxelDataTypeSignedShort();
+
+    private VoxelDataTypeSignedShort() {
+        super(16, "signed16", MAX_VALUE, MIN_VALUE);
+    }
 }

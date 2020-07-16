@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.segment.binary;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,13 @@ package org.anchoranalysis.image.bean.segment.binary;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.segment.binary;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -40,34 +40,30 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class BinarySegmentationReference extends BinarySegmentation {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private String id;
-	// END BEAN PROPERTIES
-	
-	private BinarySegmentation proxy;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String id;
+    // END BEAN PROPERTIES
 
-	@Override
-	public void onInit(ImageInitParams so) throws InitException {
-		super.onInit(so);
-		try {
-			proxy = getInitializationParameters().getBinarySgmnSet().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		}
-	}
+    private BinarySegmentation proxy;
 
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(
-		VoxelBoxWrapper voxelBox,
-		BinarySegmentationParameters params,
-		Optional<ObjectMask> mask
-	) throws SegmentationFailedException {
-		return proxy.sgmn(voxelBox, params, mask);
-	}
+    @Override
+    public void onInit(ImageInitParams so) throws InitException {
+        super.onInit(so);
+        try {
+            proxy = getInitializationParameters().getBinarySgmnSet().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new InitException(e.summarize());
+        }
+    }
+
+    @Override
+    public BinaryVoxelBox<ByteBuffer> sgmn(
+            VoxelBoxWrapper voxelBox,
+            BinarySegmentationParameters params,
+            Optional<ObjectMask> mask)
+            throws SegmentationFailedException {
+        return proxy.sgmn(voxelBox, params, mask);
+    }
 }

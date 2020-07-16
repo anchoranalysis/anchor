@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.init;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +23,18 @@ package org.anchoranalysis.image.bean.nonbean.init;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.nonbean.init;
 
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.image.stack.Stack;
 
 public class CreateCombinedStack {
-	
-	private CreateCombinedStack() {}
-	
-	public static NamedProvider<Stack> apply( ImageInitParams so ) {
-		return new CombineDiverseProvidersAsStacks(
-			so.getStackCollection(),
-			so.getChnlCollection(),
-			so.getBinaryImageCollection()
-		);
-	}
+
+    private CreateCombinedStack() {}
+
+    public static NamedProvider<Stack> apply(ImageInitParams so) {
+        return new CombineDiverseProvidersAsStacks(
+                so.getStackCollection(), so.getChnlCollection(), so.getBinaryImageCollection());
+    }
 }

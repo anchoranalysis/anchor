@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.bundle;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.io.manifest.deserializer.bundle;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.bundle;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -36,46 +35,44 @@ import java.util.Map;
 
 public class Bundle<T extends Serializable> implements Serializable, Iterable<BundleItem<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 508875270985307740L;
+    /** */
+    private static final long serialVersionUID = 508875270985307740L;
 
-	private List<BundleItem<T>> list;
-	
-	private int capacity;
+    private List<BundleItem<T>> list;
 
-	public Bundle() {
-		super();
-		list = new LinkedList<>(); 
-	}
+    private int capacity;
 
-	public int getCapacity() {
-		return capacity;
-	}
+    public Bundle() {
+        super();
+        list = new LinkedList<>();
+    }
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
-	
-	public void add( String index, T object ) {
-		this.list.add( new BundleItem<>(index, object));
-	}
-	
-	public int size() {
-		return this.list.size();
-	}
+    public int getCapacity() {
+        return capacity;
+    }
 
-	@Override
-	public Iterator<BundleItem<T>> iterator() {
-		return list.iterator();
-	}
-	
-	public Map<Integer,T> createHashMap() {
-		HashMap<Integer,T> hashMap = new HashMap<>();
-		for( BundleItem<T> item : list ) {
-			hashMap.put( Integer.parseInt(item.getIndex()), item.getObject() );
-		}
-		return hashMap;
-	}
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void add(String index, T object) {
+        this.list.add(new BundleItem<>(index, object));
+    }
+
+    public int size() {
+        return this.list.size();
+    }
+
+    @Override
+    public Iterator<BundleItem<T>> iterator() {
+        return list.iterator();
+    }
+
+    public Map<Integer, T> createHashMap() {
+        HashMap<Integer, T> hashMap = new HashMap<>();
+        for (BundleItem<T> item : list) {
+            hashMap.put(Integer.parseInt(item.getIndex()), item.getObject());
+        }
+        return hashMap;
+    }
 }

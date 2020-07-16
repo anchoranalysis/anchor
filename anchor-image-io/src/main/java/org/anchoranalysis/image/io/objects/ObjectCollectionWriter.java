@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.objects;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +23,20 @@ package org.anchoranalysis.image.io.objects;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.generator.IterableGenerator;
+/* (C)2020 */
+package org.anchoranalysis.image.io.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.io.generator.IterableGenerator;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionWriter {
-	
-	public static final String MANIFEST_DESCRIPTION = "objects";
-	
-	public static IterableGenerator<ObjectCollection> generator() {
-		return new GeneratorHDF5(true);
-	}
+
+    public static final String MANIFEST_DESCRIPTION = "objects";
+
+    public static IterableGenerator<ObjectCollection> generator() {
+        return new GeneratorHDF5(true);
+    }
 }

@@ -1,13 +1,8 @@
-package org.anchoranalysis.image.scale;
-
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
-/*
+/*-
  * #%L
- * anchor-image-bean
+ * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,41 +23,45 @@ import lombok.Value;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.scale;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 /**
- * What to scale x and y dimensions by 
- * 
- * <p>This class is IMMUTABLE.</p>
- * 
- * @author Owen Feehan
+ * What to scale x and y dimensions by
  *
+ * <p>This class is IMMUTABLE.
+ *
+ * @author Owen Feehan
  */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public final class ScaleFactor {
-	
-	private final double x;
-	private final double y;
-	
-	public ScaleFactor(double factor) {
-		this(factor, factor);
-	}
-		
-	public ScaleFactor invert() {
-		return new ScaleFactor(1/x,1/y);
-	}
-	
-	public boolean hasIdenticalXY() {
-		return Math.abs(x-y) < 1e-3;
-	}
-	
-	/** If the scale-factor involves no scaling at all */
-	public boolean isNoScale() {
-		return x==1.0 && y==1.0;
-	}
 
-	@Override
-	public String toString() {
-		return String.format("x=%f\ty=%f\t\tx^-1=%f\ty^-1=%f",x,y,1/x,1/y);
-	}
+    private final double x;
+    private final double y;
+
+    public ScaleFactor(double factor) {
+        this(factor, factor);
+    }
+
+    public ScaleFactor invert() {
+        return new ScaleFactor(1 / x, 1 / y);
+    }
+
+    public boolean hasIdenticalXY() {
+        return Math.abs(x - y) < 1e-3;
+    }
+
+    /** If the scale-factor involves no scaling at all */
+    public boolean isNoScale() {
+        return x == 1.0 && y == 1.0;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("x=%f\ty=%f\t\tx^-1=%f\ty^-1=%f", x, y, 1 / x, 1 / y);
+    }
 }

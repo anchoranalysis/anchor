@@ -1,12 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
-
-import org.anchoranalysis.bean.BeanInstanceMap;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,20 +23,23 @@ import org.anchoranalysis.bean.BeanInstanceMap;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
 
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public interface FeedbackReceiver<T> {
 
-	void reportBegin( OptimizationFeedbackInitParams<T> optInit ) throws ReporterException;
-		
-	void reportItr( Reporting<T> reporting ) throws ReporterException;
-	
-	void reportNewBest( Reporting<T> reporting ) throws ReporterException;
-	
-	void reportEnd( OptimizationFeedbackEndParams<T> optStep ) throws ReporterException;
-	
-	//! Checks that a mark's initial parameters are correct
-	void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException;
+    void reportBegin(OptimizationFeedbackInitParams<T> optInit) throws ReporterException;
+
+    void reportItr(Reporting<T> reporting) throws ReporterException;
+
+    void reportNewBest(Reporting<T> reporting) throws ReporterException;
+
+    void reportEnd(OptimizationFeedbackEndParams<T> optStep) throws ReporterException;
+
+    // ! Checks that a mark's initial parameters are correct
+    void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException;
 }

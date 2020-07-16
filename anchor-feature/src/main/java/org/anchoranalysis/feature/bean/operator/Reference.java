@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.operator;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +23,38 @@ package org.anchoranalysis.feature.bean.operator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.operator;
 
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @NoArgsConstructor
 public class Reference<T extends FeatureInput> extends FeatureOperator<T> {
 
-	// START BEAN
-	@BeanField @Getter @Setter
-	private String id;
-	// END BEAN
-	
-	public Reference( String id ) {
-		super();
-		this.id = id;
-	}
-	
-	@Override
-	public double calc(SessionInput<T> input) throws FeatureCalcException {
-		// We resolve the ID before its passed to calcFeatureByID
-		String resolvedID = input.bySymbol().resolveFeatureID(id);
-		return input.bySymbol().calcFeatureByID(resolvedID, input);
-	}
+    // START BEAN
+    @BeanField @Getter @Setter private String id;
+    // END BEAN
 
-	@Override
-	public String getDscrLong() {
-		return "_" + id;
-	}
+    public Reference(String id) {
+        super();
+        this.id = id;
+    }
+
+    @Override
+    public double calc(SessionInput<T> input) throws FeatureCalcException {
+        // We resolve the ID before its passed to calcFeatureByID
+        String resolvedID = input.bySymbol().resolveFeatureID(id);
+        return input.bySymbol().calcFeatureByID(resolvedID, input);
+    }
+
+    @Override
+    public String getDscrLong() {
+        return "_" + id;
+    }
 }

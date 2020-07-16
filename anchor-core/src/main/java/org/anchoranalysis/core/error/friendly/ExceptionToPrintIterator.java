@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.error.friendly;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.error.friendly;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,49 +31,51 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Iterates over an exception and all it's causes skipping friendly-exceptions with empty messages 
- * 
- * <p>Note it won't skip such an exception if it is the final one in the chain</p>
- * 
- * @author Owen Feehan
+ * Iterates over an exception and all it's causes skipping friendly-exceptions with empty messages
  *
+ * <p>Note it won't skip such an exception if it is the final one in the chain
+ *
+ * @author Owen Feehan
  */
 class ExceptionToPrintIterator implements Iterator<Throwable> {
 
-	private Throwable current;
-	
-	public ExceptionToPrintIterator(Throwable root) {
-		this.current = skipIfNotAcceptable( root );
-	}
-	
-	@Override
-	public boolean hasNext() {
-		return !ExceptionTypes.isFinal(current);
-	}
+    private Throwable current;
 
-	@Override
-	public Throwable next() {
-		
-		if (!hasNext()) {
-			throw new NoSuchElementException();
-		}
-		
-		current = skipIfNotAcceptable( current.getCause() );
-		return current;
-	}
-	
-	private static Throwable skipIfNotAcceptable( Throwable e ) {
-		
-		// Skip any exception with any empty message if it's an AnchorFriendlyCheckedException and not final
-		// The loop is guaranteed to end, as we'll certainly eventually meet a final exception
-		while (ExceptionTypes.hasEmptyMessage(e) && ExceptionTypes.isFriendly(e) && !ExceptionTypes.isFinal(e)) {
-			e = e.getCause();
-		}
-		
-		return e;
-	}
+    public ExceptionToPrintIterator(Throwable root) {
+        this.current = skipIfNotAcceptable(root);
+    }
 
-	public Throwable getCurrent() {
-		return current;
-	}
+    @Override
+    public boolean hasNext() {
+        return !ExceptionTypes.isFinal(current);
+    }
+
+    @Override
+    public Throwable next() {
+
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+
+        current = skipIfNotAcceptable(current.getCause());
+        return current;
+    }
+
+    private static Throwable skipIfNotAcceptable(Throwable e) {
+
+        // Skip any exception with any empty message if it's an AnchorFriendlyCheckedException and
+        // not final
+        // The loop is guaranteed to end, as we'll certainly eventually meet a final exception
+        while (ExceptionTypes.hasEmptyMessage(e)
+                && ExceptionTypes.isFriendly(e)
+                && !ExceptionTypes.isFinal(e)) {
+            e = e.getCause();
+        }
+
+        return e;
+    }
+
+    public Throwable getCurrent() {
+        return current;
+    }
 }

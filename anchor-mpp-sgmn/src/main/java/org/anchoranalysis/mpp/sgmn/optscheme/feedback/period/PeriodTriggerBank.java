@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,46 +23,45 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class PeriodTriggerBank<S> {
 
-	private HashMap<Integer, PeriodTrigger<S,PeriodReceiverList<S>> > map = new HashMap< >();
-	private ArrayList< PeriodTrigger<S,PeriodReceiverList<S>> > list = new ArrayList< >();
-	
-	public PeriodTrigger<S,PeriodReceiverList<S>> obtain( int period, PeriodReceiver<S> periodReceiver ) {
+    private HashMap<Integer, PeriodTrigger<S, PeriodReceiverList<S>>> map = new HashMap<>();
+    private ArrayList<PeriodTrigger<S, PeriodReceiverList<S>>> list = new ArrayList<>();
 
-		PeriodTrigger<S,PeriodReceiverList<S>> exst = map.get(period);
-		
-		// If we don't already have a trigger for this specific period, we create one
-		if (exst==null) {
-			PeriodReceiverList<S> listNew = new PeriodReceiverList<>();
-			exst = new PeriodTrigger<>(listNew, period );
-			list.add(exst);
-		}
-		
-		exst.getPeriodReceiver().add(periodReceiver);
-		return exst;
-	}
-	
-	public void reset() {
-		for( PeriodTrigger<S,PeriodReceiverList<S>> pt : list) {
-			pt.reset();
-		}
-	}
-	
-	public void incr( Reporting<S> reporting ) throws OperationFailedException {
-		
-		for( PeriodTrigger<S,PeriodReceiverList<S>> pt : list) {
-			pt.incr( reporting );
-		}
-		
-	}
-	
+    public PeriodTrigger<S, PeriodReceiverList<S>> obtain(
+            int period, PeriodReceiver<S> periodReceiver) {
+
+        PeriodTrigger<S, PeriodReceiverList<S>> exst = map.get(period);
+
+        // If we don't already have a trigger for this specific period, we create one
+        if (exst == null) {
+            PeriodReceiverList<S> listNew = new PeriodReceiverList<>();
+            exst = new PeriodTrigger<>(listNew, period);
+            list.add(exst);
+        }
+
+        exst.getPeriodReceiver().add(periodReceiver);
+        return exst;
+    }
+
+    public void reset() {
+        for (PeriodTrigger<S, PeriodReceiverList<S>> pt : list) {
+            pt.reset();
+        }
+    }
+
+    public void incr(Reporting<S> reporting) throws OperationFailedException {
+
+        for (PeriodTrigger<S, PeriodReceiverList<S>> pt : list) {
+            pt.incr(reporting);
+        }
+    }
 }

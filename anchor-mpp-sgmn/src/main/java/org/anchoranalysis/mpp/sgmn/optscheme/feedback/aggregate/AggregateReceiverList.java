@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,45 +23,43 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate;
 
 import java.util.ArrayList;
-
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class AggregateReceiverList<T> implements AggregateReceiver<T> {
 
-	private ArrayList<AggregateReceiver<T>> delegate = new ArrayList<>();
+    private ArrayList<AggregateReceiver<T>> delegate = new ArrayList<>();
 
-	public boolean add(AggregateReceiver<T> e) {
-		return delegate.add(e);
-	}
+    public boolean add(AggregateReceiver<T> e) {
+        return delegate.add(e);
+    }
 
-	@Override
-	public void aggStart(OptimizationFeedbackInitParams<T> initParams, Aggregator agg) throws AggregatorException {
-		
-		for ( AggregateReceiver<T> receiver : delegate) {
-			receiver.aggStart(initParams, agg);
-		}
-		
-	}
+    @Override
+    public void aggStart(OptimizationFeedbackInitParams<T> initParams, Aggregator agg)
+            throws AggregatorException {
 
-	@Override
-	public void aggEnd(Aggregator agg) throws AggregatorException {
+        for (AggregateReceiver<T> receiver : delegate) {
+            receiver.aggStart(initParams, agg);
+        }
+    }
 
-		for ( AggregateReceiver<T> receiver : delegate) {
-			receiver.aggEnd(agg);
-		}
-		
-	}
+    @Override
+    public void aggEnd(Aggregator agg) throws AggregatorException {
 
-	@Override
-	public void aggReport(Reporting<T> reporting, Aggregator agg) throws AggregatorException {
+        for (AggregateReceiver<T> receiver : delegate) {
+            receiver.aggEnd(agg);
+        }
+    }
 
-		for ( AggregateReceiver<T> receiver : delegate) {
-			receiver.aggReport(reporting, agg);
-		}
-		
-	}
+    @Override
+    public void aggReport(Reporting<T> reporting, Aggregator agg) throws AggregatorException {
+
+        for (AggregateReceiver<T> receiver : delegate) {
+            receiver.aggReport(reporting, agg);
+        }
+    }
 }

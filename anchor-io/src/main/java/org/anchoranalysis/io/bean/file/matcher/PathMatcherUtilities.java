@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.file.matcher;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +23,28 @@ package org.anchoranalysis.io.bean.file.matcher;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.file.matcher;
 
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.function.Predicate;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class PathMatcherUtilities {
-	
-	public static Predicate<Path> filter(Path dir, String fileType, String fileFilter) {
-		PathMatcher matcher = PathMatcherUtilities.matcherForFilter(dir, fileType, fileFilter);
-		return p -> PathMatcherUtilities.acceptPathViaMatcher(p, matcher);
-	}
-	
-	private static boolean acceptPathViaMatcher(Path path, PathMatcher matcher) {
-		return matcher.matches( path.getFileName() );
-	}
-	
-	private static PathMatcher matcherForFilter( Path dir, String filterType, String fileFilter ) {
-		return dir.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);
-	}
+
+    public static Predicate<Path> filter(Path dir, String fileType, String fileFilter) {
+        PathMatcher matcher = PathMatcherUtilities.matcherForFilter(dir, fileType, fileFilter);
+        return p -> PathMatcherUtilities.acceptPathViaMatcher(p, matcher);
+    }
+
+    private static boolean acceptPathViaMatcher(Path path, PathMatcher matcher) {
+        return matcher.matches(path.getFileName());
+    }
+
+    private static PathMatcher matcherForFilter(Path dir, String filterType, String fileFilter) {
+        return dir.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);
+    }
 }

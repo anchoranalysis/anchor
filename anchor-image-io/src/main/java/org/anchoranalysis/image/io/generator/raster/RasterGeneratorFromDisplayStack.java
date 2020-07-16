@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster;
 
+import java.util.Optional;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -37,65 +36,59 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> iteration-type
  */
-public class RasterGeneratorFromDisplayStack<T> extends RasterGenerator implements IterableObjectGenerator<T, Stack> {
+public class RasterGeneratorFromDisplayStack<T> extends RasterGenerator
+        implements IterableObjectGenerator<T, Stack> {
 
-	private IterableObjectGenerator<T,DisplayStack> delegate;
-	private boolean rgb;
-	
-	public RasterGeneratorFromDisplayStack(
-			IterableObjectGenerator<T, DisplayStack> delegate, boolean rgb) {
-		super();
-		this.delegate = delegate;
-		this.rgb = rgb;
-	}
+    private IterableObjectGenerator<T, DisplayStack> delegate;
+    private boolean rgb;
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		delegate.start();
-	}
+    public RasterGeneratorFromDisplayStack(
+            IterableObjectGenerator<T, DisplayStack> delegate, boolean rgb) {
+        super();
+        this.delegate = delegate;
+        this.rgb = rgb;
+    }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		delegate.end();	
-	}
+    @Override
+    public void start() throws OutputWriteFailedException {
+        delegate.start();
+    }
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
+    @Override
+    public void end() throws OutputWriteFailedException {
+        delegate.end();
+    }
 
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return this;
+    }
 
+    @Override
+    public boolean isRGB() {
+        return rgb;
+    }
 
-	@Override
-	public boolean isRGB() {
-		return rgb;
-	}
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return delegate.getGenerator().createManifestDescription();
+    }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return delegate.getGenerator().createManifestDescription();
-	}
-	
-	@Override
-	public T getIterableElement() {
-		return delegate.getIterableElement();
-	}
+    @Override
+    public T getIterableElement() {
+        return delegate.getIterableElement();
+    }
 
-	@Override
-	public void setIterableElement(T element)
-			throws SetOperationFailedException {
-		delegate.setIterableElement(element);
-	}
+    @Override
+    public void setIterableElement(T element) throws SetOperationFailedException {
+        delegate.setIterableElement(element);
+    }
 
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		return delegate.getGenerator().generate().createImgStack(false);
-	}
-
-
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
+        return delegate.getGenerator().generate().createImgStack(false);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.arrangeraster;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class ArrangeRasterException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6247544738100419019L;
+    /** */
+    private static final long serialVersionUID = -6247544738100419019L;
 
-	public ArrangeRasterException(String string) {
-		super(string);
-	}
+    public ArrangeRasterException(String string) {
+        super(string);
+    }
 
-	public ArrangeRasterException( Exception exc ) {
-		super( exc );
-	}
+    public ArrangeRasterException(Exception exc) {
+        super(exc);
+    }
 }

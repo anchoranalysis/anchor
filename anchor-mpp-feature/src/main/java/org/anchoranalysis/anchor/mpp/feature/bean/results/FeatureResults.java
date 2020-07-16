@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.results;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.anchor.mpp.feature.bean.results;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.bean.results;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -33,28 +33,27 @@ import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
-
 /**
- * Features that process {@link ResultsVectorCollection} i.e. the result of the calculation of some other features.
- * 
- * <p>This is useful for applying some aggregate statistics (min, max etc.) to the results of multiple features calculated together.</p>
- * 
- * @author Owen Feehan
+ * Features that process {@link ResultsVectorCollection} i.e. the result of the calculation of some
+ * other features.
  *
+ * <p>This is useful for applying some aggregate statistics (min, max etc.) to the results of
+ * multiple features calculated together.
+ *
+ * @author Owen Feehan
  */
 public abstract class FeatureResults extends Feature<FeatureInputResults> {
 
-	@Override
-	public double calc( SessionInput<FeatureInputResults> input ) throws FeatureCalcException {
-		return calc( input.get() );
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureInputResults input ) throws FeatureCalcException;
-	
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInputResults.class;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputResults> input) throws FeatureCalcException {
+        return calc(input.get());
+    }
 
+    // Calculates an NRG element for a set of pixels
+    public abstract double calc(FeatureInputResults input) throws FeatureCalcException;
+
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInputResults.class;
+    }
 }

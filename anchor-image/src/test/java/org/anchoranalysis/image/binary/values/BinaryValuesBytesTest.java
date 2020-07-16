@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.binary.values;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.image.binary.values;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.binary.values;
 
 import static org.junit.Assert.*;
 
@@ -33,10 +32,10 @@ import org.junit.Test;
 
 public class BinaryValuesBytesTest {
 
-	@Test
-	public void testEquals() {
-		BinaryValuesByte bv1 = new BinaryValuesByte(0,255);
-		BinaryValuesByte bv2 = new BinaryValuesByte(0,255);
-		assertTrue(bv1.equals(bv2));
-	}
+    @Test
+    public void testEquals() {
+        BinaryValuesByte bv1 = new BinaryValuesByte(0, 255);
+        BinaryValuesByte bv2 = new BinaryValuesByte(0, 255);
+        assertTrue(bv1.equals(bv2));
+    }
 }

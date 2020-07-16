@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.list;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.feature.bean.list;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.list;
 
 import java.util.List;
-
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -37,37 +35,35 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 
-public class FeatureListProviderDefineNamedItemList<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderDefineNamedItemList<T extends FeatureInput>
+        extends FeatureListProviderReferencedFeatures<T> {
 
-	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
-	
-	// START BEAN PROPERTIES
-	@BeanField @SkipInit
-	private List<NamedBean<FeatureListProvider<T>>> list;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public FeatureList<T> create() throws CreateException {
-		
-		return FeatureListFactory.mapFrom(
-			STORE_FACTORY.createNamedFeatureList(list),
-			ni -> renameFeature(
-				ni.getName(),
-				ni.getValue()
-			)
-		);
-	}
+    private static final NamedFeatureStoreFactory STORE_FACTORY =
+            NamedFeatureStoreFactory.bothNameAndParams();
 
-	public List<NamedBean<FeatureListProvider<T>>> getList() {
-		return list;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @SkipInit private List<NamedBean<FeatureListProvider<T>>> list;
+    // END BEAN PROPERTIES
 
-	public void setList(List<NamedBean<FeatureListProvider<T>>> list) {
-		this.list = list;
-	}
+    @Override
+    public FeatureList<T> create() throws CreateException {
 
-	private static <T extends FeatureInput> Feature<T> renameFeature( String name, Feature<T> feature ) {
-		feature.setCustomName(name);
-		return feature;
-	}
+        return FeatureListFactory.mapFrom(
+                STORE_FACTORY.createNamedFeatureList(list),
+                ni -> renameFeature(ni.getName(), ni.getValue()));
+    }
+
+    public List<NamedBean<FeatureListProvider<T>>> getList() {
+        return list;
+    }
+
+    public void setList(List<NamedBean<FeatureListProvider<T>>> list) {
+        this.list = list;
+    }
+
+    private static <T extends FeatureInput> Feature<T> renameFeature(
+            String name, Feature<T> feature) {
+        feature.setCustomName(name);
+        return feature;
+    }
 }

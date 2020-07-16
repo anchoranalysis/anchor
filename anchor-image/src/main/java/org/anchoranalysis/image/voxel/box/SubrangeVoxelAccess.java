@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.box;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,44 +23,43 @@ package org.anchoranalysis.image.voxel.box;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.box;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> buffer-type
  */
 class SubrangeVoxelAccess<T extends Buffer> implements PixelsForPlane<T> {
 
-	private int zRel;
-	private Extent extent;
-	private BoundedVoxelBox<T> src;
-	
-	public SubrangeVoxelAccess(int zRel, Extent extent,	BoundedVoxelBox<T> src) {
-		super();
-		this.zRel = zRel;
-		this.extent = extent;
-		this.src = src;
-	}
+    private int zRel;
+    private Extent extent;
+    private BoundedVoxelBox<T> src;
 
-	@Override
-	public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
-		src.getVoxelBox().setPixelsForPlane(z+zRel, pixels);
-	}
+    public SubrangeVoxelAccess(int zRel, Extent extent, BoundedVoxelBox<T> src) {
+        super();
+        this.zRel = zRel;
+        this.extent = extent;
+        this.src = src;
+    }
 
-	@Override
-	public VoxelBuffer<T> getPixelsForPlane(int z) {
-		return src.getVoxelBox().getPixelsForPlane(z+zRel);
-	}
+    @Override
+    public void setPixelsForPlane(int z, VoxelBuffer<T> pixels) {
+        src.getVoxelBox().setPixelsForPlane(z + zRel, pixels);
+    }
 
-	@Override
-	public Extent extent() {
-		return extent;
-	}
+    @Override
+    public VoxelBuffer<T> getPixelsForPlane(int z) {
+        return src.getVoxelBox().getPixelsForPlane(z + zRel);
+    }
+
+    @Override
+    public Extent extent() {
+        return extent;
+    }
 }

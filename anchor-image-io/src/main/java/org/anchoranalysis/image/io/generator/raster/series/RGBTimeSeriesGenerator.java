@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.series;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.image.io.generator.raster.series;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster.series;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
@@ -40,34 +38,33 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class RGBTimeSeriesGenerator extends SingleFileTypeGenerator {
 
-	private ImgStackSeries stackSeries;
-	
-	public RGBTimeSeriesGenerator(ImgStackSeries stackSeries) {
-		super();
-		this.stackSeries = stackSeries;
-	}
+    private ImgStackSeries stackSeries;
 
-	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings,
-			Path filePath) throws OutputWriteFailedException {
-		
-		try {
-			RasterWriter rasterWriter = RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
-			rasterWriter.writeTimeSeriesStackByte(stackSeries, filePath, true);
-		} catch (RasterIOException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
+    public RGBTimeSeriesGenerator(ImgStackSeries stackSeries) {
+        super();
+        this.stackSeries = stackSeries;
+    }
 
-	@Override
-	public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-		return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
-	}
+    @Override
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", "rgbTimeSeries")
-		);
-	}
+        try {
+            RasterWriter rasterWriter =
+                    RasterWriterUtilities.getDefaultRasterWriter(outputWriteSettings);
+            rasterWriter.writeTimeSeriesStackByte(stackSeries, filePath, true);
+        } catch (RasterIOException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
+    @Override
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+        return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", "rgbTimeSeries"));
+    }
 }

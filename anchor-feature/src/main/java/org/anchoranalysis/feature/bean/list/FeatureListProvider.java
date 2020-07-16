@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.list;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.bean.list;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.list;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
@@ -32,13 +32,12 @@ import org.anchoranalysis.feature.bean.provider.FeatureProviderBean;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> input type for feature list
  */
 @GroupingRoot
-public abstract class FeatureListProvider<T extends FeatureInput> extends FeatureProviderBean<FeatureListProvider<T>,FeatureList<T>> {
+public abstract class FeatureListProvider<T extends FeatureInput>
+        extends FeatureProviderBean<FeatureListProvider<T>, FeatureList<T>> {
 
-	public abstract FeatureList<T> create() throws CreateException;
+    public abstract FeatureList<T> create() throws CreateException;
 }

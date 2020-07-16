@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.define;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.define;
 
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -45,81 +44,77 @@ import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 
 public class DefineOutputterMPPWithNrg extends DefineOutputterWithNrg {
 
-	/**
-	 * 
-	 * @author Owen Feehan
-	 *
-	 * @param <T> init-params-type
-	 * @param <S> return-type
-	 */
-	@FunctionalInterface
-	public interface OperationWithNRGStack<T,S> {
-		S process(T initParams, NRGStackWithParams nrgStack) throws OperationFailedException;
-	}
-	
-	public <S> S processInput(
-		InputForMPPBean input,
-		BoundIOContext context,
-		OperationWithNRGStack<ImageInitParams,S> operation
-	) throws OperationFailedException {
+    /**
+     * @author Owen Feehan
+     * @param <T> init-params-type
+     * @param <S> return-type
+     */
+    @FunctionalInterface
+    public interface OperationWithNRGStack<T, S> {
+        S process(T initParams, NRGStackWithParams nrgStack) throws OperationFailedException;
+    }
 
-		try {
-			MPPInitParams initParams = super.createInitParams(input,context);
-			return processWithNRGStack(initParams.getImage(), initParams.getImage(), initParams, operation, context);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-		
-	public <S> S processInput(
-		BoundIOContext context,
-		Optional<NamedProvider<Stack>> stacks,
-		Optional<NamedProvider<ObjectCollection>> objects,
-		Optional<KeyValueParams> keyValueParams,
-		OperationWithNRGStack<MPPInitParams,S> operation
-	) throws OperationFailedException {
-		try {
-			MPPInitParams initParams = super.createInitParams(context, stacks, objects, keyValueParams);
-			return processWithNRGStack(initParams, initParams.getImage(), initParams, operation, context);
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	private <T,S> S processWithNRGStack(
-		T initParams,
-		ImageInitParams imageParams,
-		MPPInitParams mppParams,
-		OperationWithNRGStack<T,S> operation,
-		BoundIOContext context
-	) throws OperationFailedException {
-		try {
-			NRGStackWithParams nrgStack = super.createNRGStack(
-				imageParams,
-				context.getLogger()
-			);
-			
-			S result = operation.process(initParams, nrgStack);
-			
-			outputSharedObjects(mppParams, nrgStack, context);
-			
-			return result;
-			
-		} catch (InitException | CreateException | OutputWriteFailedException e) {
-			throw new OperationFailedException(e);
-		}			
-	}
-	
-	
-	// General objects can be outputted
-	private void outputSharedObjects(MPPInitParams initParams, NRGStackWithParams nrgStack, BoundIOContext context) throws OutputWriteFailedException {
-		
-		super.outputSharedObjects(initParams, context);
-		
-		NRGStackWriter.writeNRGStack(
-			nrgStack,
-			context
-		);
-	}
+    public <S> S processInput(
+            InputForMPPBean input,
+            BoundIOContext context,
+            OperationWithNRGStack<ImageInitParams, S> operation)
+            throws OperationFailedException {
+
+        try {
+            MPPInitParams initParams = super.createInitParams(input, context);
+            return processWithNRGStack(
+                    initParams.getImage(), initParams.getImage(), initParams, operation, context);
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    public <S> S processInput(
+            BoundIOContext context,
+            Optional<NamedProvider<Stack>> stacks,
+            Optional<NamedProvider<ObjectCollection>> objects,
+            Optional<KeyValueParams> keyValueParams,
+            OperationWithNRGStack<MPPInitParams, S> operation)
+            throws OperationFailedException {
+        try {
+            MPPInitParams initParams =
+                    super.createInitParams(context, stacks, objects, keyValueParams);
+            return processWithNRGStack(
+                    initParams, initParams.getImage(), initParams, operation, context);
+
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    private <T, S> S processWithNRGStack(
+            T initParams,
+            ImageInitParams imageParams,
+            MPPInitParams mppParams,
+            OperationWithNRGStack<T, S> operation,
+            BoundIOContext context)
+            throws OperationFailedException {
+        try {
+            NRGStackWithParams nrgStack = super.createNRGStack(imageParams, context.getLogger());
+
+            S result = operation.process(initParams, nrgStack);
+
+            outputSharedObjects(mppParams, nrgStack, context);
+
+            return result;
+
+        } catch (InitException | CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    // General objects can be outputted
+    private void outputSharedObjects(
+            MPPInitParams initParams, NRGStackWithParams nrgStack, BoundIOContext context)
+            throws OutputWriteFailedException {
+
+        super.outputSharedObjects(initParams, context);
+
+        NRGStackWriter.writeNRGStack(nrgStack, context);
+    }
 }

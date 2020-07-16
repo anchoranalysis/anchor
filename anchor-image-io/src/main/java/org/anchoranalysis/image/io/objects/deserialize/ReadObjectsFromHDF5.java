@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.objects.deserialize;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,14 @@ package org.anchoranalysis.image.io.objects.deserialize;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.objects.deserialize;
 
+import ch.systemsx.cisd.hdf5.HDF5Factory;
+import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import java.nio.file.Path;
 import java.util.List;
-
+import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
 import org.anchoranalysis.image.io.objects.GeneratorHDF5;
 import org.anchoranalysis.image.io.objects.HDF5PathHelper;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -37,79 +39,71 @@ import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-import ch.systemsx.cisd.hdf5.HDF5Factory;
-import ch.systemsx.cisd.hdf5.IHDF5Reader;
-import ncsa.hdf.hdf5lib.exceptions.HDF5FileNotFoundException;
-
 class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
 
-	private static final ObjectMaskHDF5Reader OBJECT_READER = new ObjectMaskHDF5Reader();
-	
-	@Override
-	public ObjectCollection deserialize(Path path) throws DeserializationFailedException {
+    private static final ObjectMaskHDF5Reader OBJECT_READER = new ObjectMaskHDF5Reader();
 
-		try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
+    @Override
+    public ObjectCollection deserialize(Path path) throws DeserializationFailedException {
 
-			return readObjects(reader, HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS );
-		
-		} catch (HDF5FileNotFoundException e) {
-			throw new DeserializationFailedException(
-				String.format("HDF5 file not found at %s", path)	
-			);
-		} catch (Exception e) {
-			throw new DeserializationFailedException(
-				String.format(
-					"An error occurred while reading HDF5 at %s with rootPath=%s",
-					path,
-					HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS
-				),
-				e
-			);
-		}
-	}
-	
-	/**
-	 * Read all objects
-	 * 
-	 * @param reader
-	 * @param rootPath a path in the HDF5, NOTE it should always end in a forward-slash
-	 * @return
-	 * @throws DeserializationFailedException 
-	 * @throws AnchorIOException 
-	 */
-	private ObjectCollection readObjects(IHDF5Reader reader, String rootPath) throws DeserializationFailedException {
+        try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {
 
-		assert( rootPath.endsWith("/") );
-				
-		// First check the number of objects expected
-		// if the the rootPath exists in the HDF5, if not, it's an indication that there's no
-		// objects present
-		int numberObjects = ObjectMaskHDF5Reader.extractIntAttr(reader.uint32(), "/", GeneratorHDF5.NUM_OBJECTS_ATTR_NAME);
-		if (numberObjects==0) {
-			return ObjectCollectionFactory.empty();
-		}
-		
-		ObjectCollection out = readObjectsNoCheck(reader, rootPath);
-				
-		if (out.size()!=numberObjects) {
-			throw new DeserializationFailedException(
-				String.format(
-					"An error occurred deserializing HDF5, where %d objects were expected but %d were read.",
-					numberObjects,
-					out.size()
-				)	
-			);
-		}
-		return out;
-	}
+            return readObjects(reader, HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS);
 
-	/** Reads the objects without doing any check on the total number of objects expected or received */
-	private ObjectCollection readObjectsNoCheck(IHDF5Reader reader, String rootPath) {
+        } catch (HDF5FileNotFoundException e) {
+            throw new DeserializationFailedException(
+                    String.format("HDF5 file not found at %s", path));
+        } catch (Exception e) {
+            throw new DeserializationFailedException(
+                    String.format(
+                            "An error occurred while reading HDF5 at %s with rootPath=%s",
+                            path, HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS),
+                    e);
+        }
+    }
 
-		List<String> groups = reader.object().getAllGroupMembers( rootPath );
-		return ObjectCollectionFactory.mapFrom(
-			groups,
-			groupName->	OBJECT_READER.apply(reader, rootPath + groupName)
-		);
-	}
+    /**
+     * Read all objects
+     *
+     * @param reader
+     * @param rootPath a path in the HDF5, NOTE it should always end in a forward-slash
+     * @return
+     * @throws DeserializationFailedException
+     * @throws AnchorIOException
+     */
+    private ObjectCollection readObjects(IHDF5Reader reader, String rootPath)
+            throws DeserializationFailedException {
+
+        assert (rootPath.endsWith("/"));
+
+        // First check the number of objects expected
+        // if the the rootPath exists in the HDF5, if not, it's an indication that there's no
+        // objects present
+        int numberObjects =
+                ObjectMaskHDF5Reader.extractIntAttr(
+                        reader.uint32(), "/", GeneratorHDF5.NUM_OBJECTS_ATTR_NAME);
+        if (numberObjects == 0) {
+            return ObjectCollectionFactory.empty();
+        }
+
+        ObjectCollection out = readObjectsNoCheck(reader, rootPath);
+
+        if (out.size() != numberObjects) {
+            throw new DeserializationFailedException(
+                    String.format(
+                            "An error occurred deserializing HDF5, where %d objects were expected but %d were read.",
+                            numberObjects, out.size()));
+        }
+        return out;
+    }
+
+    /**
+     * Reads the objects without doing any check on the total number of objects expected or received
+     */
+    private ObjectCollection readObjectsNoCheck(IHDF5Reader reader, String rootPath) {
+
+        List<String> groups = reader.object().getAllGroupMembers(rootPath);
+        return ObjectCollectionFactory.mapFrom(
+                groups, groupName -> OBJECT_READER.apply(reader, rootPath + groupName));
+    }
 }

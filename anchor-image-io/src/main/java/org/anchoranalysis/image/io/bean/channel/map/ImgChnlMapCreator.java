@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.channel.map;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.io.bean.channel.map;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.channel.map;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -33,5 +33,5 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 public abstract class ImgChnlMapCreator extends AnchorBean<ImgChnlMapCreator> {
 
-	public abstract ImgChnlMap createMap( OpenedRaster openedRaster ) throws CreateException;
+    public abstract ImgChnlMap createMap(OpenedRaster openedRaster) throws CreateException;
 }

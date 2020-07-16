@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.strategy.child;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,36 +23,38 @@ package org.anchoranalysis.feature.session.strategy.child;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.session.strategy.child;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class CacheTransferSourceCollection implements Iterable<CacheTransferSource<? extends FeatureInput>> {
+public class CacheTransferSourceCollection
+        implements Iterable<CacheTransferSource<? extends FeatureInput>> {
 
-	private Set<ChildCacheName> allCacheNames = new HashSet<>();
-	private List<CacheTransferSource<? extends FeatureInput>> list = new ArrayList<>();
+    private Set<ChildCacheName> allCacheNames = new HashSet<>();
+    private List<CacheTransferSource<? extends FeatureInput>> list = new ArrayList<>();
 
-	public void add(CacheTransferSource<? extends FeatureInput> source) {
-		list.add(source);
-		allCacheNames.addAll( source.getCacheNames() );
-	}
-	
-	public boolean contains( ChildCacheName childName ) {
-		return allCacheNames.contains(childName);
-	}
+    public void add(CacheTransferSource<? extends FeatureInput> source) {
+        list.add(source);
+        allCacheNames.addAll(source.getCacheNames());
+    }
 
-	@Override
-	public Iterator<CacheTransferSource<? extends FeatureInput>> iterator() {
-		return list.iterator();
-	}
+    public boolean contains(ChildCacheName childName) {
+        return allCacheNames.contains(childName);
+    }
 
-	public Set<ChildCacheName> getAllCacheNames() {
-		return allCacheNames;
-	}
+    @Override
+    public Iterator<CacheTransferSource<? extends FeatureInput>> iterator() {
+        return list.iterator();
+    }
+
+    public Set<ChildCacheName> getAllCacheNames() {
+        return allCacheNames;
+    }
 }

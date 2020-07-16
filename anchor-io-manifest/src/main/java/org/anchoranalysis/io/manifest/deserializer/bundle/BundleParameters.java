@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.bundle;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,37 +23,33 @@ package org.anchoranalysis.io.manifest.deserializer.bundle;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.bundle;
 
 import java.io.Serializable;
-
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 public class BundleParameters implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2877914366652685850L;
-	private int bundleSize;
-	private SequenceType sequenceType;
+    /** */
+    private static final long serialVersionUID = 2877914366652685850L;
 
-	public int getBundleSize() {
-		return bundleSize;
-	}
+    private int bundleSize;
+    private SequenceType sequenceType;
 
-	public void setBundleSize(int bundleSize) {
-		this.bundleSize = bundleSize;
-	}
+    public int getBundleSize() {
+        return bundleSize;
+    }
 
-	public SequenceType getSequenceType() {
-		return sequenceType;
-	}
+    public void setBundleSize(int bundleSize) {
+        this.bundleSize = bundleSize;
+    }
 
-	public void setSequenceType(SequenceType sequenceType) {
-		this.sequenceType = sequenceType;
-	}
-	
+    public SequenceType getSequenceType() {
+        return sequenceType;
+    }
 
-	
+    public void setSequenceType(SequenceType sequenceType) {
+        this.sequenceType = sequenceType;
+    }
 }

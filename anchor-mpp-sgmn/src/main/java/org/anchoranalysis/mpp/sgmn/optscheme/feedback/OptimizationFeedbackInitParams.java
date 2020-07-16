@@ -1,15 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
-
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateTriggerBank;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,38 +23,51 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback;
+
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateTriggerBank;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.period.PeriodTriggerBank;
 
 public class OptimizationFeedbackInitParams<T> {
 
-	private OptSchemeContext initContext;
-	
-	private WeightedKernelList<?> kernelFactoryList;
-	private PeriodTriggerBank<T> periodTriggerBank;
-	private AggregateTriggerBank<T> aggregateTriggerBank;
+    private OptSchemeContext initContext;
 
-	public WeightedKernelList<?> getKernelFactoryList() {
-		return kernelFactoryList;
-	}
-	public void setKernelFactoryList(WeightedKernelList<?> kernelFactoryList) {
-		this.kernelFactoryList = kernelFactoryList;
-	}
-	public PeriodTriggerBank<T> getPeriodTriggerBank() {
-		return periodTriggerBank;
-	}
-	public void setPeriodTriggerBank(PeriodTriggerBank<T> periodTriggerBank) {
-		this.periodTriggerBank = periodTriggerBank;
-	}
-	public AggregateTriggerBank<T> getAggregateTriggerBank() {
-		return aggregateTriggerBank;
-	}
-	public void setAggregateTriggerBank(AggregateTriggerBank<T> aggregateTriggerBank) {
-		this.aggregateTriggerBank = aggregateTriggerBank;
-	}
+    private WeightedKernelList<?> kernelFactoryList;
+    private PeriodTriggerBank<T> periodTriggerBank;
+    private AggregateTriggerBank<T> aggregateTriggerBank;
 
-	public OptSchemeContext getInitContext() {
-		return initContext;
-	}
-	public void setInitContext(OptSchemeContext initContext) {
-		this.initContext = initContext;
-	}
+    public WeightedKernelList<?> getKernelFactoryList() {
+        return kernelFactoryList;
+    }
+
+    public void setKernelFactoryList(WeightedKernelList<?> kernelFactoryList) {
+        this.kernelFactoryList = kernelFactoryList;
+    }
+
+    public PeriodTriggerBank<T> getPeriodTriggerBank() {
+        return periodTriggerBank;
+    }
+
+    public void setPeriodTriggerBank(PeriodTriggerBank<T> periodTriggerBank) {
+        this.periodTriggerBank = periodTriggerBank;
+    }
+
+    public AggregateTriggerBank<T> getAggregateTriggerBank() {
+        return aggregateTriggerBank;
+    }
+
+    public void setAggregateTriggerBank(AggregateTriggerBank<T> aggregateTriggerBank) {
+        this.aggregateTriggerBank = aggregateTriggerBank;
+    }
+
+    public OptSchemeContext getInitContext() {
+        return initContext;
+    }
+
+    public void setInitContext(OptSchemeContext initContext) {
+        this.initContext = initContext;
+    }
 }

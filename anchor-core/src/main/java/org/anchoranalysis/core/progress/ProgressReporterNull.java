@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.progress;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,67 +23,64 @@ package org.anchoranalysis.core.progress;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.core.progress;
 
 /**
  * Placeholder that doesn't measure any progress
- * 
- * Implemented as a singleton, to avoid repeated instances of creating a
- *  new Autocloseable class, which confuses lint tools like SonarQube
- * 
- * @author Owen Feehan
  *
+ * <p>Implemented as a singleton, to avoid repeated instances of creating a new Autocloseable class,
+ * which confuses lint tools like SonarQube
+ *
+ * @author Owen Feehan
  */
 public class ProgressReporterNull implements ProgressReporter {
 
-	private static ProgressReporterNull instance = null;
-	
-	private ProgressReporterNull() {
-		
-	}
-	
-	public static ProgressReporterNull get() {
-		if (instance==null) {
-			instance = new ProgressReporterNull();
-		}
-		return instance;
-	}
-	
-	@Override
-	public void open() {
-		// DOES NOTHING
-	}
+    private static ProgressReporterNull instance = null;
 
-	@Override
-	public void close() {
-		// DOES NOTHING		
-	}
+    private ProgressReporterNull() {}
 
-	@Override
-	public int getMax() {
-		// Arbitrary value
-		return 0;
-	}
+    public static ProgressReporterNull get() {
+        if (instance == null) {
+            instance = new ProgressReporterNull();
+        }
+        return instance;
+    }
 
-	@Override
-	public int getMin() {
-		// Arbitrary value		
-		return 0;
-	}
+    @Override
+    public void open() {
+        // DOES NOTHING
+    }
 
-	@Override
-	public void update(int val) {
-		// DOES NOTHING		
-	}
+    @Override
+    public void close() {
+        // DOES NOTHING
+    }
 
-	@Override
-	public void setMin(int min) {
-		// DOES NOTHING
-	}
+    @Override
+    public int getMax() {
+        // Arbitrary value
+        return 0;
+    }
 
-	@Override
-	public void setMax(int max) {
-		// DOES NOTHING
-	}
+    @Override
+    public int getMin() {
+        // Arbitrary value
+        return 0;
+    }
 
+    @Override
+    public void update(int val) {
+        // DOES NOTHING
+    }
+
+    @Override
+    public void setMin(int min) {
+        // DOES NOTHING
+    }
+
+    @Override
+    public void setMax(int max) {
+        // DOES NOTHING
+    }
 }

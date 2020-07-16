@@ -1,13 +1,8 @@
-package org.anchoranalysis.image.bean;
-
-import java.util.Arrays;
-import java.util.List;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +23,11 @@ import java.util.List;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean;
 
+import java.util.Arrays;
+import java.util.List;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
@@ -36,25 +35,17 @@ import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
-public abstract class ImageBean<T> extends InitializableBean<T,ImageInitParams> {
-	
-	protected ImageBean() {
-		super(
-			new PropertyInitializer<>( ImageInitParams.class, paramExtracters() ),
-			new SimplePropertyDefiner<ImageInitParams>(ImageInitParams.class)
-		);
-	}
-	
-	private static List<ExtractFromParam<ImageInitParams,?>> paramExtracters() {
-		return Arrays.asList(
-			new ExtractFromParam<>(
-				KeyValueParamsInitParams.class,
-				ImageInitParams::getFeature
-			),				
-			new ExtractFromParam<>(
-				KeyValueParamsInitParams.class,
-				ImageInitParams::getParams
-			)
-		);
-	}
+public abstract class ImageBean<T> extends InitializableBean<T, ImageInitParams> {
+
+    protected ImageBean() {
+        super(
+                new PropertyInitializer<>(ImageInitParams.class, paramExtracters()),
+                new SimplePropertyDefiner<ImageInitParams>(ImageInitParams.class));
+    }
+
+    private static List<ExtractFromParam<ImageInitParams, ?>> paramExtracters() {
+        return Arrays.asList(
+                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::getFeature),
+                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::getParams));
+    }
 }

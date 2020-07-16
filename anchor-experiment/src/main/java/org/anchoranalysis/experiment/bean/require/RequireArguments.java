@@ -1,12 +1,8 @@
-package org.anchoranalysis.experiment.bean.require;
-
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +23,12 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.require;
+
+import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class RequireArguments extends AnchorBean<RequireArguments> {
 
-	public abstract boolean hasAllRequiredArguments( boolean debugModeEnabled );
+    public abstract boolean hasAllRequiredArguments(boolean debugModeEnabled);
 }

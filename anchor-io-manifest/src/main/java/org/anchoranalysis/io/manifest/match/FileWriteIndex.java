@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.match;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +23,27 @@ package org.anchoranalysis.io.manifest.match;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.match;
 
 import org.anchoranalysis.io.manifest.file.FileWrite;
 
 public class FileWriteIndex implements Match<FileWrite> {
 
-	private String index;
-	
-	public FileWriteIndex(String index) {
-		super();
-		this.index = index;
-	}
+    private String index;
 
-	@Override
-	public boolean matches(FileWrite obj) {
-		
-		if (obj==null) {
-			return false;
-		}
-		
-		return obj.getIndex().equals(this.index);
-	}
+    public FileWriteIndex(String index) {
+        super();
+        this.index = index;
+    }
 
+    @Override
+    public boolean matches(FileWrite obj) {
+
+        if (obj == null) {
+            return false;
+        }
+
+        return obj.getIndex().equals(this.index);
+    }
 }

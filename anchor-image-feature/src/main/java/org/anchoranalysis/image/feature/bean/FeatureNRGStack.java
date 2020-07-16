@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.feature.bean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -32,15 +32,14 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 /**
  * A base class for features that only require an input that extends from {@link FeatureInputNRG}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature input-type
  */
 public abstract class FeatureNRGStack<T extends FeatureInputNRG> extends Feature<T> {
 
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInputNRG.class;
-	}
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInputNRG.class;
+    }
 }

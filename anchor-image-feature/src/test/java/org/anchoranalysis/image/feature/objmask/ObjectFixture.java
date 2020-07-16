@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.objmask;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.image.feature.objmask;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.objmask;
 
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
-/** 
+/**
  * Creates some basic objects for tests.
- * 
- * <p>Currently unused, but keep as it will likely be useful in the future</p>
- * */
+ *
+ * <p>Currently unused, but keep as it will likely be useful in the future
+ */
 public class ObjectFixture {
-	
-	public static ObjectMask createSmallCornerObj() {
-		return new ObjectMask(
-			new BoundingBox( new Extent(2,3,1) )
-		);
-	}
+
+    public static ObjectMask createSmallCornerObj() {
+        return new ObjectMask(new BoundingBox(new Extent(2, 3, 1)));
+    }
 }

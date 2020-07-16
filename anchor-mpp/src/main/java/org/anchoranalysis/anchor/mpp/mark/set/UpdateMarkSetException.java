@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark.set;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.anchor.mpp.mark.set;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark.set;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class UpdateMarkSetException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3084951824689469370L;
+    /** */
+    private static final long serialVersionUID = -3084951824689469370L;
 
-	public UpdateMarkSetException(String string) {
-		super(string);
-	}
+    public UpdateMarkSetException(String string) {
+        super(string);
+    }
 
-	public UpdateMarkSetException( Exception exc ) {
-		super( exc );
-	}
+    public UpdateMarkSetException(Exception exc) {
+        super(exc);
+    }
 }

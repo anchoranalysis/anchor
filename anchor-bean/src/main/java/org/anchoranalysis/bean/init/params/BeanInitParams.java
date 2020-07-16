@@ -1,12 +1,8 @@
-package org.anchoranalysis.bean.init.params;
-
-import org.anchoranalysis.bean.init.InitializableBean;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +23,14 @@ import org.anchoranalysis.bean.init.InitializableBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.init.params;
 
+import org.anchoranalysis.bean.init.InitializableBean;
 
 /**
  * Parent class for all parameters used to initialise beans in {@link InitializableBean}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public interface BeanInitParams {
-
-}
+public interface BeanInitParams {}

@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared.relation;
-
-/*
+/*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +23,26 @@ package org.anchoranalysis.bean.shared.relation;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.relation;
 
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.relation.RelationToValue;
 
-import lombok.EqualsAndHashCode;
+@EqualsAndHashCode(callSuper = false)
+public abstract class RelationBean extends AnchorBean<RelationBean>
+        implements GenerateUniqueParameterization {
 
-@EqualsAndHashCode(callSuper=false)
-public abstract class RelationBean extends AnchorBean<RelationBean> implements GenerateUniqueParameterization {
+    public abstract RelationToValue create();
 
-	public abstract RelationToValue create();
-	
-	@Override
-	public abstract String toString();
-	
-	// This is sufficient for all base-classes, as we rely on them not being further parameterized
-	@Override
-	public String uniqueName() {
-		return getClass().getCanonicalName();
-	}
+    @Override
+    public abstract String toString();
+
+    // This is sufficient for all base-classes, as we rely on them not being further parameterized
+    @Override
+    public String uniqueName() {
+        return getClass().getCanonicalName();
+    }
 }

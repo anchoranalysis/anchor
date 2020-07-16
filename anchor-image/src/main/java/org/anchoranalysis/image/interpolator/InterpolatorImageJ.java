@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.interpolator;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,41 @@ package org.anchoranalysis.image.interpolator;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.interpolator;
 
 import ij.process.ImageProcessor;
-
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
-
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class InterpolatorImageJ implements Interpolator {
 
-	@Override
-	public VoxelBuffer<ByteBuffer> interpolateByte(VoxelBuffer<ByteBuffer> src,
-			VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
+    @Override
+    public VoxelBuffer<ByteBuffer> interpolateByte(
+            VoxelBuffer<ByteBuffer> src, VoxelBuffer<ByteBuffer> dest, Extent eSrc, Extent eDest) {
 
-		ImageProcessor ipSrc = IJWrap.imageProcessorByte( src, eSrc );
-		ImageProcessor ipOut = ipSrc.resize( eDest.getX(), eDest.getY(), true);
-		return IJWrap.voxelBufferFromImageProcessorByte( ipOut );
-	}
+        ImageProcessor ipSrc = IJWrap.imageProcessorByte(src, eSrc);
+        ImageProcessor ipOut = ipSrc.resize(eDest.getX(), eDest.getY(), true);
+        return IJWrap.voxelBufferFromImageProcessorByte(ipOut);
+    }
 
-	@Override
-	public VoxelBuffer<ShortBuffer> interpolateShort(VoxelBuffer<ShortBuffer> src,
-			VoxelBuffer<ShortBuffer> dest, Extent eSrc, Extent eDest) {
-		
-		ImageProcessor ipSrc = IJWrap.imageProcessorShort( src, eSrc );
-		ImageProcessor ipOut = ipSrc.resize( eDest.getX(), eDest.getY(), true);
-		return IJWrap.voxelBufferFromImageProcessorShort( ipOut );
-		
-	}
+    @Override
+    public VoxelBuffer<ShortBuffer> interpolateShort(
+            VoxelBuffer<ShortBuffer> src,
+            VoxelBuffer<ShortBuffer> dest,
+            Extent eSrc,
+            Extent eDest) {
 
-	@Override
-	public boolean isNewValuesPossible() {
-		return true;
-	}
+        ImageProcessor ipSrc = IJWrap.imageProcessorShort(src, eSrc);
+        ImageProcessor ipOut = ipSrc.resize(eDest.getX(), eDest.getY(), true);
+        return IJWrap.voxelBufferFromImageProcessorShort(ipOut);
+    }
 
+    @Override
+    public boolean isNewValuesPossible() {
+        return true;
+    }
 }

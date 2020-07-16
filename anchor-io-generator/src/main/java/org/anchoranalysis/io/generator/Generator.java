@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.generator;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +23,15 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator;
 
-
-
+import java.util.Optional;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.writer.WritableItem;
 
 public interface Generator extends WritableItem {
-	
-	Optional<FileType[]> getFileTypes( OutputWriteSettings outputWriteSettings );
-}
 
+    Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings);
+}

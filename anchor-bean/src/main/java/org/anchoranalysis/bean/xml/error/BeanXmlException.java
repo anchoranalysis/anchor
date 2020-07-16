@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.xml.error;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,32 +23,30 @@ package org.anchoranalysis.bean.xml.error;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.xml.error;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 /**
  * An exception that occurs when one cannot process BeanXML for some reason
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class BeanXmlException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * Default serialization
-	 */
-	private static final long serialVersionUID = 1L;
+    /** Default serialization */
+    private static final long serialVersionUID = 1L;
 
-	public BeanXmlException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public BeanXmlException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public BeanXmlException(Throwable cause) {
-		super(cause);
-	}
-	
-	public BeanXmlException(String message) {
-		super(message);
-	}
+    public BeanXmlException(Throwable cause) {
+        super(cause);
+    }
+
+    public BeanXmlException(String message) {
+        super(message);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.arrangeraster;
-
-/*
+/*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.image.bean.arrangeraster;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.Iterator;
-
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -37,23 +35,18 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class SingleRaster extends ArrangeRasterBean {
 
-	@Override
-	public BBoxSetOnPlane createBBoxSetOnPlane(
-			Iterator<RGBStack> rasterIterator)
-			throws ArrangeRasterException {
-	
-		if (!rasterIterator.hasNext()) {
-			throw new ArrangeRasterException("iterator has no more rasters");
-		}
-		
-		RGBStack stack = rasterIterator.next();
+    @Override
+    public BBoxSetOnPlane createBBoxSetOnPlane(Iterator<RGBStack> rasterIterator)
+            throws ArrangeRasterException {
 
-		Extent extent = stack.getChnl(0).getDimensions().getExtent();
-		
-		return new BBoxSetOnPlane(
-			extent,
-			new BoundingBox(extent)
-		);
-	}
+        if (!rasterIterator.hasNext()) {
+            throw new ArrangeRasterException("iterator has no more rasters");
+        }
 
+        RGBStack stack = rasterIterator.next();
+
+        Extent extent = stack.getChnl(0).getDimensions().getExtent();
+
+        return new BBoxSetOnPlane(extent, new BoundingBox(extent));
+    }
 }

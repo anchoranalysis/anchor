@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.error;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,31 +23,29 @@ package org.anchoranalysis.bean.error;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.error;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * When something quite strange happens that we don't usually want to catch.
- *  
- * <p>This type of "black swan" exception is for errors where we aren't going to invest much effort in handling,
- *  unless it starts becoming thrown regularly.</p>
- * 
- * @author Owen Feehan
  *
+ * <p>This type of "black swan" exception is for errors where we aren't going to invest much effort
+ * in handling, unless it starts becoming thrown regularly.
+ *
+ * @author Owen Feehan
  */
 public class BeanStrangeException extends AnchorFriendlyRuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public BeanStrangeException(String message) {
-		super(message);
-	}
-	
-	public BeanStrangeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public BeanStrangeException(String message) {
+        super(message);
+    }
+
+    public BeanStrangeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

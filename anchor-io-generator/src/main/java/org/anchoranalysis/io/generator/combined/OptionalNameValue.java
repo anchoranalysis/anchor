@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.generator.combined;
-
-import java.util.Optional;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,32 +23,34 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.combined;
+
+import java.util.Optional;
 
 /**
- * 
  * A simple container expressing a name-value pair
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <V> value-type
  */
 public class OptionalNameValue<V> {
 
-	private Optional<String> name;
-	
-	private V value;
+    private Optional<String> name;
 
-	public OptionalNameValue(Optional<String> name, V value) {
-		super();
-		this.name = name;
-		this.value = value;
-	}
+    private V value;
 
-	public Optional<String> getName() {
-		return name;
-	}
+    public OptionalNameValue(Optional<String> name, V value) {
+        super();
+        this.name = name;
+        this.value = value;
+    }
 
-	public V getValue() {
-		return value;
-	}
+    public Optional<String> getName() {
+        return name;
+    }
+
+    public V getValue() {
+        return value;
+    }
 }

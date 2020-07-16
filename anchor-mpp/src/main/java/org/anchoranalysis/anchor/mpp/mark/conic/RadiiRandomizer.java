@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark.conic;
-
-import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
-
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,35 +23,36 @@ import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark.conic;
 
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
  * Utility functions for generating random radii for {@link MarkConic}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class RadiiRandomizer {
 
-	private RadiiRandomizer() {}
-	
-	public static Point3d randomizeRadii(
-		Bound bound,
-		RandomNumberGenerator randomNumberGenerator,
-		ImageResolution sr,
-		boolean do3D
-	) {
-		return new Point3d(
-			randomizeRadius(bound,randomNumberGenerator,sr),
-			randomizeRadius(bound,randomNumberGenerator,sr),
-			do3D ? randomizeRadius(bound,randomNumberGenerator,sr) : 0
-		);
-	}
-	
-	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator randomNumberGenerator, ImageResolution sr ) {
-		return radiusBound.resolve(sr, true).randOpen( randomNumberGenerator );
-	}
+    private RadiiRandomizer() {}
+
+    public static Point3d randomizeRadii(
+            Bound bound,
+            RandomNumberGenerator randomNumberGenerator,
+            ImageResolution sr,
+            boolean do3D) {
+        return new Point3d(
+                randomizeRadius(bound, randomNumberGenerator, sr),
+                randomizeRadius(bound, randomNumberGenerator, sr),
+                do3D ? randomizeRadius(bound, randomNumberGenerator, sr) : 0);
+    }
+
+    private static double randomizeRadius(
+            Bound radiusBound, RandomNumberGenerator randomNumberGenerator, ImageResolution sr) {
+        return radiusBound.resolve(sr, true).randOpen(randomNumberGenerator);
+    }
 }

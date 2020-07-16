@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.points.fitter;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.anchor.mpp.bean.points.fitter;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.points.fitter;
 
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.bean.points.PointsBean;
 import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -39,7 +37,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 // Fits an ellipsoid to a set of points
 @GroupingRoot
 public abstract class PointsFitter extends PointsBean<PointsFitter> implements CompatibleWithMark {
-	
-	public abstract void fit( List<Point3f> points, Mark mark, ImageDimensions dimensions ) throws PointsFitterException, InsufficientPointsException;
-	
+
+    public abstract void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
+            throws PointsFitterException, InsufficientPointsException;
 }

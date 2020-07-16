@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.property.change;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,30 @@ package org.anchoranalysis.core.property.change;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.core.property.change;
 
 import java.util.EventObject;
 
 public class PropertyValueChangeEvent<T> extends EventObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2465477270335155011L;
-	private transient T value;
-	private boolean adjusting;
-	
-	public PropertyValueChangeEvent(Object source, T value, boolean adjusting) {
-		super(source);
-		this.value = value;
-		this.adjusting = adjusting;
-	}
-	
-	public T getValue() {
-		return value;
-	}
-	
-	public boolean getAdjusting() {
-		return this.adjusting;
-	}
+    /** */
+    private static final long serialVersionUID = -2465477270335155011L;
+
+    private transient T value;
+    private boolean adjusting;
+
+    public PropertyValueChangeEvent(Object source, T value, boolean adjusting) {
+        super(source);
+        this.value = value;
+        this.adjusting = adjusting;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public boolean getAdjusting() {
+        return this.adjusting;
+    }
 }

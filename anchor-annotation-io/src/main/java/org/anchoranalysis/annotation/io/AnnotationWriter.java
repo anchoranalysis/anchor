@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,21 @@ package org.anchoranalysis.annotation.io;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io;
 
 import java.io.IOException;
 import java.nio.file.Path;
-
 import org.anchoranalysis.annotation.Annotation;
 
 public interface AnnotationWriter<T extends Annotation> {
 
-	/**
-	 * Saves the annotation to the file-system
-	 * 
-	 * @param annotation the annotation to save
-	 * @param path the path to write to (or a slightly-modified path is derived from this)
-	 * @throws IOException
-	 */
-	void write( T annotation, Path path ) throws IOException;
+    /**
+     * Saves the annotation to the file-system
+     *
+     * @param annotation the annotation to save
+     * @param path the path to write to (or a slightly-modified path is derived from this)
+     * @throws IOException
+     */
+    void write(T annotation, Path path) throws IOException;
 }

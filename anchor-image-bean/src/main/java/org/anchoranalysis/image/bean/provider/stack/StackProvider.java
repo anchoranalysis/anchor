@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider.stack;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider.stack;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider.stack;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
@@ -32,13 +32,12 @@ import org.anchoranalysis.image.bean.provider.BeanImgStackProvider;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class StackProvider extends BeanImgStackProvider<StackProvider,Stack> {
+public abstract class StackProvider extends BeanImgStackProvider<StackProvider, Stack> {
 
-	@Override
-	public abstract Stack create() throws CreateException;
-	
-	public Stack createStack() throws CreateException {
-		return create();
-	}
+    @Override
+    public abstract Stack create() throws CreateException;
 
+    public Stack createStack() throws CreateException {
+        return create();
+    }
 }

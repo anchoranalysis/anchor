@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.calc.results;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,40 @@ package org.anchoranalysis.feature.calc.results;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.calc.results;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class ResultsVectorCollection implements Iterable<ResultsVector> {
-	
-	private List<ResultsVector> list = new ArrayList<>();
-	
-	public ResultsVectorCollection() {
-		super();
-	}
-	
-	public ResultsVectorCollection( ResultsVector rv ) {
-		super();
-		list.add( rv );
-	}
 
+    private List<ResultsVector> list = new ArrayList<>();
 
-	public boolean add(ResultsVector e) {
-		return list.add(e);
-	}
+    public ResultsVectorCollection() {
+        super();
+    }
 
-	public int size() {
-		return list.size();
-	}
-	
-	public ResultsVector get( int index ) {
-		return list.get(index);
-	}
+    public ResultsVectorCollection(ResultsVector rv) {
+        super();
+        list.add(rv);
+    }
 
-	@Override
-	public Iterator<ResultsVector> iterator() {
-		return list.iterator();
-	}
-		
+    public boolean add(ResultsVector e) {
+        return list.add(e);
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    public ResultsVector get(int index) {
+        return list.get(index);
+    }
+
+    @Override
+    public Iterator<ResultsVector> iterator() {
+        return list.iterator();
+    }
 }

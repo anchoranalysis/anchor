@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.color.generator;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.io.bean.color.generator;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.color.generator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
@@ -33,32 +32,29 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public class ShuffleColorSetGenerator extends ColorSetGenerator {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ColorSetGenerator source = null;
-	// END BEAN PROPERTIES
-	
-	public ShuffleColorSetGenerator() {
-		
-	}
-	
-	public ShuffleColorSetGenerator(ColorSetGenerator source) {
-		super();
-		this.source = source;
-	}
-	
-	@Override
-	public ColorList generateColors(int numberColors) throws OperationFailedException {
-		ColorList lst = source.generateColors(numberColors);
-		lst.shuffle();
-		return lst;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private ColorSetGenerator source = null;
+    // END BEAN PROPERTIES
 
-	public ColorSetGenerator getSource() {
-		return source;
-	}
+    public ShuffleColorSetGenerator() {}
 
-	public void setSource(ColorSetGenerator source) {
-		this.source = source;
-	}
+    public ShuffleColorSetGenerator(ColorSetGenerator source) {
+        super();
+        this.source = source;
+    }
+
+    @Override
+    public ColorList generateColors(int numberColors) throws OperationFailedException {
+        ColorList lst = source.generateColors(numberColors);
+        lst.shuffle();
+        return lst;
+    }
+
+    public ColorSetGenerator getSource() {
+        return source;
+    }
+
+    public void setSource(ColorSetGenerator source) {
+        this.source = source;
+    }
 }

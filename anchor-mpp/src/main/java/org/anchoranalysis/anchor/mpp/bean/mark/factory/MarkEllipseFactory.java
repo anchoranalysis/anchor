@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.mark.factory;
-
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,31 +23,31 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.mark.factory;
 
-
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class MarkEllipseFactory extends MarkFactory {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private double shellRad = 0.1;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Mark create() {
-		MarkEllipse mark = new MarkEllipse();
-		mark.setShellRad(shellRad);
-		return mark;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private double shellRad = 0.1;
+    // END BEAN PROPERTIES
 
-	public double getShellRad() {
-		return shellRad;
-	}
+    @Override
+    public Mark create() {
+        MarkEllipse mark = new MarkEllipse();
+        mark.setShellRad(shellRad);
+        return mark;
+    }
 
-	public void setShellRad(double shellRad) {
-		this.shellRad = shellRad;
-	}
+    public double getShellRad() {
+        return shellRad;
+    }
 
-	
+    public void setShellRad(double shellRad) {
+        this.shellRad = shellRad;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,26 +37,24 @@ import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 import org.anchoranalysis.image.stack.Stack;
 
 @GroupingRoot
-public abstract class BinaryChnlProvider extends BeanImgStackProvider<BinaryChnlProvider,Mask> {
+public abstract class BinaryChnlProvider extends BeanImgStackProvider<BinaryChnlProvider, Mask> {
 
-	@Override
-	public abstract Mask create() throws CreateException;
-	
-	public Stack createStack() throws CreateException {
-		Channel chnl = createChnlFromBinary( create(), BinaryValues.getDefault() );
-		return new Stack( chnl ); 
-	}
+    @Override
+    public abstract Mask create() throws CreateException;
 
-	private static Channel createChnlFromBinary( Mask binaryImgChnl, BinaryValues bvOut ) {
-		ObjectCollection objects = expressAsObjects(binaryImgChnl);
-		return BinaryChnlFromObjects.createFromObjects(
-			objects,
-			binaryImgChnl.getDimensions(),
-			bvOut
-		).getChannel();
-	}
-		
-	private static ObjectCollection expressAsObjects( Mask binaryImgChnl ) {
-		return ObjectCollectionFactory.from(binaryImgChnl);
-	}
+    public Stack createStack() throws CreateException {
+        Channel chnl = createChnlFromBinary(create(), BinaryValues.getDefault());
+        return new Stack(chnl);
+    }
+
+    private static Channel createChnlFromBinary(Mask binaryImgChnl, BinaryValues bvOut) {
+        ObjectCollection objects = expressAsObjects(binaryImgChnl);
+        return BinaryChnlFromObjects.createFromObjects(
+                        objects, binaryImgChnl.getDimensions(), bvOut)
+                .getChannel();
+    }
+
+    private static ObjectCollection expressAsObjects(Mask binaryImgChnl) {
+        return ObjectCollectionFactory.from(binaryImgChnl);
+    }
 }

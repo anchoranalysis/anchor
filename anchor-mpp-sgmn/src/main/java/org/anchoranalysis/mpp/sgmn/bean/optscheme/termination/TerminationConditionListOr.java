@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,66 +23,64 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 
 // An OR list of termination conditions
 public class TerminationConditionListOr extends TerminationCondition {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<TerminationCondition> list;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private List<TerminationCondition> list;
+    // END BEAN PROPERTIES
 
-	public TerminationConditionListOr() {
-		list = new ArrayList<>();
-	}
-	
-	public TerminationConditionListOr( TerminationCondition cond1, TerminationCondition cond2 ) {
-		this();
-		list.add(cond1);
-		list.add(cond2);
-	}
-	
-	public boolean add( TerminationCondition tc ) {
-		return list.add(tc);
-	}
+    public TerminationConditionListOr() {
+        list = new ArrayList<>();
+    }
 
-	public int size() {
-		return list.size();
-	}
-	
-	@Override
-	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
-		
-		for (TerminationCondition tc : this.list) {
-			if (!tc.continueIterations(crntIter, score, size, logger)) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	
-	@Override
-	public void init() {
-		
-		for (TerminationCondition tc : this.list) {
-			tc.init();
-		}
-	}
-	
-	public List<TerminationCondition> getList() {
-		return list;
-	}
+    public TerminationConditionListOr(TerminationCondition cond1, TerminationCondition cond2) {
+        this();
+        list.add(cond1);
+        list.add(cond2);
+    }
 
-	public void setList(List<TerminationCondition> list) {
-		this.list = list;
-	}
+    public boolean add(TerminationCondition tc) {
+        return list.add(tc);
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
+
+        for (TerminationCondition tc : this.list) {
+            if (!tc.continueIterations(crntIter, score, size, logger)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void init() {
+
+        for (TerminationCondition tc : this.list) {
+            tc.init();
+        }
+    }
+
+    public List<TerminationCondition> getList() {
+        return list;
+    }
+
+    public void setList(List<TerminationCondition> list) {
+        this.list = list;
+    }
 }

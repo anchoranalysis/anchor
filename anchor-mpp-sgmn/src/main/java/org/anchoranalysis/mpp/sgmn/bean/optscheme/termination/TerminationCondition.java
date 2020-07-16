@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * A test on whether to terminate the optimization or not
- * 
+ *
  * @author Owen Feehan
  */
 public abstract class TerminationCondition extends AnchorBean<TerminationCondition> {
 
-	public abstract boolean continueIterations( int crntIter, double score, int size, MessageLogger logger );
-	
-	public void init() {
-		
-	}
+    public abstract boolean continueIterations(
+            int crntIter, double score, int size, MessageLogger logger);
+
+    public void init() {}
 }

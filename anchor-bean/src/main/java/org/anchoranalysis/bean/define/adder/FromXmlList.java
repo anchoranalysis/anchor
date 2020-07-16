@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.define.adder;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.bean.define.adder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.define.adder;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -38,84 +38,69 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 
 /**
  * Adds a list of Named-Items define in a XML file in the current directory
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FromXmlList extends DefineAdderBean {
 
-	// START BEAN PROPERTIES
-	/**
-	 * The name of the file in the current working directory WITHOUT THE .xml EXTENSION
-	 */
-	@BeanField
-	private String name;
-	
-	/**
-	 * If TRUE, a prefix is prepended to the name of each added bean. The prefix is: the name followed by a full-stop.
-	 */
-	@BeanField
-	private boolean prefix = false;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public void addTo(Define define) throws BeanXmlException {
-		try {
-			List<NamedBean<?>> beans = loadList();
-			
-			if (prefix) {
-				addPrefix( beans, name + "." );
-			}
-			
-			DefineAdderUtilities.addBeansFromList(
-				define,
-				beans
-			);
-		} catch (BeanXmlException e) {
-			// We embed any XML exception in the file-name from where it originated
-			throw new BeanXmlException(
-				new LocalisedBeanException(
-					resolvedPath().toString(),
-					e
-				)
-			);
-		}			
-	}
-	
-	private static void addPrefix( List<NamedBean<?>> beans, String prefix  ) {
-		for( NamedBean<?> nb : beans ) {
-			nb.setName( prefix + nb.getName() );
-		}
-	}
-	
-	private Path resolvedPath() {
-		return BeanPathUtilities.pathRelativeToBean(
-			this,
-			nameWithExtension()
-		);
-	}
-		
-	private List<NamedBean<?>> loadList() throws BeanXmlException {
-		return BeanXmlLoader.loadBean(resolvedPath());
-	}
-	
-	public String getName() {
-		return name;
-	}
+    // START BEAN PROPERTIES
+    /** The name of the file in the current working directory WITHOUT THE .xml EXTENSION */
+    @BeanField private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * If TRUE, a prefix is prepended to the name of each added bean. The prefix is: the name
+     * followed by a full-stop.
+     */
+    @BeanField private boolean prefix = false;
+    // END BEAN PROPERTIES
 
-	public boolean isPrefix() {
-		return prefix;
-	}
+    @Override
+    public void addTo(Define define) throws BeanXmlException {
+        try {
+            List<NamedBean<?>> beans = loadList();
 
-	public void setPrefix(boolean prefix) {
-		this.prefix = prefix;
-	}
-	
-	private String nameWithExtension() {
-		return name + ".xml";
-	}
+            if (prefix) {
+                addPrefix(beans, name + ".");
+            }
+
+            DefineAdderUtilities.addBeansFromList(define, beans);
+        } catch (BeanXmlException e) {
+            // We embed any XML exception in the file-name from where it originated
+            throw new BeanXmlException(new LocalisedBeanException(resolvedPath().toString(), e));
+        }
+    }
+
+    private static void addPrefix(List<NamedBean<?>> beans, String prefix) {
+        for (NamedBean<?> nb : beans) {
+            nb.setName(prefix + nb.getName());
+        }
+    }
+
+    private Path resolvedPath() {
+        return BeanPathUtilities.pathRelativeToBean(this, nameWithExtension());
+    }
+
+    private List<NamedBean<?>> loadList() throws BeanXmlException {
+        return BeanXmlLoader.loadBean(resolvedPath());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(boolean prefix) {
+        this.prefix = prefix;
+    }
+
+    private String nameWithExtension() {
+        return name + ".xml";
+    }
 }

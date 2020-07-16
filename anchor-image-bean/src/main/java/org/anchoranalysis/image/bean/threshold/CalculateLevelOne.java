@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.threshold;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +23,24 @@ package org.anchoranalysis.image.bean.threshold;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.histogram.Histogram;
+/* (C)2020 */
+package org.anchoranalysis.image.bean.threshold;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.histogram.Histogram;
 
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateLevelOne extends CalculateLevel {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private CalculateLevel calculateLevel;
-	// END BEAN PROPERTIES
-	
-	protected int calculateLevelIncoming(Histogram hist) throws OperationFailedException {
-		return calculateLevel.calculateLevel(hist);
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+    // END BEAN PROPERTIES
+
+    protected int calculateLevelIncoming(Histogram hist) throws OperationFailedException {
+        return calculateLevel.calculateLevel(hist);
+    }
 }

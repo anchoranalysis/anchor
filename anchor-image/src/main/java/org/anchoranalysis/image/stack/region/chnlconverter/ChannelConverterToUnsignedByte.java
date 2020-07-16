@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteNoScaling;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -37,16 +35,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 // Converts from other data types to Byte (unsigned 8-bit) without scaling any other data types
 public class ChannelConverterToUnsignedByte extends ChannelConverter<ByteBuffer> {
 
-	public ChannelConverterToUnsignedByte() {
-		this( new VoxelBoxConverterToByteNoScaling() );
-	}
-	
-	public ChannelConverterToUnsignedByte( VoxelBoxConverter<ByteBuffer> voxelBoxConverter ) {
-		super(
-			VoxelDataTypeUnsignedByte.INSTANCE,
-			voxelBoxConverter,
-			VoxelBoxFactory.getByte()
-		);
-	}
+    public ChannelConverterToUnsignedByte() {
+        this(new VoxelBoxConverterToByteNoScaling());
+    }
 
+    public ChannelConverterToUnsignedByte(VoxelBoxConverter<ByteBuffer> voxelBoxConverter) {
+        super(VoxelDataTypeUnsignedByte.INSTANCE, voxelBoxConverter, VoxelBoxFactory.getByte());
+    }
 }

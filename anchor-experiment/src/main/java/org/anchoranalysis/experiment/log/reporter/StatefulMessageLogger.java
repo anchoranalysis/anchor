@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.log.reporter;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +23,15 @@ package org.anchoranalysis.experiment.log.reporter;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.log.reporter;
 
 import org.anchoranalysis.core.log.MessageLogger;
 
-/** 
- * A {@link MessageLogger} that can be started and stopped, and is aware this state.
- **/
+/** A {@link MessageLogger} that can be started and stopped, and is aware this state. */
 public interface StatefulMessageLogger extends MessageLogger {
-	
-	void start();
-	
-	void close(boolean successful);
+
+    void start();
+
+    void close(boolean successful);
 }

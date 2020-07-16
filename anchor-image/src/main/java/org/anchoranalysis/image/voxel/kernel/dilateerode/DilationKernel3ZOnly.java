@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.kernel.dilateerode;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,62 +23,58 @@ package org.anchoranalysis.image.voxel.kernel.dilateerode;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.kernel.dilateerode;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Erosion with a 3x3 or 3x3x3 kernel
 public final class DilationKernel3ZOnly extends BinaryKernelMorph3 {
-	
-	
-	
-	// Constructor
-	public DilationKernel3ZOnly(BinaryValuesByte bv, boolean outsideAtThreshold) {
-		super(bv, outsideAtThreshold);
-	}
-	
-	@Override
-	public void init(VoxelBox<ByteBuffer> in) {
-		// NOTHING TO DO
-	}
 
-	@Override
-	public boolean accptPos( int ind, Point3i point ) {
+    // Constructor
+    public DilationKernel3ZOnly(BinaryValuesByte bv, boolean outsideAtThreshold) {
+        super(bv, outsideAtThreshold);
+    }
 
-		ByteBuffer inArrZ = inSlices.getLocal(0);
-		ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
-		ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
-		
-		if (bv.isOn(inArrZ.get(ind))) {
-			return true;
-		}
-			
-		if (inArrZLess1!=null) {
-			if (bv.isOn(inArrZLess1.get(ind))) {
-				return true;
-			}
-		} else {
-			if (outsideAtThreshold) {
-				return true;
-			}
-		}
-		
-		if (inArrZPlus1!=null) {
-			if (bv.isOn(inArrZPlus1.get(ind))) {
-				return true;
-			}
-		} else {
-			if (outsideAtThreshold) {
-				return true;
-			}
-		}
+    @Override
+    public void init(VoxelBox<ByteBuffer> in) {
+        // NOTHING TO DO
+    }
 
-		
-		return false;
-	}
+    @Override
+    public boolean accptPos(int ind, Point3i point) {
 
+        ByteBuffer inArrZ = inSlices.getLocal(0);
+        ByteBuffer inArrZLess1 = inSlices.getLocal(-1);
+        ByteBuffer inArrZPlus1 = inSlices.getLocal(+1);
+
+        if (bv.isOn(inArrZ.get(ind))) {
+            return true;
+        }
+
+        if (inArrZLess1 != null) {
+            if (bv.isOn(inArrZLess1.get(ind))) {
+                return true;
+            }
+        } else {
+            if (outsideAtThreshold) {
+                return true;
+            }
+        }
+
+        if (inArrZPlus1 != null) {
+            if (bv.isOn(inArrZPlus1.get(ind))) {
+                return true;
+            }
+        } else {
+            if (outsideAtThreshold) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

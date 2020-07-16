@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.event;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.event;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,29 +27,26 @@ package org.anchoranalysis.core.event;
  * #L%
  */
 
-
 import java.util.EventObject;
-
 import javax.swing.event.EventListenerList;
 
-
 // Framework class for converting EventListener events into RoutableEvents
-public abstract class RoutableListenerAdapter<T extends EventObject> implements IRoutableReceivable<T> {
+public abstract class RoutableListenerAdapter<T extends EventObject>
+        implements IRoutableReceivable<T> {
 
-	private EventListenerList list = new EventListenerList();
-	
-	@Override
-	public void addRoutableListener(RoutableListener<T> l) {
-		list.add(RoutableListener.class, l);
-	}
+    private EventListenerList list = new EventListenerList();
 
-	@Override
-	public void removeRoutableListener(RoutableListener<T> l) {
-		list.remove(RoutableListener.class, l);
-	}
+    @Override
+    public void addRoutableListener(RoutableListener<T> l) {
+        list.add(RoutableListener.class, l);
+    }
 
-	protected EventListenerList getList() {
-		return list;
-	}
+    @Override
+    public void removeRoutableListener(RoutableListener<T> l) {
+        list.remove(RoutableListener.class, l);
+    }
 
+    protected EventListenerList getList() {
+        return list;
+    }
 }

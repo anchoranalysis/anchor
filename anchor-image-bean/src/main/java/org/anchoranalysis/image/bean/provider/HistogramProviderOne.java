@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -32,24 +32,23 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class HistogramProviderOne extends HistogramProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private HistogramProvider histogramProvider;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Histogram create() throws CreateException {
-		Histogram hist = histogramProvider.create();
-		return createFromHistogram(hist);
-	}
-	
-	protected abstract Histogram createFromHistogram( Histogram hist ) throws CreateException;
-	
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private HistogramProvider histogramProvider;
+    // END BEAN PROPERTIES
 
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
-	}
+    @Override
+    public Histogram create() throws CreateException {
+        Histogram hist = histogramProvider.create();
+        return createFromHistogram(hist);
+    }
+
+    protected abstract Histogram createFromHistogram(Histogram hist) throws CreateException;
+
+    public HistogramProvider getHistogramProvider() {
+        return histogramProvider;
+    }
+
+    public void setHistogramProvider(HistogramProvider histogramProvider) {
+        this.histogramProvider = histogramProvider;
+    }
 }

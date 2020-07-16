@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.file.matcher;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,14 @@ package org.anchoranalysis.io.bean.file.matcher;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.file.matcher;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
 interface WalkDirectory {
-	
-	public void walkDirectory( Path dir, List<File> listOut );
+
+    public void walkDirectory(Path dir, List<File> listOut);
 }

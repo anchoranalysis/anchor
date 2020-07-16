@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.bean;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -33,59 +32,56 @@ import java.util.TreeSet;
 
 /**
  * A set of strings.
- * 
- * We use TreeSet to maintain an ordering that is consistent and meaningful for the iterator().
- * 
- * An example:
- * 
- * <pre>
- * {@code
- *    <datasets config-class="org.anchoranalysis.bean.StringSet" config-factory="stringSet">
- *		<item>first_dataset</item>
- *		<item>second_dataset</item>
- *		<item>some_other_dataset</item>
- *	  </datasets>
- * }
- * </pre>
- * 
- * @author Owen Feehan
  *
+ * <p>We use TreeSet to maintain an ordering that is consistent and meaningful for the iterator().
+ *
+ * <p>An example:
+ *
+ * <pre>{@code
+ *    <datasets config-class="org.anchoranalysis.bean.StringSet" config-factory="stringSet">
+ * 	<item>first_dataset</item>
+ * 	<item>second_dataset</item>
+ * 	<item>some_other_dataset</item>
+ *   </datasets>
+ * }</pre>
+ *
+ * @author Owen Feehan
  */
 public class StringSet extends AnchorBean<StringSet> implements StringBeanCollection {
 
-	private Set<String> set = new TreeSet<>();
+    private Set<String> set = new TreeSet<>();
 
-	@Override
-	public void add( String s ) {
-		set.add(s);
-	}
-	
-	@Override
-	public boolean contains(String s) {
-		return set.contains(s);
-	}
-	
-	public Set<String> set() {
-		return set;
-	}
+    @Override
+    public void add(String s) {
+        set.add(s);
+    }
 
-	@Override
-	public Iterator<String> iterator() {
-		return set.iterator();
-	}
+    @Override
+    public boolean contains(String s) {
+        return set.contains(s);
+    }
 
-	// 
-	
-	/**
-	 * Duplicate the bean
-	 * 
-	 * NOTE: We need to specifically-implement it as the GeneralBean functionality
-	 *  won't work with this implementation, as it uses non-default initialization (using a config-factory)
-	 */
-	@Override
-	public StringSet duplicateBean() {
-		StringSet out = new StringSet();
-		out.set.addAll(set);
-		return out;
-	}
+    public Set<String> set() {
+        return set;
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return set.iterator();
+    }
+
+    //
+
+    /**
+     * Duplicate the bean
+     *
+     * <p>NOTE: We need to specifically-implement it as the GeneralBean functionality won't work
+     * with this implementation, as it uses non-default initialization (using a config-factory)
+     */
+    @Override
+    public StringSet duplicateBean() {
+        StringSet out = new StringSet();
+        out.set.addAll(set);
+        return out;
+    }
 }

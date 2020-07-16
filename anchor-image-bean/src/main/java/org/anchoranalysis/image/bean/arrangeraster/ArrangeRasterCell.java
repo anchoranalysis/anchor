@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.bean.arrangeraster;
-
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,41 +23,45 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.arrangeraster;
 
-
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 
 public class ArrangeRasterCell extends AnchorBean<ArrangeRasterCell> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ArrangeRaster arrangeRaster;
-	
-	@BeanField @NonNegative
-	private int row;
-	
-	@BeanField @NonNegative
-	private int col;
-	// END BEAN PROPERTIES
-	
-	public ArrangeRaster getArrangeRaster() {
-		return arrangeRaster;
-	}
-	public void setArrangeRaster(ArrangeRaster arrangeRaster) {
-		this.arrangeRaster = arrangeRaster;
-	}
-	public int getRow() {
-		return row;
-	}
-	public void setRow(int row) {
-		this.row = row;
-	}
-	public int getCol() {
-		return col;
-	}
-	public void setCol(int col) {
-		this.col = col;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private ArrangeRaster arrangeRaster;
+
+    @BeanField @NonNegative private int row;
+
+    @BeanField @NonNegative private int col;
+    // END BEAN PROPERTIES
+
+    public ArrangeRaster getArrangeRaster() {
+        return arrangeRaster;
+    }
+
+    public void setArrangeRaster(ArrangeRaster arrangeRaster) {
+        this.arrangeRaster = arrangeRaster;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
 }

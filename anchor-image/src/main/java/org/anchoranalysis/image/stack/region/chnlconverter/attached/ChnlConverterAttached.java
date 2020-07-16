@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.attached;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +23,28 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter.attached;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
 /**
- * A ChnlConverter that has been permanently attached to a particular object (to give more information for the conversion)
- * 
- * @author Owen Feehan
+ * A ChnlConverter that has been permanently attached to a particular object (to give more
+ * information for the conversion)
  *
+ * @author Owen Feehan
  * @param <S> attachment-type
  * @param <T> destination-type
  */
-public interface ChnlConverterAttached<S,T extends Buffer> {
+public interface ChnlConverterAttached<S, T extends Buffer> {
 
-	void attachObject( S obj ) throws OperationFailedException;
+    void attachObject(S obj) throws OperationFailedException;
 
-	Channel convert(Channel chnl, ConversionPolicy changeExisting);
-	
-	VoxelBoxConverter<T> getVoxelBoxConverter();
+    Channel convert(Channel chnl, ConversionPolicy changeExisting);
+
+    VoxelBoxConverter<T> getVoxelBoxConverter();
 }

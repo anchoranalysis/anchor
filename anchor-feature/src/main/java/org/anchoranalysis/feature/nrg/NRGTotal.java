@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.nrg;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,44 +23,42 @@ package org.anchoranalysis.feature.nrg;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.nrg;
 
 import java.io.Serializable;
 
 public class NRGTotal implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -595099053761257083L;
-	
-	double total;
+    /** */
+    private static final long serialVersionUID = -595099053761257083L;
 
-	public NRGTotal() {
-		total = 0;
-	}
-	
-	public NRGTotal( double total ) {
-		this.total = total;
-	}
-	
-	public NRGTotal deepCopy() {
-		NRGTotal out = new NRGTotal();
-		out.total = total;
-		return out;
-	}
-	
-	public final void add( double val ) {
-		total += val;
-	}
-	
-	public final double getTotal() {
-		return total;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("%8.3f", this.total );
-	}
+    double total;
 
+    public NRGTotal() {
+        total = 0;
+    }
+
+    public NRGTotal(double total) {
+        this.total = total;
+    }
+
+    public NRGTotal deepCopy() {
+        NRGTotal out = new NRGTotal();
+        out.total = total;
+        return out;
+    }
+
+    public final void add(double val) {
+        total += val;
+    }
+
+    public final double getTotal() {
+        return total;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%8.3f", this.total);
+    }
 }

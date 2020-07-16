@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.bean.unitvalue.area;
-
-import org.anchoranalysis.bean.annotation.BeanField;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,28 +23,30 @@ import org.anchoranalysis.bean.annotation.BeanField;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.unitvalue.area;
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 
 public abstract class UnitValueArea extends UnitValueAreaOrVolume {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
 
-	public UnitValueArea() {}
-	
-	public UnitValueArea(double value) {
-		super();
-		this.value = value;
-	}
-	
-	public final double getValue() {
-		return value;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private double value;
+    // END BEAN PROPERTIES
 
-	public final void setValue(double value) {
-		this.value = value;
-	}
+    public UnitValueArea() {}
+
+    public UnitValueArea(double value) {
+        super();
+        this.value = value;
+    }
+
+    public final double getValue() {
+        return value;
+    }
+
+    public final void setValue(double value) {
+        this.value = value;
+    }
 }

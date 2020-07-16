@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +23,17 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergest
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
 
 class DiscardMergeStrategy extends MergeStrategy {
 
-	public DiscardMergeStrategy(int cost) {
-		super(cost);
-	}
+    public DiscardMergeStrategy(int cost) {
+        super(cost);
+    }
 
-	@Override
-	public void applyStrategy(MergeCandidate candidate) {
-		// DO NOTHING
-	}
-
+    @Override
+    public void applyStrategy(MergeCandidate candidate) {
+        // DO NOTHING
+    }
 }

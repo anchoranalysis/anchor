@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.object;
-
-import lombok.Value;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,23 +23,26 @@ import lombok.Value;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.object;
+
+import lombok.Value;
 
 /**
  * An object with associated matches.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @Value
 public final class MatchedObject {
-	
-	/** The source object (which is matched against others) */
-	private final ObjectMask source;
-	
-	/** The matches associated with the source-object */
-	private final ObjectCollection matches;
-	
-	public int numMatches() {
-		return this.matches.size();
-	}
+
+    /** The source object (which is matched against others) */
+    private final ObjectMask source;
+
+    /** The matches associated with the source-object */
+    private final ObjectCollection matches;
+
+    public int numMatches() {
+        return this.matches.size();
+    }
 }

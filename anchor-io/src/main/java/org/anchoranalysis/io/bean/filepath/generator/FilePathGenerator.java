@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.generator;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +23,15 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.filepath.generator;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class FilePathGenerator extends AnchorBean<FilePathGenerator> {
 
-	// Give a string that is prefixed to all output files, to give the output file path
-	public abstract Path outFilePath( Path pathIn, boolean debugMode ) throws AnchorIOException;
+    // Give a string that is prefixed to all output files, to give the output file path
+    public abstract Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException;
 }

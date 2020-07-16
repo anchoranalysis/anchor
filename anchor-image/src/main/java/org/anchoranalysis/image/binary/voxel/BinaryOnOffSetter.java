@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.binary.voxel;
-
-import org.anchoranalysis.core.geometry.Point3i;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,31 +23,34 @@ import org.anchoranalysis.core.geometry.Point3i;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.binary.voxel;
 
+import org.anchoranalysis.core.geometry.Point3i;
 
 public interface BinaryOnOffSetter {
-	
-	boolean isOn( int x, int y, int z );
-	
-	boolean isOff( int x, int y, int z );
-	
-	void setOn( int x, int y, int z );
-	
-	void setOff( int x, int y, int z );
-	
-	default void setOn(Point3i point) {
-		setOn( point.getX(), point.getY(), point.getZ() );
-	}
-	
-	default void setOff(Point3i point) {
-		setOff( point.getX(), point.getY(), point.getZ() );
-	}
-	
-	default boolean isOn(Point3i point) {
-		return isOn( point.getX(), point.getY(), point.getZ() );
-	}
-	
-	default boolean isOff(Point3i point) {
-		return isOff( point.getX(), point.getY(), point.getZ() );
-	}
+
+    boolean isOn(int x, int y, int z);
+
+    boolean isOff(int x, int y, int z);
+
+    void setOn(int x, int y, int z);
+
+    void setOff(int x, int y, int z);
+
+    default void setOn(Point3i point) {
+        setOn(point.getX(), point.getY(), point.getZ());
+    }
+
+    default void setOff(Point3i point) {
+        setOff(point.getX(), point.getY(), point.getZ());
+    }
+
+    default boolean isOn(Point3i point) {
+        return isOn(point.getX(), point.getY(), point.getZ());
+    }
+
+    default boolean isOff(Point3i point) {
+        return isOff(point.getX(), point.getY(), point.getZ());
+    }
 }

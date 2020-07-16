@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pixelpart;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,45 +23,42 @@ package org.anchoranalysis.anchor.mpp.pixelpart;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pixelpart;
 
 import java.util.ArrayList;
-
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 
-
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> part-type
  */
 public class IndexByChnl<T> {
-	
-	private ArrayList<IndexByRegion<T>> delegate = new ArrayList<>();
 
-	public boolean add(IndexByRegion<T> e) {
-		return delegate.add(e);
-	}
-	
-	public void init( PixelPartFactory<T> factory, int numChnl, int numRegions, int numSlices ) {
-		
-		for (int i=0; i<numChnl; i++) {
-			delegate.add( new IndexByRegion<>(factory,numRegions,numSlices) );
-		}
-	}
+    private ArrayList<IndexByRegion<T>> delegate = new ArrayList<>();
 
-	public IndexByRegion<T> get(int index) {
-		return delegate.get(index);
-	}
+    public boolean add(IndexByRegion<T> e) {
+        return delegate.add(e);
+    }
 
-	public int size() {
-		return delegate.size();
-	}
-	
-	public void cleanUp( PixelPartFactory<T> factory ) {
-		for (int i=0; i<delegate.size(); i++) {
-			delegate.get(i).cleanUp(factory);
-		}
-	}
+    public void init(PixelPartFactory<T> factory, int numChnl, int numRegions, int numSlices) {
+
+        for (int i = 0; i < numChnl; i++) {
+            delegate.add(new IndexByRegion<>(factory, numRegions, numSlices));
+        }
+    }
+
+    public IndexByRegion<T> get(int index) {
+        return delegate.get(index);
+    }
+
+    public int size() {
+        return delegate.size();
+    }
+
+    public void cleanUp(PixelPartFactory<T> factory) {
+        for (int i = 0; i < delegate.size(); i++) {
+            delegate.get(i).cleanUp(factory);
+        }
+    }
 }

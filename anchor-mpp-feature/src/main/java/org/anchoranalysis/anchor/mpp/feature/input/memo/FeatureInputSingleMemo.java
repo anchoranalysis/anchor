@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.input.memo;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +23,35 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
 import java.util.Optional;
-
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class FeatureInputSingleMemo extends FeatureInputNRG {
 
-	private VoxelizedMarkMemo pxlPartMemo;
-	
-	public FeatureInputSingleMemo(VoxelizedMarkMemo pxlPartMemo, NRGStackWithParams nrgStack) {
-		this(
-			pxlPartMemo,
-			Optional.of(nrgStack)
-		);
-	}
-	
-	public FeatureInputSingleMemo(
-		VoxelizedMarkMemo pxlPartMemo,
-		Optional<NRGStackWithParams> nrgStack
-	) {
-		super(nrgStack);
-		this.pxlPartMemo = pxlPartMemo;
-	}
+    private VoxelizedMarkMemo pxlPartMemo;
 
-	public VoxelizedMarkMemo getPxlPartMemo() {
-		return pxlPartMemo;
-	}
+    public FeatureInputSingleMemo(VoxelizedMarkMemo pxlPartMemo, NRGStackWithParams nrgStack) {
+        this(pxlPartMemo, Optional.of(nrgStack));
+    }
 
-	public void setPxlPartMemo(VoxelizedMarkMemo pxlPartMemo) {
-		this.pxlPartMemo = pxlPartMemo;
-	}
+    public FeatureInputSingleMemo(
+            VoxelizedMarkMemo pxlPartMemo, Optional<NRGStackWithParams> nrgStack) {
+        super(nrgStack);
+        this.pxlPartMemo = pxlPartMemo;
+    }
+
+    public VoxelizedMarkMemo getPxlPartMemo() {
+        return pxlPartMemo;
+    }
+
+    public void setPxlPartMemo(VoxelizedMarkMemo pxlPartMemo) {
+        this.pxlPartMemo = pxlPartMemo;
+    }
 }

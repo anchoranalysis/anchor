@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.file;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,21 @@ package org.anchoranalysis.io.manifest.file;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.file;
 
 import java.io.Serializable;
-
-import org.anchoranalysis.io.manifest.ManifestDescription;
-
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.io.manifest.ManifestDescription;
 
-@Value @AllArgsConstructor 
+@Value
+@AllArgsConstructor
 public class FileType implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1822279428811663437L;
 
-	private ManifestDescription manifestDescription;
-	private String fileExtension;
+    /** */
+    private static final long serialVersionUID = 1822279428811663437L;
+
+    private ManifestDescription manifestDescription;
+    private String fileExtension;
 }

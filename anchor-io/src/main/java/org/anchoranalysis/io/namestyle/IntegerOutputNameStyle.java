@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.namestyle;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,48 +23,44 @@ package org.anchoranalysis.io.namestyle;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.namestyle;
 
 public abstract class IntegerOutputNameStyle extends IndexableOutputNameStyle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private int numDigits;
-	
-	protected IntegerOutputNameStyle() {
-		// Needed for deserialization
-	}
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	protected IntegerOutputNameStyle(IndexableOutputNameStyle src) {
-		super(src);
-	}
+    private int numDigits;
 
-	protected IntegerOutputNameStyle(String outputName, int numDigits) {
-		super(outputName);
-		this.numDigits = numDigits;
-	}
-	
-	@Override
-	protected String nameFromOutputFormatString(String outputFormatString, String index) {
-		int indexInt = Integer.parseInt(index);
-		return String.format( outputFormatString, indexInt );
-	}
+    protected IntegerOutputNameStyle() {
+        // Needed for deserialization
+    }
 
-	@Override
-	protected String outputFormatString() {
-		return combineIntegerAndOutputName(
-			getOutputName(),
-			integerFormatSpecifier(numDigits)
-		);
-	}
+    protected IntegerOutputNameStyle(IndexableOutputNameStyle src) {
+        super(src);
+    }
 
-	protected abstract String combineIntegerAndOutputName( String outputName, String integerFormatString );
-	
-	
-	private static String integerFormatSpecifier(int numDigits ) {
-		return "%0" + Integer.toString(numDigits) + "d";
-	}
+    protected IntegerOutputNameStyle(String outputName, int numDigits) {
+        super(outputName);
+        this.numDigits = numDigits;
+    }
 
+    @Override
+    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+        int indexInt = Integer.parseInt(index);
+        return String.format(outputFormatString, indexInt);
+    }
+
+    @Override
+    protected String outputFormatString() {
+        return combineIntegerAndOutputName(getOutputName(), integerFormatSpecifier(numDigits));
+    }
+
+    protected abstract String combineIntegerAndOutputName(
+            String outputName, String integerFormatString);
+
+    private static String integerFormatSpecifier(int numDigits) {
+        return "%0" + Integer.toString(numDigits) + "d";
+    }
 }

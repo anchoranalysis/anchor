@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.cache.calculation;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,51 +23,52 @@ package org.anchoranalysis.feature.cache.calculation;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A {@link CacheableCalculationMap} that has been resolved against a cache.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <S> result-type
  * @param <T> feature input-type
  * @param <U> key-type
  */
-public class ResolvedCalculationMap<S, T extends FeatureInput,U> {
+public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
 
-	private CacheableCalculationMap<S,T,U,FeatureCalcException> map;
+    private CacheableCalculationMap<S, T, U, FeatureCalcException> map;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param map the cacheable-calculation map that is now considered resolved
-	 */
-	public ResolvedCalculationMap(CacheableCalculationMap<S,T,U,FeatureCalcException> map) {
-		super();
-		this.map = map;
-	}
-	
-	public S getOrCalculate(T params, U key) throws FeatureCalcException {
-		return map.getOrCalculate(params, key);
-	}
-	
-	// We delegate to the CachedCalculationMap to check equality. Needed for the search.
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ResolvedCalculationMap) {
-			return ((ResolvedCalculationMap<S, T, U>) obj).map.equals(map);
-		} else {
-			return false;
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param map the cacheable-calculation map that is now considered resolved
+     */
+    public ResolvedCalculationMap(CacheableCalculationMap<S, T, U, FeatureCalcException> map) {
+        super();
+        this.map = map;
+    }
 
-	// We delegate to the CachedCalculationMap to check hashCode. Needed for the search.
-	@Override
-	public int hashCode() {
-		return map.hashCode();
-	}
+    public S getOrCalculate(T params, U key) throws FeatureCalcException {
+        return map.getOrCalculate(params, key);
+    }
+
+    // We delegate to the CachedCalculationMap to check equality. Needed for the search.
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ResolvedCalculationMap) {
+            return ((ResolvedCalculationMap<S, T, U>) obj).map.equals(map);
+        } else {
+            return false;
+        }
+    }
+
+    // We delegate to the CachedCalculationMap to check hashCode. Needed for the search.
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 }

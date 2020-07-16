@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.objects.deserialize;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,12 @@ package org.anchoranalysis.image.io.objects.deserialize;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.objects.deserialize;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -44,9 +43,6 @@ import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-import lombok.AllArgsConstructor;
-
-
 /**
  * Deserializes an {@link ObjectMask] stored in two parts (a raster-mask and a serialized bounding-box)
  * <p>
@@ -60,66 +56,69 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class ObjectDualDeserializer implements Deserializer<ObjectMask> {
 
-	private static final ObjectInputStreamDeserializer<BoundingBox> BOUNDING_BOX_DESERIALIZER =
-		new ObjectInputStreamDeserializer<>();
-	
-	private final RasterReader rasterReader;
+    private static final ObjectInputStreamDeserializer<BoundingBox> BOUNDING_BOX_DESERIALIZER =
+            new ObjectInputStreamDeserializer<>();
 
-	@Override
-	public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
-		
-		Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
-		
-		BoundingBox bbox = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
-		
-		try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
-			Stack stack = or.openCheckType(0, ProgressReporterNull.get(), VoxelDataTypeUnsignedByte.INSTANCE ).get(0);
-			
-			if (stack.getNumChnl()!=1) {
-				throw new DeserializationFailedException("Raster file must have 1 channel exactly");
-			}
-			
-			Channel chnl = stack.getChnl(0);
-			
-			if (!chnl.getDimensions().getExtent().equals(bbox.extent())) {
-				throw new DeserializationFailedException(
-					errorMessageMismatchingDims(bbox, chnl.getDimensions(), filePath)
-				);
-			}
-			
-			return new ObjectMask( bbox, chnl.getVoxelBox().asByte() );
-			
-		} catch (RasterIOException e) {
-			throw new DeserializationFailedException(e);
-		}
-	}
-	
-	private static String errorMessageMismatchingDims(BoundingBox bbox, ImageDimensions dimensions, Path filePath) {
-		return String.format(
-			"Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
-			bbox.extent(),
-			dimensions.getExtent(),
-			filePath
-		);
-	}
-		
-	private static Path changeExtension(Path path, String oldExtension, String newExtension) throws DeserializationFailedException {
-		
-		String oldExtensionUpperCase = oldExtension.toUpperCase();
-		
-		if (!path.toString().endsWith("." + oldExtension) && !path.toString().endsWith("." + oldExtensionUpperCase)) {
-			throw new DeserializationFailedException("Files must have ." + oldExtension + " extension");
-		}
-		
-		// Change old extension into new extension
-		return Paths.get(
-			changeExtension(path.toString(), oldExtension, newExtension)
-		);
-	}
-	
-	private static String changeExtension(String path, String oldExtension, String newExtension) {
-		path = path.substring(0, path.length()-oldExtension.length());
-		path = path.concat(newExtension);
-		return path;
-	}
+    private final RasterReader rasterReader;
+
+    @Override
+    public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
+
+        Path tiffFilename = changeExtension(filePath.toAbsolutePath(), "ser", "tif");
+
+        BoundingBox bbox = BOUNDING_BOX_DESERIALIZER.deserialize(filePath);
+
+        try (OpenedRaster or = rasterReader.openFile(tiffFilename)) {
+            Stack stack =
+                    or.openCheckType(
+                                    0,
+                                    ProgressReporterNull.get(),
+                                    VoxelDataTypeUnsignedByte.INSTANCE)
+                            .get(0);
+
+            if (stack.getNumChnl() != 1) {
+                throw new DeserializationFailedException("Raster file must have 1 channel exactly");
+            }
+
+            Channel chnl = stack.getChnl(0);
+
+            if (!chnl.getDimensions().getExtent().equals(bbox.extent())) {
+                throw new DeserializationFailedException(
+                        errorMessageMismatchingDims(bbox, chnl.getDimensions(), filePath));
+            }
+
+            return new ObjectMask(bbox, chnl.getVoxelBox().asByte());
+
+        } catch (RasterIOException e) {
+            throw new DeserializationFailedException(e);
+        }
+    }
+
+    private static String errorMessageMismatchingDims(
+            BoundingBox bbox, ImageDimensions dimensions, Path filePath) {
+        return String.format(
+                "Dimensions of bounding box (%s) and raster (%s) do not match for file %s",
+                bbox.extent(), dimensions.getExtent(), filePath);
+    }
+
+    private static Path changeExtension(Path path, String oldExtension, String newExtension)
+            throws DeserializationFailedException {
+
+        String oldExtensionUpperCase = oldExtension.toUpperCase();
+
+        if (!path.toString().endsWith("." + oldExtension)
+                && !path.toString().endsWith("." + oldExtensionUpperCase)) {
+            throw new DeserializationFailedException(
+                    "Files must have ." + oldExtension + " extension");
+        }
+
+        // Change old extension into new extension
+        return Paths.get(changeExtension(path.toString(), oldExtension, newExtension));
+    }
+
+    private static String changeExtension(String path, String oldExtension, String newExtension) {
+        path = path.substring(0, path.length() - oldExtension.length());
+        path = path.concat(newExtension);
+        return path;
+    }
 }

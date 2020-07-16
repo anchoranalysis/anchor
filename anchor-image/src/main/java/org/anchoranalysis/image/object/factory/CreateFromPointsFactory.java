@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.object.factory;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,12 @@ package org.anchoranalysis.image.object.factory;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.object.factory;
 
 import java.util.List;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -35,23 +36,20 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateFromPointsFactory {
-	
-	public static ObjectMask create( List<Point3i> points ) throws CreateException {
-		
-		BoundingBox bbox;
-		try {
-			bbox = BoundingBoxFromPoints.forList(points);
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-		
-		ObjectMask mask = new ObjectMask(bbox);
-		points.forEach(mask::setOn);
-		return mask;
-	}
+
+    public static ObjectMask create(List<Point3i> points) throws CreateException {
+
+        BoundingBox bbox;
+        try {
+            bbox = BoundingBoxFromPoints.forList(points);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
+
+        ObjectMask mask = new ObjectMask(bbox);
+        points.forEach(mask::setOn);
+        return mask;
+    }
 }

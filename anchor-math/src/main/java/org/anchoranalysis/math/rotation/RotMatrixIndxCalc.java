@@ -1,10 +1,8 @@
-package org.anchoranalysis.math.rotation;
-
-/*
+/*-
  * #%L
- * anchor-core
+ * anchor-math
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +23,23 @@ package org.anchoranalysis.math.rotation;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.math.rotation;
 
-
-//Assigns values for a rotation about a particular axis (in radians)
-//axisShift= 0 for x-axis, 1 for y-axis, 2 for z-axis
+// Assigns values for a rotation about a particular axis (in radians)
+// axisShift= 0 for x-axis, 1 for y-axis, 2 for z-axis
 public class RotMatrixIndxCalc {
 
-	private int shift;
-	private int matNumDim;
-	
-	public RotMatrixIndxCalc(int shift, int matNumDim) {
-		super();
-		this.shift = shift;
-		this.matNumDim = matNumDim;
-	}
-	
-	public int calc( int orig ) {
-		return (orig+shift) % matNumDim;
-	}
+    private int shift;
+    private int matNumDim;
+
+    public RotMatrixIndxCalc(int shift, int matNumDim) {
+        super();
+        this.shift = shift;
+        this.matNumDim = matNumDim;
+    }
+
+    public int calc(int orig) {
+        return (orig + shift) % matNumDim;
+    }
 }

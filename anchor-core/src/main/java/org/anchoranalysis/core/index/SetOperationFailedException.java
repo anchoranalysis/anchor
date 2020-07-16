@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.index;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.index;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,21 +27,18 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
-
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class SetOperationFailedException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3323720426335397452L;
+    /** */
+    private static final long serialVersionUID = -3323720426335397452L;
 
-	public SetOperationFailedException(String string) {
-		super(string);
-	}
+    public SetOperationFailedException(String string) {
+        super(string);
+    }
 
-	public SetOperationFailedException( Throwable exc ) {
-		super( exc );
-	}
+    public SetOperationFailedException(Throwable exc) {
+        super(exc);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.io;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +23,22 @@ package org.anchoranalysis.experiment.io;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * If an experiment implements this interface, the task of an
- *   an experiment can be replaced by another
+ * If an experiment implements this interface, the task of an an experiment can be replaced by
+ * another
  *
  * @param <T> input-object type
  * @param <S> shared-state for job
  * @author Owen Feehan
- *
  */
-public interface IReplaceTask<T extends InputFromManager,S> {
+public interface IReplaceTask<T extends InputFromManager, S> {
 
-	public void replaceTask( Task<T,S> taskToReplace ) throws OperationFailedException;
+    public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException;
 }

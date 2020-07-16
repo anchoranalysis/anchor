@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.error;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.error;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,34 +27,30 @@ package org.anchoranalysis.core.error;
  * #L%
  */
 
-
 /**
  * A base class for all checked exceptions used on the Anchor platform
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class AnchorCheckedException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public AnchorCheckedException() {
-		super();
-	}
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public AnchorCheckedException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public AnchorCheckedException() {
+        super();
+    }
 
-	public AnchorCheckedException(String message) {
-		super(message);
-		super.initCause(null);
-	}
+    public AnchorCheckedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public AnchorCheckedException(Throwable cause) {
-		super(cause);
-	}
+    public AnchorCheckedException(String message) {
+        super(message);
+        super.initCause(null);
+    }
+
+    public AnchorCheckedException(Throwable cause) {
+        super(cause);
+    }
 }

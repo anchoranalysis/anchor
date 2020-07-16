@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.input;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +23,14 @@ package org.anchoranalysis.feature.input;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.input;
 
 /**
  * A single input used for feature-calculation to produce a result.
- * 
- * <p>i.e. when this object passed into an appropriate feature, a double result is created for it</p>
- * 
- * @author Owen Feehan
  *
+ * <p>i.e. when this object passed into an appropriate feature, a double result is created for it
+ *
+ * @author Owen Feehan
  */
-public interface FeatureInput {
-}
+public interface FeatureInput {}

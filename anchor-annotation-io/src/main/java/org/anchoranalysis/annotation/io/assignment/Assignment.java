@@ -1,15 +1,8 @@
-package org.anchoranalysis.annotation.io.assignment;
-
-import java.util.List;
-
-import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.object.ObjectMask;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,21 +23,24 @@ import org.anchoranalysis.image.object.ObjectMask;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.assignment;
 
-
-
+import java.util.List;
+import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public interface Assignment {
-	
-	int numPaired();
-	
-	int numUnassigned( boolean left );
-	
-	List<ObjectMask> getListPaired( boolean left );
-	
-	List<ObjectMask> getListUnassigned( boolean left );
-	
-	List<String> createStatisticsHeaderNames();
-	
-	List<TypedValue> createStatistics();
+
+    int numPaired();
+
+    int numUnassigned(boolean left);
+
+    List<ObjectMask> getListPaired(boolean left);
+
+    List<ObjectMask> getListUnassigned(boolean left);
+
+    List<String> createStatisticsHeaderNames();
+
+    List<TypedValue> createStatistics();
 }

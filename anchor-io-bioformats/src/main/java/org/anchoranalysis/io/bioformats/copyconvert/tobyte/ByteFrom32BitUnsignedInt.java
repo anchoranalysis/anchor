@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,60 +23,57 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-
+import loci.common.DataTools;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-import loci.common.DataTools;
-
 public class ByteFrom32BitUnsignedInt extends ConvertToByte {
 
-	private double convertRatio;
-	private int bytesPerPixel = 4;
-	private int sizeXY;
-	private int sizeBytes;
-	
-	private int effectiveBitsPerPixel;
-	private boolean littleEndian;
+    private double convertRatio;
+    private int bytesPerPixel = 4;
+    private int sizeXY;
+    private int sizeBytes;
 
-	public ByteFrom32BitUnsignedInt(int effectiveBitsPerPixel, boolean littleEndian) {
-		super();
-		this.effectiveBitsPerPixel = effectiveBitsPerPixel;
-		this.littleEndian = littleEndian;
-	}
-	
-	@Override
-	protected void setupBefore( ImageDimensions sd, int numChnlsPerByteArray ) {
+    private int effectiveBitsPerPixel;
+    private boolean littleEndian;
 
-		convertRatio = calculateConvertRatio();
-		
-  		sizeXY = sd.getX() * sd.getY();
-  		sizeBytes = sizeXY * bytesPerPixel;
-	}
-	
+    public ByteFrom32BitUnsignedInt(int effectiveBitsPerPixel, boolean littleEndian) {
+        super();
+        this.effectiveBitsPerPixel = effectiveBitsPerPixel;
+        this.littleEndian = littleEndian;
+    }
 
-	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl( byte[] src, int channelRelative ) {
-		byte[] crntChnlBytes = new byte[sizeXY];
-		
-		int indOut = 0;
-		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int i = DataTools.bytesToInt( src, indIn, littleEndian);
-			crntChnlBytes[indOut++] = (byte) (i*convertRatio);
-		}
-		return VoxelBufferByte.wrap( crntChnlBytes );
-	}
-	
-	private double calculateConvertRatio() {
-		if (effectiveBitsPerPixel==32) {
-			return 1.0;
-		} else {
-			return ConvertHelper.twoToPower(
-				-1*(effectiveBitsPerPixel-8)
-			);
-		}		
-	}
+    @Override
+    protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
+
+        convertRatio = calculateConvertRatio();
+
+        sizeXY = sd.getX() * sd.getY();
+        sizeBytes = sizeXY * bytesPerPixel;
+    }
+
+    @Override
+    protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+        byte[] crntChnlBytes = new byte[sizeXY];
+
+        int indOut = 0;
+        for (int indIn = 0; indIn < sizeBytes; indIn += bytesPerPixel) {
+            int i = DataTools.bytesToInt(src, indIn, littleEndian);
+            crntChnlBytes[indOut++] = (byte) (i * convertRatio);
+        }
+        return VoxelBufferByte.wrap(crntChnlBytes);
+    }
+
+    private double calculateConvertRatio() {
+        if (effectiveBitsPerPixel == 32) {
+            return 1.0;
+        } else {
+            return ConvertHelper.twoToPower(-1 * (effectiveBitsPerPixel - 8));
+        }
+    }
 }

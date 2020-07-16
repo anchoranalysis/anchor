@@ -1,13 +1,8 @@
-package org.anchoranalysis.image.feature.histogram;
-
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-
-/*
+/*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,18 +23,21 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.histogram;
 
-
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class Mean extends FeatureHistogramStatistic {
 
-	@Override
-	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
-		try {
-			return histogram.mean();
-		} catch (OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}			
-	}
+    @Override
+    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+        try {
+            return histogram.mean();
+        } catch (OperationFailedException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
 }

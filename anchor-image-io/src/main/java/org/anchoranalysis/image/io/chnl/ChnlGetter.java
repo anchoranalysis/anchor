@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.chnl;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.io.chnl;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.chnl;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -32,7 +32,8 @@ import org.anchoranalysis.image.channel.Channel;
 
 public interface ChnlGetter {
 
-	boolean hasChnl( String chnlName );
-	
-	Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
+    boolean hasChnl(String chnlName);
+
+    Channel getChnl(String chnlName, int t, ProgressReporter progressReporter)
+            throws GetOperationFailedException;
 }

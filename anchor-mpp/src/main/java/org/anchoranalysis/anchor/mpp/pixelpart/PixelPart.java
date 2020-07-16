@@ -1,11 +1,8 @@
-
-package org.anchoranalysis.anchor.mpp.pixelpart;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +23,28 @@ package org.anchoranalysis.anchor.mpp.pixelpart;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pixelpart;
 
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 
 /**
  * A partition of pixels
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> part-type
  */
 public interface PixelPart<T> {
-	
-	// Should only be used read-only, if we want to maintain integrity with the combined list
-	T getSlice( int sliceID );
-	
-	void addForSlice( int sliceID, int val );
 
-	// Should only be used read-only
-	T getCombined();
-	
-	void cleanUp( PixelPartFactory<T> factory );
-	
-	int numSlices();
+    // Should only be used read-only, if we want to maintain integrity with the combined list
+    T getSlice(int sliceID);
+
+    void addForSlice(int sliceID, int val);
+
+    // Should only be used read-only
+    T getCombined();
+
+    void cleanUp(PixelPartFactory<T> factory);
+
+    int numSlices();
 }

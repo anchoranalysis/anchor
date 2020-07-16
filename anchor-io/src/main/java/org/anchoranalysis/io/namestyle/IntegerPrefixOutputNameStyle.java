@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.namestyle;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +23,38 @@ package org.anchoranalysis.io.namestyle;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.namestyle;
 
 public class IntegerPrefixOutputNameStyle extends IntegerOutputNameStyle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3128734431534880903L;
-	
-	public IntegerPrefixOutputNameStyle() {
-		// Here as the empty constructor is needed for deserialization
-	}
-	
-	private IntegerPrefixOutputNameStyle(IntegerPrefixOutputNameStyle src) {
-		super(src);
-	}
-	
-	public IntegerPrefixOutputNameStyle(String outputName, int numDigitsInteger) {
-		super(outputName, numDigitsInteger);
-	}
+    /** */
+    private static final long serialVersionUID = -3128734431534880903L;
 
-	@Override
-	public IndexableOutputNameStyle deriveIndexableStyle( int numDigits ) {
-		return new IntegerPrefixOutputNameStyle( this.getOutputName(), numDigits );
-	}
+    public IntegerPrefixOutputNameStyle() {
+        // Here as the empty constructor is needed for deserialization
+    }
 
-	@Override
-	public IndexableOutputNameStyle duplicate() {
-		return new IntegerPrefixOutputNameStyle(this);
-	}
+    private IntegerPrefixOutputNameStyle(IntegerPrefixOutputNameStyle src) {
+        super(src);
+    }
 
-	@Override
-	protected String combineIntegerAndOutputName(String outputName, String integerFormatString) {
-		return integerFormatString + "_" + outputName;
-	}
+    public IntegerPrefixOutputNameStyle(String outputName, int numDigitsInteger) {
+        super(outputName, numDigitsInteger);
+    }
+
+    @Override
+    public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
+        return new IntegerPrefixOutputNameStyle(this.getOutputName(), numDigits);
+    }
+
+    @Override
+    public IndexableOutputNameStyle duplicate() {
+        return new IntegerPrefixOutputNameStyle(this);
+    }
+
+    @Override
+    protected String combineIntegerAndOutputName(String outputName, String integerFormatString) {
+        return integerFormatString + "_" + outputName;
+    }
 }

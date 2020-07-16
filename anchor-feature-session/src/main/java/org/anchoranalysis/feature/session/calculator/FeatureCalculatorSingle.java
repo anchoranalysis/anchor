@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.session.calculator;
-
-
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +23,8 @@ package org.anchoranalysis.feature.session.calculator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -34,16 +32,18 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Calculates the result of a feature for particular params
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature input-type
  */
 public interface FeatureCalculatorSingle<T extends FeatureInput> {
-	
-	/** Performs one calculation throwing an exception if something goes wrong */
-	double calc( T input ) throws FeatureCalcException;
-	
-	/** Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but throwing no exception */
-	double calcSuppressErrors(T input, ErrorReporter errorReporter );
+
+    /** Performs one calculation throwing an exception if something goes wrong */
+    double calc(T input) throws FeatureCalcException;
+
+    /**
+     * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but
+     * throwing no exception
+     */
+    double calcSuppressErrors(T input, ErrorReporter errorReporter);
 }

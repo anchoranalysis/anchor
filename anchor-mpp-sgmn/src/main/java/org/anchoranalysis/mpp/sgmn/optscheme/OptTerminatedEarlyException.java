@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,17 @@ package org.anchoranalysis.mpp.sgmn.optscheme;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 public class OptTerminatedEarlyException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1311039251626279919L;
+    /** */
+    private static final long serialVersionUID = 1311039251626279919L;
 
-	public OptTerminatedEarlyException(String message, Throwable cause ) {
-		super(message, cause );
-	}
+    public OptTerminatedEarlyException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

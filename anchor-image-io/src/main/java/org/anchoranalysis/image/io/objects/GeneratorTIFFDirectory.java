@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.objects;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.image.io.objects;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.objects;
 
 import java.util.List;
-
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -37,21 +36,21 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 
 /**
  * Writes the object-mask-collection as a TIFF to a directory
- * 
- * Writes the corner information as a binary-serialized file in the directory
- * 
- * @author Owen Feehan
  *
+ * <p>Writes the corner information as a binary-serialized file in the directory
+ *
+ * @author Owen Feehan
  */
-public class GeneratorTIFFDirectory extends IterableGeneratorBridge<ObjectCollection,List<ObjectMask>> {
+public class GeneratorTIFFDirectory
+        extends IterableGeneratorBridge<ObjectCollection, List<ObjectMask>> {
 
-	public GeneratorTIFFDirectory() {
-		super(
-			new SubfolderGenerator<ObjectMask,List<ObjectMask>>(
-				new ObjWithBoundingBoxGenerator( new ImageResolution() ),		// We don't specify a sceneres as we don't know what images they belong to
-				"obj"
-			),
-			ObjectCollection::asList
-		);
-	}
+    public GeneratorTIFFDirectory() {
+        super(
+                new SubfolderGenerator<ObjectMask, List<ObjectMask>>(
+                        new ObjWithBoundingBoxGenerator(
+                                new ImageResolution()), // We don't specify a sceneres as we don't
+                        // know what images they belong to
+                        "obj"),
+                ObjectCollection::asList);
+    }
 }

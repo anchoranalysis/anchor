@@ -1,14 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.obj;
-
-
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster.obj;
 
+import java.util.Optional;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -39,33 +36,23 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 
 /**
- * 
- * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjectsAsBinaryChnlGenerator} but also outputs a serialized bounding box.
- * 
- * @author Owen Feehan
+ * Like {@link org.anchoranalysis.image.io.generator.raster.obj.ObjectsAsBinaryChnlGenerator} but
+ * also outputs a serialized bounding box.
  *
+ * @author Owen Feehan
  */
 public class ObjWithBoundingBoxGenerator extends IterableCombinedListGenerator<ObjectMask> {
-	
-	public ObjWithBoundingBoxGenerator(ImageResolution res ) {
-		this(
-			new ObjectsAsBinaryChnlGenerator(
-				BinaryValuesByte.getDefault().getOnByte(),
-				res
-			)
-		);
-	}
-	
-	private ObjWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
-		super(
-			generator,
-			// We create an iterable bridge from object-mask to BoundingBox
-			new IterableGeneratorBridge<>(
-				new ObjectOutputStreamGenerator<>(
-					Optional.of("BoundingBox")
-				),
-				ObjectMask::getBoundingBox 
-			)
-		);
-	}
+
+    public ObjWithBoundingBoxGenerator(ImageResolution res) {
+        this(new ObjectsAsBinaryChnlGenerator(BinaryValuesByte.getDefault().getOnByte(), res));
+    }
+
+    private ObjWithBoundingBoxGenerator(IterableGenerator<ObjectMask> generator) {
+        super(
+                generator,
+                // We create an iterable bridge from object-mask to BoundingBox
+                new IterableGeneratorBridge<>(
+                        new ObjectOutputStreamGenerator<>(Optional.of("BoundingBox")),
+                        ObjectMask::getBoundingBox));
+    }
 }

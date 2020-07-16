@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared.relation.threshold;
-
 /*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.bean.shared.relation.threshold;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.relation.threshold;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
@@ -32,15 +32,15 @@ import org.anchoranalysis.core.relation.RelationToValue;
 
 /**
  * A threshold and a relation to it, allowing for tests of a value in relation to a threshold.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold> implements GenerateUniqueParameterization {
+public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold>
+        implements GenerateUniqueParameterization {
 
-	/** The threshold-value */
-	public abstract double threshold();
-	
-	/** The relation to the threshold to consider */
-	public abstract RelationToValue relation();
+    /** The threshold-value */
+    public abstract double threshold();
+
+    /** The relation to the threshold to consider */
+    public abstract RelationToValue relation();
 }

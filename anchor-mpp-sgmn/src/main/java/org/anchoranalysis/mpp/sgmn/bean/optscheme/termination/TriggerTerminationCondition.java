@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,23 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.optscheme.termination;
 
 import org.anchoranalysis.core.log.MessageLogger;
 
 public class TriggerTerminationCondition extends TerminationCondition {
-	
-	private boolean triggered = false; 
 
-	// We don't bother with synchronize
+    private boolean triggered = false;
 
-	@Override
-	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
-		return !triggered;
-	}
-	
-	public void trigger() {
-		triggered=true;
-	}
+    // We don't bother with synchronize
+
+    @Override
+    public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
+        return !triggered;
+    }
+
+    public void trigger() {
+        triggered = true;
+    }
 }

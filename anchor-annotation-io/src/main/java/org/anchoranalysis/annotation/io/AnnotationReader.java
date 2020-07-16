@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,22 @@ package org.anchoranalysis.annotation.io;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 public interface AnnotationReader<T extends Annotation> {
 
-	/**
-	 * Reads an annotation if it can, returns NULL otherwise
-	 * @param path a path representing the annotation (or we derive another path from this path)
-	 * @return the annotation or NULL if it doesn't exist in a suitable state
-	 * @throws AnchorIOException
-	 */
-	Optional<T> read( Path path ) throws AnchorIOException;
+    /**
+     * Reads an annotation if it can, returns NULL otherwise
+     *
+     * @param path a path representing the annotation (or we derive another path from this path)
+     * @return the annotation or NULL if it doesn't exist in a suitable state
+     * @throws AnchorIOException
+     */
+    Optional<T> read(Path path) throws AnchorIOException;
 }

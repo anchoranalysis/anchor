@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.error;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,25 @@ package org.anchoranalysis.image.bean.nonbean.error;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.nonbean.error;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 public class SegmentationFailedException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5014516097016484634L;
+    /** */
+    private static final long serialVersionUID = -5014516097016484634L;
 
-	public SegmentationFailedException( String message ) {
-		super( message );
-	}
-	
-	public SegmentationFailedException( String message, Throwable cause ) {
-		super( cause );
-	}
-	
-	public SegmentationFailedException( Throwable cause ) {
-		super( cause );
-	}
+    public SegmentationFailedException(String message) {
+        super(message);
+    }
+
+    public SegmentationFailedException(String message, Throwable cause) {
+        super(cause);
+    }
+
+    public SegmentationFailedException(Throwable cause) {
+        super(cause);
+    }
 }

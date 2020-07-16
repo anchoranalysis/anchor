@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.mpp.sgmn.optscheme;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -32,28 +32,24 @@ import org.anchoranalysis.image.stack.DisplayStack;
 
 /** Stores an NRGStack together with a background stack */
 public class DualStack {
-	private NRGStackWithParams nrgStack;
-	private DisplayStack bgStack;
-	
-	public DualStack(NRGStackWithParams stackBoth) throws CreateException {
-		this(
-			stackBoth,
-			DisplayStack.create(stackBoth.getNrgStack().asStack())
-		);
-	}
-	
-	public DualStack(NRGStackWithParams nrgStack, DisplayStack bgStack) {
-		super();
-		this.nrgStack = nrgStack;
-		this.bgStack = bgStack;
-	}
+    private NRGStackWithParams nrgStack;
+    private DisplayStack bgStack;
 
-	public NRGStackWithParams getNrgStack() {
-		return nrgStack;
-	}
+    public DualStack(NRGStackWithParams stackBoth) throws CreateException {
+        this(stackBoth, DisplayStack.create(stackBoth.getNrgStack().asStack()));
+    }
 
-	public DisplayStack getBgStack() {
-		return bgStack;
-	}
+    public DualStack(NRGStackWithParams nrgStack, DisplayStack bgStack) {
+        super();
+        this.nrgStack = nrgStack;
+        this.bgStack = bgStack;
+    }
 
+    public NRGStackWithParams getNrgStack() {
+        return nrgStack;
+    }
+
+    public DisplayStack getBgStack() {
+        return bgStack;
+    }
 }

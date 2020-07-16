@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.input;
-
-
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +23,8 @@ package org.anchoranalysis.image.io.input;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.input;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -35,20 +33,22 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class StackInputInitParamsCreator {
-	
-	private StackInputInitParamsCreator() {}
-	
-	public static ImageInitParams createInitParams( ProvidesStackInput inputObject, BoundIOContext context ) throws OperationFailedException {
-		ImageInitParams soImage = ImageInitParamsFactory.create(context);
-		addInput(soImage, inputObject);
-		return soImage;
-	}
-		
-	private static void addInput( ImageInitParams soImage, ProvidesStackInput inputObject ) throws OperationFailedException {
-		inputObject.addToStore(
-			new WrapStackAsTimeSequenceStore(soImage.getStackCollection()),
-			0,
-			ProgressReporterNull.get()
-		);
-	}
+
+    private StackInputInitParamsCreator() {}
+
+    public static ImageInitParams createInitParams(
+            ProvidesStackInput inputObject, BoundIOContext context)
+            throws OperationFailedException {
+        ImageInitParams soImage = ImageInitParamsFactory.create(context);
+        addInput(soImage, inputObject);
+        return soImage;
+    }
+
+    private static void addInput(ImageInitParams soImage, ProvidesStackInput inputObject)
+            throws OperationFailedException {
+        inputObject.addToStore(
+                new WrapStackAsTimeSequenceStore(soImage.getStackCollection()),
+                0,
+                ProgressReporterNull.get());
+    }
 }

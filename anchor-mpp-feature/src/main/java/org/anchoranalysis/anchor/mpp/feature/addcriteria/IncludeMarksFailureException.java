@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.addcriteria;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,21 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class IncludeMarksFailureException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4475636830799035389L;
+    /** */
+    private static final long serialVersionUID = -4475636830799035389L;
 
-	public IncludeMarksFailureException(String string) {
-		super(string);
-	}
+    public IncludeMarksFailureException(String string) {
+        super(string);
+    }
 
-	public IncludeMarksFailureException( Exception exc ) {
-		super( exc );
-	}
+    public IncludeMarksFailureException(Exception exc) {
+        super(exc);
+    }
 }
-
-

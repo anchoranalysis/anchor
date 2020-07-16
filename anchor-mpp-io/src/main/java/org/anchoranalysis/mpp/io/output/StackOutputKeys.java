@@ -1,13 +1,8 @@
-package org.anchoranalysis.mpp.io.output;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /*-
  * #%L
- * anchor-mpp-sgmn
+ * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +23,17 @@ import lombok.NoArgsConstructor;
  * THE SOFTWARE.
  * #L%
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.output;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackOutputKeys {
 
-	public static final String STACK = "stack";
-	public static final String CFG = "cfg";
-	public static final String HISTOGRAM = "histogram";
-	public static final String OBJECTS = "objects";
+    public static final String STACK = "stack";
+    public static final String CFG = "cfg";
+    public static final String HISTOGRAM = "histogram";
+    public static final String OBJECTS = "objects";
 }

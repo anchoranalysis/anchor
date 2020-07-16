@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +23,13 @@ package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter.voxelbox;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
@@ -40,44 +38,46 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 // So values larger than 255 are clipped
 public final class VoxelBoxConverterToFloatNoScaling implements VoxelBoxConverter<FloatBuffer> {
 
-	@Override
-	public VoxelBuffer<FloatBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
-		return bufferIn.duplicate();
-	}
+    @Override
+    public VoxelBuffer<FloatBuffer> convertFromFloat(VoxelBuffer<FloatBuffer> bufferIn) {
+        return bufferIn.duplicate();
+    }
 
-	@Override
-	public VoxelBuffer<FloatBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
+    @Override
+    public VoxelBuffer<FloatBuffer> convertFromInt(VoxelBuffer<IntBuffer> bufferIn) {
 
-		FloatBuffer bufferOut = FloatBuffer.allocate( bufferIn.buffer().capacity() );
-		
-		while( bufferIn.buffer().hasRemaining() ) {
-			bufferOut.put( (float) bufferIn.buffer().get() );
-		}
-		
-		return VoxelBufferFloat.wrap(bufferOut);
-	}
+        FloatBuffer bufferOut = FloatBuffer.allocate(bufferIn.buffer().capacity());
 
-	@Override
-	public VoxelBuffer<FloatBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
+        while (bufferIn.buffer().hasRemaining()) {
+            bufferOut.put((float) bufferIn.buffer().get());
+        }
 
-		FloatBuffer bufferOut = FloatBuffer.allocate( bufferIn.buffer().capacity() );
-		
-		while( bufferIn.buffer().hasRemaining() ) {
-			bufferOut.put( (float) bufferIn.buffer().get() );
-		}
-		
-		return VoxelBufferFloat.wrap(bufferOut);
-	}
+        return VoxelBufferFloat.wrap(bufferOut);
+    }
 
-	@Override
-	public VoxelBuffer<FloatBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
+    @Override
+    public VoxelBuffer<FloatBuffer> convertFromShort(VoxelBuffer<ShortBuffer> bufferIn) {
 
-		VoxelBufferFloat bufferOut = VoxelBufferFloat.allocate( bufferIn.buffer().capacity() );
-		
-		while( bufferIn.buffer().hasRemaining() ) {
-			bufferOut.buffer().put( (float) ByteConverter.unsignedByteToInt(bufferIn.buffer().get()) );
-		}
-		
-		return bufferOut;
-	}
+        FloatBuffer bufferOut = FloatBuffer.allocate(bufferIn.buffer().capacity());
+
+        while (bufferIn.buffer().hasRemaining()) {
+            bufferOut.put((float) bufferIn.buffer().get());
+        }
+
+        return VoxelBufferFloat.wrap(bufferOut);
+    }
+
+    @Override
+    public VoxelBuffer<FloatBuffer> convertFromByte(VoxelBuffer<ByteBuffer> bufferIn) {
+
+        VoxelBufferFloat bufferOut = VoxelBufferFloat.allocate(bufferIn.buffer().capacity());
+
+        while (bufferIn.buffer().hasRemaining()) {
+            bufferOut
+                    .buffer()
+                    .put((float) ByteConverter.unsignedByteToInt(bufferIn.buffer().get()));
+        }
+
+        return bufferOut;
+    }
 }

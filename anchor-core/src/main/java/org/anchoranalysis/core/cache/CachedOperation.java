@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.cache;
 
 import org.anchoranalysis.core.functional.Operation;
@@ -14,10 +15,10 @@ import org.anchoranalysis.core.functional.Operation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,74 +29,71 @@ import org.anchoranalysis.core.functional.Operation;
  * #L%
  */
 
-
 /**
- * 
  * @author Owen Feehan
- *
  * @param <R> result-type
  * @param <E> exception that is thrown if something goes wrong
  */
-public abstract class CachedOperation<R,E extends Exception> implements Operation<R,E> {
+public abstract class CachedOperation<R, E extends Exception> implements Operation<R, E> {
 
-	private R result;
-	private boolean done;
-	
-	/**
-	 * Constructor - with no result calculated yet
-	 */
-	public CachedOperation() {
-		result = null;
-		done = false;
-	}
-	
-	/**
-	 * Constructor - with result calculated (if not null)
-	 * <p>
-	 * @param result if non-null the result of the cached operation.
-	 */
-	public CachedOperation(R result) {
-		this.result = result;
-		this.done = result != null;
-	}
-	
-	@Override
-	public synchronized R doOperation() throws E {
-		
-		if (!done) {
-			result = execute();
-			done = true;
-		}		
-		return result;
-	}
-	
-	public synchronized void assignFrom( CachedOperation<R,E> src ) {
-		this.result = src.result;
-		this.done = src.done;
-	}
-	
-	public synchronized void reset() {
-		done = false;
-		result = null;
-	}
-	
-	public synchronized boolean isDone() {
-		return done;
-	}
-	
-	protected abstract R execute() throws E;
+    private R result;
+    private boolean done;
 
-	public R getResult() {
-		return result;
-	}
+    /** Constructor - with no result calculated yet */
+    public CachedOperation() {
+        result = null;
+        done = false;
+    }
 
-	public static <T,E extends Exception> CachedOperation<T,E> wrap( Operation<T,E> op ) {
-		return new CachedOperation<T,E>() {
+    /**
+     * Constructor - with result calculated (if not null)
+     *
+     * <p>
+     *
+     * @param result if non-null the result of the cached operation.
+     */
+    public CachedOperation(R result) {
+        this.result = result;
+        this.done = result != null;
+    }
 
-			@Override
-			protected T execute() throws E {
-				return op.doOperation();
-			}
-		};
-	}
+    @Override
+    public synchronized R doOperation() throws E {
+
+        if (!done) {
+            result = execute();
+            done = true;
+        }
+        return result;
+    }
+
+    public synchronized void assignFrom(CachedOperation<R, E> src) {
+        this.result = src.result;
+        this.done = src.done;
+    }
+
+    public synchronized void reset() {
+        done = false;
+        result = null;
+    }
+
+    public synchronized boolean isDone() {
+        return done;
+    }
+
+    protected abstract R execute() throws E;
+
+    public R getResult() {
+        return result;
+    }
+
+    public static <T, E extends Exception> CachedOperation<T, E> wrap(Operation<T, E> op) {
+        return new CachedOperation<T, E>() {
+
+            @Override
+            protected T execute() throws E {
+                return op.doOperation();
+            }
+        };
+    }
 }

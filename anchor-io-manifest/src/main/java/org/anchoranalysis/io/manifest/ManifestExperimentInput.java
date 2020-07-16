@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.manifest;
-
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,22 +23,23 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest;
 
-
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class ManifestExperimentInput extends AnchorBean<ManifestExperimentInput> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String file;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private String file;
+    // END BEAN PROPERTIES
 
-	public String getFile() {
-		return file;
-	}
+    public String getFile() {
+        return file;
+    }
 
-	public void setFile(String file) {
-		this.file = file;
-	}
+    public void setFile(String file) {
+        this.file = file;
+    }
 }

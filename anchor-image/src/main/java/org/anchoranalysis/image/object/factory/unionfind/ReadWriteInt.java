@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.object.factory.unionfind;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,23 @@ package org.anchoranalysis.image.object.factory.unionfind;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.object.factory.unionfind;
 
 import java.nio.IntBuffer;
-
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 
 final class ReadWriteInt extends BufferReadWrite<IntBuffer> {
 
-	@Override
-	protected boolean isBufferOn(IntBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
-		return buffer.get(offset)==bv.getOnInt();
-	}
+    @Override
+    protected boolean isBufferOn(
+            IntBuffer buffer, int offset, BinaryValues bv, BinaryValuesByte bvb) {
+        return buffer.get(offset) == bv.getOnInt();
+    }
 
-	@Override
-	protected void putBufferCnt(IntBuffer buffer, int offset, int cnt) {
-		buffer.put(offset,cnt);
-	}
+    @Override
+    protected void putBufferCnt(IntBuffer buffer, int offset, int cnt) {
+        buffer.put(offset, cnt);
+    }
 }

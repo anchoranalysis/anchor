@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.dummyProvider;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +23,20 @@ package org.anchoranalysis.mpp.sgmn.dummyProvider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.dummyProvider;
+
+import static org.mockito.Mockito.*;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
-import static org.mockito.Mockito.*;
 
 /** For referencing in BeanXML */
 public class DummyChnlProvider extends ChnlProvider {
 
-	@Override
-	public Channel create() throws CreateException {
-		return mock(Channel.class);
-	}
-
+    @Override
+    public Channel create() throws CreateException {
+        return mock(Channel.class);
+    }
 }

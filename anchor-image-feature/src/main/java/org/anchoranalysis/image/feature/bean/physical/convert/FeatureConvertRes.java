@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.physical.convert;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.feature.bean.physical.convert;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.physical.convert;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
@@ -35,42 +35,40 @@ import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
-public abstract class FeatureConvertRes<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
+public abstract class FeatureConvertRes<T extends FeatureInputWithRes>
+        extends FeatureSingleElemWithRes<T> {
 
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private String unitType;
-	// END BEAN PROPERTIES
-	
-	public FeatureConvertRes() {
-		
-	}
-	
-	public FeatureConvertRes( Feature<T> feature, UnitSuffix unitType ) {
-		super(feature);
-		this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String unitType;
+    // END BEAN PROPERTIES
 
-	@Override
-	protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
-		double valuePhysical = convertToPhysical( value, res );
-		return convertToUnits(valuePhysical);
-	}
-	
-	protected abstract double convertToPhysical( double value, ImageResolution res ) throws FeatureCalcException;
+    public FeatureConvertRes() {}
 
-	public String getUnitType() {
-		return unitType;
-	}
+    public FeatureConvertRes(Feature<T> feature, UnitSuffix unitType) {
+        super(feature);
+        this.unitType = SpatialConversionUtilities.unitMeterStringDisplay(unitType);
+    }
 
-	public void setUnitType(String unitType) {
-		this.unitType = unitType;
-	}
-		
-	private double convertToUnits( double valuePhysical ) {
-		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
-		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
-	}
+    @Override
+    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
+        double valuePhysical = convertToPhysical(value, res);
+        return convertToUnits(valuePhysical);
+    }
 
+    protected abstract double convertToPhysical(double value, ImageResolution res)
+            throws FeatureCalcException;
+
+    public String getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(String unitType) {
+        this.unitType = unitType;
+    }
+
+    private double convertToUnits(double valuePhysical) {
+        SpatialConversionUtilities.UnitSuffix prefixType =
+                SpatialConversionUtilities.suffixFromMeterString(unitType);
+        return SpatialConversionUtilities.convertToUnits(valuePhysical, prefixType);
+    }
 }

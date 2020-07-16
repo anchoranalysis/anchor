@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.functional.function;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.functional.function;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,21 +29,20 @@ package org.anchoranalysis.core.functional.function;
 
 /**
  * Like {@java.util.ToIntFunction} but can also thrown an exception.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <S> argument-type
  * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
 public interface ToIntFunctionWithException<S, E extends Exception> {
 
-	/**
-	 * Calls the function
-	 * 
-	 * @param parameter parameter object
-	 * @return return-value
-	 * @throws E an exception that may be thrown
-	 */
-	int apply(S parameter) throws E;
+    /**
+     * Calls the function
+     *
+     * @param parameter parameter object
+     * @return return-value
+     * @throws E an exception that may be thrown
+     */
+    int apply(S parameter) throws E;
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.box.factory;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.image.voxel.box.factory;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.box.factory;
 
 import java.nio.ShortBuffer;
-
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxShort;
@@ -39,20 +37,20 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 final class VoxelBoxFactoryShort implements VoxelBoxFactoryTypeBound<ShortBuffer> {
 
-	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.INSTANCE;
-	
-	@Override
-	public VoxelBox<ShortBuffer> create(PixelsForPlane<ShortBuffer> pixelsForPlane) {
-		return new VoxelBoxShort(pixelsForPlane);
-	}
+    private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.INSTANCE;
 
-	@Override
-	public VoxelBox<ShortBuffer> create(Extent e) {
-		return new VoxelBoxShort( PixelsFromShortBufferArr.createInitialised(e) );
-	}
+    @Override
+    public VoxelBox<ShortBuffer> create(PixelsForPlane<ShortBuffer> pixelsForPlane) {
+        return new VoxelBoxShort(pixelsForPlane);
+    }
 
-	@Override
-	public VoxelDataType dataType() {
-		return DATA_TYPE;
-	}
+    @Override
+    public VoxelBox<ShortBuffer> create(Extent e) {
+        return new VoxelBoxShort(PixelsFromShortBufferArr.createInitialised(e));
+    }
+
+    @Override
+    public VoxelDataType dataType() {
+        return DATA_TYPE;
+    }
 }

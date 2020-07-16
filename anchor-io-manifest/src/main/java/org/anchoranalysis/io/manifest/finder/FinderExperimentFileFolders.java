@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.finder;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.io.manifest.finder;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.finder;
 
 import java.util.List;
-
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.match.FolderWriteExperimentalFileFolder;
@@ -36,21 +34,22 @@ import org.anchoranalysis.io.manifest.match.FolderWriteExperimentalFileFolder;
 // Finders
 public class FinderExperimentFileFolders implements Finder {
 
-	private List<FolderWrite> list=null;
-	
-	@Override
-	public boolean doFind(ManifestRecorder manifestRecorder) {
-		list = FinderUtilities.findListFolder(manifestRecorder, new FolderWriteExperimentalFileFolder() );
-		return !list.isEmpty();
-	}
+    private List<FolderWrite> list = null;
 
-	@Override
-	public boolean exists() {
-		return list!=null && !list.isEmpty();
-	}
+    @Override
+    public boolean doFind(ManifestRecorder manifestRecorder) {
+        list =
+                FinderUtilities.findListFolder(
+                        manifestRecorder, new FolderWriteExperimentalFileFolder());
+        return !list.isEmpty();
+    }
 
-	public List<FolderWrite> getList() {
-		return list;
-	}
+    @Override
+    public boolean exists() {
+        return list != null && !list.isEmpty();
+    }
 
+    public List<FolderWrite> getList() {
+        return list;
+    }
 }

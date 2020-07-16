@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.log;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.log;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,19 +29,18 @@ package org.anchoranalysis.core.log;
 
 /**
  * Does nothing with (i.e. simply ignores) with any messages logged.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class NullMessageLogger implements MessageLogger {
-	
-	@Override
-	public void log(String message) {
-		// NOTHING TO DO		
-	}
 
-	@Override
-	public void logFormatted(String formatString, Object... args) {
-		// NOTHING TO DO		
-	}
+    @Override
+    public void log(String message) {
+        // NOTHING TO DO
+    }
+
+    @Override
+    public void logFormatted(String formatString, Object... args) {
+        // NOTHING TO DO
+    }
 }

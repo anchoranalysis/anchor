@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.transformer;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +23,26 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.transformer;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class TransformationContext {
 
-	private final ImageDimensions dimensions;
-	private final KernelCalcContext kernelCalcContext;
-	private final Logger logger;
+    private final ImageDimensions dimensions;
+    private final KernelCalcContext kernelCalcContext;
+    private final Logger logger;
 
-	public TransformationContext replaceError(ErrorNode errorNode) {
-		return new TransformationContext(
-			dimensions,
-			kernelCalcContext.replaceError(errorNode),
-			logger
-		);
-	}
-	
-	
+    public TransformationContext replaceError(ErrorNode errorNode) {
+        return new TransformationContext(
+                dimensions, kernelCalcContext.replaceError(errorNode), logger);
+    }
 }

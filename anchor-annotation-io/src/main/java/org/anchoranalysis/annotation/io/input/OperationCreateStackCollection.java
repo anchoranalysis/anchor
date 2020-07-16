@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.input;
-
-/*
+/*-
  * #%L
- * anchor-gui
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.annotation.io.input;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.input;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,39 +36,39 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 
-class OperationCreateStackCollection extends CachedOperationWithProgressReporter<NamedProvider<Stack>,CreateException> {
+class OperationCreateStackCollection
+        extends CachedOperationWithProgressReporter<NamedProvider<Stack>, CreateException> {
 
-	private ProvidesStackInput inputObject;
-	private int seriesNum;
-	private int t;
-	
-	public OperationCreateStackCollection( ProvidesStackInput inputObject ) {
-		this(inputObject,0,0);
-	}
-	
-	public OperationCreateStackCollection( ProvidesStackInput inputObject, int seriesNum, int t ) {
-		super();
-		this.inputObject = inputObject;
-		this.seriesNum = seriesNum;
-		this.t = t;
-	}
+    private ProvidesStackInput inputObject;
+    private int seriesNum;
+    private int t;
 
-	@Override
-	protected NamedImgStackCollection execute( ProgressReporter progressReporter ) throws CreateException {
-		try {
-			return doOperationWithException( progressReporter );
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	private NamedImgStackCollection doOperationWithException( ProgressReporter progressReporter ) throws OperationFailedException {
-		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-		inputObject.addToStore(
-			new WrapStackAsTimeSequenceStore(stackCollection, t),
-			seriesNum,
-			progressReporter
-		);
-		return stackCollection;
-	}	
+    public OperationCreateStackCollection(ProvidesStackInput inputObject) {
+        this(inputObject, 0, 0);
+    }
+
+    public OperationCreateStackCollection(ProvidesStackInput inputObject, int seriesNum, int t) {
+        super();
+        this.inputObject = inputObject;
+        this.seriesNum = seriesNum;
+        this.t = t;
+    }
+
+    @Override
+    protected NamedImgStackCollection execute(ProgressReporter progressReporter)
+            throws CreateException {
+        try {
+            return doOperationWithException(progressReporter);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private NamedImgStackCollection doOperationWithException(ProgressReporter progressReporter)
+            throws OperationFailedException {
+        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+        inputObject.addToStore(
+                new WrapStackAsTimeSequenceStore(stackCollection, t), seriesNum, progressReporter);
+        return stackCollection;
+    }
 }

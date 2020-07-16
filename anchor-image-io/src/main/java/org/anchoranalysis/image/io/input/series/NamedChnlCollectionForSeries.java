@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.input.series;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +23,11 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.input.series;
 
-
+import java.util.Optional;
 import java.util.Set;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -45,25 +42,22 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 public interface NamedChnlCollectionForSeries extends ChnlGetter {
-	
-	Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException;
-	
-	Set<String> chnlNames();
-	
-	int sizeT( ProgressReporter progressReporter ) throws RasterIOException;
-	
-	ImageDimensions dimensions() throws RasterIOException;
 
-	void addAsSeparateChnls(
-		NamedImgStackCollection stackCollection,
-		int t,
-		ProgressReporter progressReporter
-	) throws OperationFailedException;
-	
-	void addAsSeparateChnls(
-		NamedProviderStore<TimeSequence> stackCollection,
-		int t
-	) throws OperationFailedException;
-	
-	Operation<Stack,OperationFailedException> allChnlsAsStack(int t);
+    Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
+            throws GetOperationFailedException;
+
+    Set<String> chnlNames();
+
+    int sizeT(ProgressReporter progressReporter) throws RasterIOException;
+
+    ImageDimensions dimensions() throws RasterIOException;
+
+    void addAsSeparateChnls(
+            NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter)
+            throws OperationFailedException;
+
+    void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, int t)
+            throws OperationFailedException;
+
+    Operation<Stack, OperationFailedException> allChnlsAsStack(int t);
 }

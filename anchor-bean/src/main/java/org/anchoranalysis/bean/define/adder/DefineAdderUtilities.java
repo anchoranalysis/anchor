@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.define.adder;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +23,29 @@ package org.anchoranalysis.bean.define.adder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.define.adder;
 
 import java.util.List;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefineAdderUtilities {
-	
-	public static void addBeansFromList( Define out, List<NamedBean<?>> list ) throws BeanXmlException {
-	
-		try {
-			for( NamedBean<?> ni : list ) {
-				out.add(ni);
-			}
-		} catch (OperationFailedException e) {
-			throw new BeanXmlException(e);
-		}
-	}
+
+    public static void addBeansFromList(Define out, List<NamedBean<?>> list)
+            throws BeanXmlException {
+
+        try {
+            for (NamedBean<?> ni : list) {
+                out.add(ni);
+            }
+        } catch (OperationFailedException e) {
+            throw new BeanXmlException(e);
+        }
+    }
 }

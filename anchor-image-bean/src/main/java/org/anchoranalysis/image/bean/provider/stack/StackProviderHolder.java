@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider.stack;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.image.bean.provider.stack;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider.stack;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,22 +35,21 @@ import org.anchoranalysis.image.stack.Stack;
 // This is hack. When inserted into the usual framework, lots of standard bean behaviour wont work.
 public class StackProviderHolder extends StackProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private Stack stack;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private Stack stack;
+    // END BEAN PROPERTIES
 
-	public StackProviderHolder() {
-		// Needed to allow duplication in bean framework
-	}
-	
-	public StackProviderHolder(Stack stack) {
-		super();
-		this.stack = stack;
-	}
+    public StackProviderHolder() {
+        // Needed to allow duplication in bean framework
+    }
 
-	@Override
-	public Stack create() throws CreateException {
-		return stack;
-	}
+    public StackProviderHolder(Stack stack) {
+        super();
+        this.stack = stack;
+    }
+
+    @Override
+    public Stack create() throws CreateException {
+        return stack;
+    }
 }

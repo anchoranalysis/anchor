@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared.regex;
-
-/*
+/*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,54 +23,53 @@ package org.anchoranalysis.bean.shared.regex;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.regex;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class RegExList extends RegEx {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<RegEx> list = new ArrayList<>();
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Optional<String[]> match(String str) {
+    // START BEAN PROPERTIES
+    @BeanField private List<RegEx> list = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-		for( RegEx re : list ) {
-			Optional<String[]> matches = re.match(str);
-			if (matches.isPresent()) {
-				return matches;
-			}
-		}
-		return Optional.empty();
-	}
+    @Override
+    public Optional<String[]> match(String str) {
 
-	public List<RegEx> getList() {
-		return list;
-	}
+        for (RegEx re : list) {
+            Optional<String[]> matches = re.match(str);
+            if (matches.isPresent()) {
+                return matches;
+            }
+        }
+        return Optional.empty();
+    }
 
-	public void setList(List<RegEx> list) {
-		this.list = list;
-	}
+    public List<RegEx> getList() {
+        return list;
+    }
 
-	@Override
-	public String toString() {
-		boolean first = true;
-		StringBuilder sb = new StringBuilder();
-		for( RegEx re : list ) {
-			sb.append( re.toString() );
-			
-			if (first) {
-				first = false;
-			} else {
-				sb.append("\n");
-			}
-		}
-		return sb.toString();
-	}
+    public void setList(List<RegEx> list) {
+        this.list = list;
+    }
+
+    @Override
+    public String toString() {
+        boolean first = true;
+        StringBuilder sb = new StringBuilder();
+        for (RegEx re : list) {
+            sb.append(re.toString());
+
+            if (first) {
+                first = false;
+            } else {
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
+    }
 }

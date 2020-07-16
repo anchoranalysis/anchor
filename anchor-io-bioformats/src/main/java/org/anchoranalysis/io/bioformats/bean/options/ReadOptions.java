@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +23,29 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.bean.options;
 
 import java.util.List;
 import java.util.Optional;
-
-import org.anchoranalysis.bean.AnchorBean;
-
 import loci.formats.IFormatReader;
+import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class ReadOptions extends AnchorBean<ReadOptions> {
 
-	public abstract int sizeC(IFormatReader reader);
-	
-	public abstract int sizeT(IFormatReader reader);
-	
-	public abstract int sizeZ(IFormatReader reader);
-		
-	public abstract int effectiveBitsPerPixel(IFormatReader reader);
-	
-	public abstract int chnlsPerByteArray(IFormatReader reader);
-	
-	/** Is it an image with three channels (red, green and blue)? */
-	public abstract boolean isRGB(IFormatReader reader);
-	
-	/** Returns a list of channel-names or NULL if they are unavailable */
-	public abstract Optional<List<String>> determineChannelNames( IFormatReader reader );
+    public abstract int sizeC(IFormatReader reader);
+
+    public abstract int sizeT(IFormatReader reader);
+
+    public abstract int sizeZ(IFormatReader reader);
+
+    public abstract int effectiveBitsPerPixel(IFormatReader reader);
+
+    public abstract int chnlsPerByteArray(IFormatReader reader);
+
+    /** Is it an image with three channels (red, green and blue)? */
+    public abstract boolean isRGB(IFormatReader reader);
+
+    /** Returns a list of channel-names or NULL if they are unavailable */
+    public abstract Optional<List<String>> determineChannelNames(IFormatReader reader);
 }

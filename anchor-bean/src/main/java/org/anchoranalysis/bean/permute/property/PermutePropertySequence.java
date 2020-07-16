@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,36 +23,33 @@ package org.anchoranalysis.bean.permute.property;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.permute.property;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * Base class for permute-properties involving a sequence of numbers
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 public abstract class PermutePropertySequence<T> extends PermutePropertyWithPath<T> {
 
-	// START BEAN PROPERTIES
-	/**
-	 * Where the sequence starts
-	 */
-	@BeanField
-	private SequenceInteger sequence;
-	// END BEAN PROPERTIES
-	
-	protected SequenceIntegerIterator range() {
-		return sequence.iterator();
-	}
+    // START BEAN PROPERTIES
+    /** Where the sequence starts */
+    @BeanField private SequenceInteger sequence;
+    // END BEAN PROPERTIES
 
-	public SequenceInteger getSequence() {
-		return sequence;
-	}
+    protected SequenceIntegerIterator range() {
+        return sequence.iterator();
+    }
 
-	public void setSequence(SequenceInteger sequence) {
-		this.sequence = sequence;
-	}
+    public SequenceInteger getSequence() {
+        return sequence;
+    }
 
+    public void setSequence(SequenceInteger sequence) {
+        this.sequence = sequence;
+    }
 }

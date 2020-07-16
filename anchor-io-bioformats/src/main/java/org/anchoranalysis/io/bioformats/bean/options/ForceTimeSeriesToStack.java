@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,27 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.bean.options;
 
 import loci.formats.IFormatReader;
 
 /** Treats a time-series as if it was a z-stack */
 public class ForceTimeSeriesToStack extends ReadOptionsDelegate {
 
-	@Override
-	public int sizeT(IFormatReader reader) {
-		// Block normal time-series
-		return 1;
-	}
+    @Override
+    public int sizeT(IFormatReader reader) {
+        // Block normal time-series
+        return 1;
+    }
 
-	@Override
-	public int sizeZ(IFormatReader reader) {
-		return reader.getSizeT() * delegate().sizeZ(reader);
-	}
-	
-	@Override
-	public boolean isRGB(IFormatReader reader) {
-		return delegate().isRGB(reader);
-	}
+    @Override
+    public int sizeZ(IFormatReader reader) {
+        return reader.getSizeT() * delegate().sizeZ(reader);
+    }
+
+    @Override
+    public boolean isRGB(IFormatReader reader) {
+        return delegate().isRGB(reader);
+    }
 }

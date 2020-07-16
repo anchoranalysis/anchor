@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath.findmatching;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.filepath.findmatching;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.filepath.findmatching;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,35 +37,35 @@ import java.util.function.Predicate;
 
 class AddFilesToList extends SimpleFileVisitor<Path> {
 
-	private List<File> list;
-	private Predicate<Path> matcherFile;
-	private Predicate<Path> matcherDir;
-	
-	public AddFilesToList(List<File> list, Predicate<Path> matcherFile, Predicate<Path> matcherDir) {
-		super();
-		this.list = list;
-		this.matcherFile = matcherFile;
-		this.matcherDir = matcherDir;
-	}
+    private List<File> list;
+    private Predicate<Path> matcherFile;
+    private Predicate<Path> matcherDir;
 
-	@Override
-	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-		
-		if (attrs.isRegularFile() && !attrs.isDirectory() && matcherFile.test(file) ) {
-			list.add( file.normalize().toFile() );
-		}
-		return FileVisitResult.CONTINUE;
-	}
+    public AddFilesToList(
+            List<File> list, Predicate<Path> matcherFile, Predicate<Path> matcherDir) {
+        super();
+        this.list = list;
+        this.matcherFile = matcherFile;
+        this.matcherDir = matcherDir;
+    }
 
-	@Override
-	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 
-		if (!matcherDir.test(dir)) {
-			return FileVisitResult.SKIP_SUBTREE;
-		}
-		
-		return super.preVisitDirectory(dir, attrs);
-	}
-	
-	
+        if (attrs.isRegularFile() && !attrs.isDirectory() && matcherFile.test(file)) {
+            list.add(file.normalize().toFile());
+        }
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+            throws IOException {
+
+        if (!matcherDir.test(dir)) {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+
+        return super.preVisitDirectory(dir, attrs);
+    }
 }

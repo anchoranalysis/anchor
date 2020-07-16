@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.input;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.io.input;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.input;
 
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -32,10 +32,10 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class ImageInitParamsFactory {
 
-	private ImageInitParamsFactory() {}
-	
-	public static ImageInitParams create( BoundIOContext context ) {
-		SharedObjects so = new SharedObjects( context.common() );
-		return new ImageInitParams(so);
-	}
+    private ImageInitParamsFactory() {}
+
+    public static ImageInitParams create(BoundIOContext context) {
+        SharedObjects so = new SharedObjects(context.common());
+        return new ImageInitParams(so);
+    }
 }

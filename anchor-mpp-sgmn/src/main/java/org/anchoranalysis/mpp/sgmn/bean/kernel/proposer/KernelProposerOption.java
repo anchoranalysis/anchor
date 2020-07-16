@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +23,19 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
 
 import java.util.List;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
 public abstract class KernelProposerOption<T> extends AnchorBean<KernelProposerOption<T>> {
-	
-	// Add weighted kernel factories to a list, and returns the total weight
-	public abstract double addWeightedKernelFactories( List<WeightedKernel<T>> lst );
-	
-	public abstract double getWeightPositive();
-	public abstract double getWeightNegative();
+
+    // Add weighted kernel factories to a list, and returns the total weight
+    public abstract double addWeightedKernelFactories(List<WeightedKernel<T>> lst);
+
+    public abstract double getWeightPositive();
+
+    public abstract double getWeightNegative();
 }

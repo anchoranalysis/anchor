@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.file.matcher;
-
-/*
+/*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.io.bean.file.matcher;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.file.matcher;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -43,74 +42,76 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Matches filepaths against patterns
- * 
- * @author Owen
  *
+ * @author Owen
  */
 public abstract class FileMatcher extends AnchorBean<FileMatcher> {
 
-	/**
-	 * Finds a collection of files that match particular conditions
-	 * 
-	 * @param dir root directory to search
-	 * @param recursive whether to recursively search
-	 * @param ignoreHidden whether to ignore hidden files/directories or not 
-	 * @param maxDirDepth a maximum depth in directories to search
-	 * @param params parameters providing input-context
-	 * @param acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging it), otherwise throws an exception
-	 * @return a collection of files matching the conditions
-	 * @throws AnchorIOException if an error occurrs reading/writing or interacting with the filesystem
-	 */
-	public Collection<File> matchingFiles(
-		Path dir,
-		boolean recursive,
-		boolean ignoreHidden,
-		boolean acceptDirectoryErrors,
-		int maxDirDepth,
-		InputManagerParams params
-	) throws AnchorIOException {
-		
-		if (dir.toString().isEmpty()) {
-			throw new AnchorIOException("The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
-		}
-		
-		if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
-			throw new AnchorIOException( String.format("Directory '%s' does not exist", dir) );
-		}
-		
-		// Many checks are possible on a file, including whether it is hidden or not
-		Predicate<Path> filePred = maybeAddIgnoreHidden( ignoreHidden, createMatcherFile(dir, params.getInputContext()) );
-		
-		// The only check on a directory is (maybe) whether it is hidden or not
-		Predicate<Path> dirPred = maybeAddIgnoreHidden( ignoreHidden, p->true ); 
-		
-		try {
-			return createMatchingFiles(params.getProgressReporter(), recursive).apply(
-				dir,
-				new PathMatchConstraints(
-					filePred,
-					dirPred,
-					maxDirDepth
-				),
-				acceptDirectoryErrors,
-				params.getLogger()
-			);
-		} catch (FindFilesException e) {
-			throw new AnchorIOException("Cannot find matching files", e);
-		}
-	}
-	
-	private Predicate<Path> maybeAddIgnoreHidden( boolean ignoreHidden, Predicate<Path> pred ) {
-		if (ignoreHidden) {
-			return p -> pred.test(p) && HiddenPathChecker.includePath(p);
-		} else {
-			return pred;
-		}
-	}
-	
-	protected abstract Predicate<Path> createMatcherFile( Path dir, InputContextParams inputContext ) throws AnchorIOException;
-	
-	private FindMatchingFiles createMatchingFiles(ProgressReporter progressReporter, boolean recursive ) {
-		return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
-	}
+    /**
+     * Finds a collection of files that match particular conditions
+     *
+     * @param dir root directory to search
+     * @param recursive whether to recursively search
+     * @param ignoreHidden whether to ignore hidden files/directories or not
+     * @param maxDirDepth a maximum depth in directories to search
+     * @param params parameters providing input-context
+     * @param acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging
+     *     it), otherwise throws an exception
+     * @return a collection of files matching the conditions
+     * @throws AnchorIOException if an error occurrs reading/writing or interacting with the
+     *     filesystem
+     */
+    public Collection<File> matchingFiles(
+            Path dir,
+            boolean recursive,
+            boolean ignoreHidden,
+            boolean acceptDirectoryErrors,
+            int maxDirDepth,
+            InputManagerParams params)
+            throws AnchorIOException {
+
+        if (dir.toString().isEmpty()) {
+            throw new AnchorIOException(
+                    "The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
+        }
+
+        if (!dir.toFile().exists() || !dir.toFile().isDirectory()) {
+            throw new AnchorIOException(String.format("Directory '%s' does not exist", dir));
+        }
+
+        // Many checks are possible on a file, including whether it is hidden or not
+        Predicate<Path> filePred =
+                maybeAddIgnoreHidden(
+                        ignoreHidden, createMatcherFile(dir, params.getInputContext()));
+
+        // The only check on a directory is (maybe) whether it is hidden or not
+        Predicate<Path> dirPred = maybeAddIgnoreHidden(ignoreHidden, p -> true);
+
+        try {
+            return createMatchingFiles(params.getProgressReporter(), recursive)
+                    .apply(
+                            dir,
+                            new PathMatchConstraints(filePred, dirPred, maxDirDepth),
+                            acceptDirectoryErrors,
+                            params.getLogger());
+        } catch (FindFilesException e) {
+            throw new AnchorIOException("Cannot find matching files", e);
+        }
+    }
+
+    private Predicate<Path> maybeAddIgnoreHidden(boolean ignoreHidden, Predicate<Path> pred) {
+        if (ignoreHidden) {
+            return p -> pred.test(p) && HiddenPathChecker.includePath(p);
+        } else {
+            return pred;
+        }
+    }
+
+    protected abstract Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext)
+            throws AnchorIOException;
+
+    private FindMatchingFiles createMatchingFiles(
+            ProgressReporter progressReporter, boolean recursive) {
+        return new FindMatchingFilesWithProgressReporter(recursive, progressReporter);
+    }
 }

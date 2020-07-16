@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.buffer;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,89 +23,88 @@ package org.anchoranalysis.image.voxel.buffer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public final class VoxelBufferByte extends VoxelBuffer<ByteBuffer> {
 
-	private final ByteBuffer delegate;
+    private final ByteBuffer delegate;
 
-	private VoxelBufferByte(ByteBuffer delegate) {
-		super();
-		this.delegate = delegate;
-	}
-	
-	public static VoxelBufferByte allocate( int size ) {
-		return new VoxelBufferByte( ByteBuffer.allocate(size) );
-	}
-	
-	public static VoxelBufferByte wrap( byte[] arr ) {
-		return new VoxelBufferByte( ByteBuffer.wrap(arr) );
-	}
-	
-	public static VoxelBufferByte wrap( ByteBuffer buffer ) {
-		return new VoxelBufferByte( buffer );
-	}
+    private VoxelBufferByte(ByteBuffer delegate) {
+        super();
+        this.delegate = delegate;
+    }
 
-	@Override
-	public ByteBuffer buffer() {
-		return delegate;
-	}
+    public static VoxelBufferByte allocate(int size) {
+        return new VoxelBufferByte(ByteBuffer.allocate(size));
+    }
 
-	public byte get() {
-		return delegate.get();
-	}
+    public static VoxelBufferByte wrap(byte[] arr) {
+        return new VoxelBufferByte(ByteBuffer.wrap(arr));
+    }
 
-	public byte get(int index) {
-		return delegate.get(index);
-	}
+    public static VoxelBufferByte wrap(ByteBuffer buffer) {
+        return new VoxelBufferByte(buffer);
+    }
 
-	public ByteBuffer put(int index, byte b) {
-		return delegate.put(index, b);
-	}
+    @Override
+    public ByteBuffer buffer() {
+        return delegate;
+    }
 
-	public final byte[] array() {
-		return delegate.array();
-	}
+    public byte get() {
+        return delegate.get();
+    }
 
-	@Override
-	public VoxelBuffer<ByteBuffer> duplicate() {
-		return new VoxelBufferByte(ByteConverter.copy(delegate));
-	}
+    public byte get(int index) {
+        return delegate.get(index);
+    }
 
-	@Override
-	public VoxelDataType dataType() {
-		return VoxelDataTypeUnsignedByte.INSTANCE;
-	}
+    public ByteBuffer put(int index, byte b) {
+        return delegate.put(index, b);
+    }
 
-	@Override
-	public int getInt(int index) {
-		return ByteConverter.unsignedByteToInt( delegate.get(index) );
-	}
+    public final byte[] array() {
+        return delegate.array();
+    }
 
-	@Override
-	public void putInt(int index, int val) {
-		delegate.put(index, (byte) val);
-	}
+    @Override
+    public VoxelBuffer<ByteBuffer> duplicate() {
+        return new VoxelBufferByte(ByteConverter.copy(delegate));
+    }
 
-	@Override
-	public void putByte(int index, byte val) {
-		delegate.put(index, val);
-	}
-	
-	@Override
-	public void transferFrom(int destIndex, VoxelBuffer<ByteBuffer> src, int srcIndex) {
-		delegate.put( destIndex, src.buffer().get(srcIndex) );		
-	}
+    @Override
+    public VoxelDataType dataType() {
+        return VoxelDataTypeUnsignedByte.INSTANCE;
+    }
 
-	@Override
-	public int size() {
-		return delegate.capacity();
-	}
+    @Override
+    public int getInt(int index) {
+        return ByteConverter.unsignedByteToInt(delegate.get(index));
+    }
 
+    @Override
+    public void putInt(int index, int val) {
+        delegate.put(index, (byte) val);
+    }
+
+    @Override
+    public void putByte(int index, byte val) {
+        delegate.put(index, val);
+    }
+
+    @Override
+    public void transferFrom(int destIndex, VoxelBuffer<ByteBuffer> src, int srcIndex) {
+        delegate.put(destIndex, src.buffer().get(srcIndex));
+    }
+
+    @Override
+    public int size() {
+        return delegate.capacity();
+    }
 }

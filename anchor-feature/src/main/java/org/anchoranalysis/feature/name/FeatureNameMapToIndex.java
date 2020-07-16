@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.name;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,46 +23,46 @@ package org.anchoranalysis.feature.name;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.name;
 
 import java.util.HashMap;
-
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
- *  A map of Feature-Names (Strings) to indexes (Int)
+ * A map of Feature-Names (Strings) to indexes (Int)
  *
- *  Implemented as a {@link HashMap}.
- * 
+ * <p>Implemented as a {@link HashMap}.
+ *
  * @author Owen Feehan
- *
  */
 public class FeatureNameMapToIndex {
 
-	private HashMap<String,Integer> delegate = new HashMap<>();
-	
-	/**
-	 * Adds a new featureName and index
-	 * 
-	 * @param featureName
-	 * @param index
-	 */
-	public void add( String featureName, int index ) {
-		delegate.put(featureName, index);
-	}
-	
-	/**
-	 * The index for a particular featureName
-	 * 
-	 * @param featureName
-	 * @return the index
-	 * @throws GetOperationFailedException
-	 */
-	public int indexOf( String featureName ) throws GetOperationFailedException {
-		Integer index = delegate.get(featureName);
-		if (index==null) {
-			throw new GetOperationFailedException( String.format("Cannot find '%s' in FeatureNameIndex", featureName ));
-		}
-		return index;
-	}
+    private HashMap<String, Integer> delegate = new HashMap<>();
+
+    /**
+     * Adds a new featureName and index
+     *
+     * @param featureName
+     * @param index
+     */
+    public void add(String featureName, int index) {
+        delegate.put(featureName, index);
+    }
+
+    /**
+     * The index for a particular featureName
+     *
+     * @param featureName
+     * @return the index
+     * @throws GetOperationFailedException
+     */
+    public int indexOf(String featureName) throws GetOperationFailedException {
+        Integer index = delegate.get(featureName);
+        if (index == null) {
+            throw new GetOperationFailedException(
+                    String.format("Cannot find '%s' in FeatureNameIndex", featureName));
+        }
+        return index;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.rgb;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,28 @@ package org.anchoranalysis.image.stack.rgb;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.rgb;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class RGBOutputUtils {
-	
-	private RGBOutputUtils() {}
-	
-	public static void writeRGBColorToByteArr( RGBColor c, Point3i point, ImageDimensions sd, ByteBuffer red, ByteBuffer blue, ByteBuffer green ) {
-		int index = sd.offset(point.getX(), point.getY(), 0);
-		red.put(index, (byte) c.getRed());
-		green.put(index, (byte) c.getGreen());
-		blue.put(index, (byte) c.getBlue());
-		
-	}
+
+    private RGBOutputUtils() {}
+
+    public static void writeRGBColorToByteArr(
+            RGBColor c,
+            Point3i point,
+            ImageDimensions sd,
+            ByteBuffer red,
+            ByteBuffer blue,
+            ByteBuffer green) {
+        int index = sd.offset(point.getX(), point.getY(), 0);
+        red.put(index, (byte) c.getRed());
+        green.put(index, (byte) c.getGreen());
+        blue.put(index, (byte) c.getBlue());
+    }
 }

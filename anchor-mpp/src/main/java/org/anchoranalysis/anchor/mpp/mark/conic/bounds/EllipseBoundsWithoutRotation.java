@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
-
-import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
-import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,62 +23,60 @@ import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
 
-
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
+import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1109615535786453388L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private Bound radius;
-	// END BEAN PROPERTIES
-	
-	public EllipseBoundsWithoutRotation() {
-		super();
-		radius = null;
-	}
-	
-	// Constructor
-	public EllipseBoundsWithoutRotation(Bound radiusBound) {
-		super();
-		radius = radiusBound;
-	}
-	
-	// Copy Constructor
-	public EllipseBoundsWithoutRotation( EllipseBoundsWithoutRotation src ) {
-		super();
-		radius = src.radius.duplicate();
-	}
-	
-	public Bound getRadius() {
-		return radius;
-	}
+    /** */
+    private static final long serialVersionUID = -1109615535786453388L;
 
-	public void setRadius(Bound radiusX) {
-		this.radius = radiusX;
-	}
-	
-	// NB objects are scaled in pre-rotated position i.e. when aligned to axes
-	public void scaleXY( double multFactor ) {
-		this.radius.scale(multFactor);
-	}
-	
-	@Override
-	public double getMinResolved( ImageResolution sr, boolean do3D ) {
-		return radius.getMinResolved(sr, do3D);
-	}
-	
-	@Override
-	public double getMaxResolved( ImageResolution sr, boolean do3D ) {
-		return radius.getMaxResolved(sr, do3D);
-	}
-	
+    // START BEAN PROPERTIES
+    @BeanField private Bound radius;
+    // END BEAN PROPERTIES
 
+    public EllipseBoundsWithoutRotation() {
+        super();
+        radius = null;
+    }
+
+    // Constructor
+    public EllipseBoundsWithoutRotation(Bound radiusBound) {
+        super();
+        radius = radiusBound;
+    }
+
+    // Copy Constructor
+    public EllipseBoundsWithoutRotation(EllipseBoundsWithoutRotation src) {
+        super();
+        radius = src.radius.duplicate();
+    }
+
+    public Bound getRadius() {
+        return radius;
+    }
+
+    public void setRadius(Bound radiusX) {
+        this.radius = radiusX;
+    }
+
+    // NB objects are scaled in pre-rotated position i.e. when aligned to axes
+    public void scaleXY(double multFactor) {
+        this.radius.scale(multFactor);
+    }
+
+    @Override
+    public double getMinResolved(ImageResolution sr, boolean do3D) {
+        return radius.getMinResolved(sr, do3D);
+    }
+
+    @Override
+    public double getMaxResolved(ImageResolution sr, boolean do3D) {
+        return radius.getMaxResolved(sr, do3D);
+    }
 }

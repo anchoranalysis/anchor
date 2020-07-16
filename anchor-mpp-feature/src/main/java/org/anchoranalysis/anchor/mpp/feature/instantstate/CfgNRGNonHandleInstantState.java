@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.instantstate;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,24 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.instantstate;
 
 import lombok.EqualsAndHashCode;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 
 @EqualsAndHashCode(callSuper = true)
 public class CfgNRGNonHandleInstantState extends CfgNRGInstantState {
 
-	private CfgNRG cfgNRG;
-	
-	public CfgNRGNonHandleInstantState(int iter, CfgNRG cfgNRG) {
-		super(iter);
-		this.cfgNRG = cfgNRG;
-	}
+    private CfgNRG cfgNRG;
 
-	@Override
-	public CfgNRG getCfgNRG() {
-		return cfgNRG;
-	}
+    public CfgNRGNonHandleInstantState(int iter, CfgNRG cfgNRG) {
+        super(iter);
+        this.cfgNRG = cfgNRG;
+    }
+
+    @Override
+    public CfgNRG getCfgNRG() {
+        return cfgNRG;
+    }
 }

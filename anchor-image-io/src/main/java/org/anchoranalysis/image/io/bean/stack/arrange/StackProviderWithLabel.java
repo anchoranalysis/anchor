@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.bean.stack.arrange;
-
-import org.anchoranalysis.bean.NullParamsBean;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +23,10 @@ import org.anchoranalysis.bean.NullParamsBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.stack.arrange;
 
-
+import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
@@ -36,37 +34,32 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class StackProviderWithLabel extends NullParamsBean<StackProviderWithLabel> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StackProvider stackProvider;
-	
-	@BeanField
-	private String label;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private StackProvider stackProvider;
 
-	public StackProviderWithLabel() {
-		
-	}
-	
-	public StackProviderWithLabel( Stack stack, String label ) {
-		this.stackProvider = new StackProviderHolder(stack);
-		this.label = label;
-	}
-	
-	public StackProvider getStackProvider() {
-		return stackProvider;
-	}
+    @BeanField private String label;
+    // END BEAN PROPERTIES
 
-	public void setStackProvider(StackProvider stackProvider) {
-		this.stackProvider = stackProvider;
-	}
+    public StackProviderWithLabel() {}
 
-	public String getLabel() {
-		return label;
-	}
+    public StackProviderWithLabel(Stack stack, String label) {
+        this.stackProvider = new StackProviderHolder(stack);
+        this.label = label;
+    }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    public StackProvider getStackProvider() {
+        return stackProvider;
+    }
 
+    public void setStackProvider(StackProvider stackProvider) {
+        this.stackProvider = stackProvider;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 }

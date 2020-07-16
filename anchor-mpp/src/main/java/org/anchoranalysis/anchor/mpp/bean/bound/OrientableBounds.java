@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.bound;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.anchor.mpp.bean.bound;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.bound;
 
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -32,10 +32,9 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class OrientableBounds extends MarkBounds {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7378361406755456211L;
+    /** */
+    private static final long serialVersionUID = -7378361406755456211L;
 
-	public abstract Orientation randomOrientation(RandomNumberGenerator randomNumberGenerator, ImageResolution res);
+    public abstract Orientation randomOrientation(
+            RandomNumberGenerator randomNumberGenerator, ImageResolution res);
 }

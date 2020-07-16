@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.bean.operator;
-
-
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +23,8 @@ package org.anchoranalysis.feature.bean.operator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -36,49 +34,47 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
 
-	// START BEAN PROPERTIES
-	/**
-	 * If TRUE, we ignore any NaN values. Otherwise the sum becomes NaN
-	 */
-	private boolean ignoreNaN;
-	// END BEAN PROPERTIES
-	
-	public Sum() {
-		// Standard bean constructor
-	}
-	
-	public Sum(FeatureList<T> list) {
-		super(list);
-	}
-	
-	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double result = 0;
-		
-		for (Feature<T> elem : getList()) {
-			double resultInd = input.calc( elem );
-			
-			if (ignoreNaN && Double.isNaN(resultInd)) {
-				continue;
-			}
-			
-			result += resultInd;
-		}
-		
-		return result;
-	}
-	
-	@Override
-	public String getDscrLong() {
-		return descriptionForList("+");
-	}
+    // START BEAN PROPERTIES
+    /** If TRUE, we ignore any NaN values. Otherwise the sum becomes NaN */
+    private boolean ignoreNaN;
+    // END BEAN PROPERTIES
 
-	public boolean isIgnoreNaN() {
-		return ignoreNaN;
-	}
+    public Sum() {
+        // Standard bean constructor
+    }
 
-	public void setIgnoreNaN(boolean ignoreNaN) {
-		this.ignoreNaN = ignoreNaN;
-	}
+    public Sum(FeatureList<T> list) {
+        super(list);
+    }
+
+    @Override
+    public double calc(SessionInput<T> input) throws FeatureCalcException {
+
+        double result = 0;
+
+        for (Feature<T> elem : getList()) {
+            double resultInd = input.calc(elem);
+
+            if (ignoreNaN && Double.isNaN(resultInd)) {
+                continue;
+            }
+
+            result += resultInd;
+        }
+
+        return result;
+    }
+
+    @Override
+    public String getDscrLong() {
+        return descriptionForList("+");
+    }
+
+    public boolean isIgnoreNaN() {
+        return ignoreNaN;
+    }
+
+    public void setIgnoreNaN(boolean ignoreNaN) {
+        this.ignoreNaN = ignoreNaN;
+    }
 }

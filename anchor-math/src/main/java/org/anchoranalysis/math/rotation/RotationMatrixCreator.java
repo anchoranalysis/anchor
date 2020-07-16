@@ -1,10 +1,8 @@
-package org.anchoranalysis.math.rotation;
-
-/*
+/*-
  * #%L
- * anchor-core
+ * anchor-math
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,18 @@ package org.anchoranalysis.math.rotation;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.math.rotation;
 
 public abstract class RotationMatrixCreator { // NOSONAR
 
-	public RotationMatrix createRotationMatrix() { 
-		RotationMatrix matrix = new RotationMatrix( getNumDim() );
-		createRotationMatrix(matrix);
-		return matrix;
-	}
-	
-	public abstract void createRotationMatrix( RotationMatrix matrix );
-	
-	public abstract int getNumDim();
+    public RotationMatrix createRotationMatrix() {
+        RotationMatrix matrix = new RotationMatrix(getNumDim());
+        createRotationMatrix(matrix);
+        return matrix;
+    }
+
+    public abstract void createRotationMatrix(RotationMatrix matrix);
+
+    public abstract int getNumDim();
 }

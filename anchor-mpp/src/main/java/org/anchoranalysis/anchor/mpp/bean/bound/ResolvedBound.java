@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.bound;
-
-import java.io.Serializable;
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,58 +23,57 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.bound;
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 /** A bound resolved into pixel units */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResolvedBound extends AnchorBean<ResolvedBound> implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private double min = 0.0;
-	
-	@BeanField @Getter @Setter
-	private double max = 1.0;
-	// END BEAN PROPERTIES
-	
-	public ResolvedBound( ResolvedBound src ) {
-		this.min = src.min;
-		this.max = src.max;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private double min = 0.0;
 
-	public boolean contains( double val ) {
-		return (val>=min && val <=max);
-	}
+    @BeanField @Getter @Setter private double max = 1.0;
+    // END BEAN PROPERTIES
 
-	public String getDscr() {
-		return String.format("resolvedBound(min=%f,max=%f)", getMin(), getMax());
-	}
-	
-	public void scale( double multFactor ) {
-		this.min = this.min * multFactor;
-		this.max = this.max * multFactor;
-	}
-	
-	/** A random value between the bounds (open interval) */
-	public double randOpen( RandomNumberGenerator randomNumberGenerator ) {
-		return randomNumberGenerator.sampleDoubleFromRange(min,max);
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("%f-%f", min, max);
-	}
+    public ResolvedBound(ResolvedBound src) {
+        this.min = src.min;
+        this.max = src.max;
+    }
+
+    public boolean contains(double val) {
+        return (val >= min && val <= max);
+    }
+
+    public String getDscr() {
+        return String.format("resolvedBound(min=%f,max=%f)", getMin(), getMax());
+    }
+
+    public void scale(double multFactor) {
+        this.min = this.min * multFactor;
+        this.max = this.max * multFactor;
+    }
+
+    /** A random value between the bounds (open interval) */
+    public double randOpen(RandomNumberGenerator randomNumberGenerator) {
+        return randomNumberGenerator.sampleDoubleFromRange(min, max);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%f-%f", min, max);
+    }
 }

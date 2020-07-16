@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.xml.factory;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,63 +23,57 @@ package org.anchoranalysis.bean.xml.factory;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.xml.factory;
 
 import java.util.List;
-
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
-
 /**
  * Factory for creating a java.util.List of Beans
- * 
- * Several {@code <item>someitem</item>} tags can be placed in the BeanXML
- *   and each becomes an item in the list
- * 
- *  <pre>
- *  {@code
- *    <list config-class="java.util.List" config-factory="list">
- *    	<item config-class="someclass"/>
- *    	<item config-class="someclass"/>
- *      <item config-class="someclass"/>
- *    </list>
- *  }
- *  </pre>
- * 
- * @author Owen Feehan
  *
+ * <p>Several {@code <item>someitem</item>} tags can be placed in the BeanXML and each becomes an
+ * item in the list
+ *
+ * <pre>{@code
+ * <list config-class="java.util.List" config-factory="list">
+ * 	<item config-class="someclass"/>
+ * 	<item config-class="someclass"/>
+ *   <item config-class="someclass"/>
+ * </list>
+ * }</pre>
+ *
+ * @author Owen Feehan
  * @param <T> list-item type
  */
 public class ListBeanFactory<T> extends AnchorBeanFactory {
 
-	private ICreateFromList<T> creator;
-	
-	public ListBeanFactory() {
-		// FOR BEAN INITIALIZATION
-	}
-	
-    public ListBeanFactory(
-			ICreateFromList<T> creator) {
-		super();
-		this.creator = creator;
-	}
+    private ICreateFromList<T> creator;
 
-	// Creates the bean. Checks if already an instance exists.
-	@Override
-	@SuppressWarnings("rawtypes")
-	public synchronized Object createBean(Class beanClass, BeanDeclaration decl,
-        Object param) throws Exception
-    {
-    	XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
-    	SubnodeConfiguration subConfig = declXML.getConfiguration();
-    	
-    	List<T> list = HelperListUtilities.listOfBeans("item", subConfig, param);
-    	if (creator!=null) {
-	    	return creator.create(list);
-    	} else {
-    		return list;
-    	}
+    public ListBeanFactory() {
+        // FOR BEAN INITIALIZATION
+    }
+
+    public ListBeanFactory(ICreateFromList<T> creator) {
+        super();
+        this.creator = creator;
+    }
+
+    // Creates the bean. Checks if already an instance exists.
+    @Override
+    @SuppressWarnings("rawtypes")
+    public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
+            throws Exception {
+        XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
+        SubnodeConfiguration subConfig = declXML.getConfiguration();
+
+        List<T> list = HelperListUtilities.listOfBeans("item", subConfig, param);
+        if (creator != null) {
+            return creator.create(list);
+        } else {
+            return list;
+        }
     }
 }

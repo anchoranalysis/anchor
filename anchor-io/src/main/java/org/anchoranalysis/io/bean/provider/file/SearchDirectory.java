@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.provider.file;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,12 @@ package org.anchoranalysis.io.bean.provider.file;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.provider.file;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
@@ -41,103 +39,101 @@ import org.anchoranalysis.io.glob.GlobExtractor;
 import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 
 public class SearchDirectory extends FileProviderWithDirectoryString {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private FileMatcher matcher;
-	
-	@BeanField
-	private boolean recursive = false;
-	
-	/** If non-negative the max depth of directories. If -1, then there is no maximum depth. */
-	@BeanField
-	private int maxDirectoryDepth = -1;
-	
-	/** if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used
-	 *  i.e. Windows ignores case, Linux doesn't
-	 */
-	@BeanField
-	private boolean ignoreHidden = true;
-	
-	/**
-	 * if TRUE, continues when a directory-access-error occurs (logging it), otherwise throws an exception
-	 */
-	@BeanField
-	private boolean acceptDirectoryErrors = false;
-	// END BEAN PROPERTIES
-	
-	// Matching files
-	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws FileProviderException {
 
-		int maxDirDepth = maxDirectoryDepth>=0 ? maxDirectoryDepth : Integer.MAX_VALUE;	// maxDepth of directories searches
-		try {
-			return matcher.matchingFiles(directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
-		} catch (AnchorIOException e) {
-			throw new FileProviderException(e);
-		}
-	}
-	
-	
-	/**
-	 * Sets both the fileFilter and the Directory from a combinedFileFilter string
-	 * 
-	 * This is a glob matching e.g.  somefilepath/*.tif  or somefilepath\*.tif
-	 * 
-	 * @param combinedFileFilter
-	 */
-	public void setFileFilterAndDirectory( Path combinedFileFilter ) {
-		
-		GlobWithDirectory gwd = GlobExtractor.extract(combinedFileFilter.toString());
-		
-		
-		MatchGlob matcherGlob = new MatchGlob();
-		matcherGlob.setGlob( gwd.getGlob() );
-		
-		setDirectory(
-			gwd.getDirectory().orElse("")
-		);
-		
-		this.matcher = matcherGlob;
-	}
-	
-	public boolean isRecursive() {
-		return recursive;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private FileMatcher matcher;
 
-	public void setRecursive(boolean recursive) {
-		this.recursive = recursive;
-	}
+    @BeanField private boolean recursive = false;
 
-	public int getMaxDirectoryDepth() {
-		return maxDirectoryDepth;
-	}
+    /** If non-negative the max depth of directories. If -1, then there is no maximum depth. */
+    @BeanField private int maxDirectoryDepth = -1;
 
-	public void setMaxDirectoryDepth(int maxDirectoryDepth) {
-		this.maxDirectoryDepth = maxDirectoryDepth;
-	}
+    /**
+     * if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
+     * Windows ignores case, Linux doesn't
+     */
+    @BeanField private boolean ignoreHidden = true;
 
-	public boolean isIgnoreHidden() {
-		return ignoreHidden;
-	}
+    /**
+     * if TRUE, continues when a directory-access-error occurs (logging it), otherwise throws an
+     * exception
+     */
+    @BeanField private boolean acceptDirectoryErrors = false;
+    // END BEAN PROPERTIES
 
-	public void setIgnoreHidden(boolean ignoreHidden) {
-		this.ignoreHidden = ignoreHidden;
-	}
+    // Matching files
+    @Override
+    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+            throws FileProviderException {
 
-	public FileMatcher getMatcher() {
-		return matcher;
-	}
+        int maxDirDepth =
+                maxDirectoryDepth >= 0
+                        ? maxDirectoryDepth
+                        : Integer.MAX_VALUE; // maxDepth of directories searches
+        try {
+            return matcher.matchingFiles(
+                    directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
+        } catch (AnchorIOException e) {
+            throw new FileProviderException(e);
+        }
+    }
 
-	public void setMatcher(FileMatcher matcher) {
-		this.matcher = matcher;
-	}
+    /**
+     * Sets both the fileFilter and the Directory from a combinedFileFilter string
+     *
+     * <p>This is a glob matching e.g. somefilepath/*.tif or somefilepath\*.tif
+     *
+     * @param combinedFileFilter
+     */
+    public void setFileFilterAndDirectory(Path combinedFileFilter) {
 
-	public boolean isAcceptDirectoryErrors() {
-		return acceptDirectoryErrors;
-	}
+        GlobWithDirectory gwd = GlobExtractor.extract(combinedFileFilter.toString());
 
-	public void setAcceptDirectoryErrors(boolean acceptDirectoryErrors) {
-		this.acceptDirectoryErrors = acceptDirectoryErrors;
-	}
+        MatchGlob matcherGlob = new MatchGlob();
+        matcherGlob.setGlob(gwd.getGlob());
+
+        setDirectory(gwd.getDirectory().orElse(""));
+
+        this.matcher = matcherGlob;
+    }
+
+    public boolean isRecursive() {
+        return recursive;
+    }
+
+    public void setRecursive(boolean recursive) {
+        this.recursive = recursive;
+    }
+
+    public int getMaxDirectoryDepth() {
+        return maxDirectoryDepth;
+    }
+
+    public void setMaxDirectoryDepth(int maxDirectoryDepth) {
+        this.maxDirectoryDepth = maxDirectoryDepth;
+    }
+
+    public boolean isIgnoreHidden() {
+        return ignoreHidden;
+    }
+
+    public void setIgnoreHidden(boolean ignoreHidden) {
+        this.ignoreHidden = ignoreHidden;
+    }
+
+    public FileMatcher getMatcher() {
+        return matcher;
+    }
+
+    public void setMatcher(FileMatcher matcher) {
+        this.matcher = matcher;
+    }
+
+    public boolean isAcceptDirectoryErrors() {
+        return acceptDirectoryErrors;
+    }
+
+    public void setAcceptDirectoryErrors(boolean acceptDirectoryErrors) {
+        this.acceptDirectoryErrors = acceptDirectoryErrors;
+    }
 }

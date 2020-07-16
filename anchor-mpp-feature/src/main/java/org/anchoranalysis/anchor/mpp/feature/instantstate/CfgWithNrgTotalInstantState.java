@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.instantstate;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +23,28 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
-import org.anchoranalysis.core.index.SingleIndexCntr;
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.instantstate;
 
 import lombok.EqualsAndHashCode;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
+import org.anchoranalysis.core.index.SingleIndexCntr;
 
 @EqualsAndHashCode(callSuper = true)
 public class CfgWithNrgTotalInstantState extends SingleIndexCntr {
 
-	private CfgWithNRGTotal cfg;
-	
-	public CfgWithNrgTotalInstantState(int iter, CfgWithNRGTotal cfg) {
-		super(iter);
-		this.cfg = cfg;
-	}
+    private CfgWithNRGTotal cfg;
 
-	public CfgWithNRGTotal getCfg() {
-		return cfg;
-	}
+    public CfgWithNrgTotalInstantState(int iter, CfgWithNRGTotal cfg) {
+        super(iter);
+        this.cfg = cfg;
+    }
 
-	public void setCfg(CfgWithNRGTotal cfg) {
-		this.cfg = cfg;
-	}
+    public CfgWithNRGTotal getCfg() {
+        return cfg;
+    }
 
+    public void setCfg(CfgWithNRGTotal cfg) {
+        this.cfg = cfg;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Collection;
 import java.util.Optional;
-
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -42,104 +40,118 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class CollectionGenerator<T> implements Generator, IterableGenerator<Collection<T>> {
 
-	private Collection<T> collection;
-	private IterableGenerator<T> generator;
-	private BoundOutputManager outputManager;
-	private int numDigits;
-	private boolean checkIfAllowed;
-	private String subfolderName;
-	
-	public CollectionGenerator(String subfolderName,
-			IterableGenerator<T> generator, BoundOutputManager outputManager, int numDigits, boolean checkIfAllowed ) {
-		super();
-		this.generator = generator;
-		this.outputManager = outputManager;
-		this.numDigits = numDigits;
-		this.checkIfAllowed = checkIfAllowed;
-		this.subfolderName = subfolderName;
-	}
-	
-	public CollectionGenerator(Collection<T> collection, String subfolderName,
-			IterableGenerator<T> generator, BoundOutputManager outputManager, int numDigits, boolean checkIfAllowed ) {
-		super();
-		this.collection = collection;
-		this.generator = generator;
-		this.outputManager = outputManager;
-		this.numDigits = numDigits;
-		this.checkIfAllowed = checkIfAllowed;
-		this.subfolderName = subfolderName;
-	}
+    private Collection<T> collection;
+    private IterableGenerator<T> generator;
+    private BoundOutputManager outputManager;
+    private int numDigits;
+    private boolean checkIfAllowed;
+    private String subfolderName;
 
-	@Override
-	public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager) throws OutputWriteFailedException {
-		
-		writeCollection( subfolderName, outputNameStyle.deriveIndexableStyle(numDigits), 0 );
-	}
+    public CollectionGenerator(
+            String subfolderName,
+            IterableGenerator<T> generator,
+            BoundOutputManager outputManager,
+            int numDigits,
+            boolean checkIfAllowed) {
+        super();
+        this.generator = generator;
+        this.outputManager = outputManager;
+        this.numDigits = numDigits;
+        this.checkIfAllowed = checkIfAllowed;
+        this.subfolderName = subfolderName;
+    }
 
-	@Override
-	public int write(IndexableOutputNameStyle outputNameStyle, String index, BoundOutputManager outputManager)
-			throws OutputWriteFailedException {
-		
-		// In this context, we take the index as an indication of the first id to use - and assume the String index is a number
-		int indexInt = Integer.parseInt(index);
-		return writeCollection( subfolderName, outputNameStyle, indexInt );
-	}
-	
-	private int writeCollection( String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex ) throws OutputWriteFailedException {
-		
-		assert( collection!= null );
-		
-		// We start with id with 0
-		GeneratorSequenceIncrementalWriter<T> sequenceWriter = new GeneratorSequenceIncrementalWriter<>(
-			outputManager,
-			subfolderName,
-			outputNameStyle,
-			generator,
-			startIndex,
-			checkIfAllowed
-		);
-		
-		int numWritten = 0;
-		
-		sequenceWriter.start();
-		for (T element : collection) {
-			sequenceWriter.add(element);
-			numWritten++;
-		}
-		sequenceWriter.end();
-	
-		return numWritten;
-	}
+    public CollectionGenerator(
+            Collection<T> collection,
+            String subfolderName,
+            IterableGenerator<T> generator,
+            BoundOutputManager outputManager,
+            int numDigits,
+            boolean checkIfAllowed) {
+        super();
+        this.collection = collection;
+        this.generator = generator;
+        this.outputManager = outputManager;
+        this.numDigits = numDigits;
+        this.checkIfAllowed = checkIfAllowed;
+        this.subfolderName = subfolderName;
+    }
 
-	@Override
-	public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
-		return generator.getGenerator().getFileTypes(outputWriteSettings);
-	}
+    @Override
+    public void write(OutputNameStyle outputNameStyle, BoundOutputManager outputManager)
+            throws OutputWriteFailedException {
 
-	@Override
-	public Collection<T> getIterableElement() {
-		return collection;
-	}
+        writeCollection(subfolderName, outputNameStyle.deriveIndexableStyle(numDigits), 0);
+    }
 
-	@Override
-	public void setIterableElement(Collection<T> element)
-			throws SetOperationFailedException {
-		this.collection = element;
-	}
+    @Override
+    public int write(
+            IndexableOutputNameStyle outputNameStyle,
+            String index,
+            BoundOutputManager outputManager)
+            throws OutputWriteFailedException {
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		generator.start();
-		
-	}
+        // In this context, we take the index as an indication of the first id to use - and assume
+        // the String index is a number
+        int indexInt = Integer.parseInt(index);
+        return writeCollection(subfolderName, outputNameStyle, indexInt);
+    }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		generator.end();
-	}
+    private int writeCollection(
+            String subfolderName, IndexableOutputNameStyle outputNameStyle, int startIndex)
+            throws OutputWriteFailedException {
 
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
+        assert (collection != null);
+
+        // We start with id with 0
+        GeneratorSequenceIncrementalWriter<T> sequenceWriter =
+                new GeneratorSequenceIncrementalWriter<>(
+                        outputManager,
+                        subfolderName,
+                        outputNameStyle,
+                        generator,
+                        startIndex,
+                        checkIfAllowed);
+
+        int numWritten = 0;
+
+        sequenceWriter.start();
+        for (T element : collection) {
+            sequenceWriter.add(element);
+            numWritten++;
+        }
+        sequenceWriter.end();
+
+        return numWritten;
+    }
+
+    @Override
+    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings) {
+        return generator.getGenerator().getFileTypes(outputWriteSettings);
+    }
+
+    @Override
+    public Collection<T> getIterableElement() {
+        return collection;
+    }
+
+    @Override
+    public void setIterableElement(Collection<T> element) throws SetOperationFailedException {
+        this.collection = element;
+    }
+
+    @Override
+    public void start() throws OutputWriteFailedException {
+        generator.start();
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        generator.end();
+    }
+
+    @Override
+    public Generator getGenerator() {
+        return this;
+    }
 }

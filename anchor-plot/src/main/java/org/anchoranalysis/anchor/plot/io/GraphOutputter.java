@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plot.io;
-
-/*
+/*-
  * #%L
  * anchor-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,17 @@ package org.anchoranalysis.anchor.plot.io;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.plot.io;
 
 import java.awt.image.BufferedImage;
-
 import org.anchoranalysis.anchor.plot.GraphInstance;
 
 public class GraphOutputter {
 
-	private GraphOutputter() {}
-	
-	public static BufferedImage createBufferedImage( GraphInstance gi, int width, int height ) {
-		return gi.getChart().createBufferedImage(width, height);
-	}
+    private GraphOutputter() {}
+
+    public static BufferedImage createBufferedImage(GraphInstance gi, int width, int height) {
+        return gi.getChart().createBufferedImage(width, height);
+    }
 }

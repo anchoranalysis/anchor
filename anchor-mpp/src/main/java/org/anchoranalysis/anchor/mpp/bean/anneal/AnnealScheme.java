@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.anneal;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,22 @@ package org.anchoranalysis.anchor.mpp.bean.anneal;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.anneal;
 
 import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class AnnealScheme extends AnchorBean<AnnealScheme> {
-	
-	public abstract double calcTemp( int iter );
-	
-	public abstract double crntTemp();
 
-	public double calcDensityRatio( double num, double dem, int iter ) {
-		
-		double d = (num - dem) / calcTemp(iter);
-		double r = Math.exp(d);
-		assert( !Double.isNaN(r) );
-		return r;
-	}
+    public abstract double calcTemp(int iter);
+
+    public abstract double crntTemp();
+
+    public double calcDensityRatio(double num, double dem, int iter) {
+
+        double d = (num - dem) / calcTemp(iter);
+        double r = Math.exp(d);
+        assert (!Double.isNaN(r));
+        return r;
+    }
 }

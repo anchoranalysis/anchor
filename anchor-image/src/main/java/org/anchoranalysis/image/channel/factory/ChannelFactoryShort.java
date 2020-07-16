@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.channel.factory;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.channel.factory;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.channel.factory;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -35,29 +35,31 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class ChannelFactoryShort implements ChannelFactorySingleType {
 
-	private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.INSTANCE;
-	
-	@Override
-	public Channel createEmptyInitialised(ImageDimensions dim) {
-		VoxelBoxShort vb = new VoxelBoxShort( PixelsFromShortBufferArr.createInitialised(dim.getExtent()) );
-		return create(vb, dim.getRes() );
-	}
+    private static final VoxelDataType DATA_TYPE = VoxelDataTypeUnsignedShort.INSTANCE;
 
-	@Override
-	public Channel createEmptyUninitialised(ImageDimensions dimensions) {
-		
-		PixelsFromShortBufferArr pixels = PixelsFromShortBufferArr.createEmpty( dimensions.getExtent() );
-		
-		VoxelBoxShort vb = new VoxelBoxShort( pixels );
-		return create(vb, dimensions.getRes() );
-	}
+    @Override
+    public Channel createEmptyInitialised(ImageDimensions dim) {
+        VoxelBoxShort vb =
+                new VoxelBoxShort(PixelsFromShortBufferArr.createInitialised(dim.getExtent()));
+        return create(vb, dim.getRes());
+    }
 
-	@Override
-	public VoxelDataType dataType() {
-		return DATA_TYPE;
-	}
-	
-	public static VoxelDataType staticDataType() {
-		return DATA_TYPE;
-	}
+    @Override
+    public Channel createEmptyUninitialised(ImageDimensions dimensions) {
+
+        PixelsFromShortBufferArr pixels =
+                PixelsFromShortBufferArr.createEmpty(dimensions.getExtent());
+
+        VoxelBoxShort vb = new VoxelBoxShort(pixels);
+        return create(vb, dimensions.getRes());
+    }
+
+    @Override
+    public VoxelDataType dataType() {
+        return DATA_TYPE;
+    }
+
+    public static VoxelDataType staticDataType() {
+        return DATA_TYPE;
+    }
 }

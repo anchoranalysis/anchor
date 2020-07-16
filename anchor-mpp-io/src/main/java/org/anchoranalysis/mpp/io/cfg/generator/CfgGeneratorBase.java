@@ -1,12 +1,8 @@
-package org.anchoranalysis.mpp.io.cfg.generator;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.cfg.generator;
 
+import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;
@@ -46,87 +45,84 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 
-public abstract class CfgGeneratorBase extends RasterGenerator implements IterableObjectGenerator<ColoredCfgWithDisplayStack,Stack> {
+public abstract class CfgGeneratorBase extends RasterGenerator
+        implements IterableObjectGenerator<ColoredCfgWithDisplayStack, Stack> {
 
-	private String manifestDescriptionFunction = "cfg";
-	
-	private DrawOverlay writer;
-	private ColoredCfgWithDisplayStack cws;
-	private IDGetter<Overlay> idGetter;
-	private RegionMembershipWithFlags regionMembership;
-	
-	public CfgGeneratorBase(DrawOverlay writer, ColoredCfgWithDisplayStack cws, IDGetter<Overlay> idGetter, RegionMembershipWithFlags regionMembership ) {
-		super();
-		this.writer = writer;
-		this.cws = cws;
-		this.idGetter = idGetter;
-		this.regionMembership = regionMembership;
-		this.setIterableElement(cws);
-	}
-	
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		try {
-			RGBStack stack = ConvertDisplayStackToRGB.convert(
-				background(cws.getStack())
-			);
-			
-			ColoredOverlayCollection oc = OverlayCollectionMarkFactory.createColor(
-				cws.getCfg(),
-				regionMembership
-			);
-			
-			writer.writeOverlays( oc, stack, idGetter );
-			
-			return stack.asStack();
-			
-		} catch (OperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
-	
-	protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
-	
-	@Override
-	public ColoredCfgWithDisplayStack getIterableElement() {
-		return this.cws;
-	}
+    private String manifestDescriptionFunction = "cfg";
 
-	@Override
-	public void setIterableElement(ColoredCfgWithDisplayStack element) {
-		this.cws = element;
-	}
+    private DrawOverlay writer;
+    private ColoredCfgWithDisplayStack cws;
+    private IDGetter<Overlay> idGetter;
+    private RegionMembershipWithFlags regionMembership;
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
-		
-	@Override
-	public boolean isRGB() {
-		return true;
-	}
-	
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", manifestDescriptionFunction)
-		);
-	}
+    public CfgGeneratorBase(
+            DrawOverlay writer,
+            ColoredCfgWithDisplayStack cws,
+            IDGetter<Overlay> idGetter,
+            RegionMembershipWithFlags regionMembership) {
+        super();
+        this.writer = writer;
+        this.cws = cws;
+        this.idGetter = idGetter;
+        this.regionMembership = regionMembership;
+        this.setIterableElement(cws);
+    }
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
+        try {
+            RGBStack stack = ConvertDisplayStackToRGB.convert(background(cws.getStack()));
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
+            ColoredOverlayCollection oc =
+                    OverlayCollectionMarkFactory.createColor(cws.getCfg(), regionMembership);
 
-	public String getManifestDescriptionFunction() {
-		return manifestDescriptionFunction;
-	}
+            writer.writeOverlays(oc, stack, idGetter);
 
-	public void setManifestDescriptionFunction(String manifestDescriptionFunction) {
-		this.manifestDescriptionFunction = manifestDescriptionFunction;
-	}
+            return stack.asStack();
+
+        } catch (OperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
+    protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
+
+    @Override
+    public ColoredCfgWithDisplayStack getIterableElement() {
+        return this.cws;
+    }
+
+    @Override
+    public void setIterableElement(ColoredCfgWithDisplayStack element) {
+        this.cws = element;
+    }
+
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return this;
+    }
+
+    @Override
+    public boolean isRGB() {
+        return true;
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", manifestDescriptionFunction));
+    }
+
+    @Override
+    public void start() throws OutputWriteFailedException {}
+
+    @Override
+    public void end() throws OutputWriteFailedException {}
+
+    public String getManifestDescriptionFunction() {
+        return manifestDescriptionFunction;
+    }
+
+    public void setManifestDescriptionFunction(String manifestDescriptionFunction) {
+        this.manifestDescriptionFunction = manifestDescriptionFunction;
+    }
 }

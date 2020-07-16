@@ -1,15 +1,8 @@
-package org.anchoranalysis.anchor.mpp.overlay;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +23,13 @@ import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.overlay;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -38,29 +37,29 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 class FromMark implements ScaledMaskCreator {
 
-	private RegionMembershipWithFlags regionMembership;
-	
-	public FromMark(RegionMembershipWithFlags regionMembership) {
-		super();
-		this.regionMembership = regionMembership;
-	}
+    private RegionMembershipWithFlags regionMembership;
 
-	@Override
-	public ObjectWithProperties createScaledMask(
-		DrawOverlay overlayWriter,
-		ObjectWithProperties omUnscaled,
-		double scaleFactor,
-		Object originalObject,
-		ImageDimensions sdScaled,
-		BinaryValuesByte bv )
-	throws CreateException {
+    public FromMark(RegionMembershipWithFlags regionMembership) {
+        super();
+        this.regionMembership = regionMembership;
+    }
 
-		Mark originalMark = (Mark) originalObject;
-		
-		ObjectWithProperties omScaled = originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor );
-		
-		// We keep the properties the same
-		return new ObjectWithProperties(omScaled.getMask(), omUnscaled.getProperties());
-	}
+    @Override
+    public ObjectWithProperties createScaledMask(
+            DrawOverlay overlayWriter,
+            ObjectWithProperties omUnscaled,
+            double scaleFactor,
+            Object originalObject,
+            ImageDimensions sdScaled,
+            BinaryValuesByte bv)
+            throws CreateException {
 
+        Mark originalMark = (Mark) originalObject;
+
+        ObjectWithProperties omScaled =
+                originalMark.calcMaskScaledXY(sdScaled, regionMembership, bv, scaleFactor);
+
+        // We keep the properties the same
+        return new ObjectWithProperties(omScaled.getMask(), omUnscaled.getProperties());
+    }
 }

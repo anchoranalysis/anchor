@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.match;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,22 @@ package org.anchoranalysis.io.manifest.match;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.match;
 
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 public class SequenceTypeEquals implements Match<SequenceType> {
 
-	private String name;
-	
-	public SequenceTypeEquals(String name) {
-		super();
-		this.name = name;
-	}
+    private String name;
 
-	@Override
-	public boolean matches(SequenceType obj) {
-		return obj.getName().equals( name );
-	}
+    public SequenceTypeEquals(String name) {
+        super();
+        this.name = name;
+    }
+
+    @Override
+    public boolean matches(SequenceType obj) {
+        return obj.getName().equals(name);
+    }
 }

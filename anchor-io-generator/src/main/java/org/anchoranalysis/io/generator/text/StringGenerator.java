@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.text;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,12 @@ package org.anchoranalysis.io.generator.text;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.generator.text;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -38,51 +36,41 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StringGenerator extends SingleFileTypeGenerator {
 
-	private String element;
-	
-	public StringGenerator() {
-		
-	}
-	
-	public StringGenerator(String outputString) {
-		super();
-		this.element = outputString;
-	}
+    private String element;
 
-	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings,
-			Path filePath) throws OutputWriteFailedException {
-		
-		try {
-			WriteStringToFile.apply(element, filePath);
-		} catch (IOException e) {
-			throw new OutputWriteFailedException(e);
-		}
-		
+    public StringGenerator() {}
 
-	}
+    public StringGenerator(String outputString) {
+        super();
+        this.element = outputString;
+    }
 
-	@Override
-	public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-		return outputWriteSettings.getExtensionText();
-	}
-	
-	
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("text", "string")
-		);
-	}
+    @Override
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
 
-	public String getElement() {
-		return element;
-	}
+        try {
+            WriteStringToFile.apply(element, filePath);
+        } catch (IOException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
 
-	public void setElement(String element) {
-		this.element = element;
-	}
+    @Override
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+        return outputWriteSettings.getExtensionText();
+    }
 
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("text", "string"));
+    }
 
+    public String getElement() {
+        return element;
+    }
 
+    public void setElement(String element) {
+        this.element = element;
+    }
 }

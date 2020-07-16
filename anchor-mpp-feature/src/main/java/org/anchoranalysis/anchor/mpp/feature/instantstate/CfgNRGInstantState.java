@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.instantstate;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +23,17 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.instantstate;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.core.index.SingleIndexCntr;
 
 public abstract class CfgNRGInstantState extends SingleIndexCntr {
 
-	public CfgNRGInstantState(int iter) {
-		super(iter);
-	}
-	
-	public abstract CfgNRG getCfgNRG();
+    public CfgNRGInstantState(int iter) {
+        super(iter);
+    }
+
+    public abstract CfgNRG getCfgNRG();
 }

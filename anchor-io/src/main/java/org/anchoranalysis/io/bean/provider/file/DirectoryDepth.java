@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.provider.file;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,13 @@ package org.anchoranalysis.io.bean.provider.file;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.provider.file;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -38,40 +37,38 @@ import org.anchoranalysis.io.error.FileProviderException;
 
 /** Lists all directories to a certain depth */
 public class DirectoryDepth extends FileProviderWithDirectoryString {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int exactDepth = 0;
-	// END BEAN PROPERTIES
 
-	@Override
-	public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) throws FileProviderException {
-		
-		String[] filesDir = directory.toFile().list();
-		
-		if (filesDir==null) {
-			throw new FileProviderException(
-				String.format("Path %s is not valid. Cannot enumerate directory.", directory)
-			);
-		}
-		
-		int numFiles = filesDir.length;
-		
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), numFiles) ) {
-			WalkToDepth walkTo = new WalkToDepth(exactDepth, prm);
-			return walkTo.findDirs( directory.toFile() );
-		} catch (IOException e) {
-			throw new FileProviderException(e);
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int exactDepth = 0;
+    // END BEAN PROPERTIES
 
-	public int getExactDepth() {
-		return exactDepth;
-	}
+    @Override
+    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+            throws FileProviderException {
 
+        String[] filesDir = directory.toFile().list();
 
-	public void setExactDepth(int exactDepth) {
-		this.exactDepth = exactDepth;
-	}
+        if (filesDir == null) {
+            throw new FileProviderException(
+                    String.format("Path %s is not valid. Cannot enumerate directory.", directory));
+        }
 
+        int numFiles = filesDir.length;
+
+        try (ProgressReporterMultiple prm =
+                new ProgressReporterMultiple(params.getProgressReporter(), numFiles)) {
+            WalkToDepth walkTo = new WalkToDepth(exactDepth, prm);
+            return walkTo.findDirs(directory.toFile());
+        } catch (IOException e) {
+            throw new FileProviderException(e);
+        }
+    }
+
+    public int getExactDepth() {
+        return exactDepth;
+    }
+
+    public void setExactDepth(int exactDepth) {
+        this.exactDepth = exactDepth;
+    }
 }

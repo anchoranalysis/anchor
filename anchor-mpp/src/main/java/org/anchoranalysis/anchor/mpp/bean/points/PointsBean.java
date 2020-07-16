@@ -1,15 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.points;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +23,12 @@ import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.points;
 
+import java.util.Arrays;
+import java.util.List;
+import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
 import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.property.ExtractFromParam;
 import org.anchoranalysis.bean.init.property.PropertyInitializer;
@@ -38,26 +36,19 @@ import org.anchoranalysis.bean.init.property.SimplePropertyDefiner;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> bean-type
  */
-public abstract class PointsBean<T> extends InitializableBean<T,PointsInitParams> {
+public abstract class PointsBean<T> extends InitializableBean<T, PointsInitParams> {
 
-	protected PointsBean() {
-		super(
-			new PropertyInitializer<>(PointsInitParams.class, paramExtracters()),
-			new SimplePropertyDefiner<PointsInitParams>(PointsInitParams.class)
-		);
-	}
-	
-	private static List<ExtractFromParam<PointsInitParams,?>> paramExtracters() {
-		return Arrays.asList(
-			new ExtractFromParam<>(
-				ImageInitParams.class,
-				PointsInitParams::getImage
-			)				
-		);
-	}
+    protected PointsBean() {
+        super(
+                new PropertyInitializer<>(PointsInitParams.class, paramExtracters()),
+                new SimplePropertyDefiner<PointsInitParams>(PointsInitParams.class));
+    }
+
+    private static List<ExtractFromParam<PointsInitParams, ?>> paramExtracters() {
+        return Arrays.asList(
+                new ExtractFromParam<>(ImageInitParams.class, PointsInitParams::getImage));
+    }
 }

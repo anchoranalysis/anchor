@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +23,32 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import java.util.HashMap;
 
 // Remembers the last number used in a sequence, associated with a particular string
 public class SequenceMemory {
 
-	private HashMap<String,Integer> map = new HashMap<>();
+    private HashMap<String, Integer> map = new HashMap<>();
 
-	public int lastIndex( String key ) {
-		return map.computeIfAbsent(
-			key,
-			k -> Integer.valueOf(0)
-		);
-	}
-	
-	// Increments the index and returns the new incremented index
-	public int indexIncr( String key ) {
-		int ind = lastIndex(key);
-		ind++;
-		updateIndex(key,ind);
-		return ind;
-	}
-	
-	public void updateIndex( String key, int indexNew ) {
-		
-		map.remove(key);
-		Integer index = Integer.valueOf(indexNew);
-		map.put(key, index);
-	}
-	
+    public int lastIndex(String key) {
+        return map.computeIfAbsent(key, k -> Integer.valueOf(0));
+    }
+
+    // Increments the index and returns the new incremented index
+    public int indexIncr(String key) {
+        int ind = lastIndex(key);
+        ind++;
+        updateIndex(key, ind);
+        return ind;
+    }
+
+    public void updateIndex(String key, int indexNew) {
+
+        map.remove(key);
+        Integer index = Integer.valueOf(indexNew);
+        map.put(key, index);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.match;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +23,28 @@ package org.anchoranalysis.io.manifest.match;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.match;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 public class FolderWritePath implements Match<FolderWrite> {
 
-	private Path path;
-	
-	public FolderWritePath(String path) {
-		this( Paths.get(path) );
-	}
-	
-	public FolderWritePath(Path path) {
-		super();
-		this.path = path;
-	}
+    private Path path;
 
-	@Override
-	public boolean matches(FolderWrite obj) {
-		return obj.getRelativePath().equals(path);
-	}
+    public FolderWritePath(String path) {
+        this(Paths.get(path));
+    }
+
+    public FolderWritePath(Path path) {
+        super();
+        this.path = path;
+    }
+
+    @Override
+    public boolean matches(FolderWrite obj) {
+        return obj.getRelativePath().equals(path);
+    }
 }

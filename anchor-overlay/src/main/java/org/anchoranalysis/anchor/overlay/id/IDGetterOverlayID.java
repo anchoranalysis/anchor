@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.overlay.id;
-
-import org.anchoranalysis.anchor.overlay.Overlay;
-
 /*-
  * #%L
  * anchor-overlay
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +23,16 @@ import org.anchoranalysis.anchor.overlay.Overlay;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.overlay.id;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.core.idgetter.IDGetter;
 
 public class IDGetterOverlayID implements IDGetter<Overlay> {
 
-	@Override
-	public int getID( Overlay ol, int iter ) {
-		return ol.getId();
-	}
+    @Override
+    public int getID(Overlay ol, int iter) {
+        return ol.getId();
+    }
 }

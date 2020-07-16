@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.folder;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
@@ -33,32 +33,30 @@ import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 public abstract class DeserializeFromFolder<T> implements HistoryCreator<T> {
-	
-	private SequencedFolder folder;
-	
-	public DeserializeFromFolder( SequencedFolder folder ) {
-		this.folder = folder;
-	}
-	
-	@Override
-	public LoadContainer<T> create() throws DeserializationFailedException {
-		
-		SequenceType sequenceType = folder.getAssociatedSequence();
-		ITypedGetFromIndex<T> cntr = createCtnr( folder );
-		
-		assert( sequenceType != null );
-		
-		LoadContainer<T> history = new LoadContainer<>();
-		
-		BoundedIndexContainer<T> boundedContainer = new BoundsFromSequenceType<>(
-			cntr,
-			sequenceType
-		);
-		
-		history.setCntr( boundedContainer );
-		history.setExpensiveLoad( false );
-		return history;
-	}
 
-	protected abstract ITypedGetFromIndex<T> createCtnr( SequencedFolder folder );
+    private SequencedFolder folder;
+
+    public DeserializeFromFolder(SequencedFolder folder) {
+        this.folder = folder;
+    }
+
+    @Override
+    public LoadContainer<T> create() throws DeserializationFailedException {
+
+        SequenceType sequenceType = folder.getAssociatedSequence();
+        ITypedGetFromIndex<T> cntr = createCtnr(folder);
+
+        assert (sequenceType != null);
+
+        LoadContainer<T> history = new LoadContainer<>();
+
+        BoundedIndexContainer<T> boundedContainer =
+                new BoundsFromSequenceType<>(cntr, sequenceType);
+
+        history.setCntr(boundedContainer);
+        history.setExpensiveLoad(false);
+        return history;
+    }
+
+    protected abstract ITypedGetFromIndex<T> createCtnr(SequencedFolder folder);
 }

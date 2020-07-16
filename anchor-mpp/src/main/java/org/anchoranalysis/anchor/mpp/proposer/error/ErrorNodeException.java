@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.proposer.error;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,30 @@ package org.anchoranalysis.anchor.mpp.proposer.error;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.proposer.error;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
-
 
 // An exception that adds a string to the current error node
 public class ErrorNodeException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4000166470139114311L;
-	private final String str;
+    /** */
+    private static final long serialVersionUID = -4000166470139114311L;
 
-	public ErrorNodeException(String str) {
-		super(str);
-		this.str = str;
-	}
-	
-	public ErrorNodeException(Exception e) {
-		super(e.toString());
-		this.str = e.toString();
-	}
-	
-	public void addToErrorNode( ErrorNode errorNode ) {
-		errorNode.add(str);
-	}
+    private final String str;
+
+    public ErrorNodeException(String str) {
+        super(str);
+        this.str = str;
+    }
+
+    public ErrorNodeException(Exception e) {
+        super(e.toString());
+        this.str = e.toString();
+    }
+
+    public void addToErrorNode(ErrorNode errorNode) {
+        errorNode.add(str);
+    }
 }

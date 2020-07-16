@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.progress;
-
-/*
+/*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +23,16 @@ package org.anchoranalysis.core.progress;
  * THE SOFTWARE.
  * #L%
  */
-
-
-
+/* (C)2020 */
+package org.anchoranalysis.core.progress;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <R> result-type
  * @param <E> exception throw if operation fails
  */
 @FunctionalInterface
 public interface OperationWithProgressReporter<R, E extends Exception> {
 
-	R doOperation( ProgressReporter progressReporter ) throws E;
+    R doOperation(ProgressReporter progressReporter) throws E;
 }

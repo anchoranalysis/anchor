@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.image.io.generator.raster;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -35,7 +34,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
@@ -50,200 +48,189 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StringRasterGenerator extends AnchorBean<StringRasterGenerator> {
 
-	public StringRasterGenerator() {
-		
-	}
+    public StringRasterGenerator() {}
 
-	public StringRasterGenerator(String text) {
-		super();
-		this.text = text;
-	}
+    public StringRasterGenerator(String text) {
+        super();
+        this.text = text;
+    }
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String text = "text";
-	
-	@BeanField
-	private int width = -1;
-	
-	@BeanField
-	private int height = -1;
-	
-	@BeanField
-	private int fontSize = 12;
-	
-	@BeanField
-	private String fontName = "SansSerif";
-	
-	@BeanField
-	private RGBColorBean fontColor = new RGBColorBean( new RGBColor(Color.WHITE) );
-	
-	@BeanField
-	private boolean bold = false;
-	
-	@BeanField
-	private double padding = 0;
-	// END BEAN PROPERTIES
-	
-		
-	// A generator associated with this bean
-	private class Generator extends RasterGenerator implements IterableObjectGenerator<String, Stack> {
+    // START BEAN PROPERTIES
+    @BeanField private String text = "text";
 
-		@Override
-		public String getIterableElement() {
-			return text;
-		}
+    @BeanField private int width = -1;
 
-		@Override
-		public void setIterableElement(String element) {
-			StringRasterGenerator.this.text = element;
-		}
-		
-		@Override
-		public Stack generate() throws OutputWriteFailedException {
-		
-			Rectangle2D defaultSize = calcDefaultSize();
-			
-			if (width==-1) {
-				width = (int) Math.ceil( defaultSize.getWidth() + (padding*2) );
-			}
-			
-			if (height==-1) {
-				height = (int) Math.ceil( defaultSize.getHeight() + (padding*2) );
-			}
+    @BeanField private int height = -1;
 
-			BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			Graphics2D graphics = createGraphicsFromBufferedImage( bufferedImage );
-			
-			drawCenteredString(text, width, height, graphics );
+    @BeanField private int fontSize = 12;
 
-			try {
-				return CreateStackFromBufferedImage.create(bufferedImage);
-			} catch (OperationFailedException e) {
-				throw new OutputWriteFailedException(e);
-			}
-		}
-		
-		@Override
-		public boolean isRGB() {
-			return true;
-		}
-		
-		@Override
-		public Optional<ManifestDescription> createManifestDescription() {
-			return Optional.of(
-				new ManifestDescription("raster", "text")
-			);
-		}
-		
-		@Override
-		public ObjectGenerator<Stack> getGenerator() {
-			return this;
-		}
-		
-		private Rectangle2D calcDefaultSize() {
-			
-			BufferedImage bufferedImage = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
-			Graphics2D graphics = createGraphicsFromBufferedImage( bufferedImage );
-			FontMetrics fm = graphics.getFontMetrics();
-			return fm.getStringBounds(text, graphics);
-		}
-		
-		private Graphics2D createGraphicsFromBufferedImage( BufferedImage bufferedImage ) {
-			
-			Graphics2D graphics = bufferedImage.createGraphics();
-			
-			Font font = new Font( "SansSerif", bold ? Font.BOLD : Font.PLAIN, fontSize );
-			
-			graphics.setColor( fontColor.toAWTColor() );
-			graphics.setFont( font );
-			return graphics;
-		}
-		
-		private void drawCenteredString(String s, int w, int h, Graphics g) {
-		    FontMetrics fm = g.getFontMetrics();
-		    int x = (w - fm.stringWidth(s)) / 2;
-		    int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
-		    g.drawString(s, x, y);
-		}
-	}
+    @BeanField private String fontName = "SansSerif";
 
-	// Create an iterable generator, which produces Stack for different Strings
-	public IterableObjectGenerator<String, Stack> createGenerator() {
-		return new Generator();
-	}
-	
-	// Creates a stack with this string
-	public Stack generateStack() throws OutputWriteFailedException {
-		return new Generator().generate();
-	}
+    @BeanField private RGBColorBean fontColor = new RGBColorBean(new RGBColor(Color.WHITE));
 
-	public int getFontSize() {
-		return fontSize;
-	}
+    @BeanField private boolean bold = false;
 
-	public void setFontSize(int fontSize) {
-		this.fontSize = fontSize;
-	}
+    @BeanField private double padding = 0;
+    // END BEAN PROPERTIES
 
-	public String getFontName() {
-		return fontName;
-	}
+    // A generator associated with this bean
+    private class Generator extends RasterGenerator
+            implements IterableObjectGenerator<String, Stack> {
 
-	public void setFontName(String fontName) {
-		this.fontName = fontName;
-	}
+        @Override
+        public String getIterableElement() {
+            return text;
+        }
 
-	public boolean isBold() {
-		return bold;
-	}
+        @Override
+        public void setIterableElement(String element) {
+            StringRasterGenerator.this.text = element;
+        }
 
-	public void setBold(boolean bold) {
-		this.bold = bold;
-	}
+        @Override
+        public Stack generate() throws OutputWriteFailedException {
 
-	@Override
-	public String getBeanDscr() {
-		return getBeanName();
-	}
+            Rectangle2D defaultSize = calcDefaultSize();
 
-	public int getWidth() {
-		return width;
-	}
+            if (width == -1) {
+                width = (int) Math.ceil(defaultSize.getWidth() + (padding * 2));
+            }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+            if (height == -1) {
+                height = (int) Math.ceil(defaultSize.getHeight() + (padding * 2));
+            }
 
-	public int getHeight() {
-		return height;
-	}
+            BufferedImage bufferedImage =
+                    new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+            drawCenteredString(text, width, height, graphics);
 
-	public RGBColorBean getFontColor() {
-		return fontColor;
-	}
+            try {
+                return CreateStackFromBufferedImage.create(bufferedImage);
+            } catch (OperationFailedException e) {
+                throw new OutputWriteFailedException(e);
+            }
+        }
 
-	public void setFontColor(RGBColorBean fontColor) {
-		this.fontColor = fontColor;
-	}
+        @Override
+        public boolean isRGB() {
+            return true;
+        }
 
-	public String getText() {
-		return text;
-	}
+        @Override
+        public Optional<ManifestDescription> createManifestDescription() {
+            return Optional.of(new ManifestDescription("raster", "text"));
+        }
 
-	public void setText(String text) {
-		this.text = text;
-	}
-	
-	public double getPadding() {
-		return padding;
-	}
+        @Override
+        public ObjectGenerator<Stack> getGenerator() {
+            return this;
+        }
 
-	public void setPadding(double padding) {
-		this.padding = padding;
-	}
+        private Rectangle2D calcDefaultSize() {
+
+            BufferedImage bufferedImage = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
+            FontMetrics fm = graphics.getFontMetrics();
+            return fm.getStringBounds(text, graphics);
+        }
+
+        private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {
+
+            Graphics2D graphics = bufferedImage.createGraphics();
+
+            Font font = new Font("SansSerif", bold ? Font.BOLD : Font.PLAIN, fontSize);
+
+            graphics.setColor(fontColor.toAWTColor());
+            graphics.setFont(font);
+            return graphics;
+        }
+
+        private void drawCenteredString(String s, int w, int h, Graphics g) {
+            FontMetrics fm = g.getFontMetrics();
+            int x = (w - fm.stringWidth(s)) / 2;
+            int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
+            g.drawString(s, x, y);
+        }
+    }
+
+    // Create an iterable generator, which produces Stack for different Strings
+    public IterableObjectGenerator<String, Stack> createGenerator() {
+        return new Generator();
+    }
+
+    // Creates a stack with this string
+    public Stack generateStack() throws OutputWriteFailedException {
+        return new Generator().generate();
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public String getFontName() {
+        return fontName;
+    }
+
+    public void setFontName(String fontName) {
+        this.fontName = fontName;
+    }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public void setBold(boolean bold) {
+        this.bold = bold;
+    }
+
+    @Override
+    public String getBeanDscr() {
+        return getBeanName();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public RGBColorBean getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(RGBColorBean fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public double getPadding() {
+        return padding;
+    }
+
+    public void setPadding(double padding) {
+        this.padding = padding;
+    }
 }

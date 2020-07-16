@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.bean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean;
 
 import org.anchoranalysis.bean.init.property.PropertyDefiner;
 import org.anchoranalysis.core.error.InitException;
@@ -34,30 +34,28 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 
-	@Override
-	public boolean accepts( Class<?> paramType ) {
-		return FeatureInitParams.class.isAssignableFrom(paramType);
-	}
+    @Override
+    public boolean accepts(Class<?> paramType) {
+        return FeatureInitParams.class.isAssignableFrom(paramType);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void doInitFor(Object propertyValue, Object params, Object parent, Logger logger) throws InitException {
-		
-		if (parent!=null && !(parent instanceof Feature)) {
-			throw new InitException("A feature may only have another feature as a bean-parent");
-		}
+    @SuppressWarnings("unchecked")
+    @Override
+    public void doInitFor(Object propertyValue, Object params, Object parent, Logger logger)
+            throws InitException {
 
-		if (propertyValue instanceof Feature) {
-			Feature<T> propertyValueCast = (Feature<T>) propertyValue;
-			propertyValueCast.init(
-				(FeatureInitParams) params,
-				logger
-			);
-		}
-	}
+        if (parent != null && !(parent instanceof Feature)) {
+            throw new InitException("A feature may only have another feature as a bean-parent");
+        }
 
-	@Override
-	public String describeAcceptedClasses() {
-		return FeatureInitParams.class.getSimpleName();
-	}
+        if (propertyValue instanceof Feature) {
+            Feature<T> propertyValueCast = (Feature<T>) propertyValue;
+            propertyValueCast.init((FeatureInitParams) params, logger);
+        }
+    }
+
+    @Override
+    public String describeAcceptedClasses() {
+        return FeatureInitParams.class.getSimpleName();
+    }
 }

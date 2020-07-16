@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +23,17 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram.ChnlConverterHistogramQuantileIntensity;
 
 // Scales by a quantile of the intensity values of an image
-public class ChnlConverterChnlQuantileIntensity extends ChnlConverterDelegateToHistogram<ByteBuffer> {
-	
-	public ChnlConverterChnlQuantileIntensity(double quantile) {
-		super(
-			new ChnlConverterHistogramQuantileIntensity(quantile)
-		);
-	}
+public class ChnlConverterChnlQuantileIntensity
+        extends ChnlConverterDelegateToHistogram<ByteBuffer> {
+
+    public ChnlConverterChnlQuantileIntensity(double quantile) {
+        super(new ChnlConverterHistogramQuantileIntensity(quantile));
+    }
 }

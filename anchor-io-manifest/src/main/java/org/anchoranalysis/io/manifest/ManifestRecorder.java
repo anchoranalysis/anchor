@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +23,26 @@ package org.anchoranalysis.io.manifest;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest;
 
 import java.io.Serializable;
 import java.nio.file.Path;
-
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 import org.anchoranalysis.io.manifest.folder.RootFolder;
 
 public class ManifestRecorder implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7253272905284863941L;
+    /** */
+    private static final long serialVersionUID = -7253272905284863941L;
 
-	private RootFolder rootFolder;	// Paths relative to this
+    private RootFolder rootFolder; // Paths relative to this
 
-	public void init( Path rootFolderPath ) {
-		rootFolder = new RootFolder(rootFolderPath);
-	}
+    public void init(Path rootFolderPath) {
+        rootFolder = new RootFolder(rootFolderPath);
+    }
 
-	public FolderWrite getRootFolder() {
-		return rootFolder;
-	}
-
+    public FolderWrite getRootFolder() {
+        return rootFolder;
+    }
 }

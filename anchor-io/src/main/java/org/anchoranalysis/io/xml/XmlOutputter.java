@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.xml;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +23,13 @@ package org.anchoranalysis.io.xml;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.xml;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -40,37 +38,37 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 
 public class XmlOutputter {
 
-	private XmlOutputter() {}
-	
-	public static void writeXmlToFile( Document doc, Path filePath ) throws TransformerException, IOException {
+    private XmlOutputter() {}
 
-      Transformer trans = createTransformer();
-      
-      File file = filePath.toFile();
-      
-      FileWriter fw = new FileWriter(file);
-      StreamResult result = new StreamResult(fw);
-      DOMSource source = new DOMSource(doc);
-      trans.transform(source, result);
-	}
-	
-	private static Transformer createTransformer() throws TransformerConfigurationException {
-		TransformerFactory transFac = createFactory();
-		
-		Transformer trans = transFac.newTransformer();
-	    trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-	    trans.setOutputProperty(OutputKeys.INDENT, "yes");
-	    return trans;
-	}
-		
-	private static TransformerFactory createFactory() throws TransformerConfigurationException {
-		TransformerFactory factory = TransformerFactory.newInstance();
-		factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-		return factory;
-	}
+    public static void writeXmlToFile(Document doc, Path filePath)
+            throws TransformerException, IOException {
+
+        Transformer trans = createTransformer();
+
+        File file = filePath.toFile();
+
+        FileWriter fw = new FileWriter(file);
+        StreamResult result = new StreamResult(fw);
+        DOMSource source = new DOMSource(doc);
+        trans.transform(source, result);
+    }
+
+    private static Transformer createTransformer() throws TransformerConfigurationException {
+        TransformerFactory transFac = createFactory();
+
+        Transformer trans = transFac.newTransformer();
+        trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        trans.setOutputProperty(OutputKeys.INDENT, "yes");
+        return trans;
+    }
+
+    private static TransformerFactory createFactory() throws TransformerConfigurationException {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        return factory;
+    }
 }

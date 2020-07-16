@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.bean.input;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,12 @@ package org.anchoranalysis.annotation.io.bean.input;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.bean.input;
 
 import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -41,45 +41,39 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-import lombok.Getter;
-import lombok.Setter;
+public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy>
+        extends InputManager<AnnotationWithStrategy<S>> {
 
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private InputManager<T> input;
 
-public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy> extends InputManager<AnnotationWithStrategy<S>> {
+    @BeanField @Getter @Setter private S annotatorStrategy;
+    // END BEAN PROPERTIES
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private InputManager<T> input;
-	
-	@BeanField @Getter @Setter
-	private S annotatorStrategy;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
-			throws AnchorIOException {
+    @Override
+    public List<AnnotationWithStrategy<S>> inputObjects(InputManagerParams params)
+            throws AnchorIOException {
 
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
-			
-			List<T> inputs = input.inputObjects(params);
-		
-			prm.incrWorker();
-		
-			List<AnnotationWithStrategy<S>> outList = createListInput(
-				inputs,
-				new ProgressReporterOneOfMany(prm)
-			);
-			prm.incrWorker();
-			
-			return outList;
-		}
-	}
-	
-	private List<AnnotationWithStrategy<S>> createListInput( List<T> listInputObjects, ProgressReporter progressReporter ) throws AnchorIOException {
-		return FunctionalProgress.mapList(
-			listInputObjects,
-			progressReporter,
-			inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy)
-		);
-	}
+        try (ProgressReporterMultiple prm =
+                new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
+
+            List<T> inputs = input.inputObjects(params);
+
+            prm.incrWorker();
+
+            List<AnnotationWithStrategy<S>> outList =
+                    createListInput(inputs, new ProgressReporterOneOfMany(prm));
+            prm.incrWorker();
+
+            return outList;
+        }
+    }
+
+    private List<AnnotationWithStrategy<S>> createListInput(
+            List<T> listInputObjects, ProgressReporter progressReporter) throws AnchorIOException {
+        return FunctionalProgress.mapList(
+                listInputObjects,
+                progressReporter,
+                inputObject -> new AnnotationWithStrategy<S>(inputObject, annotatorStrategy));
+    }
 }

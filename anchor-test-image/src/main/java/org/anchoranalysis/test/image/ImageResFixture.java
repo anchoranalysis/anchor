@@ -1,10 +1,8 @@
-package org.anchoranalysis.test.image;
-
 /*-
  * #%L
- * anchor-test-feature-plugins
+ * anchor-test-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +23,19 @@ package org.anchoranalysis.test.image;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.image.extent.ImageResolution;
+/* (C)2020 */
+package org.anchoranalysis.test.image;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.extent.ImageResolution;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageResFixture {
 
-	public static final ImageResolution INSTANCE = create();
-	
-	private static ImageResolution create() {
-		return new ImageResolution(
-			0.01,
-			0.01,
-			0.025
-		);
-	}
+    public static final ImageResolution INSTANCE = create();
+
+    private static ImageResolution create() {
+        return new ImageResolution(0.01, 0.01, 0.025);
+    }
 }

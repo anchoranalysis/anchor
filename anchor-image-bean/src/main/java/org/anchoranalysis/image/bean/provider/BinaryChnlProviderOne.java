@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -32,25 +32,22 @@ import org.anchoranalysis.image.binary.mask.Mask;
 
 public abstract class BinaryChnlProviderOne extends BinaryChnlProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryChnlProvider binaryChnl;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Mask create() throws CreateException {
-		return createFromChnl(
-			binaryChnl.create()
-		);
-	}
-	
-	protected abstract Mask createFromChnl( Mask chnl ) throws CreateException;
+    // START BEAN PROPERTIES
+    @BeanField private BinaryChnlProvider binaryChnl;
+    // END BEAN PROPERTIES
 
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
-	}
+    @Override
+    public Mask create() throws CreateException {
+        return createFromChnl(binaryChnl.create());
+    }
 
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
-	}
+    protected abstract Mask createFromChnl(Mask chnl) throws CreateException;
+
+    public BinaryChnlProvider getBinaryChnl() {
+        return binaryChnl;
+    }
+
+    public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+        this.binaryChnl = binaryChnl;
+    }
 }

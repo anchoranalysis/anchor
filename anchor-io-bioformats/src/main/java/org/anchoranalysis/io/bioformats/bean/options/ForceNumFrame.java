@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +23,29 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.bean.options;
 
+import loci.formats.IFormatReader;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
-import loci.formats.IFormatReader;
-
 public class ForceNumFrame extends ReadOptionsDelegate {
-	
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private int numFrame;
-	// END BEAN PROPERTIES
 
-	@Override
-	public int sizeT(IFormatReader reader) {
-		return numFrame; 
-	}
-	
-	public int getNumFrame() {
-		return numFrame;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Positive private int numFrame;
+    // END BEAN PROPERTIES
 
-	public void setNumFrame(int numFrame) {
-		this.numFrame = numFrame;
-	}
+    @Override
+    public int sizeT(IFormatReader reader) {
+        return numFrame;
+    }
+
+    public int getNumFrame() {
+        return numFrame;
+    }
+
+    public void setNumFrame(int numFrame) {
+        this.numFrame = numFrame;
+    }
 }

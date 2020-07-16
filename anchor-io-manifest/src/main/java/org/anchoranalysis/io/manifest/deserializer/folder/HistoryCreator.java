@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.folder;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,12 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 public interface HistoryCreator<T> {
 
-	LoadContainer<T> create() throws DeserializationFailedException;
+    LoadContainer<T> create() throws DeserializationFailedException;
 }

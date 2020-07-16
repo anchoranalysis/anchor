@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,33 +23,32 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * Base class for {@link ObjectCollectionProvider} that take a {@code objects} bean-field of same type as provided.
- * 
- * @author Owen Feehan
+ * Base class for {@link ObjectCollectionProvider} that take a {@code objects} bean-field of same
+ * type as provided.
  *
+ * @author Owen Feehan
  */
 public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objects;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public ObjectCollection create() throws CreateException {
-		return createFromObjects(
-			objects.create()
-		);
-	}
-	
-	protected abstract ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+    // END BEAN PROPERTIES
+
+    @Override
+    public ObjectCollection create() throws CreateException {
+        return createFromObjects(objects.create());
+    }
+
+    protected abstract ObjectCollection createFromObjects(ObjectCollection objects)
+            throws CreateException;
 }

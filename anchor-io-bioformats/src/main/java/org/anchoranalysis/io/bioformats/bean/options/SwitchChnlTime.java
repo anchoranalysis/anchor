@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +23,25 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.bean.options;
 
 import java.util.List;
 import java.util.Optional;
-
 import loci.formats.IFormatReader;
 
 /** Treats the channel information as if it's time, and vice versa */
 public class SwitchChnlTime extends ReadOptionsDelegate {
 
-	@Override
-	public Optional<List<String>> determineChannelNames(IFormatReader reader) {
-		// Always return null, as we use the time-series instead
-		return Optional.empty();
-	}
-	
-	@Override
-	public boolean isRGB(IFormatReader reader) {
-		// Not supported when switching
-		return false;
-	}
+    @Override
+    public Optional<List<String>> determineChannelNames(IFormatReader reader) {
+        // Always return null, as we use the time-series instead
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean isRGB(IFormatReader reader) {
+        // Not supported when switching
+        return false;
+    }
 }

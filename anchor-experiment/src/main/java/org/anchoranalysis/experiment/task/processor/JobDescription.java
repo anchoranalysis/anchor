@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.task.processor;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,34 +23,38 @@ package org.anchoranalysis.experiment.task.processor;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.experiment.task.processor;
 
 public class JobDescription {
-	
-	private String jobShortName;
-	private int jobNumber;
-			
-	public JobDescription(String jobShortName, int jobNumber) {
-		super();
-		this.jobShortName = jobShortName;
-		this.jobNumber = jobNumber;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("%4d(%s)", jobNumber, jobShortName);
-	}
-	
-	public String getJobShortName() {
-		return jobShortName;
-	}
-	public void setJobShortName(String jobShortName) {
-		this.jobShortName = jobShortName;
-	}
-	public int getJobNumber() {
-		return jobNumber;
-	}
-	public void setJobNumber(int jobNumber) {
-		this.jobNumber = jobNumber;
-	}
+
+    private String jobShortName;
+    private int jobNumber;
+
+    public JobDescription(String jobShortName, int jobNumber) {
+        super();
+        this.jobShortName = jobShortName;
+        this.jobNumber = jobNumber;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%4d(%s)", jobNumber, jobShortName);
+    }
+
+    public String getJobShortName() {
+        return jobShortName;
+    }
+
+    public void setJobShortName(String jobShortName) {
+        this.jobShortName = jobShortName;
+    }
+
+    public int getJobNumber() {
+        return jobNumber;
+    }
+
+    public void setJobNumber(int jobNumber) {
+        this.jobNumber = jobNumber;
+    }
 }

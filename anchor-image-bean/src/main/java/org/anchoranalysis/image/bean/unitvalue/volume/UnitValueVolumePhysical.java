@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.bean.unitvalue.volume;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.unitvalue.volume;
 
-
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
@@ -39,52 +37,48 @@ import org.anchoranalysis.image.extent.ImageResolution;
 // Measures either area or volume (depending if the do3D flag is employed)
 public class UnitValueVolumePhysical extends UnitValueVolume {
 
-	// START VALUE
-	@BeanField
-	private double value;	// value in metres
-	
-	@BeanField
-	private String unitType = "";
-	// END VALUE
-	
-	@Override
-	public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
-		if (!resolution.isPresent()) {
-			throw new UnitValueException("An image resolution is required to calculate physical-volume but it is missing");
-		}
-		
-		UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(unitType);
-		
-		double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
-		
-		return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, resolution.get());
-	}
+    // START VALUE
+    @BeanField private double value; // value in metres
 
-	public double getValue() {
-		return value;
-	}
+    @BeanField private String unitType = "";
+    // END VALUE
 
-	public void setValue(double value) {
-		this.value = value;
-	}
+    @Override
+    public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
+        if (!resolution.isPresent()) {
+            throw new UnitValueException(
+                    "An image resolution is required to calculate physical-volume but it is missing");
+        }
 
+        UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(unitType);
 
-	
-	@Override
-	public String toString() {
-		if (unitType!=null && !unitType.isEmpty()) {
-			return String.format("%.2f%s",value,unitType);
-		} else {
-			return String.format("%.2f",value);
-		}
-	}
+        double valueAsBase = SpatialConversionUtilities.convertFromUnits(value, unitPrefix);
 
-	public String getUnitType() {
-		return unitType;
-	}
+        return ImageUnitConverter.convertFromPhysicalVolume(valueAsBase, resolution.get());
+    }
 
-	public void setUnitType(String unitType) {
-		this.unitType = unitType;
-	}
+    public double getValue() {
+        return value;
+    }
 
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        if (unitType != null && !unitType.isEmpty()) {
+            return String.format("%.2f%s", value, unitType);
+        } else {
+            return String.format("%.2f", value);
+        }
+    }
+
+    public String getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(String unitType) {
+        this.unitType = unitType;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.bean.background;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.annotation.io.bean.background;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.bean.background;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -34,40 +34,37 @@ import org.anchoranalysis.bean.shared.StringMap;
 
 public class AnnotationBackgroundDefinition extends AnchorBean<AnnotationBackgroundDefinition> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String stackNameVisualOriginal;
-	
-	/** If non-null, maps underlying stack-name to a background */
-	@BeanField @OptionalBean
-	private StringMap backgroundStackMap;
-	
-	/** If non-empty any stackNames (after map) containing a certain string will be ignored */
-	@BeanField @AllowEmpty
-	private String ignoreContains = "";
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private String stackNameVisualOriginal;
 
-	public StringMap getBackgroundStackMap() {
-		return backgroundStackMap;
-	}
-	
-	public void setBackgroundStackMap(StringMap backgroundStackMap) {
-		this.backgroundStackMap = backgroundStackMap;
-	}
-	
-	public String getStackNameVisualOriginal() {
-		return stackNameVisualOriginal;
-	}
-	
-	public void setStackNameVisualOriginal(String stackNameVisualOriginal) {
-		this.stackNameVisualOriginal = stackNameVisualOriginal;
-	}
+    /** If non-null, maps underlying stack-name to a background */
+    @BeanField @OptionalBean private StringMap backgroundStackMap;
 
-	public String getIgnoreContains() {
-		return ignoreContains;
-	}
+    /** If non-empty any stackNames (after map) containing a certain string will be ignored */
+    @BeanField @AllowEmpty private String ignoreContains = "";
+    // END BEAN PROPERTIES
 
-	public void setIgnoreContains(String ignoreContains) {
-		this.ignoreContains = ignoreContains;
-	}
+    public StringMap getBackgroundStackMap() {
+        return backgroundStackMap;
+    }
+
+    public void setBackgroundStackMap(StringMap backgroundStackMap) {
+        this.backgroundStackMap = backgroundStackMap;
+    }
+
+    public String getStackNameVisualOriginal() {
+        return stackNameVisualOriginal;
+    }
+
+    public void setStackNameVisualOriginal(String stackNameVisualOriginal) {
+        this.stackNameVisualOriginal = stackNameVisualOriginal;
+    }
+
+    public String getIgnoreContains() {
+        return ignoreContains;
+    }
+
+    public void setIgnoreContains(String ignoreContains) {
+        this.ignoreContains = ignoreContains;
+    }
 }

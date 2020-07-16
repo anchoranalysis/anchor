@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.transformer;
-
 /*-
  * #%L
- * anchor-plugin-mpp-sgmn
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,53 +23,49 @@ package org.anchoranalysis.mpp.sgmn.transformer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.transformer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Combines a transformation from S->U with U->T
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <S> source type
  * @param <T> destination type
  * @param <U> intermediate type
  */
 public class Compose<S, T, U> extends StateTransformerBean<S, T> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StateTransformerBean<S, U> first;
-	
-	@BeanField
-	private StateTransformerBean<U, T> second;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public T transform(S in, TransformationContext context) throws OperationFailedException {
+    // START BEAN PROPERTIES
+    @BeanField private StateTransformerBean<S, U> first;
 
-		U inter = first.transform(in, context);
-		
-		return second.transform(inter, context);
-	}
+    @BeanField private StateTransformerBean<U, T> second;
+    // END BEAN PROPERTIES
 
-	public StateTransformerBean<S, U> getFirst() {
-		return first;
-	}
+    @Override
+    public T transform(S in, TransformationContext context) throws OperationFailedException {
 
-	public void setFirst(StateTransformerBean<S, U> first) {
-		this.first = first;
-	}
+        U inter = first.transform(in, context);
 
-	public StateTransformerBean<U, T> getSecond() {
-		return second;
-	}
+        return second.transform(inter, context);
+    }
 
-	public void setSecond(StateTransformerBean<U, T> second) {
-		this.second = second;
-	}
+    public StateTransformerBean<S, U> getFirst() {
+        return first;
+    }
 
+    public void setFirst(StateTransformerBean<S, U> first) {
+        this.first = first;
+    }
 
+    public StateTransformerBean<U, T> getSecond() {
+        return second;
+    }
 
+    public void setSecond(StateTransformerBean<U, T> second) {
+        this.second = second;
+    }
 }

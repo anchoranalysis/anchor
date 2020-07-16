@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.chnl.converter;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.chnl.converter;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.chnl.converter;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
@@ -33,6 +33,5 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 /** Converts a channel from one type to another */
 public abstract class ConvertChannelTo extends ImageBean<ConvertChannelTo> {
 
-	public abstract ChannelConverter<?> createConverter() throws CreateException;
-
+    public abstract ChannelConverter<?> createConverter() throws CreateException;
 }

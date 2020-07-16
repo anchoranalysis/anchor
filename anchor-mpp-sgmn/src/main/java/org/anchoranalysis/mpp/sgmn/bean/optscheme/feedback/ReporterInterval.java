@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,45 +23,43 @@ package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ReporterInterval<T> extends FeedbackReceiverBean<T> {
 
-	// START BEAN Parameters
-	/** 
-	 * How many iterations before printing a new report? Encoded in log10.
-	 * 
-	 * <p>e.g. 0 implies every iteration, 1 implies every 10, 2 implies every 100 etc.
-	 * 
-	 */
-	@BeanField
-	private double aggIntervalLog10 = 0;
-	// END
-	
-	public ReporterInterval() {
-		// Standard bean constructor
-	}
-	
-	public ReporterInterval(double aggIntervalLog10) {
-		this.aggIntervalLog10 = aggIntervalLog10;
-	}
-	
-	@Override
-	public void reportItr( Reporting<T> reporting  ) {
-	}
-	
-	protected int getAggInterval() {
-		return (int) Math.pow(10.0, aggIntervalLog10);
-	}
+    // START BEAN Parameters
+    /**
+     * How many iterations before printing a new report? Encoded in log10.
+     *
+     * <p>e.g. 0 implies every iteration, 1 implies every 10, 2 implies every 100 etc.
+     */
+    @BeanField private double aggIntervalLog10 = 0;
+    // END
 
-	public double getAggIntervalLog10() {
-		return aggIntervalLog10;
-	}
+    public ReporterInterval() {
+        // Standard bean constructor
+    }
 
-	public void setAggIntervalLog10(double aggIntervalLog10) {
-		this.aggIntervalLog10 = aggIntervalLog10;
-	}
+    public ReporterInterval(double aggIntervalLog10) {
+        this.aggIntervalLog10 = aggIntervalLog10;
+    }
+
+    @Override
+    public void reportItr(Reporting<T> reporting) {}
+
+    protected int getAggInterval() {
+        return (int) Math.pow(10.0, aggIntervalLog10);
+    }
+
+    public double getAggIntervalLog10() {
+        return aggIntervalLog10;
+    }
+
+    public void setAggIntervalLog10(double aggIntervalLog10) {
+        this.aggIntervalLog10 = aggIntervalLog10;
+    }
 }

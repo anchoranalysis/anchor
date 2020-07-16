@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.error;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.io.error;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.error;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 public class FilePathPrefixerException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public FilePathPrefixerException(String message) {
-		super(message);
-	}
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public FilePathPrefixerException(Throwable cause) {
-		super(cause);
-	}	
+    public FilePathPrefixerException(String message) {
+        super(message);
+    }
+
+    public FilePathPrefixerException(Throwable cause) {
+        super(cause);
+    }
 }

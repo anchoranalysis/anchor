@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.provider;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +23,17 @@ package org.anchoranalysis.io.bean.filepath.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.filepath.provider;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
 import org.anchoranalysis.core.error.CreateException;
 
-public abstract class FilePathProvider extends ParamsBean<FilePathProvider> implements Provider<Path> {
+public abstract class FilePathProvider extends ParamsBean<FilePathProvider>
+        implements Provider<Path> {
 
-	@Override
-	public abstract Path create() throws CreateException;
+    @Override
+    public abstract Path create() throws CreateException;
 }

@@ -1,15 +1,8 @@
-package org.anchoranalysis.bean.shared.relation;
-
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.RelationToValue;
-
-import lombok.EqualsAndHashCode;
-
-/*
+/*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,17 +23,23 @@ import lombok.EqualsAndHashCode;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.relation;
 
-@EqualsAndHashCode(callSuper=true)
+import lombok.EqualsAndHashCode;
+import org.anchoranalysis.core.relation.GreaterThan;
+import org.anchoranalysis.core.relation.RelationToValue;
+
+@EqualsAndHashCode(callSuper = true)
 public class GreaterThanBean extends RelationBean {
 
-	@Override
-	public String toString() {
-		return GreaterThan.class.getSimpleName();
-	}
+    @Override
+    public String toString() {
+        return GreaterThan.class.getSimpleName();
+    }
 
-	@Override
-	public RelationToValue create() {
-		return new GreaterThan();
-	}
+    @Override
+    public RelationToValue create() {
+        return new GreaterThan();
+    }
 }

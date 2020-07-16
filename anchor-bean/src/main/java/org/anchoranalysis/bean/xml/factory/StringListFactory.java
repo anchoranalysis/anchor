@@ -1,14 +1,8 @@
-package org.anchoranalysis.bean.xml.factory;
-
-
-
-import org.anchoranalysis.bean.StringList;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,26 +23,25 @@ import org.anchoranalysis.bean.StringList;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.xml.factory;
 
-
+import org.anchoranalysis.bean.StringList;
 import org.anchoranalysis.bean.StringSet;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
 /**
  * A factory for creating {@link StringSet} beans
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class StringListFactory extends AnchorBeanFactory {
-    
-    // Creates the bean. Checks if already an instance exists.
-	@Override
-	@SuppressWarnings("rawtypes")
-	public synchronized Object createBean(Class beanClass, BeanDeclaration decl,
-        Object param) throws Exception
-    {
-		return HelperUtilities.populateStringCollectionFromXml( new StringList(), decl );
-    }
 
+    // Creates the bean. Checks if already an instance exists.
+    @Override
+    @SuppressWarnings("rawtypes")
+    public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
+            throws Exception {
+        return HelperUtilities.populateStringCollectionFromXml(new StringList(), decl);
+    }
 }

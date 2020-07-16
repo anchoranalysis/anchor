@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.name.provider;
-
-/*
+/*-
  * #%L
- * anchor-image
+ * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.core.name.provider;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.core.name.provider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,30 +35,30 @@ import java.util.stream.Collectors;
 
 public class NamedProviderCombine<T> implements NamedProvider<T> {
 
-	private List<NamedProvider<T>> list = new ArrayList<>();
-	
-	@Override
-	public Optional<T> getOptional(String key) throws NamedProviderGetException {
-		
-		for (NamedProvider<T> item : list) {
-			
-			Optional<T> ret = item.getOptional(key);
-			
-			if (ret.isPresent()) {
-				return ret;
-			}
-		}
-		return Optional.empty();
-	}
+    private List<NamedProvider<T>> list = new ArrayList<>();
 
-	@Override
-	public Set<String> keys() {
-		return list.stream().flatMap( item->item.keys().stream() ).collect(
-			Collectors.toCollection(HashSet::new)	
-		);
-	}
-	
-	public void add( NamedProvider<T> key ) {
-		list.add(key);
-	}
+    @Override
+    public Optional<T> getOptional(String key) throws NamedProviderGetException {
+
+        for (NamedProvider<T> item : list) {
+
+            Optional<T> ret = item.getOptional(key);
+
+            if (ret.isPresent()) {
+                return ret;
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Set<String> keys() {
+        return list.stream()
+                .flatMap(item -> item.keys().stream())
+                .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    public void add(NamedProvider<T> key) {
+        list.add(key);
+    }
 }

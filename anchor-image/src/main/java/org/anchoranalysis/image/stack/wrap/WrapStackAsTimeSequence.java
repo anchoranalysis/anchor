@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.stack.wrap;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,29 +23,31 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.stack.wrap;
 
+import java.util.Optional;
 import java.util.Set;
-
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 public class WrapStackAsTimeSequence implements NamedProvider<TimeSequence> {
-	
-	private NamedProvider<Stack> namedProvider;
-	 
-	public WrapStackAsTimeSequence( NamedProvider<Stack> namedProvider ) {
-		this.namedProvider = namedProvider;
-	}
 
-	@Override
-	public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {
-		return namedProvider.getOptional(key).map(TimeSequence::new);
-	}
+    private NamedProvider<Stack> namedProvider;
 
-	@Override
-	public Set<String> keys() {
-		return namedProvider.keys();
-	}
+    public WrapStackAsTimeSequence(NamedProvider<Stack> namedProvider) {
+        this.namedProvider = namedProvider;
+    }
+
+    @Override
+    public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {
+        return namedProvider.getOptional(key).map(TimeSequence::new);
+    }
+
+    @Override
+    public Set<String> keys() {
+        return namedProvider.keys();
+    }
 }

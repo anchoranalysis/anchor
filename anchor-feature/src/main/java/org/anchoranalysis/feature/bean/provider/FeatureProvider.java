@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.provider;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,15 @@ package org.anchoranalysis.feature.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public abstract class FeatureProvider<T extends FeatureInput> extends FeatureProviderBean<FeatureProvider<T>,Feature<T>>  {
+public abstract class FeatureProvider<T extends FeatureInput>
+        extends FeatureProviderBean<FeatureProvider<T>, Feature<T>> {
 
-	public abstract Feature<T> create() throws CreateException;
+    public abstract Feature<T> create() throws CreateException;
 }

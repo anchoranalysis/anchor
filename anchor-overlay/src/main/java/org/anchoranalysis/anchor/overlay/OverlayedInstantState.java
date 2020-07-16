@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.overlay;
-
 /*-
  * #%L
  * anchor-overlay
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.anchor.overlay;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
-import org.anchoranalysis.core.index.SingleIndexCntr;
+/* (C)2020 */
+package org.anchoranalysis.anchor.overlay;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
+import org.anchoranalysis.core.index.SingleIndexCntr;
 
 @EqualsAndHashCode(callSuper = true)
 public class OverlayedInstantState extends SingleIndexCntr {
 
-	@Getter
-	private final OverlayCollection overlayCollection;
-	
-	public OverlayedInstantState(int iter, OverlayCollection overlayCollection) {
-		super(iter);
-		this.overlayCollection = overlayCollection;
-	}
+    @Getter private final OverlayCollection overlayCollection;
+
+    public OverlayedInstantState(int iter, OverlayCollection overlayCollection) {
+        super(iter);
+        this.overlayCollection = overlayCollection;
+    }
 }

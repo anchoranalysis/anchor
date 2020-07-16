@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.name.value;
-
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.core.name.value;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.core.name.value;
 
 import java.util.Comparator;
 
 /**
  * Orders two name-values by their name (alphabetic order from standard String.compareTo(String))
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <V> value-type
  */
 public class ComparatorOrderByName<V> implements Comparator<NameValue<V>> {
 
-	@Override
-	public int compare(NameValue<V> arg0, NameValue<V> arg1) {
-		return arg0.getName().compareTo(arg1.getName());
-	}
-
+    @Override
+    public int compare(NameValue<V> arg0, NameValue<V> arg1) {
+        return arg0.getName().compareTo(arg1.getName());
+    }
 }

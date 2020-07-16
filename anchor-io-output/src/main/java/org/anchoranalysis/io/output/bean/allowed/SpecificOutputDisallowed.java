@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.output.bean.allowed;
-
-import org.anchoranalysis.bean.StringSet;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,36 +23,34 @@ import org.anchoranalysis.bean.StringSet;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.output.bean.allowed;
 
-
+import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class SpecificOutputDisallowed extends OutputAllowed {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StringSet outputsDisallowed;
-	// END BEAN PROPERTIES
-	
-	public SpecificOutputDisallowed() {
-		
-	}
-	
-	public SpecificOutputDisallowed( StringSet outputsDisallowed ) {
-		this.outputsDisallowed = outputsDisallowed;
-	}
-	
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return !outputsDisallowed.contains(outputName);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private StringSet outputsDisallowed;
+    // END BEAN PROPERTIES
 
-	public StringSet getOutputsDisallowed() {
-		return outputsDisallowed;
-	}
+    public SpecificOutputDisallowed() {}
 
-	public void setOutputsDisallowed(StringSet outputsDisallowed) {
-		this.outputsDisallowed = outputsDisallowed;
-	}
+    public SpecificOutputDisallowed(StringSet outputsDisallowed) {
+        this.outputsDisallowed = outputsDisallowed;
+    }
 
+    @Override
+    public boolean isOutputAllowed(String outputName) {
+        return !outputsDisallowed.contains(outputName);
+    }
+
+    public StringSet getOutputsDisallowed() {
+        return outputsDisallowed;
+    }
+
+    public void setOutputsDisallowed(StringSet outputsDisallowed) {
+        this.outputsDisallowed = outputsDisallowed;
+    }
 }

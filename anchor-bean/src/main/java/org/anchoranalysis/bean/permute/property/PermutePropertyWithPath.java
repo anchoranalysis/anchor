@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.bean.permute.property;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.permute.property;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.StringSet;
@@ -37,68 +37,62 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetterUtilities;
 
 /**
  * Base classes for PermuteProperty that require a path
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
 
+    // START BEAN PROPERTIES
 
-	// START BEAN PROPERTIES
-	
-	/**
-	 * Either a direct property of a bean e.g. "someproperty"
-	 * Or a nested-property with the children separated by full-stops:  e.g. "somechild1.somechild2.someproperty"
-	 * 
-	 * Children must be single multiplicity, and always be a subclass of IBean
-	 */
-	@BeanField
-	private String propertyPath;
-	
-	/** Additional property paths that are also changed, along with the main propertyPath **/
-	@BeanField @OptionalBean
-	private StringSet additionalPropertyPaths;
-	// END BEAN PROPERTIES
-	
+    /**
+     * Either a direct property of a bean e.g. "someproperty" Or a nested-property with the children
+     * separated by full-stops: e.g. "somechild1.somechild2.someproperty"
+     *
+     * <p>Children must be single multiplicity, and always be a subclass of IBean
+     */
+    @BeanField private String propertyPath;
 
-	// Searches through a list of property fields to find one that matches the propertyName
-	@Override
-	public PermutationSetter createSetter( AnchorBean<?> parentBean ) throws PermutationSetterException {
-		
-		PermutationSetterList out = new PermutationSetterList();
-		
-		addForPath(out, parentBean, propertyPath );
-		
-		// We add any additional paths
-		if (additionalPropertyPaths!=null) {
-			for( String additionalPath : additionalPropertyPaths.set() ) {
-				addForPath(out, parentBean, additionalPath );
-			}
-		}
-		
-		return out;
-	}
-	
-	private void addForPath( PermutationSetterList out, AnchorBean<?> parentBean, String path ) throws PermutationSetterException {
-		out.add(
-			PermutationSetterUtilities.createForSingle( parentBean, path )
-		);
-	}
-	
-	public String getPropertyPath() {
-		return propertyPath;
-	}
+    /** Additional property paths that are also changed, along with the main propertyPath * */
+    @BeanField @OptionalBean private StringSet additionalPropertyPaths;
+    // END BEAN PROPERTIES
 
-	public void setPropertyPath(String propertyPath) {
-		this.propertyPath = propertyPath;
-	}
+    // Searches through a list of property fields to find one that matches the propertyName
+    @Override
+    public PermutationSetter createSetter(AnchorBean<?> parentBean)
+            throws PermutationSetterException {
 
-	public StringSet getAdditionalPropertyPaths() {
-		return additionalPropertyPaths;
-	}
+        PermutationSetterList out = new PermutationSetterList();
 
-	public void setAdditionalPropertyPaths(StringSet additionalPropertyPaths) {
-		this.additionalPropertyPaths = additionalPropertyPaths;
-	}
-	
+        addForPath(out, parentBean, propertyPath);
+
+        // We add any additional paths
+        if (additionalPropertyPaths != null) {
+            for (String additionalPath : additionalPropertyPaths.set()) {
+                addForPath(out, parentBean, additionalPath);
+            }
+        }
+
+        return out;
+    }
+
+    private void addForPath(PermutationSetterList out, AnchorBean<?> parentBean, String path)
+            throws PermutationSetterException {
+        out.add(PermutationSetterUtilities.createForSingle(parentBean, path));
+    }
+
+    public String getPropertyPath() {
+        return propertyPath;
+    }
+
+    public void setPropertyPath(String propertyPath) {
+        this.propertyPath = propertyPath;
+    }
+
+    public StringSet getAdditionalPropertyPaths() {
+        return additionalPropertyPaths;
+    }
+
+    public void setAdditionalPropertyPaths(StringSet additionalPropertyPaths) {
+        this.additionalPropertyPaths = additionalPropertyPaths;
+    }
 }

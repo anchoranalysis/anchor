@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.ij.bean.writer;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-ij
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,27 @@ package org.anchoranalysis.io.ij.bean.writer;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.image.io.RasterIOException;
+/* (C)2020 */
+package org.anchoranalysis.io.ij.bean.writer;
 
 import ij.io.FileSaver;
+import org.anchoranalysis.image.io.RasterIOException;
 
 public class IJPngWriter extends IJWriterNoStack {
 
-	@Override
-	protected boolean writeRaster(FileSaver fs, String outPath, boolean asStack) throws RasterIOException {
+    @Override
+    protected boolean writeRaster(FileSaver fs, String outPath, boolean asStack)
+            throws RasterIOException {
 
-		if (asStack) {
-			throw new RasterIOException("Writing as stack unsupported for this format");
-		} else {
-			return fs.saveAsPng(outPath);
-		}
-	}
+        if (asStack) {
+            throw new RasterIOException("Writing as stack unsupported for this format");
+        } else {
+            return fs.saveAsPng(outPath);
+        }
+    }
 
-	@Override
-	public String dfltExt() {
-		return "png";
-	}
+    @Override
+    public String dfltExt() {
+        return "png";
+    }
 }

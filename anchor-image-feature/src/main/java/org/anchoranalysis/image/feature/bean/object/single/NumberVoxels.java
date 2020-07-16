@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.object.single;
-
-/*
+/*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.image.feature.bean.object.single;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.object.single;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -35,24 +34,20 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class NumberVoxels extends FeatureSingleObject {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean mip=false;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		return input.calc(
-			new CalculateNumVoxels(mip)
-		);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private boolean mip = false;
+    // END BEAN PROPERTIES
 
-	public boolean isMip() {
-		return mip;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+        return input.calc(new CalculateNumVoxels(mip));
+    }
 
-	public void setMip(boolean mip) {
-		this.mip = mip;
-	}
+    public boolean isMip() {
+        return mip;
+    }
 
+    public void setMip(boolean mip) {
+        this.mip = mip;
+    }
 }

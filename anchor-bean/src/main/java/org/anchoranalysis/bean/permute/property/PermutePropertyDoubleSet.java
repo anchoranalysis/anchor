@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +23,34 @@ package org.anchoranalysis.bean.permute.property;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
-
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class PermutePropertyDoubleSet extends PermutePropertyWithPath<Double> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StringSet values;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private StringSet values;
+    // END BEAN PROPERTIES
 
-	@Override
-	public Iterator<Double> propertyValues() {
-		return values.set()
-			.stream()
-			.mapToDouble( Double::parseDouble )
-			.iterator();
-	}
+    @Override
+    public Iterator<Double> propertyValues() {
+        return values.set().stream().mapToDouble(Double::parseDouble).iterator();
+    }
 
-	public StringSet getValues() {
-		return values;
-	}
+    public StringSet getValues() {
+        return values;
+    }
 
-	public void setValues(StringSet values) {
-		this.values = values;
-	}
+    public void setValues(StringSet values) {
+        this.values = values;
+    }
 
-	@Override
-	public String nameForPropValue(Double value)  {
-		return value.toString();
-	}
-
+    @Override
+    public String nameForPropValue(Double value) {
+        return value.toString();
+    }
 }

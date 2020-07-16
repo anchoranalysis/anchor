@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.error;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.error;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,19 +28,16 @@ package org.anchoranalysis.core.error;
  */
 
 /**
- * This is an exceotion that should never be thrown, but can be used for type-safety where an exception is needed
- * 
- * <p>See e.g. {@link org.anchoranalysis.core.bridge.BridgeElementWithIndex} for the type of class that regularly uses exceptions
- * that may never be thrown</p>
- * 
- * @author Owen Feehan
+ * This is an exceotion that should never be thrown, but can be used for type-safety where an
+ * exception is needed
  *
+ * <p>See e.g. {@link org.anchoranalysis.core.bridge.BridgeElementWithIndex} for the type of class
+ * that regularly uses exceptions that may never be thrown
+ *
+ * @author Owen Feehan
  */
 public class AnchorNeverOccursException extends AnchorRuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+    /** */
+    private static final long serialVersionUID = 1L;
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.object;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.image.bean.object;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.object;
 
 import java.util.List;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.object.MatchedObject;
@@ -36,19 +34,19 @@ import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
  * Matches an object with other objects.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ObjectMatcher extends ImageBean<ObjectMatcher> {
-	
-	/**
-	 * Finds matches for objects
-	 * 
-	 * @param sourceObjects a collection of objects, each of whom is searched for matches
-	 * @return a list of each object from @code{sourceObjects} with its matches (element order remains unchanged)
-	 * @throws OperationFailedException
-	 */
-	public abstract List<MatchedObject> findMatch( ObjectCollection sourceObjects ) throws OperationFailedException;
 
+    /**
+     * Finds matches for objects
+     *
+     * @param sourceObjects a collection of objects, each of whom is searched for matches
+     * @return a list of each object from @code{sourceObjects} with its matches (element order
+     *     remains unchanged)
+     * @throws OperationFailedException
+     */
+    public abstract List<MatchedObject> findMatch(ObjectCollection sourceObjects)
+            throws OperationFailedException;
 }

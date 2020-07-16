@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.extent;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.image.extent;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.extent;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class IncorrectImageSizeException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7881057360315158663L;
+    /** */
+    private static final long serialVersionUID = -7881057360315158663L;
 
-	public IncorrectImageSizeException(String string) {
-		super(string);
-	}
+    public IncorrectImageSizeException(String string) {
+        super(string);
+    }
 
-	public IncorrectImageSizeException( Exception exc ) {
-		super( exc );
-	}
+    public IncorrectImageSizeException(Exception exc) {
+        super(exc);
+    }
 }

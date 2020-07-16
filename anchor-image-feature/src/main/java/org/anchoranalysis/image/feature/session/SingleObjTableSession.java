@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.feature.session;
-
-import java.util.Optional;
-
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,11 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.session;
 
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
@@ -42,66 +42,62 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
 public class SingleObjTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
 
-	// START REQUIRED ARGUMENTS
-	private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
-	// END REQUIRED ARGUMENTS
-	
-	private FeatureCalculatorMulti<FeatureInputSingleObject> session;
-		
-	@Override
-	public void start(
-		ImageInitParams soImage,
-		Optional<NRGStackWithParams> nrgStack,
-		Logger logger
-	) throws InitException {
-		
-		try {
-			session = FeatureSession.with(
-				namedFeatureStore.listFeatures(),
-				InitParamsHelper.createInitParams(
-					Optional.of(soImage.getSharedObjects()),
-					nrgStack
-				),
-				soImage.getFeature().getSharedFeatureSet(),
-				logger
-			);
-		} catch (FeatureCalcException e) {
-			throw new InitException(e);
-		}
-	}
-	
-	@Override
-	public FeatureTableCalculator<FeatureInputSingleObject> duplicateForNewThread() {
-		return new SingleObjTableSession(namedFeatureStore.deepCopy());
-	}
+    // START REQUIRED ARGUMENTS
+    private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
+    // END REQUIRED ARGUMENTS
 
-	@Override
-	public ResultsVector calc(FeatureInputSingleObject input) throws FeatureCalcException {
-		return session.calc(input);
-	}
+    private FeatureCalculatorMulti<FeatureInputSingleObject> session;
 
-	@Override
-	public ResultsVector calc(FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset) throws FeatureCalcException {
-		return session.calc(input, featuresSubset);
-	}
+    @Override
+    public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
+            throws InitException {
 
-	@Override
-	public ResultsVector calcSuppressErrors(FeatureInputSingleObject input, ErrorReporter errorReporter) {
-		return session.calcSuppressErrors( input, errorReporter );
-	}
+        try {
+            session =
+                    FeatureSession.with(
+                            namedFeatureStore.listFeatures(),
+                            InitParamsHelper.createInitParams(
+                                    Optional.of(soImage.getSharedObjects()), nrgStack),
+                            soImage.getFeature().getSharedFeatureSet(),
+                            logger);
+        } catch (FeatureCalcException e) {
+            throw new InitException(e);
+        }
+    }
 
-	@Override
-	public int sizeFeatures() {
-		return namedFeatureStore.size();
-	}
-		
-	@Override
-	public FeatureNameList createFeatureNames() {
-		return namedFeatureStore.createFeatureNames();
-	}
+    @Override
+    public FeatureTableCalculator<FeatureInputSingleObject> duplicateForNewThread() {
+        return new SingleObjTableSession(namedFeatureStore.deepCopy());
+    }
+
+    @Override
+    public ResultsVector calc(FeatureInputSingleObject input) throws FeatureCalcException {
+        return session.calc(input);
+    }
+
+    @Override
+    public ResultsVector calc(
+            FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset)
+            throws FeatureCalcException {
+        return session.calc(input, featuresSubset);
+    }
+
+    @Override
+    public ResultsVector calcSuppressErrors(
+            FeatureInputSingleObject input, ErrorReporter errorReporter) {
+        return session.calcSuppressErrors(input, errorReporter);
+    }
+
+    @Override
+    public int sizeFeatures() {
+        return namedFeatureStore.size();
+    }
+
+    @Override
+    public FeatureNameList createFeatureNames() {
+        return namedFeatureStore.createFeatureNames();
+    }
 }

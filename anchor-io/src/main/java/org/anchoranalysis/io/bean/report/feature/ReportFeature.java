@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.bean.report.feature;
-
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,16 +23,19 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.report.feature;
 
-
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 
 public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
-	public abstract boolean isNumeric();
-	
-	public abstract String genTitleStr() throws OperationFailedException;
-	
-	public abstract String genFeatureStringFor( T obj, Logger logger ) throws OperationFailedException;
+    public abstract boolean isNumeric();
+
+    public abstract String genTitleStr() throws OperationFailedException;
+
+    public abstract String genFeatureStringFor(T obj, Logger logger)
+            throws OperationFailedException;
 }

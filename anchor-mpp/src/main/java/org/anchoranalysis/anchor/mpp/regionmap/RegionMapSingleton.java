@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.regionmap;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.anchor.mpp.regionmap;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.regionmap;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipAnd;
@@ -33,20 +33,28 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 // A Default RegionMap
 public class RegionMapSingleton {
 
-	private static RegionMap regionMap = null;
-	
-	private RegionMapSingleton() {}
-	
-	public static synchronized RegionMap instance() {
-		if (regionMap==null) {
-			regionMap = new RegionMap();
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_INSIDE) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_OUTSIDE) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE_INNER) );
-			regionMap.getList().add( new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE) );
-		}
-		return regionMap;
-	}
+    private static RegionMap regionMap = null;
+
+    private RegionMapSingleton() {}
+
+    public static synchronized RegionMap instance() {
+        if (regionMap == null) {
+            regionMap = new RegionMap();
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_INSIDE));
+            regionMap.getList().add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL));
+            regionMap.getList().add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE));
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_OUTSIDE));
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE_INNER));
+            regionMap
+                    .getList()
+                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE));
+        }
+        return regionMap;
+    }
 }

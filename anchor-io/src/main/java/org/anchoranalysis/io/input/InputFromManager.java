@@ -1,15 +1,8 @@
-package org.anchoranalysis.io.input;
-
-import java.nio.file.Path;
-import java.util.Optional;
-
-
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,22 +23,31 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.input;
 
+import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 public interface InputFromManager {
 
-	String descriptiveName();
-	
-	Optional<Path> pathForBinding();
-	
-	default Path pathForBindingRequired() throws AnchorIOException{
-		return pathForBinding().orElseThrow( ()->
-			new AnchorIOException("A binding path is required to be associated with each input for this algorithm, but is not")
-		);
-	}
-	
-	/** Performs all tidying up, file-closing etc. after we are finished using the {@link InputFromManager} */
-	default void close(ErrorReporter errorReporter) {}
+    String descriptiveName();
+
+    Optional<Path> pathForBinding();
+
+    default Path pathForBindingRequired() throws AnchorIOException {
+        return pathForBinding()
+                .orElseThrow(
+                        () ->
+                                new AnchorIOException(
+                                        "A binding path is required to be associated with each input for this algorithm, but is not"));
+    }
+
+    /**
+     * Performs all tidying up, file-closing etc. after we are finished using the {@link
+     * InputFromManager}
+     */
+    default void close(ErrorReporter errorReporter) {}
 }

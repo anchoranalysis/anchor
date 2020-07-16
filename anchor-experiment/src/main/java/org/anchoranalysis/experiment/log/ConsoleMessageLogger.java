@@ -1,12 +1,8 @@
-package org.anchoranalysis.experiment.log;
-
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
-
-/*
+/*-
  * #%L
- * anchor-core
+ * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,30 +23,30 @@ import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.log;
 
-
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 
 public class ConsoleMessageLogger implements StatefulMessageLogger {
 
-	@Override
-	public void start() {
-		// NOTHING TO DO
-	}
+    @Override
+    public void start() {
+        // NOTHING TO DO
+    }
 
-	@Override
-	public void log(String message) {
-		System.out.println(message); // NOSONAR
-	}
-	
-	@Override
-	public void logFormatted(String formatString, Object... args) {
-		log( String.format(formatString,args) );
-	}
+    @Override
+    public void log(String message) {
+        System.out.println(message); // NOSONAR
+    }
 
-	@Override
-	public void close(boolean successful) {
-		// NOTHING TO CLOSE
-	}
-	
-	
+    @Override
+    public void logFormatted(String formatString, Object... args) {
+        log(String.format(formatString, args));
+    }
+
+    @Override
+    public void close(boolean successful) {
+        // NOTHING TO CLOSE
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.kernel.proposer;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,30 @@ package org.anchoranalysis.mpp.sgmn.kernel.proposer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.kernel.proposer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
 public class WeightedKernelList<T> implements Iterable<WeightedKernel<T>> {
 
-	private ArrayList<WeightedKernel<T>> delegate = new ArrayList<>();
+    private ArrayList<WeightedKernel<T>> delegate = new ArrayList<>();
 
-	public boolean add(WeightedKernel<T> e) {
-		return delegate.add(e);
-	}
+    public boolean add(WeightedKernel<T> e) {
+        return delegate.add(e);
+    }
 
-	@Override
-	public Iterator<WeightedKernel<T>> iterator() {
-		return delegate.iterator();
-	}
+    @Override
+    public Iterator<WeightedKernel<T>> iterator() {
+        return delegate.iterator();
+    }
 
-	public int size() {
-		return delegate.size();
-	}
+    public int size() {
+        return delegate.size();
+    }
 
-	public WeightedKernel<T> get(int index) {
-		return delegate.get(index);
-	}
+    public WeightedKernel<T> get(int index) {
+        return delegate.get(index);
+    }
 }

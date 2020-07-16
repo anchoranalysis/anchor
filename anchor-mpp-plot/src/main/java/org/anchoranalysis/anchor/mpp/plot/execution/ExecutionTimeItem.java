@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.plot.execution;
-
-/*
+/*-
  * #%L
  * anchor-mpp-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +23,33 @@ package org.anchoranalysis.anchor.mpp.plot.execution;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.plot.execution;
 
 public class ExecutionTimeItem {
-	
-	private String objectID;
-	private long executionTime;
-	
-	public ExecutionTimeItem(String objectID, long executionTime) {
-		super();
-		this.objectID = objectID;
-		this.executionTime = executionTime;
-	}
 
-	public String getObjectID() {
-		return objectID;
-	}
+    private String objectID;
+    private long executionTime;
 
-	public void setObjectID(String objectID) {
-		this.objectID = objectID;
-	}
+    public ExecutionTimeItem(String objectID, long executionTime) {
+        super();
+        this.objectID = objectID;
+        this.executionTime = executionTime;
+    }
 
-	public long getExecutionTime() {
-		return executionTime;
-	}
+    public String getObjectID() {
+        return objectID;
+    }
 
-	public void setExecutionTime(long executionTime) {
-		this.executionTime = executionTime;
-	}
-	
-	
-	
+    public void setObjectID(String objectID) {
+        this.objectID = objectID;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    public void setExecutionTime(long executionTime) {
+        this.executionTime = executionTime;
+    }
 }

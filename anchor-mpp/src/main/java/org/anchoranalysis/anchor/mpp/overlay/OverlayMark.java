@@ -1,18 +1,8 @@
-package org.anchoranalysis.anchor.mpp.overlay;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.OverlayProperties;
-import org.anchoranalysis.anchor.overlay.object.scaled.FromMask;
-import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
-import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +23,16 @@ import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.overlay;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.OverlayProperties;
+import org.anchoranalysis.anchor.overlay.object.scaled.FromMask;
+import org.anchoranalysis.anchor.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.anchor.overlay.writer.DrawOverlay;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -46,96 +45,90 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
 public class OverlayMark extends Overlay {
 
-	private ScaledMaskCreator scaledMaskCreator;
-	private Mark mark;
-	private RegionMembershipWithFlags regionMembership;
-	
-	public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
-		super();
-		this.mark = mark;
-		this.regionMembership = regionMembership;
-		
-		/**
-		 *	How we create our scaled masks 
-		 */
-		scaledMaskCreator = new VolumeThreshold(
-			new FromMask(),	// Above the threshold, we use the quick *rough* method for scaling up
-			new FromMark(regionMembership),	// Below the threshold, we use the slower *fine* method for scaling up 
-			5000			// The threshold that decides which to use
-		);
-	}
+    private ScaledMaskCreator scaledMaskCreator;
+    private Mark mark;
+    private RegionMembershipWithFlags regionMembership;
 
-	public Mark getMark() {
-		return mark;
-	}
+    public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
+        super();
+        this.mark = mark;
+        this.regionMembership = regionMembership;
 
-	@Override
-	public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
-		return mark.bbox(
-			dim,
-			regionMembership.getRegionID()
-		);
-	}
+        /** How we create our scaled masks */
+        scaledMaskCreator =
+                new VolumeThreshold(
+                        new FromMask(), // Above the threshold, we use the quick *rough* method for
+                        // scaling up
+                        new FromMark(
+                                regionMembership), // Below the threshold, we use the slower *fine*
+                        // method for scaling up
+                        5000 // The threshold that decides which to use
+                        );
+    }
 
-	@Override
-	public ObjectWithProperties createScaledMask(
-			DrawOverlay overlayWriter, double zoomFactorNew,
-			ObjectWithProperties om, Overlay ol, ImageDimensions sdUnscaled,
-			ImageDimensions sdScaled, BinaryValuesByte bvOut) throws CreateException {
-		
-		return scaledMaskCreator.createScaledMask(
-			overlayWriter,
-			om,
-			zoomFactorNew,
-			mark,
-			sdUnscaled,
-			bvOut
-		);
-	}
+    public Mark getMark() {
+        return mark;
+    }
 
-	@Override
-	public ObjectWithProperties createObject(DrawOverlay overlayWriter, ImageDimensions dimEntireImage,
-			BinaryValuesByte bvOut) throws CreateException {
-		return mark.calcMask(
-			dimEntireImage,
-			regionMembership,
-			bvOut
-		);
-	}
+    @Override
+    public BoundingBox bbox(DrawOverlay overlayWriter, ImageDimensions dim) {
+        return mark.bbox(dim, regionMembership.getRegionID());
+    }
 
-	@Override
-	public int getId() {
-		return mark.getId();
-	}
-	
-	@Override
-	public boolean isPointInside( DrawOverlay overlayWriter, Point3i point ) {
-		
-		Point3d pointD = PointConverter.doubleFromInt(point);
-		
-		byte membership = mark.evalPointInside(pointD);
-		return (regionMembership.isMemberFlag(membership));
-	}
+    @Override
+    public ObjectWithProperties createScaledMask(
+            DrawOverlay overlayWriter,
+            double zoomFactorNew,
+            ObjectWithProperties om,
+            Overlay ol,
+            ImageDimensions sdUnscaled,
+            ImageDimensions sdScaled,
+            BinaryValuesByte bvOut)
+            throws CreateException {
 
-	// We delegate uniqueness-check to the mask
-	@Override
-	public boolean equals(Object arg0) {
-		if (arg0 instanceof OverlayMark) {
-			OverlayMark objCast = (OverlayMark) arg0;
-			return mark.equals(objCast.mark);	
-		} else {
-			return false;
-		}
-		
-	}
+        return scaledMaskCreator.createScaledMask(
+                overlayWriter, om, zoomFactorNew, mark, sdUnscaled, bvOut);
+    }
 
-	@Override
-	public int hashCode() {
-		return mark.hashCode();
-	}
+    @Override
+    public ObjectWithProperties createObject(
+            DrawOverlay overlayWriter, ImageDimensions dimEntireImage, BinaryValuesByte bvOut)
+            throws CreateException {
+        return mark.calcMask(dimEntireImage, regionMembership, bvOut);
+    }
 
-	@Override
-	public OverlayProperties generateProperties(ImageResolution sr) {
-		return mark.generateProperties(sr);
-	}
+    @Override
+    public int getId() {
+        return mark.getId();
+    }
+
+    @Override
+    public boolean isPointInside(DrawOverlay overlayWriter, Point3i point) {
+
+        Point3d pointD = PointConverter.doubleFromInt(point);
+
+        byte membership = mark.evalPointInside(pointD);
+        return (regionMembership.isMemberFlag(membership));
+    }
+
+    // We delegate uniqueness-check to the mask
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof OverlayMark) {
+            OverlayMark objCast = (OverlayMark) arg0;
+            return mark.equals(objCast.mark);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return mark.hashCode();
+    }
+
+    @Override
+    public OverlayProperties generateProperties(ImageResolution sr) {
+        return mark.generateProperties(sr);
+    }
 }

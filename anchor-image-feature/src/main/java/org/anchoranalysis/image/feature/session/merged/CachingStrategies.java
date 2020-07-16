@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.feature.session.merged;
-
-import org.anchoranalysis.feature.input.FeatureInput;
-
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,10 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.session.merged;
 
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
@@ -36,21 +35,23 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
  * Strategies for caching used in {@link FeatureCalculatorMergedPairs}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class CachingStrategies {
 
-	private CachingStrategies() {}
-	
-	/** Cache and re-use inputs */
-	public static <T extends FeatureInput> BoundReplaceStrategy<T,CacheAndReuseStrategy<T>> cacheAndReuse() {
-		return new BoundReplaceStrategy<>(CacheAndReuseStrategy::new);
-	}
-	
-	/* Don't cache inputs */
-	public static BoundReplaceStrategy<FeatureInputStack,? extends ReplaceStrategy<FeatureInputStack>> noCache() {
-		return new BoundReplaceStrategy<>(ReuseSingletonStrategy::new);
-	}
+    private CachingStrategies() {}
+
+    /** Cache and re-use inputs */
+    public static <T extends FeatureInput>
+            BoundReplaceStrategy<T, CacheAndReuseStrategy<T>> cacheAndReuse() {
+        return new BoundReplaceStrategy<>(CacheAndReuseStrategy::new);
+    }
+
+    /* Don't cache inputs */
+    public static BoundReplaceStrategy<
+                    FeatureInputStack, ? extends ReplaceStrategy<FeatureInputStack>>
+            noCache() {
+        return new BoundReplaceStrategy<>(ReuseSingletonStrategy::new);
+    }
 }

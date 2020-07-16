@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.io.cfg;
-
-/*
+/*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.mpp.io.cfg;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.cfg;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.bean.deserializer.XStreamDeserializer;
@@ -36,15 +34,15 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 public class CfgDeserializer implements Deserializer<Cfg> {
 
-	private XStreamDeserializer<Cfg> delegate;
+    private XStreamDeserializer<Cfg> delegate;
 
-	public CfgDeserializer() {
-		super();
-		delegate = new XStreamDeserializer<>();
-	}
-	
-	@Override
-	public Cfg deserialize( Path filePath ) throws DeserializationFailedException {
-		return delegate.deserialize(filePath);
-	}
+    public CfgDeserializer() {
+        super();
+        delegate = new XStreamDeserializer<>();
+    }
+
+    @Override
+    public Cfg deserialize(Path filePath) throws DeserializationFailedException {
+        return delegate.deserialize(filePath);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.test.feature;
-
 /*-
  * #%L
  * anchor-test-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.test.feature;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.test.feature;
 
 import static org.junit.Assert.assertTrue;
 
@@ -37,29 +37,31 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class ConstantsInListFixture {
 
-	private static double f1Value = 1.0;
-	private static double f2Value = 2.0;
-	private static double f3Value = 3.0;
+    private static double f1Value = 1.0;
+    private static double f2Value = 2.0;
+    private static double f3Value = 3.0;
 
-	private static double eps = 1e-16;
-	
-	private ConstantsInListFixture() {}
-	
-	/** creates a feature-list associated with the fixture */
-	public static <T extends FeatureInput> FeatureList<T> create() {
-		return FeatureListFactory.from(
-			constantFeatureFor(f1Value),
-			constantFeatureFor(f2Value),
-			constantFeatureFor(f3Value)
-		);
-	}
-		
-	/** checks that a result-vector has the results we expect from the feature-list associated with this fixture */
-	public static void checkResultVector( ResultsVector rv ) {
-		assertTrue( rv.equalsPrecision(eps, f1Value, f2Value, f3Value ) );
-	}
-	
-	private static <T extends FeatureInput> Feature<T> constantFeatureFor(double val) {
-		return new Constant<>(val);
-	}
+    private static double eps = 1e-16;
+
+    private ConstantsInListFixture() {}
+
+    /** creates a feature-list associated with the fixture */
+    public static <T extends FeatureInput> FeatureList<T> create() {
+        return FeatureListFactory.from(
+                constantFeatureFor(f1Value),
+                constantFeatureFor(f2Value),
+                constantFeatureFor(f3Value));
+    }
+
+    /**
+     * checks that a result-vector has the results we expect from the feature-list associated with
+     * this fixture
+     */
+    public static void checkResultVector(ResultsVector rv) {
+        assertTrue(rv.equalsPrecision(eps, f1Value, f2Value, f3Value));
+    }
+
+    private static <T extends FeatureInput> Feature<T> constantFeatureFor(double val) {
+        return new Constant<>(val);
+    }
 }

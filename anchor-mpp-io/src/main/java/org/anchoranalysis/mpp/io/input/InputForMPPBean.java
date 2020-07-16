@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.io.input;
-
 /*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.mpp.io.input;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.input;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -33,5 +33,6 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 /** The input can be used to initialize an MPP Bean */
 public interface InputForMPPBean {
 
-	void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage ) throws OperationFailedException;
+    void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+            throws OperationFailedException;
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pixelpart;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,54 +23,54 @@ package org.anchoranalysis.anchor.mpp.pixelpart;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pixelpart;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactory;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
 public class PixelPartPixelList implements PixelPart<VoxelIntensityList> {
 
-	private VoxelIntensityList combined;
-	private List<VoxelIntensityList> list;
-	
-	public PixelPartPixelList( int numSlices ) {
-		
-		combined = new VoxelIntensityList();
-		
-		list = new ArrayList<>();
-		for(int i=0; i<numSlices; i++) {
-			list.add( new VoxelIntensityList() );
-		}
-	}
-	
-	// Should only be used RO, if we want to maintain integrity with the combined list
-	@Override
-	public VoxelIntensityList getSlice( int sliceID ) {
-		return list.get(sliceID);
-	}
-	
-	@Override
-	public void addForSlice( int sliceID, int val ) {
-		double valD = (double) val;
-		combined.add(valD);
-		list.get(sliceID).add(valD);
-	}
+    private VoxelIntensityList combined;
+    private List<VoxelIntensityList> list;
 
-	@Override
-	public VoxelIntensityList getCombined() {
-		return combined;
-	}
+    public PixelPartPixelList(int numSlices) {
 
-	@Override
-	public void cleanUp(PixelPartFactory<VoxelIntensityList> factory) {
-		// NOTHING TO DO
-	}
+        combined = new VoxelIntensityList();
 
-	@Override
-	public int numSlices() {
-		return list.size();
-	}
+        list = new ArrayList<>();
+        for (int i = 0; i < numSlices; i++) {
+            list.add(new VoxelIntensityList());
+        }
+    }
+
+    // Should only be used RO, if we want to maintain integrity with the combined list
+    @Override
+    public VoxelIntensityList getSlice(int sliceID) {
+        return list.get(sliceID);
+    }
+
+    @Override
+    public void addForSlice(int sliceID, int val) {
+        double valD = (double) val;
+        combined.add(valD);
+        list.get(sliceID).add(valD);
+    }
+
+    @Override
+    public VoxelIntensityList getCombined() {
+        return combined;
+    }
+
+    @Override
+    public void cleanUp(PixelPartFactory<VoxelIntensityList> factory) {
+        // NOTHING TO DO
+    }
+
+    @Override
+    public int numSlices() {
+        return list.size();
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,32 +23,31 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 class ApplyScaling {
 
-	private float convertRatio = 1;
-	private float sub = 0;
-	
-	public ApplyScaling() {
-		
-	}
+    private float convertRatio = 1;
+    private float sub = 0;
 
-	public ApplyScaling(float convertRatio, float sub) {
-		super();
-		this.convertRatio = convertRatio;
-		this.sub = sub;
-	}
-	
-	public float apply( float in ) {
-		return (in-sub) * convertRatio;
-	}
-	
-	public short apply( short in ) {
-		return (short) ((in-sub) * convertRatio);
-	}
-	
-	public int apply( int in ) {
-		return (int) ((in-sub) * convertRatio);
-	}
+    public ApplyScaling() {}
+
+    public ApplyScaling(float convertRatio, float sub) {
+        super();
+        this.convertRatio = convertRatio;
+        this.sub = sub;
+    }
+
+    public float apply(float in) {
+        return (in - sub) * convertRatio;
+    }
+
+    public short apply(short in) {
+        return (short) ((in - sub) * convertRatio);
+    }
+
+    public int apply(int in) {
+        return (int) ((in - sub) * convertRatio);
+    }
 }

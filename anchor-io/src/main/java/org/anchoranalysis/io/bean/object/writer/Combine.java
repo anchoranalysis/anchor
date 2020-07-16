@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.object.writer;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,15 @@ package org.anchoranalysis.io.bean.object.writer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.object.writer;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
@@ -41,41 +43,38 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Combine extends DrawObject {
-	
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private List<DrawObject> list;
-	// END BEAN PROPERTIES
 
-	@Override
-	public PrecalcOverlay precalculate(ObjectWithProperties mask,
-			ImageDimensions dim) throws CreateException {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private List<DrawObject> list;
+    // END BEAN PROPERTIES
 
-		List<PrecalcOverlay> listPrecalc = new ArrayList<>();
-		
-		for( DrawObject writer : list) {
-			listPrecalc.add( writer.precalculate(mask, dim) );
-		}
-		
-		return new PrecalcOverlay(mask) {
+    @Override
+    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+            throws CreateException {
 
-			@Override
-			public void writePrecalculatedMask(RGBStack background, ObjectDrawAttributes attributes, int iteration,
-					BoundingBox restrictTo) throws OperationFailedException {
+        List<PrecalcOverlay> listPrecalc = new ArrayList<>();
 
-				for(PrecalcOverlay preCalc : listPrecalc) {
-					preCalc.writePrecalculatedMask(background, attributes, iteration, restrictTo);
-				}
-				
-			}
-			
-		};
-	}
+        for (DrawObject writer : list) {
+            listPrecalc.add(writer.precalculate(mask, dim));
+        }
+
+        return new PrecalcOverlay(mask) {
+
+            @Override
+            public void writePrecalculatedMask(
+                    RGBStack background,
+                    ObjectDrawAttributes attributes,
+                    int iteration,
+                    BoundingBox restrictTo)
+                    throws OperationFailedException {
+
+                for (PrecalcOverlay preCalc : listPrecalc) {
+                    preCalc.writePrecalculatedMask(background, attributes, iteration, restrictTo);
+                }
+            }
+        };
+    }
 }

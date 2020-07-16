@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.strategy.replace;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.session.strategy.replace;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.session.strategy.replace;
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -32,5 +32,5 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface ReplaceStrategy<T extends FeatureInput> {
 
-	SessionInput<T> createOrReuse(T input) throws FeatureCalcException;
+    SessionInput<T> createOrReuse(T input) throws FeatureCalcException;
 }

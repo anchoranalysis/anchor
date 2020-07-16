@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.rasterreader;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,12 @@ package org.anchoranalysis.image.io.bean.rasterreader;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.rasterreader;
 
 import java.nio.file.Path;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -35,38 +36,37 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RasterReaderUtilities {
-	
-	public static Stack openStackFromPath( RasterReader rasterReader, Path path ) throws RasterIOException {
-		OpenedRaster openedRaster = rasterReader.openFile(path);
-		
-		try {
-			if (openedRaster.numSeries()!=1) {
-				throw new RasterIOException("there must be exactly one series");
-			}
-			
-			Stack stack = openedRaster.open(0, ProgressReporterNull.get() ).get(0);
-			return stack.duplicate();
-		} finally {
-			openedRaster.close();
-		}
-		
-	}
-	
-	public static Mask openBinaryChnl( RasterReader rasterReader, Path path, BinaryValues bv ) throws RasterIOException {
-		
-		Stack stack = openStackFromPath(rasterReader, path);
-		
-		if (stack.getNumChnl()!=1) {
-			throw new RasterIOException(
-				String.format("There must be exactly one channel, but there are %d", stack.getNumChnl() )
-			);
-		}
-		
-		return new Mask( stack.getChnl(0), bv );
-	}
+
+    public static Stack openStackFromPath(RasterReader rasterReader, Path path)
+            throws RasterIOException {
+        OpenedRaster openedRaster = rasterReader.openFile(path);
+
+        try {
+            if (openedRaster.numSeries() != 1) {
+                throw new RasterIOException("there must be exactly one series");
+            }
+
+            Stack stack = openedRaster.open(0, ProgressReporterNull.get()).get(0);
+            return stack.duplicate();
+        } finally {
+            openedRaster.close();
+        }
+    }
+
+    public static Mask openBinaryChnl(RasterReader rasterReader, Path path, BinaryValues bv)
+            throws RasterIOException {
+
+        Stack stack = openStackFromPath(rasterReader, path);
+
+        if (stack.getNumChnl() != 1) {
+            throw new RasterIOException(
+                    String.format(
+                            "There must be exactly one channel, but there are %d",
+                            stack.getNumChnl()));
+        }
+
+        return new Mask(stack.getChnl(0), bv);
+    }
 }

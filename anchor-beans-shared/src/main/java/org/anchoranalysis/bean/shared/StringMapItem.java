@@ -1,12 +1,8 @@
-package org.anchoranalysis.bean.shared;
-
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
- * anchor-mpp-io
+ * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,39 +23,38 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared;
 
-
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * A simple mapping from one string (source) to another (target)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class StringMapItem extends AnchorBean<StringMapItem> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String source;
-	
-	@BeanField
-	private String target;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private String source;
 
-	public String getSource() {
-		return source;
-	}
+    @BeanField private String target;
+    // END BEAN PROPERTIES
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public String getTarget() {
-		return target;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public void setTarget(String target) {
-		this.target = target;
-	}
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
 }

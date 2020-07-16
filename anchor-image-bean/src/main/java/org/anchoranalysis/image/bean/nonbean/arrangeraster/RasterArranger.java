@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.nonbean.arrangeraster;
-
-/*
+/*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.image.bean.nonbean.arrangeraster;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.nonbean.arrangeraster;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
@@ -41,100 +39,98 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class RasterArranger {
-	
-	private BBoxSetOnPlane bboxSetOnPlane;
-	private ImageDimensions dimensions;
-	
-	public void init( ArrangeRaster arrangeRaster, List<RGBStack> list ) throws InitException {
 
-		Iterator<RGBStack> rasterIterator = list.iterator();
-		try {
-			this.bboxSetOnPlane = arrangeRaster.createBBoxSetOnPlane( rasterIterator );
-		} catch (ArrangeRasterException e) {
-			throw new InitException(e);
-		}
-		
-		if (rasterIterator.hasNext()) {
-			throw new InitException("rasterIterator has more items than can be accomodated");
-		}
+    private BBoxSetOnPlane bboxSetOnPlane;
+    private ImageDimensions dimensions;
 
-		dimensions = new ImageDimensions(
-			bboxSetOnPlane.getExtent()
-		);
-	}
-	
-	public RGBStack createStack( List<RGBStack> list, ChannelFactorySingleType chnlfactory ) {
-		RGBStack stackOut =  new RGBStack( dimensions, chnlfactory );
-		ppltStack( list, stackOut.asStack() );
-		return stackOut;
-	}
-	
-	private void ppltStack( List<RGBStack> generatedImages, Stack stackOut ) {
-		
-		int index = 0;
-		for (RGBStack img : generatedImages) {
+    public void init(ArrangeRaster arrangeRaster, List<RGBStack> list) throws InitException {
 
-			BoundingBox bbox = this.bboxSetOnPlane.get(index++);
-			
-			// NOTE
-			// For a special case where our projection z-extent is different to our actual z-extent, that means
-			//   we should repeat
-			if (bbox.extent().getZ()!=img.getDimensions().getZ()) {
-				
-				int zShift = 0;
-				do {
-					projectImgOntoStackOut( bbox, img.asStack(), stackOut, zShift );
-					zShift += img.getDimensions().getZ();
-				} while( zShift < stackOut.getDimensions().getZ() );
-				
-			} else {
-				projectImgOntoStackOut( bbox, img.asStack(), stackOut, 0 );
-			}
-			
+        Iterator<RGBStack> rasterIterator = list.iterator();
+        try {
+            this.bboxSetOnPlane = arrangeRaster.createBBoxSetOnPlane(rasterIterator);
+        } catch (ArrangeRasterException e) {
+            throw new InitException(e);
+        }
 
-		}
-	}
-	
-	private void projectImgOntoStackOut( BoundingBox bbox, Stack stackIn, Stack stackOut, int zShift ) {
-		
-		assert(stackIn.getNumChnl()==stackOut.getNumChnl());
-		
-		Extent extent = stackIn.getDimensions().getExtent();
-		Extent extentOut = stackIn.getDimensions().getExtent();
-		
-		ReadableTuple3i leftCrnr = bbox.cornerMin();
-		int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
-		int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
-		
-		int numC = stackIn.getNumChnl();
-		VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC]; 
-		VoxelBuffer<?>[] vbOut = new VoxelBuffer<?>[numC];
-		
-		for (int z=0; z<extent.getZ(); z++) {
-			
-			int outZ = leftCrnr.getZ() + z + zShift;
-			
-			if (outZ>=extentOut.getZ()) {
-				return;
-			}
+        if (rasterIterator.hasNext()) {
+            throw new InitException("rasterIterator has more items than can be accomodated");
+        }
 
-			for( int c=0; c<numC; c++) {
-				vbIn[c] = stackIn.getChnl(c).getVoxelBox().any().getPixelsForPlane(z);
-				vbOut[c] = stackOut.getChnl(c).getVoxelBox().any().getPixelsForPlane(outZ);
-			}
-		
-			int src = 0;
-			for (int y=leftCrnr.getY(); y<=yEnd; y++) {
-				for (int x=leftCrnr.getX(); x<=xEnd; x++) {
-					
-					int outPos = stackOut.getDimensions().offset(x, y);
+        dimensions = new ImageDimensions(bboxSetOnPlane.getExtent());
+    }
 
-					for( int c=0; c<numC; c++) {
-						vbOut[c].transferFromConvert(outPos, vbIn[c], src);
-					}
-					src++;
-				}
-			}
-		}		
-	}
+    public RGBStack createStack(List<RGBStack> list, ChannelFactorySingleType chnlfactory) {
+        RGBStack stackOut = new RGBStack(dimensions, chnlfactory);
+        ppltStack(list, stackOut.asStack());
+        return stackOut;
+    }
+
+    private void ppltStack(List<RGBStack> generatedImages, Stack stackOut) {
+
+        int index = 0;
+        for (RGBStack img : generatedImages) {
+
+            BoundingBox bbox = this.bboxSetOnPlane.get(index++);
+
+            // NOTE
+            // For a special case where our projection z-extent is different to our actual z-extent,
+            // that means
+            //   we should repeat
+            if (bbox.extent().getZ() != img.getDimensions().getZ()) {
+
+                int zShift = 0;
+                do {
+                    projectImgOntoStackOut(bbox, img.asStack(), stackOut, zShift);
+                    zShift += img.getDimensions().getZ();
+                } while (zShift < stackOut.getDimensions().getZ());
+
+            } else {
+                projectImgOntoStackOut(bbox, img.asStack(), stackOut, 0);
+            }
+        }
+    }
+
+    private void projectImgOntoStackOut(
+            BoundingBox bbox, Stack stackIn, Stack stackOut, int zShift) {
+
+        assert (stackIn.getNumChnl() == stackOut.getNumChnl());
+
+        Extent extent = stackIn.getDimensions().getExtent();
+        Extent extentOut = stackIn.getDimensions().getExtent();
+
+        ReadableTuple3i leftCrnr = bbox.cornerMin();
+        int xEnd = leftCrnr.getX() + bbox.extent().getX() - 1;
+        int yEnd = leftCrnr.getY() + bbox.extent().getY() - 1;
+
+        int numC = stackIn.getNumChnl();
+        VoxelBuffer<?>[] vbIn = new VoxelBuffer<?>[numC];
+        VoxelBuffer<?>[] vbOut = new VoxelBuffer<?>[numC];
+
+        for (int z = 0; z < extent.getZ(); z++) {
+
+            int outZ = leftCrnr.getZ() + z + zShift;
+
+            if (outZ >= extentOut.getZ()) {
+                return;
+            }
+
+            for (int c = 0; c < numC; c++) {
+                vbIn[c] = stackIn.getChnl(c).getVoxelBox().any().getPixelsForPlane(z);
+                vbOut[c] = stackOut.getChnl(c).getVoxelBox().any().getPixelsForPlane(outZ);
+            }
+
+            int src = 0;
+            for (int y = leftCrnr.getY(); y <= yEnd; y++) {
+                for (int x = leftCrnr.getX(); x <= xEnd; x++) {
+
+                    int outPos = stackOut.getDimensions().offset(x, y);
+
+                    for (int c = 0; c < numC; c++) {
+                        vbOut[c].transferFromConvert(outPos, vbIn[c], src);
+                    }
+                    src++;
+                }
+            }
+        }
+    }
 }

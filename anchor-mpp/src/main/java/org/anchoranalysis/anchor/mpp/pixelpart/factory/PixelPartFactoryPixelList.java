@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pixelpart.factory;
-
-import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartPixelList;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,18 +23,21 @@ import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartPixelList;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pixelpart.factory;
 
+import org.anchoranalysis.anchor.mpp.pixelpart.PixelPartPixelList;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
 public class PixelPartFactoryPixelList implements PixelPartFactory<VoxelIntensityList> {
 
-	@Override
-	public PixelPartPixelList create(int numSlices) {
-		return new PixelPartPixelList( numSlices );
-	}
+    @Override
+    public PixelPartPixelList create(int numSlices) {
+        return new PixelPartPixelList(numSlices);
+    }
 
-	@Override
-	public void addUnused(VoxelIntensityList part) {
-		// NOTHING TO DO
-	}
+    @Override
+    public void addUnused(VoxelIntensityList part) {
+        // NOTHING TO DO
+    }
 }

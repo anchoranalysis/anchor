@@ -1,16 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.cfg;
-
-
-
-import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.bean.NullParamsBean;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,72 +23,71 @@ import org.anchoranalysis.bean.NullParamsBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.cfg;
 
-
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 
-import lombok.NoArgsConstructor;
-
 @NoArgsConstructor
 public class CfgGen extends NullParamsBean<CfgGen> {
-	
-	// START BEAN PARAMETERS
-	@BeanField
-	private double referencePoissonIntensity = 1e-5;
-	
-	// A template mark from which all new marks are copied
-	@BeanField
-	private MarkFactory templateMark = null;
-	// END BEAN PARAMETERS
-	
-	private IdCounter idCounter;
-	
-	// Constructor
-	public CfgGen(MarkFactory templateMark ) {
-		this.templateMark = templateMark;
-	}
-	
-	@Override
-	public String getBeanDscr() {
-		return String.format("%s templateMark=%s, referencePoissonIntensity=%f", getBeanName(), templateMark.toString(), referencePoissonIntensity );
-	}
 
+    // START BEAN PARAMETERS
+    @BeanField private double referencePoissonIntensity = 1e-5;
 
-	@Override
-	public void onInit() throws InitException {
-		super.onInit();
-		idCounter = new IdCounter(1);
-	}
+    // A template mark from which all new marks are copied
+    @BeanField private MarkFactory templateMark = null;
+    // END BEAN PARAMETERS
 
-	public Mark newTemplateMark() {
-		assert(templateMark!=null);
-		Mark mark = this.templateMark.create();
-		mark.setId( idAndIncrement() );
-	    return mark;
-	}
-	
-	public int idAndIncrement() {
-		assert idCounter!=null;
-		return idCounter.getIdAndIncrement();
-	}
+    private IdCounter idCounter;
 
+    // Constructor
+    public CfgGen(MarkFactory templateMark) {
+        this.templateMark = templateMark;
+    }
 
-	public MarkFactory getTemplateMark() {
-		return templateMark;
-	}
+    @Override
+    public String getBeanDscr() {
+        return String.format(
+                "%s templateMark=%s, referencePoissonIntensity=%f",
+                getBeanName(), templateMark.toString(), referencePoissonIntensity);
+    }
 
+    @Override
+    public void onInit() throws InitException {
+        super.onInit();
+        idCounter = new IdCounter(1);
+    }
 
-	public void setTemplateMark(MarkFactory templateMark) {
-		this.templateMark = templateMark;
-	}
+    public Mark newTemplateMark() {
+        assert (templateMark != null);
+        Mark mark = this.templateMark.create();
+        mark.setId(idAndIncrement());
+        return mark;
+    }
 
-	public double getReferencePoissonIntensity() {
-		return referencePoissonIntensity;
-	}
+    public int idAndIncrement() {
+        assert idCounter != null;
+        return idCounter.getIdAndIncrement();
+    }
 
-	public void setReferencePoissonIntensity(double referencePoissonIntensity) {
-		this.referencePoissonIntensity = referencePoissonIntensity;
-	}
+    public MarkFactory getTemplateMark() {
+        return templateMark;
+    }
 
+    public void setTemplateMark(MarkFactory templateMark) {
+        this.templateMark = templateMark;
+    }
+
+    public double getReferencePoissonIntensity() {
+        return referencePoissonIntensity;
+    }
+
+    public void setReferencePoissonIntensity(double referencePoissonIntensity) {
+        this.referencePoissonIntensity = referencePoissonIntensity;
+    }
 }

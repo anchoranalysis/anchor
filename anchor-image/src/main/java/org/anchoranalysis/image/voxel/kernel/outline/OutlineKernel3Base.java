@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.kernel.outline;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,23 @@ package org.anchoranalysis.image.voxel.kernel.outline;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.kernel.outline;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.kernel.dilateerode.BinaryKernelMorph3Extent;
 
 public abstract class OutlineKernel3Base extends BinaryKernelMorph3Extent {
-	
-	/** Disconsiders anything outside the threshold. Takes priority ahead of outsideAtThreshold */
-	protected final boolean ignoreAtThreshold;
-	
-	public OutlineKernel3Base(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ, boolean ignoreAtThreshold) {
-		super(bv, outsideAtThreshold, useZ);
-		this.ignoreAtThreshold = ignoreAtThreshold;
-	}
+
+    /** Disconsiders anything outside the threshold. Takes priority ahead of outsideAtThreshold */
+    protected final boolean ignoreAtThreshold;
+
+    public OutlineKernel3Base(
+            BinaryValuesByte bv,
+            boolean outsideAtThreshold,
+            boolean useZ,
+            boolean ignoreAtThreshold) {
+        super(bv, outsideAtThreshold, useZ);
+        this.ignoreAtThreshold = ignoreAtThreshold;
+    }
 }

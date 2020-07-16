@@ -1,14 +1,8 @@
-package org.anchoranalysis.image.feature.session;
-
-import java.util.Optional;
-
-import org.anchoranalysis.core.name.store.SharedObjects;
-
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,25 +23,26 @@ import org.anchoranalysis.core.name.store.SharedObjects;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.session;
 
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitParamsHelper {
-	
-	public static FeatureInitParams createInitParams( Optional<SharedObjects> sharedObjects, Optional<NRGStackWithParams> nrgStack ) {
-		
-		Optional<KeyValueParams> kvp = nrgStack.map(NRGStackWithParams::getParams);
-				
-		return new FeatureInitParams(
-			kvp,
-			nrgStack.map(NRGStackWithParams::getNrgStack),
-			sharedObjects
-		);
-	}
+
+    public static FeatureInitParams createInitParams(
+            Optional<SharedObjects> sharedObjects, Optional<NRGStackWithParams> nrgStack) {
+
+        Optional<KeyValueParams> kvp = nrgStack.map(NRGStackWithParams::getParams);
+
+        return new FeatureInitParams(
+                kvp, nrgStack.map(NRGStackWithParams::getNrgStack), sharedObjects);
+    }
 }

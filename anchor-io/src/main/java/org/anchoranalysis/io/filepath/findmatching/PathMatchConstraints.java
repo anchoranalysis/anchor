@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath.findmatching;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,47 +23,46 @@ package org.anchoranalysis.io.filepath.findmatching;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.filepath.findmatching;
 
+import com.google.common.base.Preconditions;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
-import com.google.common.base.Preconditions;
-
-/**
- * Some constraints on which paths to match
- *
- */
+/** Some constraints on which paths to match */
 public class PathMatchConstraints {
 
-	/** Only accepts files where the predicate returns TRUE */
-	private Predicate<Path> matcherFile;
-	
-	/** Only accepts any containing directories where the predicate returns TRUE */
-	private Predicate<Path> matcherDir;
-	
-	/** Limits on the depth of how many sub-directories are recursed */
-	private int maxDirDepth;
-	
-	public PathMatchConstraints(Predicate<Path> matcherFile, Predicate<Path> matcherDir, int maxDirDepth) {
-		Preconditions.checkArgument(maxDirDepth>= 0);
-		this.matcherFile = matcherFile;
-		this.matcherDir = matcherDir;
-		this.maxDirDepth = maxDirDepth;
-	}
-	
-	public PathMatchConstraints replaceMaxDirDepth( int replacementMaxDirDepth ) {
-		return new PathMatchConstraints(matcherFile, matcherDir, replacementMaxDirDepth);
-	}
+    /** Only accepts files where the predicate returns TRUE */
+    private Predicate<Path> matcherFile;
 
-	public Predicate<Path> getMatcherFile() {
-		return matcherFile;
-	}
+    /** Only accepts any containing directories where the predicate returns TRUE */
+    private Predicate<Path> matcherDir;
 
-	public Predicate<Path> getMatcherDir() {
-		return matcherDir;
-	}
+    /** Limits on the depth of how many sub-directories are recursed */
+    private int maxDirDepth;
 
-	public int getMaxDirDepth() {
-		return maxDirDepth;
-	}
+    public PathMatchConstraints(
+            Predicate<Path> matcherFile, Predicate<Path> matcherDir, int maxDirDepth) {
+        Preconditions.checkArgument(maxDirDepth >= 0);
+        this.matcherFile = matcherFile;
+        this.matcherDir = matcherDir;
+        this.maxDirDepth = maxDirDepth;
+    }
+
+    public PathMatchConstraints replaceMaxDirDepth(int replacementMaxDirDepth) {
+        return new PathMatchConstraints(matcherFile, matcherDir, replacementMaxDirDepth);
+    }
+
+    public Predicate<Path> getMatcherFile() {
+        return matcherFile;
+    }
+
+    public Predicate<Path> getMatcherDir() {
+        return matcherDir;
+    }
+
+    public int getMaxDirDepth() {
+        return maxDirDepth;
+    }
 }

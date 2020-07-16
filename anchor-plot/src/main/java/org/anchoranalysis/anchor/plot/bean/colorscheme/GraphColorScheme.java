@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plot.bean.colorscheme;
-
-/*
+/*-
  * #%L
  * anchor-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.anchor.plot.bean.colorscheme;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.plot.bean.colorscheme;
 
 import java.awt.Color;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -40,84 +38,74 @@ import org.jfree.chart.title.LegendTitle;
 
 public class GraphColorScheme extends AnchorBean<GraphColorScheme> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private RGBColorBean backgroundColor = new RGBColorBean(255,255,255);
-	
-	@BeanField
-	private RGBColorBean axisColor = new RGBColorBean(0,0,0);
-	
-	@BeanField
-	private RGBColorBean plotBackgroundColor = new RGBColorBean(Color.lightGray);
-	
-	@BeanField
-	private RGBColorBean plotGridlineColor = new RGBColorBean(Color.white);
-	// END BEAN PROPERTIES
-	
-	    
-    public void colorAxis( Axis axis ) {
-    	axis.setLabelPaint( axisColor.toAWTColor() );
-        axis.setAxisLinePaint( axisColor.toAWTColor() );
-        axis.setTickLabelPaint( axisColor.toAWTColor() );
-        axis.setTickMarkPaint( axisColor.toAWTColor() );
-    }
-    
-    public void colorChart( JFreeChart chart ) {
-        chart.setBackgroundPaint( backgroundColor.toAWTColor() );
-        chart.getTitle().setPaint( axisColor.toAWTColor() );
+    // START BEAN PROPERTIES
+    @BeanField private RGBColorBean backgroundColor = new RGBColorBean(255, 255, 255);
+
+    @BeanField private RGBColorBean axisColor = new RGBColorBean(0, 0, 0);
+
+    @BeanField private RGBColorBean plotBackgroundColor = new RGBColorBean(Color.lightGray);
+
+    @BeanField private RGBColorBean plotGridlineColor = new RGBColorBean(Color.white);
+    // END BEAN PROPERTIES
+
+    public void colorAxis(Axis axis) {
+        axis.setLabelPaint(axisColor.toAWTColor());
+        axis.setAxisLinePaint(axisColor.toAWTColor());
+        axis.setTickLabelPaint(axisColor.toAWTColor());
+        axis.setTickMarkPaint(axisColor.toAWTColor());
     }
 
-    public void colorPlot( XYPlot plot ) {
-    	plot.setBackgroundPaint( plotBackgroundColor.toAWTColor() );
-        plot.setDomainGridlinePaint( plotGridlineColor.toAWTColor() );
-        plot.setRangeGridlinePaint( plotGridlineColor.toAWTColor() );
+    public void colorChart(JFreeChart chart) {
+        chart.setBackgroundPaint(backgroundColor.toAWTColor());
+        chart.getTitle().setPaint(axisColor.toAWTColor());
     }
-    
-    public void colorPlot( CategoryPlot plot ) {
-    	plot.setBackgroundPaint( plotBackgroundColor.toAWTColor() );
-        plot.setDomainGridlinePaint( plotGridlineColor.toAWTColor() );
-        plot.setRangeGridlinePaint( plotGridlineColor.toAWTColor() );
+
+    public void colorPlot(XYPlot plot) {
+        plot.setBackgroundPaint(plotBackgroundColor.toAWTColor());
+        plot.setDomainGridlinePaint(plotGridlineColor.toAWTColor());
+        plot.setRangeGridlinePaint(plotGridlineColor.toAWTColor());
     }
-    
-    public void colorLegend( LegendTitle legend ) {
-    	legend.setBackgroundPaint( backgroundColor.toAWTColor() );
-    	legend.setItemPaint( axisColor.toAWTColor() );
+
+    public void colorPlot(CategoryPlot plot) {
+        plot.setBackgroundPaint(plotBackgroundColor.toAWTColor());
+        plot.setDomainGridlinePaint(plotGridlineColor.toAWTColor());
+        plot.setRangeGridlinePaint(plotGridlineColor.toAWTColor());
     }
-    
-	public RGBColorBean getBackgroundColor() {
-		return backgroundColor;
-	}
 
+    public void colorLegend(LegendTitle legend) {
+        legend.setBackgroundPaint(backgroundColor.toAWTColor());
+        legend.setItemPaint(axisColor.toAWTColor());
+    }
 
-	public void setBackgroundColor(RGBColorBean backgroundColor) {
-		this.backgroundColor = backgroundColor;
-	}
+    public RGBColorBean getBackgroundColor() {
+        return backgroundColor;
+    }
 
+    public void setBackgroundColor(RGBColorBean backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 
-	public RGBColorBean getAxisColor() {
-		return axisColor;
-	}
+    public RGBColorBean getAxisColor() {
+        return axisColor;
+    }
 
+    public void setAxisColor(RGBColorBean color) {
+        this.axisColor = color;
+    }
 
-	public void setAxisColor(RGBColorBean color) {
-		this.axisColor = color;
-	}
+    public RGBColorBean getPlotBackgroundColor() {
+        return plotBackgroundColor;
+    }
 
-	public RGBColorBean getPlotBackgroundColor() {
-		return plotBackgroundColor;
-	}
+    public void setPlotBackgroundColor(RGBColorBean plotBackgroundColor) {
+        this.plotBackgroundColor = plotBackgroundColor;
+    }
 
-	public void setPlotBackgroundColor(RGBColorBean plotBackgroundColor) {
-		this.plotBackgroundColor = plotBackgroundColor;
-	}
+    public RGBColorBean getPlotGridlineColor() {
+        return plotGridlineColor;
+    }
 
-	public RGBColorBean getPlotGridlineColor() {
-		return plotGridlineColor;
-	}
-
-	public void setPlotGridlineColor(RGBColorBean plotGridlineColor) {
-		this.plotGridlineColor = plotGridlineColor;
-	}
-	
-
+    public void setPlotGridlineColor(RGBColorBean plotGridlineColor) {
+        this.plotGridlineColor = plotGridlineColor;
+    }
 }

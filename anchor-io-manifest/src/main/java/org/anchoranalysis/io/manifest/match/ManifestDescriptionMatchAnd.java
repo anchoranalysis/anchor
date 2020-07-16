@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.match;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +23,37 @@ package org.anchoranalysis.io.manifest.match;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.match;
 
 import java.util.ArrayList;
-
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
 public class ManifestDescriptionMatchAnd implements Match<ManifestDescription> {
 
-	private ArrayList<Match<ManifestDescription>> list = new ArrayList<>();  
-	
-	public ManifestDescriptionMatchAnd() {
-		
-	}
-	
-	public ManifestDescriptionMatchAnd( Match<ManifestDescription> condition1, Match<ManifestDescription> condition2 ) {
-		list.add( condition1 );
-		list.add( condition2 );
-	}
-	
-	public void addCondition( Match<ManifestDescription> condition ) {
-		list.add( condition );
-	}
-	
-	@Override
-	public boolean matches(ManifestDescription obj) {
-		
-		for ( Match<ManifestDescription> item : list ) {
-			
-			if (!item.matches(obj)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private ArrayList<Match<ManifestDescription>> list = new ArrayList<>();
 
+    public ManifestDescriptionMatchAnd() {}
+
+    public ManifestDescriptionMatchAnd(
+            Match<ManifestDescription> condition1, Match<ManifestDescription> condition2) {
+        list.add(condition1);
+        list.add(condition2);
+    }
+
+    public void addCondition(Match<ManifestDescription> condition) {
+        list.add(condition);
+    }
+
+    @Override
+    public boolean matches(ManifestDescription obj) {
+
+        for (Match<ManifestDescription> item : list) {
+
+            if (!item.matches(obj)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

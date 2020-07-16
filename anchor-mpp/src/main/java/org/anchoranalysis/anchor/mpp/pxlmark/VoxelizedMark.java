@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pxlmark;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,37 +23,36 @@ package org.anchoranalysis.anchor.mpp.pxlmark;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pxlmark;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 /**
  * A voxelized representation of a Mark i.e. a mark turned into voxels.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface VoxelizedMark {
-	
-	BoundedVoxelBox<ByteBuffer> getVoxelBox();
-	
-	BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP();
-	
-	BoundingBox getBoundingBox();
-	
-	BoundingBox getBoundingBoxMIP();
-	
-	VoxelizedMark duplicate();
-	
-	VoxelStatistics statisticsForAllSlices( int chnlID, int regionID );
-	
-	VoxelStatistics statisticsForAllSlicesMaskSlice( int chnlID, int regionID, int maskChnlID );
-	
-	VoxelStatistics statisticsFor( int chnlID, int regionID, int sliceID );
-	
-	void cleanUp();
+
+    BoundedVoxelBox<ByteBuffer> getVoxelBox();
+
+    BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP();
+
+    BoundingBox getBoundingBox();
+
+    BoundingBox getBoundingBoxMIP();
+
+    VoxelizedMark duplicate();
+
+    VoxelStatistics statisticsForAllSlices(int chnlID, int regionID);
+
+    VoxelStatistics statisticsForAllSlicesMaskSlice(int chnlID, int regionID, int maskChnlID);
+
+    VoxelStatistics statisticsFor(int chnlID, int regionID, int sliceID);
+
+    void cleanUp();
 }

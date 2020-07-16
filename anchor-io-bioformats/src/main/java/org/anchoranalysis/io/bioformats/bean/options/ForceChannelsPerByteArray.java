@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,30 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.bean.options;
 
+import loci.formats.IFormatReader;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
-import loci.formats.IFormatReader;
-
 public class ForceChannelsPerByteArray extends ReadOptionsDelegate {
 
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private int channelsPerByteArray;
-	// END BEAN PROPERTIES
-	
-	// Overrides with constant
-	@Override
-	public int chnlsPerByteArray(IFormatReader reader) {
-		return channelsPerByteArray;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Positive private int channelsPerByteArray;
+    // END BEAN PROPERTIES
 
-	public int getChannelsPerByteArray() {
-		return channelsPerByteArray;
-	}
+    // Overrides with constant
+    @Override
+    public int chnlsPerByteArray(IFormatReader reader) {
+        return channelsPerByteArray;
+    }
 
-	public void setChannelsPerByteArray(int channelsPerByteArray) {
-		this.channelsPerByteArray = channelsPerByteArray;
-	}
+    public int getChannelsPerByteArray() {
+        return channelsPerByteArray;
+    }
+
+    public void setChannelsPerByteArray(int channelsPerByteArray) {
+        this.channelsPerByteArray = channelsPerByteArray;
+    }
 }

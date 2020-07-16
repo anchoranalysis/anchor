@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.evaluator;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,9 @@ package org.anchoranalysis.image.feature.bean.evaluator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.evaluator;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class FeatureEvaluatorSimple<T extends FeatureInput> extends FeatureEvaluator<T> {
-
-
-}
+public class FeatureEvaluatorSimple<T extends FeatureInput> extends FeatureEvaluator<T> {}

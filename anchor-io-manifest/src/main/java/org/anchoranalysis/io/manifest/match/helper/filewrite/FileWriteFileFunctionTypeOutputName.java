@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.match.helper.filewrite;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.manifest.match.helper.filewrite;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.match.helper.filewrite;
 
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.FileWriteAnd;
@@ -37,27 +37,22 @@ import org.anchoranalysis.io.manifest.match.Match;
 
 public class FileWriteFileFunctionTypeOutputName implements Match<FileWrite> {
 
-	private Match<FileWrite> delegate;
-	
-	public FileWriteFileFunctionTypeOutputName( String function, String type,
-			String outputName) {
-		super();
-		
-		delegate =
-			new FileWriteAnd(
-				new FileWriteOutputName(outputName),
-				new FileWriteManifestMatch( new ManifestDescriptionMatchAnd(
-					new ManifestDescriptionFunctionMatch(function),
-					new ManifestDescriptionTypeMatch(type)
-				)
-		));
-		
-	}
+    private Match<FileWrite> delegate;
 
-	@Override
-	public boolean matches(FileWrite obj) {
-		return delegate.matches(obj);
-	}
-	
-	
+    public FileWriteFileFunctionTypeOutputName(String function, String type, String outputName) {
+        super();
+
+        delegate =
+                new FileWriteAnd(
+                        new FileWriteOutputName(outputName),
+                        new FileWriteManifestMatch(
+                                new ManifestDescriptionMatchAnd(
+                                        new ManifestDescriptionFunctionMatch(function),
+                                        new ManifestDescriptionTypeMatch(type))));
+    }
+
+    @Override
+    public boolean matches(FileWrite obj) {
+        return delegate.matches(obj);
+    }
 }

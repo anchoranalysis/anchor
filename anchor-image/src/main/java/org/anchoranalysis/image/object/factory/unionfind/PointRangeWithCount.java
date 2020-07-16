@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.object.factory.unionfind;
-
-import org.anchoranalysis.core.error.OperationFailedException;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,26 +23,29 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.object.factory.unionfind;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.points.PointRange;
 
 class PointRangeWithCount {
-	
-	private PointRange pointRange = new PointRange();
-	private int count = 0;
-	
-	public void add( Point3i point ) {
-		pointRange.add(point);
-		count++;
-	}
 
-	public int getCount() {
-		return count;
-	}
+    private PointRange pointRange = new PointRange();
+    private int count = 0;
 
-	public BoundingBox deriveBoundingBox() throws OperationFailedException {
-		return pointRange.deriveBoundingBox();
-	}
+    public void add(Point3i point) {
+        pointRange.add(point);
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public BoundingBox deriveBoundingBox() throws OperationFailedException {
+        return pointRange.deriveBoundingBox();
+    }
 }

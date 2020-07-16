@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.session.calculator.cached;
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.session.calculator.cached;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.session.calculator.cached;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -32,31 +32,31 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /** An input with well defined equals() and hash-code() */
 class MockFeatureInput implements FeatureInput {
-	
-	private String id;
-	
-	public MockFeatureInput(String id) {
-		super();
-		this.id = id;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		MockFeatureInput rhs = (MockFeatureInput) obj;
-		return new EqualsBuilder()
-             .append(id, rhs.id)
-             .isEquals();
-	}
+    private String id;
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(id)
-			.toHashCode();
-	}
+    public MockFeatureInput(String id) {
+        super();
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        MockFeatureInput rhs = (MockFeatureInput) obj;
+        return new EqualsBuilder().append(id, rhs.id).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(id).toHashCode();
+    }
 }

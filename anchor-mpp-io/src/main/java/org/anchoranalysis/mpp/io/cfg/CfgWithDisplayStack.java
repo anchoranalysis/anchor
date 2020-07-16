@@ -1,12 +1,8 @@
-package org.anchoranalysis.mpp.io.cfg;
-
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-
 /*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,31 +23,36 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.cfg;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.image.stack.DisplayStack;
 
 public class CfgWithDisplayStack {
 
-	private Cfg cfg;
-	private DisplayStack stack;
-	
-	public CfgWithDisplayStack(Cfg cfg, DisplayStack stack) {
-		super();
-		this.cfg = cfg;
-		this.stack = stack;
-	}
+    private Cfg cfg;
+    private DisplayStack stack;
 
-	public Cfg getCfg() {
-		return cfg;
-	}
-	public void setCfg(Cfg cfg) {
-		this.cfg = cfg;
-	}
-	
-	public DisplayStack getStack() {
-		return stack;
-	}
-	public void setStack(DisplayStack stack) {
-		this.stack = stack;
-	}
+    public CfgWithDisplayStack(Cfg cfg, DisplayStack stack) {
+        super();
+        this.cfg = cfg;
+        this.stack = stack;
+    }
+
+    public Cfg getCfg() {
+        return cfg;
+    }
+
+    public void setCfg(Cfg cfg) {
+        this.cfg = cfg;
+    }
+
+    public DisplayStack getStack() {
+        return stack;
+    }
+
+    public void setStack(DisplayStack stack) {
+        this.stack = stack;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.bean.permute.property;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
 
@@ -33,13 +32,14 @@ class IteratorIntegerWithPrefixSuffix implements Iterator<String> {
     private String prefix;
     private String suffix;
     private Iterator<Integer> delegate;
-    
-    public IteratorIntegerWithPrefixSuffix(Iterator<Integer> delegate, String prefix, String suffix) {
-		super();
-		this.prefix = prefix;
-		this.suffix = suffix;
-		this.delegate = delegate;
-	}
+
+    public IteratorIntegerWithPrefixSuffix(
+            Iterator<Integer> delegate, String prefix, String suffix) {
+        super();
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.delegate = delegate;
+    }
 
     @Override
     public boolean hasNext() {
@@ -48,8 +48,8 @@ class IteratorIntegerWithPrefixSuffix implements Iterator<String> {
 
     @Override
     public String next() {
-    	int outInt = delegate.next();
-    	return prefix + outInt + suffix;
+        int outInt = delegate.next();
+        return prefix + outInt + suffix;
     }
 
     @Override

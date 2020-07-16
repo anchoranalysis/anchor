@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.size;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,40 +23,41 @@ package org.anchoranalysis.image.bean.size;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.Extent;
+/* (C)2020 */
+package org.anchoranalysis.image.bean.size;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.extent.Extent;
 
-@NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(callSuper=false)
-public class SizeXY extends AnchorBean<SizeXY>{
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class SizeXY extends AnchorBean<SizeXY> {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private int width;
-	
-	@BeanField @Getter @Setter
-	private int height;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int width;
 
-	/**
-	 * Constructor
-	 * 
-	 * <p>Note the z-dimension in extent is ignored.</p>
-	 * 
-	 * @param extent extent
-	 */
-	public SizeXY(Extent extent) {
-		this( extent.getX(), extent.getY() );
-	}
-	
-	public Extent asExtent() {
-		return new Extent(width,height,1);
-	}
+    @BeanField @Getter @Setter private int height;
+    // END BEAN PROPERTIES
+
+    /**
+     * Constructor
+     *
+     * <p>Note the z-dimension in extent is ignored.
+     *
+     * @param extent extent
+     */
+    public SizeXY(Extent extent) {
+        this(extent.getX(), extent.getY());
+    }
+
+    public Extent asExtent() {
+        return new Extent(width, height, 1);
+    }
 }

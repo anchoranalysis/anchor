@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.prefixer;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,31 +23,32 @@ package org.anchoranalysis.io.bean.filepath.prefixer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
 
 /**
  * A path and associated descriptive name
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class PathWithDescription {
 
-	private Path path;
-	private String descriptiveName;
-	
-	public PathWithDescription(Path path, String descriptiveName) {
-		super();
-		this.path = path;
-		this.descriptiveName = descriptiveName;
-	}
+    private Path path;
+    private String descriptiveName;
 
-	public Path getPath() {
-		return path;
-	}
+    public PathWithDescription(Path path, String descriptiveName) {
+        super();
+        this.path = path;
+        this.descriptiveName = descriptiveName;
+    }
 
-	public String getDescriptiveName() {
-		return descriptiveName;
-	}
+    public Path getPath() {
+        return path;
+    }
+
+    public String getDescriptiveName() {
+        return descriptiveName;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.io.csv.name;
-
 /*-
  * #%L
  * anchor-feature-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +23,27 @@ package org.anchoranalysis.feature.io.csv.name;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.io.csv.name;
 
 import java.util.Optional;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MultiNameFactory {
 
-	/**
-	 * Creates either a multi-name that is either has a single part or a double part (with a group as first part)
-	 * 
-	 * @param groupIdentifier if present, a group identifier that becomes the first part
-	 * @param nonGroupIdentifier the non-group part of the identifier that is present irrespective
-	 * @return the created multi-name
-	 */
-	public static MultiName create(Optional<String> groupIdentifier, String nonGroupIdentifier) {
-		return groupIdentifier.map( id->
-			(MultiName) new CombinedName(id, nonGroupIdentifier)
-		).orElseGet( ()->
-			new SimpleName(nonGroupIdentifier)
-		);
-	}
+    /**
+     * Creates either a multi-name that is either has a single part or a double part (with a group
+     * as first part)
+     *
+     * @param groupIdentifier if present, a group identifier that becomes the first part
+     * @param nonGroupIdentifier the non-group part of the identifier that is present irrespective
+     * @return the created multi-name
+     */
+    public static MultiName create(Optional<String> groupIdentifier, String nonGroupIdentifier) {
+        return groupIdentifier
+                .map(id -> (MultiName) new CombinedName(id, nonGroupIdentifier))
+                .orElseGet(() -> new SimpleName(nonGroupIdentifier));
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +23,26 @@ package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 
-@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
-public class CalculateDeriveSingleMemoFromPair extends FeatureCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class CalculateDeriveSingleMemoFromPair
+        extends FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
 
-	/** Iff true, first object is used, otherwise the second */
-	private final boolean first;
-		
-	@Override
-	protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) {
-		return new FeatureInputSingleMemo(
-			first ? input.getObj1() : input.getObj2(),
-			input.getNrgStackOptional()
-		);
-	}
+    /** Iff true, first object is used, otherwise the second */
+    private final boolean first;
+
+    @Override
+    protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) {
+        return new FeatureInputSingleMemo(
+                first ? input.getObj1() : input.getObj2(), input.getNrgStackOptional());
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath.prefixer;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +23,39 @@ package org.anchoranalysis.io.filepath.prefixer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.filepath.prefixer;
 
 import java.nio.file.Path;
 
 /**
  * Generates file-paths
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface FilePathCreator {
-	
-	/**
-	 * Generates a full path, given the final part of a filePath
-	 * 
-	 * The prefix is added to final-part to generate a full path.
-	 * 
-	 * All sub-directories are created if needed to ensure it's possible to write to the fullPath.
-	 * 
-	 * @param filePathRelative the final part of the filePath
-	 * @return a resolved path containing the folderPath of FilePathPrefix, the filenamePrefix of FilePathPrefix and filePathRelative
-	 */
-	Path outFilePath( String filePathRelative );	
-	
-	/**
-	 * Extracts a relative-file path (to the folderPath of the FilePathPrefix) from an absolute path
-	 * 
-	 * This relative-path includes any filenamePrefix added by the FilePathPrefix
-	 * 
-	 * @param fullPath
-	 * @return the relative-path 
-	 */
-	Path relativePath( Path fullPath );
-	
+
+    /**
+     * Generates a full path, given the final part of a filePath
+     *
+     * <p>The prefix is added to final-part to generate a full path.
+     *
+     * <p>All sub-directories are created if needed to ensure it's possible to write to the
+     * fullPath.
+     *
+     * @param filePathRelative the final part of the filePath
+     * @return a resolved path containing the folderPath of FilePathPrefix, the filenamePrefix of
+     *     FilePathPrefix and filePathRelative
+     */
+    Path outFilePath(String filePathRelative);
+
+    /**
+     * Extracts a relative-file path (to the folderPath of the FilePathPrefix) from an absolute path
+     *
+     * <p>This relative-path includes any filenamePrefix added by the FilePathPrefix
+     *
+     * @param fullPath
+     * @return the relative-path
+     */
+    Path relativePath(Path fullPath);
 }

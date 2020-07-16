@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.cache.calculation;
-
-
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +23,13 @@ package org.anchoranalysis.feature.cache.calculation;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.cache.calculation;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface CacheCreator {
 
-	<T extends FeatureInput> FeatureSessionCache<T> create( Class<? extends FeatureInput> paramsType );
+    <T extends FeatureInput> FeatureSessionCache<T> create(
+            Class<? extends FeatureInput> paramsType);
 }

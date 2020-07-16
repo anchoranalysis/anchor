@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -32,49 +32,45 @@ import org.anchoranalysis.image.channel.Channel;
 
 /**
  * A chnl-provider based-on two input chnl-providers that must be of the same dimensionality
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ChnlProviderTwo extends ChnlProvider {
 
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnl1;
-	
-	@BeanField
-	private ChnlProvider chnl2;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private ChnlProvider chnl1;
 
-	@Override
-	public Channel create() throws CreateException {
-		
-		Channel chnlFirst = chnl1.create();
-		Channel chnlSecond = chnl2.create();
-				
-		if (!chnlFirst.getDimensions().equals(chnlSecond.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
-		return process( chnlFirst, chnlSecond );
-	}
-	
-	protected abstract Channel process( Channel chnl1, Channel chnl2 ) throws CreateException;
+    @BeanField private ChnlProvider chnl2;
+    // END BEAN PROPERTIES
 
-	public ChnlProvider getChnl1() {
-		return chnl1;
-	}
+    @Override
+    public Channel create() throws CreateException {
 
-	public void setChnl1(ChnlProvider chnl1) {
-		this.chnl1 = chnl1;
-	}
+        Channel chnlFirst = chnl1.create();
+        Channel chnlSecond = chnl2.create();
 
-	public ChnlProvider getChnl2() {
-		return chnl2;
-	}
+        if (!chnlFirst.getDimensions().equals(chnlSecond.getDimensions())) {
+            throw new CreateException("Dimensions of channels do not match");
+        }
 
-	public void setChnl2(ChnlProvider chnl2) {
-		this.chnl2 = chnl2;
-	}
+        return process(chnlFirst, chnlSecond);
+    }
+
+    protected abstract Channel process(Channel chnl1, Channel chnl2) throws CreateException;
+
+    public ChnlProvider getChnl1() {
+        return chnl1;
+    }
+
+    public void setChnl1(ChnlProvider chnl1) {
+        this.chnl1 = chnl1;
+    }
+
+    public ChnlProvider getChnl2() {
+        return chnl2;
+    }
+
+    public void setChnl2(ChnlProvider chnl2) {
+        this.chnl2 = chnl2;
+    }
 }

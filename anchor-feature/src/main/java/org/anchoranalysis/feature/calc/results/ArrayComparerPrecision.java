@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.calc.results;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,33 +23,35 @@ package org.anchoranalysis.feature.calc.results;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.calc.results;
 
 import org.apache.commons.math3.util.Precision;
 
 class ArrayComparerPrecision extends ArrayComparer {
 
-	private double eps;
-	
-	public ArrayComparerPrecision( double eps ) {
-		this.eps = eps;
-	}
+    private double eps;
 
-	@Override
-	protected boolean compareItem( Object obj1, Object obj2 ) {
-		
-		// Special case for doubles
-		if (obj1 instanceof Double) {
-			return compareDoubleWithOther((Double) obj1, obj2);
-		} else {
-			return super.compareItem(obj1, obj2);
-		}		
-	}
-	
-	private boolean compareDoubleWithOther( Double dbl, Object other ) {
-		if (other instanceof Double) {
-			return Precision.equals( dbl, (Double) other, eps);
-		} else {
-			return false;
-		}
-	}
+    public ArrayComparerPrecision(double eps) {
+        this.eps = eps;
+    }
+
+    @Override
+    protected boolean compareItem(Object obj1, Object obj2) {
+
+        // Special case for doubles
+        if (obj1 instanceof Double) {
+            return compareDoubleWithOther((Double) obj1, obj2);
+        } else {
+            return super.compareItem(obj1, obj2);
+        }
+    }
+
+    private boolean compareDoubleWithOther(Double dbl, Object other) {
+        if (other instanceof Double) {
+            return Precision.equals(dbl, (Double) other, eps);
+        } else {
+            return false;
+        }
+    }
 }

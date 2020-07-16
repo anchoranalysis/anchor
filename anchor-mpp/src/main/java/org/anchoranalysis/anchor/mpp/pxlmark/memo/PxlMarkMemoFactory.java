@@ -1,14 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pxlmark.memo;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,17 +23,22 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pxlmark.memo;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.feature.nrg.NRGStack;
 
-// We more explicitly manage the creation and deletiion of PxlMarkMemo as they can take up a large amount of memory
+// We more explicitly manage the creation and deletiion of PxlMarkMemo as they can take up a large
+// amount of memory
 public class PxlMarkMemoFactory {
-	
-	private PxlMarkMemoFactory() {
-		// ONLY ALLOWED AS STATIC
-	}
-	
-	public static VoxelizedMarkMemo create(Mark mark, NRGStack stack, RegionMap regionMap) {
-		return new VoxelizedMarkMemo(mark, stack, regionMap);
-	}
+
+    private PxlMarkMemoFactory() {
+        // ONLY ALLOWED AS STATIC
+    }
+
+    public static VoxelizedMarkMemo create(Mark mark, NRGStack stack, RegionMap regionMap) {
+        return new VoxelizedMarkMemo(mark, stack, regionMap);
+    }
 }

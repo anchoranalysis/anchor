@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.define.adder;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.bean.define.adder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.define.adder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,30 +32,26 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 
-/**
- * Concatenates a list of adders
- *
- */
+/** Concatenates a list of adders */
 public class Concatenate extends DefineAdderBean {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<DefineAdderBean> list = new ArrayList<>();
-	// END BEAN PROPERTIES
-	
-	@Override
-	public void addTo(Define define) throws BeanXmlException {
-		
-		for( DefineAdderBean da : list) {
-			da.addTo(define);
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField private List<DefineAdderBean> list = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-	public List<DefineAdderBean> getList() {
-		return list;
-	}
+    @Override
+    public void addTo(Define define) throws BeanXmlException {
 
-	public void setList(List<DefineAdderBean> list) {
-		this.list = list;
-	}
+        for (DefineAdderBean da : list) {
+            da.addTo(define);
+        }
+    }
+
+    public List<DefineAdderBean> getList() {
+        return list;
+    }
+
+    public void setList(List<DefineAdderBean> list) {
+        this.list = list;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.extent;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.image.extent;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.extent;
 
 import java.io.Serializable;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -35,157 +34,132 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 /**
  * The dimensions of an image (in voxels), together with the image resolution
- * 
- * <p>This class is IMMUTABLE</p>.
+ *
+ * <p>This class is IMMUTABLE.
  */
 public final class ImageDimensions implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private final ImageResolution res;
-	private final Extent extent;
-	
-	/** Construct with an explicit extent and default resolution (1.0 for each dimension)*/
-	public ImageDimensions(Extent extent) {
-		this(extent, new ImageResolution());
-	}
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	/** Construct with an explicit extent and resolution */
-	public ImageDimensions( Extent extent, ImageResolution res ) {
-		this.extent = extent;
-		this.res = res;
-	}
-	
-	public ImageDimensions scaleXYTo( int x, int y ) {
-		Extent extentScaled = new Extent(
-			x,
-			y,
-			extent.getZ()
-		); 
-		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
-		return new ImageDimensions(
-			extentScaled,
-			res.scaleXY(sf)
-		);
-	}
-	
-	public ImageDimensions scaleXYBy( ScaleFactor sf ) {
-		return new ImageDimensions(
-			extent.scaleXYBy(sf),
-			res.scaleXY(sf)
-		);
-	}
-		
-	public ImageDimensions duplicateChangeZ(int z) {
-		return new ImageDimensions(
-			extent.duplicateChangeZ(z),
-			res
-		);
-	}
-	
-	public ImageDimensions duplicateChangeRes(ImageResolution resToAssign) {
-		return new ImageDimensions(
-			extent,
-			resToAssign
-		);
-	}
-	
-	public long getVolume() {
-		return extent.getVolume();
-	}
-	
-	public int getVolumeXY() {
-		return extent.getVolumeXY();
-	}
+    private final ImageResolution res;
+    private final Extent extent;
 
-	public int getX() {
-		return extent.getX();
-	}
+    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    public ImageDimensions(Extent extent) {
+        this(extent, new ImageResolution());
+    }
 
-	public int getY() {
-		return extent.getY();
-	}
+    /** Construct with an explicit extent and resolution */
+    public ImageDimensions(Extent extent, ImageResolution res) {
+        this.extent = extent;
+        this.res = res;
+    }
 
-	public int getZ() {
-		return extent.getZ();
-	}
+    public ImageDimensions scaleXYTo(int x, int y) {
+        Extent extentScaled = new Extent(x, y, extent.getZ());
+        ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(extent, extentScaled);
+        return new ImageDimensions(extentScaled, res.scaleXY(sf));
+    }
 
-	public int offset(int x, int y) {
-		return extent.offset(x, y);
-	}
+    public ImageDimensions scaleXYBy(ScaleFactor sf) {
+        return new ImageDimensions(extent.scaleXYBy(sf), res.scaleXY(sf));
+    }
 
-	public int offset(int x, int y, int z) {
-		return extent.offset(x, y, z);
-	}
+    public ImageDimensions duplicateChangeZ(int z) {
+        return new ImageDimensions(extent.duplicateChangeZ(z), res);
+    }
 
-	public Extent getExtent() {
-		return extent;
-	}
-	
-	public boolean contains( Point3d point ) {
-		return extent.contains(point);
-	}
-	
-	public boolean contains( Point3i point ) {
-		return extent.contains(point);
-	}
-	
-	public boolean equals( ImageDimensions obj ) {
-		return extent.equals(obj.extent);
-	}
+    public ImageDimensions duplicateChangeRes(ImageResolution resToAssign) {
+        return new ImageDimensions(extent, resToAssign);
+    }
 
-	public final int offset(Point3i point) {
-		return extent.offset(point);
-	}
-	
-	public final int offsetSlice(Point3i point) {
-		return extent.offsetSlice(point);
-	}
+    public long getVolume() {
+        return extent.getVolume();
+    }
 
-	public ImageResolution getRes() {
-		return res;
-	}
+    public int getVolumeXY() {
+        return extent.getVolumeXY();
+    }
 
-	public boolean contains(BoundingBox bbox) {
-		return extent.contains(bbox);
-	}
+    public int getX() {
+        return extent.getX();
+    }
 
-	@Override
-	public String toString() {
-		return extent.toString();
-	}
+    public int getY() {
+        return extent.getY();
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((extent == null) ? 0 : extent.hashCode());
-		result = prime * result + ((res == null) ? 0 : res.hashCode());
-		return result;
-	}
+    public int getZ() {
+        return extent.getZ();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ImageDimensions other = (ImageDimensions) obj;
-		if (extent == null) {
-			if (other.extent != null)
-				return false;
-		} else if (!extent.equals(other.extent))
-			return false;
-		if (res == null) {
-			if (other.res != null)
-				return false;
-		} else if (!res.equals(other.res))
-			return false;
-		return true;
-	}
+    public int offset(int x, int y) {
+        return extent.offset(x, y);
+    }
+
+    public int offset(int x, int y, int z) {
+        return extent.offset(x, y, z);
+    }
+
+    public Extent getExtent() {
+        return extent;
+    }
+
+    public boolean contains(Point3d point) {
+        return extent.contains(point);
+    }
+
+    public boolean contains(Point3i point) {
+        return extent.contains(point);
+    }
+
+    public boolean equals(ImageDimensions obj) {
+        return extent.equals(obj.extent);
+    }
+
+    public final int offset(Point3i point) {
+        return extent.offset(point);
+    }
+
+    public final int offsetSlice(Point3i point) {
+        return extent.offsetSlice(point);
+    }
+
+    public ImageResolution getRes() {
+        return res;
+    }
+
+    public boolean contains(BoundingBox bbox) {
+        return extent.contains(bbox);
+    }
+
+    @Override
+    public String toString() {
+        return extent.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((extent == null) ? 0 : extent.hashCode());
+        result = prime * result + ((res == null) ? 0 : res.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        ImageDimensions other = (ImageDimensions) obj;
+        if (extent == null) {
+            if (other.extent != null) return false;
+        } else if (!extent.equals(other.extent)) return false;
+        if (res == null) {
+            if (other.res != null) return false;
+        } else if (!res.equals(other.res)) return false;
+        return true;
+    }
 }

@@ -1,12 +1,8 @@
-package org.anchoranalysis.experiment.bean.identifier;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,18 +23,19 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.identifier;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 
-
 public abstract class ExperimentIdentifier extends AnchorBean<ExperimentIdentifier> {
-	
-	/**
-	 * Creates an identifier for the experiment
-	 * 
-	 * @param taskName a name describing the current task if it xists
-	 * @return a string to identify the current experiment
-	 */
-	public abstract String identifier(Optional<String> taskName);
 
+    /**
+     * Creates an identifier for the experiment
+     *
+     * @param taskName a name describing the current task if it xists
+     * @return a string to identify the current experiment
+     */
+    public abstract String identifier(Optional<String> taskName);
 }

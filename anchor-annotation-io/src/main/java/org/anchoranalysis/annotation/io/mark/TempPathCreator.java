@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.mark;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,20 @@ package org.anchoranalysis.annotation.io.mark;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.mark;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TempPathCreator {
-	
-	public static Path deriveTempPath( Path annotationPath ) {
-		String fileName = annotationPath.getFileName().toString();
-		Path fileNameNew = Paths.get(fileName + ".temp");
-		return annotationPath.resolveSibling(fileNameNew);
-	}
+
+    public static Path deriveTempPath(Path annotationPath) {
+        String fileName = annotationPath.getFileName().toString();
+        Path fileNameNew = Paths.get(fileName + ".temp");
+        return annotationPath.resolveSibling(fileNameNew);
+    }
 }

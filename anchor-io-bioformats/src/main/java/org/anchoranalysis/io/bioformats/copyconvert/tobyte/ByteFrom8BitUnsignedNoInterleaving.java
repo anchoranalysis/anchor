@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,33 +23,33 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
 public class ByteFrom8BitUnsignedNoInterleaving extends ConvertToByte {
 
-	private int bytesPerPixel = 1;
-	private int sizeXY;
-	
-	@Override
-	protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
-		sizeXY = sd.getX() * sd.getY();
-	}
+    private int bytesPerPixel = 1;
+    private int sizeXY;
 
-	@Override
-	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
-		ByteBuffer buffer = ByteBuffer.wrap(src);
-		
-		int sizeTotalBytes = sizeXY * bytesPerPixel;
-		byte[] crntChnlBytes = new byte[sizeTotalBytes];
-		
-		buffer.position(sizeTotalBytes*channelRelative);
-		buffer.get( crntChnlBytes, 0, sizeTotalBytes);
-		return VoxelBufferByte.wrap(crntChnlBytes);
-	}
-	
+    @Override
+    protected void setupBefore(ImageDimensions sd, int numChnlsPerByteArray) {
+        sizeXY = sd.getX() * sd.getY();
+    }
+
+    @Override
+    protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int channelRelative) {
+        ByteBuffer buffer = ByteBuffer.wrap(src);
+
+        int sizeTotalBytes = sizeXY * bytesPerPixel;
+        byte[] crntChnlBytes = new byte[sizeTotalBytes];
+
+        buffer.position(sizeTotalBytes * channelRelative);
+        buffer.get(crntChnlBytes, 0, sizeTotalBytes);
+        return VoxelBufferByte.wrap(crntChnlBytes);
+    }
 }

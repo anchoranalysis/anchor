@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.define;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +23,15 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.define;
 
 import org.anchoranalysis.bean.define.Define;
 
-/** 
- * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks, and then outputs results
- *  * 
+/**
+ * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
+ * and then outputs results *
+ *
  * @param <T> input-object type
- * */
-public class DefineOutputterImage extends DefineOutputter {
-	
-	
-
-}
+ */
+public class DefineOutputterImage extends DefineOutputter {}

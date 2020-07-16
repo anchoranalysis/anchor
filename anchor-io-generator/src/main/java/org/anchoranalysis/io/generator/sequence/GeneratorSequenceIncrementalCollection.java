@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,47 +23,48 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Collection;
-
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class GeneratorSequenceIncrementalCollection<T,C> implements GeneratorSequenceIncremental<T> {
-	
-	private IterableObjectGenerator<T,C> iterableGenerator;
-	private Collection<C> collection;
-	
-	public GeneratorSequenceIncrementalCollection( Collection<C> collection, IterableObjectGenerator<T,C> iterableGenerator ) {
-		super();
-		
-		this.collection = collection;
-		this.iterableGenerator = iterableGenerator;
-	}
+public class GeneratorSequenceIncrementalCollection<T, C>
+        implements GeneratorSequenceIncremental<T> {
 
-	@Override
-	public void add( T element ) throws OutputWriteFailedException {
-		
-		try {
-			iterableGenerator.setIterableElement( element );
-			
-			C generatedElement = iterableGenerator.getGenerator().generate();
-			collection.add( generatedElement );
-		} catch (SetOperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
+    private IterableObjectGenerator<T, C> iterableGenerator;
+    private Collection<C> collection;
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		iterableGenerator.start();
-	}
+    public GeneratorSequenceIncrementalCollection(
+            Collection<C> collection, IterableObjectGenerator<T, C> iterableGenerator) {
+        super();
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		iterableGenerator.end();
-	}
+        this.collection = collection;
+        this.iterableGenerator = iterableGenerator;
+    }
 
+    @Override
+    public void add(T element) throws OutputWriteFailedException {
+
+        try {
+            iterableGenerator.setIterableElement(element);
+
+            C generatedElement = iterableGenerator.getGenerator().generate();
+            collection.add(generatedElement);
+        } catch (SetOperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
+    @Override
+    public void start() throws OutputWriteFailedException {
+        iterableGenerator.start();
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        iterableGenerator.end();
+    }
 }

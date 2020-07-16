@@ -1,17 +1,8 @@
-package org.anchoranalysis.annotation.io.bean.strategy;
-
-
-
-import java.nio.file.Path;
-import java.util.Optional;
-
-import org.anchoranalysis.annotation.io.bean.background.AnnotationBackgroundDefinition;
-
-/*
+/*-
  * #%L
- * anchor-mpp-io
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,8 +23,12 @@ import org.anchoranalysis.annotation.io.bean.background.AnnotationBackgroundDefi
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.bean.strategy;
 
-
+import java.nio.file.Path;
+import java.util.Optional;
+import org.anchoranalysis.annotation.io.bean.background.AnnotationBackgroundDefinition;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
@@ -43,36 +38,37 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private AnnotationBackgroundDefinition background;
-	
-	@BeanField @DefaultInstance
-	private RasterReader rasterReader;
-	// END BEAN PROPERTIES
-	
-	public abstract Path annotationPathFor( ProvidesStackInput item ) throws AnchorIOException;
-	
-	/** Returns a label describing the annotation, or empty() if this makes no sense
-	 *  
-	 * @throws AnchorIOException*/
-	public abstract Optional<String> annotationLabelFor( ProvidesStackInput item ) throws AnchorIOException;
-	
-	public abstract int weightWidthDescription();
-	
-	public RasterReader getRasterReader() {
-		return rasterReader;
-	}
-	
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private AnnotationBackgroundDefinition background;
 
-	public AnnotationBackgroundDefinition getBackground() {
-		return background;
-	}
+    @BeanField @DefaultInstance private RasterReader rasterReader;
+    // END BEAN PROPERTIES
 
-	public void setBackground(AnnotationBackgroundDefinition background) {
-		this.background = background;
-	}
+    public abstract Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException;
+
+    /**
+     * Returns a label describing the annotation, or empty() if this makes no sense
+     *
+     * @throws AnchorIOException
+     */
+    public abstract Optional<String> annotationLabelFor(ProvidesStackInput item)
+            throws AnchorIOException;
+
+    public abstract int weightWidthDescription();
+
+    public RasterReader getRasterReader() {
+        return rasterReader;
+    }
+
+    public void setRasterReader(RasterReader rasterReader) {
+        this.rasterReader = rasterReader;
+    }
+
+    public AnnotationBackgroundDefinition getBackground() {
+        return background;
+    }
+
+    public void setBackground(AnnotationBackgroundDefinition background) {
+        this.background = background;
+    }
 }

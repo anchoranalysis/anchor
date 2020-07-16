@@ -1,10 +1,8 @@
-package org.anchoranalysis.test;
-
 /*-
  * #%L
  * anchor-test
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.test;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.test;
 
 import static org.mockito.Mockito.mock;
 
@@ -33,23 +33,20 @@ import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * Fixtures to create loggers that don't output anything
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class LoggingFixture {
-	
-	private LoggingFixture() {}
 
-	/** A {@link MessageLogger} that doesn't output anything */
-	public static MessageLogger suppressedLogReporter() {
-		return mock(MessageLogger.class);
-	}
+    private LoggingFixture() {}
 
-	/** A {@link Logger} that doesn't output anything */
-	public static Logger suppressedLogErrorReporter() {
-		return new Logger(
-			suppressedLogReporter()
-		);
-	}
+    /** A {@link MessageLogger} that doesn't output anything */
+    public static MessageLogger suppressedLogReporter() {
+        return mock(MessageLogger.class);
+    }
+
+    /** A {@link Logger} that doesn't output anything */
+    public static Logger suppressedLogErrorReporter() {
+        return new Logger(suppressedLogReporter());
+    }
 }

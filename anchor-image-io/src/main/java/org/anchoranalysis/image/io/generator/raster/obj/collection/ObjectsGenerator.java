@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.obj.collection;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,13 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster.obj.collection;
 
+import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
@@ -36,56 +38,48 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-
 /**
  * Base class for generators that accept a set of objects as input
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @RequiredArgsConstructor
-public abstract class ObjectsGenerator extends RasterGenerator implements IterableGenerator<ObjectCollection> {
+@AllArgsConstructor
+@RequiredArgsConstructor
+public abstract class ObjectsGenerator extends RasterGenerator
+        implements IterableGenerator<ObjectCollection> {
 
-	// START REQUIRED ARGUMENTS
-	@Getter
-	private final ImageDimensions dimensions;
-	// END REQUIRED ARGUMENTS
-	
-	private ObjectCollection objects;
-	
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", "maskCollection")
-		);
-	}
+    // START REQUIRED ARGUMENTS
+    @Getter private final ImageDimensions dimensions;
+    // END REQUIRED ARGUMENTS
 
-	@Override
-	public boolean isRGB() {
-		return false;
-	}
+    private ObjectCollection objects;
 
-	@Override
-	public ObjectCollection getIterableElement() {
-		return objects;
-	}
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", "maskCollection"));
+    }
 
-	@Override
-	public void setIterableElement(ObjectCollection element)
-			throws SetOperationFailedException {
-		this.objects = element;
-	}
+    @Override
+    public boolean isRGB() {
+        return false;
+    }
 
-	@Override
-	public Generator getGenerator() {
-		return this;
-	}
+    @Override
+    public ObjectCollection getIterableElement() {
+        return objects;
+    }
 
-	protected ObjectCollection getObjects() {
-		return objects;
-	}
+    @Override
+    public void setIterableElement(ObjectCollection element) throws SetOperationFailedException {
+        this.objects = element;
+    }
+
+    @Override
+    public Generator getGenerator() {
+        return this;
+    }
+
+    protected ObjectCollection getObjects() {
+        return objects;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.io;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +23,19 @@ package org.anchoranalysis.experiment.io;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.input.InputManager;
 
 /**
- * If an experiment implements this interface, the input-manager of an
- *   an experiment can be replaced by another
- *    
- * @author Owen Feehan
+ * If an experiment implements this interface, the input-manager of an an experiment can be replaced
+ * by another
  *
+ * @author Owen Feehan
  */
 public interface IReplaceInputManager {
 
-	public void replaceInputManager( InputManager<?> inputManager ) throws OperationFailedException;
+    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException;
 }

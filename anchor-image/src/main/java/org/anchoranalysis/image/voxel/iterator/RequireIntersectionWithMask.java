@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.iterator;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.image.voxel.iterator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.iterator;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
@@ -35,64 +34,61 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Only processes a point if it lines on the region of an Object-Mask
- * 
- * <p>Any points lying outside the object-mask are never processed.</p>
- * 
- * @author Owen Feehan
  *
+ * <p>Any points lying outside the object-mask are never processed.
+ *
+ * @author Owen Feehan
  */
 final class RequireIntersectionWithMask implements ProcessVoxel {
 
-	private final ProcessVoxel process;
-	
-	private final ObjectMask mask;
-	private final Extent extent;
-	private final byte byteOn;
-	private final ReadableTuple3i cornerMin;
-	
-	private ByteBuffer bbMask;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param process the processor to call on the region of the mask
-	 * @param mask the mask that defines the "on" region which is processed only.
-	 */
-	public RequireIntersectionWithMask(ProcessVoxel process, ObjectMask mask) {
-		super();
-		this.process = process;
-		this.mask = mask;
-		this.extent = mask.getVoxelBox().extent();
-		this.byteOn = mask.getBinaryValuesByte().getOnByte();
-		this.cornerMin = mask.getBoundingBox().cornerMin();
-	}		
-						
-	@Override
-	public void notifyChangeZ(int z) {
-		process.notifyChangeZ(z);
-		bbMask = mask.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
-	}
-	
-	@Override
-	public void notifyChangeY(int y) {
-		process.notifyChangeY(y);
-	}
-	
-	@Override
-	public void process(Point3i point) {
-		// We skip if our containing mask doesn't include it
-		if (isPointOnMask(point)) {
-			process.process(point);
-		}
-	}
-	
-	private boolean isPointOnMask(Point3i point) {
-		int offsetMask = extent.offset(
-			point.getX() - cornerMin.getX(),
-			point.getY() - cornerMin.getY()
-		);
-		
-		// We skip if our containing mask doesn't include it
-		return (bbMask.get(offsetMask)==byteOn);
-	}
+    private final ProcessVoxel process;
+
+    private final ObjectMask mask;
+    private final Extent extent;
+    private final byte byteOn;
+    private final ReadableTuple3i cornerMin;
+
+    private ByteBuffer bbMask;
+
+    /**
+     * Constructor
+     *
+     * @param process the processor to call on the region of the mask
+     * @param mask the mask that defines the "on" region which is processed only.
+     */
+    public RequireIntersectionWithMask(ProcessVoxel process, ObjectMask mask) {
+        super();
+        this.process = process;
+        this.mask = mask;
+        this.extent = mask.getVoxelBox().extent();
+        this.byteOn = mask.getBinaryValuesByte().getOnByte();
+        this.cornerMin = mask.getBoundingBox().cornerMin();
+    }
+
+    @Override
+    public void notifyChangeZ(int z) {
+        process.notifyChangeZ(z);
+        bbMask = mask.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+    }
+
+    @Override
+    public void notifyChangeY(int y) {
+        process.notifyChangeY(y);
+    }
+
+    @Override
+    public void process(Point3i point) {
+        // We skip if our containing mask doesn't include it
+        if (isPointOnMask(point)) {
+            process.process(point);
+        }
+    }
+
+    private boolean isPointOnMask(Point3i point) {
+        int offsetMask =
+                extent.offset(point.getX() - cornerMin.getX(), point.getY() - cornerMin.getY());
+
+        // We skip if our containing mask doesn't include it
+        return (bbMask.get(offsetMask) == byteOn);
+    }
 }

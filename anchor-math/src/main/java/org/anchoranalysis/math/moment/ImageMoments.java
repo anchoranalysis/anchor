@@ -1,12 +1,8 @@
-package org.anchoranalysis.math.moment;
-
-import java.util.ArrayList;
-
-/*
+/*-
  * #%L
  * anchor-math
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,115 +23,114 @@ import java.util.ArrayList;
  * THE SOFTWARE.
  * #L%
  */
-
-
-import java.util.List;
+/* (C)2020 */
+package org.anchoranalysis.math.moment;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Statistic;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of points
- * 
- * <p>See <a href="Image moment">Image Moment on Wikipedia</a></p>
- * 
- * @author Owen Feehan
+ * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of
+ * points
  *
+ * <p>See <a href="Image moment">Image Moment on Wikipedia</a>
+ *
+ * @author Owen Feehan
  */
 public class ImageMoments {
-	
-	private List<EigenvalueAndVector> list;
-	private double[] mean = new double[3];
-	
-	private ImageMoments() {}
-	
-	/**
-	 * Calculates the second-moments from the covariance of a matrix of points 
-	 * 
-	 * Steps:
-	 * 1. Constructs first and the second-moments matrix of some input points
-     * 2. Calculates an eigenvalue-decomposition of the second-moment matrix 
-	 * 
-	 * @param matrixPoints a matrix where each row represents a point (n x 3) and each column an axis
-	 * @param suppressZ iff TRUE the z-dimension is ignored
-	 * @param sortAscending if TRUE, eigenValues are sorted in ascendingOrder, if FALSE in descending order
-	 */
-	public ImageMoments(DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending) {
 
-		mean = calcFirstMoments(matrixPoints);
-		
-		list = EigenValueDecompose.apply(
-			calcSecondMoments(matrixPoints, suppressZ),
-			sortAscending
-		);
-	}
-		
-	public EigenvalueAndVector get(int index) {
-		return list.get(index);
-	}
-	
-	/**
-	 * Index is the axis (0 for X, 1 for Y, 2 for Z)
-	 * @param index
-	 * @return
-	 */
-	public double getMean(int index) {
-		return mean[index];
-	}
-	
-	// Removes the entry that is closest to having an eigenVector in direction (0,0,1)
-	public void removeClosestToUnitZ() {
-		
-		double zMax = Double.NEGATIVE_INFINITY;
-		int index = -1;
-		for( int i=0; i<3; i++ ) {
-			
-			// Dot product considers only the z value
-			double zVal = list.get(i).getEigenvector().get(2);
-			if (zVal > zMax) {
-				zMax = zVal;
-				index = i;
-			}
-		}
-		
-		assert(index!=-1);
-		
-		// Remove the closest to z
-		list.remove(index);
-	}
-	
-	
-	public ImageMoments duplicate() {
-		ImageMoments out = new ImageMoments();
-		out.list = new ArrayList<>();
-		for( int i=0; i<3; i++ ) {
-			out.list.add( list.get(i).duplicate() );
-		}
-		return out;
-	}
-	
-	/** Calculates the first moment (the mean) */
-	private static double[] calcFirstMoments( DoubleMatrix2D matrixPoints ) {
-		double[] mean = new double[3];
-		for( int i=0; i<3; i++ ) {
-			mean[i] = matrixPoints.viewColumn(i).zSum() / matrixPoints.rows();
-			
-		}
-		return mean;
-	}
-	
-	/** Calculates the second moment (the covariance) */
-	private static DoubleMatrix2D calcSecondMoments( DoubleMatrix2D matrixPoints, boolean suppressZ ) {
-		
-		DoubleMatrix2D secondMoments = Statistic.covariance(matrixPoints);
-		
-		if (suppressZ) {
-			secondMoments.set(2, 0, 0);
-			secondMoments.set(2, 1, 0);
-			secondMoments.set(0, 2, 0);
-			secondMoments.set(1, 2, 0);
-		}
-		
-		return secondMoments;
-	}
+    private List<EigenvalueAndVector> list;
+    private double[] mean = new double[3];
+
+    private ImageMoments() {}
+
+    /**
+     * Calculates the second-moments from the covariance of a matrix of points
+     *
+     * <p>Steps: 1. Constructs first and the second-moments matrix of some input points 2.
+     * Calculates an eigenvalue-decomposition of the second-moment matrix
+     *
+     * @param matrixPoints a matrix where each row represents a point (n x 3) and each column an
+     *     axis
+     * @param suppressZ iff TRUE the z-dimension is ignored
+     * @param sortAscending if TRUE, eigenValues are sorted in ascendingOrder, if FALSE in
+     *     descending order
+     */
+    public ImageMoments(DoubleMatrix2D matrixPoints, boolean suppressZ, boolean sortAscending) {
+
+        mean = calcFirstMoments(matrixPoints);
+
+        list = EigenValueDecompose.apply(calcSecondMoments(matrixPoints, suppressZ), sortAscending);
+    }
+
+    public EigenvalueAndVector get(int index) {
+        return list.get(index);
+    }
+
+    /**
+     * Index is the axis (0 for X, 1 for Y, 2 for Z)
+     *
+     * @param index
+     * @return
+     */
+    public double getMean(int index) {
+        return mean[index];
+    }
+
+    // Removes the entry that is closest to having an eigenVector in direction (0,0,1)
+    public void removeClosestToUnitZ() {
+
+        double zMax = Double.NEGATIVE_INFINITY;
+        int index = -1;
+        for (int i = 0; i < 3; i++) {
+
+            // Dot product considers only the z value
+            double zVal = list.get(i).getEigenvector().get(2);
+            if (zVal > zMax) {
+                zMax = zVal;
+                index = i;
+            }
+        }
+
+        assert (index != -1);
+
+        // Remove the closest to z
+        list.remove(index);
+    }
+
+    public ImageMoments duplicate() {
+        ImageMoments out = new ImageMoments();
+        out.list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            out.list.add(list.get(i).duplicate());
+        }
+        return out;
+    }
+
+    /** Calculates the first moment (the mean) */
+    private static double[] calcFirstMoments(DoubleMatrix2D matrixPoints) {
+        double[] mean = new double[3];
+        for (int i = 0; i < 3; i++) {
+            mean[i] = matrixPoints.viewColumn(i).zSum() / matrixPoints.rows();
+        }
+        return mean;
+    }
+
+    /** Calculates the second moment (the covariance) */
+    private static DoubleMatrix2D calcSecondMoments(
+            DoubleMatrix2D matrixPoints, boolean suppressZ) {
+
+        DoubleMatrix2D secondMoments = Statistic.covariance(matrixPoints);
+
+        if (suppressZ) {
+            secondMoments.set(2, 0, 0);
+            secondMoments.set(2, 1, 0);
+            secondMoments.set(0, 2, 0);
+            secondMoments.set(1, 2, 0);
+        }
+
+        return secondMoments;
+    }
 }

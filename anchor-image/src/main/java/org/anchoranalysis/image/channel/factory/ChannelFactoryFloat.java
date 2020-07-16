@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.channel.factory;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.channel.factory;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.channel.factory;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -35,25 +35,27 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
 public class ChannelFactoryFloat implements ChannelFactorySingleType {
 
-	private static final VoxelDataTypeFloat DATA_TYPE = VoxelDataTypeFloat.INSTANCE;
-	
-	@Override
-	public Channel createEmptyInitialised(ImageDimensions dim) {
-		VoxelBoxFloat vb = new VoxelBoxFloat( PixelsFromFloatBufferArr.createInitialised(dim.getExtent()) );
-		return create(vb, dim.getRes() );
-	}
+    private static final VoxelDataTypeFloat DATA_TYPE = VoxelDataTypeFloat.INSTANCE;
 
-	@Override
-	public Channel createEmptyUninitialised(ImageDimensions dimensions) {
-		
-		PixelsFromFloatBufferArr pixels = PixelsFromFloatBufferArr.createEmpty( dimensions.getExtent() );
-		
-		VoxelBoxFloat vb = new VoxelBoxFloat( pixels );
-		return create(vb, dimensions.getRes() );
-	}
+    @Override
+    public Channel createEmptyInitialised(ImageDimensions dim) {
+        VoxelBoxFloat vb =
+                new VoxelBoxFloat(PixelsFromFloatBufferArr.createInitialised(dim.getExtent()));
+        return create(vb, dim.getRes());
+    }
 
-	@Override
-	public VoxelDataType dataType() {
-		return DATA_TYPE;
-	}
+    @Override
+    public Channel createEmptyUninitialised(ImageDimensions dimensions) {
+
+        PixelsFromFloatBufferArr pixels =
+                PixelsFromFloatBufferArr.createEmpty(dimensions.getExtent());
+
+        VoxelBoxFloat vb = new VoxelBoxFloat(pixels);
+        return create(vb, dimensions.getRes());
+    }
+
+    @Override
+    public VoxelDataType dataType() {
+        return DATA_TYPE;
+    }
 }

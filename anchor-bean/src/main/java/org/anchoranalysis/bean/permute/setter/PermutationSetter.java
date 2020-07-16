@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.setter;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,22 @@ package org.anchoranalysis.bean.permute.setter;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.permute.setter;
 
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * Imposes a permutation on some property of a bean. This can be an immediate property of a bean, or property
- *   of some nested-bean. e.g.
- *   
- *   Bean.x  (immediate property)
- *   Bean.child1.child2.child3.x  (nested)
- *   
- *   All intermediate children must be beans.
- * 
- * @author Owen Feehan
+ * Imposes a permutation on some property of a bean. This can be an immediate property of a bean, or
+ * property of some nested-bean. e.g.
  *
+ * <p>Bean.x (immediate property) Bean.child1.child2.child3.x (nested)
+ *
+ * <p>All intermediate children must be beans.
+ *
+ * @author Owen Feehan
  */
 public interface PermutationSetter {
-	
-	void setPermutation( AnchorBean<?> bean, Object val ) throws PermutationSetterException;
+
+    void setPermutation(AnchorBean<?> bean, Object val) throws PermutationSetterException;
 }

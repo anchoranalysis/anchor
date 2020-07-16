@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
 
+import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
@@ -35,97 +34,89 @@ import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
 // Maintains two paths, and their closest point
 public class MergeCandidate {
 
-	private PathWithClosest keep;
-	private PathWithClosest merge;
-	
-	public MergeCandidate(ContiguousPixelPath toKeep, ContiguousPixelPath toMerge, Point3i toKeepPoint, Point3i toMergePoint) {
-		this(
-			new PathWithClosest(toKeep,toKeepPoint),
-			new PathWithClosest(toMerge,toMergePoint)
-		);
-	}
-	
-	private MergeCandidate(PathWithClosest keep, PathWithClosest merge) {
-		this.keep = keep;
-		this.merge = merge;
-	}
-	
-	
-	/**
-	 * Merges
-	 * 
-	 * @return the number of pixels removed
-	 */
-	public MergeStrategy determineCost() {
-		return FindMergeStrategy.apply(keep,merge);
-	}
-	
-	
-	/**
-	 * Merges
-	 * 
-	 * @return the number of pixels removed
-	 */
-	public int merge() {
-		MergeStrategy strategy = FindMergeStrategy.apply(keep,merge);
-		strategy.applyStrategy(this);
-		return strategy.getCost();
-	}
-	
-	
-	
-	public MergeCandidate reverse() {
-		return new MergeCandidate(merge, keep);
-	}
-	
-	
-	/**
-	 * Chops of one-side of keep, and one-side of merge
-	 * 
-	 * @param keepLeft if TRUE, chops off the left-side of keep, if FALSE rather the right-side
-	 * @param mergeLeft if TRUE, chops off the left-side of merge, if FALSE rather the right-side
-	 * @param replace if TRUE, replaces the points with a loop. if FALSE, simply removes them
-	 */
-	public void removeOrReplace( boolean keepLeft, boolean mergeLeft, boolean replace ) {
-		removeOrReplaceOnPath(keep, keepLeft, replace);
-		removeOrReplaceOnPath(merge, mergeLeft, replace);
-	}
-	
-	private static void removeOrReplaceOnPath(PathWithClosest path, boolean left, boolean replace) {
-		if (replace) {
-			replaceWithLoop(path,left);
-		} else {
-			remove(path,left);
-		}
-	}
-	
-	private static void replaceWithLoop(PathWithClosest path, boolean left) {
-		if (left) {
-			Optional<LoopablePoints> lp = path.removeLeft();
-			lp.ifPresent( points->
-				path.insertBefore( points.loopPointsLeft() )
-			);
-		} else {
-			Optional<LoopablePoints> lp = path.removeRight();
-			lp.ifPresent( points->
-				path.getPath().insertAfter( points.loopPointsRight() )
-			);
-		}
-	}
-	
-	private static Optional<LoopablePoints> remove(PathWithClosest path, boolean left) {
-		if (left) {
-			return path.removeLeft();
-		} else {
-			return path.removeRight();
-		}
-	}
-	
-	public PathWithClosest getKeep() {
-		return keep;
-	}
+    private PathWithClosest keep;
+    private PathWithClosest merge;
 
-	public PathWithClosest getMerge() {
-		return merge;
-	}
+    public MergeCandidate(
+            ContiguousPixelPath toKeep,
+            ContiguousPixelPath toMerge,
+            Point3i toKeepPoint,
+            Point3i toMergePoint) {
+        this(new PathWithClosest(toKeep, toKeepPoint), new PathWithClosest(toMerge, toMergePoint));
+    }
+
+    private MergeCandidate(PathWithClosest keep, PathWithClosest merge) {
+        this.keep = keep;
+        this.merge = merge;
+    }
+
+    /**
+     * Merges
+     *
+     * @return the number of pixels removed
+     */
+    public MergeStrategy determineCost() {
+        return FindMergeStrategy.apply(keep, merge);
+    }
+
+    /**
+     * Merges
+     *
+     * @return the number of pixels removed
+     */
+    public int merge() {
+        MergeStrategy strategy = FindMergeStrategy.apply(keep, merge);
+        strategy.applyStrategy(this);
+        return strategy.getCost();
+    }
+
+    public MergeCandidate reverse() {
+        return new MergeCandidate(merge, keep);
+    }
+
+    /**
+     * Chops of one-side of keep, and one-side of merge
+     *
+     * @param keepLeft if TRUE, chops off the left-side of keep, if FALSE rather the right-side
+     * @param mergeLeft if TRUE, chops off the left-side of merge, if FALSE rather the right-side
+     * @param replace if TRUE, replaces the points with a loop. if FALSE, simply removes them
+     */
+    public void removeOrReplace(boolean keepLeft, boolean mergeLeft, boolean replace) {
+        removeOrReplaceOnPath(keep, keepLeft, replace);
+        removeOrReplaceOnPath(merge, mergeLeft, replace);
+    }
+
+    private static void removeOrReplaceOnPath(PathWithClosest path, boolean left, boolean replace) {
+        if (replace) {
+            replaceWithLoop(path, left);
+        } else {
+            remove(path, left);
+        }
+    }
+
+    private static void replaceWithLoop(PathWithClosest path, boolean left) {
+        if (left) {
+            Optional<LoopablePoints> lp = path.removeLeft();
+            lp.ifPresent(points -> path.insertBefore(points.loopPointsLeft()));
+        } else {
+            Optional<LoopablePoints> lp = path.removeRight();
+            lp.ifPresent(points -> path.getPath().insertAfter(points.loopPointsRight()));
+        }
+    }
+
+    private static Optional<LoopablePoints> remove(PathWithClosest path, boolean left) {
+        if (left) {
+            return path.removeLeft();
+        } else {
+            return path.removeRight();
+        }
+    }
+
+    public PathWithClosest getKeep() {
+        return keep;
+    }
+
+    public PathWithClosest getMerge() {
+        return merge;
+    }
 }

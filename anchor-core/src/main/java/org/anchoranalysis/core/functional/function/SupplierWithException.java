@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.functional.function;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.functional.function;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,20 +29,19 @@ package org.anchoranalysis.core.functional.function;
 
 /**
  * Like {@java.util.Supplier} but can also throw an exception.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type of object to supply
  * @param <E> exception-type if supplying fails
  */
 @FunctionalInterface
 public interface SupplierWithException<T, E extends Exception> {
 
-	/**
-	 * Applies a supplier like with {@link java.util.Supplier#get).
-	 * 
-	 * @return the supplied object.
-	 * @throws E an exception that may be thrown
-	 */
-	T get() throws E;
+    /**
+     * Applies a supplier like with {@link java.util.Supplier#get).
+     *
+     * @return the supplied object.
+     * @throws E an exception that may be thrown
+     */
+    T get() throws E;
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
@@ -32,10 +32,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.histogram.Histogram;
 
-
 @GroupingRoot
-public abstract class HistogramProvider extends ImageBean<HistogramProvider> implements Provider<Histogram> {
-	
-	public abstract Histogram create() throws CreateException;
-}
+public abstract class HistogramProvider extends ImageBean<HistogramProvider>
+        implements Provider<Histogram> {
 
+    public abstract Histogram create() throws CreateException;
+}

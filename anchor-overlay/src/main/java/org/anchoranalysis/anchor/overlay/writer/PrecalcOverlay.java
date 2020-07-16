@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.overlay.writer;
-
 /*-
  * #%L
  * anchor-overlay
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,32 +23,30 @@ package org.anchoranalysis.anchor.overlay.writer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.overlay.writer;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public abstract class PrecalcOverlay {
 
-	@Getter
-	private final ObjectWithProperties first; 	
+    @Getter private final ObjectWithProperties first;
 
-	public abstract void writePrecalculatedMask(
-		RGBStack background,
-		ObjectDrawAttributes attributes,
-		int iteration,
-		BoundingBox restrictTo
-	) throws OperationFailedException;
-	
+    public abstract void writePrecalculatedMask(
+            RGBStack background,
+            ObjectDrawAttributes attributes,
+            int iteration,
+            BoundingBox restrictTo)
+            throws OperationFailedException;
 }

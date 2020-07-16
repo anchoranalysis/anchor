@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.kernel;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +23,16 @@ package org.anchoranalysis.image.voxel.kernel;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.kernel;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
 public abstract class BinaryKernel extends Kernel {
-	
-	public BinaryKernel(int size) {
-		super(size);
-	}
 
-	public abstract boolean accptPos( int ind, Point3i point );	
+    public BinaryKernel(int size) {
+        super(size);
+    }
+
+    public abstract boolean accptPos(int ind, Point3i point);
 }

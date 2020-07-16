@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.points.updatable;
-
-import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
-import org.anchoranalysis.anchor.mpp.probmap.PointSampler;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +23,19 @@ import org.anchoranalysis.anchor.mpp.probmap.PointSampler;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.points.updatable;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.probmap.PointSampler;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.binary.mask.Mask;
 
-public abstract class UpdatablePointsContainer extends AnchorBean<UpdatablePointsContainer> implements UpdatableMarkSet, PointSampler {
+public abstract class UpdatablePointsContainer extends AnchorBean<UpdatablePointsContainer>
+        implements UpdatableMarkSet, PointSampler {
 
-	public abstract void init(Mask binaryImage) throws InitException;
-	
-	public abstract int size();
+    public abstract void init(Mask binaryImage) throws InitException;
 
+    public abstract int size();
 }

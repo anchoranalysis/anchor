@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.input.series;
-
-/*
+/*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.image.io.input.series;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.input.series;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.anchoranalysis.core.cache.WrapOperationAsCached;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
@@ -52,134 +50,132 @@ import org.anchoranalysis.image.stack.TimeSequence;
 
 public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollectionForSeries {
 
-	private List<NamedChnlCollectionForSeries> list = new ArrayList<>();
+    private List<NamedChnlCollectionForSeries> list = new ArrayList<>();
 
-	public NamedChnlCollectionForSeriesConcatenate() {
-		super();
-	}
-	
-	@Override
-	public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
-				
-		for( NamedChnlCollectionForSeries item : list ) {
-			
-			Optional<Channel> c = item.getChnlOrNull(chnlName, t,progressReporter);
-			if (c.isPresent()) {
-				return c.get();
-			}
-		}
+    public NamedChnlCollectionForSeriesConcatenate() {
+        super();
+    }
 
-		throw new GetOperationFailedException( String.format("chnlName '%s' is not found", chnlName) );
-	}
+    @Override
+    public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter)
+            throws GetOperationFailedException {
 
-	@Override
-	public Optional<Channel> getChnlOrNull(String chnlName, int t, ProgressReporter progressReporter)
-			throws GetOperationFailedException {
+        for (NamedChnlCollectionForSeries item : list) {
 
-		for( NamedChnlCollectionForSeries item : list ) {
-			
-			Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
-			if (c.isPresent()) {
-				return c;
-			}
-		}
+            Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
+            if (c.isPresent()) {
+                return c.get();
+            }
+        }
 
-		return Optional.empty();
-	}
-	
+        throw new GetOperationFailedException(
+                String.format("chnlName '%s' is not found", chnlName));
+    }
 
-	public void addAsSeparateChnls(NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter )
-			throws OperationFailedException {
-		
-		try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, list.size())) {
-			
-			for( NamedChnlCollectionForSeries item : list ) {
-				item.addAsSeparateChnls(stackCollection, t, new ProgressReporterOneOfMany(prm) );
-				prm.incrWorker();
-			}
-		}
-	}
-	
-	public void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, int t)
-			throws OperationFailedException {
-		for( NamedChnlCollectionForSeries item : list ) {
-			item.addAsSeparateChnls(stackCollection, t);
-		}
-	}
+    @Override
+    public Optional<Channel> getChnlOrNull(
+            String chnlName, int t, ProgressReporter progressReporter)
+            throws GetOperationFailedException {
 
-	public boolean add(NamedChnlCollectionForSeries e) {
-		return list.add(e);
-	}
-	
-	public Set<String> chnlNames() {
-		HashSet<String> set = new HashSet<>();
-		for( NamedChnlCollectionForSeries item : list ) {
-			set.addAll( item.chnlNames() );
-		}
-		return set;
-	}
-	
-	public int sizeT( ProgressReporter progressReporter )
-			throws RasterIOException {
-		
-		int series = 0;
-		boolean first = true;
-		
-		for( NamedChnlCollectionForSeries item : list ) {
-			if (first) {
-				series = item.sizeT(progressReporter);
-				first = false;
-			} else {
-				series = Math.min(series, item.sizeT(progressReporter)); 
-			}
-		}
-		return series;
-	}
+        for (NamedChnlCollectionForSeries item : list) {
 
-	@Override
-	public boolean hasChnl(String chnlName) {
-		for( NamedChnlCollectionForSeries item : list ) {
-			if( item.chnlNames().contains(chnlName) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public ImageDimensions dimensions() throws RasterIOException {
-		// Assumes dimensions are the same for every item in the list
-		return list.get(0).dimensions();
-	}
+            Optional<Channel> c = item.getChnlOrNull(chnlName, t, progressReporter);
+            if (c.isPresent()) {
+                return c;
+            }
+        }
 
-	public Iterator<NamedChnlCollectionForSeries> iteratorFromRaster() {
-		return list.iterator();
-	}
+        return Optional.empty();
+    }
 
-	@Override
-	public Operation<Stack,OperationFailedException> allChnlsAsStack(int t) {
-		return new WrapOperationAsCached<>(
-			() -> stackAllChnls(t)	
-		);
-	}
-	
-	private Stack stackAllChnls(int t) throws OperationFailedException {
-		Stack out = new Stack();
-		for( NamedChnlCollectionForSeries ncc : list ) {
-			try {
-				addAllChnlsFrom(
-					ncc.allChnlsAsStack(t).doOperation(),
-					out
-				);
-			} catch (IncorrectImageSizeException e) {
-				throw new OperationFailedException(e);
-			}
-		}
-		return out;
-	}
-	
-	private static void addAllChnlsFrom( Stack src, Stack dest ) throws IncorrectImageSizeException {
-		for( Channel c : src ) {
-			dest.addChnl(c);
-		}
-	}
+    public void addAsSeparateChnls(
+            NamedImgStackCollection stackCollection, int t, ProgressReporter progressReporter)
+            throws OperationFailedException {
+
+        try (ProgressReporterMultiple prm =
+                new ProgressReporterMultiple(progressReporter, list.size())) {
+
+            for (NamedChnlCollectionForSeries item : list) {
+                item.addAsSeparateChnls(stackCollection, t, new ProgressReporterOneOfMany(prm));
+                prm.incrWorker();
+            }
+        }
+    }
+
+    public void addAsSeparateChnls(NamedProviderStore<TimeSequence> stackCollection, int t)
+            throws OperationFailedException {
+        for (NamedChnlCollectionForSeries item : list) {
+            item.addAsSeparateChnls(stackCollection, t);
+        }
+    }
+
+    public boolean add(NamedChnlCollectionForSeries e) {
+        return list.add(e);
+    }
+
+    public Set<String> chnlNames() {
+        HashSet<String> set = new HashSet<>();
+        for (NamedChnlCollectionForSeries item : list) {
+            set.addAll(item.chnlNames());
+        }
+        return set;
+    }
+
+    public int sizeT(ProgressReporter progressReporter) throws RasterIOException {
+
+        int series = 0;
+        boolean first = true;
+
+        for (NamedChnlCollectionForSeries item : list) {
+            if (first) {
+                series = item.sizeT(progressReporter);
+                first = false;
+            } else {
+                series = Math.min(series, item.sizeT(progressReporter));
+            }
+        }
+        return series;
+    }
+
+    @Override
+    public boolean hasChnl(String chnlName) {
+        for (NamedChnlCollectionForSeries item : list) {
+            if (item.chnlNames().contains(chnlName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ImageDimensions dimensions() throws RasterIOException {
+        // Assumes dimensions are the same for every item in the list
+        return list.get(0).dimensions();
+    }
+
+    public Iterator<NamedChnlCollectionForSeries> iteratorFromRaster() {
+        return list.iterator();
+    }
+
+    @Override
+    public Operation<Stack, OperationFailedException> allChnlsAsStack(int t) {
+        return new WrapOperationAsCached<>(() -> stackAllChnls(t));
+    }
+
+    private Stack stackAllChnls(int t) throws OperationFailedException {
+        Stack out = new Stack();
+        for (NamedChnlCollectionForSeries ncc : list) {
+            try {
+                addAllChnlsFrom(ncc.allChnlsAsStack(t).doOperation(), out);
+            } catch (IncorrectImageSizeException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+        return out;
+    }
+
+    private static void addAllChnlsFrom(Stack src, Stack dest) throws IncorrectImageSizeException {
+        for (Channel c : src) {
+            dest.addChnl(c);
+        }
+    }
 }

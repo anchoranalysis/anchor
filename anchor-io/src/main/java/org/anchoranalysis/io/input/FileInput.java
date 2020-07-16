@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.input;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,44 +23,42 @@ package org.anchoranalysis.io.input;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.input;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 public class FileInput implements InputFromManager {
 
-	private File file;
-	private String descriptiveName;
-	
-	public FileInput( DescriptiveFile file ) {
-		super();
-		this.file = file.getFile();
-		this.descriptiveName = file.getDescriptiveName();
-		assert(!descriptiveName.isEmpty());
-	}
-	
-	@Override
-	public String descriptiveName() {
-		return descriptiveName;
-	}
+    private File file;
+    private String descriptiveName;
 
-	@Override
-	public Optional<Path> pathForBinding() {
-		return Optional.of(
-			file.toPath()
-		);
-	}
-	
-	@Override
-	public String toString() {
-		return descriptiveName();
-	}
-	
-	public File getFile() {
-		return file;
-	}
+    public FileInput(DescriptiveFile file) {
+        super();
+        this.file = file.getFile();
+        this.descriptiveName = file.getDescriptiveName();
+        assert (!descriptiveName.isEmpty());
+    }
+
+    @Override
+    public String descriptiveName() {
+        return descriptiveName;
+    }
+
+    @Override
+    public Optional<Path> pathForBinding() {
+        return Optional.of(file.toPath());
+    }
+
+    @Override
+    public String toString() {
+        return descriptiveName();
+    }
+
+    public File getFile() {
+        return file;
+    }
 }

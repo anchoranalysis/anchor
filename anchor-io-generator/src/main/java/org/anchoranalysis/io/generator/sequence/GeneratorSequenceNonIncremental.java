@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
 /*-
  * #%L
  * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,22 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public interface GeneratorSequenceNonIncremental<T> {
 
-	// totalNumAdd indicates in advance, how many times add will be called
-	// If this is unknown, it should be set to -1
-	// Not all writers support additions when this is unknown
-	void start( SequenceType sequenceType, int totalNumAdd ) throws OutputWriteFailedException;
-	
-	void add( T element, String index ) throws OutputWriteFailedException;
-	
-	void end() throws OutputWriteFailedException;
+    // totalNumAdd indicates in advance, how many times add will be called
+    // If this is unknown, it should be set to -1
+    // Not all writers support additions when this is unknown
+    void start(SequenceType sequenceType, int totalNumAdd) throws OutputWriteFailedException;
 
-	void setSuppressSubfolder(boolean suppressSubfolder);
+    void add(T element, String index) throws OutputWriteFailedException;
+
+    void end() throws OutputWriteFailedException;
+
+    void setSuppressSubfolder(boolean suppressSubfolder);
 }

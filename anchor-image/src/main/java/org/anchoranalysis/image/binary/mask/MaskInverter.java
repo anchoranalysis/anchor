@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.binary.mask;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,54 +23,54 @@ package org.anchoranalysis.image.binary.mask;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.binary.mask;
 
 import java.nio.ByteBuffer;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskInverter {
-	
-	public static ObjectMask invertObjectDuplicate( ObjectMask object ) {
-		BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
-		bvb.invert();
-		return new ObjectMask(bvb);
-	}
-	
-	public static void invertChnl( Mask chnl ) {
-		
-		BinaryValues bv = chnl.getBinaryValues();
-		BinaryValuesByte bvb = bv.createByte();
-		invertVoxelBox( chnl.getVoxelBox(),bvb);
-	}
-		
-	public static void invertVoxelBox( VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb ) {
-		for (int z=0; z<vb.extent().getZ(); z++) {
-			
-			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
-			
-			int offset = 0;
-			for (int y=0; y<vb.extent().getY(); y++) {
-				for (int x=0; x<vb.extent().getX(); x++) {
-					
-					byte val = bb.get(offset);
-					
-					if (val==bvb.getOnByte()) {
-						bb.put(offset,bvb.getOffByte());
-					} else {
-						bb.put(offset,bvb.getOnByte());
-					}
-					
-					offset++;
-				}
-			}
-		}
-	}
+
+    public static ObjectMask invertObjectDuplicate(ObjectMask object) {
+        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
+        bvb.invert();
+        return new ObjectMask(bvb);
+    }
+
+    public static void invertChnl(Mask chnl) {
+
+        BinaryValues bv = chnl.getBinaryValues();
+        BinaryValuesByte bvb = bv.createByte();
+        invertVoxelBox(chnl.getVoxelBox(), bvb);
+    }
+
+    public static void invertVoxelBox(VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb) {
+        for (int z = 0; z < vb.extent().getZ(); z++) {
+
+            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+
+            int offset = 0;
+            for (int y = 0; y < vb.extent().getY(); y++) {
+                for (int x = 0; x < vb.extent().getX(); x++) {
+
+                    byte val = bb.get(offset);
+
+                    if (val == bvb.getOnByte()) {
+                        bb.put(offset, bvb.getOffByte());
+                    } else {
+                        bb.put(offset, bvb.getOnByte());
+                    }
+
+                    offset++;
+                }
+            }
+        }
+    }
 }

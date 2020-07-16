@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.csv.reader;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.io.csv.reader;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.csv.reader;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 public class CSVReaderException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public CSVReaderException(String message) {
-		super(message);
-	}	
-	
-	public CSVReaderException(Throwable cause) {
-		super(cause);
-	}
+    public CSVReaderException(String message) {
+        super(message);
+    }
+
+    public CSVReaderException(Throwable cause) {
+        super(cause);
+    }
 }

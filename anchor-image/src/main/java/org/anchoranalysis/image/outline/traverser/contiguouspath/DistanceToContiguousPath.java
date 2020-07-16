@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.contiguouspath;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +23,37 @@ package org.anchoranalysis.image.outline.traverser.contiguouspath;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser.contiguouspath;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
 public class DistanceToContiguousPath {
 
-	private DistanceToContiguousPath() {}
-	
-	/** The maximum-distance of a point to the closest point on the path */
-	public static DistanceIndex maxDistanceToClosestPoint(ContiguousPixelPath path, Point3i point ) {
-		
-		int indexMin = -1;
-		int distanceMin = Integer.MAX_VALUE;
-		
-		// Finds the minimum distance to any of the paths
-		for( int i=0; i<path.size(); i++ ) {
-			
-			Point3i point2 = path.get(i);
-			
-			int distance = point.distanceMax(point2);
-			if (distance < distanceMin) {
-				distanceMin = distance;
-				indexMin = i;
-			}
-		}
-		
-		return new DistanceIndex(distanceMin,indexMin);
-	}
-		
-	public static int maxDistanceToHeadTail(ContiguousPixelPath path, Point3i point) {
-		return Math.min(
-			point.distanceMax(path.head()),
-			point.distanceMax(path.tail())
-		);
-	}
+    private DistanceToContiguousPath() {}
+
+    /** The maximum-distance of a point to the closest point on the path */
+    public static DistanceIndex maxDistanceToClosestPoint(ContiguousPixelPath path, Point3i point) {
+
+        int indexMin = -1;
+        int distanceMin = Integer.MAX_VALUE;
+
+        // Finds the minimum distance to any of the paths
+        for (int i = 0; i < path.size(); i++) {
+
+            Point3i point2 = path.get(i);
+
+            int distance = point.distanceMax(point2);
+            if (distance < distanceMin) {
+                distanceMin = distance;
+                indexMin = i;
+            }
+        }
+
+        return new DistanceIndex(distanceMin, indexMin);
+    }
+
+    public static int maxDistanceToHeadTail(ContiguousPixelPath path, Point3i point) {
+        return Math.min(point.distanceMax(path.head()), point.distanceMax(path.tail()));
+    }
 }

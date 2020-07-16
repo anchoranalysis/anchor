@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl;
-
-import java.nio.Buffer;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +23,11 @@ import java.nio.Buffer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter.attached.chnl;
 
-
+import java.nio.Buffer;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
@@ -38,33 +37,31 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverter;
 
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
-public class ChnlConverterDelegateToHistogram<T extends Buffer> implements ChnlConverterAttached<Channel, T> {
+public class ChnlConverterDelegateToHistogram<T extends Buffer>
+        implements ChnlConverterAttached<Channel, T> {
 
-	private final ChnlConverterAttached<Histogram, T> delegate;
-	
-	@Override
-	public void attachObject(Channel obj) throws OperationFailedException {
+    private final ChnlConverterAttached<Histogram, T> delegate;
 
-		try {
-			Histogram hist = HistogramFactory.create(obj);
-			delegate.attachObject(hist);
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
+    @Override
+    public void attachObject(Channel obj) throws OperationFailedException {
 
-	@Override
-	public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
-		return delegate.convert(chnl, changeExisting);
-	}
+        try {
+            Histogram hist = HistogramFactory.create(obj);
+            delegate.attachObject(hist);
 
-	@Override
-	public VoxelBoxConverter<T> getVoxelBoxConverter() {
-		return delegate.getVoxelBoxConverter();
-	}
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 
+    @Override
+    public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
+        return delegate.convert(chnl, changeExisting);
+    }
+
+    @Override
+    public VoxelBoxConverter<T> getVoxelBoxConverter() {
+        return delegate.getVoxelBoxConverter();
+    }
 }

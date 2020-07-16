@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.bean.rasterwriter;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,10 @@ package org.anchoranalysis.image.io.bean.rasterwriter;
  * THE SOFTWARE.
  * #L%
  */
-
-
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.rasterwriter;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryShort;
@@ -39,23 +36,27 @@ import org.anchoranalysis.image.stack.Stack;
 
 public abstract class RasterWriter extends AnchorBean<RasterWriter> {
 
-	// Get the default extension for a writer
-	public abstract String dfltExt();
-	
-	public abstract void writeTimeSeriesStackByte( ImgStackSeries stackSeries, Path filePath, boolean makeRGB ) throws RasterIOException;
-	
-	public void writeStack( Stack stack, Path filePath, boolean makeRGB ) throws RasterIOException {
-		
-		if (stack.allChnlsHaveType(ChannelFactoryByte.staticDataType())) {
-			writeStackByte( (Stack) stack, filePath, makeRGB );
-		} else if (stack.allChnlsHaveType(ChannelFactoryShort.staticDataType())) {
-			writeStackShort( (Stack) stack, filePath, makeRGB );
-		} else {
-			throw new RasterIOException("Channels in ImgStack are neither homogenously unsigned 8-bit (byte) or unsigned 16-bit (short). Other combinations unsupported");
-		}
-	}
-	
-	public abstract void writeStackByte( Stack stack, Path filePath, boolean makeRGB ) throws RasterIOException;
-	
-	public abstract void writeStackShort( Stack stack, Path filePath, boolean makeRGB ) throws RasterIOException;
+    // Get the default extension for a writer
+    public abstract String dfltExt();
+
+    public abstract void writeTimeSeriesStackByte(
+            ImgStackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException;
+
+    public void writeStack(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
+
+        if (stack.allChnlsHaveType(ChannelFactoryByte.staticDataType())) {
+            writeStackByte((Stack) stack, filePath, makeRGB);
+        } else if (stack.allChnlsHaveType(ChannelFactoryShort.staticDataType())) {
+            writeStackShort((Stack) stack, filePath, makeRGB);
+        } else {
+            throw new RasterIOException(
+                    "Channels in ImgStack are neither homogenously unsigned 8-bit (byte) or unsigned 16-bit (short). Other combinations unsupported");
+        }
+    }
+
+    public abstract void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
+            throws RasterIOException;
+
+    public abstract void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
+            throws RasterIOException;
 }

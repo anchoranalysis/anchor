@@ -1,10 +1,8 @@
-package org.anchoranalysis.math.statistics;
-
-/*
+/*-
  * #%L
  * anchor-math
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,38 @@ package org.anchoranalysis.math.statistics;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.math.statistics;
 
 public class FirstSecondOrderStatistic {
-	
-	/**
-	 * Mean
-	 */
-	private double mean;
-	
-	/**
-	 * Standard-Deviation
-	 */
-	private double scale;
-	
-	public double getMean() {
-		return mean;
-	}
 
-	public void setMean(double mean) {
-		this.mean = mean;
-	}
+    /** Mean */
+    private double mean;
 
-	public double getScale() {
-		return scale;
-	}
+    /** Standard-Deviation */
+    private double scale;
 
-	public void setScale(double scale) {
-		this.scale = scale;
-	}
-	
-	public double zScore( double val ) {
-		return calcZScore( val, mean, scale );
-	}
-	
-	public static double calcZScore( double val, double mean, double scale ) {
-		return (val-mean) / scale;
-	}
+    public double getMean() {
+        return mean;
+    }
+
+    public void setMean(double mean) {
+        this.mean = mean;
+    }
+
+    public double getScale() {
+        return scale;
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
+    public double zScore(double val) {
+        return calcZScore(val, mean, scale);
+    }
+
+    public static double calcZScore(double val, double mean, double scale) {
+        return (val - mean) / scale;
+    }
 }

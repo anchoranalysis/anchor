@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.define;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.define;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -37,66 +37,55 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
 class SharedObjectsOutputter {
-	
-	private SharedObjectsOutputter() {}
-	
-	public static void output(
-		ImageInitParams imageInit,
-		boolean suppressSubfolders,
-		BoundIOContext context
-	) {
-		StackCollectionOutputter.outputSubset(
-			CreateCombinedStack.apply(imageInit),
-			StackOutputKeys.STACK,
-			suppressSubfolders,
-			context
-		);
-	}
-	
-	public static void outputWithException(
-		ImageInitParams imageInit,
-		boolean suppressSubfolders,
-		BoundIOContext context
-	) throws OutputWriteFailedException {
-		StackCollectionOutputter.outputSubsetWithException(
-			CreateCombinedStack.apply(imageInit),
-			context.getOutputManager(),
-			StackOutputKeys.STACK,
-			suppressSubfolders
-		);
-	}
 
-	
-	public static void output(
-			MPPInitParams soMPP,
-			boolean suppressSubfolders,
-			BoundIOContext context
-		) {
-			ErrorReporter errorReporter = context.getErrorReporter();
-			BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
-					
-			SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
-			factory.cfg().outputSubset(errorReporter);
-			factory.histogram().outputSubset(errorReporter);
-			factory.objects().outputSubset(errorReporter);
-		}
-	
-	public static void outputWithException(
-		MPPInitParams soMPP,
-		BoundOutputManagerRouteErrors outputManager,
-		boolean suppressSubfolders
-	) throws OutputWriteFailedException {
-		
-		if(!outputManager.getOutputWriteSettings().hasBeenInit()) {
-			throw new OutputWriteFailedException("OutputManager's settings have not yet been initialized");
-		}
+    private SharedObjectsOutputter() {}
 
-		SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
-		factory.cfg().outputSubsetWithException();
-		factory.histogram().outputSubsetWithException();
-		factory.objects().outputSubsetWithException();
-	}
+    public static void output(
+            ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context) {
+        StackCollectionOutputter.outputSubset(
+                CreateCombinedStack.apply(imageInit),
+                StackOutputKeys.STACK,
+                suppressSubfolders,
+                context);
+    }
 
-	
+    public static void outputWithException(
+            ImageInitParams imageInit, boolean suppressSubfolders, BoundIOContext context)
+            throws OutputWriteFailedException {
+        StackCollectionOutputter.outputSubsetWithException(
+                CreateCombinedStack.apply(imageInit),
+                context.getOutputManager(),
+                StackOutputKeys.STACK,
+                suppressSubfolders);
+    }
 
+    public static void output(
+            MPPInitParams soMPP, boolean suppressSubfolders, BoundIOContext context) {
+        ErrorReporter errorReporter = context.getErrorReporter();
+        BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+
+        SubsetOutputterFactory factory =
+                new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
+        factory.cfg().outputSubset(errorReporter);
+        factory.histogram().outputSubset(errorReporter);
+        factory.objects().outputSubset(errorReporter);
+    }
+
+    public static void outputWithException(
+            MPPInitParams soMPP,
+            BoundOutputManagerRouteErrors outputManager,
+            boolean suppressSubfolders)
+            throws OutputWriteFailedException {
+
+        if (!outputManager.getOutputWriteSettings().hasBeenInit()) {
+            throw new OutputWriteFailedException(
+                    "OutputManager's settings have not yet been initialized");
+        }
+
+        SubsetOutputterFactory factory =
+                new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
+        factory.cfg().outputSubsetWithException();
+        factory.histogram().outputSubsetWithException();
+        factory.objects().outputSubsetWithException();
+    }
 }

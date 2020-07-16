@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.folder.sequenced;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.io.manifest.deserializer.folder.sequenced;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.folder.sequenced;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -35,21 +34,19 @@ import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 
 public class SequencedFolderDeserializer<T> extends SequencedFolderCntrCreator<T> {
 
-	private Deserializer<T> deserializer;
-	
-	public SequencedFolderDeserializer(SequencedFolder rootFolder, Deserializer<T> deserializer ) {
-		super(rootFolder);
-		this.deserializer = deserializer;
-	}
-	
-	@Override
-	protected T createFromFilePath( Path path ) throws CreateException {
-		try {
-			return deserializer.deserialize(path);
-		} catch (DeserializationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
+    private Deserializer<T> deserializer;
 
-	
+    public SequencedFolderDeserializer(SequencedFolder rootFolder, Deserializer<T> deserializer) {
+        super(rootFolder);
+        this.deserializer = deserializer;
+    }
+
+    @Override
+    protected T createFromFilePath(Path path) throws CreateException {
+        try {
+            return deserializer.deserialize(path);
+        } catch (DeserializationFailedException e) {
+            throw new CreateException(e);
+        }
+    }
 }

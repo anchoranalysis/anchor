@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.binary.voxel;
-
-
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,50 +23,49 @@ package org.anchoranalysis.image.binary.voxel;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.binary.voxel;
 
 import java.nio.IntBuffer;
-
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BinaryVoxelBoxInt extends BinaryVoxelBox<IntBuffer> {
 
-	public BinaryVoxelBoxInt(VoxelBox<IntBuffer> voxelBox,
-			BinaryValues bv) {
-		super(voxelBox, bv);
-	}
+    public BinaryVoxelBoxInt(VoxelBox<IntBuffer> voxelBox, BinaryValues bv) {
+        super(voxelBox, bv);
+    }
 
-	@Override
-	public boolean isOn(int x, int y, int z) {
-		int offset = getVoxelBox().extent().offset(x, y);
-		return getVoxelBox().getPixelsForPlane(z).buffer().get(offset) != getBinaryValues().getOffInt();
-	}
+    @Override
+    public boolean isOn(int x, int y, int z) {
+        int offset = getVoxelBox().extent().offset(x, y);
+        return getVoxelBox().getPixelsForPlane(z).buffer().get(offset)
+                != getBinaryValues().getOffInt();
+    }
 
-	@Override
-	public boolean isOff(int x, int y, int z) {
-		return !isOn(x, y, z);
-	}
+    @Override
+    public boolean isOff(int x, int y, int z) {
+        return !isOn(x, y, z);
+    }
 
-	@Override
-	public void setOn(int x, int y, int z) {
-		int offset = getVoxelBox().extent().offset(x, y);
-		getVoxelBox().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOnInt() );
-	}
+    @Override
+    public void setOn(int x, int y, int z) {
+        int offset = getVoxelBox().extent().offset(x, y);
+        getVoxelBox().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOnInt());
+    }
 
-	@Override
-	public void setOff(int x, int y, int z) {
-		int offset = getVoxelBox().extent().offset(x, y);
-		getVoxelBox().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOffInt() );	
-	}
+    @Override
+    public void setOff(int x, int y, int z) {
+        int offset = getVoxelBox().extent().offset(x, y);
+        getVoxelBox().getPixelsForPlane(z).buffer().put(offset, getBinaryValues().getOffInt());
+    }
 
-	@Override
-	public BinaryVoxelBox<IntBuffer> duplicate() {
-		return new BinaryVoxelBoxInt( getVoxelBox().duplicate(), getBinaryValues() );
-	}
-	
-	public BinaryVoxelBox<IntBuffer> extractSlice(int z) {
-		return new BinaryVoxelBoxInt( getVoxelBox().extractSlice(z), getBinaryValues() );
-	}
+    @Override
+    public BinaryVoxelBox<IntBuffer> duplicate() {
+        return new BinaryVoxelBoxInt(getVoxelBox().duplicate(), getBinaryValues());
+    }
 
+    public BinaryVoxelBox<IntBuffer> extractSlice(int z) {
+        return new BinaryVoxelBoxInt(getVoxelBox().extractSlice(z), getBinaryValues());
+    }
 }

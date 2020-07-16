@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.objmask.factory.unionfind;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,11 @@ package org.anchoranalysis.image.objmask.factory.unionfind;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.objmask.factory.unionfind;
+
+import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
+import static org.junit.Assert.*;
 
 import java.nio.Buffer;
 import org.anchoranalysis.core.error.CreateException;
@@ -42,147 +45,144 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 import org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture;
-
-import static org.anchoranalysis.image.voxel.iterator.ObjectMaskFixture.*;
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
 public class ConnectedComponentUnitFindTest {
 
-	private static final int NUM_NON_OVERLAPPING_OBJECTS = 5;
-	private static final int NUM_OVERLAPPING_OBJECTS = 3;
-	private static final int NUM_OBJECTS = NUM_NON_OVERLAPPING_OBJECTS + NUM_OVERLAPPING_OBJECTS;
-	
-	/** Used as a positive between non-overlapping objects, or as a negative shift between overlapping objects */
-	private static final int DISTANCE_BETWEEN = 10;
-		
-	private ConnectedComponentUnionFind cc;
-	
-	@Before
-	public void setup() {
-		 cc = new ConnectedComponentUnionFind(1, false);
-	}
-	
-	@Test
-	public void testByte2d() throws OperationFailedException, CreateException {
-		testObjects(
-			deriveInt(false),
-			ObjectMaskFixture.OBJECT_NUM_VOXELS_2D
-		);
-	}
-	
-	@Test
-	public void testInt2d() throws OperationFailedException, CreateException {
-		testObjects(
-			deriveByte(false),
-			ObjectMaskFixture.OBJECT_NUM_VOXELS_2D
-		);
-	}
-	
-	@Test
-	public void testByte3d() throws OperationFailedException, CreateException {
+    private static final int NUM_NON_OVERLAPPING_OBJECTS = 5;
+    private static final int NUM_OVERLAPPING_OBJECTS = 3;
+    private static final int NUM_OBJECTS = NUM_NON_OVERLAPPING_OBJECTS + NUM_OVERLAPPING_OBJECTS;
 
-		testObjects(
-			deriveInt(true),
-			ObjectMaskFixture.OBJECT_NUM_VOXELS_3D
-		);
-	}
-	
-	@Test
-	public void testInt3d() throws OperationFailedException, CreateException {
-		testObjects(
-			deriveByte(true),
-			ObjectMaskFixture.OBJECT_NUM_VOXELS_3D
-		);
-	}
-	
-	private ObjectCollection deriveInt(boolean do3D) throws OperationFailedException, CreateException {
-		return cc.deriveConnectedInt(
-			createBufferWithObjects(VoxelDataTypeUnsignedInt.INSTANCE, do3D)	
-		);
-	}
-	
-	private ObjectCollection deriveByte(boolean do3D) throws OperationFailedException, CreateException {
-		return cc.deriveConnectedByte(
-			createBufferWithObjects(VoxelDataTypeUnsignedByte.INSTANCE, do3D)	
-		);
-	}
-	
-	private void testObjects(ObjectCollection objects, int expectedSingleObjectSize ) throws CreateException, OperationFailedException {
-		assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJECTS+1, objects.size() );
-		assertTrue("size of all objects except one", allSizesEqualExceptOne(objects, expectedSingleObjectSize) );
-	}
-		
-	private <T extends Buffer> BinaryVoxelBox<T> createBufferWithObjects( VoxelDataType bufferDataType, boolean do3D ) throws CreateException {
-		
-		ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
-		
-		Extent extent = new Extent(
-			NUM_OBJECTS * (WIDTH + DISTANCE_BETWEEN),
-			NUM_OBJECTS * (HEIGHT + DISTANCE_BETWEEN),
-			DEPTH
-		);
-		
-		@SuppressWarnings("unchecked")
-		BinaryVoxelBox<T> bvb = (BinaryVoxelBox<T>) BinaryVoxelBoxFactory.instance().create(extent, bufferDataType, BinaryValues.getDefault());
-		
-		createObjects(fixture).forEach(bvb::setPixelsCheckMaskOn);
-		return bvb;
-	}
-	
-	private ObjectCollection createObjects(ObjectMaskFixture fixture) {
-		Point3i running = new Point3i();
-		return ObjectCollectionFactory.from(
-			generateObjectsAndIncrementRunning(NUM_NON_OVERLAPPING_OBJECTS, DISTANCE_BETWEEN, running, fixture),
-			generateObjectsAndIncrementRunning(NUM_OVERLAPPING_OBJECTS, -DISTANCE_BETWEEN, running, fixture)		
-		);
-	}
+    /**
+     * Used as a positive between non-overlapping objects, or as a negative shift between
+     * overlapping objects
+     */
+    private static final int DISTANCE_BETWEEN = 10;
 
-	private static ObjectCollection generateObjectsAndIncrementRunning(int numberObjects, int shift, Point3i running, ObjectMaskFixture fixture) {
-		return ObjectCollectionFactory.fromRepeated(
-			numberObjects,
-			() -> {
-				ObjectMask mask = fixture.filledMask(running.getX(), running.getY()); 
-				running.incrementX(WIDTH + shift);
-				running.incrementY(HEIGHT + shift);
-				return mask;
-			}
-		);
-	}
-	
-	/** 
-	 * Checks that all objects have a number of voxels exactly equal to target, except one which is allowed to be greater.
-	 * 
-	 * @param objects objects to check
-	 * @parma target size that all objects apart from one should be equal to
-	 * */
-	private static boolean allSizesEqualExceptOne( ObjectCollection objects, int target ) {
-		
-		boolean encounteredAlreadyTheException = false;
-		
-		for( ObjectMask objectMask : objects ) {
-			int numVoxels = objectMask.numberVoxelsOn();
-			if (numVoxels==target) {
-				continue;
-			} else {
-				if (numVoxels < target) {
-					// At least one LESS than the target
-					return false;
-				} else {
-					if (encounteredAlreadyTheException) {
-						// As we've already encountered the exception, then there is more than one exception
-						return false;
-					} else {
-						// The first exception that is encountered
-						encounteredAlreadyTheException = true;
-					}
-				}
-			}
-		}
-		
-		// We only fulfill the cteriria if we've encountered the exception
-		return encounteredAlreadyTheException;
-	}
+    private ConnectedComponentUnionFind cc;
+
+    @Before
+    public void setup() {
+        cc = new ConnectedComponentUnionFind(1, false);
+    }
+
+    @Test
+    public void testByte2d() throws OperationFailedException, CreateException {
+        testObjects(deriveInt(false), ObjectMaskFixture.OBJECT_NUM_VOXELS_2D);
+    }
+
+    @Test
+    public void testInt2d() throws OperationFailedException, CreateException {
+        testObjects(deriveByte(false), ObjectMaskFixture.OBJECT_NUM_VOXELS_2D);
+    }
+
+    @Test
+    public void testByte3d() throws OperationFailedException, CreateException {
+
+        testObjects(deriveInt(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
+    }
+
+    @Test
+    public void testInt3d() throws OperationFailedException, CreateException {
+        testObjects(deriveByte(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
+    }
+
+    private ObjectCollection deriveInt(boolean do3D)
+            throws OperationFailedException, CreateException {
+        return cc.deriveConnectedInt(
+                createBufferWithObjects(VoxelDataTypeUnsignedInt.INSTANCE, do3D));
+    }
+
+    private ObjectCollection deriveByte(boolean do3D)
+            throws OperationFailedException, CreateException {
+        return cc.deriveConnectedByte(
+                createBufferWithObjects(VoxelDataTypeUnsignedByte.INSTANCE, do3D));
+    }
+
+    private void testObjects(ObjectCollection objects, int expectedSingleObjectSize)
+            throws CreateException, OperationFailedException {
+        assertEquals("number of objects", NUM_NON_OVERLAPPING_OBJECTS + 1, objects.size());
+        assertTrue(
+                "size of all objects except one",
+                allSizesEqualExceptOne(objects, expectedSingleObjectSize));
+    }
+
+    private <T extends Buffer> BinaryVoxelBox<T> createBufferWithObjects(
+            VoxelDataType bufferDataType, boolean do3D) throws CreateException {
+
+        ObjectMaskFixture fixture = new ObjectMaskFixture(do3D);
+
+        Extent extent =
+                new Extent(
+                        NUM_OBJECTS * (WIDTH + DISTANCE_BETWEEN),
+                        NUM_OBJECTS * (HEIGHT + DISTANCE_BETWEEN),
+                        DEPTH);
+
+        @SuppressWarnings("unchecked")
+        BinaryVoxelBox<T> bvb =
+                (BinaryVoxelBox<T>)
+                        BinaryVoxelBoxFactory.instance()
+                                .create(extent, bufferDataType, BinaryValues.getDefault());
+
+        createObjects(fixture).forEach(bvb::setPixelsCheckMaskOn);
+        return bvb;
+    }
+
+    private ObjectCollection createObjects(ObjectMaskFixture fixture) {
+        Point3i running = new Point3i();
+        return ObjectCollectionFactory.from(
+                generateObjectsAndIncrementRunning(
+                        NUM_NON_OVERLAPPING_OBJECTS, DISTANCE_BETWEEN, running, fixture),
+                generateObjectsAndIncrementRunning(
+                        NUM_OVERLAPPING_OBJECTS, -DISTANCE_BETWEEN, running, fixture));
+    }
+
+    private static ObjectCollection generateObjectsAndIncrementRunning(
+            int numberObjects, int shift, Point3i running, ObjectMaskFixture fixture) {
+        return ObjectCollectionFactory.fromRepeated(
+                numberObjects,
+                () -> {
+                    ObjectMask mask = fixture.filledMask(running.getX(), running.getY());
+                    running.incrementX(WIDTH + shift);
+                    running.incrementY(HEIGHT + shift);
+                    return mask;
+                });
+    }
+
+    /**
+     * Checks that all objects have a number of voxels exactly equal to target, except one which is
+     * allowed to be greater.
+     *
+     * @param objects objects to check
+     * @parma target size that all objects apart from one should be equal to
+     */
+    private static boolean allSizesEqualExceptOne(ObjectCollection objects, int target) {
+
+        boolean encounteredAlreadyTheException = false;
+
+        for (ObjectMask objectMask : objects) {
+            int numVoxels = objectMask.numberVoxelsOn();
+            if (numVoxels == target) {
+                continue;
+            } else {
+                if (numVoxels < target) {
+                    // At least one LESS than the target
+                    return false;
+                } else {
+                    if (encounteredAlreadyTheException) {
+                        // As we've already encountered the exception, then there is more than one
+                        // exception
+                        return false;
+                    } else {
+                        // The first exception that is encountered
+                        encounteredAlreadyTheException = true;
+                    }
+                }
+            }
+        }
+
+        // We only fulfill the cteriria if we've encountered the exception
+        return encounteredAlreadyTheException;
+    }
 }

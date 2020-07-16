@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared.params.keyvalue;
-
 /*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +23,40 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.params.keyvalue;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 
 public class KeyValueParamsInitParams implements BeanInitParams {
-	
-	// START: Stores
-	private NamedProviderStore<KeyValueParams> storeKeyValueParams;
-	
-	private NamedProviderStore<Path> storeNamedFilePathCollection;
-	// END: Stores
 
-	private KeyValueParamsInitParams(SharedObjects so) {
-		super();
-		storeKeyValueParams = so.getOrCreate(KeyValueParams.class);
-		
-		// TODO We are using Strings in general as the key. Might be an idea to be more specific
-		storeNamedFilePathCollection = so.getOrCreate(String.class);
-	}
-	
-	public static KeyValueParamsInitParams create( SharedObjects so ) {
-		return new KeyValueParamsInitParams(so);
-	}
+    // START: Stores
+    private NamedProviderStore<KeyValueParams> storeKeyValueParams;
 
-	public NamedProviderStore<KeyValueParams> getNamedKeyValueParamsCollection() {
-		return storeKeyValueParams;
-	}
-	
-	public NamedProviderStore<Path> getNamedFilePathCollection() {
-		return storeNamedFilePathCollection;
-	}
+    private NamedProviderStore<Path> storeNamedFilePathCollection;
+    // END: Stores
+
+    private KeyValueParamsInitParams(SharedObjects so) {
+        super();
+        storeKeyValueParams = so.getOrCreate(KeyValueParams.class);
+
+        // TODO We are using Strings in general as the key. Might be an idea to be more specific
+        storeNamedFilePathCollection = so.getOrCreate(String.class);
+    }
+
+    public static KeyValueParamsInitParams create(SharedObjects so) {
+        return new KeyValueParamsInitParams(so);
+    }
+
+    public NamedProviderStore<KeyValueParams> getNamedKeyValueParamsCollection() {
+        return storeKeyValueParams;
+    }
+
+    public NamedProviderStore<Path> getNamedFilePathCollection() {
+        return storeNamedFilePathCollection;
+    }
 }

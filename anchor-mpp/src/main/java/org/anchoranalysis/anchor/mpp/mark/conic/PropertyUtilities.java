@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark.conic;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,19 @@ package org.anchoranalysis.anchor.mpp.mark.conic;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class PropertyUtilities {
-	
-	public static void addPoint2dProperty( ObjectWithProperties mask, String propertyName, double x, double y ) {
-		mask.setProperty(
-			propertyName,
-			new Point3d(x,y,0)
-		);
-	}
+
+    public static void addPoint2dProperty(
+            ObjectWithProperties mask, String propertyName, double x, double y) {
+        mask.setProperty(propertyName, new Point3d(x, y, 0));
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.points.fitter;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +23,29 @@ package org.anchoranalysis.anchor.mpp.bean.points.fitter;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.points.fitter;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class InsufficientPointsException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public InsufficientPointsException() {
-		super("There were insufficient number of points for a good ellipse-fit");
-	}
-	public InsufficientPointsException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-	}
+    public InsufficientPointsException() {
+        super("There were insufficient number of points for a good ellipse-fit");
+    }
 
-	public InsufficientPointsException(String message) {
-		super(message);
-	}
+    public InsufficientPointsException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
 
-	public InsufficientPointsException(Throwable cause) {
-		super(cause);
-	}
+    public InsufficientPointsException(String message) {
+        super(message);
+    }
 
+    public InsufficientPointsException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,139 +23,135 @@ package org.anchoranalysis.anchor.mpp.mark;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.apache.commons.collections.ListUtils;
 
-import lombok.Getter;
-
 public abstract class MarkAbstractPointList extends Mark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6520431317406007141L;
+    /** */
+    private static final long serialVersionUID = 6520431317406007141L;
 
-	@Getter
-	private List<Point3d> points;
+    @Getter private List<Point3d> points;
 
-	@Getter
-	private Point3d min;		// Contains the minimum x, y of all the points in the polygon
-	
-	@Getter
-	private Point3d max;		// Contains the maximum x, y of all the points in the polygon
-	
-	public MarkAbstractPointList() {
-		points = new ArrayList<>();
-	}
-	
-	public MarkAbstractPointList(Stream<Point3d> stream) {
-		points = stream.collect(Collectors.toList());
-		updateAfterPointsChange();
-	}
-	
-	protected void doDuplicate(MarkAbstractPointList markNew) {
-		markNew.points = new ArrayList<>();
-		getPoints().forEach(markNew.points::add);
-		markNew.setId( getId() );
-		markNew.updateAfterPointsChange();		
-	}
-	
-	
-	public void updateAfterPointsChange() {
-		assert(!points.isEmpty());
-				
-		this.min = calcMin( getPoints() );
-		this.max = calcMax( getPoints() );
-	}
+    @Getter private Point3d min; // Contains the minimum x, y of all the points in the polygon
 
-	@Override
-	public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
-		// TODO FOR NOW WE IGNORE THE SHELL RADIUS
-		return new BoundingBox(min, max);
-	}
-	
-	
-	private static Point3d calcMin( List<Point3d> points ) {
-		Point3d min = new Point3d(
-			Double.POSITIVE_INFINITY,
-			Double.POSITIVE_INFINITY,
-			Double.POSITIVE_INFINITY
-		);
-		for (Point3d point : points) {
-			if (point.getX() < min.getX()) {
-				min.setX( point.getX() );
-			}
-			
-			if (point.getY() < min.getY()) {
-				min.setY( point.getY() );
-			}
-			
-			if (point.getZ() < min.getZ()) {
-				min.setZ( point.getZ() );
-			}
-		}
-		return min;
-	}
-	
-	private static Point3d calcMax( List<Point3d> points ) {
-		Point3d max = new Point3d(
-			Double.NEGATIVE_INFINITY,
-			Double.NEGATIVE_INFINITY,
-			Double.NEGATIVE_INFINITY
-		);
-		for (Point3d point : points) {
-			if (point.getX() > max.getX()) {
-				max.setX( point.getX() );
-			}
-			
-			if (point.getY() > max.getY()) {
-				max.setY( point.getY() );
-			}
-			
-			if (point.getZ() > max.getZ()) {
-				max.setZ( point.getZ() );
-			}
-		}
-		return max;
-	}
-	
-	protected BoundingBox bbox() {
-		return new BoundingBox( getMin(), getMax() );
-	}
+    @Getter private Point3d max; // Contains the maximum x, y of all the points in the polygon
 
-	@Override
-	public boolean equalsDeep(Mark m) {
-		
-		if(m==null) { return false; }
-		if (m==this) { return true; }
-		
-		if (!super.equalsDeep(m)) {
-			return false;
-		}
-		
-		if(m instanceof MarkAbstractPointList) {
-			MarkAbstractPointList objCast = (MarkAbstractPointList) m;
-			
-			if (min!=objCast.getMin()) {
-				return false;
-			}
-			
-			if (max!=objCast.getMax()) {
-				return false;
-			}
-			
-			return ListUtils.isEqualList( points, objCast.getPoints() );
-		} else {
-			return false;
-		}
-	}
+    public MarkAbstractPointList() {
+        points = new ArrayList<>();
+    }
+
+    public MarkAbstractPointList(Stream<Point3d> stream) {
+        points = stream.collect(Collectors.toList());
+        updateAfterPointsChange();
+    }
+
+    protected void doDuplicate(MarkAbstractPointList markNew) {
+        markNew.points = new ArrayList<>();
+        getPoints().forEach(markNew.points::add);
+        markNew.setId(getId());
+        markNew.updateAfterPointsChange();
+    }
+
+    public void updateAfterPointsChange() {
+        assert (!points.isEmpty());
+
+        this.min = calcMin(getPoints());
+        this.max = calcMax(getPoints());
+    }
+
+    @Override
+    public BoundingBox bbox(ImageDimensions bndScene, int regionID) {
+        // TODO FOR NOW WE IGNORE THE SHELL RADIUS
+        return new BoundingBox(min, max);
+    }
+
+    private static Point3d calcMin(List<Point3d> points) {
+        Point3d min =
+                new Point3d(
+                        Double.POSITIVE_INFINITY,
+                        Double.POSITIVE_INFINITY,
+                        Double.POSITIVE_INFINITY);
+        for (Point3d point : points) {
+            if (point.getX() < min.getX()) {
+                min.setX(point.getX());
+            }
+
+            if (point.getY() < min.getY()) {
+                min.setY(point.getY());
+            }
+
+            if (point.getZ() < min.getZ()) {
+                min.setZ(point.getZ());
+            }
+        }
+        return min;
+    }
+
+    private static Point3d calcMax(List<Point3d> points) {
+        Point3d max =
+                new Point3d(
+                        Double.NEGATIVE_INFINITY,
+                        Double.NEGATIVE_INFINITY,
+                        Double.NEGATIVE_INFINITY);
+        for (Point3d point : points) {
+            if (point.getX() > max.getX()) {
+                max.setX(point.getX());
+            }
+
+            if (point.getY() > max.getY()) {
+                max.setY(point.getY());
+            }
+
+            if (point.getZ() > max.getZ()) {
+                max.setZ(point.getZ());
+            }
+        }
+        return max;
+    }
+
+    protected BoundingBox bbox() {
+        return new BoundingBox(getMin(), getMax());
+    }
+
+    @Override
+    public boolean equalsDeep(Mark m) {
+
+        if (m == null) {
+            return false;
+        }
+        if (m == this) {
+            return true;
+        }
+
+        if (!super.equalsDeep(m)) {
+            return false;
+        }
+
+        if (m instanceof MarkAbstractPointList) {
+            MarkAbstractPointList objCast = (MarkAbstractPointList) m;
+
+            if (min != objCast.getMin()) {
+                return false;
+            }
+
+            if (max != objCast.getMax()) {
+                return false;
+            }
+
+            return ListUtils.isEqualList(points, objCast.getPoints());
+        } else {
+            return false;
+        }
+    }
 }

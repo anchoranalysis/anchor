@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.output.bean.allowed;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +23,13 @@ package org.anchoranalysis.io.output.bean.allowed;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.output.bean.allowed;
 
 public class NoOutputAllowed extends OutputAllowed {
 
-	@Override
-	public boolean isOutputAllowed(String outputName) {
-		return false;
-	}
-
+    @Override
+    public boolean isOutputAllowed(String outputName) {
+        return false;
+    }
 }

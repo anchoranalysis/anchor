@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.session.merged;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +23,39 @@ package org.anchoranalysis.image.feature.session.merged;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.session.merged;
 
 public final class MergedPairsInclude {
 
-	private boolean includeFirst;
-	private boolean includeSecond;
-	private boolean includeMerged;
+    private boolean includeFirst;
+    private boolean includeSecond;
+    private boolean includeMerged;
 
-	public MergedPairsInclude() {
-		this(true,true,true);
-	}
-	
-	public MergedPairsInclude(boolean includeFirst, boolean includeSecond, boolean includeMerged) {
-		super();
-		this.includeFirst = includeFirst;
-		this.includeSecond = includeSecond;
-		this.includeMerged = includeMerged;
-	}
+    public MergedPairsInclude() {
+        this(true, true, true);
+    }
 
-	public boolean includeFirstOrSecond() {
-		return includeFirst || includeSecond;
-	}
-	
-	public boolean includeFirst() {
-		return includeFirst;
-	}
+    public MergedPairsInclude(boolean includeFirst, boolean includeSecond, boolean includeMerged) {
+        super();
+        this.includeFirst = includeFirst;
+        this.includeSecond = includeSecond;
+        this.includeMerged = includeMerged;
+    }
 
-	public boolean includeSecond() {
-		return includeSecond;
-	}
+    public boolean includeFirstOrSecond() {
+        return includeFirst || includeSecond;
+    }
 
-	public boolean includeMerged() {
-		return includeMerged;
-	}
-	
+    public boolean includeFirst() {
+        return includeFirst;
+    }
+
+    public boolean includeSecond() {
+        return includeSecond;
+    }
+
+    public boolean includeMerged() {
+        return includeMerged;
+    }
 }

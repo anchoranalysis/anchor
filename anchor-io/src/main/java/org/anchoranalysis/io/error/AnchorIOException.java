@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.error;
-
-import org.anchoranalysis.core.error.AnchorCheckedException;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,19 +23,21 @@ import org.anchoranalysis.core.error.AnchorCheckedException;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.error;
+
+import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class AnchorIOException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public AnchorIOException(String message) {
-		super(message);
-	}
+    public AnchorIOException(String message) {
+        super(message);
+    }
 
-	public AnchorIOException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public AnchorIOException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

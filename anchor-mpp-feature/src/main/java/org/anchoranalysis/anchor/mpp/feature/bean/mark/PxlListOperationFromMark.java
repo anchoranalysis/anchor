@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.mark;
-
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,12 +23,16 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
-
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class PxlListOperationFromMark extends AnchorBean<PxlListOperationFromMark> {
 
-	public abstract double doOperation( VoxelizedMarkMemo pxlMarkMemo, ImageDimensions dimensions ) throws OperationFailedException;
+    public abstract double doOperation(VoxelizedMarkMemo pxlMarkMemo, ImageDimensions dimensions)
+            throws OperationFailedException;
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.filepath.generator;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,39 @@ package org.anchoranalysis.io.bean.filepath.generator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.filepath.generator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-/** 
- * Always generates a constant path irrespective of the the input
- **/
+/** Always generates a constant path irrespective of the the input */
 public class FilePathGeneratorConstant extends FilePathGenerator {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private String value;
-	// END BEAN PROPERTIES
 
-	public FilePathGeneratorConstant() {
-		// Standard Bean Constructor
-	}
-	
-	public FilePathGeneratorConstant( String value ) {
-		this.value = value;
-	}
-	
-	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
-		return Paths.get(value);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String value;
+    // END BEAN PROPERTIES
 
-	public String getValue() {
-		return value;
-	}
+    public FilePathGeneratorConstant() {
+        // Standard Bean Constructor
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public FilePathGeneratorConstant(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
+        return Paths.get(value);
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

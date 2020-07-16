@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.index.container;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.index.container;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,99 +27,97 @@ package org.anchoranalysis.core.index.container;
  * #L%
  */
 
-
 import javax.swing.event.EventListenerList;
-
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.container.BoundChangeEvent.BoundType;
 
 public class SingleContainer<T> implements BoundedIndexContainer<T> {
 
-	private T item = null;
-	private int index;
-	private boolean loopAround = false;
-	
-	private EventListenerList eventListenerList = new EventListenerList(); 
+    private T item = null;
+    private int index;
+    private boolean loopAround = false;
 
-	public SingleContainer( boolean loopAround ) {
-		this.loopAround = loopAround;
-	}
-	
-	public SingleContainer(T item, int index, boolean loopAround) {
-		setItem(item,index);
-		this.loopAround = loopAround;
-	}
-	
-	// Index is irrelevant, we always return the same item
-	@Override
-	public T get( int index ) throws GetOperationFailedException {
-		return item;
-	}
+    private EventListenerList eventListenerList = new EventListenerList();
 
-	public T getItem() {
-		return item;
-	}
+    public SingleContainer(boolean loopAround) {
+        this.loopAround = loopAround;
+    }
 
-	public void setItem(T item, int index) {
-		
-		// If the item is the same as the existing item, there is no change, and no stateChange
-		//  events are triggered
-		if (item==this.item && index==this.index) {
-			return;
-		}
-		
-		this.item = item;
-		this.index = index;
-		
-		for (BoundChangeListener cl : eventListenerList.getListeners(BoundChangeListener.class)) {
-			cl.boundChanged( new BoundChangeEvent(this,BoundType.MINIMUM) );
-			cl.boundChanged( new BoundChangeEvent(this,BoundType.MAXIMUM) );
-		}
-	}
-	
-	@Override
-	public void addBoundChangeListener( BoundChangeListener cl ) {
-		eventListenerList.add( BoundChangeListener.class, cl );
-	}
-	
-	@Override
-	public int getMinimumIndex() {
-		return index;
-	}
-	
-	@Override
-	public int getMaximumIndex() {	// NOSONAR
-		return index;
-	}
-	
-	@Override
-	public int nextIndex( int index ) {
-		if (loopAround) {
-			return index;
-		} else {
-			return -1;
-		}
-	}
-	
-	@Override
-	public int previousIndex( int index ) {
-		if (loopAround) {
-			return index;
-		} else {		
-			return -1;
-		}
-	}
+    public SingleContainer(T item, int index, boolean loopAround) {
+        setItem(item, index);
+        this.loopAround = loopAround;
+    }
 
-	@Override
-	public int previousEqualIndex(int index) {
-		if (index==this.index) {
-			return index;
-		} else {
-			if (loopAround) {
-				return index;
-			} else {
-				return -1;
-			}
-		}
-	}
+    // Index is irrelevant, we always return the same item
+    @Override
+    public T get(int index) throws GetOperationFailedException {
+        return item;
+    }
+
+    public T getItem() {
+        return item;
+    }
+
+    public void setItem(T item, int index) {
+
+        // If the item is the same as the existing item, there is no change, and no stateChange
+        //  events are triggered
+        if (item == this.item && index == this.index) {
+            return;
+        }
+
+        this.item = item;
+        this.index = index;
+
+        for (BoundChangeListener cl : eventListenerList.getListeners(BoundChangeListener.class)) {
+            cl.boundChanged(new BoundChangeEvent(this, BoundType.MINIMUM));
+            cl.boundChanged(new BoundChangeEvent(this, BoundType.MAXIMUM));
+        }
+    }
+
+    @Override
+    public void addBoundChangeListener(BoundChangeListener cl) {
+        eventListenerList.add(BoundChangeListener.class, cl);
+    }
+
+    @Override
+    public int getMinimumIndex() {
+        return index;
+    }
+
+    @Override
+    public int getMaximumIndex() { // NOSONAR
+        return index;
+    }
+
+    @Override
+    public int nextIndex(int index) {
+        if (loopAround) {
+            return index;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public int previousIndex(int index) {
+        if (loopAround) {
+            return index;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public int previousEqualIndex(int index) {
+        if (index == this.index) {
+            return index;
+        } else {
+            if (loopAround) {
+                return index;
+            } else {
+                return -1;
+            }
+        }
+    }
 }

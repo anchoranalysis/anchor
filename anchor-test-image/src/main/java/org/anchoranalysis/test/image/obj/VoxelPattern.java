@@ -1,10 +1,8 @@
-package org.anchoranalysis.test.image.obj;
-
 /*-
  * #%L
- * anchor-test-feature-plugins
+ * anchor-test-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.test.image.obj;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.test.image.obj;
 
 public interface VoxelPattern {
-	
-	boolean isPixelOn( int x, int y, int z );
-	
+
+    boolean isPixelOn(int x, int y, int z);
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.define;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.mpp.sgmn.bean.define;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.define;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.define.Define;
@@ -37,71 +37,65 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-/** 
- * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks, and then outputs results
- *  * 
+/**
+ * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
+ * and then outputs results *
+ *
  * @param <T> input-object type
- * */
+ */
 public class DefineOutputterMPP extends DefineOutputter {
 
-	@FunctionalInterface
-	public interface OperationWithInitParams<T> {
-		void process(T initParams) throws OperationFailedException;
-	}
-	
-	public void processInput(
-		NamedChnlCollectionForSeries ncc,
-		BoundIOContext context
-	) throws OperationFailedException {
-		try {
-			MPPInitParams initParams = super.createInitParams(context);
-			ncc.addAsSeparateChnls(
-				new WrapStackAsTimeSequenceStore(
-					initParams.getImage().getStackCollection()
-				),
-				0
-			);
-			
-			super.outputSharedObjects(initParams, context);
-			
-		} catch (CreateException | OutputWriteFailedException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	public void processInputImage(
-		MultiInput input,
-		BoundIOContext context,
-		OperationWithInitParams<ImageInitParams> operation
-	) throws OperationFailedException {
-		try {
-			MPPInitParams initParams = super.createInitParams(input, context);
-			
-			operation.process(initParams.getImage());
-			
-			super.outputSharedObjects(initParams, context);
-			
-		} catch (CreateException | OutputWriteFailedException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	public void processInputMPP(
-			MultiInput input,
-			BoundIOContext context,
-			OperationWithInitParams<MPPInitParams> operation
-		) throws OperationFailedException {
-			try {
-				MPPInitParams initParams = super.createInitParams(input, context);
-				
-				operation.process(initParams);
-				
-				super.outputSharedObjects(initParams, context);
-				
-			} catch (CreateException | OutputWriteFailedException e) {
-				throw new OperationFailedException(e);
-			}
-		}
-	
-	
+    @FunctionalInterface
+    public interface OperationWithInitParams<T> {
+        void process(T initParams) throws OperationFailedException;
+    }
+
+    public void processInput(NamedChnlCollectionForSeries ncc, BoundIOContext context)
+            throws OperationFailedException {
+        try {
+            MPPInitParams initParams = super.createInitParams(context);
+            ncc.addAsSeparateChnls(
+                    new WrapStackAsTimeSequenceStore(initParams.getImage().getStackCollection()),
+                    0);
+
+            super.outputSharedObjects(initParams, context);
+
+        } catch (CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    public void processInputImage(
+            MultiInput input,
+            BoundIOContext context,
+            OperationWithInitParams<ImageInitParams> operation)
+            throws OperationFailedException {
+        try {
+            MPPInitParams initParams = super.createInitParams(input, context);
+
+            operation.process(initParams.getImage());
+
+            super.outputSharedObjects(initParams, context);
+
+        } catch (CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    public void processInputMPP(
+            MultiInput input,
+            BoundIOContext context,
+            OperationWithInitParams<MPPInitParams> operation)
+            throws OperationFailedException {
+        try {
+            MPPInitParams initParams = super.createInitParams(input, context);
+
+            operation.process(initParams);
+
+            super.outputSharedObjects(initParams, context);
+
+        } catch (CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.name.store.cachedgetter;
-
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,52 +23,58 @@ package org.anchoranalysis.core.name.store.cachedgetter;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.core.name.store.cachedgetter;
 
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.apache.commons.lang.time.StopWatch;
 
-
 /**
- * Allows for multiple simultaneous calls to execute(), measuring the total time and memory from the first starts until the last completes.
- *  
+ * Allows for multiple simultaneous calls to execute(), measuring the total time and memory from the
+ * first starts until the last completes.
+ *
  * @author Owen Feehan
  * @param E exception throw if operation fails
  */
 class MeasuringSemaphoreExecutor<E extends Exception> {
-	private int cnt = 0;
-	private long subExecTime = 0; 
-	private long subMem = 0;
-	
-	public <T> T execute(Operation<T,E> exec, String name, String storeDisplayName, Logger logger) throws E {
-		cnt++;
+    private int cnt = 0;
+    private long subExecTime = 0;
+    private long subMem = 0;
 
-		StopWatch sw = new StopWatch();
-		sw.start();
-		
-		long memoryBefore = MemoryUtilities.calcMemoryUsage();
-	
-		T obj = exec.doOperation();
-		long timeTaken = Math.max( sw.getTime() - subExecTime, 0 );
+    public <T> T execute(Operation<T, E> exec, String name, String storeDisplayName, Logger logger)
+            throws E {
+        cnt++;
 
-		long memoryAfter = MemoryUtilities.calcMemoryUsage();
-		long memoryAdded = memoryAfter - memoryBefore;
-		
-		
-		long memoryUsed = Math.max( memoryAdded - subMem, 0);
-		
-		logger.messageLogger().log( String.format("Execution Time \t(%6dms, %7dkb)\t%s\t%s", timeTaken, memoryUsed/1000, name, storeDisplayName ) );
-		cnt--;
-		
-		if (cnt==0) {
-			subExecTime=0;
-			subMem = 0;
-		} else {
-			subExecTime = timeTaken;
-			subMem = memoryAdded;
-		}
-		
-		return obj;
-	}
+        StopWatch sw = new StopWatch();
+        sw.start();
+
+        long memoryBefore = MemoryUtilities.calcMemoryUsage();
+
+        T obj = exec.doOperation();
+        long timeTaken = Math.max(sw.getTime() - subExecTime, 0);
+
+        long memoryAfter = MemoryUtilities.calcMemoryUsage();
+        long memoryAdded = memoryAfter - memoryBefore;
+
+        long memoryUsed = Math.max(memoryAdded - subMem, 0);
+
+        logger.messageLogger()
+                .log(
+                        String.format(
+                                "Execution Time \t(%6dms, %7dkb)\t%s\t%s",
+                                timeTaken, memoryUsed / 1000, name, storeDisplayName));
+        cnt--;
+
+        if (cnt == 0) {
+            subExecTime = 0;
+            subMem = 0;
+        } else {
+            subExecTime = timeTaken;
+            subMem = memoryAdded;
+        }
+
+        return obj;
+    }
 }

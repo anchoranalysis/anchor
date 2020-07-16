@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.bbox;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,11 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster.bbox;
 
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -42,92 +42,84 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
-public class ExtractedObjectGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectMask,Stack> {
+public class ExtractedObjectGenerator extends RasterGenerator
+        implements IterableObjectGenerator<ObjectMask, Stack> {
 
-	// START REQUIRED ARGUMENTS
-	private final DrawObjectsGenerator rgbObectGenerator;
-	private final IterableObjectGenerator<BoundingBox,Stack> chnlGenerator;
-	private final String manifestFunction;
-	private final boolean mip;
-	// END REQUIRED ARGUMENTS
-	
-	private ObjectMask element;
-	
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		
-		if (getIterableElement()==null) {
-			throw new OutputWriteFailedException("no mutable element set");
-		}
-		
-		try {
-			chnlGenerator.setIterableElement(element.getBoundingBox());
-		} catch (SetOperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		}
+    // START REQUIRED ARGUMENTS
+    private final DrawObjectsGenerator rgbObectGenerator;
+    private final IterableObjectGenerator<BoundingBox, Stack> chnlGenerator;
+    private final String manifestFunction;
+    private final boolean mip;
+    // END REQUIRED ARGUMENTS
 
-		Stack chnlExtracted = chnlGenerator.getGenerator().generate();
-		
-		if (mip) {
-			chnlExtracted = chnlExtracted.maxIntensityProj();
-		}
-		
-		// We apply the generator
-		try {
-			rgbObectGenerator.setBackground(
-				Optional.of(
-					DisplayStack.create(chnlExtracted)
-				)
-			);
-		} catch (CreateException e) {
-			throw new OutputWriteFailedException(e);
-		}
+    private ObjectMask element;
 
-		ObjectMask object = this.getIterableElement();
-		
-		if (mip) {
-			object = object.flattenZ();
-		}
-		
-		// We create a version that is relative to the extracted section
-		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties(
-			new ObjectMask(
-				new BoundingBox(object.getVoxelBox().extent()),
-				object.binaryVoxelBox()
-			)
-		);
-		rgbObectGenerator.setIterableElement( objects );
-		
-		return rgbObectGenerator.generate();
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
 
-	@Override
-	public ObjectMask getIterableElement() {
-		return element;
-	}
+        if (getIterableElement() == null) {
+            throw new OutputWriteFailedException("no mutable element set");
+        }
 
-	@Override
-	public void setIterableElement(ObjectMask element) {
-		this.element = element;
-	}
+        try {
+            chnlGenerator.setIterableElement(element.getBoundingBox());
+        } catch (SetOperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
+        Stack chnlExtracted = chnlGenerator.getGenerator().generate();
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("raster", manifestFunction)
-		);
-	}
+        if (mip) {
+            chnlExtracted = chnlExtracted.maxIntensityProj();
+        }
 
-	@Override
-	public boolean isRGB() {
-		return rgbObectGenerator.isRGB();
-	}
+        // We apply the generator
+        try {
+            rgbObectGenerator.setBackground(Optional.of(DisplayStack.create(chnlExtracted)));
+        } catch (CreateException e) {
+            throw new OutputWriteFailedException(e);
+        }
+
+        ObjectMask object = this.getIterableElement();
+
+        if (mip) {
+            object = object.flattenZ();
+        }
+
+        // We create a version that is relative to the extracted section
+        ObjectCollectionWithProperties objects =
+                new ObjectCollectionWithProperties(
+                        new ObjectMask(
+                                new BoundingBox(object.getVoxelBox().extent()),
+                                object.binaryVoxelBox()));
+        rgbObectGenerator.setIterableElement(objects);
+
+        return rgbObectGenerator.generate();
+    }
+
+    @Override
+    public ObjectMask getIterableElement() {
+        return element;
+    }
+
+    @Override
+    public void setIterableElement(ObjectMask element) {
+        this.element = element;
+    }
+
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return this;
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("raster", manifestFunction));
+    }
+
+    @Override
+    public boolean isRGB() {
+        return rgbObectGenerator.isRGB();
+    }
 }

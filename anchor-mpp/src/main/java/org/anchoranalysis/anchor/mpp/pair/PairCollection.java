@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pair;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.anchor.mpp.pair;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pair;
 
 import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.bean.AnchorBean;
@@ -34,13 +33,13 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 /**
  * A collection of pairs, from which we can randomly sample
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> pair-type
  */
 @GroupingRoot
-public abstract class PairCollection<T> extends AnchorBean<PairCollection<T>> implements UpdatableMarkSet {
+public abstract class PairCollection<T> extends AnchorBean<PairCollection<T>>
+        implements UpdatableMarkSet {
 
-	public abstract T sampleRandomPairNonUniform( RandomNumberGenerator randomNumberGenerator );
+    public abstract T sampleRandomPairNonUniform(RandomNumberGenerator randomNumberGenerator);
 }

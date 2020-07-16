@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.points.updatable;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.anchor.mpp.bean.points.updatable;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.points.updatable;
 
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -33,11 +32,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import lombok.EqualsAndHashCode;
 
 // http://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 class RandomSet<E> extends AbstractSet<E> {
 
     private List<E> dta = new ArrayList<>();
@@ -55,6 +53,7 @@ class RandomSet<E> extends AbstractSet<E> {
 
     /**
      * Override element at position <code>id</code> with last element.
+     *
      * @param id
      */
     public void removeAt(int id) {

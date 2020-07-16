@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.proposer;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.anchor.mpp.bean.proposer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.proposer;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
@@ -41,9 +39,16 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class PointsProposer extends NullParamsBean<PointsProposer> implements CompatibleWithMark {
+public abstract class PointsProposer extends NullParamsBean<PointsProposer>
+        implements CompatibleWithMark {
 
-	public abstract Optional<List<Point3i>> propose( Point3d point, Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator, ErrorNode errorNode ) throws ProposalAbnormalFailureException;
-	
-	public abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed);
+    public abstract Optional<List<Point3i>> propose(
+            Point3d point,
+            Mark mark,
+            ImageDimensions dimensions,
+            RandomNumberGenerator randomNumberGenerator,
+            ErrorNode errorNode)
+            throws ProposalAbnormalFailureException;
+
+    public abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed);
 }

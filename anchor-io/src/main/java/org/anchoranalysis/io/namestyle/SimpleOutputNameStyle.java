@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.namestyle;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,43 +23,42 @@ package org.anchoranalysis.io.namestyle;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.namestyle;
 
 public class SimpleOutputNameStyle extends OutputNameStyle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7800246042849181557L;
+    /** */
+    private static final long serialVersionUID = 7800246042849181557L;
 
-	private String outputName;
-	
-	public SimpleOutputNameStyle(String outputName) {
-		this.outputName = outputName;
-	}
-	
-	@Override
-	public String getPhysicalName() {
-		return getOutputName();
-	}
+    private String outputName;
 
-	@Override
-	public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
-		return new IntegerSuffixOutputNameStyle(getOutputName(), numDigits);
-	}
+    public SimpleOutputNameStyle(String outputName) {
+        this.outputName = outputName;
+    }
 
-	@Override
-	public String getOutputName() {
-		return outputName;
-	}
+    @Override
+    public String getPhysicalName() {
+        return getOutputName();
+    }
 
-	@Override
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
+    @Override
+    public IndexableOutputNameStyle deriveIndexableStyle(int numDigits) {
+        return new IntegerSuffixOutputNameStyle(getOutputName(), numDigits);
+    }
 
-	@Override
-	public OutputNameStyle duplicate() {
-		return new SimpleOutputNameStyle(outputName);
-	}
+    @Override
+    public String getOutputName() {
+        return outputName;
+    }
+
+    @Override
+    public void setOutputName(String outputName) {
+        this.outputName = outputName;
+    }
+
+    @Override
+    public OutputNameStyle duplicate() {
+        return new SimpleOutputNameStyle(outputName);
+    }
 }

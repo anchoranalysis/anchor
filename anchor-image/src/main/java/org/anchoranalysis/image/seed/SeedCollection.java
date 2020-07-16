@@ -1,9 +1,34 @@
+/*-
+ * #%L
+ * anchor-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+/* (C)2020 */
 package org.anchoranalysis.image.seed;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -12,119 +37,115 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 public class SeedCollection implements Iterable<Seed> {
 
-	private List<Seed> delegate = new ArrayList<>();
-	
-	public SeedCollection duplicate() {
-		
-		SeedCollection out = new SeedCollection();
-		for ( Seed seed : this ) {
-			out.delegate.add(seed.duplicate());
-		}
-		
-		return out;
-	}
+    private List<Seed> delegate = new ArrayList<>();
 
-	public void scaleXY( double scale) throws OperationFailedException {
-		for( Seed seed : this ) {
-			seed.scaleXY(scale);
-		}
-	}
-	
-	public ObjectCollection createMasks() {
-		return ObjectCollectionFactory.mapFrom(delegate, Seed::createMask);
-	}
-	
-	public void flattenZ() {
-		
-		for( Seed seed : delegate ) {
-			seed.flattenZ();
-		}
-	}
-	
-	public void growToZ(int sz) {
-		
-		for( Seed seed : delegate ) {
-			seed.growToZ(sz);
-		}
-	}
+    public SeedCollection duplicate() {
 
-	public void add(Seed element) {
-		delegate.add(element);
-	}
-	
-	public Seed get(int index) {
-		return delegate.get(index);
-	}
+        SeedCollection out = new SeedCollection();
+        for (Seed seed : this) {
+            out.delegate.add(seed.duplicate());
+        }
 
+        return out;
+    }
 
-	@Override
-	public Iterator<Seed> iterator() {
-		return delegate.iterator();
-	}
+    public void scaleXY(double scale) throws OperationFailedException {
+        for (Seed seed : this) {
+            seed.scaleXY(scale);
+        }
+    }
 
-	public int lastIndexOf(Object o) {
-		return delegate.lastIndexOf(o);
-	}
+    public ObjectCollection createMasks() {
+        return ObjectCollectionFactory.mapFrom(delegate, Seed::createMask);
+    }
 
-	public Seed set(int index, Seed element) {
-		return delegate.set(index, element);
-	}
+    public void flattenZ() {
 
-	public int size() {
-		return delegate.size();
-	}
-	
-	public boolean doSeedsIntersectWithContainingMask( ObjectMask objectContaining ) {
-		
-		for( int i=0; i<delegate.size(); i++) {
+        for (Seed seed : delegate) {
+            seed.flattenZ();
+        }
+    }
 
-			ObjectMask object = delegate.get(i).createMask();
-				
-			if (!object.hasIntersectingVoxels(objectContaining)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	
-	public boolean doSeedsIntersect() {
-		
-		for( int i=0; i<delegate.size(); i++) {
-			
-			Seed s = delegate.get(i);
-			
-			ObjectMask objectS = s.createMask();
-			
-			for( int j=0; j<i; j++) {
-				
-				Seed t = delegate.get(j);
-				
-				ObjectMask objectT = t.createMask();
-				
-				if (objectS.hasIntersectingVoxels(objectT)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	
-	public boolean verifySeedsAreInside( Extent e ) {
-		for (Seed seed : this) {
-			
-			ObjectMask object = seed.createMask();
-			
-			if (!e.contains(object.getBoundingBox())) {
-				return false;
-			}
-		}
-		return true;
-	}
+    public void growToZ(int sz) {
 
-	public boolean isEmpty() {
-		return delegate.isEmpty();
-	}
+        for (Seed seed : delegate) {
+            seed.growToZ(sz);
+        }
+    }
 
+    public void add(Seed element) {
+        delegate.add(element);
+    }
+
+    public Seed get(int index) {
+        return delegate.get(index);
+    }
+
+    @Override
+    public Iterator<Seed> iterator() {
+        return delegate.iterator();
+    }
+
+    public int lastIndexOf(Object o) {
+        return delegate.lastIndexOf(o);
+    }
+
+    public Seed set(int index, Seed element) {
+        return delegate.set(index, element);
+    }
+
+    public int size() {
+        return delegate.size();
+    }
+
+    public boolean doSeedsIntersectWithContainingMask(ObjectMask objectContaining) {
+
+        for (int i = 0; i < delegate.size(); i++) {
+
+            ObjectMask object = delegate.get(i).createMask();
+
+            if (!object.hasIntersectingVoxels(objectContaining)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean doSeedsIntersect() {
+
+        for (int i = 0; i < delegate.size(); i++) {
+
+            Seed s = delegate.get(i);
+
+            ObjectMask objectS = s.createMask();
+
+            for (int j = 0; j < i; j++) {
+
+                Seed t = delegate.get(j);
+
+                ObjectMask objectT = t.createMask();
+
+                if (objectS.hasIntersectingVoxels(objectT)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean verifySeedsAreInside(Extent e) {
+        for (Seed seed : this) {
+
+            ObjectMask object = seed.createMask();
+
+            if (!e.contains(object.getBoundingBox())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isEmpty() {
+        return delegate.isEmpty();
+    }
 }

@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.memory;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.memory;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,34 +30,34 @@ package org.anchoranalysis.core.memory;
 import org.anchoranalysis.core.log.MessageLogger;
 
 public class MemoryUtilities {
-	
-	private MemoryUtilities() {
-		
-	}
-	
-	public static long calcMemoryUsage() {
-		Runtime runtime = java.lang.Runtime.getRuntime();
-		long totalMemory = runtime.totalMemory();
-		long freeMemory = runtime.freeMemory();
-		return totalMemory - freeMemory;
-	}
-	
-	public static void logMemoryUsage( String id, MessageLogger logger ) {
-		Runtime runtime = java.lang.Runtime.getRuntime();
-		long totalMemory = runtime.totalMemory();
-		long freeMemory = runtime.freeMemory();
-		long memory = totalMemory - freeMemory;
-		
-		logger.logFormatted("Total used memory (%s): %d MB (out of %d MB)", id, memory/1000000, totalMemory/1000000);
-	}
-	
-	public static long memoryUsageMB() {
-		Runtime runtime = java.lang.Runtime.getRuntime(); 
-		long memory = runtime.totalMemory() - runtime.freeMemory();
-		return memory/1000000;
-	}
-	
-	public static String referenceString( Object object ) { 
-		return Integer.toHexString(System.identityHashCode(object));
-	}
+
+    private MemoryUtilities() {}
+
+    public static long calcMemoryUsage() {
+        Runtime runtime = java.lang.Runtime.getRuntime();
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+        return totalMemory - freeMemory;
+    }
+
+    public static void logMemoryUsage(String id, MessageLogger logger) {
+        Runtime runtime = java.lang.Runtime.getRuntime();
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+        long memory = totalMemory - freeMemory;
+
+        logger.logFormatted(
+                "Total used memory (%s): %d MB (out of %d MB)",
+                id, memory / 1000000, totalMemory / 1000000);
+    }
+
+    public static long memoryUsageMB() {
+        Runtime runtime = java.lang.Runtime.getRuntime();
+        long memory = runtime.totalMemory() - runtime.freeMemory();
+        return memory / 1000000;
+    }
+
+    public static String referenceString(Object object) {
+        return Integer.toHexString(System.identityHashCode(object));
+    }
 }

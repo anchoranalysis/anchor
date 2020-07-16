@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.bufferedimage;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +23,20 @@ package org.anchoranalysis.image.stack.bufferedimage;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.stack.bufferedimage;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class BufferedImageOverlay {
-	
-	private BufferedImageOverlay() {}
-	
-    public static void overlayBufferedImage( BufferedImage imageSrc, BufferedImage imageInsert, int x, int y ) {
-    	Graphics graphics = imageSrc.getGraphics();
-    	graphics.drawImage(imageInsert, x, y, imageInsert.getWidth(),imageInsert.getHeight(), null);
+
+    private BufferedImageOverlay() {}
+
+    public static void overlayBufferedImage(
+            BufferedImage imageSrc, BufferedImage imageInsert, int x, int y) {
+        Graphics graphics = imageSrc.getGraphics();
+        graphics.drawImage(
+                imageInsert, x, y, imageInsert.getWidth(), imageInsert.getHeight(), null);
     }
 }

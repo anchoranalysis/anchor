@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,74 +41,64 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
-
 /**
  * Creates KeyValueParams for a particular NRGStack that is associated with a NRGScheme
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class KeyValueParamsForImageCreator {
 
-	private NRGScheme nrgScheme;
-	private SharedFeatureMulti sharedFeatures;
-	private Logger logger;
-	
-	public KeyValueParamsForImageCreator(NRGScheme nrgScheme, SharedFeatureMulti sharedFeatures,
-			Logger logger) {
-		super();
-		this.nrgScheme = nrgScheme;
-		this.sharedFeatures = sharedFeatures;
-		this.logger = logger;
-	}
-	
-	public KeyValueParams createParamsForImage( NRGStack nrgStack ) throws FeatureCalcException {
-		try {
-			KeyValueParams params = nrgScheme.createKeyValueParams();
-			addParamsForImage(nrgStack, params );
-			return params;
-			
-		} catch (CreateException | OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private void addParamsForImage(
-			NRGStack nrgStack,
-			KeyValueParams kvp
-		) throws OperationFailedException {
-		
-		FeatureInputStack params = new FeatureInputStack(nrgStack);
-		
-		FeatureInitParams paramsInit = new FeatureInitParams(
-			Optional.of(kvp),
-			Optional.of(nrgStack),
-			Optional.empty()
-		);
-				
-		for( NamedBean<Feature<FeatureInputStack>> ni : nrgScheme.getListImageFeatures() ) {
-			
-			kvp.putIfEmpty(
-				ni.getName(),
-				calcImageFeature(ni.getItem(), paramsInit, params)
-			);
-		}
-	}
-	
-	private double calcImageFeature( Feature<FeatureInputStack> feature, FeatureInitParams paramsInit, FeatureInputStack params) throws OperationFailedException {
+    private NRGScheme nrgScheme;
+    private SharedFeatureMulti sharedFeatures;
+    private Logger logger;
 
-		try {
-			FeatureCalculatorSingle<FeatureInputStack> session = FeatureSession.with(
-				feature,
-				paramsInit,
-				sharedFeatures,
-				logger
-			);			
-			
-			return session.calc( params );
-					
-		} catch (FeatureCalcException e) {
-			throw new OperationFailedException(e);
-		}		
-	}
+    public KeyValueParamsForImageCreator(
+            NRGScheme nrgScheme, SharedFeatureMulti sharedFeatures, Logger logger) {
+        super();
+        this.nrgScheme = nrgScheme;
+        this.sharedFeatures = sharedFeatures;
+        this.logger = logger;
+    }
+
+    public KeyValueParams createParamsForImage(NRGStack nrgStack) throws FeatureCalcException {
+        try {
+            KeyValueParams params = nrgScheme.createKeyValueParams();
+            addParamsForImage(nrgStack, params);
+            return params;
+
+        } catch (CreateException | OperationFailedException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
+
+    private void addParamsForImage(NRGStack nrgStack, KeyValueParams kvp)
+            throws OperationFailedException {
+
+        FeatureInputStack params = new FeatureInputStack(nrgStack);
+
+        FeatureInitParams paramsInit =
+                new FeatureInitParams(Optional.of(kvp), Optional.of(nrgStack), Optional.empty());
+
+        for (NamedBean<Feature<FeatureInputStack>> ni : nrgScheme.getListImageFeatures()) {
+
+            kvp.putIfEmpty(ni.getName(), calcImageFeature(ni.getItem(), paramsInit, params));
+        }
+    }
+
+    private double calcImageFeature(
+            Feature<FeatureInputStack> feature,
+            FeatureInitParams paramsInit,
+            FeatureInputStack params)
+            throws OperationFailedException {
+
+        try {
+            FeatureCalculatorSingle<FeatureInputStack> session =
+                    FeatureSession.with(feature, paramsInit, sharedFeatures, logger);
+
+            return session.calc(params);
+
+        } catch (FeatureCalcException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 }

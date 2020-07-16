@@ -1,15 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.bean.mark;
-
-
-
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
-
-/*
+/*-
  * #%L
- * anchor-gui
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,47 +23,46 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.bean.mark;
 
-
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private CfgGen cfgGen;
-	
-	@BeanField
-	private Define define;
-	
-	@BeanField
-	private NRGSchemeCreator nrgSchemeCreator;
-	// END BEAN PROPERTIES
 
+    // START BEAN PROPERTIES
+    @BeanField private CfgGen cfgGen;
 
-	public CfgGen getCfgGen() {
-		return cfgGen;
-	}
+    @BeanField private Define define;
 
-	public void setCfgGen(CfgGen cfgGen) {
-		this.cfgGen = cfgGen;
-	}
+    @BeanField private NRGSchemeCreator nrgSchemeCreator;
+    // END BEAN PROPERTIES
 
-	public NRGSchemeCreator getNrgSchemeCreator() {
-		return nrgSchemeCreator;
-	}
+    public CfgGen getCfgGen() {
+        return cfgGen;
+    }
 
-	public void setNrgSchemeCreator(NRGSchemeCreator nrgSchemeCreator) {
-		this.nrgSchemeCreator = nrgSchemeCreator;
-	}
+    public void setCfgGen(CfgGen cfgGen) {
+        this.cfgGen = cfgGen;
+    }
 
-	public Define getDefine() {
-		return define;
-	}
+    public NRGSchemeCreator getNrgSchemeCreator() {
+        return nrgSchemeCreator;
+    }
 
-	public void setDefine(Define define) {
-		this.define = define;
-	}
+    public void setNrgSchemeCreator(NRGSchemeCreator nrgSchemeCreator) {
+        this.nrgSchemeCreator = nrgSchemeCreator;
+    }
+
+    public Define getDefine() {
+        return define;
+    }
+
+    public void setDefine(Define define) {
+        this.define = define;
+    }
 }

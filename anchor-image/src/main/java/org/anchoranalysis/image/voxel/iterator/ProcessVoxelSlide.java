@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.iterator;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,42 @@ package org.anchoranalysis.image.voxel.iterator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.iterator;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 
 /**
  * Slides along a {@link SlidingBuffer} as points are being processed.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 final class ProcessVoxelSlide implements ProcessVoxel {
 
-	private final SlidingBuffer<?> buffer;
-	private final ProcessVoxel process;
-	
-	public ProcessVoxelSlide(SlidingBuffer<?> buffer, ProcessVoxel process) {
-		this.process = process;
-		this.buffer = buffer;
-	}
-	
-	@Override
-	public void process(Point3i point) {
-		process.process(point);
-	}
+    private final SlidingBuffer<?> buffer;
+    private final ProcessVoxel process;
 
-	@Override
-	public void notifyChangeZ(int z) {
-		if (z!=0) {
-			buffer.shift();
-		}
-		process.notifyChangeZ(z);
-	}
+    public ProcessVoxelSlide(SlidingBuffer<?> buffer, ProcessVoxel process) {
+        this.process = process;
+        this.buffer = buffer;
+    }
 
-	@Override
-	public void notifyChangeY(int y) {
-		process.notifyChangeY(y);
-	}
+    @Override
+    public void process(Point3i point) {
+        process.process(point);
+    }
+
+    @Override
+    public void notifyChangeZ(int z) {
+        if (z != 0) {
+            buffer.shift();
+        }
+        process.notifyChangeZ(z);
+    }
+
+    @Override
+    public void notifyChangeY(int y) {
+        process.notifyChangeY(y);
+    }
 }

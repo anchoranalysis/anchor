@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.object.morph.accept;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,20 @@ package org.anchoranalysis.image.object.morph.accept;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.object.morph.accept;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class RejectIterationIfAllHigh implements AcceptIterationConditon {
 
-	@Override
-	public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb) {
-		// We exit early if there's no off-pixel
-		BinaryVoxelBoxByte nextBinary = new BinaryVoxelBoxByte(buffer, bvb );
-		return nextBinary.hasOffVoxel();
-	}
-	
+    @Override
+    public boolean acceptIteration(VoxelBox<ByteBuffer> buffer, BinaryValues bvb) {
+        // We exit early if there's no off-pixel
+        BinaryVoxelBoxByte nextBinary = new BinaryVoxelBoxByte(buffer, bvb);
+        return nextBinary.hasOffVoxel();
+    }
 }

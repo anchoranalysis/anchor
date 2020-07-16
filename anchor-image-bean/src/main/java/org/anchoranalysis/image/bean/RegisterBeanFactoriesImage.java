@@ -1,11 +1,8 @@
-package org.anchoranalysis.image.bean;
-
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +23,10 @@ package org.anchoranalysis.image.bean;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean;
 
 import java.util.List;
-
-
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -38,17 +34,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Registers beans that needs particular factories
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class RegisterBeanFactoriesImage {
-	
-	private RegisterBeanFactoriesImage() {}
-	
-	public static void registerBeanFactories() {
-		RegisterBeanFactories.register(
-			"featureList",
-			(List<Feature<FeatureInput>> list) -> FeatureListFactory.wrapReuse(list)	// NOSONAR
-		);
-	}
+
+    private RegisterBeanFactoriesImage() {}
+
+    public static void registerBeanFactories() {
+        RegisterBeanFactories.register(
+                "featureList",
+                (List<Feature<FeatureInput>> list) -> FeatureListFactory.wrapReuse(list) // NOSONAR
+                );
+    }
 }

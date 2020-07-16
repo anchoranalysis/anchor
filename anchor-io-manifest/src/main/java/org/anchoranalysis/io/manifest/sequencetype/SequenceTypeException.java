@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.sequencetype;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.io.manifest.sequencetype;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.sequencetype;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class SequenceTypeException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8838380239853844984L;
+    /** */
+    private static final long serialVersionUID = 8838380239853844984L;
 
-	public SequenceTypeException(String string) {
-		super(string);
-	}
+    public SequenceTypeException(String string) {
+        super(string);
+    }
 
-	public SequenceTypeException( Exception exc ) {
-		super( exc );
-	}
+    public SequenceTypeException(Exception exc) {
+        super(exc);
+    }
 }

@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.core.idgetter;
 
 /*
@@ -12,10 +13,10 @@ package org.anchoranalysis.core.idgetter;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,42 +27,37 @@ package org.anchoranalysis.core.idgetter;
  * #L%
  */
 
-
 public class IDGetterMod<T> implements IDGetter<T> {
 
-	private IDGetter<T> idGetter;
-	private int mod;
+    private IDGetter<T> idGetter;
+    private int mod;
 
-	public IDGetterMod() {
-		
-	}
-	
-	public IDGetterMod(IDGetter<T> idGetter, int mod) {
-		super();
-		this.idGetter = idGetter;
-		this.mod = mod;
-	}
+    public IDGetterMod() {}
 
-	@Override
-	public int getID(T m, int iter) {
-		return idGetter.getID(m, iter) % mod;
-	}
+    public IDGetterMod(IDGetter<T> idGetter, int mod) {
+        super();
+        this.idGetter = idGetter;
+        this.mod = mod;
+    }
 
-	public IDGetter<T> getIdGetter() {
-		return idGetter;
-	}
+    @Override
+    public int getID(T m, int iter) {
+        return idGetter.getID(m, iter) % mod;
+    }
 
-	public void setIdGetter(IDGetter<T> idGetter) {
-		this.idGetter = idGetter;
-	}
+    public IDGetter<T> getIdGetter() {
+        return idGetter;
+    }
 
-	public int getMod() {
-		return mod;
-	}
+    public void setIdGetter(IDGetter<T> idGetter) {
+        this.idGetter = idGetter;
+    }
 
-	public void setMod(int mod) {
-		this.mod = mod;
-	}
-	
-	
+    public int getMod() {
+        return mod;
+    }
+
+    public void setMod(int mod) {
+        this.mod = mod;
+    }
 }

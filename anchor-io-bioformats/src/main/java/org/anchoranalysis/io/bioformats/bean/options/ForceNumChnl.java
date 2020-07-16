@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats.bean.options;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +23,35 @@ package org.anchoranalysis.io.bioformats.bean.options;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.bean.options;
 
+import loci.formats.IFormatReader;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
-import loci.formats.IFormatReader;
-
 public class ForceNumChnl extends ReadOptionsDelegate {
-	
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private int numChnl;
-	// END BEAN PROPERTIES
 
-	@Override
-	public int sizeC(IFormatReader reader) {
-		return numChnl;
-	}
-	
-	@Override
-	public boolean isRGB(IFormatReader reader) {
-		// Not supported when the numer of channels is being forced
-		return false;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Positive private int numChnl;
+    // END BEAN PROPERTIES
 
-	public int getNumChnl() {
-		return numChnl;
-	}
+    @Override
+    public int sizeC(IFormatReader reader) {
+        return numChnl;
+    }
 
-	public void setNumChnl(int numChnl) {
-		this.numChnl = numChnl;
-	}
+    @Override
+    public boolean isRGB(IFormatReader reader) {
+        // Not supported when the numer of channels is being forced
+        return false;
+    }
+
+    public int getNumChnl() {
+        return numChnl;
+    }
+
+    public void setNumChnl(int numChnl) {
+        this.numChnl = numChnl;
+    }
 }

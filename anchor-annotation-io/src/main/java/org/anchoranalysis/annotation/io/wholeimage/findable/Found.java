@@ -1,12 +1,8 @@
-package org.anchoranalysis.annotation.io.wholeimage.findable;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,26 +23,27 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.wholeimage.findable;
 
-import org.anchoranalysis.core.log.Logger;
-
+import java.util.Optional;
 import lombok.Value;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * A positive-result when an object is found
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 @Value
 public class Found<T> implements Findable<T> {
 
-	/** The found object */
-	private T object;
+    /** The found object */
+    private T object;
 
-	@Override
-	public Optional<T> getFoundOrLog(String name, Logger logger) {
-		return Optional.of(object);
-	}
+    @Override
+    public Optional<T> getFoundOrLog(String name, Logger logger) {
+        return Optional.of(object);
+    }
 }

@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.io.bean.channel.map;
-
-import org.anchoranalysis.bean.AnchorBean;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-image-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,22 +23,21 @@ import org.anchoranalysis.bean.AnchorBean;
  * THE SOFTWARE.
  * #L%
  */
-
-
-import org.anchoranalysis.bean.annotation.BeanField;
+/* (C)2020 */
+package org.anchoranalysis.image.io.bean.channel.map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
 
 @AllArgsConstructor
 public class ImgChnlMapEntry extends AnchorBean<ImgChnlMapEntry> {
-	
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private String name;
-	
-	@BeanField @Getter @Setter
-	private int index;
-	// END BEAN PROPERTIES
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String name;
+
+    @BeanField @Getter @Setter private int index;
+    // END BEAN PROPERTIES
 }

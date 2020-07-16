@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.assignment;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,27 @@ package org.anchoranalysis.annotation.io.assignment;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.object.ObjectMask;
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.assignment;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 class ObjectMaskPair {
-	
-	private final ObjectMask left;
-	private final ObjectMask right;
-	private final double overlapRatio;
 
-	public boolean atBorderXY( ImageDimensions sd ) {
-		return left.getBoundingBox().atBorderXY(sd) || right.getBoundingBox().atBorderXY(sd); 
-	}
-	
-	public ObjectMask getMultiplex( boolean leftFlag ) {
-		return leftFlag ? left : right;
-	}
+    private final ObjectMask left;
+    private final ObjectMask right;
+    private final double overlapRatio;
+
+    public boolean atBorderXY(ImageDimensions sd) {
+        return left.getBoundingBox().atBorderXY(sd) || right.getBoundingBox().atBorderXY(sd);
+    }
+
+    public ObjectMask getMultiplex(boolean leftFlag) {
+        return leftFlag ? left : right;
+    }
 }

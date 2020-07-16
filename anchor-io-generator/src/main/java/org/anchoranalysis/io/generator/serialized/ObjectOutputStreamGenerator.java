@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.serialized;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.io.generator.serialized;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.generator.serialized;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,37 +32,37 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedIterableGenerator<T> {
-	
-	public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
-		super(manifestFunction);
-	}
-	
-	public ObjectOutputStreamGenerator(T rootObject, Optional<String> manifestFunction ) {
-		super(rootObject, manifestFunction);
-	}
-	
-	@Override
-	protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
-			throws OutputWriteFailedException {
+public class ObjectOutputStreamGenerator<T extends Serializable>
+        extends SerializedIterableGenerator<T> {
 
-		try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
-			
-			ObjectOutputStream out = new ObjectOutputStream(fos);
-			out.writeObject( element );
-			out.close();
-			
-		} catch (IOException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
-	
-	@Override
-	protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
-		return "";
-	}
+    public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
+        super(manifestFunction);
+    }
+
+    public ObjectOutputStreamGenerator(T rootObject, Optional<String> manifestFunction) {
+        super(rootObject, manifestFunction);
+    }
+
+    @Override
+    protected void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath, T element)
+            throws OutputWriteFailedException {
+
+        try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
+
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(element);
+            out.close();
+
+        } catch (IOException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
+    @Override
+    protected String extensionSuffix(OutputWriteSettings outputWriteSettings) {
+        return "";
+    }
 }

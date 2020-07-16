@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -39,35 +37,34 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByMaxValue;
 
 // Scales by a quantile of the intensity values of an image
-public class ChnlConverterHistogramQuantileIntensity implements ChnlConverterAttached<Histogram, ByteBuffer>{
+public class ChnlConverterHistogramQuantileIntensity
+        implements ChnlConverterAttached<Histogram, ByteBuffer> {
 
-	private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
-	private double quantile = 1.0;
-	private ChannelConverterToUnsignedByte delegate;
-	
-	public ChnlConverterHistogramQuantileIntensity( double quantile ) {
-		// Initialise with a dummy value
-		voxelBoxConverter = new	VoxelBoxConverterToByteScaleByMaxValue(1);
-		this.quantile = quantile;
-		delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
-	}
-	
-	@Override
-	public void attachObject(Histogram hist) throws OperationFailedException {
+    private VoxelBoxConverterToByteScaleByMaxValue voxelBoxConverter;
+    private double quantile = 1.0;
+    private ChannelConverterToUnsignedByte delegate;
 
-		int maxValue = hist.quantile(quantile);
-		voxelBoxConverter.setMaxValue(maxValue);
-	}
+    public ChnlConverterHistogramQuantileIntensity(double quantile) {
+        // Initialise with a dummy value
+        voxelBoxConverter = new VoxelBoxConverterToByteScaleByMaxValue(1);
+        this.quantile = quantile;
+        delegate = new ChannelConverterToUnsignedByte(voxelBoxConverter);
+    }
 
-	@Override
-	public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
-		return delegate.convert(chnl, changeExisting);
-	}
+    @Override
+    public void attachObject(Histogram hist) throws OperationFailedException {
 
-	@Override
-	public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
-		return voxelBoxConverter;
-	}
+        int maxValue = hist.quantile(quantile);
+        voxelBoxConverter.setMaxValue(maxValue);
+    }
 
+    @Override
+    public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
+        return delegate.convert(chnl, changeExisting);
+    }
 
+    @Override
+    public VoxelBoxConverter<ByteBuffer> getVoxelBoxConverter() {
+        return voxelBoxConverter;
+    }
 }

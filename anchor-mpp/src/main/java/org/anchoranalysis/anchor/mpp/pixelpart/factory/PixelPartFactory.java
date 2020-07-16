@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.pixelpart.factory;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +23,18 @@ package org.anchoranalysis.anchor.mpp.pixelpart.factory;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.pixelpart.factory;
 
 import org.anchoranalysis.anchor.mpp.pixelpart.PixelPart;
 
-
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> part-type
  */
 public interface PixelPartFactory<T> {
 
-	PixelPart<T> create( int numSlices );
-	
-	void addUnused( T part );
+    PixelPart<T> create(int numSlices);
+
+    void addUnused(T part);
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.root;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,42 +23,41 @@ package org.anchoranalysis.io.bean.root;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.root;
 
 import java.nio.file.Path;
 
 public class SplitPath {
-	
-	private Path root;
-	private Path remainder;
-	
-	SplitPath() {
-		
-	}
-	
-	SplitPath(Path remainder, Path root) {
-		super();
-		this.remainder = remainder;
-		this.root = root;
-	}
 
-	public Path getPath() {
-		return remainder;
-	}
+    private Path root;
+    private Path remainder;
 
-	public void setPath(Path path) {
-		this.remainder = path;
-	}
+    SplitPath() {}
 
-	public Path getRoot() {
-		return root;
-	}
+    SplitPath(Path remainder, Path root) {
+        super();
+        this.remainder = remainder;
+        this.root = root;
+    }
 
-	public void setRoot(Path root) {
-		this.root = root;
-	}
-	
-	public Path combined() {
-		return root.resolve(remainder);
-	}
+    public Path getPath() {
+        return remainder;
+    }
 
+    public void setPath(Path path) {
+        this.remainder = path;
+    }
+
+    public Path getRoot() {
+        return root;
+    }
+
+    public void setRoot(Path root) {
+        this.root = root;
+    }
+
+    public Path combined() {
+        return root.resolve(remainder);
+    }
 }

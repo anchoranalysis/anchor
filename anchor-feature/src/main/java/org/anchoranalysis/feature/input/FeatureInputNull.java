@@ -1,14 +1,8 @@
-package org.anchoranalysis.feature.input;
-
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +23,22 @@ import lombok.NoArgsConstructor;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.input;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 // When we don't care about parameters
 
-@EqualsAndHashCode(callSuper=false) @NoArgsConstructor(access=AccessLevel.PRIVATE)
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureInputNull implements FeatureInput {
 
-	private static final FeatureInputNull INSTANCE = new FeatureInputNull();
-	
-	public static FeatureInputNull instance() {
-		return INSTANCE;
-	}
+    private static final FeatureInputNull INSTANCE = new FeatureInputNull();
+
+    public static FeatureInputNull instance() {
+        return INSTANCE;
+    }
 }

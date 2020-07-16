@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.manifest.folder;
-
-import java.nio.file.Path;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +23,12 @@ import java.nio.file.Path;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.folder;
 
-
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileWrite;
 import org.anchoranalysis.io.manifest.match.Match;
@@ -39,28 +36,25 @@ import org.anchoranalysis.io.manifest.match.Match;
 // A stub folder which means it represents an experiment applied to a particular file
 public class ExperimentFileFolder extends FolderWriteWithPath {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4923049916867897251L;
+    /** */
+    private static final long serialVersionUID = 4923049916867897251L;
 
-	@Override
-	public void write(String outputName,
-			ManifestDescription manifestDescription, Path outFilePath,
-			String index) {
-		// NOTHING TO DO
-	}
+    @Override
+    public void write(
+            String outputName,
+            ManifestDescription manifestDescription,
+            Path outFilePath,
+            String index) {
+        // NOTHING TO DO
+    }
 
-	@Override
-	public void findFile(List<FileWrite> foundList, Match<FileWrite> match,
-			boolean recursive) {
-		// NOTHING TO DO		
-	}
+    @Override
+    public void findFile(List<FileWrite> foundList, Match<FileWrite> match, boolean recursive) {
+        // NOTHING TO DO
+    }
 
-	@Override
-	public List<FileWrite> fileList() {
-		return new ArrayList<>();
-	}
-
-
+    @Override
+    public List<FileWrite> fileList() {
+        return new ArrayList<>();
+    }
 }

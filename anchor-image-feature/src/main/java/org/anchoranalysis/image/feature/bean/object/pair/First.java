@@ -1,13 +1,8 @@
-package org.anchoranalysis.image.feature.bean.object.pair;
-
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
-
-/*
+/*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,31 +23,32 @@ import org.anchoranalysis.feature.cache.SessionInput;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.object.pair;
 
-
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
  * Evaluates the first-object in a pair only
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class First extends FeatureDeriveFromPair {
 
-	public First() {
-		// BEAN Constructor
-	}
-	
-	public First(Feature<FeatureInputSingleObject> item) {
-		super(item);
-	}
-		
-	@Override
-	public double calc(SessionInput<FeatureInputPairObjects> params)
-			throws FeatureCalcException {
-		return valueFromFirst(params);
-	}
+    public First() {
+        // BEAN Constructor
+    }
+
+    public First(Feature<FeatureInputSingleObject> item) {
+        super(item);
+    }
+
+    @Override
+    public double calc(SessionInput<FeatureInputPairObjects> params) throws FeatureCalcException {
+        return valueFromFirst(params);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.namestyle;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,27 @@ package org.anchoranalysis.io.namestyle;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.namestyle;
 
 import java.io.Serializable;
 
 public abstract class OutputNameStyle implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7757474603700575166L;
-	
-	// Only for deserialization
-	public OutputNameStyle() {
-		
-	}
-	
-	public abstract String getPhysicalName();
+    /** */
+    private static final long serialVersionUID = 7757474603700575166L;
 
-	// The output name which refers to a particular category of output
-	public abstract String getOutputName();
+    // Only for deserialization
+    public OutputNameStyle() {}
 
-	public abstract void setOutputName(String outputName);
+    public abstract String getPhysicalName();
 
-	public abstract OutputNameStyle duplicate(); 
-	
-	public abstract IndexableOutputNameStyle deriveIndexableStyle( int numDigits );
+    // The output name which refers to a particular category of output
+    public abstract String getOutputName();
+
+    public abstract void setOutputName(String outputName);
+
+    public abstract OutputNameStyle duplicate();
+
+    public abstract IndexableOutputNameStyle deriveIndexableStyle(int numDigits);
 }

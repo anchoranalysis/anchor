@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.experiment.label;
-
 /*-
  * #%L
  * anchor-image-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.experiment.label;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.experiment.label;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -32,46 +32,42 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 /**
- * 
  * @author feehano
- *
  * @param <T> key-type
  */
 public class FileLabelMap<T> {
-	
-	private Map<T,String> map = new HashMap<>();
-	
-	public void add( T fileId, String label ) {
-		map.put( fileId, label );
-	}
-	
-	public String get( T fileId ) {
-		return map.get( fileId );
-	}
 
-	public Set<String> labels() {
-		return new HashSet<>( map.values() );
-	}
-		
-	public static FileLabelMap<String> readFromCSV( Path csvPath, boolean quotedStrings ) throws CSVReaderException {
-		FileLabelMap<String> map = new FileLabelMap<>();
-		
-		try (ReadByLine reader = CSVReaderByLine.open(csvPath, ",", true, quotedStrings )) {
-			reader.read(
-				(line, firstLine) -> map.add( line[0], line[1] )
-			);
-		}
-		
-		return map;
-	}
+    private Map<T, String> map = new HashMap<>();
 
-	public Set<Entry<T, String>> entrySet() {
-		return map.entrySet();
-	}
+    public void add(T fileId, String label) {
+        map.put(fileId, label);
+    }
+
+    public String get(T fileId) {
+        return map.get(fileId);
+    }
+
+    public Set<String> labels() {
+        return new HashSet<>(map.values());
+    }
+
+    public static FileLabelMap<String> readFromCSV(Path csvPath, boolean quotedStrings)
+            throws CSVReaderException {
+        FileLabelMap<String> map = new FileLabelMap<>();
+
+        try (ReadByLine reader = CSVReaderByLine.open(csvPath, ",", true, quotedStrings)) {
+            reader.read((line, firstLine) -> map.add(line[0], line[1]));
+        }
+
+        return map;
+    }
+
+    public Set<Entry<T, String>> entrySet() {
+        return map.entrySet();
+    }
 }

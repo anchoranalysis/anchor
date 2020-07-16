@@ -1,12 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.proposer;
-
-import org.anchoranalysis.bean.NullParamsBean;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +23,16 @@ import org.anchoranalysis.bean.NullParamsBean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.proposer;
 
-
+import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 
 public abstract class ScalarProposer extends NullParamsBean<ScalarProposer> {
 
-	public abstract double propose( RandomNumberGenerator randomNumberGenerator, ImageResolution res ) throws OperationFailedException;
+    public abstract double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+            throws OperationFailedException;
 }

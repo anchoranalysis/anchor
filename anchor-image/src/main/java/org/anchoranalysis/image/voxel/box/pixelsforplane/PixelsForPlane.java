@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.box.pixelsforplane;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +23,22 @@ package org.anchoranalysis.image.voxel.box.pixelsforplane;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.box.pixelsforplane;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> buffer-type
  */
 public interface PixelsForPlane<T extends Buffer> {
 
-	public VoxelBuffer<T> getPixelsForPlane( int z );
-	
-	public void setPixelsForPlane( int z, VoxelBuffer<T> pixels );
-	
-	public Extent extent();
+    public VoxelBuffer<T> getPixelsForPlane(int z);
+
+    public void setPixelsForPlane(int z, VoxelBuffer<T> pixels);
+
+    public Extent extent();
 }

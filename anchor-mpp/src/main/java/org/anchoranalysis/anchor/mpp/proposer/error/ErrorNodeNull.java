@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.proposer.error;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,65 +23,62 @@ package org.anchoranalysis.anchor.mpp.proposer.error;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.proposer.error;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /**
  * Singleton that does nothing with errors
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ErrorNodeNull extends ErrorNode {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5512508477564211253L;
+    /** */
+    private static final long serialVersionUID = 5512508477564211253L;
 
-	private static ErrorNodeNull instance = new ErrorNodeNull();
-	
-	private ErrorNodeNull() {
-		
-	}
-	
-	public static ErrorNodeNull instance() {
-		return instance;
-	}
-	
-	@Override
-	public ErrorNode add(String errorMessage) {
-		// do nothing
-		return this;
-	}
+    private static ErrorNodeNull instance = new ErrorNodeNull();
 
-	@Override
-	public ErrorNode add(String errorMessage, Mark mark) {
-		return this;
-	}
+    private ErrorNodeNull() {}
 
-	@Override
-	public ErrorNode addFormatted(String formatString, Object... args) {
-		return this;
-	}
+    public static ErrorNodeNull instance() {
+        return instance;
+    }
 
-	@Override
-	public ErrorNode addIter(int i) {
-		return this;
-	}
+    @Override
+    public ErrorNode add(String errorMessage) {
+        // do nothing
+        return this;
+    }
 
-	@Override
-	public ErrorNode addBean(String propertyName, Object object) {
-		return this;
-	}
+    @Override
+    public ErrorNode add(String errorMessage, Mark mark) {
+        return this;
+    }
 
-	@Override
-	public ErrorNode add(Exception e) {
-		return this;
-	}
+    @Override
+    public ErrorNode addFormatted(String formatString, Object... args) {
+        return this;
+    }
 
-	@Override
-	public void addErrorDescription(StringBuilder sb) {
-		// NOTHING TO DO
-	}
+    @Override
+    public ErrorNode addIter(int i) {
+        return this;
+    }
+
+    @Override
+    public ErrorNode addBean(String propertyName, Object object) {
+        return this;
+    }
+
+    @Override
+    public ErrorNode add(Exception e) {
+        return this;
+    }
+
+    @Override
+    public void addErrorDescription(StringBuilder sb) {
+        // NOTHING TO DO
+    }
 }

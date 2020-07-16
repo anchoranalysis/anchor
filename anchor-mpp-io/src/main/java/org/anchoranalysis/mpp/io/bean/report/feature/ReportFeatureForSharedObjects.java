@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.io.bean.report.feature;
-
 /*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 
-public abstract class ReportFeatureForSharedObjects extends ReportFeature<MPPInitParams> {
-}
+public abstract class ReportFeatureForSharedObjects extends ReportFeature<MPPInitParams> {}

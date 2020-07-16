@@ -1,10 +1,8 @@
-package org.anchoranalysis.math.rotation;
-
 /*-
  * #%L
  * anchor-math
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.math.rotation;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.math.rotation;
 
 import static org.junit.Assert.*;
 
@@ -37,47 +37,40 @@ import org.junit.Test;
 
 public class RotationMatrixFromAxisAngleCreatorTest {
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {}
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {}
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {}
 
-	@Test
-	public void test() {
-		
-		RotationMatrixFromAxisAngleCreator rmc = new RotationMatrixFromAxisAngleCreator(
-			new Vector3d(-0.866,-0.5,2.31e-014),
-			3
-		);
-		RotationMatrix rm = rmc.createRotationMatrix();
-		
-		double delta = 1e-3;
-		
-		// First Row
-		assertEquals(  0.502414, rm.getMatrix().get(0, 0), delta );
-		assertEquals(  0.861667, rm.getMatrix().get(0, 1), delta );
-		assertEquals(  -0.07056, rm.getMatrix().get(0, 2), delta );
-		
-		// Second Row
-		assertEquals(  0.861667, rm.getMatrix().get(1, 0), delta );
-		assertEquals( -0.492494, rm.getMatrix().get(1, 1), delta );
-		assertEquals( 0.122201, rm.getMatrix().get(1, 2), delta );
-		
-		// Third Row
-		assertEquals( 0.07056, rm.getMatrix().get(2, 0), delta );
-		assertEquals( - 0.12221, rm.getMatrix().get(2, 1), delta );
-		assertEquals( -0.98999, rm.getMatrix().get(2, 2), delta );
-	}
+    @Test
+    public void test() {
 
+        RotationMatrixFromAxisAngleCreator rmc =
+                new RotationMatrixFromAxisAngleCreator(new Vector3d(-0.866, -0.5, 2.31e-014), 3);
+        RotationMatrix rm = rmc.createRotationMatrix();
+
+        double delta = 1e-3;
+
+        // First Row
+        assertEquals(0.502414, rm.getMatrix().get(0, 0), delta);
+        assertEquals(0.861667, rm.getMatrix().get(0, 1), delta);
+        assertEquals(-0.07056, rm.getMatrix().get(0, 2), delta);
+
+        // Second Row
+        assertEquals(0.861667, rm.getMatrix().get(1, 0), delta);
+        assertEquals(-0.492494, rm.getMatrix().get(1, 1), delta);
+        assertEquals(0.122201, rm.getMatrix().get(1, 2), delta);
+
+        // Third Row
+        assertEquals(0.07056, rm.getMatrix().get(2, 0), delta);
+        assertEquals(-0.12221, rm.getMatrix().get(2, 1), delta);
+        assertEquals(-0.98999, rm.getMatrix().get(2, 2), delta);
+    }
 }

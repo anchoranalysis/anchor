@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.color.generator;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.io.bean.color.generator;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.color.generator;
 
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.color.ColorList;
@@ -38,38 +36,35 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 // If the list is too small for size, then we extend with the final item
 public class ColorListGenerator extends ColorSetGenerator {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<RGBColorBean> list;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public ColorList generateColors(int numberColors) throws OperationFailedException {
-		
-		try {
-			ColorList out = new ColorList();
-			for( RGBColorBean item : list ) {
-				out.add( item.duplicateBean().rgbColor() );
-			}
-			
-			while ( out.size()<numberColors ) {
-				out.add( list.get( list.size()-1 ).duplicateBean().rgbColor() );
-			}
-			
-			return out;
-			
-		} catch (BeanDuplicateException e) {
-			throw new OperationFailedException(e);
-		}
+    // START BEAN PROPERTIES
+    @BeanField private List<RGBColorBean> list;
+    // END BEAN PROPERTIES
 
-	}
+    @Override
+    public ColorList generateColors(int numberColors) throws OperationFailedException {
 
-	public List<RGBColorBean> getList() {
-		return list;
-	}
+        try {
+            ColorList out = new ColorList();
+            for (RGBColorBean item : list) {
+                out.add(item.duplicateBean().rgbColor());
+            }
 
-	public void setList(List<RGBColorBean> list) {
-		this.list = list;
-	}
+            while (out.size() < numberColors) {
+                out.add(list.get(list.size() - 1).duplicateBean().rgbColor());
+            }
 
+            return out;
+
+        } catch (BeanDuplicateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    public List<RGBColorBean> getList() {
+        return list;
+    }
+
+    public void setList(List<RGBColorBean> list) {
+        this.list = list;
+    }
 }

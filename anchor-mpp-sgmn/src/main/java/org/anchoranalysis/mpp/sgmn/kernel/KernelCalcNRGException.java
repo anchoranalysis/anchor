@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.kernel;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +23,21 @@ package org.anchoranalysis.mpp.sgmn.kernel;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.kernel;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 public class KernelCalcNRGException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8395015058238556485L;
+    /** */
+    private static final long serialVersionUID = 8395015058238556485L;
 
-	public KernelCalcNRGException(String message) {
-		super(message);
-	}
-	
-	public KernelCalcNRGException(String message, Exception exc ) {
-		super(message, exc);
-	}
+    public KernelCalcNRGException(String message) {
+        super(message);
+    }
+
+    public KernelCalcNRGException(String message, Exception exc) {
+        super(message, exc);
+    }
 }

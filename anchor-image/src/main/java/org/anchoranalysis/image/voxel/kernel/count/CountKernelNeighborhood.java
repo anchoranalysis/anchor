@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.kernel.count;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,33 +23,31 @@ package org.anchoranalysis.image.voxel.kernel.count;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.kernel.count;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
 /**
- * For every voxel on the outline, count ALL neighbors that are adjacent, including those lying outside the scene.
- * 
- * Neighbouing voxels can be counted more than once.
- * 
- * @author Owen Feehan
+ * For every voxel on the outline, count ALL neighbors that are adjacent, including those lying
+ * outside the scene.
  *
+ * <p>Neighbouing voxels can be counted more than once.
+ *
+ * @author Owen Feehan
  */
 public class CountKernelNeighborhood extends CountKernelNeighborhoodBase {
 
-	public CountKernelNeighborhood(
-		boolean useZ,
-		BinaryValuesByte bv,
-		boolean multipleMatchesPerVoxel
-	) {
-		super(useZ, bv, multipleMatchesPerVoxel);
-	}
+    public CountKernelNeighborhood(
+            boolean useZ, BinaryValuesByte bv, boolean multipleMatchesPerVoxel) {
+        super(useZ, bv, multipleMatchesPerVoxel);
+    }
 
-	@Override
-	protected boolean isNeighborVoxelAccepted(Point3i point, int xShift, int yShift,
-			int zShift, Extent extent) {
-		return true;
-	}
-
+    @Override
+    protected boolean isNeighborVoxelAccepted(
+            Point3i point, int xShift, int yShift, int zShift, Extent extent) {
+        return true;
+    }
 }

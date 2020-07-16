@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,47 +23,49 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class GeneratorSequenceIncrementalRerouteErrors<T> {
 
-	private GeneratorSequenceIncremental<T> delegate;
-	private ErrorReporter errorReporter;
-	
-	public GeneratorSequenceIncrementalRerouteErrors(
-			GeneratorSequenceIncremental<T> delegate, ErrorReporter errorReporter) {
-		super();
-		this.delegate = delegate;
-		this.errorReporter = errorReporter;
-	}
+    private GeneratorSequenceIncremental<T> delegate;
+    private ErrorReporter errorReporter;
 
-	public void start() {
-		try {
-			delegate.start();
-		} catch (OutputWriteFailedException e) {
-			routeError(e);
-		}
-	}
+    public GeneratorSequenceIncrementalRerouteErrors(
+            GeneratorSequenceIncremental<T> delegate, ErrorReporter errorReporter) {
+        super();
+        this.delegate = delegate;
+        this.errorReporter = errorReporter;
+    }
 
-	public void add(T element) {
-		try {
-			delegate.add(element);
-		} catch (OutputWriteFailedException e) {
-			routeError(e);
-		}
-	}
+    public void start() {
+        try {
+            delegate.start();
+        } catch (OutputWriteFailedException e) {
+            routeError(e);
+        }
+    }
 
-	public void end() {
-		try {
-			delegate.end();
-		} catch (OutputWriteFailedException e) {
-			routeError(e);
-		}
-	}
+    public void add(T element) {
+        try {
+            delegate.add(element);
+        } catch (OutputWriteFailedException e) {
+            routeError(e);
+        }
+    }
 
-	private void routeError( Exception e ) {
-		errorReporter.recordError( GeneratorSequenceIncrementalRerouteErrors.class, e);
-	}
+    public void end() {
+        try {
+            delegate.end();
+        } catch (OutputWriteFailedException e) {
+            routeError(e);
+        }
+    }
+
+    private void routeError(Exception e) {
+        errorReporter.recordError(GeneratorSequenceIncrementalRerouteErrors.class, e);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.init;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.anchor.mpp.bean.init;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.init;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
@@ -53,111 +53,112 @@ import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 // A wrapper around SharedObjects which types certain MPP entities
 public class MPPInitParams implements BeanInitParams {
 
-	// START: InitParams
-	private ImageInitParams soImage;
-	private PointsInitParams soPoints;
-	// END: InitParams
-	
-	// START: Stores
-	private NamedProviderStore<Cfg> storeCfg;
-	private NamedProviderStore<CfgProposer> storeCfgProposer;
-	private NamedProviderStore<MarkBounds> storeMarkBounds;
-	private NamedProviderStore<MarkProposer> storeMarkProposer;
-	private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
-	private NamedProviderStore<MarkSplitProposer> storeMarkSplitProposer;
-	private NamedProviderStore<ProbMap> storeProbMap;
-	private NamedProviderStore<PairCollection<Pair<Mark>>> storePairCollection;
-	// END: Stores
+    // START: InitParams
+    private ImageInitParams soImage;
+    private PointsInitParams soPoints;
+    // END: InitParams
 
-	public MPPInitParams(ImageInitParams soImage, SharedObjects so) {
-		super();
-		this.soImage = soImage;
-		this.soPoints = PointsInitParams.create( soImage, so );
-		
-		storeCfg = so.getOrCreate(Cfg.class);
-		storeCfgProposer = so.getOrCreate(CfgProposer.class);
-		storeMarkBounds = so.getOrCreate(MarkBounds.class);
-		storeMarkProposer = so.getOrCreate(MarkProposer.class);
-		storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
-		storeMarkSplitProposer = so.getOrCreate(MarkSplitProposer.class);
-		storeProbMap = so.getOrCreate(ProbMap.class);
-		storePairCollection = so.getOrCreate(PairCollection.class);
-	}
+    // START: Stores
+    private NamedProviderStore<Cfg> storeCfg;
+    private NamedProviderStore<CfgProposer> storeCfgProposer;
+    private NamedProviderStore<MarkBounds> storeMarkBounds;
+    private NamedProviderStore<MarkProposer> storeMarkProposer;
+    private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
+    private NamedProviderStore<MarkSplitProposer> storeMarkSplitProposer;
+    private NamedProviderStore<ProbMap> storeProbMap;
+    private NamedProviderStore<PairCollection<Pair<Mark>>> storePairCollection;
+    // END: Stores
 
-	public ImageInitParams getImage() {
-		return soImage;
-	}
-	
-	public SharedFeaturesInitParams getFeature() {
-		return soImage.getFeature();
-	}
-	
-	public PointsInitParams getPoints() {
-		return soPoints;
-	}
-	
-	public KeyValueParamsInitParams getParams() {
-		return soImage.getParams();
-	}
-	
-	public NamedProviderStore<Cfg> getCfgCollection() {
-		return storeCfg;
-	}
-	
-	public NamedProviderStore<CfgProposer> getCfgProposerSet() {
-		return storeCfgProposer;
-	}
-	
-	public NamedProviderStore<MarkBounds> getMarkBoundsSet() {
-		return storeMarkBounds;
-	}
-	
-	public NamedProviderStore<MarkProposer> getMarkProposerSet() {
-		return storeMarkProposer;
-	}
-	
-	public NamedProviderStore<MarkMergeProposer> getMarkMergeProposerSet() {
-		return storeMarkMergeProposer;
-	}
-	
-	public NamedProviderStore<MarkSplitProposer> getMarkSplitProposerSet() {
-		return storeMarkSplitProposer;
-	}
-	
-	public NamedProviderStore<ProbMap> getProbMapSet() {
-		return storeProbMap;
-	}
-	
-	public NamedProviderStore<PairCollection<Pair<Mark>>> getSimplePairCollection() {
-		return storePairCollection;
-	}
-	
-	/**
-	 * 
-	 * Backwards compatible for when we only had a single bounds
-	 * 
-	 * This is stored in all our named-definition files, from now on as "primary"
-	 * 
-	 * @return
-	 * @throws NamedProviderGetException
-	 */
-	public MarkBounds getMarkBounds() throws NamedProviderGetException {
-		return getMarkBoundsSet().getException("primary");
-	}
+    public MPPInitParams(ImageInitParams soImage, SharedObjects so) {
+        super();
+        this.soImage = soImage;
+        this.soPoints = PointsInitParams.create(soImage, so);
 
-	public void populate( PropertyInitializer<?> pi, Define define, Logger logger ) throws OperationFailedException {
-		
-		PopulateStoreFromDefine<MPPInitParams> populater = new PopulateStoreFromDefine<>(define, pi, logger);
-		populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
-		populater.copyInit(MarkProposer.class, getMarkProposerSet());
-		populater.copyInit(CfgProposer.class, getCfgProposerSet());
-		populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
-		populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
-		populater.copyWithoutInit(PairCollection.class, getSimplePairCollection());
-		
-		populater.copyProvider(CfgProvider.class, getCfgCollection());
-		
-		soImage.populate(pi, define, logger);
-		soPoints.populate(pi, define, logger );
-	}
+        storeCfg = so.getOrCreate(Cfg.class);
+        storeCfgProposer = so.getOrCreate(CfgProposer.class);
+        storeMarkBounds = so.getOrCreate(MarkBounds.class);
+        storeMarkProposer = so.getOrCreate(MarkProposer.class);
+        storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
+        storeMarkSplitProposer = so.getOrCreate(MarkSplitProposer.class);
+        storeProbMap = so.getOrCreate(ProbMap.class);
+        storePairCollection = so.getOrCreate(PairCollection.class);
+    }
+
+    public ImageInitParams getImage() {
+        return soImage;
+    }
+
+    public SharedFeaturesInitParams getFeature() {
+        return soImage.getFeature();
+    }
+
+    public PointsInitParams getPoints() {
+        return soPoints;
+    }
+
+    public KeyValueParamsInitParams getParams() {
+        return soImage.getParams();
+    }
+
+    public NamedProviderStore<Cfg> getCfgCollection() {
+        return storeCfg;
+    }
+
+    public NamedProviderStore<CfgProposer> getCfgProposerSet() {
+        return storeCfgProposer;
+    }
+
+    public NamedProviderStore<MarkBounds> getMarkBoundsSet() {
+        return storeMarkBounds;
+    }
+
+    public NamedProviderStore<MarkProposer> getMarkProposerSet() {
+        return storeMarkProposer;
+    }
+
+    public NamedProviderStore<MarkMergeProposer> getMarkMergeProposerSet() {
+        return storeMarkMergeProposer;
+    }
+
+    public NamedProviderStore<MarkSplitProposer> getMarkSplitProposerSet() {
+        return storeMarkSplitProposer;
+    }
+
+    public NamedProviderStore<ProbMap> getProbMapSet() {
+        return storeProbMap;
+    }
+
+    public NamedProviderStore<PairCollection<Pair<Mark>>> getSimplePairCollection() {
+        return storePairCollection;
+    }
+
+    /**
+     * Backwards compatible for when we only had a single bounds
+     *
+     * <p>This is stored in all our named-definition files, from now on as "primary"
+     *
+     * @return
+     * @throws NamedProviderGetException
+     */
+    public MarkBounds getMarkBounds() throws NamedProviderGetException {
+        return getMarkBoundsSet().getException("primary");
+    }
+
+    public void populate(PropertyInitializer<?> pi, Define define, Logger logger)
+            throws OperationFailedException {
+
+        PopulateStoreFromDefine<MPPInitParams> populater =
+                new PopulateStoreFromDefine<>(define, pi, logger);
+        populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
+        populater.copyInit(MarkProposer.class, getMarkProposerSet());
+        populater.copyInit(CfgProposer.class, getCfgProposerSet());
+        populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
+        populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
+        populater.copyWithoutInit(PairCollection.class, getSimplePairCollection());
+
+        populater.copyProvider(CfgProvider.class, getCfgCollection());
+
+        soImage.populate(pi, define, logger);
+        soPoints.populate(pi, define, logger);
+    }
 }

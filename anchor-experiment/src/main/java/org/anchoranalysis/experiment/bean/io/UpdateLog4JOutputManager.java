@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.bean.io;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,46 +23,46 @@ package org.anchoranalysis.experiment.bean.io;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.io;
 
 import java.util.Enumeration;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.apache.log4j.Appender;
 import org.apache.log4j.LogManager;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class UpdateLog4JOutputManager {
-	
-	@SuppressWarnings("unchecked")	
-	public static void updateLog4J( BoundOutputManagerRouteErrors outputManager ) {
-		// Bit of reflection trickery involved
-		
-		Enumeration<Appender> enumApp = LogManager.getRootLogger().getAllAppenders();
-		while (enumApp.hasMoreElements()) {
-	    
-			try {
-				
-				Appender appender = enumApp.nextElement();
-				
-				if (appender instanceof Log4JFileAppender) {
-					Log4JFileAppender logjApp = (Log4JFileAppender) appender;
-										
-					String outputName = logjApp.getOutputName();
-					if (!outputManager.isOutputAllowed(outputName)) {
-						LogManager.getRootLogger().removeAppender(appender);
-						continue;
-					}
-					
-					logjApp.init( outputManager );
-					logjApp.activateOptions();
-				}
-				
-			} catch (Exception e) {
-				// Do nothing, and continue in loop
-			}
-	    }
-	}
+
+    @SuppressWarnings("unchecked")
+    public static void updateLog4J(BoundOutputManagerRouteErrors outputManager) {
+        // Bit of reflection trickery involved
+
+        Enumeration<Appender> enumApp = LogManager.getRootLogger().getAllAppenders();
+        while (enumApp.hasMoreElements()) {
+
+            try {
+
+                Appender appender = enumApp.nextElement();
+
+                if (appender instanceof Log4JFileAppender) {
+                    Log4JFileAppender logjApp = (Log4JFileAppender) appender;
+
+                    String outputName = logjApp.getOutputName();
+                    if (!outputManager.isOutputAllowed(outputName)) {
+                        LogManager.getRootLogger().removeAppender(appender);
+                        continue;
+                    }
+
+                    logjApp.init(outputManager);
+                    logjApp.activateOptions();
+                }
+
+            } catch (Exception e) {
+                // Do nothing, and continue in loop
+            }
+        }
+    }
 }

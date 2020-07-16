@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.contiguouspath;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +23,26 @@ package org.anchoranalysis.image.outline.traverser.contiguouspath;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser.contiguouspath;
 
 /** A distance, and the index the point came from */
 public class DistanceIndex {
 
-	private int distance;
-	private int index;
-	
-	public DistanceIndex(int distance, int index) {
-		super();
-		this.distance = distance;
-		this.index = index;
-	}
+    private int distance;
+    private int index;
 
-	public int getDistance() {
-		return distance;
-	}
+    public DistanceIndex(int distance, int index) {
+        super();
+        this.distance = distance;
+        this.index = index;
+    }
 
-	public int getIndex() {
-		return index;
-	}
-	
-	
+    public int getDistance() {
+        return distance;
+    }
+
+    public int getIndex() {
+        return index;
+    }
 }

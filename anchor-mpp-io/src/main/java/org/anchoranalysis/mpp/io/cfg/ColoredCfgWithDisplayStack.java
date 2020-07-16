@@ -1,13 +1,8 @@
-package org.anchoranalysis.mpp.io.cfg;
-
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-
 /*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,38 +23,45 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.cfg;
 
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.idgetter.IDGetter;
 import org.anchoranalysis.image.stack.DisplayStack;
 
 public class ColoredCfgWithDisplayStack {
 
-	private ColoredCfg cfg;
-	private DisplayStack stack;
+    private ColoredCfg cfg;
+    private DisplayStack stack;
 
-	public ColoredCfgWithDisplayStack(ColoredCfg cfg, DisplayStack stack) {
-		super();
-		this.cfg = cfg;
-		this.stack = stack;
-	}
-	
-	public ColoredCfgWithDisplayStack( CfgWithDisplayStack cwds, ColorIndex colorIndex, IDGetter<Mark> idGetter) {
-		this.cfg = new ColoredCfg( cwds.getCfg(), colorIndex, idGetter );
-		this.stack = cwds.getStack();
-	}
+    public ColoredCfgWithDisplayStack(ColoredCfg cfg, DisplayStack stack) {
+        super();
+        this.cfg = cfg;
+        this.stack = stack;
+    }
 
-	public ColoredCfg getCfg() {
-		return cfg;
-	}
-	public void setCfg(ColoredCfg cfg) {
-		this.cfg = cfg;
-	}
-	
-	public DisplayStack getStack() {
-		return stack;
-	}
-	public void setStack(DisplayStack stack) {
-		this.stack = stack;
-	}
+    public ColoredCfgWithDisplayStack(
+            CfgWithDisplayStack cwds, ColorIndex colorIndex, IDGetter<Mark> idGetter) {
+        this.cfg = new ColoredCfg(cwds.getCfg(), colorIndex, idGetter);
+        this.stack = cwds.getStack();
+    }
+
+    public ColoredCfg getCfg() {
+        return cfg;
+    }
+
+    public void setCfg(ColoredCfg cfg) {
+        this.cfg = cfg;
+    }
+
+    public DisplayStack getStack() {
+        return stack;
+    }
+
+    public void setStack(DisplayStack stack) {
+        this.stack = stack;
+    }
 }

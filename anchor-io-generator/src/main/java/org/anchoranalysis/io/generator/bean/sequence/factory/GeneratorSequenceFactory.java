@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.bean.sequence.factory;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-generator
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.generator.bean.sequence.factory;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.bean.sequence.factory;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.stack.Stack;
@@ -34,17 +34,15 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public abstract class GeneratorSequenceFactory extends AnchorBean<GeneratorSequenceFactory> {
 
-	/**
-	 * 
-	 * @param <GeneratorType> generator-type
-	 * @param outputManager
-	 * @param outputName
-	 * @param generator
-	 * @return
-	 */
-	public abstract <T> GeneratorSequenceNonIncremental<T> createGeneratorSequenceNonIncremental(
-			BoundOutputManagerRouteErrors outputManager,
-			String outputName,
-			IterableObjectGenerator<T, Stack> generator		
-	);
+    /**
+     * @param <GeneratorType> generator-type
+     * @param outputManager
+     * @param outputName
+     * @param generator
+     * @return
+     */
+    public abstract <T> GeneratorSequenceNonIncremental<T> createGeneratorSequenceNonIncremental(
+            BoundOutputManagerRouteErrors outputManager,
+            String outputName,
+            IterableObjectGenerator<T, Stack> generator);
 }

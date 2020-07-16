@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider.stack;
-
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,40 +23,39 @@ package org.anchoranalysis.image.bean.provider.stack;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider.stack;
 
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @NoArgsConstructor
 public class StackProviderReference extends StackProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private String id = "";
-	// END BEAN PROPERTIES
-	
-	private Stack stack;
-	
-	public StackProviderReference( String id ) {
-		this.id = id;
-	}
-	
-	@Override
-	public Stack create() throws CreateException {
-		if(stack==null) {
-			try {
-				this.stack = getInitializationParameters().getStackCollection().getException(id);
-			} catch (NamedProviderGetException e) {
-				throw new CreateException(e);
-			}		
-		}
-		return stack;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String id = "";
+    // END BEAN PROPERTIES
+
+    private Stack stack;
+
+    public StackProviderReference(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public Stack create() throws CreateException {
+        if (stack == null) {
+            try {
+                this.stack = getInitializationParameters().getStackCollection().getException(id);
+            } catch (NamedProviderGetException e) {
+                throw new CreateException(e);
+            }
+        }
+        return stack;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.operator;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +23,26 @@ package org.anchoranalysis.feature.bean.operator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.operator;
 
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public abstract class FeatureDoubleElem<T extends FeatureInput> extends Feature<T> {
 
-	// START BEAN PARAMETERS
-	@BeanField @Getter @Setter
-	private Feature<T> item1 = null;
-	
-	@BeanField @Getter @Setter
-	private Feature<T> item2 = null;
-	// END BEAN PARAMETERS
+    // START BEAN PARAMETERS
+    @BeanField @Getter @Setter private Feature<T> item1 = null;
 
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInputType.prefer(item1, item2);
-	}
+    @BeanField @Getter @Setter private Feature<T> item2 = null;
+    // END BEAN PARAMETERS
+
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInputType.prefer(item1, item2);
+    }
 }

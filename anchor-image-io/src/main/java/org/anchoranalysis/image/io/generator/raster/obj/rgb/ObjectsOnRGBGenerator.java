@@ -1,15 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster.obj.rgb;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +23,15 @@ import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster.obj.rgb;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
+import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
@@ -43,98 +44,90 @@ import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 /**
  * A base class for generators that draw objects on top of a RGB-Stack
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public abstract class ObjectsOnRGBGenerator extends RasterGenerator implements IterableObjectGenerator<ObjectCollectionWithProperties,Stack> {
+public abstract class ObjectsOnRGBGenerator extends RasterGenerator
+        implements IterableObjectGenerator<ObjectCollectionWithProperties, Stack> {
 
-	private static final ManifestDescription MANIFEST_DESCRIPTION = new ManifestDescription("raster", "rgbObjects");
-	
-	// START REQUIRED ARGUMENTS
-	private final DrawObject drawObject;
-	private final ObjectDrawAttributes attributes;
-	
-	@Getter @Setter
-	private Optional<DisplayStack> background;
-	// END REQUIRED ARGUMENTS	
+    private static final ManifestDescription MANIFEST_DESCRIPTION =
+            new ManifestDescription("raster", "rgbObjects");
 
-	// Iterable element
-	private ObjectCollectionWithProperties element;
-		
-	public ObjectsOnRGBGenerator(
-		DrawObject drawObject,
-		ObjectDrawAttributes attributes,
-		Optional<DisplayStack> background
-	) {
-		super();
-		this.drawObject = drawObject;
-		this.attributes = attributes;
-		this.background = background;
-	}	
-		
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		try {
-			if (!background.isPresent()) {
-				throw new OutputWriteFailedException("A background is required for this generator, but has not been set.");
-			}
-			
-			RGBStack backgroundRGB = generateBackground(background.get());
-			drawObject.write(
-				generateMasks(),
-				backgroundRGB,
-				attributes
-			);
-			return backgroundRGB.asStack();
-		} catch (OperationFailedException | CreateException e) {
-			throw new OutputWriteFailedException(e);
-		}
-	}
-	
-	@Override
-	public ObjectCollectionWithProperties getIterableElement() {
-		return element;
-	}
+    // START REQUIRED ARGUMENTS
+    private final DrawObject drawObject;
+    private final ObjectDrawAttributes attributes;
 
-	@Override
-	public void setIterableElement(ObjectCollectionWithProperties element) {
-		this.element = element;
-	}
+    @Getter @Setter private Optional<DisplayStack> background;
+    // END REQUIRED ARGUMENTS
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return this;
-	}
+    // Iterable element
+    private ObjectCollectionWithProperties element;
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		// NOTHING TO DO
-	}
+    public ObjectsOnRGBGenerator(
+            DrawObject drawObject,
+            ObjectDrawAttributes attributes,
+            Optional<DisplayStack> background) {
+        super();
+        this.drawObject = drawObject;
+        this.attributes = attributes;
+        this.background = background;
+    }
 
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
+        try {
+            if (!background.isPresent()) {
+                throw new OutputWriteFailedException(
+                        "A background is required for this generator, but has not been set.");
+            }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		// NOTHING TO DO
-	}
+            RGBStack backgroundRGB = generateBackground(background.get());
+            drawObject.write(generateMasks(), backgroundRGB, attributes);
+            return backgroundRGB.asStack();
+        } catch (OperationFailedException | CreateException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
 
-	@Override
-	public boolean isRGB() {
-		return true;
-	}
+    @Override
+    public ObjectCollectionWithProperties getIterableElement() {
+        return element;
+    }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(MANIFEST_DESCRIPTION);
-	}
-	
-	protected abstract RGBStack generateBackground(DisplayStack background) throws CreateException;
-	
-	protected abstract ObjectCollectionWithProperties generateMasks() throws CreateException;
+    @Override
+    public void setIterableElement(ObjectCollectionWithProperties element) {
+        this.element = element;
+    }
+
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return this;
+    }
+
+    @Override
+    public void start() throws OutputWriteFailedException {
+        // NOTHING TO DO
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        // NOTHING TO DO
+    }
+
+    @Override
+    public boolean isRGB() {
+        return true;
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(MANIFEST_DESCRIPTION);
+    }
+
+    protected abstract RGBStack generateBackground(DisplayStack background) throws CreateException;
+
+    protected abstract ObjectCollectionWithProperties generateMasks() throws CreateException;
 }

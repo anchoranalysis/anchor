@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.list;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +23,11 @@ package org.anchoranalysis.feature.bean.list;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.list;
 
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.regex.RegEx;
@@ -34,32 +35,31 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Selects a number of features of shared-features matching against a regular-expression
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public class FeatureListProviderSelectFromShared<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderSelectFromShared<T extends FeatureInput>
+        extends FeatureListProviderReferencedFeatures<T> {
 
-	// START BEAN PROPERTIES
-	@BeanField @OptionalBean @Getter @Setter
-	private RegEx match;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public FeatureList<T> create() throws CreateException {
-		try {
-			return FeatureListFactory.mapFromFiltered(
-				getInitializationParameters().getFeatureListSet().keys(),
-				key -> match==null || match.hasMatch(key),	
-				key -> getInitializationParameters().getSharedFeatureSet().getException(key).downcast()
-			);
-		} catch (NamedProviderGetException e) {
-			throw new CreateException(e);
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField @OptionalBean @Getter @Setter private RegEx match;
+    // END BEAN PROPERTIES
+
+    @Override
+    public FeatureList<T> create() throws CreateException {
+        try {
+            return FeatureListFactory.mapFromFiltered(
+                    getInitializationParameters().getFeatureListSet().keys(),
+                    key -> match == null || match.hasMatch(key),
+                    key ->
+                            getInitializationParameters()
+                                    .getSharedFeatureSet()
+                                    .getException(key)
+                                    .downcast());
+        } catch (NamedProviderGetException e) {
+            throw new CreateException(e);
+        }
+    }
 }

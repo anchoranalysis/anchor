@@ -1,12 +1,8 @@
-package org.anchoranalysis.test.image;
-
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-
 /*-
  * #%L
- * anchor-test-feature-plugins
+ * anchor-test-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,12 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.test.image;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
@@ -35,41 +36,37 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.image.ChnlFixture.IntensityFunction;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NRGStackFixture {
-	
-	public static NRGStackWithParams create( boolean big, boolean do3D ) {
-	
-		Extent size = muxExtent(big, do3D);
-		
-		try {
-			Stack stack = new Stack();
-			addChnl(stack, size, ChnlFixture::sumMod);
-			addChnl(stack, size, ChnlFixture::diffMod);
-			addChnl(stack, size, ChnlFixture::multMod);
-			
-			NRGStack nrgStack = new NRGStack(stack);
-			return new NRGStackWithParams(nrgStack);
-			
-		} catch (IncorrectImageSizeException e) {
-			throw new AnchorImpossibleSituationException();
-		}
-	}
-	
-	private static Extent muxExtent( boolean big, boolean do3D ) {
-		if (do3D) {
-			return big ? ChnlFixture.LARGE_3D : ChnlFixture.MEDIUM_3D;
-		} else {
-			return big ? ChnlFixture.LARGE_2D : ChnlFixture.MEDIUM_2D;
-		}
-	}
-	
-	private static void addChnl( Stack stack, Extent size, IntensityFunction intensityFunction ) throws IncorrectImageSizeException {
-		stack.addChnl(
-			ChnlFixture.createChnl(size, intensityFunction)
-		);
-	}
+
+    public static NRGStackWithParams create(boolean big, boolean do3D) {
+
+        Extent size = muxExtent(big, do3D);
+
+        try {
+            Stack stack = new Stack();
+            addChnl(stack, size, ChnlFixture::sumMod);
+            addChnl(stack, size, ChnlFixture::diffMod);
+            addChnl(stack, size, ChnlFixture::multMod);
+
+            NRGStack nrgStack = new NRGStack(stack);
+            return new NRGStackWithParams(nrgStack);
+
+        } catch (IncorrectImageSizeException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+
+    private static Extent muxExtent(boolean big, boolean do3D) {
+        if (do3D) {
+            return big ? ChnlFixture.LARGE_3D : ChnlFixture.MEDIUM_3D;
+        } else {
+            return big ? ChnlFixture.LARGE_2D : ChnlFixture.MEDIUM_2D;
+        }
+    }
+
+    private static void addChnl(Stack stack, Extent size, IntensityFunction intensityFunction)
+            throws IncorrectImageSizeException {
+        stack.addChnl(ChnlFixture.createChnl(size, intensityFunction));
+    }
 }

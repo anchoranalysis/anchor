@@ -1,18 +1,8 @@
-package org.anchoranalysis.image.feature.bean.pixelwise;
-
-
-
-import java.util.List;
-import java.util.Optional;
-
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.params.KeyValueParams;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,26 +23,33 @@ import org.anchoranalysis.core.params.KeyValueParams;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.pixelwise;
 
+import java.util.List;
+import java.util.Optional;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /** Calculates a per-pixel score */
 public abstract class PixelScore extends ImageBean<PixelScore> {
-	
-	/**
-	 * Initializes the pixels-score.
-	 * 
-	 * <p>Must be called before calc()</p>
-	 * 
-	 * @param histograms one or more histograms associated with this calculation
-	 * @param keyValueParams optional key-value params associated with this calculation
-	 * @throws InitException if anything goes wrong
-	 */
-	public void init( List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
-		// TO be overridden if needed
-	}
-	
-	public abstract double calc(int[] pixelVals) throws FeatureCalcException;
+
+    /**
+     * Initializes the pixels-score.
+     *
+     * <p>Must be called before calc()
+     *
+     * @param histograms one or more histograms associated with this calculation
+     * @param keyValueParams optional key-value params associated with this calculation
+     * @throws InitException if anything goes wrong
+     */
+    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
+            throws InitException {
+        // TO be overridden if needed
+    }
+
+    public abstract double calc(int[] pixelVals) throws FeatureCalcException;
 }

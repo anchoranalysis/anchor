@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.bean.require;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,13 @@ package org.anchoranalysis.experiment.bean.require;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.require;
 
 public class RequireDebugMode extends RequireArguments {
-	
-	@Override
-	public boolean hasAllRequiredArguments( boolean debugModeEnabled ) {
-		return debugModeEnabled;
-	}
+
+    @Override
+    public boolean hasAllRequiredArguments(boolean debugModeEnabled) {
+        return debugModeEnabled;
+    }
 }

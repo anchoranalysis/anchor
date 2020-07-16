@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.bean.log;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +23,11 @@ package org.anchoranalysis.experiment.bean.log;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.log;
 
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
@@ -34,38 +35,31 @@ import org.anchoranalysis.experiment.bean.require.RequireArguments;
 import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Logs messages to a particular location ONLY if certain conditions are fulfilled.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class OnlyIf extends LoggingDestination {
 
-	// START BEAN PROPERTIES
-	/** The logger to use if conditions are fulfilled */
-	@BeanField @Getter @Setter
-	private LoggingDestination log;
-	
-	/** The conditions that must be fulfilled */
-	@BeanField  @Getter @Setter
-	private RequireArguments requireArguments;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public StatefulMessageLogger create(
-		BoundOutputManager outputManager,
-		ErrorReporter errorReporter,
-		ExperimentExecutionArguments arguments,
-		boolean detailedLogging
-	) {
-		if (requireArguments.hasAllRequiredArguments(arguments.isDebugModeEnabled())) {
-			return log.create(outputManager, errorReporter, arguments, detailedLogging);
-		} else {
-			return new StatefulNullMessageLogger();
-		}
-	}
+    // START BEAN PROPERTIES
+    /** The logger to use if conditions are fulfilled */
+    @BeanField @Getter @Setter private LoggingDestination log;
+
+    /** The conditions that must be fulfilled */
+    @BeanField @Getter @Setter private RequireArguments requireArguments;
+    // END BEAN PROPERTIES
+
+    @Override
+    public StatefulMessageLogger create(
+            BoundOutputManager outputManager,
+            ErrorReporter errorReporter,
+            ExperimentExecutionArguments arguments,
+            boolean detailedLogging) {
+        if (requireArguments.hasAllRequiredArguments(arguments.isDebugModeEnabled())) {
+            return log.create(outputManager, errorReporter, arguments, detailedLogging);
+        } else {
+            return new StatefulNullMessageLogger();
+        }
+    }
 }

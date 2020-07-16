@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.bean.kernel.proposer;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.AnchorBean;
@@ -46,166 +44,165 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 
 public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 
-	// START BEAN
-	@BeanField
-	private List<KernelProposerOption<T>> optionList = new ArrayList<>();
-	
-	@BeanField
-	private Kernel<T> initialKernel;
-	// END BEAN
+    // START BEAN
+    @BeanField private List<KernelProposerOption<T>> optionList = new ArrayList<>();
 
-	private double[] cumProbArr;
-	private ArrayList<WeightedKernel<T>> lstKernelFactories = null;
-	
-	public void init() throws InitException {
-		calcCumProb( optionList );
-		
-		// Ensure no two kernel factories have the same name
-		EnsureUniqueNames.apply( lstKernelFactories );		
-	}
-		
-	public void initWithProposerSharedObjects( MPPInitParams so, Logger logger ) throws InitException {
-		
-		for (WeightedKernel<T> wkf : lstKernelFactories) {
-			wkf.getKernel().initRecursive(so, logger);
-		}
-	}
-		
-	public void initBeforeCalc( KernelCalcContext context ) throws InitException {
-		for (WeightedKernel<T> wkf : lstKernelFactories) {
-			wkf.getKernel().initBeforeCalc(context);
-		}
-	}
-	
-	public KernelWithID<T> initialKernel() {
-		return new KernelWithID<>(lstKernelFactories.get(0).getKernel(),0);
-	}
-	
-	// Proposes a kernel
-	public KernelWithID<T> proposeKernel( RandomNumberGenerator randomNumberGenerator ) {
-		return proposeKernel(
-			randomNumberGenerator.sampleDoubleZeroAndOne()
-		);
-	}
-	
-	public int getNumKernel() {
-		assert lstKernelFactories!= null;
-		return lstKernelFactories.size();
-	}
-	
-	public WeightedKernelList<T> getAllKernelFactories() {
-		
-		WeightedKernelList<T> listOut = new WeightedKernelList<>();
-		for( int i=0; i<getNumKernel(); i++) {
-			WeightedKernel<T> wkf = lstKernelFactories.get(i);
-			listOut.add( wkf );
-		}
-		return listOut;
-	}
-	
-	public String[] createKernelFactoryNames() {
-		
-		String[] namesOut = new String[ getNumKernel() ];
-		for( int i=0; i<getNumKernel(); i++) {
-			namesOut[i] = lstKernelFactories.get(i).getKernel().getBeanName();
-		}
-		return namesOut;
-	}
-	
-	public WeightedKernel<T> getWeightedKernelFactory( int i ) {
-		return this.lstKernelFactories.get(i);
-	}
-	
-	// View of the kernel proposer
-	@Override
-	public String toString() {
-		
-		String newLine = System.getProperty("line.separator");
-		
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append( "{size=" );
-		sb.append( getNumKernel());
-		sb.append( newLine );
-		for ( int i=0; i<getNumKernel(); i++ ) {
-			sb.append( String.format("%d: %s%n", i, getWeightedKernelFactory(i).toString()) );
-		}
-		sb.append( "}" );
-		
-		return sb.toString();
-	}
+    @BeanField private Kernel<T> initialKernel;
+    // END BEAN
 
-	public void checkCompatibleWith(Mark testMark) {
+    private double[] cumProbArr;
+    private ArrayList<WeightedKernel<T>> lstKernelFactories = null;
 
-		for (WeightedKernel<T> wkf : lstKernelFactories) {
-			if (!wkf.getKernel().isCompatibleWith(testMark)) {
-				throw new UnsupportedOperationException( String.format("Kernel %s is not compatible with templateMark", wkf.getName()) );
-			}
-		}
-	}
+    public void init() throws InitException {
+        calcCumProb(optionList);
 
-	public Kernel<T> getInitialKernel() {
-		return initialKernel;
-	}
+        // Ensure no two kernel factories have the same name
+        EnsureUniqueNames.apply(lstKernelFactories);
+    }
 
-	public void setInitialKernel(Kernel<T> initialKernel) {
-		this.initialKernel = initialKernel;
-	}
+    public void initWithProposerSharedObjects(MPPInitParams so, Logger logger)
+            throws InitException {
 
-	public List<KernelProposerOption<T>> getOptionList() {
-		return optionList;
-	}
+        for (WeightedKernel<T> wkf : lstKernelFactories) {
+            wkf.getKernel().initRecursive(so, logger);
+        }
+    }
 
-	public void setOptionList(List<KernelProposerOption<T>> optionList) {
-		this.optionList = optionList;
-	}
+    public void initBeforeCalc(KernelCalcContext context) throws InitException {
+        for (WeightedKernel<T> wkf : lstKernelFactories) {
+            wkf.getKernel().initBeforeCalc(context);
+        }
+    }
 
-	private void calcCumProb( List<KernelProposerOption<T>> options ) throws InitException {
-		
-		if (options.isEmpty()) {
-			throw new InitException("At least one option must be specified");
-		}
-		
-		lstKernelFactories = new ArrayList<>();
-		
-		// We add our initial kernel to the list, but weight it with 0, so it cannot
-		// ordinarily be chosen
-		// THIS MUST BE THE FIRST ITEM OF THE LIST, so we can pick from it later
-		//   see proposeKernel
-		lstKernelFactories.add( new WeightedKernel<T>(initialKernel, 0.0));
-		
-		// First we get a sum of all prob for normalization
-		// and we population the lst kernel factories
-		double total = 0;
-		for( KernelProposerOption<T> opt : options ) {
-			total += opt.addWeightedKernelFactories(lstKernelFactories);
-		}		
+    public KernelWithID<T> initialKernel() {
+        return new KernelWithID<>(lstKernelFactories.get(0).getKernel(), 0);
+    }
 
-		if (total==0) {
-			throw new InitException("The total weights of the kernel-factories must be > 0");
-		}
-		
-		// We a derived array with the cumulative probabilities
-		cumProbArr = new double[ lstKernelFactories.size() ];
-		double running = 0;
-		for( int i=0; i<lstKernelFactories.size(); i++ ) {
-			running += (lstKernelFactories.get(i).getWeight() / total);
-			cumProbArr[i] = running;
-		}
-	}
-	
-	// Proposes a kernel
-	private KernelWithID<T> proposeKernel( double randomValueBetweenZeroAndOne ) {
-		
-		for( int i=0; i<getNumKernel(); i++) {
+    // Proposes a kernel
+    public KernelWithID<T> proposeKernel(RandomNumberGenerator randomNumberGenerator) {
+        return proposeKernel(randomNumberGenerator.sampleDoubleZeroAndOne());
+    }
 
-			WeightedKernel<T> wkf = getWeightedKernelFactory(i);
-			
-			if (randomValueBetweenZeroAndOne<cumProbArr[i] ) {
-				return new KernelWithID<>( wkf.getKernel(), i );
-			} 
-		}
-		
-		throw new AnchorImpossibleSituationException();
-	}
+    public int getNumKernel() {
+        assert lstKernelFactories != null;
+        return lstKernelFactories.size();
+    }
+
+    public WeightedKernelList<T> getAllKernelFactories() {
+
+        WeightedKernelList<T> listOut = new WeightedKernelList<>();
+        for (int i = 0; i < getNumKernel(); i++) {
+            WeightedKernel<T> wkf = lstKernelFactories.get(i);
+            listOut.add(wkf);
+        }
+        return listOut;
+    }
+
+    public String[] createKernelFactoryNames() {
+
+        String[] namesOut = new String[getNumKernel()];
+        for (int i = 0; i < getNumKernel(); i++) {
+            namesOut[i] = lstKernelFactories.get(i).getKernel().getBeanName();
+        }
+        return namesOut;
+    }
+
+    public WeightedKernel<T> getWeightedKernelFactory(int i) {
+        return this.lstKernelFactories.get(i);
+    }
+
+    // View of the kernel proposer
+    @Override
+    public String toString() {
+
+        String newLine = System.getProperty("line.separator");
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{size=");
+        sb.append(getNumKernel());
+        sb.append(newLine);
+        for (int i = 0; i < getNumKernel(); i++) {
+            sb.append(String.format("%d: %s%n", i, getWeightedKernelFactory(i).toString()));
+        }
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+    public void checkCompatibleWith(Mark testMark) {
+
+        for (WeightedKernel<T> wkf : lstKernelFactories) {
+            if (!wkf.getKernel().isCompatibleWith(testMark)) {
+                throw new UnsupportedOperationException(
+                        String.format(
+                                "Kernel %s is not compatible with templateMark", wkf.getName()));
+            }
+        }
+    }
+
+    public Kernel<T> getInitialKernel() {
+        return initialKernel;
+    }
+
+    public void setInitialKernel(Kernel<T> initialKernel) {
+        this.initialKernel = initialKernel;
+    }
+
+    public List<KernelProposerOption<T>> getOptionList() {
+        return optionList;
+    }
+
+    public void setOptionList(List<KernelProposerOption<T>> optionList) {
+        this.optionList = optionList;
+    }
+
+    private void calcCumProb(List<KernelProposerOption<T>> options) throws InitException {
+
+        if (options.isEmpty()) {
+            throw new InitException("At least one option must be specified");
+        }
+
+        lstKernelFactories = new ArrayList<>();
+
+        // We add our initial kernel to the list, but weight it with 0, so it cannot
+        // ordinarily be chosen
+        // THIS MUST BE THE FIRST ITEM OF THE LIST, so we can pick from it later
+        //   see proposeKernel
+        lstKernelFactories.add(new WeightedKernel<T>(initialKernel, 0.0));
+
+        // First we get a sum of all prob for normalization
+        // and we population the lst kernel factories
+        double total = 0;
+        for (KernelProposerOption<T> opt : options) {
+            total += opt.addWeightedKernelFactories(lstKernelFactories);
+        }
+
+        if (total == 0) {
+            throw new InitException("The total weights of the kernel-factories must be > 0");
+        }
+
+        // We a derived array with the cumulative probabilities
+        cumProbArr = new double[lstKernelFactories.size()];
+        double running = 0;
+        for (int i = 0; i < lstKernelFactories.size(); i++) {
+            running += (lstKernelFactories.get(i).getWeight() / total);
+            cumProbArr[i] = running;
+        }
+    }
+
+    // Proposes a kernel
+    private KernelWithID<T> proposeKernel(double randomValueBetweenZeroAndOne) {
+
+        for (int i = 0; i < getNumKernel(); i++) {
+
+            WeightedKernel<T> wkf = getWeightedKernelFactory(i);
+
+            if (randomValueBetweenZeroAndOne < cumProbArr[i]) {
+                return new KernelWithID<>(wkf.getKernel(), i);
+            }
+        }
+
+        throw new AnchorImpossibleSituationException();
+    }
 }

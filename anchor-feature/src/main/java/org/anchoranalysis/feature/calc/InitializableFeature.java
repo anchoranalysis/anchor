@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.calc;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.feature.calc;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.calc;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -32,21 +32,22 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any calculations occur.
- * 
- * @author Owen Feehan
+ * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any
+ * calculations occur.
  *
+ * @author Owen Feehan
  * @param <T> input-type for feature
  */
 public interface InitializableFeature<T extends FeatureInput> {
 
-	void init( FeatureInitParams params, Feature<T> parentFeature, Logger logger) throws InitException;
-	
-	/**
-	 * A friendly name that can be displayed to user describing the Feature. Should always prioritise the CustomName
-	 *   if one is associated with the feature
-	 *   
-	 * @return
-	 */
-	String getFriendlyName();
+    void init(FeatureInitParams params, Feature<T> parentFeature, Logger logger)
+            throws InitException;
+
+    /**
+     * A friendly name that can be displayed to user describing the Feature. Should always
+     * prioritise the CustomName if one is associated with the feature
+     *
+     * @return
+     */
+    String getFriendlyName();
 }

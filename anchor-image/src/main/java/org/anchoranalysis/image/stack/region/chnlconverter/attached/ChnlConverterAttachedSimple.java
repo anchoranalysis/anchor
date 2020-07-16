@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.stack.region.chnlconverter.attached;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,10 @@ package org.anchoranalysis.image.stack.region.chnlconverter.attached;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.stack.region.chnlconverter.attached;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
@@ -36,34 +34,33 @@ import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConv
 
 /**
  * Simply passes everything onto a ChnlConverter
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <S> attachment-type
  * @param <T> destination-type
  */
-public class ChnlConverterAttachedSimple<S,T extends Buffer> implements ChnlConverterAttached<S,T> {
+public class ChnlConverterAttachedSimple<S, T extends Buffer>
+        implements ChnlConverterAttached<S, T> {
 
-	private ChannelConverter<T> delegate;
-		
-	public ChnlConverterAttachedSimple(ChannelConverter<T> delegate) {
-		super();
-		this.delegate = delegate;
-	}
-	
-	@Override
-	public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
-		return delegate.convert(chnl, changeExisting);
-	}
+    private ChannelConverter<T> delegate;
 
-	@Override
-	public void attachObject(S obj) {
-		// Nothing happens
-	}
+    public ChnlConverterAttachedSimple(ChannelConverter<T> delegate) {
+        super();
+        this.delegate = delegate;
+    }
 
-	@Override
-	public VoxelBoxConverter<T> getVoxelBoxConverter() {
-		return delegate.getVoxelBoxConverter();
-	}
+    @Override
+    public Channel convert(Channel chnl, ConversionPolicy changeExisting) {
+        return delegate.convert(chnl, changeExisting);
+    }
 
+    @Override
+    public void attachObject(S obj) {
+        // Nothing happens
+    }
+
+    @Override
+    public VoxelBoxConverter<T> getVoxelBoxConverter() {
+        return delegate.getVoxelBoxConverter();
+    }
 }

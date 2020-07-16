@@ -1,12 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,20 +23,21 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 
 /**
  * Converts the optimization state to a form that the reporter needs
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public abstract class StateReporter<T,S> extends AnchorBean<StateReporter<T,S>> {
+public abstract class StateReporter<T, S> extends AnchorBean<StateReporter<T, S>> {
 
-	public abstract StateTransformer<T, S> primaryReport();
-	
-	public abstract Optional<StateTransformer<T, S>> secondaryReport();
-	
+    public abstract StateTransformer<T, S> primaryReport();
+
+    public abstract Optional<StateTransformer<T, S>> secondaryReport();
 }

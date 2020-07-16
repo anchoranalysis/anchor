@@ -1,14 +1,8 @@
-package org.anchoranalysis.io.bean.object.writer;
-
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,9 +23,16 @@ import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.object.writer;
 
-
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
+import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,40 +42,44 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
- * Performs a flattening (maximum intensity projection in each channel) of the output of another writer
- * <p>
- * Note it doesn't cache the underlying writer.
- 
- * @author Owen Feehan
+ * Performs a flattening (maximum intensity projection in each channel) of the output of another
+ * writer
  *
+ * <p>Note it doesn't cache the underlying writer.
+ *
+ * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Flatten extends DrawObject {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private DrawObject writer;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
-			throws CreateException {
-		
-		ObjectWithProperties maskMIP = mask.map(ObjectMask::maxIntensityProjection);
-		
-		return new PrecalcOverlay(mask) {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private DrawObject writer;
+    // END BEAN PROPERTIES
 
-			@Override
-			public void writePrecalculatedMask(RGBStack background, ObjectDrawAttributes attributes, int iteration,
-					BoundingBox restrictTo) throws OperationFailedException {
-				writer.writeSingle( (ObjectWithProperties) maskMIP, background, attributes, iteration, restrictTo);
-			}
-		};
-	}
+    @Override
+    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+            throws CreateException {
+
+        ObjectWithProperties maskMIP = mask.map(ObjectMask::maxIntensityProjection);
+
+        return new PrecalcOverlay(mask) {
+
+            @Override
+            public void writePrecalculatedMask(
+                    RGBStack background,
+                    ObjectDrawAttributes attributes,
+                    int iteration,
+                    BoundingBox restrictTo)
+                    throws OperationFailedException {
+                writer.writeSingle(
+                        (ObjectWithProperties) maskMIP,
+                        background,
+                        attributes,
+                        iteration,
+                        restrictTo);
+            }
+        };
+    }
 }

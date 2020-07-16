@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
 /*-
  * #%L
  * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,10 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.io.generator.Generator;
@@ -38,11 +37,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public interface SequenceWriter {
 
-	void init( FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder  ) throws InitException;
-	
-	boolean isOn();
-	
-	void write(Operation<Generator,OutputWriteFailedException> generator, String index) throws OutputWriteFailedException;
-	
-	Optional<BoundOutputManager> getOutputManagerForFiles();
+    void init(FileType[] fileTypes, SequenceType sequenceType, boolean suppressSubfolder)
+            throws InitException;
+
+    boolean isOn();
+
+    void write(Operation<Generator, OutputWriteFailedException> generator, String index)
+            throws OutputWriteFailedException;
+
+    Optional<BoundOutputManager> getOutputManagerForFiles();
 }

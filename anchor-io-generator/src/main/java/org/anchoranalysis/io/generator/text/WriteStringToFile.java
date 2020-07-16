@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.text;
-
 /*-
  * #%L
  * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.generator.text;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.text;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,15 +32,15 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 
 public class WriteStringToFile {
-	
-	private WriteStringToFile() {}
-	
-	public static void apply( String element, Path filePath ) throws IOException {
-		FileWriter outFile = new FileWriter( filePath.toFile() );
-		PrintWriter out = new PrintWriter(outFile);
 
-		out.println( element );
-		
-		out.close();		
-	}
+    private WriteStringToFile() {}
+
+    public static void apply(String element, Path filePath) throws IOException {
+        FileWriter outFile = new FileWriter(filePath.toFile());
+        PrintWriter out = new PrintWriter(outFile);
+
+        out.println(element);
+
+        out.close();
+    }
 }

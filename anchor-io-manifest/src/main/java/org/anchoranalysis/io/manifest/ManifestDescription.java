@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.manifest;
-
-import java.io.Serializable;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,29 +23,31 @@ import java.io.Serializable;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest;
+
+import java.io.Serializable;
 
 public class ManifestDescription implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	private final String type;
-	private final String function;
+    private final String type;
+    private final String function;
 
-	public ManifestDescription(String type, String function) {
-		super();
-		this.type = type;
-		this.function = function;
-		assert(!this.function.isEmpty());
-	}
-	
-	public String getFunction() {
-		return function;
-	}
+    public ManifestDescription(String type, String function) {
+        super();
+        this.type = type;
+        this.function = function;
+        assert (!this.function.isEmpty());
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getFunction() {
+        return function;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

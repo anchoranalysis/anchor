@@ -1,12 +1,8 @@
-package org.anchoranalysis.feature.session.strategy.replace;
-
-
-
 /*-
  * #%L
  * anchor-feature-session
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +23,8 @@ package org.anchoranalysis.feature.session.strategy.replace;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.session.strategy.replace;
 
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -35,36 +33,34 @@ import org.anchoranalysis.feature.cache.calculation.CacheCreator;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-
-
 /**
- * Reuse (without needing to invalidate) an existing session-input as stored in a least-recently used cache, otherwise create a new one.
- * 
- * @author Owen Feehan
+ * Reuse (without needing to invalidate) an existing session-input as stored in a least-recently
+ * used cache, otherwise create a new one.
  *
+ * @author Owen Feehan
  * @param <T> feature-input
  */
 public class CacheAndReuseStrategy<T extends FeatureInput> implements ReplaceStrategy<T> {
 
-	private static final int CACHE_SIZE = 200;
-	
-	private LRUCache<T, SessionInput<T>> cache;
-	
-	public CacheAndReuseStrategy(CacheCreator cacheCreator) {
-		ReplaceStrategy<T> delegate = new AlwaysNew<>(cacheCreator);
-		cache = new LRUCache<>(CACHE_SIZE, delegate::createOrReuse);
-	}
-	
-	@Override
-	public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
-		try {
-			return cache.get(input); 
-		} catch (GetOperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
+    private static final int CACHE_SIZE = 200;
 
-	public LRUCache<T, SessionInput<T>> getCache() {
-		return cache;
-	}
+    private LRUCache<T, SessionInput<T>> cache;
+
+    public CacheAndReuseStrategy(CacheCreator cacheCreator) {
+        ReplaceStrategy<T> delegate = new AlwaysNew<>(cacheCreator);
+        cache = new LRUCache<>(CACHE_SIZE, delegate::createOrReuse);
+    }
+
+    @Override
+    public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
+        try {
+            return cache.get(input);
+        } catch (GetOperationFailedException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
+
+    public LRUCache<T, SessionInput<T>> getCache() {
+        return cache;
+    }
 }

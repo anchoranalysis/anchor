@@ -1,15 +1,8 @@
-package org.anchoranalysis.io.bean.object.writer;
-
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
-import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
-import org.anchoranalysis.core.error.CreateException;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,9 +23,13 @@ import org.anchoranalysis.core.error.CreateException;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.object.writer;
 
-
-
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
+import org.anchoranalysis.anchor.overlay.writer.ObjectDrawAttributes;
+import org.anchoranalysis.anchor.overlay.writer.PrecalcOverlay;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -41,28 +38,30 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 /**
  * Draws a filled-in shape for each object.
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Filled extends DrawObject {
 
-	@Override
-	public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim) throws CreateException {
-		return new PrecalcOverlay(mask) {
+    @Override
+    public PrecalcOverlay precalculate(ObjectWithProperties mask, ImageDimensions dim)
+            throws CreateException {
+        return new PrecalcOverlay(mask) {
 
-			@Override
-			public void writePrecalculatedMask(RGBStack background, ObjectDrawAttributes attributes, int iteration,
-					BoundingBox restrictTo) throws OperationFailedException {
-				
-				IntersectionWriter.writeRGBMaskIntersection(
-					mask.getMask(),
-					attributes.colorFor(mask, iteration),
-					background,
-					restrictTo
-				);
-			}
-			
-		};
-	}
+            @Override
+            public void writePrecalculatedMask(
+                    RGBStack background,
+                    ObjectDrawAttributes attributes,
+                    int iteration,
+                    BoundingBox restrictTo)
+                    throws OperationFailedException {
+
+                IntersectionWriter.writeRGBMaskIntersection(
+                        mask.getMask(),
+                        attributes.colorFor(mask, iteration),
+                        background,
+                        restrictTo);
+            }
+        };
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.folder;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import java.io.Serializable;
 import java.util.Map;
-
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -41,58 +39,67 @@ import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleUtilities;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
-public class DeserializedObjectFromFolderBundle<T extends Serializable> implements ITypedGetFromIndex<T> {
+public class DeserializedObjectFromFolderBundle<T extends Serializable>
+        implements ITypedGetFromIndex<T> {
 
-	private LRUCache<Integer,Map<Integer,T>> cache;
-	private BundleParameters bundleParameters;
-	private OrderProvider orderProvider;
-	
-	public DeserializedObjectFromFolderBundle(FolderWrite folderWrite, final BundleDeserializers<T> deserializers, int cacheSize ) throws DeserializationFailedException {
-		super();
-		
-		final FolderWrite bundleFolder = folderWrite;
-		
-		// We create our cache
-		this.cache = new LRUCache<>(
-			cacheSize,
-			index -> {
-				try {
-					Bundle<T> bundle = BundleUtilities.generateBundle( deserializers.getDeserializerBundle(), bundleFolder, index);
-					return bundle.createHashMap();
-				} catch (IllegalArgumentException | DeserializationFailedException e) {
-					throw new OperationFailedException(e);
-				}
-			}
-		);
-		
-		bundleParameters = BundleUtilities.generateBundleParameters( deserializers.getDeserializerBundleParameters(), folderWrite );
-		
-		if (bundleParameters==null) {
-			throw new DeserializationFailedException("Cannot find bundle parameters");
-		}
-		
-		orderProvider = bundleParameters.getSequenceType().createOrderProvider();
+    private LRUCache<Integer, Map<Integer, T>> cache;
+    private BundleParameters bundleParameters;
+    private OrderProvider orderProvider;
 
-	}
+    public DeserializedObjectFromFolderBundle(
+            FolderWrite folderWrite, final BundleDeserializers<T> deserializers, int cacheSize)
+            throws DeserializationFailedException {
+        super();
 
-	@Override
-	public T get(int index) throws GetOperationFailedException {
-		
-		// We divide the index by the bundle size, to get whichever bundle we need to retrieve
-		int bundleIndex = orderProvider.order( String.valueOf(index) ) / bundleParameters.getBundleSize();
-		
-		// This HashMap can contain NULL keys representing deliberately null objects
-		Map<Integer,T> hashMap = this.cache.get(bundleIndex);
-		
-		if (!hashMap.containsKey(index)) {
-			throw new GetOperationFailedException( String.format("Cannot find index %i in bundle",index) );
-		}
-		
-		return hashMap.get( index );
-	}
+        final FolderWrite bundleFolder = folderWrite;
 
-	public BundleParameters getBundleParameters() {
-		return bundleParameters;
-	}
+        // We create our cache
+        this.cache =
+                new LRUCache<>(
+                        cacheSize,
+                        index -> {
+                            try {
+                                Bundle<T> bundle =
+                                        BundleUtilities.generateBundle(
+                                                deserializers.getDeserializerBundle(),
+                                                bundleFolder,
+                                                index);
+                                return bundle.createHashMap();
+                            } catch (IllegalArgumentException | DeserializationFailedException e) {
+                                throw new OperationFailedException(e);
+                            }
+                        });
 
+        bundleParameters =
+                BundleUtilities.generateBundleParameters(
+                        deserializers.getDeserializerBundleParameters(), folderWrite);
+
+        if (bundleParameters == null) {
+            throw new DeserializationFailedException("Cannot find bundle parameters");
+        }
+
+        orderProvider = bundleParameters.getSequenceType().createOrderProvider();
+    }
+
+    @Override
+    public T get(int index) throws GetOperationFailedException {
+
+        // We divide the index by the bundle size, to get whichever bundle we need to retrieve
+        int bundleIndex =
+                orderProvider.order(String.valueOf(index)) / bundleParameters.getBundleSize();
+
+        // This HashMap can contain NULL keys representing deliberately null objects
+        Map<Integer, T> hashMap = this.cache.get(bundleIndex);
+
+        if (!hashMap.containsKey(index)) {
+            throw new GetOperationFailedException(
+                    String.format("Cannot find index %i in bundle", index));
+        }
+
+        return hashMap.get(index);
+    }
+
+    public BundleParameters getBundleParameters() {
+        return bundleParameters;
+    }
 }

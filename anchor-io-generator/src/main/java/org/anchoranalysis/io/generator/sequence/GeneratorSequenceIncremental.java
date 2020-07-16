@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.generator.sequence;
-
 /*-
  * #%L
  * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +23,16 @@ package org.anchoranalysis.io.generator.sequence;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.sequence;
 
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public interface GeneratorSequenceIncremental<T> {
 
-	void start() throws OutputWriteFailedException;
-	
-	void add( T element ) throws OutputWriteFailedException;
-	
-	void end() throws OutputWriteFailedException;
+    void start() throws OutputWriteFailedException;
+
+    void add(T element) throws OutputWriteFailedException;
+
+    void end() throws OutputWriteFailedException;
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.bound;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,67 +23,64 @@ package org.anchoranalysis.anchor.mpp.bean.bound;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.bound;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
-
 public abstract class BoundMinMax extends Bound {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -493791653577617743L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ResolvedBound delegate;
-	// END BEAN PROPERTIES
-	
-	public BoundMinMax() {
-		delegate = new ResolvedBound();
-	}
-	
-	public BoundMinMax( double min, double max ) {
-		delegate = new ResolvedBound(min,max);
-	}
-	
-	public BoundMinMax( BoundMinMax src ) {
-		delegate = new ResolvedBound(src.delegate);
-	}
+    /** */
+    private static final long serialVersionUID = -493791653577617743L;
 
-	// Getters and Setters
-	public double getMin() {
-		return delegate.getMin();
-	}
+    // START BEAN PROPERTIES
+    @BeanField private ResolvedBound delegate;
+    // END BEAN PROPERTIES
 
-	public void setMin(double min) {
-		delegate.setMin(min);
-	}
+    public BoundMinMax() {
+        delegate = new ResolvedBound();
+    }
 
-	public double getMax() {
-		return delegate.getMax();
-	}
+    public BoundMinMax(double min, double max) {
+        delegate = new ResolvedBound(min, max);
+    }
 
-	public void setMax(double max) {
-		delegate.setMax(max);
-	}
+    public BoundMinMax(BoundMinMax src) {
+        delegate = new ResolvedBound(src.delegate);
+    }
 
-	@Override
-	public String getBeanDscr() {
-		return delegate.getDscr();
-	}
-	
-	@Override
-	public void scale( double multFactor ) {
-		delegate.scale(multFactor);
-	}
+    // Getters and Setters
+    public double getMin() {
+        return delegate.getMin();
+    }
 
-	public ResolvedBound getDelegate() {
-		return delegate;
-	}
+    public void setMin(double min) {
+        delegate.setMin(min);
+    }
 
-	public void setDelegate(ResolvedBound delegate) {
-		this.delegate = delegate;
-	}
+    public double getMax() {
+        return delegate.getMax();
+    }
+
+    public void setMax(double max) {
+        delegate.setMax(max);
+    }
+
+    @Override
+    public String getBeanDscr() {
+        return delegate.getDscr();
+    }
+
+    @Override
+    public void scale(double multFactor) {
+        delegate.scale(multFactor);
+    }
+
+    public ResolvedBound getDelegate() {
+        return delegate;
+    }
+
+    public void setDelegate(ResolvedBound delegate) {
+        this.delegate = delegate;
+    }
 }

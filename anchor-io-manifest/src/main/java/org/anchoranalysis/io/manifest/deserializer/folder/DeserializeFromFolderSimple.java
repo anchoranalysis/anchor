@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer.folder;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.manifest.deserializer.folder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer.folder;
 
 import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.io.bean.deserializer.Deserializer;
@@ -33,18 +33,15 @@ import org.anchoranalysis.io.manifest.folder.SequencedFolder;
 
 public class DeserializeFromFolderSimple<T> extends DeserializeFromFolder<T> {
 
-	private Deserializer<T> deserializer;
-	
-	public DeserializeFromFolderSimple(
-			Deserializer<T> deserializer, SequencedFolder folder) {
-		super(folder);
-		this.deserializer = deserializer;
-	}
+    private Deserializer<T> deserializer;
 
-	@Override
-	protected ITypedGetFromIndex<T> createCtnr(
-			SequencedFolder folder) {
-		return new SequencedFolderDeserializer<>(folder, deserializer);
-	}
+    public DeserializeFromFolderSimple(Deserializer<T> deserializer, SequencedFolder folder) {
+        super(folder);
+        this.deserializer = deserializer;
+    }
 
+    @Override
+    protected ITypedGetFromIndex<T> createCtnr(SequencedFolder folder) {
+        return new SequencedFolderDeserializer<>(folder, deserializer);
+    }
 }

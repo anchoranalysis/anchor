@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.provider;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.bean.provider;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
@@ -35,5 +35,5 @@ import org.anchoranalysis.image.bean.ImageBean;
  * @param <T> family-type common base-class for all beans in this category
  * @param <S> provider-type what is provided
  */
-public abstract class BeanImgStackProvider<T,S> extends ImageBean<T> implements ProviderImgStack, Provider<S> {
-}
+public abstract class BeanImgStackProvider<T, S> extends ImageBean<T>
+        implements ProviderImgStack, Provider<S> {}

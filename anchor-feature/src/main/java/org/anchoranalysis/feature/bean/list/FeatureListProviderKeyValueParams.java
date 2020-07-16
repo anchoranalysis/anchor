@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.list;
-
-/*
+/*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.feature.bean.list;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.list;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,46 +36,42 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Loads a set of KeyValueParams as features
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public class FeatureListProviderKeyValueParams<T extends FeatureInput> extends FeatureListProvider<T> {
+public class FeatureListProviderKeyValueParams<T extends FeatureInput>
+        extends FeatureListProvider<T> {
 
-	// START BEAN PROPERTIES
-	@BeanField 
-	private String collectionID = "";
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private String collectionID = "";
+    // END BEAN PROPERTIES
 
-	@Override
-	public FeatureList<T> create() throws CreateException {
-		
-		try {
-			KeyValueParams kpv = getInitializationParameters().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
-			
-			return FeatureListFactory.mapFrom(
-				kpv.keySet(),
-				key -> featureForKey(key, kpv)
-			);
-			
-		} catch (NamedProviderGetException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	private Feature<T> featureForKey( String key, KeyValueParams kpv ) {
-		return new Constant<>(
-			key,
-			kpv.getPropertyAsDouble(key)
-		);
+    @Override
+    public FeatureList<T> create() throws CreateException {
 
-	}
+        try {
+            KeyValueParams kpv =
+                    getInitializationParameters()
+                            .getParams()
+                            .getNamedKeyValueParamsCollection()
+                            .getException(collectionID);
 
-	public String getCollectionID() {
-		return collectionID;
-	}
+            return FeatureListFactory.mapFrom(kpv.keySet(), key -> featureForKey(key, kpv));
 
-	public void setCollectionID(String collectionID) {
-		this.collectionID = collectionID;
-	}
+        } catch (NamedProviderGetException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private Feature<T> featureForKey(String key, KeyValueParams kpv) {
+        return new Constant<>(key, kpv.getPropertyAsDouble(key));
+    }
+
+    public String getCollectionID() {
+        return collectionID;
+    }
+
+    public void setCollectionID(String collectionID) {
+        this.collectionID = collectionID;
+    }
 }

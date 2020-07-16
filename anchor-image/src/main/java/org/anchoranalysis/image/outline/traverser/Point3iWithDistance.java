@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,36 +23,34 @@ package org.anchoranalysis.image.outline.traverser;
  * THE SOFTWARE.
  * #L%
  */
-
-import org.anchoranalysis.core.geometry.Point3i;
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.geometry.Point3i;
 
 @RequiredArgsConstructor
 class Point3iWithDistance {
 
-	@Getter
-	private final Point3i point;
-	
-	@Getter
-	private final int distance;
-	
-	// If non-null, this is a point that is a neighbor but
-	//   is disallowed from being on the same contiguous path
-	@Getter
-	private Point3i connPoint = null;
-	
-	@Override
-	public String toString() {
-		return String.format("%s--%d",point.toString(),distance);
-	}
+    @Getter private final Point3i point;
 
-	public boolean isForceNewPath() {
-		return connPoint!=null;
-	}
+    @Getter private final int distance;
 
-	public void markAsNewPath(Point3i connPoint ) {
-		this.connPoint = connPoint;
-	}
+    // If non-null, this is a point that is a neighbor but
+    //   is disallowed from being on the same contiguous path
+    @Getter private Point3i connPoint = null;
+
+    @Override
+    public String toString() {
+        return String.format("%s--%d", point.toString(), distance);
+    }
+
+    public boolean isForceNewPath() {
+        return connPoint != null;
+    }
+
+    public void markAsNewPath(Point3i connPoint) {
+        this.connPoint = connPoint;
+    }
 }

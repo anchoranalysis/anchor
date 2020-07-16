@@ -1,13 +1,8 @@
-package org.anchoranalysis.annotation;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-
 /*-
  * #%L
  * anchor-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,24 +23,28 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class AnnotationWithCfg implements Annotation {
-	
-	public abstract Cfg getCfg();
-	
-	protected abstract RegionMap getRegionMap();
-	
-	protected abstract int getRegionID();
-	
-	public ObjectCollection convertToObjects( ImageDimensions dimensions ) {
-		return getCfg().calcMask(
-			dimensions,
-			getRegionMap().membershipWithFlagsForIndex(getRegionID()),
-			BinaryValuesByte.getDefault()
-		).withoutProperties();
-	}
+
+    public abstract Cfg getCfg();
+
+    protected abstract RegionMap getRegionMap();
+
+    protected abstract int getRegionID();
+
+    public ObjectCollection convertToObjects(ImageDimensions dimensions) {
+        return getCfg().calcMask(
+                        dimensions,
+                        getRegionMap().membershipWithFlagsForIndex(getRegionID()),
+                        BinaryValuesByte.getDefault())
+                .withoutProperties();
+    }
 }

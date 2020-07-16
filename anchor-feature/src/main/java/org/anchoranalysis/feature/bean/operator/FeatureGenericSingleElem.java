@@ -1,10 +1,8 @@
-package org.anchoranalysis.feature.bean.operator;
-
 /*-
  * #%L
  * anchor-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,26 @@ package org.anchoranalysis.feature.bean.operator;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.feature.bean.operator;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A single-element feature that accepts the most generic of parameters {#link {@link FeatureInput}}
- * 
+ *
  * @author Owen Feehan
  * @param T input-type
  */
-public abstract class FeatureGenericSingleElem<T extends FeatureInput> extends FeatureSingleElem<T, T> {
+public abstract class FeatureGenericSingleElem<T extends FeatureInput>
+        extends FeatureSingleElem<T, T> {
 
-	public FeatureGenericSingleElem() {
-		super();
-	}
+    public FeatureGenericSingleElem() {
+        super();
+    }
 
-	public FeatureGenericSingleElem(Feature<T> feature) {
-		super(feature);
-	}
+    public FeatureGenericSingleElem(Feature<T> feature) {
+        super(feature);
+    }
 }

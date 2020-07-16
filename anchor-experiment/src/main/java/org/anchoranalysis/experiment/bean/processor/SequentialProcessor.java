@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.bean.processor;
-
 /*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,11 @@ package org.anchoranalysis.experiment.bean.processor;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.processor;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -43,69 +42,65 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
  * Executes jobs sequentially
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> input-object type
  * @param <S> shared-object type
  */
-public class SequentialProcessor<T extends InputFromManager,S> extends JobProcessor<T,S> {
-	
-	@Override
-	protected TaskStatistics execute(
-		BoundOutputManagerRouteErrors rootOutputManager,
-		List<T> inputObjects,
-		ParametersExperiment paramsExperiment
-	) throws ExperimentExecutionException {
-		
-		S sharedState = getTask().beforeAnyJobIsExecuted( rootOutputManager, paramsExperiment );
-		
-		TaskStatistics stats = executeAllJobs(
-			inputObjects,
-			sharedState,
-			paramsExperiment,
-			loggerForMonitor(paramsExperiment)
-		);
-		
-		getTask().afterAllJobsAreExecuted( sharedState, paramsExperiment.getContext() );
-		
-		return stats;
-	}
-	
-	private TaskStatistics executeAllJobs(
-		List<T> inputObjects,
-		S sharedState,
-		ParametersExperiment paramsExperiment,
-		Optional<MessageLogger> loggerMonitor
-	) {
-		
-		MonitoredSequentialExecutor<T> seqExecutor = new MonitoredSequentialExecutor<>(
-			object -> executeJobAndLog( object, sharedState, paramsExperiment ),
-			T::descriptiveName,
-			loggerMonitor,
-			false
-		);
-		
-		return seqExecutor.executeEachWithMonitor("Job: ", inputObjects);
-	}
-	
-	private boolean executeJobAndLog( T inputObj, S sharedState, ParametersExperiment paramsExperiment ) {
-		
-		MessageLogger logger = paramsExperiment.getLoggerExperiment();
-		ErrorReporter errorReporter = new ErrorReporterIntoLog(logger);
+public class SequentialProcessor<T extends InputFromManager, S> extends JobProcessor<T, S> {
 
-		try {
-			ParametersUnbound<T,S> paramsUnbound = new ParametersUnbound<>(
-				paramsExperiment,
-				inputObj,
-				sharedState,
-				isSuppressExceptions()
-			);
-			return getTask().executeJob( paramsUnbound );
-						
-		} catch (JobExecutionException e) {
-			errorReporter.recordError(SequentialProcessor.class, e);
-			return false;
-		}
-	}
+    @Override
+    protected TaskStatistics execute(
+            BoundOutputManagerRouteErrors rootOutputManager,
+            List<T> inputObjects,
+            ParametersExperiment paramsExperiment)
+            throws ExperimentExecutionException {
+
+        S sharedState = getTask().beforeAnyJobIsExecuted(rootOutputManager, paramsExperiment);
+
+        TaskStatistics stats =
+                executeAllJobs(
+                        inputObjects,
+                        sharedState,
+                        paramsExperiment,
+                        loggerForMonitor(paramsExperiment));
+
+        getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
+
+        return stats;
+    }
+
+    private TaskStatistics executeAllJobs(
+            List<T> inputObjects,
+            S sharedState,
+            ParametersExperiment paramsExperiment,
+            Optional<MessageLogger> loggerMonitor) {
+
+        MonitoredSequentialExecutor<T> seqExecutor =
+                new MonitoredSequentialExecutor<>(
+                        object -> executeJobAndLog(object, sharedState, paramsExperiment),
+                        T::descriptiveName,
+                        loggerMonitor,
+                        false);
+
+        return seqExecutor.executeEachWithMonitor("Job: ", inputObjects);
+    }
+
+    private boolean executeJobAndLog(
+            T inputObj, S sharedState, ParametersExperiment paramsExperiment) {
+
+        MessageLogger logger = paramsExperiment.getLoggerExperiment();
+        ErrorReporter errorReporter = new ErrorReporterIntoLog(logger);
+
+        try {
+            ParametersUnbound<T, S> paramsUnbound =
+                    new ParametersUnbound<>(
+                            paramsExperiment, inputObj, sharedState, isSuppressExceptions());
+            return getTask().executeJob(paramsUnbound);
+
+        } catch (JobExecutionException e) {
+            errorReporter.recordError(SequentialProcessor.class, e);
+            return false;
+        }
+    }
 }

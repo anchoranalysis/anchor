@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.object.single;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.feature.bean.object.single;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.object.single;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
@@ -34,59 +34,55 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class CenterOfGravity extends FeatureSingleObject {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String axis = "x";
-	
-	@BeanField
-	private double emptyValue = 0;
-	// END BEAN PROPERTIES
-	
-	/** Standard bean constructor */
-	public CenterOfGravity() {}
-	
-	/**
-	 * Constructor - create for a specific axis
-	 * 
-	 * @param axis axis
-	 */
-	public CenterOfGravity( AxisType axis ) {
-		this.axis = axis.toString().toLowerCase();
-	}
-	
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input) {
-		
-		FeatureInputSingleObject params = input.get();
-		
-		double val = params.getObject().centerOfGravity(
-			axisType()
-		);
-		
-		if (Double.isNaN(val)) {
-			return emptyValue;
-		}
-		
-		return val;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String axis = "x";
 
-	public String getAxis() {
-		return axis;
-	}
+    @BeanField private double emptyValue = 0;
+    // END BEAN PROPERTIES
 
-	public void setAxis(String axis) {
-		this.axis = axis;
-	}
+    /** Standard bean constructor */
+    public CenterOfGravity() {}
 
-	public double getEmptyValue() {
-		return emptyValue;
-	}
+    /**
+     * Constructor - create for a specific axis
+     *
+     * @param axis axis
+     */
+    public CenterOfGravity(AxisType axis) {
+        this.axis = axis.toString().toLowerCase();
+    }
 
-	public void setEmptyValue(double emptyValue) {
-		this.emptyValue = emptyValue;
-	}
-	
-	private AxisType axisType() {
-		return AxisTypeConverter.createFromString(axis);
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleObject> input) {
+
+        FeatureInputSingleObject params = input.get();
+
+        double val = params.getObject().centerOfGravity(axisType());
+
+        if (Double.isNaN(val)) {
+            return emptyValue;
+        }
+
+        return val;
+    }
+
+    public String getAxis() {
+        return axis;
+    }
+
+    public void setAxis(String axis) {
+        this.axis = axis;
+    }
+
+    public double getEmptyValue() {
+        return emptyValue;
+    }
+
+    public void setEmptyValue(double emptyValue) {
+        this.emptyValue = emptyValue;
+    }
+
+    private AxisType axisType() {
+        return AxisTypeConverter.createFromString(axis);
+    }
 }

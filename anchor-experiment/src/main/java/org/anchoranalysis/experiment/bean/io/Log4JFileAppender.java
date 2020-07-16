@@ -1,10 +1,8 @@
-package org.anchoranalysis.experiment.bean.io;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +23,12 @@ package org.anchoranalysis.experiment.bean.io;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.io;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Path;
-
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.apache.log4j.Appender;
 import org.apache.log4j.FileAppender;
@@ -41,205 +39,199 @@ import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.OptionHandler;
 
-
 class Log4JFileAppender implements Appender, OptionHandler {
 
-	// Bean interface
-	private FileAppender delegate = new FileAppender();
-	private String outputName = null;
-	private String fallbackFile;
-	// End bean interface
-	
-	private BoundOutputManagerRouteErrors outputManager = null;
-	
-	
-	public void init( BoundOutputManagerRouteErrors outputManager ) {
-		this.outputManager = outputManager;
-	}
-		
-	@Override
-	public void activateOptions() {
-		
-		if (outputManager!=null) {
-			
-			Path filePath = outputManager.outFilePath( outputName + "." + "txt" );
-			delegate.setFile( filePath.toString() );
-			
-		} else {
-			delegate.setFile(fallbackFile);
-		} 
-		
-		delegate.activateOptions();
-	}
+    // Bean interface
+    private FileAppender delegate = new FileAppender();
+    private String outputName = null;
+    private String fallbackFile;
+    // End bean interface
 
-	public void append(LoggingEvent event) {
-		delegate.append(event);
-	}
+    private BoundOutputManagerRouteErrors outputManager = null;
 
-	@Override
-	public boolean equals(Object obj) {
-		return delegate.equals(obj);
-	}
+    public void init(BoundOutputManagerRouteErrors outputManager) {
+        this.outputManager = outputManager;
+    }
 
-	public boolean getAppend() {
-		return delegate.getAppend();
-	}
+    @Override
+    public void activateOptions() {
 
-	public int getBufferSize() {
-		return delegate.getBufferSize();
-	}
+        if (outputManager != null) {
 
-	public boolean getBufferedIO() {
-		return delegate.getBufferedIO();
-	}
+            Path filePath = outputManager.outFilePath(outputName + "." + "txt");
+            delegate.setFile(filePath.toString());
 
-	public String getEncoding() {
-		return delegate.getEncoding();
-	}
+        } else {
+            delegate.setFile(fallbackFile);
+        }
 
-	public String getFile() {
-		return delegate.getFile();
-	}
+        delegate.activateOptions();
+    }
 
-	public final Filter getFirstFilter() {
-		return delegate.getFirstFilter();
-	}
+    public void append(LoggingEvent event) {
+        delegate.append(event);
+    }
 
-	public boolean getImmediateFlush() {
-		return delegate.getImmediateFlush();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return delegate.equals(obj);
+    }
 
-	public Priority getThreshold() {
-		return delegate.getThreshold();
-	}
+    public boolean getAppend() {
+        return delegate.getAppend();
+    }
 
-	@Override
-	public int hashCode() {
-		return delegate.hashCode();
-	}
+    public int getBufferSize() {
+        return delegate.getBufferSize();
+    }
 
-	public boolean isAsSevereAsThreshold(Priority priority) {
-		return delegate.isAsSevereAsThreshold(priority);
-	}
+    public boolean getBufferedIO() {
+        return delegate.getBufferedIO();
+    }
 
-	public void setAppend(boolean flag) {
-		delegate.setAppend(flag);
-	}
+    public String getEncoding() {
+        return delegate.getEncoding();
+    }
 
-	public void setBufferSize(int bufferSize) {
-		delegate.setBufferSize(bufferSize);
-	}
+    public String getFile() {
+        return delegate.getFile();
+    }
 
-	public void setBufferedIO(boolean bufferedIO) {
-		delegate.setBufferedIO(bufferedIO);
-	}
+    public final Filter getFirstFilter() {
+        return delegate.getFirstFilter();
+    }
 
-	public void setEncoding(String value) {
-		delegate.setEncoding(value);
-	}
+    public boolean getImmediateFlush() {
+        return delegate.getImmediateFlush();
+    }
 
-	public void setFile(String arg0, boolean arg1, boolean arg2, int arg3)
-			throws IOException {
-		delegate.setFile(arg0, arg1, arg2, arg3);
-	}
+    public Priority getThreshold() {
+        return delegate.getThreshold();
+    }
 
-	public void setFile(String file) {
-		delegate.setFile(file);
-	}
+    @Override
+    public int hashCode() {
+        return delegate.hashCode();
+    }
 
-	public void setImmediateFlush(boolean value) {
-		delegate.setImmediateFlush(value);
-	}
+    public boolean isAsSevereAsThreshold(Priority priority) {
+        return delegate.isAsSevereAsThreshold(priority);
+    }
 
-	public void setThreshold(Priority threshold) {
-		delegate.setThreshold(threshold);
-	}
+    public void setAppend(boolean flag) {
+        delegate.setAppend(flag);
+    }
 
-	public void setWriter(Writer writer) {
-		delegate.setWriter(writer);
-	}
+    public void setBufferSize(int bufferSize) {
+        delegate.setBufferSize(bufferSize);
+    }
 
-	@Override
-	public String toString() {
-		return delegate.toString();
-	}
+    public void setBufferedIO(boolean bufferedIO) {
+        delegate.setBufferedIO(bufferedIO);
+    }
 
-	@Override
-	public void addFilter(Filter newFilter) {
-		delegate.addFilter(newFilter);
-	}
+    public void setEncoding(String value) {
+        delegate.setEncoding(value);
+    }
 
-	@Override
-	public void clearFilters() {
-		delegate.clearFilters();
-	}
+    public void setFile(String arg0, boolean arg1, boolean arg2, int arg3) throws IOException {
+        delegate.setFile(arg0, arg1, arg2, arg3);
+    }
 
-	@Override
-	public void close() {
-		delegate.close();
-	}
+    public void setFile(String file) {
+        delegate.setFile(file);
+    }
 
-	@Override
-	public void doAppend(LoggingEvent event) {
-		delegate.doAppend(event);
-	}
+    public void setImmediateFlush(boolean value) {
+        delegate.setImmediateFlush(value);
+    }
 
-	@Override
-	public ErrorHandler getErrorHandler() {
-		return delegate.getErrorHandler();
-	}
+    public void setThreshold(Priority threshold) {
+        delegate.setThreshold(threshold);
+    }
 
-	@Override
-	public Filter getFilter() {
-		return delegate.getFilter();
-	}
+    public void setWriter(Writer writer) {
+        delegate.setWriter(writer);
+    }
 
-	@Override
-	public Layout getLayout() {
-		return delegate.getLayout();
-	}
+    @Override
+    public String toString() {
+        return delegate.toString();
+    }
 
-	@Override
-	public final String getName() {
-		return delegate.getName();
-	}
+    @Override
+    public void addFilter(Filter newFilter) {
+        delegate.addFilter(newFilter);
+    }
 
-	@Override
-	public boolean requiresLayout() {
-		return delegate.requiresLayout();
-	}
+    @Override
+    public void clearFilters() {
+        delegate.clearFilters();
+    }
 
-	@Override
-	public void setErrorHandler(ErrorHandler eh) {
-		delegate.setErrorHandler(eh);
-	}
+    @Override
+    public void close() {
+        delegate.close();
+    }
 
-	@Override
-	public void setLayout(Layout layout) {
-		delegate.setLayout(layout);
-	}
+    @Override
+    public void doAppend(LoggingEvent event) {
+        delegate.doAppend(event);
+    }
 
-	@Override
-	public void setName(String name) {
-		delegate.setName(name);
-	}
+    @Override
+    public ErrorHandler getErrorHandler() {
+        return delegate.getErrorHandler();
+    }
 
-	public String getOutputName() {
-		return outputName;
-	}
+    @Override
+    public Filter getFilter() {
+        return delegate.getFilter();
+    }
 
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
+    @Override
+    public Layout getLayout() {
+        return delegate.getLayout();
+    }
 
+    @Override
+    public final String getName() {
+        return delegate.getName();
+    }
 
-	public String getFallbackFile() {
-		return fallbackFile;
-	}
+    @Override
+    public boolean requiresLayout() {
+        return delegate.requiresLayout();
+    }
 
+    @Override
+    public void setErrorHandler(ErrorHandler eh) {
+        delegate.setErrorHandler(eh);
+    }
 
-	public void setFallbackFile(String fallbackFile) {
-		this.fallbackFile = fallbackFile;
-	}
+    @Override
+    public void setLayout(Layout layout) {
+        delegate.setLayout(layout);
+    }
 
+    @Override
+    public void setName(String name) {
+        delegate.setName(name);
+    }
+
+    public String getOutputName() {
+        return outputName;
+    }
+
+    public void setOutputName(String outputName) {
+        this.outputName = outputName;
+    }
+
+    public String getFallbackFile() {
+        return fallbackFile;
+    }
+
+    public void setFallbackFile(String fallbackFile) {
+        this.fallbackFile = fallbackFile;
+    }
 }

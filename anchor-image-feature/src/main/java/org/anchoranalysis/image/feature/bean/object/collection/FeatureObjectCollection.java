@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.feature.bean.object.collection;
-
 /*-
  * #%L
  * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.image.feature.bean.object.collection;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.bean.object.collection;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -34,17 +34,17 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollectio
 
 public abstract class FeatureObjectCollection extends Feature<FeatureInputObjectCollection> {
 
-	@Override
-	public double calc( SessionInput<FeatureInputObjectCollection> input ) throws FeatureCalcException {
-		return calc( input.get() );
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureInputObjectCollection params ) throws FeatureCalcException;
+    @Override
+    public double calc(SessionInput<FeatureInputObjectCollection> input)
+            throws FeatureCalcException {
+        return calc(input.get());
+    }
 
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInputObjectCollection.class;
-	}
-	
+    // Calculates an NRG element for a set of pixels
+    public abstract double calc(FeatureInputObjectCollection params) throws FeatureCalcException;
+
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInputObjectCollection.class;
+    }
 }

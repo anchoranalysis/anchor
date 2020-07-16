@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.orientation;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,34 +23,32 @@ package org.anchoranalysis.image.orientation;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.orientation;
 
 import java.io.Serializable;
-
 import org.anchoranalysis.core.name.provider.NameValueSet;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class Orientation implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2450707930231680263L;
+    /** */
+    private static final long serialVersionUID = 2450707930231680263L;
 
-	public abstract Orientation duplicate();
-	
-	public abstract RotationMatrix createRotationMatrix();
+    public abstract Orientation duplicate();
 
-	public abstract int getNumDims();
-	
-	public abstract boolean equals( Object other );
-	
-	public abstract int hashCode();
-	
-	public abstract Orientation negative();
-	
-	public void addProperties( NameValueSet<String> nvc ) {}
-	
-	public void addPropertiesToMask( ObjectWithProperties mask ) {}
+    public abstract RotationMatrix createRotationMatrix();
+
+    public abstract int getNumDims();
+
+    public abstract boolean equals(Object other);
+
+    public abstract int hashCode();
+
+    public abstract Orientation negative();
+
+    public void addProperties(NameValueSet<String> nvc) {}
+
+    public void addPropertiesToMask(ObjectWithProperties mask) {}
 }

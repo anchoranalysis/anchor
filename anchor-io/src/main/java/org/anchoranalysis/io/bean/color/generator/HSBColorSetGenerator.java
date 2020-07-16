@@ -1,13 +1,8 @@
-package org.anchoranalysis.io.bean.color.generator;
-
-import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.color.RGBColor;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,25 +23,29 @@ import org.anchoranalysis.core.color.RGBColor;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.color.generator;
 
+import org.anchoranalysis.core.color.ColorList;
+import org.anchoranalysis.core.color.RGBColor;
 
 public class HSBColorSetGenerator extends ColorSetGenerator {
 
-	@Override
-	public ColorList generateColors( int numberColors ) {
-	
-		ColorList lst = new ColorList();
-		
-		for (int i =0; i<numberColors; i++) {
+    @Override
+    public ColorList generateColors(int numberColors) {
 
-			float h = ((float) i) /numberColors;
-			float s = (float) 0.5;
-			float v = (float) 0.5;
-			
-			int rgb = java.awt.Color.HSBtoRGB(h, s, v);
-			lst.add( new RGBColor(rgb) );
-		}
-		
-		return lst;
-	}
+        ColorList lst = new ColorList();
+
+        for (int i = 0; i < numberColors; i++) {
+
+            float h = ((float) i) / numberColors;
+            float s = (float) 0.5;
+            float v = (float) 0.5;
+
+            int rgb = java.awt.Color.HSBtoRGB(h, s, v);
+            lst.add(new RGBColor(rgb));
+        }
+
+        return lst;
+    }
 }

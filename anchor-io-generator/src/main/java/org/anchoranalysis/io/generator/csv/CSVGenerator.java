@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.generator.csv;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-io-generator
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,28 +23,29 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.generator.csv;
 
+import java.util.Optional;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 public abstract class CSVGenerator extends SingleFileTypeGenerator {
 
-	private String manifestFunction;
-	
-	protected CSVGenerator( String manifestFunction ) {
-		this.manifestFunction = manifestFunction;
-	}
-	
-	@Override
-	public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-		return "csv";
-	}
+    private String manifestFunction;
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return Optional.of(
-			new ManifestDescription("csv", manifestFunction)
-		);
-	}
+    protected CSVGenerator(String manifestFunction) {
+        this.manifestFunction = manifestFunction;
+    }
+
+    @Override
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+        return "csv";
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return Optional.of(new ManifestDescription("csv", manifestFunction));
+    }
 }

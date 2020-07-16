@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.input;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,42 @@ package org.anchoranalysis.io.input;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class OperationOutFilePath extends CachedOperation<Path,AnchorIOException> {
+public class OperationOutFilePath extends CachedOperation<Path, AnchorIOException> {
 
-	private NamedBean<FilePathGenerator> ni;
-	private Supplier<Optional<Path>> path;
-	private boolean debugMode;
-			
-	public OperationOutFilePath(
-		NamedBean<FilePathGenerator> ni,
-		Supplier<Optional<Path>> path,
-		boolean debugMode
-	) {
-		super();
-		this.ni = ni;
-		this.path = path;
-		this.debugMode = debugMode;
-	}
+    private NamedBean<FilePathGenerator> ni;
+    private Supplier<Optional<Path>> path;
+    private boolean debugMode;
 
-	@Override
-	protected Path execute() throws AnchorIOException {
-		return ni.getValue().outFilePath(
-			path.get().orElseThrow( ()->
-				new AnchorIOException("A binding-path must be associated with the input for this operation")
-			),
-			debugMode
-		).toAbsolutePath().normalize();
-	}
+    public OperationOutFilePath(
+            NamedBean<FilePathGenerator> ni, Supplier<Optional<Path>> path, boolean debugMode) {
+        super();
+        this.ni = ni;
+        this.path = path;
+        this.debugMode = debugMode;
+    }
+
+    @Override
+    protected Path execute() throws AnchorIOException {
+        return ni.getValue()
+                .outFilePath(
+                        path.get()
+                                .orElseThrow(
+                                        () ->
+                                                new AnchorIOException(
+                                                        "A binding-path must be associated with the input for this operation")),
+                        debugMode)
+                .toAbsolutePath()
+                .normalize();
+    }
 }

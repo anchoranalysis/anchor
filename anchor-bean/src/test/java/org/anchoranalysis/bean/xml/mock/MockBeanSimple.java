@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.xml.mock;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +23,26 @@ package org.anchoranalysis.bean.xml.mock;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.xml.mock;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * A simple bean containing amessage
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class MockBeanSimple extends AnchorBean<MockBeanSimple> {
 
-	@BeanField
-	private String message;
+    @BeanField private String message;
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

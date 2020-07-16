@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,63 +23,62 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergest
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy;
 
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.DistanceToContiguousPath;
 import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
 
-import lombok.Getter;
-
 class PathWithClosest {
-	
-	@Getter
-	private ContiguousPixelPath path;
-	
-	private int closest;
-	
-	public PathWithClosest(ContiguousPixelPath path, Point3i mergePoint ) {
-		this.path = path;
-		closest = indexClosest(path,mergePoint);
-	}
-	
-	public Optional<LoopablePoints> removeLeft() {
-		return path.removeLeft(closest);
-	}
-	
-	public Optional<LoopablePoints> removeRight() {
-		return path.removeRight(size()-closest-1);
-	}
-	
-	public int distanceFromLeft() {
-		return closest;
-	}
-	
-	public int distanceFromRight() {
-		return size() - closest - 1;
-	}
-	
-	public int size() {
-		return path.size();
-	}
-		
-	private static int indexClosest(ContiguousPixelPath path, Point3i mergePoint) {
-		return DistanceToContiguousPath.maxDistanceToClosestPoint(path, mergePoint).getIndex();
-	}
 
-	public List<Point3i> points() {
-		return path.points();
-	}
+    @Getter private ContiguousPixelPath path;
 
-	public void insertBefore(List<Point3i> points) {
-		path.insertBefore(points);
-		closest += points.size();
-	}
+    private int closest;
 
-	public void insertAfter(List<Point3i> points) {
-		path.insertAfter(points);
-	}
+    public PathWithClosest(ContiguousPixelPath path, Point3i mergePoint) {
+        this.path = path;
+        closest = indexClosest(path, mergePoint);
+    }
+
+    public Optional<LoopablePoints> removeLeft() {
+        return path.removeLeft(closest);
+    }
+
+    public Optional<LoopablePoints> removeRight() {
+        return path.removeRight(size() - closest - 1);
+    }
+
+    public int distanceFromLeft() {
+        return closest;
+    }
+
+    public int distanceFromRight() {
+        return size() - closest - 1;
+    }
+
+    public int size() {
+        return path.size();
+    }
+
+    private static int indexClosest(ContiguousPixelPath path, Point3i mergePoint) {
+        return DistanceToContiguousPath.maxDistanceToClosestPoint(path, mergePoint).getIndex();
+    }
+
+    public List<Point3i> points() {
+        return path.points();
+    }
+
+    public void insertBefore(List<Point3i> points) {
+        path.insertBefore(points);
+        closest += points.size();
+    }
+
+    public void insertAfter(List<Point3i> points) {
+        path.insertAfter(points);
+    }
 }

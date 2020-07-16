@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.io.bean.report.feature;
-
 /*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,43 +35,42 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 
-public abstract class ReportFeatureEvaluator<T extends FeatureInput> extends ReportFeatureForSharedObjects {
+public abstract class ReportFeatureEvaluator<T extends FeatureInput>
+        extends ReportFeatureForSharedObjects {
 
-	// START BEAN PROPERTIES	
-	@BeanField
-	private FeatureEvaluator<T> featureEvaluator;
-	
-	@BeanField
-	private String title;
-	// END BEAN PROPERTIES
-		
-	protected void init( MPPInitParams so, Logger logger ) throws InitException {
-		// Maybe we should duplicate the providers?
-		featureEvaluator.initRecursive( so.getFeature(), logger );
-	}
-	
-	protected FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
-		return featureEvaluator.createAndStartSession();
-	}
-	
-	@Override
-	public String genTitleStr() throws OperationFailedException {
-		return title;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private FeatureEvaluator<T> featureEvaluator;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @BeanField private String title;
+    // END BEAN PROPERTIES
 
-	public FeatureEvaluator<T> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
+    protected void init(MPPInitParams so, Logger logger) throws InitException {
+        // Maybe we should duplicate the providers?
+        featureEvaluator.initRecursive(so.getFeature(), logger);
+    }
 
-	public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
+    protected FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
+        return featureEvaluator.createAndStartSession();
+    }
+
+    @Override
+    public String genTitleStr() throws OperationFailedException {
+        return title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public FeatureEvaluator<T> getFeatureEvaluator() {
+        return featureEvaluator;
+    }
+
+    public void setFeatureEvaluator(FeatureEvaluator<T> featureEvaluator) {
+        this.featureEvaluator = featureEvaluator;
+    }
 }

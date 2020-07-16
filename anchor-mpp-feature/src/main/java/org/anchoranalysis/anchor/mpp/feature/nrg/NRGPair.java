@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.nrg;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.anchor.mpp.feature.nrg;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.nrg;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
@@ -33,23 +32,21 @@ import org.anchoranalysis.feature.nrg.NRGTotal;
 
 public class NRGPair {
 
-	private final Pair<Mark> pair;
-	
-	private final NRGTotal nrg;
+    private final Pair<Mark> pair;
 
-	public NRGPair(Pair<Mark> pair, NRGTotal nrg) {
-		super();
-		this.pair = pair;
-		this.nrg = nrg;
-	}
+    private final NRGTotal nrg;
 
-	public Pair<Mark> getPair() {
-		return pair;
-	}
+    public NRGPair(Pair<Mark> pair, NRGTotal nrg) {
+        super();
+        this.pair = pair;
+        this.nrg = nrg;
+    }
 
-	public NRGTotal getNRG() {
-		return nrg;
-	}
-	
-	
+    public Pair<Mark> getPair() {
+        return pair;
+    }
+
+    public NRGTotal getNRG() {
+        return nrg;
+    }
 }

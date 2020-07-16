@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plot.index;
-
 /*-
  * #%L
  * anchor-plot
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,33 @@ package org.anchoranalysis.anchor.plot.index;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.plot.index;
 
-/**
- * Labels for x and y axis in graph
- *
- */
+/** Labels for x and y axis in graph */
 public class GraphAxisLabels {
 
-	private String x = "Index";
-	private String y = "Value";
-	
-	public String getX() {
-		return x;
-	}
-	public void setX(String x) {
-		this.x = x;
-	}
-	public String getY() {
-		return y;
-	}
-	public void setXY(String x, String y) {
-		this.x = x;
-		this.y = y;
-	}
-	public void setY(String y) {
-		this.y = y;
-	}
+    private String x = "Index";
+    private String y = "Value";
+
+    public String getX() {
+        return x;
+    }
+
+    public void setX(String x) {
+        this.x = x;
+    }
+
+    public String getY() {
+        return y;
+    }
+
+    public void setXY(String x, String y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setY(String y) {
+        this.y = y;
+    }
 }

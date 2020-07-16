@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.feature.histogram;
-
-import org.anchoranalysis.bean.annotation.BeanField;
-
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +23,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.feature.histogram;
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
@@ -35,47 +34,49 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
-	// START BEAN PROPERTIES
-	/** If true, then an exception is thrown if the histogram is empty, otherwise {@link #valueIfEmpty is returned}. */
-	@BeanField
-	private boolean exceptionIfEmpty = true;
+    // START BEAN PROPERTIES
+    /**
+     * If true, then an exception is thrown if the histogram is empty, otherwise {@link
+     * #valueIfEmpty is returned}.
+     */
+    @BeanField private boolean exceptionIfEmpty = true;
 
-	/** The value to return iff {@link #exceptionifEmpty} is false */
-	@BeanField
-	private double valueIfEmpty = 0;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
-		Histogram histogram = input.get().getHistogram();
-		
-		if (histogram.isEmpty()) {
-			
-			if (exceptionIfEmpty) {
-				throw new FeatureCalcException("Histogram is empty, so abandoning feature calculation.");
-			} else {
-				return valueIfEmpty;
-			}
-		}
-		
-		return calcStatisticFrom(histogram);
-	}
-	
-	protected abstract double calcStatisticFrom( Histogram histogram ) throws FeatureCalcException;
+    /** The value to return iff {@link #exceptionifEmpty} is false */
+    @BeanField private double valueIfEmpty = 0;
+    // END BEAN PROPERTIES
 
-	public boolean isExceptionIfEmpty() {
-		return exceptionIfEmpty;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
+        Histogram histogram = input.get().getHistogram();
 
-	public void setExceptionIfEmpty(boolean exceptionIfEmpty) {
-		this.exceptionIfEmpty = exceptionIfEmpty;
-	}
+        if (histogram.isEmpty()) {
 
-	public double getValueIfEmpty() {
-		return valueIfEmpty;
-	}
+            if (exceptionIfEmpty) {
+                throw new FeatureCalcException(
+                        "Histogram is empty, so abandoning feature calculation.");
+            } else {
+                return valueIfEmpty;
+            }
+        }
 
-	public void setValueIfEmpty(double valueIfEmpty) {
-		this.valueIfEmpty = valueIfEmpty;
-	}
+        return calcStatisticFrom(histogram);
+    }
+
+    protected abstract double calcStatisticFrom(Histogram histogram) throws FeatureCalcException;
+
+    public boolean isExceptionIfEmpty() {
+        return exceptionIfEmpty;
+    }
+
+    public void setExceptionIfEmpty(boolean exceptionIfEmpty) {
+        this.exceptionIfEmpty = exceptionIfEmpty;
+    }
+
+    public double getValueIfEmpty() {
+        return valueIfEmpty;
+    }
+
+    public void setValueIfEmpty(double valueIfEmpty) {
+        this.valueIfEmpty = valueIfEmpty;
+    }
 }

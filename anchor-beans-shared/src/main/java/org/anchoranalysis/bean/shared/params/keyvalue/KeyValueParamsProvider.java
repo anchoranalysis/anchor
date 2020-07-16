@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared.params.keyvalue;
-
 /*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +23,17 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.params.keyvalue;
 
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 
-public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider> implements Provider<KeyValueParams> {
+public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider>
+        implements Provider<KeyValueParams> {
 
-	@Override
-	public abstract KeyValueParams create() throws CreateException;
+    @Override
+    public abstract KeyValueParams create() throws CreateException;
 }

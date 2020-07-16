@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.datatype;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,27 @@ package org.anchoranalysis.image.voxel.datatype;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.datatype;
 
 import org.anchoranalysis.core.error.CreateException;
 
 public class CombineTypes {
 
-	private CombineTypes() {}
-	
-	public static VoxelDataType combineTypes( VoxelDataType type1, VoxelDataType type2 ) throws CreateException {
-		if (type1.equals(type2)) {
-			return type1;
-		} else if (type1.equals(VoxelDataTypeUnsignedByte.INSTANCE) && type2.equals(VoxelDataTypeUnsignedShort.INSTANCE) ) {
-			return VoxelDataTypeUnsignedShort.INSTANCE;
-		}  else if (type2.equals(VoxelDataTypeUnsignedByte.INSTANCE) && type1.equals(VoxelDataTypeUnsignedShort.INSTANCE) ) {
-			return VoxelDataTypeUnsignedShort.INSTANCE;
-		} else {
-			throw new CreateException("Only combinations of byte and short are supported");
-		}
-	}
-	
+    private CombineTypes() {}
+
+    public static VoxelDataType combineTypes(VoxelDataType type1, VoxelDataType type2)
+            throws CreateException {
+        if (type1.equals(type2)) {
+            return type1;
+        } else if (type1.equals(VoxelDataTypeUnsignedByte.INSTANCE)
+                && type2.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+            return VoxelDataTypeUnsignedShort.INSTANCE;
+        } else if (type2.equals(VoxelDataTypeUnsignedByte.INSTANCE)
+                && type1.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+            return VoxelDataTypeUnsignedShort.INSTANCE;
+        } else {
+            throw new CreateException("Only combinations of byte and short are supported");
+        }
+    }
 }

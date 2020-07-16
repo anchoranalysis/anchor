@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.proposer;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +23,26 @@ package org.anchoranalysis.anchor.mpp.proposer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.proposer;
 
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 /**
  * An exception thrown when something goes wrong in a Proposer
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ProposerException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public ProposerException(String message) {
-		super(message);
-	}
-	
-	public ProposerException(Throwable cause) {
-		super(cause);
-	}
+    public ProposerException(String message) {
+        super(message);
+    }
+
+    public ProposerException(Throwable cause) {
+        super(cause);
+    }
 }

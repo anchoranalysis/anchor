@@ -1,13 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.cfg;
-
-import org.anchoranalysis.anchor.mpp.bean.provider.MPPProvider;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-
 /*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +23,17 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.cfg;
 
+import org.anchoranalysis.anchor.mpp.bean.provider.MPPProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.error.CreateException;
 
 @GroupingRoot
-public abstract class CfgProvider extends MPPProvider<CfgProvider,Cfg> {
+public abstract class CfgProvider extends MPPProvider<CfgProvider, Cfg> {
 
-	@Override
-	public abstract Cfg create() throws CreateException;
+    @Override
+    public abstract Cfg create() throws CreateException;
 }

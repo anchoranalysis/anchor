@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.generator.raster;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,11 @@ package org.anchoranalysis.image.io.generator.raster;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.generator.raster;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
@@ -37,63 +36,61 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+public class DisplayStackGenerator extends ObjectGenerator<DisplayStack>
+        implements IterableObjectGenerator<DisplayStack, DisplayStack> {
 
-public class DisplayStackGenerator extends ObjectGenerator<DisplayStack> implements IterableObjectGenerator<DisplayStack, DisplayStack> {
+    private StackGenerator delegate;
+    private DisplayStack item;
 
-	private StackGenerator delegate;
-	private DisplayStack item;
-	
-	public DisplayStackGenerator(String manifestFunction ) {
-		delegate = new StackGenerator(manifestFunction);
-	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-		delegate.start();
-	}
+    public DisplayStackGenerator(String manifestFunction) {
+        delegate = new StackGenerator(manifestFunction);
+    }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		delegate.end();
-	}
+    @Override
+    public void start() throws OutputWriteFailedException {
+        delegate.start();
+    }
 
-	@Override
-	public DisplayStack getIterableElement() {
-		return item;
-	}
+    @Override
+    public void end() throws OutputWriteFailedException {
+        delegate.end();
+    }
 
-	@Override
-	public void setIterableElement(DisplayStack element)
-			throws SetOperationFailedException {
-		this.item = element;
-		
-		delegate.setIterableElement( element.createImgStack(false) );
-	}
+    @Override
+    public DisplayStack getIterableElement() {
+        return item;
+    }
 
-	@Override
-	public ObjectGenerator<DisplayStack> getGenerator() {
-		return this;
-	}
+    @Override
+    public void setIterableElement(DisplayStack element) throws SetOperationFailedException {
+        this.item = element;
 
-	@Override
-	public DisplayStack generate() throws OutputWriteFailedException {
-		return item;
-	}
+        delegate.setIterableElement(element.createImgStack(false));
+    }
 
-	@Override
-	public void writeToFile(OutputWriteSettings outputWriteSettings,
-			Path filePath) throws OutputWriteFailedException {
-		delegate.writeToFile(outputWriteSettings, filePath);
-	}
+    @Override
+    public ObjectGenerator<DisplayStack> getGenerator() {
+        return this;
+    }
 
-	@Override
-	public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-		return delegate.getFileExtension(outputWriteSettings);
-	}
+    @Override
+    public DisplayStack generate() throws OutputWriteFailedException {
+        return item;
+    }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return delegate.createManifestDescription();
-	}
+    @Override
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
+        delegate.writeToFile(outputWriteSettings, filePath);
+    }
 
+    @Override
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+        return delegate.getFileExtension(outputWriteSettings);
+    }
+
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return delegate.createManifestDescription();
+    }
 }

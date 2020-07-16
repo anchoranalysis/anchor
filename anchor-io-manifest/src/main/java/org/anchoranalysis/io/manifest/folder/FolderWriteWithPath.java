@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.folder;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,28 @@ package org.anchoranalysis.io.manifest.folder;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.folder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 
 public abstract class FolderWriteWithPath extends FolderWrite {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8319222670306262133L;
-	
-	// Relative path to parent. As this becomes serialized, we store is a string
-	private String path;
-	
-	@Override
-	public Path getRelativePath() {
-		assert(path!=null);
-		return Paths.get(path);
-	}
+    /** */
+    private static final long serialVersionUID = 8319222670306262133L;
 
-	public void setPath(Path path) {
-		this.path = FilePathToUnixStyleConverter.toStringUnixStyle( path );
-	}
+    // Relative path to parent. As this becomes serialized, we store is a string
+    private String path;
+
+    @Override
+    public Path getRelativePath() {
+        assert (path != null);
+        return Paths.get(path);
+    }
+
+    public void setPath(Path path) {
+        this.path = FilePathToUnixStyleConverter.toStringUnixStyle(path);
+    }
 }

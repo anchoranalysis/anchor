@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bean.regionmap;
-
-/*
+/*-
  * #%L
- * anchor-overlay
+ * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.anchor.mpp.bean.regionmap;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bean.regionmap;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -38,73 +36,68 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 // Maps integer IDs to sub-regions in the map
 public class RegionMap extends AnchorBean<RegionMap> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<RegionMembership> list = new ArrayList<>();
-	// END BEAN PROPERTIES
-	
-	// Creates empty region map
-	public RegionMap() {
-		
-	}
-	
-	// Creates a region map with a single entry mapping to a particular region
-	public RegionMap( int index ) {
-		list.add( new RegionMembershipAnd(index) );
-	}
-	
-	public List<RegionMembership> getList() {
-		return list;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private List<RegionMembership> list = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-	public void setList(List<RegionMembership> list) {
-		this.list = list;
-	}
-	
-	public int numRegions() {
-		return list.size();
-	}
+    // Creates empty region map
+    public RegionMap() {}
 
-	public RegionMembership membershipForIndex( int index ) {
-		return list.get(index);
-	}
-	
-	public RegionMembershipWithFlags membershipWithFlagsForIndex( int index ) {
-		return new RegionMembershipWithFlags( membershipForIndex(index), index );
-	}
-	
-	public List<RegionMembershipWithFlags> createListMembershipWithFlags() {
-		List<RegionMembershipWithFlags> listOut = new ArrayList<>();
-		
-		for( int i=0; i<list.size(); i++) {
-			RegionMembership rm = list.get(i);
-			listOut.add( new RegionMembershipWithFlags(rm,i) );
-		}
-		
-		return listOut;
-	}
+    // Creates a region map with a single entry mapping to a particular region
+    public RegionMap(int index) {
+        list.add(new RegionMembershipAnd(index));
+    }
 
-	// See {@link org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask} for an example of where equals is needed on this class
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		RegionMap rhs = (RegionMap) obj;
-		return new EqualsBuilder()
-             .appendSuper(super.equals(obj))
-             .append(list, rhs.list)
-             .isEquals();
-	}
+    public List<RegionMembership> getList() {
+        return list;
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(list)
-			.toHashCode();
-	}
-	
-	
+    public void setList(List<RegionMembership> list) {
+        this.list = list;
+    }
+
+    public int numRegions() {
+        return list.size();
+    }
+
+    public RegionMembership membershipForIndex(int index) {
+        return list.get(index);
+    }
+
+    public RegionMembershipWithFlags membershipWithFlagsForIndex(int index) {
+        return new RegionMembershipWithFlags(membershipForIndex(index), index);
+    }
+
+    public List<RegionMembershipWithFlags> createListMembershipWithFlags() {
+        List<RegionMembershipWithFlags> listOut = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            RegionMembership rm = list.get(i);
+            listOut.add(new RegionMembershipWithFlags(rm, i));
+        }
+
+        return listOut;
+    }
+
+    // See {@link org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask} for an
+    // example of where equals is needed on this class
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        RegionMap rhs = (RegionMap) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(list, rhs.list).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(list).toHashCode();
+    }
 }

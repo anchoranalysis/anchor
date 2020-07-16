@@ -1,20 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaNRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +23,17 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 
-
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaNRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
@@ -53,126 +50,118 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public class NRGSchemeWithSharedFeatures {
 
-	private NRGScheme nrgScheme;
-	private SharedFeatureMulti sharedFeatures;
-	
-	private CalcElemIndTotalOperation operationIndCalc;
-	private Logger logger;
-	
-	// Caches NRG value by index
-	private class CalcElemIndTotalOperation implements FunctionWithException<Integer,NRGTotal,FeatureCalcException> {
+    private NRGScheme nrgScheme;
+    private SharedFeatureMulti sharedFeatures;
 
-		private VoxelizedMarkMemo pmm;
-		private NRGStack raster;
-		private KeyValueParams kvp;
-		
-		public CalcElemIndTotalOperation() {
-			super();
-		}
+    private CalcElemIndTotalOperation operationIndCalc;
+    private Logger logger;
 
-		public void update( VoxelizedMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
-			this.pmm = pmm;
-			this.raster = raster;
-						
-			KeyValueParamsForImageCreator creator = new KeyValueParamsForImageCreator(
-				nrgScheme,
-				sharedFeatures,
-				logger
-			);
-			this.kvp = creator.createParamsForImage( raster );
-		}
-		
-		@Override
-		public NRGTotal apply(Integer index) throws FeatureCalcException {
-			return calc();
-		}
-		
-		public NRGTotal calc() throws FeatureCalcException {
-			
-			FeatureCalculatorMulti<FeatureInputSingleMemo> session = FeatureSession.with(
-				nrgScheme.getElemIndAsFeatureList(),
-				new FeatureInitParams(kvp),
-				sharedFeatures,
-				logger
-			);
-						
-			FeatureInputSingleMemo params = new FeatureInputSingleMemo(
-				pmm,
-				new NRGStackWithParams(raster,kvp)
-			);
-			
-			return new NRGTotal( session.calc(params).total() );
-		}
-		
-	}
-		
-	public NRGSchemeWithSharedFeatures(NRGScheme nrgScheme,	SharedFeatureMulti sharedFeatures, Logger logger ) {
-		super();
-		this.nrgScheme = nrgScheme;
-		this.sharedFeatures = sharedFeatures;
-		this.logger = logger;
-		
-		operationIndCalc = new CalcElemIndTotalOperation();
-	}
-	
-	public NRGTotal calcElemAllTotal( MemoCollection pxlMarkMemoList, NRGStack raster ) throws FeatureCalcException {
-		
-		NRGStackWithParams nrgStack = createNRGStack(raster);
-	
-		FeatureCalculatorMulti<FeatureInputAllMemo> session = FeatureSession.with(
-			nrgScheme.getElemAllAsFeatureList(),
-			new FeatureInitParams(nrgStack.getParams()),
-			sharedFeatures,
-			logger
-		);
-		
-		FeatureInputAllMemo params = new FeatureInputAllMemo(
-			pxlMarkMemoList,
-			nrgStack
-		);
+    // Caches NRG value by index
+    private class CalcElemIndTotalOperation
+            implements FunctionWithException<Integer, NRGTotal, FeatureCalcException> {
 
-		return new NRGTotal( session.calc(params).total() );
+        private VoxelizedMarkMemo pmm;
+        private NRGStack raster;
+        private KeyValueParams kvp;
 
-	}
-	
-	public NRGTotal calcElemIndTotal( VoxelizedMarkMemo pmm, NRGStack raster ) throws FeatureCalcException {
-		operationIndCalc.update(pmm, raster);
-		return operationIndCalc.calc();
-	}
+        public CalcElemIndTotalOperation() {
+            super();
+        }
 
-	
-	private NRGStackWithParams createNRGStack( NRGStack raster ) throws FeatureCalcException {
-		
-		KeyValueParams kvp;
-		try {
-			kvp = nrgScheme.createKeyValueParams();
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-		
-		return new NRGStackWithParams(raster,kvp);
-	}
-	
-	public NRGScheme getNrgScheme() {
-		return nrgScheme;
-	}
-	
-	public AddCriteriaNRGElemPair createAddCriteria() throws CreateException {
-		try {
-			return new AddCriteriaNRGElemPair(
-				getNrgScheme().getElemPairAsFeatureList(),
-				(AddCriteriaPair) getNrgScheme().getPairAddCriteria().duplicateBean()
-			);
-		} catch (InitException | BeanDuplicateException e) {
-			throw new CreateException(e);
-		}
-	}
+        public void update(VoxelizedMarkMemo pmm, NRGStack raster) throws FeatureCalcException {
+            this.pmm = pmm;
+            this.raster = raster;
 
-	public SharedFeatureMulti getSharedFeatures() {
-		return sharedFeatures;
-	}
+            KeyValueParamsForImageCreator creator =
+                    new KeyValueParamsForImageCreator(nrgScheme, sharedFeatures, logger);
+            this.kvp = creator.createParamsForImage(raster);
+        }
 
-	public RegionMap getRegionMap() {
-		return nrgScheme.getRegionMap();
-	}
+        @Override
+        public NRGTotal apply(Integer index) throws FeatureCalcException {
+            return calc();
+        }
+
+        public NRGTotal calc() throws FeatureCalcException {
+
+            FeatureCalculatorMulti<FeatureInputSingleMemo> session =
+                    FeatureSession.with(
+                            nrgScheme.getElemIndAsFeatureList(),
+                            new FeatureInitParams(kvp),
+                            sharedFeatures,
+                            logger);
+
+            FeatureInputSingleMemo params =
+                    new FeatureInputSingleMemo(pmm, new NRGStackWithParams(raster, kvp));
+
+            return new NRGTotal(session.calc(params).total());
+        }
+    }
+
+    public NRGSchemeWithSharedFeatures(
+            NRGScheme nrgScheme, SharedFeatureMulti sharedFeatures, Logger logger) {
+        super();
+        this.nrgScheme = nrgScheme;
+        this.sharedFeatures = sharedFeatures;
+        this.logger = logger;
+
+        operationIndCalc = new CalcElemIndTotalOperation();
+    }
+
+    public NRGTotal calcElemAllTotal(MemoCollection pxlMarkMemoList, NRGStack raster)
+            throws FeatureCalcException {
+
+        NRGStackWithParams nrgStack = createNRGStack(raster);
+
+        FeatureCalculatorMulti<FeatureInputAllMemo> session =
+                FeatureSession.with(
+                        nrgScheme.getElemAllAsFeatureList(),
+                        new FeatureInitParams(nrgStack.getParams()),
+                        sharedFeatures,
+                        logger);
+
+        FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, nrgStack);
+
+        return new NRGTotal(session.calc(params).total());
+    }
+
+    public NRGTotal calcElemIndTotal(VoxelizedMarkMemo pmm, NRGStack raster)
+            throws FeatureCalcException {
+        operationIndCalc.update(pmm, raster);
+        return operationIndCalc.calc();
+    }
+
+    private NRGStackWithParams createNRGStack(NRGStack raster) throws FeatureCalcException {
+
+        KeyValueParams kvp;
+        try {
+            kvp = nrgScheme.createKeyValueParams();
+        } catch (CreateException e) {
+            throw new FeatureCalcException(e);
+        }
+
+        return new NRGStackWithParams(raster, kvp);
+    }
+
+    public NRGScheme getNrgScheme() {
+        return nrgScheme;
+    }
+
+    public AddCriteriaNRGElemPair createAddCriteria() throws CreateException {
+        try {
+            return new AddCriteriaNRGElemPair(
+                    getNrgScheme().getElemPairAsFeatureList(),
+                    (AddCriteriaPair) getNrgScheme().getPairAddCriteria().duplicateBean());
+        } catch (InitException | BeanDuplicateException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    public SharedFeatureMulti getSharedFeatures() {
+        return sharedFeatures;
+    }
+
+    public RegionMap getRegionMap() {
+        return nrgScheme.getRegionMap();
+    }
 }

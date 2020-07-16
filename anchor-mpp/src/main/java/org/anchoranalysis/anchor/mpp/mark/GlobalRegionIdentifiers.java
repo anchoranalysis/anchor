@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark;
-
-/*
+/*-
  * #%L
- * anchor-overlay
+ * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +23,17 @@ package org.anchoranalysis.anchor.mpp.mark;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark;
 
 public class GlobalRegionIdentifiers {
 
-	private GlobalRegionIdentifiers() {}
-	
-	public static final int SUBMARK_INSIDE = 0;
-	public static final int SUBMARK_SHELL = 1;
-	public static final int SUBMARK_CORE = 2;
-	public static final int SUBMARK_OUTSIDE = 3;
-	public static final int SUBMARK_CORE_INNER = 4;
-	public static final int SUBMARK_SHELL_OUTSIDE = 5;
+    private GlobalRegionIdentifiers() {}
+
+    public static final int SUBMARK_INSIDE = 0;
+    public static final int SUBMARK_SHELL = 1;
+    public static final int SUBMARK_CORE = 2;
+    public static final int SUBMARK_OUTSIDE = 3;
+    public static final int SUBMARK_CORE_INNER = 4;
+    public static final int SUBMARK_SHELL_OUTSIDE = 5;
 }

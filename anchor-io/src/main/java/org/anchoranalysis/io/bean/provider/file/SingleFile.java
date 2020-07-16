@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.provider.file;
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,75 +23,70 @@ package org.anchoranalysis.io.bean.provider.file;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.bean.provider.file;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class SingleFile extends FileProviderWithDirectory {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String path;
-	// END BEAN PROPERTIES
-	
-	// Optionally changes the directory of the path
-	private Path directory;
+    // START BEAN PROPERTIES
+    @BeanField private String path;
+    // END BEAN PROPERTIES
 
-	public SingleFile() {
-		
-	}
-	
-	public SingleFile( String path ) {
-		this.path = path;
-	}
-	
-	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) {
-		
-		File file = new File(path);
-		
-		if (hasDirectory()) {
-			file = directory.resolve( file.getName() ).toFile();
-		}
+    // Optionally changes the directory of the path
+    private Path directory;
 
-		return Collections.singletonList(file);
-	}
+    public SingleFile() {}
 
-	public String getPath() {
-		return path;
-	}
+    public SingleFile(String path) {
+        this.path = path;
+    }
 
+    @Override
+    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
 
-	public static String replaceBackslashes( String str ) {
-		return str.replace('\\', '/');
-	}
-	
-	public void setPath(String path) {
-		// Make everything a forward slash
-		this.path = replaceBackslashes(path);
-	}
-	
-	private boolean hasDirectory() {
-		return directory!=null;
-	}
+        File file = new File(path);
 
+        if (hasDirectory()) {
+            file = directory.resolve(file.getName()).toFile();
+        }
 
-	@Override
-	public Path getDirectoryAsPath(InputContextParams inputContext) {
+        return Collections.singletonList(file);
+    }
 
-		if (hasDirectory()) {
-			return directory;
-		} else {
-			// We infer the directory if it isn't set
-			return Paths.get(path).getParent();
-		}
-	}
+    public String getPath() {
+        return path;
+    }
+
+    public static String replaceBackslashes(String str) {
+        return str.replace('\\', '/');
+    }
+
+    public void setPath(String path) {
+        // Make everything a forward slash
+        this.path = replaceBackslashes(path);
+    }
+
+    private boolean hasDirectory() {
+        return directory != null;
+    }
+
+    @Override
+    public Path getDirectoryAsPath(InputContextParams inputContext) {
+
+        if (hasDirectory()) {
+            return directory;
+        } else {
+            // We infer the directory if it isn't set
+            return Paths.get(path).getParent();
+        }
+    }
 }

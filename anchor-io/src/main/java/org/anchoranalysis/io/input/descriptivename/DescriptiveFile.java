@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.input.descriptivename;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,36 +23,37 @@ package org.anchoranalysis.io.input.descriptivename;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.input.descriptivename;
 
 import java.io.File;
 import java.nio.file.Path;
 
 /**
  * A file with an associated descriptive-name
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class DescriptiveFile {
 
-	private File file;
-	private String descriptiveName;
-	
-	public DescriptiveFile(File file, String descriptiveName) {
-		super();
-		this.file = file;
-		this.descriptiveName = descriptiveName;
-	}
+    private File file;
+    private String descriptiveName;
 
-	public File getFile() {
-		return file;
-	}
-	
-	public Path getPath() {
-		return file.toPath();
-	}
+    public DescriptiveFile(File file, String descriptiveName) {
+        super();
+        this.file = file;
+        this.descriptiveName = descriptiveName;
+    }
 
-	public String getDescriptiveName() {
-		return descriptiveName;
-	}
+    public File getFile() {
+        return file;
+    }
+
+    public Path getPath() {
+        return file.toPath();
+    }
+
+    public String getDescriptiveName() {
+        return descriptiveName;
+    }
 }

@@ -1,15 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.addcriteria;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,29 +23,37 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> edge-type
  */
 public class AddCriteriaNever<T> implements AddCriteria<T> {
 
-	@Override
-	public Optional<T> generateEdge(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2,
-			NRGStackWithParams nrgStack, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws CreateException {
-		return Optional.empty();
-	}
+    @Override
+    public Optional<T> generateEdge(
+            VoxelizedMarkMemo mark1,
+            VoxelizedMarkMemo mark2,
+            NRGStackWithParams nrgStack,
+            Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
+            boolean do3D)
+            throws CreateException {
+        return Optional.empty();
+    }
 
-	@Override
-	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
-		// No features involved
-		return Optional.empty();
-	}
+    @Override
+    public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
+        // No features involved
+        return Optional.empty();
+    }
 }

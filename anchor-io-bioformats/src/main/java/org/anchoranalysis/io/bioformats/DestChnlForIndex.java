@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bioformats;
-
 /*-
  * #%L
  * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +23,21 @@ package org.anchoranalysis.io.bioformats;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats;
 
 import org.anchoranalysis.image.channel.Channel;
 
 /**
  * Selects a destination-channel for the byte-copier, given an index
- * 
- * As a byte-array can contain more than one channel, an index determines
- *  which destination-channel is selected
- * 
- * @author Owen Feehan
  *
+ * <p>As a byte-array can contain more than one channel, an index determines which
+ * destination-channel is selected
+ *
+ * @author Owen Feehan
  */
 @FunctionalInterface
 public interface DestChnlForIndex {
 
-	Channel get(int index);
+    Channel get(int index);
 }

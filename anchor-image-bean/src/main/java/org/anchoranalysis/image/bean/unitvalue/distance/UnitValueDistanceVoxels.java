@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.bean.unitvalue.distance;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,35 +23,33 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.unitvalue.distance;
 
-
+import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @NoArgsConstructor
 public class UnitValueDistanceVoxels extends UnitValueDistance {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private double value;
-	// END BEAN PROPERTIES
-	
-	public UnitValueDistanceVoxels( double value ) {
-		this.value = value;
-	}
 
-	@Override
-	public double resolve(Optional<ImageResolution> res, DirectionVector dirVector) {
-		return value;
-	}
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private double value;
+    // END BEAN PROPERTIES
+
+    public UnitValueDistanceVoxels(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public double resolve(Optional<ImageResolution> res, DirectionVector dirVector) {
+        return value;
+    }
 }

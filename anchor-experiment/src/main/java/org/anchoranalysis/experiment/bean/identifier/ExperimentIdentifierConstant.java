@@ -1,12 +1,8 @@
-package org.anchoranalysis.experiment.bean.identifier;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,52 +23,49 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.experiment.bean.identifier;
 
-
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
-
 
 /**
  * Defines constants for name and version of an experiment
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ExperimentIdentifierConstant extends ExperimentIdentifier {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private String name;
-	
-	@BeanField
-	private String version;
-	// END BEAN PROPERTIES
-	
-	public ExperimentIdentifierConstant() {
-		super();
-	}
-	
-	public ExperimentIdentifierConstant(String name, String version) {
-		super();
-		this.name = name;
-		this.version = version;
-	}
-	
-	@Override
-	public String identifier(Optional<String> taskName) {
-		return IdentifierUtilities.identifierFromNameVersion(
-			name,
-			Optional.of(version)
-		);
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
-	}
+
+    // START BEAN PROPERTIES
+    @BeanField private String name;
+
+    @BeanField private String version;
+    // END BEAN PROPERTIES
+
+    public ExperimentIdentifierConstant() {
+        super();
+    }
+
+    public ExperimentIdentifierConstant(String name, String version) {
+        super();
+        this.name = name;
+        this.version = version;
+    }
+
+    @Override
+    public String identifier(Optional<String> taskName) {
+        return IdentifierUtilities.identifierFromNameVersion(name, Optional.of(version));
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 }

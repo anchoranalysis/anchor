@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared;
-
-/*
+/*-
  * #%L
- * anchor-gui
+ * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.bean.shared;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.shared;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,29 +33,26 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public class StringMap extends AnchorBean<StringMap> {
 
-	// START BEAN PROPERTIES
-	private List<StringMapItem> list;
-	// END BEAN PROPERTIES
-	
-	public Map<String,String> create() {
-		
-		HashMap<String,String> map = new HashMap<>();
-		
-		for( StringMapItem mapping : list ) {
-			map.put(
-				mapping.getSource(),
-				mapping.getTarget()
-			);
-		}
-		
-		return map;
-	}
+    // START BEAN PROPERTIES
+    private List<StringMapItem> list;
+    // END BEAN PROPERTIES
 
-	public List<StringMapItem> getList() {
-		return list;
-	}
+    public Map<String, String> create() {
 
-	public void setList(List<StringMapItem> list) {
-		this.list = list;
-	}
+        HashMap<String, String> map = new HashMap<>();
+
+        for (StringMapItem mapping : list) {
+            map.put(mapping.getSource(), mapping.getTarget());
+        }
+
+        return map;
+    }
+
+    public List<StringMapItem> getList() {
+        return list;
+    }
+
+    public void setList(List<StringMapItem> list) {
+        this.list = list;
+    }
 }

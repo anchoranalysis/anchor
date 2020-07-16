@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.datatype;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +23,27 @@ package org.anchoranalysis.image.voxel.datatype;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.datatype;
 
 public class VoxelDataTypeFloat extends VoxelDataType {
 
-	public static final long MAX_VALUE = (long) Float.MAX_VALUE;
-	public static final long MIN_VALUE = (long) Float.MIN_VALUE;
-	
-	public static final VoxelDataTypeFloat INSTANCE = new VoxelDataTypeFloat();
-	
-	private VoxelDataTypeFloat() {
-		super(32,"float", MAX_VALUE, MIN_VALUE);
-	}
-	
-	@Override
-	public boolean isInteger() {
-		return false;
-	}
+    public static final long MAX_VALUE = (long) Float.MAX_VALUE;
+    public static final long MIN_VALUE = (long) Float.MIN_VALUE;
 
-	@Override
-	public boolean isUnsigned() {
-		return false;
-	}
+    public static final VoxelDataTypeFloat INSTANCE = new VoxelDataTypeFloat();
+
+    private VoxelDataTypeFloat() {
+        super(32, "float", MAX_VALUE, MIN_VALUE);
+    }
+
+    @Override
+    public boolean isInteger() {
+        return false;
+    }
+
+    @Override
+    public boolean isUnsigned() {
+        return false;
+    }
 }

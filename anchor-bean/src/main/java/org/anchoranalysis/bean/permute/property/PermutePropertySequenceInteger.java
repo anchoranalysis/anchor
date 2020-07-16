@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.permute.property;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +23,36 @@ package org.anchoranalysis.bean.permute.property;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.permute.property;
 
 import java.util.Iterator;
 
 /**
  * An arithmetic sequence of doubles, obtained by dividing an integer sequence by a divider
- * 
- * @author Owen Feehan
- * 
- * @param T permutation type
  *
+ * @author Owen Feehan
+ * @param T permutation type
  */
 public class PermutePropertySequenceInteger extends PermutePropertySequence<Integer> {
-	
-	@Override
-	public Iterator<Integer> propertyValues() {
-		return propertyValuesDefinitelyInteger();
-	}
-	
-	public Iterator<Integer> propertyValuesDefinitelyInteger() {
-		return range();
-	}
-	
-	@Override
-	public String nameForPropValue(Integer value) {
-		int numDigitsEnd = Integer.toString(getSequence().getEnd()).length();
-		if (numDigitsEnd==1) {
-			return value.toString();
-		} else {
-			String format = String.format("%%0%dd", numDigitsEnd);
-			return String.format(format, value);
-		}
-	}
 
+    @Override
+    public Iterator<Integer> propertyValues() {
+        return propertyValuesDefinitelyInteger();
+    }
+
+    public Iterator<Integer> propertyValuesDefinitelyInteger() {
+        return range();
+    }
+
+    @Override
+    public String nameForPropValue(Integer value) {
+        int numDigitsEnd = Integer.toString(getSequence().getEnd()).length();
+        if (numDigitsEnd == 1) {
+            return value.toString();
+        } else {
+            String format = String.format("%%0%dd", numDigitsEnd);
+            return String.format(format, value);
+        }
+    }
 }

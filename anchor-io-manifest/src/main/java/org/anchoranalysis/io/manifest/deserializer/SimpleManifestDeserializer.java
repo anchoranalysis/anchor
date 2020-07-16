@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.deserializer;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,22 @@ package org.anchoranalysis.io.manifest.deserializer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.deserializer;
 
 import java.io.File;
-
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 
 public class SimpleManifestDeserializer implements ManifestDeserializer {
 
-	@Override
-	public ManifestRecorder deserializeManifest( File file ) throws DeserializationFailedException {
-		
-		ManifestRecorder manifest = new ObjectInputStreamDeserializer<ManifestRecorder>().deserialize(file.toPath());
-		manifest.init( file.toPath().getParent() );
-		return manifest;
-	}
+    @Override
+    public ManifestRecorder deserializeManifest(File file) throws DeserializationFailedException {
+
+        ManifestRecorder manifest =
+                new ObjectInputStreamDeserializer<ManifestRecorder>().deserialize(file.toPath());
+        manifest.init(file.toPath().getParent());
+        return manifest;
+    }
 }

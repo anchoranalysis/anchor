@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.mark;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.anchor.mpp.mark;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.mark;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class UnsupportedMarkTypeException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5855318973518035098L;
+    /** */
+    private static final long serialVersionUID = -5855318973518035098L;
 
-	public UnsupportedMarkTypeException(String string) {
-		super(string);
-	}
+    public UnsupportedMarkTypeException(String string) {
+        super(string);
+    }
 
-	public UnsupportedMarkTypeException( Exception exc ) {
-		super( exc );
-	}
+    public UnsupportedMarkTypeException(Exception exc) {
+        super(exc);
+    }
 }

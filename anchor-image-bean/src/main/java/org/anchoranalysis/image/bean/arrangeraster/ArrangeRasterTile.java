@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.arrangeraster;
-
-/*
+/*-
  * #%L
- * anchor-image-io
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +23,19 @@ package org.anchoranalysis.image.bean.arrangeraster;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRasterException;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.BBoxSetOnPlane;
-import org.anchoranalysis.image.bean.nonbean.arrangeraster.ArrangeRaster;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.arrangeraster.TableItemException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -46,163 +44,155 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 
 public class ArrangeRasterTile extends ArrangeRasterBean {
 
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private int numRows = -1;
-	
-	@BeanField @Positive
-	private int numCols = -1;
-	
-	@BeanField @OptionalBean
-	private List<ArrangeRasterCell> cells = new ArrayList<>();
-	
-	@BeanField
-	private ArrangeRasterBean cellDefault = new SingleRaster();
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Positive private int numRows = -1;
 
-	private class CreateTable implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
-		
-		private Iterator<RGBStack> rasterIterator;
-		
-		public CreateTable(Iterator<RGBStack> rasterIterator) {
-			super();
-			this.rasterIterator = rasterIterator;
-		}
+    @BeanField @Positive private int numCols = -1;
 
-		
-		
-		
-		// We can make this more efficient by using a lookup table for the cells
-		// But as there should be relatively few exceptions, we just always loop
-		//   through the list
-		private ArrangeRaster createArrangeRasterForItem(int rowPos, int colPos) {
-		
-			if (cells!=null) {
-				for (ArrangeRasterCell cell : cells) {
-					if (cell.getRow()==rowPos && cell.getCol()==colPos) {
-						assert(cell.getArrangeRaster()!=null);
-						return cell.getArrangeRaster();
-					}
-				}
-			}
-			
-			// If there's no explicit cell definition
-			return cellDefault;
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return rasterIterator.hasNext();
-		}
-		
-		@Override
-		public BBoxSetOnPlane createNext( int rowPos, int colPos) throws TableItemException {
-			try {
-				return createArrangeRasterForItem(rowPos, colPos).createBBoxSetOnPlane(rasterIterator);
-			} catch (ArrangeRasterException e) {
-				throw new TableItemException(e);
-			}
-		}
-	}
+    @BeanField @OptionalBean private List<ArrangeRasterCell> cells = new ArrayList<>();
 
-	private static void addShifted( Iterable<BoundingBox> src, BBoxSetOnPlane dest, int shiftX, int shiftY ) {
+    @BeanField private ArrangeRasterBean cellDefault = new SingleRaster();
+    // END BEAN PROPERTIES
 
-		// We now loop through each item in the cell, and add to our output set with
-		//   the correct offset
-		for (BoundingBox bbox : src) {
+    private class CreateTable implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
 
-			Point3i cornerMin = new Point3i( bbox.cornerMin() );
-			cornerMin.incrementX(shiftX);
-			cornerMin.incrementY(shiftY);
+        private Iterator<RGBStack> rasterIterator;
 
-			dest.add(
-				new BoundingBox(cornerMin, bbox.extent())
-			);
-		}
+        public CreateTable(Iterator<RGBStack> rasterIterator) {
+            super();
+            this.rasterIterator = rasterIterator;
+        }
 
-	}
-	
-	private static BBoxSetOnPlane createSet( TableItemArrangement<BBoxSetOnPlane> table, MaxWidthHeight maxWidthHeight ) {
-		
-		BBoxSetOnPlane set = new BBoxSetOnPlane(
-			new Extent(
-				maxWidthHeight.getTotalWidth(),
-				maxWidthHeight.getTotalHeight(),
-				maxWidthHeight.getMaxZ()
-			)	
-		);
-		
-		// We iterator over every cell in the table
-		for (int rowPos=0; rowPos<table.getNumRowsUsed(); rowPos++) {
-			for (int colPos=0; colPos<table.getNumColsUsed(); colPos++) {
-		
-				if (!table.isCellUsed(rowPos,colPos)) {
-					break;
-				}
-				
-				BBoxSetOnPlane bboxSet = table.get(rowPos,colPos);
-				
-				int rowHeight = maxWidthHeight.getMaxHeightForRow( rowPos );
-				int colWidth = maxWidthHeight.getMaxWidthForCol( colPos );
-				
-				int rowX = maxWidthHeight.sumWidthBeforeCol(colPos);
-				int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos); 
-				
-				int x = rowX + ((colWidth - bboxSet.getExtent().getX()) / 2);	// We center
-				int y = rowY + ((rowHeight - bboxSet.getExtent().getY()) / 2);	// We center
-				
-				addShifted( bboxSet, set, x, y );
-			}
-		}
-		return set;
-	}
-	
-	
-	@Override
-	public BBoxSetOnPlane createBBoxSetOnPlane( final Iterator<RGBStack> rasterIterator ) throws ArrangeRasterException {
-	
-		try {
-			TableItemArrangement<BBoxSetOnPlane> table = new TableItemArrangement<>( new CreateTable(rasterIterator), numRows, numCols );
-			
-			MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table);
-			
-			return createSet(table, maxWidthHeight );
-			
-		} catch (TableItemException e) {
-			throw new ArrangeRasterException(e);
-		}
-	}
+        // We can make this more efficient by using a lookup table for the cells
+        // But as there should be relatively few exceptions, we just always loop
+        //   through the list
+        private ArrangeRaster createArrangeRasterForItem(int rowPos, int colPos) {
 
-	public int getNumRows() {
-		return numRows;
-	}
+            if (cells != null) {
+                for (ArrangeRasterCell cell : cells) {
+                    if (cell.getRow() == rowPos && cell.getCol() == colPos) {
+                        assert (cell.getArrangeRaster() != null);
+                        return cell.getArrangeRaster();
+                    }
+                }
+            }
 
-	public void setNumRows(int numRows) {
-		this.numRows = numRows;
-	}
+            // If there's no explicit cell definition
+            return cellDefault;
+        }
 
-	public int getNumCols() {
-		return numCols;
-	}
+        @Override
+        public boolean hasNext() {
+            return rasterIterator.hasNext();
+        }
 
-	public void setNumCols(int numCols) {
-		this.numCols = numCols;
-	}
+        @Override
+        public BBoxSetOnPlane createNext(int rowPos, int colPos) throws TableItemException {
+            try {
+                return createArrangeRasterForItem(rowPos, colPos)
+                        .createBBoxSetOnPlane(rasterIterator);
+            } catch (ArrangeRasterException e) {
+                throw new TableItemException(e);
+            }
+        }
+    }
 
-	public List<ArrangeRasterCell> getCells() {
-		return cells;
-	}
+    private static void addShifted(
+            Iterable<BoundingBox> src, BBoxSetOnPlane dest, int shiftX, int shiftY) {
 
-	public void setCells(List<ArrangeRasterCell> cells) {
-		this.cells = cells;
-	}
+        // We now loop through each item in the cell, and add to our output set with
+        //   the correct offset
+        for (BoundingBox bbox : src) {
 
-	public ArrangeRasterBean getCellDefault() {
-		return cellDefault;
-	}
+            Point3i cornerMin = new Point3i(bbox.cornerMin());
+            cornerMin.incrementX(shiftX);
+            cornerMin.incrementY(shiftY);
 
-	public void setCellDefault(ArrangeRasterBean cellDefault) {
-		this.cellDefault = cellDefault;
-	}
+            dest.add(new BoundingBox(cornerMin, bbox.extent()));
+        }
+    }
 
+    private static BBoxSetOnPlane createSet(
+            TableItemArrangement<BBoxSetOnPlane> table, MaxWidthHeight maxWidthHeight) {
+
+        BBoxSetOnPlane set =
+                new BBoxSetOnPlane(
+                        new Extent(
+                                maxWidthHeight.getTotalWidth(),
+                                maxWidthHeight.getTotalHeight(),
+                                maxWidthHeight.getMaxZ()));
+
+        // We iterator over every cell in the table
+        for (int rowPos = 0; rowPos < table.getNumRowsUsed(); rowPos++) {
+            for (int colPos = 0; colPos < table.getNumColsUsed(); colPos++) {
+
+                if (!table.isCellUsed(rowPos, colPos)) {
+                    break;
+                }
+
+                BBoxSetOnPlane bboxSet = table.get(rowPos, colPos);
+
+                int rowHeight = maxWidthHeight.getMaxHeightForRow(rowPos);
+                int colWidth = maxWidthHeight.getMaxWidthForCol(colPos);
+
+                int rowX = maxWidthHeight.sumWidthBeforeCol(colPos);
+                int rowY = maxWidthHeight.sumHeightBeforeRow(rowPos);
+
+                int x = rowX + ((colWidth - bboxSet.getExtent().getX()) / 2); // We center
+                int y = rowY + ((rowHeight - bboxSet.getExtent().getY()) / 2); // We center
+
+                addShifted(bboxSet, set, x, y);
+            }
+        }
+        return set;
+    }
+
+    @Override
+    public BBoxSetOnPlane createBBoxSetOnPlane(final Iterator<RGBStack> rasterIterator)
+            throws ArrangeRasterException {
+
+        try {
+            TableItemArrangement<BBoxSetOnPlane> table =
+                    new TableItemArrangement<>(new CreateTable(rasterIterator), numRows, numCols);
+
+            MaxWidthHeight maxWidthHeight = new MaxWidthHeight(table);
+
+            return createSet(table, maxWidthHeight);
+
+        } catch (TableItemException e) {
+            throw new ArrangeRasterException(e);
+        }
+    }
+
+    public int getNumRows() {
+        return numRows;
+    }
+
+    public void setNumRows(int numRows) {
+        this.numRows = numRows;
+    }
+
+    public int getNumCols() {
+        return numCols;
+    }
+
+    public void setNumCols(int numCols) {
+        this.numCols = numCols;
+    }
+
+    public List<ArrangeRasterCell> getCells() {
+        return cells;
+    }
+
+    public void setCells(List<ArrangeRasterCell> cells) {
+        this.cells = cells;
+    }
+
+    public ArrangeRasterBean getCellDefault() {
+        return cellDefault;
+    }
+
+    public void setCellDefault(ArrangeRasterBean cellDefault) {
+        this.cellDefault = cellDefault;
+    }
 }

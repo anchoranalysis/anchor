@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,50 +23,46 @@ package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.outline.traverser.visitedpixels.combine;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
 
 /**
- * A path and a location onto which a merge can occur, and the index of the vertice
- *  in the original list
- * 
- * @author Owen Feehan
+ * A path and a location onto which a merge can occur, and the index of the vertice in the original
+ * list
  *
+ * @author Owen Feehan
  */
 class MergeTarget {
-	
-	private ContiguousPixelPath path;
-	private int indexPath;
-	private Point3i mergePoint;
-	private int mergeIndex;
-	
-	public MergeTarget(ContiguousPixelPath path, int indexPath, int mergeIndex) {
-		super();
-		this.path = path;
-		this.indexPath = indexPath;
-		this.mergeIndex = mergeIndex;
-	}		
 
-	public ContiguousPixelPath getPath() {
-		return path;
-	}
-	
-	public int getIndexPath() {
-		return indexPath;
-	}
-	
-	public Point3i mergePoint() {
-		return path.get(mergeIndex);
-	}
+    private ContiguousPixelPath path;
+    private int indexPath;
+    private Point3i mergePoint;
+    private int mergeIndex;
 
-	@Override
-	public String toString() {
-		return String.format(
-			"path=%s point=%s indexPath=%d%n",
-			path,
-			mergePoint,
-			indexPath
-		);
-	}
+    public MergeTarget(ContiguousPixelPath path, int indexPath, int mergeIndex) {
+        super();
+        this.path = path;
+        this.indexPath = indexPath;
+        this.mergeIndex = mergeIndex;
+    }
+
+    public ContiguousPixelPath getPath() {
+        return path;
+    }
+
+    public int getIndexPath() {
+        return indexPath;
+    }
+
+    public Point3i mergePoint() {
+        return path.get(mergeIndex);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("path=%s point=%s indexPath=%d%n", path, mergePoint, indexPath);
+    }
 }

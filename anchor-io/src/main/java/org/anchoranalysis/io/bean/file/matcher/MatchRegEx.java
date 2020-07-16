@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.file.matcher;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,70 +23,64 @@ package org.anchoranalysis.io.bean.file.matcher;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.file.matcher;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.params.InputContextParams;
 
-
 /**
  * Predicates that matches a file-path against a regular expression
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class MatchRegEx extends FileMatcher {
 
-	// START BEAN FIELDS
-	/**
-	 * If true, the filter is applied to the path as a whole, not just the filename (using forward slashes as directory seperators)
-	 */
-	@BeanField
-	private boolean applyToPath = false;
-	
-	@BeanField
-	private String expression;
-	// END BEAN FIELDS
-	
-	@Override
-	protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
-		if (applyToPath) {
-			Pattern pattern = Pattern.compile(expression);
-			return p -> acceptPathViaRegEx(p, pattern);
-		} else {
-			return PathMatcherUtilities.filter(dir, "regex", expression);
-		}
-	}
-	
-	public static boolean acceptPathViaRegEx(Path path, Pattern pattern) {
-		return pattern.matcher(
-			pathAsString(path)
-		).matches();
-	}
-	
-	private static String pathAsString(Path p) {
-		return FilePathToUnixStyleConverter.toStringUnixStyle(
-			p.toFile().toString()
-		);
-	}
+    // START BEAN FIELDS
+    /**
+     * If true, the filter is applied to the path as a whole, not just the filename (using forward
+     * slashes as directory seperators)
+     */
+    @BeanField private boolean applyToPath = false;
 
-	public boolean isApplyToPath() {
-		return applyToPath;
-	}
+    @BeanField private String expression;
+    // END BEAN FIELDS
 
-	public void setApplyToPath(boolean applyToPath) {
-		this.applyToPath = applyToPath;
-	}
-	
-	public String getExpression() {
-		return expression;
-	}
+    @Override
+    protected Predicate<Path> createMatcherFile(Path dir, InputContextParams inputContext) {
+        if (applyToPath) {
+            Pattern pattern = Pattern.compile(expression);
+            return p -> acceptPathViaRegEx(p, pattern);
+        } else {
+            return PathMatcherUtilities.filter(dir, "regex", expression);
+        }
+    }
 
-	public void setExpression(String expression) {
-		this.expression = expression;
-	}
+    public static boolean acceptPathViaRegEx(Path path, Pattern pattern) {
+        return pattern.matcher(pathAsString(path)).matches();
+    }
+
+    private static String pathAsString(Path p) {
+        return FilePathToUnixStyleConverter.toStringUnixStyle(p.toFile().toString());
+    }
+
+    public boolean isApplyToPath() {
+        return applyToPath;
+    }
+
+    public void setApplyToPath(boolean applyToPath) {
+        this.applyToPath = applyToPath;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.channel.factory;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,26 @@ package org.anchoranalysis.image.channel.factory;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.channel.factory;
 
 import java.nio.Buffer;
-
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-/**
- * 
- * Creates a Chnl for a specific data-type
- *
- */
+/** Creates a Chnl for a specific data-type */
 public interface ChannelFactorySingleType {
-	
-	Channel createEmptyInitialised( ImageDimensions dimensions );
 
-	Channel createEmptyUninitialised(ImageDimensions dimensions);
-	
-	default Channel create( VoxelBox<? extends Buffer> bufferAccess, ImageResolution res ) {
-		return new Channel( bufferAccess, res);
-	}
-	
-	VoxelDataType dataType();
+    Channel createEmptyInitialised(ImageDimensions dimensions);
+
+    Channel createEmptyUninitialised(ImageDimensions dimensions);
+
+    default Channel create(VoxelBox<? extends Buffer> bufferAccess, ImageResolution res) {
+        return new Channel(bufferAccess, res);
+    }
+
+    VoxelDataType dataType();
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.bound;
-
-/*
+/*-
  * #%L
  * anchor-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,21 @@ package org.anchoranalysis.anchor.mpp.bound;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.bound;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class BoundCalculatorException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public BoundCalculatorException( String s ) {
-		super(s);
-	}
-	
-	public BoundCalculatorException( Exception e ) {
-		super(e);
-	}
+    public BoundCalculatorException(String s) {
+        super(s);
+    }
+
+    public BoundCalculatorException(Exception e) {
+        super(e);
+    }
 }

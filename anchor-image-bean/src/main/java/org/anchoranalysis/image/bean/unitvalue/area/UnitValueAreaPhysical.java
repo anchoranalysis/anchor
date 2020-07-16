@@ -1,12 +1,8 @@
-package org.anchoranalysis.image.bean.unitvalue.area;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +23,10 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.unitvalue.area;
 
-
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
@@ -38,46 +36,44 @@ import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
  * Area expressed in physical coordinates
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class UnitValueAreaPhysical extends UnitValueArea {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String prefix = "";
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
-		
-		if (!resolution.isPresent()) {
-			throw new UnitValueException("An image resolution is required to calculate physical-area but it is missing");
-		}
-		
-		UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(prefix);
-		
-		double valueAsBase = SpatialConversionUtilities.convertFromUnits(getValue(), unitPrefix);
-		
-		return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, resolution.get());
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String prefix = "";
+    // END BEAN PROPERTIES
 
-	public String getPrefix() {
-		return prefix;
-	}
+    @Override
+    public double resolveToVoxels(Optional<ImageResolution> resolution) throws UnitValueException {
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+        if (!resolution.isPresent()) {
+            throw new UnitValueException(
+                    "An image resolution is required to calculate physical-area but it is missing");
+        }
 
-	@Override
-	public String toString() {
-		if (prefix!=null && !prefix.isEmpty()) {
-			return String.format("%.2f%s", getValue(),prefix);
-		} else {
-			return String.format("%.2f", getValue());
-		}
-	}
+        UnitSuffix unitPrefix = SpatialConversionUtilities.suffixFromMeterString(prefix);
 
+        double valueAsBase = SpatialConversionUtilities.convertFromUnits(getValue(), unitPrefix);
+
+        return ImageUnitConverter.convertFromPhysicalArea(valueAsBase, resolution.get());
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    @Override
+    public String toString() {
+        if (prefix != null && !prefix.isEmpty()) {
+            return String.format("%.2f%s", getValue(), prefix);
+        } else {
+            return String.format("%.2f", getValue());
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.output.error;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +23,8 @@ package org.anchoranalysis.io.output.error;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.output.error;
 
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
@@ -32,24 +32,22 @@ import org.anchoranalysis.core.error.friendly.IFriendlyException;
 
 public class OutputWriteFailedException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1036971819028250342L;
+    /** */
+    private static final long serialVersionUID = 1036971819028250342L;
 
-	public OutputWriteFailedException( String s ) {
-		super(s);
-	}
-	
-	public OutputWriteFailedException( String s, IFriendlyException e ) {
-		super(s + ": " + e.friendlyMessageHierarchy(), null);
-	}
-	
-	public OutputWriteFailedException( String s, AnchorCombinableException e ) {
-		super(s, e.summarize());
-	}
-	
-	public OutputWriteFailedException( Throwable e ) {
-		super("", e);
-	}
+    public OutputWriteFailedException(String s) {
+        super(s);
+    }
+
+    public OutputWriteFailedException(String s, IFriendlyException e) {
+        super(s + ": " + e.friendlyMessageHierarchy(), null);
+    }
+
+    public OutputWriteFailedException(String s, AnchorCombinableException e) {
+        super(s, e.summarize());
+    }
+
+    public OutputWriteFailedException(Throwable e) {
+        super("", e);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.filepath.findmatching;
-
 /*-
  * #%L
- * anchor-core
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +23,20 @@ package org.anchoranalysis.io.filepath.findmatching;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.filepath.findmatching;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
-
 import org.anchoranalysis.core.log.Logger;
 
 public interface FindMatchingFiles {
 
-	Collection<File> apply( Path dir, PathMatchConstraints constraints, boolean acceptDirectoryErrors, Logger logger ) throws FindFilesException;
+    Collection<File> apply(
+            Path dir,
+            PathMatchConstraints constraints,
+            boolean acceptDirectoryErrors,
+            Logger logger)
+            throws FindFilesException;
 }

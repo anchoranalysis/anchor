@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.name.value;
-
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,44 +23,44 @@ package org.anchoranalysis.core.name.value;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.core.name.value;
 
 /**
- * 
  * A simple container expressing a name-value pair
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <V> value-type
  */
 public final class SimpleNameValue<V> implements NameValue<V> {
 
-	private String name;
-	
-	private V value;
+    private String name;
 
-	public SimpleNameValue(String name, V value) {
-		super();
-		this.name = name;
-		this.value = value;
-	}
+    private V value;
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public SimpleNameValue(String name, V value) {
+        super();
+        this.name = name;
+        this.value = value;
+    }
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public V getValue() {
-		return value;
-	}
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public void setValue(V value) {
-		this.value = value;
-	}
+    @Override
+    public V getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(V value) {
+        this.value = value;
+    }
 }

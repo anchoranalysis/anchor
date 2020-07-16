@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.xml.mock;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.bean.xml.mock;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.xml.mock;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -34,47 +33,43 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 
 public class MockBeanNested extends AnchorBean<MockBeanNested> {
 
-	@BeanField
-	private String fieldSimpleNecessary;
-	
-	@BeanField @AllowEmpty
-	private String fieldSimpleAllowEmpty = "";
+    @BeanField private String fieldSimpleNecessary;
 
-	@BeanField
-	private MockBeanSimple fieldBeanNecessary;
-	
-	@BeanField @OptionalBean
-	private MockBeanSimple fieldBeanOptional;
-	
-	public String getFieldSimpleNecessary() {
-		return fieldSimpleNecessary;
-	}
+    @BeanField @AllowEmpty private String fieldSimpleAllowEmpty = "";
 
-	public void setFieldSimpleNecessary(String fieldSimpleNecessary) {
-		this.fieldSimpleNecessary = fieldSimpleNecessary;
-	}
+    @BeanField private MockBeanSimple fieldBeanNecessary;
 
-	public String getFieldSimpleAllowEmpty() {
-		return fieldSimpleAllowEmpty;
-	}
+    @BeanField @OptionalBean private MockBeanSimple fieldBeanOptional;
 
-	public void setFieldSimpleAllowEmpty(String fieldSimpleAllowEmpty) {
-		this.fieldSimpleAllowEmpty = fieldSimpleAllowEmpty;
-	}
+    public String getFieldSimpleNecessary() {
+        return fieldSimpleNecessary;
+    }
 
-	public MockBeanSimple getFieldBeanNecessary() {
-		return fieldBeanNecessary;
-	}
+    public void setFieldSimpleNecessary(String fieldSimpleNecessary) {
+        this.fieldSimpleNecessary = fieldSimpleNecessary;
+    }
 
-	public void setFieldBeanNecessary(MockBeanSimple fieldBeanNecessary) {
-		this.fieldBeanNecessary = fieldBeanNecessary;
-	}
+    public String getFieldSimpleAllowEmpty() {
+        return fieldSimpleAllowEmpty;
+    }
 
-	public MockBeanSimple getFieldBeanOptional() {
-		return fieldBeanOptional;
-	}
+    public void setFieldSimpleAllowEmpty(String fieldSimpleAllowEmpty) {
+        this.fieldSimpleAllowEmpty = fieldSimpleAllowEmpty;
+    }
 
-	public void setFieldBeanOptional(MockBeanSimple fieldBeanOptional) {
-		this.fieldBeanOptional = fieldBeanOptional;
-	}
+    public MockBeanSimple getFieldBeanNecessary() {
+        return fieldBeanNecessary;
+    }
+
+    public void setFieldBeanNecessary(MockBeanSimple fieldBeanNecessary) {
+        this.fieldBeanNecessary = fieldBeanNecessary;
+    }
+
+    public MockBeanSimple getFieldBeanOptional() {
+        return fieldBeanOptional;
+    }
+
+    public void setFieldBeanOptional(MockBeanSimple fieldBeanOptional) {
+        this.fieldBeanOptional = fieldBeanOptional;
+    }
 }

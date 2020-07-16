@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.output.file;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-io-output
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +23,8 @@ package org.anchoranalysis.io.output.file;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.output.file;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,37 +33,37 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FileOutput {
 
-	private final String filePath;
-	
-	// Files for writing out
-	private PrintWriter out;
-	
-	public FileOutput(String filePath) {
-		super();
-		this.filePath = filePath;
-	}
-		
-	public void start() throws AnchorIOException {
-		try {
-			FileWriter fileWriter = new FileWriter( filePath );
-			
-			this.out = new PrintWriter(fileWriter);
-		} catch (IOException e) {
-			throw new AnchorIOException("Cannot create file-writer", e);
-		}
-	}
-	
-	public boolean isEnabled() {
-		return (out!=null);
-	}
-	
-	public PrintWriter getWriter() {
-		return this.out;
-	}
-			
-	public void end() {
-		if (out!=null) {
-			out.close();
-		}
-	}
+    private final String filePath;
+
+    // Files for writing out
+    private PrintWriter out;
+
+    public FileOutput(String filePath) {
+        super();
+        this.filePath = filePath;
+    }
+
+    public void start() throws AnchorIOException {
+        try {
+            FileWriter fileWriter = new FileWriter(filePath);
+
+            this.out = new PrintWriter(fileWriter);
+        } catch (IOException e) {
+            throw new AnchorIOException("Cannot create file-writer", e);
+        }
+    }
+
+    public boolean isEnabled() {
+        return (out != null);
+    }
+
+    public PrintWriter getWriter() {
+        return this.out;
+    }
+
+    public void end() {
+        if (out != null) {
+            out.close();
+        }
+    }
 }

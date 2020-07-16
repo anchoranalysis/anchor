@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.xml;
-
-/*
+/*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,25 @@ package org.anchoranalysis.bean.xml;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.bean.xml;
 
 import org.apache.commons.configuration.XMLConfiguration;
 
 /**
  * For classes that wish to have a XmlConfiguration associated with them
- * 
- * The associateXml method is called after the class has
- *   been loaded with the BeanXMLLoader
- * 
- * @author Owen Feehan
  *
+ * <p>The associateXml method is called after the class has been loaded with the BeanXMLLoader
+ *
+ * @author Owen Feehan
  */
 @FunctionalInterface
 public interface IAssociateXmlUponLoad {
-	
-	/**
-	 * Associated 
-	 * @param xmlConfiguration the xml-configuration to associate with an object
-	 */
-	void associateXml(XMLConfiguration xmlConfiguration);
+
+    /**
+     * Associated
+     *
+     * @param xmlConfiguration the xml-configuration to associate with an object
+     */
+    void associateXml(XMLConfiguration xmlConfiguration);
 }

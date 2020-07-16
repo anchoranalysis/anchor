@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.bean.descriptivename;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,57 +23,56 @@ package org.anchoranalysis.io.bean.descriptivename;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bean.descriptivename;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 /**
  * Calculates the descriptive-name independently for each file
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class DescriptiveNameFromFileIndependent extends DescriptiveNameFromFile {
 
-	@Override
-	public List<DescriptiveFile> descriptiveNamesFor( Collection<File> files, String elseName, Logger logger ) {
-		
-		List<DescriptiveFile> out = new ArrayList<>();
-		
-		int i =0;
-		for (File f : files) {
-			String descriptiveName = createDescriptiveNameOrElse( f, i++, elseName, logger);
-			out.add( new DescriptiveFile(f, descriptiveName) );
-		}
-		
-		return out;
-	}
-	
-	protected abstract String createDescriptiveName( File file, int index ) throws CreateException;
-	
-	private String createDescriptiveNameOrElse( File file, int index, String elseName, Logger logger ) {
-		try {
-			return createDescriptiveName(file, index);
-		} catch (CreateException e) {
-			
-			String elseNameWithIndex = String.format("%s04%d", elseName, index);
+    @Override
+    public List<DescriptiveFile> descriptiveNamesFor(
+            Collection<File> files, String elseName, Logger logger) {
 
-			logger.errorReporter().recordError(
-				DescriptiveNameFromFileIndependent.class,
-				String.format(
-					"Cannot create a descriptive-name for file %s and index %d. Using '%s' instead.",
-					file.getPath(),
-					index,
-					elseNameWithIndex
-				)
-			);
-			return elseNameWithIndex;
-		}
-	}
+        List<DescriptiveFile> out = new ArrayList<>();
+
+        int i = 0;
+        for (File f : files) {
+            String descriptiveName = createDescriptiveNameOrElse(f, i++, elseName, logger);
+            out.add(new DescriptiveFile(f, descriptiveName));
+        }
+
+        return out;
+    }
+
+    protected abstract String createDescriptiveName(File file, int index) throws CreateException;
+
+    private String createDescriptiveNameOrElse(
+            File file, int index, String elseName, Logger logger) {
+        try {
+            return createDescriptiveName(file, index);
+        } catch (CreateException e) {
+
+            String elseNameWithIndex = String.format("%s04%d", elseName, index);
+
+            logger.errorReporter()
+                    .recordError(
+                            DescriptiveNameFromFileIndependent.class,
+                            String.format(
+                                    "Cannot create a descriptive-name for file %s and index %d. Using '%s' instead.",
+                                    file.getPath(), index, elseNameWithIndex));
+            return elseNameWithIndex;
+        }
+    }
 }

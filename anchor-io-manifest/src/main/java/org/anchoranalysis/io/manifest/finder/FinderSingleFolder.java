@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.manifest.finder;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,31 +23,34 @@ import java.util.Optional;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.finder;
 
+import java.util.Optional;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
 
 public abstract class FinderSingleFolder implements Finder {
 
-	private Optional<FolderWrite> foundFolder = Optional.empty();
-	
-	// A simple method to override in each finder that is based upon finding a single file
-	protected abstract Optional<FolderWrite> findFolder( ManifestRecorder manifestRecorder );
-	
-	@Override
-	public final boolean doFind( ManifestRecorder manifestRecorder ) {
-		
-		foundFolder = findFolder(manifestRecorder);
-		
-		return exists();
-	}
-	
-	@Override
-	public final boolean exists() {
-		return foundFolder.isPresent();
-	}
+    private Optional<FolderWrite> foundFolder = Optional.empty();
 
-	protected FolderWrite getFoundFolder() {
-		return foundFolder.get();
-	}
+    // A simple method to override in each finder that is based upon finding a single file
+    protected abstract Optional<FolderWrite> findFolder(ManifestRecorder manifestRecorder);
+
+    @Override
+    public final boolean doFind(ManifestRecorder manifestRecorder) {
+
+        foundFolder = findFolder(manifestRecorder);
+
+        return exists();
+    }
+
+    @Override
+    public final boolean exists() {
+        return foundFolder.isPresent();
+    }
+
+    protected FolderWrite getFoundFolder() {
+        return foundFolder.get();
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.addcriteria;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,31 +23,31 @@ package org.anchoranalysis.anchor.mpp.feature.addcriteria;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.addcriteria;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 class OrderedFeatureListCombine {
-	
-	private OrderedFeatureListCombine() {}
-	
-	public static <T extends FeatureInput> Optional<FeatureList<T>> combine( List<? extends OrderedFeatureList<T>> list ) throws CreateException {
-		
-		FeatureList<T> out = FeatureListFactory.flatMapFromOptional(
-			list,
-			OrderedFeatureList::orderedListOfFeatures
-		);
-		
-		if (!out.isEmpty()) {
-			return Optional.of(out);
-		} else {
-			return Optional.empty();
-		}
-	}
+
+    private OrderedFeatureListCombine() {}
+
+    public static <T extends FeatureInput> Optional<FeatureList<T>> combine(
+            List<? extends OrderedFeatureList<T>> list) throws CreateException {
+
+        FeatureList<T> out =
+                FeatureListFactory.flatMapFromOptional(
+                        list, OrderedFeatureList::orderedListOfFeatures);
+
+        if (!out.isEmpty()) {
+            return Optional.of(out);
+        } else {
+            return Optional.empty();
+        }
+    }
 }

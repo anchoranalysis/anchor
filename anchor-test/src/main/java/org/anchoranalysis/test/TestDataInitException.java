@@ -1,10 +1,8 @@
-package org.anchoranalysis.test;
-
-/*
+/*-
  * #%L
  * anchor-test
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +23,24 @@ package org.anchoranalysis.test;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.test;
 
 /**
  * An exception thrown when test-data cannot be loaded
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class TestDataInitException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	public TestDataInitException( String msg ) {
-		super( msg );
-	}
-	
-	public TestDataInitException( Throwable e ) {
-		super(e);
-	}
+    public TestDataInitException(String msg) {
+        super(msg);
+    }
+
+    public TestDataInitException(Throwable e) {
+        super(e);
+    }
 }

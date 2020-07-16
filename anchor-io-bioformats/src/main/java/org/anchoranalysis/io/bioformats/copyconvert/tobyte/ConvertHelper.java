@@ -1,13 +1,8 @@
-package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-io-bioformats
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +23,16 @@ import lombok.NoArgsConstructor;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ConvertHelper {
-	
-	public static float twoToPower( int exponent ) {
-		return (float) Math.pow(2.0, exponent);
-	}
+
+    public static float twoToPower(int exponent) {
+        return (float) Math.pow(2.0, exponent);
+    }
 }

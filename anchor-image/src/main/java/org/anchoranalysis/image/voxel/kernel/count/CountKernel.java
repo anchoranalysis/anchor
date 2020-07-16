@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.voxel.kernel.count;
-
 /*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +23,17 @@ package org.anchoranalysis.image.voxel.kernel.count;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.voxel.kernel.count;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.kernel.Kernel;
 
 public abstract class CountKernel extends Kernel {
-	
-	public CountKernel(int size) {
-		super(size);
-	}
 
-	public abstract int countAtPos( int ind, Point3i point );	
+    public CountKernel(int size) {
+        super(size);
+    }
+
+    public abstract int countAtPos(int ind, Point3i point);
 }

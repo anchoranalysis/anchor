@@ -1,12 +1,8 @@
-package org.anchoranalysis.mpp.io.bean.report.feature;
-
-
-
 /*-
  * #%L
  * anchor-mpp-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +23,8 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.io.bean.report.feature;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -34,22 +32,22 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class ReportFeatureForMPP<T extends FeatureInput> extends ReportFeatureEvaluator<T> {
+public abstract class ReportFeatureForMPP<T extends FeatureInput>
+        extends ReportFeatureEvaluator<T> {
 
-	// START BEAN PROPERTIES	
-	@BeanField
-	private ImageDimProvider dim;
-	// END BEAN PROPERTIES
-	
-	protected ImageDimensions createImageDim() throws CreateException {
-		return dim.create();
-	}
+    // START BEAN PROPERTIES
+    @BeanField private ImageDimProvider dim;
+    // END BEAN PROPERTIES
 
-	public ImageDimProvider getDim() {
-		return dim;
-	}
+    protected ImageDimensions createImageDim() throws CreateException {
+        return dim.create();
+    }
 
-	public void setDim(ImageDimProvider dim) {
-		this.dim = dim;
-	}
+    public ImageDimProvider getDim() {
+        return dim;
+    }
+
+    public void setDim(ImageDimProvider dim) {
+        this.dim = dim;
+    }
 }

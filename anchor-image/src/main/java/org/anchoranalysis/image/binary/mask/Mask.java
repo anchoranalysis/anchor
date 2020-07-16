@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.binary.mask;
-
-/*
+/*-
  * #%L
  * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +23,13 @@ package org.anchoranalysis.image.binary.mask;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.binary.mask;
 
-
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -49,136 +50,127 @@ import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-import com.google.common.base.Preconditions;
-
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * A channel that is restricted to two values (ON and OFF) so as to act like a mask.
- * <p>
- * This is one of Anchor's core data-objects.
- * 
- * @author Owen Feehan
  *
+ * <p>This is one of Anchor's core data-objects.
+ *
+ * @author Owen Feehan
  */
 public class Mask {
 
-	/** The underlying channel which contains the binary-values. It is always has data-type of unsigned 8-bit. */
-	@Getter @Setter
-	private Channel channel;
+    /**
+     * The underlying channel which contains the binary-values. It is always has data-type of
+     * unsigned 8-bit.
+     */
+    @Getter @Setter private Channel channel;
 
-	@Getter
-	private final BinaryValues binaryValues;
-	
-	private final BinaryValuesByte binaryValuesByte;
-	
-	public Mask(Channel channel, BinaryValues binaryValues) {
-		this.channel = channel;
-		this.binaryValues = binaryValues;
-		this.binaryValuesByte = binaryValues.createByte();
-		
-		if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-			throw new IncorrectVoxelDataTypeException("Only unsigned 8-bit data type is supported for BinaryChnl");
-		}
-	}
-	
-	public Mask( BinaryVoxelBox<ByteBuffer> voxelBox) {
-		this(voxelBox, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE) );
-	}
-	
-	public Mask( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {
-		this.channel = factory.create(
-			vb.getVoxelBox(),
-			res
-		);
-		this.binaryValues = vb.getBinaryValues();
-		this.binaryValuesByte = binaryValues.createByte();
-	}
+    @Getter private final BinaryValues binaryValues;
 
-	public ImageDimensions getDimensions() {
-		return channel.getDimensions();
-	}
-	
-	public VoxelBox<ByteBuffer> getVoxelBox() {
-		try {
-			return channel.getVoxelBox().asByte();
-		} catch (IncorrectVoxelDataTypeException e) {
-			throw new IncorrectVoxelDataTypeException("Associated imgChnl does contain have unsigned 8-bit data (byte)");
-		}
-	}
-	
-	public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
-		return new BinaryVoxelBoxByte( getVoxelBox(), binaryValues);
-	}
+    private final BinaryValuesByte binaryValuesByte;
 
-	public boolean isPointOn( Point3i point ) {
-		ByteBuffer bb = getVoxelBox().getPixelsForPlane(point.getZ()).buffer();
-		
-		int offset = getVoxelBox().extent().offset( point.getX(), point.getY() );
-		
-		return bb.get(offset)==binaryValuesByte.getOnByte();
-	}
+    public Mask(Channel channel, BinaryValues binaryValues) {
+        this.channel = channel;
+        this.binaryValues = binaryValues;
+        this.binaryValuesByte = binaryValues.createByte();
 
-	public Mask duplicate() {
-		return new Mask( channel.duplicate(), binaryValues );
-	}
-	
-	// Creates a mask from the binaryChnl
-	public ObjectMask region( BoundingBox bbox, boolean reuseIfPossible ) {
-		Preconditions.checkArgument(channel.getDimensions().contains(bbox));
-		return new ObjectMask(
-			bbox,
-			channel.getVoxelBox().asByte().region(bbox, reuseIfPossible),
-			binaryValues
-		);
-	}
+        if (!channel.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+            throw new IncorrectVoxelDataTypeException(
+                    "Only unsigned 8-bit data type is supported for BinaryChnl");
+        }
+    }
 
-	public Mask maxIntensityProj() {
-		return new Mask(channel.maxIntensityProjection(), binaryValues);
-	}
-	
-	public boolean hasHighValues() {
-		return channel.hasEqualTo( binaryValues.getOnInt() );
-	}
-	
-	public int countHighValues() {
-		return channel.countEqualTo( binaryValues.getOnInt() );
-	}
-	
-	public Mask scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
+    public Mask(BinaryVoxelBox<ByteBuffer> voxelBox) {
+        this(
+                voxelBox,
+                new ImageResolution(),
+                ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE));
+    }
 
-		if (scaleFactor.isNoScale()) {
-			// Nothing to do
-			return this;
-		}
-		
-		Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
-		
-		Mask binaryChnl = new Mask(scaled, binaryValues);
-		
-		// We threshold to make sure it's still binary
-		applyThreshold(binaryChnl);
-		
-		return binaryChnl;
-	}
+    public Mask(
+            BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory) {
+        this.channel = factory.create(vb.getVoxelBox(), res);
+        this.binaryValues = vb.getBinaryValues();
+        this.binaryValuesByte = binaryValues.createByte();
+    }
 
-	public Mask extractSlice(int z) {
-		return new Mask( channel.extractSlice(z), binaryValues );
-	}
+    public ImageDimensions getDimensions() {
+        return channel.getDimensions();
+    }
 
-	public void replaceBy(BinaryVoxelBox<ByteBuffer>  bvb)
-			throws IncorrectImageSizeException {
-		channel.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
-	}
-	
-	private void applyThreshold(Mask binaryChnl) {
-		int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
-		
-		VoxelBoxThresholder.thresholdForLevel(
-			binaryChnl.getVoxelBox(),
-			thresholdVal,
-			binaryChnl.getBinaryValues().createByte()
-		);
-	}
+    public VoxelBox<ByteBuffer> getVoxelBox() {
+        try {
+            return channel.getVoxelBox().asByte();
+        } catch (IncorrectVoxelDataTypeException e) {
+            throw new IncorrectVoxelDataTypeException(
+                    "Associated imgChnl does contain have unsigned 8-bit data (byte)");
+        }
+    }
+
+    public BinaryVoxelBox<ByteBuffer> binaryVoxelBox() {
+        return new BinaryVoxelBoxByte(getVoxelBox(), binaryValues);
+    }
+
+    public boolean isPointOn(Point3i point) {
+        ByteBuffer bb = getVoxelBox().getPixelsForPlane(point.getZ()).buffer();
+
+        int offset = getVoxelBox().extent().offset(point.getX(), point.getY());
+
+        return bb.get(offset) == binaryValuesByte.getOnByte();
+    }
+
+    public Mask duplicate() {
+        return new Mask(channel.duplicate(), binaryValues);
+    }
+
+    // Creates a mask from the binaryChnl
+    public ObjectMask region(BoundingBox bbox, boolean reuseIfPossible) {
+        Preconditions.checkArgument(channel.getDimensions().contains(bbox));
+        return new ObjectMask(
+                bbox, channel.getVoxelBox().asByte().region(bbox, reuseIfPossible), binaryValues);
+    }
+
+    public Mask maxIntensityProj() {
+        return new Mask(channel.maxIntensityProjection(), binaryValues);
+    }
+
+    public boolean hasHighValues() {
+        return channel.hasEqualTo(binaryValues.getOnInt());
+    }
+
+    public int countHighValues() {
+        return channel.countEqualTo(binaryValues.getOnInt());
+    }
+
+    public Mask scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
+
+        if (scaleFactor.isNoScale()) {
+            // Nothing to do
+            return this;
+        }
+
+        Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
+
+        Mask binaryChnl = new Mask(scaled, binaryValues);
+
+        // We threshold to make sure it's still binary
+        applyThreshold(binaryChnl);
+
+        return binaryChnl;
+    }
+
+    public Mask extractSlice(int z) {
+        return new Mask(channel.extractSlice(z), binaryValues);
+    }
+
+    public void replaceBy(BinaryVoxelBox<ByteBuffer> bvb) throws IncorrectImageSizeException {
+        channel.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
+    }
+
+    private void applyThreshold(Mask binaryChnl) {
+        int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
+
+        VoxelBoxThresholder.thresholdForLevel(
+                binaryChnl.getVoxelBox(), thresholdVal, binaryChnl.getBinaryValues().createByte());
+    }
 }

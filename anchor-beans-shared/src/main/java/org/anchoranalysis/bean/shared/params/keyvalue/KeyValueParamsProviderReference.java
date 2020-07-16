@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean.shared.params.keyvalue;
-
-/*
+/*-
  * #%L
  * anchor-beans-shared
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +23,37 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean.shared.params.keyvalue;
 
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private String id = "";
-	// END BEAN PROPERTIES
-	
-	private KeyValueParams params;
-	
-	@Override
-	public void onInit(KeyValueParamsInitParams so)	throws InitException {
-		super.onInit(so);
-		try {
-			params = so.getNamedKeyValueParamsCollection().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String id = "";
+    // END BEAN PROPERTIES
 
-	@Override
-	public KeyValueParams create() {
-		assert( getInitializationParameters()!=null );	// Otherwise init() has never been called
-		return params;
-	}
+    private KeyValueParams params;
+
+    @Override
+    public void onInit(KeyValueParamsInitParams so) throws InitException {
+        super.onInit(so);
+        try {
+            params = so.getNamedKeyValueParamsCollection().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new InitException(e.summarize());
+        }
+    }
+
+    @Override
+    public KeyValueParams create() {
+        assert (getInitializationParameters() != null); // Otherwise init() has never been called
+        return params;
+    }
 }

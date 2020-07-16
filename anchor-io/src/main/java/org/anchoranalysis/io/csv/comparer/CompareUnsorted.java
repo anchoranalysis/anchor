@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.csv.comparer;
-
 /*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +23,47 @@ package org.anchoranalysis.io.csv.comparer;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.csv.comparer;
 
 import static org.anchoranalysis.io.csv.comparer.CompareUtilities.*;
 
 import java.io.IOException;
 import java.util.Optional;
-
 import org.anchoranalysis.io.csv.reader.CSVReader.OpenedCSVFile;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 class CompareUnsorted {
-	
-	public boolean compareCsvFilesWithoutSorting( OpenedCSVFile file1, OpenedCSVFile file2, int ignoreFirstNumColumns, boolean rejectZeroRows ) throws CSVReaderException {
-		try {
-			boolean first = true;
-			
-			while( true ) {
-				Optional<String[]> lines1 = file1.readLine();
-				Optional<String[]> lines2 = file2.readLine();
-				
-				if (first) {
-					checkZeroRows(rejectZeroRows, lines1, lines2);
-					first = false;
-				}
-				
-				if (!areArraysEqual(lines1,lines2,ignoreFirstNumColumns)) {
-					return false;
-				}
-				
-				if (!lines1.isPresent()) {
-					// lines2 must also be null by this point
-					return true;
-				}
-			}		
-		} catch (IOException e) {
-			throw new CSVReaderException(e);
-		}
-	}
+
+    public boolean compareCsvFilesWithoutSorting(
+            OpenedCSVFile file1,
+            OpenedCSVFile file2,
+            int ignoreFirstNumColumns,
+            boolean rejectZeroRows)
+            throws CSVReaderException {
+        try {
+            boolean first = true;
+
+            while (true) {
+                Optional<String[]> lines1 = file1.readLine();
+                Optional<String[]> lines2 = file2.readLine();
+
+                if (first) {
+                    checkZeroRows(rejectZeroRows, lines1, lines2);
+                    first = false;
+                }
+
+                if (!areArraysEqual(lines1, lines2, ignoreFirstNumColumns)) {
+                    return false;
+                }
+
+                if (!lines1.isPresent()) {
+                    // lines2 must also be null by this point
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            throw new CSVReaderException(e);
+        }
+    }
 }

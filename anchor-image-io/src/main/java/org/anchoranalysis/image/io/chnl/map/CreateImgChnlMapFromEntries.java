@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.io.chnl.map;
-
 /*-
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +23,27 @@ package org.anchoranalysis.image.io.chnl.map;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.io.chnl.map;
 
 import java.util.List;
-
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 
-public class CreateImgChnlMapFromEntries implements FunctionWithException<
-	List<ImgChnlMapEntry>,
-	ImgChnlMap,
-	AnchorNeverOccursException
-> {
+public class CreateImgChnlMapFromEntries
+        implements FunctionWithException<
+                List<ImgChnlMapEntry>, ImgChnlMap, AnchorNeverOccursException> {
 
-	@Override
-	public ImgChnlMap apply(List<ImgChnlMapEntry> list) {
-		
-		ImgChnlMap beanOut = new ImgChnlMap();
-    	
-    	for( ImgChnlMapEntry entry : list ) {
-    		beanOut.add( entry );
-    	}
-    	
-	    return beanOut;		
-	}
+    @Override
+    public ImgChnlMap apply(List<ImgChnlMapEntry> list) {
+
+        ImgChnlMap beanOut = new ImgChnlMap();
+
+        for (ImgChnlMapEntry entry : list) {
+            beanOut.add(entry);
+        }
+
+        return beanOut;
+    }
 }

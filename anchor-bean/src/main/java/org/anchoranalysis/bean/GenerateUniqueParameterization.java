@@ -1,10 +1,8 @@
-package org.anchoranalysis.bean;
-
 /*-
  * #%L
  * anchor-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +23,26 @@ package org.anchoranalysis.bean;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.bean;
 
 /**
- * Objects that must implement well-defined equals() and hashCode() and also generate a name uniquely identifying the class and all parameterization
- * 
- * @author Owen Feehan
+ * Objects that must implement well-defined equals() and hashCode() and also generate a name
+ * uniquely identifying the class and all parameterization
  *
+ * @author Owen Feehan
  */
 public interface GenerateUniqueParameterization {
 
-	@Override
-	public abstract boolean equals(Object obj);
+    @Override
+    public abstract boolean equals(Object obj);
 
-	@Override
-	public abstract int hashCode();
-	
-	/** A string describing this class and all its parameterization that is guaranteed to be unique for a given set of parameters */
-	public abstract String uniqueName();
+    @Override
+    public abstract int hashCode();
+
+    /**
+     * A string describing this class and all its parameterization that is guaranteed to be unique
+     * for a given set of parameters
+     */
+    public abstract String uniqueName();
 }

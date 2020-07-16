@@ -1,10 +1,8 @@
-package org.anchoranalysis.io.manifest.operationrecorder;
-
 /*-
  * #%L
  * anchor-io-manifest
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +23,30 @@ package org.anchoranalysis.io.manifest.operationrecorder;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.folder.FolderWriteWithPath;
 
 public class NullWriteOperationRecorder implements WriteOperationRecorder {
 
-	@Override
-	public void write(
-		String outputName,
-		ManifestDescription manifestDescription,
-		Path outFilePath,
-		String index
-	) {
-		// NOTHING TO DO
-	}
+    @Override
+    public void write(
+            String outputName,
+            ManifestDescription manifestDescription,
+            Path outFilePath,
+            String index) {
+        // NOTHING TO DO
+    }
 
-	@Override
-	public WriteOperationRecorder writeFolder(Path relativeFolderPath,
-			ManifestFolderDescription manifestDescription,
-			FolderWriteWithPath folderWrite) {
-		return this;
-	}
-
+    @Override
+    public WriteOperationRecorder writeFolder(
+            Path relativeFolderPath,
+            ManifestFolderDescription manifestDescription,
+            FolderWriteWithPath folderWrite) {
+        return this;
+    }
 }

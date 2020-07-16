@@ -1,10 +1,8 @@
-package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
-
-/*
+/*-
  * #%L
  * anchor-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,25 @@ package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.mpp.sgmn.optscheme.feedback.period;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
 public class PeriodReceiverException extends AnchorCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8462423019988537940L;
+    /** */
+    private static final long serialVersionUID = 8462423019988537940L;
 
-	public PeriodReceiverException() {
-		super();
-	}
+    public PeriodReceiverException() {
+        super();
+    }
 
-	public PeriodReceiverException(String arg0) {
-		super(arg0);
-	}
-	
-	public PeriodReceiverException(Exception e) {
-		super(e);
-	}
+    public PeriodReceiverException(String arg0) {
+        super(arg0);
+    }
+
+    public PeriodReceiverException(Exception e) {
+        super(e);
+    }
 }

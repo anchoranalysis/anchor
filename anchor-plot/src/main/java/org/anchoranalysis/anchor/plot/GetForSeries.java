@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plot;
-
 /*-
  * #%L
  * anchor-plot
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +23,17 @@ package org.anchoranalysis.anchor.plot;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.plot;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> container-item type
  * @param <S> return-type
  */
 @FunctionalInterface
-public interface GetForSeries<T,S> {
-	S get( T item, int seriesNum ) throws GetOperationFailedException;
+public interface GetForSeries<T, S> {
+    S get(T item, int seriesNum) throws GetOperationFailedException;
 }

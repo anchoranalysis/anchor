@@ -1,10 +1,8 @@
-package org.anchoranalysis.annotation.io.wholeimage;
-
 /*-
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +23,24 @@ package org.anchoranalysis.annotation.io.wholeimage;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.annotation.io.wholeimage;
 
 import java.io.IOException;
 import java.nio.file.Path;
-
 import org.anchoranalysis.annotation.io.AnnotationWriter;
 import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.io.generator.text.WriteStringToFile;
 
-public class WholeImageLabelAnnotationWriter implements AnnotationWriter<WholeImageLabelAnnotation> {
+public class WholeImageLabelAnnotationWriter
+        implements AnnotationWriter<WholeImageLabelAnnotation> {
 
-	@Override
-	public void write(WholeImageLabelAnnotation annotation, Path path) throws IOException {
-		
-		WriterUtilities.createNecessaryDirectories(path);
-		
-		WriteStringToFile.apply(annotation.getLabel(), path);
-	}
+    @Override
+    public void write(WholeImageLabelAnnotation annotation, Path path) throws IOException {
 
+        WriterUtilities.createNecessaryDirectories(path);
+
+        WriteStringToFile.apply(annotation.getLabel(), path);
+    }
 }

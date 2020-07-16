@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.feature.input.memo;
-
 /*-
  * #%L
  * anchor-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +23,30 @@ package org.anchoranalysis.anchor.mpp.feature.input.memo;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.feature.input.memo;
 
 import java.util.Optional;
-
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-import lombok.EqualsAndHashCode;
-
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class FeatureInputAllMemo extends FeatureInputNRG {
 
-	private MemoCollection pxlMarkMemoList;
-	
-	public FeatureInputAllMemo(
-		MemoCollection pxlMarkMemoList,
-		NRGStackWithParams raster
-	) {
-		super(
-			Optional.of(raster)
-		);
-		this.pxlMarkMemoList = pxlMarkMemoList;
-	}
+    private MemoCollection pxlMarkMemoList;
 
-	public MemoCollection getPxlPartMemo() {
-		return pxlMarkMemoList;
-	}
+    public FeatureInputAllMemo(MemoCollection pxlMarkMemoList, NRGStackWithParams raster) {
+        super(Optional.of(raster));
+        this.pxlMarkMemoList = pxlMarkMemoList;
+    }
 
-	public void setPxlPartMemo(MemoCollection pxlPartMemoList) {
-		this.pxlMarkMemoList = pxlPartMemoList;
-	}
+    public MemoCollection getPxlPartMemo() {
+        return pxlMarkMemoList;
+    }
+
+    public void setPxlPartMemo(MemoCollection pxlPartMemoList) {
+        this.pxlMarkMemoList = pxlPartMemoList;
+    }
 }

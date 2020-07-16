@@ -1,6 +1,5 @@
+/* (C)2020 */
 package org.anchoranalysis.core.cache;
-
-import org.anchoranalysis.core.functional.Operation;
 
 /*-
  * #%L
@@ -14,10 +13,10 @@ import org.anchoranalysis.core.functional.Operation;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,36 +27,35 @@ import org.anchoranalysis.core.functional.Operation;
  * #L%
  */
 
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 
 /**
  * Given an {@link Operation}, it wraps it to make it a cached-operation with progress-reporter
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> return-type of operation
  * @param <E> exception that is thrown if something goes wrong during execution
  */
-public class WrapOperationWithProgressReporterAsCached<T, E extends Exception> extends CachedOperationWithProgressReporter<T, E> {
+public class WrapOperationWithProgressReporterAsCached<T, E extends Exception>
+        extends CachedOperationWithProgressReporter<T, E> {
 
-	private OperationWithProgressReporter<T, E> operation;
-	
-	public WrapOperationWithProgressReporterAsCached(Operation<T, E> operation) {
-		this(
-			progressReporter -> operation.doOperation()
-		);
-	}
-	
-	public WrapOperationWithProgressReporterAsCached(OperationWithProgressReporter<T, E> operation) {
-		super();
-		this.operation = operation;
-	}
+    private OperationWithProgressReporter<T, E> operation;
 
-	@Override
-	protected T execute(ProgressReporter progressReporter) throws E {
-		return operation.doOperation(progressReporter); 
-	}
+    public WrapOperationWithProgressReporterAsCached(Operation<T, E> operation) {
+        this(progressReporter -> operation.doOperation());
+    }
 
+    public WrapOperationWithProgressReporterAsCached(
+            OperationWithProgressReporter<T, E> operation) {
+        super();
+        this.operation = operation;
+    }
+
+    @Override
+    protected T execute(ProgressReporter progressReporter) throws E {
+        return operation.doOperation(progressReporter);
+    }
 }

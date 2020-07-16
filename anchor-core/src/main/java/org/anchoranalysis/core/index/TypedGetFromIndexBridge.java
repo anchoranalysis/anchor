@@ -1,6 +1,5 @@
+/* (C)2020 */
 package org.anchoranalysis.core.index;
-
-
 
 /*-
  * #%L
@@ -14,10 +13,10 @@ package org.anchoranalysis.core.index;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,31 +30,30 @@ package org.anchoranalysis.core.index;
 import org.anchoranalysis.core.bridge.BridgeElementWithIndex;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <S> external-type
  * @param <H> hidden-type
  */
-public class TypedGetFromIndexBridge<S,H> implements ITypedGetFromIndex<S> {
+public class TypedGetFromIndexBridge<S, H> implements ITypedGetFromIndex<S> {
 
-	private ITypedGetFromIndex<H> delegate;
+    private ITypedGetFromIndex<H> delegate;
 
-	private BridgeElementWithIndex<H,S,? extends Throwable> bridge;
-	
-	public TypedGetFromIndexBridge(ITypedGetFromIndex<H> delegate,
-			BridgeElementWithIndex<H,S,? extends Throwable> bridge) {
-		super();
-		this.delegate = delegate;
-		this.bridge = bridge;
-	}
+    private BridgeElementWithIndex<H, S, ? extends Throwable> bridge;
 
-	@Override
-	public S get(int index) throws GetOperationFailedException {
-		try {
-			return bridge.bridgeElement( index, delegate.get(index) );
-		} catch (Exception e) {
-			throw new GetOperationFailedException(e);
-		}
-	}
+    public TypedGetFromIndexBridge(
+            ITypedGetFromIndex<H> delegate,
+            BridgeElementWithIndex<H, S, ? extends Throwable> bridge) {
+        super();
+        this.delegate = delegate;
+        this.bridge = bridge;
+    }
+
+    @Override
+    public S get(int index) throws GetOperationFailedException {
+        try {
+            return bridge.bridgeElement(index, delegate.get(index));
+        } catch (Exception e) {
+            throw new GetOperationFailedException(e);
+        }
+    }
 }

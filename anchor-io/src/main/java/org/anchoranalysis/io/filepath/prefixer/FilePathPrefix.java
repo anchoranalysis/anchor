@@ -1,12 +1,8 @@
-package org.anchoranalysis.io.filepath.prefixer;
-
-
-
-/*
+/*-
  * #%L
  * anchor-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,52 +23,56 @@ package org.anchoranalysis.io.filepath.prefixer;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.io.filepath.prefixer;
 
 import java.nio.file.Path;
 
 public class FilePathPrefix implements FilePathCreator {
-	
-	private Path folderPath;
-	private String filenamePrefix = "";
-	
-	public FilePathPrefix(Path folderPath) {
-		super();
-		setFolderPath(folderPath.normalize());
-	}
-	
-	public FilePathPrefix(Path folderPath, String filenamePrefix) {
-		this.folderPath = folderPath;
-		this.filenamePrefix = filenamePrefix;
-	}
-	
-	public Path getFolderPath() {
-		return folderPath;
-	}
-	public void setFolderPath(Path folderPath) {
-		this.folderPath = folderPath.normalize();
-	}
-	public String getFilenamePrefix() {
-		return filenamePrefix;
-	}
-	public void setFilenamePrefix(String filenamePrefix) {
-		this.filenamePrefix = filenamePrefix;
-	}
-	
-	public Path getCombinedPrefix() {
-		return getFolderPath().resolve( getFilenamePrefix() );
-	}
-	
-	@Override
-	public Path outFilePath( String filePathRelative ) {
 
-		String combinedFilePath = filenamePrefix + filePathRelative;
-	
-		return folderPath.resolve(combinedFilePath);
-	}
-		
-	@Override
-	public Path relativePath( Path fullPath ) {
-		return folderPath.relativize( fullPath );
-	}
+    private Path folderPath;
+    private String filenamePrefix = "";
+
+    public FilePathPrefix(Path folderPath) {
+        super();
+        setFolderPath(folderPath.normalize());
+    }
+
+    public FilePathPrefix(Path folderPath, String filenamePrefix) {
+        this.folderPath = folderPath;
+        this.filenamePrefix = filenamePrefix;
+    }
+
+    public Path getFolderPath() {
+        return folderPath;
+    }
+
+    public void setFolderPath(Path folderPath) {
+        this.folderPath = folderPath.normalize();
+    }
+
+    public String getFilenamePrefix() {
+        return filenamePrefix;
+    }
+
+    public void setFilenamePrefix(String filenamePrefix) {
+        this.filenamePrefix = filenamePrefix;
+    }
+
+    public Path getCombinedPrefix() {
+        return getFolderPath().resolve(getFilenamePrefix());
+    }
+
+    @Override
+    public Path outFilePath(String filePathRelative) {
+
+        String combinedFilePath = filenamePrefix + filePathRelative;
+
+        return folderPath.resolve(combinedFilePath);
+    }
+
+    @Override
+    public Path relativePath(Path fullPath) {
+        return folderPath.relativize(fullPath);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.segment.binary;
-
-/*
+/*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.image.bean.segment.binary;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.image.bean.segment.binary;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
@@ -40,7 +38,12 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 @GroupingRoot
 public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
-		
-	// Returns a BinaryVoxelBox associated with the input buffer or perhaps an newly created buffer of identical size
-	public abstract BinaryVoxelBox<ByteBuffer> sgmn( VoxelBoxWrapper voxelBox, BinarySegmentationParameters params, Optional<ObjectMask> mask ) throws SegmentationFailedException;
+
+    // Returns a BinaryVoxelBox associated with the input buffer or perhaps an newly created buffer
+    // of identical size
+    public abstract BinaryVoxelBox<ByteBuffer> sgmn(
+            VoxelBoxWrapper voxelBox,
+            BinarySegmentationParameters params,
+            Optional<ObjectMask> mask)
+            throws SegmentationFailedException;
 }

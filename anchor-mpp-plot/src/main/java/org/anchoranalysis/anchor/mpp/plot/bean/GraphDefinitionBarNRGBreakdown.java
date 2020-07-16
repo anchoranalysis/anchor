@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.mpp.plot.bean;
-
-/*
+/*-
  * #%L
  * anchor-mpp-plot
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +23,11 @@ package org.anchoranalysis.anchor.mpp.plot.bean;
  * THE SOFTWARE.
  * #L%
  */
-
+/* (C)2020 */
+package org.anchoranalysis.anchor.mpp.plot.bean;
 
 import java.util.Iterator;
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.plot.NRGGraphItem;
 import org.anchoranalysis.anchor.plot.AxisLimits;
 import org.anchoranalysis.anchor.plot.GraphInstance;
@@ -41,57 +39,61 @@ import org.anchoranalysis.core.error.InitException;
 
 public class GraphDefinitionBarNRGBreakdown extends GraphDefinition<NRGGraphItem> {
 
-	private BarChart<NRGGraphItem> delegate;
-	
-	public GraphDefinitionBarNRGBreakdown() throws InitException {
-		
-		delegate = new BarChart<>(
-				getTitle(),
-				new String[]{"NRG Total"},
-				(NRGGraphItem item, int seriesNum) -> item.getObjectID(), 
-				(NRGGraphItem item, int seriesNum) ->  item.getNrg(),
-				(NRGGraphItem item, int seriesNum) -> item.getPaint(),
-				false
-		);
-		delegate.getLabels().setX("Mark");
-		delegate.getLabels().setY("NRG Coefficient");
-	}
+    private BarChart<NRGGraphItem> delegate;
 
-	@Override
-	public GraphInstance create( Iterator<NRGGraphItem> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException {
-		return delegate.createWithRangeLimits( itr, rangeLimits );
-	}
+    public GraphDefinitionBarNRGBreakdown() throws InitException {
 
-	@Override
-	public String getTitle() {
-		return "NRG Breakdown";
-	}
+        delegate =
+                new BarChart<>(
+                        getTitle(),
+                        new String[] {"NRG Total"},
+                        (NRGGraphItem item, int seriesNum) -> item.getObjectID(),
+                        (NRGGraphItem item, int seriesNum) -> item.getNrg(),
+                        (NRGGraphItem item, int seriesNum) -> item.getPaint(),
+                        false);
+        delegate.getLabels().setX("Mark");
+        delegate.getLabels().setY("NRG Coefficient");
+    }
 
-	@Override
-	public boolean isItemAccepted(NRGGraphItem item) {
-		return true;
-	}
+    @Override
+    public GraphInstance create(
+            Iterator<NRGGraphItem> itr,
+            Optional<AxisLimits> domainLimits,
+            Optional<AxisLimits> rangeLimits)
+            throws CreateException {
+        return delegate.createWithRangeLimits(itr, rangeLimits);
+    }
 
-	// START BEAN PROPERTIES
-	public boolean isShowDomainAxis() {
-		return delegate.isShowDomainAxis();
-	}
+    @Override
+    public String getTitle() {
+        return "NRG Breakdown";
+    }
 
-	public void setShowDomainAxis(boolean showDomainAxis) {
-		delegate.setShowDomainAxis(showDomainAxis);
-	}
-	// END BEAN PROPERTIES
+    @Override
+    public boolean isItemAccepted(NRGGraphItem item) {
+        return true;
+    }
 
-	@Override
-	public String getShortTitle() {
-		return getTitle();
-	}
+    // START BEAN PROPERTIES
+    public boolean isShowDomainAxis() {
+        return delegate.isShowDomainAxis();
+    }
 
-	public GraphColorScheme getGraphColorScheme() {
-		return delegate.getGraphColorScheme();
-	}
+    public void setShowDomainAxis(boolean showDomainAxis) {
+        delegate.setShowDomainAxis(showDomainAxis);
+    }
+    // END BEAN PROPERTIES
 
-	public void setGraphColorScheme(GraphColorScheme graphColorScheme) {
-		delegate.setGraphColorScheme(graphColorScheme);
-	}
+    @Override
+    public String getShortTitle() {
+        return getTitle();
+    }
+
+    public GraphColorScheme getGraphColorScheme() {
+        return delegate.getGraphColorScheme();
+    }
+
+    public void setGraphColorScheme(GraphColorScheme graphColorScheme) {
+        delegate.setGraphColorScheme(graphColorScheme);
+    }
 }

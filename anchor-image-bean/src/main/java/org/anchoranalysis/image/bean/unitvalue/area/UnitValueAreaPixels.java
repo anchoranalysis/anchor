@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.bean.unitvalue.area;
-
 /*-
  * #%L
  * anchor-image-bean
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,34 +23,34 @@ package org.anchoranalysis.image.bean.unitvalue.area;
  * THE SOFTWARE.
  * #L%
  */
+/* (C)2020 */
+package org.anchoranalysis.image.bean.unitvalue.area;
 
 import java.util.Optional;
-
 import org.anchoranalysis.image.extent.ImageResolution;
 
 /**
  * Area expressed as square pixels
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class UnitValueAreaPixels extends UnitValueArea {
 
-	public UnitValueAreaPixels() {
-		// Standard bean constructor
-	}
-	
-	public UnitValueAreaPixels(double value) {
-		super(value);
-	}
+    public UnitValueAreaPixels() {
+        // Standard bean constructor
+    }
 
-	@Override
-	public double resolveToVoxels(Optional<ImageResolution> resolution) {
-		return getValue();
-	}
+    public UnitValueAreaPixels(double value) {
+        super(value);
+    }
 
-	@Override
-	public String toString() {
-		return String.format("%.2f",getValue());
-	}
+    @Override
+    public double resolveToVoxels(Optional<ImageResolution> resolution) {
+        return getValue();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%.2f", getValue());
+    }
 }
