@@ -1,31 +1,8 @@
-/*-
- * #%L
- * anchor-feature
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.feature.bean.list;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -52,17 +29,17 @@ public class FeatureListProviderListSequence<T extends FeatureInput>
 
     // START BEAN PROPERTIES
     /** The list feature that is duplicated, and populated. */
-    @BeanField @SkipInit private FeatureListElem<T> feature;
+    @BeanField @SkipInit @Getter @Setter private FeatureListElem<T> feature;
 
-    @BeanField private String prependString;
+    @BeanField @Getter @Setter private String prependString;
 
     /** First number range that is appended */
-    @BeanField private SequenceInteger sequence;
+    @BeanField @Getter @Setter private SequenceInteger sequence;
 
     /** Another number range that is appended */
-    @BeanField @OptionalBean private SequenceInteger sequenceAdditional;
+    @BeanField @OptionalBean @Getter @Setter private SequenceInteger sequenceAdditional;
 
-    @BeanField private String seperator = ".";
+    @BeanField @Getter @Setter private String seperator = ".";
     // END BEAN PROPERTIES
 
     private String determineFeatureName(String prepend, String append) {
@@ -119,45 +96,5 @@ public class FeatureListProviderListSequence<T extends FeatureInput>
         } else {
             return createSingleSequence();
         }
-    }
-
-    public String getPrependString() {
-        return prependString;
-    }
-
-    public void setPrependString(String prependString) {
-        this.prependString = prependString;
-    }
-
-    public SequenceInteger getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(SequenceInteger sequence) {
-        this.sequence = sequence;
-    }
-
-    public SequenceInteger getSequenceAdditional() {
-        return sequenceAdditional;
-    }
-
-    public void setSequenceAdditional(SequenceInteger sequenceAdditional) {
-        this.sequenceAdditional = sequenceAdditional;
-    }
-
-    public String getSeperator() {
-        return seperator;
-    }
-
-    public void setSeperator(String seperator) {
-        this.seperator = seperator;
-    }
-
-    public FeatureListElem<T> getFeature() {
-        return feature;
-    }
-
-    public void setFeature(FeatureListElem<T> feature) {
-        this.feature = feature;
     }
 }

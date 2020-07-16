@@ -1,28 +1,3 @@
-/*-
- * #%L
- * anchor-io-bioformats
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.io.bioformats.bean;
 
@@ -38,6 +13,9 @@ import loci.formats.ImageReader;
 import loci.formats.UnknownFormatException;
 import loci.formats.ome.OMEXMLMetadata;
 import loci.formats.services.OMEXMLService;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -48,16 +26,15 @@ import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
+@NoArgsConstructor
 public class BioformatsReader extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField private ReadOptions options = new Default();
+    @BeanField @Getter @Setter private ReadOptions options = new Default();
 
     /** If non-empty forces usage of a particular bioformats plugin */
-    @BeanField @AllowEmpty private String forceReader = "";
+    @BeanField @AllowEmpty @Getter @Setter private String forceReader = "";
     // END BEAN PROPERTIES
-
-    public BioformatsReader() {}
 
     public BioformatsReader(ReadOptions options) {
         this.options = options;
@@ -117,21 +94,5 @@ public class BioformatsReader extends RasterReader {
         } catch (DependencyException | ServiceException e) {
             throw new CreateException(e);
         }
-    }
-
-    public ReadOptions getOptions() {
-        return options;
-    }
-
-    public void setOptions(ReadOptions options) {
-        this.options = options;
-    }
-
-    public String getForceReader() {
-        return forceReader;
-    }
-
-    public void setForceReader(String forceReader) {
-        this.forceReader = forceReader;
     }
 }

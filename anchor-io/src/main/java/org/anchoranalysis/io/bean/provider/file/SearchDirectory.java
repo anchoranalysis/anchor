@@ -1,34 +1,11 @@
-/*-
- * #%L
- * anchor-io
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.io.bean.provider.file;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.file.matcher.FileMatcher;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
@@ -41,24 +18,24 @@ import org.anchoranalysis.io.glob.GlobExtractor.GlobWithDirectory;
 public class SearchDirectory extends FileProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
-    @BeanField private FileMatcher matcher;
+    @BeanField @Getter @Setter private FileMatcher matcher;
 
-    @BeanField private boolean recursive = false;
+    @BeanField @Getter @Setter private boolean recursive = false;
 
     /** If non-negative the max depth of directories. If -1, then there is no maximum depth. */
-    @BeanField private int maxDirectoryDepth = -1;
+    @BeanField @Getter @Setter private int maxDirectoryDepth = -1;
 
     /**
      * if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
      * Windows ignores case, Linux doesn't
      */
-    @BeanField private boolean ignoreHidden = true;
+    @BeanField @Getter @Setter private boolean ignoreHidden = true;
 
     /**
      * if TRUE, continues when a directory-access-error occurs (logging it), otherwise throws an
      * exception
      */
-    @BeanField private boolean acceptDirectoryErrors = false;
+    @BeanField @Getter @Setter private boolean acceptDirectoryErrors = false;
     // END BEAN PROPERTIES
 
     // Matching files
@@ -95,45 +72,5 @@ public class SearchDirectory extends FileProviderWithDirectoryString {
         setDirectory(gwd.getDirectory().orElse(""));
 
         this.matcher = matcherGlob;
-    }
-
-    public boolean isRecursive() {
-        return recursive;
-    }
-
-    public void setRecursive(boolean recursive) {
-        this.recursive = recursive;
-    }
-
-    public int getMaxDirectoryDepth() {
-        return maxDirectoryDepth;
-    }
-
-    public void setMaxDirectoryDepth(int maxDirectoryDepth) {
-        this.maxDirectoryDepth = maxDirectoryDepth;
-    }
-
-    public boolean isIgnoreHidden() {
-        return ignoreHidden;
-    }
-
-    public void setIgnoreHidden(boolean ignoreHidden) {
-        this.ignoreHidden = ignoreHidden;
-    }
-
-    public FileMatcher getMatcher() {
-        return matcher;
-    }
-
-    public void setMatcher(FileMatcher matcher) {
-        this.matcher = matcher;
-    }
-
-    public boolean isAcceptDirectoryErrors() {
-        return acceptDirectoryErrors;
-    }
-
-    public void setAcceptDirectoryErrors(boolean acceptDirectoryErrors) {
-        this.acceptDirectoryErrors = acceptDirectoryErrors;
     }
 }

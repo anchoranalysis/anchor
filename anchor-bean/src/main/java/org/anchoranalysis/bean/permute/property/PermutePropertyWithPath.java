@@ -1,31 +1,8 @@
-/*-
- * #%L
- * anchor-bean
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.bean.permute.property;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -50,10 +27,10 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
      *
      * <p>Children must be single multiplicity, and always be a subclass of IBean
      */
-    @BeanField private String propertyPath;
+    @BeanField @Getter @Setter private String propertyPath;
 
     /** Additional property paths that are also changed, along with the main propertyPath * */
-    @BeanField @OptionalBean private StringSet additionalPropertyPaths;
+    @BeanField @OptionalBean @Getter @Setter private StringSet additionalPropertyPaths;
     // END BEAN PROPERTIES
 
     // Searches through a list of property fields to find one that matches the propertyName
@@ -78,21 +55,5 @@ public abstract class PermutePropertyWithPath<T> extends PermuteProperty<T> {
     private void addForPath(PermutationSetterList out, AnchorBean<?> parentBean, String path)
             throws PermutationSetterException {
         out.add(PermutationSetterUtilities.createForSingle(parentBean, path));
-    }
-
-    public String getPropertyPath() {
-        return propertyPath;
-    }
-
-    public void setPropertyPath(String propertyPath) {
-        this.propertyPath = propertyPath;
-    }
-
-    public StringSet getAdditionalPropertyPaths() {
-        return additionalPropertyPaths;
-    }
-
-    public void setAdditionalPropertyPaths(StringSet additionalPropertyPaths) {
-        this.additionalPropertyPaths = additionalPropertyPaths;
     }
 }

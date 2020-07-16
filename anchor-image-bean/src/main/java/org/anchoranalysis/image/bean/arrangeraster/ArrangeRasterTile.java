@@ -1,34 +1,11 @@
-/*-
- * #%L
- * anchor-image-bean
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.image.bean.arrangeraster;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
@@ -45,13 +22,14 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 public class ArrangeRasterTile extends ArrangeRasterBean {
 
     // START BEAN PROPERTIES
-    @BeanField @Positive private int numRows = -1;
+    @BeanField @Positive @Getter @Setter private int numRows = -1;
 
-    @BeanField @Positive private int numCols = -1;
+    @BeanField @Positive @Getter @Setter private int numCols = -1;
 
-    @BeanField @OptionalBean private List<ArrangeRasterCell> cells = new ArrayList<>();
+    @BeanField @OptionalBean @Getter @Setter
+    private List<ArrangeRasterCell> cells = new ArrayList<>();
 
-    @BeanField private ArrangeRasterBean cellDefault = new SingleRaster();
+    @BeanField @Getter @Setter private ArrangeRasterBean cellDefault = new SingleRaster();
     // END BEAN PROPERTIES
 
     private class CreateTable implements TableItemArrangement.TableCreator<BBoxSetOnPlane> {
@@ -162,37 +140,5 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
         } catch (TableItemException e) {
             throw new ArrangeRasterException(e);
         }
-    }
-
-    public int getNumRows() {
-        return numRows;
-    }
-
-    public void setNumRows(int numRows) {
-        this.numRows = numRows;
-    }
-
-    public int getNumCols() {
-        return numCols;
-    }
-
-    public void setNumCols(int numCols) {
-        this.numCols = numCols;
-    }
-
-    public List<ArrangeRasterCell> getCells() {
-        return cells;
-    }
-
-    public void setCells(List<ArrangeRasterCell> cells) {
-        this.cells = cells;
-    }
-
-    public ArrangeRasterBean getCellDefault() {
-        return cellDefault;
-    }
-
-    public void setCellDefault(ArrangeRasterBean cellDefault) {
-        this.cellDefault = cellDefault;
     }
 }

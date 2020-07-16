@@ -1,32 +1,9 @@
-/*-
- * #%L
- * anchor-image-io
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.image.io.bean.stack;
 
 import java.nio.ShortBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -48,17 +25,15 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class StackProviderGenerateString extends StackProvider {
 
     // START BEANS
-    @BeanField private StringRasterGenerator stringRasterGenerator;
+    @BeanField @Getter @Setter private StringRasterGenerator stringRasterGenerator;
 
-    @BeanField private boolean createShort;
+    @BeanField @Getter @Setter private boolean createShort;
 
-    @BeanField
-    private StackProvider intensityProvider; // The string is the maximum-value of the image
+    /* The string is the maximum-value of the image */
+    @BeanField @Getter @Setter private StackProvider intensityProvider;
 
-    @BeanField
-    private StackProvider
-            repeatZProvider; // Repeats the generated (2D) string in z, so it's the same z-extent as
-    // repeatZProvider
+    /** Repeats the generated (2D) string in z, so it's the same z-extent as repeatZProvider */
+    @BeanField @Getter @Setter private StackProvider repeatZProvider;
     // END BEANS
 
     @Override
@@ -148,41 +123,5 @@ public class StackProviderGenerateString extends StackProvider {
             chnl.getVoxelBox().copyPixelsTo(bboxSrc, chnlNew.getVoxelBox(), bboxDest);
         }
         return chnlNew;
-    }
-
-    public StringRasterGenerator getStringRasterGenerator() {
-        return stringRasterGenerator;
-    }
-
-    public void setStringRasterGenerator(StringRasterGenerator stringRasterGenerator) {
-        this.stringRasterGenerator = stringRasterGenerator;
-    }
-
-    public boolean isCreateShort() {
-        return createShort;
-    }
-
-    public void setCreateShort(boolean createShort) {
-        this.createShort = createShort;
-    }
-
-    public void setInstensityProvider(StackProvider stackProvider) {
-        intensityProvider = stackProvider;
-    }
-
-    public StackProvider getIntensityProvider() {
-        return intensityProvider;
-    }
-
-    public void setIntensityProvider(StackProvider intensityProvider) {
-        this.intensityProvider = intensityProvider;
-    }
-
-    public StackProvider getRepeatZProvider() {
-        return repeatZProvider;
-    }
-
-    public void setRepeatZProvider(StackProvider repeatZProvider) {
-        this.repeatZProvider = repeatZProvider;
     }
 }
