@@ -113,10 +113,10 @@ public class ExtendObjectsInto3DMask {
 	}
 	
 	private static BoundingBox createBoundingBoxForAllZ( BoundingBox exst, int z ) {
-		Point3i crnrMin = copyPointChangeZ( exst.cornerMin(), 0 );
+		Point3i cornerMin = copyPointChangeZ( exst.cornerMin(), 0 );
 		Extent e = copyExtentChangeZ( exst.extent(), z );
 
-		return new BoundingBox( crnrMin, e );
+		return new BoundingBox( cornerMin, e );
 	}
 	
 	private static Point3i copyPointChangeZ( ReadableTuple3i in, int z ) {

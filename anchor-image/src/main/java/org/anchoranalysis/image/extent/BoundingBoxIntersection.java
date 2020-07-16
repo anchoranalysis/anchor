@@ -84,15 +84,15 @@ public final class BoundingBoxIntersection {
 	 */
 	private Optional<BoundingBox> with( BoundingBox other, boolean createIntersectionBox) {
 		
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMinOther = other.cornerMin();
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMinOther = other.cornerMin();
 		
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
-		ReadableTuple3i crnrMaxOthr = other.calcCornerMax();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
+		ReadableTuple3i cornerMaxOthr = other.calcCornerMax();
 		
-		Optional<ExtentBoundsComparer> meiX = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, ReadableTuple3i::getX);
-		Optional<ExtentBoundsComparer> meiY = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, ReadableTuple3i::getY);
-		Optional<ExtentBoundsComparer> meiZ = ExtentBoundsComparer.createMin(crnrMin, crnrMinOther, crnrMax, crnrMaxOthr, ReadableTuple3i::getZ);
+		Optional<ExtentBoundsComparer> meiX = ExtentBoundsComparer.createMin(cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getX);
+		Optional<ExtentBoundsComparer> meiY = ExtentBoundsComparer.createMin(cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getY);
+		Optional<ExtentBoundsComparer> meiZ = ExtentBoundsComparer.createMin(cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::getZ);
 		
 		if (!meiX.isPresent() || !meiY.isPresent() || !meiZ.isPresent()) {
 			return Optional.empty();

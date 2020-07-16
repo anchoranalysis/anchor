@@ -145,7 +145,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		ImageDimensions sd = stack.getDimensions();
 		BoundingBox bbox = mark.bboxAllRegions( sd );
 		
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
 		
 		object = new ObjectMask(bbox);
 		objectFlattened = new ObjectMask(bbox.flattenZ());
@@ -155,7 +155,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		
 		ByteBuffer bufferMIP = getObjectFlattened().getVoxelBox().getPixelsForPlane(0).buffer();
 		
-		for (int z=bbox.cornerMin().getZ(); z<=crnrMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=cornerMax.getZ(); z++) {
 
 			BufferArrList bufferArrList = new BufferArrList();
 			bufferArrList.init(stack, z);
@@ -163,7 +163,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 				z,
 				mark,
 				bbox,
-				crnrMax,
+				cornerMax,
 				localExtent,
 				sd,
 				bufferArrList,
@@ -177,7 +177,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		int z,
 		Mark mark,
 		BoundingBox bbox,
-		ReadableTuple3i crnrMax,
+		ReadableTuple3i cornerMax,
 		Extent localExtent,
 		ImageDimensions sd,
 		BufferArrList bufferArrList,
@@ -194,12 +194,12 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 		
 		ByteBuffer buffer = getObject().getVoxelBox().getPixelsForPlane(zLocal).buffer();
 		
-		for (int y=bbox.cornerMin().getY(); y<=crnrMax.getY(); y++) {
+		for (int y=bbox.cornerMin().getY(); y<=cornerMax.getY(); y++) {
 			ptRunning.setY( y + 0.5 );
 			
 			int yLocal = y - bbox.cornerMin().getY();
 			
-			for (int x=bbox.cornerMin().getX(); x<=crnrMax.getX(); x++) {
+			for (int x=bbox.cornerMin().getX(); x<=cornerMax.getX(); x++) {
 				
 				ptRunning.setX( x + 0.5 );
 								

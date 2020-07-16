@@ -38,8 +38,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 class PointsFromChnlHelper {
 	
 	private int skipAfterSuccessiveEmptySlices;
-	private ReadableTuple3i crnrMin;
-	private ReadableTuple3i crnrMax;
+	private ReadableTuple3i cornerMin;
+	private ReadableTuple3i cornerMax;
 	private VoxelBox<ByteBuffer> vb;
 	private BinaryValuesByte bvb;
 	private int startZ;
@@ -49,12 +49,12 @@ class PointsFromChnlHelper {
 	private int successiveEmptySlices = -1;
 	private Extent e = vb.extent();
 	
-	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, ReadableTuple3i crnrMin, ReadableTuple3i crnrMax,
+	public PointsFromChnlHelper(int skipAfterSuccessiveEmptySlices, ReadableTuple3i cornerMin, ReadableTuple3i cornerMax,
 			VoxelBox<ByteBuffer> vb, BinaryValuesByte bvb, int startZ, List<Point3i> listOut) {
 		super();
 		this.skipAfterSuccessiveEmptySlices = skipAfterSuccessiveEmptySlices;
-		this.crnrMin = crnrMin;
-		this.crnrMax = crnrMax;
+		this.cornerMin = cornerMin;
+		this.cornerMax = cornerMax;
 		this.vb = vb;
 		this.bvb = bvb;
 		this.startZ = startZ;
@@ -62,7 +62,7 @@ class PointsFromChnlHelper {
 	}
 	
 	public void firstHalf() {
-		for( int z=startZ; z<=crnrMax.getZ(); z++) {
+		for( int z=startZ; z<=cornerMax.getZ(); z++) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
@@ -81,7 +81,7 @@ class PointsFromChnlHelper {
 	}
 	
 	public void secondHalf() {
-		for( int z=(startZ-1); z>=crnrMin.getZ(); z--) {
+		for( int z=(startZ-1); z>=cornerMin.getZ(); z--) {
 			
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
@@ -101,8 +101,8 @@ class PointsFromChnlHelper {
 	
 	private boolean addPointsFromSlice(ByteBuffer bb, int z) {
 		boolean addedToSlice = false;
-		for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-			for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+		for( int y=cornerMin.getY(); y<=cornerMax.getY(); y++) {
+			for( int x=cornerMin.getX(); x<=cornerMax.getX(); x++) {
 				
 				int offset = e.offset(x, y);
 				if (bb.get(offset)==bvb.getOnByte()) {

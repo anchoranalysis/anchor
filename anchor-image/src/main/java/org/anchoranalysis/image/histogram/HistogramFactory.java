@@ -165,21 +165,21 @@ public class HistogramFactory {
 		Extent e = inputBuffer.extent();
 		Extent eMask = object.getBoundingBox().extent();
 		
-		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
+		ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+		ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
 		
 		byte maskOnVal = object.getBinaryValuesByte().getOnByte();
 		
-		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+		for (int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = inputBuffer.getPixelsForPlane(z);
-			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(z-cornerMin.getZ()).buffer();
 			
-			for (int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for (int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+			for (int y=cornerMin.getY(); y<=cornerMax.getY(); y++) {
+				for (int x=cornerMin.getX(); x<=cornerMax.getX(); x++) {
 					
 					int offset = e.offset(x, y);
-					int offsetMask = eMask.offset(x-crnrMin.getX(), y-crnrMin.getY());
+					int offsetMask = eMask.offset(x-cornerMin.getX(), y-cornerMin.getY());
 					
 					byte maskVal = bbMask.get(offsetMask);
 					

@@ -141,21 +141,21 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromByte( VoxelBox<ByteBuffer> vbSrc, VoxelBox<ByteBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
+		for( int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++ ) {
 			
 			ByteBuffer bbIn = vbSrc.getPixelsForPlane(z).buffer();
-			ByteBuffer bbOut = vbDest.getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ByteBuffer bbOut = vbDest.getPixelsForPlane(z-cornerMin.getZ()).buffer();
 			
 			// We go through every pixel in the new width, and height, and sample from the original image
 			int indOut = 0;
 			for( int y=0; y<extentTrgt.getY(); y++) {
 				
-				int yOrig = ((int) (y/zoomFactor)) + crnrMin.getY();
+				int yOrig = ((int) (y/zoomFactor)) + cornerMin.getY();
 				for( int x=0; x<extentTrgt.getX(); x++) {
 					
-					int xOrig = ((int) (x/zoomFactor)) + crnrMin.getX();
+					int xOrig = ((int) (x/zoomFactor)) + cornerMin.getX();
 					
 					// We get the byte to write
 					byte b = (interpolator!=null) ?
@@ -173,24 +173,24 @@ public class RegionExtracterFromDisplayStack implements RegionExtracter {
 	// extentSrcSlice is the source-size (the single slice we've extracted from the buffer to interpolate from)
 	private static void interpolateRegionFromShort( VoxelBox<ShortBuffer> vbSrc, VoxelBox<ShortBuffer> vbDest, Extent extentSrc, Extent extentTrgt, BoundingBox bbox, double zoomFactor, MeanInterpolator interpolator ) throws OperationFailedException {
 		
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
+		for( int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++ ) {
 			
 			assert( vbSrc.getPixelsForPlane(z) != null );
-			assert( vbDest.getPixelsForPlane(z-crnrMin.getZ()) != null );
+			assert( vbDest.getPixelsForPlane(z-cornerMin.getZ()) != null );
 			
 			ShortBuffer bbIn = vbSrc.getPixelsForPlane(z).buffer();
-			ShortBuffer bbOut = vbDest.getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ShortBuffer bbOut = vbDest.getPixelsForPlane(z-cornerMin.getZ()).buffer();
 			
 			// We go through every pixel in the new width, and height, and sample from the original image
 			int indOut = 0;
 			for( int y=0; y<extentTrgt.getY(); y++) {
 				
-				int yOrig = ((int) (y/zoomFactor)) + crnrMin.getY();
+				int yOrig = ((int) (y/zoomFactor)) + cornerMin.getY();
 				for( int x=0; x<extentTrgt.getX(); x++) {
 					
-					int xOrig = ((int) (x/zoomFactor)) + crnrMin.getX();
+					int xOrig = ((int) (x/zoomFactor)) + cornerMin.getX();
 					
 					// We get the byte to write
 					short s = (interpolator!=null) ?

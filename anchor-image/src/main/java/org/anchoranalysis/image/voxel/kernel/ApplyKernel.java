@@ -243,8 +243,8 @@ public class ApplyKernel {
 		int cnt = 0;
 		
 		BoundingBox bbox = object.getBoundingBox();
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
 		
 		Extent extent = in.extent();
 		
@@ -253,7 +253,7 @@ public class ApplyKernel {
 		BinaryValuesByte bvb = object.getBinaryValues().createByte();
 		
 		Point3i point = new Point3i();
-		for (point.setZ(crnrMin.getZ()); point.getZ()<=crnrMax.getZ(); point.incrementZ()) {
+		for (point.setZ(cornerMin.getZ()); point.getZ()<=cornerMax.getZ(); point.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(
 				point.getZ(),
@@ -264,10 +264,10 @@ public class ApplyKernel {
 			
 			int ind = 0;
 			
-			ByteBuffer bufMask = object.getVoxelBox().getPixelsForPlane(point.getZ() - crnrMin.getZ()).buffer();
+			ByteBuffer bufMask = object.getVoxelBox().getPixelsForPlane(point.getZ() - cornerMin.getZ()).buffer();
 			
-			for (point.setY(crnrMin.getY()); point.getY()<=crnrMax.getY(); point.incrementY()) {
-				for (point.setX(crnrMin.getX()); point.getX()<=crnrMax.getX(); point.incrementX()) {
+			for (point.setY(cornerMin.getY()); point.getY()<=cornerMax.getY(); point.incrementY()) {
+				for (point.setX(cornerMin.getX()); point.getX()<=cornerMax.getX(); point.incrementX()) {
 					
 					int indKernel = extent.offset(point.getX(), point.getY());
 

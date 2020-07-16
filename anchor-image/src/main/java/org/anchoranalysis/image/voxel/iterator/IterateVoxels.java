@@ -143,26 +143,26 @@ public class IterateVoxels {
 
 		Extent extent = voxels.extent();
 		Extent extentMask = mask.getVoxelBox().extent();
-		ReadableTuple3i crnrMin = mask.getBoundingBox().cornerMin();
+		ReadableTuple3i cornerMin = mask.getBoundingBox().cornerMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
 
 			// For 3d we need to translate the global index back to local
-			int z1 = crnrMin.getZ() + z;
+			int z1 = cornerMin.getZ() + z;
 						
 			T bb = voxels.getPixelsForPlane(z1).buffer();
 			ByteBuffer bbOM = mask.getVoxelBox().getPixelsForPlane(z).buffer();
 			process.notifyChangeZ(z1);
 			
 			for (int y=0; y<extentMask.getY(); y++) {
-				int y1 = crnrMin.getY() + y;				
-				int offset = extent.offset(crnrMin.getX(), y1);
+				int y1 = cornerMin.getY() + y;				
+				int offset = extent.offset(cornerMin.getX(), y1);
 				
 				for (int x=0; x<extentMask.getX(); x++) {
 
 					if (bbOM.get()==valueOn) {
-						int x1 = crnrMin.getX() + x;
+						int x1 = cornerMin.getX() + x;
  
 						process.process(
 							new Point3i(x1,y1,z1),
@@ -185,23 +185,23 @@ public class IterateVoxels {
 	public static Optional<Point3i> findFirstPointOnMask( ObjectMask mask ) {
 		
 		Extent extentMask = mask.getVoxelBox().extent();
-		ReadableTuple3i crnrMin = mask.getBoundingBox().cornerMin();
+		ReadableTuple3i cornerMin = mask.getBoundingBox().cornerMin();
 		byte valueOn = mask.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<extentMask.getZ(); z++) {
 
 			// For 3d we need to translate the global index back to local
-			int z1 = crnrMin.getZ() + z;
+			int z1 = cornerMin.getZ() + z;
 						
 			ByteBuffer bbOM = mask.getVoxelBox().getPixelsForPlane(z).buffer();
 			
 			for (int y=0; y<extentMask.getY(); y++) {
-				int y1 = crnrMin.getY() + y;				
+				int y1 = cornerMin.getY() + y;				
 				
 				for (int x=0; x<extentMask.getX(); x++) {
 
 					if (bbOM.get()==valueOn) {
-						int x1 = crnrMin.getX() + x;
+						int x1 = cornerMin.getX() + x;
 						return Optional.of(
 							new Point3i(x1,y1,z1)
 						);
@@ -234,20 +234,20 @@ public class IterateVoxels {
 	 */
 	public static void callEachPoint( BoundingBox bbox, ProcessVoxel process ) {
 		
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
 		
 		Point3i point = new Point3i();
 		
-		for(point.setZ(crnrMin.getZ()); point.getZ()<=crnrMax.getZ(); point.incrementZ()) {
+		for(point.setZ(cornerMin.getZ()); point.getZ()<=cornerMax.getZ(); point.incrementZ()) {
 
 			process.notifyChangeZ(point.getZ());
 			
-			for(point.setY(crnrMin.getY()); point.getY()<=crnrMax.getY(); point.incrementY()) {
+			for(point.setY(cornerMin.getY()); point.getY()<=cornerMax.getY(); point.incrementY()) {
 				
 				process.notifyChangeY(point.getY());
 				
-				for(point.setX(crnrMin.getX()); point.getX()<=crnrMax.getX(); point.incrementX()) {
+				for(point.setX(cornerMin.getX()); point.getX()<=cornerMax.getX(); point.incrementX()) {
 					process.process(point);
 				}
 			}

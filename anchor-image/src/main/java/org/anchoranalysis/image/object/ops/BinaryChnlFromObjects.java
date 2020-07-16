@@ -133,16 +133,16 @@ public class BinaryChnlFromObjects {
 		ByteBuffer maskIn,
 		ByteBuffer pixelsOut,
 		Extent extentOut,
-		ReadableTuple3i crnrMin,
+		ReadableTuple3i cornerMin,
 		Point3i pointGlobal,
 		ReadableTuple3i maxGlobal,
 		byte maskOn,
 		byte outValByte
 	) {
 		
-		for (pointGlobal.setY(crnrMin.getY()); pointGlobal.getY() <= maxGlobal.getY(); pointGlobal.incrementY() ) {
+		for (pointGlobal.setY(cornerMin.getY()); pointGlobal.getY() <= maxGlobal.getY(); pointGlobal.incrementY() ) {
 			
-			for (pointGlobal.setX(crnrMin.getX()); pointGlobal.getX() <= maxGlobal.getX(); pointGlobal.incrementX() ) {	
+			for (pointGlobal.setX(cornerMin.getX()); pointGlobal.getX() <= maxGlobal.getX(); pointGlobal.incrementX() ) {	
 
 				if (maskIn.get()!=maskOn) {
 					continue;

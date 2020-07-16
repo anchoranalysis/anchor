@@ -48,7 +48,7 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	private final ObjectMask mask;
 	private final Extent extent;
 	private final byte byteOn;
-	private final ReadableTuple3i crnrMin;
+	private final ReadableTuple3i cornerMin;
 	
 	private ByteBuffer bbMask;
 	
@@ -64,13 +64,13 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 		this.mask = mask;
 		this.extent = mask.getVoxelBox().extent();
 		this.byteOn = mask.getBinaryValuesByte().getOnByte();
-		this.crnrMin = mask.getBoundingBox().cornerMin();
+		this.cornerMin = mask.getBoundingBox().cornerMin();
 	}		
 						
 	@Override
 	public void notifyChangeZ(int z) {
 		process.notifyChangeZ(z);
-		bbMask = mask.getVoxelBox().getPixelsForPlane(z - crnrMin.getZ()).buffer();
+		bbMask = mask.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
 	}
 	
 	@Override
@@ -88,8 +88,8 @@ final class RequireIntersectionWithMask implements ProcessVoxel {
 	
 	private boolean isPointOnMask(Point3i point) {
 		int offsetMask = extent.offset(
-			point.getX() - crnrMin.getX(),
-			point.getY() - crnrMin.getY()
+			point.getX() - cornerMin.getX(),
+			point.getY() - cornerMin.getY()
 		);
 		
 		// We skip if our containing mask doesn't include it

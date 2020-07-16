@@ -68,8 +68,8 @@ public class ObjectMaskFixture {
 		return createAt(new Point3i(17,15,2), extent, pattern);
 	}
 	
-	private ObjectMask createAt( Point3i crnrMin, Extent extent, VoxelPattern pattern ) {
-		BoundingBox bbox = new BoundingBox(crnrMin, extent);
+	private ObjectMask createAt( Point3i cornerMin, Extent extent, VoxelPattern pattern ) {
+		BoundingBox bbox = new BoundingBox(cornerMin, extent);
 		
 		assertTrue( dim.contains(bbox) );
 		

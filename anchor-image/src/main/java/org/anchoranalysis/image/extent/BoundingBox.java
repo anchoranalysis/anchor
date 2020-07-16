@@ -90,8 +90,8 @@ public final class BoundingBox implements Serializable {
 	}
 	
 	// Extent is the number of pixels need to represent this bounding box
-	public BoundingBox(ReadableTuple3i crnrMin, Extent extent) {
-		this.cornerMin = new Point3i(crnrMin);
+	public BoundingBox(ReadableTuple3i cornerMin, Extent extent) {
+		this.cornerMin = new Point3i(cornerMin);
 		this.extent = extent;
 	}
 	
@@ -152,7 +152,7 @@ public final class BoundingBox implements Serializable {
 	
 	public boolean atBorderXY( ImageDimensions sd ) {
 		
-		ReadableTuple3i crnrMax = this.calcCornerMax();
+		ReadableTuple3i cornerMax = this.calcCornerMax();
 
 		if (cornerMin.getX()==0) {
 			return true;
@@ -161,26 +161,26 @@ public final class BoundingBox implements Serializable {
 			return true;
 		}
 		
-		if (crnrMax.getX()==(sd.getX()-1)) {
+		if (cornerMax.getX()==(sd.getX()-1)) {
 			return true;
 		}
-		return crnrMax.getY()==(sd.getY()-1);
+		return cornerMax.getY()==(sd.getY()-1);
 	}
 	
 	public boolean atBorderZ( ImageDimensions sd ) {
 		
-		ReadableTuple3i crnrMax = this.calcCornerMax();
+		ReadableTuple3i cornerMax = this.calcCornerMax();
 		
 		if (cornerMin.getZ()==0) {
 			return true;
 		}
-		return crnrMax.getZ()==(sd.getZ()-1);
+		return cornerMax.getZ()==(sd.getZ()-1);
 	}
 	
 	public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
 
 		// Subtract the padding from the corner
-		Point3i crnrMinShifted = Point3i.immutableSubtract(cornerMin, toAdd);
+		Point3i cornerMinShifted = Point3i.immutableSubtract(cornerMin, toAdd);
 		
 		// Add double-padding in each dimension to the extent
 		Extent extentGrown = extent.growBy(
@@ -188,11 +188,11 @@ public final class BoundingBox implements Serializable {
 		); 
 		
 		// Clip to make sure we remain within bounds
-		return new BoundingBox(crnrMinShifted, extentGrown).clipTo(containingExtent);
+		return new BoundingBox(cornerMinShifted, extentGrown).clipTo(containingExtent);
 	}
 	
 	// This is the last point INSIDE the box
-	// So iterators should be <= CalcCrnrMax
+	// So iterators should be <= CalcCornerMax
 	public ReadableTuple3i calcCornerMax() {
 		Point3i out = new Point3i();
 		out.setX(cornerMin.getX() + extent.getX() - 1);
@@ -233,12 +233,12 @@ public final class BoundingBox implements Serializable {
 	
 	public Point3i closestPointOnBorder( Point3d pointIn ) {
 		
-		ReadableTuple3i crnrMax = calcCornerMax();
+		ReadableTuple3i cornerMax = calcCornerMax();
 		
 		Point3i pointOut = new Point3i();
-		pointOut.setX( closestPointOnAxis(pointIn.getX(), cornerMin.getX(), crnrMax.getX()) );
-		pointOut.setY( closestPointOnAxis(pointIn.getY(), cornerMin.getY(), crnrMax.getY()) );
-		pointOut.setZ( closestPointOnAxis(pointIn.getZ(), cornerMin.getZ(), crnrMax.getZ()) );
+		pointOut.setX( closestPointOnAxis(pointIn.getX(), cornerMin.getX(), cornerMax.getX()) );
+		pointOut.setY( closestPointOnAxis(pointIn.getY(), cornerMin.getY(), cornerMax.getY()) );
+		pointOut.setZ( closestPointOnAxis(pointIn.getZ(), cornerMin.getZ(), cornerMax.getZ()) );
 		return pointOut;
 	}
 	
@@ -313,12 +313,12 @@ public final class BoundingBox implements Serializable {
 	/**
 	 * Assigns a new corner-location to the bounding-box
 	 * 
-	 * @param crnrMinNew the new corner
+	 * @param cornerMinNew the new corner
 	 * @return a bounding-box with a new corner and the same extent
 	 */
-	public BoundingBox shiftTo(Point3i crnrMinNew) {
+	public BoundingBox shiftTo(Point3i cornerMinNew) {
 		return new BoundingBox(
-			crnrMinNew,
+			cornerMinNew,
 			extent
 		);
 	}

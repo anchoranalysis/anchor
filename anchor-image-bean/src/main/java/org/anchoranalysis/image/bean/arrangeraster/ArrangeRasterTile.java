@@ -111,12 +111,12 @@ public class ArrangeRasterTile extends ArrangeRasterBean {
 		//   the correct offset
 		for (BoundingBox bbox : src) {
 
-			Point3i crnrMin = new Point3i( bbox.cornerMin() );
-			crnrMin.incrementX(shiftX);
-			crnrMin.incrementY(shiftY);
+			Point3i cornerMin = new Point3i( bbox.cornerMin() );
+			cornerMin.incrementX(shiftX);
+			cornerMin.incrementY(shiftY);
 
 			dest.add(
-				new BoundingBox(crnrMin, bbox.extent())
+				new BoundingBox(cornerMin, bbox.extent())
 			);
 		}
 

@@ -131,16 +131,16 @@ public final class VoxelBoxInt extends VoxelBox<IntBuffer> {
 	@Override
 	public void setPixelsTo( BoundingBox bbox, int val ) {
 		
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
 		Extent e = extent();
 		
-		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+		for (int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++) {
 			
 			IntBuffer buffer = getPlaneAccess().getPixelsForPlane(z).buffer();
 			
-			for (int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for (int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+			for (int y=cornerMin.getY(); y<=cornerMax.getY(); y++) {
+				for (int x=cornerMin.getX(); x<=cornerMax.getX(); x++) {
 					int offset = e.offset(x, y);
 					buffer.put( offset, val );
 				}

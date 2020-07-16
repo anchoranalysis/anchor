@@ -28,12 +28,14 @@ package org.anchoranalysis.image.extent;
 
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Calculates distance between two bounding boxes
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BoundingBoxDistance {
-
-	private BoundingBoxDistance() {}
 	
 	public static double distance( BoundingBox box1, BoundingBox box2, boolean includeZ ) {
 		
@@ -41,34 +43,34 @@ public class BoundingBoxDistance {
 			return 0;
 		}
 		
-		ReadableTuple3i box1CrnrMin = box1.cornerMin();
-		ReadableTuple3i box1CrnrMax = box1.calcCornerMax();
+		ReadableTuple3i box1CornerMin = box1.cornerMin();
+		ReadableTuple3i box1CornerMax = box1.calcCornerMax();
 		
-		ReadableTuple3i box2CrnrMin = box2.cornerMin();
-		ReadableTuple3i box2CrnrMax = box2.calcCornerMax();
+		ReadableTuple3i box2CornerMin = box2.cornerMin();
+		ReadableTuple3i box2CornerMax = box2.calcCornerMax();
 		
 		int xDistance = minDistance(
-			box1CrnrMin.getX(),
-			box1CrnrMax.getX(),
-			box2CrnrMin.getX(),
-			box2CrnrMax.getX()
+			box1CornerMin.getX(),
+			box1CornerMax.getX(),
+			box2CornerMin.getX(),
+			box2CornerMax.getX()
 		);
 		
 		int yDistance = minDistance(
-			box1CrnrMin.getY(),
-			box1CrnrMax.getY(),
-			box2CrnrMin.getY(),
-			box2CrnrMax.getY()
+			box1CornerMin.getY(),
+			box1CornerMax.getY(),
+			box2CornerMin.getY(),
+			box2CornerMax.getY()
 		);
 		
 		int zDistance = 0;
 		
 		if (includeZ) {
 			zDistance = minDistance(
-				box1CrnrMin.getZ(),
-				box1CrnrMax.getZ(),
-				box2CrnrMin.getZ(),
-				box2CrnrMax.getZ()
+				box1CornerMin.getZ(),
+				box1CornerMax.getZ(),
+				box2CornerMin.getZ(),
+				box2CornerMax.getZ()
 			);
 		}
 		
@@ -91,8 +93,7 @@ public class BoundingBoxDistance {
 		if( (box1Max >= box2Min) && (box1Max <= box2Max)) {
 			return 0;
 		}
-		
-		
+				
 		int diff1 = Math.abs(box1Min-box2Max); 
 		int diff2 = Math.abs(box2Min-box1Max);
 		int diff3 = Math.abs(box1Min-box2Min);
