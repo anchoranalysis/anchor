@@ -29,7 +29,7 @@ package org.anchoranalysis.image.binary.logical;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -45,7 +45,7 @@ public class BinaryChnlOr {
 	 * @param chnlCrnt first-channel for OR
 	 * @param chnlReceiver second-channel for OR (and the channel where the result is overwritten)
 	 */
-	public static void binaryOr( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) {
+	public static void binaryOr( Mask chnlCrnt, Mask chnlReceiver ) {
 		
 		BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
 		BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();

@@ -31,8 +31,9 @@ import org.anchoranalysis.image.convert.ByteConverter;
  */
 
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 
 /**
@@ -45,6 +46,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor @EqualsAndHashCode
 public final class BinaryValuesByte implements Serializable {
 
 	/**
@@ -52,15 +54,15 @@ public final class BinaryValuesByte implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final BinaryValuesByte defaultBB = new BinaryValuesByte( (byte) 0, (byte) -1 );
-	
+	private static final BinaryValuesByte DEFAULT = new BinaryValuesByte( (byte) 0, (byte) -1 );
+
+	/** The byte representation of the value for OFF */
+	@Getter
 	private final byte offByte;
+	
+	/** The byte representation of the value for ON */
+	@Getter
 	private final byte onByte;
-		
-	public BinaryValuesByte(byte off, byte on) {
-		this.offByte = off;
-		this.onByte = on;
-	}
 	
 	public BinaryValuesByte(int off, int on) {
 		this( 
@@ -70,15 +72,7 @@ public final class BinaryValuesByte implements Serializable {
 	}
 	
 	public static BinaryValuesByte getDefault() {
-		return defaultBB;
-	}
-	
-	public byte getOffByte() {
-		return offByte;
-	}
-	
-	public byte getOnByte() {
-		return onByte;
+		return DEFAULT;
 	}
 	
 	public boolean isOn( byte val ) {
@@ -99,26 +93,4 @@ public final class BinaryValuesByte implements Serializable {
 			ByteConverter.unsignedByteToInt(onByte)
 		);
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		   if (obj == this) { return true; }
-		   if (obj.getClass() != getClass()) {
-		     return false;
-		   }
-		   BinaryValuesByte rhs = (BinaryValuesByte) obj;
-		   return new EqualsBuilder()
-             .append(offByte, rhs.offByte)
-             .append(onByte, rhs.onByte)
-             .isEquals();
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(offByte)
-			.append(onByte)
-			.toHashCode();
-	}	
 }

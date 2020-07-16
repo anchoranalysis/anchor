@@ -28,7 +28,7 @@ package org.anchoranalysis.image.binary.logical;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -39,7 +39,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BinaryChnlAnd {
 	
-	public static void apply( BinaryChnl chnlCrnt, BinaryChnl chnlReceiver ) {
+	public static void apply( Mask chnlCrnt, Mask chnlReceiver ) {
 		apply(
 			chnlCrnt.getVoxelBox(),
 			chnlReceiver.getVoxelBox(),

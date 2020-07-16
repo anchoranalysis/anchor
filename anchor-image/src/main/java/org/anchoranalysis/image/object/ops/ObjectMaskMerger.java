@@ -32,7 +32,7 @@ package org.anchoranalysis.image.object.ops;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.BinaryChnlInverter;
+import org.anchoranalysis.image.binary.mask.MaskInverter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -168,7 +168,7 @@ public class ObjectMaskMerger {
 		if (!second.getBinaryValues().equals(first.getBinaryValues())) {
 			
 			if (second.getBinaryValues().createInverted().equals(first.getBinaryValues())) {
-				return BinaryChnlInverter.invertObjectDuplicate(second);
+				return MaskInverter.invertObjectDuplicate(second);
 			} else {
 				throw new AnchorFriendlyRuntimeException("The two objects to be merged have binary-values that are impossible to merge");
 			}

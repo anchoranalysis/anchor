@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -161,7 +162,6 @@ public class HistogramArray implements Histogram {
 		
 		for( int i=minBin; i<=maxBin; i++) {
 			sum += arrGetLong(i)*i;
-			assert(sum>=0);
 		}
 		
 		return ((double) sum) / countTotal;
@@ -179,11 +179,9 @@ public class HistogramArray implements Histogram {
 			long num = arrGetLong(i);
 			sum += i*num;
 			count += num;
-			assert(sum>=0);
-			assert(count>=0);
 		}
 		
-		return ((double) sum)/count;
+		return ((double) sum)/count;	// NOSONAR
 	}
 	
 	public double meanNonZero() throws OperationFailedException {
@@ -315,8 +313,7 @@ public class HistogramArray implements Histogram {
 			}
 		}
 		
-		assert false;
-		return -1;
+		throw new AnchorImpossibleSituationException();
 	}
 
 	public int calcMin() throws OperationFailedException {
@@ -328,8 +325,7 @@ public class HistogramArray implements Histogram {
 			}			
 		}
 		
-		assert false;
-		return -1;
+		throw new AnchorImpossibleSituationException();
 	}
 
 	@Override
@@ -378,7 +374,6 @@ public class HistogramArray implements Histogram {
 			
 			if (relation.isRelationToValueTrue(i, threshold)) {
 				sum += arrGetLong(i);
-				assert(sum>=0);
 			}
 		}
 		
@@ -507,9 +502,7 @@ public class HistogramArray implements Histogram {
 		
 		for (int i=minBin; i<=maxBin; i++) {
 			long add = arrGetLong(i) * func.applyAsLong( (long) i);
-			assert(add>=0);
 			sum += add;
-			assert(sum>=0);
 		}
 		
 		return sum;
@@ -562,7 +555,6 @@ public class HistogramArray implements Histogram {
 	private static long extractBin(Histogram destination, int bin, int countForBin, long remaining) {
 		// If there's more or just enough remaining than we have, we transfer the entire bin
 		if( remaining >= countForBin) {
-			
 			destination.incrValBy(bin, countForBin);
 			return remaining - countForBin;
 		} else {

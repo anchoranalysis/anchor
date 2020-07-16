@@ -51,7 +51,7 @@ import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -75,7 +75,7 @@ public class ImageInitParams implements BeanInitParams {
 	private final NamedProviderStore<Histogram> storeHistogram;
 	private final NamedProviderStore<ObjectCollection> storeObjects;
 	private final NamedProviderStore<Channel> storeChnl;
-	private final NamedProviderStore<BinaryChnl> storeBinaryChnl;
+	private final NamedProviderStore<Mask> storeBinaryChnl;
 	private final NamedProviderStore<BinarySegmentation> storeBinarySgmn;
 	// END: Stores
 	
@@ -92,7 +92,7 @@ public class ImageInitParams implements BeanInitParams {
 		storeHistogram = sharedObjects.getOrCreate(Histogram.class);
 		storeObjects = sharedObjects.getOrCreate(ObjectCollection.class);
 		storeChnl = sharedObjects.getOrCreate(Channel.class);
-		storeBinaryChnl = sharedObjects.getOrCreate(BinaryChnl.class);
+		storeBinaryChnl = sharedObjects.getOrCreate(Mask.class);
 		storeBinarySgmn = sharedObjects.getOrCreate(BinarySegmentation.class);
 	}
 	
@@ -112,7 +112,7 @@ public class ImageInitParams implements BeanInitParams {
 		return storeChnl;
 	}
 	
-	public NamedProviderStore<BinaryChnl> getBinaryImageCollection() {
+	public NamedProviderStore<Mask> getBinaryImageCollection() {
 		return storeBinaryChnl;
 	}
 	

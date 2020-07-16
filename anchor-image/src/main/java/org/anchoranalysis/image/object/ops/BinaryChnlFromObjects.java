@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -49,7 +49,7 @@ import lombok.NoArgsConstructor;
 public class BinaryChnlFromObjects {
 	
 	/** We look for space IN objects, and create channel to display it */
-	public static BinaryChnl createFromObjects( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) {
+	public static Mask createFromObjects( ObjectCollection masks, ImageDimensions sd, BinaryValues outVal ) {
 		return createChannelObjectCollectionHelper(
 			masks,
 			sd,
@@ -61,7 +61,7 @@ public class BinaryChnlFromObjects {
 	
 
 	/** We look for space NOT in the objects, and create channel to display it */
-	public static BinaryChnl createFromNotObjects( ObjectCollection objects, ImageDimensions sd, BinaryValues outVal ) {
+	public static Mask createFromNotObjects( ObjectCollection objects, ImageDimensions sd, BinaryValues outVal ) {
 		return createChannelObjectCollectionHelper(
 			objects,
 			sd,
@@ -72,7 +72,7 @@ public class BinaryChnlFromObjects {
 	}
 	
 	// We look for the values that are NOT on the masks
-	private static BinaryChnl createChannelObjectCollectionHelper(
+	private static Mask createChannelObjectCollectionHelper(
 		ObjectCollection masks,
 		ImageDimensions dim,
 		BinaryValues outVal,
@@ -89,7 +89,7 @@ public class BinaryChnlFromObjects {
 		
 		writeChannelObjectCollection( vbNew, masks, objectState );
 		
-		return new BinaryChnl(chnlNew, outVal);
+		return new Mask(chnlNew, outVal);
 	}
 		
 	// nullVal is assumed to be 0

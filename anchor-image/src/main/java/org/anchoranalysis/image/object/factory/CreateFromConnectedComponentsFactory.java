@@ -32,7 +32,7 @@ import java.nio.IntBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.unionfind.ConnectedComponentUnionFind;
@@ -58,7 +58,7 @@ public class CreateFromConnectedComponentsFactory {
 		unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNghb);
 	}
 	
-	public ObjectCollection createConnectedComponents( BinaryChnl chnl ) throws CreateException {
+	public ObjectCollection createConnectedComponents( Mask chnl ) throws CreateException {
 		return createConnectedComponents( chnl.binaryVoxelBox() );
 	}
 	

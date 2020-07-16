@@ -53,10 +53,10 @@ public abstract class Tuple3d implements Serializable {
 	@Getter
 	protected double z = 0.0;
 	
-	public final void add( Tuple3d pnt ) {
-		this.x += pnt.x;
-		this.y += pnt.y;
-		this.z += pnt.z;
+	public final void add( Tuple3d point ) {
+		this.x += point.x;
+		this.y += point.y;
+		this.z += point.z;
 	}
 	
 	public final void add( double x, double y, double z ) {
@@ -65,16 +65,16 @@ public abstract class Tuple3d implements Serializable {
 		this.z += z;
 	}
 	
-	public final void add( ReadableTuple3i pnt ) {
-		this.x += pnt.getX();
-		this.y += pnt.getY();
-		this.z += pnt.getZ();
+	public final void add( ReadableTuple3i point ) {
+		this.x += point.getX();
+		this.y += point.getY();
+		this.z += point.getZ();
 	}
 	
-	public final void subtract( Tuple3d pnt ) {
-		this.x -= pnt.x;
-		this.y -= pnt.y;
-		this.z -= pnt.z;
+	public final void subtract( Tuple3d point ) {
+		this.x -= point.x;
+		this.y -= point.y;
+		this.z -= point.z;
 	}
 	
 	public final void scale( double factor ) {

@@ -43,7 +43,7 @@ import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.function.BiFunctionWithException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.functional.function.IntFunctionWithException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -161,14 +161,14 @@ public class ObjectCollectionFactory {
 	
 	
 	/**
-	 * Creates a new collection with elements from the parameter-list of {@link BinaryChnl} converting each channel to an object-mask
+	 * Creates a new collection with elements from the parameter-list of {@link Mask} converting each channel to an object-mask
 	 * 
 	 * @param obj object-mask to add to collection
 	 */
 	@SafeVarargs
-	public static ObjectCollection from( BinaryChnl ...chnl ) {
+	public static ObjectCollection from( Mask ...chnl ) {
 		ObjectCollection out = new ObjectCollection();
-		for( BinaryChnl bc : chnl ) {
+		for( Mask bc : chnl ) {
 			out.add(
 				new ObjectMask(bc.binaryVoxelBox())
 			);

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.binary;
+package org.anchoranalysis.image.binary.mask;
 
 /*
  * #%L
@@ -54,9 +54,17 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 
-// An image that supporting certain binary operations
-public class BinaryChnl {
+/**
+ * A channel that is restricted to two values (ON and OFF) so as to act like a mask.
+ * <p>
+ * This is one of Anchor's core data-objects.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Mask {
 
+	/** The underlying channel which contains the binary-values. It is always has data-type of unsigned 8-bit. */
 	@Getter @Setter
 	private Channel channel;
 
@@ -65,8 +73,7 @@ public class BinaryChnl {
 	
 	private final BinaryValuesByte binaryValuesByte;
 	
-	public BinaryChnl(Channel channel, BinaryValues binaryValues) {
-		super();
+	public Mask(Channel channel, BinaryValues binaryValues) {
 		this.channel = channel;
 		this.binaryValues = binaryValues;
 		this.binaryValuesByte = binaryValues.createByte();
@@ -76,11 +83,11 @@ public class BinaryChnl {
 		}
 	}
 	
-	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb) {
-		this(vb, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE) );
+	public Mask( BinaryVoxelBox<ByteBuffer> voxelBox) {
+		this(voxelBox, new ImageResolution(), ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE) );
 	}
 	
-	public BinaryChnl( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {
+	public Mask( BinaryVoxelBox<ByteBuffer> vb, ImageResolution res, ChannelFactorySingleType factory ) {
 		this.channel = factory.create(
 			vb.getVoxelBox(),
 			res
@@ -113,8 +120,8 @@ public class BinaryChnl {
 		return bb.get(offset)==binaryValuesByte.getOnByte();
 	}
 
-	public BinaryChnl duplicate() {
-		return new BinaryChnl( channel.duplicate(), binaryValues );
+	public Mask duplicate() {
+		return new Mask( channel.duplicate(), binaryValues );
 	}
 	
 	// Creates a mask from the binaryChnl
@@ -127,8 +134,8 @@ public class BinaryChnl {
 		);
 	}
 
-	public BinaryChnl maxIntensityProj() {
-		return new BinaryChnl(channel.maxIntensityProjection(), binaryValues);
+	public Mask maxIntensityProj() {
+		return new Mask(channel.maxIntensityProjection(), binaryValues);
 	}
 	
 	public boolean hasHighValues() {
@@ -139,7 +146,7 @@ public class BinaryChnl {
 		return channel.countEqualTo( binaryValues.getOnInt() );
 	}
 	
-	public BinaryChnl scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
+	public Mask scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
 
 		if (scaleFactor.isNoScale()) {
 			// Nothing to do
@@ -148,7 +155,7 @@ public class BinaryChnl {
 		
 		Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
 		
-		BinaryChnl binaryChnl = new BinaryChnl(scaled, binaryValues);
+		Mask binaryChnl = new Mask(scaled, binaryValues);
 		
 		// We threshold to make sure it's still binary
 		applyThreshold(binaryChnl);
@@ -156,8 +163,8 @@ public class BinaryChnl {
 		return binaryChnl;
 	}
 
-	public BinaryChnl extractSlice(int z) {
-		return new BinaryChnl( channel.extractSlice(z), binaryValues );
+	public Mask extractSlice(int z) {
+		return new Mask( channel.extractSlice(z), binaryValues );
 	}
 
 	public void replaceBy(BinaryVoxelBox<ByteBuffer>  bvb)
@@ -165,7 +172,7 @@ public class BinaryChnl {
 		channel.getVoxelBox().asByte().replaceBy(bvb.getVoxelBox());
 	}
 	
-	private void applyThreshold(BinaryChnl binaryChnl) {
+	private void applyThreshold(Mask binaryChnl) {
 		int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) /2;
 		
 		VoxelBoxThresholder.thresholdForLevel(

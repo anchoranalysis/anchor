@@ -283,18 +283,18 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		ObjectMask object = new ObjectMask(bbox);
 		
-		ReadableTuple3i pntMax = bbox.calcCornerMax();
+		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
 		byte maskOut = object.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pointMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelOut = object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pointMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pointMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					
@@ -317,18 +317,18 @@ public abstract class VoxelBox<T extends Buffer> {
 		
 		ObjectMask object = new ObjectMask(bbox);
 		
-		ReadableTuple3i pntMax = bbox.calcCornerMax();
+		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
 		byte maskOut = object.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pointMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelOut = object.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pointMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pointMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					
@@ -354,20 +354,20 @@ public abstract class VoxelBox<T extends Buffer> {
 		);
 		
 		BoundingBox bbox = maskIn.getBoundingBox();
-		ReadableTuple3i pntMax = bbox.calcCornerMax();
+		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
 		byte maskInVal = maskIn.getBinaryValuesByte().getOnByte();
 		byte maskOutVal = maskOut.getBinaryValuesByte().getOnByte();
 		
-		for (int z=bbox.cornerMin().getZ(); z<=pntMax.getZ(); z++) {
+		for (int z=bbox.cornerMin().getZ(); z<=pointMax.getZ(); z++) {
 			
 			T pixelIn = getPlaneAccess().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelMaskIn = maskIn.getVoxelBox().getPixelsForPlane(z).buffer();
 			ByteBuffer pixelOut = maskOut.getVoxelBox().getPixelsForPlane(z - bbox.cornerMin().getZ()).buffer();
 			
 			int ind = 0;
-			for (int y=bbox.cornerMin().getY(); y<=pntMax.getY(); y++) {
-				for (int x=bbox.cornerMin().getX(); x<=pntMax.getX(); x++) {
+			for (int y=bbox.cornerMin().getY(); y<=pointMax.getY(); y++) {
+				for (int x=bbox.cornerMin().getX(); x<=pointMax.getX(); x++) {
 					
 					int index = getPlaneAccess().extent().offset(x, y);
 					
@@ -559,8 +559,8 @@ public abstract class VoxelBox<T extends Buffer> {
 	// Very slow access, use sparingly.  Instead process slice by slice.
 	public abstract int getVoxel(int x, int y, int z);
 	
-	public int getVoxel(ReadableTuple3i pnt) {
-		return getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+	public int getVoxel(ReadableTuple3i point) {
+		return getVoxel(point.getX(), point.getY(), point.getZ());
 	}
 	
 	// Creates a new channel contain a duplication only of a particular slice

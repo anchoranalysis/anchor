@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public abstract class BinaryChnlProviderOne extends BinaryChnlProvider {
 
@@ -38,13 +38,13 @@ public abstract class BinaryChnlProviderOne extends BinaryChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
+	public Mask create() throws CreateException {
 		return createFromChnl(
 			binaryChnl.create()
 		);
 	}
 	
-	protected abstract BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException;
+	protected abstract Mask createFromChnl( Mask chnl ) throws CreateException;
 
 	public BinaryChnlProvider getBinaryChnl() {
 		return binaryChnl;

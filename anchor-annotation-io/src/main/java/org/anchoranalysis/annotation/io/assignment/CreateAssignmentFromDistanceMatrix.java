@@ -57,7 +57,7 @@ class CreateAssignmentFromDistanceMatrix {
 	
 	/** A hashset of a sequence of indices from 0 until an upper value (exclusive) */ 
 	private static Set<Integer> setForRange(int endValueExclusive) {
-		return IntStream.range(0, endValueExclusive).mapToObj(Integer::valueOf).collect( Collectors.toSet() );
+		return IntStream.range(0, endValueExclusive).boxed().collect( Collectors.toSet() );
 	}
 	
 	/** Calls a function with every object from a collection whose index is in a set */

@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -83,7 +83,7 @@ public class ProbMapObjectCollection implements ProbMap {
 	}
 
 	@Override
-	public BinaryChnl visualization() throws OptionalOperationUnsupportedException {
+	public Mask visualization() throws OptionalOperationUnsupportedException {
 		return BinaryChnlFromObjects.createFromObjects(
 			objects,
 			dim,

@@ -50,7 +50,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
@@ -68,11 +68,11 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	private RandomSet<Point3d> setPnts;
 	
 	private ImageDimensions dim;
-	private BinaryChnl binaryImage;
+	private Mask binaryImage;
 	private Channel binaryImageChnl;
 	
 	@Override
-	public void init(BinaryChnl binaryImage) throws InitException {
+	public void init(Mask binaryImage) throws InitException {
 		this.binaryImage = binaryImage;
 		this.binaryImageChnl = binaryImage.getChannel();
 		

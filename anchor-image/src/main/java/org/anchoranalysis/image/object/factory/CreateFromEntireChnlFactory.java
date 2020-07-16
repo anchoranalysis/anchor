@@ -28,7 +28,7 @@ package org.anchoranalysis.image.object.factory;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CreateFromEntireChnlFactory {
 			
-	public static ObjectMask createObject( BinaryChnl binaryImgChnl ) {
+	public static ObjectMask createObject( Mask binaryImgChnl ) {
 		Channel chnl = binaryImgChnl.getChannel();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte(); 

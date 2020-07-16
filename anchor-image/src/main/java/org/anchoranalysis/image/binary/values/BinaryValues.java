@@ -29,39 +29,34 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
  */
 
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * Two values representing {@link int} binary states in an unsigned-byte buffer e.g. 0 for OFF and 1 for ON
  * 
- * <p>This class is IMMUTABLE
+ * <p>This class is <i>immutable</i>.
  * 
  * See {@link org.anchoranalysis.image.binary.values.BinaryValueBytes} for an equivalent class that stores these states as {@link byte}
  * 
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode @AllArgsConstructor
 public final class BinaryValues {
 
+	/** Default values to use, if not otherwise specified */
+	private static final BinaryValues DEFAULT = new BinaryValues(0, 255);
+	
+	/** The integer representation of the value for OFF */
+	@Getter
 	private final int offInt;
+
+	/** The integer representation of the value for ON */
+	@Getter
 	private final int onInt;
 	
-	private static final BinaryValues defaultBB = new BinaryValues(0, 255);
-	
-	public BinaryValues(int off, int on) {
-		this.offInt = off;
-		this.onInt = on;
-	}
-	
-	public int getOffInt() {
-		return offInt;
-	}
-	
-	public int getOnInt() {
-		return onInt;
-	}
-
 	public BinaryValuesByte createByte() {
 		if (offInt>255) {
 			throw new IncorrectVoxelDataTypeException("offInt must be <= 255");
@@ -72,33 +67,13 @@ public final class BinaryValues {
 		return new BinaryValuesByte(offInt, onInt);
 	}
 
+	/** Default values to use, if not otherwise specified */
 	public static BinaryValues getDefault() {
-		return defaultBB;
+		return DEFAULT;
 	}
 	
+	/** Inverts the values so OFF becomes ON, and vice-versa */
 	public BinaryValues createInverted() {
 		return new BinaryValues(onInt, offInt);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		   if (obj == this) { return true; }
-		   if (obj.getClass() != getClass()) {
-		     return false;
-		   }
-		   BinaryValues rhs = (BinaryValues) obj;
-		   return new EqualsBuilder()
-             .append(offInt, rhs.offInt)
-             .append(onInt, rhs.onInt)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(offInt)
-			.append(onInt)
-			.toHashCode();
 	}
 }

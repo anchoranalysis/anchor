@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.bean.rasterreader;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -57,7 +57,7 @@ public class RasterReaderUtilities {
 		
 	}
 	
-	public static BinaryChnl openBinaryChnl( RasterReader rasterReader, Path path, BinaryValues bv ) throws RasterIOException {
+	public static Mask openBinaryChnl( RasterReader rasterReader, Path path, BinaryValues bv ) throws RasterIOException {
 		
 		Stack stack = openStackFromPath(rasterReader, path);
 		
@@ -67,6 +67,6 @@ public class RasterReaderUtilities {
 			);
 		}
 		
-		return new BinaryChnl( stack.getChnl(0), bv );
+		return new Mask( stack.getChnl(0), bv );
 	}
 }

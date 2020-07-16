@@ -40,6 +40,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
+ * A voxel-box that should only contain two voxel-values (representing ON and OFF states)
  * 
  * @author Owen Feehan
  *

@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.binary;
+package org.anchoranalysis.image.binary.mask;
 
 /*-
  * #%L
@@ -38,7 +38,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class BinaryChnlInverter {
+public class MaskInverter {
 	
 	public static ObjectMask invertObjectDuplicate( ObjectMask object ) {
 		BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
@@ -46,7 +46,7 @@ public class BinaryChnlInverter {
 		return new ObjectMask(bvb);
 	}
 	
-	public static void invertChnl( BinaryChnl chnl ) {
+	public static void invertChnl( Mask chnl ) {
 		
 		BinaryValues bv = chnl.getBinaryValues();
 		BinaryValuesByte bvb = bv.createByte();

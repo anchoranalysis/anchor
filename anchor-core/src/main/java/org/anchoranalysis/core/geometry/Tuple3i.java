@@ -52,10 +52,10 @@ public abstract class Tuple3i implements ReadableTuple3i {
 	@Getter @Setter
 	protected int z = 0;
 	
-	public final void add( ReadableTuple3i pnt ) {
-		this.x = this.x + pnt.getX();
-		this.y = this.y + pnt.getY();
-		this.z = this.z + pnt.getZ();
+	public final void add( ReadableTuple3i point ) {
+		this.x = this.x + point.getX();
+		this.y = this.y + point.getY();
+		this.z = this.z + point.getZ();
 	}
 	
 	public final void subtract( int val ) {
@@ -64,10 +64,10 @@ public abstract class Tuple3i implements ReadableTuple3i {
 		this.z = this.z - val;
 	}
 	
-	public final void subtract( ReadableTuple3i pnt ) {
-		this.x = this.x - pnt.getX();
-		this.y = this.y - pnt.getY();
-		this.z = this.z - pnt.getZ();
+	public final void subtract( ReadableTuple3i point ) {
+		this.x = this.x - point.getX();
+		this.y = this.y - point.getY();
+		this.z = this.z - point.getZ();
 	}
 	
 	public final void scale( int factor ) {
@@ -90,14 +90,14 @@ public abstract class Tuple3i implements ReadableTuple3i {
 	/**
 	 * Element-wise minimum between this point and another
 	 * 
-	 * @param pnt the other point
+	 * @param point the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3i min( ReadableTuple3i pnt ) {
+	public Point3i min( ReadableTuple3i point ) {
 		return new Point3i(
-			Math.min(x, pnt.getX()),
-			Math.min(y, pnt.getY()),
-			Math.min(z, pnt.getZ())
+			Math.min(x, point.getX()),
+			Math.min(y, point.getY()),
+			Math.min(z, point.getZ())
 		);
 	}
 	
@@ -105,14 +105,14 @@ public abstract class Tuple3i implements ReadableTuple3i {
 	/**
 	 * Element-wise maximum between this point and another
 	 * 
-	 * @param pnt the other point
+	 * @param point the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3i max( ReadableTuple3i pnt ) {
+	public Point3i max( ReadableTuple3i point ) {
 		return new Point3i(
-			Math.max(x, pnt.getX()),
-			Math.max(y, pnt.getY()),
-			Math.max(z, pnt.getZ())
+			Math.max(x, point.getX()),
+			Math.max(y, point.getY()),
+			Math.max(z, point.getZ())
 		);
 	}
 	

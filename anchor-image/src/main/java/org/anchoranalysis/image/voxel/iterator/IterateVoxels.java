@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -309,7 +309,7 @@ public class IterateVoxels {
 	 * @param process is called for each voxel within the bounding-box using GLOBAL coordinates.
 	 * @param <T> buffer-type in voxel-box
 	 */
-	public static <T extends Buffer> void callEachPoint( VoxelBox<T> voxels, BinaryChnl mask, ProcessVoxelSliceBuffer<T> process) {
+	public static <T extends Buffer> void callEachPoint( VoxelBox<T> voxels, Mask mask, ProcessVoxelSliceBuffer<T> process) {
 		// Treat it as one giant object box. This will involve some additions and subtractions of 0 during the processing of voxels
 		// but after some quick emperical checks, it doesn't seem to make a performance difference. Probably the JVM is smart enough
 		// to optimize away these redundant calcualations.

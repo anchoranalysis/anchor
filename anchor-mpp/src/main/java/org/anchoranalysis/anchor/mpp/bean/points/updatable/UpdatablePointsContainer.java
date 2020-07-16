@@ -31,11 +31,11 @@ import org.anchoranalysis.anchor.mpp.probmap.PointSampler;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public abstract class UpdatablePointsContainer extends AnchorBean<UpdatablePointsContainer> implements UpdatableMarkSet, PointSampler {
 
-	public abstract void init(BinaryChnl binaryImage) throws InitException;
+	public abstract void init(Mask binaryImage) throws InitException;
 	
 	public abstract int size();
 

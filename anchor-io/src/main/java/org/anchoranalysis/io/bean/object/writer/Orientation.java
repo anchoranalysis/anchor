@@ -94,11 +94,8 @@ public class Orientation extends DrawObject {
 			@Override
 			public void writePrecalculatedMask(RGBStack background, ObjectDrawAttributes attributes, int iteration,
 					BoundingBox restrictTo) throws OperationFailedException {
-
+				
 				Point3i midpoint = Midpoint.calcMidpoint( mask, false );
-				if (midpoint==null) {
-					return;
-				}
 				
 				Optional<Double> orientationRadians = calcOrientation( mask );
 				if (!orientationRadians.isPresent()) {
@@ -122,9 +119,7 @@ public class Orientation extends DrawObject {
 					orientationRadians.get(),
 					color,
 					background,
-					restrictTo,
-					xAxisMin.get(),
-					xAxisMax.get()
+					restrictTo
 				);
 				
 				// Reverse
@@ -134,9 +129,7 @@ public class Orientation extends DrawObject {
 						orientationRadians.get(),
 						color,
 						background,
-						restrictTo,
-						xAxisMin.get(),
-						xAxisMax.get()
+						restrictTo
 					);
 				}
 				
@@ -150,9 +143,7 @@ public class Orientation extends DrawObject {
 		double orientationRadians,
 		RGBColor color,
 		RGBStack stack,
-		BoundingBox bbox,
-		Point3d min,
-		Point3d max
+		BoundingBox bbox
 	) {
 		
 		// We start at 0
@@ -163,20 +154,16 @@ public class Orientation extends DrawObject {
 		double yIncr = Math.sin( orientationRadians ) * xDiv;
 		
 		while( true ) {
-			Point3i pnt = new Point3i( (int) x, (int) y, 0);
+			Point3i point = new Point3i( (int) x, (int) y, 0);
 
-			if (!bbox.contains().x(pnt.getX()) || !bbox.contains().y(pnt.getY())) {
+			if (bbox.contains().pointIgnoreZ(point)) {
+				Midpoint.writeRelPoint(point, color, stack, bbox );
+				
+				x += xIncr;
+				y += yIncr;
+			} else {
 				break;
 			}
-			
-			if ( (pnt.getX() < min.getX() || pnt.getX() > max.getX()) && (pnt.getY() < min.getY() || pnt.getY() > max.getY())) {
-				break;
-			}
-		
-			Midpoint.writeRelPoint(pnt, color, stack, bbox );
-						
-			x += xIncr;
-			y += yIncr;
 		}
 	}
 }

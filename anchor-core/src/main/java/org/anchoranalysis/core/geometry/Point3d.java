@@ -41,16 +41,16 @@ public final class Point3d extends Tuple3d {
 		this.z = pnt.getZ();
 	}
 	
-	public Point3d( Vector3d pnt) {
-		this.x = pnt.x;
-		this.y = pnt.y;
-		this.z = pnt.z;
+	public Point3d( Vector3d point) {
+		this.x = point.x;
+		this.y = point.y;
+		this.z = point.z;
 	}
 	
-	public Point3d( Tuple3d pnt) {
-		this.x = pnt.x;
-		this.y = pnt.y;
-		this.z = pnt.z;
+	public Point3d( Tuple3d point) {
+		this.x = point.x;
+		this.y = point.y;
+		this.z = point.z;
 	}
 	
 	public Point3d(double x, double y, double z) {
@@ -59,57 +59,59 @@ public final class Point3d extends Tuple3d {
 		this.z = z;
 	}
 	
-	public static Point3d midPointBetween(Point3d pnt1, Point3d pnt2) {
+	public static Point3d midPointBetween(Point3d point1, Point3d point2) {
 		// We create a new object of 1x1x1 between the two merged seeds
-		Point3d pntNew = new Point3d(pnt1);
-		pntNew.add( pnt2 );
+		Point3d pntNew = new Point3d(point1);
+		pntNew.add( point2 );
 		pntNew.scale(0.5);
 		return pntNew;
 	}
 	
-	public double distanceSquared( Point3d pnt ) {
-		double sx = this.x - pnt.x;
-		double sy = this.y - pnt.y;
-		double sz = this.z - pnt.z;
+	public double distanceSquared( Point3d point ) {
+		double sx = this.x - point.x;
+		double sy = this.y - point.y;
+		double sz = this.z - point.z;
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
-	public double distanceSquared( Point3i pnt ) {
-		double sx = this.x - pnt.x;
-		double sy = this.y - pnt.y;
-		double sz = this.z - pnt.z;
+	public double distanceSquared( Point3i point ) {
+		double sx = this.x - point.x;
+		double sy = this.y - point.y;
+		double sz = this.z - point.z;
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
-	public double distance( Point3d pnt ) {
-		return Math.sqrt( distanceSquared(pnt) );
+	public double distance( Point3d point ) {
+		return Math.sqrt(
+			distanceSquared(point)
+		);
 	}
 
 	/**
 	 * Element-wise minimum between this point and another
 	 * 
-	 * @param pnt the other point
+	 * @param point the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3d min( Tuple3d pnt ) {
+	public Point3d min( Tuple3d point ) {
 		return new Point3d(
-			Math.min(x, pnt.x),
-			Math.min(y, pnt.y),
-			Math.min(z, pnt.z)
+			Math.min(x, point.x),
+			Math.min(y, point.y),
+			Math.min(z, point.z)
 		);
 	}
 	
 	/**
 	 * Element-wise minimum between this point and another
 	 * 
-	 * @param pnt the other point
+	 * @param point the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3d min( ReadableTuple3i pnt ) {
+	public Point3d min( ReadableTuple3i point ) {
 		return new Point3d(
-			Math.min(x, pnt.getX()),
-			Math.min(y, pnt.getY()),
-			Math.min(z, pnt.getZ())
+			Math.min(x, point.getX()),
+			Math.min(y, point.getY()),
+			Math.min(z, point.getZ())
 		);
 	}
 
@@ -130,14 +132,14 @@ public final class Point3d extends Tuple3d {
 	/**
 	 * Element-wise maximum between this point and another
 	 * 
-	 * @param pnt the other point
+	 * @param point the other point
 	 * @return a new point containing the minimum of the x, y, z components
 	 */
-	public Point3d max( Tuple3d pnt ) {
+	public Point3d max( Tuple3d point ) {
 		return new Point3d(
-			Math.max(x, pnt.x),
-			Math.max(y, pnt.y),
-			Math.max(z, pnt.z)
+			Math.max(x, point.x),
+			Math.max(y, point.y),
+			Math.max(z, point.z)
 		);
 	}
 	
@@ -174,8 +176,8 @@ public final class Point3d extends Tuple3d {
 	}
 	
 	/** Performs a scale without changing any values in an existing point */
-	public static Point3d immutableScale(Tuple3d pnt, int factor) {
-		Point3d pntDup = new Point3d(pnt);
+	public static Point3d immutableScale(Tuple3d point, int factor) {
+		Point3d pntDup = new Point3d(point);
 		pntDup.scale(factor);
 		return pntDup;
 	}

@@ -96,10 +96,10 @@ public class IntersectionBBox {
 		);
 	}
 	
-	private IntersectionBBox(Point3i pntMin, Point3i pntMax, Point3i relPos, Extent eSrc, Extent eOther) {
-		x = new Dimension( pntMin.getX(), pntMax.getX(), relPos.getX() );
-		y = new Dimension( pntMin.getY(), pntMax.getY(), relPos.getY() );
-		z = new Dimension( pntMin.getZ(), pntMax.getZ(), relPos.getZ() );
+	private IntersectionBBox(Point3i pointMin, Point3i pointMax, Point3i relPos, Extent eSrc, Extent eOther) {
+		x = new Dimension( pointMin.getX(), pointMax.getX(), relPos.getX() );
+		y = new Dimension( pointMin.getY(), pointMax.getY(), relPos.getY() );
+		z = new Dimension( pointMin.getZ(), pointMax.getZ(), relPos.getZ() );
 		this.e1 = eSrc;
 		this.e2 = eOther;
 	}

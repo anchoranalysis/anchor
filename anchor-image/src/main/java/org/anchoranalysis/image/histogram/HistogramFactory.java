@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -95,7 +95,7 @@ public class HistogramFactory {
 	}
 	
 	
-	public static Histogram create( Channel chnl, BinaryChnl mask ) throws CreateException {
+	public static Histogram create( Channel chnl, Mask mask ) throws CreateException {
 		
 		if (!chnl.getDimensions().getExtent().equals(mask.getDimensions().getExtent())) {
 			throw new CreateException("Size of chnl and mask do not match");

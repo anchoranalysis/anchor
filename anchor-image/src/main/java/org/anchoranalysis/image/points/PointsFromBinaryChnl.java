@@ -32,14 +32,14 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 
 public class PointsFromBinaryChnl {
 	
 	private PointsFromBinaryChnl() {}
 	
-	public static List<Point3i> pointsFromChnl( BinaryChnl chnl ) {
+	public static List<Point3i> pointsFromChnl( Mask chnl ) {
 		
 		List<Point3i> listOut = new ArrayList<>();
 		
@@ -48,11 +48,11 @@ public class PointsFromBinaryChnl {
 		return listOut;
 	}
 	
-	public static List<Point2i> pointsFromChnl2D( BinaryChnl chnl ) throws CreateException {
+	public static List<Point2i> pointsFromChnl2D( Mask chnl ) throws CreateException {
 		return PointsFromBinaryVoxelBox.pointsFromVoxelBox2D( chnl.binaryVoxelBox() );
 	}
 	
-	public static List<Point3i> pointsFromChnlInsideBox( BinaryChnl chnl, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices ) {
+	public static List<Point3i> pointsFromChnlInsideBox( Mask chnl, BoundingBox bbox, int startZ, int skipAfterSuccessiveEmptySlices ) {
 		
 		List<Point3i> listOut = new ArrayList<>();
 		

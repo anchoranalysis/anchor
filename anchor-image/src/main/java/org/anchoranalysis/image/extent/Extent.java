@@ -250,12 +250,12 @@ public final class Extent implements Serializable {
 		return z>=0 && z<getZ();
 	}
 	
-	public boolean contains( Point3d pnt ) {
-		return containsX(pnt.getX()) && containsY(pnt.getY()) && containsZ(pnt.getZ());
+	public boolean contains( Point3d point ) {
+		return containsX(point.getX()) && containsY(point.getY()) && containsZ(point.getZ());
 	}
 	
-	public boolean contains( ReadableTuple3i pnt ) {
-		return containsX(pnt.getX()) && containsY(pnt.getY()) && containsZ(pnt.getZ());
+	public boolean contains( ReadableTuple3i point ) {
+		return containsX(point.getX()) && containsY(point.getY()) && containsZ(point.getZ());
 	}
 	
 	public boolean contains( int x, int y, int z ) {

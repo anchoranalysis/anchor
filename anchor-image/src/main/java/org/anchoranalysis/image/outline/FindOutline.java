@@ -30,8 +30,8 @@ package org.anchoranalysis.image.outline;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlXor;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -59,10 +59,10 @@ public class FindOutline {
 	
 	private FindOutline() {}
 	
-	public static BinaryChnl outline( BinaryChnl chnl, boolean do3D, boolean erodeEdges ) {
+	public static Mask outline( Mask chnl, boolean do3D, boolean erodeEdges ) {
 		// We create a new image for output
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
-		BinaryChnl chnlOutBinary = new BinaryChnl(chnlOut, chnl.getBinaryValues());
+		Mask chnlOutBinary = new Mask(chnlOut, chnl.getBinaryValues());
 		
 		// Gets outline
 		outlineChnlInto( chnl, chnlOutBinary, do3D, erodeEdges );
@@ -94,7 +94,7 @@ public class FindOutline {
 	}
 		
 	// Assumes imgChnlOut has the same ImgChnlRegions
-	private static void outlineChnlInto( BinaryChnl imgChnl, BinaryChnl imgChnlOut, boolean do3D, boolean erodeEdges ) {
+	private static void outlineChnlInto( Mask imgChnl, Mask imgChnlOut, boolean do3D, boolean erodeEdges ) {
 
 		BinaryVoxelBox<ByteBuffer> box = new BinaryVoxelBoxByte( imgChnl.getVoxelBox(), imgChnl.getBinaryValues() );
 		

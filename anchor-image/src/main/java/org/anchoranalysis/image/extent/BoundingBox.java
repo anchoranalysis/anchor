@@ -411,7 +411,7 @@ public final class BoundingBox implements Serializable {
 		return (int) val;
 	}
 	
-	private static Point3i multiplyByTwo(Tuple3i pnt) {
-		return Point3i.immutableScale(pnt,2);
+	private static Point3i multiplyByTwo(Tuple3i point) {
+		return Point3i.immutableScale(point,2);
 	}
 }

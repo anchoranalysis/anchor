@@ -45,26 +45,26 @@ public final class RunningSumPoint {
 		delegate = new RunningSumCollection(3);
 	}
 
-	public void increment( Point2i pnt ) {
-		forDim(0).increment(pnt.getX());
-		forDim(1).increment(pnt.getY());
+	public void increment( Point2i point ) {
+		forDim(0).increment(point.getX());
+		forDim(1).increment(point.getY());
 	}
 	
-	public void increment( Point2d pnt ) {
-		forDim(0).increment(pnt.getX());
-		forDim(1).increment(pnt.getY());
+	public void increment( Point2d point ) {
+		forDim(0).increment(point.getX());
+		forDim(1).increment(point.getY());
 	}
 	
-	public void increment( Point3i pnt ) {
-		forDim(0).increment(pnt.getX());
-		forDim(1).increment(pnt.getY());
-		forDim(2).increment(pnt.getZ());
+	public void increment( Point3i point ) {
+		forDim(0).increment(point.getX());
+		forDim(1).increment(point.getY());
+		forDim(2).increment(point.getZ());
 	}
 	
-	public void increment( Point3d pnt ) {
-		forDim(0).increment(pnt.getX());
-		forDim(1).increment(pnt.getY());
-		forDim(2).increment(pnt.getZ());
+	public void increment( Point3d point ) {
+		forDim(0).increment(point.getX());
+		forDim(1).increment(point.getY());
+		forDim(2).increment(point.getZ());
 	}
 	
 	public Point3d mean() {

@@ -44,10 +44,10 @@ public final class Point3i extends Tuple3i {
 		this.z = z;
 	}
 	
-	public Point3i(ReadableTuple3i pnt) {
-		this.x = pnt.getX();
-		this.y = pnt.getY();
-		this.z = pnt.getZ();
+	public Point3i(ReadableTuple3i point) {
+		this.x = point.getX();
+		this.y = point.getY();
+		this.z = point.getZ();
 	}
 
 	@Override
@@ -61,10 +61,10 @@ public final class Point3i extends Tuple3i {
 	    return super.equals(obj);
 	}
 	
-	public int distanceSquared( Point3i pnt ) {
-		int sx = this.x - pnt.x;
-		int sy = this.y - pnt.y;
-		int sz = this.z - pnt.z;
+	public int distanceSquared( Point3i point ) {
+		int sx = this.x - point.x;
+		int sy = this.y - point.y;
+		int sz = this.z - point.z;
 		return (sx*sx) + (sy*sy) + (sz*sz);
 	}
 	
@@ -104,8 +104,8 @@ public final class Point3i extends Tuple3i {
 	}
 		
 	/** Performs a scale without changing any values in an existing point */
-	public static Point3i immutableScale(ReadableTuple3i pnt, int factor) {
-		Point3i pntDup = new Point3i(pnt);
+	public static Point3i immutableScale(ReadableTuple3i point, int factor) {
+		Point3i pntDup = new Point3i(point);
 		pntDup.scale(factor);
 		return pntDup;
 	}

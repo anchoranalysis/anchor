@@ -134,16 +134,16 @@ public class ApplyKernel {
 		
 		kernel.init(vb);
 		
-		ReadableTuple3i pntMax = bbox.calcCornerMax();
+		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pointMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pointMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pointMax.getX(); pnt.incrementX()) {
 					
 					int ind = extent.offset(pnt.getX(), pnt.getY());
 					cnt += kernel.countAtPos(ind, pnt);
@@ -179,16 +179,16 @@ public class ApplyKernel {
 		
 		kernel.init(vb);
 		
-		ReadableTuple3i pntMax = bbox.calcCornerMax();
+		ReadableTuple3i pointMax = bbox.calcCornerMax();
 		
 		Point3i pnt = new Point3i();
-		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pntMax.getZ(); pnt.incrementZ()) {
+		for (pnt.setZ(bbox.cornerMin().getZ()); pnt.getZ()<=pointMax.getZ(); pnt.incrementZ()) {
 
 			LocalSlices localSlices = new LocalSlices(pnt.getZ(),localSlicesSize, vb);
 			kernel.notifyZChange(localSlices, pnt.getZ());
 			
-			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pntMax.getY(); pnt.incrementY()) {
-				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pntMax.getX(); pnt.incrementX()) {
+			for (pnt.setY(bbox.cornerMin().getY()); pnt.getY()<=pointMax.getY(); pnt.incrementY()) {
+				for (pnt.setX(bbox.cornerMin().getX()); pnt.getX()<=pointMax.getX(); pnt.incrementX()) {
 					
 					int ind = extent.offsetSlice(pnt);
 					if (kernel.countAtPos(ind, pnt)>0) {

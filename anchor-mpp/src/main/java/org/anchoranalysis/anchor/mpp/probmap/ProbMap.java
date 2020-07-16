@@ -29,9 +29,9 @@ package org.anchoranalysis.anchor.mpp.probmap;
  */
 
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public interface ProbMap extends PointSampler {
 
-	BinaryChnl visualization() throws OptionalOperationUnsupportedException;
+	Mask visualization() throws OptionalOperationUnsupportedException;
 }

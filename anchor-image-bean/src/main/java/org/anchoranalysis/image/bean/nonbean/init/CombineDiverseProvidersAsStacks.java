@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderBridge;
 import org.anchoranalysis.core.name.provider.NamedProviderCombine;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
@@ -53,7 +53,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 	
 	private final NamedProvider<Stack> stacks;
 	private final NamedProvider<Channel> channels;
-	private final NamedProvider<BinaryChnl> masks;
+	private final NamedProvider<Mask> masks;
 	
 	@Getter
 	private final NamedProvider<Stack> combinedStackProvider;
@@ -61,7 +61,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 	public CombineDiverseProvidersAsStacks(
 		NamedProvider<Stack> stacks,
 		NamedProvider<Channel> channels,
-		NamedProvider<BinaryChnl> masks
+		NamedProvider<Mask> masks
 	) {
 		this.stacks = stacks;
 		this.channels = channels;
@@ -96,7 +96,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 		);
 	}
 	
-	private NamedProviderBridge<BinaryChnl,Stack> masksBridge() {
+	private NamedProviderBridge<Mask,Stack> masksBridge() {
 		return new NamedProviderBridge<>(
 			masks,
 			CombineDiverseProvidersAsStacks::stackFromBinary,
@@ -104,7 +104,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 		);
 	}
 
-	private static Stack stackFromBinary( BinaryChnl sourceObject ) {
+	private static Stack stackFromBinary( Mask sourceObject ) {
 		
 		Channel chnlNew = FACTORY.createEmptyInitialised( sourceObject.getDimensions() );
 		

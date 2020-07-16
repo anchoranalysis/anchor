@@ -62,13 +62,13 @@ public final class BoundingBoxContains {
 	}
 	
 	/** Is this point within the bounding-box? */
-	public boolean point( ReadableTuple3i pnt ) {
-		return x( pnt.getX() ) && y( pnt.getY() ) && z( pnt.getZ() );
+	public boolean point( ReadableTuple3i point ) {
+		return x( point.getX() ) && y( point.getY() ) && z( point.getZ() );
 	}
 
 	/** Is this point within the bounding-box, but ignoring the z-dimension? */
-	public boolean pointIgnoreZ( Point3i pnt )  {
-		return x( pnt.getX() ) && y( pnt.getY() );
+	public boolean pointIgnoreZ( Point3i point )  {
+		return x( point.getX() ) && y( point.getY() );
 	}
 	
 	/** Is this other bounding-box FULLY contained within this bounding box? */ 
