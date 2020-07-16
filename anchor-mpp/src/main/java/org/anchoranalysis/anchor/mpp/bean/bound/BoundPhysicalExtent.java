@@ -51,12 +51,12 @@ public class BoundPhysicalExtent extends BoundMinMax {
 	}
 	
 	@Override
-	public double getMinRslvd( ImageResolution sr, boolean do3D ) {
+	public double getMinResolved( ImageResolution sr, boolean do3D ) {
 		return getMin() / sr.min(do3D);
 	}
 	
 	@Override
-	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
+	public double getMaxResolved( ImageResolution sr, boolean do3D ) {
 		return getMax() / sr.min(do3D); 
 	}
 	

@@ -400,7 +400,7 @@ public class MarkEllipse extends MarkConic implements Serializable {
 	}
 	
 	@Override
-	public double[] createRadiiArrayRslvd( ImageResolution res ) {
+	public double[] createRadiiArrayResolved( ImageResolution res ) {
 		return twoElementArray( radii.getX(), radii.getY() );
 	}
 

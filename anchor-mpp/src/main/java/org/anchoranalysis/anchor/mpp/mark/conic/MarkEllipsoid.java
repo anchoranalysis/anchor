@@ -355,7 +355,7 @@ public class MarkEllipsoid extends MarkConic implements Serializable {
 	}
 	
 	@Override
-	public double[] createRadiiArrayRslvd( ImageResolution sr ) {
+	public double[] createRadiiArrayResolved( ImageResolution sr ) {
 		return EllipsoidUtilities.normalisedRadii( this, sr );
 	}
 	

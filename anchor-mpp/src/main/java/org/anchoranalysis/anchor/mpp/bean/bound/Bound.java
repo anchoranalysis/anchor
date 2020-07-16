@@ -41,8 +41,8 @@ public abstract class Bound extends MarkBounds {
 	
 	public abstract Bound duplicate();
 	
-	public RslvdBound rslv( ImageResolution sr, boolean do3D ) {
-		return new RslvdBound( getMinRslvd(sr, do3D), getMaxRslvd(sr, do3D) );
+	public ResolvedBound resolve( ImageResolution sr, boolean do3D ) {
+		return new ResolvedBound( getMinResolved(sr, do3D), getMaxResolved(sr, do3D) );
 	}
 		
 	public abstract void scale(double multFactor);

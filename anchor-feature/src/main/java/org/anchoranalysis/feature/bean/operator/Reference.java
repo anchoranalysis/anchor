@@ -52,8 +52,8 @@ public class Reference<T extends FeatureInput> extends FeatureOperator<T> {
 	@Override
 	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		// We resolve the ID before its passed to calcFeatureByID
-		String rslvdID = input.bySymbol().resolveFeatureID(id);
-		return input.bySymbol().calcFeatureByID(rslvdID, input);
+		String resolvedID = input.bySymbol().resolveFeatureID(id);
+		return input.bySymbol().calcFeatureByID(resolvedID, input);
 	}
 
 	@Override

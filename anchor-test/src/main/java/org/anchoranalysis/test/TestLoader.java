@@ -196,8 +196,8 @@ public class TestLoader {
 	 * @param testFolderPath path to a folder in the test-data (can be empty)
 	 */
 	public void printAllFilesFromTestFolderPath( String testFolderPath) {
-		Path folderPathRslvd = resolveTestPath( testFolderPath );
-		listDirectory( folderPathRslvd.toString(), 0 );
+		Path folderPathResolved = resolveTestPath( testFolderPath );
+		listDirectory( folderPathResolved.toString(), 0 );
 	}
 	
 	/**
@@ -207,8 +207,9 @@ public class TestLoader {
 	 * @return the XML document
 	 */
 	public Document openXmlFromTestPath( String testPath ) {
-		Path filePath = resolveTestPath( testPath);
-		return openXmlAbsoluteFilePath(filePath);
+		return openXmlAbsoluteFilePath(
+			resolveTestPath(testPath)
+		);
 	}
 	
 	/**

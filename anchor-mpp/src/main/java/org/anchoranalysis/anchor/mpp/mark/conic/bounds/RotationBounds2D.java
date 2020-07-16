@@ -48,7 +48,7 @@ public class RotationBounds2D extends RotationBounds {
 
 	@Override
 	public Orientation randomOrientation(RandomNumberGenerator re, ImageResolution res) {
-		return new Orientation2D( getRotationAngle().rslv(res, false).randOpen(re) );
+		return new Orientation2D( getRotationAngle().resolve(res, false).randOpen(re) );
 	}	
 	@Override
 	public String getBeanDscr() {

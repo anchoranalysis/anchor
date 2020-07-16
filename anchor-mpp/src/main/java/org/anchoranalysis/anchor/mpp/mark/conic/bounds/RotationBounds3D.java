@@ -74,7 +74,7 @@ public class RotationBounds3D extends RotationBounds {
 	}
 	
 	private static double randomizeRot(Bound bound, RandomNumberGenerator re, ImageResolution res) {
-		return bound.rslv(res, true).randOpen(re);
+		return bound.resolve(res, true).randOpen(re);
 	}
 	
 	public Bound getRotationX() {

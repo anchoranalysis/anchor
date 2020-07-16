@@ -41,11 +41,11 @@ public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Seria
 	 */
 	private static final long serialVersionUID = 0;
 	
-	public abstract double getMinRslvd( ImageResolution sr, boolean do3D );
+	public abstract double getMinResolved( ImageResolution sr, boolean do3D );
 	
-	public abstract double getMaxRslvd( ImageResolution sr, boolean do3D );
+	public abstract double getMaxResolved( ImageResolution sr, boolean do3D );
 
-	public RslvdBound calcMinMax( ImageResolution sr, boolean do3D ) {
-		return new RslvdBound( getMinRslvd(sr, do3D), getMaxRslvd(sr, do3D) );
+	public ResolvedBound calcMinMax( ImageResolution sr, boolean do3D ) {
+		return new ResolvedBound( getMinResolved(sr, do3D), getMaxResolved(sr, do3D) );
 	}
 }

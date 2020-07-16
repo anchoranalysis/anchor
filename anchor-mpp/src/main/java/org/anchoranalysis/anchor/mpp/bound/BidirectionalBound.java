@@ -2,7 +2,7 @@ package org.anchoranalysis.anchor.mpp.bound;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 
 /*-
  * #%L
@@ -32,10 +32,10 @@ import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 
 public class BidirectionalBound {
 
-	private final Optional<RslvdBound> forward;
-	private final Optional<RslvdBound> reverse;
+	private final Optional<ResolvedBound> forward;
+	private final Optional<ResolvedBound> reverse;
 	
-	public BidirectionalBound(Optional<RslvdBound> forward, Optional<RslvdBound> reverse) {
+	public BidirectionalBound(Optional<ResolvedBound> forward, Optional<ResolvedBound> reverse) {
 		super();
 		this.forward = forward;
 		this.reverse = reverse;
@@ -106,11 +106,11 @@ public class BidirectionalBound {
 		return maxBoth / minBoth;
 	}
 		
-	public Optional<RslvdBound> getForward() {
+	public Optional<ResolvedBound> getForward() {
 		return forward;
 	}
 
-	public Optional<RslvdBound> getReverse() {
+	public Optional<ResolvedBound> getReverse() {
 		return reverse;
 	}
 }

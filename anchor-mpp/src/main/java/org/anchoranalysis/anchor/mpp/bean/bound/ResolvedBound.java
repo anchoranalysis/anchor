@@ -33,8 +33,14 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /** A bound resolved into pixel units */
-public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
+@NoArgsConstructor @AllArgsConstructor
+public class ResolvedBound extends AnchorBean<ResolvedBound> implements Serializable {
 
 	/**
 	 * 
@@ -42,23 +48,14 @@ public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double min = 0.0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double max = 1.0;
 	// END BEAN PROPERTIES
 	
-	/** Standard bean constructor */
-	public RslvdBound() {}
-	
-	public RslvdBound(double min, double max) {
-		super();
-		this.min = min;
-		this.max = max;
-	}
-	
-	public RslvdBound( RslvdBound src ) {
+	public ResolvedBound( ResolvedBound src ) {
 		this.min = src.min;
 		this.max = src.max;
 	}
@@ -66,26 +63,9 @@ public class RslvdBound extends AnchorBean<RslvdBound> implements Serializable {
 	public boolean contains( double val ) {
 		return (val>=min && val <=max);
 	}
-	
-	// Getters and Setters
-	public double getMin() {
-		return min;
-	}
-
-	public void setMin(double min) {
-		this.min = min;
-	}
-
-	public double getMax() {
-		return max;
-	}
-
-	public void setMax(double max) {
-		this.max = max;
-	}
 
 	public String getDscr() {
-		return String.format("rslvdBound(min=%f,max=%f)", getMin(), getMax());
+		return String.format("resolvedBound(min=%f,max=%f)", getMin(), getMax());
 	}
 	
 	public void scale( double multFactor ) {

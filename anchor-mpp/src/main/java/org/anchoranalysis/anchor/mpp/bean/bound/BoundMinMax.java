@@ -39,19 +39,19 @@ public abstract class BoundMinMax extends Bound {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private RslvdBound delegate;
+	private ResolvedBound delegate;
 	// END BEAN PROPERTIES
 	
 	public BoundMinMax() {
-		delegate = new RslvdBound();
+		delegate = new ResolvedBound();
 	}
 	
 	public BoundMinMax( double min, double max ) {
-		delegate = new RslvdBound(min,max);
+		delegate = new ResolvedBound(min,max);
 	}
 	
 	public BoundMinMax( BoundMinMax src ) {
-		delegate = new RslvdBound(src.delegate);
+		delegate = new ResolvedBound(src.delegate);
 	}
 
 	// Getters and Setters
@@ -81,11 +81,11 @@ public abstract class BoundMinMax extends Bound {
 		delegate.scale(multFactor);
 	}
 
-	public RslvdBound getDelegate() {
+	public ResolvedBound getDelegate() {
 		return delegate;
 	}
 
-	public void setDelegate(RslvdBound delegate) {
+	public void setDelegate(ResolvedBound delegate) {
 		this.delegate = delegate;
 	}
 }

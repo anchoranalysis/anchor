@@ -57,6 +57,6 @@ public class RadiiRandomizer {
 	}
 	
 	private static double randomizeRadius(Bound radiusBound, RandomNumberGenerator re, ImageResolution sr ) {
-		return radiusBound.rslv(sr, true).randOpen( re );
+		return radiusBound.resolve(sr, true).randOpen( re );
 	}
 }

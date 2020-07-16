@@ -49,12 +49,12 @@ public class BoundDegrees extends BoundMinMax {
 	}
 	
 	@Override
-	public double getMinRslvd( ImageResolution sr, boolean do3D ) {
+	public double getMinResolved( ImageResolution sr, boolean do3D ) {
 		return AngleConversionUtilities.convertDegreesToRadians( getMin() );
 	}
 	
 	@Override
-	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
+	public double getMaxResolved( ImageResolution sr, boolean do3D ) {
 		return AngleConversionUtilities.convertDegreesToRadians( getMax() );
 	}
 	

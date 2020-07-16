@@ -76,13 +76,13 @@ public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 	}
 	
 	@Override
-	public double getMinRslvd( ImageResolution sr, boolean do3D ) {
-		return radius.getMinRslvd(sr, do3D);
+	public double getMinResolved( ImageResolution sr, boolean do3D ) {
+		return radius.getMinResolved(sr, do3D);
 	}
 	
 	@Override
-	public double getMaxRslvd( ImageResolution sr, boolean do3D ) {
-		return radius.getMaxRslvd(sr, do3D);
+	public double getMaxResolved( ImageResolution sr, boolean do3D ) {
+		return radius.getMaxResolved(sr, do3D);
 	}
 	
 

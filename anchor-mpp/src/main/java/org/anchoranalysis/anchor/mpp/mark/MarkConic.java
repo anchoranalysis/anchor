@@ -48,7 +48,7 @@ public abstract class MarkConic extends MarkAbstractPosition {
 		super(src);
 	}
 
-	public abstract double[] createRadiiArrayRslvd( ImageResolution sr );
+	public abstract double[] createRadiiArrayResolved( ImageResolution sr );
 	
 	public abstract double[] createRadiiArray();
 	
@@ -58,8 +58,8 @@ public abstract class MarkConic extends MarkAbstractPosition {
 	
 	public abstract void setMarksExplicit( Point3d pos );
 	
-	public double[] radiiOrderedRslvd( ImageResolution sr ) {
-		double[] radii = createRadiiArrayRslvd( sr );
+	public double[] radiiOrderedResolved( ImageResolution sr ) {
+		double[] radii = createRadiiArrayResolved( sr );
 		Arrays.sort( radii );
 		return radii;
 	}

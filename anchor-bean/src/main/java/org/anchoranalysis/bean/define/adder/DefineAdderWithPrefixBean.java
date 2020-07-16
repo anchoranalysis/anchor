@@ -34,6 +34,9 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Adds a prefix
  * 
@@ -44,12 +47,12 @@ public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {
 
 	// START BEAN PROPERTIES
 	/** A prefix that is placed before the name of every bean created */
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String prefix = "";
 	// END BEAN PROPERTIES
 		
 	protected void addWithName( Define define, String name, AnchorBean<?> item) throws BeanXmlException {
-		NamedBean<?> nb = new NamedBean<>( rslvName(name), item);
+		NamedBean<?> nb = new NamedBean<>( resolveName(name), item);
 		try {
 			define.add(nb);
 		} catch (OperationFailedException e) {
@@ -58,15 +61,7 @@ public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {
 	}
 	
 	/** Adds a prefix before the name */
-	protected String rslvName( String name ) {
+	protected String resolveName( String name ) {
 		return prefix + name;
-	}
-	
-	public String getPrefix() {
-		return prefix;
-	}
-
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
 	}
 }
