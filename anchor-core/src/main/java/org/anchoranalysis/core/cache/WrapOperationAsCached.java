@@ -1,4 +1,3 @@
-/* (C)2020 */
 package org.anchoranalysis.core.cache;
 
 import org.anchoranalysis.core.functional.Operation;

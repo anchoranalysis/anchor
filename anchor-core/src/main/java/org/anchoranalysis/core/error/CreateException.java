@@ -1,4 +1,3 @@
-/* (C)2020 */
 package org.anchoranalysis.core.error;
 
 import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
