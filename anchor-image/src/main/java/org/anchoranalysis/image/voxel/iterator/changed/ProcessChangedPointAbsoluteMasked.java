@@ -37,7 +37,7 @@ import java.nio.ByteBuffer;
 public interface ProcessChangedPointAbsoluteMasked<T> {
 
 	/**
-	 * The value and offset for the source point (around which we process neighbours)
+	 * The value and offset for the source point (around which we process neighbors)
 	 * 
 	 * <p>This function should always be called before {@link processPoint}</p>
 	 * <p>It can be called repeatedly for different points (resetting state each time).</p>
@@ -53,6 +53,6 @@ public interface ProcessChangedPointAbsoluteMasked<T> {
 	/** Processes a particular point */
 	boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset );
 	
-	/** Collects the result of the operation after processing neighbour pixels */
+	/** Collects the result of the operation after processing neighbor pixels */
 	public abstract T collectResult();
 }

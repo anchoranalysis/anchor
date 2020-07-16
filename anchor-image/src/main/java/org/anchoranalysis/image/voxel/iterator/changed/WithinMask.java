@@ -35,13 +35,13 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Processes only neighbouring voxels that lie on a mask.
+ * Processes only neighboring voxels that lie on a mask.
  * 
  * @author Owen Feehan
  *
  * @param <T> result-type that can be collected after processing
  */
-final class WithinMask<T> implements ProcessVoxelNeighbour<T> {
+final class WithinMask<T> implements ProcessVoxelNeighbor<T> {
 
 	private final ProcessChangedPointAbsoluteMasked<T> delegate;
 	private final ObjectMask object;

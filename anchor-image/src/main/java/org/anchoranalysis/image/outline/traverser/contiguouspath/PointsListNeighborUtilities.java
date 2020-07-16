@@ -36,15 +36,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class PointsListNeighborUtilities {
 	
-	/** Are all points in a list neighbouring the next point in the list? */
-	public static boolean areAllPointsInBigNghb( List<Point3i> list ) {
+	/** Are all points in a list neighboring the next point in the list? */
+	public static boolean areAllPointsInBigNeighborhood( List<Point3i> list ) {
 		for( int i=0; i<list.size(); i++) {
 			if (i!=0) {
 				
 				Point3i first = list.get(i-1);
 				Point3i second = list.get(i);
 					
-				if(!arePointsNghb(first, second)) {
+				if(!arePointsNeighbors(first, second)) {
 					return false;
 				}
 			}
@@ -52,8 +52,8 @@ public class PointsListNeighborUtilities {
 		return true;
 	}
 	
-	/** Makes sure no successive neighbours are equal */
-	public static boolean areNghbDistinct( List<Point3i> list ) {
+	/** Makes sure no successive neighbors are equal */
+	public static boolean areNeighborsDistinct( List<Point3i> list ) {
 		for( int i=0; i<list.size(); i++) {
 			if (i!=0) {
 				
@@ -68,7 +68,7 @@ public class PointsListNeighborUtilities {
 		return true;
 	}
 	
-	public static boolean arePointsNghb( Point3i point1, Point3i point2 ) {
+	public static boolean arePointsNeighbors( Point3i point1, Point3i point2 ) {
 		if (point1.equals(point2)) {
 			return false;
 		}

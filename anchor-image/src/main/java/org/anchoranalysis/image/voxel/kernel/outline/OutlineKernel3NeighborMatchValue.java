@@ -36,14 +36,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 // Keeps any on pixel that touches an off pixel where the off pixel has a corresponding HIGH value in vbRequireHigh
-public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
+public class OutlineKernel3NeighborMatchValue extends OutlineKernel3Base {
 	
 	private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
 	private LocalSlices localSlicesRequireHigh;
 	private BinaryValuesByte bvRequireHigh;
 	private ObjectMask object;
 	
-	public OutlineKernel3NghbMatchValue(
+	public OutlineKernel3NeighborMatchValue(
 		boolean outsideAtThreshold,
 		boolean useZ,
 		ObjectMask object,
@@ -61,7 +61,7 @@ public class OutlineKernel3NghbMatchValue extends OutlineKernel3Base {
 	}
 	
 	// Constructor
-	private OutlineKernel3NghbMatchValue(
+	private OutlineKernel3NeighborMatchValue(
 		BinaryValuesByte bv,
 		boolean outsideAtThreshold,
 		boolean useZ,

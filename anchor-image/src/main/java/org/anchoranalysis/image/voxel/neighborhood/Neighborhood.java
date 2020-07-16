@@ -1,6 +1,6 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.neighborhood;
 
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 
 /*
  * #%L
@@ -29,7 +29,7 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
  */
 
 
-public interface Nghb {
+public interface Neighborhood {
 
-	void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> testNghb);
+	void processAllPointsInNeighborhood(boolean do3D, ProcessVoxelNeighbor<?> processNeighbor);
 }

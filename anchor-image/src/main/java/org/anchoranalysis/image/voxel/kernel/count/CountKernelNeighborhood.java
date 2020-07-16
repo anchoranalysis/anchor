@@ -31,16 +31,16 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
 /**
- * For every voxel on the outline, count ALL neighbours that are adjacent, including those lying outside the scene.
+ * For every voxel on the outline, count ALL neighbors that are adjacent, including those lying outside the scene.
  * 
- * Neighbouring voxels can be counted more than once.
+ * Neighbouing voxels can be counted more than once.
  * 
  * @author Owen Feehan
  *
  */
-public class CountKernelNghb extends CountKernelNghbBase {
+public class CountKernelNeighborhood extends CountKernelNeighborhoodBase {
 
-	public CountKernelNghb(
+	public CountKernelNeighborhood(
 		boolean useZ,
 		BinaryValuesByte bv,
 		boolean multipleMatchesPerVoxel
@@ -49,7 +49,7 @@ public class CountKernelNghb extends CountKernelNghbBase {
 	}
 
 	@Override
-	protected boolean isNghbVoxelAccepted(Point3i point, int xShift, int yShift,
+	protected boolean isNeighborVoxelAccepted(Point3i point, int xShift, int yShift,
 			int zShift, Extent extent) {
 		return true;
 	}

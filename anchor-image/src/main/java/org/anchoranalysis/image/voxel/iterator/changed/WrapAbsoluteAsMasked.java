@@ -29,15 +29,15 @@ package org.anchoranalysis.image.voxel.iterator.changed;
 import java.nio.ByteBuffer;
 
 /** 
- * Wraps a {@link ProcessVoxelNeighbourAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
+ * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
  *
  * @param <T> result-type that can be collected after processing
  **/
 public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
 
-	private final ProcessVoxelNeighbourAbsolute<T> delegate;
+	private final ProcessVoxelNeighborAbsolute<T> delegate;
 	
-	public WrapAbsoluteAsMasked(ProcessVoxelNeighbourAbsolute<T> delegate) {
+	public WrapAbsoluteAsMasked(ProcessVoxelNeighborAbsolute<T> delegate) {
 		super();
 		this.delegate = delegate;
 	}

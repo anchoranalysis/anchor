@@ -40,14 +40,14 @@ import org.anchoranalysis.image.extent.Extent;
  * @author Owen Feehan
  *
  */
-final class WithinExtent<T> implements ProcessVoxelNeighbour<T> {
+final class WithinExtent<T> implements ProcessVoxelNeighbor<T> {
 
 	private final Extent extent;
-	private final ProcessVoxelNeighbourAbsolute<T> delegate;
+	private final ProcessVoxelNeighborAbsolute<T> delegate;
 	
 	private Point3i point;
 	
-	public WithinExtent( Extent extent, ProcessVoxelNeighbourAbsolute<T> processAbsolutePoint ) {
+	public WithinExtent( Extent extent, ProcessVoxelNeighborAbsolute<T> processAbsolutePoint ) {
 		this.extent = extent;
 		this.delegate = processAbsolutePoint;
 	}

@@ -46,21 +46,21 @@ public class CombineToOnePath {
 			// DO NOTHING
 		}
 	
-		chopIfNeccessaryToMakeNghbs( paths.get(0) );
+		chopIfNeccessaryToMakeNeighbors( paths.get(0) );
 		return paths.get(0);
 	}
 	
-	private static void chopIfNeccessaryToMakeNghbs( ContiguousPixelPath singlePath ) throws OperationFailedException {
+	private static void chopIfNeccessaryToMakeNeighbors( ContiguousPixelPath singlePath ) throws OperationFailedException {
 		
-		// If the start and end of the path aren't neighbours we should chop
-		//  off whatever is necessary to make them neighbours
+		// If the start and end of the path aren't neighbors we should chop
+		//  off whatever is necessary to make them neighbors
 		if (!areHeadTailConnected(singlePath) && !EnsureContiguousPathLoops.apply(singlePath)) {
 			throw new OperationFailedException("head() and tail() of outline are not neigbours");
 		}
 	}
 			
 	private static boolean areHeadTailConnected(ContiguousPixelPath path) {
-		return PointsListNeighborUtilities.arePointsNghb(
+		return PointsListNeighborUtilities.arePointsNeighbors(
 			path.head(),
 			path.tail()
 		);

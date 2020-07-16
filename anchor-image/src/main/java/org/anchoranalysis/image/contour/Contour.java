@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import lombok.Getter;
 
 /**
- * A path of successively-neighbouring points along the edge of an object
+ * A path of successively-neighboring points along the edge of an object
  * 
  * @author Owen Feehan
  *

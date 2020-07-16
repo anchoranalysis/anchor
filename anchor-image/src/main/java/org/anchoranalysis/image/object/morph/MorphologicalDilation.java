@@ -67,7 +67,7 @@ public class MorphologicalDilation {
 		Optional<Extent> extent,
 		boolean do3D,
 		int iterations,
-		boolean bigNghb
+		boolean bigNeighborhood
 	) throws CreateException {
 		
 		Point3i grow = do3D ? new Point3i(iterations,iterations,iterations) : new Point3i(iterations,iterations,0);
@@ -75,14 +75,14 @@ public class MorphologicalDilation {
 		try {
 			ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
 			return objectGrown.replaceVoxels(
-				dilate(objectGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNghb).getVoxelBox()
+				dilate(objectGrown.binaryVoxelBox(), do3D, iterations, null, 0, bigNeighborhood).getVoxelBox()
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException("Cannot grow object-mask", e);
 		}
 	}
 
-	public static BinaryVoxelBox<ByteBuffer> dilate( BinaryVoxelBox<ByteBuffer> bvb, boolean do3D, int iterations, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean bigNghb ) throws CreateException {
+	public static BinaryVoxelBox<ByteBuffer> dilate( BinaryVoxelBox<ByteBuffer> bvb, boolean do3D, int iterations, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean bigNeighborhood ) throws CreateException {
 		return dilate(
 			bvb,
 			do3D,
@@ -92,7 +92,7 @@ public class MorphologicalDilation {
 			false,
 			false,
 			Optional.empty(),
-			bigNghb
+			bigNeighborhood
 		);
 	}
 	
@@ -102,7 +102,7 @@ public class MorphologicalDilation {
 	 * TODO: merge do3D and zOnly parameters into an enum
 	 * 
 	 * @param bvb input-buffer
-	 * @param do3D if TRUE, 6-neighbourhood dilation, otherwise 4-neighnrouhood
+	 * @param do3D if TRUE, 6-neighborhood dilation, otherwise 4-neighnrouhood
 	 * @param iterations number of dilations
 	 * @param backgroundVb optional background-buffer that can influence the dilation with the minIntensityValue
 	 * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
@@ -121,7 +121,7 @@ public class MorphologicalDilation {
 		boolean zOnly,
 		boolean outsideAtThreshold,
 		Optional<AcceptIterationConditon> acceptConditions,
-		boolean bigNghb
+		boolean bigNeighborhood
 	) throws CreateException {
 		
 		BinaryKernel kernelDilation = createDilationKernel(
@@ -131,7 +131,7 @@ public class MorphologicalDilation {
 			minIntensityValue,
 			zOnly,
 			outsideAtThreshold,
-			bigNghb
+			bigNeighborhood
 		);
 		
 		VoxelBox<ByteBuffer> buf = bvb.getVoxelBox();
@@ -151,19 +151,19 @@ public class MorphologicalDilation {
 		return new BinaryVoxelBoxByte(buf, bvb.getBinaryValues() );
 	}
 		
-	private static BinaryKernel createDilationKernel( BinaryValuesByte bv, boolean do3D, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean zOnly, boolean outsideAtThreshold, boolean bigNghb ) throws CreateException {
+	private static BinaryKernel createDilationKernel( BinaryValuesByte bv, boolean do3D, Optional<VoxelBox<ByteBuffer>> backgroundVb, int minIntensityValue, boolean zOnly, boolean outsideAtThreshold, boolean bigNeighborhood ) throws CreateException {
 
 		BinaryKernel kernelDilation;
 		
 		if (zOnly) {
 			
-			if (bigNghb) {
-				throw new CreateException("BigNghb not supported for zOnly");
+			if (bigNeighborhood) {
+				throw new CreateException("Big-neighborhood not supported for zOnly");
 			}
 			
 			kernelDilation = new DilationKernel3ZOnly( bv, outsideAtThreshold);
 		} else {
-			kernelDilation = new DilationKernel3( bv, outsideAtThreshold, do3D, bigNghb);
+			kernelDilation = new DilationKernel3( bv, outsideAtThreshold, do3D, bigNeighborhood);
 		}
 		
 		// TODO HACK FIX , how we handle the different regions

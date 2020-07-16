@@ -1,6 +1,6 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.neighborhood;
 
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 
 import lombok.AllArgsConstructor;
 
@@ -39,11 +39,11 @@ import lombok.AllArgsConstructor;
  *
  */
 @AllArgsConstructor
-public final class BigNghb implements Nghb {
+final class BigNeighborhood implements Neighborhood {
 	
 	private final boolean includeCenterPoint;
 	
-	public BigNghb() {
+	public BigNeighborhood() {
 		this.includeCenterPoint = false;
 	}
 	
@@ -54,7 +54,7 @@ public final class BigNghb implements Nghb {
 	 * <p>Apologies that it is difficult to read with high cognitive-complexity.</p>
 	 */
 	@Override
-	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> process) {
+	public void processAllPointsInNeighborhood(boolean do3D, ProcessVoxelNeighbor<?> process) {
 		
 		if (do3D) {
 			

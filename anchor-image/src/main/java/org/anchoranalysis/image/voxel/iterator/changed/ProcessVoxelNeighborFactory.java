@@ -31,9 +31,12 @@ import java.util.Optional;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
-public class ProcessVoxelNeighbourFactory {
+import lombok.AccessLevel;
 
-	private ProcessVoxelNeighbourFactory() {}
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class ProcessVoxelNeighborFactory {
 	
 	/**
 	 * Within either a mask or an extent (as a fallback)
@@ -43,7 +46,7 @@ public class ProcessVoxelNeighbourFactory {
 	 * @param process a process which will be wrapped inside a restriction
 	 * @return a new process with a restriction on the existing process
 	 */
-	public static<T> ProcessVoxelNeighbour<T> within(Optional<ObjectMask> containingMask, Extent extentFallback, ProcessVoxelNeighbourAbsolute<T> process) {
+	public static<T> ProcessVoxelNeighbor<T> within(Optional<ObjectMask> containingMask, Extent extentFallback, ProcessVoxelNeighborAbsolute<T> process) {
 		return containingMask.map( mask->
 			withinMask(mask, process)
 		).orElseGet( ()->
@@ -51,25 +54,25 @@ public class ProcessVoxelNeighbourFactory {
 		);
 	}
 		
-	public static <T> ProcessVoxelNeighbour<T> withinExtent(ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> process) {
+	public static <T> ProcessVoxelNeighbor<T> withinExtent(ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T> process) {
 		return withinExtent(
 			process.getExtent(),
 			process
 		);
 	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask object, ProcessChangedPointAbsoluteMasked<T> process) {
+	public static <T> ProcessVoxelNeighbor<T> withinMask(ObjectMask object, ProcessChangedPointAbsoluteMasked<T> process) {
 		return new WithinMask<>(process, object);
 	}
 	
-	public static <T> ProcessVoxelNeighbour<T> withinMask(ObjectMask object, ProcessVoxelNeighbourAbsolute<T> process) {
+	public static <T> ProcessVoxelNeighbor<T> withinMask(ObjectMask object, ProcessVoxelNeighborAbsolute<T> process) {
 		return new WithinMask<>(
 			new WrapAbsoluteAsMasked<>(process),
 			object
 		);
 	}
 		
-	private static <T> ProcessVoxelNeighbour<T> withinExtent(Extent extent, ProcessVoxelNeighbourAbsolute<T> process) {
+	private static <T> ProcessVoxelNeighbor<T> withinExtent(Extent extent, ProcessVoxelNeighborAbsolute<T> process) {
 		return new WithinExtent<>(extent, process);
 	}
 }

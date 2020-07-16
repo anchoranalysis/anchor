@@ -46,16 +46,16 @@ public class CreateFromConnectedComponentsFactory {
 		this(false);
 	}
 	
-	public CreateFromConnectedComponentsFactory(boolean bigNghb) {
-		this(bigNghb, 1);
+	public CreateFromConnectedComponentsFactory(boolean bigNeighborhood) {
+		this(bigNeighborhood, 1);
 	}
 	
 	public CreateFromConnectedComponentsFactory(int minNumberVoxels) {
 		this(false, minNumberVoxels);
 	}
 	
-	public CreateFromConnectedComponentsFactory(boolean bigNghb, int minNumberVoxels) {
-		unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNghb);
+	public CreateFromConnectedComponentsFactory(boolean bigNeighborhood, int minNumberVoxels) {
+		unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNeighborhood);
 	}
 	
 	public ObjectCollection createConnectedComponents( Mask chnl ) throws CreateException {

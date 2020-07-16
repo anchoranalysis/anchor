@@ -36,16 +36,16 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 // Erosion with a 3x3 or 3x3x3 kernel
 public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 	
-	private boolean bigNghb;
+	private boolean bigNeighborhood;
 	
 	// Constructor
-	public DilationKernel3(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ, boolean bigNghb) throws CreateException {
+	public DilationKernel3(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ, boolean bigNeighborhood) throws CreateException {
 		super(bv, outsideAtThreshold, useZ);
-		this.bigNghb = bigNghb;
+		this.bigNeighborhood = bigNeighborhood;
 		
-		if (useZ && bigNghb) {
+		if (useZ && bigNeighborhood) {
 			throw new CreateException(
-				"useZ and bigNghb cannot be simultaneously true, as this mode is not currently supported"
+				"useZ and bigNeighborhood cannot be simultaneously true, as this mode is not currently supported"
 			);
 		}
 	}
@@ -129,7 +129,7 @@ public final class DilationKernel3 extends BinaryKernelMorph3Extent {
 		ind -= xLength;
 		
 		
-		if (bigNghb) {
+		if (bigNeighborhood) {
 			
 			// x-1, y-1
 			

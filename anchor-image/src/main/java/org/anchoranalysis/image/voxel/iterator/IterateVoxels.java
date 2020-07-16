@@ -38,8 +38,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
-import org.anchoranalysis.image.voxel.nghb.Nghb;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 
 /**
  * Iterate over voxels in an extent/bounding-box/mask calling a processor on each selected voxel
@@ -346,17 +346,17 @@ public class IterateVoxels {
 	}
 	
 	/**
-	 * Iterate over each point in the neighbourhood of an existing point - also setting the source of a delegate
+	 * Iterate over each point in the neighborhood of an existing point - also setting the source of a delegate
 	 * 
-	 * @param sourcePoint the point to iterate over its neighbourhood
-	 * @param nghb a definition of what constitutes the neighbourhood
+	 * @param sourcePoint the point to iterate over its neighborhood
+	 * @param neighborhood a definition of what constitutes the neighborhood
 	 * @param do3D whether to iterate in 2D or 3D
-	 * @param process is called for each voxel in the neighbourhood of the source-point.
-	 * @return the result after processing each point in the neighbourhood
+	 * @param process is called for each voxel in the neighborhood of the source-point.
+	 * @return the result after processing each point in the neighborhood
 	 */
-	public static <T> T callEachPointInNghb( Point3i sourcePoint, Nghb nghb, boolean do3D, ProcessVoxelNeighbour<T> process, int sourceVal, int sourceOffsetXY) {
+	public static <T> T callEachPointInNeighborhood( Point3i sourcePoint, Neighborhood neighborhood, boolean do3D, ProcessVoxelNeighbor<T> process, int sourceVal, int sourceOffsetXY) {
 		process.initSource(sourcePoint, sourceVal, sourceOffsetXY);
-		nghb.processAllPointsInNghb(do3D, process);
+		neighborhood.processAllPointsInNeighborhood(do3D, process);
 		return process.collectResult();
 	}
 		

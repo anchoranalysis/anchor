@@ -40,7 +40,7 @@ class Point3iWithDistance {
 	@Getter
 	private final int distance;
 	
-	// If non-null, this is a point that is a neighbour but
+	// If non-null, this is a point that is a neighbor but
 	//   is disallowed from being on the same contiguous path
 	@Getter
 	private Point3i connPoint = null;

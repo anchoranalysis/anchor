@@ -36,7 +36,7 @@ import org.anchoranalysis.image.outline.traverser.visitedpixels.LoopablePoints;
 
 import lombok.Getter;
 
-/** A list of visited pixels which forms one contiguous path (each pixel neighbours each other) */
+/** A list of visited pixels which forms one contiguous path (each pixel neighbors each other) */
 public class ContiguousPixelPath {
 	
 	private List<Point3i> list;
@@ -73,7 +73,7 @@ public class ContiguousPixelPath {
 	}
 	
 	/**
-	 * Adds the point to the closest end of the path....  but only if it neighbours the head or the tail
+	 * Adds the point to the closest end of the path....  but only if it neighbors the head or the tail
 	 * 
 	 * @param point the point to add
 	 * @return TRUE if point was successfully added, FALSE if the point could not be added
@@ -145,12 +145,12 @@ public class ContiguousPixelPath {
 		);
 	}
 	
-	/** Inserts points before existing path. Does not check if they are neighbours. */
+	/** Inserts points before existing path. Does not check if they are neighbors. */
 	public void insertBefore( List<Point3i> points ) {
 		list.addAll(0, points);
 	}
 	
-	/** Inserts points at end of existing path. Does not check if they are neighbours. */
+	/** Inserts points at end of existing path. Does not check if they are neighbors. */
 	public void insertAfter( List<Point3i> points ) {
 		list.addAll(points);
 	}

@@ -37,15 +37,15 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-/** Makes sure the head() and tail() of a ContiguousPath are neighbours */
+/** Makes sure the head() and tail() of a ContiguousPath are neighbors */
 class EnsureContiguousPathLoops {
 	
 	private EnsureContiguousPathLoops() {}
 	
-	/** Ensures the head() and tail() of a path are neighbours, chopping off points if appropriate */
+	/** Ensures the head() and tail() of a path are neighbors, chopping off points if appropriate */
 	public static boolean apply(ContiguousPixelPath path) {
 		
-		// Look for all points on the path which neighbour each other
+		// Look for all points on the path which neighbor each other
 		// Consider all possibilities, and implement the cut that removes the minimal pixels
 		IndexOffsets offsets = new FindMinimum(path).apply();
 		
@@ -137,8 +137,8 @@ class EnsureContiguousPathLoops {
 			}
 			
 			if (minCostIndexes.left()==-1) {
-				// We failed to find any neighbouring points to cut with
-				// This should never happen, as long as there are at least two neighbouring points
+				// We failed to find any neighboring points to cut with
+				// This should never happen, as long as there are at least two neighboring points
 				throw new AnchorImpossibleSituationException();
 			}
 			
@@ -147,7 +147,7 @@ class EnsureContiguousPathLoops {
 		
 		private void maybeUpdate( int i, int j, Point3i pointLeft, Point3i pointRight ) {
 
-			if (PointsListNeighborUtilities.arePointsNghb(pointLeft, pointRight)) {
+			if (PointsListNeighborUtilities.arePointsNeighbors(pointLeft, pointRight)) {
 				
 				// Then it's possible we make these two points the head and tail of 
 				//   the list. This would cost us a certain number of pixels, that

@@ -220,10 +220,10 @@ public class SetUpdatable extends UpdatablePointsContainer {
 	
 	
 	public void addPointsInMark(MemoForIndex marksExisting, VoxelizedMarkMemo markToAdd) {
-		// We add any points in our new mark to the set, but only if there's not already a neighbour covering them
+		// We add any points in our new mark to the set, but only if there's not already a neighbor covering them
 		
 		// So our first step is to identify any overlapping marks
-		List<VoxelizedMarkMemo> neighbours = findNeighbours(marksExisting, markToAdd);
+		List<VoxelizedMarkMemo> neighbors = findNeighbors(marksExisting, markToAdd);
 		
 		VoxelizedMark pxlMark = markToAdd.voxelized();
 		
@@ -252,7 +252,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 				bvb,
 				zGlobal,
 				rm,
-				neighbours
+				neighbors
 			);
 		}
 	}
@@ -266,7 +266,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		BinaryValuesByte bvb,
 		int zGlobal,
 		RegionMembership rm,
-		List<VoxelizedMarkMemo> neighbours
+		List<VoxelizedMarkMemo> neighbors
 	) {
 		byte flags = rm.flags();
 		
@@ -283,8 +283,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
 					
 					Point3d pointGlobal = new Point3d( xGlobal, yGlobal, zGlobal );
 					
-					// Now we check to make sure the point isn't contained in any of its neighbours
-					if (!isPointInList(neighbours, pointGlobal)) {
+					// Now we check to make sure the point isn't contained in any of its neighbors
+					if (!isPointInList(neighbors, pointGlobal)) {
 						setPoints.add(pointGlobal);	
 					}
 				}
@@ -293,7 +293,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
 		
 	}
 
-	private List<VoxelizedMarkMemo> findNeighbours( MemoForIndex all, VoxelizedMarkMemo source) {
+	private List<VoxelizedMarkMemo> findNeighbors( MemoForIndex all, VoxelizedMarkMemo source) {
 		
 		ArrayList<VoxelizedMarkMemo> list = new ArrayList<>();
 			

@@ -66,9 +66,9 @@ public class OutlineTraverser {
 	private final boolean useZ;
 	
 	/**
-	 * Whether to use bigger neighbourhoods (8 instead of 4, 12 instead of 6 etc.)
+	 * Whether to use bigger neighborhoods (8 instead of 4, 12 instead of 6 etc.)
 	 */
-	private final boolean nghb8;
+	private final boolean bigNeighborhood;
 	
 	/**
 	 * Root point is arbitrarily chosen from object
@@ -134,7 +134,7 @@ public class OutlineTraverser {
 		
 		Point3i point = pointWithDistance.getPoint();
 
-		List<Point3iWithDistance> localQueue = considerNghbs( point, pointWithDistance.getDistance() );
+		List<Point3iWithDistance> localQueue = considerNeighbors( point, pointWithDistance.getDistance() );
 				
 		if (pointWithDistance.isForceNewPath()) {
 			visitedPixels.addNewPath(point, pointWithDistance.getConnPoint() );
@@ -142,7 +142,7 @@ public class OutlineTraverser {
 			visitedPixels.addVisitedPoint(point);
 		}
 		
-		// If there is more than one neighbour, we make sure that a new path is created when it is visited
+		// If there is more than one neighbor, we make sure that a new path is created when it is visited
 		if (localQueue.size()>1) {
 			queue.addAllWithConn( localQueue, point );
 		} else {
@@ -150,7 +150,7 @@ public class OutlineTraverser {
 		}
 	}
 		
-	private List<Point3iWithDistance> considerNghbs( Point3i point, int distance ) {
+	private List<Point3iWithDistance> considerNeighbors( Point3i point, int distance ) {
 
 		List<Point3iWithDistance> out = new ArrayList<>(); 
 		
@@ -161,7 +161,7 @@ public class OutlineTraverser {
 			visitCondition,
 			point
 		);
-		consider.considerNeighbors(useZ, nghb8);
+		consider.considerNeighbors(useZ, bigNeighborhood);
 		return out;
 	}
 }

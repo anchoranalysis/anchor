@@ -48,23 +48,16 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.jgrapht.alg.util.UnionFind;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class ConnectedComponentUnionFind {
 
+	/** a minimum number of voxels necessary in the connected-component, otherwise it omitted from the output. */
 	private final int minNumberVoxels;
 	
-	private final boolean bigNghb;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param minNumberVoxels a minimum number of voxels necessary in the connected-component, otherwise it omitted from the output.
-	 * @param bigNghb whether to use a smaller or bigger neighbour (in 3D, 6-conn neighbours are used as small)
-	 */
-	public ConnectedComponentUnionFind(int minNumberVoxels, boolean bigNghb) {
-		super();
-		this.minNumberVoxels = minNumberVoxels;
-		this.bigNghb = bigNghb;
-	}	
+	/** whether to use a smaller or bigger neighbor (in 3D, 6-conn neighbors are used as small) */
+	private final boolean bigNeighborhood;
 		
 	/**
 	 * Converts a binary-voxel-box (byte) into connected components.
@@ -117,7 +110,7 @@ public class ConnectedComponentUnionFind {
 			new PopulateIndexProcessor<>(
 				visited,
 				indexBuffer,
-				createMergeWithNghbs(indexBuffer, unionIndex),
+				createMergeWithNeighbors(indexBuffer, unionIndex),
 				bufferReaderWriter
 			)
 		);
@@ -131,12 +124,12 @@ public class ConnectedComponentUnionFind {
 		);
 	}
 	
-	private MergeWithNghbs createMergeWithNghbs(VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
-		return new MergeWithNghbs(
+	private MergeWithNeighbors createMergeWithNeighbors(VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex) {
+		return new MergeWithNeighbors(
 			indexBuffer,
 			unionIndex,
 			indexBuffer.extent().getZ() > 1,
-			bigNghb
+			bigNeighborhood
 		);
 	}
 	

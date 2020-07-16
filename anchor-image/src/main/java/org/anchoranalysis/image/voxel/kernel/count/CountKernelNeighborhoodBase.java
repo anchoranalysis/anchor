@@ -36,14 +36,14 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 /**
- * The number of touching-faces of a voxel with a neighbour
+ * The number of touching-faces of a voxel with a neighbor
  * 
- * i.e. the sum of all faces of a voxel that touch the face of a voxel belonging to a neighbouring pixel
+ * i.e. the sum of all faces of a voxel that touch the face of a voxel belonging to a neighboring pixel
  * 
  * @author Owen Feehan
  *
  */
-public abstract class CountKernelNghbBase extends CountKernel {
+public abstract class CountKernelNeighborhoodBase extends CountKernel {
 	
 	private boolean useZ;
 	
@@ -57,12 +57,12 @@ public abstract class CountKernelNghbBase extends CountKernel {
 	private boolean ignoreAtThreshold = false;
 	
 	/**
-	 * If TRUE, a voxel is allowed to have more than 1 neighbour.  If FALSE, once at least one neighbour is found, it exists with a count of 1
+	 * If TRUE, a voxel is allowed to have more than 1 neighbor.  If FALSE, once at least one neighbor is found, it exists with a count of 1
 	 */
 	private boolean multipleMatchesPerVoxel = false;
 	
 	// Constructor
-	public CountKernelNghbBase(boolean useZ, BinaryValuesByte bv, boolean multipleMatchesPerVoxel ) {
+	public CountKernelNeighborhoodBase(boolean useZ, BinaryValuesByte bv, boolean multipleMatchesPerVoxel ) {
 		super(3);
 		this.useZ = useZ;
 		this.bv = bv;
@@ -79,7 +79,7 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		this.inSlices = inSlices;
 	}
 
-	protected abstract boolean isNghbVoxelAccepted( Point3i point, int xShift, int yShift, int zShift, Extent extent );
+	protected abstract boolean isNeighborVoxelAccepted( Point3i point, int xShift, int yShift, int zShift, Extent extent );
 	
 	/**
 	 * This method is deliberately not broken into smaller pieces to avoid inlining.
@@ -110,12 +110,12 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		x--;
 		ind--;
 		if (x>=0) {
-			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(point,-1,0,0, extent)) {
+			if (bv.isOff(inArrZ.get(ind)) && isNeighborVoxelAccepted(point,-1,0,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(point,-1,0,0, extent)) {
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNeighborVoxelAccepted(point,-1,0,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
@@ -124,12 +124,12 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		x += 2;
 		ind += 2;
 		if (x<extent.getX()) {
-			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(point,+1,0,0, extent)) {
+			if (bv.isOff(inArrZ.get(ind)) && isNeighborVoxelAccepted(point,+1,0,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(point,+1,0,0, extent)) {
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNeighborVoxelAccepted(point,+1,0,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
@@ -141,12 +141,12 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		y--;
 		ind -= xLength;
 		if (y>=0) {
-			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(point,0,-1,0, extent)) {
+			if (bv.isOff(inArrZ.get(ind)) && isNeighborVoxelAccepted(point,0,-1,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(point,0,-1,0, extent)) {
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNeighborVoxelAccepted(point,0,-1,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
@@ -155,12 +155,12 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		y += 2;
 		ind += (2*xLength);
 		if (y<(extent.getY())) {
-			if (bv.isOff(inArrZ.get(ind)) && isNghbVoxelAccepted(point,0,+1,0, extent)) {
+			if (bv.isOff(inArrZ.get(ind)) && isNeighborVoxelAccepted(point,0,+1,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
 		} else {
-			if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(point,0,+1,0, extent)) {
+			if (!ignoreAtThreshold && !outsideAtThreshold && isNeighborVoxelAccepted(point,0,+1,0, extent)) {
 				if (!multipleMatchesPerVoxel) { return 1; }
 				cnt++;
 			}
@@ -169,24 +169,24 @@ public abstract class CountKernelNghbBase extends CountKernel {
 		
 		if (useZ) {
 			if (inArrZLess1!=null) {
-				if (bv.isOff(inArrZLess1.get(ind)) && isNghbVoxelAccepted(point,0,0,-1, extent)) {
+				if (bv.isOff(inArrZLess1.get(ind)) && isNeighborVoxelAccepted(point,0,0,-1, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; }
 					cnt++;
 				}
 			} else {
-				if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(point,0,0,-1, extent)) {
+				if (!ignoreAtThreshold && !outsideAtThreshold && isNeighborVoxelAccepted(point,0,0,-1, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; }
 					cnt++;
 				}
 			}
 			
 			if (inArrZPlus1!=null) {
-				if (bv.isOff(inArrZPlus1.get(ind)) && isNghbVoxelAccepted(point,0,0,+1, extent)) {
+				if (bv.isOff(inArrZPlus1.get(ind)) && isNeighborVoxelAccepted(point,0,0,+1, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; }
 					cnt++;
 				}
 			} else {
-				if (!ignoreAtThreshold && !outsideAtThreshold && isNghbVoxelAccepted(point,0,0,+1, extent)) {
+				if (!ignoreAtThreshold && !outsideAtThreshold && isNeighborVoxelAccepted(point,0,0,+1, extent)) {
 					if (!multipleMatchesPerVoxel) { return 1; }
 					cnt++;
 				}

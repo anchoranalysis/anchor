@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffer<T> {
 	
 	private VoxelBox<IntBuffer> indexBuffer;
-	private MergeWithNghbs mergeWithNgbs;
+	private MergeWithNeighbors mergeWithNgbs;
 	private BinaryValues bv;
 	private BinaryValuesByte bvb;
 	private final BufferReadWrite<T> bufferReaderWriter;
@@ -50,7 +50,7 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
 	public PopulateIndexProcessor(
 		BinaryVoxelBox<T> visited,
 		VoxelBox<IntBuffer> indexBuffer,
-		MergeWithNghbs mergeWithNgbs,
+		MergeWithNeighbors mergeWithNgbs,
 		BufferReadWrite<T> bufferReaderWriter
 	) {
 		this.indexBuffer = indexBuffer;
@@ -73,18 +73,18 @@ class PopulateIndexProcessor<T extends Buffer> implements ProcessVoxelSliceBuffe
 	public void process(Point3i point, T buffer, int offsetSlice) {
 		if (bufferReaderWriter.isBufferOn(buffer,offsetSlice,bv,bvb) && bbIndex.get(offsetSlice)==0) {
 			
-			int nghbLab = mergeWithNgbs.calcMinNghbLabel(
+			int neighborLabel = mergeWithNgbs.calcMinNeighborLabel(
 				point,
 				0,
 				offsetSlice
 			);
-			if (nghbLab==-1) {
+			if (neighborLabel==-1) {
 				bufferReaderWriter.putBufferCnt(buffer, offsetSlice, count);
 				bbIndex.put(offsetSlice, count);
 				mergeWithNgbs.addElement(count);
 				count++;
 			} else {
-				bbIndex.put(offsetSlice, nghbLab);
+				bbIndex.put(offsetSlice, neighborLabel);
 			}
 		}
 	}

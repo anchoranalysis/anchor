@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.neighborhood;
 
 /*-
  * #%L
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Adds edges if objects neighbour each other
+ * Adds edges if objects neighbor each other
  * 
  * @author Owen Feehan
  *
@@ -81,7 +81,7 @@ class EdgeAdder<V> {
 			Optional.of(sceneExtent),
 			do3D && sceneExtent.getZ()>1,
 			1,
-			params.isBigNghb()
+			params.isBigNeighborhood()
 		);
 		
 		addWithDilatedMask(ignoreIndex, object, vertexWith, dilated);

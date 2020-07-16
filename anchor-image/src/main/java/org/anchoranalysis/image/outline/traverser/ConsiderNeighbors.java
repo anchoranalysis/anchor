@@ -45,9 +45,9 @@ class ConsiderNeighbors {
 	private final ConsiderVisit icv;
 	private final Point3i point;
 		
-	public void considerNeighbors( boolean useZ, boolean nghb8 ) {
+	public void considerNeighbors( boolean useZ, boolean bigNeighborhood ) {
 
-		// Look for any neighbouring pixels and call them recursively
+		// Look for any neighboring pixels and call them recursively
 		considerAndQueue( 1, 0, 0 );
 		
 		considerAndQueue( -1, 0, 0 );
@@ -59,7 +59,7 @@ class ConsiderNeighbors {
 			considerAndQueue( 0, 0, 1 );	
 		}
 		
-		if (nghb8) {
+		if (bigNeighborhood) {
 			considerAndQueue( -1, -1, 0 );
 			considerAndQueue( -1, 1, 0 );
 			considerAndQueue( 1, -1, 0 );
@@ -80,7 +80,7 @@ class ConsiderNeighbors {
 	}
 	
 	private void considerAndQueue( int xShift, int yShift, int zShift ) {
-		considerVisitAndQueueNghbPoint(
+		considerVisitAndQueueNeighborPoint(
 			icv,
 			new Point3i(
 				point.getX()+xShift,
@@ -92,7 +92,7 @@ class ConsiderNeighbors {
 		);
 	}
 	
-	private boolean considerVisitAndQueueNghbPoint(
+	private boolean considerVisitAndQueueNeighborPoint(
 		ConsiderVisit considerVisit,
 		Point3i point,
 		int distance,

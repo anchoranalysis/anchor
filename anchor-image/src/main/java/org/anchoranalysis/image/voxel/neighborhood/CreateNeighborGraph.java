@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.neighborhood;
 
 /*
  * #%L
@@ -37,13 +37,13 @@ import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.nghb.EdgeAdder.AddEdge;
+import org.anchoranalysis.image.voxel.neighborhood.EdgeAdder.AddEdge;
 
 import lombok.RequiredArgsConstructor;
 
 /**
  * 
- * Creates an undirected graph where each vertex is an object, and edge exists if the objects neighbour
+ * Creates an undirected graph where each vertex is an object, and edge exists if the objects neighbor
  * 
  * @author Owen Feehan
  *
@@ -58,7 +58,7 @@ public class CreateNeighborGraph<V> {
 	private final EdgeAdderParameters edgeAdderParams;
 	
 	/**
-	 * Creates an edge from two neighbouring vertices
+	 * Creates an edge from two neighboring vertices
 	 * 
 	 * @author Owen Feehan
 	 *
@@ -75,7 +75,7 @@ public class CreateNeighborGraph<V> {
 	 * 
 	 * @param vertices vertices to construct graph from
 	 * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be low-cost)
-	 * @param edgeFromVertices creates an edge for two vertices (and the number of neighbouring pixels)
+	 * @param edgeFromVertices creates an edge for two vertices (and the number of neighboring pixels)
 	 * @param sceneExtent
 	 * @param do3D
 	 * @param <E> edge-type of graph
@@ -90,7 +90,7 @@ public class CreateNeighborGraph<V> {
 		boolean do3D
 	) throws CreateException {
 		
-		// Graph of neighbouring objects, with the number of common pixels as an edge
+		// Graph of neighboring objects, with the number of common pixels as an edge
 		GraphWithEdgeTypes<V,E> graph = new GraphWithEdgeTypes<>(undirected);
 		
 		// Objects from each vertex

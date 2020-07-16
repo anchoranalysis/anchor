@@ -37,14 +37,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 /**
- * The number of touching-faces of a voxel with a neighbour, so long as the neighbour is part of a mask
+ * The number of touching-faces of a voxel with a neighbor, so long as the neighbor is part of a mask
  * 
- * i.e. the sum of all faces of a voxel that touch the face of a voxel belonging to a neighbouring pixel
+ * i.e. the sum of all faces of a voxel that touch the face of a voxel belonging to a neighboring pixel
  * 
  * @author Owen Feehan
  *
  */
-public class CountKernelNghbMask extends CountKernelNghbBase {
+public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
 	
 	private BinaryVoxelBox<ByteBuffer> vbRequireHigh;
 	private BinaryValuesByte bvRequireHigh;
@@ -52,7 +52,7 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 
 	private LocalSlices localSlicesRequireHigh;
 	
-	public CountKernelNghbMask(boolean useZ, BinaryValuesByte bv, ObjectMask objectRequireHigh, boolean multipleMatchesPerVoxel) {
+	public CountKernelNeighborhoodMask(boolean useZ, BinaryValuesByte bv, ObjectMask objectRequireHigh, boolean multipleMatchesPerVoxel) {
 		super(useZ, bv, multipleMatchesPerVoxel);
 		this.objectRequireHigh = objectRequireHigh;
 		this.vbRequireHigh = objectRequireHigh.binaryVoxelBox();
@@ -66,7 +66,7 @@ public class CountKernelNghbMask extends CountKernelNghbBase {
 	}
 	
 	@Override
-	protected boolean isNghbVoxelAccepted( Point3i point, int xShift, int yShift, int zShift, Extent extent ) {
+	protected boolean isNeighborVoxelAccepted( Point3i point, int xShift, int yShift, int zShift, Extent extent ) {
 		
 		ByteBuffer inArr = localSlicesRequireHigh.getLocal(zShift);
 		

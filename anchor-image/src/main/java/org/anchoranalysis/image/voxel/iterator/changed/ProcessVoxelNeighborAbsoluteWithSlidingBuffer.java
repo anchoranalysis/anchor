@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  *
  * @param <T> result-type that is collected
  */
-public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> implements ProcessVoxelNeighbourAbsolute<T> {
+public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T> implements ProcessVoxelNeighborAbsolute<T> {
 
 	private final SlidingBuffer<?> rbb;
 	private final Extent extent;
@@ -46,7 +46,7 @@ public abstract class ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<T> implemen
 	protected int sourceVal;	
 	private int sourceOffsetXY;
 		
-	protected ProcessVoxelNeighbourAbsoluteWithSlidingBuffer(SlidingBuffer<?> rbb) {
+	protected ProcessVoxelNeighborAbsoluteWithSlidingBuffer(SlidingBuffer<?> rbb) {
 		this.rbb = rbb;
 		this.extent = rbb.extent();
 	}

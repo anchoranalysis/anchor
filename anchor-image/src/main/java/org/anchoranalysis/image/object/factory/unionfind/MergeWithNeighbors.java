@@ -33,17 +33,16 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
-import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.Nghb;
-import org.anchoranalysis.image.voxel.nghb.SmallNghb;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.jgrapht.alg.util.UnionFind;
 
-final class MergeWithNghbs {
+final class MergeWithNeighbors {
 
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Integer> {
+	private static class PointTester extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Integer> {
 		
 		private int minLabel;
 		
@@ -88,7 +87,7 @@ final class MergeWithNghbs {
 			return true;
 		}
 
-		/** The minimum label in the neighbourhood */
+		/** The minimum label in the neighborhood */
 		@Override
 		public Integer collectResult() {
 			assert(minLabel!=0);
@@ -97,29 +96,34 @@ final class MergeWithNghbs {
 	}
 
 	private final boolean do3D;
-	private final ProcessVoxelNeighbour<Integer> process;
-	private final Nghb nghb;
+	private final ProcessVoxelNeighbor<Integer> process;
+	private final Neighborhood neighborhood;
 	private final SlidingBuffer<IntBuffer> slidingIndex;
 	private final UnionFind<Integer> unionIndex;
 
 	
 	// Without mask
-	public MergeWithNghbs(VoxelBox<IntBuffer> indexBuffer, UnionFind<Integer> unionIndex, boolean do3D, boolean bigNghb ) {
+	public MergeWithNeighbors(
+		VoxelBox<IntBuffer> indexBuffer,
+		UnionFind<Integer> unionIndex,
+		boolean do3D,
+		boolean bigNeighborhood
+	) {
 		this.do3D = do3D;
 		this.slidingIndex = new SlidingBuffer<>(indexBuffer);
 		this.unionIndex = unionIndex;
 		
-		nghb = bigNghb ? new BigNghb() : new SmallNghb();
+		neighborhood = NeighborhoodFactory.of(bigNeighborhood);
 		
-		this.process = ProcessVoxelNeighbourFactory.withinExtent(
+		this.process = ProcessVoxelNeighborFactory.withinExtent(
 			new PointTester(slidingIndex,unionIndex)
 		);
 	}
 			
-	// Calculates the minimum label of the neighbours, making sure to merge any different values
-	//   -1 indicates that there is no indexed neighbour
-	public int calcMinNghbLabel( Point3i point, int exstVal, int indxBuffer) {
-		return IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, exstVal, indxBuffer);
+	// Calculates the minimum label of the neighbors, making sure to merge any different values
+	//   -1 indicates that there is no indexed neighbor
+	public int calcMinNeighborLabel( Point3i point, int exstVal, int indxBuffer) {
+		return IterateVoxels.callEachPointInNeighborhood(point, neighborhood, do3D, process, exstVal, indxBuffer);
 	}
 
 	public void shift() {

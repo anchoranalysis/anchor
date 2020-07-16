@@ -1,6 +1,6 @@
-package org.anchoranalysis.image.voxel.nghb;
+package org.anchoranalysis.image.voxel.neighborhood;
 
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 
 /*
  * #%L
@@ -30,16 +30,14 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 
 
 // 4 or 6 connectivity
-// Relies on IProcessRelPoint to do bound checking
-public class SmallNghb implements Nghb {
+final class SmallNeighborhood implements Neighborhood {
 
 	@Override
-	public void processAllPointsInNghb(boolean do3D, ProcessVoxelNeighbour<?> process) {
+	public void processAllPointsInNeighborhood(boolean do3D, ProcessVoxelNeighbor<?> process) {
 		
 		int numDims = do3D ? 3 : 2;
 		
-		boolean b = process.notifyChangeZ(0);
-		assert(b);
+		process.notifyChangeZ(0);
 		
 		for (int d=0; d<numDims; d++) {
 			for (int j=-1; j<=1; j+=2) {
@@ -57,7 +55,7 @@ public class SmallNghb implements Nghb {
 		}
 	}
 	
-	private final void processDim( ProcessVoxelNeighbour<?> process, int j, int d) {
+	private final void processDim( ProcessVoxelNeighbor<?> process, int j, int d) {
 		switch(d) {
 			case 0:
 				process.processPoint(j, 0);

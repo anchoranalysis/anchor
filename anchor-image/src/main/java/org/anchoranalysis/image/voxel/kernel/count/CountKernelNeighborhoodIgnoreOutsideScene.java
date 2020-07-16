@@ -32,19 +32,19 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
 /**
- * For every voxel on the outline, count ALL neighbours that are adjacent, but ignoring any outside the scene.
+ * For every voxel on the outline, count ALL neighbors that are adjacent, but ignoring any outside the scene.
  * 
- * Neighbouring voxels can be counted more than once.
+ * Neighboring voxels can be counted more than once.
  * 
  * @author Owen Feehan
  *
  */
-public class CountKernelNghbIgnoreOutsideScene extends CountKernelNghbBase {
+public class CountKernelNeighborhoodIgnoreOutsideScene extends CountKernelNeighborhoodBase {
 
 	private Extent extentScene;
 	private ReadableTuple3i addPoint;
 	
-	public CountKernelNghbIgnoreOutsideScene(
+	public CountKernelNeighborhoodIgnoreOutsideScene(
 		boolean useZ,
 		BinaryValuesByte bv,
 		boolean multipleMatchesPerVoxel,
@@ -57,14 +57,12 @@ public class CountKernelNghbIgnoreOutsideScene extends CountKernelNghbBase {
 	}
 
 	@Override
-	protected boolean isNghbVoxelAccepted(Point3i point, int xShift, int yShift,
-			int zShift, Extent extent) {
-		
-		int xNew = point.getX()+xShift+addPoint.getX();
-		int yNew = point.getY()+yShift+addPoint.getY();
-		int zNew = point.getZ()+zShift+addPoint.getZ();
-		
-		return extentScene.contains(xNew,yNew,zNew);
+	protected boolean isNeighborVoxelAccepted(Point3i point, int xShift, int yShift, int zShift, Extent extent) {
+		return extentScene.contains(
+			point.getX()+xShift+addPoint.getX(),
+			point.getY()+yShift+addPoint.getY(),
+			point.getZ()+zShift+addPoint.getZ()
+		);
 	}
 
 }
