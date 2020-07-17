@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.pxlmark.memo;
+package org.anchoranalysis.anchor.mpp.mark.voxelized.memo;
 
 public interface MemoForIndex {
     VoxelizedMarkMemo getMemoForIndex(int index);

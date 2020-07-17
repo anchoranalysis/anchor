@@ -24,52 +24,46 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
+package org.anchoranalysis.anchor.mpp.bean.mark.bounds;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
+import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.Orientation2D;
 
 @NoArgsConstructor
-public class EllipseBounds extends EllipseBoundsWithoutRotation {
+@AllArgsConstructor
+public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
 
     /** */
-    private static final long serialVersionUID = 5833714580114414447L;
+    private static final long serialVersionUID = -1109615535786453388L;
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private Bound rotationAngle;
+    @BeanField @Getter @Setter private Bound radius;
     // END BEAN PROPERTIES
 
-    // Constructor
-    public EllipseBounds(Bound radiusBnd) {
-        super(radiusBnd);
-        rotationAngle = new BoundUnitless(0, 2 * Math.PI);
-    }
-
     // Copy Constructor
-    public EllipseBounds(EllipseBounds src) {
-        super(src);
-        rotationAngle = src.rotationAngle.duplicate();
+    public EllipseBoundsWithoutRotation(EllipseBoundsWithoutRotation src) {
+        super();
+        radius = src.radius.duplicate();
+    }
+
+    // NB objects are scaled in pre-rotated position i.e. when aligned to axes
+    public void scaleXY(double multFactor) {
+        this.radius.scale(multFactor);
     }
 
     @Override
-    public String getBeanDscr() {
-        return String.format(
-                "%s, radius=(%s), rotation=(%s)",
-                getBeanName(), getRadius().toString(), rotationAngle.toString());
+    public double getMinResolved(ImageResolution sr, boolean do3D) {
+        return radius.getMinResolved(sr, do3D);
     }
 
     @Override
-    public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
-        return new Orientation2D(
-                getRotationAngle().resolve(res, false).randOpen(randomNumberGenerator));
+    public double getMaxResolved(ImageResolution sr, boolean do3D) {
+        return radius.getMaxResolved(sr, do3D);
     }
 }

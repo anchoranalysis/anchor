@@ -24,9 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
+package org.anchoranalysis.anchor.mpp.bean.mark.bounds;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
@@ -34,43 +35,41 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.image.orientation.Orientation2D;
 
-/**
- * Creates a randomly-generated orientation in 3D based upon Euler Angles
- *
- * @author Owen Feehan
- */
-public class RotationBounds3D extends RotationBounds {
+@NoArgsConstructor
+public class EllipseBounds extends EllipseBoundsWithoutRotation {
 
-    private static final Bound DEFAULT_BOUND = new BoundUnitless(0, 2 * Math.PI);
+    /** */
+    private static final long serialVersionUID = 5833714580114414447L;
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private Bound rotationX = DEFAULT_BOUND;
-
-    @BeanField @Getter @Setter private Bound rotationY = DEFAULT_BOUND;
-
-    @BeanField @Getter @Setter private Bound rotationZ = DEFAULT_BOUND;
+    @BeanField @Getter @Setter private Bound rotationAngle;
     // END BEAN PROPERTIES
 
-    @Override
-    public Orientation randomOrientation(
-            RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
-        return new Orientation3DEulerAngles(
-                randomizeRot(rotationX, randomNumberGenerator, res),
-                randomizeRot(rotationY, randomNumberGenerator, res),
-                randomizeRot(rotationZ, randomNumberGenerator, res));
+    // Constructor
+    public EllipseBounds(Bound radiusBnd) {
+        super(radiusBnd);
+        rotationAngle = new BoundUnitless(0, 2 * Math.PI);
+    }
+
+    // Copy Constructor
+    public EllipseBounds(EllipseBounds src) {
+        super(src);
+        rotationAngle = src.rotationAngle.duplicate();
     }
 
     @Override
     public String getBeanDscr() {
         return String.format(
-                "%s, rotation=(%f,%f,%f)",
-                getBeanName(), getRotationX(), getRotationY(), rotationZ);
+                "%s, radius=(%s), rotation=(%s)",
+                getBeanName(), getRadius().toString(), rotationAngle.toString());
     }
 
-    private static double randomizeRot(
-            Bound bound, RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
-        return bound.resolve(res, true).randOpen(randomNumberGenerator);
+    @Override
+    public Orientation randomOrientation(
+            RandomNumberGenerator randomNumberGenerator, ImageResolution res) {
+        return new Orientation2D(
+                getRotationAngle().resolve(res, false).randOpen(randomNumberGenerator));
     }
 }

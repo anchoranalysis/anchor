@@ -24,11 +24,35 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.mark;
+package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
-import org.anchoranalysis.bean.AnchorBean;
+import java.nio.ByteBuffer;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public abstract class MarkDistance extends AnchorBean<MarkDistance> implements CompatibleWithMark {
+/**
+ * A voxelized representation of a Mark i.e. a mark turned into voxels.
+ *
+ * @author Owen Feehan
+ */
+public interface VoxelizedMark {
 
-    public abstract double distance(Mark mark1, Mark mark2) throws UnsupportedMarkTypeException;
+    BoundedVoxelBox<ByteBuffer> getVoxelBox();
+
+    BoundedVoxelBox<ByteBuffer> getVoxelBoxMIP();
+
+    BoundingBox getBoundingBox();
+
+    BoundingBox getBoundingBoxMIP();
+
+    VoxelizedMark duplicate();
+
+    VoxelStatistics statisticsForAllSlices(int chnlID, int regionID);
+
+    VoxelStatistics statisticsForAllSlicesMaskSlice(int chnlID, int regionID, int maskChnlID);
+
+    VoxelStatistics statisticsFor(int chnlID, int regionID, int sliceID);
+
+    void cleanUp();
 }

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.anchor.mpp.mark.set;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.MemoForIndex;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;

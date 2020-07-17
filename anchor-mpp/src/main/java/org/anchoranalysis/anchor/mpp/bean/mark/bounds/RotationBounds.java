@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.mark.conic.bounds;
+package org.anchoranalysis.anchor.mpp.bean.mark.bounds;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;

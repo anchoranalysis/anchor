@@ -24,13 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.pxlmark.memo;
+package org.anchoranalysis.anchor.mpp.mark.voxelized.memo;
 
 import lombok.Getter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMarkFactory;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMarkFactory;
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.feature.nrg.NRGStack;

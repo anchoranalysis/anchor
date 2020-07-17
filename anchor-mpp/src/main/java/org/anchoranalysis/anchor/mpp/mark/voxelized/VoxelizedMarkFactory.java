@@ -24,18 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.mark;
+package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.GenerateUniqueParameterization;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.feature.nrg.NRGStack;
 
-public abstract class MarkRegion extends AnchorBean<MarkRegion>
-        implements GenerateUniqueParameterization {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VoxelizedMarkFactory {
 
-    public abstract VoxelStatistics createStatisticsFor(
-            VoxelizedMarkMemo memo, ImageDimensions dimensions) throws CreateException;
+    public static VoxelizedMarkHistogram create(Mark mark, NRGStack stack, RegionMap regionMap) {
+        return new VoxelizedMarkHistogram(mark, stack, regionMap);
+    }
 }

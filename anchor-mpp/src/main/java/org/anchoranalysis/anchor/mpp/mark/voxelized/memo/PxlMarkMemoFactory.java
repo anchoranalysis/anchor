@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.pxlmark.memo;
+package org.anchoranalysis.anchor.mpp.mark.voxelized.memo;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;

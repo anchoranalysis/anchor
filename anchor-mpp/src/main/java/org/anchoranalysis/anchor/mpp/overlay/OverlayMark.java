@@ -42,12 +42,18 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@EqualsAndHashCode(callSuper = false)
 public class OverlayMark extends Overlay {
 
-    private ScaledMaskCreator scaledMaskCreator;
-    private Mark mark;
-    private RegionMembershipWithFlags regionMembership;
+    @Getter
+    private final Mark mark;
+    private final RegionMembershipWithFlags regionMembership;
+    
+    @EqualsAndHashCode.Exclude
+    private final ScaledMaskCreator scaledMaskCreator;
 
     public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
         super();
@@ -64,10 +70,6 @@ public class OverlayMark extends Overlay {
                         // method for scaling up
                         5000 // The threshold that decides which to use
                         );
-    }
-
-    public Mark getMark() {
-        return mark;
     }
 
     @Override
@@ -109,22 +111,6 @@ public class OverlayMark extends Overlay {
 
         byte membership = mark.evalPointInside(pointD);
         return (regionMembership.isMemberFlag(membership));
-    }
-
-    // We delegate uniqueness-check to the mask
-    @Override
-    public boolean equals(Object arg0) {
-        if (arg0 instanceof OverlayMark) {
-            OverlayMark objCast = (OverlayMark) arg0;
-            return mark.equals(objCast.mark);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return mark.hashCode();
     }
 
     @Override

@@ -26,7 +26,10 @@
 
 package org.anchoranalysis.anchor.mpp.bean.regionmap;
 
+import lombok.EqualsAndHashCode;
+
 // A region membership with its flag stored as a byte
+@EqualsAndHashCode
 public class RegionMembershipWithFlags {
 
     private byte flags;

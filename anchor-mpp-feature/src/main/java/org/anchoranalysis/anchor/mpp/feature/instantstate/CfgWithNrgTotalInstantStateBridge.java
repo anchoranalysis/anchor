@@ -28,8 +28,8 @@ package org.anchoranalysis.anchor.mpp.feature.instantstate;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.anchor.mpp.overlay.OverlayCollectionMarkFactory;
-import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.OverlayedInstantState;
 import org.anchoranalysis.anchor.overlay.collection.OverlayCollection;
 import org.anchoranalysis.core.error.OperationFailedException;

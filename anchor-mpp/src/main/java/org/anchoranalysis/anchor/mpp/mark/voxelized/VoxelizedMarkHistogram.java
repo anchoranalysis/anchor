@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.pxlmark;
+package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
 import java.nio.ByteBuffer;
 import java.util.List;

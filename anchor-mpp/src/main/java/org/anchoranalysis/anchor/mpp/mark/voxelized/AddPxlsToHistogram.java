@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.pxlmark;
+package org.anchoranalysis.anchor.mpp.mark.voxelized;
 
 import java.util.List;
 import java.util.function.IntConsumer;

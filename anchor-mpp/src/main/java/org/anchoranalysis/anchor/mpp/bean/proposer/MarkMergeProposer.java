@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.geometry.Point3f;
 

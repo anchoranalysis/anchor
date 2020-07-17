@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.anchor.mpp.regionmap;
+package org.anchoranalysis.anchor.mpp.mark.conic;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipAnd;
