@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
  * Maps integer IDs to sub-regions in the map
@@ -69,13 +70,9 @@ public class RegionMap extends AnchorBean<RegionMap> {
     }
 
     public List<RegionMembershipWithFlags> createListMembershipWithFlags() {
-        List<RegionMembershipWithFlags> listOut = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            RegionMembership rm = list.get(i);
-            listOut.add(new RegionMembershipWithFlags(rm, i));
-        }
-
-        return listOut;
+        return FunctionalList.mapToListWithIndex(
+            list,
+            RegionMembershipWithFlags::new
+        );
     }
 }
