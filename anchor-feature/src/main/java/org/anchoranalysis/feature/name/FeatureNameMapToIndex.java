@@ -61,6 +61,7 @@ public class FeatureNameMapToIndex {
         Integer index = delegate.get(featureName);
         if (index == null) {
             throw new GetOperationFailedException(
+                    featureName,
                     String.format("Cannot find '%s' in FeatureNameIndex", featureName));
         }
         return index;

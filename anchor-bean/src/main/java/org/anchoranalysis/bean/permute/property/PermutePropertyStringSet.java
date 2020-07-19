@@ -31,15 +31,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 
 public class PermutePropertyStringSet extends PermutePropertyWithPath<String> {
 
     // START BEAN PROPERTIES
+    /** The values of the string-set */
     @BeanField @Getter @Setter private StringSet values;
     // END BEAN PROPERTIES
 
     @Override
-    public Iterator<String> propertyValues() {
+    public Iterator<String> propertyValues() throws OperationFailedException {
+        
+        if (values.isEmpty()) {
+            throw new OperationFailedException("No values have been defined for permutation. At least one must exist!");
+        }
+        
         return values.iterator();
     }
 

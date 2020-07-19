@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -55,11 +55,11 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
         return nrgStack.map(NRGStackWithParams::getParams);
     }
 
-    public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
+    public ImageDimensions getDimensionsRequired() throws FeatureCalculationException {
         return getDimensionsOptional()
                 .orElseThrow(
                         () ->
-                                new FeatureCalcException(
+                                new FeatureCalculationException(
                                         "Dimensions are required in the input for this operation"));
     }
 
@@ -70,12 +70,12 @@ public abstract class FeatureInputNRG implements FeatureInputParams {
     /**
      * Returns the nrg-stack or throws an exception if it's not set as it's required.
      *
-     * @throws FeatureCalcException if the nrg-stack isn't present
+     * @throws FeatureCalculationException if the nrg-stack isn't present
      */
-    public NRGStackWithParams getNrgStackRequired() throws FeatureCalcException {
+    public NRGStackWithParams getNrgStackRequired() throws FeatureCalculationException {
         return nrgStack.orElseThrow(
                 () ->
-                        new FeatureCalcException(
+                        new FeatureCalculationException(
                                 "An NRG-stack is required in the input for this operation"));
     }
 

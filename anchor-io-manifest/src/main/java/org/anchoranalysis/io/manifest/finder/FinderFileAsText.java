@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -75,13 +76,13 @@ public class FinderFileAsText extends FinderSingleFile {
         return readFile(fileWrite.calcPath());
     }
 
-    public String get() throws GetOperationFailedException {
+    public String get() throws OperationFailedException {
         assert (exists());
         if (!text.isPresent()) {
             try {
                 text = Optional.of(readFileFromFileWrite(getFoundFile()));
             } catch (IOException e) {
-                throw new GetOperationFailedException(e);
+                throw new OperationFailedException(e);
             }
         }
         return text.get();

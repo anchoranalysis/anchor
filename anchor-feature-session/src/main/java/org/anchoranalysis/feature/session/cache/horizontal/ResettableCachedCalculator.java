@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
@@ -44,7 +44,7 @@ class ResettableCachedCalculator<T extends FeatureInput>
         implements FeatureSessionCacheCalculator<T> {
 
     private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);
-    private ResettableSet<CacheableCalculationMap<?, T, ?, FeatureCalcException>>
+    private ResettableSet<CacheableCalculationMap<?, T, ?, FeatureCalculationException>>
             setCalculationMap = new ResettableSet<>(false);
 
     private Logger logger;
@@ -60,7 +60,7 @@ class ResettableCachedCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalcException {
+    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException {
         double val = feature.calcCheckInit(input);
         if (Double.isNaN(val)) {
             logger.messageLogger()
@@ -74,26 +74,26 @@ class ResettableCachedCalculator<T extends FeatureInput>
     @Override
     public <U> ResolvedCalculation<U, T> search(FeatureCalculation<U, T> calculation) {
         return new ResolvedCalculation<>(
-                (CacheableCalculation<U, T, FeatureCalcException>)
+                (CacheableCalculation<U, T, FeatureCalculationException>)
                         setCalculation.findOrAdd(calculation, null));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <S, U> ResolvedCalculationMap<S, T, U> search(
-            CacheableCalculationMap<S, T, U, FeatureCalcException> calculation) {
+            CacheableCalculationMap<S, T, U, FeatureCalculationException> calculation) {
         return new ResolvedCalculationMap<>(
-                (CacheableCalculationMap<S, T, U, FeatureCalcException>)
+                (CacheableCalculationMap<S, T, U, FeatureCalculationException>)
                         setCalculationMap.findOrAdd(calculation, null));
     }
 
     @Override
-    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalcException {
+    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalculationException {
         try {
             Feature<T> feature = sharedFeatures.getException(id);
             return calc(feature, input);
         } catch (NamedProviderGetException e) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     String.format("Cannot locate feature with resolved-ID: %s", id), e.summarize());
         }
     }

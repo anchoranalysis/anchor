@@ -32,7 +32,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 @NoArgsConstructor
@@ -54,7 +56,7 @@ public class CenterOfGravity extends FeatureSingleObject {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) {
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
 
         FeatureInputSingleObject params = input.get();
 
@@ -67,7 +69,11 @@ public class CenterOfGravity extends FeatureSingleObject {
         return val;
     }
 
-    private AxisType axisType() {
-        return AxisTypeConverter.createFromString(axis);
+    private AxisType axisType() throws FeatureCalculationException {
+        try {
+            return AxisTypeConverter.createFromString(axis);
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
+        }
     }
 }

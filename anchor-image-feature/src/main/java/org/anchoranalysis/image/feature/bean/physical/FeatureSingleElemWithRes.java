@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.bean.physical;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.extent.ImageResolution;
 
@@ -43,7 +43,7 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
     }
 
     @Override
-    public final double calc(SessionInput<T> input) throws FeatureCalcException {
+    public final double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         double value = input.calc(getItem());
 
@@ -51,5 +51,5 @@ public abstract class FeatureSingleElemWithRes<T extends FeatureInputWithRes>
     }
 
     protected abstract double calcWithRes(double value, ImageResolution res)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 }

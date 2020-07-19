@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.cache.calculation;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -39,19 +39,19 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
 
-    private CacheableCalculationMap<S, T, U, FeatureCalcException> map;
+    private CacheableCalculationMap<S, T, U, FeatureCalculationException> map;
 
     /**
      * Constructor
      *
      * @param map the cacheable-calculation map that is now considered resolved
      */
-    public ResolvedCalculationMap(CacheableCalculationMap<S, T, U, FeatureCalcException> map) {
+    public ResolvedCalculationMap(CacheableCalculationMap<S, T, U, FeatureCalculationException> map) {
         super();
         this.map = map;
     }
 
-    public S getOrCalculate(T params, U key) throws FeatureCalcException {
+    public S getOrCalculate(T params, U key) throws FeatureCalculationException {
         return map.getOrCalculate(params, key);
     }
 

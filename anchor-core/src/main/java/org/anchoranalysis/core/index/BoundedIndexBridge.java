@@ -28,28 +28,23 @@ package org.anchoranalysis.core.index;
 
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
 public class BoundedIndexBridge<T>
         implements FunctionWithException<Integer, T, GetOperationFailedException> {
 
-    private BoundedIndexContainer<T> cntr;
-
-    public BoundedIndexBridge(BoundedIndexContainer<T> cntr) {
-        super();
-        this.cntr = cntr;
-    }
+    /** The container associated with the bridge */
+    @Setter
+    private BoundedIndexContainer<T> container;
 
     @Override
     public T apply(Integer sourceObject) throws GetOperationFailedException {
-        int index = cntr.previousEqualIndex(sourceObject);
+        int index = container.previousEqualIndex(sourceObject);
         if (index == -1) {
-            throw new GetOperationFailedException("Cannot find a previousEqualIndex in the cntr");
+            throw new GetOperationFailedException(sourceObject, "Cannot find a previousEqualIndex in the cntr");
         }
-        return cntr.get(index);
-    }
-
-    // Updates the cntr associated with the bridge
-    public void setCntr(BoundedIndexContainer<T> cntr) {
-        this.cntr = cntr;
+        return container.get(index);
     }
 }

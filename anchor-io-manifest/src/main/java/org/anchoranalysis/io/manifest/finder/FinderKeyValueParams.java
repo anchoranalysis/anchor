@@ -29,6 +29,7 @@ package org.anchoranalysis.io.manifest.finder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -46,13 +47,13 @@ public class FinderKeyValueParams extends FinderSingleFile {
         this.manifestFunction = manifestFunction;
     }
 
-    public KeyValueParams get() throws GetOperationFailedException {
+    public KeyValueParams get() throws OperationFailedException {
         assert (exists());
 
         try {
             return KeyValueParams.readFromFile(getFoundFile().calcPath());
         } catch (IOException e) {
-            throw new GetOperationFailedException(e);
+            throw new OperationFailedException(e);
         }
     }
 

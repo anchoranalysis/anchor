@@ -52,7 +52,7 @@ public class TypedGetFromIndexBridge<S, H> implements ITypedGetFromIndex<S> {
         try {
             return bridge.bridgeElement(index, delegate.get(index));
         } catch (Exception e) {
-            throw new GetOperationFailedException(e);
+            throw new GetOperationFailedException(index,e);
         }
     }
 }

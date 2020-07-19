@@ -29,7 +29,8 @@ package org.anchoranalysis.image.feature.session.merged;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
@@ -104,7 +105,7 @@ class CombinedCalculator {
 
     public ResultsVector calcForInput(
             FeatureInputPairObjects input, Optional<ErrorReporter> errorReporter)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         ResultsVectorBuilder helper = new ResultsVectorBuilder(sizeFeatures(), errorReporter);
 

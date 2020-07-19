@@ -50,7 +50,7 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -148,7 +148,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
             this.hasInit = true;
             this.nrgStack = stack;
 
-        } catch (CreateException | FeatureCalcException e) {
+        } catch (CreateException e) {
             throw new InitException(e);
         }
     }
@@ -302,7 +302,7 @@ public class PairCollectionAddCriteria<T> extends PairCollection<T> {
                                             new FeatureInitParams(nrgStack.getParams()),
                                             sharedFeatures,
                                             logger));
-        } catch (FeatureCalcException e) {
+        } catch (InitException e) {
             throw new CreateException(e);
         }
 

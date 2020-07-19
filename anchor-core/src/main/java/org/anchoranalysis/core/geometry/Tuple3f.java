@@ -54,7 +54,7 @@ public abstract class Tuple3f implements Serializable {
         } else if (dimIndex == 2) {
             return z;
         } else {
-            throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+            throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
         }
     }
 
@@ -68,7 +68,7 @@ public abstract class Tuple3f implements Serializable {
                 return z;
             default:
                 assert false;
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.UNKNOWN_AXIS_TYPE);
+                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class Tuple3f implements Serializable {
                 this.z = val;
                 break;
             default:
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
         }
     }
 

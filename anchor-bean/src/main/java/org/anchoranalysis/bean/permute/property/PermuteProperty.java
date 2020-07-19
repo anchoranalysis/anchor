@@ -50,5 +50,5 @@ public abstract class PermuteProperty<T> extends AnchorBean<PermuteProperty<T>> 
      *
      * @return a new iterator for the permutations that are possible
      */
-    public abstract Iterator<T> propertyValues();
+    public abstract Iterator<T> propertyValues() throws OperationFailedException;
 }

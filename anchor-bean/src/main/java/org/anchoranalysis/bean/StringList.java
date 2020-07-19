@@ -29,6 +29,8 @@ package org.anchoranalysis.bean;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A list of strings (order is defined).
@@ -45,8 +47,10 @@ import java.util.List;
  *
  * @author Owen Feehan
  */
+@Accessors(fluent = true)
 public class StringList extends AnchorBean<StringList> implements StringBeanCollection {
 
+    @Getter
     private List<String> list = new ArrayList<>();
 
     @Override
@@ -59,16 +63,15 @@ public class StringList extends AnchorBean<StringList> implements StringBeanColl
         return list.contains(s);
     }
 
-    public List<String> list() {
-        return list;
-    }
-
     @Override
     public Iterator<String> iterator() {
         return list.iterator();
     }
 
-    //
+    @Override
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
 
     /**
      * Duplicate the bean

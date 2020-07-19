@@ -36,11 +36,13 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.nrg.NRGTotal;
@@ -58,43 +60,46 @@ public class NRGSchemeWithSharedFeatures {
 
     // Caches NRG value by index
     private class CalcElemIndTotalOperation
-            implements FunctionWithException<Integer, NRGTotal, FeatureCalcException> {
+            implements FunctionWithException<Integer, NRGTotal, NamedFeatureCalculationException> {
 
         private VoxelizedMarkMemo pmm;
         private NRGStack raster;
         private KeyValueParams kvp;
 
-        public CalcElemIndTotalOperation() {
-            super();
-        }
-
-        public void update(VoxelizedMarkMemo pmm, NRGStack raster) throws FeatureCalcException {
+        public void update(VoxelizedMarkMemo pmm, NRGStack raster) throws OperationFailedException {
             this.pmm = pmm;
             this.raster = raster;
 
             KeyValueParamsForImageCreator creator =
                     new KeyValueParamsForImageCreator(nrgScheme, sharedFeatures, logger);
-            this.kvp = creator.createParamsForImage(raster);
+            try {
+                this.kvp = creator.createParamsForImage(raster);
+            } catch (CreateException e) {
+                throw new OperationFailedException(e);
+            }
         }
 
         @Override
-        public NRGTotal apply(Integer index) throws FeatureCalcException {
+        public NRGTotal apply(Integer index) throws NamedFeatureCalculationException {
             return calc();
         }
 
-        public NRGTotal calc() throws FeatureCalcException {
-
-            FeatureCalculatorMulti<FeatureInputSingleMemo> session =
-                    FeatureSession.with(
-                            nrgScheme.getElemIndAsFeatureList(),
-                            new FeatureInitParams(kvp),
-                            sharedFeatures,
-                            logger);
-
-            FeatureInputSingleMemo params =
-                    new FeatureInputSingleMemo(pmm, new NRGStackWithParams(raster, kvp));
-
-            return new NRGTotal(session.calc(params).total());
+        public NRGTotal calc() throws NamedFeatureCalculationException {
+            try {
+                FeatureCalculatorMulti<FeatureInputSingleMemo> session =
+                        FeatureSession.with(
+                                nrgScheme.getElemIndAsFeatureList(),
+                                new FeatureInitParams(kvp),
+                                sharedFeatures,
+                                logger);
+    
+                FeatureInputSingleMemo params =
+                        new FeatureInputSingleMemo(pmm, new NRGStackWithParams(raster, kvp));
+    
+                return new NRGTotal(session.calc(params).total());
+            } catch (InitException e) {
+                throw new NamedFeatureCalculationException(e);
+            }
         }
     }
 
@@ -109,35 +114,43 @@ public class NRGSchemeWithSharedFeatures {
     }
 
     public NRGTotal calcElemAllTotal(MemoCollection pxlMarkMemoList, NRGStack raster)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
-        NRGStackWithParams nrgStack = createNRGStack(raster);
-
-        FeatureCalculatorMulti<FeatureInputAllMemo> session =
-                FeatureSession.with(
-                        nrgScheme.getElemAllAsFeatureList(),
-                        new FeatureInitParams(nrgStack.getParams()),
-                        sharedFeatures,
-                        logger);
-
-        FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, nrgStack);
-
-        return new NRGTotal(session.calc(params).total());
+        try {
+            NRGStackWithParams nrgStack = createNRGStack(raster);
+    
+            FeatureCalculatorMulti<FeatureInputAllMemo> session =
+                    FeatureSession.with(
+                            nrgScheme.getElemAllAsFeatureList(),
+                            new FeatureInitParams(nrgStack.getParams()),
+                            sharedFeatures,
+                            logger);
+    
+            FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, nrgStack);
+    
+            return new NRGTotal(session.calc(params).total());
+            
+        } catch (InitException | FeatureCalculationException e) {
+            throw new NamedFeatureCalculationException(e);
+        }
     }
 
-    public NRGTotal calcElemIndTotal(VoxelizedMarkMemo pmm, NRGStack raster)
-            throws FeatureCalcException {
-        operationIndCalc.update(pmm, raster);
-        return operationIndCalc.calc();
+    public NRGTotal calcElemIndTotal(VoxelizedMarkMemo pmm, NRGStack raster) throws NamedFeatureCalculationException {
+        try {
+            operationIndCalc.update(pmm, raster);
+            return operationIndCalc.calc();
+        } catch (OperationFailedException e) {
+            throw new NamedFeatureCalculationException(e);
+        }
     }
 
-    private NRGStackWithParams createNRGStack(NRGStack raster) throws FeatureCalcException {
+    private NRGStackWithParams createNRGStack(NRGStack raster) throws FeatureCalculationException {
 
         KeyValueParams kvp;
         try {
             kvp = nrgScheme.createKeyValueParams();
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
 
         return new NRGStackWithParams(raster, kvp);

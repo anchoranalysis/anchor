@@ -47,23 +47,20 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSeries {
 
-    private ImgChnlMap chnlMap;
-
+    // END REQUIRED ARGUMENTS
     // Null until the first time we request a channel
-    private OpenedRaster openedRaster;
+    private final OpenedRaster openedRaster;
+    private final ImgChnlMap chnlMap;
+    private final int seriesNum;
+    // END REQUIRED ARGUMENTS
+    
     private TimeSequence ts = null;
-    private int seriesNum;
-
-    public NamedChnlCollectionForSeriesMap(
-            OpenedRaster openedRaster, ImgChnlMap chnlMap, int seriesNum) {
-        this.chnlMap = chnlMap;
-        this.seriesNum = seriesNum;
-        this.openedRaster = openedRaster;
-    }
-
+    
     @Override
     public ImageDimensions dimensions() throws RasterIOException {
         return openedRaster.dim(seriesNum);
@@ -76,17 +73,26 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
 
         int index = chnlMap.get(chnlName);
         if (index == -1) {
-            throw new GetOperationFailedException(String.format("'%s' cannot be found", chnlName));
-        }
-
-        Stack stack = createTs(progressReporter).get(t);
-
-        if (index >= stack.getNumChnl()) {
             throw new GetOperationFailedException(
-                    String.format("Stack does not have a channel corresponding to '%s'", chnlName));
+                chnlName,
+                String.format("'%s' cannot be found", chnlName)
+            );
         }
 
-        return stack.getChnl(chnlMap.getException(chnlName));
+        try {
+            Stack stack = createTs(progressReporter).get(t);
+    
+            if (index >= stack.getNumChnl()) {
+                throw new GetOperationFailedException(
+                    chnlName,
+                    String.format("Stack does not have a channel corresponding to '%s'", chnlName));
+            }
+    
+            return stack.getChnl(chnlMap.getException(chnlName));
+            
+        } catch( OperationFailedException e) {
+            throw new GetOperationFailedException(chnlName, e);
+        }
     }
 
     // The outputManager is in case we want to do any debugging
@@ -100,20 +106,24 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
             return Optional.empty();
         }
 
-        Stack stack = createTs(progressReporter).get(t);
-
-        if (index >= stack.getNumChnl()) {
-            return Optional.empty();
+        try {
+            Stack stack = createTs(progressReporter).get(t);
+    
+            if (index >= stack.getNumChnl()) {
+                return Optional.empty();
+            }
+    
+            return Optional.of(stack.getChnl(index));
+        } catch (OperationFailedException e) {
+            throw new GetOperationFailedException(chnlName, e);
         }
-
-        return Optional.of(stack.getChnl(index));
     }
 
     @Override
     public int sizeT(ProgressReporter progressReporter) throws RasterIOException {
         try {
             return createTs(progressReporter).size();
-        } catch (GetOperationFailedException e) {
+        } catch (OperationFailedException e) {
             throw new RasterIOException(e);
         }
     }
@@ -170,12 +180,12 @@ public class NamedChnlCollectionForSeriesMap implements NamedChnlCollectionForSe
     }
 
     private TimeSequence createTs(ProgressReporter progressReporter)
-            throws GetOperationFailedException {
+            throws OperationFailedException {
         if (ts == null) {
             try {
                 ts = openedRaster.open(seriesNum, progressReporter);
             } catch (RasterIOException e) {
-                throw new GetOperationFailedException(e);
+                throw new OperationFailedException(e);
             }
         }
         return ts;

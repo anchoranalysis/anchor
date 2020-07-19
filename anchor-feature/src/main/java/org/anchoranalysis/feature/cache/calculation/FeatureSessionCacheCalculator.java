@@ -30,7 +30,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.cache.FeatureSymbolCalculator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -49,9 +50,9 @@ public interface FeatureSessionCacheCalculator<T extends FeatureInput>
      * @param feature feature
      * @param input feature-input
      * @return the feature-value
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
-    double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalcException;
+    double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException;
 
     /**
      * Calculates a feature-list throwing an exception if there is an error
@@ -60,10 +61,10 @@ public interface FeatureSessionCacheCalculator<T extends FeatureInput>
      * @param input params
      * @return the results of each feature, with Double.NaN (and the stored exception) if an error
      *     occurs
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     default ResultsVector calc(FeatureList<T> features, SessionInput<T> input)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         ResultsVector out = new ResultsVector(features.size());
         for (int i = 0; i < features.size(); i++) {
 
@@ -72,11 +73,11 @@ public interface FeatureSessionCacheCalculator<T extends FeatureInput>
             try {
                 double val = calc(f, input);
                 out.set(i, val);
-            } catch (FeatureCalcException e) {
-
-                throw new FeatureCalcException(
-                        String.format("Feature '%s' has thrown an error%n", f.getFriendlyName()),
-                        e);
+            } catch (FeatureCalculationException e) {
+                throw new NamedFeatureCalculationException(
+                     f.getFriendlyName(),
+                     e
+                );
             }
         }
         return out;

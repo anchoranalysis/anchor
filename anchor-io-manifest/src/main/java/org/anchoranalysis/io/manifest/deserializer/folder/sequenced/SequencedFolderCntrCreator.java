@@ -64,7 +64,7 @@ public abstract class SequencedFolderCntrCreator<T> implements ITypedGetFromInde
 
             return createFromFilePath(path);
         } catch (CreateException e) {
-            throw new GetOperationFailedException(e);
+            throw new GetOperationFailedException(index, e);
         }
     }
 }

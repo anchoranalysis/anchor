@@ -40,8 +40,7 @@ import org.anchoranalysis.core.index.container.BoundedIndexContainer;
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
  */
-public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
-        implements BoundedIndexContainer<S> {
+public abstract class BoundedIndexContainerBridge<H, S, E extends Exception> implements BoundedIndexContainer<S> {
 
     private BoundedIndexContainer<H> delegate;
 
@@ -57,7 +56,7 @@ public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
         try {
             return bridge(index, internalState);
         } catch (Exception e) {
-            throw new GetOperationFailedException(e);
+            throw new GetOperationFailedException(index, e);
         }
     }
 

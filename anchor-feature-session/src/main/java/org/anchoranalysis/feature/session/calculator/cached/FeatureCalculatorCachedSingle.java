@@ -27,7 +27,8 @@
 package org.anchoranalysis.feature.session.calculator.cached;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiFromSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -68,8 +69,12 @@ public class FeatureCalculatorCachedSingle<T extends FeatureInput>
     }
 
     @Override
-    public double calc(T input) throws FeatureCalcException {
-        return delegate.calc(input).get(0);
+    public double calc(T input) throws FeatureCalculationException {
+        try {
+            return delegate.calc(input).get(0);
+        } catch (NamedFeatureCalculationException e) {
+            throw e.dropKey();
+        }
     }
 
     @Override

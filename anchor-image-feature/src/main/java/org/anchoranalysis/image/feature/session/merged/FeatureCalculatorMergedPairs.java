@@ -32,7 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -93,14 +94,13 @@ public class FeatureCalculatorMergedPairs
     }
 
     @Override
-    public ResultsVector calc(FeatureInputPairObjects input) throws FeatureCalcException {
+    public ResultsVector calc(FeatureInputPairObjects input) throws NamedFeatureCalculationException {
         return calculator.calcForInput(input, Optional.empty());
     }
 
     @Override
     public ResultsVector calc(
-            FeatureInputPairObjects input, FeatureList<FeatureInputPairObjects> featuresSubset)
-            throws FeatureCalcException {
+            FeatureInputPairObjects input, FeatureList<FeatureInputPairObjects> featuresSubset) {
         throw new UnsupportedOperationException();
     }
 
@@ -110,7 +110,7 @@ public class FeatureCalculatorMergedPairs
 
         try {
             return calculator.calcForInput(input, Optional.of(errorReporter));
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             errorReporter.recordError(FeatureCalculatorMergedPairs.class, e);
 
             ResultsVector rv = new ResultsVector(sizeFeatures());
@@ -121,7 +121,7 @@ public class FeatureCalculatorMergedPairs
 
     public ResultsVector calcMaybeSuppressErrors(
             FeatureInputPairObjects input, ErrorReporter errorReporter)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         if (suppressErrors) {
             return calcSuppressErrors(input, errorReporter);
         } else {

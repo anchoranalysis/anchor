@@ -69,6 +69,7 @@ public class NamedChnlCollectionForSeriesConcatenate implements NamedChnlCollect
         }
 
         throw new GetOperationFailedException(
+                chnlName,
                 String.format("chnlName '%s' is not found", chnlName));
     }
 

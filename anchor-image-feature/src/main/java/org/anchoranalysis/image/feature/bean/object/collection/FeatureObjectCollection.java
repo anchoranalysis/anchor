@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.object.collection;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
 
@@ -36,12 +36,12 @@ public abstract class FeatureObjectCollection extends Feature<FeatureInputObject
 
     @Override
     public double calc(SessionInput<FeatureInputObjectCollection> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return calc(input.get());
     }
 
     // Calculates an NRG element for a set of pixels
-    public abstract double calc(FeatureInputObjectCollection params) throws FeatureCalcException;
+    public abstract double calc(FeatureInputObjectCollection params) throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {

@@ -39,7 +39,8 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -70,13 +71,13 @@ public class CfgNRG implements Serializable {
     }
 
     // The initial calculation of the NRG, thereafter it can be updated
-    public void init() throws FeatureCalcException {
+    public void init() throws NamedFeatureCalculationException {
         this.calcMarkInd = new NRGSavedInd();
         try {
             this.calcMarkPair = new NRGSavedPairs(delegate.getNrgScheme().createAddCriteria());
             this.calcMarkAll = new NRGSavedAll();
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new NamedFeatureCalculationException(e);
         }
     }
 
@@ -101,8 +102,7 @@ public class CfgNRG implements Serializable {
         return delegate;
     }
 
-    public void updateTotal(MemoCollection pxlMarkMemoList, NRGStack stack)
-            throws FeatureCalcException {
+    public void updateTotal(MemoCollection pxlMarkMemoList, NRGStack stack) throws NamedFeatureCalculationException {
 
         // We calculate an all value
         this.calcMarkAll.calc(pxlMarkMemoList, delegate.getNrgScheme(), stack);
@@ -144,7 +144,7 @@ public class CfgNRG implements Serializable {
     }
 
     public void add(MemoCollection wrapperInd, VoxelizedMarkMemo newPxlMarkMemo, NRGStack stack)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         delegate.add(newPxlMarkMemo);
 
@@ -155,14 +155,14 @@ public class CfgNRG implements Serializable {
         try {
             getCalcMarkPair().add(wrapperInd, newPxlMarkMemo);
         } catch (UpdateMarkSetException e) {
-            throw new FeatureCalcException(e);
+            throw new NamedFeatureCalculationException(e);
         }
 
         updateTotal(wrapperInd, stack);
     }
 
     public void rmv(MemoCollection wrapperInd, VoxelizedMarkMemo memoRmv, NRGStack stack)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         int index = wrapperInd.getIndexForMemo(memoRmv);
         assert (index != -1);
@@ -170,7 +170,7 @@ public class CfgNRG implements Serializable {
     }
 
     public void rmv(MemoCollection wrapperInd, int index, VoxelizedMarkMemo memoRmv, NRGStack stack)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         try {
             getCalcMarkPair().rmv(wrapperInd, memoRmv);
             wrapperInd.rmv(getCalcMarkInd(), index);
@@ -179,12 +179,12 @@ public class CfgNRG implements Serializable {
 
             updateTotal(wrapperInd, stack);
         } catch (UpdateMarkSetException e) {
-            throw new FeatureCalcException(e);
+            throw new NamedFeatureCalculationException(e);
         }
     }
 
     public void rmvTwo(MemoCollection wrapperInd, int index1, int index2, NRGStack nrgStack)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         VoxelizedMarkMemo memoRmv1 = wrapperInd.getMemoForIndex(index1);
         VoxelizedMarkMemo memoRmv2 = wrapperInd.getMemoForIndex(index2);
@@ -202,7 +202,7 @@ public class CfgNRG implements Serializable {
 
             getCalcMarkPair().rmv(memoList, memoRmv2);
         } catch (UpdateMarkSetException e) {
-            throw new FeatureCalcException(e);
+            throw new NamedFeatureCalculationException(e);
         }
 
         newCfg.removeTwo(index1, index2);
@@ -219,7 +219,7 @@ public class CfgNRG implements Serializable {
             int index,
             VoxelizedMarkMemo newMark,
             NRGStackWithParams nrgStack)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         Mark oldMark = delegate.getCfg().get(index);
 
@@ -237,7 +237,7 @@ public class CfgNRG implements Serializable {
             VoxelizedMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark(getCfg(), oldMark);
             getCalcMarkPair().exchange(wrapperInd, oldPxlMarkMemo, index, newPxlMarkMemo);
         } catch (UpdateMarkSetException e) {
-            throw new FeatureCalcException(e);
+            throw new NamedFeatureCalculationException(e);
         }
 
         assert (getCalcMarkPair().isCfgSpan(delegate.getCfg()));

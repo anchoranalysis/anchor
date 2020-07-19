@@ -32,10 +32,11 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -163,7 +164,7 @@ class WriteGroupResults {
         try {
             session = FeatureSession.with(featuresAggregate.listFeatures(), logger);
 
-        } catch (FeatureCalcException e1) {
+        } catch (InitException e1) {
             logger.errorReporter().recordError(GroupedResultsVectorCollection.class, e1);
             throw new AnchorIOException("Cannot start feature-session", e1);
         }

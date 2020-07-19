@@ -28,12 +28,15 @@ package org.anchoranalysis.bean.xml.factory;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.Arrays;
+import java.util.function.Function;
 import org.anchoranalysis.bean.StringBeanCollection;
+import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
+import org.apache.commons.configuration.tree.ConfigurationNode;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperUtilities {
@@ -55,18 +58,76 @@ class HelperUtilities {
 
         return bean;
     }
+    
+    /**
+     * Populates a string-collection from an XML bean from two sources: a "items" attribute an any "item" element
+     * <p>
+     * The items attribute can be a comma seperated string.
+     * 
+     * @param collectionToPopulate the collection to populate 
+     * @param declaration the top-most XML bean declaration
+     * @return {@code collectionToPopulate}
+     * @throws BeanXmlException 
+     */
+    public static StringBeanCollection populateStringCollection(
+            StringBeanCollection collectionToPopulate, BeanDeclaration declaration) {
+        XMLBeanDeclaration delcarationCast = (XMLBeanDeclaration) declaration;
+        populateStringCollectionFromElements(collectionToPopulate, delcarationCast);
+        return populateStringCollectionFromAttribute(collectionToPopulate, delcarationCast);
+    }
 
-    public static StringBeanCollection populateStringCollectionFromXml(
-            StringBeanCollection collection, BeanDeclaration decl) {
-
-        XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
-        SubnodeConfiguration subConfig = declXML.getConfiguration();
-
-        String[] stringArr = subConfig.getStringArray("item");
-        for (String item : stringArr) {
-            collection.add(item);
-        }
-
-        return collection;
+    /**
+     * Populates a string-collection from an XML bean that any "item" elements
+     * 
+     * @param collectionToPopulate the collection to populate 
+     * @param declaration the top-most XML bean declaration
+     * @return {@code collectionToPopulate}
+     */
+    private static StringBeanCollection populateStringCollectionFromElements(
+            StringBeanCollection collectionToPopulate, XMLBeanDeclaration declaration) {
+        return populateStringCollection(collectionToPopulate, declaration, decl -> decl.getConfiguration().getStringArray("item") );
+    }
+    
+    /**
+     * Populates a string-collection from an XML bean that has a "items" attribute that can be split by commas
+     * <p>
+     * e.g. value could be a comma seperated list of strings
+     * 
+     * @param collectionToPopulate the collection to populate 
+     * @param declaration the top-most XML bean declaration
+     * @return {@code collectionToPopulate}
+     * @throws BeanXmlException 
+     */
+    private static StringBeanCollection populateStringCollectionFromAttribute(
+            StringBeanCollection collectionToPopulate, XMLBeanDeclaration declaration) {
+        return populateStringCollection(
+           collectionToPopulate,
+           declaration,
+           xmlDeclaration -> separatedValuesFromAttribute(xmlDeclaration, "items")
+        );
+    }
+    
+    private static StringBeanCollection populateStringCollection(
+           StringBeanCollection collectionToPopulate,
+           XMLBeanDeclaration declaration,
+           Function<XMLBeanDeclaration,String[]> extractItems
+     ) {
+        String[] items = extractItems.apply(declaration);
+        Arrays.stream(items).forEach(collectionToPopulate::add);
+        return collectionToPopulate;
+    }
+    
+    /**
+     * Extracts all values matching a top-level attribute-name (whose value is split into multiple entities if comma separated)
+     * 
+     * @param declaration xml-declaration
+     * @param attributeName name of top-level attribute
+     * @return an array with each part of the attribute-value (multiple parts occuring if separated by commas) 
+     */
+    private static String[] separatedValuesFromAttribute(XMLBeanDeclaration declaration, String attributeName) {
+        return declaration.getNode().getAttributes().stream().filter( node->
+            node.getName().contentEquals(attributeName)
+        ).map(ConfigurationNode::getValue).toArray(size -> new String[size]);
     }
 }
+

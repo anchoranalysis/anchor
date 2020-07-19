@@ -31,19 +31,13 @@ import org.anchoranalysis.core.index.ITypedGetFromIndex;
 import org.anchoranalysis.core.index.container.BoundChangeListener;
 import org.anchoranalysis.core.index.container.BoundedIndexContainer;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class BoundsFromSequenceType<T> implements ITypedGetFromIndex<T>, BoundedIndexContainer<T> {
 
     private ITypedGetFromIndex<T> typedIndexGetter;
-
     private SequenceType sequenceType;
-
-    public BoundsFromSequenceType(
-            ITypedGetFromIndex<T> typedIndexGetter, SequenceType sequenceType) {
-        super();
-        this.typedIndexGetter = typedIndexGetter;
-        this.sequenceType = sequenceType;
-    }
 
     @Override
     public T get(int index) throws GetOperationFailedException {

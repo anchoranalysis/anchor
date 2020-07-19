@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -61,14 +61,14 @@ public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
             FeatureCalculatorSingle<T> session = super.createAndStartSession();
             return Double.toString(calcFeatureOn(objects.create(), session));
 
-        } catch (FeatureCalcException | CreateException e) {
+        } catch (FeatureCalculationException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
     protected abstract double calcFeatureOn(
             ObjectCollection objects, FeatureCalculatorSingle<T> session)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     @Override
     public boolean isNumeric() {

@@ -78,7 +78,7 @@ public class LRUCache<K, V> {
         try {
             return cache.get(key);
         } catch (ExecutionException | UncheckedExecutionException e) {
-            throw new GetOperationFailedException(e.getCause());
+            throw new GetOperationFailedException(key.toString(), e.getCause());
         }
     }
 

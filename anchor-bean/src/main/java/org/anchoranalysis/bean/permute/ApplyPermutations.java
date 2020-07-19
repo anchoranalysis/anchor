@@ -36,12 +36,14 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.AllArgsConstructor;
 
 /**
  * Applies a PermuteProperty to a bean to create new duplicated beans each with a permutation
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class ApplyPermutations<T extends AnchorBean<T>> {
 
     @FunctionalInterface
@@ -54,14 +56,8 @@ public class ApplyPermutations<T extends AnchorBean<T>> {
         void setName(S obj, String name);
     }
 
-    private INameGetter<T> nameGetter;
-    private INameSetter<T> nameSetter;
-
-    public ApplyPermutations(INameGetter<T> nameGetter, INameSetter<T> nameSetter) {
-        super();
-        this.nameGetter = nameGetter;
-        this.nameSetter = nameSetter;
-    }
+    private final INameGetter<T> nameGetter;
+    private final INameSetter<T> nameSetter;
 
     /**
      * Takes a list of beans, and creates a permuted version, updating the custom names
@@ -102,7 +98,7 @@ public class ApplyPermutations<T extends AnchorBean<T>> {
 
             return listOut;
 
-        } catch (BeanDuplicateException | IllegalArgumentException | PermutationSetterException e) {
+        } catch (BeanDuplicateException | IllegalArgumentException | PermutationSetterException | OperationFailedException e) {
             throw new CreateException(e);
         }
     }

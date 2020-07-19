@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -56,7 +56,7 @@ public class AssignmentObjectFactory {
             ObjectCollection right,
             double maxAcceptedCost,
             ImageDimensions dim)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         // Empty annotations
         if (left.isEmpty()) {
@@ -85,7 +85,7 @@ public class AssignmentObjectFactory {
                 new CreateAssignmentFromDistanceMatrix(cost, assign, maxAcceptedCost)
                         .createAssignment();
         if (assignment.rightSize() != right.size()) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     "assignment.rightSize() does not equal the number of the right objects. This should never happen!");
         }
         return assignment;
@@ -101,13 +101,13 @@ public class AssignmentObjectFactory {
 
     private ObjectCollectionDistanceMatrix createCostMatrix(
             ObjectCollection annotation, ObjectCollection result, ImageDimensions dim)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         FeatureCalculatorSingle<FeatureInputPairObjects> session;
         try {
             session = featureEvaluator.createAndStartSession();
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
 
         NRGStackWithParams nrgStack = new NRGStackWithParams(dim);
@@ -125,7 +125,7 @@ public class AssignmentObjectFactory {
                 outArr[i][j] = costObjects;
 
                 if (Double.isNaN(costObjects)) {
-                    throw new FeatureCalcException("Cost is NaN");
+                    throw new FeatureCalculationException("Cost is NaN");
                 }
             }
         }
@@ -133,7 +133,7 @@ public class AssignmentObjectFactory {
         try {
             return new ObjectCollectionDistanceMatrix(annotation, result, outArr);
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

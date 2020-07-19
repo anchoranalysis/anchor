@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -62,23 +62,23 @@ public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
             new ChildCacheName(FeatureDeriveFromPair.class, "merged");
 
     protected double valueFromFirst(SessionInput<FeatureInputPairObjects> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return featureValFrom(input, Extract.FIRST, CACHE_NAME_FIRST);
     }
 
     protected double valueFromSecond(SessionInput<FeatureInputPairObjects> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return featureValFrom(input, Extract.SECOND, CACHE_NAME_SECOND);
     }
 
     protected double valueFromMerged(SessionInput<FeatureInputPairObjects> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return featureValFrom(input, Extract.MERGED, CACHE_NAME_MERGED);
     }
 
     private double featureValFrom(
             SessionInput<FeatureInputPairObjects> input, Extract extract, ChildCacheName cacheName)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         return input.forChild().calc(item, new CalculateInputFromPair(extract), cacheName);
     }

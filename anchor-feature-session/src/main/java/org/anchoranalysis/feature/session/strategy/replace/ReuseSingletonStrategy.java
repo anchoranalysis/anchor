@@ -28,9 +28,10 @@ package org.anchoranalysis.feature.session.strategy.replace;
 
 import java.util.Optional;
 import java.util.function.Function;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheCreator;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.SessionInputSequential;
 import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
@@ -65,10 +66,10 @@ public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceSt
     }
 
     @Override
-    public SessionInput<T> createOrReuse(T input) throws FeatureCalcException {
+    public SessionInput<T> createOrReuse(T input) throws CreateException {
 
         if (input == null) {
-            throw new FeatureCalcException("The input may not be null");
+            throw new CreateException("The input may not be null");
         }
 
         if (sessionInput.isPresent()) {

@@ -28,7 +28,8 @@ package org.anchoranalysis.feature.session.calculator.cached;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class FeatureCalculatorCachedMultiTest {
     private FeatureCalculatorCachedMulti<MockFeatureInput> cached;
 
     @Before
-    public void setup() throws FeatureCalcException {
+    public void setup() throws FeatureCalculationException {
         cached =
                 new FeatureCalculatorCachedMulti<>(
                         FeatureCalculatorMultiFixture.createFeatureCalculator(
@@ -54,10 +55,10 @@ public class FeatureCalculatorCachedMultiTest {
      * Checks the cache contains an item, when a new item with different object but identical to an
      * existing one is passed
      *
-     * @throws FeatureCalcException
+     * @throws NamedFeatureCalculationException 
      */
     @Test
-    public void testCacheContainsExisting() throws FeatureCalcException {
+    public void testCacheContainsExisting() throws NamedFeatureCalculationException {
 
         assertCurrentLoad(0);
 

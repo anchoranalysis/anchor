@@ -32,7 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
@@ -43,7 +44,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 @RequiredArgsConstructor
-public class SingleObjTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
+public class SingleObjectTableSession implements FeatureTableCalculator<FeatureInputSingleObject> {
 
     // START REQUIRED ARGUMENTS
     private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
@@ -55,33 +56,30 @@ public class SingleObjTableSession implements FeatureTableCalculator<FeatureInpu
     public void start(ImageInitParams soImage, Optional<NRGStackWithParams> nrgStack, Logger logger)
             throws InitException {
 
-        try {
-            session =
-                    FeatureSession.with(
-                            namedFeatureStore.listFeatures(),
-                            InitParamsHelper.createInitParams(
-                                    Optional.of(soImage.getSharedObjects()), nrgStack),
-                            soImage.getFeature().getSharedFeatureSet(),
-                            logger);
-        } catch (FeatureCalcException e) {
-            throw new InitException(e);
-        }
+        session = FeatureSession.with(
+            namedFeatureStore.listFeatures(),
+            InitParamsHelper.createInitParams(
+                    Optional.of(soImage.getSharedObjects()
+            ), nrgStack),
+            soImage.getFeature().getSharedFeatureSet(),
+            logger
+        );
     }
 
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> duplicateForNewThread() {
-        return new SingleObjTableSession(namedFeatureStore.deepCopy());
+        return new SingleObjectTableSession(namedFeatureStore.deepCopy());
     }
 
     @Override
-    public ResultsVector calc(FeatureInputSingleObject input) throws FeatureCalcException {
+    public ResultsVector calc(FeatureInputSingleObject input) throws NamedFeatureCalculationException {
         return session.calc(input);
     }
 
     @Override
     public ResultsVector calc(
             FeatureInputSingleObject input, FeatureList<FeatureInputSingleObject> featuresSubset)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         return session.calc(input, featuresSubset);
     }
 

@@ -28,20 +28,20 @@ package org.anchoranalysis.feature.calc;
 
 import org.anchoranalysis.core.error.AnchorCheckedException;
 
-public class FeatureCalcException extends AnchorCheckedException {
+public class FeatureCalculationException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = -907417952940489366L;
 
-    public FeatureCalcException(String string) {
+    public FeatureCalculationException(String string) {
         super(string);
     }
 
-    public FeatureCalcException(Throwable exc) {
+    public FeatureCalculationException(Throwable exc) {
         super(exc);
     }
 
-    public FeatureCalcException(String string, Throwable exc) {
+    public FeatureCalculationException(String string, Throwable exc) {
         super(string, exc);
     }
 }

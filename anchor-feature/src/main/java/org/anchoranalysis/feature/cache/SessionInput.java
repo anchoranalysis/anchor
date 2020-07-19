@@ -33,7 +33,8 @@ import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCache;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -54,16 +55,16 @@ public interface SessionInput<T extends FeatureInput> {
      * @param feature the feature to calculate with
      * @return the result of the calculation
      */
-    double calc(Feature<T> feature) throws FeatureCalcException;
+    double calc(Feature<T> feature) throws FeatureCalculationException;
 
     /**
      * Calculates the results of several features using this input
      *
      * @param features features to calculate with
      * @return the results of each feature's calculation respectively
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
-    ResultsVector calc(FeatureList<T> features) throws FeatureCalcException;
+    ResultsVector calc(FeatureList<T> features) throws NamedFeatureCalculationException;
 
     /**
      * Calculates a feature-calculation after resolving it against the main cache
@@ -71,9 +72,9 @@ public interface SessionInput<T extends FeatureInput> {
      * @param <S> return-type of the calculation
      * @param calculation the feature-calculation to resolve
      * @return the result of the calculation
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
-    <S> S calc(FeatureCalculation<S, T> calculation) throws FeatureCalcException;
+    <S> S calc(FeatureCalculation<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * Calculates a resolved Feature-calculation
@@ -81,9 +82,9 @@ public interface SessionInput<T extends FeatureInput> {
      * @param <S> return-type of the calculation
      * @param cc the feature-calculation to resolve
      * @return the result of the calculation
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
-    <S> S calc(ResolvedCalculation<S, T> cc) throws FeatureCalcException;
+    <S> S calc(ResolvedCalculation<S, T> cc) throws FeatureCalculationException;
 
     /**
      * Returns a resolver for calculations

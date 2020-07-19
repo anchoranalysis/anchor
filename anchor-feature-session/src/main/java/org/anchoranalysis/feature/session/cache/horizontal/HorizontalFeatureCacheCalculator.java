@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.FeatureSessionCacheCalculator;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -58,7 +58,7 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     }
 
     private Double calcAndAdd(Feature<T> feature, SessionInput<T> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         Double result = delegate.calc(feature, input);
         map.add(feature, resolveNameFeature(feature), result);
         return result;
@@ -74,7 +74,7 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalcException {
+    public double calc(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException {
 
         // if there's no custom name, then we don't consider caching
         if (feature.getCustomName() == null || feature.getCustomName().isEmpty()) {
@@ -96,7 +96,7 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
 
     @Override
     public <S, U> ResolvedCalculationMap<S, T, U> search(
-            CacheableCalculationMap<S, T, U, FeatureCalcException> cc) {
+            CacheableCalculationMap<S, T, U, FeatureCalculationException> cc) {
         return delegate.search(cc);
     }
 
@@ -114,7 +114,7 @@ class HorizontalFeatureCacheCalculator<T extends FeatureInput>
     }
 
     @Override
-    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalcException {
+    public double calcFeatureByID(String id, SessionInput<T> input) throws FeatureCalculationException {
 
         // Let's first check if it's in our cache
         Double res = map.getResultFor(id);

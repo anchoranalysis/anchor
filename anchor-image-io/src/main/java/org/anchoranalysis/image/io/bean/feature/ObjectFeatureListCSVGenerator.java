@@ -32,12 +32,13 @@ import lombok.Getter;
 import lombok.Setter;
 import one.util.streamex.StreamEx;
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -115,7 +116,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator
                         session.calcSuppressErrors(
                                 createParams(objectMask, nrgStack), logger.errorReporter()));
             }
-        } catch (FeatureCalcException e) {
+        } catch (InitException e) {
             throw new OutputWriteFailedException(e);
         }
 

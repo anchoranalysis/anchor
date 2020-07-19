@@ -38,7 +38,8 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGTotal;
 
@@ -69,7 +70,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
             NRGStack nrgStack,
             Cfg cfg,
             NRGSchemeWithSharedFeatures nrgSchemeTotal)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         this.regionMap = nrgSchemeTotal.getRegionMap();
         calcFreshInd(nrgSavedInd, nrgStack, cfg, nrgSchemeTotal);
     }
@@ -126,7 +127,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
             NRGStack nrgStack,
             Cfg cfg,
             NRGSchemeWithSharedFeatures nrgSchemeTotal)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         nrgSavedInd.setNrgTotal(0);
 
@@ -154,7 +155,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
             VoxelizedMarkMemo newMark,
             NRGStack stack,
             NRGSchemeWithSharedFeatures nrgSchemeTotal)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         // We calculate energy for individual components
         NRGTotal ind = nrgSchemeTotal.calcElemIndTotal(newMark, stack);
         nrgSavedInd.exchange(index, ind);
@@ -168,8 +169,8 @@ public class MemoCollection implements Serializable, MemoForIndex {
             NRGSavedInd nrgSavedInd,
             VoxelizedMarkMemo pmm,
             NRGStack stack,
-            NRGSchemeWithSharedFeatures nrgScheme)
-            throws FeatureCalcException {
+            NRGSchemeWithSharedFeatures nrgScheme) throws NamedFeatureCalculationException
+            {
         NRGTotal nrg = nrgScheme.calcElemIndTotal(pmm, stack);
 
         // We calculate energy for individual components

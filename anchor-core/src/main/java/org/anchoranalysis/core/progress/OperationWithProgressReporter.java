@@ -26,6 +26,9 @@
 
 package org.anchoranalysis.core.progress;
 
+import org.anchoranalysis.core.name.provider.NamedProviderBridge;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+
 /**
  * @author Owen Feehan
  * @param <R> result-type
@@ -33,6 +36,6 @@ package org.anchoranalysis.core.progress;
  */
 @FunctionalInterface
 public interface OperationWithProgressReporter<R, E extends Exception> {
-
+    
     R doOperation(ProgressReporter progressReporter) throws E;
 }

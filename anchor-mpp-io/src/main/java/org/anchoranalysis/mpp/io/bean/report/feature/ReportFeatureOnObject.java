@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.io.bean.report.feature;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -37,17 +37,17 @@ public class ReportFeatureOnObject extends ReportFeatureOnObjectsBase<FeatureInp
     @Override
     protected double calcFeatureOn(
             ObjectCollection objects, FeatureCalculatorSingle<FeatureInputSingleObject> session)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return session.calc(new FeatureInputSingleObject(extractObjFromCollection(objects)));
     }
 
     private ObjectMask extractObjFromCollection(ObjectCollection objects)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         if (objects.size() == 0) {
-            throw new FeatureCalcException("No object found");
+            throw new FeatureCalculationException("No object found");
         }
         if (objects.size() > 1) {
-            throw new FeatureCalcException("More than one object found");
+            throw new FeatureCalculationException("More than one object found");
         }
         return objects.get(0);
     }

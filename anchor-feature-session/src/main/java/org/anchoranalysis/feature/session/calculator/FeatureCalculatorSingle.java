@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.session.calculator;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface FeatureCalculatorSingle<T extends FeatureInput> {
 
     /** Performs one calculation throwing an exception if something goes wrong */
-    double calc(T input) throws FeatureCalcException;
+    double calc(T input) throws FeatureCalculationException;
 
     /**
      * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but

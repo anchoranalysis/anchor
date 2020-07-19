@@ -29,11 +29,12 @@ package org.anchoranalysis.anchor.mpp.feature.nrg.scheme;
 import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -60,14 +61,14 @@ public class KeyValueParamsForImageCreator {
         this.logger = logger;
     }
 
-    public KeyValueParams createParamsForImage(NRGStack nrgStack) throws FeatureCalcException {
+    public KeyValueParams createParamsForImage(NRGStack nrgStack) throws CreateException {
         try {
             KeyValueParams params = nrgScheme.createKeyValueParams();
             addParamsForImage(nrgStack, params);
             return params;
 
-        } catch (CreateException | OperationFailedException e) {
-            throw new FeatureCalcException(e);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
         }
     }
 
@@ -97,7 +98,7 @@ public class KeyValueParamsForImageCreator {
 
             return session.calc(params);
 
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException | InitException e) {
             throw new OperationFailedException(e);
         }
     }

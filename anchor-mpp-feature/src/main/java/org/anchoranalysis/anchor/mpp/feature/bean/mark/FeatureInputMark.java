@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -78,10 +78,10 @@ public class FeatureInputMark implements FeatureInputParams {
         return dimensions;
     }
 
-    public ImageDimensions getDimensionsRequired() throws FeatureCalcException {
+    public ImageDimensions getDimensionsRequired() throws FeatureCalculationException {
         return dimensions.orElseThrow(
                 () ->
-                        new FeatureCalcException(
+                        new FeatureCalculationException(
                                 "Dimensions are required in the input for this operation"));
     }
 }

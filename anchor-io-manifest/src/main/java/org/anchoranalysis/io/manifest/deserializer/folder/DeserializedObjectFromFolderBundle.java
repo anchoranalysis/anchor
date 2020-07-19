@@ -93,6 +93,7 @@ public class DeserializedObjectFromFolderBundle<T extends Serializable>
 
         if (!hashMap.containsKey(index)) {
             throw new GetOperationFailedException(
+                    index,
                     String.format("Cannot find index %i in bundle", index));
         }
 

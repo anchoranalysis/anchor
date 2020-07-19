@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.calculator;
 
 import java.util.function.Consumer;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -56,7 +56,7 @@ public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
         this.funcToApplyChange = funcToApplyChange;
     }
 
-    public double calc(T input) throws FeatureCalcException {
+    public double calc(T input) throws FeatureCalculationException {
         funcToApplyChange.accept(input);
         return calculator.calc(input);
     }
