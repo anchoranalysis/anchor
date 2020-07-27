@@ -30,6 +30,7 @@ import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.progress.CachedOperationWithProgressReporter;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import lombok.AllArgsConstructor;
 
 /**
  * Given an {@link Operation}, it wraps it to make it a cached-operation with progress-reporter
@@ -38,6 +39,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
  * @param <T> return-type of operation
  * @param <E> exception that is thrown if something goes wrong during execution
  */
+@AllArgsConstructor
 public class WrapOperationWithProgressReporterAsCached<T, E extends Exception>
         extends CachedOperationWithProgressReporter<T, E> {
 
@@ -45,12 +47,6 @@ public class WrapOperationWithProgressReporterAsCached<T, E extends Exception>
 
     public WrapOperationWithProgressReporterAsCached(Operation<T, E> operation) {
         this(progressReporter -> operation.doOperation());
-    }
-
-    public WrapOperationWithProgressReporterAsCached(
-            OperationWithProgressReporter<T, E> operation) {
-        super();
-        this.operation = operation;
     }
 
     @Override

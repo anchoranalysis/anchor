@@ -237,7 +237,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
                 double val = sessionInput.calc(feature);
                 res.set(i, val);
             } catch (FeatureCalculationException e) {
-                throw new NamedFeatureCalculationException(feature.getFriendlyName(), e);
+                throw new NamedFeatureCalculationException(feature.getFriendlyName(), e.getMessage());
             }
             
         }

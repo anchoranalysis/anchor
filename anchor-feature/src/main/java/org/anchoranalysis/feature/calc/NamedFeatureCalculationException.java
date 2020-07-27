@@ -38,16 +38,6 @@ public class NamedFeatureCalculationException extends AnchorFriendlyCheckedExcep
     }
     
     /**
-     * Constructor - when a particular named feature failed to calculate
-     * 
-     * @param featureName a name to describe the feature whose calculation failed
-     * @param exception the reason for failure when calculating this feature
-     */
-    public NamedFeatureCalculationException(String featureName, Exception exception) {
-        this(featureName, exception.toString()); 
-    }
-    
-    /**
      * Constructor - when a particular named feature failed in some way
      * 
      * @param featureName a name to describe the feature whose calculation failed
@@ -56,7 +46,7 @@ public class NamedFeatureCalculationException extends AnchorFriendlyCheckedExcep
     public NamedFeatureCalculationException(String featureName, String message) {
         super(
           String.format(
-             "Calculating feature %s created an exception:%n%s",
+             "An error occurred when calculating feature '%s': %s",
              featureName,
              message
           )      
